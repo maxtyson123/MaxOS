@@ -24,15 +24,15 @@ Go to the project directory
 Make Files and OS
 
 ```bash
-i686-elf-as boot.s -o boot.o
-i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+ nasm -f elf32 loader.s
+ ld -T link.ld -melf_i386 loader.o -o kernel.elf
+ cp kernel.elf iso/boot/       
 ```
 
 Run Os 
 
 ```bash
-  qemu-system-i386 -kernel myos.bin
+     bochs -f bochsrc.txt -q
 ```
 
 
