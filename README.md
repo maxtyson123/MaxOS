@@ -13,12 +13,10 @@ Clone the project
   git clone https://github.com/maxtyson123/max-os
 ```
 
-(You may need a copy of https://github.com/lordmilko/i686-elf-tools)
-
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd max-os
 ```
 
 Make Files and OS

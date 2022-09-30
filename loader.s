@@ -1,17 +1,33 @@
-global loader                   ; the entry symbol for ELF
+.set MAGIC, 0x1badb002
+.set FLAGS, (1<<0 | 1<<1)
+.set CHECKSUM, -(MAGIC + FLAGS)
 
-MAGIC_NUMBER equ 0x1BADB002     ; define the magic number constant
-FLAGS        equ 0x0            ; multiboot flags
-CHECKSUM     equ -MAGIC_NUMBER  ; calculate the checksum
-                                ; (magic number + checksum + flags should equal 0)
+.section .multiboot
+    .long MAGIC
+    .long FLAGS
+    .long CHECKSUM
 
-section .text:                  ; start of the text (code) section
-align 4                         ; the code must be 4 byte aligned
-    dd MAGIC_NUMBER             ; write the magic number to the machine code,
-    dd FLAGS                    ; the flags,
-    dd CHECKSUM                 ; and the checksum
 
-loader:                         ; the loader label (defined as entry point in linker script)
-    mov eax, 0xCAFEBABE         ; place the number 0xCAFEBABE in the register eax
-.loop:
-    jmp .loop                   ; loop forever
+.section .text
+.extern kernelMain
+.extern callConstructors
+.global loader
+
+
+loader:
+    mov $kernel_stack, %esp
+    call callConstructors
+    push %eax
+    push %ebx
+    call kernelMain
+
+
+_stop:
+    cli
+    hlt
+    jmp _stop
+
+
+.section .bss
+.space 2*1024*1024; # 2 MiB
+kernel_stack:
