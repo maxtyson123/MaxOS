@@ -1,4 +1,5 @@
 #include "types.h"
+#include "gdt.h"
 
 void printf(char* str)
 {
@@ -23,6 +24,9 @@ extern "C" void callConstructors()
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Maxs Test Kernel -v6 -b6");
-    while(1);
+    printf("Maxs Test Kernel -v7 -b7");
+
+    GlobalDescriptorTable gdt; //Setup GDT
+
+    while(1);                  //Loop
 }

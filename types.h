@@ -11,4 +11,4 @@ typedef long long int           int64_t;
 typedef unsigned long long int uint64_t;
 
 #endif
-//This for other compilers
+//This ensures all the byte defs are the same, usefull for other compliers
