@@ -13,6 +13,7 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 {
     //Tell processor to use this table
     uint32_t i[2];  //8 bytes
+
     i[0] = (uint32_t)this;  //First byte: Tell processor the address of table
     i[1] = sizeof(GlobalDescriptorTable) << 16; //Last four bytes: The high  bytes of the segment integer
     asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));

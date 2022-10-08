@@ -1,5 +1,6 @@
 #include "types.h"
 #include "gdt.h"
+#include "interrupts.h"
 
 void printf(char* str)
 {
@@ -59,12 +60,19 @@ extern "C" void callConstructors()
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Maxs Test Kernel -v8 -b9         \n");
+    printf("Maxs Test Kernel -v9 -b12         \n");
     printf("[x] Kernel Booted \n");
 
-    printf("[ ] Setting Up GDT... \n");
+    printf("[ ] Setting Up Global Discriptor Table... \n");
     GlobalDescriptorTable gdt; //Setup GDT
     printf("[x] GDT Setup \n");
+
+    printf("[ ] Setting Up Interrupt Discriptor Table... \n");
+    InterruptManager interrupts(&gdt);//Setup IDT
+    //Setup Hardware
+    //--
+    interrupts.Activate(); //Activate as separate method from constructor as we first instantiated the method, then the hardware
+    printf("[x] IDT Setup \n");
 
     while(1);                  //Loop
 }

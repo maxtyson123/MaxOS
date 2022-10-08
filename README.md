@@ -5,29 +5,34 @@ Max os following: [OS Dev Wiki](https://wiki.osdev.org/Creating_an_Operating_Sys
 
 Made in C and asm
 
+
+
 ## Progress
 
 ###  Initial 
 
 - [x] Memory and Global Descriptor Table
-- [ ] Hardware Cominuation / Ports
-- [ ] System Interrupts
+- [x] Hardware Communication / Ports
+- [x] System Interrupts
 - [ ] Keyboard & Mouse
 - [ ] Drivers
 - [ ] PCI
 - [ ] GUI Basics
 - [ ] Desktop and Windows
 - [ ] Network
-- [ ] Filesytem 
+- [ ] Filesystem 
 
 
 ###  Extended
 
-- [ ] Useable Desktop
+- [ ] Usable Desktop
 - [ ] Users 
 - [ ] Shell
 - [ ] 64 Bit
 - [ ] Applications
+- [ ] Game Engine
+- [ ] Game Ports (DOOM etc..)
+- [ ] M++
 
 
 ## Run Locally
@@ -47,6 +52,7 @@ Go to the project directory
 Make Files and OS
 
 ```bash
+ sudo apt-get install g++ binutils libc6-dev-i386 grub-legacy xorriso
  make maxos.iso  
 ```
 
