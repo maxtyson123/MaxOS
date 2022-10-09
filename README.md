@@ -21,18 +21,22 @@ Made in C and asm
 - [ ] Desktop and Windows
 - [ ] Network
 - [ ] Filesystem 
+- [ ] Audio
 
 
 ###  Extended
 
 - [ ] Usable Desktop
+- [ ] Libs
 - [ ] Users 
 - [ ] Shell
 - [ ] 64 Bit
 - [ ] Applications
 - [ ] Game Engine
+- [ ] Web Browser
 - [ ] Game Ports (DOOM etc..)
 - [ ] M++
+- [ ] POSIX
 
 
 ## Run Locally

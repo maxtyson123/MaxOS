@@ -4,10 +4,35 @@
 
 #include "interrupts.h"
 
-void printf(char* str);
+void printf(char* str, bool clearLine = false);
 
+///__Handler__
+
+InterruptHandler::InterruptHandler(uint8_t interrupNumber, InterruptManager *interruptManager){
+    //Store vals given
+    this->interrupNumber = interrupNumber;
+    this->interruptManager = interruptManager;
+    //Put itself into handlers array
+    interruptManager->handlers[interrupNumber] = this;
+}
+InterruptHandler::~InterruptHandler(){
+    //Remove self from handlers array
+    if(interruptManager->handlers[interrupNumber] == this){
+        interruptManager->handlers[interrupNumber] = 0;
+    }
+}
+
+uint32_t InterruptHandler::HandleInterrupt(uint32_t esp){
+    //Standard for the handlers, specfics will be created when init
+    return esp;
+}
+
+
+///__Manger__
 
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
+
+InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 
 void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
                                                         uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType)
@@ -38,10 +63,10 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     for(uint8_t i = 255; i > 0; --i)
     {
         SetInterruptDescriptorTableEntry(i, CodeSegment, &InterruptIgnore, 0, IDT_INTERRUPT_GATE);
-        //handlers[i] = 0;
+        handlers[i] = 0;
     }
     SetInterruptDescriptorTableEntry(0, CodeSegment, &InterruptIgnore, 0, IDT_INTERRUPT_GATE);
-    //handlers[0] = 0;
+    handlers[0] = 0;
 
     //The reason its eg. 0x20 and 0x21 instead of 0 and 1 is becuase it is offest by 0x20 in interstubshit.s line 3
 
@@ -87,7 +112,7 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     programmableInterruptControllerMasterCommandPort.Write(0x11);
     programmableInterruptControllerSlaveCommandPort.Write(0x11);
 
-    //Because the CPU uses interrupt 1 etc, tell the PIC to add 0x20 to it
+    //Because the CPU uses interrupt 1 etc, tell the PIC to add 0x20 to it (this is the remapping of harware)
     programmableInterruptControllerMasterDataPort.Write(hardwareInterruptOffset);
     programmableInterruptControllerSlaveDataPort.Write(hardwareInterruptOffset+8);
 
@@ -117,24 +142,60 @@ InterruptManager::~InterruptManager()
 
 void InterruptManager::Activate() {
 
+    if(ActiveInterruptManager != 0){                //There shouldnt be another interrupt manager, but for saftey delete anyother ones. This is becuase the processor only has 1 IDT
+        ActiveInterruptManager->Deactivate();
+    }
+
+    ActiveInterruptManager = this;
     asm("sti"); //sti = start interrupts
+
 }
 
 void InterruptManager::Deactivate()
 {
-
+    if(ActiveInterruptManager == this){         //Only if the active InterruptManger
+        ActiveInterruptManager = 0;
         asm("cli"); //cli = clear interrupts
+    }
+
 
 }
 
 uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
-    char* foo = "INTERRUPT 0x00";
+
+    if(ActiveInterruptManager != 0){
+        return ActiveInterruptManager->DoHandleInterrupt(interrupt, esp);
+    }
+
+    return esp;
+}
+
+void printOutPut(uint8_t interrupt){
+    char* foo = " UNHANDLED INTERRUPT 0x00";
     char* hex = "0123456789ABCDEF";
 
-    foo[12] = hex[(interrupt >> 4) & 0xF];
-    foo[13] = hex[interrupt & 0xF];
+    foo[23] = hex[(interrupt >> 4) & 0xF];
+    foo[24] = hex[interrupt & 0xF];
     printf(foo);
+}
 
+uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
+{
+    if(handlers[interrupt]!= 0){
+        esp = handlers[interrupt]->HandleInterrupt(esp);
+    }else{
+        if(interrupt != 0x20){   //If not the timer interrupt
+            printOutPut(interrupt);
+        }
+    }
+
+    if(0x20 <= interrupt && interrupt < 0x30) //Only if it is hardware (keep in mind that around line: 90, the hardware interrupt was remapped at 0x20)
+    {
+        //Send Answer to tell PIC the interrupt was recived
+        programmableInterruptControllerMasterCommandPort.Write(0x20);   //0x20 is the awnser the PIC wants for master
+        if(0x28 <= interrupt)   //Only send slave answer if interrupt sent from slave
+            programmableInterruptControllerSlaveCommandPort.Write(0x20);   //0x20 is the awnser the PIC wants for slave
+    }
     return esp;
 }
