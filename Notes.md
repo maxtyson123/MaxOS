@@ -1,3 +1,7 @@
+# Mouse and Keyboard
+### Keyboard
+- as
+
 # Hardware Communications
 ### Data Send / Receive
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
@@ -37,3 +41,5 @@ See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://w
 - To get this number as a parameter the CPU would have to push the number onto a stack, which the CPU cant do safely
 - So instead there has to be function for every interrupt, Which can be done most safely in assembly instead of c++ because compilers be compiling 
 - From the assembily code a c++ function can then be called (simmilar to calling kernelMain in loader.s)
+- Once the INterrupt has been recived and handled the OS then needs to be put back into C++ mode so that it can continue
+- 
