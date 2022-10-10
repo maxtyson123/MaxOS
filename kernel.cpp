@@ -3,6 +3,7 @@
 #include "gdt.h"
 #include "interrupts.h"
 #include "keyboard.h"
+#include "mouse.h"
 
 void printf(char* str, bool clearLine = false)
 {
@@ -71,19 +72,21 @@ extern "C" void callConstructors()
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Maxs Test Kernel -v10 -b15         \n");
+    printf("Max OS Kernel -v11 -b16         \n");
     printf("[x] Kernel Booted \n");
 
     printf("[ ] Setting Up Global Descriptor Table... \n");
-    GlobalDescriptorTable gdt; //Setup GDT
+    GlobalDescriptorTable gdt;                                                      //Setup GDT
     printf("[x] GDT Setup \n");
 
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
-    InterruptManager interrupts(0x20, &gdt);
-    KeyboardDriver keyboard(&interrupts);
+    InterruptManager interrupts(0x20, &gdt);      //Instantite the method
+    KeyboardDriver keyboard(&interrupts);                                   //Setup Keyboard driver
     printf("    -Keyboard setup\n");
-    interrupts.Activate(); //Activate as separate method from constructor as we first instantiated the method, then the hardware
+    MouseDriver mouse(&interrupts);                                         //Setup Mouse driver
+    printf("    -Mouse setup\n");
+    interrupts.Activate();                                                          //Activate as separate method from constructor as we first instantiated the method, then the hardware
     printf("[x] IDT Setup \n", true);
 
-    while(1);                  //Loop
+    while(1);                                                                       //Loop
 }

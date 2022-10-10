@@ -14,7 +14,7 @@ Made in C and asm
 - [x] Memory and Global Descriptor Table
 - [x] Hardware Communication / Ports
 - [x] System Interrupts
-- [ ] Keyboard & Mouse
+- [x] Keyboard & Mouse
 - [ ] Drivers
 - [ ] PCI
 - [ ] GUI Basics

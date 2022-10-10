@@ -1,6 +1,3 @@
-# Mouse and Keyboard
-### Keyboard
-- as
 
 # Hardware Communications
 ### Data Send / Receive

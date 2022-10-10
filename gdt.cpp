@@ -3,21 +3,20 @@
 //
 
 #include "gdt.h"
-//NOTE TO SELF: Because "types.h" is included in "gdt.h" it doesnt need to be included here
+//NOTE TO SELF: Because "types.h" is included in "gdt.h" it doesn't need to be included here
 
 GlobalDescriptorTable::GlobalDescriptorTable()
-        : nullSegmentSelector(0, 0, 0),
-          unusedSegmentSelector(0, 0, 0),
+        : nullSegmentSelector(0, 0, 0),                     //Ignored
+          unusedSegmentSelector(0, 0, 0),                   //Ignored
           codeSegmentSelector(0, 64*1024*1024, 0x9A),       //0x9A Access for code
           dataSegmentSelector(0, 64*1024*1024, 0x92)        //0x92 Access flag for data
 {
-    //Tell processor to use this table
-    uint32_t i[2];
-    i[1] = (uint32_t)this;                              //First byte: Tell processor the address of table
-    i[0] = sizeof(GlobalDescriptorTable) << 16;         //Last four bytes: The high  bytes of the segment integer
+    //Tell processor to use this table   (8 bytes)
+    uint32_t gdt_t[2];
+    gdt_t[1] = (uint32_t)this;                                  //First byte: Tell processor the address of table
+    gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;             //Last four bytes: The high  bytes of the segment integer
 
-
-    asm volatile("lgdt (%0)": :"p" (((uint8_t *) i)+2));
+    asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));    //Pass it as a unsigned 8Bit int to assembly
 
 }
 
