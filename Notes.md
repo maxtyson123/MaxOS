@@ -1,5 +1,6 @@
 
 # Hardware Communications
+Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse combination 
 ### Data Send / Receive
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
 - By default, the PIC is set ignore that, so to receive the key signal tell PIC not to ignore it

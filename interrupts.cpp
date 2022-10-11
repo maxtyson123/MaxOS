@@ -4,7 +4,9 @@
 
 #include "interrupts.h"
 
-void printf(char* str, bool clearLine = false);
+
+void printf(char* str, bool clearLine = false); //Forward declaration
+void printfHex(uint8_t key);                    //Forward declaration
 
 ///__Handler__
 
@@ -174,14 +176,6 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
     return esp;
 }
 
-void printOutPut(uint8_t interrupt){
-    char* foo = " UNHANDLED INTERRUPT 0x00";
-    char* hex = "0123456789ABCDEF";
-
-    foo[23] = hex[(interrupt >> 4) & 0xF];
-    foo[24] = hex[interrupt & 0xF];
-    printf(foo);
-}
 
 uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
@@ -189,7 +183,8 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
         esp = handlers[interrupt]->HandleInterrupt(esp);        //Run the handler
     }else{
         if(interrupt != 0x20){   //If not the timer interrupt
-            printOutPut(interrupt);
+            printf("UNHANDLED INTERRUPT 0x");
+            printfHex(interrupt);
         }
     }
 

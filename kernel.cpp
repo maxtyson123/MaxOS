@@ -2,6 +2,7 @@
 #include "types.h"
 #include "gdt.h"
 #include "interrupts.h"
+#include "driver.h"
 #include "keyboard.h"
 #include "mouse.h"
 
@@ -57,7 +58,67 @@ void printf(char* str, bool clearLine = false)
         }
 }
 
+void printfHex(uint8_t key){
+    char *foo = "00";
+    char *hex = "0123456789ABCDEF";
 
+    foo[0] = hex[(key >> 4) & 0xF];
+    foo[1] = hex[key & 0xF];
+    printf(foo);
+}
+
+class PrintfKeyboardEventHandler : public KeyboardEventHandler{
+    public:
+        void OnKeyDown(char c){
+            char* foo = " ";
+            foo[0] = c;
+            printf(foo);
+        }
+};
+
+class MouseToConsole: public MouseEventHandler{
+
+        int8_t x, y;
+    public:
+        MouseToConsole()
+        {
+            static uint16_t* VideoMemory = (uint16_t*)0xb8000;
+            x = 40;
+            y = 12;
+            //Show the initial cursor
+            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4           //Get High 4 bits and shift to right (Foreground becomes Background)
+                                  | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
+                                  | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
+        }
+
+        void OnMouseMove(int x_offset, int y_offset){
+
+            static uint16_t* VideoMemory = (uint16_t*)0xb8000;
+
+            //Show old cursor
+            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4           //Get High 4 bits and shift to right (Foreground becomes Background)
+                                  | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
+                                  | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
+
+            x += x_offset;     //Movement on the x-axis (note, mouse passes the info inverted)
+            y -= y_offset;     //Movement on the y-axis (note, mouse passes the info inverted)
+
+            //Make sure mouse position not out of bounds
+            if(x < 0) x = 0;
+            if(x >= 80) x = 79;
+
+            if(y < 0) y = 0;
+            if(y >= 25) y = 24;
+
+
+
+            //Show the new cursor by inverting the current character
+            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4           //Get High 4 bits and shift to right (Foreground becomes Background)
+                                  | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
+                                  | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
+        }
+
+};
 
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
@@ -70,23 +131,37 @@ extern "C" void callConstructors()
 
 
 
+
+#pragma clang diagnostic ignored "-Wwritable-strings"
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Max OS Kernel -v11 -b16         \n");
+    printf("Max OS Kernel -v12 -b17         \n");
     printf("[x] Kernel Booted \n");
 
     printf("[ ] Setting Up Global Descriptor Table... \n");
-    GlobalDescriptorTable gdt;                                                      //Setup GDT
+    GlobalDescriptorTable gdt;                                                              //Setup GDT
     printf("[x] GDT Setup \n");
 
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
-    InterruptManager interrupts(0x20, &gdt);      //Instantite the method
-    KeyboardDriver keyboard(&interrupts);                                   //Setup Keyboard driver
-    printf("    -Keyboard setup\n");
-    MouseDriver mouse(&interrupts);                                         //Setup Mouse driver
-    printf("    -Mouse setup\n");
-    interrupts.Activate();                                                          //Activate as separate method from constructor as we first instantiated the method, then the hardware
+    InterruptManager interrupts(0x20, &gdt);            //Instantiate the method
+
+    DriverManager driverManager;
+        PrintfKeyboardEventHandler printfKeyboardEventHandler;
+        KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard driver
+        driverManager.AddDriver(&keyboard);
+        printf("    -Keyboard setup\n");
+
+        MouseToConsole mouseEventHandler;
+        MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse driver
+        driverManager.AddDriver(&mouse);
+        printf("    -Mouse setup\n");
+
+    driverManager.ActivateAll();
+    printf("    -Drivers Setup\n");
+
+    interrupts.Activate();                                                                  //Activate as separate method from constructor as we first instantiated the method, then the hardware
     printf("[x] IDT Setup \n", true);
 
-    while(1);                                                                       //Loop
+    while(1);                                                                               //Loop
 }
+#pragma clang diagnostic pop
