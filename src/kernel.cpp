@@ -1,10 +1,15 @@
 
-#include "types.h"
-#include "gdt.h"
-#include "interrupts.h"
-#include "driver.h"
-#include "keyboard.h"
-#include "mouse.h"
+#include <common/types.h>
+#include <gdt.h>
+#include <hardwarecommunication/interrupts.h>
+#include <drivers/driver.h>
+#include <drivers/keyboard.h>
+#include <drivers/mouse.h>
+
+using namespace maxos;
+using namespace maxos::common;
+using namespace maxos::drivers;
+using namespace maxos::hardwarecommunication;
 
 void printf(char* str, bool clearLine = false)
 {
@@ -147,12 +152,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     DriverManager driverManager;
         PrintfKeyboardEventHandler printfKeyboardEventHandler;
-        KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard driver
+        KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
         driverManager.AddDriver(&keyboard);
         printf("    -Keyboard setup\n");
 
         MouseToConsole mouseEventHandler;
-        MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse driver
+        MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
         driverManager.AddDriver(&mouse);
         printf("    -Mouse setup\n");
 

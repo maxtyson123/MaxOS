@@ -2,8 +2,10 @@
 // Created by 98max on 10/4/2022.
 //
 
-#include "port.h"
-#include "types.h"
+#include <hardwarecommunication/port.h>
+
+using namespace maxos::common;
+using namespace maxos::hardwarecommunication;
 
 Port::Port(uint16_t portnumber){
     this->portnumber = portnumber;

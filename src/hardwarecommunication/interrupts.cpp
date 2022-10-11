@@ -2,7 +2,9 @@
 // Created by 98max on 7/10/2022.
 //
 
-#include "interrupts.h"
+#include <hardwarecommunication/interrupts.h>
+using namespace maxos::common;
+using namespace maxos::hardwarecommunication;
 
 
 void printf(char* str, bool clearLine = false); //Forward declaration

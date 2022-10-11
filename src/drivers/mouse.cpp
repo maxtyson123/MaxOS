@@ -2,9 +2,12 @@
 // Created by 98max on 10/10/2022.
 //
 
-#include "mouse.h"
+#include <drivers/mouse.h>
 
-///__Handler__
+using namespace maxos::common;
+using namespace maxos::drivers;
+using namespace maxos::hardwarecommunication;
+
 
 ///__Handler__
 

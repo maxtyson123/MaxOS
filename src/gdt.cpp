@@ -2,8 +2,9 @@
 // Created by 98max on 10/3/2022.
 //
 
-#include "gdt.h"
-//NOTE TO SELF: Because "types.h" is included in "gdt.h" it doesn't need to be included here
+#include <gdt.h>
+using namespace maxos;
+using namespace maxos::common;
 
 GlobalDescriptorTable::GlobalDescriptorTable()
         : nullSegmentSelector(0, 0, 0),                     //Ignored
