@@ -16,7 +16,7 @@ Made in C and asm
 - [x] System Interrupts
 - [x] Keyboard & Mouse
 - [x] Drivers
-- [ ] PCI
+- [x] PCI
 - [ ] GUI Basics
 - [ ] Desktop and Windows
 - [ ] Network
