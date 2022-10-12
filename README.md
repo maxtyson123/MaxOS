@@ -6,8 +6,8 @@ Max os following: [OS Dev Wiki](https://wiki.osdev.org/Creating_an_Operating_Sys
 Made mainly in C++ with a dabble of ASM. [![wakatime](https://wakatime.com/badge/github/maxtyson123/max-os.svg)](https://wakatime.com/badge/github/maxtyson123/max-os)
 
 Currently working on: Kernel - 
-
-##Screenshots
+ 
+## Screenshots
 ![Screenshot](docs/Screenshots/Drivers, PCI.png)
 
 ### Services
