@@ -1,7 +1,8 @@
 
 # Hardware Communications
-Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse combination 
+Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse communication 
 ### Data Send / Receive
+This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
 - By default, the PIC is set ignore that, so to receive the key signal tell PIC not to ignore it
 - This is done by sending some data to the PIC
@@ -13,8 +14,9 @@ Here are some notes on how the comincation with hardware works, this is used for
  outb(portNumber, data)
  outb(0x20, 0x1) //Example using PIC (port 32) and the data 1
 ```
-- To intialize the PIC  ICWs (Initialization Control Words) must be sent
+- To initialize the PIC  ICWs (Initialization Control Words) must be sent
 ### Interrupts
+This relates to "interrupts.cpp, interruptstubs.s", which are extended by "keyboard.cpp, mouse.cpp".
 See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://wiki.osdev.org/Interrupt_Descriptor_Table), [Stack](https://www.geeksforgeeks.org/introduction-of-stack-based-cpu-organization/)
 - If the PIC sends information without the Interrupt Descriptor Table (IDT) then there will just be a "protection fault"
 - This is because the PIC relays information in the form of interrupts which the OS doesn't know how to handle without an IDT most likely causing it ro crash or restart
@@ -39,5 +41,17 @@ See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://w
 - To get this number as a parameter the CPU would have to push the number onto a stack, which the CPU cant do safely
 - So instead there has to be function for every interrupt, Which can be done most safely in assembly instead of c++ because compilers be compiling 
 - From the assembly code a c++ function can then be called (similar to calling kernelMain in loader.s)
-- Once the IInterrupt has been received and handled the OS then needs to send a receive message for it continue.
+- Once the Interrupt has been received and handled the OS then needs to send a reception message for it continue.
 - Answers (receive messages) only need to be sent to hardware interrupts
+
+### Peripheral Component Interconnect (PCI)
+See also [PCI](https://www.lowlevel.eu/wiki/Peripheral_Component_Interconnect)
+- In the computer there is a PCI controller that is connected to the PIC. Devices connected to the PCI controller are generally a GPU (graphics card) or a network/Wi-Fi card
+- The PCI controller has up to 8 BUS-es, and on each BUS there can be up to 32 different devices
+- Devices can have up to 8 functions, for example the sound card has audio capture and audio output
+- 3 bits to encode BUS, 5 bits to encode the device number,3 bits to encode the function
+- Unlike the keyboard and mouse, the port number cant be hardcoded because it is unknown if the device is even there or put in the slot on the motherboard
+- As a workaround, the PCI controller has a function to query what device is in the specified port
+- Iterating through the BUS-es and querying the device number will return an uint16_t for the vendor ID and an uint16_t for device ID.
+- The PCI controller will also tell more general information such as class and subclass IDs, which are useful for compatibility modes
+- Once the PCI driver is setup then it becomes easy to extend the OS as in future all that needs to be done is to get the device ID and write drivers for them

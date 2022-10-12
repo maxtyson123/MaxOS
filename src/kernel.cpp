@@ -1,7 +1,12 @@
 
 #include <common/types.h>
 #include <gdt.h>
+
+//Hardware com
 #include <hardwarecommunication/interrupts.h>
+#include <hardwarecommunication/pci.h>
+
+//Drivers
 #include <drivers/driver.h>
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
@@ -13,7 +18,7 @@ using namespace maxos::hardwarecommunication;
 
 void printf(char* str, bool clearLine = false)
 {
-    static uint16_t* VideoMemory = (uint16_t*)0xb8000;
+    static uint16_t* VideoMemory = (uint16_t*)0xb8000;  //Spit the video memory into an array of 16 bit, 4 bit for foreground, 4 bit for background, 8 bit for character
 
     static uint8_t x = 0, y = 0;    //Cursor Location
 
@@ -140,12 +145,16 @@ extern "C" void callConstructors()
 #pragma clang diagnostic ignored "-Wwritable-strings"
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Max OS Kernel -v12 -b17         \n");
+    //NOTE: Will rewrite boot text stuff later
+    //NOTE: Posibly rename from MaxOS to TyOSn
+
+    printf("Max OS Kernel -v0.13 -b18         \n");
     printf("[x] Kernel Booted \n");
 
     printf("[ ] Setting Up Global Descriptor Table... \n");
     GlobalDescriptorTable gdt;                                                              //Setup GDT
     printf("[x] GDT Setup \n");
+
 
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
     InterruptManager interrupts(0x20, &gdt);            //Instantiate the method
@@ -160,6 +169,11 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
         MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
         driverManager.AddDriver(&mouse);
         printf("    -Mouse setup\n");
+
+    printf("    -[ ]Setting PCI\n\n");
+    PeripheralComponentInterconnectController PCIController;
+    PCIController.SelectDrivers(&driverManager);
+    printf("\n    -[x]Setup PCI\n");
 
     driverManager.ActivateAll();
     printf("    -Drivers Setup\n");

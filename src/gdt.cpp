@@ -14,10 +14,10 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 {
     //Tell processor to use this table   (8 bytes)
     uint32_t gdt_t[2];
-    gdt_t[1] = (uint32_t)this;                                  //First byte: Tell processor the address of table
-    gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;             //Last four bytes: The high  bytes of the segment integer
+    gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;             //First and Second byte: The high  bytes of the segment integer
+    gdt_t[1] = (uint32_t)this;                                  //Last Four bytes: Tell processor the address of table
 
-    asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));    //Pass it as a unsigned 8Bit int to assembly
+    asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));    //Pass it as a unsigned 8Bit int to assembly (p means push adress)
 
 }
 
@@ -41,7 +41,7 @@ uint16_t GlobalDescriptorTable::CodeSegmentSelector()
 //Setup GDT for memory
 GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type)
 {
-    uint8_t* target = (uint8_t*)this;
+    uint8_t* target = (uint8_t*)this;       //segment entry in GDT.
 
     if (limit <= 65536)
     {

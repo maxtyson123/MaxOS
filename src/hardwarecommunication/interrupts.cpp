@@ -132,6 +132,7 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     programmableInterruptControllerMasterDataPort.Write(0x01);
     programmableInterruptControllerSlaveDataPort.Write(0x01);
 
+    //This represents the value in the Interrupt Mask Register (IMR), This enables interrupts
     programmableInterruptControllerMasterDataPort.Write(0x00);
     programmableInterruptControllerSlaveDataPort.Write(0x00);
 
@@ -194,7 +195,7 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
     {
         //Send Answer to tell PIC the interrupt was received
         programmableInterruptControllerMasterCommandPort.Write(0x20);      //0x20 is the answer the PIC wants for master
-        if(0x28 <= interrupt)                                                   //Only send slave answer if interrupt sent from slave
+        if(0x28 <= interrupt)                                              //Answer the master always, but don't answer the slave unless the slave called the interrupt
             programmableInterruptControllerSlaveCommandPort.Write(0x20);   //0x20 is the answer the PIC wants for slave
     }
     return esp;

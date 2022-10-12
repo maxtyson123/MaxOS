@@ -12,12 +12,12 @@ namespace maxos {
     public:
         class SegmentDescriptor {
         private:
-            maxos::common::uint16_t limit_lo;      //Low Bytes of the pointer
-            maxos::common::uint16_t base_lo;       //Low Bytes of the pointer
+            maxos::common::uint16_t limit_lo;      //Low Bytes of the pointer       (Least Significant)
+            maxos::common::uint16_t base_lo;       //Low Bytes of the pointer        (Least Significant)
             maxos::common::uint8_t base_hi;        //One byte extension for the pointer
             maxos::common::uint8_t type;           //Excess Bytes
-            maxos::common::uint8_t flags_limit_hi;
-            maxos::common::uint8_t base_vhi;
+            maxos::common::uint8_t flags_limit_hi; //High Bytes of the pointer        (Most Significant)
+            maxos::common::uint8_t base_vhi;       //High Bytes of the pointer        (Most Significant)
         public:
             SegmentDescriptor(maxos::common::uint32_t base, maxos::common::uint32_t limit, maxos::common::uint8_t type);
 
@@ -26,7 +26,7 @@ namespace maxos {
 
             maxos::common::uint32_t Limit();
 
-        } __attribute__((packed)); //Prevent Compiler from moving objects as it needs to be byte perfect bc OS stuff
+        } __attribute__((packed)); //Tell GCC not to change any of the alignment in the structure. The packed attribute specifies that a variable or structure field should have the smallest possible alignment, one byte for a variable, and one bit for a field, unless you specify a larger value with the aligned attribute.
 
     private:
         SegmentDescriptor nullSegmentSelector;

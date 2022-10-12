@@ -8,11 +8,13 @@ objects = obj/loader.o \
  		  obj/hardwarecommunication/port.o \
  		  obj/hardwarecommunication/interruptstubs.o \
  		  obj/hardwarecommunication/interrupts.o \
+ 		  obj/hardwarecommunication/pci.o \
  		  obj/drivers/keyboard.o \
  		  obj/drivers/mouse.o \
  		  obj/kernel.o
 
-
+.PHONY: default
+default: build;
 
 obj/%.o: src/%.cpp
 	mkdir -p $(@D)
@@ -42,6 +44,8 @@ maxos.iso: maxos.bin
 
 build: maxos.iso
 	echo Complete
+
+
 
 .PHONY: clean
 clean:

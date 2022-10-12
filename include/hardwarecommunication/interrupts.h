@@ -29,7 +29,7 @@ namespace maxos {
         };
 
         class InterruptManager {
-            friend class InterruptHandler;
+            friend class InterruptHandler;  //Declaring InterruptHandler as a friend class makes it possible for InterruptManager class to access all members (private and public) of InterrruptHandler class as if it were a member of that class.
 
         protected:
 

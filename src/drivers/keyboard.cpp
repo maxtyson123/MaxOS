@@ -40,7 +40,7 @@ void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
 
 void KeyboardDriver::Activate() {
-        while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start up key eg. hold 'F12' for boot menu or hold 'del' for bios )
+        while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start up key eg. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
             dataPort.Read();
         commandPort.Write(0xAE);                            //Tell: PIC to send keyboard interrupt [or] tell keyboard to send interrupts to PIC
         commandPort.Write(0x20);                            //Tell: get current state
@@ -49,11 +49,17 @@ void KeyboardDriver::Activate() {
         dataPort.Write(status);                             //Write back the current state
 
         dataPort.Write(0xF4);                               //Final Activation of keyboard
+
+        //Keyboard Controller Commands :
+        //
+        //0xAE : Enable Keyboard
+        //0x20 : Read command byte , after that we read the status from data port
+        //0x60 : Write command byte , after that we change the state of the data port
 }
 
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
 
-    uint8_t key = dataPort.Read();
+    uint8_t key = dataPort.Read();      //NOTE: The 8th bit is set to 1 if key is released and cleared to 0 if key is pressed
 
     if(handler == 0){
         return esp;
@@ -70,6 +76,8 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
                 break;
             case 0xC5:
                 break;
+
+            //handler->OnKeyDown(x);    by default it does nothing, however it can be defined in a another class derived from the KeyboardEventHandler class and implement in it OnKeyDown() that does anything when key is pressed
 
             //Top Row
             case 0x3B: handler->OnKeyDown('F1'); break;
