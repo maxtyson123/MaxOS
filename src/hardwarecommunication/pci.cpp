@@ -74,7 +74,7 @@ bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus,
     return Read(bus,device,0,0x0E) & (1<<7);    //Read address, the 7th bit of it returns if there is a function
 }
 
-void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* driverManager) {
+void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* driverManager, InterruptManager* interruptManager) {
     for (int bus = 0; bus < 8; ++bus) {
 
         for (int device = 0; device < 32; ++device) {
@@ -86,8 +86,21 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 
                 //If there is no device then vendor ID is 0x0000, If the device is not ready to react then the vendor ID is 0x0001   (REMOVE 0xFFFF if things go wrong)
                 if(deviceDescriptor.vendor_ID == 0x0000 || deviceDescriptor.vendor_ID == 0x0001 || deviceDescriptor.vendor_ID == 0xFFFF){
-                    break;                                                                          //This also means there are no more function afterwards
+                    continue;
                 }
+
+                for (int barNum = 0; barNum < 6; ++barNum) {
+                    BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
+                    if(bar.adress && (bar.type == InputOutput)){ //Only if the address is really set
+                        deviceDescriptor.portBase = (uint32_t)bar.adress;  //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
+                    }
+
+                    Driver* driver = GetDriver(deviceDescriptor, interruptManager);
+                    if(driver != 0){    //If there is a driver
+                        driverManager->AddDriver(driver);
+                    }
+                }
+
 
                 //Display INFO
                 printf("    PCI BUS ");
@@ -133,5 +146,81 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
 
     return result;
 }
+
+Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager) {
+
+    switch (dev.vendor_ID) {
+        case 0x1022:                            //AMD
+            switch (dev.device_ID) {
+                case 0x2000:                    //AMD - am79c971 (Ethernet Controller) (https://www.amd.com/system/files/TechDocs/20550.pdf)
+                    printf("DEBUG, AMD Ethernet"); //(Note: will replace with drivers written later)
+                    break;
+            }
+            break;
+        case 0x8089:                            //Intel
+            break;
+    }
+
+    //If there is no driver for the particular device, go into generic devices
+    switch (dev.class_id) {
+        case 0x03:                              //Graphics
+            switch (dev.subclass_id) {
+                case 0x00:                      //Graphics - VGA
+                    break;                      //GUI here we come!
+            }
+            break;
+    }
+    
+    
+    
+    return 0;
+}
+
+BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
+    BaseAdressRegister result;
+
+    uint32_t headerType = Read(bus,device,function,0x0E) & 0x7F;  //Only get first 7 bits
+
+    if (headerType >= 0x02)  // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
+    {
+        printf("ERROR: unsupported header type found! \n");
+        return result;
+    }
+
+    const int max_bars = 6 - (headerType * 4); // 6 BARs for type 0x00 and 2 BARs for type 0x01:
+    if(bar >= max_bars){
+        return result;
+    }
+
+
+    const uint32_t barOffset = 0x10 + (bar * 4);   // Determine the offset of the current BAR (note: bar addresses begin at register 0x10, bars have the size of 4)
+    uint32_t bar_value = Read(bus,device,function,barOffset);
+    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;  //Examine the last bit (check notes: last bit is type)
+    uint32_t temp;
+
+    if(result.type == MemoryMapping){
+
+        switch((bar_value >> 1) & 0x3) //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
+        {
+            //Come back to code memory mapping (see lowlev.eu pci)
+            case 0: // 32 Bit Mode
+            case 1: // 20 Bit Mode
+            case 2: // 64 Bit Mode
+                break;
+        }
+
+        //                   Shift bar by 3 (removing last 3 bits) check if it == 0x1
+        result.preFetchable = ((bar_value >> 3) & 0x1) == 0x1;
+    }
+    else
+    {  // I/O
+        result.adress = (uint8_t*)(bar_value & ~0x3); //~0x3 = cancle last 2 bits
+        result.preFetchable = false;
+    }
+
+    return result;
+}
+
+
 
 

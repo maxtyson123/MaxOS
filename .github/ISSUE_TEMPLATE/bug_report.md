@@ -1,38 +1,31 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+## Information
 
----
+Give some basic information about the bug or crash.
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Logs
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+If applicable, insert relevant log contents here.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+```
+LOG CONTENTS
+```
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Screenshot
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+If applicable, insert a screenshot here.
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+## Environment
 
-**Additional context**
-Add any other context about the problem here.
+Describe what you were doing when the crash or bug occurred. Additionally, provide information about the environment (if you aren't sure, don't worry if you need to leave something blank):
+- *Host Operating System or Machine*:
+- *QEMU or Virtualization Software Version*:
+
+## To Reproduce
+
+Steps to reproduce the bug, if possible:
+1. Do something...
+2. Do something else...
+
+## Additional context
+
+Add any other context about the bug here. If you made any additional changes to the default environment, such as adding kernel parameters or using a different toolchain, add that here.

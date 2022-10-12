@@ -139,7 +139,18 @@ extern "C" void callConstructors()
         (*i)();
 }
 
+//[NEW] Version sys
+class Version{
+    public:
+       int version;            //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
+       char* version_c;       //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
+       int build;              //Commit Number
+       char* build_c;          //Commit Number
+       char* buildAuthor;      //Auther of the commit (Mostlikly me, but change for pull requsts and such)
+        Version(){};
+        ~Version(){};
 
+};
 
 
 #pragma clang diagnostic ignored "-Wwritable-strings"
@@ -148,8 +159,17 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Will rewrite boot text stuff later
     //NOTE: Posibly rename from MaxOS to TyOSn
 
-    printf("Max OS Kernel -v0.13 -b18         \n");
-    printf("[x] Kernel Booted \n");
+    Version* maxOsVer;
+    maxOsVer->version = 0.14;
+    maxOsVer->version_c = "0.14";
+    maxOsVer->build = 29;
+    maxOsVer->build_c = "29";
+    maxOsVer->buildAuthor = "Max Tyson";
+
+    printf("Max OS Kernel -v"); printf(maxOsVer->version_c);    printf(" -b"); printf(maxOsVer->build_c);  printf(" -a"); printf(maxOsVer->buildAuthor);
+
+
+    printf("\n[x] Kernel Booted \n");
 
     printf("[ ] Setting Up Global Descriptor Table... \n");
     GlobalDescriptorTable gdt;                                                              //Setup GDT
@@ -172,7 +192,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("    -[ ]Setting PCI\n\n");
     PeripheralComponentInterconnectController PCIController;
-    PCIController.SelectDrivers(&driverManager);
+    PCIController.SelectDrivers(&driverManager, &interrupts);
     printf("\n    -[x]Setup PCI\n");
 
     driverManager.ActivateAll();

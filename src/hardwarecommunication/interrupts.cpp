@@ -76,6 +76,30 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     handlers[0] = 0;                                                                                                                             //Set to no handler (for first in array)
 
 
+    //Deafult
+    //0x00	Division by zero
+    //0x01	Single-step interrupt (see trap flag)
+    //0x02	NMI
+    //0x03	Breakpoint (which benefits from the shorter 0xCC encoding of INT 3)
+    //0x04	Overflow
+    //0x05	Bound Range Exceeded
+    //0x06	Invalid Opcode
+    //0x07	Coprocessor not available
+    //0x08	Double Fault
+    //0x09	Coprocessor Segment Overrun (386 or earlier only)
+    //0x0A	Invalid Task State Segment
+    //0x0B	Segment not present
+    //0x0C	Stack Segment Fault
+    //0x0D	General Protection Fault
+    //0x0E	Page Fault
+    //0x0F	reserved
+    //0x10	x87 Floating Point Exception
+    //0x11	Alignment Check
+    //0x12	Machine Check
+    //0x13	SIMD Floating-Point Exception
+    //0x14	Virtualization Exception
+    //0x15	Control Protection Exception (only available with CET)
+
     //Set Up the base interrupts
     SetInterruptDescriptorTableEntry(0x00, CodeSegment, &HandleException0x00, 0, IDT_INTERRUPT_GATE);
     SetInterruptDescriptorTableEntry(0x01, CodeSegment, &HandleException0x01, 0, IDT_INTERRUPT_GATE);

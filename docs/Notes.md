@@ -1,5 +1,5 @@
 
-# Hardware Communications
+# Hardware Communication
 Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse communication 
 ### Data Send / Receive
 This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
@@ -45,7 +45,7 @@ See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://w
 - Answers (receive messages) only need to be sent to hardware interrupts
 
 ### Peripheral Component Interconnect (PCI)
-See also [PCI](https://www.lowlevel.eu/wiki/Peripheral_Component_Interconnect)
+This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Peripheral_Component_Interconnect)
 - In the computer there is a PCI controller that is connected to the PIC. Devices connected to the PCI controller are generally a GPU (graphics card) or a network/Wi-Fi card
 - The PCI controller has up to 8 BUS-es, and on each BUS there can be up to 32 different devices
 - Devices can have up to 8 functions, for example the sound card has audio capture and audio output
@@ -54,4 +54,18 @@ See also [PCI](https://www.lowlevel.eu/wiki/Peripheral_Component_Interconnect)
 - As a workaround, the PCI controller has a function to query what device is in the specified port
 - Iterating through the BUS-es and querying the device number will return an uint16_t for the vendor ID and an uint16_t for device ID.
 - The PCI controller will also tell more general information such as class and subclass IDs, which are useful for compatibility modes
-- Once the PCI driver is setup then it becomes easy to extend the OS as in future all that needs to be done is to get the device ID and write drivers for them
+- Once the PCI driver is set up then it becomes easy to extend the OS as in future all that needs to be done is to get the device ID and write drivers for them
+### Base Address Registers
+- The soultion for having multiple PCI devices (two GPUS, two screens etc..) is to have a Base Adress Registers (BAR)
+- Base adress registers are registers in the PCI configuration space, which in a more simple way is just storing the address of a PCI device in memory
+- There are two types of BARs, one is  the I/O BAR, this is for devices that communicate bit by bit e.g. mouse where the position is read from the port each interrupt 
+- The I/O base address register is 4 bytes long:
+- - Lowest bit:            Type Of register: (I/O bit = 1)
+- - Second-lowest bit:     Reserved 
+- - Bits 3 - 16:           Port Number (MUST BE MULTIPLE OF 4)
+- Memory mapping is another type of BAR, this one is where the device takes x memory location, and to communicate with it just write/read from that location in memory. This is better preformace-wise as the CPU can do other tasks while that is updating in the background
+- The Memory Mapping BAR is 4 bytes long:
+- - Lowest Bit:  Type Of register: (MemMap bit = 0)
+- - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
+- - Fourth bit: Prefetch-able bit (eg. reading from a hard drive inadvace becuase its estamated that the program will need that soon)
+- - Last Twelve: Port Number (MUST BE MULTIPLE OF 4)

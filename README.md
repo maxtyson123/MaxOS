@@ -8,7 +8,7 @@ Made mainly in C++ with a dabble of ASM. [![wakatime](https://wakatime.com/badge
 Currently working on: Kernel - 
  
 ## Screenshots
-![Screenshot](docs/Screenshots/Drivers, PCI.png)
+![Screenshot](docs/Screenshots/Drivers_PCI.png)
 
 ### Services
 -None Yet
@@ -24,19 +24,7 @@ Currently working on: Kernel -
 
 ## Progress
 
-###  Initial 
-
-- [x] Memory and Global Descriptor Table
-- [x] Hardware Communication / Ports
-- [x] System Interrupts
-- [x] Keyboard & Mouse
-- [x] Drivers
-- [x] PCI
-- [ ] GUI Basics
-- [ ] Desktop and Windows
-- [ ] Network
-- [ ] Filesystem 
-- [ ] Audio
+Moved to  projects page
 
 
 ###  Extended

@@ -15,6 +15,21 @@ namespace maxos
 {
     namespace hardwarecommunication
     {
+        enum BaseAdressRegisterType{        //Used for the last bit of the address register
+            MemoryMapping = 0,
+            InputOutput = 1
+        };
+
+        class BaseAdressRegister{
+            public:
+                bool preFetchable;
+                common::uint8_t* adress;
+                common::uint32_t size;
+                BaseAdressRegisterType type;
+
+        };
+
+
         class PeripheralComponentInterconnectDeviceDescriptor {
             public:
                 common::uint32_t portBase;  //Port used for communication
@@ -50,8 +65,11 @@ namespace maxos
                 void Write(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset, common::uint32_t value);
                 bool DeviceHasFunctions(common::uint16_t bus, common::uint16_t device);
 
-                void SelectDrivers(drivers::DriverManager* driverManager);
+                void SelectDrivers(drivers::DriverManager* driverManager, InterruptManager* interruptManager);
+                drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager);
+
                 PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(common::uint16_t bus, common::uint16_t device, common::uint16_t function);
+                BaseAdressRegister GetBaseAdressRegister(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint16_t bar);       // bar = 0-5 in case of header type 0 [or]  bar = 0-1 in case of header type 1
         };
     }
 }

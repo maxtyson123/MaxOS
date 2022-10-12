@@ -4,6 +4,8 @@
 
 #include <drivers/keyboard.h>
 
+
+
 using namespace maxos::common;
 using namespace maxos::drivers;
 using namespace maxos::hardwarecommunication;
@@ -68,7 +70,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
     static bool Shift = false;
 
 
-  switch (key) {
+    switch (key) {
             //Initializers that can be ignored
             case 0x45:
                 break;
@@ -187,10 +189,10 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
             ///Special Key FUNCTIONS
 
             default:
-                if(key < 0x80) {              //Interrupts 0x80 onwards are just for keyrelease, therefore we can ignore printingthem
+                if(key < 0x80) {              //Interrupts 0x80 onwards are just for keyrelease, therefore we can ignore printing them
                     printf("Keyboard 0x");
                     printfHex(key);
-                }
+               }
                 break;
 
     }
