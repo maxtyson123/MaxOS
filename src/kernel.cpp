@@ -10,6 +10,7 @@
 #include <drivers/driver.h>
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
+#include <drivers/vga.h>
 
 using namespace maxos;
 using namespace maxos::common;
@@ -32,7 +33,7 @@ void printf(char* str, bool clearLine = false)
         x = 0;
     }
 
-    for(int i = 0; str[i] != '\0'; ++i)     //Increment through each char as long as its not the end symbol
+    for(int i = 0; str[i] != '\0'; ++i)     //Increment through each char as long as it's not the end symbol
 
         switch (str[i]) {
 
@@ -79,10 +80,14 @@ void printfHex(uint8_t key){
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
     public:
+        bool guiTestKeyPressed = false;
         void OnKeyDown(char c){
             char* foo = " ";
             foo[0] = c;
             printf(foo);
+            if(c == 't'){
+                guiTestKeyPressed = true;
+            }
         }
 };
 
@@ -160,8 +165,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Posibly rename from MaxOS to TyOSn
 
     Version* maxOsVer;
-    maxOsVer->version = 0.14;
-    maxOsVer->version_c = "0.14";
+    maxOsVer->version = 0.15;
+    maxOsVer->version_c = "0.15";
     maxOsVer->build = 29;
     maxOsVer->build_c = "29";
     maxOsVer->buildAuthor = "Max Tyson";
@@ -179,27 +184,48 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
     InterruptManager interrupts(0x20, &gdt);            //Instantiate the method
 
-    DriverManager driverManager;
-        PrintfKeyboardEventHandler printfKeyboardEventHandler;
-        KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
-        driverManager.AddDriver(&keyboard);
-        printf("    -Keyboard setup\n");
+    printf("[ ] Setting Up Interrupt Descriptor Table... \n");
 
-        MouseToConsole mouseEventHandler;
-        MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
-        driverManager.AddDriver(&mouse);
-        printf("    -Mouse setup\n");
+    printf("[ ] Setting Up Drivers... \n");
+    DriverManager driverManager;
+
+    PrintfKeyboardEventHandler printfKeyboardEventHandler;
+    KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
+    driverManager.AddDriver(&keyboard);
+    printf("    -Keyboard setup\n");
+
+    MouseToConsole mouseEventHandler;
+    MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
+    driverManager.AddDriver(&mouse);
+    printf("    -Mouse setup\n");
 
     printf("    -[ ]Setting PCI\n\n");
     PeripheralComponentInterconnectController PCIController;
     PCIController.SelectDrivers(&driverManager, &interrupts);
     printf("\n    -[x]Setup PCI\n");
 
+    VideoGraphicsArray vga;
+    printf("    -VGA setup\n");
+
     driverManager.ActivateAll();
-    printf("    -Drivers Setup\n");
+    printf("[X] Drivers Setup\n");
 
     interrupts.Activate();                                                                  //Activate as separate method from constructor as we first instantiated the method, then the hardware
     printf("[x] IDT Setup \n", true);
+
+    printf("[ ] TEST Graphics... {VGA}\n");
+    printf("press 't' ");
+    while(!printfKeyboardEventHandler.guiTestKeyPressed);
+
+    vga.SetMode(320,200,8);
+    //Test Rect
+    for (int32_t y = 0; y < 200; y++) {
+        for (int32_t x = 0; x < 320; x++) {
+            vga.PutPixel(x,y,0x00,0x00,0xA8);
+        }
+    }
+
+    printf("[X] Graphics TEST {VGA}\n");
 
     while(1);                                                                               //Loop
 }

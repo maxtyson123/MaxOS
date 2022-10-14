@@ -144,7 +144,7 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     programmableInterruptControllerMasterCommandPort.Write(0x11);
     programmableInterruptControllerSlaveCommandPort.Write(0x11);
 
-    //Because the CPU uses interrupt 1 etc, tell the PIC to add 0x20 to it (this is the remapping of hardware)
+    //Because the CPU uses interrupt 1 etc. , tell the PIC to add 0x20 to it (this is the remapping of hardware)
     programmableInterruptControllerMasterDataPort.Write(hardwareInterruptOffset);
     programmableInterruptControllerSlaveDataPort.Write(hardwareInterruptOffset+8);
 
@@ -174,7 +174,7 @@ InterruptManager::~InterruptManager()
 
 void InterruptManager::Activate() {
 
-    if(ActiveInterruptManager != 0){                //There shouldnt be another interrupt manager, but for saftey delete anyother ones. This is becuase the processor only has 1 IDT
+    if(ActiveInterruptManager != 0){                //There shouldn't be another interrupt manager, but for saftey delete anyother ones. This is becuase the processor only has 1 IDT
         ActiveInterruptManager->Deactivate();
     }
 

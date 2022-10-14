@@ -17,7 +17,7 @@ GlobalDescriptorTable::GlobalDescriptorTable()
     gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;             //First and Second byte: The high  bytes of the segment integer
     gdt_t[1] = (uint32_t)this;                                  //Last Four bytes: Tell processor the address of table
 
-    asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));    //Pass it as a unsigned 8Bit int to assembly (p means push adress)
+    asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));    //Pass it as an unsigned 8Bit int to assembly (p means push adress)
 
 }
 

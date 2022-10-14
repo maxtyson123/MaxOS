@@ -36,5 +36,5 @@ set(
         ${common_h}/types.h
 
 
-)
+        include/drivers/vga.h src/drivers/vga.cpp)
 add_executable(untitled ${SOURCE_FILES})

@@ -1,6 +1,6 @@
 
 # Hardware Communication
-Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse communication 
+Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse communication and setting up other devices, eg. GPU
 ### Data Send / Receive
 This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
@@ -68,4 +68,13 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Lowest Bit:  Type Of register: (MemMap bit = 0)
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
 - - Fourth bit: Prefetch-able bit (eg. reading from a hard drive inadvace becuase its estamated that the program will need that soon)
-- - Last Twelve: Port Number (MUST BE MULTIPLE OF 4)
+- - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
+
+# Graphics
+Here are the notes on graphics for the operating system. (May need to read hardware communication first)
+### Graphics Mode
+- To write pixels and such to the screen for a GUI the graphics card needs to be put into graphics mode (grub puts it into text mode by default)
+- There are two ways of doing this, via the BIOS 0x13 Interrupt or by directly telling the GPU.
+- As the BIOS interrupt 0x13 is only for 16Bit operating system (MaxOS is 32bit) graphics mode would have to be set via the GPU
+- Setting graphics mode via the GPU is incredibly complicated therefore the script ['modes.c' by Chris Giese](https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c) is used
+- 

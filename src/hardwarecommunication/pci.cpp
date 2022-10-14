@@ -153,7 +153,6 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
         case 0x1022:                            //AMD
             switch (dev.device_ID) {
                 case 0x2000:                    //AMD - am79c971 (Ethernet Controller) (https://www.amd.com/system/files/TechDocs/20550.pdf)
-                    printf("DEBUG, AMD Ethernet"); //(Note: will replace with drivers written later)
                     break;
             }
             break;
@@ -176,7 +175,31 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
     return 0;
 }
 
+/* searches for the lowest set bit in a 32-bit value, value must not be 0 */
+uint32_t get_number_of_lowest_set_bit(uint32_t value)
+{
+    uint32_t pos = 0;
+    uint32_t mask = 0x00000001;
+    while (!(value & mask))
+    { ++pos; mask=mask<<1; }
+    return pos;
+}
+
+/* searches for the highest set bit in a 32-bit value, value must not be 0 */
+uint32_t get_number_of_highest_set_bit(uint32_t value)
+{
+    uint32_t pos = 31;
+    uint32_t mask = 0x80000000;
+    while (!(value & mask))
+    { --pos; mask=mask>>1; }
+    return pos;
+}
+
 BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
+
+
+
+
     BaseAdressRegister result;
 
     uint32_t headerType = Read(bus,device,function,0x0E) & 0x7F;  //Only get first 7 bits
@@ -193,24 +216,53 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
     }
 
 
-    const uint32_t barOffset = 0x10 + (bar * 4);   // Determine the offset of the current BAR (note: bar addresses begin at register 0x10, bars have the size of 4)
+    const uint32_t barOffset = 0x10 + (bar * 4);                            // Determine the offset of the current BAR (note: bar addresses begin at register 0x10, bars have the size of 4)
     uint32_t bar_value = Read(bus,device,function,barOffset);
-    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;  //Examine the last bit (check notes: last bit is type)
+    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;          //Examine the last bit (check notes: last bit is type)
     uint32_t temp;
 
     if(result.type == MemoryMapping){
-
+        result.preFetchable = ((bar_value >> 3) & 0x1) == 0x1;
         switch((bar_value >> 1) & 0x3) //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
         {
-            //Come back to code memory mapping (see lowlev.eu pci)
-            case 0: // 32 Bit Mode
+            case 0:                                                                                          // 32 Bit Mode
+            {
+                Write(bus,device,function,barOffset,0xFFFFFFF0);                            // overwrite with all 1s
+                const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFF0;       // and read back again
+                if (barValue == 0)                                                                          // at least one address bit must be 1 (i.e. writable).
+                {
+                    if (result.preFetchable)                                                                // unused BARs must be completely 0 (the prefetchable bit must not be set either)
+                    {
+                        printf("ERROR : 32-bit memory BAR"); printf(reinterpret_cast<char *>(bar)); printf("contains no writable address bits!\n");
+                        return result;
+                    }
+
+                    // Output BAR info :
+                     //  printf("BAR: "); printf(reinterpret_cast<char *>(bar)); printf("is unused!\n");
+                }
+                else
+                {
+                    const uint32_t lowestBit = get_number_of_lowest_set_bit(barValue);
+                    // it must be a valid 32-bit address :
+                    if ( (get_number_of_highest_set_bit(barValue) != 31) || (lowestBit > 31) || (lowestBit < 4) )
+                    {
+                        printf("ERROR : 32-bit memory BAR %u contains invalid writable address bits!\n",bar);
+                        return result;
+                    }
+
+                    // Output BAR info :
+                   // printf("BAR: "); printf(reinterpret_cast<char *>(bar)); printf(" works (32Bit)!\n");
+
+                }
+            }
+                break;
             case 1: // 20 Bit Mode
             case 2: // 64 Bit Mode
                 break;
         }
 
         //                   Shift bar by 3 (removing last 3 bits) check if it == 0x1
-        result.preFetchable = ((bar_value >> 3) & 0x1) == 0x1;
+
     }
     else
     {  // I/O
@@ -220,6 +272,12 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
 
     return result;
 }
+
+
+
+
+
+
 
 
 

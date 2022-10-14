@@ -11,6 +11,7 @@ objects = obj/loader.o \
  		  obj/hardwarecommunication/pci.o \
  		  obj/drivers/keyboard.o \
  		  obj/drivers/mouse.o \
+ 		  obj/drivers/vga.o \
  		  obj/kernel.o
 
 .PHONY: default
@@ -45,7 +46,9 @@ maxos.iso: maxos.bin
 build: maxos.iso
 	echo Complete
 
-
+install_dep:
+	sudo apt-get update -y
+	sudo apt-get install g++ binutils libc6-i386 grub-pc xorriso mtools
 
 .PHONY: clean
 clean:

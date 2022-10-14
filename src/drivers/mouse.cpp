@@ -104,7 +104,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
         //Detect button press
         for (int i = 0; i < 3; ++i) {
             //move the bit, and compare it to buffer 0 != //move the bit, and compare it to buttons
-            if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1))) //Check if its the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
+            if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1))) //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
             {
                 //Handle the button press/release
                 if(buttons & (0x1<<i))                  //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed

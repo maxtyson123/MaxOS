@@ -42,7 +42,7 @@ void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
 
 void KeyboardDriver::Activate() {
-        while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start up key eg. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
+        while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start-up key eg.. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
             dataPort.Read();
         commandPort.Write(0xAE);                            //Tell: PIC to send keyboard interrupt [or] tell keyboard to send interrupts to PIC
         commandPort.Write(0x20);                            //Tell: get current state
@@ -79,7 +79,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
             case 0xC5:
                 break;
 
-            //handler->OnKeyDown(x);    by default it does nothing, however it can be defined in a another class derived from the KeyboardEventHandler class and implement in it OnKeyDown() that does anything when key is pressed
+            //handler->OnKeyDown(x);    by default it does nothing, however it can be defined in an another class derived from the KeyboardEventHandler class and implement in it OnKeyDown() that does anything when key is pressed
 
             //Top Row
             case 0x3B: handler->OnKeyDown('F1'); break;
