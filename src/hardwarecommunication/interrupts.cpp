@@ -3,8 +3,8 @@
 //
 
 #include <hardwarecommunication/interrupts.h>
-using namespace maxos::common;
-using namespace maxos::hardwarecommunication;
+using namespace maxOS::common;
+using namespace maxOS::hardwarecommunication;
 
 
 void printf(char* str, bool clearLine = false); //Forward declaration

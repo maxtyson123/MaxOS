@@ -3,8 +3,8 @@
 //
 #include <gui/widget.h>
 
-using namespace maxos::common;
-using namespace maxos::gui;
+using namespace maxOS::common;
+using namespace maxOS::gui;
 
 ///__DEFAULT WIDGET__
 

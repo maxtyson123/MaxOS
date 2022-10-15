@@ -11,7 +11,7 @@
 #include <hardwarecommunication/interrupts.h>
 
 
-namespace maxos
+namespace maxOS
 {
     namespace hardwarecommunication
     {

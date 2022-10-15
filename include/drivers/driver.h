@@ -5,7 +5,7 @@
 #ifndef MAX_OS_DRIVERS_DRIVER_H
 #define MAX_OS_DRIVERS_DRIVER_H
 
-namespace maxos
+namespace maxOS
 {
     namespace drivers {
 

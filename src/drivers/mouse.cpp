@@ -4,9 +4,9 @@
 
 #include <drivers/mouse.h>
 
-using namespace maxos::common;
-using namespace maxos::drivers;
-using namespace maxos::hardwarecommunication;
+using namespace maxOS::common;
+using namespace maxOS::drivers;
+using namespace maxOS::hardwarecommunication;
 
 
 ///__Handler__

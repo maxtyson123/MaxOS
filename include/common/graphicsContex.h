@@ -2,12 +2,12 @@
 // Created by 98max on 10/15/2022.
 //
 
-#ifndef MAXOS_COMMON_GRAPHICSCONTEX_H
-#define MAXOS_COMMON_GRAPHICSCONTEX_H
+#ifndef MaxOS_COMMON_GRAPHICSCONTEX_H
+#define MaxOS_COMMON_GRAPHICSCONTEX_H
 
 #include <drivers/vga.h>
 
-namespace maxos {
+namespace maxOS {
 
     namespace common {
 
@@ -17,4 +17,4 @@ namespace maxos {
     }
 }
 
-#endif //MAXOS_GRAPHICSCONTEX_H
+#endif //MaxOS_GRAPHICSCONTEX_H

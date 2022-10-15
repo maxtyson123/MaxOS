@@ -2,10 +2,10 @@
 // Created by 98max on 10/15/2022.
 //
 
-#ifndef MAXOS_GUI_WINDOW_H
-#define MAXOS_GUI_WINDOW_H
+#ifndef MaxOS_GUI_WINDOW_H
+#define MaxOS_GUI_WINDOW_H
 
-namespace maxos{
+namespace maxOS{
 
     namespace gui{
 
@@ -15,4 +15,4 @@ namespace maxos{
 
 }
 
-#endif //MAXOS_GUI_WINDOW_H
+#endif //MaxOS_GUI_WINDOW_H

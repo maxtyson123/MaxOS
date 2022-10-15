@@ -3,9 +3,9 @@
 //
 #include <hardwarecommunication/pci.h>
 
-using namespace maxos::common;
-using namespace maxos::hardwarecommunication;
-using namespace maxos::drivers;
+using namespace maxOS::common;
+using namespace maxOS::hardwarecommunication;
+using namespace maxOS::drivers;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration

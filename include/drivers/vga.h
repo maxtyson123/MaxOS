@@ -2,15 +2,15 @@
 // Created by Tyson on 14/10/2022.
 //
 
-#ifndef MAXOS_DRIVERS_VGA_H
-#define MAXOS_DRIVERS_VGA_H
+#ifndef MaxOS_DRIVERS_VGA_H
+#define MaxOS_DRIVERS_VGA_H
 
 #include <common/types.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
 
-namespace maxos{
+namespace maxOS{
 
     namespace drivers{
 
@@ -53,4 +53,4 @@ namespace maxos{
     }
 }
 
-#endif //MAXOS_DRIVERS_VGA_H
+#endif //MaxOS_DRIVERS_VGA_H

@@ -6,6 +6,7 @@ Max os following: [OS Dev Wiki](https://wiki.osdev.org/Creating_an_Operating_Sys
 Made mainly in C++ with a dabble of ASM. 
 
 [![wakatime](https://wakatime.com/badge/github/maxtyson123/max-os.svg)](https://wakatime.com/badge/github/maxtyson123/max-os)
+![maxOS](https://github.com/maxtyson123/max-os/workflows/maxOS/badge.svg)
 
 *Dont make pull request or bugs until initial is done (found in projects)
  
@@ -65,7 +66,7 @@ Make Files and OS
 
 ```bash
  sudo apt-get install g++ binutils libc6-dev-i386 grub-legacy xorriso
- make maxos.iso  
+ make maxOS.iso  
 ```
 
 Run Os 

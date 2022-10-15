@@ -4,8 +4,8 @@
 
 #include <hardwarecommunication/port.h>
 
-using namespace maxos::common;
-using namespace maxos::hardwarecommunication;
+using namespace maxOS::common;
+using namespace maxOS::hardwarecommunication;
 
 Port::Port(uint16_t portnumber){
     this->portnumber = portnumber;

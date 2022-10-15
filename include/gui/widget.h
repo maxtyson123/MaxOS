@@ -2,13 +2,13 @@
 // Created by 98max on 10/15/2022.
 //
 
-#ifndef MAXOS_GUI_WIDGET_H
-#define MAXOS_GUI_WIDGET_H
+#ifndef MaxOS_GUI_WIDGET_H
+#define MaxOS_GUI_WIDGET_H
 
 #include <common/types.h>
 #include <common/graphicsContex.h>
 
-namespace maxos{
+namespace maxOS{
 
     namespace gui{
 
@@ -76,4 +76,4 @@ namespace maxos{
 
 }
 
-#endif //MAXOS_GUI_WIDGET_H
+#endif //MaxOS_GUI_WIDGET_H

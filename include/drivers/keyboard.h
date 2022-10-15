@@ -10,7 +10,7 @@
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
 
-namespace maxos
+namespace maxOS
 {
     namespace drivers {
 
@@ -23,17 +23,17 @@ namespace maxos
             virtual void OnKeyUp(char);
         };
 
-        class KeyboardDriver : public maxos::hardwarecommunication::InterruptHandler, public Driver {
-            maxos::hardwarecommunication::Port8Bit dataPort;
-            maxos::hardwarecommunication::Port8Bit commandPort;
+        class KeyboardDriver : public maxOS::hardwarecommunication::InterruptHandler, public Driver {
+            maxOS::hardwarecommunication::Port8Bit dataPort;
+            maxOS::hardwarecommunication::Port8Bit commandPort;
 
             KeyboardEventHandler *handler;
         public:
-            KeyboardDriver(maxos::hardwarecommunication::InterruptManager *manager, KeyboardEventHandler *handler);
+            KeyboardDriver(maxOS::hardwarecommunication::InterruptManager *manager, KeyboardEventHandler *handler);
 
             ~KeyboardDriver();
 
-            virtual maxos::common::uint32_t HandleInterrupt(maxos::common::uint32_t esp);
+            virtual maxOS::common::uint32_t HandleInterrupt(maxOS::common::uint32_t esp);
 
             virtual void Activate();
         };

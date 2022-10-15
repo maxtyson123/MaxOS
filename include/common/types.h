@@ -1,7 +1,7 @@
 #ifndef MAX_OS_COMMON_TYPES_H
 #define MAX_OS_COMMON_TYPES_H
 
-namespace maxos
+namespace maxOS
 {
     namespace common
     {

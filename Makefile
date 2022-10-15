@@ -25,10 +25,10 @@ obj/%.o: src/%.s
 	mkdir -p $(@D)
 	as $(ASPARAMS) -o $@ $<
 
-maxos.bin: linker.ld $(objects)
+maxOS.bin: linker.ld $(objects)
 	ld $(LDPARAMS) -T $< -o $@ $(objects)
 
-maxos.iso: maxos.bin
+maxOS.iso: maxOS.bin
 	mkdir iso
 	mkdir iso/boot
 	mkdir iso/boot/grub
@@ -37,13 +37,13 @@ maxos.iso: maxos.bin
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
 	echo 'menuentry "My Operating System" {' >> iso/boot/grub/grub.cfg
-	echo '  multiboot /boot/maxos.bin'    >> iso/boot/grub/grub.cfg
+	echo '  multiboot /boot/maxOS.bin'    >> iso/boot/grub/grub.cfg
 	echo '  boot'                            >> iso/boot/grub/grub.cfg
 	echo '}'                                 >> iso/boot/grub/grub.cfg
-	grub-mkrescue --output=maxos.iso iso
+	grub-mkrescue --output=maxOS.iso iso
 	rm -rf iso
 
-build: maxos.iso
+build: maxOS.iso
 	echo Complete
 
 install_dep:

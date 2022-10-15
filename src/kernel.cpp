@@ -12,10 +12,10 @@
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
 
-using namespace maxos;
-using namespace maxos::common;
-using namespace maxos::drivers;
-using namespace maxos::hardwarecommunication;
+using namespace maxOS;
+using namespace maxOS::common;
+using namespace maxOS::drivers;
+using namespace maxOS::hardwarecommunication;
 
 void printf(char* str, bool clearLine = false)
 {
@@ -164,14 +164,14 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Will rewrite boot text stuff later
     //NOTE: Posibly rename from MaxOS to TyOSn
 
-    Version* maxOsVer;
-    maxOsVer->version = 0.15;
-    maxOsVer->version_c = "0.15.1";
-    maxOsVer->build = 30;
-    maxOsVer->build_c = "30";
-    maxOsVer->buildAuthor = "Max Tyson";
+    Version* maxOSVer;
+    maxOSVer->version = 0.15;
+    maxOSVer->version_c = "0.15.1";
+    maxOSVer->build = 30;
+    maxOSVer->build_c = "30";
+    maxOSVer->buildAuthor = "Max Tyson";
 
-    printf("Max OS Kernel -v"); printf(maxOsVer->version_c);    printf(" -b"); printf(maxOsVer->build_c);  printf(" -a"); printf(maxOsVer->buildAuthor);
+    printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
 
 
     printf("\n[x] Kernel Booted \n");
