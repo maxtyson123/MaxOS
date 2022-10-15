@@ -166,9 +166,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     Version* maxOsVer;
     maxOsVer->version = 0.15;
-    maxOsVer->version_c = "0.15";
-    maxOsVer->build = 29;
-    maxOsVer->build_c = "29";
+    maxOsVer->version_c = "0.15.1";
+    maxOsVer->build = 30;
+    maxOsVer->build_c = "30";
     maxOsVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOsVer->version_c);    printf(" -b"); printf(maxOsVer->build_c);  printf(" -a"); printf(maxOsVer->buildAuthor);
@@ -213,20 +213,20 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     interrupts.Activate();                                                                  //Activate as separate method from constructor as we first instantiated the method, then the hardware
     printf("[x] IDT Setup \n", true);
 
+
     printf("[ ] TEST Graphics... {VGA}\n");
     printf("press 't' ");
     while(!printfKeyboardEventHandler.guiTestKeyPressed);
-
     vga.SetMode(320,200,8);
+
     //Test Rect
-    for (int32_t y = 0; y < 200; y++) {
-        for (int32_t x = 0; x < 320; x++) {
-            vga.PutPixel(x,y,0x00,0x00,0xA8);
-        }
-    }
+    vga.FillRectangle(0,0,320,200,0x00,0x00,0xA8);
 
     printf("[X] Graphics TEST {VGA}\n");
 
     while(1);                                                                               //Loop
 }
 #pragma clang diagnostic pop
+
+
+//This has messed with my understanding of c++, like how does a header contain the funct  void OnKeyUp(common::int32_t x, common::int32_t y); but the cpp  void OnKeyUp(char* str; with no errors

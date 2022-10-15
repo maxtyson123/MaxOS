@@ -1,3 +1,4 @@
+NOTE: method is the same is function (or atleast in my wording here)
 
 # Hardware Communication
 Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse communication and setting up other devices, eg. GPU
@@ -63,18 +64,39 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Lowest bit:            Type Of register: (I/O bit = 1)
 - - Second-lowest bit:     Reserved 
 - - Bits 3 - 16:           Port Number (MUST BE MULTIPLE OF 4)
-- Memory mapping is another type of BAR, this one is where the device takes x memory location, and to communicate with it just write/read from that location in memory. This is better preformace-wise as the CPU can do other tasks while that is updating in the background
+- Memory mapping is another type of BAR, this one is where the device takes x memory location, and to communicate with it just write/read from that location in memory. This is better performance-wise as the CPU can do other tasks while that is updating in the background
 - The Memory Mapping BAR is 4 bytes long:
 - - Lowest Bit:  Type Of register: (MemMap bit = 0)
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
-- - Fourth bit: Prefetch-able bit (eg. reading from a hard drive inadvace becuase its estamated that the program will need that soon)
+- - Fourth bit: Prefetch-able bit (eg. reading from a hard drive in advance because its estimated that the program will need that soon)
 - - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
 
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)
-### Graphics Mode
+### Graphics Mode {VGA}
 - To write pixels and such to the screen for a GUI the graphics card needs to be put into graphics mode (grub puts it into text mode by default)
 - There are two ways of doing this, via the BIOS 0x13 Interrupt or by directly telling the GPU.
 - As the BIOS interrupt 0x13 is only for 16Bit operating system (MaxOS is 32bit) graphics mode would have to be set via the GPU
 - Setting graphics mode via the GPU is incredibly complicated therefore the script ['modes.c' by Chris Giese](https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c) is used
-- 
+- To set the graphics mode via the GPU different sets of values have to be sent to different places, for example a 320px wide by 200px height x 8-bit colour depth graphics mode would have to be set by sending these values:
+- - Misc Port: 0x63,
+- - Sequencer Port:  0x03, 0x01, 0x0F, 0x00, 0x0E,
+- - (CRTC) Cathode ray tube controller Port:  0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
+    0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3, 0xFF,
+- - (GC) Graphics controller Port: 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F, 0xFF,
+- - (AC) Attribute Controller: 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x41, 0x00, 0x0F, 0x00, 0x00
+- However communicating with these ports aren't that easy as there is an index port (to tell where the data should be put) and a data port (push the data)
+- And on the CRTC port there is special indexes and data that has to be set for it to unlocked before writing actual data (the reason it has to be unlocked is that if incorrect data is the hardware could be damaged)
+- Similarly, the AC port has to be reset before each index & data write.
+- The VGA class that was written should have a class above that call graphicsContext which would define methods such as putPixel(...), drawRect(...), drawLine(...), drawCircle(...) and sub-classes such as color.
+- The draw functions should rely on the putPixel function therefore in different graphics modes that are derived from that graphicsContext class can be supported.
+
+### GUI - Framework
+See also: Bresenham line algorithm (use for later)
+- The GUI framework will have a base class called Widget, which should have a draw method. This draw method would get a graphicsContext and draw itself onto of it using the graphicContex's draw methods.
+- Thees widgets will have parents and such, therefore their draw positions will be reletive, meaning there has to be a method to get the absolute position.
+- Widgets will also have a width a height, and a method to check if a co-ordnate is inside of itslef (used for mouse handling and such)
+- To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMove, OnMouseUp. However the mouse handler wont be on the widget itself, rather it would be on the desktop.
+- This is becuase the mouse movement is reported in relative-ness not aboslute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
+- A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the children (eg. the child gets drawn last so its on top)
+- To get which widget to preform the keyEvent or mouseEven the desktop will have a method of getting the focused widget
