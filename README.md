@@ -11,7 +11,7 @@ Made mainly in C++ with a dabble of ASM.
 *Dont make pull request or bugs until initial is done (found in projects)
  
 ## Screenshots
-![Screenshot](docs/Screenshots/Drivers_PCI.png)
+![Screenshot](docs/Screenshots/GUI_Barebones_crop.png)
 
 ### Services
 -None Yet
