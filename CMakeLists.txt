@@ -36,5 +36,5 @@ set(
         ${common_h}/types.h
 
 
-        include/drivers/vga.h src/drivers/vga.cpp include/gui/widget.h include/gui/window.h include/gui/desktop.h src/gui/desktop.cpp src/gui/widget.cpp src/gui/window.cpp include/common/graphicsContex.h)
+        include/drivers/vga.h src/drivers/vga.cpp include/gui/widget.h include/gui/window.h include/gui/desktop.h src/gui/desktop.cpp src/gui/widget.cpp src/gui/window.cpp include/common/graphicsContex.h include/gui/render.h src/gui/render.cpp)
 add_executable(untitled ${SOURCE_FILES})

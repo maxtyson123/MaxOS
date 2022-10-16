@@ -1,4 +1,5 @@
 
+//Common
 #include <common/types.h>
 #include <gdt.h>
 
@@ -12,10 +13,16 @@
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
 
+//GUI
+#include <gui/desktop.h>
+#include <gui/window.h>
+#include "gui/render.h"
+
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::hardwarecommunication;
+using namespace maxOS::gui;
 
 void printf(char* str, bool clearLine = false)
 {
@@ -115,8 +122,8 @@ class MouseToConsole: public MouseEventHandler{
                                   | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
                                   | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
 
-            x += x_offset;     //Movement on the x-axis (note, mouse passes the info inverted)
-            y -= y_offset;     //Movement on the y-axis (note, mouse passes the info inverted)
+            x += x_offset;     //Movement on the x-axis
+            y += y_offset;     //Movement on the y-axis (note, mouse passes the info inverted)
 
             //Make sure mouse position not out of bounds
             if(x < 0) x = 0;
@@ -162,13 +169,13 @@ class Version{
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
     //NOTE: Will rewrite boot text stuff later
-    //NOTE: Posibly rename from MaxOS to TyOSn
+    //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
     maxOSVer->version = 0.15;
-    maxOSVer->version_c = "0.15.1";
-    maxOSVer->build = 30;
-    maxOSVer->build_c = "30";
+    maxOSVer->version_c = "0.15.2";
+    maxOSVer->build = 32;
+    maxOSVer->build_c = "32";
     maxOSVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
@@ -186,16 +193,22 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
 
+    //Desktop needs the mouse and keyboard
+    // so instantiated it here
+    Desktop desktop(320,200,0x00,0x00,0xA8);
+
     printf("[ ] Setting Up Drivers... \n");
     DriverManager driverManager;
 
-    PrintfKeyboardEventHandler printfKeyboardEventHandler;
-    KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
+        // PrintfKeyboardEventHandler printfKeyboardEventHandler;
+        // KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
+    KeyboardDriver keyboard(&interrupts,&desktop);   //Setup Keyboard drivers
     driverManager.AddDriver(&keyboard);
     printf("    -Keyboard setup\n");
 
-    MouseToConsole mouseEventHandler;
-    MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
+      //  MouseToConsole mouseEventHandler;
+      //  MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
+    MouseDriver mouse(&interrupts, &desktop);                 //Setup Mouse drivers
     driverManager.AddDriver(&mouse);
     printf("    -Mouse setup\n");
 
@@ -205,28 +218,41 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("\n    -[x]Setup PCI\n");
 
     VideoGraphicsArray vga;
+    Render rend(320,200);   //arguments do nothing for now. 320,200 is hardcoded into "gui/render.h"
     printf("    -VGA setup\n");
 
     driverManager.ActivateAll();
     printf("[X] Drivers Setup\n");
 
-    interrupts.Activate();                                                                  //Activate as separate method from constructor as we first instantiated the method, then the hardware
-    printf("[x] IDT Setup \n", true);
-
-
-    printf("[ ] TEST Graphics... {VGA}\n");
-    printf("press 't' ");
-    while(!printfKeyboardEventHandler.guiTestKeyPressed);
     vga.SetMode(320,200,8);
 
-    //Test Rect
-    vga.FillRectangle(0,0,320,200,0x00,0x00,0xA8);
+    //Test Windows
+    Window win1(&desktop, 10,10,20,20,0xA8,0x00,0x00);
+    Window win2(&desktop, 10,35,40,20,0x00,0xA8,0x00);
 
-    printf("[X] Graphics TEST {VGA}\n");
+    //Add children
+    desktop.AddChild(&win1);
+    desktop.AddChild(&win2);
 
-    while(1);                                                                               //Loop
+    printf("GUI is ready ... \n");
+
+
+    printf("[x] IDT Setup \n", true);
+    interrupts.Activate();
+
+
+
+
+    while(1){
+
+        //render new frame
+        desktop.Draw(&rend);
+
+        //display rendered frame
+        rend.display(&vga);
+    }                                                                       //Loop
 }
 #pragma clang diagnostic pop
 
 
-//This has messed with my understanding of c++, like how does a header contain the funct  void OnKeyUp(common::int32_t x, common::int32_t y); but the cpp  void OnKeyUp(char* str; with no errors
+//Ignore this BS, forgot abt polybullshit

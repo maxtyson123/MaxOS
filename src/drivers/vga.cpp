@@ -131,31 +131,35 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 }
 
 
+//8 bit vga mode only has 256 colours. colorIndex selects which one to display
+void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
+    if(x < 0 || x >= 320 || y < 0 || y >= 200) return; //Check if coords r legal
 
-void VideoGraphicsArray::PutPixel(uint32_t x, uint32_t y,  uint8_t colourIndex)
-{
-    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;  //Get where to put the pixel in memory and x y pos
-    *pixelAddress = colourIndex;
+    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    //Get where to put the pixel in memory and x y pos
+    *pixelAddress = colorIndex;
 }
 
 uint8_t VideoGraphicsArray::GetColourIndex(uint8_t r, uint8_t g, uint8_t b)
 {
-    if(r == 0x00, g == 0x00, b == 0xA8)
-        return 0x01;
+    if(r == 0x00 && g == 0x00 && b == 0x00)  return 0x00;   //BLACK
+    if(r == 0x00 && g == 0x00 && b == 0xA8)  return 0x01;   //BLUE
+    if(r == 0x00 && g == 0xA8 && b == 0x00)  return 0x02;   //GREEN
+    if(r == 0x00 && g == 0x00 && b == 0xA8)  return 0x01;   //BLUE
+    if(r == 0xA8 && g == 0x00 && b == 0x00)  return 0x04;   //RED
+    if(r == 0xFF && g == 0xFF && b == 0xFF)  return 0x3F;   //WHITE
+
+    //If cant find hex for a rgb value then return black
     return 0x00;
 }
 
-void VideoGraphicsArray::PutPixel(uint32_t x, uint32_t y,  uint8_t r, uint8_t g, uint8_t b)
-{
+void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b){
     PutPixel(x,y, GetColourIndex(r,g,b));
 }
 
-void
-VideoGraphicsArray::FillRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t r, uint8_t g, uint8_t b) {
-
-    for (int32_t Y = y; Y < y+h; Y++) {
-        for (int32_t X = x; X < x+w; X++) {
-            PutPixel(X,Y,r,g,b);
+void VideoGraphicsArray::FillRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t r, uint8_t g, uint8_t b) {
+    for (uint32_t Y = y; Y < y + h; Y++) {
+        for (uint32_t X = x; X < x + w; X++) {
+            PutPixel(X, Y, r, g, b);
         }
     }
 }

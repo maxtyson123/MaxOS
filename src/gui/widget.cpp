@@ -5,10 +5,13 @@
 
 using namespace maxOS::common;
 using namespace maxOS::gui;
+using namespace maxOS::drivers;
 
 ///__DEFAULT WIDGET__
 
-Widget::Widget( Widget* parent, int32_t x, int32_t y, int32_t w, int32_t h, uint8_t r, uint8_t g, uint8_t b){
+Widget::Widget( Widget* parent, int32_t x, int32_t y, int32_t w, int32_t h, uint8_t r, uint8_t g, uint8_t b)
+: KeyboardEventHandler()
+{
 
     this->parent = parent;
     this->x = x;
@@ -66,7 +69,13 @@ void Widget::Draw(GraphicsContext* gc){
     gc->FillRectangle(X,Y,w,h,r,g,b);
 }
 
-void Widget::OnMouseDown(int32_t x, int32_t y){
+bool Widget::ContainsCoordinate(int32_t x, int32_t y)
+{
+    //Check if the passed  variables are larger then the widget position and check if there smaller then the width
+    return (x >= this->x) && (x < this->x + this->w) && (y >= this->y) && (y < this->y + this->h);
+}
+
+void Widget::OnMouseDown(int32_t x, int32_t y, uint8_t button){
     //If the object can actually be focussed
     if(Focussable){
       GetFocus(this);
@@ -76,7 +85,7 @@ void Widget::OnMouseDown(int32_t x, int32_t y){
 
 
 //Ignore these by default
-void Widget::OnMouseUp(int32_t x, int32_t y){
+void Widget::OnMouseUp(int32_t x, int32_t y, uint8_t button){
 
 }
 
@@ -84,17 +93,12 @@ void Widget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, int32_t ne
 
 }
 
-void Widget::OnKeyDown(char* str){
-
-}
-
-void Widget::OnKeyUp(char* str){
-
-}
 
 ///__COMPOSITE WIDGET__
 
-CompositeWidget::CompositeWidget( Widget* parent, int32_t x, int32_t y, int32_t w, int32_t h, uint8_t r, uint8_t g, uint8_t b){
+CompositeWidget::CompositeWidget( Widget* parent, int32_t x, int32_t y, int32_t w, int32_t h, uint8_t r, uint8_t g, uint8_t b)
+: Widget(parent,x,y,w,h,r,g,b)  //Call the base constructor;
+{
     focussedChild = 0;
     numChildren = 0;
 }
@@ -111,6 +115,18 @@ void CompositeWidget::GetFocus(Widget *widget) {
 
 }
 
+bool CompositeWidget::AddChild(Widget *child) {
+
+    if(numChildren >= 100){         //NTS: Not threat safe
+        return false;
+    }
+
+    children[numChildren++] = child;
+    return true;
+
+}
+
+
 void CompositeWidget::Draw(GraphicsContext *gc) {
 
     //Draw its own bg
@@ -122,7 +138,7 @@ void CompositeWidget::Draw(GraphicsContext *gc) {
     }
 }
 
-void CompositeWidget::OnMouseDown(int32_t x, int32_t y) {
+void CompositeWidget::OnMouseDown(int32_t x, int32_t y, uint8_t button) {
 
     //Pass the event to the child that contains the co-ordinate
 
@@ -133,7 +149,7 @@ void CompositeWidget::OnMouseDown(int32_t x, int32_t y) {
         if(children[i]->ContainsCoordinate(x - this->x, y - this->y)){
 
             //(Subtracting x and y turns it into relative coords)
-            children[i]->OnMouseDown(x - this->x, y - this->y);          //Pass the Mouse Event
+            children[i]->OnMouseDown(x - this->x, y - this->y,button);          //Pass the Mouse Event
             break;                                                             //Stop looping as the click has been handled
 
         }
@@ -141,7 +157,7 @@ void CompositeWidget::OnMouseDown(int32_t x, int32_t y) {
     }
 }
 
-void CompositeWidget::OnMouseUp(int32_t x, int32_t y) {
+void CompositeWidget::OnMouseUp(int32_t x, int32_t y, uint8_t button) {
 
 
     //Children with the smaller index is first on the screen therefore should receive the MouseEvent
@@ -151,7 +167,7 @@ void CompositeWidget::OnMouseUp(int32_t x, int32_t y) {
         if(children[i]->ContainsCoordinate(x - this->x, y - this->y)){
 
             //(Subtracting x and y turns it into relative coords)
-            children[i]->OnMouseUp(x - this->x, y - this->y);          //Pass the Mouse Event
+            children[i]->OnMouseUp(x - this->x, y - this->y,button);          //Pass the Mouse Event
             break;                                                           //Stop looping as the click has been handled
 
         }
@@ -160,6 +176,8 @@ void CompositeWidget::OnMouseUp(int32_t x, int32_t y) {
 }
 
 void CompositeWidget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, int32_t new_y) {
+
+    //IN the future change it so it detects if the first child widgets are the same, then make events for on mouse enter and on mouse leave
 
     //Handle Old Coord
     int firstChild = -1;
@@ -201,17 +219,18 @@ void CompositeWidget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, i
 }
 
 
-void CompositeWidget::OnKeyDown(char* str) {
+void CompositeWidget::OnKeyDown(char str) {
 
     if(focussedChild != 0){             //IF the key event should happen on a child
         focussedChild->OnKeyDown(str);  //Pass to child
     }
 }
 
-void CompositeWidget::OnKeyUp(char* str){
+void CompositeWidget::OnKeyUp(char str){
 
     if(focussedChild != 0){             //IF the key event should happen on a child
         focussedChild->OnKeyUp(str);    //Pass to child
     }
 }
+
 

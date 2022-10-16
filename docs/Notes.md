@@ -95,8 +95,11 @@ Here are the notes on graphics for the operating system. (May need to read hardw
 See also: Bresenham line algorithm (use for later)
 - The GUI framework will have a base class called Widget, which should have a draw method. This draw method would get a graphicsContext and draw itself onto of it using the graphicContex's draw methods.
 - Thees widgets will have parents and such, therefore their draw positions will be reletive, meaning there has to be a method to get the absolute position.
-- Widgets will also have a width a height, and a method to check if a co-ordnate is inside of itslef (used for mouse handling and such)
+- Widgets will also have a width and height, and a method to check if a co-ordnate is inside of itslef (used for mouse handling and such)
 - To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMove, OnMouseUp. However the mouse handler wont be on the widget itself, rather it would be on the desktop.
-- This is becuase the mouse movement is reported in relative-ness not aboslute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
+- This is because the mouse movement is reported in relative-ness not aboslute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
 - A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the children (eg. the child gets drawn last so its on top)
-- To get which widget to preform the keyEvent or mouseEven the desktop will have a method of getting the focused widget
+- To get which widget to preform the keyEvent or mouseEvent the desktop will have a method of getting the focused widget
+- The desktop will work like the composite widget, but will have to overide the mouseHandler class as mouse passes movement in relative to last position (moved x  pixels) so the desktop will have to translate the restiveness into absolute positions
+- For better preformance, instead of re-drawing the screen every time just draw it once and then when a gui object changes (eg. moving a window) memcopy the object to the new state and then redraw any invaild parts (invalid is where places where there used to be the gui object)
+- To draw text the modes.c has fonts, 

@@ -97,7 +97,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
     if(offest == 0)//If the mouse data transmission is complete (3rd piece of data is through)
     {
 
-        handler->OnMouseMove(buffer[1], buffer[2]);     //If things go wrong with mouse in the future then y = -buffer[2];
+        handler->OnMouseMove((int8_t)buffer[1], -((int8_t)buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
 
 
 

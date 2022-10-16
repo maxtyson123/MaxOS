@@ -12,7 +12,7 @@ namespace maxOS {
     namespace common {
 
         //Faked for now
-        typedef GraphicsContext VideoGraphicsArray;
+        typedef drivers::VideoGraphicsArray GraphicsContext;
 
     }
 }

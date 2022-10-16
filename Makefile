@@ -12,6 +12,10 @@ objects = obj/loader.o \
  		  obj/drivers/keyboard.o \
  		  obj/drivers/mouse.o \
  		  obj/drivers/vga.o \
+ 		  obj/gui/widget.o \
+ 		  obj/gui/window.o \
+ 		  obj/gui/desktop.o \
+ 		  obj/gui/render.o \
  		  obj/kernel.o
 
 .PHONY: default
@@ -37,7 +41,7 @@ maxOS.iso: maxOS.bin
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
 	echo 'menuentry "My Operating System" {' >> iso/boot/grub/grub.cfg
-	echo '  multiboot /boot/maxOS.bin'    >> iso/boot/grub/grub.cfg
+	echo '  multiboot /boot/maxOS.bin'    	 >> iso/boot/grub/grub.cfg
 	echo '  boot'                            >> iso/boot/grub/grub.cfg
 	echo '}'                                 >> iso/boot/grub/grub.cfg
 	grub-mkrescue --output=maxOS.iso iso
@@ -45,6 +49,14 @@ maxOS.iso: maxOS.bin
 
 build: maxOS.iso
 	echo Complete
+
+runQ: maxOS.iso
+	qemu-system-i386 -boot d -cdrom maxOS.iso -m 512
+
+runQ_W: maxOS.iso
+	"C:\Program Files\qemu\qemu-system-i386" -boot d -cdrom maxOS.iso -m 512
+
+
 
 install_dep:
 	sudo apt-get update -y
