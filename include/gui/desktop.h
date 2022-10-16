@@ -26,9 +26,9 @@ namespace maxOS{
 
                 void Draw(common::GraphicsContext* gc);
 
-            void OnMouseDown(maxOS::common::uint8_t button);
-            void OnMouseUp(maxOS::common::uint8_t button);
-            void OnMouseMove(int x, int y);
+                void OnMouseDown(maxOS::common::uint8_t button);
+                void OnMouseUp(maxOS::common::uint8_t button);
+                void OnMouseMove(int x, int y);
 
         };
 

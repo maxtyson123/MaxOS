@@ -26,6 +26,8 @@ void Desktop::Draw(common::GraphicsContext *gc) {
     //Draw the desktop
     CompositeWidget::Draw(gc);
 
+
+
     //Draw the mouse
     for(int i = 0; i < 4; i++)
     {

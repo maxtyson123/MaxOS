@@ -16,6 +16,7 @@ objects = obj/loader.o \
  		  obj/gui/window.o \
  		  obj/gui/desktop.o \
  		  obj/gui/render.o \
+ 		  obj/gui/widgets/text.o \
  		  obj/kernel.o
 
 .PHONY: default

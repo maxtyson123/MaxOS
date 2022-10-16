@@ -2,6 +2,7 @@
 // Created by 98max on 10/15/2022.
 //
 #include <gui/window.h>
+#include <gui/widgets/text.h>
 
 using namespace maxOS;
 using namespace maxOS::gui;
@@ -43,4 +44,23 @@ void Window::OnMouseMove(common::int32_t old_x, common::int32_t old_y, common::i
 
     //Run default (So Children also receive event)
     CompositeWidget::OnMouseMove(old_x, old_y, new_x, new_y);
+}
+
+void Window::Draw(common::GraphicsContext *gc) {
+
+
+    //Set To 0 as ModelToScreen ads own x and y to it
+    int X = 0;
+    int Y = 0;
+
+    //Get absolute position
+    ModelToScreen(X,Y);
+
+    //Draw Header
+    gc->FillRectangle(X,Y-10,w,10,0xFF,0xFF,0xFF);
+
+    //Draw window title
+
+
+    CompositeWidget::Draw(gc);
 }

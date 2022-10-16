@@ -133,7 +133,10 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 
 //8 bit vga mode only has 256 colours. colorIndex selects which one to display
 void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
-    if(x < 0 || x >= 320 || y < 0 || y >= 200) return; //Check if coords r legal
+
+    if(x < 0 || 320 <= x
+       || y < 0 || 200 <= y)
+        return; //Check if coords r legal
 
     uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    //Get where to put the pixel in memory and x y pos
     *pixelAddress = colorIndex;

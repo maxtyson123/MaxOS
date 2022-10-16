@@ -16,7 +16,8 @@
 //GUI
 #include <gui/desktop.h>
 #include <gui/window.h>
-#include "gui/render.h"
+#include <gui/render.h>
+#include <gui/widgets/text.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -173,9 +174,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     Version* maxOSVer;
     maxOSVer->version = 0.15;
-    maxOSVer->version_c = "0.15.2";
+    maxOSVer->version_c = "0.15.3";
     maxOSVer->build = 32;
-    maxOSVer->build_c = "32";
+    maxOSVer->build_c = "34";
     maxOSVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
@@ -226,13 +227,18 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     vga.SetMode(320,200,8);
 
-    //Test Windows
-    Window win1(&desktop, 10,10,20,20,0xA8,0x00,0x00);
-    Window win2(&desktop, 10,35,40,20,0x00,0xA8,0x00);
+    //Window
+    Window debugConsole(&desktop, 10,10,200,150,0x00,0x00,0x00);
+    Text debugConsole_title(&debugConsole,2,4,200,10,0x00,0x00,0x00,"Debug Console");
+    debugConsole.AddChild(&debugConsole_title);
+
+    Text testText(&debugConsole,2,20,10,10,0xA8,0x00,0x00,"Hello");
+
 
     //Add children
-    desktop.AddChild(&win1);
-    desktop.AddChild(&win2);
+    debugConsole.AddChild(&testText);
+    desktop.AddChild(&debugConsole);
+
 
     printf("GUI is ready ... \n");
 
@@ -241,7 +247,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     interrupts.Activate();
 
 
-
+    testText.UpdateText("Max OS ");
 
     while(1){
 
@@ -249,10 +255,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
         desktop.Draw(&rend);
 
         //display rendered frame
-        rend.display(&vga);
+         rend.display(&vga);
     }                                                                       //Loop
 }
 #pragma clang diagnostic pop
 
-
-//Ignore this BS, forgot abt polybullshit
+//NEXT: Text and buttons, window overlapping, mouse release, invert mouse colour on black/white
