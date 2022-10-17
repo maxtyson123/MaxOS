@@ -25,6 +25,55 @@ using namespace maxOS::drivers;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 
+
+
+void printf_gui(char* str, Text lines[15]){
+
+    static uint8_t gx = 0, gy = 0;    //Cursor Location
+    static char lineText[15][29];
+    //Debug Console is 29 wide x 15 high
+
+    for(int i = 0; str[i] != '\0'; ++i){     //Increment through each char as long as it's not the end symbol
+
+        switch (str[i]) {
+
+            case '\n':      //If newline
+                gy++;        //New Line
+                gx = 0;      //Reset Width pos
+                break;
+
+            default:        //(This also stops the \n from being printed)
+                lineText[gy][gx] = str[i];
+                gx++;
+
+        }
+
+        if(gx >= 29){    //If at edge of screen
+
+            gy++;
+            gx = 0;
+        }
+
+        //If at bottom of screen then clear and restart
+        if(gy >= 15){
+            for (int y = 0; y < 15; ++y) {
+                for (int x = 0; x < 29; ++x) {
+                    //Set everything to a space char
+                    lineText[y][x] = ' ';
+                }
+            }
+
+            gx = 0;
+            gy = 0;
+
+        }
+    }
+    for (int i = 0; i < 15; ++i) {
+        lines[i].UpdateText(lineText[i]);
+    }
+
+}
+
 void printf(char* str, bool clearLine = false)
 {
     static uint16_t* VideoMemory = (uint16_t*)0xb8000;  //Spit the video memory into an array of 16 bit, 4 bit for foreground, 4 bit for background, 8 bit for character
@@ -32,6 +81,7 @@ void printf(char* str, bool clearLine = false)
     static uint8_t x = 0, y = 0;    //Cursor Location
 
     //Screen is 80 wide x 25 high (characters)
+
 
     if(clearLine){
         for (int x = 0; x < 80; ++x) {
@@ -41,7 +91,7 @@ void printf(char* str, bool clearLine = false)
         x = 0;
     }
 
-    for(int i = 0; str[i] != '\0'; ++i)     //Increment through each char as long as it's not the end symbol
+    for(int i = 0; str[i] != '\0'; ++i){     //Increment through each char as long as it's not the end symbol
 
         switch (str[i]) {
 
@@ -75,6 +125,7 @@ void printf(char* str, bool clearLine = false)
             y = 0;
 
         }
+    }
 }
 
 void printfHex(uint8_t key){
@@ -174,9 +225,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     Version* maxOSVer;
     maxOSVer->version = 0.15;
-    maxOSVer->version_c = "0.15.3";
-    maxOSVer->build = 32;
-    maxOSVer->build_c = "34";
+    maxOSVer->version_c = "0.15.4";
+    maxOSVer->build = 36;
+    maxOSVer->build_c = "36";
     maxOSVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
@@ -228,26 +279,54 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     vga.SetMode(320,200,8);
 
     //Window
-    Window debugConsole(&desktop, 10,10,200,150,0x00,0x00,0x00);
-    Text debugConsole_title(&debugConsole,2,4,200,10,0x00,0x00,0x00,"Debug Console");
+    Window debugConsole(&desktop, 10,10,250,150,0x00,0x00,0x00);
+    Text debugConsole_title(&debugConsole,2,3,200,10,0x00,0x00,0x00,"Debug Console");
     debugConsole.AddChild(&debugConsole_title);
 
-    Text testText(&debugConsole,2,20,10,10,0xA8,0x00,0x00,"Hello");
+
+    //Debug console lines (note will make into app later)
+    Text lines[15] = {
+            Text(&debugConsole,2,20,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,30,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,40,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,50,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,60,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,70,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,80,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,100,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,110,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,120,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,130,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,140,10,10,0xA8,0x00,0x00,""),
+            Text(&debugConsole,2,150,10,10,0xA8,0x00,0x00,""),
+
+    };
+
+    for (int i = 0; i <  15; ++i) {
+        debugConsole.AddChild(&lines[i]);
+    }
+
+
 
 
     //Add children
-    debugConsole.AddChild(&testText);
+
     desktop.AddChild(&debugConsole);
 
 
-    printf("GUI is ready ... \n");
+    printf_gui("GUI is ready ............ \n",lines);
+    printf_gui("Max OS\n\n",lines);
+    printf_gui("LONG LINE (*(#()*$(@*#($#*@()$*#@",lines);
+    //BUG: Long lines
 
 
     printf("[x] IDT Setup \n", true);
     interrupts.Activate();
 
 
-    testText.UpdateText("Max OS ");
+   // testText.UpdateText("Max OS ");
 
     while(1){
 
@@ -260,4 +339,4 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 }
 #pragma clang diagnostic pop
 
-//NEXT: Text and buttons, window overlapping, mouse release, invert mouse colour on black/white
+//NEXT: buttons, window overlapping, mouse release, invert mouse colour on black/white
