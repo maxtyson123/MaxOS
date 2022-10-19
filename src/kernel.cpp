@@ -2,6 +2,7 @@
 //Common
 #include <common/types.h>
 #include <gdt.h>
+#include <multitasking.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -25,6 +26,8 @@ using namespace maxOS::drivers;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 
+
+// #define ENABLE_GRAPHICS
 
 
 void printf_gui(char* str, Text lines[15]){
@@ -194,13 +197,30 @@ class MouseToConsole: public MouseEventHandler{
 
 };
 
+//DEBUG TASKS
+
+void taskA(){
+    while (true){
+        printf("A");
+    }
+}
+
+void taskB(){
+    while (true){
+        printf("B");
+    }
+}
+
+//Define what a constructor is
 typedef void (*constructor)();
+
+//Iterates over space between start_ctors and end_ctors and jumps into all function pointers
 extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
 extern "C" void callConstructors()
 {
     for(constructor* i = &start_ctors; i != &end_ctors; i++)
-        (*i)();
+        (*i)();  //envoce constructor calls
 }
 
 //[NEW] Version sys
@@ -224,10 +244,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
-    maxOSVer->version = 0.15;
-    maxOSVer->version_c = "0.15.4";
-    maxOSVer->build = 36;
-    maxOSVer->build_c = "36";
+    maxOSVer->version = 0.16;
+    maxOSVer->version_c = "0.16";
+    maxOSVer->build = 37;
+    maxOSVer->build_c = "37";
     maxOSVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
@@ -239,102 +259,135 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     GlobalDescriptorTable gdt;                                                              //Setup GDT
     printf("[x] GDT Setup \n");
 
+    //TaskManger is up here as needs to use IDT
+    printf("[ ] Setting Task Manger... \n");
+    TaskManager taskManager;
+
+    //Test Tasks
+    Task task1(&gdt, taskA);
+    Task task2(&gdt, taskB);
+
+    taskManager.AddTask(&task1);
+    taskManager.AddTask(&task2);
+
+    printf("[x] Task Manger Setup \n");
+
+
+
 
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
-    InterruptManager interrupts(0x20, &gdt);            //Instantiate the method
+    InterruptManager interrupts(0x20, &gdt, &taskManager);            //Instantiate the method
 
-    printf("[ ] Setting Up Interrupt Descriptor Table... \n");
 
-    //Desktop needs the mouse and keyboard
-    // so instantiated it here
-    Desktop desktop(320,200,0x00,0x00,0xA8);
+
+    #ifdef ENABLE_GRAPHICS
+        //Desktop needs the mouse and keyboard
+        // so instantiated it here
+        Desktop desktop(320,200,0x00,0x00,0xA8);
+    #endif
 
     printf("[ ] Setting Up Drivers... \n");
     DriverManager driverManager;
+        //Keyboard
+        #ifdef ENABLE_GRAPHICS
+            KeyboardDriver keyboard(&interrupts,&desktop);   //Setup Keyboard drivers
+            driverManager.AddDriver(&keyboard);
+        #else
+            PrintfKeyboardEventHandler printfKeyboardEventHandler;
+            KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
+        #endif
+        printf("    -Keyboard setup\n");
 
-        // PrintfKeyboardEventHandler printfKeyboardEventHandler;
-        // KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
-    KeyboardDriver keyboard(&interrupts,&desktop);   //Setup Keyboard drivers
-    driverManager.AddDriver(&keyboard);
-    printf("    -Keyboard setup\n");
 
-      //  MouseToConsole mouseEventHandler;
-      //  MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
-    MouseDriver mouse(&interrupts, &desktop);                 //Setup Mouse drivers
-    driverManager.AddDriver(&mouse);
-    printf("    -Mouse setup\n");
+        //Mouse
+        #ifdef ENABLE_GRAPHICS
+             MouseDriver mouse(&interrupts, &desktop);                 //Setup Mouse drivers
+        #else
+            MouseToConsole mouseEventHandler;
+            MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
 
-    printf("    -[ ]Setting PCI\n\n");
-    PeripheralComponentInterconnectController PCIController;
-    PCIController.SelectDrivers(&driverManager, &interrupts);
-    printf("\n    -[x]Setup PCI\n");
+        #endif
+        driverManager.AddDriver(&mouse);
+        printf("    -Mouse setup\n");
 
-    VideoGraphicsArray vga;
-    Render rend(320,200);   //arguments do nothing for now. 320,200 is hardcoded into "gui/render.h"
-    printf("    -VGA setup\n");
+        printf("    -[ ]Setting PCI\n\n");
+        PeripheralComponentInterconnectController PCIController;
+        PCIController.SelectDrivers(&driverManager, &interrupts);
+        printf("\n    -[x]Setup PCI\n");
 
+        #ifdef ENABLE_GRAPHICS
+            VideoGraphicsArray vga;
+            Render rend(320,200);   //arguments do nothing for now. 320,200 is hardcoded into "gui/render.h"
+            printf("    -VGA setup\n");
+        #endif
     driverManager.ActivateAll();
     printf("[X] Drivers Setup\n");
 
-    vga.SetMode(320,200,8);
 
-    //Window
-    Window debugConsole(&desktop, 10,10,250,150,0x00,0x00,0x00);
-    Text debugConsole_title(&debugConsole,2,3,200,10,0x00,0x00,0x00,"Debug Console");
-    debugConsole.AddChild(&debugConsole_title);
+    #ifdef ENABLE_GRAPHICS
+        vga.SetMode(320,200,8);
 
-
-    //Debug console lines (note will make into app later)
-    Text lines[15] = {
-            Text(&debugConsole,2,20,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,30,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,40,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,50,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,60,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,70,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,80,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,100,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,110,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,120,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,130,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,140,10,10,0xA8,0x00,0x00,""),
-            Text(&debugConsole,2,150,10,10,0xA8,0x00,0x00,""),
-
-    };
-
-    for (int i = 0; i <  15; ++i) {
-        debugConsole.AddChild(&lines[i]);
-    }
+        //Window
+        Window debugConsole(&desktop, 10,10,250,150,0x00,0x00,0x00);
+        Text debugConsole_title(&debugConsole,2,3,200,10,0x00,0x00,0x00,"Debug Console");
+        debugConsole.AddChild(&debugConsole_title);
 
 
+        //Debug console lines (note will make into app later)
+        Text lines[15] = {
+                Text(&debugConsole,2,20,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,30,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,40,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,50,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,60,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,70,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,80,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,100,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,110,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,120,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,130,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,140,10,10,0xA8,0x00,0x00,""),
+                Text(&debugConsole,2,150,10,10,0xA8,0x00,0x00,""),
+
+        };
+
+        for (int i = 0; i <  15; ++i) {
+            debugConsole.AddChild(&lines[i]);
+        }
 
 
-    //Add children
-
-    desktop.AddChild(&debugConsole);
 
 
-    printf_gui("GUI is ready ............ \n",lines);
-    printf_gui("Max OS\n\n",lines);
-    printf_gui("LONG LINE (*(#()*$(@*#($#*@()$*#@",lines);
-    //BUG: Long lines
+        //Add children
+
+        desktop.AddChild(&debugConsole);
 
 
+        printf_gui("GUI is ready ............ \n",lines);
+        printf_gui("Max OS\n\n",lines);
+        printf_gui("LONG LINE (*(#()*$(@*#($#*@()$*#@",lines);
+        //BUG: Long lines
+    #endif
+
+    //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and task
     printf("[x] IDT Setup \n", true);
     interrupts.Activate();
 
+    //CODE AFTER HERE (INTERRUPTS) SHOULD BE A TASK
 
    // testText.UpdateText("Max OS ");
 
+
     while(1){
+        #ifdef ENABLE_GRAPHICS
+            //render new frame
+            desktop.Draw(&rend);
 
-        //render new frame
-        desktop.Draw(&rend);
-
-        //display rendered frame
-         rend.display(&vga);
+            //display rendered frame
+             rend.display(&vga);
+        #endif
     }                                                                       //Loop
 }
 #pragma clang diagnostic pop

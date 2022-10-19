@@ -3,6 +3,8 @@
 //
 
 #include <hardwarecommunication/interrupts.h>
+
+using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 
@@ -56,12 +58,13 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 }
 
 
-InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable)
+InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable,TaskManager* taskManager)
         : programmableInterruptControllerMasterCommandPort(0x20),
           programmableInterruptControllerMasterDataPort(0x21),
           programmableInterruptControllerSlaveCommandPort(0xA0),
           programmableInterruptControllerSlaveDataPort(0xA1)
 {
+    this->taskManager = taskManager;
     this->hardwareInterruptOffset = hardwareInterruptOffset;
     uint32_t CodeSegment = globalDescriptorTable->CodeSegmentSelector();
 
@@ -215,7 +218,15 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
         }
     }
 
-    if(0x20 <= interrupt && interrupt < 0x30) //Only if it is hardware (keep in mind that around line: 90, the hardware interrupt was remapped at 0x20) the hardware ranges from 0x20 to 0x30
+    //TODO: Cast CPUState and uin3t esp to same
+
+    //Timer interrupt for tasks
+    if(interrupt == hardwareInterruptOffset)
+    {
+        esp = (uint32_t)taskManager->Schedule((CPUState*)esp);
+    }
+
+    if(hardwareInterruptOffset <= interrupt && interrupt < hardwareInterruptOffset+16) //Only if it is hardware (keep in mind that around line: 90, the hardware interrupt was remapped at 0x20) the hardware ranges from 0x20 to 0x30
     {
         //Send Answer to tell PIC the interrupt was received
         programmableInterruptControllerMasterCommandPort.Write(0x20);      //0x20 is the answer the PIC wants for master

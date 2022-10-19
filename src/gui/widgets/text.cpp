@@ -8,7 +8,7 @@ using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::gui;
 
-static unsigned char g_8x8_font[2048] =
+static unsigned char g_8x8_font[2048] =     //Font
         {
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 0x7E, 0x81, 0xA5, 0x81, 0xBD, 0x99, 0x81, 0x7E,
@@ -294,17 +294,17 @@ void Text::Draw(common::GraphicsContext *gc) {
     for(int i = 0; str[i] != '\0'; ++i)     //Increment through each char as long as it's not the end symbol
     {
         unsigned char c = str[i];
-        int posX = X+(i*8);
-        int posY = Y;
+        int posX = X+(i*8);     //Characters are 8 pixels wide so apply that spacing
+        int posY = Y;           //Y stays the same throughout
 
 
-        int cx,cy;
-        int mask[8]={1,2,4,8,16,32,64,128};
-        unsigned char *glyph=g_8x8_font+(int)c*8;
+        int cx,cy;                                                                                  //Character x/y
+        int mask[8]={1,2,4,8,16,32,64,128};                          //Character mask
+        unsigned char *glyph=g_8x8_font+(int)c*8;                                                   //Get the charcter from font
 
-        for(cy=0;cy<8;cy++){
-            for(cx=0;cx<8;cx++){
-                if(glyph[cy]&mask[cx]) gc -> PutPixel(posX+(8-cx), posY+cy-12 ,r,g,b);
+        for(cy=0;cy<8;cy++){                                                                        //Loop through character's Y pixels
+            for(cx=0;cx<8;cx++){                                                                    //Loop through character's X pixels
+                if(glyph[cy]&mask[cx]) gc -> PutPixel(posX+(8-cx), posY+cy-12 ,r,g,b);        //Print the pixel as long as it's a pixel in the character
             }
         }
     }

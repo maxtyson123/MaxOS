@@ -4,9 +4,11 @@
 
 #ifndef MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
+
 #include <common/types.h>
 #include <hardwarecommunication/port.h>
 #include <gdt.h>
+#include <multitasking.h>
 
 
 namespace maxOS {
@@ -35,6 +37,7 @@ namespace maxOS {
 
             static InterruptManager *ActiveInterruptManager;
             InterruptHandler *handlers[256];
+            TaskManager* taskManager;
 
             struct GateDescriptor {
                 maxOS::common::uint16_t handlerAddressLowBits;
@@ -148,7 +151,7 @@ namespace maxOS {
 
 
         public:
-            InterruptManager(maxOS::common::uint16_t hardwareInterruptOffset, maxOS::GlobalDescriptorTable *globalDescriptorTable);
+            InterruptManager(maxOS::common::uint16_t hardwareInterruptOffset, maxOS::GlobalDescriptorTable *globalDescriptorTable, TaskManager* taskManager);
 
             ~InterruptManager();
 

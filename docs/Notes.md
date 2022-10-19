@@ -1,7 +1,7 @@
-NOTE: method is the same is function (or atleast in my wording here)
+NOTE: method is the same is function (or at least in my wording here)
 
 # Hardware Communication
-Here are some notes on how the comincation with hardware works, this is used for the keyboard and mouse communication and setting up other devices, eg. GPU
+Here are some notes on how the communication with hardware works, this is used for the keyboard and mouse communication and setting up other devices, e.g. GPU
 ### Data Send / Receive
 This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
@@ -25,7 +25,7 @@ See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://w
   - Interrupt number: uint8_t (unsigned 8bit integer) 
   - handler: address in the ram of where to jump to preform the code/function to handle this interrupt
   - Flags:
-  - Segment: tells the processor to switch a certain segment before executing handler, (this is for when the processor is executing code in the usersapce, the handler is in the kernelspace and the processor needs to switch to the kernel segment)
+  - Segment: tells the processor to switch a certain segment before executing handler, (this is for when the processor is executing code in the userspace, the handler is in the kernelspace and the processor needs to switch to the kernel segment)
   - Access Rights: Number from 0-3 (3 is userspace)
 - To do this in C++ it would be ideal to receive the Interrupt number as a parameter and handel it in a function eg:
 ```bash
@@ -57,8 +57,8 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - The PCI controller will also tell more general information such as class and subclass IDs, which are useful for compatibility modes
 - Once the PCI driver is set up then it becomes easy to extend the OS as in future all that needs to be done is to get the device ID and write drivers for them
 ### Base Address Registers
-- The soultion for having multiple PCI devices (two GPUS, two screens etc..) is to have a Base Adress Registers (BAR)
-- Base adress registers are registers in the PCI configuration space, which in a more simple way is just storing the address of a PCI device in memory
+- The solution for having multiple PCI devices (two GPUS, two screens etc…) is to have a Base Address Registers (BAR)
+- Base address registers are registers in the PCI configuration space, which in a more simple way is just storing the address of a PCI device in memory
 - There are two types of BARs, one is  the I/O BAR, this is for devices that communicate bit by bit e.g. mouse where the position is read from the port each interrupt 
 - The I/O base address register is 4 bytes long:
 - - Lowest bit:            Type Of register: (I/O bit = 1)
@@ -68,7 +68,7 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - The Memory Mapping BAR is 4 bytes long:
 - - Lowest Bit:  Type Of register: (MemMap bit = 0)
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
-- - Fourth bit: Prefetch-able bit (eg. reading from a hard drive in advance because its estimated that the program will need that soon)
+- - Fourth bit: Prefetch-able bit (e.g. reading from a hard drive in advance because its estimated that the program will need that soon)
 - - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
 
 # Graphics
@@ -85,7 +85,7 @@ Here are the notes on graphics for the operating system. (May need to read hardw
     0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3, 0xFF,
 - - (GC) Graphics controller Port: 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F, 0xFF,
 - - (AC) Attribute Controller: 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x41, 0x00, 0x0F, 0x00, 0x00
-- However communicating with these ports aren't that easy as there is an index port (to tell where the data should be put) and a data port (push the data)
+- However, communicating with these ports aren't that easy as there is an index port (to tell where the data should be put) and a data port (push the data)
 - And on the CRTC port there is special indexes and data that has to be set for it to unlocked before writing actual data (the reason it has to be unlocked is that if incorrect data is the hardware could be damaged)
 - Similarly, the AC port has to be reset before each index & data write.
 - The VGA class that was written should have a class above that call graphicsContext which would define methods such as putPixel(...), drawRect(...), drawLine(...), drawCircle(...) and sub-classes such as color.
@@ -93,13 +93,30 @@ Here are the notes on graphics for the operating system. (May need to read hardw
 
 ### GUI - Framework
 See also: Bresenham line algorithm (use for later)
-- The GUI framework will have a base class called Widget, which should have a draw method. This draw method would get a graphicsContext and draw itself onto of it using the graphicContex's draw methods.
-- Thees widgets will have parents and such, therefore their draw positions will be reletive, meaning there has to be a method to get the absolute position.
-- Widgets will also have a width and height, and a method to check if a co-ordnate is inside of itslef (used for mouse handling and such)
-- To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMove, OnMouseUp. However the mouse handler wont be on the widget itself, rather it would be on the desktop.
-- This is because the mouse movement is reported in relative-ness not aboslute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
-- A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the children (eg. the child gets drawn last so its on top)
+- The GUI framework will have a base class called Widget, which should have a draw method. This draw method would get a graphicsContext and draw itself onto of it using the graphicContext's draw methods.
+- Thees widgets will have parents and such, therefore their draw positions will be relative, meaning there has to be a method to get the absolute position.
+- Widgets will also have a width and height, and a method to check if a co-ordinate is inside itself (used for mouse handling and such)
+- To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMove, OnMouseUp. However, the mouse handler won't be on the widget itself, rather it would be on the desktop.
+- This is because the mouse movement is reported in relative-ness not absolute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
+- A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the children (e.g. the child gets drawn last so its on top)
 - To get which widget to preform the keyEvent or mouseEvent the desktop will have a method of getting the focused widget
-- The desktop will work like the composite widget, but will have to overide the mouseHandler class as mouse passes movement in relative to last position (moved x  pixels) so the desktop will have to translate the restiveness into absolute positions
-- For better preformance, instead of re-drawing the screen every time just draw it once and then when a gui object changes (eg. moving a window) memcopy the object to the new state and then redraw any invaild parts (invalid is where places where there used to be the gui object)
-- To draw text the modes.c has fonts, 
+- The desktop will work like the composite widget, but will have to override the mouseHandler class as mouse passes movement in relative to last position (moved x  pixels) so the desktop will have to translate the restiveness into absolute positions
+- For better performance, instead of re-drawing the screen every time just draw it once and then when a gui object changes (e.g. moving a window) memory the object to the new state and then redraw any invalid parts (invalid is where places where there used to be the gui object)
+- To draw text the "modes.c" has various 8x8 Bitmap fonts. Using these fonts a Text widget can be made that gets the characters of a string from the font and then print all the pixels in that character.  
+
+# System Stuff
+### Multitasking
+See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explaining
+- In the RAM there is different places for different species of code. The processor jumps around executing different parts. Somewhere in the RAM there is a STACK where stuff is being pushed a popped
+- Currently: A timer interrupt occurs and what happens is the processor pushes some registers on the stack (e.g. pointer to where it was executing before the interrupt). The processor then goes into the interrupt manager (see interrupts.cpp) and executes the handler for that interrupt. Once the handler has finished executing the processor then carry's on what it was executing before (hence why the pointer was pushed to the stack).
+- However, to do multithreading the current way of executing in the OS needs to change. First the OS will take another portion of the RAM, reserve it for multitasking, and make its own stack there for every task.
+- Therefore, when a task is created a memory region is made. Infomation for the processor is then explictly writen into segments in that region e.g. the instruction pointer at the entry point
+- Previously: the interstubs.s file pushed the current processor values (interstubs line 64: save the registers) and then pushed the stack pointer (interstubs line 80: Invoke C++ handlers) and then load register again
+- (Carrying on "Previously") The handler function would have the pointer to the stack (passed as var: esp). The return value of handle interrupt is then written into esp and then executed by processor. 
+- Now with multitasking the return value for the handle interrupt method would be changed to point to the top of the new task's stack.
+- To sum up: 
+- - The kernel will be excuting method "X" and recive an interrupt
+- - kernel will exucte the interrupt handler
+- - The interrupt handler will then return a pointer to the new task
+- - Kernel will then excute the new task instead of executing method "X"
+- To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execteu

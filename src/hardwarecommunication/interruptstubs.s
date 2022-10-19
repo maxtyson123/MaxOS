@@ -11,6 +11,7 @@
 .global _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException\num\()Ev
 _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
     movb $\num, (interruptnumber)
+    #For an exception , the processor pushes an error value automatically
     jmp int_bottom
 .endm
 
@@ -19,6 +20,8 @@ _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
 .global _ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev
 _ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
     movb $\num + IRQ_BASE, (interruptnumber)
+    #Push 0  for the error
+    pushl $0
     jmp int_bottom
 .endm
 
@@ -64,32 +67,36 @@ HandleInterruptRequest 0x31
 
 int_bottom:
 
-    # register sichern
-    pusha
-    pushl %ds
-    pushl %es
-    pushl %fs
-    pushl %gs
+    # Push Values From CPUState (multitasking.h)
+    pushl %ebp
+    pushl %edi
+    pushl %esi
 
-    # ring 0 segment register laden
-    #cld
-    #mov $0x10, %eax
-    #mov %eax, %eds
-    #mov %eax, %ees
+    pushl %edx
+    pushl %ecx
+    pushl %ebx
+    pushl %eax
 
-    # C++ Handler aufrufen
+
+    # Invoke C++ handlers
     pushl %esp
     push (interruptnumber)
     call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
-    add %esp, 6
-    mov %eax, %esp # den stack wechseln
 
-    # register laden
-    pop %gs
-    pop %fs
-    pop %es
-    pop %ds
-    popa
+    #Switch the stack
+    mov %eax, %esp
+
+    # (In reverse ofc) Pop Values From CPUState (multitasking.h)
+    popl %eax
+    popl %ebx
+    popl %ecx
+    popl %edx
+
+    popl %esi
+    popl %edi
+    popl %ebp
+
+    add $4, %esp
 
 .global _ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
 _ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
