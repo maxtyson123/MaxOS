@@ -6,7 +6,7 @@
 #define MAXOS_GUI_TEXT_H
 
 #include <common/types.h>
-#include <common/graphicsContex.h>
+#include <common/graphicsContext.h>
 #include <gui/widget.h>
 
 namespace maxOS {

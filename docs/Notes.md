@@ -108,15 +108,35 @@ See also: Bresenham line algorithm (use for later)
 ### Multitasking
 See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explaining
 - In the RAM there is different places for different species of code. The processor jumps around executing different parts. Somewhere in the RAM there is a STACK where stuff is being pushed a popped
-- Currently: A timer interrupt occurs and what happens is the processor pushes some registers on the stack (e.g. pointer to where it was executing before the interrupt). The processor then goes into the interrupt manager (see interrupts.cpp) and executes the handler for that interrupt. Once the handler has finished executing the processor then carry's on what it was executing before (hence why the pointer was pushed to the stack).
+- Before Multitasking: A timer interrupt occurs and what happens is the processor pushes some registers on the stack (e.g. pointer to where it was executing before the interrupt). The processor then goes into the interrupt manager (see interrupts.cpp) and executes the handler for that interrupt. Once the handler has finished executing the processor then carry's on what it was executing before (hence why the pointer was pushed to the stack).
 - However, to do multithreading the current way of executing in the OS needs to change. First the OS will take another portion of the RAM, reserve it for multitasking, and make its own stack there for every task.
-- Therefore, when a task is created a memory region is made. Infomation for the processor is then explictly writen into segments in that region e.g. the instruction pointer at the entry point
+- Therefore, when a task is created a memory region is made. Information for the processor is then explicitly writen into segments in that region e.g. the instruction pointer at the entry point
 - Previously: the interstubs.s file pushed the current processor values (interstubs line 64: save the registers) and then pushed the stack pointer (interstubs line 80: Invoke C++ handlers) and then load register again
 - (Carrying on "Previously") The handler function would have the pointer to the stack (passed as var: esp). The return value of handle interrupt is then written into esp and then executed by processor. 
 - Now with multitasking the return value for the handle interrupt method would be changed to point to the top of the new task's stack.
 - To sum up: 
-- - The kernel will be excuting method "X" and recive an interrupt
-- - kernel will exucte the interrupt handler
+- - The kernel will be executing method "X" and receive an interrupt
+- - kernel will execute the interrupt handler
 - - The interrupt handler will then return a pointer to the new task
-- - Kernel will then excute the new task instead of executing method "X"
+- - Kernel will then execute the new task instead of executing method "X"
 - To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execteu
+### Dynamic Memory Management / Heap
+See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list)
+- Before Dynamic Memory Management (DMM), the implementation was very static as there would just be the objects and are allocated on the stack.
+- This is not the best as sometimes you don't know what is needed in advance, e.g. when iterating through the PCI devices and there is a device that needs it's driver instantiated there for space has to be allocated or reserved for that driver
+- This means there needs to be a way of keeping track of the space that has already been assigned to something as it is not ideal to have stuff overlap and disturb each other.
+- Currently the RAM looks like this:
+```bash
+  [Video Memory] [Text Memory] [BIOS] [ Grub / Bootloader ] [ MaxOS / Kernel ] [ Stack ] [ FREE SPACE ]
+```
+- However, there is a problem as there is no way to know if GRUB has loaded something behind the kernel e.g. Multiboot structure or Modules . Therefore, it is unknown how much space there is 
+- To get around this the OS will just get the pointer to the stack and add 4MB to it. Which is not ideal as that is just a guess that is hopefully enough
+- To implement this a class called memory manager will be given the stack point and a size of X. (Can get X from grub)
+- The memory will then be split up into Memory Chunks (a class) that will be structured like the following:
+- - Memory Chunk : Previous
+- - Memory Chunk : Next
+- - Bool : Allocated
+- - size_t : size
+- These Memory Chunks are just a linked list (double linked)  and every chunk that has dropped from the RAM will be entered into the list, which is how the OS will keep track of used / free memory
+- More than one free chunk in a row is bad as it means larger data that could fit into those two chunks combine wont be able to. This can be prevented merging a chunk with another if it is deallocated next to another un allocated chunk.
+- 

@@ -6,7 +6,7 @@
 #define MAXOS_GUI_RENDER_H
 
 #include <drivers/vga.h>
-#include <common/graphicsContex.h>
+#include <common/graphicsContext.h>
 
 namespace maxOS{
 

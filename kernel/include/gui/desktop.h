@@ -6,7 +6,7 @@
 #define MaxOS_GUI_DESKTOP_H
 
 #include <common/types.h>
-#include <common/graphicsContex.h>
+#include <common/graphicsContext.h>
 #include <drivers/mouse.h>
 #include <gui/widget.h>
 

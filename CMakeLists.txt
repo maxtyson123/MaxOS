@@ -36,5 +36,5 @@ set(
         ${common_h}/types.h
 
 
-        kernel/include/drivers/vga.h kernel/src/drivers/vga.cpp kernel/include/gui/widget.h kernel/include/gui/window.h kernel/include/gui/desktop.h kernel/src/gui/desktop.cpp kernel/src/gui/widget.cpp kernel/src/gui/window.cpp kernel/include/common/graphicsContex.h kernel/include/gui/render.h kernel/src/gui/render.cpp kernel/include/gui/widgets/text.h kernel/src/gui/widgets/text.cpp kernel/include/multitasking.h kernel/src/multitasking.cpp)
+        kernel/include/drivers/vga.h kernel/src/drivers/vga.cpp kernel/include/gui/widget.h kernel/include/gui/window.h kernel/include/gui/desktop.h kernel/src/gui/desktop.cpp kernel/src/gui/widget.cpp kernel/src/gui/window.cpp kernel/include/common/graphicsContext.h kernel/include/gui/render.h kernel/src/gui/render.cpp kernel/include/gui/widgets/text.h kernel/src/gui/widgets/text.cpp kernel/include/multitasking.h kernel/src/multitasking.cpp kernel/include/memorymanagement.h kernel/src/memorymanagement.cpp)
 add_executable(untitled ${SOURCE_FILES})
