@@ -197,19 +197,6 @@ class MouseToConsole: public MouseEventHandler{
 
 };
 
-//DEBUG TASKS
-
-void taskA(){
-    while (true){
-        printf("A");
-    }
-}
-
-void taskB(){
-    while (true){
-        printf("B");
-    }
-}
 
 //Define what a constructor is
 typedef void (*constructor)();
@@ -262,14 +249,6 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //TaskManger is up here as needs to use IDT
     printf("[ ] Setting Task Manger... \n");
     TaskManager taskManager;
-
-    //Test Tasks
-    Task task1(&gdt, taskA);
-    Task task2(&gdt, taskB);
-
-    taskManager.AddTask(&task1);
-    taskManager.AddTask(&task2);
-
     printf("[x] Task Manger Setup \n");
 
 
@@ -392,4 +371,4 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 }
 #pragma clang diagnostic pop
 
-//NEXT: buttons, window overlapping, mouse release, invert mouse colour on black/white
+//GUI NEXT: buttons, window overlapping, mouse release, invert mouse colour on black/white

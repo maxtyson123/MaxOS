@@ -4,23 +4,23 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(SYSTEM .)
 
-set(harwardCom_c ./src/hardwarecommunication)
-set(harwardCom_h ./include/hardwarecommunication)
+set(harwardCom_c kernel/src/hardwarecommunication)
+set(harwardCom_h kernel/include/hardwarecommunication)
 
-set(drivers_c ./src/drivers)
-set(drivers_h ./include/drivers)
+set(drivers_c kernel/src/drivers)
+set(drivers_h kernel/include/drivers)
 
-set(common_c ./src/common)
-set(common_h ./include/common)
+set(common_c kernel/src/common)
+set(common_h kernel/include/common)
 
 #Include the directories and now your cpp files will recognize your headers
-include_directories(./include)
+include_directories(kernel/include)
 
 set(
         SOURCE_FILES
-        ./src/kernel.cpp
-        ./src/gdt.cpp
-        ./include/gdt.h
+        kernel/src/kernel.cpp
+        kernel/src/gdt.cpp
+        kernel/include/gdt.h
         ${harwardCom_h}/pci.h
         ${harwardCom_c}/pci.cpp
         ${harwardCom_h}/port.h
@@ -36,5 +36,5 @@ set(
         ${common_h}/types.h
 
 
-        include/drivers/vga.h src/drivers/vga.cpp include/gui/widget.h include/gui/window.h include/gui/desktop.h src/gui/desktop.cpp src/gui/widget.cpp src/gui/window.cpp include/common/graphicsContex.h include/gui/render.h src/gui/render.cpp include/gui/widgets/text.h src/gui/widgets/text.cpp include/multitasking.h src/multitasking.cpp)
+        kernel/include/drivers/vga.h kernel/src/drivers/vga.cpp kernel/include/gui/widget.h kernel/include/gui/window.h kernel/include/gui/desktop.h kernel/src/gui/desktop.cpp kernel/src/gui/widget.cpp kernel/src/gui/window.cpp kernel/include/common/graphicsContex.h kernel/include/gui/render.h kernel/src/gui/render.cpp kernel/include/gui/widgets/text.h kernel/src/gui/widgets/text.cpp kernel/include/multitasking.h kernel/src/multitasking.cpp)
 add_executable(untitled ${SOURCE_FILES})
