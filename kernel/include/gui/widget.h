@@ -68,8 +68,8 @@ namespace maxOS{
             virtual void OnMouseUp(common::int32_t x, common::int32_t y, common::uint8_t button);
             virtual void OnMouseMove(common::int32_t old_x, common::int32_t old_y, common::int32_t new_x, common::int32_t new_y);
 
-            virtual void OnKeyDown(char);
-            virtual void OnKeyUp(char);
+            virtual void OnKeyDown(char*);
+            virtual void OnKeyUp(char*);
 
 
         };

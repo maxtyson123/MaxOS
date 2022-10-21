@@ -25,7 +25,7 @@ namespace maxOS{
             MemoryChunk* first;
 
         public:
-            static MemoryManager* activeMemoryManager; //Simmilar to how we have the active interrupt manager
+            static MemoryManager* activeMemoryManager; //Similar to how we have the active interrupt manager
 
             MemoryManager(common::size_t start, common::size_t size);
             ~MemoryManager();
@@ -36,5 +36,16 @@ namespace maxOS{
     };
 
 }
+
+
+void* operator new(unsigned size);
+void* operator new[](unsigned size);
+
+//Placement New
+void* operator new(unsigned size, void* pointer);
+void* operator new[](unsigned size, void* pointer);
+
+void operator delete(void* pointer);
+void operator delete[](void* pointer);
 
 #endif //MAXOS_MEMORYMANAGEMENT_H

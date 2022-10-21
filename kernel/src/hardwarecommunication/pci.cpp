@@ -149,10 +149,16 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
 
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager) {
 
+    Driver* driver = 0;
     switch (dev.vendor_ID) {
         case 0x1022:                            //AMD
             switch (dev.device_ID) {
                 case 0x2000:                    //AMD - am79c971 (Ethernet Controller) (https://www.amd.com/system/files/TechDocs/20550.pdf)
+                   /*
+                    driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
+                    if(driver != 0)                                                                                 //Check if space in memory
+                       new (driver) amd_am79c973(...);                                                              //Create Driver
+                   */
                     break;
             }
             break;
@@ -165,14 +171,14 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
         case 0x03:                              //Graphics
             switch (dev.subclass_id) {
                 case 0x00:                      //Graphics - VGA
-                    break;                      //GUI here we come!
+                    break;
             }
             break;
     }
     
     
     
-    return 0;
+    return driver;
 }
 
 /* searches for the lowest set bit in a 32-bit value, value must not be 0 */

@@ -135,3 +135,61 @@ void MemoryManager::free(void *pointer) {
 }
 
 
+//Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
+
+
+void* operator new(unsigned size){
+
+    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+
+        return maxOS::MemoryManager::activeMemoryManager -> malloc(size);
+
+    }
+
+    return 0;
+
+}
+void* operator new[](unsigned size){
+
+    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+
+        return maxOS::MemoryManager::activeMemoryManager -> malloc(size);
+
+    }
+
+    return 0;
+
+}
+
+//Placement New (see placement new operator)
+
+void* operator new(unsigned size, void* pointer){
+
+    return pointer;
+
+}
+void* operator new[](unsigned size, void* pointer){
+
+    return pointer;
+
+}
+
+void operator delete(void* pointer){
+
+    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+
+        return maxOS::MemoryManager::activeMemoryManager -> free(pointer);
+
+    }
+
+}
+
+void operator delete[](void* pointer){
+
+    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+
+        return maxOS::MemoryManager::activeMemoryManager -> free(pointer);
+
+    }
+
+}

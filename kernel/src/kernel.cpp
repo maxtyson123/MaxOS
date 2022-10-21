@@ -1,8 +1,10 @@
 
 //Common
 #include <common/types.h>
+#include <common/printf.h>
 #include <gdt.h>
 #include <multitasking.h>
+#include <memorymanagement.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -29,127 +31,52 @@ using namespace maxOS::gui;
 
 // #define ENABLE_GRAPHICS
 
+static Console console;
+
 
 void printf_gui(char* str, Text lines[15]){
 
-    static uint8_t gx = 0, gy = 0;    //Cursor Location
-    static char lineText[15][29];
-    //Debug Console is 29 wide x 15 high
-
-    for(int i = 0; str[i] != '\0'; ++i){     //Increment through each char as long as it's not the end symbol
-
-        switch (str[i]) {
-
-            case '\n':      //If newline
-                gy++;        //New Line
-                gx = 0;      //Reset Width pos
-                break;
-
-            default:        //(This also stops the \n from being printed)
-                lineText[gy][gx] = str[i];
-                gx++;
-
-        }
-
-        if(gx >= 29){    //If at edge of screen
-
-            gy++;
-            gx = 0;
-        }
-
-        //If at bottom of screen then clear and restart
-        if(gy >= 15){
-            for (int y = 0; y < 15; ++y) {
-                for (int x = 0; x < 29; ++x) {
-                    //Set everything to a space char
-                    lineText[y][x] = ' ';
-                }
-            }
-
-            gx = 0;
-            gy = 0;
-
-        }
-    }
-    for (int i = 0; i < 15; ++i) {
-        lines[i].UpdateText(lineText[i]);
-    }
+    console.put_string_gui(str,lines);
 
 }
 
 void printf(char* str, bool clearLine = false)
 {
-    static uint16_t* VideoMemory = (uint16_t*)0xb8000;  //Spit the video memory into an array of 16 bit, 4 bit for foreground, 4 bit for background, 8 bit for character
+    console.put_string(str,clearLine);
 
-    static uint8_t x = 0, y = 0;    //Cursor Location
-
-    //Screen is 80 wide x 25 high (characters)
-
-
-    if(clearLine){
-        for (int x = 0; x < 80; ++x) {
-            //Set everything to a space char
-            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | ' ';
-        }
-        x = 0;
-    }
-
-    for(int i = 0; str[i] != '\0'; ++i){     //Increment through each char as long as it's not the end symbol
-
-        switch (str[i]) {
-
-            case '\n':      //If newline
-                y++;        //New Line
-                x = 0;      //Reset Width pos
-                break;
-
-            default:        //(This also stops the \n from being printed)
-                VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | str[i];
-                x++;
-        }
-        
-
-
-        if(x >= 80){    //If at edge of screen
-            y++;        //New Line
-            x = 0;      //Reset Width pos
-        }
-
-        //If at bottom of screen then clear and restart
-        if(y >= 25){
-            for (int y = 0; y < 25; ++y) {
-                for (int x = 0; x < 80; ++x) {
-                    //Set everything to a space char
-                    VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | ' ';
-                }
-            }
-            
-            x = 0;
-            y = 0;
-
-        }
-    }
 }
 
 void printfHex(uint8_t key){
-    char *foo = "00";
-    char *hex = "0123456789ABCDEF";
-
-    foo[0] = hex[(key >> 4) & 0xF];
-    foo[1] = hex[key & 0xF];
-    printf(foo);
+    console.put_hex(key);
 }
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
     public:
         bool guiTestKeyPressed = false;
-        void OnKeyDown(char c){
-            char* foo = " ";
-            foo[0] = c;
-            printf(foo);
-            if(c == 't'){
-                guiTestKeyPressed = true;
+        void OnKeyDown(char* c){
+
+
+            if(c == "ARRT"){
+                console.moveCursor(1,0);
+                return;
             }
+            if(c == "ARLF"){
+                console.moveCursor(-1,0);
+                return;
+            }
+            if(c == "ARUP"){
+                console.moveCursor(0,1);
+                return;
+            }
+            if(c == "ARDN"){
+                console.moveCursor(0,-1);
+                return;
+            }
+
+
+
+            printf(c);
+
         }
 };
 
@@ -231,10 +158,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
-    maxOSVer->version = 0.16;
-    maxOSVer->version_c = "0.16";
-    maxOSVer->build = 37;
-    maxOSVer->build_c = "37";
+    maxOSVer->version = 0.17;
+    maxOSVer->version_c = "0.17";
+    maxOSVer->build = 40;
+    maxOSVer->build_c = "40";
     maxOSVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
@@ -246,6 +173,39 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     GlobalDescriptorTable gdt;                                                              //Setup GDT
     printf("[x] GDT Setup \n");
 
+    printf("[ ] Setting Up Memory Management... \n");
+    uint32_t* memupper = (uint32_t*)(((size_t)multiboot_structure) + 8);                    //memupper is a field at offset 8 in the Multiboot information structure and it indicates the amount upper memory in kilobytes.
+                                                                                            //Lower memory starts at address 0, and upper memory starts at address 1 megabyte. The
+                                                                                            //maximum possible value for lower memory is 640 kilobytes. The value returned for upper
+                                                                                            //memory is maximally the address of the first upper memory hole minus 1 megabyte.
+    size_t  heap = 10*1024*1024;                                                            //Start at 10MB
+
+
+    printf("heap: 0x");
+    printfHex((heap >> 24) & 0xFF);
+    printfHex((heap >> 16) & 0xFF);
+    printfHex((heap >> 8 ) & 0xFF);
+    printfHex((heap      ) & 0xFF);
+
+
+    size_t  memSize = (*memupper)*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
+    MemoryManager memoryManager(heap, memSize);                                    //Memory Mangement
+    printf(" memSize: 0x");
+    printfHex(((size_t)memSize >> 24) & 0xFF);
+    printfHex(((size_t)memSize >> 16) & 0xFF);
+    printfHex(((size_t)memSize >> 8 ) & 0xFF);
+    printfHex(((size_t)memSize      ) & 0xFF);
+
+
+    void* allocated = memoryManager.malloc(1024);
+    printf(" allocated: 0x");
+    printfHex(((size_t)allocated >> 24) & 0xFF);
+    printfHex(((size_t)allocated >> 16) & 0xFF);
+    printfHex(((size_t)allocated >> 8 ) & 0xFF);
+    printfHex(((size_t)allocated      ) & 0xFF);
+    printf("\n");
+
+    printf("[x] Memory Management Setup \n");
     //TaskManger is up here as needs to use IDT
     printf("[ ] Setting Task Manger... \n");
     TaskManager taskManager;
@@ -353,6 +313,13 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and task
     printf("[x] IDT Setup \n", true);
     interrupts.Activate();
+
+
+    printf("Line 1 \n");
+    printf("Line 2 \n");
+    printf("Line 3 \n");
+    printf("Line 4 \n");
+    printf("Scroll Setup \n");
 
     //CODE AFTER HERE (INTERRUPTS) SHOULD BE A TASK
 

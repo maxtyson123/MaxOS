@@ -139,4 +139,7 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 - - size_t : size
 - These Memory Chunks are just a linked list (double linked)  and every chunk that has dropped from the RAM will be entered into the list, which is how the OS will keep track of used / free memory
 - More than one free chunk in a row is bad as it means larger data that could fit into those two chunks combine wont be able to. This can be prevented merging a chunk with another if it is deallocated next to another un allocated chunk.
+- To find memory eaiser see [multiboot.h](https://github.com/cstack/osdev/blob/master/multiboot.h), however I will implement my own for copyright reasons which will just use the multiboot structure
+- Now that there is memory mangemen objects will be able to use the "new" and "delete" methods, allowing for virtual deconstructors
+- However, if there is no free memory then the function will return 0 which wounld work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exeption like c++ normally would as currently there is no exception handler
 - 

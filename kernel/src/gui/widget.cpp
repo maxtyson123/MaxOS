@@ -219,14 +219,14 @@ void CompositeWidget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, i
 }
 
 
-void CompositeWidget::OnKeyDown(char str) {
+void CompositeWidget::OnKeyDown(char* str) {
 
     if(focussedChild != 0){             //IF the key event should happen on a child
         focussedChild->OnKeyDown(str);  //Pass to child
     }
 }
 
-void CompositeWidget::OnKeyUp(char str){
+void CompositeWidget::OnKeyUp(char* str){
 
     if(focussedChild != 0){             //IF the key event should happen on a child
         focussedChild->OnKeyUp(str);    //Pass to child

@@ -7,6 +7,7 @@
 
 #include <common/types.h>
 #include <drivers/driver.h>
+#include <memorymanagement.h>
 #include <hardwarecommunication/port.h>
 #include <hardwarecommunication/interrupts.h>
 

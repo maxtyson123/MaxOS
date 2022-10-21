@@ -1,9 +1,10 @@
-GCCPARAMS = -m32 -Ikernel/include -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
+GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 ASPARAMS = --32
 LDPARAMS = -melf_i386
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/gdt.o \
+ 		  obj/kernel/memorymanagement.o \
  		  obj/kernel/drivers/driver.o \
  		  obj/kernel/hardwarecommunication/port.o \
  		  obj/kernel/hardwarecommunication/interruptstubs.o \
@@ -18,26 +19,72 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/desktop.o \
  		  obj/kernel/gui/render.o \
  		  obj/kernel/gui/widgets/text.o \
+ 		  obj/kernel/common/printf.o \
  		  obj/kernel/kernel.o
+
+libraries =
+ports =
+programs =
+
 
 .PHONY: default
 default: build;
 
-#Kernel
+### Kernel ###
 
 obj/kernel/%.o: kernel/src/%.cpp
 	mkdir -p $(@D)
-	gcc $(GCCPARAMS) -c -o $@ $<
+	gcc $(GCCPARAMS) -Ikernel/include -c -o $@ $<
 
 obj/kernel/%.o: kernel/src/%.s
 	mkdir -p $(@D)
-	as $(ASPARAMS) -o $@ $<
+	as $(ASPARAMS) -Ikernel/include -o $@ $<
 
-buildKernel: $(kernel)
-	echo Kernel Built
+### Libraries ###
 
-maxOS.bin: linker.ld $(kernel)
-	ld $(LDPARAMS) -T $< -o $@ $(kernel)
+obj/libraries/%.o: libraries/src/%.cpp
+	mkdir -p $(@D)
+	gcc $(GCCPARAMS) -Ilibraries/include -c -o $@ $<
+
+obj/libraries/%.o: libraries/src/%.s
+	mkdir -p $(@D)
+	as $(ASPARAMS) -Ilibraries/include -o $@ $<
+
+buildLibraries: $(libraries)
+	echo Libraries Built
+
+
+### Ports ###
+
+obj/ports/%.o: ports/src/%.cpp
+	mkdir -p $(@D)
+	gcc $(GCCPARAMS) -Iports/include -c -o $@ $<
+
+obj/ports/%.o: ports/src/%.s
+	mkdir -p $(@D)
+	as $(ASPARAMS) -Iports/include -o $@ $<
+
+buildPorts: $(ports)
+	echo Ports Built
+
+
+### Programs ###
+
+obj/programs/%.o: programs/src/%.cpp
+	mkdir -p $(@D)
+	gcc $(GCCPARAMS) -Iprograms/include -c -o $@ $<
+
+obj/programs/%.o: programs/src/%.s
+	mkdir -p $(@D)
+	as $(ASPARAMS) -Iprograms/include -o $@ $<
+
+buildPrograms: $(programs)
+	echo Programs Built
+
+### Make ###
+
+maxOS.bin: linker.ld $(kernel) $(libraries) $(ports) $(programs)
+	ld $(LDPARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
 
 maxOS.iso: maxOS.bin
 	mkdir iso

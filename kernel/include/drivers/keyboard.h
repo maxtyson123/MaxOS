@@ -18,9 +18,9 @@ namespace maxOS
         public:
             KeyboardEventHandler();
 
-            virtual void OnKeyDown(char);
+            virtual void OnKeyDown(char*);
 
-            virtual void OnKeyUp(char);
+            virtual void OnKeyUp(char*);
         };
 
         class KeyboardDriver : public maxOS::hardwarecommunication::InterruptHandler, public Driver {
