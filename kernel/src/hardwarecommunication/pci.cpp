@@ -2,6 +2,7 @@
 // Created by 98max on 12/10/2022.
 //
 #include <hardwarecommunication/pci.h>
+#include <drivers/amd_am79c973.h>
 
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
@@ -94,11 +95,12 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                     if(bar.adress && (bar.type == InputOutput)){ //Only if the address is really set
                         deviceDescriptor.portBase = (uint32_t)bar.adress;  //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
                     }
+                }
 
-                    Driver* driver = GetDriver(deviceDescriptor, interruptManager);
-                    if(driver != 0){    //If there is a driver
-                        driverManager->AddDriver(driver);
-                    }
+                //Only need one driver for the device, not every BAR
+                Driver* driver = GetDriver(deviceDescriptor, interruptManager);
+                if(driver != 0){    //If there is a driver
+                    driverManager->AddDriver(driver);
                 }
 
 
@@ -154,11 +156,10 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
         case 0x1022:                            //AMD
             switch (dev.device_ID) {
                 case 0x2000:                    //AMD - am79c971 (Ethernet Controller) (https://www.amd.com/system/files/TechDocs/20550.pdf)
-                   /*
                     driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
-                    if(driver != 0)                                                                                 //Check if space in memory
-                       new (driver) amd_am79c973(...);                                                              //Create Driver
-                   */
+                    if(driver != 0)                                                                                     //Check if space in memory
+                       new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance
+                    return driver;                                                                                      //Add Driver
                     break;
             }
             break;

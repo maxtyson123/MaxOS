@@ -119,13 +119,13 @@ See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explain
 - - kernel will execute the interrupt handler
 - - The interrupt handler will then return a pointer to the new task
 - - Kernel will then execute the new task instead of executing method "X"
-- To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execteu
+- To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execute
 ### Dynamic Memory Management / Heap
 See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list)
 - Before Dynamic Memory Management (DMM), the implementation was very static as there would just be the objects and are allocated on the stack.
-- This is not the best as sometimes you don't know what is needed in advance, e.g. when iterating through the PCI devices and there is a device that needs it's driver instantiated there for space has to be allocated or reserved for that driver
+- This is not the best as sometimes you don't know what is needed in advance, e.g. when iterating through the PCI devices and there is a device that needs its driver instantiated there for space has to be allocated or reserved for that driver
 - This means there needs to be a way of keeping track of the space that has already been assigned to something as it is not ideal to have stuff overlap and disturb each other.
-- Currently the RAM looks like this:
+- Currently, the RAM looks like this:
 ```bash
   [Video Memory] [Text Memory] [BIOS] [ Grub / Bootloader ] [ MaxOS / Kernel ] [ Stack ] [ FREE SPACE ]
 ```
@@ -138,8 +138,18 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 - - Bool : Allocated
 - - size_t : size
 - These Memory Chunks are just a linked list (double linked)  and every chunk that has dropped from the RAM will be entered into the list, which is how the OS will keep track of used / free memory
-- More than one free chunk in a row is bad as it means larger data that could fit into those two chunks combine wont be able to. This can be prevented merging a chunk with another if it is deallocated next to another un allocated chunk.
-- To find memory eaiser see [multiboot.h](https://github.com/cstack/osdev/blob/master/multiboot.h), however I will implement my own for copyright reasons which will just use the multiboot structure
-- Now that there is memory mangemen objects will be able to use the "new" and "delete" methods, allowing for virtual deconstructors
-- However, if there is no free memory then the function will return 0 which wounld work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exeption like c++ normally would as currently there is no exception handler
+- More than one free chunk in a row is bad as it means larger data that could have had fit into those two chunks if they were combined won't be able to. This can be prevented merging a chunk with another if it is deallocated next to another un allocated chunk.
+- To find memory easier see [multiboot.h](https://github.com/cstack/osdev/blob/master/multiboot.h), however I will implement my own for copyright reasons which will just use the multiboot structure
+- Now that there is memory management objects will be able to use the "new" and "delete" methods, allowing for virtual deconstructions
+- However, if there is no free memory then the function will return 0 which would work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exception like c++ normally would as currently there is no exception handler
+
+# Networking
+### Driver
+See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) 
+- To get networking capability in the OS a driver for the virtualized network chip (am79c971) has to be written
+- This device is a complicated one to write a driver for. However, it will follow the same implementation as the other drivers: a class derived from driver, a class derived from interrupt handler (interrupt number and port number can be gotten from PCI)
+- The device takes a lot of code to initialize (similar to loads for setting VGA graphics mode).
+- The networking device can have multiple send and receive buffers and for every buffer there needs to be an instance of a struct (which mainly has a pointer to that buffer)
+- A problem with this though is that this is one of those devices that use some bits in the address for other purposes meaning it needs to be a multiple of 16 (similar to bar)
+- So the buffer will be 2KB but then an additional 15 bytes are added on and then 4 bytes are removed. This allows for the multiple of 16 to be found
 - 

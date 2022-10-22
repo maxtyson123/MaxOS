@@ -235,3 +235,7 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
     }
     return esp;
 }
+
+maxOS::common::uint16_t InterruptManager::HardwareInterruptOffset() {
+    return hardwareInterruptOffset;
+}

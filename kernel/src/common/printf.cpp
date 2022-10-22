@@ -109,10 +109,8 @@ void Console::put_string(char* str, bool clearLine)
         }
     }
 
-
     for (int y = 0; y < 25; ++y) {
         for (int x = 0; x < 80; ++x) {
-            //Set everything to a space char
             VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | displayed[y][x];
         }
     }
@@ -130,14 +128,38 @@ void Console::put_hex(uint8_t key){
 
 void Console::moveCursor(uint8_t C_x, uint8_t C_y){
 
+    //Move cursor by specified amount
     x += C_x;
     y += C_y;
 
-    if(x > 80) x = 80;
-    if(x < 0) x = 0;
+    //Check width overflow
+    if(x >= 79) {
+        x = 0;
+        y++;
+    }
+    if(x <= 0){
+        x = 79;
+        y--;
+    }
 
-    if(y > 25) y = 25;
-    if(y < 0) y = 0;
+    //Y doesn't need an overflow as scrolling
+
+
+}
+
+void Console::backspace(){
+    put_string(" ");                //Remove the cursor pointer in front
+    moveCursor(-2,0);          //Go back 2
+    put_string(" ");                //Remove that character
+    moveCursor(-1,0);          //Go back to the characters position
+
+    if(x <= 0){
+        y--;
+        x = 78;
+    }
+
+    put_string("_");                 //Line to know where cursor at
+    moveCursor(-1,0);          //Move behind the cursor
 
 }
 

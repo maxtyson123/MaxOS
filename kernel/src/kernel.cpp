@@ -33,6 +33,12 @@ using namespace maxOS::gui;
 
 static Console console;
 
+int strcmp(const char *s1, const char *s2)
+{
+    while ((*s1 == *s2) && *s1) { ++s1; ++s2; }
+    return ((int) (unsigned char) *s1) - ((int) (unsigned char) *s2);
+}
+
 
 void printf_gui(char* str, Text lines[15]){
 
@@ -55,27 +61,45 @@ class PrintfKeyboardEventHandler : public KeyboardEventHandler{
         bool guiTestKeyPressed = false;
         void OnKeyDown(char* c){
 
+           if(strcmp(c,"ARRT") == 0){
 
-            if(c == "ARRT"){
                 console.moveCursor(1,0);
                 return;
-            }
-            if(c == "ARLF"){
+
+            }else if(strcmp(c,"ARLF") == 0){
+
                 console.moveCursor(-1,0);
                 return;
-            }
-            if(c == "ARUP"){
+
+            }else if(strcmp(c,"ARDN") == 0){
+
                 console.moveCursor(0,1);
                 return;
-            }
-            if(c == "ARDN"){
+
+            }else if(strcmp(c,"ARUP") == 0){
+
                 console.moveCursor(0,-1);
                 return;
+
+            }else if(strcmp(c,"BACKSPACE") == 0){
+
+                console.backspace();
+
+           }else if(strcmp(c,"DEL") == 0){
+
+
+
+           }else{
+
+                printf(c);                          //Print Char
+                printf("_");                        //Line to know where cursor at
+                console.moveCursor(-1,0);      //Move behind the cursor
+
             }
 
 
 
-            printf(c);
+
 
         }
 };
@@ -158,10 +182,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
-    maxOSVer->version = 0.17;
-    maxOSVer->version_c = "0.17";
-    maxOSVer->build = 40;
-    maxOSVer->build_c = "40";
+    maxOSVer->version = 0.18;
+    maxOSVer->version_c = "0.18";
+    maxOSVer->build = 41;
+    maxOSVer->build_c = "41";
     maxOSVer->buildAuthor = "Max Tyson";
 
     printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
@@ -314,17 +338,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("[x] IDT Setup \n", true);
     interrupts.Activate();
 
-
-    printf("Line 1 \n");
-    printf("Line 2 \n");
-    printf("Line 3 \n");
-    printf("Line 4 \n");
-    printf("Scroll Setup \n");
-
-    //CODE AFTER HERE (INTERRUPTS) SHOULD BE A TASK
-
-   // testText.UpdateText("Max OS ");
-
+    //CODE AFTER HERE (interrupts.Activate();) SHOULD BE A TASK
 
     while(1){
         #ifdef ENABLE_GRAPHICS

@@ -10,10 +10,11 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/hardwarecommunication/interruptstubs.o \
  		  obj/kernel/hardwarecommunication/interrupts.o \
  		  obj/kernel/hardwarecommunication/pci.o \
-	   	  obj/kernel/multitasking.o \
+ 		  obj/kernel/multitasking.o \
  		  obj/kernel/drivers/keyboard.o \
  		  obj/kernel/drivers/mouse.o \
  		  obj/kernel/drivers/vga.o \
+ 		  obj/kernel/drivers/amd_am79c973.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
  		  obj/kernel/gui/desktop.o \
@@ -106,10 +107,10 @@ build: maxOS.iso
 
 
 runQ: maxOS.iso
-	qemu-system-i386 -boot d -cdrom maxOS.iso -m 512
+	qemu-system-i386 -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512
 
 runQ_W: maxOS.iso
-	"C:\Program Files\qemu\qemu-system-i386" -boot d -cdrom maxOS.iso -m 512
+	"C:\Program Files\qemu\qemu-system-i386" -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512
 
 
 

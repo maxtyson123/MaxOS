@@ -23,6 +23,7 @@ namespace maxOS{
                 void put_hex(uint8_t key);
 
                 void moveCursor(uint8_t C_x, uint8_t C_y);
+                void backspace();
         };
 
 
