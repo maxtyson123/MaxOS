@@ -155,7 +155,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
     switch (dev.vendor_ID) {
         case 0x1022:                            //AMD
             switch (dev.device_ID) {
-                case 0x2000:                    //AMD - am79c971 (Ethernet Controller) (https://www.amd.com/system/files/TechDocs/20550.pdf)
+                case 0x2000:                    //AMD - am79c971 (Ethernet Controller)
                     driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
                     if(driver != 0)                                                                                     //Check if space in memory
                        new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance

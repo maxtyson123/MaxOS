@@ -7,6 +7,34 @@
 using namespace maxOS;
 using namespace maxOS::common;
 
+Console::Console() {
+
+    //Set default limits
+    lim_x = 80;
+    lim_y = 26;
+
+    //Draw Top
+
+    x = 0; y = 0; put_string("******************************************************************************** ");
+    x = 0; y = 1; put_string("* Debug Console                ******                                          * ");
+    x = 0; y = 2; put_string("******************************************************************************** ");
+
+    //Draw Side
+    for (int i = 3; i < 23; ++i) {
+        x = 0; y = i; put_string("*                                                                              * ");
+    }
+
+    //Draw bottom
+    x = 0; y = 24; put_string("******************************************************************************** ");
+
+
+}
+
+Console::~Console() {
+
+}
+
+
 void Console::put_string_gui(char* str, gui::Text lines[15]){
 
     static uint8_t gx = 0, gy = 0;    //Cursor Location
@@ -64,11 +92,11 @@ void Console::put_string(char* str, bool clearLine)
     static char displayed[25][80];
 
     if(clearLine){
-        for (int x = 0; x < 80; ++x) {
+        for (int x = 0; x < lim_x; ++x) {
             //Set everything to a space char
             displayed[y][x] = ' ';
         }
-        x = 0;
+        x = ini_x;
     }
 
     for(int i = 0; str[i] != '\0'; ++i){     //Increment through each char as long as it's not the end symbol
@@ -76,8 +104,8 @@ void Console::put_string(char* str, bool clearLine)
         switch (str[i]) {
 
             case '\n':      //If newline
-                y++;        //New Line
-                x = 0;      //Reset Width pos
+                y++;             //New Line
+                x = ini_x;      //Reset Width pos
                 break;
 
             default:        //(This also stops the \n from being printed)
@@ -87,28 +115,36 @@ void Console::put_string(char* str, bool clearLine)
 
 
 
-        if(x >= 80){    //If at edge of screen
+        if(x >= lim_x){    //If at edge of screen
             y++;        //New Line
-            x = 0;      //Reset Width pos
+            x = ini_x;      //Reset Width pos
         }
 
         //If at bottom of screen then clear and restart
-        if(y >= 25){
+        if(y >= lim_y){
 
-            for (int y = 0; y < 24; ++y) {
-                for (int x = 0; x < 80; ++x) {
-                    displayed[y][x] = displayed[y+1][x];
+            for (int y = ini_y; y < lim_y; ++y) {
+                for (int x = ini_x; x < lim_x; ++x) {
+                    displayed[y][x] = displayed[y+1][x];            //Shift up by 1
                 }
             }
 
-            x = 0;
-            y = 24;
-            for (int x = 0; x < 80; ++x) {
+            x = ini_x;
+            y = lim_y-1;
+
+            //Draw the empty line
+            for (int x = 1; x < 79; ++x) {
                 displayed[y][x] = ' ';
             }
+
+            //Draw the border
+            displayed[y][0] = '*';
+            displayed[y][79] = '*';
+
         }
     }
 
+    //Write to video memory
     for (int y = 0; y < 25; ++y) {
         for (int x = 0; x < 80; ++x) {
             VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | displayed[y][x];
@@ -163,10 +199,3 @@ void Console::backspace(){
 
 }
 
-Console::Console() {
-
-}
-
-Console::~Console() {
-
-}

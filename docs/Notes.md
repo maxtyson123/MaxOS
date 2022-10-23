@@ -145,7 +145,7 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 
 # Networking
 ### Driver
-See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) 
+See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) [AMD_AM79C973](https://www.amd.com/system/files/TechDocs/20550.pdf)
 - To get networking capability in the OS a driver for the virtualized network chip (am79c971) has to be written
 - This device is a complicated one to write a driver for. However, it will follow the same implementation as the other drivers: a class derived from driver, a class derived from interrupt handler (interrupt number and port number can be gotten from PCI)
 - The device takes a lot of code to initialize (similar to loads for setting VGA graphics mode).

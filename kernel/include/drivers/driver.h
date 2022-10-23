@@ -10,28 +10,28 @@ namespace maxOS
     namespace drivers {
 
         class Driver {
-        public:
-            Driver();
+            public:
+                Driver();
 
-            ~Driver();
+                ~Driver();
 
-            virtual void Activate();
+                virtual void Activate();
 
-            virtual void Deactivate();
+                virtual void Deactivate();
 
-            virtual int Reset();
+                virtual int Reset();
         };
 
         class DriverManager {
-        private:
-            Driver *drivers[255];   //Fixed length for now as there isn't dynamic memory in the OS yet.
-            int numDrivers;
-        public:
-            DriverManager();
+            public:                     //Public For testing
+                Driver *drivers[255];   //Fixed length for now as there is dynamic memory in the OS but I haven't setup drivers this way yet.
+                int numDrivers;
+            public:
+                DriverManager();
 
-            void AddDriver(Driver *);
+                void AddDriver(Driver *);
 
-            void ActivateAll();
+                void ActivateAll();
         };
     }
 }

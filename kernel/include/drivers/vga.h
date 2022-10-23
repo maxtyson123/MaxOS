@@ -38,17 +38,17 @@ namespace maxOS{
                 virtual common::uint8_t GetColourIndex(common::uint8_t  r, common::uint8_t g, common::uint8_t b);
 
 
-        public:
-                VideoGraphicsArray();
-                ~VideoGraphicsArray();
+            public:
+                    VideoGraphicsArray();
+                    ~VideoGraphicsArray();
 
-                virtual bool SupportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
-                virtual bool SetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
+                    virtual bool SupportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
+                    virtual bool SetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
 
-                virtual void PutPixel(common::int32_t x, common::int32_t y, common::uint8_t  r, common::uint8_t g, common::uint8_t b);
-                virtual void PutPixel(common::int32_t x, common::int32_t y, common::uint8_t  colourIndex);
+                    virtual void PutPixel(common::int32_t x, common::int32_t y, common::uint8_t  r, common::uint8_t g, common::uint8_t b);
+                    virtual void PutPixel(common::int32_t x, common::int32_t y, common::uint8_t  colourIndex);
 
-                virtual void FillRectangle(common::uint32_t x, common::uint32_t y, common::uint32_t w, common::uint32_t h, common::uint8_t  r, common::uint8_t g, common::uint8_t b);
+                    virtual void FillRectangle(common::uint32_t x, common::uint32_t y, common::uint32_t w, common::uint32_t h, common::uint8_t  r, common::uint8_t g, common::uint8_t b);
         };
     }
 }

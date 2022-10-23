@@ -15,6 +15,7 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
+#include <drivers/amd_am79c973.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -165,10 +166,10 @@ extern "C" void callConstructors()
 class Version{
     public:
        int version;            //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
-       char* version_c;       //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
+       char* version_c;        //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
        int build;              //Commit Number
        char* build_c;          //Commit Number
-       char* buildAuthor;      //Auther of the commit (Mostlikly me, but change for pull requsts and such)
+       char* buildAuthor;      //Author of the commit (Mostlikly me, but change for pull requests and such)
         Version(){};
         ~Version(){};
 
@@ -178,17 +179,32 @@ class Version{
 #pragma clang diagnostic ignored "-Wwritable-strings"
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
+
+
     //NOTE: Will rewrite boot text stuff later
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
     maxOSVer->version = 0.18;
-    maxOSVer->version_c = "0.18";
-    maxOSVer->build = 41;
-    maxOSVer->build_c = "41";
+    maxOSVer->version_c = "0.18.1";
+    maxOSVer->build = 42;
+    maxOSVer->build_c = "42";
     maxOSVer->buildAuthor = "Max Tyson";
 
-    printf("Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" -b"); printf(maxOSVer->build_c);  printf(" -a"); printf(maxOSVer->buildAuthor);
+    //Print in header
+    console.lim_x = 80;
+    console.x = 30; console.y = 1;
+    printf("* Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" * -b"); printf(maxOSVer->build_c);  printf(" * -a"); printf(maxOSVer->buildAuthor);
+
+    //Reset Console positions
+    console.x = 1; console.y = 3;
+
+    console.ini_x = 2;
+    console.ini_y = 4;
+
+    console.lim_x = 79;
+    console.lim_y = 24;
+
 
 
     printf("\n[x] Kernel Booted \n");
@@ -231,9 +247,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("[x] Memory Management Setup \n");
     //TaskManger is up here as needs to use IDT
-    printf("[ ] Setting Task Manger... \n");
+    printf("[ ] Setting Task Manager... \n");
     TaskManager taskManager;
-    printf("[x] Task Manger Setup \n");
+    printf("[x] Task Manager Setup \n");
 
 
 
@@ -333,6 +349,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
         printf_gui("LONG LINE (*(#()*$(@*#($#*@()$*#@",lines);
         //BUG: Long lines
     #endif
+
+    amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
+    eth0->Send((uint8_t*)"Hello Network", 13);
 
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and task
     printf("[x] IDT Setup \n", true);
