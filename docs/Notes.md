@@ -70,6 +70,21 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
 - - Fourth bit: Prefetch-able bit (e.g. reading from a hard drive in advance because its estimated that the program will need that soon)
 - - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
+### Hard-drives
+- History of hard drives: 20 years ago there used to be IDE (Integrated Device Electronics) that was later continued on to ATA (Advanced Technology Attachment) that has now been moved onto what is used to day SATA (Serial Advanced Technology Attachment) 
+- As hard drives have been around for a long time, they are well documented and easy to implement
+- SATA devices are almost always compatible to ATA or AHCI (Advanced Host Controller Interface)
+- Using the PCI controller, SATA hard drives can be found on class id 0x01 and subclass id 0x06
+- There are two different ways of accessing a hard-drive. The first one is PIO (Programed Input Output) which is relatively simple to implement but rather slow (maxs out at 16 M/Bs)
+- The second and better way would be DMA (Direct Memory Access) , which simply just writes the data to a memory location and sends an interrupt once finished
+- Although it is better to read from the PCI devices list, the ports can just be hard coded 
+- For the Implementation of PIO:
+- - PIO Has 28Bit Mode and 48Bit Mode
+- - These modes just specify how many bits are transferred to the device to request a sector (Sectors are 512 bytes)
+- - 28Bits supports hard drives/files upto 4GB whereas 48Bits support hard drives/files upto 8PB
+- Previously to communicate with data on the hard drive the OS had to know the CHS (Cylinder, Head, Sector)  address. As hard drive developed and there were no longer spinning disks and such (e.g. SSDs) a new way of comincating was invented: LBA.
+- LBA stands for Logical Block Address which basically just returns a sector with a given number
+
 
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)

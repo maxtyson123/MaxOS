@@ -1,6 +1,7 @@
 GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 ASPARAMS = --32
 LDPARAMS = -melf_i386
+QEMUPARAMS = -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/gdt.o \
@@ -14,6 +15,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/keyboard.o \
  		  obj/kernel/drivers/mouse.o \
  		  obj/kernel/drivers/vga.o \
+ 		  obj/kernel/drivers/ata.o \
  		  obj/kernel/drivers/amd_am79c973.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
@@ -105,12 +107,18 @@ maxOS.iso: maxOS.bin
 build: maxOS.iso
 	echo Complete
 
+## MISC
+
+setupQ:
+	sudo apt-get install qemu-system-i386
+	qemu-img create maxOS.img 10000
+
 
 runQ: maxOS.iso
-	qemu-system-i386 -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512
+	qemu-system-i386 $(QEMUPARAMS)
 
 runQ_W: maxOS.iso
-	"C:\Program Files\qemu\qemu-system-i386" -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512
+	"C:\Program Files\qemu\qemu-system-i386" $(QEMUPARAMS)
 
 
 

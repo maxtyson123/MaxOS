@@ -15,6 +15,7 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
+#include <drivers/ata.h>
 #include <drivers/amd_am79c973.h>
 
 //GUI
@@ -185,10 +186,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
-    maxOSVer->version = 0.18;
-    maxOSVer->version_c = "0.18.1";
-    maxOSVer->build = 42;
-    maxOSVer->build_c = "42";
+    maxOSVer->version = 0.19;
+    maxOSVer->version_c = "0.19";
+    maxOSVer->build = 43;
+    maxOSVer->build_c = "43";
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -256,7 +257,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("[ ] Setting Up Interrupt Descriptor Table... \n");
     InterruptManager interrupts(0x20, &gdt, &taskManager);            //Instantiate the method
-
+    printf("[x] IDT Setup \n", true);
 
 
     #ifdef ENABLE_GRAPHICS
@@ -350,12 +351,46 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
         //BUG: Long lines
     #endif
 
-    amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
-    eth0->Send((uint8_t*)"Hello Network", 13);
+    printf("[ ] Setting Up ATA Hard Drives... \n");
+
+    //Interrupt 14 for Primary
+    AdvancedTechnologyAttachment ata0m(0x1F0, true);         //Primary master
+    AdvancedTechnologyAttachment ata0s(0x1F0, false);        //Primary Slave
+    printf("    -ATA Primary Master: ");     ata0m.Identify();     printf("\n");
+    printf("    -ATA Primary Slave: ");      ata0s.Identify();     printf("\n");
+
+    //Interrupt 15 for Primary
+    AdvancedTechnologyAttachment ata1m(0x170, true);         //Secondary master
+    AdvancedTechnologyAttachment ata1s(0x170, false);        //Secondary Slave
+
+    /*
+
+    AdvancedTechnologyAttachment ata1m(0x1E8, true);         //Third master
+    AdvancedTechnologyAttachment ata1s(0x1E8, false);        //Third Slave
+
+    AdvancedTechnologyAttachment ata1m(0x168, true);         //Third master
+    AdvancedTechnologyAttachment ata1s(0x168, false);        //Third Slave
+
+    */
+
+    //Test
+
+    char* atamBuffer = "Test file write";
+    printf("    -ATA Write test: ");
+    ata0m.Write28(0,(uint8_t*)atamBuffer,15);
+    printf("\n");
+    ata0m.Flush();
+    printf("    -ATA Read test: ");
+    ata0m.Read28(0,15);
+    printf("\n");
+
+
+    printf("[x] ATA Hard Drives Setup \n");
 
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and task
-    printf("[x] IDT Setup \n", true);
+    printf("[ ] Activating Interrupt Descriptor Table... \n");
     interrupts.Activate();
+    printf("[x] IDT Activated \n", true);
 
     //CODE AFTER HERE (interrupts.Activate();) SHOULD BE A TASK
 

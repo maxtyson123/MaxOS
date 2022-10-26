@@ -11,7 +11,7 @@ Made mainly in C++ with a dabble of ASM.
 *Dont make pull request or bugs until initial is done (found in projects)
  
 ## Screenshots
-![Screenshot](docs/Screenshots/GUI_Barebones_crop.png)
+![Screenshot](docs/Screenshots/ATA_Hardrives.png)
 
 ### Services
 -None Yet
@@ -33,7 +33,9 @@ Moved to  projects page
 
 
 ###  Extended
-
+- [ ] VESA Video Mode
+- [ ] DMA Hard Drive
+- [ ] Virtual Filesystem 
 - [ ] Usable Desktop
 - [ ] Applications
 - [ ] Shell
