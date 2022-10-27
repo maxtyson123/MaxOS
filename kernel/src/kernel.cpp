@@ -5,6 +5,7 @@
 #include <gdt.h>
 #include <multitasking.h>
 #include <memorymanagement.h>
+#include <syscalls.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -150,6 +151,18 @@ class MouseToConsole: public MouseEventHandler{
 
 };
 
+void sysPrintf(char* str){
+
+    asm("int $0x80" : : "a" (4), "b" (str));    //Call interrupt 0x80, set AX to 4, BX to string
+
+}
+
+void TestTask(){
+
+    sysPrintf("Test syscall from test task");
+
+};
+
 
 //Define what a constructor is
 typedef void (*constructor)();
@@ -186,10 +199,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
-    maxOSVer->version = 0.19;
-    maxOSVer->version_c = "0.19";
-    maxOSVer->build = 43;
-    maxOSVer->build_c = "43";
+    maxOSVer->version = 0.20;
+    maxOSVer->version_c = "0.20";
+    maxOSVer->build = 44;
+    maxOSVer->build_c = "44";
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -247,7 +260,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("\n");
 
     printf("[x] Memory Management Setup \n");
-    //TaskManger is up here as needs to use IDT
+
+
     printf("[ ] Setting Task Manager... \n");
     TaskManager taskManager;
     printf("[x] Task Manager Setup \n");
@@ -255,10 +269,13 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
 
 
-    printf("[ ] Setting Up Interrupt Descriptor Table... \n");
+    printf("[ ] Setting Up Interrupt Manager... \n");
     InterruptManager interrupts(0x20, &gdt, &taskManager);            //Instantiate the method
-    printf("[x] IDT Setup \n", true);
+    printf("[x] Interrupt Manager Setup \n", true);
 
+    printf("[ ] Setting Up System Calls Handler... \n");
+    SysCallHandler sysCalls(&interrupts, 0x80);                                         //Instantiate the method
+    printf("[x] System Calls Handler Setup \n", true);
 
     #ifdef ENABLE_GRAPHICS
         //Desktop needs the mouse and keyboard

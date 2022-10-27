@@ -84,6 +84,13 @@ CPUState *TaskManager::Schedule(CPUState *cpuState) {
         currentTask %= numTasks;   //Restart from beginning
     }
 
+    /*
+    if(tasks[currentTask] -> killMe){
+        tasks[currentTask] = tasks[numTasks];
+        numTasks - 1;
+    }
+     */
+
     return tasks[currentTask] -> cpuState;
 
 }

@@ -50,6 +50,7 @@ namespace maxOS{
     public:
         Task(GlobalDescriptorTable *gdt, void entrypoint());
         ~Task();
+        bool killMe = false;
     };
 
 

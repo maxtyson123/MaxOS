@@ -1,7 +1,7 @@
 GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 ASPARAMS = --32
 LDPARAMS = -melf_i386
-QEMUPARAMS = -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img
+QEMUPARAMS = -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial stdio
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/gdt.o \
@@ -10,6 +10,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/hardwarecommunication/port.o \
  		  obj/kernel/hardwarecommunication/interruptstubs.o \
  		  obj/kernel/hardwarecommunication/interrupts.o \
+ 		  obj/kernel/syscalls.o \
  		  obj/kernel/hardwarecommunication/pci.o \
  		  obj/kernel/multitasking.o \
  		  obj/kernel/drivers/keyboard.o \

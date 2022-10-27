@@ -157,7 +157,14 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 - To find memory easier see [multiboot.h](https://github.com/cstack/osdev/blob/master/multiboot.h), however I will implement my own for copyright reasons which will just use the multiboot structure
 - Now that there is memory management objects will be able to use the "new" and "delete" methods, allowing for virtual deconstructions
 - However, if there is no free memory then the function will return 0 which would work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exception like c++ normally would as currently there is no exception handler
-
+### System Calls
+See also [List of syscalls](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
+- The kernel can load a binary executable from the hard drive and then store it in memory and then attach the memory pointer to task management
+- When the operating system is unsecure from executables, they will be able to use assembly and such to talk to the hard drive and other devices, this can lead to malicious programs.
+- To get around this the kernel has to be put in userspace once fully initiated. Userspace tells the device to ignore "outb" commands and other low level operations. 
+- However, programs do have to communicate with the hard drive and other devices so there has to be some, managed , way of doing so.
+- So instead system calls are used. Basically the program will call a software interrupt (0x80) and then the kernel will read infomation from the AX and BX registers (AX and BX were set before the interrupt, AX is the system call number and BX is parameters) 
+- There for the implementation for this just involves setting up an interrupt handler that handles the interrupt 0x80, reads the AX  and BX registers and then runs the relative function
 # Networking
 ### Driver
 See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) [AMD_AM79C973](https://www.amd.com/system/files/TechDocs/20550.pdf)
