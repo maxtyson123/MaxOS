@@ -151,17 +151,25 @@ class MouseToConsole: public MouseEventHandler{
 
 };
 
-void sysPrintf(char* str){
 
-    asm("int $0x80" : : "a" (4), "b" (str));    //Call interrupt 0x80, set AX to 4, BX to string
 
+void sysprintf(char* str)
+{
+    asm("int $0x80" : : "a" (4), "b" (str));
 }
 
-void TestTask(){
+void taskA()
+{
+    while(true)
+        sysprintf("A");
+}
 
-    sysPrintf("Test syscall from test task");
+void taskB()
+{
+    while(true)
+        sysprintf("B");
+}
 
-};
 
 
 //Define what a constructor is
@@ -264,6 +272,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("[ ] Setting Task Manager... \n");
     TaskManager taskManager;
+
+    Task task1(&gdt, taskA);
+    Task task2(&gdt, taskB);
+    taskManager.AddTask(&task1);
+    taskManager.AddTask(&task2);
+
     printf("[x] Task Manager Setup \n");
 
 
@@ -274,7 +288,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("[x] Interrupt Manager Setup \n", true);
 
     printf("[ ] Setting Up System Calls Handler... \n");
-    SysCallHandler sysCalls(&interrupts, 0x80);                                         //Instantiate the method
+    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the method
     printf("[x] System Calls Handler Setup \n", true);
 
     #ifdef ENABLE_GRAPHICS
@@ -423,4 +437,5 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 }
 #pragma clang diagnostic pop
 
-//GUI NEXT: buttons, window overlapping, mouse release, invert mouse colour on black/white
+// Comment of the commit:
+// I spent a whole week trying to fix the unhandled interrupt 0x2E for sys calls and the error was just on line 20 in syscalss.h (see commit for more ughhhh)

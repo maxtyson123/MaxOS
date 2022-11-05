@@ -11,30 +11,32 @@ using namespace maxOS::hardwarecommunication;
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
 
-SysCallHandler::SysCallHandler(InterruptManager *interruptManager, uint8_t interruptNumber)
-: InterruptHandler(interruptNumber + interruptManager->HardwareInterruptOffset(), interruptManager)
+
+SyscallHandler::SyscallHandler(InterruptManager* interruptManager, uint8_t InterruptNumber)
+        :    InterruptHandler(InterruptNumber  + interruptManager->HardwareInterruptOffset(), interruptManager)
 {
-
 }
 
-SysCallHandler::~SysCallHandler() {
-
+SyscallHandler::~SyscallHandler()
+{
 }
 
-common::uint32_t SysCallHandler::HandleInterrupt(uint8_t interrupt, uint32_t esp) {
-
+uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
+{
     CPUState* cpu = (CPUState*)esp;
 
-    switch (cpu->eax) {
-        case 4:
-            printf((char*)cpu->ebx, false);
-            break;
 
+    switch(cpu->eax)
+    {
+        case 4:
+            printf((char*)cpu->ebx);
+            break;
 
         default:
             break;
     }
 
-    return esp;
 
+    return esp;
 }
+
