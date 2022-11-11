@@ -1,7 +1,7 @@
 GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 ASPARAMS = --32
 LDPARAMS = -melf_i386
-QEMUPARAMS = -net user -net nic,model=pcnet -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial stdio
+QEMUPARAMS = -net user -net nic,model=pcnet,macaddr=08:00:27:EC:D0:29 -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial stdio
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/gdt.o \
@@ -25,6 +25,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/common/printf.o \
  		  obj/kernel/net/etherframe.o \
+ 		  obj/kernel/net/arp.o \
  		  obj/kernel/kernel.o
 
 libraries =
@@ -99,7 +100,7 @@ maxOS.iso: maxOS.bin
 	echo 'set timeout=0'                      > iso/boot/grub/grub.cfg
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
-	echo 'menuentry "My Operating System" {' >> iso/boot/grub/grub.cfg
+	echo 'menuentry "Max OS" {' >> iso/boot/grub/grub.cfg
 	echo '  multiboot /boot/maxOS.bin'    	 >> iso/boot/grub/grub.cfg
 	echo '  boot'                            >> iso/boot/grub/grub.cfg
 	echo '}'                                 >> iso/boot/grub/grub.cfg

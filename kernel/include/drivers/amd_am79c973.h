@@ -102,7 +102,10 @@ namespace maxOS{
                 void Receive();
 
                 void SetHandler(RawDataHandler* dataHandler);
-                common::uint64_t  GetMACAddress();
+                common::uint64_t GetMACAddress();
+                common::uint32_t GetIPAddress();
+
+                void SetIPAddress(common::uint32_t ip); //Here it is done manually, also can be done via DCHP
 
         };
 

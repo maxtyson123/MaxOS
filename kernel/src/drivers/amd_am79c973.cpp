@@ -205,7 +205,9 @@ void amd_am79c973::Send(common::uint8_t *buffer, int size) {
 
     }
 
-    // What this loop does is copy the infomation passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
+
+
+    // What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
     for (uint8_t *src = buffer + size -1,                                                   // Set src pointer to the end of the data that is being sent
                  *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].adress + size -1);       // Take the buffer that has been slected
                  src >= buffer;                                                             // While there is still information in the buffer that hasnt been written to src
@@ -213,6 +215,14 @@ void amd_am79c973::Send(common::uint8_t *buffer, int size) {
         )
     {
         *dst = *src;                                                                        // Copy data from source buffer to destiantion buffer
+    }
+
+
+    printf("Sending: ");
+    for(int i = 0; i < size; i++)
+    {
+        printfHex(buffer[i]);
+        printf(" ");
     }
 
     sendBufferDescr[sendDescriptor].avail = 0;                               // Set that this buffer is in use
@@ -246,7 +256,8 @@ void amd_am79c973::Receive() {
                 uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].adress);
 
 
-                //Pass data to handler
+                
+            //Pass data to handler
             if(dataHandler != 0){
 
                 if(dataHandler -> OnRawDataReceived(buffer, size)){         //If data needs to be sent back
@@ -257,15 +268,14 @@ void amd_am79c973::Receive() {
 
             }
 
-            /*
-             * Print the data
-            // Iterate over the data
+            printf("Received: ");
+            size = 64;
             for(int i = 0; i < size; i++)
             {
                 printfHex(buffer[i]);
                 printf(" ");
             }
-            */
+
 
         }
 
@@ -283,8 +293,18 @@ void amd_am79c973::SetHandler(RawDataHandler *dataHandler) {
 
 }
 
+
+void amd_am79c973::SetIPAddress(common::uint32_t ip) {
+    initBlock.logicalAdress = ip;
+}
+
+
 uint64_t amd_am79c973::GetMACAddress() {
     return initBlock.physicalAdress;
+}
+
+common::uint32_t amd_am79c973::GetIPAddress() {
+    return initBlock.logicalAdress;
 }
 
 

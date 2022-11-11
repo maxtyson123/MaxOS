@@ -13,28 +13,45 @@ set(drivers_h include/drivers)
 set(common_c src/common)
 set(common_h include/common)
 
+set(gui_c src/gui)
+set(gui_h include/gui)
+
+set(net_c src/net)
+set(net_h include/net)
+
 #Include the directories and now your cpp files will recognize your headers
 include_directories(include)
 
 set(
         SOURCE_FILES
         src/kernel.cpp
-        src/gdt.cpp
-        include/gdt.h
-        ${harwardCom_h}/pci.h
-        ${harwardCom_c}/pci.cpp
-        ${harwardCom_h}/port.h
-        ${harwardCom_c}/port.cpp
-        ${harwardCom_h}/interrupts.h
-        ${harwardCom_c}/interrupts.cpp
-        ${drivers_h}/driver.h
-        ${drivers_c}/driver.cpp
-        ${drivers_h}/mouse.h
-        ${drivers_c}/mouse.cpp
-        ${drivers_h}/keyboard.h
-        ${drivers_c}/keyboard.cpp
+        include/gdt.h src/gdt.cpp
+        include/multitasking.h src/multitasking.cpp
+        include/memorymanagement.h src/memorymanagement.cpp
+        include/syscalls.h src/syscalls.cpp
+
+        ${harwardCom_h}/pci.h ${harwardCom_c}/pci.cpp
+        ${harwardCom_h}/port.h ${harwardCom_c}/port.cpp
+        ${harwardCom_h}/interrupts.h ${harwardCom_c}/interrupts.cpp
+
+        ${drivers_h}/driver.h ${drivers_c}/driver.cpp
+        ${drivers_h}/mouse.h ${drivers_c}/mouse.cpp
+        ${drivers_h}/keyboard.h ${drivers_c}/keyboard.cpp
+        ${drivers_h}/amd_am79c973.h ${drivers_c}/amd_am79c973.cpp
+        ${drivers_h}/ata.h ${drivers_c}/ata.cpp
+        ${drivers_h}/vga.h ${drivers_c}/vga.cpp
+
+        ${gui_h}/widget.h ${gui_c}/widget.cpp
+        ${gui_h}/window.h ${gui_c}/window.cpp
+        ${gui_h}/desktop.h ${gui_c}/desktop.cpp
+        ${gui_h}/render.h ${gui_c}/render.cpp
+        ${gui_h}/widgets/text.h ${gui_c}/widgets/text.cpp
+
+        ${net_h}/etherframe.h ${net_c}/etherframe.cpp
+        ${net_h}/arp.h ${net_c}/arp.cpp
+
         ${common_h}/types.h
+        ${common_h}/graphicsContext.h
 
-
-        include/drivers/amd_am79c973.h src/drivers/amd_am79c973.cpp include/drivers/ata.h src/drivers/ata.cpp include/drivers/vga.h src/drivers/vga.cpp include/gui/widget.h include/gui/window.h include/gui/desktop.h src/gui/desktop.cpp src/gui/widget.cpp src/gui/window.cpp include/common/graphicsContext.h include/gui/render.h src/gui/render.cpp include/gui/widgets/text.h src/gui/widgets/text.cpp include/multitasking.h src/multitasking.cpp include/memorymanagement.h src/memorymanagement.cpp include/syscalls.h src/syscalls.cpp include/net/etherframe.h src/net/etherframe.cpp)
-add_executable(untitled ${SOURCE_FILES})
+)
+add_executable(maxOS ${SOURCE_FILES})

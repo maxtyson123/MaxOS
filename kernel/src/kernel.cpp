@@ -7,6 +7,7 @@
 #include <memorymanagement.h>
 #include <syscalls.h>
 
+
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
@@ -27,6 +28,7 @@
 
 //NET
 #include <net/etherframe.h>
+#include <net/arp.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -46,8 +48,8 @@ static Console console;
 ///@return 0 if string is the same
 int strcmp(const char* s1, const char* s2)
 {
-    while ((*s1 == *s2) && *s1) { ++s1; ++s2; }
-    return ((int) (unsigned char) *s1) - ((int) (unsigned char) *s2);
+    while ((*s1 == *s2) && *s1) { ++s1; ++s2; }                             //While the characters are the same and the string is not over
+    return ((int) (unsigned char) *s1) - ((int) (unsigned char) *s2);       //Return the difference between the characters
 }
 
 
@@ -55,7 +57,7 @@ int strcmp(const char* s1, const char* s2)
 ///@param str String to print
 ///@param lines Lines to print text on
 void printf_gui(char* str, Text lines[15]){
-    console.put_string_gui(str,lines);
+    console.put_string_gui(str,lines);                                      //Print to the GUI console
 
 
 }
@@ -76,7 +78,7 @@ void printfHex(uint8_t key){
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
     public:
-        bool guiTestKeyPressed = false;
+
         void OnKeyDown(char* c){
 
            if(strcmp(c,"ARRT") == 0){
@@ -171,7 +173,7 @@ class MouseToConsole: public MouseEventHandler{
 ///@param str String to print
 void sysprintf(char* str)
 {
-    asm("int $0x80" : : "a" (4), "b" (str));
+    asm("int $0x80" : : "a" (4), "b" (str));        //Call the interrupt 0x80 with the syscall number 4 and the string to print
 }
 
 
@@ -197,11 +199,11 @@ extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
 extern "C" void callConstructors()
 {
-    for(constructor* i = &start_ctors; i != &end_ctors; i++)
-        (*i)();  //envoce constructor calls
+    for(constructor* i = &start_ctors; i != &end_ctors; i++)        //Iterate over all constructors
+        (*i)();                                                     //Call the constructor
 }
 
-//[NEW] Version sys
+
 class Version{
     public:
        int version;            //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
@@ -216,7 +218,7 @@ class Version{
 
 
 #pragma clang diagnostic ignored "-Wwritable-strings"
-extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
+extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_magic)
 {
 
 
@@ -224,10 +226,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
-    maxOSVer->version = 0.20;
-    maxOSVer->version_c = "0.20";
-    maxOSVer->build = 44;
-    maxOSVer->build_c = "44";
+    maxOSVer->version = 0.21;
+    maxOSVer->version_c = "0.21.1";
+    maxOSVer->build = 47;
+    maxOSVer->build_c = "47";
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -259,7 +261,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
                                                                                             //memory is maximally the address of the first upper memory hole minus 1 megabyte.
     size_t  heap = 10*1024*1024;                                                            //Start at 10MB
 
-
+    //Print the heap address
     printf("heap: 0x");
     printfHex((heap >> 24) & 0xFF);
     printfHex((heap >> 16) & 0xFF);
@@ -269,6 +271,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     size_t  memSize = (*memupper)*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
     MemoryManager memoryManager(heap, memSize);                                    //Memory Mangement
+    //Print the memory adress
     printf(" memSize: 0x");
     printfHex(((size_t)memSize >> 24) & 0xFF);
     printfHex(((size_t)memSize >> 16) & 0xFF);
@@ -440,15 +443,35 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("[x] Setting Up Network Driver \n");
     amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
+        printf(" -  Setting Up IP, Gateway, Subnet... \n");
+        uint8_t ip[] = {10,0,2,15};              //IP address that virtual box has by default
+        uint32_t IP_BE = ((uint32_t)ip[3] << 24)                //Convert to big endian
+                         | ((uint32_t)ip[2] << 16)
+                         | ((uint32_t)ip[1] << 8)
+                         | (uint32_t)ip[0];
+        uint8_t gateway_ip[] = {10,0,2,2};       //IP address for the gateway
+        uint32_t GIP_BE = ((uint32_t)gateway_ip[3] << 24)       //Convert to big endian
+                          | ((uint32_t)gateway_ip[2] << 16)
+                          | ((uint32_t)gateway_ip[1] << 8)
+                          | (uint32_t)gateway_ip[0];
+        uint8_t subnet[] = {255,255,255,0};      //Subnet mask
+        eth0 -> SetIPAddress(IP_BE);                         //Set IP address
+
         printf(" -  Setting Up EtherFrame... \n");
         EtherFrameProvider etherFrame(eth0);
-        etherFrame.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"Hello Network", 13);    //Broadcast, ARP,
+
+        printf(" -  Setting Up ARP... \n");
+        AddressResolutionProtocol arp(&etherFrame);
+
     printf("[x] Network Driver Setup \n");
 
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");
     interrupts.Activate();
     printf("[x] IDT Activated \n", true);
+
+    printf("\n\n");
+    arp.Resolve(GIP_BE);    //Test ARP
 
     //CODE AFTER HERE (interrupts.Activate();) SHOULD BE A TASK
 
@@ -465,4 +488,4 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 #pragma clang diagnostic pop
 
 // Comment of the commit:
-// I spent a whole week trying to fix the unhandled interrupt 0x2E for sys calls and the error was just on line 20 in syscalss.h (see commit for more ughhhh)
+//

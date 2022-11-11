@@ -178,11 +178,26 @@ See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](h
 See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame)
 - The driver written for the am79c971 can be utilized to receive and send data, however for the device to be useful a protocol handler has to be written.
 - This protocol handler will look at the incoming data and decide what protocol should be used to interpret the data.
-- The data that is recived by the am79c971 will be call raw data
+- The data that is received by the am79c971 will be call raw data
 - The raw data is structured like this (Encoded in big endian):
 - - First 6 bytes: Destination MAC Address (Should  be this devices MAC address or 0xFFFF if it is a broadcast (sent to all devices on the network))
 - - Next 6 bytes: Source MAC Address (Who sent the data)
 - - Next 2 bytes: EtherType (Indicate the protocol)
 - - Next 46 - 1000 bytes: Data (Payload)
 - - Last 4 bytes: Checksum (CRC)
-- From this data the handler can then interpet the data e.g. discard if the MAC adress isnt for this device or pass the data to the ARP handler if the EtherType is 0x8006 etc.
+- From this data the handler can then interpret the data e.g. discard if the MAC adress isnt for this device or pass the data to the ARP handler if the EtherType is 0x0806 etc.
+### Address Resolution Protocol
+See also [Wikipedia - ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol)
+- The Address Resolution Protocol (ARP) is a communication protocol used for discovering the link layer address, such as a MAC address, associated with a given internet layer address, typically an IPv4 address.
+- The ARP data block is as follows: (known as the payload in the raw-data)
+- - First 2 Bytes: Hardware type (e.g. ethernet or WLAN)
+- - Next 2 Bytes: Protocol (Will have already received this from handler 0x0806)
+- - Next 1 Byte: Size of hardware address (Mac Address = 6)
+- - Next 1 Byte: Size of protocol address (IP Address = 4)
+- - Next 2 Bytes: Command (What does the sender what Question/Response)
+- - Next 6 Bytes: Mac address of the sender
+- - Next 4 Bytes: IP address of the sender
+- - Next 6 Bytes: Mac address of the receiver
+- - Next 4 Bytes: IP address of the receiver
+- The reason the MAC address is repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay 
+- Therefore, the ARP packet contains the MAC address of the original device that sent the ARP request.
