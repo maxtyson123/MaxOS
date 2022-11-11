@@ -137,7 +137,7 @@ amd_am79c973::~amd_am79c973() {
 }
 
 /**
- * @details This function activates the device and starts it
+ * @details This function activates the device and starts it (Runs when the driver-manger calls activateAll())
  */
 void amd_am79c973::Activate()
 {

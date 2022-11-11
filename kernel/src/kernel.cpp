@@ -11,6 +11,7 @@
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
+#include <hardwarecommunication/serial.h>
 
 //Drivers
 #include <drivers/driver.h>
@@ -231,14 +232,14 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 {
 
 
+
     //NOTE: Will rewrite boot text stuff later
-    //NOTE: Possibly rename from MaxOS to TyOSn
 
     Version* maxOSVer;
     maxOSVer->version = 0.21;
-    maxOSVer->version_c = "0.21.1";
-    maxOSVer->build = 47;
-    maxOSVer->build_c = "47";
+    maxOSVer->version_c = "0.21.2";
+    maxOSVer->build = 49;
+    maxOSVer->build_c = "49";
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -318,6 +319,16 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("[ ] Setting Up Interrupt Manager... \n");
     InterruptManager interrupts(0x20, &gdt, &taskManager);            //Instantiate the method
     printf("[x] Interrupt Manager Setup \n", true);
+
+    printf("[ ] Setting Up Serial Log... \n");
+    serial serialLog(&interrupts);
+    //serialLog.Test();
+    serialLog.Write("\n",-1);
+    serialLog.Write("Serial Log Started\n");
+    serialLog.Write("MaxOS Started\n",7);
+    printf("[x] Serial Log Setup \n");
+
+
 
     printf("[ ] Setting Up System Calls Handler... \n");
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the method
@@ -474,15 +485,22 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     printf("[x] Network Driver Setup \n");
 
+
+
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");
     interrupts.Activate();
     printf("[x] IDT Activated \n", true);
 
+    //Kernel is ready, code after here should be in a seperate process
+    serialLog.Write("MaxOS is ready\n",7);
+
     printf("\n\n");
     arp.Resolve(GIP_BE);    //Test ARP
 
     //CODE AFTER HERE (interrupts.Activate();) SHOULD BE A TASK
+
+
 
     while(1){
         #ifdef ENABLE_GRAPHICS

@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(SYSTEM ..)
 
+#Define shorthands for the source files
 set(harwardCom_c src/hardwarecommunication)
 set(harwardCom_h include/hardwarecommunication)
 
@@ -19,9 +20,8 @@ set(gui_h include/gui)
 set(net_c src/net)
 set(net_h include/net)
 
-#Include the directories and now your cpp files will recognize your headers
+#Include all the files
 include_directories(include)
-
 set(
         SOURCE_FILES
         src/kernel.cpp
@@ -55,5 +55,9 @@ set(
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
 
-)
+        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h)
+
+#Ignore standard library
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
+
 add_executable(maxOS ${SOURCE_FILES})
