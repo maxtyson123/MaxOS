@@ -21,6 +21,10 @@ Desktop::~Desktop() {
 
 }
 
+/**
+ * @details Draw the desktop onto a graphics context
+ * @param gc The graphics context to draw on
+ */
 void Desktop::Draw(common::GraphicsContext *gc) {
 
     //Draw the desktop
@@ -40,18 +44,31 @@ void Desktop::Draw(common::GraphicsContext *gc) {
 
 }
 
+/**
+ * @details Handle mouse button release events
+ * @param button The mouse button that was released
+ */
 void Desktop::OnMouseUp(maxOS::common::uint8_t button) {
 
     //Translate mouseEvent to widget method
     CompositeWidget::OnMouseDown(MouseX,MouseY,button);
 }
 
+/**
+ * @details Handle mouse button press events
+ * @param button The mouse button that was pressed
+ */
 void Desktop::OnMouseDown(maxOS::common::uint8_t button) {
 
     //Translate mouseEvent to widget method
     CompositeWidget::OnMouseDown(MouseX,MouseY,button);
 };
 
+/**
+ * @details Handle mouse movement events
+ * @param x The new x position of the mouse
+ * @param y The new y position of the mouse
+ */
 void Desktop::OnMouseMove(int x, int y) {
 
     //Divide Relative movement so that the mouse is not as sensitive

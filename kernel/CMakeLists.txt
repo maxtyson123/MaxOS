@@ -51,7 +51,9 @@ set(
         ${net_h}/arp.h ${net_c}/arp.cpp
 
         ${common_h}/types.h
+        ${common_h}/types.h
         ${common_h}/graphicsContext.h
+        ${common_h}/printf.h ${common_c}/printf.cpp
 
 )
 add_executable(maxOS ${SOURCE_FILES})

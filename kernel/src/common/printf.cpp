@@ -34,7 +34,10 @@ Console::~Console() {
 
 }
 
-
+/**
+ * @details This function puts a string to the screen
+ * @param str The string to put
+ */
 void Console::put_string_gui(char* str, gui::Text lines[15]){
 
     static uint8_t gx = 0, gy = 0;    //Cursor Location
@@ -82,6 +85,11 @@ void Console::put_string_gui(char* str, gui::Text lines[15]){
 
 }
 
+/**
+ * @details This function puts a string to the screen
+ * @param str The string to put
+ * @param clearLine If true then the line will be cleared before printing
+ */
 void Console::put_string(char* str, bool clearLine)
 {
     static uint16_t* VideoMemory = (uint16_t*)0xb8000;  //Spit the video memory into an array of 16 bit, 4 bit for foreground, 4 bit for background, 8 bit for character
@@ -153,6 +161,10 @@ void Console::put_string(char* str, bool clearLine)
 
 }
 
+/**
+ * @details This function puts a hex number to the screen
+ * @param key The  hex number to put
+ */
 void Console::put_hex(uint8_t key){
     char *foo = "00";
     char *hex = "0123456789ABCDEF";
@@ -162,6 +174,11 @@ void Console::put_hex(uint8_t key){
     put_string(foo);
 }
 
+/**
+ * @details This function moves the cursor to a new location
+ * @param C_x The new x location
+ * @param C_y The new y location
+ */
 void Console::moveCursor(uint8_t C_x, uint8_t C_y){
 
     //Move cursor by specified amount
@@ -183,6 +200,9 @@ void Console::moveCursor(uint8_t C_x, uint8_t C_y){
 
 }
 
+/**
+ * @details This function removes a character from the screen
+ */
 void Console::backspace(){
     put_string(" ");                //Remove the cursor pointer in front
     moveCursor(-2,0);          //Go back 2

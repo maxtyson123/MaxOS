@@ -59,6 +59,10 @@ TaskManager::~TaskManager() {
 
 }
 
+/**
+ * @details Adds a task to the task manager
+ * @param task The task to add
+ */
 bool TaskManager::AddTask(Task *task) {
 
     if(numTasks >= 256){ //Array IS full
@@ -70,6 +74,11 @@ bool TaskManager::AddTask(Task *task) {
 
 }
 
+/**
+ * @details Switches to the next task
+ * @param cpuState The current CPU state
+ * @return The new CPU state
+ */
 CPUState *TaskManager::Schedule(CPUState *cpuState) {
 
     if(numTasks <= 0){      //If theres no tasks yet

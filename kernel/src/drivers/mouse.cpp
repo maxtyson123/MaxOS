@@ -46,6 +46,9 @@ MouseDriver::~MouseDriver(){
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 
+/**
+ * @details Activate the mouse
+ */
 void MouseDriver::Activate() {
     offest = 0; //The mouse is weird and won't write to exactly 0 sometimes, so there has to be different offsets for different os-es
     buttons = 0;
@@ -73,6 +76,11 @@ void MouseDriver::Activate() {
     //0xF6 | Reset mouse settings to default settings
 }
 
+/**
+ * @details Handle the mouse interrupt
+ * @param esp
+ * @return always returns esp
+ */
 uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
 
     //The mouse triggers 3 interrupts , one for each byte .

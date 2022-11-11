@@ -30,11 +30,17 @@ DriverManager::DriverManager(){
     numDrivers = 0;
 }
 
+/**
+ * @details This function adds a driver to the driver manager
+ * @param driver The driver to add
+ */
 void DriverManager::AddDriver(Driver* drv){
     drivers[numDrivers] = drv;
     numDrivers++;
 }
-
+/**
+ * @details This function activates all the drivers in the driver manager
+ */
 void DriverManager::ActivateAll(){
     for(int i = 0; i < numDrivers; i++){
         drivers[i]->Activate();

@@ -41,6 +41,9 @@ KeyboardDriver::~KeyboardDriver(){
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
 
+/**
+ * @details Activate the keyboard driver
+ */
 void KeyboardDriver::Activate() {
         while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start-up key eg.. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
             dataPort.Read();
@@ -59,6 +62,11 @@ void KeyboardDriver::Activate() {
         //0x60 : Write command byte , after that we change the state of the data port
 }
 
+/**
+ * Handle the keyboard interrupt
+ * @param esp  The stack pointer
+ * @return returns the passed esp
+ */
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
 
     uint8_t key = dataPort.Read();      //NOTE: The 8th bit is set to 1 if key is released and cleared to 0 if key is pressed

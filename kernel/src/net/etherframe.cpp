@@ -9,6 +9,12 @@ using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::drivers;
 
+/**
+ * @brief Construct a new EtherFrameHandler:: EtherFrameHandler object
+ *
+ * @param backend the backend driver for the ethernet card, which will be used to send and receive packets
+ * @param etherType the type of the protocol, which will be handled by this handler
+ */
 EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, common::uint16_t etherType) {
 
     //Convert into Big Endian
@@ -21,12 +27,17 @@ EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, common::uint16
 
 }
 
+/**
+ * @brief Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list
+ *
+ */
 EtherFrameHandler::~EtherFrameHandler() {
 
     //Remove this from the Ether Frame Provider
     backend -> handlers[etherType_BE] = 0;
 
 }
+
 
 bool EtherFrameHandler::OnEtherFrameReceived(common::uint8_t *etherframePayload, common::uint32_t size) {
 
@@ -35,6 +46,13 @@ bool EtherFrameHandler::OnEtherFrameReceived(common::uint8_t *etherframePayload,
 
 }
 
+/**
+ * @brief Send an packet via the backend driver
+ *
+ * @param dstMAC the destination MAC address
+ * @param data the data to send
+ * @param size the size of the payload
+ */
 void EtherFrameHandler::Send(common::uint64_t dstMAC_BE, common::uint8_t *data, common::uint32_t size) {
 
     backend -> Send(dstMAC_BE, etherType_BE, data, size);
@@ -57,6 +75,12 @@ EtherFrameProvider::~EtherFrameProvider() {
 
 }
 
+/**
+ * @brief Handle the received packet
+ *
+ * @param buffer the buffer with the received data
+ * @param size the size of the received data
+ */
 bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint32_t size) {
 
     //Convert to struct for easier use
@@ -90,6 +114,14 @@ bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint
 
 }
 
+/**
+ * @brief Send an packet via the backend driver
+ *
+ * @param dstMAC_BE the destination MAC address
+ * @param etherType_BE the type of the protocol
+ * @param buffer the data to send
+ * @param size the size of the payload
+ */
 void EtherFrameProvider::Send(common::uint64_t dstMAC_BE, common::uint16_t etherType_BE, common::uint8_t *buffer, common::uint32_t size) {
 
 
@@ -113,12 +145,22 @@ void EtherFrameProvider::Send(common::uint64_t dstMAC_BE, common::uint16_t ether
     backend -> Send(buffer2, size + sizeof(EtherFrameHeader));
 }
 
+/**
+ * @brief Get the IP Address of the device
+ *
+ * @return common::uint32_t the IP Address
+ */
 common::uint32_t EtherFrameProvider::GetIPAddress() {
 
     return backend -> GetIPAddress();
 
 }
 
+/**
+ * @brief Get the MAC Address of the device from the backend
+ *
+ * @return common::uint64_t the MAC Address
+ */
 common::uint64_t EtherFrameProvider::GetMACAddress() {
 
     return backend -> GetMACAddress();

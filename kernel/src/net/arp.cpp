@@ -19,10 +19,12 @@ net::AddressResolutionProtocol::~AddressResolutionProtocol() {
 
 }
 
-///<summary>Called when an ARP packet is received.</summary>
-///@param etherframePayload The payload of the ARP packet.
-///@param size The size of the ARP packet.
-///@return True if the device should send a response, false otherwise.
+/**
+ * Called when an ARP packet is received.
+ * @param etherframePayload The payload of the ARP packet.
+ * @param size The size of the ARP packet.
+ * @return True if the device should send a response, false otherwise.
+ */
 bool AddressResolutionProtocol::OnEtherFrameReceived(common::uint8_t* etherframePayload, common::uint32_t size) {
 
     //Check if the size is correct
@@ -76,8 +78,11 @@ bool AddressResolutionProtocol::OnEtherFrameReceived(common::uint8_t* etherframe
 
 }
 
-///<summary>Request the MAC address of a given IP address</summary>
-///@param IP_BE The IP address in BigEndian
+
+/**
+ * Request the MAC address of a given IP address.
+ * @param IP_BE The IP address in BigEndian.
+ */
 void AddressResolutionProtocol::RequestMACAddress(common::uint32_t IP_BE) {
 
     //When a MAC adress is requested, instantiate a new ARP message block on the stack
@@ -102,9 +107,11 @@ void AddressResolutionProtocol::RequestMACAddress(common::uint32_t IP_BE) {
 
 }
 
-///<summary>Get the MAC address from the cache</summary>
-///@param IP_BE The IP address to search for
-///@return The MAC address if found, broadcast address otherwise
+/**
+ * Get the MAC address from the cache.
+ * @param IP_BE The IP address to search for.
+ * @return The MAC address if found, broadcast address otherwise.
+ */
 common::uint64_t AddressResolutionProtocol::GetMACFromCache(common::uint32_t IP_BE) {
 
     //Search for IP in cache
@@ -120,9 +127,11 @@ common::uint64_t AddressResolutionProtocol::GetMACFromCache(common::uint32_t IP_
 }
 
 
-///<summary>Get the MAC address from an IP via ARP</summary>
-///@param IP_BE The IP address to get the MAC address from
-///@return The MAC address of the IP address
+/**
+ * Get the MAC address from an IP via ARP.
+ * @param IP_BE The IP address to get the MAC address from.
+ * @return The MAC address of the IP address.
+ */
 common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
 
     //This function will return the MAC address of the IP address given as parameter

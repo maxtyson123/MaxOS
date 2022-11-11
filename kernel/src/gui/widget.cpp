@@ -42,6 +42,11 @@ void Widget::GetFocus(Widget* widget){
 
 }
 
+/**
+ * @details Convert the relative coordinates to absolute screen coordinates
+ * @param x The x coordinate (relative to the parent)
+ * @param y The y coordinate (relative to the parent)
+ */
 void Widget::ModelToScreen(int32_t &x, int32_t &y){
 
     //Get the offset from the parent and then add own offset to it
@@ -56,6 +61,10 @@ void Widget::ModelToScreen(int32_t &x, int32_t &y){
 
 }
 
+/**
+ * @details Draw the widget on the screen
+ * @param graphicsContext The graphics context to draw on
+ */
 void Widget::Draw(GraphicsContext* gc){
     //Default Implementation
 
@@ -69,12 +78,24 @@ void Widget::Draw(GraphicsContext* gc){
     gc->FillRectangle(X,Y,w,h,r,g,b);
 }
 
+/**
+ * @details Detects if the widget contains the given point
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @return True if the widget contains the point
+ */
 bool Widget::ContainsCoordinate(int32_t x, int32_t y)
 {
     //Check if the passed  variables are larger then the widget position and check if there smaller then the width
     return (x >= this->x) && (x < this->x + this->w) && (y >= this->y) && (y < this->y + this->h);
 }
 
+/**
+ * @details Called when a mouse button is pressed
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @param button The button that was pressed
+ */
 void Widget::OnMouseDown(int32_t x, int32_t y, uint8_t button){
     //If the object can actually be focussed
     if(Focussable){
@@ -107,6 +128,10 @@ CompositeWidget::~CompositeWidget() {
 
 }
 
+/**
+ * @details Check if the widget is focussed
+ * @param widget
+ */
 void CompositeWidget::GetFocus(Widget *widget) {
     this->focussedChild = widget;
     if(parent != 0){
@@ -115,6 +140,11 @@ void CompositeWidget::GetFocus(Widget *widget) {
 
 }
 
+/**
+ * @details Add a child to the composite widget
+ * @param child  The child to add
+ * @return True if the child was added, false if there was no space
+ */
 bool CompositeWidget::AddChild(Widget *child) {
 
     if(numChildren >= 100){         //NTS: Not threat safe
@@ -126,7 +156,10 @@ bool CompositeWidget::AddChild(Widget *child) {
 
 }
 
-
+/**
+ * @details Draw the widget on the screen
+ * @param graphicsContext The graphics context to draw on
+ */
 void CompositeWidget::Draw(GraphicsContext *gc) {
 
     //Draw its own bg
@@ -138,6 +171,12 @@ void CompositeWidget::Draw(GraphicsContext *gc) {
     }
 }
 
+/**
+ * @details This function is called when a mouse button is pressed
+ * @param x The x coordinate when the mouse button was pressed
+ * @param y The y coordinate when the mouse button was pressed
+ * @param button The button that was pressed
+ */
 void CompositeWidget::OnMouseDown(int32_t x, int32_t y, uint8_t button) {
 
     //Pass the event to the child that contains the co-ordinate
@@ -157,6 +196,12 @@ void CompositeWidget::OnMouseDown(int32_t x, int32_t y, uint8_t button) {
     }
 }
 
+/**
+ * @details This function is called when a mouse button is released
+ * @param x The x coordinate when the mouse button was released
+ * @param y The y coordinate when the mouse button was released
+ * @param button The button that was released
+ */
 void CompositeWidget::OnMouseUp(int32_t x, int32_t y, uint8_t button) {
 
 
@@ -175,6 +220,13 @@ void CompositeWidget::OnMouseUp(int32_t x, int32_t y, uint8_t button) {
     }
 }
 
+/**
+ * @details This function is called when the mouse is moved
+ * @param old_x The old x coordinate
+ * @param old_y The old y coordinate
+ * @param new_x The new x coordinate
+ * @param new_y The new y coordinate
+ */
 void CompositeWidget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, int32_t new_y) {
 
     //IN the future change it so it detects if the first child widgets are the same, then make events for on mouse enter and on mouse leave
@@ -218,7 +270,10 @@ void CompositeWidget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, i
 
 }
 
-
+/**
+ * @details This function is called when a key is pressed
+ * @param key The key that was pressed
+ */
 void CompositeWidget::OnKeyDown(char* str) {
 
     if(focussedChild != 0){             //IF the key event should happen on a child
@@ -226,6 +281,10 @@ void CompositeWidget::OnKeyDown(char* str) {
     }
 }
 
+/**
+ * @details This function is called when a key is released
+ * @param key The key that was released
+ */
 void CompositeWidget::OnKeyUp(char* str){
 
     if(focussedChild != 0){             //IF the key event should happen on a child

@@ -31,6 +31,9 @@ AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() {
 
 }
 
+/**
+ * @details This function Identifiers the ATA device
+ */
 void AdvancedTechnologyAttachment::Identify() {
 
     devicePort.Write(master ? 0xA0 : 0xB0);     //Select Device Master(0xA0) / Slave(0xB0)
@@ -95,6 +98,11 @@ void AdvancedTechnologyAttachment::Identify() {
 
 }
 
+/**
+ * @details This function reads a sector from the ATA device
+ * @param sector The sector to read
+ * @param count The amount of data to read to that sector
+ */
 void AdvancedTechnologyAttachment::Read28(uint32_t sector, int count) {
 
     //Don't Allow reading More then a sector
@@ -167,6 +175,11 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, int count) {
 
 }
 
+/**
+ * @details This function writes a sector to the ATA device
+ * @param sector The sector to write to
+ * @param count The amount of data to write to that sector
+ */
 void AdvancedTechnologyAttachment::Write28(uint32_t sector, uint8_t *data, int count) {
 
     //Don't Allow Writing More then a sector
@@ -210,7 +223,9 @@ void AdvancedTechnologyAttachment::Write28(uint32_t sector, uint8_t *data, int c
         dataPort.Write(0x0000);
 
 }
-
+/**
+ * @details Flush the ATA device
+ */
 void AdvancedTechnologyAttachment::Flush() {
 
     devicePort.Write(master ? 0xE0 : 0xF0);     //Select Device Master(0xE0) / Slave(0xF0)

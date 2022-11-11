@@ -14,6 +14,7 @@ void printfHex(uint8_t key);                    // Forward declaration
 
 ///___DATA HANDLER___
 
+
 RawDataHandler::RawDataHandler(amd_am79c973 *backend) {
 
     this -> backend = backend;
@@ -135,6 +136,9 @@ amd_am79c973::~amd_am79c973() {
 
 }
 
+/**
+ * @details This function activates the device and starts it
+ */
 void amd_am79c973::Activate()
 {
 
@@ -153,6 +157,10 @@ void amd_am79c973::Activate()
 
 }
 
+/**
+ * @details This function resets the device
+ * @return The amount of ms to wait
+ */
 int amd_am79c973::Reset() {
 
     resetPort.Read();
@@ -161,6 +169,10 @@ int amd_am79c973::Reset() {
 
 }
 
+/**
+ * @details This function handles the interrupt for the device
+ * @param esp The stack pointer (where to return to)
+ */
 common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
@@ -193,7 +205,11 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 //  The OWN bit must now be set in the “flags” field (0x80000000) in order to “transfer” the descriptor to the card.
 //  Furthermore, STP (Start of Packet, 0x02000000) and ENP (End of Packet, 0x01000000) should be set - this indicates that the data is not split up, but that it is a single Ethernet packet.
 //  Furthermore, bits 12-15 must be set (0x0000F000, are probably reserved) and bits 0-11 are negative Size of the package.
-
+/**
+ * @details This function sends a package
+ * @param buffer The buffer to send
+ * @param size The size of the buffer
+ */
 void amd_am79c973::Send(common::uint8_t *buffer, int size) {
 
 
@@ -237,6 +253,9 @@ void amd_am79c973::Send(common::uint8_t *buffer, int size) {
 
 }
 
+/**
+ * @details This function handles the receivement a package
+ */
 void amd_am79c973::Receive() {
     printf("AMD am79c973 DATA RECEVED\n");
 
@@ -287,22 +306,36 @@ void amd_am79c973::Receive() {
     
 }
 
+/**
+ * @details This function sets the data handler
+ * @param handler The handler to set
+ */
 void amd_am79c973::SetHandler(RawDataHandler *dataHandler) {
 
     this -> dataHandler = dataHandler;
 
 }
 
-
+/**
+ * @details This function sets the IP address
+ * @param ip The IP address to set
+ */
 void amd_am79c973::SetIPAddress(common::uint32_t ip) {
     initBlock.logicalAdress = ip;
 }
 
-
+/**
+ * @details This function gets the MAC address
+ * @return The MAC address
+ */
 uint64_t amd_am79c973::GetMACAddress() {
     return initBlock.physicalAdress;
 }
 
+/**
+ * @details This function gets the IP address
+ * @return The IP address
+ */
 common::uint32_t amd_am79c973::GetIPAddress() {
     return initBlock.logicalAdress;
 }

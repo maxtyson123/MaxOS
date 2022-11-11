@@ -37,6 +37,14 @@ PeripheralComponentInterconnectController::~PeripheralComponentInterconnectContr
 
 }
 
+/**
+ * Read data from the PCI Controller
+ * @param bus Bus number
+ * @param device Device number
+ * @param function Function number
+ * @param registeroffset Register offset
+ * @return  data from the PCI Controller
+ */
 uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset) {
     //Structure of the address I / O port :
     //31    | Enable bit
@@ -58,6 +66,14 @@ uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t 
 
 }
 
+/**
+ * Write data to the PCI Controller
+ * @param bus Bus number
+ * @param device Device number
+ * @param function Function number
+ * @param registeroffset Register offset
+ * @param value Value to write
+ */
 void PeripheralComponentInterconnectController::Write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value) {
     uint32_t id =
             0x1 << 31
@@ -69,12 +85,24 @@ void PeripheralComponentInterconnectController::Write(uint16_t bus, uint16_t dev
     dataPort.Write(value);
 }
 
+/**
+ * Check if the device has a function
+ * @param bus Bus number
+ * @param device Device number
+ * @return true if the device has a function
+ */
 bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus, uint16_t device) {
 
     //0x0E
     return Read(bus,device,0,0x0E) & (1<<7);    //Read address, the 7th bit of it returns if there is a function
 }
 
+/**
+ * Select the driver for the device
+ * @param driverManager device driver manager
+ * @param interruptManager Interrupt manager
+ * @return Driver for the device
+ */
 void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* driverManager, InterruptManager* interruptManager) {
     for (int bus = 0; bus < 8; ++bus) {
 
@@ -129,6 +157,13 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
     }
 }
 
+/**
+ * Get the device descriptor
+ * @param bus Bus number
+ * @param device Device number
+ * @param function Function number
+ * @return Device descriptor
+ */
 PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function) {
     PeripheralComponentInterconnectDeviceDescriptor result;
 
@@ -149,6 +184,12 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
     return result;
 }
 
+/**
+ * Get the driver for the device
+ * @param dev Device descriptor
+ * @param interruptManager Interrupt manager
+ * @return Driver for the device, 0 if there is no driver
+ */
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager) {
 
     Driver* driver = 0;
@@ -182,7 +223,12 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
     return driver;
 }
 
-/* searches for the lowest set bit in a 32-bit value, value must not be 0 */
+
+/**
+ * Get the lowest set bit in a 32-bit value
+ * @param value 32-bit value
+ * @return Lowest set bit
+ */
 uint32_t get_number_of_lowest_set_bit(uint32_t value)
 {
     uint32_t pos = 0;
@@ -192,7 +238,11 @@ uint32_t get_number_of_lowest_set_bit(uint32_t value)
     return pos;
 }
 
-/* searches for the highest set bit in a 32-bit value, value must not be 0 */
+/**
+ * Get the highest set bit in a 32-bit value
+ * @param value  32-bit value
+ * @return  Highest set bit
+ */
 uint32_t get_number_of_highest_set_bit(uint32_t value)
 {
     uint32_t pos = 31;
@@ -202,6 +252,14 @@ uint32_t get_number_of_highest_set_bit(uint32_t value)
     return pos;
 }
 
+/**
+ * Get the base adress register
+ * @param bus Bus number
+ * @param device Device number
+ * @param function Function number
+ * @param barNum Base adress register number
+ * @return Base adress register
+ */
 BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
 

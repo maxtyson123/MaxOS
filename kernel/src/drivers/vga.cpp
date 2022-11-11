@@ -29,7 +29,10 @@ VideoGraphicsArray::~VideoGraphicsArray() {
 
 }
 
-
+/**
+ * @details This function is used to write to the VGA registers.
+ * @param registers  The VGA registers to write to.
+ */
 void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
 {
     //MISC (1 val, hardcoded)
@@ -79,12 +82,22 @@ void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
 
 }
 
+/**
+ * @details This function is used to get the maximum resolution of the VGA and colour depth.
+ * @return True if the specified resolution is supported, otherwise false.
+ */
 bool VideoGraphicsArray::SupportsMode(uint32_t width, uint32_t height, uint32_t colourdepth)
 {
     return width == 320 && height == 200 && colourdepth == 8;
 }
 
-
+/**
+ * @details This function is used to set the specified resolution and colour depth.
+ * @param width The width of the resolution.
+ * @param height The height of the resolution.
+ * @param colourdepth The colour depth of the resolution.
+ * @return True if the specified resolution is supported, otherwise false.
+ */
 bool VideoGraphicsArray::SetMode(uint32_t width, uint32_t height, uint32_t colourdepth)
 {
     if(!SupportsMode(width, height, colourdepth))
@@ -115,6 +128,10 @@ bool VideoGraphicsArray::SetMode(uint32_t width, uint32_t height, uint32_t colou
     return true;
 }
 
+/**
+ * @details This function is used to get the framebuffer address.
+ * @return The framebuffer address.
+ */
 uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 {
     //Read data from index number 6
@@ -132,6 +149,12 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 
 
 //8 bit vga mode only has 256 colours. colorIndex selects which one to display
+/**
+ * @details This function is used to put a pixel on the screen.
+ * @param x The x coordinate of the pixel.
+ * @param y The y coordinate of the pixel.
+ * @param colour The colour of the pixel.
+ */
 void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
 
     if(x < 0 || 320 <= x
@@ -142,6 +165,13 @@ void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
     *pixelAddress = colorIndex;
 }
 
+/**
+ * @details This function is used to get the colour based on a red, green and blue value.
+ * @param r The red value.
+ * @param g The green value.
+ * @param b The blue value.
+ * @return The colour, returns black if the colour is not supported.
+ */
 uint8_t VideoGraphicsArray::GetColourIndex(uint8_t r, uint8_t g, uint8_t b)
 {
     if(r == 0x00 && g == 0x00 && b == 0x00)  return 0x00;   //BLACK
@@ -155,10 +185,28 @@ uint8_t VideoGraphicsArray::GetColourIndex(uint8_t r, uint8_t g, uint8_t b)
     return 0x00;
 }
 
+/**
+ * @details This function puts on pixel on the screen.
+ * @param x The x coordinate of the pixel.
+ * @param y The y coordinate of the pixel.
+ * @param r The red value of the pixel.
+ * @param g The green value of the pixel.
+ * @param b The blue value of the pixel.
+ */
 void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b){
     PutPixel(x,y, GetColourIndex(r,g,b));
 }
 
+/**
+ * @details This function draws a rectangle on the screen.
+ * @param x The x coordinate of the rectangle.
+ * @param y The y coordinate of the rectangle.
+ * @param w The width of the rectangle.
+ * @param h The height of the rectangle.
+ * @param r The red value of the rectangle.
+ * @param g The green value of the rectangle.
+ * @param b The blue value of the rectangle.
+ */
 void VideoGraphicsArray::FillRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t r, uint8_t g, uint8_t b) {
     for (uint32_t Y = y; Y < y + h; Y++) {
         for (uint32_t X = x; X < x + w; X++) {

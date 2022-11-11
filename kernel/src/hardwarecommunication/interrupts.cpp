@@ -40,6 +40,14 @@ InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256]
 
 InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 
+/**
+ * @details This function is used to set an entry in the IDT
+ * @param interrupt  Interrupt number
+ * @param CodeSegment  Code segment
+ * @param handler  Interrupt Handler
+ * @param DescriptorPrivilegeLevel Descriptor Privilege Level
+ * @param DescriptorType  Descriptor Type
+ */
 void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
                                                         uint16_t CodeSegment,
                                                         void (*handler)(),
@@ -177,6 +185,9 @@ InterruptManager::~InterruptManager()
     Deactivate();
 }
 
+/**
+ * @details This function activates the interrupt manager
+ */
 void InterruptManager::Activate() {
 
     if(ActiveInterruptManager != 0){                //There shouldn't be another interrupt manager, but for saftey delete anyother ones. This is becuase the processor only has 1 IDT
@@ -188,6 +199,9 @@ void InterruptManager::Activate() {
 
 }
 
+/**
+ * @details This function deactivates the interrupt manager
+ */
 void InterruptManager::Deactivate()
 {
     if(ActiveInterruptManager == this){         //Only if the active InterruptManger
@@ -198,6 +212,12 @@ void InterruptManager::Deactivate()
 
 }
 
+/**
+ * @details This function passes the interrupt request on to the active interrupt manager
+ * @param interruptNumber The interrupt number
+ * @param esp The stack pointer
+ * @return The stack pointer
+ */
 uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
 
@@ -208,7 +228,12 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
     return esp;
 }
 
-
+/**
+ * @details This function handles the interrupt request
+ * @param interruptNumber The interrupt number
+ * @param esp The stack pointer
+ * @return The stack pointer
+ */
 uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
     if(handlers[interrupt]!= 0){                                //If it has a handler for it
@@ -239,6 +264,10 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
     return esp;
 }
 
+/**
+ * @details This function returns the offset of the hardware interrupt
+ * @return The offset of the hardware interrupt
+ */
 maxOS::common::uint16_t InterruptManager::HardwareInterruptOffset() {
     return hardwareInterruptOffset;
 }

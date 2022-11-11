@@ -38,6 +38,11 @@ MemoryManager::~MemoryManager() {
     }
 }
 
+/**
+ * @details Allocates a block of memory
+ * @param size size of the block
+ * @return a pointer to the block, 0 if no block is available
+ */
 void* MemoryManager::malloc(common::size_t size) {
 
     MemoryChunk* result = 0;
@@ -88,6 +93,11 @@ void* MemoryManager::malloc(common::size_t size) {
 
 }
 
+
+/**
+ * @details Frees a block of memory
+ * @param pointer A pointer to the block
+ */
 void MemoryManager::free(void *pointer) {
 
 

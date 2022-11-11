@@ -21,6 +21,10 @@ SyscallHandler::~SyscallHandler()
 {
 }
 
+/**
+ * @details Handles the interrupt for a system call
+ * @param stackFrame The stack frame
+ */
 uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
 {
     CPUState* cpu = (CPUState*)esp;

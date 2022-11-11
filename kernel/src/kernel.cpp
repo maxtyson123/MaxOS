@@ -42,10 +42,12 @@ using namespace maxOS::net;
 
 static Console console;
 
-/// <summary> Compare two strings </summary>
-///@param s1 First string
-///@param s2 Second string
-///@return 0 if string is the same
+/**
+ * @details Compare two strings
+ * @param  s1 String 1
+ * @param  s2 String 2
+ * @return 0 if equal, 1 if not
+ */
 int strcmp(const char* s1, const char* s2)
 {
     while ((*s1 == *s2) && *s1) { ++s1; ++s2; }                             //While the characters are the same and the string is not over
@@ -53,25 +55,30 @@ int strcmp(const char* s1, const char* s2)
 }
 
 
-/// <summary> Print to the GUI debug console </summary>
-///@param str String to print
-///@param lines Lines to print text on
+/**
+ * @details Get the length of a string
+ * @param  str String to print
+ * @param lines Lines to print on
+ */
 void printf_gui(char* str, Text lines[15]){
     console.put_string_gui(str,lines);                                      //Print to the GUI console
 
 
 }
 
-/// <summary> Print to the VideoMemory debug console </summary>
-///@param str String to print
-///@param clearLine Clear the current line before writing
+/**
+ * @details Print to the Video Memory Debug Console
+ * @param  str String to print
+ */
 void printf(char* str, bool clearLine = false)
 {
     console.put_string(str,clearLine);
 
 }
-/// <summary> Print to the VideoMemory debug console </summary>
-///@param key Number to print
+/**
+ * @details Print to the Video Memory Debug Console
+ * @param  key Hex Value to print
+ */
 void printfHex(uint8_t key){
     console.put_hex(key);
 }
@@ -169,8 +176,10 @@ class MouseToConsole: public MouseEventHandler{
 };
 
 
-/// <summary> Print a string via a syscall </summary>
-///@param str String to print
+/**
+ * @details Print a string via a syscall
+ * @param str String to print
+ */
 void sysprintf(char* str)
 {
     asm("int $0x80" : : "a" (4), "b" (str));        //Call the interrupt 0x80 with the syscall number 4 and the string to print

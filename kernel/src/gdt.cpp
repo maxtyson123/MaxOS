@@ -6,6 +6,9 @@
 using namespace maxOS;
 using namespace maxOS::common;
 
+/**
+ * Global Descriptor Table
+ */
 GlobalDescriptorTable::GlobalDescriptorTable()
         : nullSegmentSelector(0, 0, 0),                     //Ignored
           unusedSegmentSelector(0, 0, 0),                   //Ignored
@@ -27,18 +30,31 @@ GlobalDescriptorTable::~GlobalDescriptorTable()
 }
 
 
-//Off sets
+/**
+ * Data Segment Selector
+ * @return The data segment selector offset
+ */
 uint16_t GlobalDescriptorTable::DataSegmentSelector()
 {
     return (uint8_t*)&dataSegmentSelector - (uint8_t*)this;
 }
 
+/**
+ * Code Segment Selector
+ * @return The code segment selector offset
+ */
 uint16_t GlobalDescriptorTable::CodeSegmentSelector()
 {
     return (uint8_t*)&codeSegmentSelector - (uint8_t*)this;
 }
 
 //Setup GDT for memory
+/**
+ * @details Constructor for Segment Selector
+ * @param base Base address
+ * @param limit Limit
+ * @param flags Flags
+ */
 GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type)
 {
     uint8_t* target = (uint8_t*)this;       //segment entry in GDT.
@@ -84,9 +100,11 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint3
     // Type / Access Rights
     target[5] = type;
 }
-
-//To look up the pointer
-uint32_t GlobalDescriptorTable::SegmentDescriptor::Base()
+/**
+ * @details Look up the pointer
+ * @return The pointer
+ */
+uint32_t GlobalDescriptorTable::SegmentDescriptor::Base() //To look up the pointer
 {
     uint8_t* target = (uint8_t*)this;
 
@@ -98,6 +116,10 @@ uint32_t GlobalDescriptorTable::SegmentDescriptor::Base()
     return result;
 }
 
+/**
+ * @details Look up the limit
+ * @return The limit
+ */
 uint32_t GlobalDescriptorTable::SegmentDescriptor::Limit()
 {
     uint8_t* target = (uint8_t*)this;
