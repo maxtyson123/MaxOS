@@ -10,6 +10,9 @@ We love your input! We want to make contributing to this project as easy and tra
 ## We Develop with GitHub
 We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
 
+## Code Standard
+To keep the code understanble please make sure it is formatted and reable. Additionally add comments exapling what your function does and the various steps. Summary's and params are only needed if the function is intended to be used on a wider scale e.g. printf but not EtherFrameProvider::OnRawDataReceived(...); 
+
 ## We Use [GitHub Flow](https://guides.github.com/introduction/flow/index.html), So All Code Changes Happen Through Pull Requests
 Pull requests are the best way to propose changes to the codebase (we use [GitHub Flow](https://guides.github.com/introduction/flow/index.html)). We actively welcome your pull requests:
 
@@ -42,7 +45,7 @@ People *love* thorough bug reports. I'm not even kidding.
 I'm again borrowing these from [Facebook's Guidelines](https://github.com/facebook/draft-js/blob/a9316a723f9e918afde44dea68b5f9f39b7d9b00/CONTRIBUTING.md)
 
 * 2 spaces for indentation rather than tabs
-* You can try running `npm run lint` for style unification
+
 
 ## License
 By contributing, you agree that your contributions will be licensed under its MIT License.

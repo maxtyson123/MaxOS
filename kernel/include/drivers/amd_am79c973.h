@@ -16,6 +16,21 @@ namespace maxOS{
 
     namespace drivers{
 
+        class amd_am79c973;
+
+        class RawDataHandler{
+
+            protected:
+                amd_am79c973* backend;
+            public:
+                RawDataHandler(amd_am79c973* backend);
+                ~RawDataHandler();
+
+                virtual bool OnRawDataReceived(common::uint8_t* buffer, common::uint32_t size);
+                void Send(common::uint8_t* buffer, common::uint32_t size);
+
+        };
+
         class amd_am79c973 : public Driver, public hardwarecommunication::InterruptHandler{
 
             struct InitializationBlock{
@@ -70,6 +85,7 @@ namespace maxOS{
             common::uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
             common::uint8_t currentRecvBuffer;               //Which buffers are active
 
+            RawDataHandler* dataHandler;
 
             public:
                 amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager);
@@ -84,6 +100,9 @@ namespace maxOS{
 
                 void Send(common::uint8_t* buffer, int size);
                 void Receive();
+
+                void SetHandler(RawDataHandler* dataHandler);
+                common::uint64_t  GetMACAddress();
 
         };
 

@@ -24,6 +24,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/render.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/common/printf.o \
+ 		  obj/kernel/net/etherframe.o \
  		  obj/kernel/kernel.o
 
 libraries =

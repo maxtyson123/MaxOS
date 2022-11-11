@@ -12,6 +12,36 @@ void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 
 
+///___DATA HANDLER___
+
+RawDataHandler::RawDataHandler(amd_am79c973 *backend) {
+
+    this -> backend = backend;
+    backend -> SetHandler(this);
+
+}
+
+RawDataHandler::~RawDataHandler() {
+
+    //Remove the handler on destruction
+    backend -> SetHandler(0);
+
+}
+
+bool RawDataHandler::OnRawDataReceived(uint8_t* buffer, uint32_t size){
+
+    return false;
+
+}
+
+void RawDataHandler::Send(uint8_t* buffer, uint32_t size){
+
+    backend -> Send(buffer, size);
+
+}
+
+///___DRIVER___
+
 
 amd_am79c973::amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager *interruptManager)
 :   Driver(),
@@ -28,6 +58,9 @@ amd_am79c973::amd_am79c973(hardwarecommunication::PeripheralComponentInterconnec
     // No active buffer at the start
     currentSendBuffer = 0;
     currentRecvBuffer = 0;
+
+    // No handler by default
+    this -> dataHandler = 0;
 
     // Get the MAC adresses (split up in little endian order)
     uint64_t MAC0 = MACAddress0Port.Read() % 256;
@@ -212,12 +245,27 @@ void amd_am79c973::Receive() {
 
                 uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].adress);
 
-                // Iterate over the data
-                for(int i = 0; i < size; i++)
-                {
-                    printfHex(buffer[i]);
-                    printf(" ");
+
+                //Pass data to handler
+            if(dataHandler != 0){
+
+                if(dataHandler -> OnRawDataReceived(buffer, size)){         //If data needs to be sent back
+
+                    Send(buffer, size);
+
                 }
+
+            }
+
+            /*
+             * Print the data
+            // Iterate over the data
+            for(int i = 0; i < size; i++)
+            {
+                printfHex(buffer[i]);
+                printf(" ");
+            }
+            */
 
         }
 
@@ -228,3 +276,15 @@ void amd_am79c973::Receive() {
 
     
 }
+
+void amd_am79c973::SetHandler(RawDataHandler *dataHandler) {
+
+    this -> dataHandler = dataHandler;
+
+}
+
+uint64_t amd_am79c973::GetMACAddress() {
+    return initBlock.physicalAdress;
+}
+
+

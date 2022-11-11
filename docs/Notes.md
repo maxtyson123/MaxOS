@@ -174,4 +174,15 @@ See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](h
 - The networking device can have multiple send and receive buffers and for every buffer there needs to be an instance of a struct (which mainly has a pointer to that buffer)
 - A problem with this though is that this is one of those devices that use some bits in the address for other purposes meaning it needs to be a multiple of 16 (similar to bar)
 - So the buffer will be 2KB but then an additional 15 bytes are added on and then 4 bytes are removed. This allows for the multiple of 16 to be found
-- 
+### Handler
+See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame)
+- The driver written for the am79c971 can be utilized to receive and send data, however for the device to be useful a protocol handler has to be written.
+- This protocol handler will look at the incoming data and decide what protocol should be used to interpret the data.
+- The data that is recived by the am79c971 will be call raw data
+- The raw data is structured like this (Encoded in big endian):
+- - First 6 bytes: Destination MAC Address (Should  be this devices MAC address or 0xFFFF if it is a broadcast (sent to all devices on the network))
+- - Next 6 bytes: Source MAC Address (Who sent the data)
+- - Next 2 bytes: EtherType (Indicate the protocol)
+- - Next 46 - 1000 bytes: Data (Payload)
+- - Last 4 bytes: Checksum (CRC)
+- From this data the handler can then interpet the data e.g. discard if the MAC adress isnt for this device or pass the data to the ARP handler if the EtherType is 0x8006 etc.

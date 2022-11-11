@@ -25,36 +25,51 @@
 #include <gui/render.h>
 #include <gui/widgets/text.h>
 
+//NET
+#include <net/etherframe.h>
+
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
+using namespace maxOS::net;
 
 
 // #define ENABLE_GRAPHICS
 
 static Console console;
 
-int strcmp(const char *s1, const char *s2)
+/// <summary> Compare two strings </summary>
+///@param s1 First string
+///@param s2 Second string
+///@return 0 if string is the same
+int strcmp(const char* s1, const char* s2)
 {
     while ((*s1 == *s2) && *s1) { ++s1; ++s2; }
     return ((int) (unsigned char) *s1) - ((int) (unsigned char) *s2);
 }
 
 
+/// <summary> Print to the GUI debug console </summary>
+///@param str String to print
+///@param lines Lines to print text on
 void printf_gui(char* str, Text lines[15]){
-
     console.put_string_gui(str,lines);
+
 
 }
 
+/// <summary> Print to the VideoMemory debug console </summary>
+///@param str String to print
+///@param clearLine Clear the current line before writing
 void printf(char* str, bool clearLine = false)
 {
     console.put_string(str,clearLine);
 
 }
-
+/// <summary> Print to the VideoMemory debug console </summary>
+///@param key Number to print
 void printfHex(uint8_t key){
     console.put_hex(key);
 }
@@ -152,11 +167,13 @@ class MouseToConsole: public MouseEventHandler{
 };
 
 
-
+/// <summary> Print a string via a syscall </summary>
+///@param str String to print
 void sysprintf(char* str)
 {
     asm("int $0x80" : : "a" (4), "b" (str));
 }
+
 
 void taskA()
 {
@@ -273,10 +290,13 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("[ ] Setting Task Manager... \n");
     TaskManager taskManager;
 
+    /*
+    __Tests__
     Task task1(&gdt, taskA);
     Task task2(&gdt, taskB);
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
+    */
 
     printf("[x] Task Manager Setup \n");
 
@@ -418,7 +438,14 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
 
     printf("[x] ATA Hard Drives Setup \n");
 
-    //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and task
+    printf("[x] Setting Up Network Driver \n");
+    amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
+        printf(" -  Setting Up EtherFrame... \n");
+        EtherFrameProvider etherFrame(eth0);
+        etherFrame.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"Hello Network", 13);    //Broadcast, ARP,
+    printf("[x] Network Driver Setup \n");
+
+    //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");
     interrupts.Activate();
     printf("[x] IDT Activated \n", true);

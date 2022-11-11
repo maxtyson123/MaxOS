@@ -3,12 +3,15 @@
 
 Max os following: [OS Dev Wiki](https://wiki.osdev.org/Creating_an_Operating_System), [YouTube WYOOS](https://www.youtube.com/watch?v=1rnA6wpF0o4&list=PLHh55M_Kq4OApWScZyPl5HhgsTJS9MZ6M&ab_channel=WriteyourownOperatingSystem')
 
-Made mainly in C++ with a dabble of ASM. 
+This is a hobby OS developed in mainly C++, the aim of this project is to setup a functional operating system that supports programs, has a GUI and is POSIX compatible. 
+
+In the future I aim to have it run on a raspberry PI, include its very own in house web browser and a custom game engine.
+
+The codebase is well commented with additional notes in the docs directory. Contribution is welcome, however it would be ideal once the basics are set up and I begin on the extended features. (See projects)
 
 [![wakatime](https://wakatime.com/badge/github/maxtyson123/max-os.svg)](https://wakatime.com/badge/github/maxtyson123/max-os)
 ![maxOS](https://github.com/maxtyson123/max-os/workflows/maxOS/badge.svg)
 
-*Dont make pull request or bugs until initial is done (found in projects)
  
 ## Screenshots
 ![Screenshot](docs/Screenshots/ATA_Hardrives.png)
@@ -68,14 +71,20 @@ Go to the project directory
 Make Files and OS
 
 ```bash
- sudo apt-get install g++ binutils libc6-dev-i386 grub-legacy xorriso
+ make install_dep
  make maxOS.iso  
 ```
 
-Run Os 
+Run Os (Linux)
 
 ```bash
-     Virtual Box
+make setupQ
+make runQ
 ```
 
+Run Os (Windows)
 
+```bash
+# Install QEMU into "C:\Program Files\qemu\"
+make runQ_W
+```
