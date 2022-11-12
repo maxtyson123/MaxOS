@@ -97,7 +97,8 @@ void Console::put_string(char* str, bool clearLine)
 
 
     //Screen is 80 wide x 25 high (characters)
-    static char displayed[25][80];
+    static char displayed[250][80];
+    static char current[25][80];
 
     if(clearLine){
         for (int x = 0; x < lim_x; ++x) {
@@ -128,6 +129,7 @@ void Console::put_string(char* str, bool clearLine)
             x = ini_x;      //Reset Width pos
         }
 
+        /*
         //If at bottom of screen then clear and restart
         if(y >= lim_y){
 
@@ -150,12 +152,35 @@ void Console::put_string(char* str, bool clearLine)
             displayed[y][79] = '*';
 
         }
+         */
     }
+
+    //Copy the displayed array to the current array
+    for (int current_y = 0; current_y < 24; ++current_y) {                                          //For each line
+        for (int current_x = 0; current_x < 80; ++current_x) {                                      //For each char
+        int pos = current_y;                                                                        //Set the position to the current line
+            if(y >= 25){                                                                            //If the current line is greater than the max line
+                pos = current_y + (y-23);                                                           //Set the position relative to the history
+            }
+            if(current_x < ini_x || current_x >= lim_x || current_y < ini_y || current_y >= lim_y){   //If the current char is outside the bounds, set by kernel
+                continue;
+            }
+            current[current_y][current_x] = displayed[pos][current_x];                             //Set the current char to the displayed char
+        }
+    }
+
+    //Draw Bottom and sides
+    for (int i = 0; i < 80; ++i) {
+        current[24][i] = '*';
+    }
+    current[23][0] = '*';
+    current[23][79] = '*';
+
 
     //Write to video memory
     for (int y = 0; y < 25; ++y) {
         for (int x = 0; x < 80; ++x) {
-            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | displayed[y][x];
+            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | current[y][x];
         }
     }
 
@@ -218,4 +243,3 @@ void Console::backspace(){
     moveCursor(-1,0);          //Move behind the cursor
 
 }
-

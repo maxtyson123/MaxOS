@@ -165,7 +165,7 @@ void serial::Test(){
 /**
  * @details This function writes a message to the serial port
  * @param str The message to be written
- * @param type The type of the message
+ * @param type The type of the message 1 = info, 2 = warning, 3 = error, 4 = fatal, 5 = success, 6 = debug, 7 = kernel, 8 = unknown
  */
 void serial::Write(char* str, int type) {
     Colour t_colour;
@@ -184,7 +184,7 @@ void serial::Write(char* str, int type) {
 
         //Info
         case 1:
-            printHeader(t_colour.blue_fg, t_type.none, "Info");
+            printHeader(t_colour.light_grey_fg, t_type.none, "Info");
             break;
 
         //Warning

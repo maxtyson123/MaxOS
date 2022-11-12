@@ -9,6 +9,8 @@ In the future I aim to have it run on a raspberry PI, include its very own in ho
 
 The codebase is well commented with additional notes in the docs directory. Contribution is welcome, however it would be ideal once the basics are set up and I begin on the extended features. (See projects)
 
+Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom that can optionally be installed via the make_toolchain.sh file located in toolcahin. The OS can be built using this (build_via_tc.sh) or built via the make file (see below.) The toolchain will become more mainstream with the release of the c libraries.
+
 [![wakatime](https://wakatime.com/badge/github/maxtyson123/max-os.svg)](https://wakatime.com/badge/github/maxtyson123/max-os)
 ![maxOS](https://github.com/maxtyson123/max-os/workflows/maxOS/badge.svg)
 
@@ -19,7 +21,7 @@ The codebase is well commented with additional notes in the docs directory. Cont
 ### Services
 -None Yet
 ### GUI Programs
--None Yet
+-Debug Console
 ### CLI Programs
 -(COMING) Uinx / POSIX like 
 ### Libraries

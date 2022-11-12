@@ -334,6 +334,11 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the method
     printf("[x] System Calls Handler Setup \n", true);
 
+    serialLog.Write("Memory Management Ready\n",1);
+    serialLog.Write("Tasks Ready\n",1);
+    serialLog.Write("Global Descriptor Table Ready\n",1);
+    serialLog.Write("System Calls Ready\n",1);
+
     #ifdef ENABLE_GRAPHICS
         //Desktop needs the mouse and keyboard
         // so instantiated it here
@@ -374,6 +379,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
             Render rend(320,200);   //arguments do nothing for now. 320,200 is hardcoded into "gui/render.h"
             printf("    -VGA setup\n");
         #endif
+
     driverManager.ActivateAll();
     printf("[X] Drivers Setup\n");
 
@@ -461,6 +467,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     printf("[x] ATA Hard Drives Setup \n");
 
+
+
     printf("[x] Setting Up Network Driver \n");
     amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
         printf(" -  Setting Up IP, Gateway, Subnet... \n");
@@ -487,10 +495,15 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
 
+
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");
     interrupts.Activate();
     printf("[x] IDT Activated \n", true);
+
+    /*Note: Serial port sends random interrupt before interrupts are activated*/     serialLog.Write("Devices Ready\n",1); serialLog.Write("Network Ready\n",1);
+
+    serialLog.Write("Interrupts Ready\n",1);
 
     //Kernel is ready, code after here should be in a seperate process
     serialLog.Write("MaxOS is ready\n",7);

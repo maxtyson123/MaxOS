@@ -1,7 +1,10 @@
-GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
-ASPARAMS = --32
-LDPARAMS = -melf_i386
-QEMUPARAMS = -net user -net nic,model=pcnet,macaddr=08:00:27:EC:D0:29 -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial mon:stdio
+
+GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
+GCC_EXEC ?= gcc
+
+AS_PARAMS = --32
+LD_PARAMS = -melf_i386
+QEMU_PARAMS = -net user -net nic,model=pcnet,macaddr=08:00:27:EC:D0:29 -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial mon:stdio
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/gdt.o \
@@ -41,21 +44,21 @@ default: build;
 
 obj/kernel/%.o: kernel/src/%.cpp
 	mkdir -p $(@D)
-	gcc $(GCCPARAMS) -Ikernel/include -c -o $@ $<
+	$(GCC_EXEC) $(GCC_PARAMS) -Ikernel/include -c -o $@ $<
 
 obj/kernel/%.o: kernel/src/%.s
 	mkdir -p $(@D)
-	as $(ASPARAMS) -Ikernel/include -o $@ $<
+	as $(AS_PARAMS) -Ikernel/include -o $@ $<
 
 ### Libraries ###
 
 obj/libraries/%.o: libraries/src/%.cpp
 	mkdir -p $(@D)
-	gcc $(GCCPARAMS) -Ilibraries/include -c -o $@ $<
+	$(GCC_EXEC) $(GCC_PARAMS) -Ilibraries/include -c -o $@ $<
 
 obj/libraries/%.o: libraries/src/%.s
 	mkdir -p $(@D)
-	as $(ASPARAMS) -Ilibraries/include -o $@ $<
+	as $(AS_PARAMS) -Ilibraries/include -o $@ $<
 
 buildLibraries: $(libraries)
 	echo Libraries Built
@@ -65,11 +68,11 @@ buildLibraries: $(libraries)
 
 obj/ports/%.o: ports/src/%.cpp
 	mkdir -p $(@D)
-	gcc $(GCCPARAMS) -Iports/include -c -o $@ $<
+	$(GCC_EXEC) $(GCC_PARAMS) -Iports/include -c -o $@ $<
 
 obj/ports/%.o: ports/src/%.s
 	mkdir -p $(@D)
-	as $(ASPARAMS) -Iports/include -o $@ $<
+	as $(AS_PARAMS) -Iports/include -o $@ $<
 
 buildPorts: $(ports)
 	echo Ports Built
@@ -79,11 +82,11 @@ buildPorts: $(ports)
 
 obj/programs/%.o: programs/src/%.cpp
 	mkdir -p $(@D)
-	gcc $(GCCPARAMS) -Iprograms/include -c -o $@ $<
+	$(GCC_EXEC) $(GCC_PARAMS) -Iprograms/include -c -o $@ $<
 
 obj/programs/%.o: programs/src/%.s
 	mkdir -p $(@D)
-	as $(ASPARAMS) -Iprograms/include -o $@ $<
+	as $(AS_PARAMS) -Iprograms/include -o $@ $<
 
 buildPrograms: $(programs)
 	echo Programs Built
@@ -91,7 +94,7 @@ buildPrograms: $(programs)
 ### Make ###
 
 maxOS.bin: linker.ld $(kernel) $(libraries) $(ports) $(programs)
-	ld $(LDPARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
+	ld $(LD_PARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
 
 maxOS.iso: maxOS.bin
 	mkdir iso
@@ -119,10 +122,10 @@ setupQ:
 
 
 runQ: maxOS.iso
-	qemu-system-i386 $(QEMUPARAMS)
+	qemu-system-i386 $(QEMU_PARAMS)
 
 runQ_W: maxOS.iso
-	"C:\Program Files\qemu\qemu-system-i386" $(QEMUPARAMS)
+	"C:\Program Files\qemu\qemu-system-i386" $(QEMU_PARAMS)
 
 
 
