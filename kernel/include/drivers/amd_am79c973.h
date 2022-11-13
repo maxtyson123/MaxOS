@@ -40,9 +40,9 @@ namespace maxOS{
                 unsigned numSendBuffers : 4;
                 unsigned reserved2 : 4;
                 unsigned numRecvBuffers : 4;
-                common::uint64_t physicalAdress : 48;   //Not 64 bits but will be treated like it is
+                common::uint64_t physicalAddress : 48;   //Not 64 bits but will be treated like it is
                 common::uint16_t reserved3;
-                common::uint64_t logicalAdress;         //Potential For IP adress
+                common::uint64_t logicalAddress;
                 common::uint32_t recvBufferDescrAddress;
                 common::uint32_t sendBufferDescrAddress;
 
@@ -51,7 +51,7 @@ namespace maxOS{
 
             struct BufferDescriptor{
 
-                common::uint32_t adress;
+                common::uint32_t address;
                 common::uint32_t flags;
                 common::uint32_t flags2;
                 common::uint32_t avail;
@@ -85,7 +85,7 @@ namespace maxOS{
             common::uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
             common::uint8_t currentRecvBuffer;               //Which buffers are active
 
-            RawDataHandler* dataHandler;
+            RawDataHandler* handler;
 
             public:
                 amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager);
@@ -101,7 +101,7 @@ namespace maxOS{
                 void Send(common::uint8_t* buffer, int size);
                 void Receive();
 
-                void SetHandler(RawDataHandler* dataHandler);
+                void SetHandler(RawDataHandler* handler);
                 common::uint64_t GetMACAddress();
                 common::uint32_t GetIPAddress();
 

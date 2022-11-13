@@ -7,12 +7,14 @@
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::hardwarecommunication;
 
 void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 
 
 ///___DATA HANDLER___
+
 
 
 RawDataHandler::RawDataHandler(amd_am79c973 *backend) {
@@ -44,24 +46,23 @@ void RawDataHandler::Send(uint8_t* buffer, uint32_t size){
 ///___DRIVER___
 
 
-amd_am79c973::amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager *interruptManager)
-:   Driver(),
-    InterruptHandler(deviceDescriptor -> interrupt + interruptManager -> HardwareInterruptOffset(), interruptManager),
-    MACAddress0Port( deviceDescriptor -> portBase),
-    MACAddress2Port(deviceDescriptor -> portBase + 0x02),
-    MACAddress4Port(deviceDescriptor -> portBase + 0x04),
-    registerDataPort(deviceDescriptor -> portBase + 0x10),
-    registerAddressPort(deviceDescriptor -> portBase + 0x12),
-    busControlRegisterDataPort(deviceDescriptor -> portBase + 0x14),
-    resetPort(deviceDescriptor -> portBase + 0x16)
+amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts)
+        :   Driver(),
+            InterruptHandler(dev -> interrupt + interrupts -> HardwareInterruptOffset(), interrupts),
+            MACAddress0Port(dev -> portBase),
+            MACAddress2Port(dev -> portBase + 0x02),
+            MACAddress4Port(dev -> portBase + 0x04),
+            registerDataPort(dev -> portBase + 0x10),
+            registerAddressPort(dev -> portBase + 0x12),
+            resetPort(dev -> portBase + 0x14),
+            busControlRegisterDataPort(dev -> portBase + 0x16)
 {
-
     // No active buffer at the start
     currentSendBuffer = 0;
     currentRecvBuffer = 0;
 
     // No handler by default
-    this -> dataHandler = 0;
+    this -> handler = 0;
 
     // Get the MAC adresses (split up in little endian order)
     uint64_t MAC0 = MACAddress0Port.Read() % 256;
@@ -71,7 +72,7 @@ amd_am79c973::amd_am79c973(hardwarecommunication::PeripheralComponentInterconnec
     uint64_t MAC4 = MACAddress4Port.Read() % 256;
     uint64_t MAC5 = MACAddress4Port.Read() / 256;
 
-    // Combine MAC addresses
+    // Combine MAC addresses into one 48 bit number
     uint64_t MAC = MAC5 << 40
                    | MAC4 << 32
                    | MAC3 << 24
@@ -93,10 +94,9 @@ amd_am79c973::amd_am79c973(hardwarecommunication::PeripheralComponentInterconnec
     initBlock.numSendBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
     initBlock.reserved2 = 0;                         // Reserved
     initBlock.numRecvBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
-    initBlock.physicalAdress = MAC;                  // Set the physical address to the MAC address
+    initBlock.physicalAddress = MAC;                 // Set the physical address to the MAC address
     initBlock.reserved3 = 0;                         // Reserverd
-    initBlock.logicalAdress = 0;                     // None for now
-
+    initBlock.logicalAddress = 0;                    // None for now
 
     // Set Buffer descriptors memory
     sendBufferDescr = (BufferDescriptor*)((((uint32_t)&sendBufferDescrMemory[0]) + 15) & ~((uint32_t)0xF));
@@ -105,36 +105,37 @@ amd_am79c973::amd_am79c973(hardwarecommunication::PeripheralComponentInterconnec
     recvBufferDescr = (BufferDescriptor*)((((uint32_t)&recvBufferDescrMemory[0]) + 15) & ~((uint32_t)0xF));
     initBlock.recvBufferDescrAddress = (uint32_t)recvBufferDescr;
 
-    // Set Buffer Descriptors themselves
-    for (uint8_t i = 0; i < 8; i++){
+    for(uint8_t i = 0; i < 8; i++)
+    {
 
-        // Send
-        sendBufferDescr[i].adress = (((uint32_t)&sendBuffers[i]) + 15 ) & ~(uint32_t)0xF;        // Same as above
+        // Send buffer descriptors
+        sendBufferDescr[i].address = (((uint32_t)&sendBuffers[i]) + 15 ) & ~(uint32_t)0xF;       // Same as above
         sendBufferDescr[i].flags = 0x7FF                                                         // Legnth of descriptor
-                                 | 0xF000;                                                       // Set it to send buffer
+                                   | 0xF000;                                                     // Set it to send buffer
         sendBufferDescr[i].flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
         sendBufferDescr[i].avail = 0;                                                            // IF it is in use
 
         // Receive
-        recvBufferDescr[i].adress = (((uint32_t)&recvBufferDescr[i]) + 15 ) & ~(uint32_t)0xF;    // Same as above
-        recvBufferDescr[i].flags = 0x7FF                                                         // Legnth of descriptor
+        recvBufferDescr[i].address = (((uint32_t)&recvBufferDescr[i]) + 15 ) & ~(uint32_t)0xF;   // Same as above
+        recvBufferDescr[i].flags = 0xF7FF                                                        // Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)
                                    | 0x80000000;                                                 // Set it to receive buffer
         recvBufferDescr[i].flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
         recvBufferDescr[i].avail = 0;                                                            // IF it is in use
-
     }
 
     // Move initialization block into device
     registerAddressPort.Write(1);                                     // Tell device to write to register 1
     registerDataPort.Write( (uint32_t)(&initBlock) & 0xFFFF );             // Write address data
-    registerAddressPort.Write(1);                                     // Tell device to write to register 2
+    registerAddressPort.Write(2);                                     // Tell device to write to register 2
     registerDataPort.Write( ((uint32_t)(&initBlock) >> 16) & 0xFFFF );     // Write shifted address data
 
-}
-
-amd_am79c973::~amd_am79c973() {
 
 }
+
+amd_am79c973::~amd_am79c973()
+{
+}
+
 
 /**
  * @details This function activates the device and starts it (Runs when the driver-manger calls activateAll())
@@ -200,6 +201,7 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 
 }
 
+
 // Sending a package :
 // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the driver.
 //  The OWN bit must now be set in the “flags” field (0x80000000) in order to “transfer” the descriptor to the card.
@@ -225,10 +227,10 @@ void amd_am79c973::Send(common::uint8_t *buffer, int size) {
 
     // What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
     for (uint8_t *src = buffer + size -1,                                                   // Set src pointer to the end of the data that is being sent
-                 *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].adress + size -1);       // Take the buffer that has been slected
-                 src >= buffer;                                                             // While there is still information in the buffer that hasnt been written to src
-                 src--,dst--                                                                // Move 2 pointers to the end of the buffers
-        )
+         *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].address + size -1);       // Take the buffer that has been slected
+         src >= buffer;                                                             // While there is still information in the buffer that hasnt been written to src
+         src--,dst--                                                                // Move 2 pointers to the end of the buffers
+            )
     {
         *dst = *src;                                                                        // Copy data from source buffer to destiantion buffer
     }
@@ -244,7 +246,7 @@ void amd_am79c973::Send(common::uint8_t *buffer, int size) {
     sendBufferDescr[sendDescriptor].avail = 0;                               // Set that this buffer is in use
     sendBufferDescr[sendDescriptor].flags2 = 0;                              // Clear any previous error messages
     sendBufferDescr[sendDescriptor].flags = 0x8300F000                       // Encode the size of what is being sent
-                                          | ((uint16_t)((-size) & 0xFFF));;
+                                            | ((uint16_t)((-size) & 0xFFF));;
 
 
     registerAddressPort.Write(0);                           // Tell device to write to register 0
@@ -266,20 +268,20 @@ void amd_am79c973::Receive() {
         // Check if there is an error                                 &&  Check start and end bits of the packet
         if(!(recvBufferDescr[currentRecvBuffer].flags & 0x40000000)  && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000){
 
-                uint32_t size = recvBufferDescr[currentRecvBuffer].flags & 0xFFF;
+            uint32_t size = recvBufferDescr[currentRecvBuffer].flags & 0xFFF;
 
-                if(size > 64){          // If the size is the size of ethernet 2 frame
-                    size -= 4;          // remove the checksum
-                }
+            if(size > 64){          // If the size is the size of ethernet 2 frame
+                size -= 4;          // remove the checksum
+            }
 
-                uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].adress);
+            uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);
 
 
-                
+
             //Pass data to handler
-            if(dataHandler != 0){
+            if(handler != 0){
 
-                if(dataHandler -> OnRawDataReceived(buffer, size)){         //If data needs to be sent back
+                if(handler -> OnRawDataReceived(buffer, size)){         //If data needs to be sent back
 
                     Send(buffer, size);
 
@@ -303,8 +305,9 @@ void amd_am79c973::Receive() {
 
     }
 
-    
+
 }
+
 
 /**
  * @details This function sets the data handler
@@ -312,7 +315,7 @@ void amd_am79c973::Receive() {
  */
 void amd_am79c973::SetHandler(RawDataHandler *dataHandler) {
 
-    this -> dataHandler = dataHandler;
+    this -> handler = dataHandler;
 
 }
 
@@ -321,7 +324,7 @@ void amd_am79c973::SetHandler(RawDataHandler *dataHandler) {
  * @param ip The IP address to set
  */
 void amd_am79c973::SetIPAddress(common::uint32_t ip) {
-    initBlock.logicalAdress = ip;
+    initBlock.logicalAddress = ip;
 }
 
 /**
@@ -329,7 +332,7 @@ void amd_am79c973::SetIPAddress(common::uint32_t ip) {
  * @return The MAC address
  */
 uint64_t amd_am79c973::GetMACAddress() {
-    return initBlock.physicalAdress;
+    return initBlock.physicalAddress;
 }
 
 /**
@@ -337,7 +340,5 @@ uint64_t amd_am79c973::GetMACAddress() {
  * @return The IP address
  */
 common::uint32_t amd_am79c973::GetIPAddress() {
-    return initBlock.logicalAdress;
+    return initBlock.logicalAddress;
 }
-
-

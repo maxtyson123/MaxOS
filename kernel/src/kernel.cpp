@@ -346,27 +346,27 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     #endif
 
     printf("[ ] Setting Up Drivers... \n");
+
     DriverManager driverManager;
         //Keyboard
-        #ifdef ENABLE_GRAPHICS
-            KeyboardDriver keyboard(&interrupts,&desktop);   //Setup Keyboard drivers
-            driverManager.AddDriver(&keyboard);
+        #ifdef GRAPHICSMODE
+            KeyboardDriver keyboard(&interrupts, &desktop);
         #else
-            PrintfKeyboardEventHandler printfKeyboardEventHandler;
-            KeyboardDriver keyboard(&interrupts,&printfKeyboardEventHandler);   //Setup Keyboard drivers
+            PrintfKeyboardEventHandler kbhandler;
+            KeyboardDriver keyboard(&interrupts, &kbhandler);
         #endif
+            driverManager.AddDriver(&keyboard);
         printf("    -Keyboard setup\n");
 
 
         //Mouse
-        #ifdef ENABLE_GRAPHICS
-             MouseDriver mouse(&interrupts, &desktop);                 //Setup Mouse drivers
+        #ifdef GRAPHICSMODE
+            MouseDriver mouse(&interrupts, &desktop);
         #else
-            MouseToConsole mouseEventHandler;
-            MouseDriver mouse(&interrupts, &mouseEventHandler);                 //Setup Mouse drivers
-
+            MouseToConsole mousehandler;
+            MouseDriver mouse(&interrupts, &mousehandler);
         #endif
-        driverManager.AddDriver(&mouse);
+            driverManager.AddDriver(&mouse);
         printf("    -Mouse setup\n");
 
         printf("    -[ ]Setting PCI\n\n");
@@ -471,8 +471,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     printf("[x] Setting Up Network Driver \n");
     amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
+
         printf(" -  Setting Up IP, Gateway, Subnet... \n");
-        uint8_t ip[] = {10,0,2,15};              //IP address that virtual box has by default
+        uint8_t ip[] = {10,0,2,15};              //IP address that vms have for virtualization
         uint32_t IP_BE = ((uint32_t)ip[3] << 24)                //Convert to big endian
                          | ((uint32_t)ip[2] << 16)
                          | ((uint32_t)ip[1] << 8)
@@ -483,7 +484,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
                           | ((uint32_t)gateway_ip[1] << 8)
                           | (uint32_t)gateway_ip[0];
         uint8_t subnet[] = {255,255,255,0};      //Subnet mask
-        eth0 -> SetIPAddress(IP_BE);                         //Set IP address
+        eth0 -> SetIPAddress(IP_BE);                        //Set IP address
 
         printf(" -  Setting Up EtherFrame... \n");
         EtherFrameProvider etherFrame(eth0);

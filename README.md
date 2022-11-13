@@ -42,13 +42,16 @@ Moved to  projects page
 - [ ] DMA Hard Drive
 - [ ] Virtual Filesystem 
 - [ ] Usable Desktop
-- [ ] Applications
+- [ ] Elf Loader
+- [ ] Process Manager / Scheduler
+- [ ] Threads
 - [ ] Shell
-- [ ] Libs
+- [ ] Libc
+- [ ] GCC Cross compiler
 - [ ] POSIX
 - [ ] Game Ports (DOOM etc..)
-- [ ] Users 
-- [ ] Virtual Memory 
+- [ ] Users & Privileges
+- [ ] Virtual Memory
 - [ ] 64 Bit
 - [ ] Game Engine
 - [ ] Web Browser
