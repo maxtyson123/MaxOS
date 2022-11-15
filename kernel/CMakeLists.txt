@@ -55,7 +55,7 @@ set(
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
 
-        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h)
+        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h include/multithreading.h src/multithreading.cpp include/system/process.h src/system/process.cpp)
 
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")

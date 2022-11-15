@@ -3,7 +3,7 @@
 #include <common/types.h>
 #include <common/printf.h>
 #include <gdt.h>
-#include <multitasking.h>
+#include <multithreading.h>
 #include <memorymanagement.h>
 #include <syscalls.h>
 
@@ -31,12 +31,16 @@
 #include <net/etherframe.h>
 #include <net/arp.h>
 
+//SYSTEM
+#include <system/process.h>
+
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 using namespace maxOS::net;
+using namespace maxOS::system;
 
 
 // #define ENABLE_GRAPHICS
@@ -181,6 +185,8 @@ class MouseToConsole: public MouseEventHandler{
  * @details Print a string via a syscall
  * @param str String to print
  */
+
+
 void sysprintf(char* str)
 {
     asm("int $0x80" : : "a" (4), "b" (str));        //Call the interrupt 0x80 with the syscall number 4 and the string to print
@@ -189,8 +195,10 @@ void sysprintf(char* str)
 
 void taskA()
 {
-    while(true)
+    for (int i = 0; i < 100; ++i) {
         sysprintf("A");
+    }
+
 }
 
 void taskB()
@@ -236,10 +244,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //NOTE: Will rewrite boot text stuff later
 
     Version* maxOSVer;
-    maxOSVer->version = 0.21;
-    maxOSVer->version_c = "0.21.2";
-    maxOSVer->build = 49;
-    maxOSVer->build_c = "49";
+    maxOSVer->version = 0.22;
+    maxOSVer->version_c = "0.22";
+    maxOSVer->build = 52;
+    maxOSVer->build_c = "52";
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -300,8 +308,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("[x] Memory Management Setup \n");
 
 
-    printf("[ ] Setting Task Manager... \n");
-    TaskManager taskManager;
+    printf("[ ] Setting Thread Manager... \n");
+    ThreadManager threadManager;
 
     /*
     __Tests__
@@ -309,7 +317,11 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     Task task2(&gdt, taskB);
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
-    */
+
+     */
+
+    Process testProcess(taskA, &threadManager);
+
 
     printf("[x] Task Manager Setup \n");
 
@@ -317,7 +329,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
     printf("[ ] Setting Up Interrupt Manager... \n");
-    InterruptManager interrupts(0x20, &gdt, &taskManager);            //Instantiate the method
+    InterruptManager interrupts(0x20, &gdt, &threadManager);            //Instantiate the method
     printf("[x] Interrupt Manager Setup \n", true);
 
     printf("[ ] Setting Up Serial Log... \n");
@@ -478,13 +490,20 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
                          | ((uint32_t)ip[2] << 16)
                          | ((uint32_t)ip[1] << 8)
                          | (uint32_t)ip[0];
+
         uint8_t gateway_ip[] = {10,0,2,2};       //IP address for the gateway
         uint32_t GIP_BE = ((uint32_t)gateway_ip[3] << 24)       //Convert to big endian
                           | ((uint32_t)gateway_ip[2] << 16)
                           | ((uint32_t)gateway_ip[1] << 8)
                           | (uint32_t)gateway_ip[0];
+
         uint8_t subnet[] = {255,255,255,0};      //Subnet mask
-        eth0 -> SetIPAddress(IP_BE);                        //Set IP address
+        uint32_t SUB_BE = ((uint32_t)subnet[3] << 24)           //Convert to big endian
+                          | ((uint32_t)subnet[2] << 16)
+                          | ((uint32_t)subnet[1] << 8)
+                          | (uint32_t)subnet[0];
+
+        eth0 -> SetIPAddress(IP_BE);                         //Set IP address
 
         printf(" -  Setting Up EtherFrame... \n");
         EtherFrameProvider etherFrame(eth0);
@@ -506,13 +525,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     serialLog.Write("Interrupts Ready\n",1);
 
-    //Kernel is ready, code after here should be in a seperate process
+    //Kernel is ready, code after here should be in a separate process
     serialLog.Write("MaxOS is ready\n",7);
 
     printf("\n\n");
     arp.Resolve(GIP_BE);    //Test ARP
 
-    //CODE AFTER HERE (interrupts.Activate();) SHOULD BE A TASK
 
 
 

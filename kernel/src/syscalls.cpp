@@ -27,7 +27,7 @@ SyscallHandler::~SyscallHandler()
  */
 uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
 {
-    CPUState* cpu = (CPUState*)esp;
+    CPUState_Thread* cpu = (CPUState_Thread*)esp;
 
 
     switch(cpu->eax)

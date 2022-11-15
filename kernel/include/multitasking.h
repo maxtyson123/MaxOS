@@ -11,7 +11,7 @@
 namespace maxOS{
 
 
-    struct CPUState
+    struct CPUState_Task
     {
         //Pushed by kernel in interuptstubs
 
@@ -46,7 +46,7 @@ namespace maxOS{
         friend class TaskManager;   //Allow TaskManger class to acess private values of this class
     private:
         common::uint8_t stack[4096]; //Allocate 4kb for this tasks stack
-        CPUState* cpuState;
+        CPUState_Task* cpuState;
     public:
         Task(GlobalDescriptorTable *gdt, void entrypoint());
         ~Task();
@@ -64,7 +64,7 @@ namespace maxOS{
         TaskManager();
         ~TaskManager();
         bool AddTask(Task* task);
-        CPUState* Schedule(CPUState* cpuState);         //method that does the scheduling (round-robin [https://en.wikipedia.org/wiki/Round-robin_scheduling])s
+        CPUState_Task* Schedule(CPUState_Task* cpuState);         //method that does the scheduling (round-robin [https://en.wikipedia.org/wiki/Round-robin_scheduling])s
     };
 
 }

@@ -9,6 +9,7 @@ using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 
 
+
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
 
@@ -66,13 +67,13 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 }
 
 
-InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable,TaskManager* taskManager)
+InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable,ThreadManager* threadManager)
         : programmableInterruptControllerMasterCommandPort(0x20),
           programmableInterruptControllerMasterDataPort(0x21),
           programmableInterruptControllerSlaveCommandPort(0xA0),
           programmableInterruptControllerSlaveDataPort(0xA1)
 {
-    this->taskManager = taskManager;
+    this->threadManager = threadManager;
     this->hardwareInterruptOffset = hardwareInterruptOffset;
     uint32_t CodeSegment = globalDescriptorTable->CodeSegmentSelector();
 
@@ -228,7 +229,9 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
     //Timer interrupt for tasks
     if(interrupt == hardwareInterruptOffset)
     {
-        esp = (uint32_t)taskManager->Schedule((CPUState*)esp);
+        esp = (uint32_t)threadManager->Schedule((CPUState_Thread*)esp);
+
+
     }
 
     if(hardwareInterruptOffset <= interrupt && interrupt < hardwareInterruptOffset+16) //Only if it is hardware (keep in mind that around line: 90, the hardware interrupt was remapped at 0x20) the hardware ranges from 0x20 to 0x30

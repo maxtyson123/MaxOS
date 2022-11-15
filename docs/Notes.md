@@ -135,6 +135,16 @@ See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explain
 - - The interrupt handler will then return a pointer to the new task
 - - Kernel will then execute the new task instead of executing method "X"
 - To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execute
+### Threads
+See also: [Thread](https://wiki.osdev.org/Thread)
+- A thread is a lightweight process. It is a sequence of instructions within a program that can be executed independently of other code. Threads can be created and managed by a thread library.
+- Threads are often used in parallel computing, where they can be used to perform multiple tasks simultaneously. Threads are also used in multimedia, where they can be used to perform different tasks in real time. For example, a thread can be used to play a sound while another thread is used to display a graphic.
+- Threads are also used in operating systems, where they can be used to perform different tasks simultaneously. For example, a thread can be used to play a sound while another thread is used to display a graphic.
+- The main difference between a thread and a process is that threads share the same address space, while processes have separate address spaces. This means that threads can share data and code, while processes cannot. This also means that threads are faster than processes, because they do not need to be loaded into memory.
+- To implement threads in the OS, the kernel will have to implement a thread class. This class will have a method to create a thread, and a method to execute the thread. The thread class will also have a method to get the current thread.
+- The thread class will also have a method to get the current thread. This method will be used to get the current thread, and then the thread will be able to access its own stack.
+- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yeild method on the thread class.
+- Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. Threads are often used to implement concurrency within a process. Threads are also used to implement parallelism, where multiple processes can run simultaneously on a multi-core processor.
 ### Dynamic Memory Management / Heap
 See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list)
 - Before Dynamic Memory Management (DMM), the implementation was very static as there would just be the objects and are allocated on the stack.

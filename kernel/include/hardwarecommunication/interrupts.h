@@ -8,7 +8,7 @@
 #include <common/types.h>
 #include <hardwarecommunication/port.h>
 #include <gdt.h>
-#include <multitasking.h>
+#include <multithreading.h>
 
 
 namespace maxOS {
@@ -37,7 +37,7 @@ namespace maxOS {
 
             static InterruptManager *ActiveInterruptManager;
             InterruptHandler *handlers[256];
-            TaskManager* taskManager;
+            ThreadManager* threadManager;
 
             struct GateDescriptor {
                 maxOS::common::uint16_t handlerAddressLowBits;
@@ -153,7 +153,7 @@ namespace maxOS {
 
 
         public:
-            InterruptManager(maxOS::common::uint16_t hardwareInterruptOffset, maxOS::GlobalDescriptorTable *globalDescriptorTable, TaskManager* taskManager);
+            InterruptManager(maxOS::common::uint16_t hardwareInterruptOffset, maxOS::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManager);
 
             ~InterruptManager();
 

@@ -15,6 +15,8 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/hardwarecommunication/interrupts.o \
  		  obj/kernel/hardwarecommunication/serial.o \
  		  obj/kernel/syscalls.o \
+ 		  obj/kernel/multithreading.o \
+ 		  obj/kernel/system/process.o \
  		  obj/kernel/hardwarecommunication/pci.o \
  		  obj/kernel/multitasking.o \
  		  obj/kernel/drivers/keyboard.o \
