@@ -25,10 +25,10 @@ include_directories(include)
 set(
         SOURCE_FILES
         src/kernel.cpp
-        include/gdt.h src/gdt.cpp
-        include/multitasking.h src/multitasking.cpp
-        include/memorymanagement.h src/memorymanagement.cpp
-        include/syscalls.h src/syscalls.cpp
+        include/system/gdt.h src/system/gdt.cpp
+        include/system/multitasking.h src/system/multitasking.cpp
+        include/system/memorymanagement.h src/system/memorymanagement.cpp
+        include/system/syscalls.h src/system/syscalls.cpp
 
         ${harwardCom_h}/pci.h ${harwardCom_c}/pci.cpp
         ${harwardCom_h}/port.h ${harwardCom_c}/port.cpp
@@ -55,7 +55,7 @@ set(
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
 
-        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h)
+        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h include/system/multithreading.h src/system/multithreading.cpp include/system/process.h src/system/process.cpp)
 
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")

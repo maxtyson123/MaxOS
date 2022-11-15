@@ -2,11 +2,12 @@
 // Created by 98max on 27/10/2022.
 //
 
-#include <syscalls.h>
+#include <system/syscalls.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
+using namespace maxOS::system;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
@@ -23,17 +24,21 @@ SyscallHandler::~SyscallHandler()
 
 /**
  * @details Handles the interrupt for a system call
- * @param stackFrame The stack frame
+ * @param esp The stack frame
  */
 uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
 {
-    CPUState* cpu = (CPUState*)esp;
+    CPUState_Thread* cpu = (CPUState_Thread*)esp;
 
 
     switch(cpu->eax)
     {
-        case 4:
+        case 4:                                 //Write
             printf((char*)cpu->ebx);
+            break;
+
+        case 37:                                //Get PID
+
             break;
 
         default:

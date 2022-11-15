@@ -1,17 +1,18 @@
 //
 // Created by 98max on 10/18/2022.
 //
-#include <multitasking.h>
+#include <system/multitasking.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
+using namespace maxOS::system;
 
 
 ///__TASK__
 
 Task::Task(GlobalDescriptorTable *gdt, void entrypoint()) {
     //              start of stack + size of stack - size of entry
-    cpuState = (CPUState*)(stack + 4096 - sizeof(CPUState));
+    cpuState = (CPUState_Task*)(stack + 4096 - sizeof(CPUState_Task));
 
     //Set phony entries
 
@@ -79,14 +80,14 @@ bool TaskManager::AddTask(Task *task) {
  * @param cpuState The current CPU state
  * @return The new CPU state
  */
-CPUState *TaskManager::Schedule(CPUState *cpuState) {
+CPUState_Task *TaskManager::Schedule(CPUState_Task *cpuState) {
 
-    if(numTasks <= 0){      //If theres no tasks yet
+    if(numTasks <= 0){      //If there's no tasks yet
         return cpuState;    //Restore old cpu state
     }
 
     if(currentTask >= 0){
-        tasks[currentTask] -> cpuState = cpuState;   //Resetore the old value (put task back into list of tasks)
+        tasks[currentTask] -> cpuState = cpuState;   //Restore the old value (put task back into list of tasks)
     }
 
     if(++currentTask >= numTasks){ //If current task exceeds size of tasks

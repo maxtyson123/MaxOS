@@ -8,6 +8,7 @@ using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::drivers;
+using namespace maxOS::system;
 
 /**
  * @brief Construct a new EtherFrameHandler:: EtherFrameHandler object

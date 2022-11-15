@@ -7,16 +7,18 @@ LD_PARAMS = -melf_i386
 QEMU_PARAMS = -net user -net nic,model=pcnet,macaddr=08:00:27:EC:D0:29 -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial mon:stdio
 
 kernel =  obj/kernel/loader.o \
- 		  obj/kernel/gdt.o \
- 		  obj/kernel/memorymanagement.o \
+ 		  obj/kernel/system/gdt.o \
+ 		  obj/kernel/system/memorymanagement.o \
  		  obj/kernel/drivers/driver.o \
  		  obj/kernel/hardwarecommunication/port.o \
  		  obj/kernel/hardwarecommunication/interruptstubs.o \
  		  obj/kernel/hardwarecommunication/interrupts.o \
  		  obj/kernel/hardwarecommunication/serial.o \
- 		  obj/kernel/syscalls.o \
+ 		  obj/kernel/system/syscalls.o \
+ 		  obj/kernel/system/multithreading.o \
+ 		  obj/kernel/system/process.o \
  		  obj/kernel/hardwarecommunication/pci.o \
- 		  obj/kernel/multitasking.o \
+ 		  obj/kernel/system/multitasking.o \
  		  obj/kernel/drivers/keyboard.o \
  		  obj/kernel/drivers/mouse.o \
  		  obj/kernel/drivers/vga.o \

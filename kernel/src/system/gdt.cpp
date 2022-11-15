@@ -2,9 +2,10 @@
 // Created by 98max on 10/3/2022.
 //
 
-#include <gdt.h>
+#include <system/gdt.h>
 using namespace maxOS;
 using namespace maxOS::common;
+using namespace maxOS::system;
 
 /**
  * Global Descriptor Table

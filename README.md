@@ -39,13 +39,11 @@ Moved to  projects page
 
 ###  Extended
 - [ ] VESA Video Mode
-- [ ] DMA Hard Drive
-- [ ] Virtual Filesystem 
 - [ ] Usable Desktop
+- [ ] New Process Manager / Scheduler
 - [ ] Elf Loader
-- [ ] Process Manager / Scheduler
-- [ ] Threads
 - [ ] Shell
+- [ ] System Calls
 - [ ] Libc
 - [ ] GCC Cross compiler
 - [ ] POSIX

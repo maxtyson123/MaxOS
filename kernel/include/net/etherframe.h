@@ -7,7 +7,7 @@
 
 #include <common/types.h>
 #include <drivers/amd_am79c973.h>
-#include <memorymanagement.h>
+#include <system/memorymanagement.h>
 
 namespace maxOS{
 

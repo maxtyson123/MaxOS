@@ -2,10 +2,11 @@
 // Created by 98max on 10/20/2022.
 //
 
-#include <memorymanagement.h>
+#include <system/memorymanagement.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
+using namespace maxOS::system;
 
 MemoryManager* MemoryManager::activeMemoryManager = 0;
 
@@ -150,9 +151,9 @@ void MemoryManager::free(void *pointer) {
 
 void* operator new(unsigned size){
 
-    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+    if(maxOS::system::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
 
-        return maxOS::MemoryManager::activeMemoryManager -> malloc(size);
+        return maxOS::system::MemoryManager::activeMemoryManager -> malloc(size);
 
     }
 
@@ -161,9 +162,9 @@ void* operator new(unsigned size){
 }
 void* operator new[](unsigned size){
 
-    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+    if(maxOS::system::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
 
-        return maxOS::MemoryManager::activeMemoryManager -> malloc(size);
+        return maxOS::system::MemoryManager::activeMemoryManager -> malloc(size);
 
     }
 
@@ -186,9 +187,9 @@ void* operator new[](unsigned size, void* pointer){
 
 void operator delete(void* pointer){
 
-    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+    if(maxOS::system::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
 
-        return maxOS::MemoryManager::activeMemoryManager -> free(pointer);
+        return maxOS::system::MemoryManager::activeMemoryManager -> free(pointer);
 
     }
 
@@ -196,9 +197,9 @@ void operator delete(void* pointer){
 
 void operator delete[](void* pointer){
 
-    if(maxOS::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
+    if(maxOS::system::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
 
-        return maxOS::MemoryManager::activeMemoryManager -> free(pointer);
+        return maxOS::system::MemoryManager::activeMemoryManager -> free(pointer);
 
     }
 

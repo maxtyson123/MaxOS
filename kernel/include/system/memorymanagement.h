@@ -2,24 +2,25 @@
 // Created by 98max on 10/20/2022.
 //
 
-#ifndef MAXOS_MEMORYMANAGEMENT_H
-#define MAXOS_MEMORYMANAGEMENT_H
+#ifndef MAXOS_SYSTEM_MEMORYMANAGEMENT_H
+#define MAXOS_SYSTEM_MEMORYMANAGEMENT_H
 
 #include <common/types.h>
 
 namespace maxOS{
+    namespace system{
 
-    struct MemoryChunk{
+        struct MemoryChunk{
 
-        MemoryChunk* next;
-        MemoryChunk* prev;
+            MemoryChunk* next;
+            MemoryChunk* prev;
 
-        bool allocated;
-        common::size_t size;
+            bool allocated;
+            common::size_t size;
 
-    };
+        };
 
-    class MemoryManager{
+        class MemoryManager{
 
         protected:
             MemoryChunk* first;
@@ -33,7 +34,9 @@ namespace maxOS{
             void* malloc(common::size_t size);
             void free(void* pointer);
 
-    };
+        };
+    }
+
 
 }
 
@@ -48,4 +51,4 @@ void* operator new[](unsigned size, void* pointer);
 void operator delete(void* pointer);
 void operator delete[](void* pointer);
 
-#endif //MAXOS_MEMORYMANAGEMENT_H
+#endif //MAXOS_SYSTEM_MEMORYMANAGEMENT_H
