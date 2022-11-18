@@ -13,6 +13,7 @@ using namespace maxOS::system;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
+char printfInt( long num );                     //Forward declaration
 
 ///__Handler__
 
@@ -242,6 +243,11 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
         if(0x28 <= interrupt)                                              //Answer the master always, but don't answer the slave unless the slave called the interrupt
             programmableInterruptControllerSlaveCommandPort.Write(0x20);   //0x20 is the answer the PIC wants for slave
     }
+
+    CPUState_Thread cpuStateThread = *((CPUState_Thread*)esp);
+
+
+
     return esp;
 }
 

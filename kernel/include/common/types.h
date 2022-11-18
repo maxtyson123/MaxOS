@@ -15,6 +15,8 @@ namespace maxOS
         typedef unsigned long long int uint64_t;
         typedef const char*              string;
         typedef uint32_t                 size_t;    //On 32bit system the mem adresses are 32bit
+        typedef unsigned short           mode_t;
+        typedef int                      pid_t;
     }
 }
 

@@ -87,6 +87,20 @@ void printfHex(uint8_t key){
     console.put_hex(key);
 }
 
+char printfInt( long num )
+{
+    char text[20];
+    int i = 0;
+    int c = 0;
+    if( num == 0 ) printf("0");
+    while( num >= 100 ) num -= 100, ++c;
+    text[i++] = c + 48, c = 0;
+    while( num >= 10 ) num -= 10, ++c;
+    text[i++] = c + 48, text[i] = num + 48;
+    printf(text);
+}
+
+
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
     public:
 
@@ -189,12 +203,17 @@ class MouseToConsole: public MouseEventHandler{
 
 void sys_printf(char* str)
 {
-    asm("int $0x80" : : "a" (4), "b" (str));        //Call the interrupt 0x80 with the syscall number 4 and the string to print
+
+
+    //asm("int $0x80" : : "a" (4), "b" (str));        //Call the interrupt 0x80 with the syscall number 4 and the string to print
+    asm volatile( "int $0x80" : "=c"(str) : "a"(4), "b"(str));
+
 }
 
 void sys_getpid(uint32_t* funct)
 {
-    asm("int $0x80" : : "a" (20), "b" (funct));        //Call the interrupt 0x80 with the syscall number 20 and the process to kill
+    asm("int $0x80" : : "a" (20), "b" (funct));        //Call the interrupt 0x80 with the syscall number 20 and the process to get PID from
+
 
 }
 
@@ -327,10 +346,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //NOTE: Will rewrite boot text stuff later
 
     Version* maxOSVer;
-    maxOSVer->version = 0.22;
-    maxOSVer->version_c = "0.22.1";
-    maxOSVer->build = 53;
-    maxOSVer->build_c = "53";
+    maxOSVer->version = 0.23;
+    maxOSVer->version_c = "0.23";
+    maxOSVer->build = 55;
+    maxOSVer->build_c = "55";
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
