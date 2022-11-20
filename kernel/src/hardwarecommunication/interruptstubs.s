@@ -46,6 +46,19 @@ HandleException 0x10
 HandleException 0x11
 HandleException 0x12
 HandleException 0x13
+HandleException 0x14
+HandleException 0x15
+HandleException 0x16
+HandleException 0x17
+HandleException 0x18
+HandleException 0x19
+HandleException 0x1A
+HandleException 0x1B
+HandleException 0x1C
+HandleException 0x1D
+HandleException 0x1E
+HandleException 0x1F
+
 
 HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01

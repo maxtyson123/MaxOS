@@ -112,9 +112,22 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, system::Glo
     SetInterruptDescriptorTableEntry(0x11, CodeSegment, &HandleException0x11, 0, IDT_INTERRUPT_GATE);   //Alignment Check
     SetInterruptDescriptorTableEntry(0x12, CodeSegment, &HandleException0x12, 0, IDT_INTERRUPT_GATE);   //Machine Check
     SetInterruptDescriptorTableEntry(0x13, CodeSegment, &HandleException0x13, 0, IDT_INTERRUPT_GATE);   //SIMD Floating-Point Exception
+    SetInterruptDescriptorTableEntry(0x14, CodeSegment, &HandleException0x14, 0, IDT_INTERRUPT_GATE);   //Virtualization Exception
+    SetInterruptDescriptorTableEntry(0x15, CodeSegment, &HandleException0x15, 0, IDT_INTERRUPT_GATE);   //Control Protection Exception
+    SetInterruptDescriptorTableEntry(0x16, CodeSegment, &HandleException0x16, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x17, CodeSegment, &HandleException0x17, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x18, CodeSegment, &HandleException0x18, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x19, CodeSegment, &HandleException0x19, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x1A, CodeSegment, &HandleException0x1A, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x1B, CodeSegment, &HandleException0x1B, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x1C, CodeSegment, &HandleException0x1C, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x1D, CodeSegment, &HandleException0x1D, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x1E, CodeSegment, &HandleException0x1E, 0, IDT_INTERRUPT_GATE);   //reserved
+    SetInterruptDescriptorTableEntry(0x1F, CodeSegment, &HandleException0x1F, 0, IDT_INTERRUPT_GATE);   //reserved
+
 
     //Set up the hardware interrupts (offest by 0x20) //Ranges 0x20 - 0x30
-    SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x00, CodeSegment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);  //0x20 - Default PIC interval
+    SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x00, CodeSegment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);  //0x20 - Default PIC interval   / Timer
     SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x01, CodeSegment, &HandleInterruptRequest0x01, 0, IDT_INTERRUPT_GATE);  //0x21 - Keyboard
     SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x02, CodeSegment, &HandleInterruptRequest0x02, 0, IDT_INTERRUPT_GATE);  //0x22 - Cascade (used internally by the two PICs. never raised)
     SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x03, CodeSegment, &HandleInterruptRequest0x03, 0, IDT_INTERRUPT_GATE);  //0x23 - COM2, COM4
@@ -220,9 +233,148 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
         esp = handlers[interrupt]->HandleInterrupt(esp);        //Run the handler
     }else{
         if(interrupt != 0x20){   //If not the timer interrupt
-            printf("UNHANDLED INTERRUPT 0x");
-            printfHex(interrupt);
-            printf(" ");
+
+            switch (interrupt) {
+
+                case 0x00:  //Divide by zero
+                    printf("[ERROR] Divide by zero  (int 0x00)");
+                    break;
+
+                case 0x01: //Single step
+                    printf("[ERROR] Single step (int 0x01)");
+                    break;
+
+                case 0x02: //Non maskable interrupt
+                    printf("[ERROR] Non maskable interrupt (int 0x02)");
+                    break;
+
+                case 0x03: //Breakpoint
+                    printf("[ERROR] Breakpoint (int 0x03)");
+                    break;
+
+                case 0x04: //Overflow
+                    printf("[ERROR] Overflow (int 0x04)");
+                    break;
+
+                case 0x05: //Bounds check
+                    printf("[ERROR] Bounds check  (int 0x05)");
+                    break;
+
+                case 0x06: //Invalid opcode
+                    printf("[ERROR] Invalid opcode  (int 0x06)");
+                    break;
+
+                case 0x07: //Coprocessor not available
+                    printf("[ERROR] Coprocessor not available  (int 0x07)");
+                    break;
+
+                case 0x08: //Double fault
+                    printf("[ERROR] Double fault (int 0x08)");
+                    break;
+
+                case 0x09: //Coprocessor segment overrun
+                    printf("[ERROR] Coprocessor segment overrun (int 0x09)");
+                    break;
+
+                case 0x0A: //Invalid task state segment
+                    printf("[ERROR] Invalid TSS (int 0x0A)");
+                    break;
+
+                case 0x0B: //Segment not present
+                    printf("[ERROR] Segment not present (int 0x0B)");
+                    break;
+
+                case 0x0C: //Stack segment fault
+                    printf("[ERROR] Stack segment fault (int 0x0C)");
+                    break;
+
+                case 0x0D: //General protection fault
+                    printf("[ERROR] General protection fault (int 0x0D)");
+                    break;
+
+                case 0x0E: //Page fault
+                    printf("[ERROR] Page fault (int 0x0E)");
+                    break;
+
+                case 0x0F: //Reserved
+                    printf("[INFO] Reserved (int 0x0F)");
+                    break;
+
+                case 0x10: //x87 FPU floating point error
+                    printf("[ERROR] x87 FPU floating point error (int 0x10)");
+                    break;
+
+                case 0x11: //Alignment check
+                    printf("[INFO] Alignment check (int 0x11)");
+                    break;
+
+                case 0x12: //Machine check
+                    printf("[INFO] Machine check (int 0x12)");
+                    break;
+
+                case 0x13: //SIMD floating point exception
+                    printf("[ERROR] SIMD floating point exception (int 0x13)");
+                    break;
+
+                case 0x14: //Virtualization exception
+                    printf("[ERROR] Virtualization exception (int 0x14)");
+                    break;
+
+                case 0x15: //Reserved
+                    printf("[INFO] Reserved (int 0x15)");
+                    break;
+
+                case 0x16: //Reserved
+                    printf("[INFO] Reserved (int 0x16)");
+                    break;
+
+                case 0x17: //Reserved
+                    printf("[INFO] Reserved (int 0x17)");
+                    break;
+
+                case 0x18: //Reserved
+                    printf("[INFO] Reserved (int 0x18)");
+                    break;
+
+                case 0x19: //Reserved
+                    printf("[INFO] Reserved (int 0x19)");
+                    break;
+
+                case 0x1A: //Reserved
+                    printf("[INFO] Reserved (int 0x1A)");
+                    break;
+
+                case 0x1B: //Reserved
+                    printf("[INFO] Reserved (int 0x1B)");
+                    break;
+
+                case 0x1C: //Reserved
+                    printf("[INFO] Reserved (int 0x1C)");
+                    break;
+
+                case 0x1D: //Reserved
+                    printf("[INFO] Reserved (int 0x1D)");
+                    break;
+
+                case 0x1E: //Reserved
+                    printf("[INFO] Reserved (int 0x1E)");
+                    break;
+
+                case 0x1F: //Reserved
+                    printf("[INFO] Reserved (int 0x1F)");
+                    break;
+
+
+
+                default:
+                    printf("UNHANDLED INTERRUPT 0x");
+                    printfHex(interrupt);
+                    printf(" ");
+                    break;
+                
+            }
+          
+
         }
     }
 

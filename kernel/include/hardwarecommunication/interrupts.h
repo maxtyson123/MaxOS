@@ -141,6 +141,35 @@ namespace maxOS {
 
             static void HandleException0x13();
 
+            static void HandleException0x14();
+
+            static void HandleException0x15();
+
+            static void HandleException0x16();
+
+            static void HandleException0x17();
+
+            static void HandleException0x18();
+
+            static void HandleException0x19();
+
+            static void HandleException0x1A();
+
+            static void HandleException0x1B();
+
+            static void HandleException0x1C();
+
+            static void HandleException0x1D();
+
+            static void HandleException0x1E();
+
+            static void HandleException0x1F();
+
+
+
+
+
+
             static maxOS::common::uint32_t HandleInterrupt(maxOS::common::uint8_t interrupt, maxOS::common::uint32_t esp);
 
             maxOS::common::uint32_t DoHandleInterrupt(maxOS::common::uint8_t interrupt, maxOS::common::uint32_t esp);
