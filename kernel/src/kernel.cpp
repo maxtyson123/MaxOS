@@ -25,6 +25,7 @@
 //NET
 #include <net/etherframe.h>
 #include <net/arp.h>
+#include <net/ipv4.h>
 
 //SYSTEM
 #include <system/process.h>
@@ -306,7 +307,7 @@ uint32_t SUB_BE = ((uint32_t)subnet[3] << 24)           //Convert to big endian
 ///__KERNEL PROCESS VARS__
 
 serial k_sLog = 0;
-AddressResolutionProtocol k_arp = 0;
+InternetProtocolProvider *k_ipv4;
 
 /**
  * @details Main process for the kernel
@@ -321,8 +322,7 @@ void kernProc(){
     //Kernel is ready, code after here should be in a separate process
     k_sLog.Write("MaxOS is ready\n",7);
 
-    printf("\n\n");
-    k_arp.Resolve(GIP_BE);    //Test ARP
+    k_ipv4 -> Send(GIP_BE, 0x0008, (uint8_t*) "Yo, Netwrk", 10);
 
     while(1){
         #ifdef ENABLE_GRAPHICS
@@ -587,7 +587,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
 
         printf(" -  Setting Up IP, Gateway, Subnet... \n");
-        eth0 -> SetIPAddress(IP_BE);                         //Set IP address
+        eth0 -> SetIPAddress(IP_BE);
 
         printf(" -  Setting Up EtherFrame... \n");
         EtherFrameProvider etherFrame(eth0);
@@ -595,13 +595,16 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         printf(" -  Setting Up ARP... \n");
         AddressResolutionProtocol arp(&etherFrame);
 
+        printf(" -  Setting Up IPv4... \n");
+        InternetProtocolProvider ipv4(&etherFrame, &arp, GIP_BE, SUB_BE);
+
     printf("[x] Network Driver Setup \n");
 
     Process kernelMain(kernProc, &threadManager);
-    Process testProcess(taskA, &threadManager);
+    //Process testProcess(taskA, &threadManager);
 
     k_sLog = serialLog;
-    k_arp = arp;
+    k_ipv4 = &ipv4;
 
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");

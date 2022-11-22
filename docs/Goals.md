@@ -9,13 +9,14 @@
 - LibC
 - LibM
 - LibAudio
+- LibGUI
+- LibC
 - LibCpp
 - LibCompress
-- LibIMAP
+- LibNet
 - LibMarkdown
-- LibPDF
 - LibTimeZone
-- 
+- LibWeb
 
 # Apps
 - Webserver
@@ -41,6 +42,8 @@
 - About
 - Help
 - Task Manager
+- Text Editor
+- 
 
 
 # Milestones
@@ -52,9 +55,10 @@
 - Viable for use
 - users
 - 3D (OpenGl most likely)
-- Boot from real hardware 
+- Boot from real hardware
 
 # Other
 - Clipboard
 - Privelges (Rings, Read/Write)
 - Apps installer
+- App store

@@ -32,6 +32,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/common/printf.o \
  		  obj/kernel/net/etherframe.o \
  		  obj/kernel/net/arp.o \
+ 		  obj/kernel/net/ipv4.o \
  		  obj/kernel/kernel.o
 
 libraries =

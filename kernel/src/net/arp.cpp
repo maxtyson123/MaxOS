@@ -9,6 +9,8 @@ using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::drivers;
 
+
+
 net::AddressResolutionProtocol::AddressResolutionProtocol(net::EtherFrameProvider* backend)
 : EtherFrameHandler(backend, 0x0806)
 {
@@ -134,6 +136,7 @@ common::uint64_t AddressResolutionProtocol::GetMACFromCache(common::uint32_t IP_
  */
 common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
 
+
     //This function will return the MAC address of the IP address given as parameter
 
     //First, check if the IP address is in the cache
@@ -150,6 +153,7 @@ common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
     }
 
     //Return the MAC address
+
     return MAC;
 
 }

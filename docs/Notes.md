@@ -211,3 +211,33 @@ See also [Wikipedia - ARP](https://en.wikipedia.org/wiki/Address_Resolution_Prot
 - - Next 4 Bytes: IP address of the receiver
 - The reason the MAC address is repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay 
 - Therefore, the ARP packet contains the MAC address of the original device that sent the ARP request.
+### Internet Protocol v4
+See also [Wikipedia - IPv4](https://en.wikipedia.org/wiki/IPv4), [Wikipedia - IPv4 Header](https://en.wikipedia.org/wiki/IPv4_header)
+- The Internet Protocol (IP) is the principal communications protocol in the Internet protocol suite for relaying datagrams across network boundaries. Its routing function enables internetworking, and essentially establishes the Internet.
+- The IP data block is as follows: (known as the payload in the raw-data)
+- - First 1 Byte: Version (4)
+- - Next 1 Byte: Header Length (Number of 32 bit words in the header)
+- - Next 1 Byte: Type of Service (Used for Quality of Service)
+- - Next 2 Bytes: Total Length (Header + Data)
+- - Next 2 Bytes: Identification (Used for fragmentation, when a packet is too big for the ethernet frame and has to be split up)
+- - Next 2 Bytes: Flags (Used for fragmentation)
+- - Next 1 Byte: Time to live (How many hops the packet can make)
+- - Next 1 Byte: Protocol (What protocol is the data)
+- - Next 2 Bytes: Header Checksum (CRC)
+- - Next 4 Bytes: Source IP Address (Who sent the data)
+- - Next 4 Bytes: Destination IP Address (Who is the data for)
+- - Next 4 Bytes: Options (Optional, if header length is greater than 5)
+- The time to live is used to prevent infinite loops. If a packet is sent to a device that is not on the network, the packet will be sent back to the sender. If the time to live is 0, the packet will be discarded.
+- It is also used in traceroute to see how many hops it takes to get to the destination. Starts by sending a packet with a time to live of 1, if it gets to the destination it will be discarded. If it gets to a device that is not on the network, the packet will be sent back to the sender. The sender will then send a packet with a time to live of 2 and so on.
+- The checksum is set by the sender and is used to check if the data has been corrupted in transit.
+- The protocol is used to determine what protocol the data is for. e.g. 0x06 is TCP, 0x11 is UDP
+- The options are used to add extra information to the header. e.g. the maximum segment size (MSS) is used to tell the receiver how big the data can be. However, this is not used in most protocols today.
+- The header length is used to determine how many 32 bit words are in the header. This is used to determine where the data starts.
+- The total length is used to determine how many bytes are in the packet. This is used to determine where the data ends.
+- The identification is used to determine if the packet is part of a fragmented packet. If the identification is the same as a previous packet, the data is added to the previous packet.
+- The flags are used to determine if the packet is part of a fragmented packet. If the flags are 0x02, the packet is the last packet in the fragmented packet.
+- The type of service is used to determine the quality of service. e.g. 0x10 is low delay, 0x08 is high throughput, 0x04 is high reliability.
+- The version is used to determine the version of the protocol. e.g. 4 is IPv4 and 6 is IPv6
+- The source IP address is used to determine who sent the packet. This is used to determine if the packet is for this device. If it is not, the packet is discarded.
+- The destination IP address is used to determine who the packet is for. This is used to determine if the packet is for this device. If it is not, the packet is discarded. If it is, the packet is passed to the next protocol handler.
+- The data is the data that is being sent. This is passed to the next protocol handler.

@@ -84,6 +84,10 @@ EtherFrameProvider::~EtherFrameProvider() {
  */
 bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint32_t size) {
 
+    //Check if the size is big enough to contain an ethernet frame
+    if(size < sizeof(EtherFrameHeader))
+        return false;
+
     //Convert to struct for easier use
     EtherFrameHeader* frame = (EtherFrameHeader*)buffer;
     bool sendBack = false;
@@ -144,6 +148,9 @@ void EtherFrameProvider::Send(common::uint64_t dstMAC_BE, common::uint16_t ether
 
     //Send via backend
     backend -> Send(buffer2, size + sizeof(EtherFrameHeader));
+
+    //Free the buffer
+    MemoryManager::activeMemoryManager -> free(buffer2);
 }
 
 /**
