@@ -2,6 +2,7 @@
 //Common
 #include <common/types.h>
 #include <common/printf.h>
+#include <common/timer.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -75,8 +76,11 @@ void printf_gui(char* str, Text lines[15]){
  * @details Print to the Video Memory Debug Console
  * @param  str String to print
  */
+
+bool testTick = false;
 void printf(char* str, bool clearLine = false)
 {
+
     console.put_string(str,clearLine);
 
 }
@@ -131,8 +135,10 @@ class PrintfKeyboardEventHandler : public KeyboardEventHandler{
 
                 console.backspace();
 
-           }else if(strcmp(c,"DEL") == 0){
+           }else if(strcmp(c,"t") == 0){
 
+               printf("T");
+                    testTick = true;
 
 
            }else{
@@ -244,6 +250,14 @@ void taskA()
 
         sys_printf("A");
     }
+
+    Timer::activeTimer ->Wait(100);
+
+    for (int i = 0; i < 100; ++i) {
+
+        sys_printf("B");
+    }
+
     proc_exit("0");
 
 
@@ -370,6 +384,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     printf("\n[x] Kernel Booted \n");
 
+    printf("[ ] Setting Programmable Interrupt Timer ... \n");
+    Timer t;
+    PIT pit(10);
+    printf("[x] PIT Setup \n");
+
+
     printf("[ ] Setting Up Global Descriptor Table... \n");
     GlobalDescriptorTable gdt;                                                              //Setup GDT
     printf("[x] GDT Setup \n");
@@ -468,8 +488,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         #else
             PrintfKeyboardEventHandler kbhandler;
             KeyboardDriver keyboard(&interrupts, &kbhandler);
+
         #endif
-            driverManager.AddDriver(&keyboard);
+        driverManager.AddDriver(&keyboard);
         printf("    -Keyboard setup\n");
 
 
@@ -601,7 +622,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("[x] Network Driver Setup \n");
 
     Process kernelMain(kernProc, &threadManager);
-    //Process testProcess(taskA, &threadManager);
+    Process testProcess(taskA, &threadManager);
 
     k_sLog = serialLog;
     k_ipv4 = &ipv4;

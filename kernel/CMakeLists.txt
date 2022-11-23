@@ -55,7 +55,7 @@ set(
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
 
-        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h include/system/multithreading.h src/system/multithreading.cpp include/system/process.h src/system/process.cpp src/net/ipv4.cpp include/net/ipv4.h)
+        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h include/system/multithreading.h src/system/multithreading.cpp include/system/process.h src/system/process.cpp src/net/ipv4.cpp include/net/ipv4.h src/common/timer.cpp include/common/timer.h)
 
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")

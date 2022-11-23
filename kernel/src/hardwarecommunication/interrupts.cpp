@@ -383,8 +383,9 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
     //Timer interrupt for tasks
     if(interrupt == hardwareInterruptOffset)
     {
+        Timer::activeTimer -> UpdateTicks();
         esp = (uint32_t)threadManager->Schedule((CPUState_Thread*)esp);
-
+        //printf("task switched", true);
 
     }
 

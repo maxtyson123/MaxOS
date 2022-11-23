@@ -30,10 +30,25 @@ InternetProtocolHandler::~InternetProtocolHandler() {
 
 }
 
+/**
+ * @details Called when an IP packet is received. (Deafult, does nothing, overide for use)
+ * @param srcIP_BE The source IP address.
+ * @param dstIP_BE The destination IP address.
+ * @param internetprotocolPayload The payload of the IP packet.
+ * @param size The size of the IP packet.
+ * @return True if the packet was handled, false otherwise.
+ */
 bool InternetProtocolHandler::OnInternetProtocolReceived(uint32_t srcIP_BE, uint32_t dstIP_BE, uint8_t *internetprotocolPayload, uint32_t size) {
     return false;
 }
 
+/**
+ * @details Sends an IP packet.
+ * @param dstIP_BE The destination IP address.
+ * @param internetprotocolPayload The payload of the IP packet.
+ * @param size The size of the IP packet.
+ * @return True if the packet was sent, false otherwise.
+ */
 void InternetProtocolHandler::Send(uint32_t dstIP_BE, uint8_t *internetProtocolPayload, uint32_t size) {
 
     //Pass to backend
@@ -63,6 +78,12 @@ InternetProtocolProvider::~InternetProtocolProvider() {
 
 }
 
+/**
+ * @details Called when an IP packet is received.
+ * @param etherframePayload The payload of the IP packet.
+ * @param size The size of the IP packet.
+ * @return True if the packet is to be sent back, false otherwise.
+ */
 bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, uint32_t size) {
 
     //Check if the size is big enough to contain an ethernet frame
@@ -109,6 +130,13 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
     return sendBack;
 }
 
+/**
+ * @details Sends an IP packet.
+ * @param dstIP_BE The destination IP address.
+ * @param protocol The protocol of the IP packet.
+ * @param data The payload of the IP packet.
+ * @param size The size of the IP packet.
+ */
 void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t *data, uint32_t size) {
 
     uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(sizeof(InternetProtocolVersion4Message) + size);                           //Allocate memory for the message
@@ -153,6 +181,12 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     printf("Sent IP packet");
 }
 
+/**
+ * @details Creates a checksum for the given data.
+ * @param data The data to create a checksum for.
+ * @param lengthInBytes The length of the data in bytes.
+ * @return The checksum.
+ */
 uint16_t InternetProtocolProvider::Checksum(uint16_t *data, uint32_t lengthInBytes) {
 
     uint32_t temp = 0;                                                                             //Init sum

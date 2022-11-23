@@ -147,6 +147,8 @@ common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
         RequestMACAddress(IP_BE);
     }
 
+   // Timer::activeTimer ->Wait(300);                        //Wait for .3 seconds
+
     //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop)
     while (MAC == 0xFFFFFFFFFFFF) {                         //Wait until the MAC address is found
         MAC = GetMACFromCache(IP_BE);                       //Check if the MAC address is in the cache
