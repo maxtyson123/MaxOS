@@ -119,20 +119,6 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                     continue;
                 }
 
-                for (int barNum = 0; barNum < 6; ++barNum) {
-                    BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
-                    if(bar.adress && (bar.type == InputOutput)){ //Only if the address is really set
-                        deviceDescriptor.portBase = (uint32_t)bar.adress;  //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
-                    }
-                }
-
-                //Only need one driver for the device, not every BAR
-                Driver* driver = GetDriver(deviceDescriptor, interruptManager);
-                if(driver != 0){    //If there is a driver
-                    driverManager->AddDriver(driver);
-                }
-
-
                 //Display INFO
                 printf("    PCI BUS ");
                 printfHex(bus & 0xFF);
@@ -150,6 +136,21 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                 printf(", DEVICE ");
                 printfHex((deviceDescriptor.device_ID & 0xFF00) >> 8);
                 printfHex(deviceDescriptor.device_ID & 0xFF);
+
+                for (int barNum = 0; barNum < 6; ++barNum) {
+                    BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
+                    if(bar.adress && (bar.type == InputOutput)){ //Only if the address is really set
+                        deviceDescriptor.portBase = (uint32_t)bar.adress;  //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
+                    }
+                }
+
+                //Only need one driver for the device, not every BAR
+                Driver* driver = GetDriver(deviceDescriptor, interruptManager);
+                if(driver != 0){    //If there is a driver
+                    driverManager->AddDriver(driver);
+                }
+
+
 
                 printf("\n");
             }
@@ -198,6 +199,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
         case 0x1022:                            //AMD
             switch (dev.device_ID) {
                 case 0x2000:                    //AMD - am79c971 (Ethernet Controller)
+                    printf("    AMD am79c971", true);
                     driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
                     if(driver != 0)                                                                                     //Check if space in memory
                        new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance

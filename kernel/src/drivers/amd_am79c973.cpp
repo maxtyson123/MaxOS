@@ -116,7 +116,7 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
         sendBufferDescr[i].avail = 0;                                                            // IF it is in use
 
         // Receive
-        recvBufferDescr[i].address = (((uint32_t)&recvBufferDescr[i]) + 15 ) & ~(uint32_t)0xF;   // Same as above
+        recvBufferDescr[i].address = (((uint32_t)&recvBuffers[i]) + 15 ) & ~(uint32_t)0xF;   // Same as above
         recvBufferDescr[i].flags = 0xF7FF                                                        // Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)
                                    | 0x80000000;                                                 // Set it to receive buffer
         recvBufferDescr[i].flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive

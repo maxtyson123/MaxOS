@@ -172,13 +172,14 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     if((dstIP_BE & subnetMask) != (message->srcIP & subnetMask))                                                                                             //Check if the destination is on the same subnet
         route = gatewayIP;                                                                                                                                   //If not, set route to gateway IP
 
+    printf("\nRequesting ARP\n");                                                                                                                            //Print debug info
     uint32_t MAC = arp ->Resolve(route);
 
     //Send message
-    printf("Sending IP packet");
+    printf("\nSending IP packet\n");
     backend -> Send(MAC, this -> etherType_BE, buffer, size + sizeof(InternetProtocolVersion4Message));      //Send message
     MemoryManager::activeMemoryManager->free(buffer);                                                                                                 //Free memory
-    printf("Sent IP packet");
+    printf("\nSent IP packet\n");
 }
 
 /**

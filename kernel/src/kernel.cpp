@@ -336,7 +336,7 @@ void kernProc(){
     //Kernel is ready, code after here should be in a separate process
     k_sLog.Write("MaxOS is ready\n",7);
 
-    k_ipv4 -> Send(GIP_BE, 0x0008, (uint8_t*) "Yo, Netwrk", 10);
+    k_ipv4 -> Send(GIP_BE, 0x0008, (uint8_t*) "Yo Netwrk", 9);
 
     while(1){
         #ifdef ENABLE_GRAPHICS
@@ -622,10 +622,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("[x] Network Driver Setup \n");
 
     Process kernelMain(kernProc, &threadManager);
-    Process testProcess(taskA, &threadManager);
+    //Process testProcess(taskA, &threadManager);
 
     k_sLog = serialLog;
     k_ipv4 = &ipv4;
+
+
 
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");
