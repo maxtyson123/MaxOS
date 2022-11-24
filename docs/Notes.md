@@ -2,7 +2,7 @@ NOTE: method is the same is function (or at least in my wording here)
 
 # Hardware Communication
 Here are some notes on how the communication with hardware works, this is used for the keyboard and mouse communication and setting up other devices, e.g. GPU
-### Data Send / Receive
+### Data Send and Receive
 This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
 - By default, the PIC is set ignore that, so to receive the key signal tell PIC not to ignore it
@@ -176,7 +176,7 @@ See also [List of syscalls](https://faculty.nps.edu/cseagle/assembly/sys_call.ht
 - So instead system calls are used. Basically the program will call a software interrupt (0x80) and then the kernel will read infomation from the AX and BX registers (AX and BX were set before the interrupt, AX is the system call number and BX is parameters) 
 - There for the implementation for this just involves setting up an interrupt handler that handles the interrupt 0x80, reads the AX  and BX registers and then runs the relative function
 # Networking
-### Driver
+### Driver am79c971
 See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) [AMD_AM79C973](https://www.amd.com/system/files/TechDocs/20550.pdf)
 - To get networking capability in the OS a driver for the virtualized network chip (am79c971) has to be written
 - This device is a complicated one to write a driver for. However, it will follow the same implementation as the other drivers: a class derived from driver, a class derived from interrupt handler (interrupt number and port number can be gotten from PCI)
@@ -251,3 +251,67 @@ See also [Wikipedia - ICMP](https://en.wikipedia.org/wiki/Internet_Control_Messa
 - - Next 2 Bytes: Checksum (CRC)
 - - Next 4 Bytes: Data (Optional)
 - Message Types: See [Wikipedia - ICMP Message Types](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+### User Datagram Protocol
+See also [Wikipedia - UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
+- The User Datagram Protocol (UDP) is one of the core members of the Internet protocol suite. It is a connectionless protocol, meaning that UDP datagrams are not guaranteed to arrive in the same order in which they were sent, and may be duplicated or lost entirely.
+- UDP is used for time-sensitive applications, such as voice over IP (VoIP), streaming media, and real-time multiplayer games. 
+- The reason it is used for time sensitive applications is because it does not require the host to acknowledge receipt of the data. This means that if the data is lost it will not be resent and the application will not know. This is fine for time sensitive applications as the data is not needed to be received. In a real time application, if the data is lost then maybe a frame will be skipped but the application will not crash and the user generally will not notice.
+- It is also used for DNS lookups, and for low-latency and loss-tolerating applications, such as real-time audio and video streaming.
+- UDP is a simple protocol, with no handshaking or acknowledgment of data packets. It is used in conjunction with the Internet Protocol (IP) and the Internet Control Message Protocol (ICMP) to provide a best-effort datagram service.
+- The UDP data block is as follows: (known as the payload in the raw-data)
+- - First 2 Bytes: Source Port (Port that the data is coming from)
+- - Next 2 Bytes: Destination Port (Port that the data is going to)
+- - Next 2 Bytes: Length (Length of the UDP data block) 
+- - Next 2 Bytes: Checksum (CRC)
+- - Next 0 - 65507 Bytes: Data (Payload)
+- The reason the ports are repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay
+- Therefore, the UDP packet contains the port of the original device that sent the UDP request.
+- The UDP is just a multiplexer and demultiplexer, similar to CPU in data send / recive section. This means that it does not care what the data is, it just passes it on.
+### Transmission Control Protocol
+See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
+TBC
+### Hyper Text Transfer Protocol
+See also [Wikipedia - HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
+TBC
+### Open Systems Interconnection Model
+See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
+- The Open Systems Interconnection (OSI) model is a conceptual model that characterises and standardises the communication functions of a telecommunication or computing system without regard to its underlying internal structure and technology.
+- OSI is a reference model for how information is passed between applications and computer systems. 
+- It is structured in a layered approach, with each layer performing a specific function.
+- The layers are as follows:
+- - Application Layer (Handled in the application)
+- - Presentation Layer (Handled in the application)
+- - Session Layer (Handled in the application)
+- - Transport Layer (TCP, UDP)
+- - Network Layer (Ipv4)
+- - Data Link Layer (Etherframe)
+- - Physical Layer  (am79c971)
+- It is important to network because it allows for the different layers to be implemented in different ways. For example, the physical layer can be implemented using a wireless connection or a wired connection. The network layer can be implemented using a router or a switch. The transport layer can be implemented using TCP or UDP. The application layer can be implemented using HTTP or FTP.
+- The operating system will implement the layers above the network layer (Application, Presentation, Session, Transport) and the network device will implement the layers below the network layer (Data Link, Physical)
+- The reason for this is because the network device is the only thing that can communicate with the physical layer and the network layer. The operating system can only communicate with the application layer and the transport layer.
+
+# Index
+Here is an index of files in the os, and what notes they  relate to. This is useful for finding the implmentation of code for a specific part of the notes.
+### Kernel
+- [common / printf.cpp : none](#none)
+- [drivers / am79c971.cpp : driver-am79c971](#driver-am79c971)
+- [drivers / ata.cpp : hard-drives](#hard-drives)
+- [drivers / driver.cpp : hardware-communication](#hardware-communication)
+- [drivers / keyboard.cpp : none](#none)
+- [drivers / mouse.cpp : none](#none)
+- [drivers / vga.cpp : graphics-mode-vga](#graphics-mode-vga)
+- [gui / widgets / text.cpp : GUI - Framework](#gui---framework)
+- [gui / desktop.cpp : GUI - Framework](#gui---framework)
+- [gui / render.cpp : GUI - Framework](#gui---framework)
+- [gui / widget.cpp : GUI - Framework](#gui---framework)
+- [gui / window.cpp : GUI - Framework](#gui---framework)
+- [ hardwarecommunication / interrupts.cpp : interrupts](#interrupts)
+- [ hardwarecommunication / interruptstubs.s : interrupts](#interrupts)
+- [ hardwarecommunication / pci.cpp : PCI](#peripheral-component-interconnect-pci)
+- [ hardwarecommunication / port.cpp : data send/receive](#data-send-and-receive)
+- [ hardwarecommunication / serial.cpp : serial ports](https://wiki.osdev.org/Serial_Ports)
+- [ net / arp.cpp : ARP](#address-resolution-protocol)
+- [ net / etherframe.cpp : Handler](#handler)
+- [ net / icmp.cpp : ICMP](#internet-control-message-protocol)
+- [ net / ipv4.cpp : IPv4](#internet-protocol-v4)
+- [kernel.c : none](#none)
