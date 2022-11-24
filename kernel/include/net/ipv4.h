@@ -13,25 +13,24 @@ namespace maxOS{
 
     namespace net{
 
-        struct InternetProtocolVersion4Message{
+        struct InternetProtocolV4Message
+        {
+            common::uint8_t headerLength : 4;
+            common::uint8_t version : 4;
+            common::uint8_t tos;
+            common::uint16_t totalLength;
 
-            common::uint8_t headerLength : 4;           // Set to 4 bits, header is here first becuase of big endian encoded
-            common::uint8_t version : 4;                // Set to 4 bits
-            common::uint8_t tos;                        // Type of service
-            common::uint16_t totalLength;               // Total length of the message
+            common::uint16_t ident;
+            common::uint16_t flagsAndOffset;
 
-            common::uint16_t identification;            // Identification of the message
-            common::uint8_t flagsAndOffset;             // Flags and offset
+            common::uint8_t timeToLive;
+            common::uint8_t protocol;
+            common::uint16_t checksum;
 
-            common::uint8_t timeToLive;                 // Time to live
-            common::uint8_t protocol;                   // Protocol
-            common::uint16_t checksum;                  // Header checksum
+            common::uint32_t srcIP;
+            common::uint32_t dstIP;
+        } __attribute__((packed));
 
-            common::uint32_t srcIP;                     // Source IP
-            common::uint32_t dstIP;                     // Destination IP
-
-
-        }__attribute__((packed));                       // Packed to avoid padding
 
         class InternetProtocolProvider;
 

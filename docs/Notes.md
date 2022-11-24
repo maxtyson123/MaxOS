@@ -241,3 +241,13 @@ See also [Wikipedia - IPv4](https://en.wikipedia.org/wiki/IPv4), [Wikipedia - IP
 - The source IP address is used to determine who sent the packet. This is used to determine if the packet is for this device. If it is not, the packet is discarded.
 - The destination IP address is used to determine who the packet is for. This is used to determine if the packet is for this device. If it is not, the packet is discarded. If it is, the packet is passed to the next protocol handler.
 - The data is the data that is being sent. This is passed to the next protocol handler.
+### Internet Control Message Protocol
+See also [Wikipedia - ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol)
+- The Internet Control Message Protocol (ICMP) is a protocol used by network devices, including routers, to send error messages and operational information indicating, for example, that a requested service is not available or that a host or router could not be reached.
+- ICMP is an integral part of the Internet protocol suite. It is used by network devices, including routers, to send error messages and operational information indicating, for example, that a requested service is not available or that a host or router could not be reached. A primary use is in error reporting, where a host sends an ICMP message to a router when it is unable to reach another host. The router can then send error messages back to the source host, indicating the nature of the problem.
+- The ICMP data block is as follows: (known as the payload in the raw-data)
+- - First 1 Byte: Type (What type of message is being sent)
+- - Next 1 Byte: Code (What code is being sent)
+- - Next 2 Bytes: Checksum (CRC)
+- - Next 4 Bytes: Data (Optional)
+- Message Types: See [Wikipedia - ICMP Message Types](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)

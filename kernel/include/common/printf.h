@@ -24,6 +24,7 @@ namespace maxOS{
                 void put_string_gui(char* str, gui::Text lines[15]);
                 void put_string(char* str, bool clearLine = false);
                 void put_hex(uint8_t key);
+                char* int_to_string(int i);
 
                 void moveCursor(uint8_t C_x, uint8_t C_y);
                 void backspace();

@@ -27,6 +27,7 @@
 #include <net/etherframe.h>
 #include <net/arp.h>
 #include <net/ipv4.h>
+#include <net/icmp.h>
 
 //SYSTEM
 #include <system/process.h>
@@ -92,18 +93,14 @@ void printfHex(uint8_t key){
     console.put_hex(key);
 }
 
-char printfInt( long num )
+
+
+char printfInt( int i)
 {
-    char text[20];
-    int i = 0;
-    int c = 0;
-    if( num == 0 ) printf("0");
-    while( num >= 100 ) num -= 100, ++c;
-    text[i++] = c + 48, c = 0;
-    while( num >= 10 ) num -= 10, ++c;
-    text[i++] = c + 48, text[i] = num + 48;
-    printf(text);
+    printf(console.int_to_string(i));
+
 }
+
 
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
@@ -290,9 +287,7 @@ extern "C" void callConstructors()
 class Version{
     public:
        int version;            //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
-       char* version_c;        //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
        int build;              //Commit Number
-       char* build_c;          //Commit Number
        char* buildAuthor;      //Author of the commit (Mostlikly me, but change for pull requests and such)
         Version(){};
         ~Version(){};
@@ -336,7 +331,7 @@ void kernProc(){
     //Kernel is ready, code after here should be in a separate process
     k_sLog.Write("MaxOS is ready\n",7);
 
-    k_ipv4 -> Send(GIP_BE, 0x0008, (uint8_t*) "Yo Netwrk", 9);
+
 
     while(1){
         #ifdef ENABLE_GRAPHICS
@@ -356,20 +351,17 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 {
 
 
-
     //NOTE: Will rewrite boot text stuff later
 
     Version* maxOSVer;
-    maxOSVer->version = 0.23;
-    maxOSVer->version_c = "0.23";
-    maxOSVer->build = 55;
-    maxOSVer->build_c = "55";
+    maxOSVer->version = 24;
+    maxOSVer->build = 61;
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
     console.lim_x = 80;
     console.x = 30; console.y = 1;
-    printf("* Max OS Kernel -v"); printf(maxOSVer->version_c);    printf(" * -b"); printf(maxOSVer->build_c);  printf(" * -a"); printf(maxOSVer->buildAuthor);
+    printf("* Max OS Kernel -v0."); printfInt(maxOSVer->version);    printf(" * -b"); printfInt(maxOSVer->build);  printf(" * -a"); printf(maxOSVer->buildAuthor);
 
     //Reset Console positions
     console.x = 1; console.y = 3;
@@ -619,9 +611,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         printf(" -  Setting Up IPv4... \n");
         InternetProtocolProvider ipv4(&etherFrame, &arp, GIP_BE, SUB_BE);
 
+        printf(" -  Setting Up ICMP... \n");
+        InternetControlMessageProtocol icmp(&ipv4);
+
     printf("[x] Network Driver Setup \n");
 
-    Process kernelMain(kernProc, &threadManager);
+    //Process kernelMain(kernProc, &threadManager);
     //Process testProcess(taskA, &threadManager);
 
     k_sLog = serialLog;
@@ -634,7 +629,11 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     interrupts.Activate();
     printf("[x] IDT Activated \n", true);
 
+    printf("++Broadcast MAC ++\n");
+    arp.BroadcastMACAddress(GIP_BE);
 
+    printf("\n ++ Test ICMP ++\n");
+    icmp.RequestEchoReply(GIP_BE);
 
 }
 

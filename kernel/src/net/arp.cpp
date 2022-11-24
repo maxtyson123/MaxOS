@@ -159,3 +159,22 @@ common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
     return MAC;
 
 }
+
+void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
+{
+    AddressResolutionProtocolMessage arp;                //Create a new ARP message
+    arp.hardwareType = 0x0100;                           // ethernet
+    arp.protocol = 0x0008;                               // IPv4
+    arp.hardwareAddressSize = 6;                         // MAC address size
+    arp.protocolAddressSize = 4;                         // IPv4 address size
+    arp.command = 0x0200;                                // Reply
+
+    arp.srcMAC = backend->GetMACAddress();               // Set the source MAC address to the backend's MAC address
+    arp.srcIP = backend->GetIPAddress();                 // Set the source IP address to the backend's IP address
+    arp.dstMAC = Resolve(IP_BE);                         // Set the destination MAC address to the IP address
+    //arp.dstMAC = 0xFFFFFFFFFFFF;                         // Set the destination MAC address to broadcast
+    arp.dstIP = IP_BE;                                   // Set the destination IP address to the IP address
+
+    this->Send(arp.dstMAC, (uint8_t*)&arp, sizeof(AddressResolutionProtocolMessage));
+
+}

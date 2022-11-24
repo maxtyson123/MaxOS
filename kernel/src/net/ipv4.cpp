@@ -9,6 +9,7 @@ using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::system;
 
+
 void printf(char*, bool=false);
 ///__Handler__///
 InternetProtocolHandler::InternetProtocolHandler(InternetProtocolProvider *backend, uint8_t protocol) {
@@ -60,8 +61,9 @@ void InternetProtocolHandler::Send(uint32_t dstIP_BE, uint8_t *internetProtocolP
 
 ///__Provider__///
 
+
 InternetProtocolProvider::InternetProtocolProvider(EtherFrameProvider *backend, AddressResolutionProtocol *arp, uint32_t gatewayIP, uint32_t subnetMask)
-: EtherFrameHandler(backend, 0x0800)
+        : EtherFrameHandler(backend, 0x0800)
 {
     //Store vars
     this -> arp = arp;
@@ -87,11 +89,11 @@ InternetProtocolProvider::~InternetProtocolProvider() {
 bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, uint32_t size) {
 
     //Check if the size is big enough to contain an ethernet frame
-    if(size < sizeof(InternetProtocolVersion4Message))
+    if(size < sizeof(InternetProtocolV4Message))
         return false;
 
     //Convert to struct for easier use
-    InternetProtocolVersion4Message* ipMessage = (InternetProtocolVersion4Message*)etherframePayload;
+    InternetProtocolV4Message* ipMessage = (InternetProtocolV4Message*)etherframePayload;
     bool sendBack = false;
 
     //Only handle if it is for this device
@@ -108,7 +110,7 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
                                                                                      ipMessage -> dstIP,                                                     //Destination IP
                                                                                      etherframePayload + 4 * ipMessage -> headerLength,           //Payload is behind the header
                                                                                      length - 4*ipMessage -> headerLength                                       //Size of the payload
-                                                                                     );
+            );
 
         }
 
@@ -130,6 +132,7 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
     return sendBack;
 }
 
+
 /**
  * @details Sends an IP packet.
  * @param dstIP_BE The destination IP address.
@@ -139,18 +142,18 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
  */
 void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t *data, uint32_t size) {
 
-    uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(sizeof(InternetProtocolVersion4Message) + size);                           //Allocate memory for the message
-    InternetProtocolVersion4Message *message = (InternetProtocolVersion4Message*)buffer;                                                                     //Convert to struct for easier use
+    uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(sizeof(InternetProtocolV4Message) + size);                           //Allocate memory for the message
+    InternetProtocolV4Message *message = (InternetProtocolV4Message*)buffer;                                                                     //Convert to struct for easier use
 
     message -> version = 4;                                                                                                                                  //Set version
-    message -> headerLength = sizeof(InternetProtocolVersion4Message)/4;                                                                                     //Set header length
+    message -> headerLength = sizeof(InternetProtocolV4Message)/4;                                                                                     //Set header length
     message -> tos = 0;                                                                                                                                      //Set type of service (not priv)
 
-    message -> totalLength = size + sizeof(InternetProtocolVersion4Message);                                                                                 //Set total length
+    message -> totalLength = size + sizeof(InternetProtocolV4Message);                                                                                 //Set total length
     message -> totalLength = ((message -> totalLength & 0xFF00) >> 8)                                                                                        // Convert to big endian (Swap bytes)
-                           | ((message -> totalLength & 0x00FF) << 8);                                                                                       // Convert to big endian (Swap bytes)
+                             | ((message -> totalLength & 0x00FF) << 8);                                                                                       // Convert to big endian (Swap bytes)
 
-    message -> identification = 0x100;                                                                                                                       //Set identification
+    message -> ident = 0x100;                                                                                                                       //Set identification
     message -> flagsAndOffset = 0x0040;                                                                                                                      //Set flags/offset, 0x40 because we are not fragmenting
 
     message -> timeToLive = 0x40;                                                                                                                            //Set time to live
@@ -160,10 +163,10 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     message -> srcIP = backend -> GetIPAddress();                                                                                                            //Set source IP
 
     message -> checksum = 0;                                                                                                                                 //Set checksum to 0, init with 0 as checksum funct will also add this value
-    message -> checksum = Checksum((uint16_t*)message, sizeof(InternetProtocolVersion4Message));                                             //Calculate checksum
+    message -> checksum = Checksum((uint16_t*)message, sizeof(InternetProtocolV4Message));                                             //Calculate checksum
 
     //Copy data
-    uint8_t* databuffer = buffer + sizeof(InternetProtocolVersion4Message);                                                                                  //Get pointer to the data
+    uint8_t* databuffer = buffer + sizeof(InternetProtocolV4Message);                                                                                  //Get pointer to the data
     for(int i = 0; i < size; i++)                                                                                                                            //Loop through data
         databuffer[i] = data[i];                                                                                                                             //Copy data
 
@@ -177,7 +180,7 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
 
     //Send message
     printf("\nSending IP packet\n");
-    backend -> Send(MAC, this -> etherType_BE, buffer, size + sizeof(InternetProtocolVersion4Message));      //Send message
+    backend -> Send(MAC, this -> etherType_BE, buffer, size + sizeof(InternetProtocolV4Message));      //Send message
     MemoryManager::activeMemoryManager->free(buffer);                                                                                                 //Free memory
     printf("\nSent IP packet\n");
 }
@@ -201,5 +204,5 @@ uint16_t InternetProtocolProvider::Checksum(uint16_t *data, uint32_t lengthInByt
     while(temp & 0xFFFF0000)                                                                       //While there is a carry
         temp = (temp & 0xFFFF) + (temp >> 16);                                                     //Add the carry to the sum
 
-    return ((temp & 0xFF00) >> 8) | ((temp & 0x00FF) << 8);                                        //Return the sum in big endian
+    return ((~temp & 0xFF00) >> 8) | ((~temp & 0x00FF) << 8);
 }

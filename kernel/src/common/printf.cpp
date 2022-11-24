@@ -85,6 +85,31 @@ void Console::put_string_gui(char* str, gui::Text lines[15]){
 
 }
 
+char* Console::int_to_string(int i){
+    static char text[12];                                //Create a buffer for the string
+    int loc = 11;                                        //Set the location to the end of the buffer
+    text[11] = 0;                                        //Set the end of the buffer to 0
+    char neg = 1;                                        //Set the negative flag to 1
+    if (i >= 0)
+    {
+        neg = 0;                                        //If the number is positive, set the negative flag to 0
+        i = -i;                                         //Make the number negative
+    }
+    while (i)                                           //While the number is not 0
+    {
+        text[--loc] = '0' - i % 10;                     //Set the character to the ASCII value of the number
+        i /= 10;                                        //Divide the number by 10
+    }
+
+    if (loc==11)                                        //If the location is at the end of the buffer
+        text[--loc] = '0';                              //Set the character to 0
+    if (neg)
+        text[--loc] = '-';                              //If the number was negative, set the character to '-'
+
+    return &text[loc];
+
+}
+
 /**
  * @details This function puts a string to the screen
  * @param str The string to put
@@ -169,9 +194,29 @@ void Console::put_string(char* str, bool clearLine)
         }
     }
 
+    //Calculate the middle
+    int y_mid = 39;         //1Digit
+    if(y >= 10){            //2Digit
+        y_mid = 38;
+    }
+    if(y >= 100) {           //3Digit
+        y_mid = 37;
+    }
     //Draw Bottom and sides
     for (int i = 0; i < 80; ++i) {
         current[24][i] = '*';
+        if(i == 40){
+
+            char* text = int_to_string(y);              //Get the string
+            int loc = 0;                                  //Set the location to the start of the string
+            while (text[loc] != '\0') {                   //While the current char is not the end of the string
+                current[24][i] = text[loc];               //Set the current char to the current char in the string
+                loc++;                                    //Increment the location
+                i++;                                      //Increment the current char
+            }
+
+        }
+
     }
     current[23][0] = '*';
     current[23][79] = '*';

@@ -20,19 +20,27 @@ set(gui_h include/gui)
 set(net_c src/net)
 set(net_h include/net)
 
+set(sys_c src/system)
+set(sys_h include/system)
+
 #Include all the files
 include_directories(include)
 set(
         SOURCE_FILES
         src/kernel.cpp
-        include/system/gdt.h src/system/gdt.cpp
-        include/system/multitasking.h src/system/multitasking.cpp
-        include/system/memorymanagement.h src/system/memorymanagement.cpp
-        include/system/syscalls.h src/system/syscalls.cpp
+
+        ${sys_h}/gdt.h ${sys_c}/gdt.cpp
+        ${sys_h}/multitasking.h ${sys_c}/multitasking.cpp
+        ${sys_h}/memorymanagement.h ${sys_c}/memorymanagement.cpp
+        ${sys_h}/syscalls.h ${sys_c}/syscalls.cpp
+        ${sys_h}/multithreading.h ${sys_c}/multithreading.cpp
+        ${sys_h}/process.h ${sys_c}/process.cpp
+
 
         ${harwardCom_h}/pci.h ${harwardCom_c}/pci.cpp
         ${harwardCom_h}/port.h ${harwardCom_c}/port.cpp
         ${harwardCom_h}/interrupts.h ${harwardCom_c}/interrupts.cpp
+        ${harwardCom_h}/serial.h ${harwardCom_c}/serial.cpp
 
         ${drivers_h}/driver.h ${drivers_c}/driver.cpp
         ${drivers_h}/mouse.h ${drivers_c}/mouse.cpp
@@ -49,13 +57,15 @@ set(
 
         ${net_h}/etherframe.h ${net_c}/etherframe.cpp
         ${net_h}/arp.h ${net_c}/arp.cpp
+        ${net_h}/ipv4.h ${net_c}/ipv4.cpp
+        ${net_h}/icmp.h ${net_c}/icmp.cpp
 
         ${common_h}/types.h
         ${common_h}/types.h
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
-
-        src/hardwarecommunication/serial.cpp include/hardwarecommunication/serial.h include/system/multithreading.h src/system/multithreading.cpp include/system/process.h src/system/process.cpp src/net/ipv4.cpp include/net/ipv4.h src/common/timer.cpp include/common/timer.h)
+        ${common_h}/timer.h ${common_c}/timer.cpp
+)
 
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
