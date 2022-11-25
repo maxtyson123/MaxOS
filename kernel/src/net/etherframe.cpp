@@ -59,6 +59,11 @@ void EtherFrameHandler::Send(common::uint64_t dstMAC_BE, common::uint8_t *data, 
     backend -> Send(dstMAC_BE, etherType_BE, data, size);
 }
 
+common::uint32_t EtherFrameHandler::GetIPAddress() {
+
+    return backend -> GetIPAddress();
+
+}
 
 
 EtherFrameProvider::EtherFrameProvider(drivers::amd_am79c973 *backend)

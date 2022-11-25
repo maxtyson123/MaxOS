@@ -28,6 +28,7 @@
 #include <net/arp.h>
 #include <net/ipv4.h>
 #include <net/icmp.h>
+#include <net/udp.h>
 
 //SYSTEM
 #include <system/process.h>
@@ -354,8 +355,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //NOTE: Will rewrite boot text stuff later
 
     Version* maxOSVer;
-    maxOSVer->version = 24;
-    maxOSVer->build = 61;
+    maxOSVer->version = 25;
+    maxOSVer->build = 62;
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -614,6 +615,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         printf(" -  Setting Up ICMP... \n");
         InternetControlMessageProtocol icmp(&ipv4);
 
+        printf(" -  Setting Up UDP... \n");
+        UserDatagramProtocolProvider udp(&ipv4);
+
     printf("[x] Network Driver Setup \n");
 
     //Process kernelMain(kernProc, &threadManager);
@@ -634,6 +638,11 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     printf("\n ++ Test ICMP ++\n");
     icmp.RequestEchoReply(GIP_BE);
+
+    printf("\n ++ Test UDP ++\n");
+    UserDatagramProtocolSocket* test_socket = udp.Connect(GIP_BE, 1234);        //Use ncat -u -l 1234 to listen
+    test_socket->Send((uint8_t*)"Hello World", 11);
+
 
 }
 

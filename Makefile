@@ -35,6 +35,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/net/arp.o \
  		  obj/kernel/net/ipv4.o \
  		  obj/kernel/net/icmp.o \
+ 		  obj/kernel/net/udp.o \
  		  obj/kernel/kernel.o
 
 libraries =

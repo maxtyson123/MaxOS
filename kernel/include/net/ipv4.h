@@ -48,7 +48,7 @@ namespace maxOS{
                 void Send(common::uint32_t dstIP_BE, common::uint8_t* internetProtocolPayload, common::uint32_t size);
         };
 
-        class InternetProtocolProvider : net::EtherFrameHandler{
+        class InternetProtocolProvider : public net::EtherFrameHandler{
 
             friend class InternetProtocolHandler;
 
@@ -68,6 +68,7 @@ namespace maxOS{
                 void Send(common::uint32_t dstIP_BE, common::uint8_t protocol, common::uint8_t* data, common::uint32_t size);
 
                 static common::uint16_t Checksum(common::uint16_t* data, common::uint32_t lengthInBytes);
+
 
         };
 

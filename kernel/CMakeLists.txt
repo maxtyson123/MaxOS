@@ -59,6 +59,7 @@ set(
         ${net_h}/arp.h ${net_c}/arp.cpp
         ${net_h}/ipv4.h ${net_c}/ipv4.cpp
         ${net_h}/icmp.h ${net_c}/icmp.cpp
+        ${net_h}/udp.h ${net_c}/udp.cpp
 
         ${common_h}/types.h
         ${common_h}/types.h

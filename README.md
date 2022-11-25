@@ -38,13 +38,15 @@ Moved to  projects page
 
 
 ###  Extended
+- [ ] Fix VMs
 - [ ] VESA Video Mode
 - [ ] Usable Desktop
 - [ ] New Process Manager / Scheduler
 - [ ] Elf Loader
 - [ ] Shell
 - [ ] System Calls
-- [ ] Libc
+- [ ] LibC
+- [ ] LibNet
 - [ ] GCC Cross compiler
 - [ ] POSIX
 - [ ] Game Ports (DOOM etc..)

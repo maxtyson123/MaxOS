@@ -8,7 +8,7 @@
 
 #include <common/types.h>
 #include <net/ipv4.h>
-#include <memorymanagement.h>
+#include <system/memorymanagement.h>
 
 namespace maxOS
 {
@@ -37,7 +37,7 @@ namespace maxOS
                 ~UserDatagramProtocolHandler();
                 virtual void HandleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
 
-        }
+        };
 
         class UserDatagramProtocolSocket
         {
