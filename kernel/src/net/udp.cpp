@@ -92,14 +92,13 @@ bool UserDatagramProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE,
     UserDatagramProtocolSocket* socket = 0;                    //The socket that will be used
     for (int i = 0; i < numSockets && socket == 0; ++i)        //Loop through the sockets that are in use while the socket is not found
     {
-
         if(sockets[i]->localPort == localPort                  //If the local port (header dst, our port) is the same as the local port of the socket
         && sockets[i]->localIP == dstIP_BE                     //If the local IP (packet dst, our IP) is the same as the local IP of the socket
         && sockets[i]->listening)                              //If the socket is listening
         {
 
             socket = sockets[i];                               //Set the socket to the socket that is being checked
-            socket->listening = false;                         //Set the socket to not listening
+            socket->listening = false;                         //Set the socket to not listening, as it is now in use
             socket->remotePort = remotePort;                   //Set the remote port of the socket to the remote port of the packet
             socket->remoteIP = srcIP_BE;                       //Set the remote IP of the socket to the remote IP of the packet
 
@@ -149,7 +148,27 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, u
 }
 
 UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) {
-    return nullptr;
+
+    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+
+    if(socket != 0) //If the socket was created
+    {
+        new (socket) UserDatagramProtocolSocket(this);    //Create the socket
+
+        //Configure the socket
+        socket -> listening = true;                       //Set the socket to listening
+        socket -> localPort = port;                 //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
+        socket -> localIP = backend -> GetIPAddress();    //IP that we will use to connect to the remote application
+
+        //Convet the port to big endian
+        socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);
+
+
+        sockets[numSockets++] = socket;                   //Add the socket to the list of sockets
+    }
+
+    return socket;                                        //Return the socket
+
 }
 
 void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket) {
@@ -198,5 +217,8 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
 }
 
 void UserDatagramProtocolProvider::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolHandler *handler) {
+
+    socket -> handler = handler;                                                                   //Set the handler of the socket to the handler that was passed in
+
 
 }

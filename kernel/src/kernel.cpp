@@ -198,6 +198,20 @@ class MouseToConsole: public MouseEventHandler{
 
 };
 
+class PrintfUDPHandler : public UserDatagramProtocolHandler
+{
+public:
+    void HandleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size)
+    {
+        char* foo = " ";
+        for(int i = 0; i < size; i++)                                    //Loop through the data
+        {
+            foo[0] = data[i];                                                   //Get the character
+            printf(foo);                                                        //Print the character
+        }
+    }
+};
+
 
 /**
  * @details Print a string via a syscall
@@ -617,6 +631,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
         printf(" -  Setting Up UDP... \n");
         UserDatagramProtocolProvider udp(&ipv4);
+        PrintfUDPHandler printfUDPHandler;
 
     printf("[x] Network Driver Setup \n");
 
@@ -640,8 +655,17 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     icmp.RequestEchoReply(GIP_BE);
 
     printf("\n ++ Test UDP ++\n");
-    UserDatagramProtocolSocket* test_socket = udp.Connect(GIP_BE, 1234);        //Use ncat -u -l 1234 to listen
+    /* Test Connection TODO: Comeback and fix the UDP handler
+    UserDatagramProtocolSocket* test_socket = udp.Connect(GIP_BE, 1234);        //Use ncat -u -l 1234 to test
+    udp.Bind(test_socket, &printfUDPHandler);
     test_socket->Send((uint8_t*)"Hello World", 11);
+     */
+
+    //Test Listening
+    UserDatagramProtocolSocket* test_socket = udp.Listen(1234);        //First set a portforward rule in Vbox then Use ncat -u -p 1234 127.0.0.1 to test
+    udp.Bind(test_socket, &printfUDPHandler)
+
+
 
 
 }
