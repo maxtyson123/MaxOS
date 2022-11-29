@@ -8,7 +8,7 @@
 #include <common/types.h>
 #include <drivers/driver.h>
 
-#include <system/memorymanagement.h>
+#include <memory/memorymanagement.h>
 #include <hardwarecommunication/port.h>
 #include <hardwarecommunication/interrupts.h>
 
@@ -49,6 +49,7 @@ namespace maxOS
                 common::uint8_t interface_id;
 
                 common::uint8_t revision;
+                BaseAdressRegisterType bar;
 
                 PeripheralComponentInterconnectDeviceDescriptor();
                 ~PeripheralComponentInterconnectDeviceDescriptor();

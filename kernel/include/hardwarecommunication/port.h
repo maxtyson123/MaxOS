@@ -8,65 +8,61 @@
 #include <common/types.h>
 namespace maxOS {
     namespace hardwarecommunication {
+
         //Base Class for ports
         class Port {
-        protected:  //Protected so that it cant be instantiated bc its purely virtual
-            maxOS::common::uint16_t portnumber;
+            protected:  //Protected so that it cant be instantiated bc its purely virtual
+                maxOS::common::uint16_t portnumber;
 
-            Port(maxOS::common::uint16_t portnumber);
-
-            ~Port();
+                Port(maxOS::common::uint16_t portnumber);
+                ~Port();
         };
 
         class Port8Bit : public Port {
-        public:
-            //Constructor / Deconstructor
-            Port8Bit(maxOS::common::uint16_t portnumber);
+            public:
+                //Constructor / Deconstructor
+                Port8Bit(maxOS::common::uint16_t portnumber);
+                ~Port8Bit();
 
-            ~Port8Bit();
+                //Read / Write Method
+                virtual void Write(maxOS::common::uint8_t data);
 
-            //Read / Write Method
-            virtual void Write(maxOS::common::uint8_t data);
-
-            virtual maxOS::common::uint8_t Read();
+                virtual maxOS::common::uint8_t Read();
         };
 
         class Port8BitSlow : public Port8Bit {
-        public:
-            //Constructor / Deconstructor
-            Port8BitSlow(maxOS::common::uint16_t portnumber);
+            public:
+                //Constructor / Deconstructor
+                Port8BitSlow(maxOS::common::uint16_t portnumber);
+                ~Port8BitSlow();
 
-            ~Port8BitSlow();
-
-            //Read / Write Method
-            virtual void Write(maxOS::common::uint8_t data);
-            //---Inherits read methods
+                //Read / Write Method
+                virtual void Write(maxOS::common::uint8_t data);
+                //---Inherits read methods
         };
 
         class Port16Bit : public Port {
-        public:
-            //Constructor / Deconstructor
-            Port16Bit(maxOS::common::uint16_t portnumber);
+            public:
+                //Constructor / Deconstructor
+                Port16Bit(maxOS::common::uint16_t portnumber);
+                ~Port16Bit();
 
-            ~Port16Bit();
+                //Read / Write Method
+                virtual void Write(maxOS::common::uint16_t data);
 
-            //Read / Write Method
-            virtual void Write(maxOS::common::uint16_t data);
-
-            virtual maxOS::common::uint16_t Read();
+                virtual maxOS::common::uint16_t Read();
         };
 
         class Port32Bit : public Port {
-        public:
-            //Constructor / Deconstructor
-            Port32Bit(maxOS::common::uint16_t portnumber);
+            public:
+                //Constructor / Deconstructor
+                Port32Bit(maxOS::common::uint16_t portnumber);
+                ~Port32Bit();
 
-            ~Port32Bit();
+                //Read / Write Method
+                virtual void Write(maxOS::common::uint32_t data);
 
-            //Read / Write Method
-            virtual void Write(maxOS::common::uint32_t data);
-
-            virtual maxOS::common::uint32_t Read();
+                virtual maxOS::common::uint32_t Read();
         };
     }
 }

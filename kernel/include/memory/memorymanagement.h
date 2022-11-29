@@ -8,7 +8,8 @@
 #include <common/types.h>
 
 namespace maxOS{
-    namespace system{
+
+    namespace memory{
 
         struct MemoryChunk{
 

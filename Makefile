@@ -4,11 +4,16 @@ GCC_EXEC ?= gcc
 
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386
-QEMU_PARAMS = -net user -net nic,model=pcnet,macaddr=08:00:27:EC:D0:29 -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial stdio
+QEMU_PARAMS = -nic tap,model=e1000 \
+ 			  -boot d -cdrom maxOS.iso \
+ 			   -m 512 \
+ 			   -hda maxOS.img \
+ 			    -serial stdio
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \
- 		  obj/kernel/system/memorymanagement.o \
+ 		  obj/kernel/memory/memorymanagement.o \
+ 		  obj/kernel/memory/memoryinputoutput.o \
  		  obj/kernel/drivers/driver.o \
  		  obj/kernel/hardwarecommunication/port.o \
  		  obj/kernel/hardwarecommunication/interruptstubs.o \
@@ -24,6 +29,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/vga.o \
  		  obj/kernel/drivers/ata.o \
  		  obj/kernel/drivers/amd_am79c973.o \
+ 		  obj/kernel/drivers/intel_i217.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
  		  obj/kernel/gui/desktop.o \

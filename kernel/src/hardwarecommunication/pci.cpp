@@ -3,11 +3,12 @@
 //
 #include <hardwarecommunication/pci.h>
 #include <drivers/amd_am79c973.h>
+#include <drivers/intel_i217.h>
 
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
-using namespace maxOS::system;
+using namespace maxOS::memory;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
@@ -139,12 +140,12 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 
                 for (int barNum = 0; barNum < 6; ++barNum) {
                     BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
-                    if(bar.adress && (bar.type == InputOutput)){ //Only if the address is really set
-                        deviceDescriptor.portBase = (uint32_t)bar.adress;  //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
+                    if(bar.adress && (bar.type == InputOutput)){                                            //Only if the address is really set
+                        deviceDescriptor.portBase = (uint32_t)bar.adress;                                   //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
+                        deviceDescriptor.bar = bar.type;
                     }
                 }
 
-                //Only need one driver for the device, not every BAR
                 Driver* driver = GetDriver(deviceDescriptor, interruptManager);
                 if(driver != 0){    //If there is a driver
                     driverManager->AddDriver(driver);
@@ -157,6 +158,7 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 
         }
     }
+    while (true);
 }
 
 /**
@@ -196,8 +198,11 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 
     Driver* driver = 0;
     switch (dev.vendor_ID) {
-        case 0x1022:                            //AMD
+
+        //AMD
+        case 0x1022:
             switch (dev.device_ID) {
+
                 case 0x2000:                    //AMD - am79c971 (Ethernet Controller)
                     printf("    AMD am79c971", true);
                     driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
@@ -205,10 +210,31 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                        new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance
                     return driver;                                                                                      //Add Driver
                     break;
+
+                default:
+                    break;
             }
-            break;
-        case 0x8089:                            //Intel
-            break;
+        break;
+        //End AMD
+
+        //Intel
+        case 0x8086:
+            switch (dev.device_ID) {
+
+                case 0x100E:                    //INTEL - i217 (Ethernet Controller)
+                    printf("    INTEL i217", true);
+                    driver = (intel_i217*)MemoryManager::activeMemoryManager->malloc(sizeof(intel_i217));       //Allocate memory region of the sie of the class
+                    if(driver != 0)                                                                                     //Check if space in memory
+                        new (driver) intel_i217(&dev, interruptManager);                                               //Create Driver Instance
+                    return driver;                                                                                      //Add Driver
+                    break;
+
+                default:
+                    break;
+
+            }
+        break;
+        //End Intel
     }
 
     //If there is no driver for the particular device, go into generic devices

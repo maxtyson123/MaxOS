@@ -34,8 +34,11 @@
 #include <system/process.h>
 #include <system/gdt.h>
 #include <system/syscalls.h>
-#include <system/memorymanagement.h>
+#include <memory/memorymanagement.h>
 #include <system/multithreading.h>
+
+//MEMORY
+#include <memory/memorymanagement.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -44,6 +47,7 @@ using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 using namespace maxOS::net;
 using namespace maxOS::system;
+using namespace maxOS::memory;
 
 
 // #define ENABLE_GRAPHICS
@@ -663,7 +667,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     //Test Listening
     UserDatagramProtocolSocket* test_socket = udp.Listen(1234);        //First set a portforward rule in Vbox then Use ncat -u -p 1234 127.0.0.1 to test
-    udp.Bind(test_socket, &printfUDPHandler)
+    udp.Bind(test_socket, &printfUDPHandler);
 
 
 

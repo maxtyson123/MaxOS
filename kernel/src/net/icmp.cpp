@@ -22,7 +22,15 @@ InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolP
 InternetControlMessageProtocol::~InternetControlMessageProtocol() {
 
 }
+/**
+ * Called by the InternetProtocolProvider when a new packet has arrived
+ * @param srcIP_BE  The source IP address of the packet
+ * @param dstIP_BE  The destination IP address of the packet
+ * @param internetprotocolPayload  The payload of the packet
+ * @param size The size of the payload
 
+ * @return True if the packet is to be sent back to the sender, false otherwise
+ */
 bool InternetControlMessageProtocol::OnInternetProtocolReceived(uint32_t srcIP_BE, uint32_t dstIP_BE, uint8_t *internetprotocolPayload, uint32_t size) {
 
     // Check if the size is at least the size of the header
@@ -65,6 +73,10 @@ bool InternetControlMessageProtocol::OnInternetProtocolReceived(uint32_t srcIP_B
 
 }
 
+/**
+ * Sends an ICMP echo request to the specified IP address
+ * @param ip_be The IP address to send the request to
+ */
 void InternetControlMessageProtocol::RequestEchoReply(uint32_t ip_be) {
 
     InternetControlMessageProtocolMessage icmp;

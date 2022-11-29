@@ -23,6 +23,9 @@ set(net_h include/net)
 set(sys_c src/system)
 set(sys_h include/system)
 
+set(mem_c src/memory)
+set(mem_h include/memory)
+
 #Include all the files
 include_directories(include)
 set(
@@ -31,7 +34,6 @@ set(
 
         ${sys_h}/gdt.h ${sys_c}/gdt.cpp
         ${sys_h}/multitasking.h ${sys_c}/multitasking.cpp
-        ${sys_h}/memorymanagement.h ${sys_c}/memorymanagement.cpp
         ${sys_h}/syscalls.h ${sys_c}/syscalls.cpp
         ${sys_h}/multithreading.h ${sys_c}/multithreading.cpp
         ${sys_h}/process.h ${sys_c}/process.cpp
@@ -48,6 +50,7 @@ set(
         ${drivers_h}/amd_am79c973.h ${drivers_c}/amd_am79c973.cpp
         ${drivers_h}/ata.h ${drivers_c}/ata.cpp
         ${drivers_h}/vga.h ${drivers_c}/vga.cpp
+        ${drivers_h}/intel_i127.h ${drivers_c}/intel_i127.cpp
 
         ${gui_h}/widget.h ${gui_c}/widget.cpp
         ${gui_h}/window.h ${gui_c}/window.cpp
@@ -66,6 +69,10 @@ set(
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
         ${common_h}/timer.h ${common_c}/timer.cpp
+
+        ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
+        ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
+
 )
 
 #Ignore standard library

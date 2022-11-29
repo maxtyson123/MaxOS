@@ -18,6 +18,7 @@ namespace maxOS{
 
         class amd_am79c973;
 
+
         class RawDataHandler{
 
             protected:

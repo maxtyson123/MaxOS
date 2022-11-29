@@ -8,7 +8,7 @@
 
 #include <common/types.h>
 #include <net/ipv4.h>
-#include <system/memorymanagement.h>
+#include <memory/memorymanagement.h>
 
 namespace maxOS
 {

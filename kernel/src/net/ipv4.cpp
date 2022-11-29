@@ -7,7 +7,7 @@
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::net;
-using namespace maxOS::system;
+using namespace maxOS::memory;
 
 
 void printf(char*, bool=false);

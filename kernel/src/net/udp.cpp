@@ -3,7 +3,7 @@
 using namespace maxOS;
 using namespace maxOS::net;
 using namespace maxOS::common;
-using namespace maxOS::system;
+using namespace maxOS::memory;
 
 ///__Handler__
 
@@ -74,7 +74,14 @@ UserDatagramProtocolProvider::UserDatagramProtocolProvider(InternetProtocolProvi
 UserDatagramProtocolProvider::~UserDatagramProtocolProvider() {
 
 }
-
+/**
+ *
+ * @param srcIP_BE The source IP address in big endian
+ * @param dstIP_BE  The destination IP address in big endian
+ * @param internetprotocolPayload The UDP payload
+ * @param size The size of the UDP payload
+ * @return True if the packet is to be sent back to the sender
+ */
 bool UserDatagramProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE, uint32_t dstIP_BE, uint8_t *internetprotocolPayload,uint32_t size) {
 
     //Check the size
@@ -121,6 +128,12 @@ bool UserDatagramProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE,
 
 }
 
+/**
+ * Connects the socket to the remote IP and port
+ * @param ip The remote IP address in big endian
+ * @param port The remote port
+ * @return The socket that was connected
+ */
 UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, uint16_t port) {
 
 
@@ -147,6 +160,11 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, u
     return socket;                                        //Return the socket
 }
 
+/**
+ * Listens for incoming packets on the port
+ * @param port The port to listen on
+ * @return The socket that is listening
+ */
 UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) {
 
     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
@@ -171,6 +189,10 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) 
 
 }
 
+/**
+ * Disconnects the socket from the remote IP and port
+ * @param socket The socket to disconnect
+ */
 void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket) {
 
     for(uint16_t i = 0; i < numSockets && socket == 0; i++){                    //Loop through the sockets that are in use while the socket is not found
@@ -187,6 +209,12 @@ void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket
 
 }
 
+/**
+ * Sends a packet to the remote IP and port
+ * @param socket The socket to send the packet from
+ * @param data The data to send
+ * @param size The size of the data
+ */
 void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
 
     uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
@@ -216,6 +244,11 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
 
 }
 
+/**
+ * Binds a handler to the socket
+ * @param socket The socket to bind the handler to
+ * @param handler The handler to bind
+ */
 void UserDatagramProtocolProvider::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolHandler *handler) {
 
     socket -> handler = handler;                                                                   //Set the handler of the socket to the handler that was passed in
