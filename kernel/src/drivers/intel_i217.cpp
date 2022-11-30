@@ -84,9 +84,9 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     sendDescriptorTailRegister = 0x3818;
 
     // Get BAR0 type, io_base address and MMIO base address
-    bar_type = deviceDescriptor -> bar;
-    portBase = deviceDescriptor -> portBase & ~1;
-    memBase =deviceDescriptor -> portBase & ~3;
+    bar_type = 1;// deviceDescriptor -> hasMemoryBase ? 0 : 1;
+    portBase = deviceDescriptor -> portBase;
+    memBase = deviceDescriptor -> memoryBase;
 
 
     //Clear eprom
@@ -103,8 +103,6 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 
     }
 
-    //TODO:    startLink();
-
     for(int i = 0; i < 0x80; i++)               //Loop through all the registers
         Write(0x5200 + i*4, 0);     //Clear the receive descriptor array
 
@@ -112,7 +110,6 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     //Initialize the send and receive descriptors
     receiveInit();
     sendInit();
-
 
 }
 
@@ -218,7 +215,6 @@ bool intel_i217::readMACAddress() {
     {
 
 
-
         uint8_t * mem_base_mac_8 = (uint8_t *) (memBase+0x5400);                   //Get the base address of the MAC address
         uint32_t * mem_base_mac_32 = (uint32_t *) (memBase+0x5400);                //Get the base address of the MAC address
 
@@ -309,7 +305,7 @@ void intel_i217::sendInit() {
     currentSendBuffer = 0;
 
     Write(sendControlRegister,  (1 << 1)    // Transmit Enable
-                             |  (1 << 3)                // Pad Short Packets
+                             | (1 << 3)                 // Pad Short Packets
                              | (15 << 4)                // Collision Threshold
                              | (64 <<  12)              // Collision Distance
                              | (1 << 24)                // Re-transmit on Late Collision

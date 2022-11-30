@@ -142,8 +142,13 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                     BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
                     if(bar.adress && (bar.type == InputOutput)){                                            //Only if the address is really set
                         deviceDescriptor.portBase = (uint32_t)bar.adress;                                   //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
-                        deviceDescriptor.bar = bar.type;
+                        deviceDescriptor.hasPortBase = true;
+                    }else if(bar.adress && (bar.type == MemoryMapping)){
+                        deviceDescriptor.memoryBase = (uint32_t)bar.adress;
+                        deviceDescriptor.hasMemoryBase = true;
                     }
+
+
                 }
 
                 Driver* driver = GetDriver(deviceDescriptor, interruptManager);
@@ -151,7 +156,8 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                     driverManager->AddDriver(driver);
                 }
 
-
+                if(deviceDescriptor.hasMemoryBase) printf(" (MEMORY)");
+                if(deviceDescriptor.hasPortBase) printf(" (I/O)");
 
                 printf("\n");
             }
@@ -197,84 +203,151 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager) {
 
     Driver* driver = 0;
-    switch (dev.vendor_ID) {
-
-        //AMD
+    switch (dev.vendor_ID)
+    {
         case 0x1022:
-            switch (dev.device_ID) {
+        {//AMD
 
-                case 0x2000:                    //AMD - am79c971 (Ethernet Controller)
+            switch (dev.device_ID)
+            {
+                case 0x2000:
+                {//am79c971
+
                     printf("    AMD am79c971", true);
                     driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
                     if(driver != 0)                                                                                     //Check if space in memory
-                       new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance
+                        new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance
                     return driver;                                                                                      //Add Driver
                     break;
 
-                default:
-                    break;
-            }
-        break;
-        //End AMD
-
-        //Intel
-        case 0x8086:
-            switch (dev.device_ID) {
-
-                case 0x100E:                    //INTEL - i217 (Ethernet Controller)
-                    printf("    INTEL i217", true);
-                    driver = (intel_i217*)MemoryManager::activeMemoryManager->malloc(sizeof(intel_i217));       //Allocate memory region of the sie of the class
-                    if(driver != 0)                                                                                     //Check if space in memory
-                        new (driver) intel_i217(&dev, interruptManager);                                               //Create Driver Instance
-                    return driver;                                                                                      //Add Driver
-                    break;
+                }//end am79c971
 
                 default:
-                    break;
-
-            }
-        break;
-        //End Intel
-    }
-
-    //If there is no driver for the particular device, go into generic devices
-    switch (dev.class_id) {
-        case 0x03:                              //Graphics
-            switch (dev.subclass_id) {
-                case 0x00:                      //Graphics - VGA
                     break;
             }
             break;
+        }//End AMD
+
+        case 1234:
+        { //QEMU
+
+            switch (dev.device_ID)
+            {
+
+                case 0x1111:
+                {//Virtual Video Controller
+
+                    printf("   QEMU Virtual Video Controller (NO DRIVER)", true); //Emulated Video Card
+                    break;
+
+
+                }//Virtual Video Controller
+
+            }
+            break;
+        }//End QEMU
+
+        case 0x8086:
+        { //Intel
+
+            switch (dev.device_ID)
+            {
+
+                case 0x100E:
+                {//i217 (Ethernet Controller)
+
+                    printf("    INTEL i217", true);
+                    driver = (intel_i217 *) MemoryManager::activeMemoryManager->malloc(
+                            sizeof(intel_i217));       //Allocate memory region of the sie of the class
+                    if (driver !=
+                        0)                                                                                     //Check if space in memory
+                        new(driver) intel_i217(&dev,
+                                               interruptManager);                                               //Create Driver Instance
+                    return driver;                                                                                      //Add Driver
+                    break;
+
+                }//end i217
+
+                case 0x1237:
+                {//440FX
+
+                    printf("   INTEL 440FX (NO DRIVER)", true); //https://en.wikipedia.org/wiki/Intel_440FX (It is a chipset, not a device)
+                    break;
+
+                }//end 440FX
+
+                case 0x7000:
+                {//PIIX3 ISA
+
+                    printf("   INTEL PIIX3 ISA (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                    break;
+
+                }//end PIIX3 ISA
+
+                case 0x7010:
+                {//PIIX3 IDE
+
+                    printf("   INTEL PIIX3 IDE (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                    break;
+
+                }//end PIIX3 IDE
+
+                case 0x7113:
+                {//PIIX4 ACPI
+
+                    printf("   INTEL PIIX4 ACPI (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                    break;
+
+                }//end PIIX4 ACPI
+
+                default:
+                    break;
+
+            }
+            break;
+        }//End Intel
     }
-    
-    
-    
+
+    //If there is no driver for the particular device, go into generic devices
+    switch (dev.class_id)
+    {
+        case 0x03:
+        {//Graphics
+
+            switch (dev.subclass_id)
+            {
+                case 0x00:
+                {//VGA
+
+                    printf("    GRAPHICS VGA (NO DRIVER)", true);
+                    break;
+
+                }//end VGA
+
+
+            }
+            break;
+
+        }
+
+    }
+
     return driver;
 }
 
-
-/**
- * Get the lowest set bit in a 32-bit value
- * @param value 32-bit value
- * @return Lowest set bit
- */
-uint32_t get_number_of_lowest_set_bit(uint32_t value)
+static unsigned int get_number_of_lowest_set_bit(uint32_t value)
 {
-    uint32_t pos = 0;
+    unsigned int  pos = 0;
     uint32_t mask = 0x00000001;
     while (!(value & mask))
     { ++pos; mask=mask<<1; }
     return pos;
 }
 
-/**
- * Get the highest set bit in a 32-bit value
- * @param value  32-bit value
- * @return  Highest set bit
- */
-uint32_t get_number_of_highest_set_bit(uint32_t value)
+/* searches for the highest set bit in a 32-bit value, value must not be 0 */
+static unsigned int  get_number_of_highest_set_bit(uint32_t value)
 {
-    uint32_t pos = 31;
+    unsigned int  pos = 31;
     uint32_t mask = 0x80000000;
     while (!(value & mask))
     { --pos; mask=mask>>1; }
@@ -300,7 +373,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
 
     if (headerType >= 0x02)  // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
     {
-        printf("ERROR: unsupported header type found! \n");
+        printf("       ERROR: unsupported header type found! \n");
         return result;
     }
 
@@ -316,50 +389,168 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
     uint32_t temp;
 
     if(result.type == MemoryMapping){
-        result.preFetchable = ((bar_value >> 3) & 0x1) == 0x1;
-        switch((bar_value >> 1) & 0x3) //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
+
+        result.preFetchable = ((Read(bus,device,function,barOffset) >> 3) & 0x1) == 1;              //Examine the 3rd bit (check notes: 3rd bit is prefetchable)
+        switch((bar_value >> 1) & 0x3)                                                                        //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
         {
+
             case 0:                                                                                          // 32 Bit Mode
             {
-                Write(bus,device,function,barOffset,0xFFFFFFF0);                            // overwrite with all 1s
-                const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFF0;       // and read back again
-                if (barValue == 0)                                                                          // at least one address bit must be 1 (i.e. writable).
+                //Check if there are any readable bits
+                Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
+                const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
+
+                if (barValue == 0)                                                // at least one address bit must be 1 (i.e. writable).
                 {
-                    if (result.preFetchable)                                                                // unused BARs must be completely 0 (the prefetchable bit must not be set either)
+                    if (result.preFetchable)                                      // unused BARs must be completely 0 (the prefetchable bit must not be set either)
                     {
-                        printf("ERROR : 32-bit memory BAR"); printf(reinterpret_cast<char *>(bar)); printf("contains no writable address bits!\n");
+                        printf("       ERROR (32bit): BAR NOT WRITEABLE\n");
                         return result;
                     }
 
-                    // Output BAR info :
-                     //  printf("BAR: "); printf(reinterpret_cast<char *>(bar)); printf("is unused!\n");
                 }
                 else
                 {
-                    const uint32_t lowestBit = get_number_of_lowest_set_bit(barValue);
+                    const unsigned  int lowestBit = get_number_of_lowest_set_bit(barValue);
                     // it must be a valid 32-bit address :
                     if ( (get_number_of_highest_set_bit(barValue) != 31) || (lowestBit > 31) || (lowestBit < 4) )
                     {
-                        printf("ERROR : 32-bit memory BAR %u contains invalid writable address bits!\n",bar);
+                        printf("       ERROR (32bit): INVALID BITS\n");
                         return result;
                     }
 
-                    // Output BAR info :
-                   // printf("BAR: "); printf(reinterpret_cast<char *>(bar)); printf(" works (32Bit)!\n");
+                    //Get the base memory address from the bar_value
+                    result.adress = (uint8_t*)(bar_value & ~0x1); //Remove the last bit
 
                 }
-            }
                 break;
+            }                                                                                                // END 32 Bit Mode
+
             case 1: // 20 Bit Mode
-            case 2: // 64 Bit Mode
+            {
+                if (headerType == 0x01)                                                // 20 Bit Mode is not supported for PCI-to-PCI bridges
+                {
+                    printf("       ERROR (20Bit): 20 BIT MODE NOT SUPPORTED\n");
+                    return result;
+                }
+
+
+                //Check if there are any readable bits
+                Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
+                const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
+
+                if (barValue == 0)                                                // at least one address bit must be 1 (i.e. writable).
+                {
+                    if (result.preFetchable)                                      // unused BARs must be completely 0 (the prefetchable bit must not be set either)
+                    {
+                        printf("       ERROR (20Bit): BAR NOT WRITEABLE\n");
+                        return result;
+                    }
+
+                }
+                const unsigned int lowestBit = get_number_of_lowest_set_bit(barValue);
+
+                // it must be a valid 20-bit address :
+                if ( (get_number_of_highest_set_bit(barValue) != 19) || (lowestBit > 19) || (lowestBit < 4) )
+                {
+                    printf("       ERROR (20Bit): INVAILD BTIS!\n");
+                    return result;
+
+                }
+
+
+                //Get the base memory address from the bar_value
+                result.adress = (uint8_t*)(bar_value & ~0x1); //Remove the last bit
+
                 break;
+            }
+            case 2: // 64 Bit Mode
+            {
+                // check whether a 64-bit BAR is even possible at the current position:
+                if (bar >= (max_bars - 1)) {
+                    printf("       ERROR (64bit): BAR CANT STOP AT LAST POS\n");
+                    return result;
+                }
+                // non-prefetchable 64-BARs cannot be used behind bridges (? but they are not forbidden in the spec ?) :
+                if ( !result.preFetchable) {
+                    printf("       ERROR (64bit): BAR non fetchable !\n");
+                    return result;
+                }
+
+                Write(bus,device,function, barOffset, 0xFFFFFFF0);                              // overwrite with all 1s
+                Write(bus,device,function, barOffset + 4, 0xFFFFFFFF);                          // overwrite with all 1s
+                const uint32_t barLowValue = Read(bus,device,function, barOffset) & 0xFFFFFFF0;       // and read back again
+                const uint32_t barHighValue = Read(bus,device,function, barOffset + 4);               // and read back again
+
+                unsigned int lowestBit = 0;
+                if (barLowValue != 0) {
+                    // less than 4 GB :
+
+                    lowestBit = get_number_of_lowest_set_bit(barLowValue);
+
+                    // it must be a valid small 64-bit address :
+                    if ((barHighValue != 0xFFFFFFFF)                                          // upper 32 bits must be 1s
+                            || (get_number_of_highest_set_bit(barLowValue) != 31)       // lower 32 bits must be 32-bit address
+                            || (lowestBit > 31)                                               // lower 32 bits must be 32-bit address
+                            || (lowestBit < 4))                                               // lower 32 bits must be 32-bit address
+                    {
+                        printf("       ERROR (64bit): INVALID BITS\n");
+                        return result;
+                    }
+
+                }
+                else
+                {
+                    // greater than/equal to 4 GB :
+                    lowestBit = get_number_of_lowest_set_bit(barHighValue) + 32;
+
+                    // it must be a valid large 64-bit address :
+                    if ((get_number_of_highest_set_bit(barHighValue) != 31)       // upper 32 bits must be 32-bit address
+                            || (lowestBit > 63)                                         // lower 32 bits must be 32-bit address
+                            || (lowestBit < 36))                                        // lower 32 bits must be 32-bit address
+                    {
+                        printf("       ERROR (32bit): INVALID BITS\n");
+                        return result;
+                    }
+                }
+
+                //Get the base memory address from the bar_value
+                result.adress = (uint8_t*)(bar_value & ~0x1); //Remove the last bit
+
+
+                // skip the subsequent BAR for analysis as cannot be used because it contains the upper 32 bits of the previous 64-bit BAR
+                ++bar;
+
+            }
         }
 
         //                   Shift bar by 3 (removing last 3 bits) check if it == 0x1
 
     }
     else
-    {  // I/O
+    {
+        //Check if there are any readable bits
+        Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
+        const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
+
+        if (barValue == 0) // at least one address bit must be 1 (i.e. writable).
+        {
+            printf("       ERROR : NO WRITEABLE BITS");
+            return result;
+        }
+
+        const unsigned int  lowestBit = get_number_of_lowest_set_bit(barValue);
+        const unsigned int  highestBit = get_number_of_highest_set_bit(barValue);
+
+        // it must either be a valid 32-bit address or a valid 16-bit address :
+        if ( ( (highestBit != 31) && (highestBit != 15) ) || (highestBit < lowestBit) || (lowestBit < 2) )
+        {
+            printf("       ERROR : INVAlID BITS");
+            return result;
+        }
+
+
+        // I/O
         result.adress = (uint8_t*)(bar_value & ~0x3); //~0x3 = cancle last 2 bits
         result.preFetchable = false;
     }

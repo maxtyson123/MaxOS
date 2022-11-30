@@ -24,17 +24,22 @@ namespace maxOS
 
         class BaseAdressRegister{
             public:
-                bool preFetchable;
-                common::uint8_t* adress;
-                common::uint32_t size;
-                BaseAdressRegisterType type;
+                bool preFetchable;                      //If the memory is pre-fetchable
+                common::uint8_t* adress;                //The address of the register
+                common::uint32_t size;                  //The size of the register
+                BaseAdressRegisterType type;            //The type of the register
 
         };
 
 
         class PeripheralComponentInterconnectDeviceDescriptor {
             public:
+                bool hasPortBase;
                 common::uint32_t portBase;  //Port used for communication
+
+                bool hasMemoryBase;
+                common::uint32_t memoryBase;  //Mem adress used for communication
+
                 common::uint32_t interrupt; //The interrupt
 
                 common::uint16_t bus;
@@ -49,7 +54,8 @@ namespace maxOS
                 common::uint8_t interface_id;
 
                 common::uint8_t revision;
-                BaseAdressRegisterType bar;
+
+
 
                 PeripheralComponentInterconnectDeviceDescriptor();
                 ~PeripheralComponentInterconnectDeviceDescriptor();

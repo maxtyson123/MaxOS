@@ -6,9 +6,9 @@ AS_PARAMS = --32
 LD_PARAMS = -melf_i386
 QEMU_PARAMS = -nic tap,model=e1000 \
  			  -boot d -cdrom maxOS.iso \
- 			   -m 512 \
- 			   -hda maxOS.img \
- 			    -serial stdio
+ 			  -m 512 \
+ 			  -hda maxOS.img \
+ 			  -serial stdio
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \
