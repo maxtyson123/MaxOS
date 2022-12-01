@@ -2,52 +2,21 @@
 //  Created by 98max on 22/10/2022.
 // 
 
-#include <drivers/amd_am79c973.h>
+#include <drivers/ethernet/amd_am79c973.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::ethernet;
 using namespace maxOS::hardwarecommunication;
 
 void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 
 
-///___DATA HANDLER___
-
-
-
-RawDataHandler::RawDataHandler(amd_am79c973 *backend) {
-
-    this -> backend = backend;
-    backend -> SetHandler(this);
-
-}
-
-RawDataHandler::~RawDataHandler() {
-
-    //Remove the handler on destruction
-    backend -> SetHandler(0);
-
-}
-
-bool RawDataHandler::OnRawDataReceived(uint8_t* buffer, uint32_t size){
-
-    return false;
-
-}
-
-void RawDataHandler::Send(uint8_t* buffer, uint32_t size){
-
-    backend -> Send(buffer, size);
-
-}
-
-///___DRIVER___
-
 
 amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts)
-        :   Driver(),
+        :   EthernetDriver(),
             InterruptHandler(dev -> interrupt + interrupts -> HardwareInterruptOffset(), interrupts),
             MACAddress0Port(dev -> portBase),
             MACAddress2Port(dev -> portBase + 0x02),
@@ -61,8 +30,9 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     currentSendBuffer = 0;
     currentRecvBuffer = 0;
 
-    // No handler by default
-    this -> handler = 0;
+    //Not active or intialized
+    active = false;
+    initDone = false;
 
     // Get the MAC adresses (split up in little endian order)
     uint64_t MAC0 = MACAddress0Port.Read() % 256;
@@ -143,8 +113,10 @@ amd_am79c973::~amd_am79c973()
 void amd_am79c973::Activate()
 {
 
+    initDone = false;                                            // Set initDone to false
     registerAddressPort.Write(0);                           // Tell device to write to register 0
-    registerDataPort.Write(0x41);                           // Enables interrupts
+    registerDataPort.Write(0x41);                           // Enable Interrupts and start the device
+    while(!initDone);                                            // Wait for initDone to be set to true
 
     registerAddressPort.Write(4);                           // Tell device to read from register 4
     uint32_t temp = registerDataPort.Read();                     // Get current data
@@ -155,6 +127,7 @@ void amd_am79c973::Activate()
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x42);                           // Tell device that it is initialized and can begin operating
 
+    active = true;                                               // Set active to true
 
 }
 
@@ -168,6 +141,16 @@ int amd_am79c973::Reset() {
     resetPort.Write(0);
     return 10;                      // 10 means wait for 10ms
 
+}
+
+string amd_am79c973::GetVendorName()
+{
+    return "AMD";
+}
+
+string amd_am79c973::GetDeviceName()
+{
+    return "PCnet-FAST III (am79c973)";
 }
 
 /**
@@ -189,9 +172,9 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
     if((temp & 0x0800) == 0x0800) printf("AMD am79c973 MEMORY ERROR\n");
 
     // Responses
-    if((temp & 0x0400) == 0x0400) Receive();
-    if((temp & 0x0200) == 0x0200) printf("AMD am79c973 DATA SENT\n");
-    if((temp & 0x0100) == 0x0100) printf("AMD am79c973 INIT DONE\n");
+    if((temp & 0x0400) == 0x0400) FetchDataReceived();
+    if((temp & 0x0200) == 0x0200) FetchDataSent();
+    if((temp & 0x0100) == 0x0100) initDone = true;
 
     // Reply that it was received
     registerAddressPort.Write(0);                           // Tell device to write to register 0
@@ -212,8 +195,9 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
-void amd_am79c973::Send(common::uint8_t *buffer, int size) {
+void amd_am79c973::DoSend(common::uint8_t *buffer, int size) {
 
+    while(!active);
 
     int sendDescriptor = currentSendBuffer;              // Get where data has been written to
     currentSendBuffer = (currentSendBuffer + 1) % 8;    // Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different tasks in parallel)
@@ -255,76 +239,47 @@ void amd_am79c973::Send(common::uint8_t *buffer, int size) {
 
 }
 
-/**
- * @details This function handles the receivement a package
- */
-void amd_am79c973::Receive() {
-    printf("AMD am79c973 DATA RECEVED\n");
 
-    for(; (recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0;         // Check if there is data    (if the first flag is 0 then it is empty)
-          currentRecvBuffer = (currentRecvBuffer + 1) % 8)                      // Cycle through the receive buffers
+void amd_am79c973::FetchDataReceived()
+{
+    for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)         //Loop through all the buffers
     {
+        if(!(recvBufferDescr[currentRecvBuffer].flags    & 0x40000000)                   //Check if there is an error
+            && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000)    //Check start and end bits of the packet
+        {
+            uint32_t size = recvBufferDescr[currentRecvBuffer].flags2 & 0xFFF;          //Get the size of the packet
+            if (size > 64)                                                              //If the size is the size of ethernet 2 frame
+                size -= 4;                                                              //remove the checksum
 
-        // Check if there is an error                                 &&  Check start and end bits of the packet
-        if(!(recvBufferDescr[currentRecvBuffer].flags & 0x40000000)  && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000){
-
-            uint32_t size = recvBufferDescr[currentRecvBuffer].flags & 0xFFF;
-
-            if(size > 64){          // If the size is the size of ethernet 2 frame
-                size -= 4;          // remove the checksum
-            }
-
-            uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);
-
-
-
-            //Pass data to handler
-            if(handler != 0){
-
-                if(handler -> OnRawDataReceived(buffer, size)){         //If data needs to be sent back
-
-                    Send(buffer, size);
-
-                }
-
-            }
-
-            printf("Received: ");
-            size = 64;
-            for(int i = 0; i < size; i++)
-            {
-                printfHex(buffer[i]);
-                printf(" ");
-            }
-
-
+            uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);   //Get the buffer
+            FireDataReceived(buffer, size);                                             //Pass data to handler
         }
 
-        recvBufferDescr[currentRecvBuffer].flags2 = 0;                  // Write that the data has been read and can now be used again
-        recvBufferDescr[currentRecvBuffer].flags = 0x8000F7FF;          // Clear the buffer
+        recvBufferDescr[currentRecvBuffer].flags2 = 0;                                  //Write that the data has been read and can now be used again
+        recvBufferDescr[currentRecvBuffer].flags = 0x8000F7FF;                          //Clear the buffer
+    }
+}
 
+void amd_am79c973::FetchDataSent()
+{
+
+    for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)
+    {
+        if(!(recvBufferDescr[currentRecvBuffer].flags    & 0x40000000)
+            && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000)
+        {
+            uint32_t size = recvBufferDescr[currentRecvBuffer].flags2 & 0xFFF;
+            if (size > 64)
+                size -= 4;
+
+            uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);
+            FireDataSent(buffer, size);
+        }
+
+        recvBufferDescr[currentRecvBuffer].flags2 = 0;
+        recvBufferDescr[currentRecvBuffer].flags = 0x8000F7FF;
     }
 
-
-}
-
-
-/**
- * @details This function sets the data handler
- * @param handler The handler to set
- */
-void amd_am79c973::SetHandler(RawDataHandler *dataHandler) {
-
-    this -> handler = dataHandler;
-
-}
-
-/**
- * @details This function sets the IP address
- * @param ip The IP address to set
- */
-void amd_am79c973::SetIPAddress(common::uint32_t ip) {
-    initBlock.logicalAddress = ip;
 }
 
 /**
@@ -332,13 +287,7 @@ void amd_am79c973::SetIPAddress(common::uint32_t ip) {
  * @return The MAC address
  */
 uint64_t amd_am79c973::GetMACAddress() {
-    return initBlock.physicalAddress;
+    while(ownMAC == 0);
+    return ownMAC;
 }
 
-/**
- * @details This function gets the IP address
- * @return The IP address
- */
-common::uint32_t amd_am79c973::GetIPAddress() {
-    return initBlock.logicalAddress;
-}

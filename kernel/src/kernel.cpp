@@ -11,11 +11,11 @@
 
 //Drivers
 #include <drivers/driver.h>
-#include <drivers/keyboard.h>
-#include <drivers/mouse.h>
+#include <drivers/peripherals/keyboard.h>
+#include <drivers/peripherals/mouse.h>
 #include <drivers/vga.h>
 #include <drivers/ata.h>
-#include <drivers/amd_am79c973.h>
+#include <drivers/ethernet/amd_am79c973.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -43,6 +43,8 @@
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::peripherals;
+using namespace maxOS::drivers::ethernet;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 using namespace maxOS::net;
@@ -616,10 +618,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
     printf("[x] Setting Up Network Driver \n");
-    amd_am79c973* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
+    EthernetDriver* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
 
         printf(" -  Setting Up IP, Gateway, Subnet... \n");
-        eth0 -> SetIPAddress(IP_BE);
+        //eth0 -> SetIPAddress(IP_BE);
 
         printf(" -  Setting Up EtherFrame... \n");
         EtherFrameProvider etherFrame(eth0);

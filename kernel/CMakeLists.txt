@@ -45,12 +45,12 @@ set(
         ${harwardCom_h}/serial.h ${harwardCom_c}/serial.cpp
 
         ${drivers_h}/driver.h ${drivers_c}/driver.cpp
-        ${drivers_h}/mouse.h ${drivers_c}/mouse.cpp
-        ${drivers_h}/keyboard.h ${drivers_c}/keyboard.cpp
-        ${drivers_h}/amd_am79c973.h ${drivers_c}/amd_am79c973.cpp
+        ${drivers_h}/peripherals/mouse.h ${drivers_c}/peripherals/mouse.cpp
+        ${drivers_h}/peripherals/keyboard.h ${drivers_c}/peripherals/keyboard.cpp
+        ${drivers_h}/ethernet/amd_am79c973.h ${drivers_c}/ethernet/amd_am79c973.cpp
         ${drivers_h}/ata.h ${drivers_c}/ata.cpp
         ${drivers_h}/vga.h ${drivers_c}/vga.cpp
-        ${drivers_h}/intel_i127.h ${drivers_c}/intel_i127.cpp
+        ${drivers_h}/ethernet/intel_i217.h ${drivers_c}/ethernet/intel_i217.cpp
 
         ${gui_h}/widget.h ${gui_c}/widget.cpp
         ${gui_h}/window.h ${gui_c}/window.cpp
@@ -73,7 +73,7 @@ set(
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
         ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
 
-)
+        src/drivers/ethernet/ethernet.cpp include/drivers/ethernet/ethernet.h include/common/vector.h src/common/vector.cpp src/drivers/ethernet/rawdatahandler.cpp include/drivers/ethernet/rawdatahandler.h)
 
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")

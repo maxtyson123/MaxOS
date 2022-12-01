@@ -2,11 +2,12 @@
 // Created by 98max on 11/29/2022.
 //
 
-#include <drivers/intel_i217.h>
+#include <drivers/ethernet/intel_i217.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::ethernet;
 using namespace maxOS::hardwarecommunication;
 using namespace memory;
 
@@ -21,37 +22,6 @@ using namespace memory;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
-
-
-///___DATA HANDLER___
-
-
-
-RawDataHandler_temp::RawDataHandler_temp(intel_i217 *backend) {
-
-    this -> backend = backend;
-    backend -> SetHandler(this);
-
-}
-
-RawDataHandler_temp::~RawDataHandler_temp() {
-
-    //Remove the handler on destruction
-    backend -> SetHandler(0);
-
-}
-
-bool RawDataHandler_temp::OnRawDataReceived(uint8_t* buffer, uint32_t size){
-
-    return false;
-
-}
-
-void RawDataHandler_temp::Send(uint8_t* buffer, uint32_t size){
-
-    backend -> Send(buffer, size);
-
-}
 
 
 ///__DRIVER___
@@ -84,7 +54,7 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     sendDescriptorTailRegister = 0x3818;
 
     // Get BAR0 type, io_base address and MMIO base address
-    bar_type = 1;// deviceDescriptor -> hasMemoryBase ? 0 : 1;
+    bar_type =  1; //deviceDescriptor -> hasMemoryBase ? 0 : 1  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
     portBase = deviceDescriptor -> portBase;
     memBase = deviceDescriptor -> memoryBase;
 
@@ -362,15 +332,9 @@ void intel_i217::Receive() {
         }
 
         //Pass data to handler
-        if(handler != 0){
 
-            if(handler -> OnRawDataReceived(buffer, size)){         //If data needs to be sent back
 
-                Send(buffer, size);
 
-            }
-
-        }
 
         printf("Received: ");
         size = 64;
@@ -416,11 +380,7 @@ void intel_i217::Send(const void *buffer, int size) {
 
 }
 
-void intel_i217::SetHandler(RawDataHandler_temp *handler) {
 
-    this -> handler = handler;
-
-}
 
 common::uint64_t intel_i217::GetMACAddress() {
 

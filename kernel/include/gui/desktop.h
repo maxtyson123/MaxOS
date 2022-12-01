@@ -7,14 +7,14 @@
 
 #include <common/types.h>
 #include <common/graphicsContext.h>
-#include <drivers/mouse.h>
+#include <drivers/peripherals/mouse.h>
 #include <gui/widget.h>
 
 namespace maxOS{
 
     namespace gui{
 
-        class Desktop : public CompositeWidget, public drivers::MouseEventHandler{     //NTS: it is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device wont have a mouse cursor
+        class Desktop : public CompositeWidget, public drivers::peripherals::MouseEventHandler{     //NTS: it is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device wont have a mouse cursor
 
             protected:
                 common::uint32_t MouseX;

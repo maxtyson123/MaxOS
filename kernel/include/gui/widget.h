@@ -7,14 +7,14 @@
 
 #include <common/types.h>
 #include <common/graphicsContext.h>
-#include <drivers/keyboard.h>
+#include <drivers/peripherals/keyboard.h>
 
 
 namespace maxOS{
 
     namespace gui{
 
-        class Widget : public drivers::KeyboardEventHandler{
+        class Widget : public drivers::peripherals::KeyboardEventHandler{
 
             protected:
 

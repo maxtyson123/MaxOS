@@ -35,6 +35,12 @@ namespace maxOS{
             void* malloc(common::size_t size);
             void free(void* pointer);
 
+            template<class T> T* Instantiate(common::uint32_t numberOfElements=1);
+            template<class T, class P1> T* Instantiate(P1);
+            template<class T, class P1, class P2> T* Instantiate(P1, P2);
+            template<class T, class P1, class P2, class P3> T* Instantiate(P1, P2, P3);
+            template<class T, class P1, class P2, class P3, class P4> T* Instantiate(P1, P2, P3, P4);
+
         };
     }
 

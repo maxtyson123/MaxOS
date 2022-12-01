@@ -2,12 +2,13 @@
 // Created by 98max on 12/10/2022.
 //
 #include <hardwarecommunication/pci.h>
-#include <drivers/amd_am79c973.h>
-#include <drivers/intel_i217.h>
+#include <drivers/ethernet/amd_am79c973.h>
+#include <drivers/ethernet/intel_i217.h>
 
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::ethernet;
 using namespace maxOS::memory;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
@@ -214,10 +215,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 {//am79c971
 
                     printf("    AMD am79c971", true);
-                    driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));       //Allocate memory region of the sie of the class
-                    if(driver != 0)                                                                                     //Check if space in memory
-                        new (driver) amd_am79c973(&dev, interruptManager);                                               //Create Driver Instance
-                    return driver;                                                                                      //Add Driver
+                    return MemoryManager::activeMemoryManager -> Instantiate<ethernet::amd_am79c973>(&dev, interruptManager);
                     break;
 
                 }//end am79c971
@@ -420,7 +418,10 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                     }
 
                     //Get the base memory address from the bar_value
-                    result.adress = (uint8_t*)(bar_value & ~0x1); //Remove the last bit
+                    result.adress = (uint8_t*)(bar_value  & 0xFFFFFFF0);
+
+
+
 
                 }
                 break;
@@ -460,7 +461,8 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
 
 
                 //Get the base memory address from the bar_value
-                result.adress = (uint8_t*)(bar_value & ~0x1); //Remove the last bit
+                result.adress = (uint8_t*)(bar_value  & 0xFFF0);
+
 
                 break;
             }
@@ -515,7 +517,8 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                 }
 
                 //Get the base memory address from the bar_value
-                result.adress = (uint8_t*)(bar_value & ~0x1); //Remove the last bit
+                result.adress = (uint8_t*)((barLowValue & 0xFFFFFFF0) + (barHighValue & 0xFFFFFFFF) << 32);
+
 
 
                 // skip the subsequent BAR for analysis as cannot be used because it contains the upper 32 bits of the previous 64-bit BAR
@@ -551,7 +554,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
 
 
         // I/O
-        result.adress = (uint8_t*)(bar_value & ~0x3); //~0x3 = cancle last 2 bits
+        result.adress = (uint8_t*)(bar_value & 0xFFFFFFFC); //~0x3 - use this if things go wrong
         result.preFetchable = false;
     }
 

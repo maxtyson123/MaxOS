@@ -2,13 +2,15 @@
 // Created by 98max on 9/10/2022.
 //
 
-#include <drivers/keyboard.h>
+#include <drivers/peripherals/keyboard.h>
 
 
 
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::peripherals;
 using namespace maxOS::hardwarecommunication;
+
 
 ///___Handler___
 

@@ -24,12 +24,14 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/process.o \
  		  obj/kernel/hardwarecommunication/pci.o \
  		  obj/kernel/system/multitasking.o \
- 		  obj/kernel/drivers/keyboard.o \
- 		  obj/kernel/drivers/mouse.o \
+ 		  obj/kernel/drivers/peripherals/keyboard.o \
+ 		  obj/kernel/drivers/peripherals/mouse.o \
  		  obj/kernel/drivers/vga.o \
  		  obj/kernel/drivers/ata.o \
- 		  obj/kernel/drivers/amd_am79c973.o \
- 		  obj/kernel/drivers/intel_i217.o \
+ 		  obj/kernel/drivers/ethernet/amd_am79c973.o \
+ 		  obj/kernel/drivers/ethernet/intel_i217.o \
+ 		  obj/kernel/drivers/ethernet/ethernet.o \
+ 		  obj/kernel/drivers/ethernet/rawdatahandler.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
  		  obj/kernel/gui/desktop.o \
@@ -37,6 +39,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/common/printf.o \
  		  obj/kernel/common/timer.o \
+ 		  obj/kernel/common/vector.o \
  		  obj/kernel/net/etherframe.o \
  		  obj/kernel/net/arp.o \
  		  obj/kernel/net/ipv4.o \

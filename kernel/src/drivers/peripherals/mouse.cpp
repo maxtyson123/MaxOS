@@ -2,10 +2,11 @@
 // Created by 98max on 10/10/2022.
 //
 
-#include <drivers/mouse.h>
+#include <drivers/peripherals/mouse.h>
 
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::peripherals;
 using namespace maxOS::hardwarecommunication;
 
 

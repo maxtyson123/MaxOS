@@ -8,6 +8,7 @@ using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::ethernet;
 using namespace maxOS::memory;
 
 /**
@@ -59,16 +60,13 @@ void EtherFrameHandler::Send(common::uint64_t dstMAC_BE, common::uint8_t *data, 
     backend -> Send(dstMAC_BE, etherType_BE, data, size);
 }
 
-common::uint32_t EtherFrameHandler::GetIPAddress() {
-
-    return backend -> GetIPAddress();
-
-}
 
 
-EtherFrameProvider::EtherFrameProvider(drivers::amd_am79c973 *backend)
-: RawDataHandler(backend)
+EtherFrameProvider::EtherFrameProvider(EthernetDriver* backend)
+: EthernetDriverEventHandler()
 {
+
+    this->backend = backend;
 
     //Clear handlers on start
     for (uint32_t i = 0; i < 65535; ++i) {
@@ -87,7 +85,7 @@ EtherFrameProvider::~EtherFrameProvider() {
  * @param buffer the buffer with the received data
  * @param size the size of the received data
  */
-bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint32_t size) {
+bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t size) {
 
     //Check if the size is big enough to contain an ethernet frame
     if(size < sizeof(EtherFrameHeader))
@@ -99,7 +97,7 @@ bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint
 
     //Only handle if it is for this device
     if(frame->dstMAC_BE == 0xFFFFFFFFFFFF                   //If it is a broadcast
-    || frame->dstMAC_BE == backend -> GetMACAddress())      //If it is for this device
+    || frame->dstMAC_BE == backend -> GetMediaAccessControlAddress())      //If it is for this device
     {
 
         //Check if there is a handler for this frame type
@@ -116,7 +114,7 @@ bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint
     if(sendBack){
 
         frame -> dstMAC_BE = frame -> srcMAC_BE;            //Set the new destination to be the device the data was received from
-        frame -> srcMAC_BE = backend->GetMACAddress();      //Set the new source to be this device's MAC address
+        frame -> srcMAC_BE = backend->GetMediaAccessControlAddress();      //Set the new source to be this device's MAC address
 
     }
 
@@ -140,7 +138,7 @@ void EtherFrameProvider::Send(common::uint64_t dstMAC_BE, common::uint16_t ether
 
     //Put data in the header
     frame -> dstMAC_BE = dstMAC_BE;
-    frame -> srcMAC_BE = backend -> GetMACAddress();
+    frame -> srcMAC_BE = backend -> GetMediaAccessControlAddress();
     frame -> etherType_BE = etherType_BE;
 
     //Set source and destination to their buffers
@@ -159,23 +157,12 @@ void EtherFrameProvider::Send(common::uint64_t dstMAC_BE, common::uint16_t ether
 }
 
 /**
- * @brief Get the IP Address of the device
- *
- * @return common::uint32_t the IP Address
- */
-common::uint32_t EtherFrameProvider::GetIPAddress() {
-
-    return backend -> GetIPAddress();
-
-}
-
-/**
  * @brief Get the MAC Address of the device from the backend
  *
  * @return common::uint64_t the MAC Address
  */
 common::uint64_t EtherFrameProvider::GetMACAddress() {
 
-    return backend -> GetMACAddress();
+    return backend -> GetMediaAccessControlAddress();
 
 }
