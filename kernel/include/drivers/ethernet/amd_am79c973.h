@@ -91,19 +91,15 @@ namespace maxOS{
                     void Activate();
                     void Deactivate();
 
-                    common::string GetVendorName();
+                common::string GetVendorName();
                     common::string GetDeviceName();
 
                     //Override Interrupt default methods
                     common::uint32_t HandleInterrupt(common::uint32_t esp);
 
                     void DoSend(common::uint8_t* buffer, int size);
-                    //void Receive();
 
-                    common::uint64_t GetMACAddress();
-
-                    //common::uint32_t GetIPAddress();
-                    //void SetIPAddress(common::uint32_t ip); //Here it is done manually, also can be done via DCHP
+                    common::uint64_t GetMediaAccessControlAddress();
 
                     inline void* operator new(common::uint32_t, amd_am79c973* p)
                     {

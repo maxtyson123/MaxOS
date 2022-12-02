@@ -3,7 +3,7 @@ GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exce
 GCC_EXEC ?= gcc
 
 AS_PARAMS = --32
-LD_PARAMS = -melf_i386
+LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -nic tap,model=e1000 \
  			  -boot d -cdrom maxOS.iso \
  			  -m 512 \
@@ -12,6 +12,7 @@ QEMU_PARAMS = -nic tap,model=e1000 \
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \
+		  obj/kernel/common/timer.o \
  		  obj/kernel/memory/memorymanagement.o \
  		  obj/kernel/memory/memoryinputoutput.o \
  		  obj/kernel/drivers/driver.o \
@@ -38,8 +39,6 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/render.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/common/printf.o \
- 		  obj/kernel/common/timer.o \
- 		  obj/kernel/common/vector.o \
  		  obj/kernel/net/etherframe.o \
  		  obj/kernel/net/arp.o \
  		  obj/kernel/net/ipv4.o \

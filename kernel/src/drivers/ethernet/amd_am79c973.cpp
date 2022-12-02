@@ -43,7 +43,7 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     uint64_t MAC5 = MACAddress4Port.Read() / 256;
 
     // Combine MAC addresses into one 48 bit number
-    uint64_t MAC = MAC5 << 40
+     ownMAC = MAC5 << 40
                    | MAC4 << 32
                    | MAC3 << 24
                    | MAC2 << 16
@@ -64,7 +64,7 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     initBlock.numSendBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
     initBlock.reserved2 = 0;                         // Reserved
     initBlock.numRecvBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
-    initBlock.physicalAddress = MAC;                 // Set the physical address to the MAC address
+    initBlock.physicalAddress = ownMAC;              // Set the physical address to the MAC address
     initBlock.reserved3 = 0;                         // Reserverd
     initBlock.logicalAddress = 0;                    // None for now
 
@@ -286,8 +286,12 @@ void amd_am79c973::FetchDataSent()
  * @details This function gets the MAC address
  * @return The MAC address
  */
-uint64_t amd_am79c973::GetMACAddress() {
+uint64_t amd_am79c973::GetMediaAccessControlAddress() {
     while(ownMAC == 0);
     return ownMAC;
+}
+
+void amd_am79c973::Deactivate() {
+
 }
 

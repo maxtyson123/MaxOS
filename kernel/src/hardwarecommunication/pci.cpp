@@ -215,7 +215,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 {//am79c971
 
                     printf("    AMD am79c971", true);
-                    return MemoryManager::activeMemoryManager -> Instantiate<ethernet::amd_am79c973>(&dev, interruptManager);
+                //    return MemoryManager::activeMemoryManager -> Instantiate<amd_am79c973>(&dev, interruptManager);
                     break;
 
                 }//end am79c971

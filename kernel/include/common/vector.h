@@ -13,11 +13,11 @@ namespace maxOS{
 
         template<class T> class VectorIterationHandler
         {
-            public:
-                VectorIterationHandler();
-                ~VectorIterationHandler();
-                virtual void OnRead(T);
-                virtual void OnEndOfStream();
+        public:
+            VectorIterationHandler();
+            ~VectorIterationHandler();
+            virtual void OnRead(T);
+            virtual void OnEndOfStream();
         };
 
 
@@ -25,38 +25,41 @@ namespace maxOS{
 
         template<class T> class Vector
         {
-            protected:
-                T elements[100];            // fake - currently max 100 elements - but the interface should be used already
-                uint32_t Size;
-                uint32_t MaxSize;
-            public:
-                typedef T* iterator;
+        protected:
+            T elements[100]; // fake - currently max 100 elements - but the interface should be used already
+            uint32_t Size;
+            uint32_t MaxSize;
+        public:
+            typedef T* iterator;
 
-                Vector();
-                Vector(int size, T element);
-                ~Vector();
+            Vector();
+            Vector(int size, T element);
+            ~Vector();
 
-                T& operator[](int index);
-                uint32_t size();
-                iterator begin();
-                iterator end();
-                iterator find(T element);
-                bool empty();
+            T& operator[](int index);
+            uint32_t size();
+            iterator begin();
+            iterator end();
+            iterator find(T element);
+            bool empty();
 
-                iterator push_back(T element);
-                void pop_back();
-                iterator push_front(T element);
-                void pop_front();
-                void erase(T element);
-                void erase(iterator position);
-                void clear();
+            iterator push_back(T element);
+            void pop_back();
+            iterator push_front(T element);
+            void pop_front();
+            void erase(T element);
+            void erase(iterator position);
+            void clear();
 
-                void Iterate(VectorIterationHandler<T>* handler);
-                void Iterate(void callback(T&));
+            void Iterate(VectorIterationHandler<T>* handler);
+            void Iterate(void callback(T&));
         };
 
-    }
 
+
+    }
 }
+
+#include "../../src/common/vector_templates.cpp"
 
 #endif //MAXOS_COMMON_VECTOR_H

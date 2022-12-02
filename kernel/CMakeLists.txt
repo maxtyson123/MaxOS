@@ -73,7 +73,7 @@ set(
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
         ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
 
-        src/drivers/ethernet/ethernet.cpp include/drivers/ethernet/ethernet.h include/common/vector.h src/common/vector.cpp src/drivers/ethernet/rawdatahandler.cpp include/drivers/ethernet/rawdatahandler.h)
+        src/drivers/ethernet/ethernet.cpp include/drivers/ethernet/ethernet.h include/common/vector.h src/common/vector_templates.cpp src/drivers/ethernet/rawdatahandler.cpp include/drivers/ethernet/rawdatahandler.h)
 
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
