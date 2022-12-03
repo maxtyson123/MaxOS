@@ -8,6 +8,7 @@
 #include <common/types.h>
 #include <common/timer.h>
 #include <net/etherframe.h>
+#include <net/ipv4.h>
 
 namespace maxOS{
 
@@ -31,14 +32,15 @@ namespace maxOS{
 
         }__attribute__((packed));
 
-        class AddressResolutionProtocol : EtherFrameHandler{
+        class AddressResolutionProtocol : public EtherFrameHandler, public InternetProtocolAddressResolver
+        {
             private:
                 common::uint32_t cacheIPAddress[128];
                 common::uint32_t cacheMACAddress[128];
                 int numCacheEntries;
-
+                InternetProtocolProvider* internetProtocolProvider;
             public:
-                AddressResolutionProtocol(EtherFrameProvider* backend);
+                AddressResolutionProtocol(EtherFrameProvider* backend, InternetProtocolProvider* internetProtocolHandler);
                 ~AddressResolutionProtocol();
 
                 bool OnEtherFrameReceived(common::uint8_t* etherframePayload, common::uint32_t size);
@@ -46,8 +48,10 @@ namespace maxOS{
                 void RequestMACAddress(common::uint32_t IP_BE);
                 common::uint64_t GetMACFromCache(common::uint32_t IP_BE);
 
-                common::uint64_t Resolve(common::uint32_t IP_BE);
+                drivers::ethernet::MediaAccessControlAddress Resolve(common::uint32_t IP_BE);
                 void BroadcastMACAddress(common::uint32_t IP_BE);
+
+                void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress);
         };
 
     }

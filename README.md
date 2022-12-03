@@ -40,13 +40,22 @@ Moved to  projects page
 ###  Extended
 - [ ] Fix VMs
 - [ ] VESA Video Mode
-- [ ] Usable Desktop
+- [ ] Usable Desktop / GUI draw rewrite
+- [ ] Timer rewrite
+- [ ] Console rewrite
+- [ ] BUS Hardware communication
+- [ ] USB
+- [ ] HTTP Protocol, DCHP protocol
+- [ ] Codebase cleanup / rewrite
+- [ ] Kernel Boot Rewrite
+- [ ] Example Telnet Server (GUI) (EMBEDDED)
 - [ ] New Process Manager / Scheduler
 - [ ] Elf Loader
 - [ ] Shell
 - [ ] System Calls
 - [ ] LibC
 - [ ] LibNet
+- [ ] Example Telnet Server (GUI) (EXTERNALLY LOADED)
 - [ ] GCC Cross compiler
 - [ ] POSIX
 - [ ] Game Ports (DOOM etc..)

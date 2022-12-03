@@ -144,10 +144,10 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, u
         new (socket) UserDatagramProtocolSocket(this);    //Create the socket
 
         //Configure the socket
-        socket -> remotePort = port;                      //Port to that application wants to connect to
-        socket -> remoteIP = ip;                          //IP to that application wants to connect to
-        socket -> localPort = freePort++;                 //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
-        socket -> localIP = backend -> GetIPAddress();    //IP that we will use to connect to the remote application
+        socket -> remotePort = port;                                    //Port to that application wants to connect to
+        socket -> remoteIP = ip;                                        //IP to that application wants to connect to
+        socket -> localPort = freePort++;                               //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
+        socket -> localIP = backend -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
 
         //Convet the ports to big endian
         socket -> remotePort = ((socket -> remotePort & 0xFF00)>>8) | ((socket -> remotePort & 0x00FF) << 8);
@@ -174,9 +174,9 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) 
         new (socket) UserDatagramProtocolSocket(this);    //Create the socket
 
         //Configure the socket
-        socket -> listening = true;                       //Set the socket to listening
-        socket -> localPort = port;                 //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
-        socket -> localIP = backend -> GetIPAddress();    //IP that we will use to connect to the remote application
+        socket -> listening = true;                                     //Set the socket to listening
+        socket -> localPort = port;                                     //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
+        socket -> localIP = backend -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
 
         //Convet the port to big endian
         socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);

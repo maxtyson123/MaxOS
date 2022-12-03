@@ -8,12 +8,15 @@ using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::ethernet;
 
 
 
-net::AddressResolutionProtocol::AddressResolutionProtocol(net::EtherFrameProvider* backend)
-: EtherFrameHandler(backend, 0x0806)
+net::AddressResolutionProtocol::AddressResolutionProtocol(net::EtherFrameProvider* backend, InternetProtocolProvider* internetProtocolProvider)
+: EtherFrameHandler(backend, 0x0806),
+  InternetProtocolAddressResolver(internetProtocolProvider)
 {
+    this -> internetProtocolProvider = internetProtocolProvider;
     numCacheEntries = 0;
 }
 
@@ -42,17 +45,17 @@ bool AddressResolutionProtocol::OnEtherFrameReceived(common::uint8_t* etherframe
         if(arpMessage -> protocol == 0x0008             //Check if the protocol is IPv4 (BigEndian)
         && arpMessage -> hardwareAddressSize == 6
         && arpMessage -> protocolAddressSize == 4
-        && arpMessage -> dstIP == backend -> GetIPAddress())
+        && arpMessage -> dstIP == internetProtocolProvider -> GetInternetProtocolAddress())
         {
 
             switch (arpMessage -> command) {
                 //Request
                 case 0x0100:
-                    arpMessage -> command = 0x0200;                                         //Set the command to reply
-                    arpMessage -> dstMAC = arpMessage -> srcMAC;                            //Set the destination MAC to the source MAC
-                    arpMessage -> dstIP = arpMessage -> srcIP;                              //Set the destination IP to the source IP
-                    arpMessage -> srcMAC = backend -> GetMACAddress();                      //Set the source MAC to this MAC
-                    arpMessage -> srcIP = backend -> GetIPAddress();                        //Set the source IP to this IP
+                    arpMessage -> command = 0x0200;                                                                         //Set the command to reply
+                    arpMessage -> dstMAC = arpMessage -> srcMAC;                                                            //Set the destination MAC to the source MAC
+                    arpMessage -> dstIP = arpMessage -> srcIP;                                                              //Set the destination IP to the source IP
+                    arpMessage -> srcMAC = internetProtocolProvider -> GetMediaAccessControlAddress();                      //Set the source MAC to this MAC
+                    arpMessage -> srcIP = internetProtocolProvider -> GetInternetProtocolAddress();                         //Set the source IP to this IP
                     return true;
                     break;
 
@@ -91,17 +94,17 @@ void AddressResolutionProtocol::RequestMACAddress(common::uint32_t IP_BE) {
     AddressResolutionProtocolMessage arpMessage;
 
     //Set the message's values
-    arpMessage.hardwareType = 0x0100;                   //Ethernet, encoded in BigEndian
-    arpMessage.protocol = 0x0008;                       //IPv4, encoded in BigEndian
-    arpMessage.hardwareAddressSize = 6;                 //MAC address size
-    arpMessage.protocolAddressSize = 4;                 //IPv4 address size
-    arpMessage.command = 0x0100;                        //Request, encoded in BigEndian
+    arpMessage.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian
+    arpMessage.protocol = 0x0008;                                                       //IPv4, encoded in BigEndian
+    arpMessage.hardwareAddressSize = 6;                                                 //MAC address size
+    arpMessage.protocolAddressSize = 4;                                                 //IPv4 address size
+    arpMessage.command = 0x0100;                                                        //Request, encoded in BigEndian
 
     //Set the message's source and destination
-    arpMessage.srcMAC = backend -> GetMACAddress();     //Set the source MAC address to the backend's MAC address
-    arpMessage.srcIP = backend -> GetIPAddress();       //Set the source IP address to the backend's IP address
-    arpMessage.dstMAC = 0xFFFFFFFFFFFF;                 //Set the destination MAC address to broadcast
-    arpMessage.dstIP = IP_BE;                           //Set the destination IP address to the requested IP address
+    arpMessage.srcMAC = backend -> GetMACAddress();                                     //Set the source MAC address to the backend's MAC address
+    arpMessage.srcIP = internetProtocolProvider -> GetInternetProtocolAddress();        //Set the source IP address to the backend's IP address
+    arpMessage.dstMAC = 0xFFFFFFFFFFFF;                                                 //Set the destination MAC address to broadcast
+    arpMessage.dstIP = IP_BE;                                                           //Set the destination IP address to the requested IP address
 
     //Send the message
     this -> Send(arpMessage.dstMAC, (uint8_t*)&arpMessage, sizeof(AddressResolutionProtocolMessage));
@@ -134,7 +137,7 @@ common::uint64_t AddressResolutionProtocol::GetMACFromCache(common::uint32_t IP_
  * @param IP_BE The IP address to get the MAC address from.
  * @return The MAC address of the IP address.
  */
-common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
+MediaAccessControlAddress AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
 
 
     //This function will return the MAC address of the IP address given as parameter
@@ -149,7 +152,7 @@ common::uint64_t AddressResolutionProtocol::Resolve(common::uint32_t IP_BE) {
 
    // Timer::activeTimer ->Wait(300);                        //Wait for .3 seconds
 
-    //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop)
+    //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
     while (MAC == 0xFFFFFFFFFFFF) {                         //Wait until the MAC address is found
         MAC = GetMACFromCache(IP_BE);                       //Check if the MAC address is in the cache
     }
@@ -177,4 +180,12 @@ void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
 
     this->Send(arp.dstMAC, (uint8_t*)&arp, sizeof(AddressResolutionProtocolMessage));
 
+}
+
+void AddressResolutionProtocol::Store(InternetProtocolAddress internetProtocolAddress, MediaAccessControlAddress mediaAccessControlAddress) {
+    if(numCacheEntries < 128){                                              //Check if the cache is full
+        cacheIPAddress[numCacheEntries] = internetProtocolAddress;          //Save the IP address
+        cacheMACAddress[numCacheEntries] = mediaAccessControlAddress;            //Save the MAC address
+        numCacheEntries++;                                                  //Increase the number of entries
+    }
 }

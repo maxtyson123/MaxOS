@@ -315,24 +315,6 @@ class Version{
 
 };
 
-//Network
-uint8_t ip[] = {10,0,2,15};              //IP address that vms have for virtualization
-uint32_t IP_BE = ((uint32_t)ip[3] << 24)                //Convert to big endian
-                 | ((uint32_t)ip[2] << 16)
-                 | ((uint32_t)ip[1] << 8)
-                 | (uint32_t)ip[0];
-
-uint8_t gateway_ip[] = {10,0,2,2};       //IP address for the gateway
-uint32_t GIP_BE = ((uint32_t)gateway_ip[3] << 24)       //Convert to big endian
-                  | ((uint32_t)gateway_ip[2] << 16)
-                  | ((uint32_t)gateway_ip[1] << 8)
-                  | (uint32_t)gateway_ip[0];
-
-uint8_t subnet[] = {255,255,255,0};      //Subnet mask
-uint32_t SUB_BE = ((uint32_t)subnet[3] << 24)           //Convert to big endian
-                  | ((uint32_t)subnet[2] << 16)
-                  | ((uint32_t)subnet[1] << 8)
-                  | (uint32_t)subnet[0];
 
 ///__KERNEL PROCESS VARS__
 
@@ -528,7 +510,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
             printf("    -VGA setup\n");
         #endif
 
-    driverManager.ActivateAll();
+
     printf("[X] Drivers Setup\n");
 
 
@@ -618,19 +600,21 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
     printf("[x] Setting Up Network Driver \n");
-    EthernetDriver* eth0 = (amd_am79c973*)(driverManager.drivers[2]);
+    EthernetDriver* eth0 = (EthernetDriver*)(driverManager.drivers[2]);
 
         printf(" -  Setting Up IP, Gateway, Subnet... \n");
-        //eth0 -> SetIPAddress(IP_BE);
+        SubnetMask subnetMask = InternetProtocolProvider::CreateSubnetMask(255,255,255,0);
+        InternetProtocolAddress defaultGatewayInternetProtocolAddress = InternetProtocolProvider::CreateInternetProtocolAddress(10,0,2,2);
+        InternetProtocolAddress ownInternetProtocolAddress = InternetProtocolProvider::CreateInternetProtocolAddress(10,0,2,15);
 
         printf(" -  Setting Up EtherFrame... \n");
         EtherFrameProvider etherFrame(eth0);
 
-        printf(" -  Setting Up ARP... \n");
-        AddressResolutionProtocol arp(&etherFrame);
-
         printf(" -  Setting Up IPv4... \n");
-        InternetProtocolProvider ipv4(&etherFrame, &arp, GIP_BE, SUB_BE);
+        InternetProtocolProvider ipv4(&etherFrame, ownInternetProtocolAddress, defaultGatewayInternetProtocolAddress, subnetMask);
+
+        printf(" -  Setting Up ARP... \n");
+        AddressResolutionProtocol arp(&etherFrame, &ipv4);
 
         printf(" -  Setting Up ICMP... \n");
         InternetControlMessageProtocol icmp(&ipv4);
@@ -654,24 +638,34 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     interrupts.Activate();
     printf("[x] IDT Activated \n", true);
 
+    printf("[ ] Activating Drivers... \n");
+    driverManager.ActivateAll();                                //Has to be after interrupts are activated
+    printf("[x] Drivers Activated \n", true);
+
+/*
+
+    while (true);
+
     printf("++Broadcast MAC ++\n");
-    arp.BroadcastMACAddress(GIP_BE);
+    arp.BroadcastMACAddress(defaultGatewayInternetProtocolAddress);
+
+
 
     printf("\n ++ Test ICMP ++\n");
-    icmp.RequestEchoReply(GIP_BE);
+    icmp.RequestEchoReply(defaultGatewayInternetProtocolAddress);
 
     printf("\n ++ Test UDP ++\n");
     /* Test Connection TODO: Comeback and fix the UDP handler
     UserDatagramProtocolSocket* test_socket = udp.Connect(GIP_BE, 1234);        //Use ncat -u -l 1234 to test
     udp.Bind(test_socket, &printfUDPHandler);
     test_socket->Send((uint8_t*)"Hello World", 11);
-     */
+
 
     //Test Listening
     UserDatagramProtocolSocket* test_socket = udp.Listen(1234);        //First set a portforward rule in Vbox then Use ncat -u -p 1234 127.0.0.1 to test
     udp.Bind(test_socket, &printfUDPHandler);
 
-
+*/
 
 
 }

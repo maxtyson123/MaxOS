@@ -61,7 +61,6 @@ void EtherFrameHandler::Send(common::uint64_t dstMAC_BE, common::uint8_t *data, 
 }
 
 
-
 EtherFrameProvider::EtherFrameProvider(EthernetDriver* backend)
 : EthernetDriverEventHandler()
 {

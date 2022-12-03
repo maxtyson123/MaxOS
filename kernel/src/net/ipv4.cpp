@@ -8,9 +8,37 @@ using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::net;
 using namespace maxOS::memory;
+using namespace maxOS::drivers;
+using namespace maxOS::drivers::ethernet;
 
 
 void printf(char*, bool=false);
+
+
+///__RESOLVER__///
+
+InternetProtocolAddressResolver::InternetProtocolAddressResolver(InternetProtocolProvider *handler)
+{
+
+    handler -> RegisterInternetProtocolAddressResolver(this);
+
+}
+
+
+
+InternetProtocolAddressResolver::~InternetProtocolAddressResolver() {
+
+}
+
+MediaAccessControlAddress InternetProtocolAddressResolver::Resolve(InternetProtocolAddress address) {
+    return 0xFFFFFFFFFFFF; // the broadcast address
+}
+
+void InternetProtocolAddressResolver::Store(InternetProtocolAddress internetProtocolAddress, MediaAccessControlAddress mediaAccessControlAddress) {
+
+}
+
+
 ///__Handler__///
 InternetProtocolHandler::InternetProtocolHandler(InternetProtocolProvider *backend, uint8_t protocol) {
 
@@ -62,14 +90,13 @@ void InternetProtocolHandler::Send(uint32_t dstIP_BE, uint8_t *internetProtocolP
 ///__Provider__///
 
 
-InternetProtocolProvider::InternetProtocolProvider(EtherFrameProvider *backend, AddressResolutionProtocol *arp, uint32_t gatewayIP, uint32_t subnetMask)
+InternetProtocolProvider::InternetProtocolProvider(EtherFrameProvider *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask)
         : EtherFrameHandler(backend, 0x0800)
 {
     //Store vars
-    this -> arp = arp;
-    this -> gatewayIP = gatewayIP;
+    this -> ownInternetProtocolAddress = ownInternetProtocolAddress;
+    this -> defaultGatewayInternetProtocolAddress = defaultGatewayInternetProtocolAddress;
     this -> subnetMask = subnetMask;
-
     //Reset handlers
     for (int i = 0; i < 255; ++i) {
         handlers[i] = 0;
@@ -173,10 +200,10 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     //Check if the destination is on the same subnet, The if condition determines if the destination device is on the same Local network as the source device . and if they are not on the same local network then we resolve the ip address of the gateway .
     uint32_t route = dstIP_BE;                                                                                                                               //Set route to destination IP by default
     if((dstIP_BE & subnetMask) != (message->srcIP & subnetMask))                                                                                             //Check if the destination is on the same subnet
-        route = gatewayIP;                                                                                                                                   //If not, set route to gateway IP
+        route = defaultGatewayInternetProtocolAddress;                                                                                                                                   //If not, set route to gateway IP
 
     printf("\nRequesting ARP\n");                                                                                                                            //Print debug info
-    uint32_t MAC = arp ->Resolve(route);
+    uint32_t MAC = resolver ->Resolve(route);
 
     //Send message
     printf("\nSending IP packet\n");
@@ -206,3 +233,54 @@ uint16_t InternetProtocolProvider::Checksum(uint16_t *data, uint32_t lengthInByt
 
     return ((~temp & 0xFF00) >> 8) | ((~temp & 0x00FF) << 8);
 }
+
+void InternetProtocolProvider::RegisterInternetProtocolAddressResolver(InternetProtocolAddressResolver *resolver) {
+
+    this -> resolver = resolver;
+
+}
+
+InternetProtocolAddress InternetProtocolProvider::CreateInternetProtocolAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4) {
+    InternetProtocolAddress result = digit4;
+    result = (result << 8) | digit3;
+    result = (result << 8) | digit2;
+    result = (result << 8) | digit1;
+    return result;
+}
+
+InternetProtocolAddress InternetProtocolProvider::Parse(string address) {
+    uint8_t digits[4];
+
+    uint8_t currentDigit = 0;
+    for(int i = 0; i < 4; i++)
+        digits[i] = 0;
+    for(char* i = (char*)address; *i != '\0'; ++i)
+    {
+        if('0' <= *i && *i <= '9')
+        {
+            digits[currentDigit] = digits[currentDigit] * 10 + *i - '0';
+        }
+        else
+        {
+            if(currentDigit >= 3)
+                break;
+            currentDigit++;
+        }
+
+    }
+
+    return CreateInternetProtocolAddress(digits[0], digits[1], digits[2], digits[3]);
+}
+
+SubnetMask InternetProtocolProvider::CreateSubnetMask(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4) {
+    return (SubnetMask)CreateInternetProtocolAddress(digit1, digit2, digit3, digit4);
+}
+
+InternetProtocolAddress InternetProtocolProvider::GetInternetProtocolAddress() {
+    return ownInternetProtocolAddress;
+}
+
+MediaAccessControlAddress InternetProtocolProvider::GetMediaAccessControlAddress() {
+    return backend -> GetMACAddress();
+}
+

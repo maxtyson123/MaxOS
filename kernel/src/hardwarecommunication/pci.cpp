@@ -13,7 +13,7 @@ using namespace maxOS::memory;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
 void printfHex(uint8_t key);                    //Forward declaration
-
+char printfInt( int i);
 
 
 ///__DESCRIPTOR___
@@ -157,6 +157,8 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                     driverManager->AddDriver(driver);
                 }
 
+
+
                 if(deviceDescriptor.hasMemoryBase) printf(" (MEMORY)");
                 if(deviceDescriptor.hasPortBase) printf(" (I/O)");
 
@@ -165,7 +167,7 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 
         }
     }
-    while (true);
+
 }
 
 /**
@@ -215,7 +217,11 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 {//am79c971
 
                     printf("    AMD am79c971", true);
-                //    return MemoryManager::activeMemoryManager -> Instantiate<amd_am79c973>(&dev, interruptManager);
+                    //return MemoryManager::activeMemoryManager -> Instantiate<amd_am79c973>(&dev, interruptManager);
+                    amd_am79c973* result = (amd_am79c973*)MemoryManager::activeMemoryManager ->malloc(sizeof(amd_am79c973));
+                    new (result) amd_am79c973(&dev, interruptManager);
+
+                    return result;
                     break;
 
                 }//end am79c971
@@ -225,6 +231,25 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
             }
             break;
         }//End AMD
+
+        case 0x106B:
+        {//Apple
+
+            switch (dev.device_ID)
+            {
+                case 0x003F:
+                {//KeyLargo/Intrepid USB
+
+                    printf("   APPLE KeyLargo/Intrepid USB (NO DRIVER)", true);
+                    break;
+
+                }//end KeyLargo/Intrepid USB
+
+                default:
+                    break;
+            }
+            break;
+        }//End Apple
 
         case 1234:
         { //QEMU
@@ -255,12 +280,9 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 {//i217 (Ethernet Controller)
 
                     printf("    INTEL i217", true);
-                    driver = (intel_i217 *) MemoryManager::activeMemoryManager->malloc(
-                            sizeof(intel_i217));       //Allocate memory region of the sie of the class
-                    if (driver !=
-                        0)                                                                                     //Check if space in memory
-                        new(driver) intel_i217(&dev,
-                                               interruptManager);                                               //Create Driver Instance
+                    driver = (intel_i217 *) MemoryManager::activeMemoryManager->malloc(sizeof(intel_i217));         //Allocate memory region of the sie of the class
+                    if (driver != 0)                                                                                    //Check if space in memory
+                        new(driver) intel_i217(&dev, interruptManager);                                                 //Create Driver Instance
                     return driver;                                                                                      //Add Driver
                     break;
 
@@ -274,6 +296,14 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 
                 }//end 440FX
 
+                case 0x2415:
+                {//AUDIO CONTROLLER
+
+                    printf("   INTEL  AC'97 AUDIO CONTROLLER (NO DRIVER)", true); //82801AA AC'97 Audio Controller
+                    break;
+
+                }//end AUDIO CONTROLLER
+
                 case 0x7000:
                 {//PIIX3 ISA
 
@@ -283,6 +313,14 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 }//end PIIX3 ISA
 
                 case 0x7010:
+                {//PIIX4 IDE
+
+                    printf("   INTEL PIIX4 IDE (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                    break;
+
+                }//end PIIX4 IDE
+
+                case 0x7111:
                 {//PIIX3 IDE
 
                     printf("   INTEL PIIX3 IDE (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
@@ -304,6 +342,29 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
             }
             break;
         }//End Intel
+
+        case 0x80EE: { //VIRTUALBOX
+
+            switch (dev.device_ID) {
+
+                case 0xBEEF: {//GRAPHICS ADAPTER
+
+                    printf("   VIRTUALBOX GRAPHICS ADAPTER (NO DRIVER)", true);
+                    break;
+
+                }//end GRAPHICS ADAPTER
+
+                case 0xCAFE: {//GUEST SERVICE
+
+                    printf("   VIRTUALBOX GUEST SERVICE (NO DRIVER)", true);
+                    break;
+
+                }//end GUEST SERVICE
+
+            }
+            break;
+        }//End VIRTUALBOX
+
     }
 
     //If there is no driver for the particular device, go into generic devices
@@ -413,7 +474,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                     // it must be a valid 32-bit address :
                     if ( (get_number_of_highest_set_bit(barValue) != 31) || (lowestBit > 31) || (lowestBit < 4) )
                     {
-                        printf("       ERROR (32bit): INVALID BITS\n");
+                        //TODO: MAKE WORK WITH VIRTUALBOX / QEMU printf("       ERROR (32bit): BAR INVALID BITS\n");
                         return result;
                     }
 

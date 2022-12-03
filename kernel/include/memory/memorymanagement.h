@@ -35,17 +35,48 @@ namespace maxOS{
             void* malloc(common::size_t size);
             void free(void* pointer);
 
-            template<class T> T* Instantiate(common::uint32_t numberOfElements=1);
-            template<class T, class P1> T* Instantiate(P1);
-            template<class T, class P1, class P2> T* Instantiate(P1, P2);
-            template<class T, class P1, class P2, class P3> T* Instantiate(P1, P2, P3);
-            template<class T, class P1, class P2, class P3, class P4> T* Instantiate(P1, P2, P3, P4);
+            template<class T> T* Instantiate(common::uint32_t numberOfElements=1){
+                T* result = (T*)malloc(sizeof(T)*numberOfElements);
+                new (result) T();
+                return result;
+            }
+
+            template<class T, class P1> T* Instantiate(P1 p1){
+                T* result = (T*)malloc(sizeof(T));
+                new (result) T(p1);
+                return result;
+            }
+
+            template<class T, class P1, class P2> T* Instantiate(P1 p1, P2 p2)     {
+                T* result = (T*)malloc(sizeof(T));
+                new (result) T(p1, p2);
+                return result;
+            }
+
+            template<class T, class P1, class P2, class P3> T* Instantiate(P1 p1, P2 p2, P3 p3) {
+                T* result = (T*)malloc(sizeof(T));
+                new (result) T(p1, p2, p3);
+                return result;
+            }
+
+            template<class T, class P1, class P2, class P3, class P4> T* Instantiate(P1 p1, P2 p2, P3 p3, P4 p4) {
+                T* result = (T*)malloc(sizeof(T));
+                new (result) T(p1, p2, p3, p4);
+                return result;
+            }
+
+
+
+
+
 
         };
     }
 
 
 }
+
+
 
 
 void* operator new(unsigned size);

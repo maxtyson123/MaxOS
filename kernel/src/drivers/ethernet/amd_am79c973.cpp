@@ -112,11 +112,15 @@ amd_am79c973::~amd_am79c973()
  */
 void amd_am79c973::Activate()
 {
+    printf("Activating AMD 79C973 Ethernet Controller ");
+
 
     initDone = false;                                            // Set initDone to false
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x41);                           // Enable Interrupts and start the device
-    while(!initDone);                                            // Wait for initDone to be set to true
+    //while(!initDone);                                            // Wait for initDone to be set to true
+
+
 
     registerAddressPort.Write(4);                           // Tell device to read from register 4
     uint32_t temp = registerDataPort.Read();                     // Get current data
@@ -159,6 +163,8 @@ string amd_am79c973::GetDeviceName()
  */
 common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 
+    printf("INTERRUPT");
+
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
     registerAddressPort.Write(0);                           // Tell device to read from register 0
     uint32_t temp = registerDataPort.Read();                     // Get current data
@@ -179,6 +185,8 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
     // Reply that it was received
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(temp);                           // Tell device that the interrupt was received
+
+
 
     return esp;
 
