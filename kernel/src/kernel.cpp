@@ -644,7 +644,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
 
-/*
+
 
     printf("++Broadcast MAC ++\n");
     arp.BroadcastMACAddress(defaultGatewayInternetProtocolAddress);
@@ -664,8 +664,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //Test Listening
     UserDatagramProtocolSocket* test_socket = udp.Listen(1234);        //First set a portforward rule in Vbox then Use ncat -u -p 1234 127.0.0.1 to test
     udp.Bind(test_socket, &printfUDPHandler);
-
-*/
+    */
 
 
 }
@@ -676,3 +675,4 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 #pragma clang diagnostic pop
 
 //MaxOS - May the source be with you...
+

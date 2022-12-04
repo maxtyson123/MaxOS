@@ -4,7 +4,15 @@ GCC_EXEC ?= gcc
 
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386 --verbose
-QEMU_PARAMS = -net user -net nic,model=pcnet,macaddr=08:00:27:EC:D0:29 -boot d -cdrom maxOS.iso -m 512 -hda maxOS.img -serial stdio
+QEMU_PARAMS = -nic tap,model=e1000 \
+		      -boot d \
+		      -cdrom maxOS.iso \
+		      -m 512 \
+		      -hda maxOS.img \
+		      -serial stdio
+
+#-nic tap,model=e1000 \
+#-net user -net nic,model=pcnet \
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \

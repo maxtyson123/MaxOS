@@ -62,6 +62,7 @@ Moved to  projects page
 - [ ] Game Ports (DOOM etc..)
 - [ ] Users & Privileges
 - [ ] Virtual Memory
+- [ ] More drivers, essitaly ones etc, wifi maybe
 - [ ] 64 Bit
 - [ ] Game Engine
 - [ ] Web Browser

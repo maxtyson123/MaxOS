@@ -43,12 +43,12 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     uint64_t MAC5 = MACAddress4Port.Read() / 256;
 
     // Combine MAC addresses into one 48 bit number
-     ownMAC = MAC5 << 40
-                   | MAC4 << 32
-                   | MAC3 << 24
-                   | MAC2 << 16
-                   | MAC1 << 8
-                   | MAC0;
+    ownMAC = MAC5 << 40
+             | MAC4 << 32
+             | MAC3 << 24
+             | MAC2 << 16
+             | MAC1 << 8
+             | MAC0;
 
     // Set the device to 32 bit mode
     registerAddressPort.Write(20);              // Tell device to write to register 20
@@ -107,6 +107,7 @@ amd_am79c973::~amd_am79c973()
 }
 
 
+
 /**
  * @details This function activates the device and starts it (Runs when the driver-manger calls activateAll())
  */
@@ -118,7 +119,7 @@ void amd_am79c973::Activate()
     initDone = false;                                            // Set initDone to false
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x41);                           // Enable Interrupts and start the device
-    //while(!initDone);                                            // Wait for initDone to be set to true
+    while(!initDone);                                            // Wait for initDone to be set to true
 
 
 
@@ -132,7 +133,7 @@ void amd_am79c973::Activate()
     registerDataPort.Write(0x42);                           // Tell device that it is initialized and can begin operating
 
     active = true;                                               // Set active to true
-
+    printf("AMD am79c973 INIT DONE\n");
 }
 
 /**
@@ -147,6 +148,7 @@ int amd_am79c973::Reset() {
 
 }
 
+
 string amd_am79c973::GetVendorName()
 {
     return "AMD";
@@ -157,13 +159,14 @@ string amd_am79c973::GetDeviceName()
     return "PCnet-FAST III (am79c973)";
 }
 
+
+
 /**
  * @details This function handles the interrupt for the device
  * @param esp The stack pointer (where to return to)
  */
 common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 
-    printf("INTERRUPT");
 
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
     registerAddressPort.Write(0);                           // Tell device to read from register 0
@@ -177,10 +180,11 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
     if((temp & 0x1000) == 0x1000) printf("AMD am79c973 MISSED FRAME\n");
     if((temp & 0x0800) == 0x0800) printf("AMD am79c973 MEMORY ERROR\n");
 
+
     // Responses
     if((temp & 0x0400) == 0x0400) FetchDataReceived();
     if((temp & 0x0200) == 0x0200) FetchDataSent();
-    if((temp & 0x0100) == 0x0100) initDone = true;
+    if((temp & 0x0100) == 0x0100) initDone = true;//
 
     // Reply that it was received
     registerAddressPort.Write(0);                           // Tell device to write to register 0
@@ -193,6 +197,7 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 }
 
 
+
 // Sending a package :
 // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the driver.
 //  The OWN bit must now be set in the “flags” field (0x80000000) in order to “transfer” the descriptor to the card.
@@ -203,7 +208,9 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
-void amd_am79c973::DoSend(common::uint8_t *buffer, int size) {
+void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
+
+    printf("Sending package... ");
 
     while(!active);
 
@@ -228,13 +235,6 @@ void amd_am79c973::DoSend(common::uint8_t *buffer, int size) {
     }
 
 
-    printf("Sending: ");
-    for(int i = 0; i < size; i++)
-    {
-        printfHex(buffer[i]);
-        printf(" ");
-    }
-
     sendBufferDescr[sendDescriptor].avail = 0;                               // Set that this buffer is in use
     sendBufferDescr[sendDescriptor].flags2 = 0;                              // Clear any previous error messages
     sendBufferDescr[sendDescriptor].flags = 0x8300F000                       // Encode the size of what is being sent
@@ -244,16 +244,19 @@ void amd_am79c973::DoSend(common::uint8_t *buffer, int size) {
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x48);                           // Tell device to send the data currently in the buffer
 
+    printf(" Done\n");
 
 }
 
-
 void amd_am79c973::FetchDataReceived()
 {
+
+    printf("Fetching data... ");
+
     for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)         //Loop through all the buffers
     {
         if(!(recvBufferDescr[currentRecvBuffer].flags    & 0x40000000)                   //Check if there is an error
-            && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000)    //Check start and end bits of the packet
+           && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000)    //Check start and end bits of the packet
         {
             uint32_t size = recvBufferDescr[currentRecvBuffer].flags2 & 0xFFF;          //Get the size of the packet
             if (size > 64)                                                              //If the size is the size of ethernet 2 frame
@@ -271,10 +274,11 @@ void amd_am79c973::FetchDataReceived()
 void amd_am79c973::FetchDataSent()
 {
 
+    /*
     for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)
     {
         if(!(recvBufferDescr[currentRecvBuffer].flags    & 0x40000000)
-            && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000)
+           && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000)
         {
             uint32_t size = recvBufferDescr[currentRecvBuffer].flags2 & 0xFFF;
             if (size > 64)
@@ -287,8 +291,10 @@ void amd_am79c973::FetchDataSent()
         recvBufferDescr[currentRecvBuffer].flags2 = 0;
         recvBufferDescr[currentRecvBuffer].flags = 0x8000F7FF;
     }
+    */
 
 }
+
 
 /**
  * @details This function gets the MAC address
@@ -302,4 +308,5 @@ uint64_t amd_am79c973::GetMediaAccessControlAddress() {
 void amd_am79c973::Deactivate() {
 
 }
+
 

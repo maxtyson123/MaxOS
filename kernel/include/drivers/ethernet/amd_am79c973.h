@@ -22,89 +22,87 @@ namespace maxOS{
 
             class amd_am79c973 : public EthernetDriver, public hardwarecommunication::InterruptHandler{
 
-                    struct InitializationBlock{
+                struct InitializationBlock{
 
-                        common::uint16_t mode;
-                        unsigned reserved1 : 4;
-                        unsigned numSendBuffers : 4;
-                        unsigned reserved2 : 4;
-                        unsigned numRecvBuffers : 4;
-                        common::uint64_t physicalAddress : 48;   //Not 64 bits but will be treated like it is
-                        common::uint16_t reserved3;
-                        common::uint64_t logicalAddress;
-                        common::uint32_t recvBufferDescrAddress;
-                        common::uint32_t sendBufferDescrAddress;
-
-
-                    } __attribute__((packed));
-
-                    struct BufferDescriptor{
-
-                        common::uint32_t address;
-                        common::uint32_t flags;
-                        common::uint32_t flags2;
-                        common::uint32_t avail;
-
-                    } __attribute__((packed));
+                    common::uint16_t mode;
+                    unsigned reserved1 : 4;
+                    unsigned numSendBuffers : 4;
+                    unsigned reserved2 : 4;
+                    unsigned numRecvBuffers : 4;
+                    common::uint64_t physicalAddress : 48;   //Not 64 bits but will be treated like it is
+                    common::uint16_t reserved3;
+                    common::uint64_t logicalAddress;
+                    common::uint32_t recvBufferDescrAddress;
+                    common::uint32_t sendBufferDescrAddress;
 
 
-                    //Reading the media access control address (MAC address)
-                    hardwarecommunication::Port16Bit MACAddress0Port;
-                    hardwarecommunication::Port16Bit MACAddress2Port;
-                    hardwarecommunication::Port16Bit MACAddress4Port;
+                } __attribute__((packed));
 
-                    //Register ports
-                    hardwarecommunication::Port16Bit registerDataPort;
-                    hardwarecommunication::Port16Bit registerAddressPort;
-                    hardwarecommunication::Port16Bit busControlRegisterDataPort;
+                struct BufferDescriptor{
 
-                    hardwarecommunication::Port16Bit resetPort;
+                    common::uint32_t address;
+                    common::uint32_t flags;
+                    common::uint32_t flags2;
+                    common::uint32_t avail;
 
-                    //The main purpose of the initialization block it to hold a pointer to the array of BufferDescriptors, which hold the pointers to the buffers
-                    InitializationBlock initBlock;
+                } __attribute__((packed));
 
 
-                    BufferDescriptor* sendBufferDescr;               //Descriptor entry
-                    common::uint8_t sendBufferDescrMemory[2048+15];  //RAM for the send buffer, also 16 byte aligned
-                    common::uint8_t sendBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
-                    common::uint8_t currentSendBuffer;               //Which buffers are active
+                //Reading the media access control address (MAC address)
+                hardwarecommunication::Port16Bit MACAddress0Port;
+                hardwarecommunication::Port16Bit MACAddress2Port;
+                hardwarecommunication::Port16Bit MACAddress4Port;
 
-                    BufferDescriptor* recvBufferDescr;               //Descriptor entry
-                    common::uint8_t recvBufferDescrMemory[2048+15];  //RAM for the recive buffer, also 16 byte aligned
-                    common::uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
-                    common::uint8_t currentRecvBuffer;               //Which buffers are active
+                //Register ports
+                hardwarecommunication::Port16Bit registerDataPort;
+                hardwarecommunication::Port16Bit registerAddressPort;
+                hardwarecommunication::Port16Bit busControlRegisterDataPort;
 
-                    MediaAccessControlAddress ownMAC;                //MAC address of the device
-                    volatile bool active;                            //Is the device active
-                    volatile bool initDone;                          //Is the device initialized
+                hardwarecommunication::Port16Bit resetPort;
 
-                    void FetchDataReceived();                        //Fetches the data from the buffer
-                    void FetchDataSent();                            //Fetches the data from the buffer
+                //The main purpose of the initialization block it to hold a pointer to the array of BufferDescriptors, which hold the pointers to the buffers
+                InitializationBlock initBlock;
 
-                public:
-                    amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager);
-                    ~amd_am79c973();
 
-                    //Override driver default methods
-                    int Reset();
+                BufferDescriptor* sendBufferDescr;               //Descriptor entry
+                common::uint8_t sendBufferDescrMemory[2048+15];  //RAM for the send buffer, also 16 byte aligned
+                common::uint8_t sendBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
+                common::uint8_t currentSendBuffer;               //Which buffers are active
 
-                    void Activate();
-                    void Deactivate();
+                BufferDescriptor* recvBufferDescr;               //Descriptor entry
+                common::uint8_t recvBufferDescrMemory[2048+15];  //RAM for the recive buffer, also 16 byte aligned
+                common::uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
+                common::uint8_t currentRecvBuffer;               //Which buffers are active
 
+                //Ethernet Driver functions
+                MediaAccessControlAddress ownMAC;                //MAC address of the device
+                volatile bool active;                            //Is the device active
+                volatile bool initDone;                          //Is the device initialized
+
+                void FetchDataReceived();                        //Fetches the data from the buffer
+                void FetchDataSent();                            //Fetches the data from the buffer
+
+            public:
+                amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager);
+                ~amd_am79c973();
+
+                //Override driver default methods
+                int Reset();
+                void Activate();
+                void Deactivate();
+
+                //Override Interrupt default methods
+                common::uint32_t HandleInterrupt(common::uint32_t esp);
+
+                //Ethernet Driver functions
                 common::string GetVendorName();
-                    common::string GetDeviceName();
-
-                    //Override Interrupt default methods
-                    common::uint32_t HandleInterrupt(common::uint32_t esp);
-
-                    void DoSend(common::uint8_t* buffer, int size);
-
-                    common::uint64_t GetMediaAccessControlAddress();
-
-                    inline void* operator new(common::uint32_t, amd_am79c973* p)
-                    {
-                        return p;
-                    }
+                common::string GetDeviceName();
+                void DoSend(common::uint8_t* buffer, common::uint32_t size);
+                common::uint64_t GetMediaAccessControlAddress();
+                inline void* operator new(common::uint32_t, amd_am79c973* p)
+                {
+                    return p;
+                }
 
             };
 

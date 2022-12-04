@@ -593,25 +593,26 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
     }
     else
     {
-        //Check if there are any readable bits
-        Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
-        const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
+        /** fixme: this causes the device to not initialize properly, which means mem map is also probably wrong
+              Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
+              const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
 
-        if (barValue == 0) // at least one address bit must be 1 (i.e. writable).
-        {
-            printf("       ERROR : NO WRITEABLE BITS");
-            return result;
-        }
+              if (barValue == 0) // at least one address bit must be 1 (i.e. writable).
+              {
+                  printf("       ERROR : NO WRITEABLE BITS");
+                  return result;
+              }
 
-        const unsigned int  lowestBit = get_number_of_lowest_set_bit(barValue);
-        const unsigned int  highestBit = get_number_of_highest_set_bit(barValue);
+              const unsigned int  lowestBit = get_number_of_lowest_set_bit(barValue);
+              const unsigned int  highestBit = get_number_of_highest_set_bit(barValue);
 
-        // it must either be a valid 32-bit address or a valid 16-bit address :
-        if ( ( (highestBit != 31) && (highestBit != 15) ) || (highestBit < lowestBit) || (lowestBit < 2) )
-        {
-            printf("       ERROR : INVAlID BITS");
-            return result;
-        }
+              // it must either be a valid 32-bit address or a valid 16-bit address :
+              if ( ( (highestBit != 31) && (highestBit != 15) ) || (highestBit < lowestBit) || (lowestBit < 2) )
+              {
+                  printf("       ERROR : INVAlID BITS");
+                  return result;
+              }
+              **/
 
 
         // I/O

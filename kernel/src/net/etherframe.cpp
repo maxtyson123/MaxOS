@@ -11,6 +11,10 @@ using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
 using namespace maxOS::memory;
 
+
+void printf(char* str, bool clearLine = false); // Forward declaration
+void printfHex(uint8_t key);                    // Forward declaration
+
 /**
  * @brief Construct a new EtherFrameHandler:: EtherFrameHandler object
  *
@@ -65,7 +69,9 @@ EtherFrameProvider::EtherFrameProvider(EthernetDriver* backend)
 : EthernetDriverEventHandler()
 {
 
+    //Register this as the event handler for the backend driver
     this->backend = backend;
+    backend -> ConnectEventHandler(this);
 
     //Clear handlers on start
     for (uint32_t i = 0; i < 65535; ++i) {
@@ -85,6 +91,8 @@ EtherFrameProvider::~EtherFrameProvider() {
  * @param size the size of the received data
  */
 bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t size) {
+
+    printf("Handling packet... ");
 
     //Check if the size is big enough to contain an ethernet frame
     if(size < sizeof(EtherFrameHeader))
@@ -116,6 +124,8 @@ bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t 
         frame -> srcMAC_BE = backend->GetMediaAccessControlAddress();      //Set the new source to be this device's MAC address
 
     }
+
+    printf(" Done\n");
 
     return sendBack;
 
