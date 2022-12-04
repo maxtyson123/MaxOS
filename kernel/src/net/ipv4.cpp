@@ -124,7 +124,7 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
     bool sendBack = false;
 
     //Only handle if it is for this device
-    if(ipMessage -> dstIP == backend -> GetIPAddress())
+    if(ipMessage -> dstIP == GetInternetProtocolAddress())
     {
         int length = ipMessage -> totalLength;                          //Get length of the message
         if(length > size)                                               //Check if the length is bigger than the size of the message
@@ -187,7 +187,7 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     message -> protocol = protocol;                                                                                                                          //Set protocol
 
     message -> dstIP = dstIP_BE;                                                                                                                             //Set destination IP
-    message -> srcIP = backend -> GetIPAddress();                                                                                                            //Set source IP
+    message -> srcIP = GetInternetProtocolAddress();                                                                                                            //Set source IP
 
     message -> checksum = 0;                                                                                                                                 //Set checksum to 0, init with 0 as checksum funct will also add this value
     message -> checksum = Checksum((uint16_t*)message, sizeof(InternetProtocolV4Message));                                             //Calculate checksum

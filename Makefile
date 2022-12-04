@@ -28,7 +28,6 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/amd_am79c973.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
- 		  obj/kernel/drivers/ethernet/rawdatahandler.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
  		  obj/kernel/gui/desktop.o \

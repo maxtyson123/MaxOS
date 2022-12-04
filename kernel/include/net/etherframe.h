@@ -6,7 +6,7 @@
 #define MAXOS_NET_ETHERFRAME_H
 
 #include <common/types.h>
-#include <drivers/ethernet/amd_am79c973.h>
+#include <drivers/ethernet/ethernet.h>
 #include <memory/memorymanagement.h>
 
 namespace maxOS{
@@ -60,9 +60,6 @@ namespace maxOS{
                 bool DataReceived(common::uint8_t* buffer, common::uint32_t size);
                 void Send(common::uint64_t dstMAC_BE, common::uint16_t etherType_BE, common::uint8_t* buffer, common::uint32_t size);
 
-                common::uint32_t GetIPAddress() {
-                    return 0;           //TODO: FIX LATER
-                }
 
         common::uint64_t GetMACAddress();
 

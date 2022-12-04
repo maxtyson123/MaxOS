@@ -642,9 +642,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     driverManager.ActivateAll();                                //Has to be after interrupts are activated
     printf("[x] Drivers Activated \n", true);
 
-/*
 
-    while (true);
+
+/*
 
     printf("++Broadcast MAC ++\n");
     arp.BroadcastMACAddress(defaultGatewayInternetProtocolAddress);

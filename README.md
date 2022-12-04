@@ -56,6 +56,7 @@ Moved to  projects page
 - [ ] LibC
 - [ ] LibNet
 - [ ] Example Telnet Server (GUI) (EXTERNALLY LOADED)
+- [ ] GUI Theming
 - [ ] GCC Cross compiler
 - [ ] POSIX
 - [ ] Game Ports (DOOM etc..)

@@ -165,18 +165,18 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(common::uint32_t IP
 
 void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
 {
-    AddressResolutionProtocolMessage arp;                //Create a new ARP message
-    arp.hardwareType = 0x0100;                           // ethernet
-    arp.protocol = 0x0008;                               // IPv4
-    arp.hardwareAddressSize = 6;                         // MAC address size
-    arp.protocolAddressSize = 4;                         // IPv4 address size
-    arp.command = 0x0200;                                // Reply
+    AddressResolutionProtocolMessage arp;                                                 //Create a new ARP message
+    arp.hardwareType = 0x0100;                                                            // ethernet
+    arp.protocol = 0x0008;                                                                // IPv4
+    arp.hardwareAddressSize = 6;                                                          // MAC address size
+    arp.protocolAddressSize = 4;                                                          // IPv4 address size
+    arp.command = 0x0200;                                                                 // Reply
 
-    arp.srcMAC = backend->GetMACAddress();               // Set the source MAC address to the backend's MAC address
-    arp.srcIP = backend->GetIPAddress();                 // Set the source IP address to the backend's IP address
-    arp.dstMAC = Resolve(IP_BE);                         // Set the destination MAC address to the IP address
-    //arp.dstMAC = 0xFFFFFFFFFFFF;                         // Set the destination MAC address to broadcast
-    arp.dstIP = IP_BE;                                   // Set the destination IP address to the IP address
+    arp.srcMAC = internetProtocolProvider -> GetMediaAccessControlAddress();              // Set the source MAC address to the backend's MAC address
+    arp.srcIP = internetProtocolProvider -> GetInternetProtocolAddress();                 // Set the source IP address to the backend's IP address
+    arp.dstMAC = Resolve(IP_BE);                                                          // Set the destination MAC address to the IP address
+    //arp.dstMAC = 0xFFFFFFFFFFFF;                                                        // Set the destination MAC address to broadcast
+    arp.dstIP = IP_BE;                                                                    // Set the destination IP address to the IP address
 
     this->Send(arp.dstMAC, (uint8_t*)&arp, sizeof(AddressResolutionProtocolMessage));
 
@@ -185,7 +185,7 @@ void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
 void AddressResolutionProtocol::Store(InternetProtocolAddress internetProtocolAddress, MediaAccessControlAddress mediaAccessControlAddress) {
     if(numCacheEntries < 128){                                              //Check if the cache is full
         cacheIPAddress[numCacheEntries] = internetProtocolAddress;          //Save the IP address
-        cacheMACAddress[numCacheEntries] = mediaAccessControlAddress;            //Save the MAC address
+        cacheMACAddress[numCacheEntries] = mediaAccessControlAddress;       //Save the MAC address
         numCacheEntries++;                                                  //Increase the number of entries
     }
 }

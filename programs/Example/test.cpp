@@ -7,21 +7,22 @@
 using namespace Application;
 using namespace Application::test;
 
-Test::Test(){
 
-};
+int main(int argc, char** argv, char** envp) {
 
-Test::~Test(){
+   //Init the ui lib
 
-};
+    LibUI::init();
 
-void _start(void)
-{
-    //Print on screen, TEST: Use LIB or kernel wont allow this code
-    int i;
-    for (i = 0; i < 3; i++) {
-        *videomem++ = (0x07 << 8) | ('0' + i);
-    }
+    //Make window
+    Window window = LibUI::Window("Test Application");
 
-    while(1);
+
+    //Run event loop (THIS will set proc to waiting, and then when an event is triggered, it will be handled)
+    LibUI::run();
+
+
+
+    //Event loop exited, exit program
+    return 0;
 }

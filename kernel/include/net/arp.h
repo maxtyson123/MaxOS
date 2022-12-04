@@ -7,7 +7,7 @@
 
 #include <common/types.h>
 #include <common/timer.h>
-#include <net/etherframe.h>
+
 #include <net/ipv4.h>
 
 namespace maxOS{
