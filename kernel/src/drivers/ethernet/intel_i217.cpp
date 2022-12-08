@@ -54,7 +54,7 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     sendDescriptorTailRegister = 0x3818;
 
     // Get BAR0 type, io_base address and MMIO base address
-    bar_type =  1; //deviceDescriptor -> hasMemoryBase ? 0 : 1  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
+    bar_type = 1; // deviceDescriptor -> hasMemoryBase ? 0 : 1;  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
     portBase = deviceDescriptor -> portBase;
     //TODO: memBase = deviceDescriptor -> memoryBase;
 
@@ -74,16 +74,14 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     }else{
 
         printf("ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
-
+        while (true);
     }
 
     for(int i = 0; i < 0x80; i++)               //Loop through all the registers
         Write(0x5200 + i*4, 0);     //Clear the receive descriptor array
 
 
-    //Initialize the send and receive descriptors
-    receiveInit();
-    sendInit();
+
 
 }
 
@@ -302,7 +300,12 @@ void intel_i217::Activate() {
     Write(interruptMaskRegister ,0xff & ~4);                   //Enable all interrupts except link status change
     Read(0xc0);                                                     //Clear all interrupts
 
-    while (!initDone);                                           //Wait for the init to be done
+    //while (!initDone);                                           //Wait for the init to be done
+
+    //Initialize the send and receive descriptors
+    receiveInit();
+    sendInit();
+
     active = true;                                               // Set active to true
     printf("Intel i217 INIT DONE\n");
 
@@ -315,7 +318,7 @@ common::uint32_t intel_i217::HandleInterrupt(common::uint32_t esp) {
 
     printf("Interrupt from INTEL i217");
 
-    if(temp & 0x04) initDone = true;
+    if(temp & 0x04) printf("INTEL i217 START LINK");//initDone = true;
     if(temp & 0x10) printf("INTEL i217 GOOD THRESHOLD");
     if(temp & 0x80) FetchDataReceived();
 
@@ -393,6 +396,7 @@ string intel_i217::GetDeviceName()
 
 
 common::uint64_t intel_i217::GetMediaAccessControlAddress() {
+    printf("Getting MAC address... ");
     while(ownMAC == 0);
     return ownMAC;
 

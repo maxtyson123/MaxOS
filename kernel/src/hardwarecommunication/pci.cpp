@@ -280,10 +280,10 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 {//i217 (Ethernet Controller)
 
                     printf("    INTEL i217", true);
-                    driver = (intel_i217 *) MemoryManager::activeMemoryManager->malloc(sizeof(intel_i217));         //Allocate memory region of the sie of the class
-                    if (driver != 0)                                                                                    //Check if space in memory
-                        new(driver) intel_i217(&dev, interruptManager);                                                 //Create Driver Instance
-                    return driver;                                                                                      //Add Driver
+                    intel_i217* result = (intel_i217*)MemoryManager::activeMemoryManager ->malloc(sizeof(intel_i217));
+                    new (result) intel_i217(&dev, interruptManager);
+
+                    return result;                     //Add Driver
                     break;
 
                 }//end i217

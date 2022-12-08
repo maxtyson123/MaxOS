@@ -163,8 +163,12 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(common::uint32_t IP
 
 }
 
+
+void printf(char* str, bool clearLine = false); //Forward declaration
+void printfHex(uint8_t key);                    //Forward declaration
 void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
 {
+
     AddressResolutionProtocolMessage arp;                                                 //Create a new ARP message
     arp.hardwareType = 0x0100;                                                            // ethernet
     arp.protocol = 0x0008;                                                                // IPv4
@@ -172,12 +176,15 @@ void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
     arp.protocolAddressSize = 4;                                                          // IPv4 address size
     arp.command = 0x0200;                                                                 // Reply
 
+
     arp.srcMAC = internetProtocolProvider -> GetMediaAccessControlAddress();              // Set the source MAC address to the backend's MAC address
+    printf("done MAC");
     arp.srcIP = internetProtocolProvider -> GetInternetProtocolAddress();                 // Set the source IP address to the backend's IP address
     arp.dstMAC = Resolve(IP_BE);                                                          // Set the destination MAC address to the IP address
     //arp.dstMAC = 0xFFFFFFFFFFFF;                                                        // Set the destination MAC address to broadcast
     arp.dstIP = IP_BE;                                                                    // Set the destination IP address to the IP address
 
+    printf("reached send");
     this->Send(arp.dstMAC, (uint8_t*)&arp, sizeof(AddressResolutionProtocolMessage));
 
 }
