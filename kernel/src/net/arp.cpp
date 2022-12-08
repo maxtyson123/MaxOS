@@ -178,7 +178,6 @@ void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
 
 
     arp.srcMAC = internetProtocolProvider -> GetMediaAccessControlAddress();              // Set the source MAC address to the backend's MAC address
-    printf("done MAC");
     arp.srcIP = internetProtocolProvider -> GetInternetProtocolAddress();                 // Set the source IP address to the backend's IP address
     arp.dstMAC = Resolve(IP_BE);                                                          // Set the destination MAC address to the IP address
     //arp.dstMAC = 0xFFFFFFFFFFFF;                                                        // Set the destination MAC address to broadcast

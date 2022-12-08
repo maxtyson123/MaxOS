@@ -269,9 +269,31 @@ See also [Wikipedia - UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
 - The UDP is just a multiplexer and demultiplexer, similar to CPU in data send / recive section. This means that it does not care what the data is, it just passes it on.
 ### Transmission Control Protocol
 See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
-TBC
+- The Transmission Control Protocol (TCP) is one of the main protocols of the Internet protocol suite. It originated in the initial network implementation in which it complemented the Internet Protocol. It provides reliable, ordered, and error-checked delivery of a stream of octets (bytes) between applications running on hosts communicating via an IP network. Major internet applications such as the World Wide Web, email, remote administration, and file transfer rely on TCP. Applications that do not require reliable data stream service may use the User Datagram Protocol (UDP), which provides a connectionless datagram service that emphasizes reduced latency over reliability.
+- TCP is a connection-oriented protocol, which means that two computers must first establish a connection before exchanging data. 
+- The reason it is connection oriented is because it requires the host to acknowledge receipt of the data. This means that if the data is lost it will be resent and the application will know. This is fine for applications that require the data to be received.
+- TCP is a reliable protocol, which means that it will resend any lost packets. This is done by using a sequence number and an acknowledgement number. The sequence number is the number of the first byte in the data. The acknowledgement number is the number of the next byte that is expected. If the acknowledgement number is not the same as the sequence number, the data is resent.
+- The TCP data block is as follows: (known as the payload in the raw-data)
+- - First 2 Bytes: Source Port (Port that the data is coming from)
+- - Next 2 Bytes: Destination Port (Port that the data is going to)
+- - Next 4 Bytes: Sequence Number (Number of the first byte in the data)
+- - Next 4 Bytes: Acknowledgement Number (Number of the next byte that is expected)
+- - Next 1 Byte: Header Length (Length of the TCP header)
+- - Next 1 Byte: Flags (Flags that are set)
+- - Next 2 Bytes: Window Size (Window is the amount of data that can be sent before an acknowledgement is required)
+- - Next 2 Bytes: Checksum (CRC)
+- - Next 2 Bytes: Urgent Pointer (Pointer to the urgent data)
+- - Next 0 - 65507 Bytes: Data (Payload)
+- For security, the sender and reciver agree on an offset. This is the number of bytes that are added to the sequence number. This means that the sequence number is not the same as the data. This is to prevent people from being able to guess the sequence number and therefore the data, intercepting it and sending malicious data whilst impersonating the sender.
+- 
 ### Hyper Text Transfer Protocol
 See also [Wikipedia - HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
+TBC
+### Domain Name System
+See also [Wikipedia - DNS](https://en.wikipedia.org/wiki/Domain_Name_System)
+TBC
+### Dynamic Host Configuration Protocol
+See also [Wikipedia - DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol)
 TBC
 ### Open Systems Interconnection Model
 See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
