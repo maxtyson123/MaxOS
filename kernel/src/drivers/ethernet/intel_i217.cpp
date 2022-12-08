@@ -27,7 +27,7 @@ void printfHex(uint8_t key);                    //Forward declaration
 ///__DRIVER___
 
 intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager)
-: Driver(),
+: EthernetDriver(),
   InterruptHandler(deviceDescriptor->interrupt + interruptManager->HardwareInterruptOffset(), interruptManager)
 
 {
@@ -56,8 +56,10 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     // Get BAR0 type, io_base address and MMIO base address
     bar_type =  1; //deviceDescriptor -> hasMemoryBase ? 0 : 1  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
     portBase = deviceDescriptor -> portBase;
-    memBase = deviceDescriptor -> memoryBase;
+    //TODO: memBase = deviceDescriptor -> memoryBase;
 
+    initDone = false;
+    active = false;
 
     //Clear eprom
     epromPresent = false;
@@ -66,6 +68,8 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     detectEEProm ();
 
     if (readMACAddress()){
+
+        ownMAC = CreateMediaAccessControlAddress(macAddress[0], macAddress[1], macAddress[2], macAddress[3], macAddress[4], macAddress[5]);
 
     }else{
 
@@ -86,6 +90,7 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 intel_i217::~intel_i217() {
 
 }
+
 
 void intel_i217::Write(common::uint16_t address, common::uint32_t data) {
 
@@ -290,10 +295,16 @@ void intel_i217::sendInit() {
 
 void intel_i217::Activate() {
 
+    printf("Activating Intel i217\n");
+
     //Enable interrupts
     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
     Write(interruptMaskRegister ,0xff & ~4);                   //Enable all interrupts except link status change
     Read(0xc0);                                                     //Clear all interrupts
+
+    while (!initDone);                                           //Wait for the init to be done
+    active = true;                                               // Set active to true
+    printf("Intel i217 INIT DONE\n");
 
 }
 
@@ -304,17 +315,18 @@ common::uint32_t intel_i217::HandleInterrupt(common::uint32_t esp) {
 
     printf("Interrupt from INTEL i217");
 
-    if(temp & 0x04) printf("INTEL i217 INIT DONE");
+    if(temp & 0x04) initDone = true;
     if(temp & 0x10) printf("INTEL i217 GOOD THRESHOLD");
-    if(temp & 0x80) Receive();
+    if(temp & 0x80) FetchDataReceived();
 
 
     return esp;
 
 }
 
-void intel_i217::Receive() {
-    printf("INTEL i217 DATA RECEVED\n");
+void intel_i217::FetchDataReceived() {
+
+    printf("Fetching data... ");
 
     uint16_t old_cur;
     bool got_packet = false;
@@ -325,24 +337,11 @@ void intel_i217::Receive() {
         uint8_t *buffer = (uint8_t *)receiveDsrctrs[currentReceiveBuffer] -> bufferAddress;
         uint16_t size = receiveDsrctrs[currentReceiveBuffer] -> length;
 
-        // Here you should inject the received packet into your network stack
-
         if(size > 64){          // If the size is the size of ethernet 2 frame
             size -= 4;          // remove the checksum
         }
 
-        //Pass data to handler
-
-
-
-
-        printf("Received: ");
-        size = 64;
-        for(int i = 0; i < size; i++)
-        {
-            printfHex(buffer[i]);
-            printf(" ");
-        }
+        FireDataReceived(buffer, size);  //Pass data to handler
 
 
         receiveDsrctrs[currentReceiveBuffer]->status = 0;
@@ -355,9 +354,10 @@ void intel_i217::Receive() {
 
 }
 
-void intel_i217::Send(const void *buffer, int size) {
+void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
-    printf("INTEL i217 DATA SEND\n");
+    printf("Sending package... ");
+    while(!active);
 
     //Put params into send buffer
     sendDsrctrs[currentSendBuffer] -> bufferAddress = (uint64_t)buffer;
@@ -377,20 +377,33 @@ void intel_i217::Send(const void *buffer, int size) {
 
     //Wait for the packet to be sent
     while(!(sendDsrctrs[old_cur]->status & 0xff));
+    printf(" Done\n");
 
 }
 
+string intel_i217::GetVendorName()
+{
+    return "INTEL";
+}
+
+string intel_i217::GetDeviceName()
+{
+    return "E1000 (i217)";
+}
 
 
-common::uint64_t intel_i217::GetMACAddress() {
-
-    uint64_t MAC = macAddress[5] << 40
-                 | macAddress[4] << 32
-                 | macAddress[3] << 24
-                 | macAddress[2] << 16
-                 | macAddress[1] << 8
-                 | macAddress[0];
-
-    return MAC;
+common::uint64_t intel_i217::GetMediaAccessControlAddress() {
+    while(ownMAC == 0);
+    return ownMAC;
 
 }
+
+int intel_i217::Reset() {
+    return Driver::Reset();
+}
+
+void intel_i217::Deactivate() {
+    Driver::Deactivate();
+}
+
+

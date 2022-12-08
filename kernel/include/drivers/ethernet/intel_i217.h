@@ -12,6 +12,7 @@
 #include <hardwarecommunication/port.h>
 #include <memory/memoryinputoutput.h>
 #include <memory/memorymanagement.h>
+#include <drivers/ethernet/ethernet.h>
 
 namespace maxOS{
 
@@ -20,7 +21,7 @@ namespace maxOS{
         namespace ethernet{
 
 
-            class intel_i217 : public Driver, public hardwarecommunication::InterruptHandler {
+            class intel_i217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
 
 
 
@@ -98,7 +99,13 @@ namespace maxOS{
                 void receiveInit();          // Initialize receive descriptors an buffers
                 void sendInit();             // Initialize transmit descriptors an buffers
 
+                //Ethernet Driver functions
+                MediaAccessControlAddress ownMAC;                //MAC address of the device
+                volatile bool active;                            //Is the device active
+                volatile bool initDone;                          //Is the device initialized
 
+                void FetchDataReceived();                        //Fetches the data from the buffer
+                void FetchDataSent();                            //Fetches the data from the buffer
 
             public:
 
@@ -107,19 +114,23 @@ namespace maxOS{
 
 
                 //Override driver default methods
+                int Reset();
                 void Activate();
+                void Deactivate();
 
                 //Override Interrupt default methods
                 common::uint32_t HandleInterrupt(common::uint32_t esp);
 
-                void Send(const void * buffer, int size);
-                void Receive();
 
-
-                common::uint64_t GetMACAddress();
-                common::uint32_t GetIPAddress();
-
-                void SetIPAddress(common::uint32_t ip); //Here it is done manually, also can be done via DCHP
+                //Ethernet Driver functions
+                common::string GetVendorName();
+                common::string GetDeviceName();
+                void DoSend(common::uint8_t* buffer, common::uint32_t size);
+                common::uint64_t GetMediaAccessControlAddress();
+                inline void* operator new(common::uint32_t, intel_i217* p)
+                {
+                    return p;
+                }
 
 
             };
