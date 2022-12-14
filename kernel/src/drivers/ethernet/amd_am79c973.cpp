@@ -210,7 +210,7 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
  */
 void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
 
-    printf("Sending package... ");
+    //Used for debuging printf("Sending package... ");
 
     while(!active);
 
@@ -251,7 +251,7 @@ void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
 void amd_am79c973::FetchDataReceived()
 {
 
-    printf("Fetching data... ");
+    //Used for debuging printf("Fetching data... ");
 
     for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)         //Loop through all the buffers
     {

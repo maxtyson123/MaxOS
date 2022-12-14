@@ -75,8 +75,9 @@ MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress()
 void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
 {
     printf("Sending: ");
-    //size = 64;
-    for(int i = 0; i < size; i++)
+
+    int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
+    for(int i = displayType; i < size; i++)
     {
         printfHex(buffer[i]);
         printf(" ");
@@ -87,7 +88,7 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
     for(Vector<EthernetDriverEventHandler*>::iterator i = handlers.begin(); i != handlers.end(); i++)
         (*i)->BeforeSend(buffer, size);
 
-    printf("Status: ");
+    //Used for debuging  printf("Status: ");
     DoSend(buffer, size);
 }
 
@@ -108,7 +109,8 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 {
     printf("Receiving: ");
     //size = 64;
-    for(int i = 0; i < size; i++)
+    int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
+    for(int i = displayType; i < size; i++)
     {
         printfHex(buffer[i]);
         printf(" ");
@@ -118,7 +120,7 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 
     bool SendBack = false;
 
-    printf("Status: ");
+    //Used for debuging printf("Status: ");
     for(Vector<EthernetDriverEventHandler*>::iterator i = handlers.begin(); i != handlers.end(); i++)
         if((*i)->DataReceived(buffer, size))
             SendBack = true;
@@ -127,7 +129,6 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
         printf("Sending back... \n");
         Send(buffer, size);
     }
-
 
 }
 

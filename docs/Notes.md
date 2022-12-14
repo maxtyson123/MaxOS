@@ -266,12 +266,12 @@ See also [Wikipedia - UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
 - - Next 0 - 65507 Bytes: Data (Payload)
 - The reason the ports are repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay
 - Therefore, the UDP packet contains the port of the original device that sent the UDP request.
-- The UDP is just a multiplexer and demultiplexer, similar to CPU in data send / recive section. This means that it does not care what the data is, it just passes it on.
+- The UDP is just a multiplexer and demultiplexer, similar to CPU in data send / receive section. This means that it does not care what the data is, it just passes it on.
 ### Transmission Control Protocol
 See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
 - The Transmission Control Protocol (TCP) is one of the main protocols of the Internet protocol suite. It originated in the initial network implementation in which it complemented the Internet Protocol. It provides reliable, ordered, and error-checked delivery of a stream of octets (bytes) between applications running on hosts communicating via an IP network. Major internet applications such as the World Wide Web, email, remote administration, and file transfer rely on TCP. Applications that do not require reliable data stream service may use the User Datagram Protocol (UDP), which provides a connectionless datagram service that emphasizes reduced latency over reliability.
 - TCP is a connection-oriented protocol, which means that two computers must first establish a connection before exchanging data. 
-- The reason it is connection oriented is because it requires the host to acknowledge receipt of the data. This means that if the data is lost it will be resent and the application will know. This is fine for applications that require the data to be received.
+- The reason it is connection oriented is that it requires the host to acknowledge receipt of the data. This means that if the data is lost it will be resent and the application will know. This is fine for applications that require the data to be received.
 - TCP is a reliable protocol, which means that it will resend any lost packets. This is done by using a sequence number and an acknowledgement number. The sequence number is the number of the first byte in the data. The acknowledgement number is the number of the next byte that is expected. If the acknowledgement number is not the same as the sequence number, the data is resent.
 - The TCP data block is as follows: (known as the payload in the raw-data)
 - - First 2 Bytes: Source Port (Port that the data is coming from)
@@ -284,8 +284,20 @@ See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Pr
 - - Next 2 Bytes: Checksum (CRC)
 - - Next 2 Bytes: Urgent Pointer (Pointer to the urgent data)
 - - Next 0 - 65507 Bytes: Data (Payload)
-- For security, the sender and reciver agree on an offset. This is the number of bytes that are added to the sequence number. This means that the sequence number is not the same as the data. This is to prevent people from being able to guess the sequence number and therefore the data, intercepting it and sending malicious data whilst impersonating the sender.
-- 
+- For security, the sender and receiver agree on an offset. This is the number of bytes that are added to the sequence number. This means that the sequence number is not the same as the data. This is to prevent people from being able to guess the sequence number and therefore the data, intercepting it and sending malicious data whilst impersonating the sender.
+- To disconnect, the sender sends a FIN packet. The receiver then sends an ACK packet. The sender then sends an ACK packet. The receiver then sends a FIN packet. The sender then sends an ACK packet. The receiver then sends an ACK packet.
+- To create the checksum the TCP header and the data is added together. The checksum is then added to the header. The checksum is then calculated again. If the checksum is the same then the data is valid.
+- It is calculated by adding the 16-bit words together. If the result is greater than 16 bits, then the carry is added to the result. The result is then inverted.
+- The command flags are what are sent in the TCP header. The flags are as follows:
+- - FIN: The connection is finished (1)
+- - SYN: Synchronize sequence numbers (2)
+- - RST: Reset the connection (4)
+- - PSH: Push function (8)
+- - ACK: Acknowledgement (16)
+- - URG: Urgent (32)
+- - ECE: ECN-Echo (64)
+- - CWR: Congestion Window Reduced (128)
+- These flags are used to control the flow of data. For example, the SYN flag is used to start the connection. The ACK flag is used to acknowledge the data. The FIN flag is used to end the connection.
 ### Hyper Text Transfer Protocol
 See also [Wikipedia - HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
 TBC
@@ -295,6 +307,16 @@ TBC
 ### Dynamic Host Configuration Protocol
 See also [Wikipedia - DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol)
 TBC
+### Secure Shell
+See also [Wikipedia - SSH](https://en.wikipedia.org/wiki/Secure_Shell)
+TBC
+### File Transfer Protocol
+See also [Wikipedia - FTP](https://en.wikipedia.org/wiki/File_Transfer_Protocol)
+TBC
+### Simple Mail Transfer Protocol
+See also [Wikipedia - SMTP](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol)
+TBC
+
 ### Open Systems Interconnection Model
 See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 - The Open Systems Interconnection (OSI) model is a conceptual model that characterises and standardises the communication functions of a telecommunication or computing system without regard to its underlying internal structure and technology.
@@ -306,7 +328,7 @@ See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 - - Session Layer (Handled in the application)
 - - Transport Layer (TCP, UDP)
 - - Network Layer (Ipv4)
-- - Data Link Layer (Etherframe)
+- - Data Link Layer (Ether frame)
 - - Physical Layer  (am79c971)
 - It is important to network because it allows for the different layers to be implemented in different ways. For example, the physical layer can be implemented using a wireless connection or a wired connection. The network layer can be implemented using a router or a switch. The transport layer can be implemented using TCP or UDP. The application layer can be implemented using HTTP or FTP.
 - The operating system will implement the layers above the network layer (Application, Presentation, Session, Transport) and the network device will implement the layers below the network layer (Data Link, Physical)

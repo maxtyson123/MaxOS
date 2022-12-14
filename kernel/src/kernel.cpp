@@ -29,6 +29,7 @@
 #include <net/ipv4.h>
 #include <net/icmp.h>
 #include <net/udp.h>
+#include <net/tcp.h>
 
 //SYSTEM
 #include <system/process.h>
@@ -209,7 +210,7 @@ class PrintfUDPHandler : public UserDatagramProtocolHandler
 public:
     void HandleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size)
     {
-        printf("UDP Message: ");
+
         char* foo = " ";
         for(int i = 0; i < size; i++)                                    //Loop through the data
         {
@@ -219,6 +220,39 @@ public:
     }
 };
 
+class PrintfTCPHandler : public TransmissionControlProtocolHandler
+{
+public:
+    bool HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size)
+    {
+        char* foo = " ";
+        for(int i = 0; i < size; i++)                                    //Loop through the data
+        {
+            foo[0] = data[i];                                                   //Get the character
+            printf(foo);                                                        //Print the character
+        }
+
+        if(size > 9
+           && data[0] == 'G'
+           && data[1] == 'E'
+           && data[2] == 'T'
+           && data[3] == ' '
+           && data[4] == '/'
+           && data[5] == ' '
+           && data[6] == 'H'
+           && data[7] == 'T'
+           && data[8] == 'T'
+           && data[9] == 'P'
+                )
+        {
+            socket->Send((uint8_t*)"HTTP/1.1 200 OK\r\nServer: MyOS\r\nContent-Type: text/html\r\n\r\n<html><head><title>My Operating System</title></head><body><b>My Operating System</b> http://www.AlgorithMan.de</body></html>\r\n",184);
+            socket->Disconnect();
+        }
+
+
+        return true;
+    }
+};
 
 /**
  * @details Print a string via a syscall
@@ -358,8 +392,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //NOTE: Will rewrite boot text stuff later
 
     Version* maxOSVer;
-    maxOSVer->version = 25;
-    maxOSVer->build = 62;
+    maxOSVer->version = 26;
+    maxOSVer->build = 75;
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -624,6 +658,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         UserDatagramProtocolProvider udp(&ipv4);
         PrintfUDPHandler printfUDPHandler;
 
+        printf(" -  Setting Up TCP... \n");
+        TransmissionControlProtocolProvider tcp(&ipv4);
+        PrintfTCPHandler printfTCPHandler;
+
     printf("[x] Network Driver Setup \n");
 
     //Process kernelMain(kernProc, &threadManager);
@@ -651,25 +689,38 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     arp.BroadcastMACAddress(defaultGatewayInternetProtocolAddress);
 
 
-
+    /*
     printf("\n ++ Test ICMP ++\n");
     icmp.RequestEchoReply(defaultGatewayInternetProtocolAddress);
+    */
 
+
+    ///TO TEST NETWORKING SET A UDP/TCP PORT FORWARD TO host: 127.0.0.1 port 1234 client: 10.0.2.2 port: 1234
+
+    /*
     printf("\n ++ Test UDP ++\n");
 
-    /** TEST PACKET SENDING
-    UserDatagramProtocolSocket* test_socket = udp.Connect(defaultGatewayInternetProtocolAddress, 1234);        //Use ncat -u -l 1234 to test
+    +TEST PACKET SENDING+
+    UserDatagramProtocolSocket* test_socket = udp.Connect(defaultGatewayInternetProtocolAddress, 1234);                 //Use ncat -u -l 127.0.0.1 1234 to test
     udp.Bind(test_socket, &printfUDPHandler);
     test_socket->Send((uint8_t*)"Hello World", 11);
-    **/
 
-    /*Test Listening            - Dont know if this works, my testing fails but I think it is becuase of my use od ncat instead of netcat or smth
-    UserDatagramProtocolSocket* test_socket = udp.Listen(1234);        //First set a portforward rule in Vbox then Use ncat -u -p 1234 127.0.0.1 to test
+    +TEST SOCKET LISTENING+
+    UserDatagramProtocolSocket* test_socket = udp.Listen(1234);                                                         // Use ncat -u   127.0.0.1 1234 to test
     udp.Bind(test_socket, &printfUDPHandler);
-
      */
 
+    /*
+    printf("\n ++ Test TCP ++\n");
+    +TEST TCP SENDING+
+    TransmissionControlProtocolSocket* test_tcp_socket = tcp.Connect(defaultGatewayInternetProtocolAddress, 1234);      //Use ncat -l 127.0.0.1 1234 to test
+    tcp.Bind(test_tcp_socket, &printfTCPHandler);
+    test_tcp_socket->Send((uint8_t*)"Hello World", 11);
 
+
+    TransmissionControlProtocolSocket* test_tcp_socket = tcp.Listen(1234);                                                    // Use ncat 127.0.0.1 1234
+    tcp.Bind(test_tcp_socket, &printfTCPHandler);
+      */
 }
 
 
@@ -678,4 +729,4 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 #pragma clang diagnostic pop
 
 //MaxOS - May the source be with you...
-
+//TODO: Fix networking later TCP/UDP listening, - sending works
