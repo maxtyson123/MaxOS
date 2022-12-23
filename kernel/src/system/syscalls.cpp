@@ -38,7 +38,6 @@ uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
     {
         case 4:                                 //Write
             printf((char*)cpu->ebx);
-            cpu -> ecx = (uint32_t)"b";
             break;
 
          default:
@@ -82,9 +81,9 @@ void sys_fork(CPUState_Thread* cpu)
  */
 size_t sys_read(unsigned int fd, char *buf,	size_t count){
 
-
-    asm volatile( "int $0x80" : "=d"(count) : "a"(3), "b"(fd), "c" (buf));             //Call the interrupt, passing the syscall number and the argument
-    return count;
+    uint32_t data = 3;
+    asm volatile( "int $0x80" : "=a"(data) : "b"(fd), "c" (buf), "d" (count));             //Call the interrupt, passing the syscall number and the argument
+    return data;
 
     //https://man7.org/linux/man-pages/man2/read.2.html
 
@@ -100,8 +99,10 @@ size_t sys_read(unsigned int fd, char *buf,	size_t count){
  */
 size_t sys_write(int fd, const void *buf, size_t count){
 
-    asm volatile( "int $0x80" : "=d"(count) : "a"(4), "b"(fd), "c" (buf));             //Call the interrupt, passing the syscall number and the argument
-    return count;
+
+    uint32_t data = 4;
+    asm volatile( "int $0x80" : "=a"(data) :  "b"(fd), "c" (buf), "d"(count));             //Call the interrupt, passing the syscall number and the argument
+    return data;
 
     //https://man7.org/linux/man-pages/man2/write.2.html
 
@@ -132,9 +133,10 @@ int sys_open(const char *pathname, int flags, mode_t mode){
  * @return On success, zero is returned.  On error, -1 is returned
  */
 int sys_close(int fd){
-        int ret;
-        asm volatile( "int $0x80" : "=c"(ret) : "a"(6), "b"(fd));             //Call the interrupt, passing the syscall number and the argument
-        return ret;
+
+        uint32_t data = 6;
+        asm volatile( "int $0x80" : "=a"(data) :  "b"(fd));             //Call the interrupt, passing the syscall number and the argument
+        return data;
         //https://man7.org/linux/man-pages/man2/close.2.html
 }
 
@@ -148,8 +150,10 @@ int sys_close(int fd){
        then 0 is returned.  On error, -1 is returned
  */
 pid_t sys_waitpid(pid_t pid, int *status, int options) {
-    asm volatile( "int $0x80" : "=b"(pid) : "a" (7), "b" (pid), "c" (status), "d" (options));             //Call the interrupt, passing the syscall number and the argument
-    return pid;
+
+    uint32_t data = 7;
+    asm volatile( "int $0x80" : "=a"(data) : "b" (pid), "c" (status), "d" (options));             //Call the interrupt, passing the syscall number and the argument
+    return data;
     //https://man7.org/linux/man-pages/man2/waitpid.2.html
 }
 
@@ -162,7 +166,9 @@ pid_t sys_waitpid(pid_t pid, int *status, int options) {
        newly opened file.  On error, -1 is returned
  */
 int sys_creat(const char *pathname, mode_t mode){
-    asm("int $0x80" : : "a" (8), "b" (pathname), "c" (mode));
+
+    uint32_t data = 8;
+    asm volatile( "int $0x80" : "=a"(data) :"b" (pathname), "c" (mode));
     //TODO: Return the file descriptor
     //https://man7.org/linux/man-pages/man2/open.2.html#:~:text=O_TRUNC%20is%20unspecified.-,creat,-()%0A%20%20%20%20%20%20%20A%20call
 }
@@ -175,9 +181,10 @@ int sys_creat(const char *pathname, mode_t mode){
  * @return On success, zero is returned.  On error, -1 is returned
  */
 int sys_link(const char *oldpath, const char *newpath){
-    int ret;
-    asm volatile( "int $0x80" : "=d"(ret) : "a" (9), "b" (oldpath), "c" (newpath));             //Call the interrupt, passing the syscall number and the argument
-    return ret;
+
+    uint32_t data = 9;
+    asm volatile( "int $0x80" : "=a"(data) : "b" (oldpath), "c" (newpath));             //Call the interrupt, passing the syscall number and the argument
+    return data;
     //https://man7.org/linux/man-pages/man2/link.2.html
 }
 
@@ -189,9 +196,10 @@ int sys_link(const char *oldpath, const char *newpath){
  * @return On success, zero is returned.  On error, -1 is returned
  */
 int sys_unlink(const char *pathname){
-    int ret;
-    asm volatile( "int $0x80" : "=c"(ret) : "a" (10), "b" (pathname));             //Call the interrupt, passing the syscall number and the argument
-    return ret;
+
+    uint32_t data = 10;
+    asm volatile( "int $0x80" : "=a"(data) : "b" (pathname));             //Call the interrupt, passing the syscall number and the argument
+    return data;
 
     //https://man7.org/linux/man-pages/man2/unlink.2.html
 }

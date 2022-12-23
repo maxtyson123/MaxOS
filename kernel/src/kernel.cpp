@@ -270,19 +270,6 @@ void sys_printf(char* str)
 
 }
 
-void sys_getpid(uint32_t* funct)
-{
-    asm("int $0x80" : : "a" (20), "b" (funct));        //Call the interrupt 0x80 with the syscall number 20 and the process to get PID from
-
-
-}
-
-
-void sys_kill(int pid)
-{
-    asm("int $0x80" : : "a" (37), "b" (pid));        //Call the interrupt 0x80 with the syscall number 21 and the process to kill
-}
-
 void temp_sys_kill()
 {
     asm("int $0x20" : : "a" (37), "b" (1));        //Call the interrupt 0x80 with the syscall number 20 and the process to kill (1 is is kill me)
@@ -304,7 +291,7 @@ void taskA()
         sys_printf("A");
     }
 
-    Timer::activeTimer ->Wait(100);
+    Timer::activeTimer -> Wait(100);
 
     for (int i = 0; i < 100; ++i) {
 
