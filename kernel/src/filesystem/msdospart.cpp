@@ -1,0 +1,54 @@
+//
+// Created by 98max on 12/28/2022.
+//
+
+#include <filesystem/msdospart.h>
+
+using namespace maxOS;
+using namespace maxOS::drivers;
+using namespace maxOS::common;
+using namespace maxOS::filesystem;
+
+void printf(char* str, bool clearLine = false); // Forward declaration
+void printfHex(uint8_t key);                    // Forward declaration
+
+void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
+
+    MasterBootRecord masterBootRecord;                                                           // Create a MasterBootRecord object
+
+    hd -> Read28(0, (uint8_t*)&masterBootRecord, sizeof(MasterBootRecord));     // Read the MasterBootRecord from the disk
+
+    /*
+    printf("MBR: ");
+    for (int i = 446; i < 466 + 4*16; ++i) {                                                     //Loop through the MBR and print it
+        printfHex(((uint8_t*)&masterBootRecord)[i]);                                             //Print the buffer at the current index
+        printf(" ");
+    }
+    printf("\n");
+    */
+
+    if(masterBootRecord.magicNumber != 0xAA55){                                                  // Check if the magic number is correct
+        printf("Invalid MBR!");
+        return;
+    }
+
+    for(int i = 0; i < 4; i++){                                                                  // Loop through the 4 primary partitions
+
+        if(masterBootRecord.primaryPartition[i].partitionId == 0) continue;                      // If the partition id is 0, skip it
+
+        printf("Partition ");
+        printfHex(i & 0xFF);                                                                 // Print the partition number
+        printf(": ");
+
+        if(masterBootRecord.primaryPartition[i].bootable != 0x80) {                                // Check if the partition is bootable
+            printf("Not ");
+        }
+        printf("Bootable, ");
+
+        printf("Type ");
+        printfHex(masterBootRecord.primaryPartition[i].partitionId);                              // Print the partition type
+        printf("   ");
+    }
+    printf("\n");
+
+}

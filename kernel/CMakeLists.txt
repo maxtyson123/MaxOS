@@ -51,6 +51,8 @@ set(
         ${drivers_h}/ata.h ${drivers_c}/ata.cpp
         ${drivers_h}/vga.h ${drivers_c}/vga.cpp
         ${drivers_h}/ethernet/intel_i217.h ${drivers_c}/ethernet/intel_i217.cpp
+        ${drivers_h}/ethernet/ethernet.h ${drivers_c}/ethernet/ethernet.cpp
+        ${drivers_h}/ethernet/rawdatahandler.h ${drivers_c}/ethernet/rawdatahandler.cpp
 
         ${gui_h}/widget.h ${gui_c}/widget.cpp
         ${gui_h}/window.h ${gui_c}/window.cpp
@@ -63,18 +65,19 @@ set(
         ${net_h}/ipv4.h ${net_c}/ipv4.cpp
         ${net_h}/icmp.h ${net_c}/icmp.cpp
         ${net_h}/udp.h ${net_c}/udp.cpp
+        ${net_h}/tcp.h ${net_c}/tcp.cpp
 
         ${common_h}/types.h
         ${common_h}/types.h
         ${common_h}/graphicsContext.h
         ${common_h}/printf.h ${common_c}/printf.cpp
         ${common_h}/timer.h ${common_c}/timer.cpp
+        ${common_h}/vector.h ${common_c}/vector_templates.cpp
 
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
         ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
 
-        src/drivers/ethernet/ethernet.cpp include/drivers/ethernet/ethernet.h include/common/vector.h src/common/vector_templates.cpp src/drivers/ethernet/rawdatahandler.cpp include/drivers/ethernet/rawdatahandler.h src/net/tcp.cpp include/net/tcp.h)
-
+        src/filesystem/msdospart.cpp include/filesystem/msdospart.h)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

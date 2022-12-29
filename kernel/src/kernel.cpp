@@ -41,6 +41,9 @@
 //MEMORY
 #include <memory/memorymanagement.h>
 
+//FILESYSTEM
+#include <filesystem/msdospart.h>
+
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
@@ -51,6 +54,7 @@ using namespace maxOS::gui;
 using namespace maxOS::net;
 using namespace maxOS::system;
 using namespace maxOS::memory;
+using namespace maxOS::filesystem;
 
 
 // #define ENABLE_GRAPHICS
@@ -379,8 +383,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //NOTE: Will rewrite boot text stuff later
 
     Version* maxOSVer;
-    maxOSVer->version = 26;
-    maxOSVer->build = 75;
+    maxOSVer->version = 27;
+    maxOSVer->build = 77;
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header
@@ -588,13 +592,14 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     //Interrupt 14 for Primary
     AdvancedTechnologyAttachment ata0m(0x1F0, true);         //Primary master
     AdvancedTechnologyAttachment ata0s(0x1F0, false);        //Primary Slave
-    printf("    -ATA Primary Master: ");     ata0m.Identify();     printf("\n");
-    printf("    -ATA Primary Slave: ");      ata0s.Identify();     printf("\n");
+    printf("    -ATA 0 Primary Master: ");     ata0m.Identify();     printf("\n");
+    printf("    -ATA 0 Primary Slave: ");      ata0s.Identify();     printf("\n");
 
     //Interrupt 15 for Primary
     AdvancedTechnologyAttachment ata1m(0x170, true);         //Secondary master
     AdvancedTechnologyAttachment ata1s(0x170, false);        //Secondary Slave
-
+    printf("    -ATA 1 Primary Master: ");     ata1m.Identify();     printf("\n");
+    printf("    -ATA 1 Primary Slave: ");      ata1s.Identify();     printf("\n");
     /*
 
     AdvancedTechnologyAttachment ata1m(0x1E8, true);         //Third master
@@ -605,21 +610,18 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     */
 
-    //Test
-
-    char* atamBuffer = "Test file write";
-    printf("    -ATA Write test: ");
-    ata0m.Write28(0,(uint8_t*)atamBuffer,15);
-    printf("\n");
-    ata0m.Flush();
-    printf("    -ATA Read test: ");
-    ata0m.Read28(0,15);
-    printf("\n");
 
 
     printf("[x] ATA Hard Drives Setup \n");
 
+    printf("[ ] Setting Up File System... \n");
 
+    printf("    -Reading partitions\n");
+    MSDOSPartitionTable::ReadPartitions(&ata0m);
+
+    printf("[x] File System Setup \n");
+
+    while (true);
 
     printf("[x] Setting Up Network Driver \n");
     EthernetDriver* eth0 = (EthernetDriver*)(driverManager.drivers[2]);

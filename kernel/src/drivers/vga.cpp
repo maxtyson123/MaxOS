@@ -161,7 +161,7 @@ void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
        || y < 0 || 200 <= y)
         return; //Check if coords r legal
 
-    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    //Get where to put the pixel in memory and x y pos
+    uint8_t* pixelAddress = FrameBufferSegment + 320*y + x;    //Get where to put the pixel in memory and x y pos
     *pixelAddress = colorIndex;
 }
 
@@ -213,4 +213,11 @@ void VideoGraphicsArray::FillRectangle(uint32_t x, uint32_t y, uint32_t w, uint3
             PutPixel(X, Y, r, g, b);
         }
     }
+}
+
+void VideoGraphicsArray::updateFrameAdress(){
+
+    //It is better to update before each frame draw rather then evertime a pixel is drawn
+    FrameBufferSegment = GetFrameBufferSegment();
+
 }

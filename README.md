@@ -18,47 +18,56 @@ Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom tha
 ## Screenshots
 ![Screenshot](docs/Screenshots/ATA_Hardrives.png)
 
-### Services
--None Yet
-### GUI Programs
--Debug Console
-### CLI Programs
--(COMING) Uinx / POSIX like 
-### Libraries
--(COMING) Libc
--(COMING) Libm
-### Ports
--(COMING) Doom
-
-## Progress
-
-###  Intial
-
-Moved to  projects page
 
 
-###  Extended
+### Whats working:
+- [x] Bootloader
+- [x] Global Descriptor Table
+- [x] Interrupt Descriptor Table
+- [x] Keyboard and Mouse Drivers
+- [x] PCI Communication (for drivers)
+- [x] Basic GUI Framework (will be replaced with a more advanced one later)
+- [x] Process Switching / Multitasking
+- [x] Memory Management
+- [x] Ethernet Networking Drivers
+- [x] Various Internet Protocols (ARP, ICMP, UDP, TCP)
+
+
+
+
+###  Future Plans
+
+Kernel Cleanup
+
 - [ ] Fix VMs
 - [ ] VESA Video Mode
 - [ ] Usable Desktop / GUI draw rewrite
 - [ ] Timer rewrite
 - [ ] Console rewrite
-- [ ] BUS Hardware communication
 - [ ] USB
 - [ ] HTTP Protocol, DCHP protocol
 - [ ] Codebase cleanup / rewrite
 - [ ] Kernel Boot Rewrite
 - [ ] Example Telnet Server (GUI) (EMBEDDED)
+
+Road to Userspace
+
 - [ ] New Process Manager / Scheduler
 - [ ] Elf Loader
 - [ ] Shell
 - [ ] System Calls
+- [ ] OS Specific Toolchain
 - [ ] LibC
+- [ ] LibM
+- [ ] Interprocess Communication
+- [ ] Services, (GUI Server, Network Server, etc)
 - [ ] LibNet
 - [ ] Example Telnet Server (GUI) (EXTERNALLY LOADED)
-- [ ] GUI Theming
-- [ ] GCC Cross compiler
+
+OS Functionality
+
 - [ ] POSIX
+- [ ] GUI Theming
 - [ ] Game Ports (DOOM etc..)
 - [ ] Users & Privileges
 - [ ] Virtual Memory
@@ -69,7 +78,43 @@ Moved to  projects page
 - [ ] M++
 - [ ] VNC
 
+### Services
+Current:
+- None
 
+Planned:
+- GUI Server
+- Network Server
+
+### GUI Programs
+Current:
+- Debug Console
+
+Planned:
+- Telnet Server
+### CLI Programs
+Current:
+- None
+
+Planned:
+- UNIX Shell
+### Libraries
+Current:
+- None
+
+Planned:
+- LibC
+- LibM
+- LibNet
+- LibGUI
+### Ports
+Current:
+- None
+
+Planned:
+- Git
+- DOOM
+- Bash
 ## Run Locally
 
 Clone the project

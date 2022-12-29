@@ -70,21 +70,38 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
 - - Fourth bit: Prefetch-able bit (e.g. reading from a hard drive in advance because its estimated that the program will need that soon)
 - - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
+
+# Files And Drives
 ### Hard-drives
-- History of hard drives: 20 years ago there used to be IDE (Integrated Device Electronics) that was later continued on to ATA (Advanced Technology Attachment) that has now been moved onto what is used to day SATA (Serial Advanced Technology Attachment) 
+- History of hard drives: 20 years ago there used to be IDE (Integrated Device Electronics) that was later continued on to ATA (Advanced Technology Attachment) that has now been moved onto what is used to day SATA (Serial Advanced Technology Attachment)
 - As hard drives have been around for a long time, they are well documented and easy to implement
 - SATA devices are almost always compatible to ATA or AHCI (Advanced Host Controller Interface)
 - Using the PCI controller, SATA hard drives can be found on class id 0x01 and subclass id 0x06
 - There are two different ways of accessing a hard-drive. The first one is PIO (Programed Input Output) which is relatively simple to implement but rather slow (maxs out at 16 M/Bs)
 - The second and better way would be DMA (Direct Memory Access) , which simply just writes the data to a memory location and sends an interrupt once finished
-- Although it is better to read from the PCI devices list, the ports can just be hard coded 
+- Although it is better to read from the PCI devices list, the ports can just be hard coded
 - For the Implementation of PIO:
 - - PIO Has 28Bit Mode and 48Bit Mode
 - - These modes just specify how many bits are transferred to the device to request a sector (Sectors are 512 bytes)
 - - 28Bits supports hard drives/files upto 4GB whereas 48Bits support hard drives/files upto 8PB
 - Previously to communicate with data on the hard drive the OS had to know the CHS (Cylinder, Head, Sector)  address. As hard drive developed and there were no longer spinning disks and such (e.g. SSDs) a new way of comincating was invented: LBA.
 - LBA stands for Logical Block Address which basically just returns a sector with a given number
-
+### Partion Table
+- This OS will use the MS DOS partition table is because it is the most common and well documented. Additionalym Windows uses it and so does Linux
+- This partion table is simple so it is easy to implement, but it is also limited to 4 primary partitions and 1 extended partition.
+- The partition table is located at the end of the first sector of the hard drive
+- At the start of the first sector there is a 440 byte boot sector, which is used to boot the OS. The bootstraper will then look at the partition table to find the OS partition.
+- After the boot sector there are 4 bytes of signature.
+- Then there is 2 bytes that are unused
+- Then there is the partition table which is 64 bytes long and has 4 entries of 16 bytes each
+- At the end there are 2 magic bytes (0x55, 0xAA) which is used to check if the partition table is valid
+- The structure of the partition table is as follows:
+- - First 1 byte: Bootable flag (0x80 = bootable, 0x00 = not bootable) (There can only be one bootable partition per hard drive)
+- - Next 3 bytes: Cylinder Head Sector (CHS) address of the first sector of the partition
+- - Next 1 byte: Partition type (0x00 = empty, 0x01 = FAT12, 0x04 = FAT16, 0x05 = Extended, 0x06 = FAT16, 0x07 = NTFS, 0x0B = FAT32, 0x0C = FAT32, 0x0E = FAT16, 0x0F = Extended, 0x11 = Hidden FAT12, 0x14 = Hidden FAT16, 0x16 = Hidden FAT16, 0x1B = Hidden FAT32, 0x1C = Hidden FAT32, 0x1E = Hidden FAT16, 0x42 = MBR, 0x82 = Linux Swap, 0x83 = Linux, 0x84 = Hibernation, 0x85 = Linux Extended, 0x86 = NTFS Volume Set, 0x87 = NTFS Volume Set, 0xA5 = FreeBSD, 0xA6 = OpenBSD, 0xA9 = NetBSD, 0xB7 = BSDI, 0xB8 = BSDI Swap, 0xEB = BeOS, 0xEE = GPT, 0xEF = EFI System, 0xFB = VMWare File System, 0xFC = VMWare Swap)
+- - Next 3 bytes: Cylinder Head Sector (CHS) address of the last sector of the partition
+- - Next 4 bytes: LBA address of the first sector of the partition
+- - Next 4 bytes: Number of sectors in the partition
 
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)

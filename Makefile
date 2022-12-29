@@ -4,7 +4,7 @@ GCC_EXEC ?= gcc
 
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386 --verbose
-QEMU_PARAMS = -nic tap,model=e1000 \
+QEMU_PARAMS = -net user -net nic,model=pcnet \
 		      -boot d \
 		      -cdrom maxOS.iso \
 		      -m 512 \
@@ -36,6 +36,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/amd_am79c973.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
+ 		  obj/kernel/filesystem/msdospart.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
  		  obj/kernel/gui/desktop.o \
@@ -135,8 +136,9 @@ build: maxOS.iso
 ## MISC
 
 setupQ:
-	sudo apt-get install qemu-system-i386
-	qemu-img create maxOS.img 10000
+	toolchain/setupQemu.sh
+
+
 
 
 runQ: maxOS.iso

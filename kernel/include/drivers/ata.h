@@ -31,7 +31,7 @@ namespace maxOS{
                 ~AdvancedTechnologyAttachment();
 
                 void Identify();
-                void Read28(common::uint32_t sector, int count);
+                void Read28(common::uint32_t sector, common::uint8_t* data, int count);
                 void Write28(common::uint32_t sector, common::uint8_t* data, int count);
                 void Flush();                                                                               //Flush Cache  //TODO: See also vid 19 24:20
 

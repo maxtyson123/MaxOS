@@ -17,6 +17,7 @@ namespace maxOS{
 
         class VideoGraphicsArray{   //VGA (come back for VESA )
             protected:
+                common::uint8_t* FrameBufferSegment;
                 //-The CRT Controller (CRTC) is responsible for controlling the output of video data to the display monitor.
                 //-The graphics controller is responsible for managing the interface between CPU and video memory.
                 //-The sequencer manages the interface between the video data and RAMDAC.
@@ -41,6 +42,8 @@ namespace maxOS{
             public:
                     VideoGraphicsArray();
                     ~VideoGraphicsArray();
+
+                    void updateFrameAdress();
 
                     virtual bool SupportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
                     virtual bool SetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);

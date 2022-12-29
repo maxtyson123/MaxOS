@@ -1,6 +1,8 @@
 #Install Dependency's
 sudo apt-get install bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo build-essential
 
+#Create a directory for the toolchain
+rm -rf src
 mkdir src
 cd src
 

@@ -101,9 +101,10 @@ void AdvancedTechnologyAttachment::Identify() {
 /**
  * @details This function reads a sector from the ATA device
  * @param sector The sector to read
- * @param count The amount of data to read to that sector
+ * @param data The data to read into
+ * @param count The amount of data to read from that sector
  */
-void AdvancedTechnologyAttachment::Read28(uint32_t sector, int count) {
+void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8_t* data, int count) {
 
     //Don't Allow reading More then a sector
     if(sector > 0x0FFFFFFF)
@@ -156,17 +157,20 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, int count) {
 
         uint16_t readData = dataPort.Read();
 
-        char *text = "  \0";
-        text[0] = readData & 0xFF;
+        /*
+              char* foo = "  \0";
+              foo[1] = (readData >> 8) & 0x00FF;
+              foo[0] = readData & 0x00FF;
+              printf(foo);
+              */
 
-        if(i+1 < count)
-            text[1] = (readData >> 8) & 0xFF;
-        else
-            text[1] = '\0';
+            //Place into the data array
+            data[i] = readData & 0x00FF;
 
+            //If we are not at the end of the array, place the next byte into the array as it is incremented by 2 each loop
+            if(i+1 < count)
+                data[i+1] = (readData >> 8) & 0x00FF;
 
-        if(i < count)                                           //Prevent random shit from throwing up on my screen
-            printf(text);
     }
 
     //Hard Drive must have a full sector read, even if the data isnt the size of a full sector
@@ -180,7 +184,7 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, int count) {
  * @param sector The sector to write to
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::Write28(uint32_t sector, uint8_t *data, int count) {
+void AdvancedTechnologyAttachment::Write28(common::uint32_t sector, common::uint8_t* data, int count){
 
     //Don't Allow Writing More then a sector
     if(sector > 0x0FFFFFFF)
