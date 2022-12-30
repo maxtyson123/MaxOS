@@ -5,7 +5,7 @@ sudo apt-get install qemu-system-i386
 rm -rf maxOS.img
 
 #Create a 2GB image
-qemu-img create maxOS.img 2000000000
+qemu-img create maxOS.img 2G #000000000
 
 #Partion the image
 fdisk maxOS.img -u=cylinders << EOF
@@ -51,8 +51,8 @@ sudo mount -o loop /dev/loop0p1 /mnt/maxOS_img_1
 
 #Echo some test files
 cd /mnt/maxOS_img_1
-sudo  echo 'this is partition 1, file 1' | sudo tee file.txt
-sudo  echo 'this is partition 1, file 2' | sudo tee file.txt
+sudo  echo 'this is partition 1, file 1' | sudo tee file1.txt
+sudo  echo 'this is partition 1, file 2' | sudo tee file2.txt
 
 ## IMAGE 2
 
@@ -67,5 +67,8 @@ sudo mount -o loop /dev/loop0p2 /mnt/maxOS_img_2
 
 #Echo some test files
 cd /mnt/maxOS_img_2
-sudo  echo 'this is partition 2, file 1' | sudo tee file.txt
-sudo  echo 'this is partition 2, file 2' | sudo tee file.txt
+sudo  echo 'this is partition 2, file 1' | sudo tee file1.txt
+sudo  echo 'this is partition 2, file 2' | sudo tee file2.txt
+
+#Install grub
+sudo grub-install --root-directory=/mnt/maxOS_img_1 --no-floppy --modules="normal part_msdos ext2" /dev/loop0

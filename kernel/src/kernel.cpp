@@ -543,48 +543,6 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     #ifdef ENABLE_GRAPHICS
         vga.SetMode(320,200,8);
 
-        //Window
-        Window debugConsole(&desktop, 10,10,250,150,0x00,0x00,0x00);
-        Text debugConsole_title(&debugConsole,2,3,200,10,0x00,0x00,0x00,"Debug Console");
-        debugConsole.AddChild(&debugConsole_title);
-
-
-        //Debug console lines (note will make into app later)
-        Text lines[15] = {
-                Text(&debugConsole,2,20,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,30,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,40,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,50,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,60,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,70,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,80,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,90,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,100,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,110,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,120,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,130,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,140,10,10,0xA8,0x00,0x00,""),
-                Text(&debugConsole,2,150,10,10,0xA8,0x00,0x00,""),
-
-        };
-
-        for (int i = 0; i <  15; ++i) {
-            debugConsole.AddChild(&lines[i]);
-        }
-
-
-
-
-        //Add children
-
-        desktop.AddChild(&debugConsole);
-
-
-        printf_gui("GUI is ready ............ \n",lines);
-        printf_gui("Max OS\n\n",lines);
-        printf_gui("LONG LINE (*(#()*$(@*#($#*@()$*#@",lines);
-        //BUG: Long lines
     #endif
 
     printf("[ ] Setting Up ATA Hard Drives... \n");

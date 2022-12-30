@@ -102,7 +102,43 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Next 3 bytes: Cylinder Head Sector (CHS) address of the last sector of the partition
 - - Next 4 bytes: LBA address of the first sector of the partition
 - - Next 4 bytes: Number of sectors in the partition
+### Fat 32 File System
+See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT32)
+- The FAT32 file system is the most common file system used in Windows and Linux
+- The FAT32 file system is a simple file system that is easy to implement and is well documented
+- The FAT32 file system is a cluster based file system, which means that the file system is divided into clusters. Each cluster is 4KB in size
+- FAT32 was designed to be compatible with FAT16, which is why it has a 16bit root directory
+- FAT32 has 3 sections: Reserved sector, the FAT32 table and the data section
+- The structure of the FAT32 file system is as follows (512 bytes = 1 sector):
+- - Reserved Sector: 32KB (64 sectors)
+- - - Boot Sector: 512 bytes
+- - - FS Information Sector: 512 bytes
+- - - More optional reserved sectors
+- - FAT32 Table: 4KB (8 sectors)
+- - - FAT32 Table 1: 4KB (8 sectors)
+- - - FAT32 Table 2: 4KB (8 sectors) (optional)
+- - Data Section: To the end of the hard drive
 
+- Inside the boot sector there is a BIOS Parameter Block (BPB) 
+- The structure of the BPB is as follows:
+- - First 3 bytes: Jump instruction (Jump to the bootstraper)
+- - Next 8 bytes: OEM Name (Name of the OS that created the file system)
+- - Next 2 bytes: Bytes per sector (512)
+- - Next 1 byte: Sectors per cluster (8)
+- - Next 2 bytes: Reserved sectors (64)
+- - Next 1 byte: Number of FATs (2)
+- - Next 2 bytes: Number of root directory entries (512) (No longer used)
+- - Next 2 bytes: Total number of sectors (0) (No longer used)
+- - Next 1 byte: Media descriptor (Is this a hard drive or a floppy disk etc.)
+- - Next 2 bytes: Sectors per FAT (0) (Used only in FAT16)
+- - Next 2 bytes: Sectors per track (0) (No longer used)
+- - Next 2 bytes: Number of heads (0) (No longer used)
+- - Next 4 bytes: Number of hidden sectors (0) (No longer used)
+- - Next 4 bytes: Total number of sectors (0) (No longer used)
+- - Next 4 bytes: Table size (8)
+- - Next 2 bytes: Extended flags (0)
+- - Next 2 bytes: FAT version (0)
+- - Next 4 bytes: Root directory cluster (2) 
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)
 ### Graphics Mode {VGA}

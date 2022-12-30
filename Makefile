@@ -5,8 +5,8 @@ GCC_EXEC ?= gcc
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -net user -net nic,model=pcnet \
-		      -boot d \
-		      -cdrom maxOS.iso \
+		      -boot c \
+			  -cdrom maxOS.iso \
 		      -m 512 \
 		      -hda maxOS.img \
 		      -serial stdio
@@ -123,7 +123,7 @@ maxOS.iso: maxOS.bin
 	echo 'set timeout=0'                      > iso/boot/grub/grub.cfg
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
-	echo 'menuentry "Max OS" {' >> iso/boot/grub/grub.cfg
+	echo 'menuentry "Max OS" {' 			 >> iso/boot/grub/grub.cfg
 	echo '  multiboot /boot/maxOS.bin'    	 >> iso/boot/grub/grub.cfg
 	echo '  boot'                            >> iso/boot/grub/grub.cfg
 	echo '}'                                 >> iso/boot/grub/grub.cfg
