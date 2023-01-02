@@ -64,6 +64,11 @@ Road to Userspace
 - [ ] LibNet
 - [ ] Example Telnet Server (GUI) (EXTERNALLY LOADED)
 
+POSIX
+- [ ] Unix Filesystem "proc, bin etc"
+- [ ] Unix System Calls
+- [ ] Other posix stuff
+
 OS Functionality
 
 - [ ] POSIX
@@ -72,6 +77,7 @@ OS Functionality
 - [ ] Users & Privileges
 - [ ] Virtual Memory
 - [ ] More drivers, essitaly ones etc, wifi maybe
+- [ ] Microkernel
 - [ ] 64 Bit
 - [ ] Game Engine
 - [ ] Web Browser

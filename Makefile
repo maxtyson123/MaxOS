@@ -5,14 +5,14 @@ GCC_EXEC ?= gcc
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -net user -net nic,model=pcnet \
-		      -boot c \
-			  -cdrom maxOS.iso \
 		      -m 512 \
 		      -hda maxOS.img \
 		      -serial stdio
 
-#-nic tap,model=e1000 \
-#-net user -net nic,model=pcnet \
+#For intel_i217: -nic tap,model=e1000 \
+#For amd: 		 -net user -net nic,model=pcnet \
+#Boot iso:       -boot c -cdrom maxOS.iso \
+#Boot from hdd:  -boot d -hda /dev/loop0 \
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \
@@ -142,6 +142,8 @@ setupQ:
 
 
 runQ: maxOS.iso
+	toolchain/copy_filesystem.sh
+	sync
 	qemu-system-i386 $(QEMU_PARAMS)
 
 runQ_W: maxOS.iso

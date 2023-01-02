@@ -139,6 +139,27 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - Next 2 bytes: Extended flags (0)
 - - Next 2 bytes: FAT version (0)
 - - Next 4 bytes: Root directory cluster (2) 
+- - Next 2 bytes: FS Information sector (1)
+- - Next 2 bytes: Backup boot sector (6)
+- - Next 12 bytes: Reserved (0)
+- - Next 1 byte: Drive number
+- - Next 1 byte: Reserved (0)
+- - Next 1 byte: Extended boot signature (0x29)
+- - Next 4 bytes: Volume ID
+- - Next 11 bytes: Volume label
+- - Next 8 bytes: File system type (FAT32)
+- In the filesystem a directory is a cluster (e.g 4kb) and every sector in that cluster containers 16 directory entries
+- The structure of a directory entry is as follows:
+- - First 8 bytes: File name (8.3 format)
+- - Next 3 bytes: File extension
+- - Next 1 byte: File attributes (0x01 = Read Only, 0x02 = Hidden, 0x04 = System, 0x08 = Volume ID, 0x10 = Directory, 0x20 = Archive, 0x40 = Device, 0x80 = Unused)
+- - Next 1 byte: Reserved (0)
+- - Next 7 bytes: Creation time
+- - Next 2 bytes: Cluster high
+- - Next 4 bytes: Write time e.t.c
+- - Next 2 bytes: Cluster low 
+- - Next 4 bytes: File size
+- The cluster low and high are basicly pointers to where the directory entry is located on the hard drive or where the file is located on the hard drive
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)
 ### Graphics Mode {VGA}

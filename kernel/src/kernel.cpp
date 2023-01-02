@@ -577,7 +577,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("    -Reading partitions\n");
     MSDOSPartitionTable::ReadPartitions(&ata0m);
 
-    printf("[x] File System Setup \n");
+    printf("[x] File System Setup\n");
 
     while (true);
 
