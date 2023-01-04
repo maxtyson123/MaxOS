@@ -2,6 +2,8 @@
 GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 GCC_EXEC ?= gcc
 
+BUILD_COMPLETE ?= make runQ
+
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -net user -net nic,model=pcnet \
@@ -11,8 +13,8 @@ QEMU_PARAMS = -net user -net nic,model=pcnet \
 
 #For intel_i217: -nic tap,model=e1000 \
 #For amd: 		 -net user -net nic,model=pcnet \
-#Boot iso:       -boot c -cdrom maxOS.iso \
-#Boot from hdd:  -boot d -hda /dev/loop0 \
+#Boot iso:       -boot d -cdrom maxOS.iso \
+#Boot from hdd:  -boot c -hda /dev/loop0 \
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \
@@ -36,6 +38,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/amd_am79c973.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
+ 		  obj/kernel/filesystem/fat32.o \
  		  obj/kernel/filesystem/msdospart.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
@@ -110,7 +113,7 @@ obj/programs/%.o: programs/src/%.s
 buildPrograms: $(programs)
 	echo Programs Built
 
-### Make ###
+### Build ###
 
 maxOS.bin: linker.ld $(kernel) $(libraries) $(ports) $(programs)
 	ld $(LD_PARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
@@ -130,20 +133,40 @@ maxOS.iso: maxOS.bin
 	grub-mkrescue --output=maxOS.iso iso
 	rm -rf iso
 
-build: maxOS.iso
-	echo Complete
-
-## MISC
-
-setupQ:
-	toolchain/setupQemu.sh
-
-
-
-
-runQ: maxOS.iso
+.PHONY: filesystem
+filesystem:
 	toolchain/copy_filesystem.sh
 	sync
+
+build: maxOS.iso
+	@echo Made Max OS Kernel
+
+	# Make the libraries
+	@echo Made Max OS Libraries
+
+	# Make the programs
+	@echo Made Max OS Programs
+
+	# Make the ports
+	@echo Made Max OS Ports
+
+	# Make the disk image
+	(ls maxOS.img && echo yes) || toolchain/create_disk_img.sh
+	make filesystem
+
+	@echo === Made Max OS ===
+
+
+
+test: build
+	echo Testing
+
+
+## QEMU
+
+
+runQ: build
+	sudo apt-get install qemu-system-i386
 	qemu-system-i386 $(QEMU_PARAMS)
 
 runQ_W: maxOS.iso

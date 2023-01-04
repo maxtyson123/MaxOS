@@ -12,6 +12,10 @@ using namespace maxOS::filesystem;
 void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 
+/**
+ * Read the partition table of a given hard disk
+ * @param hd The hard disk to read the partition table from
+ */
 void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
 
     MasterBootRecord masterBootRecord;                                                           // Create a MasterBootRecord object
@@ -40,14 +44,17 @@ void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
         printfHex(i & 0xFF);                                                                 // Print the partition number
         printf(": ");
 
-        if(masterBootRecord.primaryPartition[i].bootable != 0x80) {                                // Check if the partition is bootable
+        if(masterBootRecord.primaryPartition[i].bootable != 0x80) {                              // Check if the partition is bootable
             printf("Not ");
         }
         printf("Bootable, ");
 
         printf("Type ");
-        printfHex(masterBootRecord.primaryPartition[i].partitionId);                              // Print the partition type
+        printfHex(masterBootRecord.primaryPartition[i].partitionId);                         // Print the partition type
         printf("   ");
+
+        ReadBiosBlock(hd, masterBootRecord.primaryPartition[i].startLBA);            // Read the FAT32 BIOS block
+
     }
     printf("\n");
 

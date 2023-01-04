@@ -12,8 +12,6 @@ namespace maxOS{
 
     namespace filesystem{
 
-     class FileAllocationTable32{
-
 
          struct BiosParameterBlock32{
 
@@ -71,10 +69,7 @@ namespace maxOS{
 
          } __attribute__((packed));
 
-         public:
              void ReadBiosBlock(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
-
-     };
 
     }
 

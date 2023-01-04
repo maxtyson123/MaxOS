@@ -1,6 +1,3 @@
-#Install QEMU
-sudo apt-get install qemu-system-i386
-
 #Remove Old image
 rm -rf maxOS.img
 

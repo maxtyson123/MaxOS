@@ -7,6 +7,7 @@
 
 #include <common/types.h>
 #include <drivers/ata.h>
+#include <filesystem/fat32.h>
 
 namespace maxOS{
 

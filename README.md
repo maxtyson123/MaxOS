@@ -16,7 +16,7 @@ Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom tha
 
  
 ## Screenshots
-![Screenshot](docs/Screenshots/ATA_Hardrives.png)
+![Screenshot](docs/Screenshots/FAT32_read_dirs_and_files.png)
 
 
 
@@ -72,6 +72,7 @@ POSIX
 OS Functionality
 
 - [ ] POSIX
+- [ ] ext2 Filesystem
 - [ ] GUI Theming
 - [ ] Game Ports (DOOM etc..)
 - [ ] Users & Privileges

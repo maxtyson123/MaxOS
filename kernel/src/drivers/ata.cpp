@@ -104,25 +104,26 @@ void AdvancedTechnologyAttachment::Identify() {
  * @param data The data to read into
  * @param count The amount of data to read from that sector
  */
-void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8_t* data, int count) {
 
-    //Don't Allow reading More then a sector
-    if(sector > 0x0FFFFFFF)
+void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8_t* data, int count)
+{
+    //Dont Allow reading More then a sector
+    if(sector & 0xF0000000)
         return;
-    if(count > 512)
+    if(count > bytesPerSector)
         return;
 
-
-
-    devicePort.Write(master ? 0xE0 : 0xF0 | ((sector & 0x0F000000) >> 24) );     //Select Device Master(0xE0) / Slave(0xF0), and add spare bits
-    errorPort.Write(0);                                                          //Clear Previous Errors
-    sectorCountPort.Write(1);                                                    // For now only read/write a single sector         TODO: Fix this
+    devicePort.Write((master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
+    errorPort.Write(0);
+    sectorCountPort.Write(1);
 
 
     LBAlowPort.Write(  sector & 0x000000FF );              //Split the sector into the port (put the low 8 bits ito this port)
     LBAmidPort.Write( (sector & 0x0000FF00) >> 8);         //Split the sector into the port  (put the mid 8 bits ito this port)
     LBAHiPort.Write( (sector & 0x00FF0000) >> 16);         //Split the sector into the port (put the hi 8 bits ito this port)
     commandPort.Write(0x20);                              //Command For Reading
+
+
 
 
     uint8_t status = commandPort.Read();                     //Read Status
@@ -132,14 +133,9 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
     }
 
     //Can take a while for the disk to be fully read
-    while (
-            ((status & 0x80) == 0x80)                 //Device is busy
-            &&
-            ((status & 0x01) != 0x01)                 //There was an error
-            )
-    {
+    while(((status & 0x80) == 0x80)
+      && ((status & 0x01) != 0x01))
         status = commandPort.Read();
-    }
 
     //Check for any errors
     if(status & 0x01){
@@ -151,32 +147,29 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
 
     printf("Reading from ATA: ");
 
-
     //We are reading 2 bytes to the data port so , it will be 256 , so has to be incremented by 2
-    for (uint16_t i = 0; i < bytesPerSector ; i+= 2) {
-
+    for(uint16_t i = 0; i < count; i+= 2)
+    {
         uint16_t readData = dataPort.Read();
 
         /*
-              char* foo = "  \0";
-              foo[1] = (readData >> 8) & 0x00FF;
-              foo[0] = readData & 0x00FF;
-              printf(foo);
-              */
+        char* foo = "  \0";
+        foo[1] = (readData >> 8) & 0x00FF;
+        foo[0] = readData & 0x00FF;
+        printf(foo);
+        */
 
-            //Place into the data array
-            data[i] = readData & 0x00FF;
+        //Place into the data array
+        data[i] = readData & 0x00FF;
 
-            //If we are not at the end of the array, place the next byte into the array as it is incremented by 2 each loop
-            if(i+1 < count)
-                data[i+1] = (readData >> 8) & 0x00FF;
-
+        //If we are not at the end of the array, place the next byte into the array as it is incremented by 2 each loop
+        if(i+1 < count)
+            data[i+1] = (readData >> 8) & 0x00FF;
     }
 
     //Hard Drive must have a full sector read, even if the data isnt the size of a full sector
-    for(int i = count + (count%2); i < bytesPerSector; i += 2)      //If count isnt an even number then it would have already had it's byte read
+    for(uint16_t i = count + (count % 2); i < bytesPerSector; i+= 2)
         dataPort.Read();
-
 }
 
 /**
