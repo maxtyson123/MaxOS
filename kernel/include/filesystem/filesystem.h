@@ -19,8 +19,8 @@ namespace maxOS{
                 FileWriter();
                 ~FileWriter();
 
-                virtual bool Write(common::uint8_t *data, common::uint32_t size);
-                virtual bool Seek(common::uint32_t position);
+                virtual common::uint32_t Write(common::uint8_t *data, common::uint32_t size);
+                virtual common::uint32_t Seek(common::uint32_t position);
                 virtual bool Close();
                 virtual bool Flush();
 
@@ -34,8 +34,8 @@ namespace maxOS{
                 FileReader();
                 ~FileReader();
 
-                virtual void Read(common::uint8_t* data, common::uint32_t size);
-                virtual bool Seek(common::uint32_t position);
+                virtual common::uint32_t Read(common::uint8_t* data, common::uint32_t size);
+                virtual common::uint32_t Seek(common::uint32_t position);
 
                 common::uint32_t GetPosition();
                 common::uint32_t GetFileSize();
@@ -48,9 +48,11 @@ namespace maxOS{
             FileEnumerator();
             ~FileEnumerator();
 
-            virtual void getFileName();
+            virtual char* getFileName();
             virtual FileReader getReader();
             virtual FileWriter getWriter();
+
+            virtual bool hasNext();
             virtual FileEnumerator next();
 
         };
@@ -61,7 +63,8 @@ namespace maxOS{
             DirectoryEnumerator();
             ~DirectoryEnumerator();
 
-            virtual void getDirectoryName();
+            virtual char* getDirectoryName();
+            virtual bool hasNext();
             virtual DirectoryEnumerator next();
 
         };
@@ -72,10 +75,13 @@ namespace maxOS{
                 DirectoryTraverser();
                 ~DirectoryTraverser();
 
-                virtual bool hasNext();
-                virtual DirectoryTraverser next();
-                virtual void changeDirectory();
-                virtual void makeDirectory();
+                virtual void changeDirectory(DirectoryEnumerator directory);
+
+                virtual void makeDirectory(char* name);
+                virtual void removeDirectory(char* name);
+
+                virtual void makeFile(char* name);
+                virtual void removeFile(char* name);
 
                 virtual FileEnumerator getFileEnumerator();
                 virtual DirectoryEnumerator getDirectoryEnumerator();
