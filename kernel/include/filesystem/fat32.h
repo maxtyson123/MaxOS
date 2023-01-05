@@ -7,6 +7,7 @@
 
 #include <common/types.h>
 #include <drivers/ata.h>
+#include <filesystem/filesystem.h>
 
 namespace maxOS{
 
@@ -68,6 +69,78 @@ namespace maxOS{
              common::uint32_t  size;
 
          } __attribute__((packed));
+
+        class FatFileWriter : public FileWriter {
+
+            public:
+                FatFileWriter();
+                ~FatFileWriter();
+
+                bool Write(common::uint8_t *data, common::uint32_t size);
+                bool Seek(common::uint32_t position);
+                bool Close();
+                bool Flush();
+
+                common::uint32_t GetPosition();
+                common::uint32_t GetFileSize();
+        };
+
+        class FatFileReader : public FileReader{
+
+        public:
+            FatFileReader();
+            ~FatFileReader();
+
+            void Read(common::uint8_t* data, common::uint32_t size);
+            bool Seek(common::uint32_t position);
+
+            common::uint32_t GetPosition();
+            common::uint32_t GetFileSize();
+
+        };
+
+        class FatFileEnumerator : public FileEnumerator{
+
+            public:
+                FatFileEnumerator();
+                ~FatFileEnumerator();
+
+                void getFileName();
+                FileReader getReader();
+                FileWriter getWriter();
+                FileEnumerator next();
+
+        };
+
+        class FatDirectoryTraverser : public DirectoryTraverser{
+            public:
+
+                FatDirectoryTraverser();
+                ~FatDirectoryTraverser();
+
+                bool hasNext();
+                DirectoryTraverser next();
+                void changeDirectory();
+                void makeDirectory();
+
+                virtual FileEnumerator getFileEnumerator();
+
+        };
+
+         class Fat32 : public FileSystem{
+             private:
+                drivers::AdvancedTechnologyAttachment hd;
+                common::uint32_t partitionOffset;
+
+
+             public:
+                Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
+                ~Fat32();
+
+                DirectoryTraverser getDirectoryTraverser();
+
+
+         };
 
              void ReadBiosBlock(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
 

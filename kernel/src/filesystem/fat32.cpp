@@ -28,13 +28,13 @@ void maxOS::filesystem::ReadBiosBlock(drivers::AdvancedTechnologyAttachment *hd,
     //Log sector size
     printf("sectors per cluster: ");
     printfHex(bpb.sectorsPerCluster);
-    printf("\n");
+    printf(" contents: \n");
 
 
     //Read information from the BIOS block and store it in the global variables
-    uint32_t fatStart = partitionOffset + bpb.reservedSectors;
+    uint32_t fatStart = partitionOffset + bpb.reservedSectors;                      //The FAT is located after the reserved sectors
     uint32_t fatSize = bpb.tableSize32;
-    uint32_t dataStart = fatStart + fatSize*bpb.tableCopies;
+    uint32_t dataStart = fatStart + fatSize*bpb.tableCopies;                        //The data is located after the FAT (which is fatSize * tableCopies sectors long)
     uint32_t rootStart = dataStart + bpb.sectorsPerCluster*(bpb.rootCluster - 2);   //rootCluster is offset 2 by default
 
     //16 Root entries per sector
@@ -66,23 +66,54 @@ void maxOS::filesystem::ReadBiosBlock(drivers::AdvancedTechnologyAttachment *hd,
         }
         else{
 
-            printf(" (file)\n");
+            printf(" (file) ");
 
             //Read the first cluster of the file
-            uint32_t  fileCluster = ((uint32_t) dirent[i].firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
-                                              | dirent[i].firstClusterLow;              //Add the low cluster number
+            uint32_t  firestFileCluster = ((uint32_t) dirent[i].firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+                                                    | dirent[i].firstClusterLow;              //Add the low cluster number
 
-            //Convert file cluster into a sector
-            uint32_t fileSector = dataStart + bpb.sectorsPerCluster*(fileCluster - 2);  //*Offset by 2
 
-            //Read the first sector of the file
-            uint8_t fileBuffer[512];                                                    //Create a buffer to store the file contents
-            hd -> Read28(fileSector, fileBuffer, 512);                 //Read the first sector of the file
-            fileBuffer[dirent[i].size = '\0'];                                          //Add a null terminator to the end of the file
-            printf((char*)fileBuffer);                                              //Print the file contents
 
+            int32_t SIZE = dirent[i].size;
+            int32_t nextFileCluster = firestFileCluster;
+            uint8_t fileBuffer[513];
+            uint8_t fatBuffer[513];
+
+            while (SIZE > 0){
+
+                //Convert file cluster into a sector
+                uint32_t fileSector = dataStart + bpb.sectorsPerCluster*(nextFileCluster - 2);                  //*Offset by 2
+                int sectorOffset = 0;
+
+                //Loop the sectors of the file
+                for (; SIZE > 0; SIZE -= 512) {
+
+                    hd -> Read28(fileSector + sectorOffset, fileBuffer, 512);                 //Read the specified sector of the file
+                    sectorOffset++;                                                                            //Increment the sector offset
+
+                    fileBuffer[SIZE > 512 ? 512 : SIZE = '\0'];                                                //Add a null terminator to the end of the sector
+                    printf((char*)fileBuffer);                                                             //Print the file contents
+
+                    //If the next sector is in a different cluster then break
+                    if (sectorOffset > bpb.sectorsPerCluster)
+                        break;
+                }
+
+                //Get the next cluster of the file
+                uint32_t fatSectorForCurrentCluster = nextFileCluster / (512 / sizeof(uint32_t));               //The FAT sector for the current cluster is the current cluster divided by the number of entries per sector
+
+                //Read the FAT sector for the current cluster
+                hd->Read28(fatStart + fatSectorForCurrentCluster, fatBuffer, 512);
+
+                //Get the offset of the current cluster in the FAT sector
+                uint32_t fatOffsetInSectorForCurrentCluster = nextFileCluster % (512/sizeof(uint32_t));
+
+                nextFileCluster = ((uint32_t*)&fatBuffer)[fatOffsetInSectorForCurrentCluster] & 0x0FFFFFFF;
+            }
         }
-
-
     }
+    printf("\n");
 }
+
+
+//TODO: Fix folders after lib not found error

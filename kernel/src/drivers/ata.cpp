@@ -145,8 +145,6 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
 
     }
 
-    printf("Reading from ATA: ");
-
     //We are reading 2 bytes to the data port so , it will be 256 , so has to be incremented by 2
     for(uint16_t i = 0; i < count; i+= 2)
     {

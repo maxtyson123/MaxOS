@@ -31,6 +31,7 @@ Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom tha
 - [x] Memory Management
 - [x] Ethernet Networking Drivers
 - [x] Various Internet Protocols (ARP, ICMP, UDP, TCP)
+- [ ] Fat32 Filesystem through an ATA driver
 
 
 
@@ -55,7 +56,7 @@ Road to Userspace
 - [ ] New Process Manager / Scheduler
 - [ ] Elf Loader
 - [ ] Shell
-- [ ] System Calls
+- [ ] More System Calls
 - [ ] OS Specific Toolchain
 - [ ] LibC
 - [ ] LibM
@@ -73,11 +74,11 @@ OS Functionality
 
 - [ ] POSIX
 - [ ] ext2 Filesystem
-- [ ] GUI Theming
+- [ ] GUI Theming, More GUI Widgets
 - [ ] Game Ports (DOOM etc..)
 - [ ] Users & Privileges
 - [ ] Virtual Memory
-- [ ] More drivers, essitaly ones etc, wifi maybe
+- [ ] More drivers, essential ones etc, wifi maybe
 - [ ] Microkernel
 - [ ] 64 Bit
 - [ ] Game Engine

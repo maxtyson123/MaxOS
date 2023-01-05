@@ -160,6 +160,10 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - Next 2 bytes: Cluster low 
 - - Next 4 bytes: File size
 - The cluster low and high are basicly pointers to where the directory entry is located on the hard drive or where the file is located on the hard drive
+- To read a file you need to read the cluster low and high and then read the cluster from the hard drive
+- The FAT32 table is a table that contains pointers to where the next cluster is located on the hard drive
+- When an hard drive is fragmented files larger then a cluster are split up and stored in multiple places on the hard drive
+- The FAT32 table is used to find the next cluster of a file, when a file is fragmented
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)
 ### Graphics Mode {VGA}
