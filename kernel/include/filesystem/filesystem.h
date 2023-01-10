@@ -13,6 +13,12 @@ namespace maxOS{
     namespace filesystem{
 
 
+        enum SeekType{
+            SEEK_SET,
+            SEEK_CUR,
+            SEEK_END
+        };
+
         class FileWriter {
 
             public:
@@ -20,12 +26,13 @@ namespace maxOS{
                 ~FileWriter();
 
                 virtual common::uint32_t Write(common::uint8_t *data, common::uint32_t size);
-                virtual common::uint32_t Seek(common::uint32_t position);
+                virtual common::uint32_t Seek(common::uint32_t position, SeekType seek);
+
                 virtual bool Close();
                 virtual bool Flush();
 
-                common::uint32_t GetPosition();
-                common::uint32_t GetFileSize();
+                virtual common::uint32_t GetPosition();
+                virtual common::uint32_t GetFileSize();
         };
 
         class FileReader{
@@ -35,10 +42,10 @@ namespace maxOS{
                 ~FileReader();
 
                 virtual common::uint32_t Read(common::uint8_t* data, common::uint32_t size);
-                virtual common::uint32_t Seek(common::uint32_t position);
+                virtual common::uint32_t Seek(common::uint32_t position, SeekType seek);
 
-                common::uint32_t GetPosition();
-                common::uint32_t GetFileSize();
+                virtual common::uint32_t GetPosition();
+                virtual common::uint32_t GetFileSize();
 
         };
 
@@ -49,11 +56,11 @@ namespace maxOS{
             ~FileEnumerator();
 
             virtual char* getFileName();
-            virtual FileReader getReader();
-            virtual FileWriter getWriter();
+            virtual FileReader* getReader();
+            virtual FileWriter* getWriter();
 
             virtual bool hasNext();
-            virtual FileEnumerator next();
+            virtual FileEnumerator* next();
 
         };
 
@@ -64,8 +71,9 @@ namespace maxOS{
             ~DirectoryEnumerator();
 
             virtual char* getDirectoryName();
+
             virtual bool hasNext();
-            virtual DirectoryEnumerator next();
+            virtual DirectoryEnumerator* next();
 
         };
 
@@ -83,8 +91,8 @@ namespace maxOS{
                 virtual void makeFile(char* name);
                 virtual void removeFile(char* name);
 
-                virtual FileEnumerator getFileEnumerator();
-                virtual DirectoryEnumerator getDirectoryEnumerator();
+                virtual FileEnumerator* getFileEnumerator();
+                virtual DirectoryEnumerator* getDirectoryEnumerator();
 
         };
 
@@ -94,7 +102,7 @@ namespace maxOS{
                 FileSystem();
                 ~FileSystem();
 
-                virtual DirectoryTraverser getDirectoryTraverser();
+                virtual DirectoryTraverser* getDirectoryTraverser();
         };
 
     }

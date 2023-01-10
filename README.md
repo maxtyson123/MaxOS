@@ -11,6 +11,8 @@ The codebase is well commented with additional notes in the docs directory. Cont
 
 Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom that can optionally be installed via the make_toolchain.sh file located in toolcahin. The OS can be built using this (build_via_tc.sh) or built via the make file (see below.) The toolchain will become more mainstream with the release of the c libraries.
 
+MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an ATA drive. The makefile will mount MaxOS onto mnt/maxOS_img_1, however it is not ideal to directly copy files onto the mount point as upon build the folders are wiped and instead you should interact with the folders in the "filesystem" directory. (Note: when you reboot your device you need to run toolchain/create_disk_img.sh to remount the disk)
+
 [![wakatime](https://wakatime.com/badge/github/maxtyson123/max-os.svg)](https://wakatime.com/badge/github/maxtyson123/max-os)
 ![maxOS](https://github.com/maxtyson123/max-os/workflows/maxOS/badge.svg)
 
@@ -123,7 +125,9 @@ Planned:
 - Git
 - DOOM
 - Bash
-## Run Locally
+## Run Locally 
+
+Steps for linux:
 
 Clone the project
 
@@ -137,23 +141,15 @@ Go to the project directory
   cd max-os
 ```
 
-Make Files and OS
+Install Dependencies & build
 
 ```bash
- make install_dep
- make maxOS.iso  
+ make install_dep 
+ make build
 ```
 
-Run Os (Linux)
+Run Os In Qemu
 
 ```bash
-make setupQ
 make runQ
-```
-
-Run Os (Windows)
-
-```bash
-# Install QEMU into "C:\Program Files\qemu\"
-make runQ_W
 ```

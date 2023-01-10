@@ -384,7 +384,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     Version* maxOSVer;
     maxOSVer->version = 28;
-    maxOSVer->build = 84;
+    maxOSVer->build = 85;
     maxOSVer->buildAuthor = "Max Tyson";
 
     //Print in header

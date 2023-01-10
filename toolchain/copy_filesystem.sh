@@ -1,3 +1,4 @@
+
 #Boot
 sudo rm -rf /mnt/maxOS_img_1/boot/maxOS.bin
 sudo cp maxOS.bin /mnt/maxOS_img_1/boot

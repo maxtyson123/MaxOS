@@ -53,7 +53,8 @@ void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
         printfHex(masterBootRecord.primaryPartition[i].partitionId);                         // Print the partition type
         printf("   ");
 
-        ReadBiosBlock(hd, masterBootRecord.primaryPartition[i].startLBA);            // Read the FAT32 BIOS block
+
+        Fat32 fat32(hd, masterBootRecord.primaryPartition[i].startLBA);              // Create a Fat32 object
 
     }
     printf("\n");

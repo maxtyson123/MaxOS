@@ -38,6 +38,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/amd_am79c973.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
+ 		  obj/kernel/filesystem/filesystem.o \
  		  obj/kernel/filesystem/fat32.o \
  		  obj/kernel/filesystem/msdospart.o \
  		  obj/kernel/gui/widget.o \
@@ -138,7 +139,7 @@ filesystem:
 	toolchain/copy_filesystem.sh
 	sync
 
-build: maxOS.iso
+build: maxOS.bin
 	@echo Made Max OS Kernel
 
 	# Make the libraries

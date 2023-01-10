@@ -139,8 +139,6 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
 
     //Check for any errors
     if(status & 0x01){
-
-        printf("ERROR");
         return;
 
     }
