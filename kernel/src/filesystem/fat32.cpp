@@ -190,49 +190,81 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     directorySector = dirSec;
     fatSize = fat_size;
 
-    //Read the directory entry's from the directory sector
-    hd -> Read28(directorySector, (uint8_t*)&dirent[0], 16*sizeof(DirectoryEntry));
 
     //Clear the enumerators
     currentFileEnumerator = 0;
     currentDirectoryEnumerator = 0;
 
+    //Directory reading  loop
+    int index = 0;
+    uint32_t nextCluster = directorySector;
+    uint8_t fatBuffer[513];
 
-    for(int i = 0; i < 16; i++) {
+    //Read directory entries until the end of the cluster
+    while(true) {
+        
+        //Convert file cluster into a sector
+        uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
+        int sectorOffset = 0;
 
-        //If the name is 0x00 then there are no more entries
-        if (dirent[i].name[0] == 0x00)
+        //Read the secotrs in the cluster
+        while(true){
+
+            //Read the sector
+            hd -> Read28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
+            sectorOffset++;                                                                                         //Increment the sector offset
+
+            //Loop through all the entrys
+            for(int i = 0; i < 16; i++) {
+                //If the name is 0x00 then there are no more entries
+                if (tempDirent[i].name[0] == 0x00) {
+                    break;
+                }
+
+                //If the attribute is 0x0F then this is a long file name entry, skip it.
+                if ((tempDirent[i].attributes & 0x0F) == 0x0F) {
+                    continue;
+                }
+
+                dirent.push_back(tempDirent[i]);
+
+                if(currentDirectoryEnumerator == 0 && (dirent[index].attributes & 0x10) == 0x10){                                                                                            //If this is the first directory entry then set the current directory to this entry
+                    currentDirectoryIndex = index;                                                                                                  //Set the current directory index to the current entry
+                    FatDirectoryEnumerator* dir = new FatDirectoryEnumerator(this, dirent[index], currentDirectoryIndex);         //Create a new directory enumerator
+                    currentDirectoryEnumerator = dir;                                                                                           //Set the current directory enumerator to the new directory enumerator
+                }
+
+                if(currentFileEnumerator == 0 && (dirent[index].attributes & 0x10) != 0x10){
+                    currentFileIndex = index;
+                    FatFileEnumerator* file = new FatFileEnumerator(this, dirent[index], currentFileIndex);
+                    currentFileEnumerator = file;
+                }
+
+                index++;
+            }
+
+            //If the next sector is in a different cluster then break
+            if (sectorOffset > sectorsPrCluster)
+                break;     
+        }
+
+        //Get the next cluster of the directory
+        uint32_t sector = nextCluster / (512 / sizeof(uint32_t));                                                                       //Calculate the sector of the FAT table
+        uint32_t offset = nextCluster % (512 / sizeof(uint32_t));                                                                       //Calculate the offset of the FAT table
+
+        //Read the FAT sector for the current cluster
+        hd -> Read28(fatLocation + sector, fatBuffer, 512);
+
+        //Set the next cluster to the next cluster in the FAT
+        nextCluster = ((uint32_t*)&fatBuffer)[offset] & 0x0FFFFFFF;    
+
+        //if the next cluster is 0, it means the end of the cluster chain
+        if (nextCluster == 0) {
             break;
-
-        //If the atrribute is 0x0F then this is a long file name entry, skip it.
-        if ((dirent[i].attributes & 0x0F) == 0x0F || (dirent[i].attributes & 0x10) != 0x10)
-            continue;
-
-        if(currentDirectoryEnumerator == 0){                                                                                            //If this is the first directory entry then set the current directory to this entry
-            currentDirectoryIndex = i;                                                                                                  //Set the current directory index to the current entry
-            FatDirectoryEnumerator* dir = new FatDirectoryEnumerator(this, dirent[i], currentDirectoryIndex);         //Create a new directory enumerator
-            currentDirectoryEnumerator = dir;                                                                                           //Set the current directory enumerator to the new directory enumerator
         }
     }
 
-    for(int i = 0; i < 16; i++) {
 
-        //If the name is 0x00 then there are no more entries
-        if (dirent[i].name[0] == 0x00)
-            break;
-
-        //If the atrribute is 0x0F then this is a long file name entry, skip it.
-        if ((dirent[i].attributes & 0x0F) == 0x0F || (dirent[i].attributes & 0x10) == 0x10)
-            continue;
-
-        if(currentFileEnumerator == 0){
-            currentFileIndex = i;
-            FatFileEnumerator* file = new FatFileEnumerator(this, dirent[i], currentFileIndex);
-            currentFileEnumerator = file;
-        }
-
-
-    }
 
     //Intialize the reader, writer and its buffer
     FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
@@ -324,7 +356,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
     }
 
     //Write the directory entry to the disk
-    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 
 }
 
@@ -362,7 +394,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
 
     //Write the directory entry to the disk
-    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 }
 
 void FatDirectoryTraverser::makeFile(char *name) {
@@ -411,7 +443,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
     }
 
     //Write the directory entry to the disk
-    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 }
 
 void FatDirectoryTraverser::removeFile(char *name) {
@@ -448,7 +480,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
 
     //Write the directory entry to the disk
-    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 }
 
 FileEnumerator* FatDirectoryTraverser::getFileEnumerator() {
@@ -479,7 +511,7 @@ void FatDirectoryTraverser::WriteDirectoryInfoChange(DirectoryEntry* e) {
 
     }
 
-    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 
 }
 

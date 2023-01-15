@@ -170,8 +170,8 @@ namespace maxOS{
 
         private:
 
-                DirectoryEntry dirent[16];
-
+                DirectoryEntry tempDirent[16];
+                common::Vector<DirectoryEntry> dirent;        
 
 
                 FatDirectoryEnumerator* currentDirectoryEnumerator;
