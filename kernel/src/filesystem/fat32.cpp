@@ -115,12 +115,43 @@ void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t
 
 };
 
+/**
+ * @brief Check if a char* is a valid FAT32 name
+ * @param name Pointer to the char array to check
+ * @return true if the name is valid, false otherwise
+ */
+bool Fat32::IsValidFAT32Name(char* name) {
+  
+     // Count the number of characters in the name
+    int len = 0;
+    while (name[len] != '\0') {
+        len++;
+    }
+
+    // Check for length
+    if (len > 8) {
+        return false;
+    }
+
+    // Check for invalid characters
+    for (int i = 0; i < len; i++) {
+        if (!((name[i] >= 'A' && name[i] <= 'Z') || (name[i] >= '0' && name[i] <= '9') || name[i] == ' ' || name[i] == '_' || name[i] == '^' || name[i] == '$' || name[i] == '~' || name[i] == '!' || name[i] == '#' || name[i] == '%' || name[i] == '&' || name[i] == '-' || name[i] == '{' || name[i] == '}' || name[i] == '@' || name[i] == '\'' || name[i] == '(' || name[i] == ')')) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 ///__DirectoryTraverser__///
 
 FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size) {
 
     //TODO: For reading directotys Add multiple sector support, and multiple cluster support
     //TODO: Add error checks
+    //TODO: Add support for long file names
+
+    //Todo: test cluster allocation, test directory renaming
 
     hd = ataDevice;
 
@@ -179,12 +210,8 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
     FatFileWriter* fw = (FatFileWriter*)currentFileEnumerator -> getWriter();
 
-    uint32_t fileSize = fr -> GetFileSize() +512;                                                   //Test what happens if we try to write more then whats allready allocated for the file
-
+    uint32_t fileSize = fr -> GetFileSize() + 512;                                                   //Test what happens if we try to write more then whats allready allocated for the file
     uint8_t* fileBuffer = (uint8_t*)MemoryManager::activeMemoryManager ->malloc(fileSize);
-
-
-
 
     //Write some dummy text to the file
     for (int j = 0; j < fileSize; ++j) {
@@ -202,8 +229,6 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     MemoryManager::activeMemoryManager -> free(fileBuffer);
 
     //TODO: Fix bug that the physical drive doesnt get updated, probabbly has also got something to do with the reading error
-
-
 
 }
 
@@ -226,9 +251,32 @@ void FatDirectoryTraverser::changeDirectory(DirectoryEnumerator directory) {
 }
 
 void FatDirectoryTraverser::makeDirectory(char *name) {
+  
     //Check if the name is a valid FAT32 name
+    if(!Fat32::IsValidFAT32Name(name)) return;
+
     //Check if the name is already in use
+    for(int i = 0; i < 16; i++) {
+        if (dirent[i].name[0] == 0x00)                                  //If the name is 0x00 then there are no more entries
+            break;
+
+        if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
+            continue;
+
+        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+            printf("Name already in use");
+            return;
+        }
+    }
+
     //Create a new directory entry with the name
+    DirectoryEntry newDir;                                      //Directory entry to be added
+    newDir.attributes = 0x10;                                   //Set the attributes to directory
+    newDir.clusterHigh = 0;                                     //Set the high cluster to 0
+    newDir.clusterLow = 0;                                      //Set the low cluster to 0
+    newDir.size = 0;                                            //Set the size to 0
+ 
+
 	//Allocate a cluster for the directory
     //Write the directory entry to the disk
 
@@ -244,6 +292,8 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
 
 void FatDirectoryTraverser::makeFile(char *name) {
    //Check if the name is a valid FAT32 name
+    if(!Fat32::IsValidFAT32Name(name)) return;
+
     //Check if the name is already in use
     //Create a new directory entry with the name
 	//Allocate a cluster for the file
@@ -326,10 +376,22 @@ char* FatDirectoryEnumerator::getDirectoryName() {
  */
 char *FatDirectoryEnumerator::changeDirectoryName(char* newDirectoryName) {
 
-    //TODO: Check if the new name is acceptable
-    //TODO: Write the new name into the directory entry
-    //TODO: Save the changes to the disk
+    //Check if the new name is acceptable
+    if(!Fat32::IsValidFAT32Name(newDirectoryName)) return nullptr;
 
+    //Write the new name into the directory entry
+    for (int i = 0; i < 8; i++) {
+        if (newDirectoryName[i] != '\0') {
+            directoryInfo -> name[i] = newDirectoryName[i];
+        } else {
+            directoryInfo -> name[i] = ' ';
+        }
+    }
+
+    //Save the changes to the disk
+    traverser -> WriteDirectoryInfoChange(directoryInfo);
+
+    return newDirectoryName;
 }
 
 /**
@@ -400,10 +462,21 @@ char *FatFileEnumerator::getFileName() {
  * @return The old filename
  */
 char *FatFileEnumerator::changeFileName(char *newFileName) {
-    //TODO: Check if the new name is acceptable
-    //TODO: Write the changes to the directory entry
-    //TODO: Write the changes to disk
-    return nullptr;
+    //Check if the new name is acceptable
+    if(!Fat32::IsValidFAT32Name(newFileName)) return nullptr;
+
+    //Write the new name into the directory entry
+     for (int i = 0; i < 8; i++) {
+        if (newFileName[i] != '\0') {
+            fileInfo -> name[i] = newFileName[i];
+        } else {
+            fileInfo -> name[i] = ' ';
+        }
+    }
+    //Save the changes to the disk
+    traverser -> WriteDirectoryInfoChange(fileInfo);
+
+    return newFileName;
 }
 
 /**

@@ -10,6 +10,7 @@
 #include <filesystem/filesystem.h>
 #include <common/vector.h>
 #include <memory/memorymanagement.h>
+#include <common/printf.h>
 
 namespace maxOS{
 
@@ -223,6 +224,8 @@ namespace maxOS{
 
                 static common::uint32_t AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t currentCluster, common::uint32_t fatLocation, common::uint32_t fat_size);
                 static void UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t cluster, common::uint32_t newFatValue, common::uint32_t fatLocation);
+
+                static bool IsValidFAT32Name(char* name);
 
                 DirectoryTraverser* getDirectoryTraverser();
 

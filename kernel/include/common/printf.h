@@ -11,6 +11,7 @@
 namespace maxOS{
 
     namespace common{
+
         class Console{
             public:
                 Console();
@@ -31,13 +32,13 @@ namespace maxOS{
         };
 
 
+        int strcmp(const char* s1, const char* s2);
+
     };
 
 }
 
-class printf {
 
-};
 
 
 #endif //MAXOS_PRINTF_H
