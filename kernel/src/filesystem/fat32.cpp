@@ -60,24 +60,58 @@ DirectoryTraverser* Fat32::getDirectoryTraverser() {
 
 /**
  * Allocate a new cluster in the FAT
- * 
+ * @param currentCluster The current cluster to allocate a new cluster after
+ * @param fatLocation The location of the FAT table
+ * @param fat_size The size of the FAT table
  * @return The current directory traverser
  */
-uint32_t Fat32::AllocateCluster(){
+uint32_t Fat32::AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint32_t currentCluster, uint32_t fatLocation, uint32_t fat_size){
 
+    //Find and store the first free cluster
+    uint32_t  fatBuffer[512 / sizeof(uint32_t)];                                                                                        //Create a buffer to store a sector of the FAT table
+    uint32_t nextFreeCluster = -1;
+    for (int sector = 0; sector < fat_size; ++sector) {                                                                     //Loop the sectors of the FAT table
+
+        hd -> Read28(fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));          //Read the sector of the FAT table
+        for (int j = 0; j < 512 / sizeof(uint32_t); ++j) {                                                                              //Loop through each entry in the sectort
+
+            if(fatBuffer[i] == 0){                                                                                                      //Fat entries are available if it is 0x000000
+
+                nextFreeCluster = sector * (512 / sizeof(uint32_t)) + j;                                                                //Calculate the cluster number
+                break;
+            }
+        }
+    }
+
+    //If there is no space left on the drive
+    if(nextFreeCluster == -1) return nextFreeCluster;                                                                                        //If there is no free clusters then return
+
+    //Mark the next free cluster as used
+    UpdateEntryInFat(hd, nextFreeCluster, nextFreeCluster, fatLocation);
+
+    //Mark the newly allocated cluster as the last cluster of the file
+    UpdateEntryInFat(hd, nextFreeCluster, 0x0FFFFFFF, fatLocation);
+
+    //Modify the FAT table to update the last cluster to point to the new cluster
+    UpdateEntryInFat(hd, currentCluster, nextFreeCluster, fatLocation);
+
+    return nextFreeCluster;
 };
 
 /**
  * Update the entry in the FAT
- * 
+ * @param cluster The cluster to update
+ * @param newFatValue The new value to set the entry to
+ * @param fatLocation The location of the FAT table
  */
-void Fat32::UpdateEntryInFat(uint32_t clusterIndex, uint32_t newFatValue){
+void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t cluster, uint32_t newFatValue, uint32_t fatLocation){
     
-    uint32_t sector = clusterIndex / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
-    uint32_t offset = clusterIndex % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
-    drive -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
+    uint32_t  fatBuffer[512 / sizeof(uint32_t)];  
+    uint32_t sector = cluster / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
+    uint32_t offset = cluster % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
+    hd -> Read28(fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
     fatBuffer[offset] = newFatValue;                                                                                                //Set the entry to 0x0FFFFFFF
-    drive -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
+    hd -> Write28(fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
 
 };
 
@@ -231,8 +265,9 @@ DirectoryEnumerator* FatDirectoryTraverser::getDirectoryEnumerator() {
     return currentDirectoryEnumerator;
 }
 
-void FatDirectoryTraverser::WriteDirectoryInfoChange(DirectoryEntry entry) {
+void FatDirectoryTraverser::WriteDirectoryInfoChange(DirectoryEntry* e) {
 
+    DirectoryEntry entry = *e;
     for (int j = 0; j < 16; ++j) {
 
         //Calculate the first cluster position in the FAT
@@ -662,52 +697,13 @@ common::uint32_t FatFileWriter::Write(common::uint8_t *data, common::uint32_t si
             fileInfo -> size += extendedFileSize;
 
             //Update the new size on disk
-            traverser -> WriteDirectoryInfoChange(fileInfo);
-
-            //Find and store the first free cluster
-            uint32_t  fatBuffer[512 / sizeof(uint32_t)];                                                                                        //Create a buffer to store a sector of the FAT table
-            uint32_t nextFreeCluster = -1;
-            for (int sector = 0; sector < traverser -> fatSize; ++sector) {                                                                     //Loop the sectors of the FAT table
-
-                traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));          //Read the sector of the FAT table
-                for (int j = 0; j < 512 / sizeof(uint32_t); ++j) {                                                                              //Loop through each entry in the sectort
-
-                    if(fatBuffer[i] == 0){                                                                                                      //Fat entries are available if it is 0x000000
-
-                        nextFreeCluster = sector * (512 / sizeof(uint32_t)) + j;                                                                //Calculate the cluster number
-                        break;
-                    }
-                }
-            }
-
-			//If there is no space left on the drive
-            if(nextFreeCluster == -1) return dataOffset;                                                                                        //If there is no free clusters then return
-
-            //Mark the next free cluster as used
-            uint32_t sector = nextFreeCluster / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
-            uint32_t offset = nextFreeCluster % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
-            traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
-            fatBuffer[offset] = nextFreeCluster;                                                                                                //Set the entry to 0x0FFFFFFF
-            traverser -> hd -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
-
-            //Mark the newly allocated cluster as the last cluster of the file
-            sector = nextFreeCluster / (512 / sizeof(uint32_t));                                                                       //Calculate the sector of the FAT table
-             offset = nextFreeCluster % (512 / sizeof(uint32_t));                                                                       //Calculate the offset of the FAT table
-            traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
-            fatBuffer[offset] = 0x0FFFFFFF;                                                                                                     //Set the entry to 0x0FFFFFFF
-            traverser -> hd -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
-
-
-            //Modify the FAT table to update the last cluster to point to the new cluster
-            sector = nextFileCluster / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
-            offset = nextFileCluster % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
-            traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
-            fatBuffer[offset] = nextFreeCluster;                                                                                                //Set the entry to 0x0FFFFFFF
-            traverser -> hd -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
-
+            traverser -> WriteDirectoryInfoChange(fileInfo);            
 
             //Set the next cluster to the next cluster in the FAT
-            nextFileCluster = nextFreeCluster;
+            nextFileCluster = Fat32::AllocateCluster(traverser -> hd, nextFileCluster, traverser -> fatLocation, traverser -> fatSize);
+        
+            //If there is no storage (free clusters) left on the partition
+            if(nextFileCluster == -1) return dataOffset;
         }
         else
         {                  //Otherwise we can just check the FAT table for the next cluster and continue

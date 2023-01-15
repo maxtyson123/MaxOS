@@ -200,7 +200,7 @@ namespace maxOS{
                 void makeFile(char* name);
                 void removeFile(char* name);
 
-                void WriteDirectoryInfoChange(DirectoryEntry entry);
+                void WriteDirectoryInfoChange(DirectoryEntry* entry);
 				void UpdateFatTable();
 				void AllocateCluster();
 
@@ -221,8 +221,8 @@ namespace maxOS{
                 Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
                 ~Fat32();
 
-                static uint32_t AllocateCluster();
-                static void UpdateEntryInFat();
+                static common::uint32_t AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t currentCluster, common::uint32_t fatLocation, common::uint32_t fat_size);
+                static void UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t cluster, common::uint32_t newFatValue, common::uint32_t fatLocation);
 
                 DirectoryTraverser* getDirectoryTraverser();
 
