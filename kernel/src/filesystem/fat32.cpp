@@ -257,6 +257,9 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
 
     //Check if the name is already in use
     for(int i = 0; i < 16; i++) {
+        if ((dirent[i].attributes & 0x0F) == 0x0F || (dirent[i].attributes & 0x10) != 0x10)  //If the atrribute is 0x0F then this is a long file name entry, skip it. Or if its not a directory
+            continue;
+
         if (dirent[i].name[0] == 0x00)                                  //If the name is 0x00 then there are no more entries
             break;
 
@@ -272,13 +275,28 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
     //Create a new directory entry with the name
     DirectoryEntry newDir;                                      //Directory entry to be added
     newDir.attributes = 0x10;                                   //Set the attributes to directory
-    newDir.clusterHigh = 0;                                     //Set the high cluster to 0
-    newDir.clusterLow = 0;                                      //Set the low cluster to 0
     newDir.size = 0;                                            //Set the size to 0
- 
-
+    for(int i = 0; i < 8; i++) {                                //Set the name
+        newDir.name[i] = name[i];
+    }
+    
 	//Allocate a cluster for the directory
+    uint32_t cluster = Fat32::AllocateCluster(hd, fatLocation, fatSize, sectorsPrCluster);
+    
+    //Convert the cluster into high and low for the directory entry
+    newDir.firstClusterHigh = (uint16_t)(cluster >> 16);
+    newDir.firstClusterLow = (uint16_t)(cluster & 0xFFFF);
+
+    //Find the first free directory entry
+    for(int i = 0; i < 16; i++) {
+        if (dirent[i].name[0] == 0x00) {                            //If the name is 0x00 then there are no more entries
+            dirent[i] = newDir;                                     //Set the directory entry to the new directory entry
+            break;
+        }      
+    }
+
     //Write the directory entry to the disk
+    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 
 }
 
@@ -291,13 +309,52 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
 }
 
 void FatDirectoryTraverser::makeFile(char *name) {
-   //Check if the name is a valid FAT32 name
+    
+    //Check if the name is a valid FAT32 name
     if(!Fat32::IsValidFAT32Name(name)) return;
 
     //Check if the name is already in use
+    for(int i = 0; i < 16; i++) {
+        if ((dirent[i].attributes & 0x0F) == 0x0F || (dirent[i].attributes & 0x10) == 0x10)  //If the atrribute is 0x0F then this is a long file name entry, skip it. Or if its not a file
+            continue;
+
+        if (dirent[i].name[0] == 0x00)                                  //If the name is 0x00 then there are no more entries
+            break;
+
+        if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
+            continue;
+
+        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+            printf("Name already in use");
+            return;
+        }
+    }
+
     //Create a new directory entry with the name
+    DirectoryEntry newFile;                                      //Directory entry to be added
+    newFile.attributes = 0x20;                                   //Set the attributes to file
+    newFile.size = 0;                                            //Set the size to 0
+    for(int i = 0; i < 8; i++) {                                 //Set the name
+        newFile.name[i] = name[i];
+    }
+    
 	//Allocate a cluster for the file
+    uint32_t cluster = Fat32::AllocateCluster(hd, fatLocation, fatSize, sectorsPrCluster);
+    
+    //Convert the cluster into high and low for the directory entry
+    newFile.firstClusterHigh = (uint16_t)(cluster >> 16);
+    newFile.firstClusterLow = (uint16_t)(cluster & 0xFFFF);
+
+    //Find the first free directory entry
+    for(int i = 0; i < 16; i++) {
+        if (dirent[i].name[0] == 0x00) {                            //If the name is 0x00 then there are no more entries
+            dirent[i] = newFile;                                    //Set the directory entry to the new directory entry
+            break;
+        }      
+    }
+
     //Write the directory entry to the disk
+    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 }
 
 void FatDirectoryTraverser::removeFile(char *name) {
