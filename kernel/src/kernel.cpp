@@ -61,18 +61,6 @@ using namespace maxOS::filesystem;
 
 static Console console;
 
-/**
- * @details Compare two strings
- * @param  s1 String 1
- * @param  s2 String 2
- * @return 0 if equal, 1 if not
- */
-int strcmp(const char* s1, const char* s2)
-{
-    while ((*s1 == *s2) && *s1) { ++s1; ++s2; }                             //While the characters are the same and the string is not over
-    return ((int) (unsigned char) *s1) - ((int) (unsigned char) *s2);       //Return the difference between the characters
-}
-
 
 /**
  * @details Get the length of a string
