@@ -38,7 +38,7 @@ Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partiti
     uint32_t rootStart = dataStart + bpb.sectorsPerCluster*(bpb.rootCluster - 2);   //rootCluster is offset 2 by default
 
 
-    FatDirectoryTraverser rootTraverser(hd, rootStart, dataStart, bpb.sectorsPerCluster, fatStart);
+    FatDirectoryTraverser rootTraverser(hd, rootStart, dataStart, bpb.sectorsPerCluster, fatStart, fatSize);
     currentTraverser = &rootTraverser;
 
 
@@ -58,14 +58,44 @@ DirectoryTraverser* Fat32::getDirectoryTraverser() {
 
 }
 
+/**
+ * Allocate a new cluster in the FAT
+ * 
+ * @return The current directory traverser
+ */
+uint32_t Fat32::AllocateCluster(){
+
+};
+
+/**
+ * Update the entry in the FAT
+ * 
+ */
+void Fat32::UpdateEntryInFat(uint32_t clusterIndex, uint32_t newFatValue){
+    
+    uint32_t sector = clusterIndex / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
+    uint32_t offset = clusterIndex % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
+    drive -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
+    fatBuffer[offset] = newFatValue;                                                                                                //Set the entry to 0x0FFFFFFF
+    drive -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
+
+};
 
 ///__DirectoryTraverser__///
 
-FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc) {
+FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size) {
 
-    //TODO: Add multiple sector support, and multiple cluster support
+    //TODO: For reading directotys Add multiple sector support, and multiple cluster support
+    //TODO: Add error checks
 
     hd = ataDevice;
+
+    //Set the data start and cluster sector count and fat location
+    dataStartSector = dataStart;
+    sectorsPrCluster = clusterSectorCount;
+    fatLocation = fatLoc;
+    directorySector = dirSec;
+    fatSize = fat_size;
 
     //Read the directory entry's from the directory sector
     hd -> Read28(directorySector, (uint8_t*)&dirent[0], 16*sizeof(DirectoryEntry));
@@ -74,10 +104,6 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     currentFileEnumerator = 0;
     currentDirectoryEnumerator = 0;
 
-    //Set the data start and cluster sector count and fat location
-    dataStartSector = dataStart;
-    sectorsPrCluster = clusterSectorCount;
-    fatLocation = fatLoc;
 
     for(int i = 0; i < 16; i++) {
 
@@ -115,20 +141,35 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
 
     }
 
-    //Intialize the reader and its buffer
+    //Intialize the reader, writer and its buffer
     FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
-    uint8_t* readBuffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(fr->GetFileSize()/2);
+    FatFileWriter* fw = (FatFileWriter*)currentFileEnumerator -> getWriter();
 
-    //Read all the data from the file and then print it to the screen
-    fr -> Read(readBuffer, fr->GetFileSize()/2);
-    printf((char *)readBuffer);
+    uint32_t fileSize = fr -> GetFileSize() +512;                                                   //Test what happens if we try to write more then whats allready allocated for the file
 
-    //Test the setting of the seek positioning
-    fr -> Seek(0, SEEK_SET);
+    uint8_t* fileBuffer = (uint8_t*)MemoryManager::activeMemoryManager ->malloc(fileSize);
 
-    //Read the second half (split for testing of cursor moving)
-    fr -> Read(readBuffer, fr->GetFileSize()/2);
-    printf((char *)readBuffer);
+
+
+
+    //Write some dummy text to the file
+    for (int j = 0; j < fileSize; ++j) {
+        unsigned char a = 'b';
+        fileBuffer[j] = (uint8_t)a;
+    }
+
+
+    //Write to the file
+    fw -> Write(fileBuffer, fileSize);
+    printf("\nData written: ");
+    printf((char*)fileBuffer);
+
+
+    MemoryManager::activeMemoryManager -> free(fileBuffer);
+
+    //TODO: Fix bug that the physical drive doesnt get updated, probabbly has also got something to do with the reading error
+
+
 
 }
 
@@ -151,19 +192,35 @@ void FatDirectoryTraverser::changeDirectory(DirectoryEnumerator directory) {
 }
 
 void FatDirectoryTraverser::makeDirectory(char *name) {
-    DirectoryTraverser::makeDirectory(name);
+    //Check if the name is a valid FAT32 name
+    //Check if the name is already in use
+    //Create a new directory entry with the name
+	//Allocate a cluster for the directory
+    //Write the directory entry to the disk
+
 }
 
 void FatDirectoryTraverser::removeDirectory(char *name) {
-    DirectoryTraverser::removeDirectory(name);
+    //Loop  throuugh all the dirictory entrys
+	//Check if the name is the same as parameter
+	//De allocate any clusters  
+	//Clear the directory entry
+
 }
 
 void FatDirectoryTraverser::makeFile(char *name) {
-    DirectoryTraverser::makeFile(name);
+   //Check if the name is a valid FAT32 name
+    //Check if the name is already in use
+    //Create a new directory entry with the name
+	//Allocate a cluster for the file
+    //Write the directory entry to the disk
 }
 
 void FatDirectoryTraverser::removeFile(char *name) {
-    DirectoryTraverser::removeFile(name);
+    //Loop  throuugh all the dirictory entrys
+	//Check if the name is the same as parameter
+	//De allocate any clusters  
+	//Clear the directory entry
 }
 
 FileEnumerator* FatDirectoryTraverser::getFileEnumerator() {
@@ -172,6 +229,29 @@ FileEnumerator* FatDirectoryTraverser::getFileEnumerator() {
 
 DirectoryEnumerator* FatDirectoryTraverser::getDirectoryEnumerator() {
     return currentDirectoryEnumerator;
+}
+
+void FatDirectoryTraverser::WriteDirectoryInfoChange(DirectoryEntry entry) {
+
+    for (int j = 0; j < 16; ++j) {
+
+        //Calculate the first cluster position in the FAT
+        uint32_t  firstFileCluster = ((uint32_t) entry.firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+                                     | entry.firstClusterLow;                        //Add the low cluster number
+
+        uint32_t  afirstFileCluster = ((uint32_t) dirent[i].firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+                                     | dirent[i].firstClusterLow;                        //Add the low cluster number
+
+        //Check if they are the same
+        if(firstFileCluster == afirstFileCluster){
+            dirent[i] = entry;
+            break;
+        }
+
+    }
+
+    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+
 }
 
 ///__DirectoryEnumerator__///
@@ -209,7 +289,7 @@ char* FatDirectoryEnumerator::getDirectoryName() {
  * @param newDirectoryName The new name of the directory
  * @return The old name of the directory
  */
-char *FatDirectoryEnumerator::changeDirectoryName(char *newDirectoryName) {
+char *FatDirectoryEnumerator::changeDirectoryName(char* newDirectoryName) {
 
     //TODO: Check if the new name is acceptable
     //TODO: Write the new name into the directory entry
@@ -258,7 +338,8 @@ FatFileEnumerator::FatFileEnumerator(FatDirectoryTraverser* parent, DirectoryEnt
 
     //Create a new reader and writer
     reader = new FatFileReader(parent,file);
-    //TODO: Create a writer object once the writer is implemented
+    writer = new FatFileWriter(parent,file);
+
 
 }
 
@@ -362,7 +443,6 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
                                   | fileInfo -> firstClusterLow;              //Add the low cluster number
 
 
-
     int32_t fSIZE = fileInfo -> size;
     int32_t nextFileCluster = firestFileCluster;
     uint8_t fileBuffer[513];
@@ -378,8 +458,6 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
         int sectorOffset = 0;
 
 
-
-
         //Loop the sectors of the file
         for (; fSIZE > 0; fSIZE -= 512) {
 
@@ -392,6 +470,7 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
 
             //Copy the sector into the data buffer
             for (int i = 0; i < 512; i++) {
+
                 readPos++;
 
                 //Check that the data being read is after/at the position of the seeker cursor
@@ -409,8 +488,6 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
                 //Put the data into the data buffer
                 data[dataOffset] = fileBuffer[i];
                 dataOffset++;
-
-
 
             }
 
@@ -482,36 +559,214 @@ common::uint32_t FatFileReader::GetFileSize() {
 
 //TODO: Implement
 
-FatFileWriter::FatFileWriter() {
+FatFileWriter::FatFileWriter(FatDirectoryTraverser* parent, DirectoryEntry file) {
 
+    //Initialize the file writer
+    fileInfo = &file;
+    traverser = parent;
+    offsetPosition = 0;
 }
 
 FatFileWriter::~FatFileWriter() {
 
 }
 
+/**
+ * Writes data to a file starting at the current seek position and ending at the current seek position + size
+ * @param data The buffer to write the data from
+ * @param size The size that is to be written
+ * @return The number of bytes written, if this is less than size then then there is insufficient space on the disk
+ */
 common::uint32_t FatFileWriter::Write(common::uint8_t *data, common::uint32_t size) {
-    return FileWriter::Write(data, size);
+
+
+    //TODO: Write larger then the size of the file (e.g. grow the file)
+
+    //Read the first cluster of the file
+    uint32_t  firstFileCluster = ((uint32_t) fileInfo -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+                                            | fileInfo -> firstClusterLow;              //Add the low cluster number
+
+
+
+    int32_t fSIZE = fileInfo -> size;
+    int32_t nextFileCluster = firstFileCluster;
+    uint8_t fileBuffer[513];
+    uint8_t fatBuffer[513];
+
+    int dataOffset = 0;
+    int writePos = 0;
+
+    while (fSIZE > 0){
+
+        //Convert file cluster into a sector
+        uint32_t fileSector = traverser -> dataStartSector + traverser -> sectorsPrCluster*(nextFileCluster - 2);                  //*Offset by 2
+        int sectorOffset = 0;
+
+
+        //Loop the sectors of the file
+        for (; fSIZE > 0; fSIZE -= 512) {
+
+            //Check that the data will be writen at the offset/seek pos
+            if(writePos < offsetPosition){
+
+                ///If the data will not be written at the right place then read the sector and then begin writing after the offset
+                traverser -> hd -> Read28(fileSector + sectorOffset, fileBuffer, 512);    //Read the specified sector of the file
+
+
+            }
+            sectorOffset++;
+
+            //Copy the data buffer into the sector buffer
+            for (int i = 0; i < 512; i++) {
+                writePos++;
+
+                //Check if it is a valid place  to put data
+                if (writePos < offsetPosition)
+                    continue;
+
+
+                //Increment the offset
+                offsetPosition++;
+
+                //Check that the data buffer is not full / that the requested size has not been reached, if it is then write the data early and then
+                if (dataOffset >= size){
+                    traverser -> hd -> Write28(fileSector + sectorOffset, fileBuffer, i);    //Write the sector to the disk
+                    return size;
+                }
+
+                //Put the data into the data buffer
+                fileBuffer[i] = data[dataOffset];
+                dataOffset++;
+            }
+
+            //Write the sector to the disk
+            traverser -> hd -> Write28(fileSector + sectorOffset, fileBuffer, 512);
+
+            //If the next sector is in a different cluster then break
+            if (sectorOffset > traverser -> sectorsPrCluster)
+                break;
+
+        }//_For end
+
+
+
+
+        //TODO: Test if it works
+        if(writePos >= fSIZE){   //If the data to be written is past the end of the file then we need to update the FAT table with new clusters for the data
+
+            //Increase the file size by one cluster
+            uint32_t extendedFileSize = size - dataOffset;                                                                                       //The size of the file minus how much has already been written
+            if(extendedFileSize > traverser -> sectorsPrCluster * 512)                                                                           //If the extended filesize is still bigger then the size of one cluster
+                extendedFileSize = traverser -> sectorsPrCluster * 512;                                                                          //Then set the extended file size to the size of one cluster
+            fSIZE += extendedFileSize;                                                                                                           //Increase the file size by the extended file size
+            fileInfo -> size += extendedFileSize;
+
+            //Update the new size on disk
+            traverser -> WriteDirectoryInfoChange(fileInfo);
+
+            //Find and store the first free cluster
+            uint32_t  fatBuffer[512 / sizeof(uint32_t)];                                                                                        //Create a buffer to store a sector of the FAT table
+            uint32_t nextFreeCluster = -1;
+            for (int sector = 0; sector < traverser -> fatSize; ++sector) {                                                                     //Loop the sectors of the FAT table
+
+                traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));          //Read the sector of the FAT table
+                for (int j = 0; j < 512 / sizeof(uint32_t); ++j) {                                                                              //Loop through each entry in the sectort
+
+                    if(fatBuffer[i] == 0){                                                                                                      //Fat entries are available if it is 0x000000
+
+                        nextFreeCluster = sector * (512 / sizeof(uint32_t)) + j;                                                                //Calculate the cluster number
+                        break;
+                    }
+                }
+            }
+
+			//If there is no space left on the drive
+            if(nextFreeCluster == -1) return dataOffset;                                                                                        //If there is no free clusters then return
+
+            //Mark the next free cluster as used
+            uint32_t sector = nextFreeCluster / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
+            uint32_t offset = nextFreeCluster % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
+            traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
+            fatBuffer[offset] = nextFreeCluster;                                                                                                //Set the entry to 0x0FFFFFFF
+            traverser -> hd -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
+
+            //Mark the newly allocated cluster as the last cluster of the file
+            sector = nextFreeCluster / (512 / sizeof(uint32_t));                                                                       //Calculate the sector of the FAT table
+             offset = nextFreeCluster % (512 / sizeof(uint32_t));                                                                       //Calculate the offset of the FAT table
+            traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
+            fatBuffer[offset] = 0x0FFFFFFF;                                                                                                     //Set the entry to 0x0FFFFFFF
+            traverser -> hd -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
+
+
+            //Modify the FAT table to update the last cluster to point to the new cluster
+            sector = nextFileCluster / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
+            offset = nextFileCluster % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
+            traverser -> hd -> Read28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
+            fatBuffer[offset] = nextFreeCluster;                                                                                                //Set the entry to 0x0FFFFFFF
+            traverser -> hd -> Write28(traverser -> fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));             //Write the changes to the disk                                    //Write the sector of the FAT table
+
+
+            //Set the next cluster to the next cluster in the FAT
+            nextFileCluster = nextFreeCluster;
+        }
+        else
+        {                  //Otherwise we can just check the FAT table for the next cluster and continue
+
+
+            //Get the next cluster of the file
+            uint32_t sector = nextFileCluster / (512 / sizeof(uint32_t));                                                                       //Calculate the sector of the FAT table
+            uint32_t offset = nextFileCluster % (512 / sizeof(uint32_t));                                                                       //Calculate the offset of the FAT table
+
+            //Read the FAT sector for the current cluster
+            traverser -> hd -> Read28(traverser -> fatLocation + sector, fatBuffer, 512);
+
+            //Set the next cluster to the next cluster in the FAT
+            nextFileCluster = ((uint32_t*)&fatBuffer)[offset ] & 0x0FFFFFFF;
+
+        }
+
+    }
+
+    //If we get to here then the user requested to read more bytes than there are in the file
+    return dataOffset;
 }
 
+
+
 common::uint32_t FatFileWriter::Seek(common::uint32_t position, SeekType seek) {
-    return FileWriter::Seek(position, seek);
+    switch (seek) {
+        case SEEK_SET:
+            offsetPosition = position;
+            break;
+        case SEEK_CUR:
+            offsetPosition += position;
+            break;
+        case SEEK_END:
+            offsetPosition = fileInfo -> size + position;
+            break;
+        default:
+            break;
+    }
+
+    return offsetPosition;
 }
 
 bool FatFileWriter::Close() {
-    return FileWriter::Close();
+
+    //TODO: Implement
+
 }
 
 bool FatFileWriter::Flush() {
-    return FileWriter::Flush();
+
+    //TODO: Implement
+
 }
 
 common::uint32_t FatFileWriter::GetPosition() {
-    return FileWriter::GetPosition();
+    return offsetPosition;
 }
 
 common::uint32_t FatFileWriter::GetFileSize() {
-    return FileWriter::GetFileSize();
+    return fileInfo -> size;
 }
-
-

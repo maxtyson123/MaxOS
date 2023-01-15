@@ -16,7 +16,6 @@ namespace maxOS{
     namespace filesystem{
 
 
-
         struct BiosParameterBlock32{
 
             common::uint8_t    jump[3];
@@ -73,10 +72,15 @@ namespace maxOS{
 
         } __attribute__((packed));
 
-        class FatFileWriter : public FileWriter {
 
+        class FatDirectoryTraverser;
+
+        class FatFileWriter : public FileWriter {
+                DirectoryEntry* fileInfo;
+                FatDirectoryTraverser* traverser;
+                common::uint32_t offsetPosition;
             public:
-                FatFileWriter();
+                FatFileWriter(FatDirectoryTraverser* parent, DirectoryEntry file);
                 ~FatFileWriter();
 
                 common::uint32_t Write(common::uint8_t *data, common::uint32_t size);
@@ -89,8 +93,7 @@ namespace maxOS{
                 common::uint32_t GetFileSize();
         };
 
-        class FatFileEnumerator;
-        class FatDirectoryTraverser;
+
 
         class FatFileReader : public FileReader{
 
@@ -167,7 +170,7 @@ namespace maxOS{
         private:
 
                 DirectoryEntry dirent[16];
-                common::uint32_t directorySector;
+
 
 
                 FatDirectoryEnumerator* currentDirectoryEnumerator;
@@ -182,9 +185,10 @@ namespace maxOS{
                 common::uint32_t dataStartSector;
                 common::uint32_t sectorsPrCluster;
                 common::uint32_t fatLocation;
+                common::uint32_t fatSize;
+                common::uint32_t directorySector;
 
-
-                FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc);
+                FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size);
                 ~FatDirectoryTraverser();
 
 
@@ -195,6 +199,10 @@ namespace maxOS{
 
                 void makeFile(char* name);
                 void removeFile(char* name);
+
+                void WriteDirectoryInfoChange(DirectoryEntry entry);
+				void UpdateFatTable();
+				void AllocateCluster();
 
                 FileEnumerator* getFileEnumerator();
                 DirectoryEnumerator* getDirectoryEnumerator();
@@ -213,6 +221,8 @@ namespace maxOS{
                 Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
                 ~Fat32();
 
+                static uint32_t AllocateCluster();
+                static void UpdateEntryInFat();
 
                 DirectoryTraverser* getDirectoryTraverser();
 
