@@ -10,11 +10,11 @@
 #include <filesystem/filesystem.h>
 #include <common/vector.h>
 #include <memory/memorymanagement.h>
+#include <common/printf.h>
 
 namespace maxOS{
 
     namespace filesystem{
-
 
 
         struct BiosParameterBlock32{
@@ -73,10 +73,20 @@ namespace maxOS{
 
         } __attribute__((packed));
 
-        class FatFileWriter : public FileWriter {
 
+        //A struct to hold the extra information about a directory entry
+        struct DirectoryEntryExtras{
+             char longFileName[256];
+        };
+
+        class FatDirectoryTraverser;
+
+        class FatFileWriter : public FileWriter {
+                DirectoryEntry* fileInfo;
+                FatDirectoryTraverser* traverser;
+                common::uint32_t offsetPosition;
             public:
-                FatFileWriter();
+                FatFileWriter(FatDirectoryTraverser* parent, DirectoryEntry file);
                 ~FatFileWriter();
 
                 common::uint32_t Write(common::uint8_t *data, common::uint32_t size);
@@ -89,8 +99,7 @@ namespace maxOS{
                 common::uint32_t GetFileSize();
         };
 
-        class FatFileEnumerator;
-        class FatDirectoryTraverser;
+
 
         class FatFileReader : public FileReader{
 
@@ -166,8 +175,9 @@ namespace maxOS{
 
         private:
 
-                DirectoryEntry dirent[16];
-                common::uint32_t directorySector;
+                DirectoryEntry tempDirent[16];
+                common::Vector<DirectoryEntry> dirent;        
+                common::Vector<DirectoryEntryExtras> dirent_extras;        
 
 
                 FatDirectoryEnumerator* currentDirectoryEnumerator;
@@ -182,9 +192,10 @@ namespace maxOS{
                 common::uint32_t dataStartSector;
                 common::uint32_t sectorsPrCluster;
                 common::uint32_t fatLocation;
+                common::uint32_t fatSize;
+                common::uint32_t directorySector;
 
-
-                FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc);
+                FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size);
                 ~FatDirectoryTraverser();
 
 
@@ -196,6 +207,8 @@ namespace maxOS{
                 void makeFile(char* name);
                 void removeFile(char* name);
 
+                void WriteDirectoryInfoChange(DirectoryEntry* entry);
+	            
                 FileEnumerator* getFileEnumerator();
                 DirectoryEnumerator* getDirectoryEnumerator();
 
@@ -213,6 +226,12 @@ namespace maxOS{
                 Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
                 ~Fat32();
 
+                static common::uint32_t AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t currentCluster, common::uint32_t fatLocation, common::uint32_t fat_size);
+                static void DeallocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t firstCluster, common::uint32_t fatLocation, common::uint32_t fat_size);
+
+                static void UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t cluster, common::uint32_t newFatValue, common::uint32_t fatLocation);
+
+                static bool IsValidFAT32Name(char* name);
 
                 DirectoryTraverser* getDirectoryTraverser();
 
