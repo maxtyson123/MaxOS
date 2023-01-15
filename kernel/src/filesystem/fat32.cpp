@@ -98,6 +98,34 @@ uint32_t Fat32::AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint3
     return nextFreeCluster;
 };
 
+
+/**
+ * @brief Deallocates all clusters in a file
+ * @param hd pointer to the AdvancedTechnologyAttachment object representing the hard drive
+ * @param firstCluster The first cluster of the file to be deallocated
+ * @param fatLocation The location of the FAT table on the hard drive
+ * @param fat_size The size of the FAT table in sectors
+ */
+void Fat32::DeallocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint32_t firstCluster, uint32_t fatLocation, uint32_t fat_size) {
+
+    //Loop through all the clusters in the file
+    uint32_t nextCluster = firstCluster;
+    while (nextCluster != 0x0FFFFFFF) {
+
+        //Read the current cluster's entry in the FAT
+        uint32_t  fatBuffer[512 / sizeof(uint32_t)];                                             //Create a buffer to store a sector of the FAT table
+        uint32_t sector = nextCluster / (512 / sizeof(uint32_t));                                //Calculate the sector of the FAT table
+        uint32_t offset = nextCluster % (512 / sizeof(uint32_t));                                //Calculate the offset of the FAT table
+        hd -> Read28(fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
+
+        //Mark the current cluster as free
+        UpdateEntryInFat(hd, nextCluster, 0x00000000, fatLocation);
+
+        //Get the next cluster in the file
+        nextCluster = fatBuffer[offset];
+    }
+}
+
 /**
  * Update the entry in the FAT
  * @param cluster The cluster to update
@@ -122,7 +150,7 @@ void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t
  */
 bool Fat32::IsValidFAT32Name(char* name) {
   
-     // Count the number of characters in the name
+    // Count the number of characters in the name
     int len = 0;
     while (name[len] != '\0') {
         len++;
@@ -151,7 +179,7 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     //TODO: Add error checks
     //TODO: Add support for long file names
 
-    //Todo: test cluster allocation, test directory renaming
+    //Todo: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion
 
     hd = ataDevice;
 
@@ -301,11 +329,40 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
 }
 
 void FatDirectoryTraverser::removeDirectory(char *name) {
-    //Loop  throuugh all the dirictory entrys
-	//Check if the name is the same as parameter
-	//De allocate any clusters  
-	//Clear the directory entry
+    int index = -1;
 
+    //Loop  through all the dirictory entrys
+    for(int i = 0; i < 16; i++) {
+        if ((dirent[i].attributes & 0x0F) == 0x0F || (dirent[i].attributes & 0x10) != 0x10)  //If the atrribute is 0x0F then this is a long file name entry, skip it. Or if its not a directory
+            continue;
+
+        if (dirent[i].name[0] == 0x00)                                  //If the name is 0x00 then there are no more entries
+            break;
+
+        if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
+            continue;
+
+        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+            dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
+            index = i;
+            break;
+        }
+    }
+
+    //If the directory was not found
+    if(index == -1) {
+        printf("Directory not found");
+        return;
+    }
+
+    //Get the first cluster of the directory
+    uint32_t cluster = (dirent[i].firstClusterHigh << 16) | dirent[i].firstClusterLow;
+
+	//De allocate any clusters  
+    Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
+
+    //Write the directory entry to the disk
+    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 }
 
 void FatDirectoryTraverser::makeFile(char *name) {
@@ -358,10 +415,40 @@ void FatDirectoryTraverser::makeFile(char *name) {
 }
 
 void FatDirectoryTraverser::removeFile(char *name) {
-    //Loop  throuugh all the dirictory entrys
-	//Check if the name is the same as parameter
+   int index = -1;
+
+    //Loop  through all the dirictory entrys
+    for(int i = 0; i < 16; i++) {
+        if ((dirent[i].attributes & 0x0F) == 0x0F || (dirent[i].attributes & 0x10) == 0x10)  //If the atrribute is 0x0F then this is a long file name entry, skip it. Or if its not a file
+            continue;
+
+        if (dirent[i].name[0] == 0x00)                                  //If the name is 0x00 then there are no more entries
+            break;
+
+        if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
+            continue;
+
+        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+            dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
+            index = i;
+            break;
+        }
+    }
+
+    //If the file was not found
+    if(index == -1) {
+        printf("File not found");
+        return;
+    }
+
+    //Get the first cluster of the directory
+    uint32_t cluster = (dirent[i].firstClusterHigh << 16) | dirent[i].firstClusterLow;
+
 	//De allocate any clusters  
-	//Clear the directory entry
+    Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
+
+    //Write the directory entry to the disk
+    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
 }
 
 FileEnumerator* FatDirectoryTraverser::getFileEnumerator() {

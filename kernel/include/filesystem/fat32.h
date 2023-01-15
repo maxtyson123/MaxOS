@@ -202,9 +202,7 @@ namespace maxOS{
                 void removeFile(char* name);
 
                 void WriteDirectoryInfoChange(DirectoryEntry* entry);
-				void UpdateFatTable();
-				void AllocateCluster();
-
+	            
                 FileEnumerator* getFileEnumerator();
                 DirectoryEnumerator* getDirectoryEnumerator();
 
@@ -223,6 +221,8 @@ namespace maxOS{
                 ~Fat32();
 
                 static common::uint32_t AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t currentCluster, common::uint32_t fatLocation, common::uint32_t fat_size);
+                static void DeallocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t firstCluster, common::uint32_t fatLocation, common::uint32_t fat_size);
+
                 static void UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t cluster, common::uint32_t newFatValue, common::uint32_t fatLocation);
 
                 static bool IsValidFAT32Name(char* name);
