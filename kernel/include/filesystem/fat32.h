@@ -74,6 +74,11 @@ namespace maxOS{
         } __attribute__((packed));
 
 
+        //A struct to hold the extra information about a directory entry
+        struct DirectoryEntryExtras{
+             char longFileName[256];
+        };
+
         class FatDirectoryTraverser;
 
         class FatFileWriter : public FileWriter {
@@ -172,6 +177,7 @@ namespace maxOS{
 
                 DirectoryEntry tempDirent[16];
                 common::Vector<DirectoryEntry> dirent;        
+                common::Vector<DirectoryEntryExtras> dirent_extras;        
 
 
                 FatDirectoryEnumerator* currentDirectoryEnumerator;

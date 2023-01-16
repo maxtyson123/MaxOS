@@ -175,11 +175,12 @@ bool Fat32::IsValidFAT32Name(char* name) {
 
 FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size) {
 
-    //TODO: For reading directotys Add multiple sector support, and multiple cluster support
     //TODO: Add error checks
-    //TODO: Add support for long file names
+    //TODO: Change Directory
+    //TODO: File extentions
+    //TODO: Fix new dirent looping and writing to disk ugh
 
-    //Todo: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion
+    //Todo: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion, test multiple cluster directory reading, test longfile name reading,
 
     hd = ataDevice;
 
@@ -214,18 +215,38 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
             hd -> Read28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
             sectorOffset++;                                                                                         //Increment the sector offset
 
+            //create a buffer to store the long file name
+            char longFileName[256];
+            int nameLen = 0;
+
             //Loop through all the entrys
             for(int i = 0; i < 16; i++) {
                 //If the name is 0x00 then there are no more entries
                 if (tempDirent[i].name[0] == 0x00) {
                     break;
                 }
+                
+                //If the attribute is 0x0F then this is a long file name entry
+                if ((dirent[i].attributes & 0x0F) == 0x0F) {
+                  
+                    //Extract the part of the file name from the current entry
+                    for (int j = 0; j < 5; j++) {
+                      longFileName[nameLen++] = dirent[i].name[j];
+                    }
 
-                //If the attribute is 0x0F then this is a long file name entry, skip it.
-                if ((tempDirent[i].attributes & 0x0F) == 0x0F) {
+                    //Add the dot    
+                    longFileName[nameLen++] = '.';
+                    
+                    //Extract the part of the file extentsion from the current entry
+                    for (int j = 0; j < 3; j++) {
+                        longFileName[nameLen++] = dirent[i].extension[j];
+                    }
+
+                    //Dont add the entry to the dirent list
                     continue;
                 }
 
+                //Store the directory entry in the dirent list
                 dirent.push_back(tempDirent[i]);
 
                 if(currentDirectoryEnumerator == 0 && (dirent[index].attributes & 0x10) == 0x10){                                                                                            //If this is the first directory entry then set the current directory to this entry
@@ -239,6 +260,18 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
                     FatFileEnumerator* file = new FatFileEnumerator(this, dirent[index], currentFileIndex);
                     currentFileEnumerator = file;
                 }
+
+                //Print the longfile name
+                printf((char*)longFileName);
+
+                //TODO: Save  the long file name for the entry
+
+                //Reset the name buffer
+                for (int i = 0; i < 256; i++) {
+                    longFileName[i] = 0;
+                }
+                nameLen = 0;
+
 
                 index++;
             }
