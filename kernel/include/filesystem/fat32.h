@@ -151,15 +151,17 @@ namespace maxOS{
         };
 
         class FatDirectoryEnumerator : public DirectoryEnumerator{
-
+            friend class FatDirectoryTraverser;    
             private:
                 FatDirectoryTraverser* traverser;
-                DirectoryEntry* directoryInfo;
+               
                 int index;
 
             public:
                 FatDirectoryEnumerator(FatDirectoryTraverser* parent, DirectoryEntry directory, int id);
                 ~FatDirectoryEnumerator();
+
+                 DirectoryEntry* directoryInfo;
 
                 char* getDirectoryName();
                 char* changeDirectoryName(char* newDirectoryName);
@@ -199,7 +201,7 @@ namespace maxOS{
                 ~FatDirectoryTraverser();
 
 
-                void changeDirectory(DirectoryEnumerator directory);
+                void changeDirectory(FatDirectoryEnumerator directory);
 
                 void makeDirectory(char* name);
                 void removeDirectory(char* name);
@@ -209,6 +211,9 @@ namespace maxOS{
 
                 void WriteDirectoryInfoChange(DirectoryEntry* entry);
 	            
+                void UpdateDirectoryEntrysToDisk();
+                void ReadEntrys();
+
                 FileEnumerator* getFileEnumerator();
                 DirectoryEnumerator* getDirectoryEnumerator();
 
