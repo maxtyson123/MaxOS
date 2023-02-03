@@ -196,34 +196,9 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     //Read the directory entrys
     ReadEntrys();
 
-    printf("Read");
-
     //Intialize the reader, writer and its buffer
     FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
     FatFileWriter* fw = (FatFileWriter*)currentFileEnumerator -> getWriter();
-
-    uint32_t fileSize = fr -> GetFileSize() + 512;                                                   //Test what happens if we try to write more then whats allready allocated for the file
-    uint8_t* fileBuffer = (uint8_t*)MemoryManager::activeMemoryManager ->malloc(fileSize);
-
-    /*
-
-    TODO: Loops
-
-    //Write some dummy text to the file
-    for (int j = 0; j < fileSize; ++j) {
-        unsigned char a = 'b';
-        fileBuffer[j] = (uint8_t)a;
-    }
-
-
-    //Write to the file
-    fw -> Write(fileBuffer, fileSize);
-    printf("\nData written: ");
-    printf((char*)fileBuffer);
-
-     */
-
-    MemoryManager::activeMemoryManager -> free(fileBuffer);
 
     //TODO: Fix bug that the physical drive doesnt get updated, probabbly has also got something to do with the reading error
 
@@ -265,13 +240,14 @@ void FatDirectoryTraverser::ReadEntrys(){
             for(int i = 0; i < 16; i++) {
                 //If the name is 0x00 then there are no more entries
                 if (tempDirent[i].name[0] == 0x00) {
-                    break;
+                    return;
                 }
                 
                 //If the attribute is 0x0F then this is a long file name entry
-                if ((dirent[i].attributes & 0x0F) == 0x0F) {
+                if ((tempDirent[i].attributes & 0x0F) == 0x0F) {
                     continue;
                 }
+
 
                 //Store the directory entry in the dirent list
                 dirent.push_back(tempDirent[i]);
@@ -287,6 +263,11 @@ void FatDirectoryTraverser::ReadEntrys(){
                     FatFileEnumerator* file = new FatFileEnumerator(this, dirent[index], currentFileIndex);
                     currentFileEnumerator = file;
                 }
+
+                char* foo = "        ";
+                for(int j = 0; j < 8; j++)
+                    foo[j] = dirent[index].name[j];
+                printf(foo);
 
                 index++;
             }
