@@ -9,7 +9,7 @@ In the future I aim to have it run on a raspberry PI, include its very own in ho
 
 The codebase is well commented with additional notes in the docs directory. Contribution is welcome, however it would be ideal once the basics are set up and I begin on the extended features. (See projects)
 
-Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom that can optionally be installed via the make_toolchain.sh file located in toolcahin. The OS can be built using this (build_via_tc.sh) or built via the make file (see below.) The toolchain will become more mainstream with the release of the c libraries.
+(BUGGY) Now with custom build toolchain (binutils, gcc, g++, make, etc) and a custom that can optionally be installed via the make_toolchain.sh file located in toolcahin. The OS can be built using this (build_via_tc.sh) or built via the make file (see below.) The toolchain will become more mainstream with the release of the c libraries.
 
 MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an ATA drive. The makefile will mount MaxOS onto mnt/maxOS_img_1, however it is not ideal to directly copy files onto the mount point as upon build the folders are wiped and instead you should interact with the folders in the "filesystem" directory. (Note: when you reboot your device you need to run toolchain/create_disk_img.sh to remount the disk)
 
@@ -135,10 +135,11 @@ Clone the project
   git clone https://github.com/maxtyson123/max-os
 ```
 
-Go to the project directory
+Go to the project directory, fix the scripts
 
 ```bash
   cd max-os
+  toolchain/fix_scripts_github.sh
 ```
 
 Install Dependencies & build
