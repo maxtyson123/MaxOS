@@ -196,6 +196,8 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     //Read the directory entrys
     ReadEntrys();
 
+    printf("Read");
+
     //Intialize the reader, writer and its buffer
     FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
     FatFileWriter* fw = (FatFileWriter*)currentFileEnumerator -> getWriter();
@@ -252,16 +254,12 @@ void FatDirectoryTraverser::ReadEntrys(){
         uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
         int sectorOffset = 0;
 
-        //Read the secoters in the cluster
+        //Read the sectors in the cluster
         while(true){
 
             //Read the sector
             hd -> Read28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
             sectorOffset++;                                                                                         //Increment the sector offset
-
-            //create a buffer to store the long file name
-            char longFileName[256];
-            int nameLen = 0;
 
             //Loop through all the entries
             for(int i = 0; i < 16; i++) {
@@ -272,21 +270,6 @@ void FatDirectoryTraverser::ReadEntrys(){
                 
                 //If the attribute is 0x0F then this is a long file name entry
                 if ((dirent[i].attributes & 0x0F) == 0x0F) {
-                  
-                    //Extract the part of the file name from the current entry
-                    for (int j = 0; j < 5; j++) {
-                      longFileName[nameLen++] = dirent[i].name[j];
-                    }
-
-                    //Add the dot    
-                    longFileName[nameLen++] = '.';
-                    
-                    //Extract the part of the file extentsion from the current entry
-                    for (int j = 0; j < 3; j++) {
-                        longFileName[nameLen++] = dirent[i].extension[j];
-                    }
-
-                    //Dont add the entry to the dirent list
                     continue;
                 }
 
@@ -304,18 +287,6 @@ void FatDirectoryTraverser::ReadEntrys(){
                     FatFileEnumerator* file = new FatFileEnumerator(this, dirent[index], currentFileIndex);
                     currentFileEnumerator = file;
                 }
-
-                //Print the longfile name
-                //TODO: printf((char*)longFileName); = prints random shit
-
-                //TODO: Save  the long file name for the entry
-
-                //Reset the name buffer
-                for (int i = 0; i < 256; i++) {
-                    longFileName[i] = 0;
-                }
-                nameLen = 0;
-
 
                 index++;
             }
