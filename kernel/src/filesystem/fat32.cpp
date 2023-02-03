@@ -176,10 +176,12 @@ bool Fat32::IsValidFAT32Name(char* name) {
 FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size) {
 
     //TODO: Add error checks
-    //TODO: File extentions
+    //TODO: File extensions
     //TODO: Long file names
-    
-    //Todo: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion, test multiple cluster directory reading, test longfile name reading,test directory  entry updation, test directory changing
+
+    //TODO: Fix bug that the physical drive doesnt get updated, probably has also got something to do with the reading error
+    //TODO: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion, test directory  entry updation
+    //TODO: File name string has to be 8 characters long (including spaces) for it to compare correctly
 
     hd = ataDevice;
 
@@ -196,11 +198,23 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     //Read the directory entrys
     ReadEntrys();
 
-    //Intialize the reader, writer and its buffer
-    FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
-    FatFileWriter* fw = (FatFileWriter*)currentFileEnumerator -> getWriter();
 
-    //TODO: Fix bug that the physical drive doesnt get updated, probabbly has also got something to do with the reading error
+    printf("Finding the home directory:");
+    //Find the home directory
+    while (currentDirectoryEnumerator -> hasNext()){
+        currentDirectoryEnumerator = (FatDirectoryEnumerator*)currentDirectoryEnumerator -> next();
+
+        if (common::strcmp(currentDirectoryEnumerator -> getDirectoryName(),"HOME    ") == 0){
+            printf("\n HOME directory found");
+            break;
+        }
+    }
+
+    printf("\n Change directory to HOME directory: ");
+    printf(currentDirectoryEnumerator -> getDirectoryName());
+
+    while (true);
+
 
 }
 
@@ -298,10 +312,10 @@ void FatDirectoryTraverser::ReadEntrys(){
  * Changes the current directory to the specified directory, re reads the directory entries
  * @param directory The directory to change to
  */
-void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator directory) {
+void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator* directory) {
 
    //Get the directory entry
-   DirectoryEntry* directoryEntry = directory.directoryInfo;              
+   DirectoryEntry* directoryEntry = directory -> directoryInfo;
 
     //Get the first sector of the directory
     uint32_t newDirectoryCluster = ((uint32_t) directoryEntry -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
@@ -333,7 +347,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0) {              //If the name is the same as the parameter
             printf("Name already in use");
             return;
         }
@@ -365,6 +379,10 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
     //Write the directory entry to the disk
     UpdateDirectoryEntrysToDisk();
 
+    //Create the "." and ".." directory entries
+    DirectoryEntry thisDir;                                         //Directory entry for the "." directory, this points to the current directory
+    DirectoryEntry parentDir;                                       //Directory entry for the ".." directory, this points to the parent directory
+
 }
 
 void FatDirectoryTraverser::removeDirectory(char *name) {
@@ -381,7 +399,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
             dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
             index = i;
             break;
@@ -420,7 +438,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
             printf("Name already in use");
             return;
         }
@@ -467,7 +485,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
             dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
             index = i;
             break;

@@ -202,7 +202,7 @@ namespace maxOS{
                 ~FatDirectoryTraverser();
 
 
-                void changeDirectory(FatDirectoryEnumerator directory);
+                void changeDirectory(FatDirectoryEnumerator* directory);
 
                 void makeDirectory(char* name);
                 void removeDirectory(char* name);

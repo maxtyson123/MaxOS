@@ -237,7 +237,7 @@ public:
            && data[9] == 'P'
                 )
         {
-            socket->Send((uint8_t*)"HTTP/1.1 200 OK\r\nServer: MyOS\r\nContent-Type: text/html\r\n\r\n<html><head><title>My Operating System</title></head><body><b>My Operating System</b> http://www.AlgorithMan.de</body></html>\r\n",184);
+            socket->Send((uint8_t*)"HTTP/1.1 200 OK", 15);
             socket->Disconnect();
         }
 
@@ -390,7 +390,6 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     console.lim_y = 24;
 
 
-
     printf("\n[x] Kernel Booted \n");
 
     printf("[ ] Setting Programmable Interrupt Timer ... \n");
@@ -450,14 +449,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     taskManager.AddTask(&task2);
 
      */
-
-
-
-
     printf("[x] Task Manager Setup \n");
-
-
-
 
     printf("[ ] Setting Up Interrupt Manager... \n");
     InterruptManager interrupts(0x20, &gdt, &threadManager);            //Instantiate the method
