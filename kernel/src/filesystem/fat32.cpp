@@ -190,9 +190,11 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     directorySector = dirSec;
     fatSize = fat_size;
 
+    //Convert the directory sector into a cluster
+    directoryCluster = (directorySector - dataStartSector) / sectorsPrCluster + 2;
+
     //Read the directory entrys
     ReadEntrys();
-
 
     //Intialize the reader, writer and its buffer
     FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
@@ -200,6 +202,10 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
 
     uint32_t fileSize = fr -> GetFileSize() + 512;                                                   //Test what happens if we try to write more then whats allready allocated for the file
     uint8_t* fileBuffer = (uint8_t*)MemoryManager::activeMemoryManager ->malloc(fileSize);
+
+    /*
+
+    TODO: Loops
 
     //Write some dummy text to the file
     for (int j = 0; j < fileSize; ++j) {
@@ -213,6 +219,7 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     printf("\nData written: ");
     printf((char*)fileBuffer);
 
+     */
 
     MemoryManager::activeMemoryManager -> free(fileBuffer);
 
@@ -235,7 +242,7 @@ void FatDirectoryTraverser::ReadEntrys(){
 
     //Directory reading  loop
     int index = 0;
-    uint32_t nextCluster = directorySector;
+    uint32_t nextCluster = directoryCluster;
     uint8_t fatBuffer[513];
 
     //Read directory entries until the end of the cluster
@@ -245,7 +252,7 @@ void FatDirectoryTraverser::ReadEntrys(){
         uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
         int sectorOffset = 0;
 
-        //Read the secotrs in the cluster
+        //Read the secoters in the cluster
         while(true){
 
             //Read the sector
@@ -299,7 +306,7 @@ void FatDirectoryTraverser::ReadEntrys(){
                 }
 
                 //Print the longfile name
-                printf((char*)longFileName);
+                //TODO: printf((char*)longFileName); = prints random shit
 
                 //TODO: Save  the long file name for the entry
 
@@ -345,12 +352,12 @@ void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator directory) {
    DirectoryEntry* directoryEntry = directory.directoryInfo;              
 
     //Get the first sector of the directory
-    uint32_t newDirectorySector = ((uint32_t) directoryEntry -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
-                                  | directoryEntry -> firstClusterLow;              //Add the low cluster number
+    uint32_t newDirectoryCluster = ((uint32_t) directoryEntry -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+                                             | directoryEntry -> firstClusterLow;              //Add the low cluster number
 
 
     //Set this to the directory sector
-    directorySector = newDirectorySector;
+    directoryCluster = newDirectoryCluster;
 
     //Re-read the directory entries
     ReadEntrys();
@@ -567,7 +574,7 @@ void FatDirectoryTraverser::UpdateDirectoryEntrysToDisk(){
 
     //Directory reading  loop
     int index = 0;
-    uint32_t nextCluster = directorySector;
+    uint32_t nextCluster = directoryCluster;
     uint8_t fatBuffer[513];
 
     //Write directory entries until the end of the cluster
@@ -823,12 +830,12 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
     //TODO: fix performance issues
 
     //Read the first cluster of the file
-    uint32_t  firestFileCluster = ((uint32_t) fileInfo -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+    uint32_t  firstFileCluster = ((uint32_t) fileInfo -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
                                   | fileInfo -> firstClusterLow;              //Add the low cluster number
 
 
     int32_t fSIZE = fileInfo -> size;
-    int32_t nextFileCluster = firestFileCluster;
+    int32_t nextFileCluster = firstFileCluster;
     uint8_t fileBuffer[513];
     uint8_t fatBuffer[513];
 

@@ -196,6 +196,7 @@ namespace maxOS{
                 common::uint32_t fatLocation;
                 common::uint32_t fatSize;
                 common::uint32_t directorySector;
+                common::uint32_t directoryCluster;
 
                 FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size);
                 ~FatDirectoryTraverser();
