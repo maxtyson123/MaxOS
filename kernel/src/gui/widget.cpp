@@ -274,10 +274,10 @@ void CompositeWidget::OnMouseMove(int32_t old_x, int32_t old_y, int32_t new_x, i
  * @details This function is called when a key is pressed
  * @param key The key that was pressed
  */
-void CompositeWidget::OnKeyDown(char* str) {
+void CompositeWidget::onKeyDown(char* str) {
 
     if(focussedChild != 0){             //IF the key event should happen on a child
-        focussedChild->OnKeyDown(str);  //Pass to child
+        focussedChild->onKeyDown(str);  //Pass to child
     }
 }
 

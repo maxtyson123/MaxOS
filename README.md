@@ -33,7 +33,7 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 - [x] Memory Management
 - [x] Ethernet Networking Drivers
 - [x] Various Internet Protocols (ARP, ICMP, UDP, TCP)
-- [ ] Fat32 Filesystem through an ATA driver
+- [ ] {FIX Later} Fat32 Filesystem through an ATA driver
 
 
 
@@ -42,7 +42,6 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 
 Kernel Cleanup
 
-- [ ] Fix VMs
 - [ ] VESA Video Mode
 - [ ] Usable Desktop / GUI draw rewrite
 - [ ] Timer rewrite

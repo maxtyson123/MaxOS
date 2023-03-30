@@ -20,7 +20,7 @@ namespace maxOS
             public:
                 KeyboardEventHandler();
 
-                virtual void OnKeyDown(char*);
+                virtual void onKeyDown(char*);
 
                 virtual void OnKeyUp(char*);
             };

@@ -63,28 +63,15 @@ static Console console;
 
 
 /**
- * @details Get the length of a string
- * @param  str String to print
- * @param lines Lines to print on
- */
-void printf_gui(char* str, Text lines[15]){
-    console.put_string_gui(str,lines);                                      //Print to the GUI console
-
-
-}
-
-/**
  * @details Print to the Video Memory Debug Console
  * @param  str String to print
  */
-
-bool testTick = false;
 void printf(char* str, bool clearLine = false)
 {
-
     console.put_string(str,clearLine);
-
 }
+
+
 /**
  * @details Print to the Video Memory Debug Console
  * @param  key Hex Value to print
@@ -94,19 +81,21 @@ void printfHex(uint8_t key){
 }
 
 
-
+/**
+ * @details Prints a integer to the screen
+ * @param i The integer to print
+ * @return None
+ */
 char printfInt( int i)
 {
     printf(console.int_to_string(i));
 
 }
 
-
-
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
     public:
 
-        void OnKeyDown(char* c){
+        void onKeyDown(char* c){
 
            if(strcmp(c,"ARRT") == 0){
 
@@ -132,12 +121,6 @@ class PrintfKeyboardEventHandler : public KeyboardEventHandler{
 
                 console.backspace();
 
-           }else if(strcmp(c,"t") == 0){
-
-               printf("T");
-                    testTick = true;
-
-
            }else{
 
                 printf(c);                          //Print Char
@@ -145,17 +128,12 @@ class PrintfKeyboardEventHandler : public KeyboardEventHandler{
                 console.moveCursor(-1,0);      //Move behind the cursor
 
             }
-
-
-
-
-
         }
 };
 
 class MouseToConsole: public MouseEventHandler{
 
-        int8_t x, y;
+    int8_t x, y;
     public:
         MouseToConsole()
         {

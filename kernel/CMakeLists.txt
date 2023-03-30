@@ -77,7 +77,7 @@ set(
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
         ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
 
-        src/filesystem/msdospart.cpp include/filesystem/msdospart.h include/filesystem/fat32.h src/filesystem/fat32.cpp include/filesystem/filesystem.h src/filesystem/filesystem.cpp)
+        src/filesystem/msdospart.cpp include/filesystem/msdospart.h include/filesystem/fat32.h src/filesystem/fat32.cpp include/filesystem/filesystem.h src/filesystem/filesystem.cpp include/drivers/video/video.h src/common/graphicsContext.cpp src/common/colour.cpp include/common/colour.h)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 
