@@ -151,15 +151,17 @@ namespace maxOS{
         };
 
         class FatDirectoryEnumerator : public DirectoryEnumerator{
-
+            friend class FatDirectoryTraverser;    
             private:
                 FatDirectoryTraverser* traverser;
-                DirectoryEntry* directoryInfo;
+               
                 int index;
 
             public:
                 FatDirectoryEnumerator(FatDirectoryTraverser* parent, DirectoryEntry directory, int id);
                 ~FatDirectoryEnumerator();
+
+                 DirectoryEntry* directoryInfo;
 
                 char* getDirectoryName();
                 char* changeDirectoryName(char* newDirectoryName);
@@ -194,12 +196,13 @@ namespace maxOS{
                 common::uint32_t fatLocation;
                 common::uint32_t fatSize;
                 common::uint32_t directorySector;
+                common::uint32_t directoryCluster;
 
                 FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size);
                 ~FatDirectoryTraverser();
 
 
-                void changeDirectory(DirectoryEnumerator directory);
+                void changeDirectory(FatDirectoryEnumerator* directory);
 
                 void makeDirectory(char* name);
                 void removeDirectory(char* name);
@@ -209,6 +212,9 @@ namespace maxOS{
 
                 void WriteDirectoryInfoChange(DirectoryEntry* entry);
 	            
+                void UpdateDirectoryEntrysToDisk();
+                void ReadEntrys();
+
                 FileEnumerator* getFileEnumerator();
                 DirectoryEnumerator* getDirectoryEnumerator();
 

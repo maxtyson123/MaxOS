@@ -176,11 +176,12 @@ bool Fat32::IsValidFAT32Name(char* name) {
 FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size) {
 
     //TODO: Add error checks
-    //TODO: Change Directory
-    //TODO: File extentions
-    //TODO: Fix new dirent looping and writing to disk ugh
+    //TODO: File extensions
+    //TODO: Long file names
 
-    //Todo: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion, test multiple cluster directory reading, test longfile name reading,
+    //TODO: Fix bug that the physical drive doesnt get updated, probably has also got something to do with the reading error
+    //TODO: test cluster allocation, test directory/file renaming, test file/directory creation, test file/directory deletion, test directory  entry updation
+    //TODO: File name string has to be 8 characters long (including spaces) for it to compare correctly
 
     hd = ataDevice;
 
@@ -191,6 +192,40 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     directorySector = dirSec;
     fatSize = fat_size;
 
+    //Convert the directory sector into a cluster
+    directoryCluster = (directorySector - dataStartSector) / sectorsPrCluster + 2;
+
+    //Read the directory entrys
+    ReadEntrys();
+
+
+    printf("Finding the home directory:");
+    //Find the home directory
+    while (currentDirectoryEnumerator -> hasNext()){
+        currentDirectoryEnumerator = (FatDirectoryEnumerator*)currentDirectoryEnumerator -> next();
+
+        if (common::strcmp(currentDirectoryEnumerator -> getDirectoryName(),"HOME    ") == 0){
+            printf("\n HOME directory found");
+            break;
+        }
+    }
+
+    printf("\n Change directory to HOME directory: ");
+    printf(currentDirectoryEnumerator -> getDirectoryName());
+
+    while (true);
+
+
+}
+
+FatDirectoryTraverser::~FatDirectoryTraverser() {
+
+}
+
+void FatDirectoryTraverser::ReadEntrys(){
+
+    //Clear the array
+    dirent.clear();
 
     //Clear the enumerators
     currentFileEnumerator = 0;
@@ -198,7 +233,7 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
 
     //Directory reading  loop
     int index = 0;
-    uint32_t nextCluster = directorySector;
+    uint32_t nextCluster = directoryCluster;
     uint8_t fatBuffer[513];
 
     //Read directory entries until the end of the cluster
@@ -208,43 +243,25 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
         uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
         int sectorOffset = 0;
 
-        //Read the secotrs in the cluster
+        //Read the sectors in the cluster
         while(true){
 
             //Read the sector
             hd -> Read28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
             sectorOffset++;                                                                                         //Increment the sector offset
 
-            //create a buffer to store the long file name
-            char longFileName[256];
-            int nameLen = 0;
-
-            //Loop through all the entrys
+            //Loop through all the entries
             for(int i = 0; i < 16; i++) {
                 //If the name is 0x00 then there are no more entries
                 if (tempDirent[i].name[0] == 0x00) {
-                    break;
+                    return;
                 }
                 
                 //If the attribute is 0x0F then this is a long file name entry
-                if ((dirent[i].attributes & 0x0F) == 0x0F) {
-                  
-                    //Extract the part of the file name from the current entry
-                    for (int j = 0; j < 5; j++) {
-                      longFileName[nameLen++] = dirent[i].name[j];
-                    }
-
-                    //Add the dot    
-                    longFileName[nameLen++] = '.';
-                    
-                    //Extract the part of the file extentsion from the current entry
-                    for (int j = 0; j < 3; j++) {
-                        longFileName[nameLen++] = dirent[i].extension[j];
-                    }
-
-                    //Dont add the entry to the dirent list
+                if ((tempDirent[i].attributes & 0x0F) == 0x0F) {
                     continue;
                 }
+
 
                 //Store the directory entry in the dirent list
                 dirent.push_back(tempDirent[i]);
@@ -261,17 +278,10 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
                     currentFileEnumerator = file;
                 }
 
-                //Print the longfile name
-                printf((char*)longFileName);
-
-                //TODO: Save  the long file name for the entry
-
-                //Reset the name buffer
-                for (int i = 0; i < 256; i++) {
-                    longFileName[i] = 0;
-                }
-                nameLen = 0;
-
+                char* foo = "        ";
+                for(int j = 0; j < 8; j++)
+                    foo[j] = dirent[index].name[j];
+                printf(foo);
 
                 index++;
             }
@@ -296,49 +306,27 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
             break;
         }
     }
-
-
-
-    //Intialize the reader, writer and its buffer
-    FatFileReader* fr = (FatFileReader*)currentFileEnumerator -> getReader();
-    FatFileWriter* fw = (FatFileWriter*)currentFileEnumerator -> getWriter();
-
-    uint32_t fileSize = fr -> GetFileSize() + 512;                                                   //Test what happens if we try to write more then whats allready allocated for the file
-    uint8_t* fileBuffer = (uint8_t*)MemoryManager::activeMemoryManager ->malloc(fileSize);
-
-    //Write some dummy text to the file
-    for (int j = 0; j < fileSize; ++j) {
-        unsigned char a = 'b';
-        fileBuffer[j] = (uint8_t)a;
-    }
-
-
-    //Write to the file
-    fw -> Write(fileBuffer, fileSize);
-    printf("\nData written: ");
-    printf((char*)fileBuffer);
-
-
-    MemoryManager::activeMemoryManager -> free(fileBuffer);
-
-    //TODO: Fix bug that the physical drive doesnt get updated, probabbly has also got something to do with the reading error
-
-}
-
-FatDirectoryTraverser::~FatDirectoryTraverser() {
-
 }
 
 /**
  * Changes the current directory to the specified directory, re reads the directory entries
  * @param directory The directory to change to
  */
-void FatDirectoryTraverser::changeDirectory(DirectoryEnumerator directory) {
+void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator* directory) {
+
+   //Get the directory entry
+   DirectoryEntry* directoryEntry = directory -> directoryInfo;
 
     //Get the first sector of the directory
+    uint32_t newDirectoryCluster = ((uint32_t) directoryEntry -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+                                             | directoryEntry -> firstClusterLow;              //Add the low cluster number
+
+
     //Set this to the directory sector
+    directoryCluster = newDirectoryCluster;
+
     //Re-read the directory entries
-    //Print for debuging
+    ReadEntrys();
 
 
 }
@@ -359,7 +347,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0) {              //If the name is the same as the parameter
             printf("Name already in use");
             return;
         }
@@ -389,7 +377,11 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
     }
 
     //Write the directory entry to the disk
-//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+    UpdateDirectoryEntrysToDisk();
+
+    //Create the "." and ".." directory entries
+    DirectoryEntry thisDir;                                         //Directory entry for the "." directory, this points to the current directory
+    DirectoryEntry parentDir;                                       //Directory entry for the ".." directory, this points to the parent directory
 
 }
 
@@ -407,7 +399,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
             dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
             index = i;
             break;
@@ -427,7 +419,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
 
     //Write the directory entry to the disk
-//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+    UpdateDirectoryEntrysToDisk();
 }
 
 void FatDirectoryTraverser::makeFile(char *name) {
@@ -446,7 +438,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
             printf("Name already in use");
             return;
         }
@@ -476,7 +468,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
     }
 
     //Write the directory entry to the disk
-//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+    UpdateDirectoryEntrysToDisk();
 }
 
 void FatDirectoryTraverser::removeFile(char *name) {
@@ -493,7 +485,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name)) {              //If the name is the same as the parameter
+        if (common::strcmp(name, (char*)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
             dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
             index = i;
             break;
@@ -513,7 +505,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
 
     //Write the directory entry to the disk
-//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+    UpdateDirectoryEntrysToDisk();
 }
 
 FileEnumerator* FatDirectoryTraverser::getFileEnumerator() {
@@ -544,7 +536,59 @@ void FatDirectoryTraverser::WriteDirectoryInfoChange(DirectoryEntry* e) {
 
     }
 
-//TODO: fix:    hd -> Write28(directorySector, (uint8_t*)dirent, sizeof(dirent));
+    UpdateDirectoryEntrysToDisk();
+
+}
+
+void FatDirectoryTraverser::UpdateDirectoryEntrysToDisk(){
+
+    //Directory reading  loop
+    int index = 0;
+    uint32_t nextCluster = directoryCluster;
+    uint8_t fatBuffer[513];
+
+    //Write directory entries until the end of the cluster
+    while(true) {
+        
+        //Convert file cluster into a sector
+        uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
+        int sectorOffset = 0;
+
+        //Read the secotrs in the cluster
+        while(true){
+            //Copy the directory entries to the tempBuffer
+            for(int i = 0; i < 16; i++) {
+                tempDirent[i] = dirent[index];
+                index++;
+            }    
+
+            //Write a sectors worth of directory entries
+            hd -> Write28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
+            sectorOffset++;                                                                                             //Increment the sector offset
+
+          
+            //If the next sector is in a different cluster then break
+            if (sectorOffset > sectorsPrCluster)
+                break;     
+        }
+
+        //Get the next cluster of the directory
+        uint32_t sector = nextCluster / (512 / sizeof(uint32_t));                                                                       //Calculate the sector of the FAT table
+        uint32_t offset = nextCluster % (512 / sizeof(uint32_t));                                                                       //Calculate the offset of the FAT table
+
+        //Read the FAT sector for the current cluster
+        hd -> Read28(fatLocation + sector, fatBuffer, 512);
+
+        //Set the next cluster to the next cluster in the FAT
+        nextCluster = ((uint32_t*)&fatBuffer)[offset] & 0x0FFFFFFF;    
+
+        //if the next cluster is 0, it means the end of the cluster chain
+        if (nextCluster == 0) {
+            break;
+        }
+    }
+
+    //TODO: Expand the directory if there is not enough space
 
 }
 
@@ -756,12 +800,12 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
     //TODO: fix performance issues
 
     //Read the first cluster of the file
-    uint32_t  firestFileCluster = ((uint32_t) fileInfo -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
+    uint32_t  firstFileCluster = ((uint32_t) fileInfo -> firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left
                                   | fileInfo -> firstClusterLow;              //Add the low cluster number
 
 
     int32_t fSIZE = fileInfo -> size;
-    int32_t nextFileCluster = firestFileCluster;
+    int32_t nextFileCluster = firstFileCluster;
     uint8_t fileBuffer[513];
     uint8_t fatBuffer[513];
 
