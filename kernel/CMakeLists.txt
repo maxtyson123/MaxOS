@@ -49,7 +49,8 @@ set(
         ${drivers_h}/peripherals/keyboard.h ${drivers_c}/peripherals/keyboard.cpp
         ${drivers_h}/ethernet/amd_am79c973.h ${drivers_c}/ethernet/amd_am79c973.cpp
         ${drivers_h}/ata.h ${drivers_c}/ata.cpp
-        ${drivers_h}/vga.h ${drivers_c}/vga.cpp
+        ${drivers_h}/video/vga.h ${drivers_c}/video/vga.cpp
+        ${drivers_h}/video/video.h ${drivers_c}/video/video.cpp
         ${drivers_h}/ethernet/intel_i217.h ${drivers_c}/ethernet/intel_i217.cpp
         ${drivers_h}/ethernet/ethernet.h ${drivers_c}/ethernet/ethernet.cpp
         ${drivers_h}/ethernet/rawdatahandler.h ${drivers_c}/ethernet/rawdatahandler.cpp
@@ -77,7 +78,7 @@ set(
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
         ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
 
-        src/filesystem/msdospart.cpp include/filesystem/msdospart.h include/filesystem/fat32.h src/filesystem/fat32.cpp include/filesystem/filesystem.h src/filesystem/filesystem.cpp include/drivers/video/video.h src/common/graphicsContext.cpp src/common/colour.cpp include/common/colour.h)
+        src/filesystem/msdospart.cpp include/filesystem/msdospart.h include/filesystem/fat32.h src/filesystem/fat32.cpp include/filesystem/filesystem.h src/filesystem/filesystem.cpp include/drivers/video/video.h src/common/graphicsContext.cpp src/common/colour.cpp include/common/colour.h src/drivers/video/video.cpp)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

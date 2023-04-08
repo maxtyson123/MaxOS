@@ -5,7 +5,7 @@
 #ifndef MAXOS_GUI_RENDER_H
 #define MAXOS_GUI_RENDER_H
 
-#include <drivers/vga.h>
+#include <drivers/video/vga.h>
 #include <common/graphicsContext.h>
 
 namespace maxOS{
@@ -19,7 +19,8 @@ namespace maxOS{
                 common::uint8_t b;
             };
 
-            class Render : public drivers::VideoGraphicsArray{
+            //TODO: Fix
+            class Render : public drivers::video::VideoGraphicsArray{
                 private:
                     Pixel pixels[320][200];
 

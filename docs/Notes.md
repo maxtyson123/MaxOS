@@ -181,8 +181,8 @@ Here are the notes on graphics for the operating system. (May need to read hardw
 - However, communicating with these ports aren't that easy as there is an index port (to tell where the data should be put) and a data port (push the data)
 - And on the CRTC port there is special indexes and data that has to be set for it to unlocked before writing actual data (the reason it has to be unlocked is that if incorrect data is the hardware could be damaged)
 - Similarly, the AC port has to be reset before each index & data write.
-- The VGA class that was written should have a class above that call graphicsContext which would define methods such as putPixel(...), drawRect(...), drawLine(...), drawCircle(...) and sub-classes such as color.
-- The draw functions should rely on the putPixel function therefore in different graphics modes that are derived from that graphicsContext class can be supported.
+- The VGA class that was written should have a class above that call graphicsContext which would define methods such as renderPixel(...), drawRect(...), drawLine(...), drawCircle(...) and sub-classes such as color.
+- The draw functions should rely on the renderPixel function therefore in different graphics modes that are derived from that graphicsContext class can be supported.
 
 ### GUI - Framework
 See also: Bresenham line algorithm (use for later)

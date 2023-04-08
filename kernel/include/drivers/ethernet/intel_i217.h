@@ -10,7 +10,7 @@
 #include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
-#include <memory/memoryinputoutput.h>
+#include <memory/memoryIO.h>
 #include <memory/memorymanagement.h>
 #include <drivers/ethernet/ethernet.h>
 

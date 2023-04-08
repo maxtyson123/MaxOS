@@ -46,11 +46,13 @@ Kernel Cleanup
 - [ ] Usable Desktop / GUI draw rewrite
 - [ ] Timer rewrite
 - [ ] Console rewrite
+- [ ] Codebase cleanup / rewrite
 - [ ] USB
 - [ ] HTTP Protocol, DCHP protocol
-- [ ] Codebase cleanup / rewrite
 - [ ] Kernel Boot Rewrite
 - [ ] Example Telnet Server (GUI) (EMBEDDED)
+- [ ] CMAKE
+- [ ] Fix Fat32 Filesystem
 
 Road to Userspace
 

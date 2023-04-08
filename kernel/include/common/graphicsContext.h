@@ -5,7 +5,6 @@
 #ifndef MaxOS_COMMON_GRAPHICSCONTEX_H
 #define MaxOS_COMMON_GRAPHICSCONTEX_H
 
-#include <drivers/vga.h>
 #include <common/colour.h>
 
 namespace maxOS {
@@ -23,17 +22,17 @@ namespace maxOS {
 
            Colour colourPallet[256];
 
-           virtual void putPixel(uint32_t x, uint32_t y, uint32_t colour);
-           virtual void putPixel8Bit(uint32_t x, uint32_t y, uint32_t colour);
-           virtual void putPixel16Bit(uint32_t x, uint32_t y, uint32_t colour);
-           virtual void putPixel24Bit(uint32_t x, uint32_t y, uint32_t colour);
-           virtual void putPixel32Bit(uint32_t x, uint32_t y, uint32_t colour);
+           virtual void renderPixel(uint32_t x, uint32_t y, uint32_t colour);
+           virtual void renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour);
+           virtual void renderPixel16Bit(uint32_t x, uint32_t y, uint16_t colour);
+           virtual void renderPixel24Bit(uint32_t x, uint32_t y, uint32_t colour);
+           virtual void renderPixel32Bit(uint32_t x, uint32_t y, uint32_t colour);
 
-           virtual uint32_t getPixel(uint32_t x, uint32_t y);
-           virtual uint32_t getPixel8Bit(uint32_t x, uint32_t y);
-           virtual uint32_t getPixel16Bit(uint32_t x, uint32_t y);
-           virtual uint32_t getPixel24Bit(uint32_t x, uint32_t y);
-           virtual uint32_t getPixel32Bit(uint32_t x, uint32_t y);
+           virtual uint32_t getRenderedPixel(uint32_t x, uint32_t y);
+           virtual uint8_t getRenderedPixel8Bit(uint32_t x, uint32_t y);
+           virtual uint16_t getRenderedPixel16Bit(uint32_t x, uint32_t y);
+           virtual uint32_t getRenderedPixel24Bit(uint32_t x, uint32_t y);
+           virtual uint32_t getRenderedPixel32Bit(uint32_t x, uint32_t y);
 
         public:
            GraphicsContext();
@@ -58,6 +57,12 @@ namespace maxOS {
 
            void fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour);
            void fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour);
+
+           void drawCircle(int32_t x0, int32_t y0, int32_t radius, Colour colour);
+           void drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour);
+
+           void fillCircle(int32_t x0, int32_t y0, int32_t radius, Colour colour);
+           void fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour);
 
        };
 

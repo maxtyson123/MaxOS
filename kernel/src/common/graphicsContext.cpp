@@ -2,7 +2,7 @@
 // Created by 98max on 30/03/2023.
 //
 
-# include <common/graphicsContext.h>
+#include <common/graphicsContext.h>
 
 using namespace maxOS::common;
 
@@ -58,74 +58,138 @@ GraphicsContext::~GraphicsContext() {
 
 }
 
-
-void GraphicsContext::putPixel(uint32_t x, uint32_t y, uint32_t colour) {
+/**
+ * Renders a pixel to the screen, automatically uses the correct color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The colour of the pixel
+ */
+void GraphicsContext::renderPixel(uint32_t x, uint32_t y, uint32_t colour) {
 
     // Call the correct putPixel function based on the color depth
     switch (colorDepth) {
         case 8:
-            putPixel8Bit(x, y, colour);
+            renderPixel8Bit(x, y, colour);
             break;
         case 16:
-            putPixel16Bit(x, y, colour);
+            renderPixel16Bit(x, y, colour);
             break;
         case 24:
-            putPixel24Bit(x, y, colour);
+            renderPixel24Bit(x, y, colour);
             break;
         case 32:
-            putPixel32Bit(x, y, colour);
+            renderPixel32Bit(x, y, colour);
             break;
     }
 
 
 }
 
-void GraphicsContext::putPixel8Bit(uint32_t x, uint32_t y, uint32_t colour) {
+/**
+ * Renders a pixel to the screen using the 8 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The 8Bit colour of the pixel
+ */
+void GraphicsContext::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour) {
 
 }
 
-void GraphicsContext::putPixel16Bit(uint32_t x, uint32_t y, uint32_t colour) {
+/**
+ * Renders a pixel to the screen using the 16 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The 16Bit colour of the pixel
+ */
+void GraphicsContext::renderPixel16Bit(uint32_t x, uint32_t y, uint16_t colour) {
 
 }
 
-void GraphicsContext::putPixel24Bit(uint32_t x, uint32_t y, uint32_t colour) {
+/**
+ * Renders a pixel to the screen using the 24 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The 24Bit colour of the pixel
+ */
+void GraphicsContext::renderPixel24Bit(uint32_t x, uint32_t y, uint32_t colour) {
 
 }
 
-void GraphicsContext::putPixel32Bit(uint32_t x, uint32_t y, uint32_t colour) {
+/**
+ * Renders a pixel to the screen using the 32 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The 32Bit colour of the pixel
+ */
+void GraphicsContext::renderPixel32Bit(uint32_t x, uint32_t y, uint32_t colour) {
 
 }
 
-uint32_t GraphicsContext::getPixel(uint32_t x, uint32_t y) {
+/**
+ * Gets the colour of a pixel on the screen, automatically uses the correct color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The colour of the pixel
+ */
+uint32_t GraphicsContext::getRenderedPixel(uint32_t x, uint32_t y) {
     // Call the correct getPixel function based on the color depth
     switch (colorDepth) {
         case 8:
-            return getPixel8Bit(x, y);
+            return getRenderedPixel8Bit(x, y);
         case 16:
-            return getPixel16Bit(x, y);
+            return getRenderedPixel16Bit(x, y);
         case 24:
-            return getPixel24Bit(x, y);
+            return getRenderedPixel24Bit(x, y);
         case 32:
-            return getPixel32Bit(x, y);
+            return getRenderedPixel32Bit(x, y);
     }
 }
 
-uint32_t GraphicsContext::getPixel8Bit(uint32_t x, uint32_t y) {
+/**
+ * Gets the colour of a pixel on the screen using the 8 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The 8Bit colour of the pixel
+ */
+uint8_t GraphicsContext::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
-uint32_t GraphicsContext::getPixel16Bit(uint32_t x, uint32_t y) {
+/**
+ * Gets the colour of a pixel on the screen using the 16 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The 16Bit colour of the pixel
+ */
+uint16_t GraphicsContext::getRenderedPixel16Bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
-uint32_t GraphicsContext::getPixel24Bit(uint32_t x, uint32_t y) {
+/**
+ * Gets the colour of a pixel on the screen using the 24 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The 24Bit colour of the pixel
+ */
+uint32_t GraphicsContext::getRenderedPixel24Bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
-uint32_t GraphicsContext::getPixel32Bit(uint32_t x, uint32_t y) {
+/**
+ * Gets the colour of a pixel on the screen using the 32 bit color depth
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The 32Bit colour of the pixel
+ */
+uint32_t GraphicsContext::getRenderedPixel32Bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
+/**
+ * Converts a colour to an integer value based on the current color depth
+ * @param colour The colour class to convert
+ * @return The integer value of the colour
+ */
 uint32_t GraphicsContext::colourToInt(Colour colour) {
 
     switch (colorDepth) {
@@ -194,6 +258,11 @@ uint32_t GraphicsContext::colourToInt(Colour colour) {
     }
 }
 
+/**
+ * Converts an integer value to a colour based on the current color depth
+ * @param colour The integer value to convert
+ * @return The colour class of the integer value
+ */
 Colour GraphicsContext::intToColour(uint32_t colour) {
     switch (colorDepth) {
 
@@ -245,15 +314,395 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
     }
 }
 
+/**
+ * Gets the width of the screen
+ * @return The width of the screen
+ */
 uint32_t GraphicsContext::getWidth() {
     return width;
 }
 
+/**
+ * Gets the height of the screen
+ * @return The height of the screen
+ */
 uint32_t GraphicsContext::getHeight() {
     return height;
 }
 
+/**
+ * Renders a pixel to the screen
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The colour of the pixel
+ */
 void GraphicsContext::putPixel(int32_t x, int32_t y, Colour colour) {
+
+    // Convert the colour to an integer and then print it
+    renderPixel(x,y, colourToInt(colour));
+}
+
+/**
+ * Renders a pixel to the screen
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The colour of the pixel
+ */
+void GraphicsContext::putPixel(int32_t x, int32_t y, int32_t colour) {
+
+    // Check if the pixel is within the width of the screen
+    if (0 > x || (uint32_t)x >= width) {
+        return;
+    }
+
+    // Check if the pixel is within the height of the screen
+    if (0 > y || (uint32_t) y >= height) {
+        return;
+    }
+
+    // Render the pixel
+    renderPixel(x, mirrorYAxis ? height-y-1 : y, colour);
 
 }
 
+/**
+ * Gets the colour of a pixel
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The colour of the pixel
+ */
+Colour GraphicsContext::getPixel(int32_t x, int32_t y) {
+
+    // Check if the pixel is within the width of the screen
+    if (0 > x || (uint32_t)x >= width) {
+        return Colour(0,0,0);
+    }
+
+    // Check if the pixel is within the height of the screen
+    if (0 > y || (uint32_t) y >= height) {
+        return Colour(0,0,0);
+    }
+
+    // Get the pixel and convert it to a colour
+    uint32_t translatedColor = getRenderedPixel(x, mirrorYAxis ? height-y-1 : y);
+    return intToColour(translatedColor);
+
+
+}
+
+/**
+ * Inverts a pixel
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ */
+void GraphicsContext::invertPixel(int32_t x, int32_t y) {
+    // Get the pixel
+    Colour colour = getPixel(x,y);
+
+    // Invert the pixel
+    colour.red = 255 - colour.red;
+    colour.green = 255 - colour.green;
+    colour.blue = 255 - colour.blue;
+
+    // Render the pixel
+    putPixel(x,y,colour);
+}
+
+/**
+ * Draws a line on the screen
+ * @param x0 The x coordinate of the first point
+ * @param y0 The y coordinate of the first point
+ * @param x1 The x coordinate of the final point
+ * @param y1 The y coordinate of the final point
+ * @param colour The colour of the line
+ */
+void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+    drawLine(x0,y0,x1,y1,colourToInt(colour));
+}
+
+/**
+ * Draws a line on the screen
+ * @param x0 The x coordinate of the first point
+ * @param y0 The y coordinate of the first point
+ * @param x1 The x coordinate of the final point
+ * @param y1 The y coordinate of the final point
+ * @param colour The colour of the line
+ */
+void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
+
+    // Store the minimum and maximum y values by checking which one is larger/smaller
+    bool y0IsSmaller = y0 < y1;
+    int32_t yMin = y0IsSmaller ? y0 : y1;
+    int32_t yMax = y0IsSmaller ? y1 : y0;
+
+    // If x1 is smaller than x0, reverse the points to draw from left to right
+    if(x1 < x0){
+        drawLine(x1,y1,x0,y0,colour);
+        return;
+    }
+
+    // If the line is vertical, draw it
+    if(x1 == x0)
+    {
+        // Force the line to be within the screen
+        if(yMin < 0) yMin = 0;
+        if((uint32_t)yMax >= height) yMax = height - 1;
+
+        // Mirror the Y axis as directly calling renderPixel will not do this
+        if(mirrorYAxis)
+        {
+            int32_t temp = yMax;            // Store the maximum y value
+            yMax = height - yMin - 1;       // Set the maximum y value to the minimum y value
+            yMin = height - temp - 1;       // Set the minimum y value to the maximum y value
+        }
+
+
+        // Check that the line is within the screen
+        if (0 > x0 || (uint32_t) x0 >= width) {
+            return;
+        }
+
+        // Draw the line
+        for(int32_t y = yMin; y <= yMax; ++y)
+            renderPixel(x0, y, colour);
+
+        return;
+    }
+
+    // If the line is horizontal, draw it
+    if(y1 == y0)
+    {
+        // Ensure the line is within the screen
+        if(x0 < 0) x0 = 0;
+        if((uint32_t)x1 >= width) x1 = width-1;
+
+        // Mirror the Y axis as directly calling renderPixel will not do this
+        if(mirrorYAxis)
+            y0 = height-y0-1;
+
+        // Check that the line is within the screen
+        if (0 > y0 || (uint32_t) y0 >= height)
+            return;
+
+        // Draw the line
+        for(int32_t x = x0; x <= x1; ++x)
+            renderPixel(x,y0,colour);
+    }
+
+    // If the line is not horizontal or vertical then it must be a diagonal line
+    // Find the slope of the line
+    float slope = ((float)(y1-y0))/(x1-x0);              // Change in y over change in x
+
+    // If the line is more horizontal than vertical, increment x by 1 and increment y by the slope
+    if(-1 <= slope && slope <= 1)
+    {
+        // Start at minimum y and increment y by the slope
+        float y = y0;
+
+        // Start at minimum x and increment x by 1
+        for(int32_t x = x0; x <= x1; x++, y+=slope)
+            renderPixel(x, (int32_t)y, colour);
+    }
+    // If the line is more vertical than horizontal, increment y by 1 and increment x by the inverse of the slope
+    else
+    {
+        // Invert the slope
+        slope = 1.0f/slope;
+
+        // Start at minimum x and increment x by the inverse of the slope
+        float x = x0;
+
+        // Start at minimum y and increment y by 1
+        for(int32_t y = yMin; y <= yMax; x+=slope, y++)
+            renderPixel((int32_t)x, y, colour);
+    }
+
+
+
+}
+
+/**
+ * Draws a rectangle on the screen
+ * @param x0 The x coordinate of the top left corner
+ * @param y0 The y coordinate of the top left corner
+ * @param x1 The x coordinate of the bottom right corner
+ * @param y1 The y coordinate of the bottom right corner
+ * @param colour The colour of the rectangle
+ */
+void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+    drawRectangle(x0,y0,x1,y1,colourToInt(colour));
+
+}
+
+/**
+ * Draws a rectangle on the screen
+ * @param x0 The x coordinate of the top left corner
+ * @param y0 The y coordinate of the top left corner
+ * @param x1 The x coordinate of the bottom right corner
+ * @param y1 The y coordinate of the bottom right corner
+ * @param colour The colour of the rectangle
+ */
+void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
+
+    // Ensure x and y 0 is smaller than x and y 1
+    --y0;
+    --x0;
+
+    // Draw the rectangle
+    drawLine(x0,y0,x1,y0,colour); // Top
+    drawLine(x0,y1,x1,y1,colour); // Bottom
+    drawLine(x0,y0,x0,y1,colour); // Left
+    drawLine(x1,y0,x1,y1,colour); // Right
+
+}
+
+/**
+ * Draws a rectangle on the screen, filled with a colour
+ * @param x0 The x coordinate of the top left corner
+ * @param y0 The y coordinate of the top left corner
+ * @param x1 The x coordinate of the bottom right corner
+ * @param y1 The y coordinate of the bottom right corner
+ * @param colour The colour of the rectangle
+ */
+void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+    fillRectangle(x0,y0,x1,y1,colourToInt(colour));
+}
+
+/**
+ * Draws a rectangle on the screen, filled with a colour
+ * @param x0 The x coordinate of the top left corner
+ * @param y0 The y coordinate of the top left corner
+ * @param x1 The x coordinate of the bottom right corner
+ * @param y1 The y coordinate of the bottom right corner
+ * @param colour The colour of the rectangle
+ */
+void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
+
+    // Draw from left to right
+    if(y1 < y0){
+        fillRectangle(x1,y1,x0,y0,colour);
+        return;
+    }
+
+    // Make sure the rectangle is within the height of the screen
+    if(y0 < 0) y0 = 0;
+    if((uint32_t)y1 > height) y1 = height;
+
+    // Make sure the rectangle is within the width of the screen
+    bool x0IsSmaller = x0 < x1;
+    int32_t xMin = x0IsSmaller ? x0 : x1;
+    int32_t xMax = x0IsSmaller ? x1 : x0;
+
+    if(xMin < 0) xMin = 0;
+    if((uint32_t)xMax > width) xMax = width;
+
+    // Mirror the Y axis as directly calling renderPixel will not do this
+    if(mirrorYAxis)
+    {
+        uint32_t temp = y1;             // Store the maximum y value
+        y1 = height - y0 - 1;           // Set the maximum y value to the minimum y value
+        y0 = height - temp - 1;         // Set the minimum y value to the maximum y value
+    }
+
+    // Draw the rectangle
+    for(int32_t y = y0; y <= y1; ++y){
+        for (int32_t x = xMin; x <= xMax; ++x) {
+            renderPixel(x, y, colour);
+        }
+    }
+
+}
+
+/**
+ * Draws a circle on the screen
+ * @param x0 The x coordinate of the centre of the circle
+ * @param y0 The y coordinate of the centre of the circle
+ * @param radius The radius of the circle
+ * @param colour The colour of the circle
+ */
+void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, Colour colour){
+    drawCircle(x0,y0,radius,colourToInt(colour));
+}
+
+/**
+ * Draws a circle on the screen
+ * @param x0 The x coordinate of the centre of the circle
+ * @param y0 The y coordinate of the centre of the circle
+ * @param radius The radius of the circle
+ * @param colour The colour of the circle
+ */
+void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour) {
+
+    // Make sure the circle is with in the width and height of the screen
+    if(x0 < 0) x0 = 0;
+    if((uint32_t)x0 > width) x0 = width;
+    if(y0 < 0) y0 = 0;
+    if((uint32_t)y0 > height) y0 = height;
+
+    // Mirror the Y axis as directly calling renderPixel will not do this
+    if(mirrorYAxis)
+        y0 = height-y0-1;
+
+    // Draw the circle
+
+    // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+    for(int32_t x = -radius; x <= radius; ++x){
+
+        // Draw a line from the top most point of the circle to the bottom most point of the circle
+        for(int32_t y = -radius; y <= radius; ++y){
+
+            // Only draw the pixel if it is within the circle
+            if(x*x + y*y <= radius*radius)
+                renderPixel(x0+x,y0+y,colour);
+        }
+    }
+
+
+}
+
+/**
+ * Draws a circle on the screen, filled with a colour
+ * @param x0 The x coordinate of the centre of the circle
+ * @param y0 The y coordinate of the centre of the circle
+ * @param radius The radius of the circle
+ * @param colour The colour of the circle
+ */
+void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, Colour colour) {
+    fillCircle(x0,y0,radius,colourToInt(colour));
+
+}
+
+/**
+ * Draws a circle on the screen, filled with a colour
+ * @param x0 The x coordinate of the centre of the circle
+ * @param y0 The y coordinate of the centre of the circle
+ * @param radius The radius of the circle
+ * @param colour The colour of the circle
+ */
+void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour) {
+
+        // Make sure the circle is with in the width and height of the screen
+        if(x0 < 0) x0 = 0;
+        if((uint32_t)x0 > width) x0 = width;
+        if(y0 < 0) y0 = 0;
+        if((uint32_t)y0 > height) y0 = height;
+
+        // Mirror the Y axis as directly calling renderPixel will not do this
+        if(mirrorYAxis)
+            y0 = height-y0-1;
+
+        // Draw the circle
+
+        // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+        for(int32_t x = -radius; x <= radius; ++x){
+
+            // Draw a line from the top most point of the circle to the bottom most point of the circle
+            for(int32_t y = -radius; y <= radius; ++y){
+
+                // Only draw the pixel if it is within the circle
+                if(x*x + y*y <= radius*radius)
+                    renderPixel(x0+x,y0+y,colour);
+            }
+        }
+
+}

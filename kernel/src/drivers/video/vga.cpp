@@ -2,10 +2,11 @@
 // Created by Tyson on 14/10/2022.
 //
 
-#include <drivers/vga.h>
+#include <drivers/video/vga.h>
 
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::video;
 using namespace maxOS::hardwarecommunication;
 
 
@@ -86,21 +87,21 @@ void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
  * @details This function is used to get the maximum resolution of the VGA and colour depth.
  * @return True if the specified resolution is supported, otherwise false.
  */
-bool VideoGraphicsArray::SupportsMode(uint32_t width, uint32_t height, uint32_t colourdepth)
+bool VideoGraphicsArray::supportsMode(uint32_t width, uint32_t height, uint32_t colourDepth)
 {
-    return width == 320 && height == 200 && colourdepth == 8;
+    return width == 320 && height == 200 && colourDepth == 8;
 }
 
 /**
  * @details This function is used to set the specified resolution and colour depth.
  * @param width The width of the resolution.
  * @param height The height of the resolution.
- * @param colourdepth The colour depth of the resolution.
+ * @param colourDepth The colour depth of the resolution.
  * @return True if the specified resolution is supported, otherwise false.
  */
-bool VideoGraphicsArray::SetMode(uint32_t width, uint32_t height, uint32_t colourdepth)
+bool VideoGraphicsArray::internalSetMode(uint32_t width, uint32_t height, uint32_t colourDepth)
 {
-    if(!SupportsMode(width, height, colourdepth))
+    if(!supportsMode(width, height, colourDepth))
         return false;
 
     //Values from osdev / modes.c
@@ -155,69 +156,14 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
  * @param y The y coordinate of the pixel.
  * @param colour The colour of the pixel.
  */
-void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
-
-    if(x < 0 || 320 <= x
-       || y < 0 || 200 <= y)
-        return; //Check if coords r legal
+void VideoGraphicsArray::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour){
 
     uint8_t* pixelAddress = FrameBufferSegment + 320*y + x;    //Get where to put the pixel in memory and x y pos
-    *pixelAddress = colorIndex;
+    *pixelAddress = colour;
 }
 
-/**
- * @details This function is used to get the colour based on a red, green and blue value.
- * @param r The red value.
- * @param g The green value.
- * @param b The blue value.
- * @return The colour, returns black if the colour is not supported.
- */
-uint8_t VideoGraphicsArray::GetColourIndex(uint8_t r, uint8_t g, uint8_t b)
-{
-    if(r == 0x00 && g == 0x00 && b == 0x00)  return 0x00;   //BLACK
-    if(r == 0x00 && g == 0x00 && b == 0xA8)  return 0x01;   //BLUE
-    if(r == 0x00 && g == 0xA8 && b == 0x00)  return 0x02;   //GREEN
-    if(r == 0x00 && g == 0x00 && b == 0xA8)  return 0x01;   //BLUE
-    if(r == 0xA8 && g == 0x00 && b == 0x00)  return 0x04;   //RED
-    if(r == 0xFF && g == 0xFF && b == 0xFF)  return 0x3F;   //WHITE
-
-    //If cant find hex for a rgb value then return black
-    return 0x00;
+uint8_t VideoGraphicsArray::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
+    uint8_t* pixelAddress = FrameBufferSegment + y*320 + x;
+    return *pixelAddress;
 }
 
-/**
- * @details This function puts on pixel on the screen.
- * @param x The x coordinate of the pixel.
- * @param y The y coordinate of the pixel.
- * @param r The red value of the pixel.
- * @param g The green value of the pixel.
- * @param b The blue value of the pixel.
- */
-void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b){
-    PutPixel(x,y, GetColourIndex(r,g,b));
-}
-
-/**
- * @details This function draws a rectangle on the screen.
- * @param x The x coordinate of the rectangle.
- * @param y The y coordinate of the rectangle.
- * @param w The width of the rectangle.
- * @param h The height of the rectangle.
- * @param r The red value of the rectangle.
- * @param g The green value of the rectangle.
- * @param b The blue value of the rectangle.
- */
-void VideoGraphicsArray::FillRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t r, uint8_t g, uint8_t b) {
-    for (uint32_t Y = y; Y < y + h; Y++) {
-        for (uint32_t X = x; X < x + w; X++) {
-            PutPixel(X, Y, r, g, b);
-        }
-    }
-}
-
-void VideoGraphicsArray::updateFrameAdress(){
-
-    //It is better to update before each frame draw rather then evertime a pixel is drawn
-    FrameBufferSegment = GetFrameBufferSegment();
-
-}

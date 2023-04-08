@@ -13,7 +13,7 @@
 #include <drivers/driver.h>
 #include <drivers/peripherals/keyboard.h>
 #include <drivers/peripherals/mouse.h>
-#include <drivers/vga.h>
+#include <drivers/video/vga.h>
 #include <drivers/ata.h>
 #include <drivers/ethernet/amd_am79c973.h>
 
@@ -49,6 +49,7 @@ using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::peripherals;
 using namespace maxOS::drivers::ethernet;
+using namespace maxOS::drivers::video;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 using namespace maxOS::net;
@@ -57,7 +58,7 @@ using namespace maxOS::memory;
 using namespace maxOS::filesystem;
 
 
-// #define ENABLE_GRAPHICS
+#define ENABLE_GRAPHICS
 
 static Console console;
 
