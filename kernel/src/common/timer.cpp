@@ -31,7 +31,8 @@ common::uint32_t Timer::GetTicks() {
 }
 
 /**
- * Wait for a certain amount of milliseconds
+ * @details Wait for a certain amount of milliseconds
+ *
  * @param ms The amount of milliseconds to wait
  */
 void Timer::Wait(common::uint32_t ms) {
@@ -40,7 +41,7 @@ void Timer::Wait(common::uint32_t ms) {
 }
 
 /**
- * Update the ticks
+ * @details Update the ticks
  */
 void Timer::UpdateTicks() {
 

@@ -40,7 +40,8 @@ TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket()
 {
 }
 /**
- * @brief Handle the TCP message (socket end)
+ * @details Handle the TCP message (socket end)
+ *
  * @param data The datah
  * @param size The size of the data
  * @return True if the connection is to be terminated after hadnling or false if not
@@ -53,7 +54,8 @@ bool TransmissionControlProtocolSocket::HandleTransmissionControlProtocolMessage
 }
 
 /**
- * @breif Send data over the socket
+ * @details Send data over the socket
+ *
  * @param data The data to send
  * @param size The size of the data
  */
@@ -67,7 +69,7 @@ void TransmissionControlProtocolSocket::Send(uint8_t* data, uint16_t size)
 }
 
 /**
- * @brief Disconnect the socket
+ * @details Disconnect the socket
  */
 void TransmissionControlProtocolSocket::Disconnect()
 {
@@ -102,7 +104,8 @@ uint32_t bigEndian32(uint32_t x)
 }
 
 /**
- * @brief Handle the TCP message (provider end)
+ * @details Handle the TCP message (provider end)
+ *
  * @param srcIP_BE The source IP address
  * @param dstIP_BE The destination IP address
  * @param internetprotocolPayload The payload
@@ -316,7 +319,8 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
 }
 
 /**
- * @brief Send a packet (Throught the provider)
+ * @details Send a packet (Throught the provider)
+ *
  * @param socket    The socket to send the packet from
  * @param data    The data to send
  * @param size   The size of the data
@@ -378,7 +382,7 @@ void TransmissionControlProtocolProvider::Send(TransmissionControlProtocolSocket
 }
 
 /**
- * @breif Connect to a remote host through the TCP protocol
+ * @details Connect to a remote host through the TCP protocol
  * @param ip The IP of the remote host
  * @param port The port of the remote host
  * @return The socket that is connected to the remote host, 0 if it failed
@@ -419,7 +423,8 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Connect(
 }
 
 /**
- * @breif Begin the disconnect process
+ * @details Begin the disconnect process
+ *
  * @param socket The socket to disconnect
  */
 void TransmissionControlProtocolProvider::Disconnect(TransmissionControlProtocolSocket* socket)
@@ -431,7 +436,8 @@ void TransmissionControlProtocolProvider::Disconnect(TransmissionControlProtocol
 }
 
 /**
- * Begin listening on a port
+ * @details Begin listening on a port
+ *
  * @param port The port to listen on
  * @return The socket that will handle the connection
  */
@@ -460,7 +466,8 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Listen(u
 }
 
 /**
- * @breif Bind a data handler to this socket
+ * @details Bind a data handler to this socket
+ *
  * @param socket The socket to bind the handler to
  * @param handler The handler to bind
  */

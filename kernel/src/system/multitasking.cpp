@@ -62,6 +62,7 @@ TaskManager::~TaskManager() {
 
 /**
  * @details Adds a task to the task manager
+ *
  * @param task The task to add
  */
 bool TaskManager::AddTask(Task *task) {
@@ -77,6 +78,7 @@ bool TaskManager::AddTask(Task *task) {
 
 /**
  * @details Switches to the next task
+ *
  * @param cpuState The current CPU state
  * @return The new CPU state
  */

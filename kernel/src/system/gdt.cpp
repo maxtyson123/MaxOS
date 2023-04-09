@@ -8,7 +8,7 @@ using namespace maxOS::common;
 using namespace maxOS::system;
 
 /**
- * Global Descriptor Table
+ * @details Global Descriptor Table
  */
 GlobalDescriptorTable::GlobalDescriptorTable()
         : nullSegmentSelector(0, 0, 0),                     //Ignored
@@ -32,7 +32,8 @@ GlobalDescriptorTable::~GlobalDescriptorTable()
 
 
 /**
- * Data Segment Selector
+ * @details Data Segment Selector
+ *
  * @return The data segment selector offset
  */
 uint16_t GlobalDescriptorTable::DataSegmentSelector()
@@ -41,7 +42,8 @@ uint16_t GlobalDescriptorTable::DataSegmentSelector()
 }
 
 /**
- * Code Segment Selector
+ * @details Code Segment Selector
+ *
  * @return The code segment selector offset
  */
 uint16_t GlobalDescriptorTable::CodeSegmentSelector()
@@ -52,6 +54,8 @@ uint16_t GlobalDescriptorTable::CodeSegmentSelector()
 //Setup GDT for memory
 /**
  * @details Constructor for Segment Selector
+ *
+ *
  * @param base Base address
  * @param limit Limit
  * @param flags Flags
@@ -103,6 +107,7 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint3
 }
 /**
  * @details Look up the pointer
+ *
  * @return The pointer
  */
 uint32_t GlobalDescriptorTable::SegmentDescriptor::Base() //To look up the pointer
@@ -119,6 +124,7 @@ uint32_t GlobalDescriptorTable::SegmentDescriptor::Base() //To look up the point
 
 /**
  * @details Look up the limit
+ *
  * @return The limit
  */
 uint32_t GlobalDescriptorTable::SegmentDescriptor::Limit()

@@ -29,7 +29,8 @@ MemIO8Bit::~MemIO8Bit() {
 }
 
 /**
- * Writes data to the memory address
+ * @details Writes data to the memory address
+ *
  * @param data  the data to write
  */
 void MemIO8Bit::Write(uint8_t data){
@@ -37,7 +38,8 @@ void MemIO8Bit::Write(uint8_t data){
 }
 
 /**
- * Reads data from the memory address
+ * @details Reads data from the memory address
+ *
  * @return the data read
  */
 
@@ -57,7 +59,8 @@ MemIO16Bit::~MemIO16Bit() {
 }
 
 /**
- * Writes data to the memory address
+ * @details Writes data to the memory address
+ *
  * @param data  the data to write
  */
 void MemIO16Bit::Write(uint16_t data){
@@ -65,7 +68,8 @@ void MemIO16Bit::Write(uint16_t data){
 }
 
 /**
- * Reads data from the memory address
+ * @details Reads data from the memory address
+ *
  * @return the data read
  */
 
@@ -85,7 +89,8 @@ MemIO32Bit::~MemIO32Bit() {
 }
 
 /**
- * Writes data to the memory address
+ * @details Writes data to the memory address
+ *
  * @param data  the data to write
  */
 void MemIO32Bit::Write(uint32_t data){
@@ -93,7 +98,8 @@ void MemIO32Bit::Write(uint32_t data){
 }
 
 /**
- * Reads data from the memory address
+ * @details Reads data from the memory address
+ *
  * @return the data read
  */
 
@@ -113,7 +119,8 @@ MemIO64Bit::~MemIO64Bit() {
 }
 
 /**
- * Writes data to the memory address
+ * @details Writes data to the memory address
+ *
  * @param data  the data to write
  */
 void MemIO64Bit::Write(uint64_t data){
@@ -121,7 +128,8 @@ void MemIO64Bit::Write(uint64_t data){
 }
 
 /**
- * Reads data from the memory address
+ * @details Reads data from the memory address
+ *
  * @return the data read
  */
 uint64_t MemIO64Bit::Read(){

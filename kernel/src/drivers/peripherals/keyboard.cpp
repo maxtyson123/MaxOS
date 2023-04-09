@@ -65,7 +65,8 @@ void KeyboardDriver::Activate() {
 }
 
 /**
- * Handle the keyboard interrupt
+ * @details Handle the keyboard interrupt
+ *
  * @param esp  The stack pointer
  * @return returns the passed esp
  */

@@ -281,6 +281,7 @@ Text::~Text() {
 
 /**
  * @details Draw the text on the screen
+ *
  * @param gc The graphics context to draw on
  */
 void Text::Draw(common::GraphicsContext *gc) {
@@ -318,6 +319,7 @@ void Text::Draw(common::GraphicsContext *gc) {
 
 /**
  * @details Set the text to be displayed
+ *
  * @param text The text to be displayed
  */
 void Text::UpdateText(char *newText) {

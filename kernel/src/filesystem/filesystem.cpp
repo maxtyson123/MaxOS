@@ -24,7 +24,8 @@ DirectoryTraverser *FileSystem::getDirectoryTraverser() {
 }
 
 /**
- * Get the directory traverser for the filesystem
+ * @details Get the directory traverser for the filesystem
+ *
  * @return
  */
 
@@ -42,7 +43,8 @@ DirectoryTraverser::~DirectoryTraverser() {
 }
 
 /**
- * Change what directory is being traversed
+ * @details Change what directory is being traversed
+ *
  * @param directory the directory to traverse
  */
 void DirectoryTraverser::changeDirectory(DirectoryEnumerator directory) {
@@ -53,7 +55,8 @@ void DirectoryTraverser::changeDirectory(DirectoryEnumerator directory) {
 }
 
 /**
- * Creates a new directory
+ * @details Creates a new directory
+ *
  * @param name the name of the directory
  */
 void DirectoryTraverser::makeDirectory(char* name) {
@@ -61,7 +64,8 @@ void DirectoryTraverser::makeDirectory(char* name) {
 }
 
 /**
- * Removes a directory and all its contents
+ * @details Removes a directory and all its contents
+ *
  * @param name the name of the directory to remove
  */
 void DirectoryTraverser::removeDirectory(char *name) {
@@ -72,7 +76,8 @@ void DirectoryTraverser::removeDirectory(char *name) {
 
 
 /**
- * Gets the file enumerator for the current directory
+ * @details Gets the file enumerator for the current directory
+ *
  * @return the file enumerator
  */
 FileEnumerator* DirectoryTraverser::getFileEnumerator() {
@@ -80,7 +85,8 @@ FileEnumerator* DirectoryTraverser::getFileEnumerator() {
 }
 
 /**
- * Gets the directory enumerator for the current directory
+ * @details Gets the directory enumerator for the current directory
+ *
  * @return  the directory enumerator
  */
 DirectoryEnumerator* DirectoryTraverser::getDirectoryEnumerator() {
@@ -88,7 +94,8 @@ DirectoryEnumerator* DirectoryTraverser::getDirectoryEnumerator() {
 }
 
 /**
- * Creates a new file
+ * @details Creates a new file
+ *
  * @param name the name of the file
  */
 void DirectoryTraverser::makeFile(char *name) {
@@ -96,7 +103,8 @@ void DirectoryTraverser::makeFile(char *name) {
 }
 
 /**
- * Removes a file
+ * @details Removes a file
+ *
  * @param name the name of the file
  */
 void DirectoryTraverser::removeFile(char *name) {
@@ -119,7 +127,8 @@ DirectoryEnumerator::~DirectoryEnumerator() {
 }
 
 /**
- * Gets the name of the directory
+ * @details Gets the name of the directory
+ *
  * @return the name of the directory
  */
 char* DirectoryEnumerator::getDirectoryName() {
@@ -127,7 +136,8 @@ char* DirectoryEnumerator::getDirectoryName() {
 }
 
 /**
- * Checks if there is another directory
+ * @details Checks if there is another directory
+ *
  * @return true if there is another directory, false otherwise
  */
 bool DirectoryEnumerator::hasNext() {
@@ -135,7 +145,8 @@ bool DirectoryEnumerator::hasNext() {
 }
 
 /**
- * Gets the next directoryEnumerator in this DirectoryTraverser
+ * @details Gets the next directoryEnumerator in this DirectoryTraverser
+ *
  * @return the next directoryEnumerator
  */
 DirectoryEnumerator* DirectoryEnumerator::next() {
@@ -154,7 +165,8 @@ FileEnumerator::~FileEnumerator() {
 }
 
 /**
- * Gets the name of the current file
+ * @details Gets the name of the current file
+ *
  * @return the name of the file
  */
 char* FileEnumerator::getFileName() {
@@ -163,7 +175,8 @@ char* FileEnumerator::getFileName() {
 }
 
 /**
- * Gets the reader for the current file
+ * @details Gets the reader for the current file
+ *
  * @return the reader for the file
  */
 FileReader* FileEnumerator::getReader() {
@@ -171,7 +184,8 @@ FileReader* FileEnumerator::getReader() {
 }
 
 /**
- * Gets the writer for the current file
+ * @details Gets the writer for the current file
+ *
  * @return the writer for the file
  */
 FileWriter* FileEnumerator::getWriter() {
@@ -179,7 +193,8 @@ FileWriter* FileEnumerator::getWriter() {
 }
 
 /**
- * Checks if there is another file
+ * @details Checks if there is another file
+ *
  * @return true if there is another file, false otherwise
  */
 bool FileEnumerator::hasNext() {
@@ -187,7 +202,8 @@ bool FileEnumerator::hasNext() {
 }
 
 /**
- * Gets the next file in this DirectoryTraverser
+ * @details Gets the next file in this DirectoryTraverser
+ *
  * @return The next file
  */
 FileEnumerator* FileEnumerator::next() {
@@ -207,7 +223,8 @@ FileReader::~FileReader() {
 }
 
 /**
- * Reads from the file and stores the data in the buffer at the given position (default 0 + how many bytes has been read this fileEnumeration)
+ * @details Reads from the file and stores the data in the buffer at the given position (default 0 + how many bytes has been read this fileEnumeration)
+ *
  * @param data the data pointer to read into
  * @param size the size of the data to read
  * @return the amount of data read
@@ -217,7 +234,8 @@ uint32_t FileReader::Read(common::uint8_t *data, common::uint32_t size) {
 }
 
 /**
- * Moves the position in the file
+ * @details Moves the position in the file
+ *
  * @param position how many bytes to move the position
  * @param seek The type of seek to perform. (SEEK_SET, offset = position) (SEEK_CUR, offset = offset + position)  (SEEK_END, offset = fileSize + position)
  * @return the position in the file
@@ -227,7 +245,8 @@ uint32_t FileReader::Seek(common::uint32_t position, SeekType seek) {
 }
 
 /**
- * Gets the current position in the file
+ * @details Gets the current position in the file
+ *
  * @return the current position in the file
  */
 common::uint32_t FileReader::GetPosition() {
@@ -235,7 +254,8 @@ common::uint32_t FileReader::GetPosition() {
 }
 
 /**
- * Gets the size of the file
+ * @details Gets the size of the file
+ *
  * @return the size of the file
  */
 common::uint32_t FileReader::GetFileSize() {
@@ -255,7 +275,8 @@ FileWriter::~FileWriter() {
 }
 
 /**
- * Writes to the file at the given position (default 0 + how many bytes has been read this fileEnumeration)
+ * @details Writes to the file at the given position (default 0 + how many bytes has been read this fileEnumeration)
+ *
  * @param data the data pointer to write from
  * @param size the size of the data to write
  * @return the amount of data written
@@ -265,7 +286,8 @@ uint32_t FileWriter::Write(common::uint8_t *data, common::uint32_t size) {
 }
 
 /**
- * Moves the position in the file
+ * @details Moves the position in the file
+ *
  * @param position  the position to move to
  * @param seek The type of seek to perform. (SEEK_SET, offset = position) (SEEK_CUR, offset = offset + position)  (SEEK_END, offset = fileSize + position)
  * @return how many bytes the position has been moved
@@ -275,7 +297,8 @@ common::uint32_t FileWriter::Seek(common::uint32_t position, SeekType seek) {
 }
 
 /**
- * Closes the current file
+ * @details Closes the current file
+ *
  * @return True if the file was closed successfully, false otherwise
  */
 bool FileWriter::Close() {
@@ -283,7 +306,8 @@ bool FileWriter::Close() {
 }
 
 /**
- * Flushes the current file (writes all data to the disk)
+ * @details Flushes the current file (writes all data to the disk)
+ *
  * @return True if the file was flushed successfully, false otherwise
  */
 bool FileWriter::Flush() {
@@ -291,7 +315,8 @@ bool FileWriter::Flush() {
 }
 
 /**
- * Gets the current position in the file
+ * @details Gets the current position in the file
+ *
  * @return the current position in the file
  */
 common::uint32_t FileWriter::GetPosition() {
@@ -299,7 +324,8 @@ common::uint32_t FileWriter::GetPosition() {
 }
 
 /**
- * Gets the size of the file
+ * @details Gets the size of the file
+ *
  * @return the size of the file
  */
 common::uint32_t FileWriter::GetFileSize() {

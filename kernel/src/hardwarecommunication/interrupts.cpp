@@ -45,6 +45,7 @@ InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 
 /**
  * @details This function is used to set an entry in the IDT
+ *
  * @param interrupt  Interrupt number
  * @param CodeSegment  Code segment
  * @param handler  Interrupt Handler
@@ -207,6 +208,7 @@ void InterruptManager::Deactivate()
 
 /**
  * @details This function passes the interrupt request on to the active interrupt manager
+ *
  * @param interruptNumber The interrupt number
  * @param esp The stack pointer
  * @return The stack pointer
@@ -223,6 +225,7 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 
 /**
  * @details This function handles the interrupt request
+ *
  * @param interruptNumber The interrupt number
  * @param esp The stack pointer
  * @return The stack pointer
@@ -406,6 +409,7 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 
 /**
  * @details This function returns the offset of the hardware interrupt
+ *
  * @return The offset of the hardware interrupt
  */
 maxOS::common::uint16_t InterruptManager::HardwareInterruptOffset() {

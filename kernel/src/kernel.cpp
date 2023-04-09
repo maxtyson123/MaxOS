@@ -65,6 +65,7 @@ static Console console;
 
 /**
  * @details Print to the Video Memory Debug Console
+ *
  * @param  str String to print
  */
 void printf(char* str, bool clearLine = false)
@@ -75,6 +76,7 @@ void printf(char* str, bool clearLine = false)
 
 /**
  * @details Print to the Video Memory Debug Console
+ *
  * @param  key Hex Value to print
  */
 void printfHex(uint8_t key){
@@ -84,6 +86,7 @@ void printfHex(uint8_t key){
 
 /**
  * @details Prints a integer to the screen
+ *
  * @param i The integer to print
  * @return None
  */
@@ -227,11 +230,9 @@ public:
 
 /**
  * @details Print a string via a syscall
+ *
  * @param str String to print
  */
-
-
-
 void sys_printf(char* str)
 {
 
@@ -316,6 +317,7 @@ InternetProtocolProvider *k_ipv4;
 
 /**
  * @details Main process for the kernel
+ *
  * @return Should never return, nor be killed
  */
 void kernProc(){

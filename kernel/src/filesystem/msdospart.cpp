@@ -13,7 +13,8 @@ void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 
 /**
- * Read the partition table of a given hard disk
+ * @details Read the partition table of a given hard disk
+ *
  * @param hd The hard disk to read the partition table from
  */
 void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {

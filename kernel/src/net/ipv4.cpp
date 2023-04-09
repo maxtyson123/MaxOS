@@ -61,6 +61,7 @@ InternetProtocolHandler::~InternetProtocolHandler() {
 
 /**
  * @details Called when an IP packet is received. (Deafult, does nothing, overide for use)
+ *
  * @param srcIP_BE The source IP address.
  * @param dstIP_BE The destination IP address.
  * @param internetprotocolPayload The payload of the IP packet.
@@ -73,6 +74,7 @@ bool InternetProtocolHandler::OnInternetProtocolReceived(uint32_t srcIP_BE, uint
 
 /**
  * @details Sends an IP packet.
+ *
  * @param dstIP_BE The destination IP address.
  * @param internetprotocolPayload The payload of the IP packet.
  * @param size The size of the IP packet.
@@ -109,6 +111,7 @@ InternetProtocolProvider::~InternetProtocolProvider() {
 
 /**
  * @details Called when an IP packet is received.
+ *
  * @param etherframePayload The payload of the IP packet.
  * @param size The size of the IP packet.
  * @return True if the packet is to be sent back, false otherwise.
@@ -162,6 +165,7 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
 
 /**
  * @details Sends an IP packet.
+ *
  * @param dstIP_BE The destination IP address.
  * @param protocol The protocol of the IP packet.
  * @param data The payload of the IP packet.
@@ -214,6 +218,7 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
 
 /**
  * @details Creates a checksum for the given data.
+ *
  * @param data The data to create a checksum for.
  * @param lengthInBytes The length of the data in bytes.
  * @return The checksum.

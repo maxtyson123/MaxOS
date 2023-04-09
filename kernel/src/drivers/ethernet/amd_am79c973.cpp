@@ -138,6 +138,7 @@ void amd_am79c973::Activate()
 
 /**
  * @details This function resets the device
+ *
  * @return The amount of ms to wait
  */
 int amd_am79c973::Reset() {
@@ -163,6 +164,7 @@ string amd_am79c973::GetDeviceName()
 
 /**
  * @details This function handles the interrupt for the device
+ *
  * @param esp The stack pointer (where to return to)
  */
 common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
@@ -205,6 +207,7 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
 //  Furthermore, bits 12-15 must be set (0x0000F000, are probably reserved) and bits 0-11 are negative Size of the package.
 /**
  * @details This function sends a package
+ *
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
@@ -298,6 +301,7 @@ void amd_am79c973::FetchDataSent()
 
 /**
  * @details This function gets the MAC address
+ *
  * @return The MAC address
  */
 uint64_t amd_am79c973::GetMediaAccessControlAddress() {

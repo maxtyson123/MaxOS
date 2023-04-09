@@ -46,6 +46,8 @@ Kernel Cleanup
 - [ ] Usable Desktop / GUI draw rewrite
 - [ ] Timer rewrite
 - [ ] Console rewrite
+- [ ] Better Doxygen Documentation
+- [ ] Use better c++ coding conventions
 - [ ] Codebase cleanup / rewrite
 - [ ] USB
 - [ ] HTTP Protocol, DCHP protocol

@@ -27,6 +27,7 @@ SyscallHandler::~SyscallHandler()
 
 /**
  * @details Handles the interrupt for a system call
+ *
  * @param esp The stack frame
  */
 uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
@@ -52,6 +53,7 @@ uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
 
 /**
  * @details terminate the calling process
+ *
  * @param status The exit code
  */
 void sys_exit(int status)
@@ -63,6 +65,7 @@ void sys_exit(int status)
  * @details creates a new process by duplicating the calling process.
        The new process is referred to as the child process.  The calling
        process is referred to as the parent process.
+
  * @param cpu  The CPU state of the calling process
  */
 void sys_fork(CPUState_Thread* cpu)
@@ -73,6 +76,7 @@ void sys_fork(CPUState_Thread* cpu)
 /**
  * @details attempts to read up to count bytes from file descriptor fd
        into the buffer starting at buf.
+
  * @param fd  The file descriptor
  * @param buf The buffer to read into
  * @param count The number of bytes to read
@@ -92,6 +96,7 @@ size_t sys_read(unsigned int fd, char *buf,	size_t count){
 /**
  * @details attempts to write up to count bytes from the buffer starting
        at buf to the file referred to by the file descriptor fd.
+
  * @param fd  The file descriptor
  * @param buf The buffer to write from
  * @param count The number of bytes to write
@@ -112,6 +117,7 @@ size_t sys_write(int fd, const void *buf, size_t count){
  * @details opens the file specified by pathname.  If
        the specified file does not exist, it may optionally (if O_CREAT
        is specified in flags) be created by open().
+
  * @param filename  The file to open
  * @param flags The flags to open the file with
  * @param mode The mode to open the file with
@@ -129,6 +135,7 @@ int sys_open(const char *pathname, int flags, mode_t mode){
 /**
  * @details closes a file descriptor, so that it no longer refers to any
        file and may be reused.
+
  * @param fd  The file descriptor to close
  * @return On success, zero is returned.  On error, -1 is returned
  */
@@ -142,6 +149,7 @@ int sys_close(int fd){
 
 /**
  * @details waits for a child process to stop or terminate.
+ *
  * @param pid  The process ID of the child process
  * @param status The exit code of the child process
  * @param options The options to wait with
@@ -160,6 +168,7 @@ pid_t sys_waitpid(pid_t pid, int *status, int options) {
 /**
  * @ details equivalent to calling open() with flags
        equal to O_CREAT|O_WRONLY|O_TRUNC.
+
  * @param pathname
  * @param mode
  * @return On success, these system calls return a nonnegative integer that is a file descriptor for the
@@ -176,6 +185,7 @@ int sys_creat(const char *pathname, mode_t mode){
 /**
  * @details creates a new link (also known as a hard link) to an
        existing file.
+
  * @param oldpath The path to the existing file
  * @param newpath The path to the new link
  * @return On success, zero is returned.  On error, -1 is returned
@@ -192,6 +202,7 @@ int sys_link(const char *oldpath, const char *newpath){
  * @details deletes a name from the file system.  If that name was the
        last link to a file and no processes have the file open, the file
        is deleted and the space it was using is made available for reuse.
+
  * @param pathname The path to the file to unlink
  * @return On success, zero is returned.  On error, -1 is returned
  */

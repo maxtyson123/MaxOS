@@ -18,7 +18,8 @@ int i = 0;
 //TODO: Fix folders after lib not found error
 
 /**
- * Intialize the FAT32 filesystem
+ * @details Intialize the FAT32 filesystem
+ *
  * @param hd The hard disk to initialize the FAT32 filesystem on
  * @param partitionOffset The offset of the partition to initialize the FAT32 filesystem on
  */
@@ -49,7 +50,8 @@ Fat32::~Fat32() {
 }
 
 /**
- * Get the current directory traverser
+ * @details Get the current directory traverser
+ *
  * @return The current directory traverser
  */
 DirectoryTraverser* Fat32::getDirectoryTraverser() {
@@ -59,7 +61,8 @@ DirectoryTraverser* Fat32::getDirectoryTraverser() {
 }
 
 /**
- * Allocate a new cluster in the FAT
+ * @details Allocate a new cluster in the FAT
+ *
  * @param currentCluster The current cluster to allocate a new cluster after
  * @param fatLocation The location of the FAT table
  * @param fat_size The size of the FAT table
@@ -100,7 +103,8 @@ uint32_t Fat32::AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint3
 
 
 /**
- * @brief Deallocates all clusters in a file
+ * @details Deallocates all clusters in a file
+ *
  * @param hd pointer to the AdvancedTechnologyAttachment object representing the hard drive
  * @param firstCluster The first cluster of the file to be deallocated
  * @param fatLocation The location of the FAT table on the hard drive
@@ -127,7 +131,8 @@ void Fat32::DeallocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint32_
 }
 
 /**
- * Update the entry in the FAT
+ * @details Update the entry in the FAT
+ *
  * @param cluster The cluster to update
  * @param newFatValue The new value to set the entry to
  * @param fatLocation The location of the FAT table
@@ -144,7 +149,8 @@ void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t
 };
 
 /**
- * @brief Check if a char* is a valid FAT32 name
+ * @details Check if a char* is a valid FAT32 name
+ *
  * @param name Pointer to the char array to check
  * @return true if the name is valid, false otherwise
  */
@@ -309,7 +315,8 @@ void FatDirectoryTraverser::ReadEntrys(){
 }
 
 /**
- * Changes the current directory to the specified directory, re reads the directory entries
+ * @details Changes the current directory to the specified directory, re reads the directory entries
+ *
  * @param directory The directory to change to
  */
 void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator* directory) {
@@ -611,7 +618,8 @@ FatDirectoryEnumerator::~FatDirectoryEnumerator() {
 }
 
 /**
- * Get the name of the directory
+ * @details Get the name of the directory
+ *
  * @return The name of the directory
  */
 char* FatDirectoryEnumerator::getDirectoryName() {
@@ -623,7 +631,8 @@ char* FatDirectoryEnumerator::getDirectoryName() {
 }
 
 /**
- * Change the name of the directory
+ * @details Change the name of the directory
+ *
  * @param newDirectoryName The new name of the directory
  * @return The old name of the directory
  */
@@ -648,7 +657,8 @@ char *FatDirectoryEnumerator::changeDirectoryName(char* newDirectoryName) {
 }
 
 /**
- * Check if there is another directory in the parent directory
+ * @details Check if there is another directory in the parent directory
+ *
  * @return True if there is another directory, false if not
  */
 bool FatDirectoryEnumerator::hasNext() {
@@ -657,7 +667,8 @@ bool FatDirectoryEnumerator::hasNext() {
 }
 
 /**
- * Get the next directory in the parent directory
+ * @details Get the next directory in the parent directory
+ *
  * @return The next directory in the parent directory
  */
 DirectoryEnumerator* FatDirectoryEnumerator::next() {
@@ -698,7 +709,8 @@ FatFileEnumerator::~FatFileEnumerator() {
 }
 
 /**
- * Get the name of the file
+ * @details Get the name of the file
+ *
  * @return The name of the file
  */
 char *FatFileEnumerator::getFileName() {
@@ -710,7 +722,8 @@ char *FatFileEnumerator::getFileName() {
 }
 
 /**
- * Changes the name of the currently enumerated file
+ * @details Changes the name of the currently enumerated file
+ *
  * @param newFileName The new filename
  * @return The old filename
  */
@@ -733,7 +746,8 @@ char *FatFileEnumerator::changeFileName(char *newFileName) {
 }
 
 /**
- * Gets a reference to the current reader object
+ * @details Gets a reference to the current reader object
+ *
  * @return The current reader object
  */
 FileReader* FatFileEnumerator::getReader() {
@@ -741,7 +755,8 @@ FileReader* FatFileEnumerator::getReader() {
 }
 
 /**
- * Gets a reference to the current writer object
+ * @details Gets a reference to the current writer object
+ *
  * @return The current writer object
  */
 FileWriter* FatFileEnumerator::getWriter() {
@@ -749,7 +764,8 @@ FileWriter* FatFileEnumerator::getWriter() {
 }
 
 /**
- * Checks if there is a another file enumerater after this one
+ * @details Checks if there is a another file enumerater after this one
+ *
  * @return True if there is another file, false if not
  */
 bool FatFileEnumerator::hasNext() {
@@ -757,7 +773,8 @@ bool FatFileEnumerator::hasNext() {
 }
 
 /**
- * Creates a new FatFileEnumerator object for the next file in the directory (Note: this is why you should store the return value in a varible and refernce that value instead of calling x -> next() -> doY(); )
+ * @details Creates a new FatFileEnumerator object for the next file in the directory (Note: this is why you should store the return value in a varible and refernce that value instead of calling x -> next() -> doY(); )
+ *
  * @return The next file in the directory
  */
 FileEnumerator* FatFileEnumerator::next() {
@@ -790,7 +807,8 @@ FatFileReader::~FatFileReader() {
 }
 
 /**
- * Read a number of bytes from the file
+ * @details Read a number of bytes from the file
+ *
  * @param data The buffer to read the data into
  * @param size The number of bytes to read
  * @return The number of bytes read. If this is less than size then the end of the file has been reached.
@@ -876,7 +894,8 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
 }
 
 /**
- * Moves the file offset to a new position
+ * @details Moves the file offset to a new position
+ *
  * @param position The new position of the file offset
  * @param seek The type of seek to perform. (SEEK_SET, offset = position) (SEEK_CUR, offset = offset + position)  (SEEK_END, offset = fileSize + position)
  * @return The new position of the file offset
@@ -901,7 +920,8 @@ common::uint32_t FatFileReader::Seek(common::uint32_t position, SeekType seek) {
 }
 
 /**
- * Get the current position of the file offset
+ * @details Get the current position of the file offset
+ *
  * @return the current position of the file offset
  */
 common::uint32_t FatFileReader::GetPosition() {
@@ -909,7 +929,8 @@ common::uint32_t FatFileReader::GetPosition() {
 }
 
 /**
- * Get the size of the file
+ * @details Get the size of the file
+ *
  * @return the size of the file
  */
 common::uint32_t FatFileReader::GetFileSize() {
@@ -933,7 +954,8 @@ FatFileWriter::~FatFileWriter() {
 }
 
 /**
- * Writes data to a file starting at the current seek position and ending at the current seek position + size
+ * @details Writes data to a file starting at the current seek position and ending at the current seek position + size
+ *
  * @param data The buffer to write the data from
  * @param size The size that is to be written
  * @return The number of bytes written, if this is less than size then then there is insufficient space on the disk

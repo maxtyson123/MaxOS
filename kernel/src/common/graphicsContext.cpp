@@ -59,7 +59,8 @@ GraphicsContext::~GraphicsContext() {
 }
 
 /**
- * Renders a pixel to the screen, automatically uses the correct color depth
+ * @details Renders a pixel to the screen, automatically uses the correct color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
@@ -86,7 +87,8 @@ void GraphicsContext::renderPixel(uint32_t x, uint32_t y, uint32_t colour) {
 }
 
 /**
- * Renders a pixel to the screen using the 8 bit color depth
+ * @details Renders a pixel to the screen using the 8 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 8Bit colour of the pixel
@@ -96,7 +98,8 @@ void GraphicsContext::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour) {
 }
 
 /**
- * Renders a pixel to the screen using the 16 bit color depth
+ * @details Renders a pixel to the screen using the 16 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 16Bit colour of the pixel
@@ -106,7 +109,8 @@ void GraphicsContext::renderPixel16Bit(uint32_t x, uint32_t y, uint16_t colour) 
 }
 
 /**
- * Renders a pixel to the screen using the 24 bit color depth
+ * @details Renders a pixel to the screen using the 24 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 24Bit colour of the pixel
@@ -116,7 +120,8 @@ void GraphicsContext::renderPixel24Bit(uint32_t x, uint32_t y, uint32_t colour) 
 }
 
 /**
- * Renders a pixel to the screen using the 32 bit color depth
+ * @details Renders a pixel to the screen using the 32 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 32Bit colour of the pixel
@@ -126,7 +131,8 @@ void GraphicsContext::renderPixel32Bit(uint32_t x, uint32_t y, uint32_t colour) 
 }
 
 /**
- * Gets the colour of a pixel on the screen, automatically uses the correct color depth
+ * @details Gets the colour of a pixel on the screen, automatically uses the correct color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The colour of the pixel
@@ -146,7 +152,8 @@ uint32_t GraphicsContext::getRenderedPixel(uint32_t x, uint32_t y) {
 }
 
 /**
- * Gets the colour of a pixel on the screen using the 8 bit color depth
+ * @details Gets the colour of a pixel on the screen using the 8 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 8Bit colour of the pixel
@@ -156,7 +163,8 @@ uint8_t GraphicsContext::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
 }
 
 /**
- * Gets the colour of a pixel on the screen using the 16 bit color depth
+ * @details Gets the colour of a pixel on the screen using the 16 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 16Bit colour of the pixel
@@ -166,7 +174,8 @@ uint16_t GraphicsContext::getRenderedPixel16Bit(uint32_t x, uint32_t y) {
 }
 
 /**
- * Gets the colour of a pixel on the screen using the 24 bit color depth
+ * @details Gets the colour of a pixel on the screen using the 24 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 24Bit colour of the pixel
@@ -176,7 +185,8 @@ uint32_t GraphicsContext::getRenderedPixel24Bit(uint32_t x, uint32_t y) {
 }
 
 /**
- * Gets the colour of a pixel on the screen using the 32 bit color depth
+ * @details Gets the colour of a pixel on the screen using the 32 bit color depth
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 32Bit colour of the pixel
@@ -186,7 +196,8 @@ uint32_t GraphicsContext::getRenderedPixel32Bit(uint32_t x, uint32_t y) {
 }
 
 /**
- * Converts a colour to an integer value based on the current color depth
+ * @details Converts a colour to an integer value based on the current color depth
+ *
  * @param colour The colour class to convert
  * @return The integer value of the colour
  */
@@ -259,7 +270,8 @@ uint32_t GraphicsContext::colourToInt(Colour colour) {
 }
 
 /**
- * Converts an integer value to a colour based on the current color depth
+ * @details Converts an integer value to a colour based on the current color depth
+ *
  * @param colour The integer value to convert
  * @return The colour class of the integer value
  */
@@ -315,7 +327,8 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
 }
 
 /**
- * Gets the width of the screen
+ * @details Gets the width of the screen
+ *
  * @return The width of the screen
  */
 uint32_t GraphicsContext::getWidth() {
@@ -323,7 +336,8 @@ uint32_t GraphicsContext::getWidth() {
 }
 
 /**
- * Gets the height of the screen
+ * @details Gets the height of the screen
+ *
  * @return The height of the screen
  */
 uint32_t GraphicsContext::getHeight() {
@@ -331,7 +345,8 @@ uint32_t GraphicsContext::getHeight() {
 }
 
 /**
- * Renders a pixel to the screen
+ * @details Renders a pixel to the screen
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
@@ -343,7 +358,8 @@ void GraphicsContext::putPixel(int32_t x, int32_t y, Colour colour) {
 }
 
 /**
- * Renders a pixel to the screen
+ * @details Renders a pixel to the screen
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
@@ -366,7 +382,8 @@ void GraphicsContext::putPixel(int32_t x, int32_t y, int32_t colour) {
 }
 
 /**
- * Gets the colour of a pixel
+ * @details Gets the colour of a pixel
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The colour of the pixel
@@ -391,7 +408,8 @@ Colour GraphicsContext::getPixel(int32_t x, int32_t y) {
 }
 
 /**
- * Inverts a pixel
+ * @details Inverts a pixel
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  */
@@ -409,7 +427,8 @@ void GraphicsContext::invertPixel(int32_t x, int32_t y) {
 }
 
 /**
- * Draws a line on the screen
+ * @details Draws a line on the screen
+ *
  * @param x0 The x coordinate of the first point
  * @param y0 The y coordinate of the first point
  * @param x1 The x coordinate of the final point
@@ -421,7 +440,8 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, C
 }
 
 /**
- * Draws a line on the screen
+ * @details Draws a line on the screen
+ *
  * @param x0 The x coordinate of the first point
  * @param y0 The y coordinate of the first point
  * @param x1 The x coordinate of the final point
@@ -522,7 +542,8 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 }
 
 /**
- * Draws a rectangle on the screen
+ * @details Draws a rectangle on the screen
+ *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
  * @param x1 The x coordinate of the bottom right corner
@@ -535,7 +556,8 @@ void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
 }
 
 /**
- * Draws a rectangle on the screen
+ * @details Draws a rectangle on the screen
+ *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
  * @param x1 The x coordinate of the bottom right corner
@@ -557,7 +579,8 @@ void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
 }
 
 /**
- * Draws a rectangle on the screen, filled with a colour
+ * @details Draws a rectangle on the screen, filled with a colour
+ *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
  * @param x1 The x coordinate of the bottom right corner
@@ -569,7 +592,8 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
 }
 
 /**
- * Draws a rectangle on the screen, filled with a colour
+ * @details Draws a rectangle on the screen, filled with a colour
+ *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
  * @param x1 The x coordinate of the bottom right corner
@@ -614,7 +638,8 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
 }
 
 /**
- * Draws a circle on the screen
+ * @details Draws a circle on the screen
+ *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle
@@ -625,7 +650,8 @@ void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, Colour 
 }
 
 /**
- * Draws a circle on the screen
+ * @details Draws a circle on the screen
+ *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle
@@ -661,7 +687,8 @@ void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
 }
 
 /**
- * Draws a circle on the screen, filled with a colour
+ * @details Draws a circle on the screen, filled with a colour
+ *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle
@@ -673,7 +700,8 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, Colour 
 }
 
 /**
- * Draws a circle on the screen, filled with a colour
+ * @details Draws a circle on the screen, filled with a colour
+ *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle

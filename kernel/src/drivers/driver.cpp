@@ -32,6 +32,7 @@ DriverManager::DriverManager(){
 
 /**
  * @details This function adds a driver to the driver manager
+ *
  * @param driver The driver to add
  */
 void DriverManager::AddDriver(Driver* drv){

@@ -16,7 +16,7 @@ void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 
 /**
- * @brief Construct a new EtherFrameHandler:: EtherFrameHandler object
+ * @details Construct a new EtherFrameHandler:: EtherFrameHandler object
  *
  * @param backend the backend driver for the ethernet card, which will be used to send and receive packets
  * @param etherType the type of the protocol, which will be handled by this handler
@@ -34,7 +34,7 @@ EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, common::uint16
 }
 
 /**
- * @brief Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list
+ * @details Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list
  *
  */
 EtherFrameHandler::~EtherFrameHandler() {
@@ -53,7 +53,7 @@ bool EtherFrameHandler::OnEtherFrameReceived(common::uint8_t *etherframePayload,
 }
 
 /**
- * @brief Send an packet via the backend driver
+ * @details Send an packet via the backend driver
  *
  * @param dstMAC the destination MAC address
  * @param data the data to send
@@ -85,7 +85,7 @@ EtherFrameProvider::~EtherFrameProvider() {
 }
 
 /**
- * @brief Handle the received packet
+ * @details Handle the received packet
  *
  * @param buffer the buffer with the received data
  * @param size the size of the received data
@@ -132,7 +132,7 @@ bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t 
 }
 
 /**
- * @brief Send an packet via the backend driver
+ * @details Send an packet via the backend driver
  *
  * @param dstMAC_BE the destination MAC address
  * @param etherType_BE the type of the protocol
@@ -166,7 +166,7 @@ void EtherFrameProvider::Send(common::uint64_t dstMAC_BE, common::uint16_t ether
 }
 
 /**
- * @brief Get the MAC Address of the device from the backend
+ * @details Get the MAC Address of the device from the backend
  *
  * @return common::uint64_t the MAC Address
  */

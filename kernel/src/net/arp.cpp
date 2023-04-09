@@ -25,7 +25,8 @@ net::AddressResolutionProtocol::~AddressResolutionProtocol() {
 }
 
 /**
- * Called when an ARP packet is received.
+ * @details Called when an ARP packet is received.
+ *
  * @param etherframePayload The payload of the ARP packet.
  * @param size The size of the ARP packet.
  * @return True if the device should send a response, false otherwise.
@@ -85,7 +86,8 @@ bool AddressResolutionProtocol::OnEtherFrameReceived(common::uint8_t* etherframe
 
 
 /**
- * Request the MAC address of a given IP address.
+ * @details Request the MAC address of a given IP address.
+ *
  * @param IP_BE The IP address in BigEndian.
  */
 void AddressResolutionProtocol::RequestMACAddress(common::uint32_t IP_BE) {
@@ -113,7 +115,8 @@ void AddressResolutionProtocol::RequestMACAddress(common::uint32_t IP_BE) {
 }
 
 /**
- * Get the MAC address from the cache.
+ * @details Get the MAC address from the cache.
+ *
  * @param IP_BE The IP address to search for.
  * @return The MAC address if found, broadcast address otherwise.
  */
@@ -133,7 +136,8 @@ common::uint64_t AddressResolutionProtocol::GetMACFromCache(common::uint32_t IP_
 
 
 /**
- * Get the MAC address from an IP via ARP.
+ * @details Get the MAC address from an IP via ARP.
+ *
  * @param IP_BE The IP address to get the MAC address from.
  * @return The MAC address of the IP address.
  */

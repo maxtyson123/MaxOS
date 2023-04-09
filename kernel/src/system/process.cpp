@@ -40,7 +40,8 @@ void Process::threadMain(void entrypoint(), Process* process){
 }
 
 /**
- * @breif Create a new thread, as a child of this process
+ * @details Create a new thread, as a child of this process
+ *
  * @param entrypoint Entry point of the thread
  */
 void Process::CreateChildThread(void (*entrypoint)()) {
@@ -59,7 +60,8 @@ void Process::CreateChildThread(void (*entrypoint)()) {
 }
 
 /**
- * @brief Kill the process's child thread
+ * @details Kill the process's child thread
+ *
  * @param threadID ID of the thread to kill
  */
 void Process::KillChildThread(int threadID) {
@@ -77,7 +79,7 @@ void Process::KillChildThread(int threadID) {
 }
 
 /**
- * @breif kill all the child threads
+ * @details kill all the child threads
  */
 void Process::KillAllChildThreads() {
 
@@ -97,7 +99,7 @@ void Process::KillAllChildThreads() {
 }
 
 /**
- * @breif refresh the process, removing any empty child threads
+ * @details refresh the process, removing any empty child threads
  */
 void Process::RefreshProcess() {
 
@@ -115,7 +117,7 @@ void Process::RefreshProcess() {
 }
 
 /**
- * @breif Kill the process
+ * @details Kill the process
  */
 void Process::Kill() {
     //Kill all child threads

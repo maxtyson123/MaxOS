@@ -79,6 +79,7 @@ void MouseDriver::Activate() {
 
 /**
  * @details Handle the mouse interrupt
+ *
  * @param esp
  * @return always returns esp
  */

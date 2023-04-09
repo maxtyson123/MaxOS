@@ -26,6 +26,9 @@ set(sys_h include/system)
 set(mem_c src/memory)
 set(mem_h include/memory)
 
+set(fs_c src/filesystem)
+set(fs_h include/filesystem)
+
 #Include all the files
 include_directories(include)
 set(
@@ -70,15 +73,20 @@ set(
 
         ${common_h}/types.h
         ${common_h}/types.h
-        ${common_h}/graphicsContext.h
+        ${common_h}/graphicsContext.h ${common_c}/graphicsContext.cpp
         ${common_h}/printf.h ${common_c}/printf.cpp
         ${common_h}/timer.h ${common_c}/timer.cpp
         ${common_h}/vector.h ${common_c}/vector_templates.cpp
+        ${common_h}/colour.h ${common_c}/colour.cpp
 
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
-        ${mem_h}/memoryinputoutput.h ${mem_c}/memoryinputoutput.cpp
+        ${mem_h}/memoryIO.h ${mem_c}/memoryIO.cpp
 
-        src/filesystem/msdospart.cpp include/filesystem/msdospart.h include/filesystem/fat32.h src/filesystem/fat32.cpp include/filesystem/filesystem.h src/filesystem/filesystem.cpp include/drivers/video/video.h src/common/graphicsContext.cpp src/common/colour.cpp include/common/colour.h src/drivers/video/video.cpp)
+        ${fs_h}/msdospart.h ${fs_c}/msdospart.cpp
+        ${fs_h}/fat32.h ${fs_c}/fat32.cpp
+        ${fs_h}/filesystem.h ${fs_c}/filesystem.cpp
+
+   include/common/rectangle.h src/common/rectangle_templates.cpp src/gui/widgets/templates.cpp include/common/coordinates.h include/common/pair.h)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

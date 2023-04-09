@@ -32,6 +32,7 @@ VideoGraphicsArray::~VideoGraphicsArray() {
 
 /**
  * @details This function is used to write to the VGA registers.
+ *
  * @param registers  The VGA registers to write to.
  */
 void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
@@ -85,6 +86,7 @@ void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
 
 /**
  * @details This function is used to get the maximum resolution of the VGA and colour depth.
+ *
  * @return True if the specified resolution is supported, otherwise false.
  */
 bool VideoGraphicsArray::supportsMode(uint32_t width, uint32_t height, uint32_t colourDepth)
@@ -94,6 +96,7 @@ bool VideoGraphicsArray::supportsMode(uint32_t width, uint32_t height, uint32_t 
 
 /**
  * @details This function is used to set the specified resolution and colour depth.
+ *
  * @param width The width of the resolution.
  * @param height The height of the resolution.
  * @param colourDepth The colour depth of the resolution.
@@ -131,6 +134,7 @@ bool VideoGraphicsArray::internalSetMode(uint32_t width, uint32_t height, uint32
 
 /**
  * @details This function is used to get the framebuffer address.
+ *
  * @return The framebuffer address.
  */
 uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
@@ -152,6 +156,7 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 //8 bit vga mode only has 256 colours. colorIndex selects which one to display
 /**
  * @details This function is used to put a pixel on the screen.
+ *
  * @param x The x coordinate of the pixel.
  * @param y The y coordinate of the pixel.
  * @param colour The colour of the pixel.

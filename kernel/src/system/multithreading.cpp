@@ -55,7 +55,7 @@ ThreadManager::~ThreadManager()
 }
 
 /**
- * @brief Add a thread to an empty place in the array
+ * @details Add a thread to an empty place in the array
  *
  * @param Thread thread to add
  * @return true if succesfully added
@@ -88,7 +88,7 @@ int ThreadManager::CreateThread(void entrypoint())
 }
 
 /**
- * @brief Schedules the next thread to be executed by checking its yieldsStatus.
+ * @details Schedules the next thread to be executed by checking its yieldsStatus.
  *
  * @param cpustate state
  * @return CPUState_Thread* thread to be executed state
@@ -139,7 +139,7 @@ CPUState_Thread *ThreadManager::Schedule(CPUState_Thread* cpustate)
 }
 
 /**
- * @brief Terminates a thread by removing it from an array by making its pointer nullptr
+ * @details Terminates a thread by removing it from an array by making its pointer nullptr
  *
  * @param tid thread id to terminate
  * @return true if sucessfully terminated
@@ -162,7 +162,7 @@ bool ThreadManager::TerminateThread(int tid)
 }
 
 /**
- * @brief Joins a thread by waiting to finish
+ * @details Joins a thread by waiting to finish
  *
  * @param other thread to join
  * @return true if succesfully joined
@@ -186,7 +186,7 @@ bool ThreadManager::JoinThreads(int other)
 }
 
 /**
- * @brief Makes yield status true of the current thread
+ * @details Makes yield status true of the current thread
  *
  */
 void ThreadManager::YieldThreads(int tid)
@@ -195,7 +195,8 @@ void ThreadManager::YieldThreads(int tid)
 }
 
 /**
- * @breif Checks if a thread is terminated
+ * @details Checks if a thread is terminated
+ *
  * @param tid thread id to check
  * @return false if thread is terminated
  */

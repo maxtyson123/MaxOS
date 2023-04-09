@@ -100,6 +100,7 @@ void AdvancedTechnologyAttachment::Identify() {
 
 /**
  * @details This function reads a sector from the ATA device
+ *
  * @param sector The sector to read
  * @param data The data to read into
  * @param count The amount of data to read from that sector
@@ -170,6 +171,7 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
 
 /**
  * @details This function writes a sector to the ATA device
+ *
  * @param sector The sector to write to
  * @param count The amount of data to write to that sector
  */

@@ -27,6 +27,7 @@ Port8Bit::~Port8Bit() {
 
 /**
  * @details Write a byte to the port (8Bit)
+ *
  * @param data the byte to write
  */
 void Port8Bit::Write(uint8_t data){
@@ -35,6 +36,7 @@ void Port8Bit::Write(uint8_t data){
 
 /**
  * @details Read a byte from the port (8Bit)
+ *
  * @return the byte read
  */
 uint8_t Port8Bit::Read(){
@@ -54,6 +56,7 @@ Port8BitSlow::~Port8BitSlow() {
 
 /**
  * @details Write a byte to the port (8BitSlow)
+ *
  * @param data the byte to write
  */
 void Port8BitSlow::Write(uint8_t data){
@@ -75,6 +78,7 @@ Port16Bit::~Port16Bit() {
 
 /**
  * @details Write a word to the port (16Bit)
+ *
  * @param data the word to write
  */
 void Port16Bit::Write(uint16_t data){
@@ -83,6 +87,7 @@ void Port16Bit::Write(uint16_t data){
 
 /**
  * @details Read a word from the port (16Bit)
+ *
  * @return the word read
  */
 uint16_t Port16Bit::Read(){
@@ -104,6 +109,7 @@ Port32Bit::~Port32Bit() {
 
 /**
  * @details Write a double word to the port (32Bit)
+ *
  * @param data the double word to write
  */
 void Port32Bit::Write(uint32_t data){
@@ -112,6 +118,7 @@ void Port32Bit::Write(uint32_t data){
 
 /**
  * @details Read a double word from the port (32Bit)
+ *
  * @return the double word read
  */
 uint32_t Port32Bit::Read(){

@@ -66,6 +66,7 @@ int serial::receive() {
 
 /**
  * @details This function reads a byte from the serial port
+ *
  * @return The byte read from the serial port
  */
 char serial::Read() {
@@ -89,6 +90,7 @@ int serial::isTransmitEmpty() {
 
 /**
  * @details This function writes a header for the message
+ *
  * @param col The color of the header
  * @param type The type of the text
  * @param msg The message
@@ -164,6 +166,7 @@ void serial::Test(){
 
 /**
  * @details This function writes a message to the serial port
+ *
  * @param str The message to be written
  * @param type The type of the message 1 = info, 2 = warning, 3 = error, 4 = fatal, 5 = success, 6 = debug, 7 = kernel, 8 = unknown
  */
@@ -234,6 +237,7 @@ void serial::Write(char* str, int type) {
 
 /**
  * @details Read from the serial port when the interrupt is triggered
+ * 
  * @param esp The stack pointer
  * @return The stack pointer (where the processor will go when the interrupt is finished) (always will be what is passed in)
  */

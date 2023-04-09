@@ -41,7 +41,8 @@ PeripheralComponentInterconnectController::~PeripheralComponentInterconnectContr
 }
 
 /**
- * Read data from the PCI Controller
+ * @details Read data from the PCI Controller
+ *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
@@ -70,7 +71,8 @@ uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t 
 }
 
 /**
- * Write data to the PCI Controller
+ * @details Write data to the PCI Controller
+ *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
@@ -89,7 +91,8 @@ void PeripheralComponentInterconnectController::Write(uint16_t bus, uint16_t dev
 }
 
 /**
- * Check if the device has a function
+ * @details Check if the device has a function
+ *
  * @param bus Bus number
  * @param device Device number
  * @return true if the device has a function
@@ -101,7 +104,8 @@ bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus,
 }
 
 /**
- * Select the driver for the device
+ * @details Select the driver for the device
+ *
  * @param driverManager device driver manager
  * @param interruptManager Interrupt manager
  * @return Driver for the device
@@ -171,7 +175,8 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 }
 
 /**
- * Get the device descriptor
+ * @details Get the device descriptor
+ *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
@@ -198,7 +203,8 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
 }
 
 /**
- * Get the driver for the device
+ * @details Get the driver for the device
+ *
  * @param dev Device descriptor
  * @param interruptManager Interrupt manager
  * @return Driver for the device, 0 if there is no driver
@@ -414,7 +420,8 @@ static unsigned int  get_number_of_highest_set_bit(uint32_t value)
 }
 
 /**
- * Get the base adress register
+ * @details Get the base adress register
+ *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number

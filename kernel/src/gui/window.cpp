@@ -19,6 +19,7 @@ Window::~Window() {
 
 /**
  * @details This method is called when a button is pressed.
+ *
  * @param x The x coordinate of the mouse.
  * @param y The y coordinate of the mouse.
  * @param button The button that is pressed.
@@ -33,6 +34,7 @@ void Window::OnMouseDown(common::int32_t x, common::int32_t y, common::uint8_t b
 
 /**
  * @details This function is called when a mouse button is released.
+ *
  * @param x The x coordinate of the mouse.
  * @param y The y coordinate of the mouse.
  * @param button The button that is released.
@@ -47,6 +49,7 @@ void Window::OnMouseUp(common::int32_t x, common::int32_t y, common::uint8_t but
 
 /**
  * @details This function is called when the mouse is moved.
+ *
  * @param oldx The old x coordinate of the mouse.
  * @param oldy The old y coordinate of the mouse.
  * @param newx The new x coordinate of the mouse.
@@ -67,6 +70,7 @@ void Window::OnMouseMove(common::int32_t old_x, common::int32_t old_y, common::i
 
 /**
  * @details This function draws the window.
+ *
  * @param gc The graphics context to draw on.
  */
 void Window::Draw(common::GraphicsContext *gc) {

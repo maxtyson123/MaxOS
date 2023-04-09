@@ -75,6 +75,7 @@ UserDatagramProtocolProvider::~UserDatagramProtocolProvider() {
 
 }
 /**
+ * @details Handle the recivement of an UDP packet
  *
  * @param srcIP_BE The source IP address in big endian
  * @param dstIP_BE  The destination IP address in big endian
@@ -161,7 +162,8 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, u
 }
 
 /**
- * Listens for incoming packets on the port
+ * @details Listens for incoming packets on the port
+ *
  * @param port The port to listen on
  * @return The socket that is listening
  */
@@ -190,7 +192,8 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) 
 }
 
 /**
- * Disconnects the socket from the remote IP and port
+ * @details Disconnects the socket from the remote IP and port
+ *
  * @param socket The socket to disconnect
  */
 void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket) {
@@ -210,7 +213,8 @@ void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket
 }
 
 /**
- * Sends a packet to the remote IP and port
+ * @details Sends a packet to the remote IP and port
+ *
  * @param socket The socket to send the packet from
  * @param data The data to send
  * @param size The size of the data
@@ -245,7 +249,8 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
 }
 
 /**
- * Binds a handler to the socket
+ * @details Binds a handler to the socket
+ *
  * @param socket The socket to bind the handler to
  * @param handler The handler to bind
  */

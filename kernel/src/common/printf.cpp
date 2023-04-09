@@ -36,6 +36,7 @@ Console::~Console() {
 
 /**
  * @details This function puts a string to the screen
+ *
  * @param str The string to put
  */
 void Console::put_string_gui(char* str, gui::Text lines[15]){
@@ -112,6 +113,7 @@ char* Console::int_to_string(int i){
 
 /**
  * @details This function puts a string to the screen
+ *
  * @param str The string to put
  * @param clearLine If true then the line will be cleared before printing
  */
@@ -233,6 +235,7 @@ void Console::put_string(char* str, bool clearLine)
 
 /**
  * @details This function puts a hex number to the screen
+ *
  * @param key The  hex number to put
  */
 void Console::put_hex(uint8_t key){
@@ -246,6 +249,7 @@ void Console::put_hex(uint8_t key){
 
 /**
  * @details This function moves the cursor to a new location
+ *
  * @param C_x The new x location
  * @param C_y The new y location
  */
@@ -291,6 +295,7 @@ void Console::backspace(){
 
 /**
  * @details Compare two strings
+ *
  * @param  s1 String 1
  * @param  s2 String 2
  * @return 0 if equal, 1 if not

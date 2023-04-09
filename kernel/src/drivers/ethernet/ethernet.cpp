@@ -50,7 +50,8 @@ EthernetDriver::~EthernetDriver()
 }
 
 /**
- * @brief Get the device name
+ * @details Get the device name
+ *
  * @return  The device name
  */
 string EthernetDriver::GetDeviceName()
@@ -59,7 +60,8 @@ string EthernetDriver::GetDeviceName()
 }
 
 /**
- * @brief Get the MAC address
+ * @details Get the MAC address
+ *
  * @return the MAC address
  */
 MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress()
@@ -68,7 +70,8 @@ MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress()
 }
 
 /**
- * @brief Send data to the network via the driver backend
+ * @details Send data to the network via the driver backend
+ *
  * @param buffer  The buffer to send
  * @param size The size of the buffer
  */
@@ -93,7 +96,7 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
 }
 
 /**
- * @breif (Device Side) Send the data
+ * @details (Device Side) Send the data
  */
 void EthernetDriver::DoSend(uint8_t*, uint32_t)
 {
@@ -101,7 +104,8 @@ void EthernetDriver::DoSend(uint8_t*, uint32_t)
 }
 
 /**
- * @breif Handle the recieved data
+ * @details Handle the recieved data
+ *
  * @param buffer The buffer to handle
  * @param size The size of the buffer
  */
@@ -133,7 +137,8 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 }
 
 /**
- * @breif Send data
+ * @details Send data
+ *
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
@@ -144,7 +149,8 @@ void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size)
 }
 
 /**
- * Connect the event handler to the base protocol e.g. etherframe
+ * @details Connect the event handler to the base protocol e.g. etherframe
+ *
  * @param handler The event handler
  */
 void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* handler)
@@ -155,7 +161,8 @@ void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* handler)
 // if your mac address is e.g. 1c:6f:65:07:ad:1a (see output of ifconfig)
 // then you would call CreateMediaAccessControlAddress(0x1c, 0x6f, 0x65, 0x07, 0xad, 0x1a)
 /**
- * @brief Create a Media Access Control Address
+ * @details Create a Media Access Control Address
+ *
  * @param digit1 The first digit
  * @param digit2 The second digit
  * @param digit3 The third digit
