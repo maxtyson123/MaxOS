@@ -155,7 +155,7 @@ void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size)
  */
 void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* handler)
 {
-    handlers.push_back(handler);
+    handlers.pushBack(handler);
 }
 
 // if your mac address is e.g. 1c:6f:65:07:ad:1a (see output of ifconfig)

@@ -24,6 +24,8 @@ VideoGraphicsArray::VideoGraphicsArray()
  attributeControllerResetPort(0x3DA)
 {
 
+    //TODO: May need to call this in a better place
+    GetFrameBufferSegment();
 }
 
 VideoGraphicsArray::~VideoGraphicsArray() {

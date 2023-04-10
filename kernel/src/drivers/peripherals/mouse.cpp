@@ -31,6 +31,10 @@ void MouseEventHandler::OnMouseMove(int x, int y){
 
 }
 
+MouseEventHandler::~MouseEventHandler() {
+
+}
+
 
 ///__Driver__
 

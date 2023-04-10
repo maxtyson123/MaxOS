@@ -270,7 +270,7 @@ void FatDirectoryTraverser::ReadEntrys(){
 
 
                 //Store the directory entry in the dirent list
-                dirent.push_back(tempDirent[i]);
+                dirent.pushBack(tempDirent[i]);
 
                 if(currentDirectoryEnumerator == 0 && (dirent[index].attributes & 0x10) == 0x10){                                                                                            //If this is the first directory entry then set the current directory to this entry
                     currentDirectoryIndex = index;                                                                                                  //Set the current directory index to the current entry

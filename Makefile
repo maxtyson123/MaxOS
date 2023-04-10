@@ -18,9 +18,8 @@ QEMU_PARAMS = -net user -net nic,model=pcnet \
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \
-		  obj/kernel/common/timer.o \
  		  obj/kernel/memory/memorymanagement.o \
- 		  obj/kernel/memory/memoryinputoutput.o \
+ 		  obj/kernel/memory/memoryIO.o \
  		  obj/kernel/drivers/driver.o \
  		  obj/kernel/hardwarecommunication/port.o \
  		  obj/kernel/hardwarecommunication/interruptstubs.o \
@@ -39,6 +38,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/amd_am79c973.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
+ 		  obj/kernel/drivers/clock/clock.o \
  		  obj/kernel/filesystem/filesystem.o \
  		  obj/kernel/filesystem/fat32.o \
  		  obj/kernel/filesystem/msdospart.o \

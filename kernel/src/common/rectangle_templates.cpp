@@ -128,7 +128,7 @@ namespace maxOS{
             // If the rectangles don't intersect, return this rectangle
             if(!intersects(other))
             {
-                result.push_back(*this);
+                result.pushBack(*this);
                 return result;
             }
 
@@ -141,28 +141,30 @@ namespace maxOS{
             if(top < other.top)
             {
                 // Create a rectangle from the top of this rectangle to the top of the other rectangle (the block above the other rectangle)
-                result.push_back(Rectangle<T>(left, top, right-left, other.top-top));
+                result.pushBack(Rectangle<T>(left, top, right - left, other.top - top));
             }
 
             // If the left of this rectangle is to the left of the left of the other rectangle then this rectangle must be inside the other rectangle
             if(this -> left < other.left)
             {
                 // Create a rectangle from the left of this rectangle to the left of the other rectangle (the block to the left of the other rectangle)
-                result.push_back(Rectangle<T>(this->left, top, other.left - this->left, bottom-top));
+                result.pushBack(Rectangle<T>(this->left, top, other.left - this->left, bottom - top));
             }
 
             // If the right of this rectangle is to the right of the right of the other rectangle then this rectangle must be inside the other rectangle
             if(this -> left + this -> width > other.left + other.width)
             {
                 // Create a rectangle from the right of the other rectangle to the right of this rectangle (the block to the right of the other rectangle)
-                result.push_back(Rectangle<T>(other.left + other.width, top, this->left + this->width - (other.left + other.width), bottom-top));
+                result.pushBack(Rectangle<T>(other.left + other.width, top,
+                                             this->left + this->width - (other.left + other.width), bottom - top));
             }
 
             // If the bottom of this rectangle is below the bottom of the other rectangle then this rectangle must be inside the other rectangle
             if(this -> top + this -> height > other.top + other.height)
             {
                 // Create a rectangle from the bottom of the other rectangle to the bottom of this rectangle (the block below the other rectangle)
-                result.push_back(Rectangle<T>(left, other.top + other.height, right-left, this->top + this->height - (other.top + other.height)));
+                result.pushBack(Rectangle<T>(left, other.top + other.height, right - left,
+                                             this->top + this->height - (other.top + other.height)));
             }
         }
 

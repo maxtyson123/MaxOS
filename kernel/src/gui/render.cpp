@@ -22,7 +22,6 @@ Render::~Render() {
  * @param gc The graphics context to draw the pixels.
  */
 void Render::display(GraphicsContext* gc){
-    gc -> updateFrameAdress();
     for(int ix = 0; ix < 320; ix++){
         for(int iy = 0; iy < 200; iy++){
             gc->PutPixel(ix,iy, pixels[ix][iy].r, pixels[ix][iy].g, pixels[ix][iy].b);

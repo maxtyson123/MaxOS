@@ -43,10 +43,10 @@ namespace maxOS{
             iterator find(T element);
             bool empty();
 
-            iterator push_back(T element);
-            void pop_back();
-            iterator push_front(T element);
-            void pop_front();
+            iterator pushBack(T element);
+            void popBack();
+            iterator pushFront(T element);
+            void popFront();
             void erase(T element);
             void erase(iterator position);
             void clear();

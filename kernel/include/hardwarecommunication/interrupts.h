@@ -6,7 +6,6 @@
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 
 #include <common/types.h>
-#include <common/timer.h>
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
 #include <system/multithreading.h>

@@ -43,8 +43,9 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 Kernel Cleanup
 
 - [ ] VESA Video Mode
-- [ ] Usable Desktop / GUI draw rewrite
-- [ ] Timer rewrite
+- [x] GUI Draw Rewrite
+- [ ] Usable Desktop
+- [x] Timer rewrite
 - [ ] Console rewrite
 - [ ] Better Doxygen Documentation
 - [ ] Use better c++ coding conventions

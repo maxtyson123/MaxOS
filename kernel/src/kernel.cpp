@@ -2,7 +2,6 @@
 //Common
 #include <common/types.h>
 #include <common/printf.h>
-#include <common/timer.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -263,7 +262,6 @@ void taskA()
         sys_printf("A");
     }
 
-    Timer::activeTimer -> Wait(100);
 
     for (int i = 0; i < 100; ++i) {
 
@@ -373,10 +371,6 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     printf("\n[x] Kernel Booted \n");
 
-    printf("[ ] Setting Programmable Interrupt Timer ... \n");
-    Timer t;
-    PIT pit(10);
-    printf("[x] PIT Setup \n");
 
 
     printf("[ ] Setting Up Global Descriptor Table... \n");

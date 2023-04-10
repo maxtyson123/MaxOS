@@ -75,7 +75,6 @@ set(
         ${common_h}/types.h
         ${common_h}/graphicsContext.h ${common_c}/graphicsContext.cpp
         ${common_h}/printf.h ${common_c}/printf.cpp
-        ${common_h}/timer.h ${common_c}/timer.cpp
         ${common_h}/vector.h ${common_c}/vector_templates.cpp
         ${common_h}/colour.h ${common_c}/colour.cpp
 
@@ -86,7 +85,7 @@ set(
         ${fs_h}/fat32.h ${fs_c}/fat32.cpp
         ${fs_h}/filesystem.h ${fs_c}/filesystem.cpp
 
-   include/common/rectangle.h src/common/rectangle_templates.cpp src/gui/widgets/templates.cpp include/common/coordinates.h include/common/pair.h)
+   include/common/rectangle.h src/common/rectangle_templates.cpp src/gui/widgets/templates.cpp include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

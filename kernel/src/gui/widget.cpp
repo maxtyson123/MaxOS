@@ -407,7 +407,7 @@ void CompositeWidget::drawSelf(GraphicsContext *gc, Rectangle<int> &area) {
 void CompositeWidget::addChild(Widget *child) {
 
         // Add the child to the list of children
-        children.push_back(child);
+    children.pushBack(child);
 
         // Set the parent of the child to this widget
         Widget::addChild(child);

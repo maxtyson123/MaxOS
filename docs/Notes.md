@@ -70,6 +70,21 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
 - - Fourth bit: Prefetch-able bit (e.g. reading from a hard drive in advance because its estimated that the program will need that soon)
 - - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
+### RTC Timer
+See also [RTC](https://wiki.osdev.org/RTC)
+- The RTC (Real Time Clock) is a device that is connected to the PCI controller and is used to keep track of time
+- The ports used for the RTC are 0x70(Write) and 0x71(Read)
+- The base frequency of the RTC is 32768 Hz, it is possible to change this frequency but that can mess with the time keeping
+- The RTC has a register called the CMOS RAM, which is a 128 byte long memory that can be read and written to, it stores the time and date
+- To get the time certain registers need to be read from te data port (0x71). Before doing this updates need to be disabled so that the time is not changed while reading it.
+- The registers are:
+- - Seconds:    0x00 (0-59)
+- - Minutes:    0x02 (0-59)
+- - Hours:      0x04 (0-23)
+- - WeekDay:    0x06 (1-7, 1 = Sunday)
+- - Day:        0x07 (1-31)
+- - Month:      0x08 (1-12)
+- - Year:       0x09 (0-99)
 
 # Files And Drives
 ### Hard-drives

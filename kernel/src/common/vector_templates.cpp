@@ -100,7 +100,7 @@ namespace maxOS
         }
 
         /**
-         * Emptys the Vector
+         * Empty the Vector
          * @tparam T Type of the Vector
          * @return The iterator of the element
          */
@@ -118,7 +118,7 @@ namespace maxOS
          * @return The iterator of the element
          */
         template<class T>
-        typename Vector<T>::iterator Vector<T>::push_back(T element) {
+        typename Vector<T>::iterator Vector<T>::pushBack(T element) {
             if (Size >= MaxSize)                 // if the Vector is full
                 return end();                   // return the end of the Vector
 
@@ -131,7 +131,7 @@ namespace maxOS
          * @tparam T Type of the Vector
          */
         template<class T>
-        void Vector<T>::pop_back() {
+        void Vector<T>::popBack() {
             if (Size > 0)                // if the Vector is not empty
                 --Size;                // remove the last element
         }
@@ -144,7 +144,7 @@ namespace maxOS
          * @return The iterator of the element
          */
         template<class T>
-        typename Vector<T>::iterator Vector<T>::push_front(T element) {
+        typename Vector<T>::iterator Vector<T>::pushFront(T element) {
             if (Size >= MaxSize)                               // if the Vector is full
                 return end();                                 // return the end of the Vector
 
@@ -163,7 +163,7 @@ namespace maxOS
 
          */
         template<class T>
-        void Vector<T>::pop_front() {
+        void Vector<T>::popFront() {
             if (Size > 0)                                     //If the Vector is not empty
             {
                 for (iterator i = begin() + 1; i != end(); ++i) // for each element in the Vector
