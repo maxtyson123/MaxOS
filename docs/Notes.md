@@ -204,7 +204,7 @@ See also: Bresenham line algorithm (use for later)
 - The GUI framework will have a base class called Widget, which should have a draw method. This draw method would get a graphicsContext and draw itself onto of it using the graphicContext's draw methods.
 - Thees widgets will have parents and such, therefore their draw positions will be relative, meaning there has to be a method to get the absolute position.
 - Widgets will also have a width and height, and a method to check if a co-ordinate is inside itself (used for mouse handling and such)
-- To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMove, OnMouseUp. However, the mouse handler won't be on the widget itself, rather it would be on the desktop.
+- To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMoveWidget, onMouseUpEvent. However, the mouse handler won't be on the widget itself, rather it would be on the desktop.
 - This is because the mouse movement is reported in relative-ness not absolute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
 - A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the children (e.g. the child gets drawn last so its on top)
 - To get which widget to preform the keyEvent or mouseEvent the desktop will have a method of getting the focused widget

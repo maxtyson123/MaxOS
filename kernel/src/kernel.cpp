@@ -149,7 +149,7 @@ class MouseToConsole: public MouseEventHandler{
                                   | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
         }
 
-        void OnMouseMove(int x_offset, int y_offset){
+        void onMouseMoveEvent(int x_offset, int y_offset){
 
             static uint16_t* VideoMemory = (uint16_t*)0xb8000;
 

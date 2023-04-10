@@ -22,9 +22,9 @@ namespace maxOS {
 
                 virtual void OnActivate();
 
-                virtual void OnMouseDown(maxOS::common::uint8_t button);
-                virtual void OnMouseUp(maxOS::common::uint8_t button);
-                virtual void OnMouseMove(int x, int y);
+                virtual void onMouseDownEvent(maxOS::common::uint8_t button);
+                virtual void onMouseUpEvent(maxOS::common::uint8_t button);
+                virtual void onMouseMoveEvent(int x, int y);
             };
 
 

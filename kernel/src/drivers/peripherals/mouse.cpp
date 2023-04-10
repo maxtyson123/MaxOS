@@ -19,15 +19,15 @@ void MouseEventHandler::OnActivate(){
 
 }
 
-void MouseEventHandler::OnMouseDown(uint8_t button){
+void MouseEventHandler::onMouseDownEvent(uint8_t button){
 
 }
 
-void MouseEventHandler::OnMouseUp(uint8_t button){
+void MouseEventHandler::onMouseUpEvent(uint8_t button){
 
 }
 
-void MouseEventHandler::OnMouseMove(int x, int y){
+void MouseEventHandler::onMouseMoveEvent(int x, int y){
 
 }
 
@@ -111,7 +111,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
     if(offest == 0)//If the mouse data transmission is complete (3rd piece of data is through)
     {
 
-        handler->OnMouseMove((int8_t)buffer[1], -((int8_t)buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
+        handler->onMouseMoveEvent((int8_t) buffer[1], -((int8_t) buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
 
 
 
@@ -122,9 +122,9 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
             {
                 //Handle the button press/release
                 if(buttons & (0x1<<i))                  //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
-                    handler->OnMouseUp(i+1);
+                    handler->onMouseUpEvent(i + 1);
                 else
-                    handler->OnMouseDown(i+1);
+                    handler->onMouseDownEvent(i + 1);
 
                 }
 

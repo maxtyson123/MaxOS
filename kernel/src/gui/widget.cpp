@@ -250,7 +250,7 @@ void Widget::bringToFront(Widget *widget) {
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void Widget::onMouseEnter(uint32_t toX, uint32_t toY) {
+void Widget::onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY) {
 
 }
 
@@ -260,7 +260,7 @@ void Widget::onMouseEnter(uint32_t toX, uint32_t toY) {
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void Widget::onMouseLeave(uint32_t fromX, uint32_t fromY) {
+void Widget::onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY) {
 
 }
 
@@ -272,7 +272,7 @@ void Widget::onMouseLeave(uint32_t fromX, uint32_t fromY) {
  * @param toX The x new coordinate of the mouse
  * @param toY The y new coordinate of the mouse
  */
-void Widget::onMouseMove(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
+void Widget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY) {
 
 }
 
@@ -419,7 +419,7 @@ void CompositeWidget::addChild(Widget *child) {
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseEnter(uint32_t toX, uint32_t toY) {
+void CompositeWidget::onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY) {
 
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
@@ -434,8 +434,8 @@ void CompositeWidget::onMouseEnter(uint32_t toX, uint32_t toY) {
             uint32_t childX = toX - childArea.left;
             uint32_t childY = toY - childArea.top;
 
-            // Call the child's onMouseEnter function
-            (*childWidget)->onMouseEnter(childX, childY);
+            // Call the child's onMouseEnterWidget function
+            (*childWidget)->onMouseEnterWidget(childX, childY);
 
             // Break as the event has been handled
             break;
@@ -449,7 +449,7 @@ void CompositeWidget::onMouseEnter(uint32_t toX, uint32_t toY) {
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseLeave(uint32_t fromX, uint32_t fromY) {
+void CompositeWidget::onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY) {
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
 
@@ -463,8 +463,8 @@ void CompositeWidget::onMouseLeave(uint32_t fromX, uint32_t fromY) {
             uint32_t childX = fromX - childArea.left;
             uint32_t childY = fromY - childArea.top;
 
-            // Call the child's onMouseLeave function
-            (*childWidget)->onMouseLeave(childX, childY);
+            // Call the child's onMouseLeaveWidget function
+            (*childWidget)->onMouseLeaveWidget(childX, childY);
 
             // Break as the event has been handled
             break;
@@ -480,7 +480,7 @@ void CompositeWidget::onMouseLeave(uint32_t fromX, uint32_t fromY) {
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseMove(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
+void CompositeWidget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY) {
 
     Widget* leftChild = nullptr;
     Widget* enteredChild = nullptr;
@@ -507,7 +507,7 @@ void CompositeWidget::onMouseMove(uint32_t fromX, uint32_t fromY, uint32_t toX, 
             }
 
             // This means the mouse is still in the child so pass the event to the child
-            (*childWidget)->onMouseMove(fromX, fromY, toX, toY); //TODO: Use relative? (*childWidget)->onMouseMove(fromX - childArea.left, fromY - childArea.top, toX - childArea.left, toY - childArea.top
+            (*childWidget)->onMouseMoveWidget(fromX, fromY, toX, toY);
 
         }else{
 
@@ -521,11 +521,11 @@ void CompositeWidget::onMouseMove(uint32_t fromX, uint32_t fromY, uint32_t toX, 
 
         // Pass the events to the children
         if(leftChild != nullptr){
-            leftChild->onMouseLeave(fromX, fromY);
+            leftChild->onMouseLeaveWidget(fromX, fromY);
         }
 
         if(enteredChild != nullptr){
-            enteredChild->onMouseEnter(toX, toY);
+            enteredChild->onMouseEnterWidget(toX, toY);
         }
     }
 }
@@ -536,7 +536,7 @@ void CompositeWidget::onMouseMove(uint32_t fromX, uint32_t fromY, uint32_t toX, 
  * @param x The x coordinate of the mouse
  * @param y The y coordinate of the mouse
  * @param button The button that was pressed
- * @return The handler for the event
+ * @return The object that has the handler which handled the event
  */
 peripherals::MouseEventHandler *CompositeWidget::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
 

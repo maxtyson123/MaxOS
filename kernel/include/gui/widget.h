@@ -68,9 +68,9 @@ namespace maxOS{
                 void bringToFront();
 
                 // Mouse functions
-                virtual void onMouseEnter(common::uint32_t toX, common::uint32_t toY);
-                virtual void onMouseLeave(common::uint32_t fromX, common::uint32_t fromY);
-                virtual void onMouseMove(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY);
+                virtual void onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY);
+                virtual void onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY);
+                virtual void onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY);
                 virtual drivers::peripherals::MouseEventHandler* onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button);
                 virtual void onMouseButtonReleased(common::uint32_t x, common::uint32_t y, common::uint8_t button);
 
@@ -100,9 +100,9 @@ namespace maxOS{
                 virtual void addChild(Widget* child);
 
                 // Mouse functions
-                virtual void onMouseEnter(common::uint32_t toX, common::uint32_t toY);
-                virtual void onMouseLeave(common::uint32_t fromX, common::uint32_t fromY);
-                virtual void onMouseMove(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY);
+                virtual void onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY);
+                virtual void onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY);
+                virtual void onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY);
                 virtual drivers::peripherals::MouseEventHandler* onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button);
                 virtual void onMouseButtonReleased(common::uint32_t x, common::uint32_t y, common::uint8_t button);
 
@@ -125,7 +125,7 @@ namespace maxOS{
                 WidgetMoverResizer(Widget* widget);
                 ~WidgetMoverResizer();
 
-                void OnMouseMove(int x, int y);
+                void onMouseMoveEvent(int x, int y);
 
         };
 

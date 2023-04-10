@@ -30,7 +30,7 @@ namespace maxOS{
          * @param x The x position of the mouse
          * @param y The y position of the mouse
          */
-        template<int L, int T, int W, int H> void WidgetMoverResizer<L, T, W, H>::OnMouseMove(int x, int y)
+        template<int L, int T, int W, int H> void WidgetMoverResizer<L, T, W, H>::onMouseMoveEvent(int x, int y)
         {
 
             Widget* targ = this->target;
