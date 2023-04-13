@@ -36,10 +36,10 @@ namespace maxOS {
                 maxOS::common::uint8_t offest;
                 maxOS::common::uint8_t buttons;
 
-                MouseEventHandler *handler;
+                MouseEventHandler *mouseEventHandler;
 
             public:
-                MouseDriver(maxOS::hardwarecommunication::InterruptManager *manager, MouseEventHandler *handler);
+                MouseDriver(maxOS::hardwarecommunication::InterruptManager *manager, MouseEventHandler *mEventHandler);
 
                 ~MouseDriver();
 

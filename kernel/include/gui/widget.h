@@ -22,7 +22,7 @@ namespace maxOS{
          * A widget is a graphical element that can be drawn on the screen.
          */
         class Widget : public drivers::peripherals::KeyboardEventHandler{
-            template<int L, int T, int W, int H> friend class WidgetMoverResizer;
+            template<int Left, int Top, int Width, int Height> friend class WidgetMoverResizer;
             friend class WidgetContainer;
 
             private:
@@ -113,12 +113,12 @@ namespace maxOS{
         /**
          * A resizable widget.
          *
-         * @tparam L Left
-         * @tparam T Top
-         * @tparam W Width
-         * @tparam H Height
+         * @tparam Left Left
+         * @tparam Top Top
+         * @tparam Width Width
+         * @tparam Height Height
          */
-        template<int L, int T, int W, int H> class WidgetMoverResizer : public drivers::peripherals::MouseEventHandler{
+        template<int Left, int Top, int Width, int Height> class WidgetMoverResizer : public drivers::peripherals::MouseEventHandler{
             protected:
                 Widget* widget;
             public:

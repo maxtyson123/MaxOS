@@ -17,10 +17,10 @@ void printf(char*, bool=false);
 
 ///__RESOLVER__///
 
-InternetProtocolAddressResolver::InternetProtocolAddressResolver(InternetProtocolProvider *handler)
+InternetProtocolAddressResolver::InternetProtocolAddressResolver(InternetProtocolProvider *internetProtocolProvider)
 {
 
-    handler -> RegisterInternetProtocolAddressResolver(this);
+    internetProtocolProvider -> RegisterInternetProtocolAddressResolver(this);
 
 }
 
@@ -47,15 +47,15 @@ InternetProtocolHandler::InternetProtocolHandler(InternetProtocolProvider *backe
     this -> ip_protocol = protocol;
 
     //Register handler
-    backend -> handlers[protocol] = this;
+    backend -> internetProtocolHandlers[protocol] = this;
 
 }
 
 InternetProtocolHandler::~InternetProtocolHandler() {
 
     //Unregister handler
-    if(backend -> handlers[ip_protocol] == this)            //Double check to make sure it is the same handler
-        backend -> handlers[ip_protocol] = 0;               //Unregister handler
+    if(backend -> internetProtocolHandlers[ip_protocol] == this)            //Double check to make sure it is the same handler
+        backend -> internetProtocolHandlers[ip_protocol] = 0;               //Unregister handler
 
 }
 
@@ -99,9 +99,9 @@ InternetProtocolProvider::InternetProtocolProvider(EtherFrameProvider *backend, 
     this -> ownInternetProtocolAddress = ownInternetProtocolAddress;
     this -> defaultGatewayInternetProtocolAddress = defaultGatewayInternetProtocolAddress;
     this -> subnetMask = subnetMask;
-    //Reset handlers
+    //Reset internetProtocolHandlers
     for (int i = 0; i < 255; ++i) {
-        handlers[i] = 0;
+        internetProtocolHandlers[i] = 0;
     }
 }
 
@@ -134,9 +134,9 @@ bool InternetProtocolProvider::OnEtherFrameReceived(uint8_t *etherframePayload, 
             length = size;                                              //If so, set length to size (this stops heartbleed attacks as it will not read past the end of the message, which the attacker could have filled with data)
 
         //Check if there is a handler for this frame type
-        if(handlers[ipMessage -> protocol] != 0){
+        if(internetProtocolHandlers[ipMessage -> protocol] != 0){
 
-            sendBack = handlers[ipMessage -> protocol] -> OnInternetProtocolReceived(ipMessage -> srcIP,                                                     //Source IP
+            sendBack = internetProtocolHandlers[ipMessage -> protocol] -> OnInternetProtocolReceived(ipMessage -> srcIP,                                                     //Source IP
                                                                                      ipMessage -> dstIP,                                                     //Destination IP
                                                                                      etherframePayload + 4 * ipMessage -> headerLength,           //Payload is behind the header
                                                                                      length - 4*ipMessage -> headerLength                                       //Size of the payload

@@ -17,7 +17,7 @@ Render::~Render() {
 }
 
 /**
- * @details This method is used to draw a pixel on the screen.
+ * @details This function is used to draw a pixel on the screen.
  *
  * @param gc The graphics context to draw the pixels.
  */
@@ -30,7 +30,7 @@ void Render::display(GraphicsContext* gc){
 }
 
 /**
- * @details This method is used to draw a pixel on the into a pixels buffer.
+ * @details This function is used to draw a pixel on the into a pixels buffer.
  *
  * @param x The x coordinate of the pixel.
  * @param y The y coordinate of the pixel.

@@ -9,10 +9,7 @@ using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
 
-void printf(char* str, bool clearLine = false); // Forward declaration
-void printfHex(uint8_t key);                    // Forward declaration
-
-AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t portBase, bool master)
+AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t portBase, bool master, OutputStream* ataMessageStream)
 : dataPort(portBase),
   errorPort(portBase + 1),
   sectorCountPort(portBase + 2),
@@ -25,6 +22,7 @@ AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t portBase, bo
 {
     bytesPerSector = 512;
     this -> master = master;
+    this -> ataMessageStream = ataMessageStream;
 }
 
 AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() {
@@ -43,7 +41,7 @@ void AdvancedTechnologyAttachment::Identify() {
     devicePort.Write(0xA0);                     //Select Master (0xA0)
     uint8_t status = commandPort.Read();             //Read Status
     if(status == 0xFF){                              //IF status is 0xFF then there is no device
-        printf("Invalid Status");
+        ataMessageStream -> write("Invalid Status");
         return;                                      //Return, beacuse if there is no master then there wont be a slave either
     }
 
@@ -56,7 +54,7 @@ void AdvancedTechnologyAttachment::Identify() {
 
     status = commandPort.Read();                     //Read Status
     if(status == 0x00){                              //IF status is 0x00 then there is no device
-        printf("No Device");
+        ataMessageStream -> write("No Device");
         return;                                      //There is no slave/master
     }
 
@@ -73,7 +71,7 @@ void AdvancedTechnologyAttachment::Identify() {
     //Check for any errors
     if(status & 0x01){
 
-        printf("ERROR");
+        ataMessageStream -> write("ERROR");
         return;
 
     }
@@ -87,11 +85,11 @@ void AdvancedTechnologyAttachment::Identify() {
         text[0] = (data >> 8) & 0xFF;
         text[1] = data & 0xFF;
         if(text[0] == 'K'){
-            printf(text);
+            ataMessageStream -> write(text);
             stopPrint = true;       //Stop the messed up text from showing
         }
 
-        if(!stopPrint) printf(text);
+        if(!stopPrint) ataMessageStream -> write(text);
 
     }
 
@@ -129,7 +127,7 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
 
     uint8_t status = commandPort.Read();                     //Read Status
     if(status == 0x00){                                     //IF status is 0x00 then there is no device
-        printf("No Device");
+        ataMessageStream -> write("No Device");
         return;                                              //There is no slave/master
     }
 
@@ -195,7 +193,7 @@ void AdvancedTechnologyAttachment::Write28(common::uint32_t sector, common::uint
     LBAHiPort.Write( (sector & 0x00FF0000) >> 16);         //Split the sector into the port (put the hi 8 bits ito this port)
     commandPort.Write(0x30);                              //Command For Writing
 
-    printf("Writing to ATA: ");
+    ataMessageStream -> write("Writing to ATA: ");
 
 
     //We are write 2 bytes to the data port so , it will be 256 , so has to be incremented by 2
@@ -210,7 +208,7 @@ void AdvancedTechnologyAttachment::Write28(common::uint32_t sector, common::uint
         text[0] = writeData & 0xFF;
 
         if(i < count)                                           //Prevent random shit from throwing up on my screen
-             printf(text);
+            ataMessageStream -> write(text);
     }
 
     //Hard Drive must have a full sector written, even if the data isnt the size of a full sector
@@ -229,7 +227,7 @@ void AdvancedTechnologyAttachment::Flush() {
 
     uint8_t status = commandPort.Read();                     //Read Status
     if(status == 0x00){                              //IF status is 0x00 then there is no device
-        printf("No Device");
+        ataMessageStream -> write("No Device");
         return;                                      //There is no slave/master
     }
 
@@ -246,7 +244,7 @@ void AdvancedTechnologyAttachment::Flush() {
     //Check for any errors
     if(status & 0x01){
 
-        printf("ERROR");
+        ataMessageStream -> write("ERROR");
         return;
 
     }

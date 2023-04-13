@@ -427,7 +427,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("[x] Task Manager Setup \n");
 
     printf("[ ] Setting Up Interrupt Manager... \n");
-    InterruptManager interrupts(0x20, &gdt, &threadManager);            //Instantiate the method
+    InterruptManager interrupts(0x20, &gdt, &threadManager);            //Instantiate the function
     printf("[x] Interrupt Manager Setup \n", true);
 
     printf("[ ] Setting Up Serial Log... \n");
@@ -441,7 +441,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
     printf("[ ] Setting Up System Calls Handler... \n");
-    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the method
+    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
     printf("[x] System Calls Handler Setup \n", true);
 
     serialLog.Write("Memory Management Ready\n",1);

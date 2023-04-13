@@ -29,7 +29,7 @@ EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, common::uint16
 
     //Register this in the Ether Frame Provider
     this -> backend = backend;
-    backend -> handlers[etherType_BE] = this;
+    backend -> frameHandlers[etherType_BE] = this;
 
 }
 
@@ -40,7 +40,7 @@ EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, common::uint16
 EtherFrameHandler::~EtherFrameHandler() {
 
     //Remove this from the Ether Frame Provider
-    backend -> handlers[etherType_BE] = 0;
+    backend -> frameHandlers[etherType_BE] = 0;
 
 }
 
@@ -73,9 +73,9 @@ EtherFrameProvider::EtherFrameProvider(EthernetDriver* backend)
     this->backend = backend;
     backend -> ConnectEventHandler(this);
 
-    //Clear handlers on start
+    //Clear frameHandlers on start
     for (uint32_t i = 0; i < 65535; ++i) {
-        handlers[i] = 0;
+        frameHandlers[i] = 0;
     }
 
 }
@@ -108,8 +108,8 @@ bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t 
     {
 
         //Check if there is a handler for this frame type
-        if(handlers[frame -> etherType_BE] != 0){
-            sendBack = handlers[frame -> etherType_BE] -> OnEtherFrameReceived(buffer + sizeof(EtherFrameHeader), size - sizeof(EtherFrameHeader));
+        if(frameHandlers[frame -> etherType_BE] != 0){
+            sendBack = frameHandlers[frame -> etherType_BE] -> OnEtherFrameReceived(buffer + sizeof(EtherFrameHeader), size - sizeof(EtherFrameHeader));
             //Note: We don't have to remove the size of the checksum because it was removed in amd_am79c973.cpp :
             //void amd_am79c973::Receive() { .. .. if(size > 64) // remove checksum size -= 4; .. .. }
 

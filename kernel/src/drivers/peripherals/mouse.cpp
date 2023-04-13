@@ -38,18 +38,16 @@ MouseEventHandler::~MouseEventHandler() {
 
 ///__Driver__
 
-MouseDriver::MouseDriver(InterruptManager* manager, MouseEventHandler* handler)
+MouseDriver::MouseDriver(InterruptManager* manager, MouseEventHandler* mEventHandler)
         : InterruptHandler(0x2C, manager),  //0x2C is mouse object, pass the manager paramerter to the base object
           dataPort(0x60),
           commandPort(0x64)
 {
-    this->handler = handler;
+    this->mouseEventHandler = mEventHandler;
 }
 MouseDriver::~MouseDriver(){
 
 }
-
-void printf(char* str, bool clearLine = false); //Forward declaration
 
 /**
  * @details Activate the mouse
@@ -102,7 +100,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
 
     buffer[offest] = dataPort.Read();       //Read mouse info into buffer
 
-    if(handler == 0){                       //If there's no handler then don't do anything
+    if(mouseEventHandler == 0){                       //If there's no handler then don't do anything
         return esp;
     }
 
@@ -111,7 +109,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
     if(offest == 0)//If the mouse data transmission is complete (3rd piece of data is through)
     {
 
-        handler->onMouseMoveEvent((int8_t) buffer[1], -((int8_t) buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
+        mouseEventHandler->onMouseMoveEvent((int8_t) buffer[1], -((int8_t) buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
 
 
 
@@ -122,9 +120,9 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
             {
                 //Handle the button press/release
                 if(buttons & (0x1<<i))                  //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
-                    handler->onMouseUpEvent(i + 1);
+                    mouseEventHandler->onMouseUpEvent(i + 1);
                 else
-                    handler->onMouseDownEvent(i + 1);
+                    mouseEventHandler->onMouseDownEvent(i + 1);
 
                 }
 

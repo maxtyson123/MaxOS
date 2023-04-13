@@ -22,12 +22,12 @@ InterruptHandler::InterruptHandler(uint8_t interrupNumber, InterruptManager *int
     this->interrupNumber = interrupNumber;
     this->interruptManager = interruptManager;
     //Put itself into handlers array
-    interruptManager->handlers[interrupNumber] = this;
+    interruptManager->interruptHandlers[interrupNumber] = this;
 }
 InterruptHandler::~InterruptHandler(){
     //Remove self from handlers array
-    if(interruptManager->handlers[interrupNumber] == this){
-        interruptManager->handlers[interrupNumber] = 0;
+    if(interruptManager->interruptHandlers[interrupNumber] == this){
+        interruptManager->interruptHandlers[interrupNumber] = 0;
     }
 }
 
@@ -85,10 +85,10 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, system::Glo
     for(uint8_t i = 255; i > 0; --i)
     {
         SetInterruptDescriptorTableEntry(i, CodeSegment, &InterruptIgnore, 0, IDT_INTERRUPT_GATE);  //Set to ignore
-        handlers[i] = 0;                                                                                                                         //Set to no handler
+        interruptHandlers[i] = 0;                                                                                                                         //Set to no handler
     }
     SetInterruptDescriptorTableEntry(0, CodeSegment, &InterruptIgnore, 0, IDT_INTERRUPT_GATE);      //Set to ignore (for first in array)
-    handlers[0] = 0;                                                                                                                             //Set to no handler (for first in array)
+    interruptHandlers[0] = 0;                                                                                                                             //Set to no handler (for first in array)
 
 
 
@@ -232,8 +232,8 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
  */
 uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
-    if(handlers[interrupt]!= 0){                                //If it has a handler for it
-        esp = handlers[interrupt]->HandleInterrupt(esp);        //Run the handler
+    if(interruptHandlers[interrupt] != 0){                                //If it has a handler for it
+        esp = interruptHandlers[interrupt]->HandleInterrupt(esp);        //Run the handler
     }else{
         if(interrupt != 0x20){   //If not the timer interrupt
 

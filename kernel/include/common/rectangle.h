@@ -12,22 +12,22 @@ namespace maxOS{
     namespace common{
 
         // A rectangle template for use in the GUI system
-        template<class T> class Rectangle{
+        template<class Type> class Rectangle{
             public:
-                T left;
-                T top;
-                T width;
-                T height;
+                Type left;
+                Type top;
+                Type width;
+                Type height;
 
                 Rectangle();
-                Rectangle(T left, T top, T width, T height);
+                Rectangle(Type left, Type top, Type width, Type height);
                 ~Rectangle();
 
-                bool intersects(const Rectangle<T>& other);
-                Rectangle<T> intersection(const Rectangle<T>& other);
-                Vector<Rectangle<T> > subtract(const Rectangle<T>& other);
-                bool contains(const Rectangle<T>& other);
-                bool contains(T x, T y);
+                bool intersects(const Rectangle<Type>& other);
+                Rectangle<Type> intersection(const Rectangle<Type>& other);
+                Vector<Rectangle<Type> > subtract(const Rectangle<Type>& other);
+                bool contains(const Rectangle<Type>& other);
+                bool contains(Type x, Type y);
         };
 
     }

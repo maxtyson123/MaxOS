@@ -536,11 +536,11 @@ void CompositeWidget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t
  * @param x The x coordinate of the mouse
  * @param y The y coordinate of the mouse
  * @param button The button that was pressed
- * @return The object that has the handler which handled the event
+ * @return The object that has the mouseEventHandler which handled the event
  */
 peripherals::MouseEventHandler *CompositeWidget::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
 
-    MouseEventHandler* handler = nullptr;
+    MouseEventHandler* mouseEventHandler = nullptr;
 
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
@@ -556,15 +556,15 @@ peripherals::MouseEventHandler *CompositeWidget::onMouseButtonPressed(uint32_t x
             uint32_t childY = y - childArea.top;
 
             // Call the child's onMouseButtonPressed function
-            handler = (*childWidget)->onMouseButtonPressed(childX, childY, button);
+            mouseEventHandler = (*childWidget)->onMouseButtonPressed(childX, childY, button);
 
             // Break as the event has been handled
             break;
         }
     }
 
-    // Return the handler
-    return handler;
+    // Return the mouseEventHandler
+    return mouseEventHandler;
 
 }
 

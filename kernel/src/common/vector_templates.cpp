@@ -9,22 +9,22 @@ namespace maxOS
     namespace common {
         /**
          * Base Template for VectorIterationHandler
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          */
-        template<class T>
-        Vector<T>::Vector() {
+        template<class Type>
+        Vector<Type>::Vector() {
             MaxSize = 100;
             Size = 0;
         }
 
         /**
          * Template for VectorIterationHandler
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          * @param Size Size of the Vector
          * @param element Element to fill the Vector with
          */
-        template<class T>
-        Vector<T>::Vector(int Size, T element) {
+        template<class Type>
+        Vector<Type>::Vector(int Size, Type element) {
             MaxSize = 100;
 
             if (Size >= MaxSize)
@@ -36,18 +36,18 @@ namespace maxOS
         }
 
 
-        template<class T>
-        Vector<T>::~Vector() {
+        template<class Type>
+        Vector<Type>::~Vector() {
         }
 
         /**
          * Operator [] for Vector
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          * @param index The index of the element
          * @return the element at the index
          */
-        template<class T>
-        T &Vector<T>::operator[](int index) {
+        template<class Type>
+        Type &Vector<Type>::operator[](int index) {
             if (index <= Size)
                 return elements[index];
 
@@ -56,42 +56,42 @@ namespace maxOS
 
         /**
          * Returns the size of the Vector
-         * @tparam T    Type of the Vector
+         * @tparam Type    Type of the Vector
          * @return     Size of the Vector
          */
-        template<class T>
-        uint32_t Vector<T>::size() {
+        template<class Type>
+        uint32_t Vector<Type>::size() {
             return Size;
         }
 
         /**
          * Returns the begin of the Vector
-         * @tparam T   Type of the Vector
+         * @tparam Type   Type of the Vector
          * @return   The begin of the Vector
          */
-        template<class T>
-        typename Vector<T>::iterator Vector<T>::begin() {
+        template<class Type>
+        typename Vector<Type>::iterator Vector<Type>::begin() {
             return &elements[0];
         }
 
         /**
          * Returns the end of the Vector
-         * @tparam T   Type of the Vector
+         * @tparam Type   Type of the Vector
          * @return   The end of the Vector
          */
-        template<class T>
-        typename Vector<T>::iterator Vector<T>::end() {
+        template<class Type>
+        typename Vector<Type>::iterator Vector<Type>::end() {
             return &elements[0] + Size;
         }
 
         /**
          * Finds an element in the Vector
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          * @param element The element to find
          * @return The iterator of the element
          */
-        template<class T>
-        typename Vector<T>::iterator Vector<T>::find(T element) {
+        template<class Type>
+        typename Vector<Type>::iterator Vector<Type>::find(Type element) {
             for (iterator i = begin(); i != end(); ++i)      // for each element in the Vector
                 if (*i ==
                     element)                           // if the element is equal to the element we are looking for
@@ -101,24 +101,24 @@ namespace maxOS
 
         /**
          * Empty the Vector
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          * @return The iterator of the element
          */
-        template<class T>
-        bool Vector<T>::empty() {
+        template<class Type>
+        bool Vector<Type>::empty() {
             return begin() == end();
         }
 
 
         /**
          * Pushes an element to the Vector (at the end)
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          * @param element The element to push
 
          * @return The iterator of the element
          */
-        template<class T>
-        typename Vector<T>::iterator Vector<T>::pushBack(T element) {
+        template<class Type>
+        typename Vector<Type>::iterator Vector<Type>::pushBack(Type element) {
             if (Size >= MaxSize)                 // if the Vector is full
                 return end();                   // return the end of the Vector
 
@@ -128,23 +128,23 @@ namespace maxOS
 
         /**
          * Removes an element from the Vector (at the end)
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          */
-        template<class T>
-        void Vector<T>::popBack() {
+        template<class Type>
+        void Vector<Type>::popBack() {
             if (Size > 0)                // if the Vector is not empty
                 --Size;                // remove the last element
         }
 
         /**
          * Removes an element from the Vector (at the index)
-         * @tparam T  Type of the Vector
+         * @tparam Type  Type of the Vector
          * @param element The element to remove
 
          * @return The iterator of the element
          */
-        template<class T>
-        typename Vector<T>::iterator Vector<T>::pushFront(T element) {
+        template<class Type>
+        typename Vector<Type>::iterator Vector<Type>::pushFront(Type element) {
             if (Size >= MaxSize)                               // if the Vector is full
                 return end();                                 // return the end of the Vector
 
@@ -159,11 +159,11 @@ namespace maxOS
 
         /**
          * Removes an element from the Vector (at the index)
-         * @tparam T  Type of the Vector
+         * @tparam Type  Type of the Vector
 
          */
-        template<class T>
-        void Vector<T>::popFront() {
+        template<class Type>
+        void Vector<Type>::popFront() {
             if (Size > 0)                                     //If the Vector is not empty
             {
                 for (iterator i = begin() + 1; i != end(); ++i) // for each element in the Vector
@@ -174,11 +174,11 @@ namespace maxOS
 
         /**
          * Removes an element from the Vector
-         * @tparam T The type of the Vector
+         * @tparam Type The type of the Vector
          * @param element The element to remove
          */
-        template<class T>
-        void Vector<T>::erase(T element) {
+        template<class Type>
+        void Vector<Type>::erase(Type element) {
             int hits = 0;                                   // number of hits
             for (iterator i = begin(); i != end(); ++i)      // for each element in the Vector
             {
@@ -197,11 +197,11 @@ namespace maxOS
 
         /**
          * Removes the element at the index
-         * @tparam T The type of the Vector
+         * @tparam Type The type of the Vector
          * @param position The position of the element to remove
          */
-        template<class T>
-        void Vector<T>::erase(typename Vector<T>::iterator position) {
+        template<class Type>
+        void Vector<Type>::erase(typename Vector<Type>::iterator position) {
             // element not in this vector
             if (position < begin() || position >= end())
                 return;
@@ -216,35 +216,35 @@ namespace maxOS
 
         /**
          * Clears the Vector
-         * @tparam T  Type of the Vector
+         * @tparam Type  Type of the Vector
          */
-        template<class T>
-        void Vector<T>::clear() {
+        template<class Type>
+        void Vector<Type>::clear() {
             Size = 0;
         }
 
 
         /**
          * Iterator for Vector
-         * @tparam T  Type of the Vector
+         * @tparam Type  Type of the Vector
 
-         * @param handler  The handler of the Vector
+         * @param vectorIterationHandler  The handler of the Vector
          */
-        template<class T>
-        void Vector<T>::Iterate(VectorIterationHandler<T> *handler) {
+        template<class Type>
+        void Vector<Type>::Iterate(VectorIterationHandler<Type> *vectorIterationHandler) {
             // for each element in the Vector
             for (iterator i = begin(); i != end(); ++i)
-                handler->OnRead(*i);                    // call the OnRead function of the handler
-            handler->OnEndOfStream();                   // call the OnEndOfStream function of the handler
+                vectorIterationHandler -> OnRead(*i);                    // call the OnRead function of the handler
+            vectorIterationHandler -> OnEndOfStream();                   // call the OnEndOfStream function of the handler
         }
 
         /**
          * Iterates over the Vector
-         * @tparam T Type of the Vector
+         * @tparam Type Type of the Vector
          * @param callback The callback function
          */
-        template<class T>
-        void Vector<T>::Iterate(void callback(T &)) {
+        template<class Type>
+        void Vector<Type>::Iterate(void callback(Type &)) {
             for (iterator i = begin(); i != end(); ++i)              // for each element in the Vector
                 callback(*i);                                       // call the callback function
         }

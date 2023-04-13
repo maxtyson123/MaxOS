@@ -11,48 +11,48 @@ namespace maxOS{
 
     namespace common{
 
-        template<class T> class VectorIterationHandler
+        template<class Type> class VectorIterationHandler
         {
         public:
             VectorIterationHandler();
             ~VectorIterationHandler();
-            virtual void OnRead(T);
+            virtual void OnRead(Type);
             virtual void OnEndOfStream();
         };
 
 
 
 
-        template<class T> class Vector
+        template<class Type> class Vector
         {
         protected:
-            T elements[100]; // fake - currently max 100 elements - but the interface should be used already
+            Type elements[100]; // fake - currently max 100 elements - but the interface should be used already
             uint32_t Size;
             uint32_t MaxSize;
         public:
-            typedef T* iterator;
+            typedef Type* iterator;
 
             Vector();
-            Vector(int size, T element);
+            Vector(int size, Type element);
             ~Vector();
 
-            T& operator[](int index);
+            Type& operator[](int index);
             uint32_t size();
             iterator begin();
             iterator end();
-            iterator find(T element);
+            iterator find(Type element);
             bool empty();
 
-            iterator pushBack(T element);
+            iterator pushBack(Type element);
             void popBack();
-            iterator pushFront(T element);
+            iterator pushFront(Type element);
             void popFront();
-            void erase(T element);
+            void erase(Type element);
             void erase(iterator position);
             void clear();
 
-            void Iterate(VectorIterationHandler<T>* handler);
-            void Iterate(void callback(T&));
+            void Iterate(VectorIterationHandler<Type>* vectorIterationHandler);
+            void Iterate(void callback(Type&));
         };
 
 

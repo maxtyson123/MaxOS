@@ -20,14 +20,10 @@ using namespace memory;
 #define buffer8192                 ((2 << 16) | (1 << 25))
 #define buffer16384                ((1 << 16) | (1 << 25))
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-
-
 ///__DRIVER___
 
-intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager)
-: EthernetDriver(),
+intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager, OutputStream* intelNetMessageStream)
+: EthernetDriver(intelNetMessageStream),
   InterruptHandler(deviceDescriptor->interrupt + interruptManager->HardwareInterruptOffset(), interruptManager)
 
 {
@@ -73,7 +69,7 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 
     }else{
 
-        printf("ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
+        errorMessage("ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
         while (true);
     }
 
@@ -293,7 +289,7 @@ void intel_i217::sendInit() {
 
 void intel_i217::Activate() {
 
-    printf("Activating Intel i217\n");
+    driverMessageStream -> write("Activating Intel i217\n");
 
     //Enable interrupts
     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
@@ -307,7 +303,7 @@ void intel_i217::Activate() {
     sendInit();
 
     active = true;                                               // Set active to true
-    printf("Intel i217 INIT DONE\n");
+    driverMessageStream -> write("Intel i217 INIT DONE\n");
 
 }
 
@@ -316,10 +312,10 @@ common::uint32_t intel_i217::HandleInterrupt(common::uint32_t esp) {
     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
     uint32_t temp = Read(0xc0);                //Read the interrupt status register
 
-    printf("Interrupt from INTEL i217");
+    driverMessageStream -> write("Interrupt from INTEL i217");
 
-    if(temp & 0x04) printf("INTEL i217 START LINK");//initDone = true;
-    if(temp & 0x10) printf("INTEL i217 GOOD THRESHOLD");
+    if(temp & 0x04) driverMessageStream -> write("INTEL i217 START LINK");//initDone = true;
+    if(temp & 0x10) driverMessageStream -> write("INTEL i217 GOOD THRESHOLD");
     if(temp & 0x80) FetchDataReceived();
 
 
@@ -329,7 +325,7 @@ common::uint32_t intel_i217::HandleInterrupt(common::uint32_t esp) {
 
 void intel_i217::FetchDataReceived() {
 
-    printf("Fetching data... ");
+    driverMessageStream -> write("Fetching data... ");
 
     uint16_t old_cur;
     bool got_packet = false;
@@ -359,7 +355,7 @@ void intel_i217::FetchDataReceived() {
 
 void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
-    printf("Sending package... ");
+    driverMessageStream -> write("Sending package... ");
     while(!active);
 
     //Put params into send buffer
@@ -380,7 +376,7 @@ void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
     //Wait for the packet to be sent
     while(!(sendDsrctrs[old_cur]->status & 0xff));
-    printf(" Done\n");
+    driverMessageStream -> write(" Done\n");
 
 }
 
@@ -396,7 +392,7 @@ string intel_i217::GetDeviceName()
 
 
 common::uint64_t intel_i217::GetMediaAccessControlAddress() {
-    printf("Getting MAC address... ");
+    driverMessageStream -> write("Getting MAC address... ");
     while(ownMAC == 0);
     return ownMAC;
 

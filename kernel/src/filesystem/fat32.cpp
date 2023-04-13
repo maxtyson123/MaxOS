@@ -10,11 +10,6 @@ using namespace maxOS::drivers;
 using namespace maxOS::filesystem;
 using namespace maxOS::memory;
 
-void printf(char* str, bool clearLine = false); // Forward declaration
-void printfHex(uint8_t key);                    // Forward declaration
-char printfInt( int i);                         // Forward declaration
-int i = 0;
-
 //TODO: Fix folders after lib not found error
 
 /**
@@ -23,10 +18,13 @@ int i = 0;
  * @param hd The hard disk to initialize the FAT32 filesystem on
  * @param partitionOffset The offset of the partition to initialize the FAT32 filesystem on
  */
-Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset) {
+Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset, OutputStream* fat32MessageStream) {
 
     drive = hd;
     partOffset = partitionOffset;
+
+    // Set the message stream
+    this -> fat32MessageStream = fat32MessageStream;
 
     //Read the BIOS block from the first sector of the partition
     BiosParameterBlock32 bpb;
@@ -138,8 +136,8 @@ void Fat32::DeallocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint32_
  * @param fatLocation The location of the FAT table
  */
 void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t cluster, uint32_t newFatValue, uint32_t fatLocation){
-    
-    uint32_t  fatBuffer[512 / sizeof(uint32_t)];  
+
+    uint32_t  fatBuffer[512 / sizeof(uint32_t)];
     uint32_t sector = cluster / (512 / sizeof(uint32_t));                                                                                //Calculate the sector of the FAT table
     uint32_t offset = cluster % (512 / sizeof(uint32_t));                                                                                //Calculate the offset of the FAT table
     hd -> Read28(fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));              //Read the sector of the FAT table
@@ -155,7 +153,7 @@ void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t
  * @return true if the name is valid, false otherwise
  */
 bool Fat32::IsValidFAT32Name(char* name) {
-  
+
     // Count the number of characters in the name
     int len = 0;
     while (name[len] != '\0') {
@@ -179,7 +177,7 @@ bool Fat32::IsValidFAT32Name(char* name) {
 
 ///__DirectoryTraverser__///
 
-FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size) {
+FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size, common::OutputStream* outStream) {
 
     //TODO: Add error checks
     //TODO: File extensions
@@ -190,6 +188,9 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     //TODO: File name string has to be 8 characters long (including spaces) for it to compare correctly
 
     hd = ataDevice;
+
+    // Set the output stream
+    fat32MessageStream = outStream;
 
     //Set the data start and cluster sector count and fat location
     dataStartSector = dataStart;
@@ -205,19 +206,19 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     ReadEntrys();
 
 
-    printf("Finding the home directory:");
+    fat32MessageStream -> write("Finding the home directory:");
     //Find the home directory
     while (currentDirectoryEnumerator -> hasNext()){
         currentDirectoryEnumerator = (FatDirectoryEnumerator*)currentDirectoryEnumerator -> next();
 
         if (common::strcmp(currentDirectoryEnumerator -> getDirectoryName(),"HOME    ") == 0){
-            printf("\n HOME directory found");
+            fat32MessageStream -> write("\n HOME directory found");
             break;
         }
     }
 
-    printf("\n Change directory to HOME directory: ");
-    printf(currentDirectoryEnumerator -> getDirectoryName());
+    fat32MessageStream -> write("\n Change directory to HOME directory: ");
+    fat32MessageStream -> write(currentDirectoryEnumerator -> getDirectoryName());
 
     while (true);
 
@@ -244,7 +245,7 @@ void FatDirectoryTraverser::ReadEntrys(){
 
     //Read directory entries until the end of the cluster
     while(true) {
-        
+
         //Convert file cluster into a sector
         uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
         int sectorOffset = 0;
@@ -253,7 +254,7 @@ void FatDirectoryTraverser::ReadEntrys(){
         while(true){
 
             //Read the sector
-            hd -> Read28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
+            hd -> Read28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries
             sectorOffset++;                                                                                         //Increment the sector offset
 
             //Loop through all the entries
@@ -262,7 +263,7 @@ void FatDirectoryTraverser::ReadEntrys(){
                 if (tempDirent[i].name[0] == 0x00) {
                     return;
                 }
-                
+
                 //If the attribute is 0x0F then this is a long file name entry
                 if ((tempDirent[i].attributes & 0x0F) == 0x0F) {
                     continue;
@@ -287,14 +288,14 @@ void FatDirectoryTraverser::ReadEntrys(){
                 char* foo = "        ";
                 for(int j = 0; j < 8; j++)
                     foo[j] = dirent[index].name[j];
-                printf(foo);
+                fat32MessageStream -> write(foo);
 
                 index++;
             }
 
             //If the next sector is in a different cluster then break
             if (sectorOffset > sectorsPrCluster)
-                break;     
+                break;
         }
 
         //Get the next cluster of the directory
@@ -305,7 +306,7 @@ void FatDirectoryTraverser::ReadEntrys(){
         hd -> Read28(fatLocation + sector, fatBuffer, 512);
 
         //Set the next cluster to the next cluster in the FAT
-        nextCluster = ((uint32_t*)&fatBuffer)[offset] & 0x0FFFFFFF;    
+        nextCluster = ((uint32_t*)&fatBuffer)[offset] & 0x0FFFFFFF;
 
         //if the next cluster is 0, it means the end of the cluster chain
         if (nextCluster == 0) {
@@ -339,7 +340,7 @@ void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator* directory) {
 }
 
 void FatDirectoryTraverser::makeDirectory(char *name) {
-  
+
     //Check if the name is a valid FAT32 name
     if(!Fat32::IsValidFAT32Name(name)) return;
 
@@ -355,7 +356,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
             continue;
 
         if (common::strcmp(name, (char*)dirent[i].name) == 0) {              //If the name is the same as the parameter
-            printf("Name already in use");
+            fat32MessageStream -> write("Name already in use");
             return;
         }
     }
@@ -367,10 +368,10 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
     for(int i = 0; i < 8; i++) {                                //Set the name
         newDir.name[i] = name[i];
     }
-    
+
 	//Allocate a cluster for the directory
     uint32_t cluster = Fat32::AllocateCluster(hd, fatLocation, fatSize, sectorsPrCluster);
-    
+
     //Convert the cluster into high and low for the directory entry
     newDir.firstClusterHigh = (uint16_t)(cluster >> 16);
     newDir.firstClusterLow = (uint16_t)(cluster & 0xFFFF);
@@ -380,7 +381,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
         if (dirent[i].name[0] == 0x00) {                            //If the name is 0x00 then there are no more entries
             dirent[i] = newDir;                                     //Set the directory entry to the new directory entry
             break;
-        }      
+        }
     }
 
     //Write the directory entry to the disk
@@ -415,14 +416,14 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
 
     //If the directory was not found
     if(index == -1) {
-        printf("Directory not found");
+        fat32MessageStream -> write("Directory not found");
         return;
     }
 
     //Get the first cluster of the directory
     uint32_t cluster = (dirent[i].firstClusterHigh << 16) | dirent[i].firstClusterLow;
 
-	//De allocate any clusters  
+	//De allocate any clusters
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
 
     //Write the directory entry to the disk
@@ -430,7 +431,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
 }
 
 void FatDirectoryTraverser::makeFile(char *name) {
-    
+
     //Check if the name is a valid FAT32 name
     if(!Fat32::IsValidFAT32Name(name)) return;
 
@@ -446,7 +447,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
             continue;
 
         if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
-            printf("Name already in use");
+            fat32MessageStream -> write("Name already in use");
             return;
         }
     }
@@ -458,10 +459,10 @@ void FatDirectoryTraverser::makeFile(char *name) {
     for(int i = 0; i < 8; i++) {                                 //Set the name
         newFile.name[i] = name[i];
     }
-    
+
 	//Allocate a cluster for the file
     uint32_t cluster = Fat32::AllocateCluster(hd, fatLocation, fatSize, sectorsPrCluster);
-    
+
     //Convert the cluster into high and low for the directory entry
     newFile.firstClusterHigh = (uint16_t)(cluster >> 16);
     newFile.firstClusterLow = (uint16_t)(cluster & 0xFFFF);
@@ -471,7 +472,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
         if (dirent[i].name[0] == 0x00) {                            //If the name is 0x00 then there are no more entries
             dirent[i] = newFile;                                    //Set the directory entry to the new directory entry
             break;
-        }      
+        }
     }
 
     //Write the directory entry to the disk
@@ -501,14 +502,14 @@ void FatDirectoryTraverser::removeFile(char *name) {
 
     //If the file was not found
     if(index == -1) {
-        printf("File not found");
+        fat32MessageStream -> write("File not found");
         return;
     }
 
     //Get the first cluster of the directory
     uint32_t cluster = (dirent[i].firstClusterHigh << 16) | dirent[i].firstClusterLow;
 
-	//De allocate any clusters  
+	//De allocate any clusters
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
 
     //Write the directory entry to the disk
@@ -556,7 +557,7 @@ void FatDirectoryTraverser::UpdateDirectoryEntrysToDisk(){
 
     //Write directory entries until the end of the cluster
     while(true) {
-        
+
         //Convert file cluster into a sector
         uint32_t directoryReadSector = dataStartSector + sectorsPrCluster*(nextCluster - 2);                  //*Offset by 2
         int sectorOffset = 0;
@@ -567,16 +568,16 @@ void FatDirectoryTraverser::UpdateDirectoryEntrysToDisk(){
             for(int i = 0; i < 16; i++) {
                 tempDirent[i] = dirent[index];
                 index++;
-            }    
+            }
 
             //Write a sectors worth of directory entries
-            hd -> Write28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries 
+            hd -> Write28(directoryReadSector + sectorOffset, (uint8_t*)&tempDirent[0], 16*sizeof(DirectoryEntry));      //Read the directory entries
             sectorOffset++;                                                                                             //Increment the sector offset
 
-          
+
             //If the next sector is in a different cluster then break
             if (sectorOffset > sectorsPrCluster)
-                break;     
+                break;
         }
 
         //Get the next cluster of the directory
@@ -587,7 +588,7 @@ void FatDirectoryTraverser::UpdateDirectoryEntrysToDisk(){
         hd -> Read28(fatLocation + sector, fatBuffer, 512);
 
         //Set the next cluster to the next cluster in the FAT
-        nextCluster = ((uint32_t*)&fatBuffer)[offset] & 0x0FFFFFFF;    
+        nextCluster = ((uint32_t*)&fatBuffer)[offset] & 0x0FFFFFFF;
 
         //if the next cluster is 0, it means the end of the cluster chain
         if (nextCluster == 0) {
@@ -1045,11 +1046,11 @@ common::uint32_t FatFileWriter::Write(common::uint8_t *data, common::uint32_t si
             fileInfo -> size += extendedFileSize;
 
             //Update the new size on disk
-            traverser -> WriteDirectoryInfoChange(fileInfo);            
+            traverser -> WriteDirectoryInfoChange(fileInfo);
 
             //Set the next cluster to the next cluster in the FAT
             nextFileCluster = Fat32::AllocateCluster(traverser -> hd, nextFileCluster, traverser -> fatLocation, traverser -> fatSize);
-        
+
             //If there is no storage (free clusters) left on the partition
             if(nextFileCluster == -1) return dataOffset;
         }

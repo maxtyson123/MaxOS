@@ -50,7 +50,7 @@ namespace maxOS{
             friend class EtherFrameHandler;
             protected:
 
-                EtherFrameHandler* handlers[65535];
+                EtherFrameHandler* frameHandlers[65535];
                 drivers::ethernet::EthernetDriver* backend;
 
             public:

@@ -31,13 +31,13 @@ namespace maxOS{
             class EthernetDriver : public Driver
             {
             protected:
-                common::Vector<EthernetDriverEventHandler*> handlers;
+                common::Vector<EthernetDriverEventHandler*> ethernetEventHandlers;
                 virtual void DoSend(common::uint8_t* buffer, common::uint32_t size);
                 void FireDataReceived(common::uint8_t* buffer, common::uint32_t size);
                 void FireDataSent(common::uint8_t* buffer, common::uint32_t size);
 
             public:
-                EthernetDriver();
+                EthernetDriver(common::OutputStream* ethernetMessageStream);
                 ~EthernetDriver();
 
                 common::string GetDeviceName();
@@ -45,7 +45,7 @@ namespace maxOS{
                 virtual MediaAccessControlAddress GetMediaAccessControlAddress();
 
                 void Send(common::uint8_t* buffer, common::uint32_t size);
-                void ConnectEventHandler(EthernetDriverEventHandler* handler);
+                void ConnectEventHandler(EthernetDriverEventHandler* ethernetDriverEventHandler);
             };
 
         }

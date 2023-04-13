@@ -18,7 +18,7 @@ Window::~Window() {
 }
 
 /**
- * @details This method is called when a button is pressed.
+ * @details This function is called when a button is pressed.
  *
  * @param x The x coordinate of the mouse.
  * @param y The y coordinate of the mouse.

@@ -26,7 +26,7 @@ UserDatagramProtocolSocket::UserDatagramProtocolSocket(UserDatagramProtocolProvi
 
     //Set the instance variables
     this -> backend = backend;
-    handler = 0;
+    userDatagramProtocolHandler = 0;
     listening = false;
 
 }
@@ -37,8 +37,8 @@ UserDatagramProtocolSocket::~UserDatagramProtocolSocket() {
 
 void UserDatagramProtocolSocket::HandleUserDatagramProtocolMessage(uint8_t *data, uint16_t size) {
 
-    if(handler != 0) {
-        handler -> HandleUserDatagramProtocolMessage(this, data, size);
+    if(userDatagramProtocolHandler != 0) {
+        userDatagramProtocolHandler -> HandleUserDatagramProtocolMessage(this, data, size);
     }
 
 }
@@ -252,11 +252,11 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
  * @details Binds a handler to the socket
  *
  * @param socket The socket to bind the handler to
- * @param handler The handler to bind
+ * @param userDatagramProtocolHandler The handler to bind
  */
-void UserDatagramProtocolProvider::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolHandler *handler) {
+void UserDatagramProtocolProvider::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolHandler *userDatagramProtocolHandler) {
 
-    socket -> handler = handler;                                                                   //Set the handler of the socket to the handler that was passed in
+    socket -> userDatagramProtocolHandler = userDatagramProtocolHandler;                                                                   //Set the handler of the socket to the handler that was passed in
 
 
 }

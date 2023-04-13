@@ -52,7 +52,7 @@ namespace maxOS
                 common::uint32_t remoteIP;
                 
                 UserDatagramProtocolProvider* backend;
-                UserDatagramProtocolHandler* handler;
+                UserDatagramProtocolHandler* userDatagramProtocolHandler;
 
             public:
                 UserDatagramProtocolSocket(UserDatagramProtocolProvider* backend);
@@ -83,7 +83,7 @@ namespace maxOS
                 virtual void Disconnect(UserDatagramProtocolSocket* socket);
                 virtual void Send(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
 
-                virtual void Bind(UserDatagramProtocolSocket* socket, UserDatagramProtocolHandler* handler);
+                virtual void Bind(UserDatagramProtocolSocket* socket, UserDatagramProtocolHandler* userDatagramProtocolHandler);
         };
 
     }

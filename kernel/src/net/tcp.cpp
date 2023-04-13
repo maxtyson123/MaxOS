@@ -30,7 +30,7 @@ TransmissionControlProtocolSocket::TransmissionControlProtocolSocket(Transmissio
 {
     //Set the default values
     this -> backend = backend;
-    handler = 0;
+    transmissionControlProtocolHandler = 0;
 
     //Closed as default
     state = CLOSED;
@@ -48,8 +48,8 @@ TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket()
  */
 bool TransmissionControlProtocolSocket::HandleTransmissionControlProtocolMessage(uint8_t* data, uint16_t size)
 {
-    if(handler != 0)
-        return handler -> HandleTransmissionControlProtocolMessage(this, data, size);
+    if(transmissionControlProtocolHandler != 0)
+        return transmissionControlProtocolHandler -> HandleTransmissionControlProtocolMessage(this, data, size);
     return false;
 }
 
@@ -469,9 +469,9 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Listen(u
  * @details Bind a data handler to this socket
  *
  * @param socket The socket to bind the handler to
- * @param handler The handler to bind
+ * @param transmissionControlProtocolHandler The handler to bind
  */
-void TransmissionControlProtocolProvider::Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* handler)
+void TransmissionControlProtocolProvider::Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* transmissionControlProtocolHandler)
 {
-    socket -> handler = handler;
+    socket -> transmissionControlProtocolHandler = transmissionControlProtocolHandler;
 }

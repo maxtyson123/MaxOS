@@ -53,9 +53,10 @@ Clock::~Clock() {
 }
 
 /**
- * @details Handle the RTC interrupt, It increments the number of ticks and calls the event handlers if the number of ticks is equal to the number of ticks between events
+ * @details Handle the RTC interrupt, It increments the number of ticks and calls the event clockEventHandlers if the number of ticks is equal to the number of ticks between events
+ * @param esp The stack pointer
  */
-void Clock::HandleInterrupt() {
+uint32_t Clock::HandleInterrupt(uint32_t esp) {
 
     // Increment the number of ticks and decrement the number of ticks until the next event
     ticks++;
@@ -80,8 +81,10 @@ void Clock::HandleInterrupt() {
     time.second = binaryRepresentation(readHardwareClock(0x0));                   // Register 0 is the second
 
     // Call the onTime function for each event handler
-    for(Vector<ClockEventHandler*>::iterator clockEventHandler = handlers.begin(); clockEventHandler != handlers.end(); clockEventHandler++)
+    for(Vector<ClockEventHandler*>::iterator clockEventHandler = clockEventHandlers.begin(); clockEventHandler != clockEventHandlers.end(); clockEventHandler++)
         (*clockEventHandler) -> onTime(time);
+
+    return esp;
 }
 
 
@@ -151,26 +154,26 @@ void Clock::Activate() {
 }
 
 /**
- * @details Connects an event handler to the clock
+ * @details Connects an event clockEventHandler to the clock
  *
- * @param handler The event handler to connect
+ * @param clockEventHandler The event clockEventHandler to connect
  */
-void Clock::connectEventHandler(ClockEventHandler *handler) {
+void Clock::connectEventHandler(ClockEventHandler *clockEventHandler) {
 
-    // Add the event handler to the vector of event handlers
-    handlers.pushBack(handler);
+    // Add the event clockEventHandler to the vector of event clockEventHandlers
+    clockEventHandlers.pushBack(clockEventHandler);
 
 }
 
 /**
- * @details Disconnects an event handler from the clock
+ * @details Disconnects an event clockEventHandler from the clock
  *
- * @param handler The event handler to disconnect
+ * @param clockEventHandler The event clockEventHandler to disconnect
  */
-void Clock::disconnectEventHandler(ClockEventHandler *handler) {
+void Clock::disconnectEventHandler(ClockEventHandler *clockEventHandler) {
 
-    // Remove the event handler from the vector of event handlers
-    handlers.erase(handler);
+    // Remove the event clockEventHandler from the vector of event clockEventHandlers
+    clockEventHandlers.erase(clockEventHandler);
 
 }
 

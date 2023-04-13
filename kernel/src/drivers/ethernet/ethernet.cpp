@@ -9,9 +9,6 @@ using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
 
-void printf(char* str, bool clearLine = false); // Forward declaration
-void printfHex(uint8_t key);                    // Forward declaration
-
 ///__EVENT HANDLER___
 
 EthernetDriverEventHandler::EthernetDriverEventHandler()
@@ -24,7 +21,6 @@ EthernetDriverEventHandler::~EthernetDriverEventHandler()
 
 bool EthernetDriverEventHandler::DataReceived(uint8_t*, uint32_t)
 {
-    printf("Not implemented\n");
     return false;
 }
 
@@ -40,8 +36,8 @@ void EthernetDriverEventHandler::DataSent(uint8_t*, uint32_t)
 
 ///__ETHERNET DRIVER___
 
-EthernetDriver::EthernetDriver()
-
+EthernetDriver::EthernetDriver(OutputStream* ethernetMessageStream)
+: Driver(ethernetMessageStream)
 {
 }
 
@@ -77,18 +73,18 @@ MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress()
  */
 void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
 {
-    printf("Sending: ");
+    driverMessageStream -> write("Sending: ");
 
     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
     for(int i = displayType; i < size; i++)
     {
-        printfHex(buffer[i]);
-        printf(" ");
+        driverMessageStream -> writeHex(buffer[i]);
+        driverMessageStream -> write(" ");
     }
-    printf("\n");
+    driverMessageStream -> write("\n");
 
 
-    for(Vector<EthernetDriverEventHandler*>::iterator i = handlers.begin(); i != handlers.end(); i++)
+    for(Vector<EthernetDriverEventHandler*>::iterator i = ethernetEventHandlers.begin(); i != ethernetEventHandlers.end(); i++)
         (*i)->BeforeSend(buffer, size);
 
     //Used for debuging  printf("Status: ");
@@ -100,7 +96,6 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
  */
 void EthernetDriver::DoSend(uint8_t*, uint32_t)
 {
-    printf("Not implemented\n");
 }
 
 /**
@@ -111,26 +106,26 @@ void EthernetDriver::DoSend(uint8_t*, uint32_t)
  */
 void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 {
-    printf("Receiving: ");
+    driverMessageStream -> write("Receiving: ");
     //size = 64;
     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
     for(int i = displayType; i < size; i++)
     {
-        printfHex(buffer[i]);
-        printf(" ");
+        driverMessageStream -> writeHex(buffer[i]);
+        driverMessageStream -> write(" ");
     }
-    printf("\n");
+    driverMessageStream -> write("\n");
 
 
     bool SendBack = false;
 
     //Used for debuging printf("Status: ");
-    for(Vector<EthernetDriverEventHandler*>::iterator i = handlers.begin(); i != handlers.end(); i++)
+    for(Vector<EthernetDriverEventHandler*>::iterator i = ethernetEventHandlers.begin(); i != ethernetEventHandlers.end(); i++)
         if((*i)->DataReceived(buffer, size))
             SendBack = true;
 
     if(SendBack){
-        printf("Sending back... \n");
+        driverMessageStream -> write("Sending back... \n");
         Send(buffer, size);
     }
 
@@ -144,18 +139,18 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
  */
 void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size)
 {
-    for(Vector<EthernetDriverEventHandler*>::iterator i = handlers.begin(); i != handlers.end(); i++)
+    for(Vector<EthernetDriverEventHandler*>::iterator i = ethernetEventHandlers.begin(); i != ethernetEventHandlers.end(); i++)
         (*i)->DataSent(buffer, size);
 }
 
 /**
- * @details Connect the event handler to the base protocol e.g. etherframe
+ * @details Connect the event ethernetDriverEventHandler to the base protocol e.g. etherframe
  *
- * @param handler The event handler
+ * @param ethernetDriverEventHandler The event ethernetDriverEventHandler
  */
-void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* handler)
+void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* ethernetDriverEventHandler)
 {
-    handlers.pushBack(handler);
+    ethernetEventHandlers.pushBack(ethernetDriverEventHandler);
 }
 
 // if your mac address is e.g. 1c:6f:65:07:ad:1a (see output of ifconfig)

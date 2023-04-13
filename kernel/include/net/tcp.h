@@ -101,7 +101,7 @@ namespace maxOS{
                 common::uint32_t acknowledgementNumber;
 
                 TransmissionControlProtocolProvider* backend;
-                TransmissionControlProtocolHandler* handler;
+                TransmissionControlProtocolHandler* transmissionControlProtocolHandler;
 
                 TransmissionControlProtocolSocketState state;
             public:
@@ -131,7 +131,7 @@ namespace maxOS{
                 virtual void Send(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size, common::uint16_t flags = 0);
 
                 virtual TransmissionControlProtocolSocket* Listen(common::uint16_t port);
-                virtual void Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* handler);
+                virtual void Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
         };
 
 

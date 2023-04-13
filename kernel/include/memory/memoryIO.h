@@ -25,7 +25,7 @@ namespace maxOS{
                 MemIO8Bit(common::uint64_t address);
                 ~MemIO8Bit();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(common::uint8_t data);
 
                 virtual common::uint8_t Read();
@@ -38,7 +38,7 @@ namespace maxOS{
                 MemIO16Bit(common::uint64_t address);
                 ~MemIO16Bit();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(common::uint16_t data);
 
                 virtual common::uint16_t Read();
@@ -50,7 +50,7 @@ namespace maxOS{
                 MemIO32Bit(common::uint64_t address);
                 ~MemIO32Bit();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(common::uint32_t data);
 
                 virtual common::uint32_t Read();
@@ -62,7 +62,7 @@ namespace maxOS{
             MemIO64Bit(common::uint64_t address);
             ~MemIO64Bit();
 
-            //Read / Write Method
+            //Read / Write function
             virtual void Write(common::uint64_t data);
 
             virtual common::uint64_t Read();

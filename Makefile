@@ -48,6 +48,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/render.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/common/printf.o \
+ 		  obj/kernel/common/inputStream.o \
  		  obj/kernel/net/etherframe.o \
  		  obj/kernel/net/arp.o \
  		  obj/kernel/net/ipv4.o \

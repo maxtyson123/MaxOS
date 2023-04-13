@@ -9,6 +9,8 @@ using namespace maxOS::drivers;
 using namespace maxOS::common;
 using namespace maxOS::filesystem;
 
+
+// TODO: Get rid of printing as it isnt needed in the MBR? Maybe even make a debug stream for later usecaes like this
 void printf(char* str, bool clearLine = false); // Forward declaration
 void printfHex(uint8_t key);                    // Forward declaration
 

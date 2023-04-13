@@ -1,5 +1,3 @@
-NOTE: method is the same is function (or at least in my wording here)
-
 # Hardware Communication
 Here are some notes on how the communication with hardware works, this is used for the keyboard and mouse communication and setting up other devices, e.g. GPU
 ### Data Send and Receive
@@ -7,7 +5,7 @@ This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboar
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
 - By default, the PIC is set ignore that, so to receive the key signal tell PIC not to ignore it
 - This is done by sending some data to the PIC
-- This means there has the to be a method of talking to the hardware (send data out / receive data in)
+- This means there has the to be a function of talking to the hardware (send data out / receive data in)
 - CPU has a multiplexer and a de-multiplexer which is connected to different hardware which is what physically sends the data
 - The PIC (a piece of hardware) has the port number 32 (0x20), so the data for the PIC has to be sent port 32 via the multiplexer
 - Using assembler, data can be set:
@@ -201,13 +199,13 @@ Here are the notes on graphics for the operating system. (May need to read hardw
 
 ### GUI - Framework
 See also: Bresenham line algorithm (use for later)
-- The GUI framework will have a base class called Widget, which should have a draw method. This draw method would get a graphicsContext and draw itself onto of it using the graphicContext's draw methods.
-- Thees widgets will have parents and such, therefore their draw positions will be relative, meaning there has to be a method to get the absolute position.
-- Widgets will also have a width and height, and a method to check if a co-ordinate is inside itself (used for mouse handling and such)
+- The GUI framework will have a base class called Widget, which should have a draw function. This draw function would get a graphicsContext and draw itself onto of it using the graphicContext's draw methods.
+- Thees widgets will have parents and such, therefore their draw positions will be relative, meaning there has to be a function to get the absolute position.
+- Widgets will also have a width and height, and a function to check if a co-ordinate is inside itself (used for mouse handling and such)
 - To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, onMouseMoveWidget, onMouseUpEvent. However, the mouse handler won't be on the widget itself, rather it would be on the desktop.
 - This is because the mouse movement is reported in relative-ness not absolute position (desktop would store mouse position and update it based on the movement, the object can just query the x,y pos from the desktop).
 - A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the children (e.g. the child gets drawn last so its on top)
-- To get which widget to preform the keyEvent or mouseEvent the desktop will have a method of getting the focused widget
+- To get which widget to preform the keyEvent or mouseEvent the desktop will have a function of getting the focused widget
 - The desktop will work like the composite widget, but will have to override the mouseHandler class as mouse passes movement in relative to last position (moved x  pixels) so the desktop will have to translate the restiveness into absolute positions
 - For better performance, instead of re-drawing the screen every time just draw it once and then when a gui object changes (e.g. moving a window) memory the object to the new state and then redraw any invalid parts (invalid is where places where there used to be the gui object)
 - To draw text the "modes.c" has various 8x8 Bitmap fonts. Using these fonts a Text widget can be made that gets the characters of a string from the font and then print all the pixels in that character.  
@@ -221,12 +219,12 @@ See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explain
 - Therefore, when a task is created a memory region is made. Information for the processor is then explicitly writen into segments in that region e.g. the instruction pointer at the entry point
 - Previously: the interstubs.s file pushed the current processor values (interstubs line 64: save the registers) and then pushed the stack pointer (interstubs line 80: Invoke C++ handlers) and then load register again
 - (Carrying on "Previously") The handler function would have the pointer to the stack (passed as var: esp). The return value of handle interrupt is then written into esp and then executed by processor. 
-- Now with multitasking the return value for the handle interrupt method would be changed to point to the top of the new task's stack.
+- Now with multitasking the return value for the handle interrupt function would be changed to point to the top of the new task's stack.
 - To sum up: 
-- - The kernel will be executing method "X" and receive an interrupt
+- - The kernel will be executing function "X" and receive an interrupt
 - - kernel will execute the interrupt handler
 - - The interrupt handler will then return a pointer to the new task
-- - Kernel will then execute the new task instead of executing method "X"
+- - Kernel will then execute the new task instead of executing function "X"
 - To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execute
 ### Threads
 See also: [Thread](https://wiki.osdev.org/Thread)
@@ -234,9 +232,9 @@ See also: [Thread](https://wiki.osdev.org/Thread)
 - Threads are often used in parallel computing, where they can be used to perform multiple tasks simultaneously. Threads are also used in multimedia, where they can be used to perform different tasks in real time. For example, a thread can be used to play a sound while another thread is used to display a graphic.
 - Threads are also used in operating systems, where they can be used to perform different tasks simultaneously. For example, a thread can be used to play a sound while another thread is used to display a graphic.
 - The main difference between a thread and a process is that threads share the same address space, while processes have separate address spaces. This means that threads can share data and code, while processes cannot. This also means that threads are faster than processes, because they do not need to be loaded into memory.
-- To implement threads in the OS, the kernel will have to implement a thread class. This class will have a method to create a thread, and a method to execute the thread. The thread class will also have a method to get the current thread.
-- The thread class will also have a method to get the current thread. This method will be used to get the current thread, and then the thread will be able to access its own stack.
-- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yeild method on the thread class.
+- To implement threads in the OS, the kernel will have to implement a thread class. This class will have a function to create a thread, and a function to execute the thread. The thread class will also have a function to get the current thread.
+- The thread class will also have a function to get the current thread. This function will be used to get the current thread, and then the thread will be able to access its own stack.
+- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yeild function on the thread class.
 - Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. Threads are often used to implement concurrency within a process. Threads are also used to implement parallelism, where multiple processes can run simultaneously on a multi-core processor.
 ### Dynamic Memory Management / Heap
 See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list)

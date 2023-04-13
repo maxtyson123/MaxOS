@@ -65,7 +65,7 @@ namespace maxOS{
             TaskManager();
             ~TaskManager();
             bool AddTask(Task* task);
-            CPUState_Task* Schedule(CPUState_Task* cpuState);         //method that does the scheduling (round-robin [https://en.wikipedia.org/wiki/Round-robin_scheduling])s
+            CPUState_Task* Schedule(CPUState_Task* cpuState);         //function that does the scheduling (round-robin [https://en.wikipedia.org/wiki/Round-robin_scheduling])s
         };
 
     }

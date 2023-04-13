@@ -32,8 +32,8 @@ namespace maxOS {
                     volatile common::uint64_t ticks;        // Enusre that the compiler does not optimize this variable out of the code (volatile)
 
                 protected:
-                    // Store all the event handlers
-                    common::Vector<ClockEventHandler*> handlers;
+                    // Store all the event clockEventHandlers
+                    common::Vector<ClockEventHandler*> clockEventHandlers;
                     bool binaryCodedDecimalRepresentation;
 
                     // Ports
@@ -45,7 +45,7 @@ namespace maxOS {
                     common::uint16_t ticksUntilNextEvent;
 
                     // Other functions
-                    void HandleInterrupt();
+                    common::uint32_t HandleInterrupt(common::uint32_t esp);
                     common::uint8_t readHardwareClock(common::uint8_t address);
                     common::uint8_t binaryRepresentation(common::uint8_t number);
 
@@ -54,8 +54,8 @@ namespace maxOS {
                     ~Clock();
 
                     void Activate();
-                    void connectEventHandler(ClockEventHandler* handler);
-                    void disconnectEventHandler(ClockEventHandler* handler);
+                    void connectEventHandler(ClockEventHandler* clockEventHandler);
+                    void disconnectEventHandler(ClockEventHandler* clockEventHandler);
                     void delay(common::uint32_t milliseconds);
             };
 

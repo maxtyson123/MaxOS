@@ -24,7 +24,7 @@ namespace maxOS {
                 Port8Bit(maxOS::common::uint16_t portnumber);
                 ~Port8Bit();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(maxOS::common::uint8_t data);
 
                 virtual maxOS::common::uint8_t Read();
@@ -36,7 +36,7 @@ namespace maxOS {
                 Port8BitSlow(maxOS::common::uint16_t portnumber);
                 ~Port8BitSlow();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(maxOS::common::uint8_t data);
                 //---Inherits read methods
         };
@@ -47,7 +47,7 @@ namespace maxOS {
                 Port16Bit(maxOS::common::uint16_t portnumber);
                 ~Port16Bit();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(maxOS::common::uint16_t data);
 
                 virtual maxOS::common::uint16_t Read();
@@ -59,7 +59,7 @@ namespace maxOS {
                 Port32Bit(maxOS::common::uint16_t portnumber);
                 ~Port32Bit();
 
-                //Read / Write Method
+                //Read / Write function
                 virtual void Write(maxOS::common::uint32_t data);
 
                 virtual maxOS::common::uint32_t Read();

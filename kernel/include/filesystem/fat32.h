@@ -10,6 +10,7 @@
 #include <filesystem/filesystem.h>
 #include <common/vector.h>
 #include <memory/memorymanagement.h>
+#include <common/outputStream.h>
 #include <common/printf.h>
 
 namespace maxOS{
@@ -179,8 +180,9 @@ namespace maxOS{
 
                 DirectoryEntry tempDirent[16];
                 common::Vector<DirectoryEntry> dirent;        
-                common::Vector<DirectoryEntryExtras> dirent_extras;        
+                common::Vector<DirectoryEntryExtras> dirent_extras;
 
+                common::OutputStream* fat32MessageStream;
 
                 FatDirectoryEnumerator* currentDirectoryEnumerator;
                 common::uint32_t currentDirectoryIndex;
@@ -198,7 +200,7 @@ namespace maxOS{
                 common::uint32_t directorySector;
                 common::uint32_t directoryCluster;
 
-                FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size);
+                FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t directorySector, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size, common::OutputStream* fat32MessageStream);
                 ~FatDirectoryTraverser();
 
 
@@ -225,11 +227,12 @@ namespace maxOS{
             private:
                 drivers::AdvancedTechnologyAttachment* drive;
                 common::uint32_t partOffset;
+                common::OutputStream* fat32MessageStream;
 
                 FatDirectoryTraverser* currentTraverser;
 
             public:
-                Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset);
+                Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset, common::OutputStream* fat32MessageStream);
                 ~Fat32();
 
                 static common::uint32_t AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t currentCluster, common::uint32_t fatLocation, common::uint32_t fat_size);

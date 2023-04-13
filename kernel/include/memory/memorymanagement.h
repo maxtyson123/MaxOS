@@ -35,33 +35,33 @@ namespace maxOS{
             void* malloc(common::size_t size);
             void free(void* pointer);
 
-            template<class T> T* Instantiate(common::uint32_t numberOfElements=1){
-                T* result = (T*)malloc(sizeof(T)*numberOfElements);
-                new (result) T();
+            template<class Type> Type* Instantiate(common::uint32_t numberOfElements=1){
+                Type* result = (Type*)malloc(sizeof(Type)*numberOfElements);
+                new (result) Type();
                 return result;
             }
 
-            template<class T, class P1> T* Instantiate(P1 p1){
-                T* result = (T*)malloc(sizeof(T));
-                new (result) T(p1);
+            template<class Type, class Parameter1> Type* Instantiate(Parameter1 p1){
+                Type* result = (Type*)malloc(sizeof(Type));
+                new (result) Type(p1);
                 return result;
             }
 
-            template<class T, class P1, class P2> T* Instantiate(P1 p1, P2 p2)     {
-                T* result = (T*)malloc(sizeof(T));
-                new (result) T(p1, p2);
+            template<class Type, class Parameter1, class Parameter2> Type* Instantiate(Parameter1 p1, Parameter2 p2)     {
+                Type* result = (Type*)malloc(sizeof(Type));
+                new (result) Type(p1, p2);
                 return result;
             }
 
-            template<class T, class P1, class P2, class P3> T* Instantiate(P1 p1, P2 p2, P3 p3) {
-                T* result = (T*)malloc(sizeof(T));
-                new (result) T(p1, p2, p3);
+            template<class Type, class Parameter1, class Parameter2, class Parameter3> Type* Instantiate(Parameter1 p1, Parameter2 p2, Parameter3 p3) {
+                Type* result = (Type*)malloc(sizeof(Type));
+                new (result) Type(p1, p2, p3);
                 return result;
             }
 
-            template<class T, class P1, class P2, class P3, class P4> T* Instantiate(P1 p1, P2 p2, P3 p3, P4 p4) {
-                T* result = (T*)malloc(sizeof(T));
-                new (result) T(p1, p2, p3, p4);
+            template<class Type, class Parameter1, class Parameter2, class Parameter3, class Parameter4> Type* Instantiate(Parameter1 p1, Parameter2 p2, Parameter3 p3, Parameter4 p4) {
+                Type* result = (Type*)malloc(sizeof(Type));
+                new (result) Type(p1, p2, p3, p4);
                 return result;
             }
 

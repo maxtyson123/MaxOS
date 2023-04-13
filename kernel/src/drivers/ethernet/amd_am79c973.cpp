@@ -10,13 +10,8 @@ using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
 using namespace maxOS::hardwarecommunication;
 
-void printf(char* str, bool clearLine = false); // Forward declaration
-void printfHex(uint8_t key);                    // Forward declaration
-
-
-
-amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts)
-        :   EthernetDriver(),
+amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
+        :   EthernetDriver(amdNetMessageStream),
             InterruptHandler(dev -> interrupt + interrupts -> HardwareInterruptOffset(), interrupts),
             MACAddress0Port(dev -> portBase),
             MACAddress2Port(dev -> portBase + 0x02),
@@ -113,7 +108,7 @@ amd_am79c973::~amd_am79c973()
  */
 void amd_am79c973::Activate()
 {
-    printf("Activating AMD 79C973 Ethernet Controller ");
+    driverMessageStream -> write("Activating AMD 79C973 Ethernet Controller ");
 
 
     initDone = false;                                            // Set initDone to false
@@ -133,7 +128,7 @@ void amd_am79c973::Activate()
     registerDataPort.Write(0x42);                           // Tell device that it is initialized and can begin operating
 
     active = true;                                               // Set active to true
-    printf("AMD am79c973 INIT DONE\n");
+    driverMessageStream -> write(("AMD am79c973 INIT DONE\n");
 }
 
 /**
@@ -177,10 +172,10 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
     // Note: Cant be switch case as multiple errors can occur at the same time
 
     // Errors
-    if((temp & 0x8000) == 0x8000) printf("AMD am79c973 ERROR\n");
-    if((temp & 0x2000) == 0x2000) printf("AMD am79c973 COLLISION ERROR\n");
-    if((temp & 0x1000) == 0x1000) printf("AMD am79c973 MISSED FRAME\n");
-    if((temp & 0x0800) == 0x0800) printf("AMD am79c973 MEMORY ERROR\n");
+    if((temp & 0x8000) == 0x8000) errorMessage("AMD am79c973 ERROR\n");
+    if((temp & 0x2000) == 0x2000) errorMessage("AMD am79c973 COLLISION ERROR\n");
+    if((temp & 0x1000) == 0x1000) errorMessage("AMD am79c973 MISSED FRAME\n");
+    if((temp & 0x0800) == 0x0800) errorMessage("AMD am79c973 MEMORY ERROR\n");
 
 
     // Responses
@@ -212,8 +207,6 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
  * @param size The size of the buffer
  */
 void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
-
-    //Used for debuging printf("Sending package... ");
 
     while(!active);
 
@@ -247,14 +240,12 @@ void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x48);                           // Tell device to send the data currently in the buffer
 
-    printf(" Done\n");
+    driverMessageStream -> write(" Done\n");
 
 }
 
 void amd_am79c973::FetchDataReceived()
 {
-
-    //Used for debuging printf("Fetching data... ");
 
     for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)         //Loop through all the buffers
     {

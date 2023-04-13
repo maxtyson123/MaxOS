@@ -37,7 +37,7 @@ namespace maxOS{
         class InternetProtocolAddressResolver
         {
         public:
-            InternetProtocolAddressResolver(InternetProtocolProvider* handler);
+            InternetProtocolAddressResolver(InternetProtocolProvider* internetProtocolProvider);
             ~InternetProtocolAddressResolver();
             virtual drivers::ethernet::MediaAccessControlAddress Resolve(InternetProtocolAddress address);
             virtual void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress);
@@ -63,7 +63,7 @@ namespace maxOS{
             friend class InternetProtocolAddressResolver;
 
             protected:
-                InternetProtocolHandler* handlers[255];
+                InternetProtocolHandler* internetProtocolHandlers[255];
                 InternetProtocolAddressResolver* resolver;
 
                 InternetProtocolAddress ownInternetProtocolAddress;
