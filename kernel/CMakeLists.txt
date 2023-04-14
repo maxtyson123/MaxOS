@@ -85,7 +85,7 @@ set(
         ${fs_h}/fat32.h ${fs_c}/fat32.cpp
         ${fs_h}/filesystem.h ${fs_c}/filesystem.cpp
 
-   include/common/rectangle.h src/common/rectangle_templates.cpp src/gui/widgets/templates.cpp include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h)
+   include/common/rectangle.h src/common/rectangle_templates.cpp include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

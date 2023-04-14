@@ -299,7 +299,7 @@ void Desktop::onMouseMoveEvent(int x, int y) {
  */
 void Desktop::onMouseDownEvent(maxOS::common::uint8_t button) {
 
-    // The widget that handled the event becomes the widget that is being dragged
+    // The widget that handled the event becomes the widget
     draggedWidget = CompositeWidget::onMouseButtonPressed(mouseX, mouseY, button);
 
 }
@@ -311,12 +311,38 @@ void Desktop::onMouseDownEvent(maxOS::common::uint8_t button) {
  */
 void Desktop::onMouseUpEvent(maxOS::common::uint8_t button) {
 
-   // Pass the event to the widget that is being dragged
+   // Pass the event to the widget
    CompositeWidget::onMouseButtonReleased(mouseX, mouseY, button);
 
    // Dragging has stopped
    draggedWidget = 0;
 
+}
+
+/**
+ * @details When a key is pressed pass the event to the widget that is currently focussed
+ * @param keyDownCode The key that was pressed
+ * @param keyDownState The state of the keyboard
+ */
+void Desktop::onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState) {
+
+    // Pass the event to the widget that is  in focus
+    if (focussedWidget != 0) {
+        focussedWidget -> onKeyDown(keyDownCode, keyDownState);
+    }
+}
+
+/**
+ * @details When a key is pressed pass the event to the widget that is currently focussed
+ * @param keyUpCode The key that was pressed
+ * @param keyUpState The state of the keyboard
+ */
+void Desktop::onKeyUp(drivers::peripherals::KeyCode keyUpCode, drivers::peripherals::KeyboardState keyUpState) {
+
+    // Pass the event to the widget that is  in focus
+    if (focussedWidget != 0) {
+        focussedWidget -> onKeyDown(keyUpCode, keyUpState);
+    }
 }
 
 

@@ -87,6 +87,8 @@ OS Functionality
 - [ ] More drivers, essential ones etc, wifi maybe
 - [ ] Microkernel
 - [ ] 64 Bit
+- [ ] 3D Rendering e.g. OpenGL
+= [ ] Python Port
 - [ ] Game Engine
 - [ ] Web Browser
 - [ ] M++

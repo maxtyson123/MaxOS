@@ -43,7 +43,7 @@ void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
 
         if(masterBootRecord.primaryPartition[i].partitionId == 0) continue;                      // If the partition id is 0, skip it
 
-        printf("Partition ");
+        printf("\nPartition ");
         printfHex(i & 0xFF);                                                                 // Print the partition number
         printf(": ");
 
@@ -57,7 +57,8 @@ void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
         printf("   ");
 
 
-        Fat32 fat32(hd, masterBootRecord.primaryPartition[i].startLBA);              // Create a Fat32 object
+        //TODO: Add a message stream
+        Fat32 fat32(hd, masterBootRecord.primaryPartition[i].startLBA, 0);              // Create a Fat32 object
 
     }
     printf("\n");

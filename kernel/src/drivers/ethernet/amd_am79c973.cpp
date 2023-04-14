@@ -128,7 +128,7 @@ void amd_am79c973::Activate()
     registerDataPort.Write(0x42);                           // Tell device that it is initialized and can begin operating
 
     active = true;                                               // Set active to true
-    driverMessageStream -> write(("AMD am79c973 INIT DONE\n");
+    driverMessageStream -> write("AMD am79c973 INIT DONE\n");
 }
 
 /**

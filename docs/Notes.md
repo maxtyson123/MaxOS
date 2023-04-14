@@ -177,6 +177,8 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - The FAT32 table is a table that contains pointers to where the next cluster is located on the hard drive
 - When an hard drive is fragmented files larger then a cluster are split up and stored in multiple places on the hard drive
 - The FAT32 table is used to find the next cluster of a file, when a file is fragmented
+- To expand a file the File Allocation Table has to be edited to point to a new empty cluster, this is done by looping through all the clusters in the FAT and finding one with the value 0x000000 which means it is unused. Then the FAT is edited so that the end of the file is this new cluster, the cluster is marked as used and the finnaly the file is set to use this cluster.
+- A cluster can only belong to one file at a time. This is useful as that means that when a file is being read or expand the operating system doesnt need to split the cluster up.
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)
 ### Graphics Mode {VGA}

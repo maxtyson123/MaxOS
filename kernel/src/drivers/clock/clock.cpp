@@ -64,7 +64,7 @@ uint32_t Clock::HandleInterrupt(uint32_t esp) {
 
     // If the number of ticks until the next event is not 0 then return
     if(ticksUntilNextEvent != 0)
-        return;
+        return esp;
 
     // Otherwise, reset the number of ticks until the next event
     ticksUntilNextEvent = ticksBetweenEvents;

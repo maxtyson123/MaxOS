@@ -40,6 +40,9 @@ namespace maxOS
                 void AddDriver(Driver *);
 
                 void ActivateAll();
+
+                // TODO: Device Names and Vendor
+                // TODO: eventHandlers for drivers
         };
     }
 }

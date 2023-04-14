@@ -16,52 +16,54 @@ using namespace maxOS::hardwarecommunication;
 
 KeyboardEventHandler::KeyboardEventHandler(){
 
+}
+
+KeyboardEventHandler::~KeyboardEventHandler() {
+
 };
 
-void KeyboardEventHandler::onKeyDown(char*)
+void KeyboardEventHandler::onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState)
 {
 }
 
-void KeyboardEventHandler::OnKeyUp(char*)
+void KeyboardEventHandler::onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState)
 {
 }
 
 
 
 ///___Driver___
-KeyboardDriver::KeyboardDriver(InterruptManager* manager, KeyboardEventHandler *handler)
-: InterruptHandler(0x21, manager),  //0x21 is keyboard object, pass the manager paramerter to the base object
-  dataPort(0x60),
-  commandPort(0x64)
+
+KeyboardDriver::KeyboardDriver(InterruptManager* manager, KeyboardEventHandler *keyboardEventHandler)
+        : InterruptHandler(0x21, manager),
+          dataPort(0x60),
+          commandPort(0x64)
 {
-    this->handler = handler;
 }
 KeyboardDriver::~KeyboardDriver(){
 
 }
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-
 /**
  * @details Activate the keyboard driver
  */
 void KeyboardDriver::Activate() {
-        while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start-up key eg.. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
-            dataPort.Read();
-        commandPort.Write(0xAE);                            //Tell: PIC to send keyboard interrupt [or] tell keyboard to send interrupts to PIC
-        commandPort.Write(0x20);                            //Tell: get current state
-        uint8_t status = (dataPort.Read() | 1)  & ~ 0x10;        //Read current state then set rightmost bit to 1 becuase this will be the new state and clear the bit
-        commandPort.Write(0x60);                            //Tell: change current state
-        dataPort.Write(status);                             //Write back the current state
+    while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start-up key eg.. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
+        dataPort.Read();
 
-        dataPort.Write(0xF4);                               //Final Activation of keyboard
+    commandPort.Write(0xAE);                            // Tell: PIC to send keyboard interrupt [or] tell keyboard to send interrupts to PIC
+    commandPort.Write(0x20);                            // Tell: get current state
+    uint8_t status = (dataPort.Read() | 1)  & ~ 0x10;        // Read current state then set rightmost bit to 1 becuase this will be the new state and clear the bit
+    commandPort.Write(0x60);                            // Tell: change current state
+    dataPort.Write(status);                             // Write back the current state
 
-        //Keyboard Controller Commands :
-        //
-        //0xAE : Enable Keyboard
-        //0x20 : Read command byte , after that we read the status from data port
-        //0x60 : Write command byte , after that we change the state of the data port
+    dataPort.Write(0xF4);                               // Final Activation of keyboard
+
+    //Keyboard Controller Commands :
+    //
+    //0xAE : Enable Keyboard
+    //0x20 : Read command byte , after that read the status from data port
+    //0x60 : Write command byte , after that change the state of the data port
 }
 
 /**
@@ -72,177 +74,540 @@ void KeyboardDriver::Activate() {
  */
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
 
+    // Read the scancode from the keyboard
     uint8_t key = dataPort.Read();      //NOTE: The 8th bit is set to 1 if key is released and cleared to 0 if key is pressed
 
-    if(handler == 0){
-        return esp;
-    }
-
-    static bool Shift = false;
-
-
-    switch (key) {
-            //Initializers that can be ignored
-            case 0x45:
-                break;
-            case 0xFA:
-                break;
-            case 0xC5:
-                break;
-
-            //handler->OnKeyDown(x);    by default it does nothing, however it can be defined in an another class derived from the KeyboardEventHandler class and implement in it OnKeyDown() that does anything when key is pressed
-
-            //Top Row
-            case 0x3B:
-                handler->onKeyDown("F1"); break;
-            case 0x3C:
-                handler->onKeyDown("F2"); break;
-            case 0x3D:
-                handler->onKeyDown("F3"); break;
-            case 0x3E:
-                handler->onKeyDown("F4"); break;
-            case 0x3F:
-                handler->onKeyDown("F5"); break;
-            case 0x40:
-                handler->onKeyDown("F6"); break;
-            case 0x41:
-                handler->onKeyDown("F7"); break;
-            case 0x42:
-                handler->onKeyDown("F8"); break;
-            case 0x43:
-                handler->onKeyDown("F9"); break;
-            case 0x44:
-                handler->onKeyDown("F10"); break;
-            case 0x57:
-                handler->onKeyDown("F11"); break;
-            case 0x58:
-                handler->onKeyDown("F12"); break;
-
-            //First Row
-            case 0x29: (Shift) ? handler->onKeyDown("~") : handler->onKeyDown("`"); break;
-            case 0x02: (Shift) ? handler->onKeyDown("!") : handler->onKeyDown("1"); break;
-            case 0x03: (Shift) ? handler->onKeyDown("@") : handler->onKeyDown("2"); break;
-            case 0x04: (Shift) ? handler->onKeyDown("#") : handler->onKeyDown("3"); break;
-            case 0x05: (Shift) ? handler->onKeyDown("$") : handler->onKeyDown("4"); break;
-            case 0x06: (Shift) ? handler->onKeyDown("%") : handler->onKeyDown("5"); break;
-            case 0x07: (Shift) ? handler->onKeyDown("^") : handler->onKeyDown("6"); break;
-            case 0x08: (Shift) ? handler->onKeyDown("&") : handler->onKeyDown("7"); break;
-            case 0x09: (Shift) ? handler->onKeyDown("*") : handler->onKeyDown("8"); break;
-            case 0x0A: (Shift) ? handler->onKeyDown("(") : handler->onKeyDown("9"); break;
-            case 0x0B: (Shift) ? handler->onKeyDown(")") : handler->onKeyDown("0"); break;
-            case 0x0C: (Shift) ? handler->onKeyDown("_") : handler->onKeyDown("-"); break;
-            case 0x0D: (Shift) ? handler->onKeyDown("+") : handler->onKeyDown("="); break;
-
-            //Second Row
-            case 0x10: (Shift) ? handler->onKeyDown("Q") : handler->onKeyDown("q"); break;
-            case 0x11: (Shift) ? handler->onKeyDown("W") : handler->onKeyDown("w"); break;
-            case 0x12: (Shift) ? handler->onKeyDown("E") : handler->onKeyDown("e"); break;
-            case 0x13: (Shift) ? handler->onKeyDown("R") : handler->onKeyDown("r"); break;
-            case 0x14: (Shift) ? handler->onKeyDown("T") : handler->onKeyDown("t"); break;
-            case 0x15: (Shift) ? handler->onKeyDown("Y") : handler->onKeyDown("y"); break;
-            case 0x16: (Shift) ? handler->onKeyDown("U") : handler->onKeyDown("u"); break;
-            case 0x17: (Shift) ? handler->onKeyDown("I") : handler->onKeyDown("i"); break;
-            case 0x18: (Shift) ? handler->onKeyDown("O") : handler->onKeyDown("o"); break;
-            case 0x19: (Shift) ? handler->onKeyDown("P") : handler->onKeyDown("p"); break;
-            case 0x1A: (Shift) ? handler->onKeyDown("{") : handler->onKeyDown("["); break;
-            case 0x1B: (Shift) ? handler->onKeyDown("}") : handler->onKeyDown("]"); break;
-
-            //Third Row
-            case 0x1E: (Shift) ? handler->onKeyDown("A") : handler->onKeyDown("a"); break;
-            case 0x1F: (Shift) ? handler->onKeyDown("S") : handler->onKeyDown("s"); break;
-            case 0x20: (Shift) ? handler->onKeyDown("D") : handler->onKeyDown("d"); break;
-            case 0x21: (Shift) ? handler->onKeyDown("F") : handler->onKeyDown("f"); break;
-            case 0x22: (Shift) ? handler->onKeyDown("G") : handler->onKeyDown("g"); break;
-            case 0x23: (Shift) ? handler->onKeyDown("H") : handler->onKeyDown("h"); break;
-            case 0x24: (Shift) ? handler->onKeyDown("J") : handler->onKeyDown("j"); break;
-            case 0x25: (Shift) ? handler->onKeyDown("K") : handler->onKeyDown("k"); break;
-            case 0x26: (Shift) ? handler->onKeyDown("L") : handler->onKeyDown("l"); break;
-            case 0x27: (Shift) ? handler->onKeyDown(":") : handler->onKeyDown(";"); break;
-            case 0x28: (Shift) ? handler->onKeyDown("\"") : handler->onKeyDown("'"); break;
-            case 0x2B: (Shift) ? handler->onKeyDown("|") : handler->onKeyDown("\\"); break;
-
-            //Row Four
-            case 0x2C: (Shift) ? handler->onKeyDown("Z") : handler->onKeyDown("z"); break;
-            case 0x2D: (Shift) ? handler->onKeyDown("X") : handler->onKeyDown("x"); break;
-            case 0x2E: (Shift) ? handler->onKeyDown("C") : handler->onKeyDown("c"); break;
-            case 0x2F: (Shift) ? handler->onKeyDown("V") : handler->onKeyDown("v"); break;
-            case 0x30: (Shift) ? handler->onKeyDown("B") : handler->onKeyDown("b"); break;
-            case 0x31: (Shift) ? handler->onKeyDown("N") : handler->onKeyDown("n"); break;
-            case 0x32: (Shift) ? handler->onKeyDown("M") : handler->onKeyDown("m"); break;
-            case 0x33: (Shift) ? handler->onKeyDown("<") : handler->onKeyDown(","); break;
-            case 0x34: (Shift) ? handler->onKeyDown(">") : handler->onKeyDown("."); break;
-            case 0x35: (Shift) ? handler->onKeyDown("?") : handler->onKeyDown("/"); break;
-
-            //Numpad
-            case 0x4A:
-                handler->onKeyDown("-"); break;
-            case 0x4E:
-                handler->onKeyDown("+"); break;
-            //Most other numpad are confilcting
-
-
-            //Special
-            case 0x1C:
-                handler->onKeyDown("\n"); break;             //Enter
-            case 0x39:
-                handler->onKeyDown(" "); break;              //Space
-            case 0x0F:
-                handler->onKeyDown("    "); break;           //Tab
-            case 0x1D:
-                handler->onKeyDown("CRTL"); break;           //Left Control
-            case 0x5B:
-                handler->onKeyDown("WIN"); break;            //Windows Key
-            case 0x3A: Shift = !Shift; break;                       //Caps Lock
-            case 0x38:
-                handler->onKeyDown("ALT"); break;            //Left ALT
-            case 0x01:
-                handler->onKeyDown("ESC"); break;            //Escape
-            case 0x37:
-                handler->onKeyDown("PRNT"); break;           //Print Screen
-            case 0x46:
-                handler->onKeyDown("SCRL"); break;           //Scroll Lock
-            case 0x52:
-                handler->onKeyDown("INST"); break;           //Insert
-            case 0x47:
-                handler->onKeyDown("HOME"); break;           //Home
-            case 0x53:
-                handler->onKeyDown("DEL"); break;            //Delete
-            case 0x4F:
-                handler->onKeyDown("END"); break;            //End
-            case 0x51:
-                handler->onKeyDown("PGDWN"); break;          //Page Down
-            case 0x49:
-                handler->onKeyDown("PGUP"); break;           //Page Up
-            case 0x48:
-                handler->onKeyDown("ARUP"); break;           //Arrow Up
-            case 0x50:
-                handler->onKeyDown("ARDN"); break;           //Arrow Down
-            case 0x4B:
-                handler->onKeyDown("ARLF"); break;           //Arrow Left
-            case 0x4D:
-                handler->onKeyDown("ARRT"); break;           //Arrow Right
-            case 0x0E:
-                handler->onKeyDown("BACKSPACE"); break;
-
-            //   Left       Right
-            case 0x2A: case 0x36: Shift = !Shift;  break;         //Shift Onpres
-            case 0xAA: case 0xB6: Shift = !Shift;  break;        //Shift Onrelease
-
-
-            ///TODO:
-            ///Key Release
-            ///Special Key FUNCTIONS
-
-            default:
-                if(key < 0x80) {              //Interrupts 0x80 onwards are just for keyrelease, therefore we can ignore printing them
-                    printf("Keyboard 0x");
-                    printfHex(key);
-               }
-                break;
-
-    }
-
-
+    // Pass the scan code to the handlers
+    for(Vector<InputStreamEventHandler<uint8_t>*>::iterator streamEventHandler = inputStreamEventHandlers.begin(); streamEventHandler != inputStreamEventHandlers.end(); streamEventHandler++)
+        (*streamEventHandler)->onStreamRead(key);
 
     return esp;
+
+}
+
+///___State___
+
+/**
+ * @details Initialize the keyboard stat with the default values being false
+ */
+KeyboardState::KeyboardState() {
+
+    this -> leftShift = false;
+    this -> rightShift = false;
+    this -> leftControl = false;
+    this -> rightControl = false;
+    this -> leftAlt = false;
+    this -> rightAlt = false;
+
+    this -> capsLock = false;
+    this -> numberPadLock = false;
+    this -> scrollLock = false;
+
+
+}
+
+KeyboardState::~KeyboardState() {
+
+}
+
+///___Interpreter___
+
+KeyboardInterpreter::KeyboardInterpreter()
+: InputStreamEventHandler<uint8_t>()
+{
+
+    // Extended codes are none by default
+    this -> nextIsExtendedCode0 = false;
+    this -> currentExtendedCode1 = 0;
+    this -> extendedCode1Buffer = 0;
+
+}
+
+/**
+ * @details Adds a keyboard event handler to the keyboard interpreter
+ * @param keyboardEventHandler The keyboard event handler to add
+ */
+void KeyboardInterpreter::connectEventHandler(KeyboardEventHandler *keyboardEventHandler) {
+
+    // Append to the array
+    this -> keyboardEventHandlers.pushBack(keyboardEventHandler);
+
+}
+
+void KeyboardInterpreter::onKeyRead(bool released, KeyboardState state, KeyCode keyCode) {
+
+    // Check if the key is released or pressed
+    if(released){
+
+        // Pass the release event to the handlers
+        for(Vector<KeyboardEventHandler*>::iterator keyboardEventHandler = keyboardEventHandlers.begin(); keyboardEventHandler != keyboardEventHandlers.end(); keyboardEventHandler++)
+            (*keyboardEventHandler)->onKeyUp(keyCode, state);
+
+        // Event handled
+        return;
+    }
+
+    // Pass the press event to the handlers
+    for(Vector<KeyboardEventHandler*>::iterator keyboardEventHandler = keyboardEventHandlers.begin(); keyboardEventHandler != keyboardEventHandlers.end(); keyboardEventHandler++)
+        (*keyboardEventHandler)->onKeyDown(keyCode, state);
+
+}
+
+///___Interpreter EN_US___
+
+KeyboardInterpreterEN_US::KeyboardInterpreterEN_US()
+: KeyboardInterpreter()
+{
+
+}
+
+KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() {
+
+}
+
+void KeyboardInterpreterEN_US::onStreamRead(uint8_t scanCode) {
+
+    // TODO: Extended ScanCodes E0, E1
+
+    // Check if the key is released or pressed (The 8th bit is set to 1 if key is released and cleared to 0 if key is pressed)
+    bool released = (scanCode & 0x8);
+
+    bool isShifting = this -> keyBoardState.leftShift || this -> keyBoardState.rightShift;
+    bool shouldBeUpperCase = isShifting != this -> keyBoardState.capsLock;
+
+    switch ((KeyCodeEN_US)scanCode) {
+
+        // First row
+        case KeyCodeEN_US::escape:
+            onKeyRead(released, this -> keyBoardState, KeyCode::escape);
+            break;
+
+        case KeyCodeEN_US::f1:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f1);
+            break;
+
+        case KeyCodeEN_US::f2:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f2);
+            break;
+
+        case KeyCodeEN_US::f3:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f3);
+            break;
+
+        case KeyCodeEN_US::f4:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f4);
+            break;
+
+        case KeyCodeEN_US::f5:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f5);
+            break;
+
+        case KeyCodeEN_US::f6:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f6);
+            break;
+
+        case KeyCodeEN_US::f7:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f7);
+            break;
+
+        case KeyCodeEN_US::f8:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f8);
+            break;
+
+        case KeyCodeEN_US::f9:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f9);
+            break;
+
+        case KeyCodeEN_US::f10:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f10);
+            break;
+
+        case KeyCodeEN_US::f11:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f11);
+            break;
+
+        case KeyCodeEN_US::f12:
+            onKeyRead(released, this -> keyBoardState, KeyCode::f12);
+            break;
+
+        case KeyCodeEN_US::printScreen:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadMultiply : KeyCode::printScreen);
+            break;
+
+        case KeyCodeEN_US::scrollLock:
+            onKeyRead(released, this -> keyBoardState, KeyCode::scrollLock);
+            break;
+
+        /*
+         * TODO: Implement pause/break, it conflicts with numlock, I prefer numlock so that is why it is not implemented
+        case KeyCodeEN_US::pauseBreak:
+            onKeyRead(released, this -> keyBoardState, KeyCode::pauseBreak);
+            break;
+        */
+
+        // Second row
+        case KeyCodeEN_US::squigglyLine:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::squigglyLine : KeyCode::slantedApostrophe);
+            break;
+
+        case KeyCodeEN_US::one:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::exclamationMark : KeyCode::one);
+            break;
+
+        case KeyCodeEN_US::two:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::atSign: KeyCode::two);
+            break;
+
+        case KeyCodeEN_US::three:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::hash : KeyCode::three);
+            break;
+
+        case KeyCodeEN_US::four:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::dollarSign : KeyCode::four);
+            break;
+
+        case KeyCodeEN_US::five:
+            onKeyRead(released, this ->  keyBoardState, shouldBeUpperCase ? KeyCode::percentSign : KeyCode::five);
+            break;
+
+        case KeyCodeEN_US::six:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::powerSign : KeyCode::six);
+            break;
+
+        case KeyCodeEN_US::seven:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::andSign : KeyCode::seven);
+            break;
+
+        case KeyCodeEN_US::eight:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::multiply : KeyCode::eight);
+            break;
+
+        case KeyCodeEN_US::nine:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::openBracket : KeyCode::nine);
+            break;
+
+        case KeyCodeEN_US::zero:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::closeBracket : KeyCode::zero);
+            break;
+
+        case KeyCodeEN_US::minus:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::underscore : KeyCode::minus);
+            break;
+
+        case KeyCodeEN_US::equals:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::plus : KeyCode::equals);
+            break;
+
+        case KeyCodeEN_US::backspace:
+            onKeyRead(released, this -> keyBoardState, KeyCode::backspace);
+            break;
+
+        case KeyCodeEN_US::insert:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadZero : KeyCode::insert);
+            break;
+
+        case KeyCodeEN_US::home:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadSeven  : KeyCode::home);
+            break;
+
+        case KeyCodeEN_US::pageUp:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadNine : KeyCode::pageUp);
+            break;
+
+        case KeyCodeEN_US::numberPadLock:
+
+            // Ensure this is not a repeat
+            if(!released){
+                this -> keyBoardState.numberPadLock = !this -> keyBoardState.numberPadLock;
+            }
+            onKeyRead(released, this -> keyBoardState, KeyCode::numberPadLock);
+            break;
+
+        case KeyCodeEN_US::numberPadForwardSlash:
+
+            // Check if number pad lock is on
+            if(this -> keyBoardState.numberPadLock){
+                onKeyRead(released, this -> keyBoardState, KeyCode::numberPadForwardSlash);
+            }else{
+
+                // Normal Forward Slash
+                onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::questionMark : KeyCode::forwardSlash);
+            }
+            break;
+
+        // Number Pad Multiply is same as print screen
+
+        case KeyCodeEN_US::numberPadMinus:
+            onKeyRead(released, this -> keyBoardState, KeyCode::numberPadMinus);
+            break;
+
+        // Third row
+        case KeyCodeEN_US::tab:
+            onKeyRead(released, this -> keyBoardState, KeyCode::tab);
+            break;
+
+        case KeyCodeEN_US::Q:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::Q : KeyCode::q);
+            break;
+
+        case KeyCodeEN_US::W:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::W : KeyCode::w);
+            break;
+
+        case KeyCodeEN_US::E:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::E : KeyCode::e);
+            break;
+
+        case KeyCodeEN_US::R:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::R : KeyCode::r);
+            break;
+
+        case KeyCodeEN_US::T:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::T : KeyCode::t);
+            break;
+
+        case KeyCodeEN_US::Y:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::Y : KeyCode::y);
+            break;
+
+        case KeyCodeEN_US::U:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::U : KeyCode::u);
+            break;
+
+        case KeyCodeEN_US::I:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::I : KeyCode::i);
+            break;
+
+        case KeyCodeEN_US::O:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::O : KeyCode::o);
+            break;
+
+        case KeyCodeEN_US::P:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::P : KeyCode::p);
+            break;
+
+        case KeyCodeEN_US::openSquareBracket:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::openCurlyBracket : KeyCode::openSquareBracket);
+            break;
+
+        case KeyCodeEN_US::closeSquareBracket:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::closeCurlyBracket : KeyCode::closeSquareBracket);
+            break;
+
+        case KeyCodeEN_US::backslash:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::lineThing : KeyCode::backslash);
+            break;
+
+        case KeyCodeEN_US::deleteKey:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadFullStop : KeyCode::deleteKey);
+            break;
+
+        case KeyCodeEN_US::end:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadOne : KeyCode::end);
+            break;
+
+        case KeyCodeEN_US::pageDown:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadThree : KeyCode::pageDown);
+            break;
+
+        // Number pad 7 is same as home
+
+        case KeyCodeEN_US::numberPadEight:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadEight : KeyCode::upArrow);
+            break;
+
+        // Number pad 9 is same as page up
+
+        case KeyCodeEN_US::numberPadPlus:
+            onKeyRead(released, this -> keyBoardState, KeyCode::numberPadPlus);
+            break;
+
+        // Fourth row
+
+        case KeyCodeEN_US::capsLock:
+            // Ensure this is not a repeat
+            if(!released){
+                this -> keyBoardState.capsLock = !this -> keyBoardState.capsLock;
+            }
+
+            onKeyRead(released, this -> keyBoardState, KeyCode::capsLock);
+            break;
+
+        case KeyCodeEN_US::A:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::A : KeyCode::a);
+            break;
+
+        case KeyCodeEN_US::S:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::S : KeyCode::s);
+            break;
+
+        case KeyCodeEN_US::D:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::D : KeyCode::d);
+            break;
+
+        case KeyCodeEN_US::F:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::F : KeyCode::f);
+            break;
+
+        case KeyCodeEN_US::G:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::G : KeyCode::g);
+            break;
+
+        case KeyCodeEN_US::H:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::H : KeyCode::h);
+            break;
+
+        case KeyCodeEN_US::J:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::J : KeyCode::j);
+            break;
+
+        case KeyCodeEN_US::K:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::K : KeyCode::k);
+            break;
+
+        case KeyCodeEN_US::L:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::L : KeyCode::l);
+            break;
+
+        case KeyCodeEN_US::semicolon:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::colon : KeyCode::semicolon);
+            break;
+
+        case KeyCodeEN_US::apostrophe:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::quotationMark : KeyCode::apostrophe);
+            break;
+
+        case KeyCodeEN_US::enter:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadEnter : KeyCode::enter);
+            break;
+
+        case KeyCodeEN_US::numberPadFour:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadFour : KeyCode::leftArrow);
+            break;
+
+        case KeyCodeEN_US::numberPadFive:
+            onKeyRead(released, this -> keyBoardState, KeyCode::numberPadFive);
+            break;
+
+        case KeyCodeEN_US::numberPadSix:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadSix : KeyCode::rightArrow);
+            break;
+
+        // Fifth row
+        case KeyCodeEN_US::leftShift:
+            // Check if this is a repeat
+            if(!released){
+                this -> keyBoardState.leftShift = !this -> keyBoardState.leftShift;
+            }
+
+            onKeyRead(released, this -> keyBoardState, KeyCode::leftShift);
+            break;
+
+        case KeyCodeEN_US::Z:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::Z : KeyCode::z);
+            break;
+
+        case KeyCodeEN_US::X:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::X : KeyCode::x);
+            break;
+
+        case KeyCodeEN_US::C:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::C : KeyCode::c);
+            break;
+
+        case KeyCodeEN_US::V:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::V : KeyCode::v);
+            break;
+
+        case KeyCodeEN_US::B:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::B : KeyCode::b);
+            break;
+
+        case KeyCodeEN_US::N:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::N : KeyCode::n);
+            break;
+
+        case KeyCodeEN_US::M:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::M : KeyCode::m);
+            break;
+
+        case KeyCodeEN_US::comma:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::lessThan : KeyCode::comma);
+            break;
+
+        case KeyCodeEN_US::fullStop:
+            onKeyRead(released, this -> keyBoardState, shouldBeUpperCase ? KeyCode::greaterThan : KeyCode::fullStop);
+            break;
+
+        // Forward slash is same as number pad forward slash
+
+        case KeyCodeEN_US::rightShift:
+            // Check if this is a repeat
+            if(!released){
+                this -> keyBoardState.rightShift = !this -> keyBoardState.rightShift;
+            }
+
+            onKeyRead(released, this -> keyBoardState, KeyCode::rightShift);
+            break;
+
+        // Up Arrow is the same as number pad 8
+
+        // Number pad 1 is the same as end
+
+        case KeyCodeEN_US::numberPadTwo:
+            onKeyRead(released, this -> keyBoardState, this -> keyBoardState.numberPadLock ? KeyCode::numberPadTwo : KeyCode::downArrow);
+            break;
+
+        // Number pad 3 is the same as page down
+
+        // Number pad enter is the same as enter
+
+        // Sixth row
+        case KeyCodeEN_US::leftControl:
+            // Check if this is a repeat
+            if(!released){
+                this -> keyBoardState.leftControl = !this -> keyBoardState.leftControl;
+                this -> keyBoardState.rightControl = !this -> keyBoardState.rightControl;
+            }
+
+            onKeyRead(released, this -> keyBoardState, KeyCode::leftControl);
+            break;
+
+        case KeyCodeEN_US::leftOS:
+            onKeyRead(released, this -> keyBoardState, KeyCode::leftOS);
+            break;
+
+        case KeyCodeEN_US::leftAlt:
+            // Check if this is a repeat
+            if(!released){
+                this -> keyBoardState.leftAlt = !this -> keyBoardState.leftAlt;
+                this -> keyBoardState.rightAlt = !this -> keyBoardState.rightAlt;
+            }
+
+            onKeyRead(released, this -> keyBoardState, KeyCode::leftAlt);
+            break;
+
+        case KeyCodeEN_US::space:
+            onKeyRead(released, this -> keyBoardState, KeyCode::space);
+            break;
+
+        // Right Alt is the same as left alt
+
+        // Right Control is the same as left control
+
+        // Left Arrow is the same as number pad 4
+
+        // Down Arrow is the same as number pad 2
+
+        // Right Arrow is the same as number pad 6
+
+        // Number pad 0 is the same as insert
+
+        // Number pad full stop is the same as delete
+
+        default:
+            break;
+        
+    }
+    
 }

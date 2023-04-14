@@ -47,11 +47,10 @@ namespace maxOS{
                 void onMouseDownEvent(maxOS::common::uint8_t button);
                 void onMouseUpEvent(maxOS::common::uint8_t button);
 
+                void onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState);
+                void onKeyUp(drivers::peripherals::KeyCode keyUpCode, drivers::peripherals::KeyboardState keyUpState);
 
-                //TODO: Rewrite the keyboard to use event handlers then add them to the desktop (probably rewrite mouse too)
         };
-
-
     }
 
 }

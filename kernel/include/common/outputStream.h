@@ -18,7 +18,7 @@ namespace maxOS{
                 GenericOutputStream();
                 ~GenericOutputStream();
 
-                void onRead(Type readElement);
+                void onStreamRead(Type readElement);
                 void onEndOfStream(GenericInputStream<Type>* stream);
 
                 virtual void write(Type writeElement);
@@ -74,14 +74,14 @@ namespace maxOS{
          * @tparam Type The type of the elements that will be written to the stream.
          * @param readElement The element that was read from the stream.
          */
-        template<class Type> void GenericOutputStream<Type>::onRead(Type readElement) {
+        template<class Type> void GenericOutputStream<Type>::onStreamRead(Type readElement) {
 
             // When something is read from the input stream, it is written to the output stream.
             write(readElement);
 
             // Pass the element to any handlers.
             for(typename  Vector<InputStreamEventHandler<Type>*>::iterator inputStreamEventHandler = this -> inputStreamEventHandlers.begin(); inputStreamEventHandler != this -> inputStreamEventHandlers.end(); ++inputStreamEventHandler)
-                (*inputStreamEventHandler) -> onRead(readElement);
+                (*inputStreamEventHandler)->onStreamRead(readElement);
 
 
         }

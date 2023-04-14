@@ -37,7 +37,7 @@ Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partiti
     uint32_t rootStart = dataStart + bpb.sectorsPerCluster*(bpb.rootCluster - 2);   //rootCluster is offset 2 by default
 
 
-    FatDirectoryTraverser rootTraverser(hd, rootStart, dataStart, bpb.sectorsPerCluster, fatStart, fatSize);
+    FatDirectoryTraverser rootTraverser(hd, rootStart, dataStart, bpb.sectorsPerCluster, fatStart, fatSize, fat32MessageStream);
     currentTraverser = &rootTraverser;
 
 
@@ -76,7 +76,7 @@ uint32_t Fat32::AllocateCluster(drivers::AdvancedTechnologyAttachment *hd, uint3
         hd -> Read28(fatLocation + sector, (uint8_t*)fatBuffer, sizeof(fatBuffer));          //Read the sector of the FAT table
         for (int j = 0; j < 512 / sizeof(uint32_t); ++j) {                                                                              //Loop through each entry in the sectort
 
-            if(fatBuffer[i] == 0){                                                                                                      //Fat entries are available if it is 0x000000
+            if(fatBuffer[j] == 0){                                                                                                      //Fat entries are available if it is 0x000000
 
                 nextFreeCluster = sector * (512 / sizeof(uint32_t)) + j;                                                                //Calculate the cluster number
                 break;
@@ -421,7 +421,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
     }
 
     //Get the first cluster of the directory
-    uint32_t cluster = (dirent[i].firstClusterHigh << 16) | dirent[i].firstClusterLow;
+    uint32_t cluster = (dirent[index].firstClusterHigh << 16) | dirent[index].firstClusterLow;
 
 	//De allocate any clusters
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
@@ -507,7 +507,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
     }
 
     //Get the first cluster of the directory
-    uint32_t cluster = (dirent[i].firstClusterHigh << 16) | dirent[i].firstClusterLow;
+    uint32_t cluster = (dirent[index].firstClusterHigh << 16) | dirent[index].firstClusterLow;
 
 	//De allocate any clusters
     Fat32::DeallocateCluster(hd, cluster, fatLocation, fatSize);
@@ -527,7 +527,7 @@ DirectoryEnumerator* FatDirectoryTraverser::getDirectoryEnumerator() {
 void FatDirectoryTraverser::WriteDirectoryInfoChange(DirectoryEntry* e) {
 
     DirectoryEntry entry = *e;
-    for (int j = 0; j < 16; ++j) {
+    for (int i = 0; i < 16; ++i) {
 
         //Calculate the first cluster position in the FAT
         uint32_t  firstFileCluster = ((uint32_t) entry.firstClusterHigh << 16)       //Shift the high cluster number 16 bits to the left

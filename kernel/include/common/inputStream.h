@@ -24,7 +24,7 @@ namespace maxOS{
                 InputStreamEventHandler();
                 ~InputStreamEventHandler();
 
-                virtual void onRead(Type readElement);
+                virtual void onStreamRead(Type readElement);
                 virtual void onEndOfStream(GenericInputStream<Type>* stream);
         };
 
@@ -46,7 +46,7 @@ namespace maxOS{
                 InputStreamSocket(InputStreamEventHandler<Type>* processorHandler);
                 ~InputStreamSocket();
 
-                void onRead(Type readElement);
+                void onStreamRead(Type readElement);
         };
 
 
@@ -60,10 +60,10 @@ namespace maxOS{
                 Type terminationElement;
 
             public:
-                InputStreamBuffer(Type eventFireElement, Type terminationElement));
+                InputStreamBuffer(Type eventFireElement, Type terminationElement);
                 ~InputStreamBuffer();
 
-                void onRead(Type readElement);
+                void onStreamRead(Type readElement);
                 void onEndOfStream(GenericInputStream<Type>* stream);
                 void flush();
         };
@@ -122,7 +122,7 @@ namespace maxOS{
          * @tparam Type the type of data the stream is handling
          * @param readElement The element that was read from the stream
          */
-        template<class Type> void InputStreamEventHandler<Type>::onRead(Type readElement) {
+        template<class Type> void InputStreamEventHandler<Type>::onStreamRead(Type readElement) {
 
         }
 
@@ -220,11 +220,11 @@ namespace maxOS{
          * @tparam Type The type of data the stream is handling
          * @param readElement The element that was read from the stream
          */
-        template<class Type> void InputStreamSocket<Type>::onRead(Type readElement) {
+        template<class Type> void InputStreamSocket<Type>::onStreamRead(Type readElement) {
 
             // Pass the read event on to the handlers
             for(typename Vector<InputStreamEventHandler<Type>*>::iterator inputStreamEventHandler = this -> inputStreamEventHandlers.begin(); inputStreamEventHandler != this -> inputStreamEventHandlers.end(); inputStreamEventHandler++)
-                (*inputStreamEventHandler) -> onRead(readElement);
+                (*inputStreamEventHandler)->onStreamRead(readElement);
 
         }
 
@@ -256,7 +256,7 @@ namespace maxOS{
          * @tparam Type
          * @param readElement
          */
-        template<class Type> void InputStreamBuffer<Type>::onRead(Type readElement) {
+        template<class Type> void InputStreamBuffer<Type>::onStreamRead(Type readElement) {
 
             // If this element should fire an event
             if(readElement == eventFireElement){
@@ -305,7 +305,7 @@ namespace maxOS{
             buffer[offset] = terminationElement;
 
             // Fire the on read event
-            InputStreamProcessor<Type, Type*>::onRead(buffer);
+            InputStreamProcessor<Type, Type *>::onStreamRead(buffer);
 
             // Reset the offset
             offset = 0;
