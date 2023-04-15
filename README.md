@@ -28,7 +28,7 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 - [x] Interrupt Descriptor Table
 - [x] Keyboard and Mouse Drivers
 - [x] PCI Communication (for drivers)
-- [x] Basic GUI Framework (will be replaced with a more advanced one later)
+- [x] GUI Framework (Front to back drawing, Area invalidation, etc)
 - [x] Process Switching / Multitasking
 - [x] Memory Management
 - [x] Ethernet Networking Drivers
@@ -50,6 +50,7 @@ Kernel Cleanup
 - [ ] Better Doxygen Documentation
 - [ ] Use better c++ coding conventions
 - [ ] Codebase cleanup / rewrite
+- [ ] Chuck a few more event handlers in there
 - [ ] USB
 - [ ] HTTP Protocol, DCHP protocol
 - [ ] Kernel Boot Rewrite

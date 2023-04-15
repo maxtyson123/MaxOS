@@ -61,7 +61,6 @@ set(
         ${gui_h}/widget.h ${gui_c}/widget.cpp
         ${gui_h}/window.h ${gui_c}/window.cpp
         ${gui_h}/desktop.h ${gui_c}/desktop.cpp
-        ${gui_h}/render.h ${gui_c}/render.cpp
         ${gui_h}/widgets/text.h ${gui_c}/widgets/text.cpp
 
         ${net_h}/etherframe.h ${net_c}/etherframe.cpp
@@ -85,7 +84,7 @@ set(
         ${fs_h}/fat32.h ${fs_c}/fat32.cpp
         ${fs_h}/filesystem.h ${fs_c}/filesystem.cpp
 
-   include/common/rectangle.h src/common/rectangle_templates.cpp include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h)
+   include/common/rectangle.h src/common/rectangle_templates.cpp include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h include/gui/font.h src/gui/font.cpp)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

@@ -8,22 +8,25 @@
 #include <common/types.h>
 #include <common/graphicsContext.h>
 #include <gui/widget.h>
+#include <gui/font.h>
 
 namespace maxOS {
 
     namespace gui {
 
-        class Text : public CompositeWidget{
+        class Text : public Widget{
 
             public:
 
-                char* WidgetText;
+                Font font;
+                char* widgetText;
 
-                Text(Widget *parent, common::int32_t x, common::int32_t y, common::int32_t w, common::int32_t h, common::uint8_t r, common::uint8_t g, common::uint8_t b, char* text);
+                Text(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string text);
                 ~Text();
 
-                void Draw(common::GraphicsContext* gc);
-                void UpdateText(char* newText);
+                void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                void updateText(common::string newText);
+
         };
 
     }
