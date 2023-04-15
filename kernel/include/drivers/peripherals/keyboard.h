@@ -234,7 +234,7 @@ namespace maxOS
                 KeyboardInterpreter();
                 ~KeyboardInterpreter();
 
-                void connectEventHandler(KeyboardEventHandler* keyboardEventHandler);
+                void connectKeyboardEventHandler(KeyboardEventHandler* keyboardEventHandler);
                 void onKeyRead(bool released, KeyboardState state, KeyCode keyCode);
 
             };

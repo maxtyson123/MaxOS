@@ -44,8 +44,8 @@ namespace maxOS{
                 void invalidate(common::Rectangle<common::int32_t>& area);
 
                 void onMouseMoveEvent(int x, int y);
-                void onMouseDownEvent(maxOS::common::uint8_t button);
-                void onMouseUpEvent(maxOS::common::uint8_t button);
+                void onMouseDownEvent(common::uint8_t button);
+                void onMouseUpEvent(common::uint8_t button);
 
                 void onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState);
                 void onKeyUp(drivers::peripherals::KeyCode keyUpCode, drivers::peripherals::KeyboardState keyUpState);

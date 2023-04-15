@@ -78,8 +78,8 @@ namespace maxOS{
                 GenericInputStream(InputStreamEventHandler<Type>* inputStreamEventHandler);
                 ~GenericInputStream();
 
-                void connectEventHandler(InputStreamEventHandler<Type>* inputStreamEventHandler);
-                void diconnectEventHandler(InputStreamEventHandler<Type>* inputStreamEventHandler);
+                void connectInputStreamEventHandler(InputStreamEventHandler<Type>* inputStreamEventHandler);
+                void disconnectInputStreamEventHandler(InputStreamEventHandler<Type>* inputStreamEventHandler);
 
         };
 
@@ -113,7 +113,7 @@ namespace maxOS{
         template<class Type> InputStreamEventHandler<Type>::~InputStreamEventHandler() {
             // Loop through all the streams and disconnect this handler from them
             while(!genericInputStreams.empty())
-                (*genericInputStreams.begin()) -> diconnectEventHandler(this);
+                (*genericInputStreams.begin())->disconnectInputStreamEventHandler(this);
 
         }
 
@@ -328,7 +328,7 @@ namespace maxOS{
         template<class Type> GenericInputStream<Type>::GenericInputStream(InputStreamEventHandler<Type> *inputStreamEventHandler) {
 
             // Connect the inputStreamEventHandler
-            connectEventHandler(inputStreamEventHandler);
+            connectInputStreamEventHandler(inputStreamEventHandler);
 
         }
 
@@ -340,7 +340,7 @@ namespace maxOS{
 
             // Disconnect all handlers
             while (!inputStreamEventHandlers.empty())
-                diconnectEventHandler(*(inputStreamEventHandlers.begin()));
+                disconnectInputStreamEventHandler(*(inputStreamEventHandlers.begin()));
         }
 
         /**
@@ -348,7 +348,7 @@ namespace maxOS{
          * @tparam Type The type of data the stream is handling
          * @param inputStreamEventHandler The inputStreamEventHandler to add
          */
-        template<class Type> void GenericInputStream<Type>::connectEventHandler(InputStreamEventHandler<Type> *inputStreamEventHandler) {
+        template<class Type> void GenericInputStream<Type>::connectInputStreamEventHandler(InputStreamEventHandler<Type> *inputStreamEventHandler) {
 
             // Check if the inputStreamEventHandler is already connected
             if(inputStreamEventHandlers.find(inputStreamEventHandler) != inputStreamEventHandlers.end())
@@ -364,7 +364,7 @@ namespace maxOS{
          * @tparam Type The type of data the stream is handling
          * @param inputStreamEventHandler The inputStreamEventHandler to remove
          */
-        template<class Type> void GenericInputStream<Type>::diconnectEventHandler(InputStreamEventHandler<Type> *inputStreamEventHandler) {
+        template<class Type> void GenericInputStream<Type>::disconnectInputStreamEventHandler(InputStreamEventHandler<Type> *inputStreamEventHandler) {
 
             // Check if the inputStreamEventHandler is connected
             if(inputStreamEventHandlers.find(inputStreamEventHandler) == inputStreamEventHandlers.end())

@@ -297,7 +297,7 @@ void Desktop::onMouseMoveEvent(int x, int y) {
  *
  * @param button The button that was pressed
  */
-void Desktop::onMouseDownEvent(maxOS::common::uint8_t button) {
+void Desktop::onMouseDownEvent(uint8_t button) {
 
     // The widget that handled the event becomes the widget
     draggedWidget = CompositeWidget::onMouseButtonPressed(mouseX, mouseY, button);
@@ -309,7 +309,7 @@ void Desktop::onMouseDownEvent(maxOS::common::uint8_t button) {
  *
  * @param button The button that was released
  */
-void Desktop::onMouseUpEvent(maxOS::common::uint8_t button) {
+void Desktop::onMouseUpEvent(uint8_t button) {
 
    // Pass the event to the widget
    CompositeWidget::onMouseButtonReleased(mouseX, mouseY, button);

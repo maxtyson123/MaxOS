@@ -54,8 +54,8 @@ namespace maxOS {
                     ~Clock();
 
                     void Activate();
-                    void connectEventHandler(ClockEventHandler* clockEventHandler);
-                    void disconnectEventHandler(ClockEventHandler* clockEventHandler);
+                    void connectClockEventHandler(ClockEventHandler* clockEventHandler);
+                    void disconnectClockEventHandler(ClockEventHandler* clockEventHandler);
                     void delay(common::uint32_t milliseconds);
             };
 

@@ -15,10 +15,6 @@ using namespace maxOS::hardwarecommunication;
 MouseEventHandler::MouseEventHandler() {
 }
 
-void MouseEventHandler::OnActivate(){
-
-}
-
 void MouseEventHandler::onMouseDownEvent(uint8_t button){
 
 }
@@ -38,12 +34,13 @@ MouseEventHandler::~MouseEventHandler() {
 
 ///__Driver__
 
-MouseDriver::MouseDriver(InterruptManager* manager, MouseEventHandler* mEventHandler)
+MouseDriver::MouseDriver(InterruptManager* manager)
         : InterruptHandler(0x2C, manager),  //0x2C is mouse object, pass the manager paramerter to the base object
           dataPort(0x60),
           commandPort(0x64)
 {
-    this->mouseEventHandler = mEventHandler;
+    offest = 0; //The mouse is weird and won't write to exactly 0 sometimes, so there has to be different offsets for different os-es
+    buttons = 0;
 }
 MouseDriver::~MouseDriver(){
 
@@ -53,12 +50,11 @@ MouseDriver::~MouseDriver(){
  * @details Activate the mouse
  */
 void MouseDriver::Activate() {
-    offest = 0; //The mouse is weird and won't write to exactly 0 sometimes, so there has to be different offsets for different os-es
-    buttons = 0;
+
 
     commandPort.Write(0xAB);                            //Tell: PIC to send mouse interrupt [or] tell mouse to send interrupts to PIC
     commandPort.Write(0x20);                            //Tell: get current state
-    uint8_t status = (dataPort.Read() | 2);             //Read current state then set it to 2 becuase this will be the new state and clear the bit
+    uint8_t status = (dataPort.Read() | 2);                  //Read current state then set it to 2 becuase this will be the new state and clear the bit
     commandPort.Write(0x60);                            //Tell: change current state
     dataPort.Write(status);                             //Write back the current state
 
@@ -96,39 +92,78 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
     if(!(status & 0x20)) //Only if the 6th bit of data is one then there is data to handle
         return esp;                      //Otherwise don't bother handling this input
 
-    static int8_t x=40,y=12;                //Initialize mouse in the center of the screen
 
     buffer[offest] = dataPort.Read();       //Read mouse info into buffer
-
-    if(mouseEventHandler == 0){                       //If there's no handler then don't do anything
-        return esp;
-    }
-
     offest = (offest + 1) % 3;              //Move through the offset
 
     if(offest == 0)//If the mouse data transmission is complete (3rd piece of data is through)
     {
 
-        mouseEventHandler->onMouseMoveEvent((int8_t) buffer[1], -((int8_t) buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
+        // Pass the mouse data to the mouse event handlers
+        for(Vector<MouseEventHandler*>::iterator mouseEventHandler = mouseEventHandlers.begin(); mouseEventHandler != mouseEventHandlers.end(); mouseEventHandler++)
+        {
+
+            // If the mouse is moved (buffer 1 and 2 store x and y)
+            if(buffer[1] != 0 || buffer[2] != 0)
+                (*mouseEventHandler) -> onMouseMoveEvent((int8_t) buffer[1], -((int8_t) buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
+
+            //Detect button press
+            for (int i = 0; i < 3; ++i) {
 
 
-
-        //Detect button press
-        for (int i = 0; i < 3; ++i) {
-            //move the bit, and compare it to buffer 0 != //move the bit, and compare it to buttons
-            if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1))) //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
-            {
-                //Handle the button press/release
-                if(buttons & (0x1<<i))                  //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
-                    mouseEventHandler->onMouseUpEvent(i + 1);
-                else
-                    mouseEventHandler->onMouseDownEvent(i + 1);
+                //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
+                if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1)))
+                {
+                    //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
+                    if(buttons & (0x1<<i))
+                        (*mouseEventHandler) -> onMouseUpEvent(i + 1);
+                    else
+                        (*mouseEventHandler) -> onMouseDownEvent(i + 1);
 
                 }
 
             }
 
-        buttons = buffer[0];
+            // Update the buttons
+            buttons = buffer[0];  // TODO: Maybe do this out side of the loop?
+        };
+
+
+
+
+
     }
     return esp;
+}
+
+/**
+ * @details Connect a mouse event handler to the mouse driver
+ *
+ * @param handler the mouse event handler to connect
+ */
+void MouseDriver::connectMouseEventHandler(MouseEventHandler *handler) {
+
+    // Check if the handler is already connected (find returns end if not found)
+    if(mouseEventHandlers.find(handler) != mouseEventHandlers.end())
+        return;
+
+    // Add the handler to the list of handlers
+    mouseEventHandlers.pushBack(handler);
+
+}
+
+/**
+ * @details Disconnect a mouse event handler from the mouse driver
+ *
+ * @param handler The mouse event handler to disconnect
+ */
+void MouseDriver::disconnectMouseEventHandler(MouseEventHandler *handler) {
+
+    // Check if the handler is connected (find returns end if not found)
+    if(mouseEventHandlers.find(handler) == mouseEventHandlers.end())
+        return;
+
+    // Remove the handler from the list of handlers
+    mouseEventHandlers.erase(handler);
+
 }

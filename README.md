@@ -69,7 +69,7 @@ Road to Userspace
 - [ ] LibM
 - [ ] Interprocess Communication
 - [ ] Services, (GUI Server, Network Server, etc)
-- [ ] LibNet
+- [ ] LibNet - SMB Needed
 - [ ] Example Telnet Server (GUI) (EXTERNALLY LOADED)
 
 POSIX
@@ -89,7 +89,7 @@ OS Functionality
 - [ ] Microkernel
 - [ ] 64 Bit
 - [ ] 3D Rendering e.g. OpenGL
-= [ ] Python Port
+- [ ] Python Port
 - [ ] Game Engine
 - [ ] Web Browser
 - [ ] M++

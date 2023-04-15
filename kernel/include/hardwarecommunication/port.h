@@ -12,57 +12,57 @@ namespace maxOS {
         //Base Class for ports
         class Port {
             protected:  //Protected so that it cant be instantiated bc its purely virtual
-                maxOS::common::uint16_t portnumber;
+                common::uint16_t portnumber;
 
-                Port(maxOS::common::uint16_t portnumber);
+                Port(common::uint16_t portnumber);
                 ~Port();
         };
 
         class Port8Bit : public Port {
             public:
                 //Constructor / Deconstructor
-                Port8Bit(maxOS::common::uint16_t portnumber);
+                Port8Bit(common::uint16_t portnumber);
                 ~Port8Bit();
 
                 //Read / Write function
-                virtual void Write(maxOS::common::uint8_t data);
+                virtual void Write(common::uint8_t data);
 
-                virtual maxOS::common::uint8_t Read();
+                virtual common::uint8_t Read();
         };
 
         class Port8BitSlow : public Port8Bit {
             public:
                 //Constructor / Deconstructor
-                Port8BitSlow(maxOS::common::uint16_t portnumber);
+                Port8BitSlow(common::uint16_t portnumber);
                 ~Port8BitSlow();
 
                 //Read / Write function
-                virtual void Write(maxOS::common::uint8_t data);
+                virtual void Write(common::uint8_t data);
                 //---Inherits read methods
         };
 
         class Port16Bit : public Port {
             public:
                 //Constructor / Deconstructor
-                Port16Bit(maxOS::common::uint16_t portnumber);
+                Port16Bit(common::uint16_t portnumber);
                 ~Port16Bit();
 
                 //Read / Write function
-                virtual void Write(maxOS::common::uint16_t data);
+                virtual void Write(common::uint16_t data);
 
-                virtual maxOS::common::uint16_t Read();
+                virtual common::uint16_t Read();
         };
 
         class Port32Bit : public Port {
             public:
                 //Constructor / Deconstructor
-                Port32Bit(maxOS::common::uint16_t portnumber);
+                Port32Bit(common::uint16_t portnumber);
                 ~Port32Bit();
 
                 //Read / Write function
-                virtual void Write(maxOS::common::uint32_t data);
+                virtual void Write(common::uint32_t data);
 
-                virtual maxOS::common::uint32_t Read();
+                virtual common::uint32_t Read();
         };
     }
 }

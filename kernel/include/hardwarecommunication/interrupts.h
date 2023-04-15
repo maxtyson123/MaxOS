@@ -18,15 +18,15 @@ namespace maxOS {
 
         class InterruptHandler {
             protected:
-                maxOS::common::uint8_t interrupNumber;
+                common::uint8_t interrupNumber;
                 InterruptManager *interruptManager;
 
-                InterruptHandler(maxOS::common::uint8_t interrupNumber, InterruptManager *interruptManager);
+                InterruptHandler(common::uint8_t interrupNumber, InterruptManager *interruptManager);
 
                 ~InterruptHandler();
 
             public:
-                virtual maxOS::common::uint32_t HandleInterrupt(maxOS::common::uint32_t esp);
+                virtual common::uint32_t HandleInterrupt(common::uint32_t esp);
 
         };
 
@@ -40,27 +40,27 @@ namespace maxOS {
                 ThreadManager* threadManager;
 
                 struct GateDescriptor {
-                    maxOS::common::uint16_t handlerAddressLowBits;
-                    maxOS::common::uint16_t gdt_codeSegmentSelector;
-                    maxOS::common::uint8_t reserved;
-                    maxOS::common::uint8_t access;
-                    maxOS::common::uint16_t handlerAddressHighBits;
+                    common::uint16_t handlerAddressLowBits;
+                    common::uint16_t gdt_codeSegmentSelector;
+                    common::uint8_t reserved;
+                    common::uint8_t access;
+                    common::uint16_t handlerAddressHighBits;
                 } __attribute__((packed));
 
                 static GateDescriptor interruptDescriptorTable[256];
 
                 struct InterruptDescriptorTablePointer {
-                    maxOS::common::uint16_t size;
-                    maxOS::common::uint32_t base;
+                    common::uint16_t size;
+                    common::uint32_t base;
                 } __attribute__((packed));
 
-                maxOS::common::uint16_t hardwareInterruptOffset;
+                common::uint16_t hardwareInterruptOffset;
 
-                static void SetInterruptDescriptorTableEntry(maxOS::common::uint8_t interrupt,
-                                                             maxOS::common::uint16_t codeSegmentSelectorOffset,
+                static void SetInterruptDescriptorTableEntry(common::uint8_t interrupt,
+                                                             common::uint16_t codeSegmentSelectorOffset,
                                                              void (*handler)(),
-                                                             maxOS::common::uint8_t DescriptorPrivilegeLevel,
-                                                             maxOS::common::uint8_t DescriptorType);
+                                                             common::uint8_t DescriptorPrivilegeLevel,
+                                                             common::uint8_t DescriptorType);
 
                 static void InterruptIgnore();
 
@@ -118,9 +118,9 @@ namespace maxOS {
                 static void HandleException0x1F();
 
 
-                static maxOS::common::uint32_t HandleInterrupt(maxOS::common::uint8_t interrupt, maxOS::common::uint32_t esp);
+                static common::uint32_t HandleInterrupt(common::uint8_t interrupt, common::uint32_t esp);
 
-                maxOS::common::uint32_t DoHandleInterrupt(maxOS::common::uint8_t interrupt, maxOS::common::uint32_t esp);
+                common::uint32_t DoHandleInterrupt(common::uint8_t interrupt, common::uint32_t esp);
 
                 //PIC Cominunication
                 Port8BitSlow programmableInterruptControllerMasterCommandPort;
@@ -130,11 +130,11 @@ namespace maxOS {
 
 
             public:
-                InterruptManager(maxOS::common::uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManager);
+                InterruptManager(common::uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManager);
 
                 ~InterruptManager();
 
-                maxOS::common::uint16_t HardwareInterruptOffset();
+                common::uint16_t HardwareInterruptOffset();
 
                 void Activate();
 

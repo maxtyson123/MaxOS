@@ -411,6 +411,6 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
  *
  * @return The offset of the hardware interrupt
  */
-maxOS::common::uint16_t InterruptManager::HardwareInterruptOffset() {
+uint16_t InterruptManager::HardwareInterruptOffset() {
     return hardwareInterruptOffset;
 }

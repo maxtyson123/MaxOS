@@ -158,7 +158,11 @@ void Clock::Activate() {
  *
  * @param clockEventHandler The event clockEventHandler to connect
  */
-void Clock::connectEventHandler(ClockEventHandler *clockEventHandler) {
+void Clock::connectClockEventHandler(ClockEventHandler *clockEventHandler) {
+
+    // Check if the handler is already connected (find returns end if not found)
+    if(clockEventHandlers.find(clockEventHandler) != clockEventHandlers.end())
+        return;
 
     // Add the event clockEventHandler to the vector of event clockEventHandlers
     clockEventHandlers.pushBack(clockEventHandler);
@@ -170,7 +174,7 @@ void Clock::connectEventHandler(ClockEventHandler *clockEventHandler) {
  *
  * @param clockEventHandler The event clockEventHandler to disconnect
  */
-void Clock::disconnectEventHandler(ClockEventHandler *clockEventHandler) {
+void Clock::disconnectClockEventHandler(ClockEventHandler *clockEventHandler) {
 
     // Remove the event clockEventHandler from the vector of event clockEventHandlers
     clockEventHandlers.erase(clockEventHandler);

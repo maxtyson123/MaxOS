@@ -150,6 +150,10 @@ void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size)
  */
 void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* ethernetDriverEventHandler)
 {
+    // Check if the handler is already connected (find returns end if not found)
+    if(ethernetEventHandlers.find(ethernetDriverEventHandler) != ethernetEventHandlers.end())
+        return;
+
     ethernetEventHandlers.pushBack(ethernetDriverEventHandler);
 }
 

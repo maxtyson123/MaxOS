@@ -127,7 +127,11 @@ KeyboardInterpreter::KeyboardInterpreter()
  * @details Adds a keyboard event handler to the keyboard interpreter
  * @param keyboardEventHandler The keyboard event handler to add
  */
-void KeyboardInterpreter::connectEventHandler(KeyboardEventHandler *keyboardEventHandler) {
+void KeyboardInterpreter::connectKeyboardEventHandler(KeyboardEventHandler *keyboardEventHandler) {
+
+    // Check if the handler is already connected (find returns end if not found)
+    if(keyboardEventHandlers.find(keyboardEventHandler) != keyboardEventHandlers.end())
+        return;
 
     // Append to the array
     this -> keyboardEventHandlers.pushBack(keyboardEventHandler);

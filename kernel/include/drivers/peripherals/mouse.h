@@ -7,6 +7,7 @@
 
 
 #include <common/types.h>
+#include <common/vector.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
@@ -16,36 +17,38 @@ namespace maxOS {
         namespace peripherals {
 
             class MouseEventHandler {
-            public:
-                MouseEventHandler();
-                ~MouseEventHandler();
+                public:
+                    MouseEventHandler();
+                    ~MouseEventHandler();
 
-                virtual void OnActivate();
 
-                virtual void onMouseDownEvent(maxOS::common::uint8_t button);
-                virtual void onMouseUpEvent(maxOS::common::uint8_t button);
-                virtual void onMouseMoveEvent(int x, int y);
+                    virtual void onMouseDownEvent(common::uint8_t button);
+                    virtual void onMouseUpEvent(common::uint8_t button);
+                    virtual void onMouseMoveEvent(int x, int y);
             };
 
 
-            class MouseDriver : public maxOS::hardwarecommunication::InterruptHandler, public Driver {
-                maxOS::hardwarecommunication::Port8Bit dataPort;
-                maxOS::hardwarecommunication::Port8Bit commandPort;
+            class MouseDriver : public hardwarecommunication::InterruptHandler, public Driver {
+                hardwarecommunication::Port8Bit dataPort;
+                hardwarecommunication::Port8Bit commandPort;
 
-                maxOS::common::uint8_t buffer[3];
-                maxOS::common::uint8_t offest;
-                maxOS::common::uint8_t buttons;
+                common::uint32_t HandleInterrupt(common::uint32_t esp);
 
-                MouseEventHandler *mouseEventHandler;
+                common::uint8_t buffer[3];
+                common::uint8_t offest;
+                common::uint8_t buttons;
+
+                common::Vector<MouseEventHandler*> mouseEventHandlers;
 
             public:
-                MouseDriver(maxOS::hardwarecommunication::InterruptManager *manager, MouseEventHandler *mEventHandler);
-
+                MouseDriver(hardwarecommunication::InterruptManager *manager);
                 ~MouseDriver();
 
-                virtual maxOS::common::uint32_t HandleInterrupt(maxOS::common::uint32_t esp);
-
                 virtual void Activate();
+
+                void connectMouseEventHandler(MouseEventHandler* handler);
+                void disconnectMouseEventHandler(MouseEventHandler* handler);
+
             };
         }
     }
