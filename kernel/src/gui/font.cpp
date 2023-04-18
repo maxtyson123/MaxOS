@@ -163,3 +163,8 @@ AmigaFont::AmigaFont() {
 
 
 }
+
+AmigaFont::~AmigaFont() {
+
+
+}

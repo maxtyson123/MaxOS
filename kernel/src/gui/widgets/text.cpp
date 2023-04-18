@@ -7,6 +7,7 @@
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::gui;
+using namespace maxOS::gui::widgets;
 
 Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
 : Widget(left, top, width, height)

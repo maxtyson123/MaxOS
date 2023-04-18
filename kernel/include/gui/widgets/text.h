@@ -14,7 +14,8 @@ namespace maxOS {
 
     namespace gui {
 
-        class Text : public Widget{
+        namespace widgets{
+            class Text : public Widget{
 
             public:
 
@@ -27,7 +28,8 @@ namespace maxOS {
                 void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
                 void updateText(common::string newText);
 
-        };
+            };
+        }
 
     }
 }

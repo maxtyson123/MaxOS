@@ -154,7 +154,7 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(common::uint32_t IP
         RequestMACAddress(IP_BE);
     }
 
-   // Timer::activeTimer ->Wait(300);                        //Wait for .3 seconds
+    //TODO: Add clock to wait
 
     //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
     while (MAC == 0xFFFFFFFFFFFF) {                         //Wait until the MAC address is found

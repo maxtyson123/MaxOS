@@ -6,7 +6,6 @@
 #define MAXOS_NET_ARP_H
 
 #include <common/types.h>
-#include <common/timer.h>
 
 #include <net/ipv4.h>
 

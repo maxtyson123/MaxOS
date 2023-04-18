@@ -34,57 +34,6 @@ Console::~Console() {
 
 }
 
-/**
- * @details This function puts a string to the screen
- *
- * @param str The string to put
- */
-void Console::put_string_gui(char* str, gui::Text lines[15]){
-
-    static uint8_t gx = 0, gy = 0;    //Cursor Location
-    static char lineText[15][29];
-    //Debug Console is 29 wide x 15 high
-
-    for(int i = 0; str[i] != '\0'; ++i){     //Increment through each char as long as it's not the end symbol
-
-        switch (str[i]) {
-
-            case '\n':      //If newline
-                gy++;        //New Line
-                gx = 0;      //Reset Width pos
-                break;
-
-            default:        //(This also stops the \n from being printed)
-                lineText[gy][gx] = str[i];
-                gx++;
-
-        }
-
-        if(gx >= 29){    //If at edge of screen
-
-            gy++;
-            gx = 0;
-        }
-
-        //If at bottom of screen then clear and restart
-        if(gy >= 15){
-            for (int y = 0; y < 15; ++y) {
-                for (int x = 0; x < 29; ++x) {
-                    //Set everything to a space char
-                    lineText[y][x] = ' ';
-                }
-            }
-
-            gx = 0;
-            gy = 0;
-
-        }
-    }
-    for (int i = 0; i < 15; ++i) {
-        lines[i].UpdateText(lineText[i]);
-    }
-
-}
 
 char* Console::int_to_string(int i){
     static char text[12];                                //Create a buffer for the string
@@ -300,7 +249,7 @@ void Console::backspace(){
  * @param  s2 String 2
  * @return 0 if equal, 1 if not
  */
-int strcmp(const char* s1, const char* s2)
+int maxOS::common::strcmp(const char* s1, const char* s2)
 {
     while ((*s1 == *s2) && *s1) { ++s1; ++s2; }                             //While the characters are the same and the string is not over
     return ((int) (unsigned char) *s1) - ((int) (unsigned char) *s2);       //Return the difference between the characters

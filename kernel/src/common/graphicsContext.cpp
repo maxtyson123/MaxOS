@@ -47,7 +47,7 @@ GraphicsContext::GraphicsContext() {
     colourPallet[31] = Colour(0xA8,0xFF,0xFF);      // Celeste
 
 
-    // Set the rest of the palette to white
+    // Set the rest of the palette to black
     for(uint8_t colorCode = 255; colorCode >= 0x40; --colorCode)
         colourPallet[colorCode] = Colour(0,0,0);
 

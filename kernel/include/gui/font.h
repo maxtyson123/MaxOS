@@ -5,9 +5,9 @@
 #ifndef MAXOS_COMMON_FONT_H
 #define MAXOS_COMMON_FONT_H
 
-#include<kernel/include/common/types.h>
-#include<kernel/include/common/graphicsContext.h>
-#include<kernel/include/common/rectangle.h>
+#include<common/types.h>
+#include<common/graphicsContext.h>
+#include<common/rectangle.h>
 
 namespace maxOS{
 

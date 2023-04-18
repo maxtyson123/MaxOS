@@ -34,7 +34,7 @@ void KeyboardEventHandler::onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState)
 
 ///___Driver___
 
-KeyboardDriver::KeyboardDriver(InterruptManager* manager, KeyboardEventHandler *keyboardEventHandler)
+KeyboardDriver::KeyboardDriver(InterruptManager* manager)
         : InterruptHandler(0x21, manager),
           dataPort(0x60),
           commandPort(0x64)
@@ -120,6 +120,10 @@ KeyboardInterpreter::KeyboardInterpreter()
     this -> nextIsExtendedCode0 = false;
     this -> currentExtendedCode1 = 0;
     this -> extendedCode1Buffer = 0;
+
+}
+
+KeyboardInterpreter::~KeyboardInterpreter() {
 
 }
 

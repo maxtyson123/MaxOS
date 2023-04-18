@@ -45,8 +45,11 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/widget.o \
  		  obj/kernel/gui/window.o \
  		  obj/kernel/gui/desktop.o \
+ 		  obj/kernel/gui/font.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/common/printf.o \
+ 		  obj/kernel/common/graphicsContext.o \
+ 		  obj/kernel/common/colour.o \
  		  obj/kernel/common/inputStream.o \
  		  obj/kernel/net/etherframe.o \
  		  obj/kernel/net/arp.o \

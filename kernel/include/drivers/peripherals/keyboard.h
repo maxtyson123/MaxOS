@@ -373,8 +373,7 @@ namespace maxOS
 
 
             public:
-                KeyboardDriver(hardwarecommunication::InterruptManager *manager, KeyboardEventHandler *keyboardEventHandler);
-
+                KeyboardDriver(hardwarecommunication::InterruptManager *manager);
                 ~KeyboardDriver();
 
                 virtual common::uint32_t HandleInterrupt(common::uint32_t esp);

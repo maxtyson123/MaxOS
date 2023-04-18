@@ -21,8 +21,6 @@ namespace maxOS{
                 uint8_t lim_x = 0, lim_y = 0;    //Cursor Limits
                 uint8_t ini_x = 0, ini_y = 0;    //Cursor Start
 
-
-                void put_string_gui(char* str, gui::Text lines[15]);
                 void put_string(char* str, bool clearLine = false);
                 void put_hex(uint8_t key);
                 char* int_to_string(int i);

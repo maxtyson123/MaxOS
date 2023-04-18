@@ -189,10 +189,7 @@ void Clock::disconnectClockEventHandler(ClockEventHandler *clockEventHandler) {
 void Clock::delay(common::uint32_t milliseconds) {
 
         // Round the number of milliseconds to the nearest 100
-        uint64_t roundedMilliseconds = (milliseconds + 99);
-
-        // Divide the number of milliseconds by 100 to get the number of ticks
-        roundedMilliseconds /= 100;
+        uint64_t roundedMilliseconds =  ((milliseconds+99)/100);
 
         // Calculate the number of ticks until the delay is over
         uint64_t ticksUntilDelayIsOver = ticks + roundedMilliseconds;

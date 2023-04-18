@@ -19,7 +19,6 @@
 //GUI
 #include <gui/desktop.h>
 #include <gui/window.h>
-#include <gui/render.h>
 #include <gui/widgets/text.h>
 
 //NET
@@ -49,6 +48,7 @@ using namespace maxOS::drivers;
 using namespace maxOS::drivers::peripherals;
 using namespace maxOS::drivers::ethernet;
 using namespace maxOS::drivers::video;
+using namespace maxOS::drivers::clock;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 using namespace maxOS::net;
@@ -329,15 +329,6 @@ void kernProc(){
 
 
 
-    while(1){
-        #ifdef ENABLE_GRAPHICS
-                            //render new frame
-                            desktop.Draw(&rend);
-
-                            //display rendered frame
-                             rend.display(&vga);
-        #endif
-    }
 
 }
 
@@ -449,35 +440,25 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     serialLog.Write("Global Descriptor Table Ready\n",1);
     serialLog.Write("System Calls Ready\n",1);
 
-    #ifdef ENABLE_GRAPHICS
-        //Desktop needs the mouse and keyboard
-        // so instantiated it here
-        Desktop desktop(320,200,0x00,0x00,0xA8);
-    #endif
 
     printf("[ ] Setting Up Drivers... \n");
 
     DriverManager driverManager;
         //Keyboard
-        #ifdef GRAPHICSMODE
-            KeyboardDriver keyboard(&interrupts, &desktop);
-        #else
-            PrintfKeyboardEventHandler kbhandler;
-            KeyboardDriver keyboard(&interrupts, &kbhandler);
+        PrintfKeyboardEventHandler kbhandler;
+        KeyboardDriver keyboard(&interrupts);
+        KeyboardInterpreterEN_US usKeyboard;
+        keyboard.connectInputStreamEventHandler(&usKeyboard);
 
-        #endif
         driverManager.AddDriver(&keyboard);
         printf("    -Keyboard setup\n");
 
 
         //Mouse
-        #ifdef GRAPHICSMODE
-            MouseDriver mouse(&interrupts, &desktop);
-        #else
-            MouseToConsole mousehandler;
-            MouseDriver mouse(&interrupts, &mousehandler);
-        #endif
-            driverManager.AddDriver(&mouse);
+        MouseToConsole mousehandler;
+        MouseDriver mouse(&interrupts);
+
+        driverManager.AddDriver(&mouse);
         printf("    -Mouse setup\n");
 
         printf("    -[ ]Setting PCI\n\n");
@@ -485,32 +466,30 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         PCIController.SelectDrivers(&driverManager, &interrupts);
         printf("\n    -[x]Setup PCI\n");
 
-        #ifdef ENABLE_GRAPHICS
-            VideoGraphicsArray vga;
-            Render rend(320,200);   //arguments do nothing for now. 320,200 is hardcoded into "gui/render.h"
-            printf("    -VGA setup\n");
-        #endif
+
+        printf("    -[ ]Setting up CLOCK\n\n");
+        Clock kernelClock(&interrupts, 1);
+        printf("\n    -[x]Setup CLOCK\n");
+
+        // TODO: Replace with video driver
+        VideoGraphicsArray vga;
+        printf("    -VGA setup\n");
+
 
 
     printf("[X] Drivers Setup\n");
 
-
-    #ifdef ENABLE_GRAPHICS
-        vga.SetMode(320,200,8);
-
-    #endif
-
     printf("[ ] Setting Up ATA Hard Drives... \n");
 
     //Interrupt 14 for Primary
-    AdvancedTechnologyAttachment ata0m(0x1F0, true);         //Primary master
-    AdvancedTechnologyAttachment ata0s(0x1F0, false);        //Primary Slave
+    AdvancedTechnologyAttachment ata0m(0x1F0, true, 0);         //Primary master
+    AdvancedTechnologyAttachment ata0s(0x1F0, false, 0);        //Primary Slave
     printf("    -ATA 0 Primary Master: ");     ata0m.Identify();     printf("\n");
     printf("    -ATA 0 Primary Slave: ");      ata0s.Identify();     printf("\n");
 
     //Interrupt 15 for Primary
-    AdvancedTechnologyAttachment ata1m(0x170, true);         //Secondary master
-    AdvancedTechnologyAttachment ata1s(0x170, false);        //Secondary Slave
+    AdvancedTechnologyAttachment ata1m(0x170, true, 0);         //Secondary master
+    AdvancedTechnologyAttachment ata1s(0x170, false, 0);        //Secondary Slave
     printf("    -ATA 1 Primary Master: ");     ata1m.Identify();     printf("\n");
     printf("    -ATA 1 Primary Slave: ");      ata1s.Identify();     printf("\n");
     /*
@@ -623,6 +602,20 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     TransmissionControlProtocolSocket* test_tcp_socket = tcp.Listen(1234);                                                    // Use ncat 127.0.0.1 1234
     tcp.Bind(test_tcp_socket, &printfTCPHandler);
       */
+
+
+#ifdef ENABLE_GRAPHICS
+
+    VideoDriver* videoDriver = (VideoDriver*) &vga;
+    videoDriver ->setMode(320, 200, 8);
+    Desktop desktop(videoDriver);
+    mouse.connectMouseEventHandler(&desktop);
+    usKeyboard.connectKeyboardEventHandler(&desktop);
+    kernelClock.connectClockEventHandler(&desktop);
+
+
+
+#endif
 }
 
 
