@@ -1,5 +1,5 @@
 
-GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
+GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -g
 GCC_EXEC ?= gcc
 
 BUILD_COMPLETE ?= make runQ
@@ -10,6 +10,7 @@ QEMU_PARAMS = -net user -net nic,model=pcnet \
 		      -m 512 \
 		      -hda maxOS.img \
 		      -serial stdio
+QEMU_EXTRA_PARAMS? = ""
 
 #For intel_i217: -nic tap,model=e1000 \
 #For amd: 		 -net user -net nic,model=pcnet \
@@ -122,6 +123,7 @@ buildPrograms: $(programs)
 
 maxOS.bin: linker.ld $(kernel) $(libraries) $(ports) $(programs)
 	ld $(LD_PARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
+	objcopy --only-keep-debug $@ maxOS.sym
 
 maxOS.iso: maxOS.bin
 	mkdir iso
@@ -171,17 +173,23 @@ test: build
 
 
 runQ: build
-	sudo apt-get install qemu-system-i386
-	qemu-system-i386 $(QEMU_PARAMS)
+	qemu-system-i386 $(QEMU_PARAMS) $(QEMU_EXTRA_PARAMS)
 
 runQ_W: maxOS.iso
-	"C:\Program Files\qemu\qemu-system-i386" $(QEMU_PARAMS)
+	"C:\Program Files\qemu\qemu-system-i386" $(QEMU_PARAMS) $(QEMU_EXTRA_PARAMS)
+
+debugQ: build
+	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S" & gdb -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
 
 
 
 install_dep:
 	sudo apt-get update -y
 	sudo apt-get install g++ binutils libc6-i386 grub-pc xorriso mtools
+
+install_run_dep:
+	sudo apt-get install qemu-system-i386
+	sudo apt-get install gdb
 
 .PHONY: clean
 clean:
