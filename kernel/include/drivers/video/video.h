@@ -6,7 +6,7 @@
 #define MAXOS_DRIVERS_VIDEO_VIDEO_H
 
 #include <drivers/driver.h>
-#include <common/graphicscontext.h>
+#include <common/graphicsContext.h>
 #include <common/types.h>
 
 namespace maxOS

@@ -95,8 +95,6 @@ namespace maxOS{
                 common::uint32_t HandleInterrupt(common::uint32_t esp);
 
                 //Ethernet Driver functions
-                common::string GetVendorName();
-                common::string GetDeviceName();
                 void DoSend(common::uint8_t* buffer, common::uint32_t size);
                 common::uint64_t GetMediaAccessControlAddress();
                 inline void* operator new(common::uint32_t, amd_am79c973* p)

@@ -18,6 +18,7 @@ Desktop::Desktop(GraphicsContext *gc)
   MouseEventHandler(),
   ClockEventHandler()
 {
+
     // Dragged and focussed widget are null
     draggedWidget = 0;
     focussedWidget = 0;
@@ -89,7 +90,7 @@ void Desktop::invertMouseCursor() {
     //TODO: Get image drawing going and draw a proper mouse
 
     // Draw the horizontal line
-    for (int x = mouseX - 3; x < mouseX + 3; ++x) {
+    for (int x = mouseX - 3; x <= mouseX + 3; ++x) {
 
         // Invert the pixel
         graphicsContext->invertPixel(x, mouseY);
@@ -97,7 +98,7 @@ void Desktop::invertMouseCursor() {
     }
 
     // Draw the vertical line
-    for (int y = mouseY - 3; y < mouseY + 3; ++y) {
+    for (int y = mouseY - 3; y <= mouseY + 3; ++y) {
 
         // Invert the pixel
         graphicsContext->invertPixel(mouseX, y);
@@ -211,6 +212,10 @@ void Desktop::addChild(Widget* childWidget) {
  * @param time The time when the event occurred
  */
 void Desktop::onTime(const Time &time) {
+
+    graphicsContext ->drawCircle(100,100,100, Colour(0xA8,0xFF,0x57));
+    graphicsContext ->fillCircle(150, 60, 33,  Colour(0xA8, 0xA8, 0x57));
+
 
     // Check if anything is invaild and needs to be redrawn
     if(invalidAreas.empty())

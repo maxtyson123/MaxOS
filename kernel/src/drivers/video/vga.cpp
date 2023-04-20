@@ -165,12 +165,13 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
  */
 void VideoGraphicsArray::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour){
 
-    uint8_t* pixelAddress = FrameBufferSegment + 320*y + x;    //Get where to put the pixel in memory and x y pos
+    //TODO: Replace GetFrameBufferSegment() with a value that gets read every frame instead of pixel
+    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    //Get where to put the pixel in memory and x y pos
     *pixelAddress = colour;
 }
 
 uint8_t VideoGraphicsArray::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
-    uint8_t* pixelAddress = FrameBufferSegment + y*320 + x;
+    uint8_t* pixelAddress = GetFrameBufferSegment() + y*320 + x;
     return *pixelAddress;
 }
 

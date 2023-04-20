@@ -22,7 +22,7 @@ GraphicsContext::GraphicsContext() {
     colourPallet[6]  = Colour(0xA8, 0xA8, 0x00);    // Light Gold
     colourPallet[7]  = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
     colourPallet[8]  = Colour(0x00, 0x00, 0x57);    // Cetacean Blue
-    colourPallet[9]  = Colour(0x00, 0x00, 0x0FF);   // Blue
+    colourPallet[9]  = Colour(0x00, 0x00, 0xFF);   // Blue
     colourPallet[10] = Colour(0x00, 0xA8, 0x57);    // Green (Pigment)
     colourPallet[11] = Colour(0x00, 0xA8, 0xFF);    // Vivid Cerulean
     colourPallet[12] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
@@ -203,68 +203,47 @@ uint32_t GraphicsContext::getRenderedPixel32Bit(uint32_t x, uint32_t y) {
  */
 uint32_t GraphicsContext::colourToInt(Colour colour) {
 
-    switch (colorDepth) {
+    switch(colorDepth)
+    {
         case 8:
         {
             uint32_t result = 0;
-            int bestDistance = 0xFFFFFFF;      // Set to max int
-
-            // Loop through the colour pallet and find the closest match
-            for (uint8_t i = 0; i < 255; ++i) {
-                Colour* palletColour = &colourPallet[i];
-
-                // Calculate the distance between the two colours
-                int distance = ((int)colour.red - (int)palletColour->red) * ((int)colour.red - (int)palletColour->red) +
-                                ((int)colour.green - (int)palletColour->green) * ((int)colour.green - (int)palletColour->green) +
-                                ((int)colour.blue - (int)palletColour->blue) * ((int)colour.blue - (int)palletColour->blue);
-
-                // If the distance is less than the best distance, set the best distance to the current distance
-                if (distance < bestDistance) {
-                    bestDistance = distance;
+            int mindistance = 0xfffffff;
+            for(uint32_t i = 0; i <= 255; ++i)
+            {
+                Colour* c = &colourPallet[i];
+                int distance =
+                        ((int)colour.red-(int)c->red)*((int)colour.red-(int)c->red)
+                        +((int)colour.green-(int)c->green)*((int)colour.green-(int)c->green)
+                        +((int)colour.blue-(int)c->blue)*((int)colour.blue-(int)c->blue);
+                if(distance < mindistance)
+                {
+                    mindistance = distance;
                     result = i;
                 }
-
-                return  result;
             }
-
+            return result;
         }
-
         case 16:
         {
-           // 16-Bit Colour: 5 bits for red, 6 bits for green, 5 bits for blue (RRRRR,GGGGGG,BBBBB)
-           uint32_t result = 0;
-
-           result = (
-                     (uint16_t)(colour.red & 0xF8) << 8)                    // Red,   mask off the top 3 bits and shift left 8 (RRRRR00000000000)
-                   | ((uint16_t)(colour.green & 0xFC) << 3)                 // Green, mask off the top 2 bits and shift left 3 bits (000000GGGGGG000)
-                   | ((uint16_t)(colour.blue & 0xF8) >> 3);                 // Blue,  mask off the top 3 bits and shift right 3 bits (000000000000BBBBB)
-
-            return result;
-
+            // 16-Bit colours RRRRRGGGGGGBBBBB
+            return ((uint16_t)(colour.red   & 0xF8)) << 8
+                   | ((uint16_t)(colour.green & 0xFC)) << 3
+                   | ((uint16_t)(colour.blue  & 0xF8) >> 3);
         }
-
         case 24:
         {
-            // 24-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue (RRRRRRRR,GGGGGGGG,BBBBBBBB)
-            uint32_t result = 0;
-
-            result = (
-                      (uint32_t)colour.red << 16)                              // Red,   shift left 16 bits (RRRRRRRR0000000000000000)
-                    | ((uint32_t)colour.green << 8)                            // Green, shift left 8 bits (00000000GGGGGGGG00000000)
-                    | ((uint32_t)colour.blue);                                 // Blue,  no shift (0000000000000000BBBBBBBB)
-
-            return result;
+            return (uint32_t)colour.red   << 16
+                   | (uint32_t)colour.green << 8
+                   | (uint32_t)colour.blue;
         }
-
         default:
         case 32:
         {
-            // 32-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue, 8 bits for alpha (RRRRRRRR,GGGGGGGG,BBBBBBBB,AAAAAAAA)
-
-            return (uint32_t)colour.red << 24
-                 | (uint32_t)colour.green << 16
-                 | (uint32_t)colour.blue << 8
-                 | (uint32_t)colour.alpha;
+            return (uint32_t)colour.red   << 24
+                   | (uint32_t)colour.green << 16
+                   | (uint32_t)colour.blue  <<  8
+                   | (uint32_t)colour.alpha;
         }
     }
 }
@@ -677,8 +656,8 @@ void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
         // Draw a line from the top most point of the circle to the bottom most point of the circle
         for(int32_t y = -radius; y <= radius; ++y){
 
-            // Only draw the pixel if it is within the circle
-            if(x*x + y*y <= radius*radius)
+            // If the point is within the circle, draw it but make sure it is only part of the outline
+            if(x*x + y*y <= radius*radius && x*x + y*y >= (radius-1)*(radius-1))
                 renderPixel(x0+x,y0+y,colour);
         }
     }

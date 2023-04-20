@@ -293,6 +293,7 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 
                 case 0x0D: //General protection fault
                     printf("[ERROR] General protection fault (int 0x0D)");
+                    while(true);
                     break;
 
                 case 0x0E: //Page fault

@@ -108,6 +108,10 @@ amd_am79c973::~amd_am79c973()
  */
 void amd_am79c973::Activate()
 {
+
+    //TODO: Implment new console driver and use the stream for it here, causes GPF erorr int so return for now
+    return;
+
     driverMessageStream -> write("Activating AMD 79C973 Ethernet Controller ");
 
 
@@ -142,17 +146,6 @@ int amd_am79c973::Reset() {
     resetPort.Write(0);
     return 10;                      // 10 means wait for 10ms
 
-}
-
-
-string amd_am79c973::GetVendorName()
-{
-    return "AMD";
-}
-
-string amd_am79c973::GetDeviceName()
-{
-    return "PCnet-FAST III (am79c973)";
 }
 
 

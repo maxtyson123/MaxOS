@@ -455,8 +455,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
         //Mouse
-        MouseToConsole mousehandler;
+        MouseToConsole mouseConsoleHandler;
         MouseDriver mouse(&interrupts);
+        mouse.connectMouseEventHandler(&mouseConsoleHandler);
 
         driverManager.AddDriver(&mouse);
         printf("    -Mouse setup\n");
@@ -467,9 +468,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
         printf("\n    -[x]Setup PCI\n");
 
 
-        printf("    -[ ]Setting up CLOCK\n\n");
+        printf("    -[ ]Setting up CLOCK");
         Clock kernelClock(&interrupts, 1);
-        printf("\n    -[x]Setup CLOCK\n");
+        driverManager.AddDriver(&kernelClock);
+        printf("\n    -[x]Setup CLOCK");
 
         // TODO: Replace with video driver
         VideoGraphicsArray vga;
@@ -480,7 +482,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printf("[X] Drivers Setup\n");
 
     printf("[ ] Setting Up ATA Hard Drives... \n");
-
+/***
     //Interrupt 14 for Primary
     AdvancedTechnologyAttachment ata0m(0x1F0, true, 0);         //Primary master
     AdvancedTechnologyAttachment ata0s(0x1F0, false, 0);        //Primary Slave
@@ -503,7 +505,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     */
 
 
-
+/***
     printf("[x] ATA Hard Drives Setup \n");
 
     printf("[ ] Setting Up File System... \n");
@@ -551,7 +553,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     k_sLog = serialLog;
     k_ipv4 = &ipv4;
 
-
+    */
 
     //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
     printf("[ ] Activating Interrupt Descriptor Table... \n");
@@ -564,7 +566,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
 
-
+/***
 
     printf("++Broadcast MAC ++\n");
     arp.BroadcastMACAddress(defaultGatewayInternetProtocolAddress);
@@ -603,11 +605,21 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     tcp.Bind(test_tcp_socket, &printfTCPHandler);
       */
 
+    class PrintClockEventHandler : public ClockEventHandler{
 
-#ifdef ENABLE_GRAPHICS
+
+        public:
+            void onTime(const common::Time& time){
+                printf("Time: ", true);
+                printfInt(time.second);
+            }
+    };
+
+#ifndef ENABLE_GRAPHICS
 
     VideoDriver* videoDriver = (VideoDriver*) &vga;
     videoDriver ->setMode(320, 200, 8);
+
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
     usKeyboard.connectKeyboardEventHandler(&desktop);
@@ -616,6 +628,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
 #endif
+
+    while (true);
+
 }
 
 
