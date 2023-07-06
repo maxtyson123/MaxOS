@@ -44,10 +44,10 @@ void Text::draw(GraphicsContext *gc, Rectangle<int>& area) {
     int32_t y = textCoordinates.second;
 
     // Draw the background for the text (TODO: Might not need to do this as the background is drawn by the default draw operation)
-    gc -> fillRectangle(x+area.left, y+area.top, x+area.left+area.width, y+area.top+area.height, font.backgroundColour);
+    gc -> fillRectangle(x+area.left, y+area.top, x+area.left+area.width, y+area.top+area.height, this ->font.backgroundColour);
 
     // Draw the text
-    font.drawText(x, y, gc, widgetText, area);
+    this ->font.drawText(x, y, gc, widgetText, area);
 
 }
 

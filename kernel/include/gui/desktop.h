@@ -43,7 +43,8 @@ namespace maxOS{
                 void onTime(const common::Time& time);
                 void invalidate(common::Rectangle<common::int32_t>& area);
 
-                void onMouseMoveEvent(int x, int y);
+                // Overrides mouse event handlers
+                void onMouseMoveEvent(common::int8_t x, common::int8_t y);
                 void onMouseDownEvent(common::uint8_t button);
                 void onMouseUpEvent(common::uint8_t button);
 

@@ -23,7 +23,7 @@ void MouseEventHandler::onMouseUpEvent(uint8_t button){
 
 }
 
-void MouseEventHandler::onMouseMoveEvent(int x, int y){
+void MouseEventHandler::onMouseMoveEvent(int8_t x, int8_t y){
 
 }
 
@@ -39,7 +39,7 @@ MouseDriver::MouseDriver(InterruptManager* manager)
           dataPort(0x60),
           commandPort(0x64)
 {
-    offest = 0; //The mouse is weird and won't write to exactly 0 sometimes, so there has to be different offsets for different os-es
+    offest = 2; //The mouse is weird and won't write to exactly 0 sometimes, so there has to be different offsets for different os-es
     buttons = 0;
 }
 MouseDriver::~MouseDriver(){

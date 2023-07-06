@@ -13,38 +13,74 @@ GraphicsContext::GraphicsContext() {
     mirrorYAxis = false;
 
     // VirtualBox VGA palette
-    colourPallet[0]  = Colour(0x00, 0x00, 0x00);    // Black
-    colourPallet[1]  = Colour(0x00, 0x00, 0xA8);    // Duke Blue
-    colourPallet[2]  = Colour(0x00, 0xA8, 0x00);    // Islamic Green
-    colourPallet[3]  = Colour(0x00, 0xA8, 0xA8);    // Persian Green
-    colourPallet[4]  = Colour(0xA8, 0x00, 0x00);    // Dark Candy Apple Red
-    colourPallet[5]  = Colour(0xA8, 0x00, 0xA8);    // Heliotrope Magenta
-    colourPallet[6]  = Colour(0xA8, 0xA8, 0x00);    // Light Gold
-    colourPallet[7]  = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
-    colourPallet[8]  = Colour(0x00, 0x00, 0x57);    // Cetacean Blue
-    colourPallet[9]  = Colour(0x00, 0x00, 0xFF);   // Blue
-    colourPallet[10] = Colour(0x00, 0xA8, 0x57);    // Green (Pigment)
-    colourPallet[11] = Colour(0x00, 0xA8, 0xFF);    // Vivid Cerulean
-    colourPallet[12] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
-    colourPallet[13] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
-    colourPallet[14] = Colour(0xA8, 0xA8, 0x57);    // Olive Green
-    colourPallet[15] = Colour(0xA8, 0xA8, 0xFF);    // Maximum Blue Purple
-    colourPallet[16] = Colour(0x00,0x57,0x00);      // Dark Green (X11)
-    colourPallet[17] = Colour(0x00,0x57,0xA8);      // Cobalt Blue
-    colourPallet[18] = Colour(0x00,0xFF,0x00);      // Electric Green
-    colourPallet[19] = Colour(0x00,0xFF,0xA8);      // Medium Spring Green
-    colourPallet[20] = Colour(0xA8,0x57,0x00);      // Windsor Tan
-    colourPallet[21] = Colour(0xA8,0x57,0xA8);      // Purpureus
-    colourPallet[22] = Colour(0xA8,0xFF,0x00);      // Spring Bud
-    colourPallet[23] = Colour(0xA8,0xFF,0xA8);      // Mint Green
-    colourPallet[24] = Colour(0x00,0x57,0x57);      // Midnight Green (Eagle Green)
-    colourPallet[25] = Colour(0x00,0x57,0xFF);      // Blue (RYB)
-    colourPallet[26] = Colour(0x00,0xFF,0x57);      // Malachite
-    colourPallet[27] = Colour(0x00,0xFF,0xFF);      // Aqua
-    colourPallet[28] = Colour(0xA8,0x57,0x57);      // Middle Red Purple
-    colourPallet[29] = Colour(0xA8,0x57,0xFF);      // Lavender Indigo
-    colourPallet[30] = Colour(0xA8,0xFF,0x57);      // Inchworm
-    colourPallet[31] = Colour(0xA8,0xFF,0xFF);      // Celeste
+    colourPallet[0x00] = Colour(0x00,0x00,0x00);    // Black
+    colourPallet[0x01] = Colour(0x00,0x00,0xA8);    // Duke Blue
+    colourPallet[0x02] = Colour(0x00,0xA8,0x00);    // Islamic Green
+    colourPallet[0x03] = Colour(0x00,0xA8,0xA8);    // Persian Green
+    colourPallet[0x04] = Colour(0xA8,0x00,0x00);    // Dark Candy Apple Red
+    colourPallet[0x05] = Colour(0xA8,0x00,0xA8);    // Heliotrope Magenta
+
+    colourPallet[0x06] = Colour(0xA8,0xA8,0x00);    // Light Gold
+    colourPallet[0x07] = Colour(0xA8,0xA8,0xA8);    // Dark Gray (X11)
+    colourPallet[0x08] = Colour(0x00,0x00,0x57);    // Cetacean Blue
+    colourPallet[0x09] = Colour(0x00,0x00,0xFF);    // Blue
+    colourPallet[0x0A] = Colour(0x00,0xA8,0x57);    // Green (Pigment)
+    colourPallet[0x0B] = Colour(0x00,0xA8,0xFF);    // Vivid Cerulean
+    colourPallet[0x0C] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+    colourPallet[0x0D] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+    colourPallet[0x0E] = Colour(0xA8,0xA8,0x57);    // Olive Green
+    colourPallet[0x0F] = Colour(0xA8,0xA8,0xFF);    // Maximum Blue Purple
+
+    colourPallet[0x10] = Colour(0x00,0x57,0x00);    // Dark Green (X11)
+    colourPallet[0x11] = Colour(0x00,0x57,0xA8);    // Cobalt Blue
+    colourPallet[0x12] = Colour(0x00,0xFF,0x00);    // Electric Green
+    colourPallet[0x13] = Colour(0x00,0xFF,0xA8);    // Medium Spring Green
+    colourPallet[0x14] = Colour(0xA8,0x57,0x00);    // Windsor Tan
+    colourPallet[0x15] = Colour(0xA8,0x57,0xA8);    // Purpureus
+    colourPallet[0x16] = Colour(0xA8,0xFF,0x00);    // Spring Bud
+    colourPallet[0x17] = Colour(0xA8,0xFF,0xA8);    // Mint Green
+    colourPallet[0x18] = Colour(0x00,0x57,0x57);    // Midnight Green (Eagle Green)
+    colourPallet[0x19] = Colour(0x00,0x57,0xFF);    // Blue (RYB)
+    colourPallet[0x1A] = Colour(0x00,0xFF,0x57);    // Malachite
+    colourPallet[0x1B] = Colour(0x00,0xFF,0xFF);    // Aqua
+    colourPallet[0x1C] = Colour(0xA8,0x57,0x57);    // Middle Red Purple
+    colourPallet[0x1D] = Colour(0xA8,0x57,0xFF);    // Lavender Indigo
+    colourPallet[0x1E] = Colour(0xA8,0xFF,0x57);    // Olive Green
+    colourPallet[0x1F] = Colour(0xA8,0xFF,0xFF);    // Celeste
+
+    colourPallet[0x20] = Colour(0x57,0x00,0x00);    // Blood Red
+    colourPallet[0x21] = Colour(0x57,0x00,0xA8);    // Metallic Violet
+    colourPallet[0x22] = Colour(0x57,0xA8,0x00);    // Kelly Green
+    colourPallet[0x23] = Colour(0x57,0xA8,0xA8);    // Cadet Blue
+    colourPallet[0x24] = Colour(0xFF,0x00,0x00);    // Red
+    colourPallet[0x25] = Colour(0xFF,0x00,0xA8);    // Fashion Fuchsia
+    colourPallet[0x26] = Colour(0xFF,0xA8,0x00);    // Chrome Yellow
+    colourPallet[0x27] = Colour(0xFF,0xA8,0xA8);    // Light Salmon Pink
+    colourPallet[0x28] = Colour(0x57,0x00,0x57);    // Imperial Purple
+    colourPallet[0x29] = Colour(0x57,0x00,0xFF);    // Electric Indigo
+    colourPallet[0x2A] = Colour(0x57,0xA8,0x57);    // Apple
+    colourPallet[0x2B] = Colour(0x57,0xA8,0xFF);    // Blue Jeans
+    colourPallet[0x2C] = Colour(0xFF,0x00,0x57);    // Folly
+    colourPallet[0x2D] = Colour(0xFF,0x00,0xFF);    // Fuchsia
+    colourPallet[0x2E] = Colour(0xFF,0xA8,0x57);    // Rajah
+    colourPallet[0x2F] = Colour(0xFF,0xA8,0xFF);    // Rich Brilliant Lavender
+
+    colourPallet[0x30] = Colour(0x57,0x57,0x00);    // Dark Bronze (Coin)
+    colourPallet[0x31] = Colour(0x57,0x57,0xA8);    // Liberty
+    colourPallet[0x32] = Colour(0x57,0xFF,0x00);    // Chlorophyll Green
+    colourPallet[0x33] = Colour(0x57,0xFF,0xA8);    // Medium Aquamarine
+    colourPallet[0x34] = Colour(0xFF,0x57,0x00);    // Orange (Pantone)
+    colourPallet[0x35] = Colour(0xFF,0x57,0xA8);    // Brilliant Rose
+    colourPallet[0x36] = Colour(0xFF,0xFF,0x00);    // Yellow
+    colourPallet[0x37] = Colour(0xFF,0xFF,0xA8);    // Calamansi
+    colourPallet[0x38] = Colour(0x57,0x57,0x57);    // Davy's Grey
+    colourPallet[0x39] = Colour(0x57,0x57,0xFF);    // Very Light Blue
+    colourPallet[0x3A] = Colour(0x57,0xFF,0x57);    // Screamin' Green
+    colourPallet[0x3B] = Colour(0x57,0xFF,0xFF);    // Electric Blue
+    colourPallet[0x3C] = Colour(0xFF,0x57,0x57);    // Sunset Orange
+    colourPallet[0x3D] = Colour(0xFF,0x57,0xFF);    // Shocking Pink (Crayola)
+    colourPallet[0x3E] = Colour(0xFF,0xFF,0x57);    // Shocking Pink (Crayola)
+    colourPallet[0x3F] = Colour(0xFF,0xFF,0xFF);    // White
 
 
     // Set the rest of the palette to black
@@ -300,8 +336,6 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
             return result;
 
         }
-
-        
     }
 }
 
@@ -405,6 +439,7 @@ void GraphicsContext::invertPixel(int32_t x, int32_t y) {
     putPixel(x,y,colour);
 }
 
+
 /**
  * @details Draws a line on the screen
  *
@@ -450,11 +485,10 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
         // Mirror the Y axis as directly calling renderPixel will not do this
         if(mirrorYAxis)
         {
-            int32_t temp = yMax;            // Store the maximum y value
-            yMax = height - yMin - 1;       // Set the maximum y value to the minimum y value
-            yMin = height - temp - 1;       // Set the minimum y value to the maximum y value
+            int32_t temp = yMax;
+            yMax = height - yMin - 1;
+            yMin = height - temp - 1;
         }
-
 
         // Check that the line is within the screen
         if (0 > x0 || (uint32_t) x0 >= width) {
@@ -502,6 +536,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
         for(int32_t x = x0; x <= x1; x++, y+=slope)
             renderPixel(x, (int32_t)y, colour);
     }
+
     // If the line is more vertical than horizontal, increment y by 1 and increment x by the inverse of the slope
     else
     {
@@ -608,8 +643,8 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
     }
 
     // Draw the rectangle
-    for(int32_t y = y0; y <= y1; ++y){
-        for (int32_t x = xMin; x <= xMax; ++x) {
+    for(int32_t y = y0; y < y1; ++y){
+        for (int32_t x = xMin; x < xMax; ++x) {
             renderPixel(x, y, colour);
         }
     }

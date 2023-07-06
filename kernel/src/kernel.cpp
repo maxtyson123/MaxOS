@@ -149,7 +149,7 @@ class MouseToConsole: public MouseEventHandler{
                                   | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
         }
 
-        void onMouseMoveEvent(int x_offset, int y_offset){
+        void onMouseMoveEvent(int8_t x_offset, int8_t y_offset){
 
             static uint16_t* VideoMemory = (uint16_t*)0xb8000;
 
@@ -607,15 +607,15 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
     class PrintClockEventHandler : public ClockEventHandler{
 
-
         public:
+
             void onTime(const common::Time& time){
-                printf("Time: ", true);
+                printf("Seconds: ");
                 printfInt(time.second);
             }
     };
 
-#ifndef ENABLE_GRAPHICS
+#ifdef ENABLE_GRAPHICS
 
     VideoDriver* videoDriver = (VideoDriver*) &vga;
     videoDriver ->setMode(320, 200, 8);
@@ -625,6 +625,14 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     usKeyboard.connectKeyboardEventHandler(&desktop);
     kernelClock.connectClockEventHandler(&desktop);
 
+    widgets::Text testLabel(0, 0, 80, 20, "Hello World");
+
+    Window testWindow2(&testLabel, "Window 2");
+    testWindow2.move(10,10);
+    desktop.addChild(&testWindow2);
+
+    Window testWindow(150,10, 150, 150, "Window 1");
+    desktop.addChild(&testWindow);
 
 
 #endif

@@ -12,8 +12,8 @@ using namespace maxOS::drivers::peripherals;
 
 Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string titleText)
 : CompositeWidget(left, top, width, height),
-// Top at -10 for bar height, -5 for frame, +1 for the border. Width is the width of the window minus the frame on each side. Height is the height of the title bar plus the frame on the top minus the border.
-  title(0, -(10 + 5) + 1, width - 2 * 5, 10 + 5 - 2, titleText),
+// Top at -10 for bar height, -5 for frame, + 2 for the border. Width is the width of the window minus the frame on each side. Height is the height of the title bar plus the frame on the top minus the border.
+  title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, titleText),
   windowWidgetMover(this),
   windowWidgetMoverResizerTop(this),
   windowWidgetMoverResizerBottom(this),
@@ -35,7 +35,7 @@ Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width
     // Set the colours
     windowAreaColour            = Colour(0xff, 0xff, 0xff);    // White
     windowFrameBorderColour     = Colour(0x00, 0x00, 0x00);    // Black
-    windowFrameColour           = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
+    windowFrameColour           = Colour(0x57,0x57,0x57);      // Davy's Grey
     title.font.foregroundColour = Colour(0xff, 0xff, 0xff);    // White
     title.font.backgroundColour = windowFrameColour;
 
@@ -47,7 +47,7 @@ Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width
 Window::Window(Widget *containedWidget, common::string titleText)
 // Width is the width of the contained widget plus the frame on each side and the border. Height is the height of the contained widget plus the frame on the top and bottom plus the height of the title bar plus the border.
 : CompositeWidget(0, 0, containedWidget -> getPosition().width + 2 * 5 + 2, containedWidget->getPosition().height + 2 * 5 + 10 + 2),
-  title(0, -(10 + 5) + 1, containedWidget -> getPosition().width, 10 + 5 - 2, titleText),
+  title(0, -(10 + 5) + 2, containedWidget -> getPosition().width, 10 + 5 - 3, titleText),
   windowWidgetMover(this),
   windowWidgetMoverResizerTop(this),
   windowWidgetMoverResizerLeft(this),
@@ -69,7 +69,7 @@ Window::Window(Widget *containedWidget, common::string titleText)
     // Set the colours
     windowAreaColour            = Colour(0xff, 0xff, 0xff);    // White
     windowFrameBorderColour     = Colour(0x00, 0x00, 0x00);    // Black
-    windowFrameColour           = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
+    windowFrameColour           = Colour(0x57,0x57,0x57);      // Davy's Grey
     title.font.foregroundColour = Colour(0xff, 0xff, 0xff);    // White
     title.font.backgroundColour = windowFrameColour;
 
@@ -144,8 +144,6 @@ MouseEventHandler* Window::onMouseButtonPressed(common::uint32_t x, common::uint
         return &windowWidgetMoverResizerBottomRight;
     }
 
-
-
     // Pass the event on to the children and see which one handles it
     MouseEventHandler* childThatHandledEvent = CompositeWidget::onMouseButtonPressed(x, y, button);
     return childThatHandledEvent;
@@ -188,27 +186,17 @@ void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area)
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
         gc -> fillRectangle(windowFrameTopAreaToDraw.left + windowX, windowFrameTopAreaToDraw.top + windowY, windowFrameTopAreaToDraw.left + windowFrameTopAreaToDraw.width + windowX, windowFrameTopAreaToDraw.top + windowFrameTopAreaToDraw.height + windowY, windowFrameColour);
 
-        // Draw the border
-        if(area.intersects(Rectangle<int>(0,0,windowPosition.width, 1))){
-            gc -> drawRectangle(windowFrameTopAreaToDraw.left + windowX, windowY, windowFrameTopAreaToDraw.left + windowFrameTopAreaToDraw.width + windowX, windowY, windowFrameBorderColour);
-        }
-
     }
 
     // Draw the bottom of the window frame (does not include left and right borders so start at windowFrameThickness and end at windowPosition.width - windowFrameThickness)
-    Rectangle<int> windowFrameBottomArea(windowFrameThickness, windowPosition.height - windowFrameThickness, windowPosition.width - 2 * windowFrameThickness, windowFrameThickness);
+    Rectangle<int> windowFrameBottomArea(windowFrameThickness, windowPosition.height - windowFrameThickness, windowPosition.width - 2*windowFrameThickness, windowFrameThickness);
     if(windowFrameBottomArea.intersects(area)){
 
         // Get the parts of the window frame top area that are in the area to draw
         Rectangle<int> windowFrameBottomAreaToDraw = windowFrameBottomArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
-        gc -> fillRectangle(windowFrameBottomAreaToDraw.left + windowX, windowFrameBottomAreaToDraw.top + windowY, windowFrameBottomAreaToDraw.left + windowFrameBottomAreaToDraw.width + windowX, windowFrameBottomAreaToDraw.top + windowFrameBottomAreaToDraw.height + windowY, windowFrameColour);
-
-        // Draw the border
-        if(area.intersects(Rectangle<int>(0,windowPosition.height - 1,windowPosition.width, 1))){
-            gc -> drawRectangle(windowFrameBottomAreaToDraw.left + windowX, windowY + windowPosition.height -1, windowFrameBottomAreaToDraw.left + windowFrameBottomAreaToDraw.width + windowX - 1, windowY + windowPosition.height - 1, windowFrameBorderColour);
-        }
+        gc -> fillRectangle(windowX + windowFrameBottomAreaToDraw.left, windowY + windowFrameBottomAreaToDraw.top, windowX + windowFrameBottomAreaToDraw.left + windowFrameBottomAreaToDraw.width, windowY + windowFrameBottomAreaToDraw.top + windowFrameBottomAreaToDraw.height, windowFrameColour);
 
     }
 
@@ -220,34 +208,24 @@ void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area)
         Rectangle<int> windowFrameLeftAreaToDraw = windowFrameLeftArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
-        gc -> fillRectangle(windowFrameLeftAreaToDraw.left + windowX, windowFrameLeftAreaToDraw.top + windowY, windowFrameLeftAreaToDraw.left + windowFrameLeftAreaToDraw.width + windowX, windowFrameLeftAreaToDraw.top + windowFrameLeftAreaToDraw.height + windowY, windowFrameColour);
-
-        // Draw the border
-        if(area.intersects(Rectangle<int>(0,0,1, windowPosition.height))){
-            gc -> drawRectangle(windowPosition.width -1 + windowX, windowFrameLeftAreaToDraw.top + windowY, windowPosition.width - 1 + windowX, windowFrameLeftAreaToDraw.top + windowFrameLeftAreaToDraw.height + windowY - 1, windowFrameBorderColour);
-
-        }
+        gc -> fillRectangle(windowX + windowFrameLeftAreaToDraw.left, windowY + windowFrameLeftAreaToDraw.top, windowX + windowFrameLeftAreaToDraw.left + windowFrameLeftAreaToDraw.width, windowY + windowFrameLeftAreaToDraw.top + windowFrameLeftAreaToDraw.height, windowFrameColour);
 
     }
 
     // Draw the right of the window frame
-    Rectangle<int> windowFrameRightArea(windowPosition.width - windowFrameThickness,0, windowFrameThickness, windowPosition.height);
+    Rectangle<int> windowFrameRightArea(windowPosition.width - windowFrameThickness, 0, windowFrameThickness, windowPosition.height);
     if(windowFrameRightArea.intersects(area)){
 
         // Get the parts of the window frame top area that are in the area to draw
         Rectangle<int> windowFrameRightAreaToDraw = windowFrameRightArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
-        gc -> fillRectangle(windowFrameRightAreaToDraw.left + windowX, windowFrameRightAreaToDraw.top + windowY, windowFrameRightAreaToDraw.left + windowFrameRightAreaToDraw.width + windowX, windowFrameRightAreaToDraw.top + windowFrameRightAreaToDraw.height + windowY, windowFrameColour);
-
-        // Draw the border
-        if(area.intersects(Rectangle<int>(windowPosition.width - 1,0,1, windowPosition.height))){
-            gc -> drawRectangle(windowPosition.width -1 + windowX, windowFrameRightAreaToDraw.top + windowY, windowPosition.width - 1 + windowX, windowFrameRightAreaToDraw.top + windowFrameRightAreaToDraw.height + windowY - 1, windowFrameBorderColour);
-
-        }
+        gc -> fillRectangle(windowX + windowFrameRightAreaToDraw.left, windowY + windowFrameRightAreaToDraw.top, windowX + windowFrameRightAreaToDraw.left + windowFrameRightAreaToDraw.width, windowY + windowFrameRightAreaToDraw.top + windowFrameRightAreaToDraw.height, windowFrameColour);
 
     }
 
+    // TODO: This is a hack to get the window border to draw correctly, should make it so that the window border is drawn in the correct place
+    gc -> drawRectangle(windowX+1, windowY+1, windowX + windowPosition.width -1, windowY + windowPosition.height -1, windowFrameBorderColour);
 }
 
 /**

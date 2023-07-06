@@ -19,7 +19,8 @@ namespace maxOS {
 
             public:
 
-                Font font;
+                //TODO: Redo so that it uses some generified font class
+                AmigaFont font;
                 char* widgetText;
 
                 Text(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string text);

@@ -21,10 +21,9 @@ namespace maxOS {
                     MouseEventHandler();
                     ~MouseEventHandler();
 
-
                     virtual void onMouseDownEvent(common::uint8_t button);
                     virtual void onMouseUpEvent(common::uint8_t button);
-                    virtual void onMouseMoveEvent(int x, int y);
+                    virtual void onMouseMoveEvent(common::int8_t x, common::int8_t y);
             };
 
 

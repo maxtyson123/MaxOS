@@ -14,19 +14,30 @@ namespace maxOS {
                 First first;
                 Second second;
 
-                Pair() {
+                Pair();
+                Pair(First, Second);
+                ~Pair();
+        };
 
-                };
+        //_____________________________Implementation___________________________________________
+        template<class First, class Second> Pair<First,Second>::Pair()
+        {
+        }
 
-                Pair(First, Second) {
-                    this->first = first;
-                    this->second = second;
-                };
+        template<class First, class Second> Pair<First,Second>::Pair(First first, Second second)
+        {
+            this->first = first;
+            this->second = second;
+        }
 
-                ~Pair() {
+        template<class First, class Second> Pair<First,Second>::~Pair()
+        {
+        }
 
-                };
-            };
+
+        //Note, The GUI fucked it self soley because pair was implmented inline ffs
+
     }
+
 }
 #endif //MAXOS_PAIR_H

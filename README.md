@@ -142,7 +142,7 @@ Clone the project
   git clone https://github.com/maxtyson123/max-os
 ```
 
-Go to the project directory, fix the scripts
+Go to the project directory, fix the scripts (GitHub does weird line endings)
 
 ```bash
   cd max-os
