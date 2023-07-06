@@ -18,7 +18,7 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 
  
 ## Screenshots
-![Screenshot](docs/Screenshots/FAT32_read_dirs_and_files.png)
+![Screenshot](docs/Screenshots/GUI_windows.png)
 
 
 
@@ -36,7 +36,10 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 - [ ] {FIX Later} Fat32 Filesystem through an ATA driver
 
 
-
+### Current Plans:
+1. Get the windows to move correctly
+2. Rewrite the filesystem
+3. Setup SMB/CIFS protocol
 
 ###  Future Plans
 
