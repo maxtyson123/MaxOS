@@ -625,7 +625,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     usKeyboard.connectKeyboardEventHandler(&desktop);
     kernelClock.connectClockEventHandler(&desktop);
 
-    widgets::Text testLabel(0, 0, 80, 20, "Hello World");
+    widgets::Text testLabel(0, 0, 120, 20, "Hello World");
 
     Window testWindow2(&testLabel, "Window 2");
     testWindow2.move(10,10);
