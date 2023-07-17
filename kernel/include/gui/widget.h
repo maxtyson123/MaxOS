@@ -23,7 +23,7 @@ namespace maxOS{
          */
         class Widget : public drivers::peripherals::KeyboardEventHandler{
             template<int Left, int Top, int Width, int Height> friend class WidgetMoverResizer;
-            friend class WidgetContainer;
+            friend class CompositeWidget;
 
             private:
                 common::Rectangle<int> position;
@@ -125,11 +125,11 @@ namespace maxOS{
                 WidgetMoverResizer(Widget* widget);
                 ~WidgetMoverResizer();
 
-                void onMouseMoveEvent(int x, int y);
+                void onMouseMoveEvent(common::int8_t x, common::int8_t y);
 
         };
 
-        typedef WidgetMoverResizer<0, 0, 0, 0> WidgetMover;
+        typedef WidgetMoverResizer<1, 1, 0, 0> WidgetMover;
 
         typedef WidgetMoverResizer<0, 1, 0, -1> WidgetMoverResizerTop;
         typedef WidgetMoverResizer<0, 0, 0, 1> WidgetMoverResizerBottom;
@@ -170,7 +170,7 @@ namespace maxOS{
          * @param x The x position of the mouse
          * @param y The y position of the mouse
          */
-        template<int Left, int Top, int Width, int Height> void WidgetMoverResizer<Left, Top, Width, Height>::onMouseMoveEvent(int x, int y)
+        template<int Left, int Top, int Width, int Height> void WidgetMoverResizer<Left, Top, Width, Height>::onMouseMoveEvent(common::int8_t x, common::int8_t y)
         {
 
             Widget* targ = this->targettedWidget;

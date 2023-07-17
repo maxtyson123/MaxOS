@@ -90,63 +90,48 @@ Window::~Window() {
  * @param y The y coordinate of the mouse.
  * @param button The button that is pressed.
  */
-MouseEventHandler* Window::onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button){
+MouseEventHandler* Window::onMouseButtonPressed(common::uint32_t mouseX, common::uint32_t mouseY, common::uint8_t button){
 
-    // Get the position of the window
-    Rectangle<int> windowPosition = this -> getPosition();
+    maxOS::drivers::peripherals::MouseEventHandler* childrenResult = CompositeWidget::onMouseButtonPressed(X,Y,button);
+    Rectangle<int> windowPosition = getPosition();
 
     // Check if the mouse is in the frame
-    if(x <= windowFrameThickness){                  // This means the mouse is in the left as the x position (relative to this object) has not passed the frame
-
-        // If y is also less than the frame thickness then the mouse is in the top left corner
-        if(y <= windowFrameThickness){
+    if(mouseX <= windowFrameThickness)                                                  // This means the mouse is in the left as the x position (relative to this object) has not passed the frame
+    {
+        if(mouseY <= windowFrameThickness)                                              // If y is also less than the frame thickness then the mouse is in the top left corner
             return &windowWidgetMoverResizerTopLeft;
-        }
 
-        // If y is also greater than the height of the window minus the frame thickness then the mouse is above the bottom left corner
-        if(y >= windowPosition.height - windowFrameThickness){
+        else if(mouseY < windowPosition.height - windowFrameThickness)                  // If y is also greater than the height of the window minus the frame thickness then the mouse is above the bottom left corner
             return &windowWidgetMoverResizerLeft;
-        }
 
-        // Otherwise it's in the bottom left corner
-        return &windowWidgetMoverResizerBottomLeft;
-
-    }else if (x < windowPosition.width - windowFrameThickness){    // This means the mouse is in the middle as the x position (relative to this object) has passed the frame on the left but not the right
-
-        // If y is also less than the frame thickness then the mouse is in the top middle
-        if(y <= windowFrameThickness){
+        else                                                                            // Otherwise it's in the bottom left corner
+            return &windowWidgetMoverResizerBottomLeft;
+    }
+    else if(mouseX < windowPosition.width - windowFrameThickness)                       // This means the mouse is in the middle as the x position (relative to this object) has passed the frame on the left but not the right
+    {
+        if(mouseY <= windowFrameThickness)                                              // If y is also less than the frame thickness then the mouse is in the top middle
             return &windowWidgetMoverResizerTop;
-        }
 
-        // If y less thant the frame thick ness and the height of the title bar then the mouse is in the title bar
-        if(y <= windowFrameThickness + windowTitleBarHeight){
+        else if(mouseY < windowFrameThickness+windowTitleBarHeight)                     // If y less thant the frame thickness and the height of the title bar then the mouse is in the title bar
             return &windowWidgetMover;
-        }
 
-        // If y is also greater than the height of the window minus the frame thickness then the mouse is in the bottom
-        if(y >= windowPosition.height - windowFrameThickness) {
+        else if(mouseY >= windowPosition.height-windowFrameThickness)                   // If y is also greater than the height of the window minus the frame thickness then the mouse is in the bottom
             return &windowWidgetMoverResizerBottom;
-        }
-
-    }else{  // This means the only place left to check is the right as left and top/bottom is done (The mouse must be on the right otherwise it would have been picked up in the middle (prev if statement))
-
-        // If y is also less than the frame thickness then the mouse is in the top right corner
-        if (y <= windowFrameThickness) {
+    }
+    else
+    {
+        if(mouseY <= windowFrameThickness)                                              // If y is also less than the frame thickness then the mouse is in the top right corner
             return &windowWidgetMoverResizerTopRight;
-        }
 
-        // If y is also greater than the height of the window minus the frame thickness then the mouse is above the bottom right corner
-        if (y >= windowPosition.height - windowFrameThickness) {
+        else if(mouseY < windowPosition.height-windowFrameThickness)                    // If y is also greater than the height of the window minus the frame thickness then the mouse is above the bottom right corner
             return &windowWidgetMoverResizerRight;
-        }
 
-        // Otherwise its in the bottom right corner
-        return &windowWidgetMoverResizerBottomRight;
+        else                                                                            // Otherwise its in the bottom right corner
+            return &windowWidgetMoverResizerBottomRight;
     }
 
-    // Pass the event on to the children and see which one handles it
-    MouseEventHandler* childThatHandledEvent = CompositeWidget::onMouseButtonPressed(x, y, button);
-    return childThatHandledEvent;
+
+    return childrenResult;
 
 }
 
