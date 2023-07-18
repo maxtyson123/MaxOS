@@ -42,13 +42,17 @@ namespace maxOS{
                     void renderPixel8Bit(common::uint32_t x, common::uint32_t y, common::uint8_t colour);
                     common::uint8_t getRenderedPixel8Bit(common::uint32_t x, common::uint32_t y);
 
-             public:
-                    VideoGraphicsArray();
-                    ~VideoGraphicsArray();
+                public:
+                       VideoGraphicsArray();
+                       ~VideoGraphicsArray();
 
-                    bool supportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
+                       bool supportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
 
-            };
+                       inline void* operator new(common::uint32_t, VideoGraphicsArray* p)
+                       {
+                            return p;
+                       }
+               };
         }
 
     }

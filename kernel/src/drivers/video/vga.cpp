@@ -9,6 +9,7 @@ using namespace maxOS::drivers;
 using namespace maxOS::drivers::video;
 using namespace maxOS::hardwarecommunication;
 
+// http://files.osdev.org/mirrors/geezer/osd/graphics/modes.c - helpful so thanks
 
 VideoGraphicsArray::VideoGraphicsArray()
 :miscPort(0x3C2),
@@ -23,9 +24,6 @@ VideoGraphicsArray::VideoGraphicsArray()
  attributeControllerWritePort(0x3C0),
  attributeControllerResetPort(0x3DA)
 {
-
-    //TODO: May need to call this in a better place
-    GetFrameBufferSegment();
 }
 
 VideoGraphicsArray::~VideoGraphicsArray() {
@@ -39,10 +37,10 @@ VideoGraphicsArray::~VideoGraphicsArray() {
  */
 void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
 {
-    //MISC (1 val, hardcoded)
+    //MISC (1 val)
     miscPort.Write(*(registers++));                                     //Get pointer to register, write first to misc, and increase pointer
 
-    //SEQ (5 vals, hardcoded)
+    //SEQ (5 vals)
     for (uint8_t i = 0; i < 5; i++ ) {
         sequenceIndexPort.Write(i);                                     //Tell where the data is to be written
         sequenceDataPort.Write(*(registers++));                         //Get pointer to register, first to sequence, and increase pointer
@@ -56,31 +54,30 @@ void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
 
     //Make sure that the unlock isn't overwritten
     registers[0x03] = registers[0x03] | 0x80;                               //In the register 0x03 also set first 1
-    registers[0x11] = registers[0x11] | ~0x80;                              //In the register 0x11 also set first 1
+    registers[0x11] = registers[0x11] & ~0x80;                              //In the register 0x11 also set first 0
 
-    //CRTC (25 vals, hardcoded)
+    //CRTC (25 vals)
     for (uint8_t i = 0; i < 25; i++ ) {
-        crtcIndexPort.Write(i);                                         //Tell where the data is to be written
-        crtcDataPort.Write(*(registers++));                             //Get pointer to register, write to cathode thingy, and increase pointer
+        crtcIndexPort.Write(i);                                        //Tell where the data is to be written
+        crtcDataPort.Write(*(registers++));                            //Get pointer to register, write to cathode thingy, and increase pointer
     }
 
-    //GC (9 vals, hardcoded)
+    //GC (9 vals)
     for(uint8_t i = 0; i < 9; i++)
     {
-        ///HRS of bug hunting to figure out that I wrote index port twice
-        graphicsControllerIndexPort.Write(i);                   //Tell where the data is to be writtens
-        graphicsControllerDataPort.Write(*(registers++));       //Get pointer to register, write to graphics controller, and increase pointer
+        graphicsControllerIndexPort.Write(i);                          //Tell where the data is to be written
+        graphicsControllerDataPort.Write(*(registers++));              //Get pointer to register, write to graphics controller, and increase pointer
     }
 
-    //AC (21 vals, hardcoded)
+    //AC (21 vals)
     for(uint8_t i = 0; i < 21; i++)
     {
-        attributeControllerResetPort.Read();                        //Reset the Controller
-        attributeControllerIndexPort.Write(i);                  //Tell where the data is to be written
-        attributeControllerWritePort.Write(*(registers++));      //Get pointer to register, write to attribute controller, and increase pointer
+        attributeControllerResetPort.Read();                                //Reset the Controller
+        attributeControllerIndexPort.Write(i);                         //Tell where the data is to be written
+        attributeControllerWritePort.Write(*(registers++));            //Get pointer to register, write to attribute controller, and increase pointer
     }
 
-    //Re-Lock CRTC
+    //Re-Lock CRTC and unblank display
     attributeControllerResetPort.Read();
     attributeControllerIndexPort.Write(0x20);
 
@@ -112,19 +109,19 @@ bool VideoGraphicsArray::internalSetMode(uint32_t width, uint32_t height, uint32
     //Values from osdev / modes.c
     unsigned char g_320x200x256[] =
             {
-                    /* MISC */
+                    // MISC
                     0x63,
-                    /* SEQ */
+                    // SEQ
                     0x03, 0x01, 0x0F, 0x00, 0x0E,
-                    /* CRTC */
+                    // CRTC
                     0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
                     0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                     0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3,
                     0xFF,
-                    /* GC */
+                    // GC
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
                     0xFF,
-                    /* AC */
+                    // AC
                     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                     0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
                     0x41, 0x00, 0x0F, 0x00, 0x00
@@ -141,6 +138,10 @@ bool VideoGraphicsArray::internalSetMode(uint32_t width, uint32_t height, uint32
  */
 uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 {
+
+    // Optimise so that dont have to read and write to the port every time
+    return (uint8_t*)0xA0000;
+
     //Read data from index number 6
     graphicsControllerIndexPort.Write(0x06);
     uint8_t segmentNumber = graphicsControllerDataPort.Read() & (3<<2); //Shift by 2 as only intrested in bits 3 & 4 (& 3 so all the other bits are removed)
@@ -165,13 +166,12 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
  */
 void VideoGraphicsArray::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour){
 
-    //TODO: Replace GetFrameBufferSegment() with a value that gets read every frame instead of pixel
-    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    //Get where to put the pixel in memory and x y pos
-    *pixelAddress = colour;
+    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    // Get where to put the pixel in memory and x y pos
+    *pixelAddress = colour;                                         // Set the colour of the pixel
 }
 
 uint8_t VideoGraphicsArray::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
-    uint8_t* pixelAddress = GetFrameBufferSegment() + y*320 + x;
-    return *pixelAddress;
+    uint8_t* pixelAddress = GetFrameBufferSegment() + y*320 + x;    // Get where the pixel is in memory and x y pos
+    return *pixelAddress;                                           // Return the colour of the pixel
 }
 

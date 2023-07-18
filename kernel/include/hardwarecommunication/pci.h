@@ -8,10 +8,13 @@
 #include <common/types.h>
 #include <drivers/driver.h>
 
+// Memory
 #include <memory/memorymanagement.h>
 #include <hardwarecommunication/port.h>
 #include <hardwarecommunication/interrupts.h>
 
+// Drivers
+#include <drivers/video/vga.h>
 
 namespace maxOS
 {

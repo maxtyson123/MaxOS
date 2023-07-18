@@ -9,6 +9,7 @@ using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
+using namespace maxOS::drivers::video;
 using namespace maxOS::memory;
 
 void printf(char* str, bool clearLine = false); //Forward declaration
@@ -383,8 +384,11 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
             {
                 case 0x00:
                 {//VGA
+                    printf("    GRAPHICS VGA", true);
+                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::activeMemoryManager ->malloc(sizeof(VideoGraphicsArray));
+                    new (result) VideoGraphicsArray();
 
-                    printf("    GRAPHICS VGA (NO DRIVER)", true);
+                    return result;                     //Add Driver
                     break;
 
                 }//end VGA

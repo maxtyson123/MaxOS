@@ -9,13 +9,15 @@ LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -net user -net nic,model=pcnet \
 		      -m 512 \
 		      -hda maxOS.img \
+		      -vga std \
 		      -serial stdio
 QEMU_EXTRA_PARAMS? = ""
 
-#For intel_i217: -nic tap,model=e1000 \
-#For amd: 		 -net user -net nic,model=pcnet \
-#Boot iso:       -boot d -cdrom maxOS.iso \
-#Boot from hdd:  -boot c -hda /dev/loop0 \
+#For intel_i217 ethernet: 	-nic tap,model=e1000 \
+#For amd ethernet: 		 	-net user -net nic,model=pcnet \
+#Boot iso:       			-boot d -cdrom maxOS.iso \
+#Boot from hdd:  			-boot c -hda /dev/loop0 \
+#VESA graphics: 			-vga std \
 
 kernel =  obj/kernel/loader.o \
  		  obj/kernel/system/gdt.o \

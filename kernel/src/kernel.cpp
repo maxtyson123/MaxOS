@@ -12,7 +12,7 @@
 #include <drivers/driver.h>
 #include <drivers/peripherals/keyboard.h>
 #include <drivers/peripherals/mouse.h>
-#include <drivers/video/vga.h>
+#include <drivers/video/video.h>
 #include <drivers/ata.h>
 #include <drivers/ethernet/amd_am79c973.h>
 
@@ -449,7 +449,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
         KeyboardDriver keyboard(&interrupts);
         KeyboardInterpreterEN_US usKeyboard;
         keyboard.connectInputStreamEventHandler(&usKeyboard);
-
         driverManager.AddDriver(&keyboard);
         printf("    -Keyboard setup\n");
 
@@ -457,7 +456,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
         //Mouse
         MouseToConsole mouseConsoleHandler;
         MouseDriver mouse(&interrupts);
-
         driverManager.AddDriver(&mouse);
         printf("    -Mouse setup\n");
 
@@ -465,17 +463,13 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
         PeripheralComponentInterconnectController PCIController;
         PCIController.SelectDrivers(&driverManager, &interrupts);
         printf("\n    -[x]Setup PCI\n");
+    while (true);
 
 
         printf("    -[ ]Setting up CLOCK");
         Clock kernelClock(&interrupts, 1);
         driverManager.AddDriver(&kernelClock);
         printf("\n    -[x]Setup CLOCK");
-
-        // TODO: Replace with video driver
-        VideoGraphicsArray vga;
-        printf("    -VGA setup\n");
-
 
 
     printf("[X] Drivers Setup\n");
@@ -616,7 +610,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
 
 #ifdef ENABLE_GRAPHICS
 
-    VideoDriver* videoDriver = (VideoDriver*) &vga;
+    VideoDriver* videoDriver = (VideoDriver*)(driverManager.drivers[2]);    // TODO: need a better way to get the video driver
     videoDriver ->setMode(320, 200, 8);
 
     Desktop desktop(videoDriver);
