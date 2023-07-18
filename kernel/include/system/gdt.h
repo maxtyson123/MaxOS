@@ -6,6 +6,8 @@
 #define MAX_OS_SYSTEM_GDT_H
 
 #include <common/types.h>
+#include <system/multiboot.h>
+
 namespace maxOS {
     namespace system {
         class GlobalDescriptorTable {
@@ -34,16 +36,16 @@ namespace maxOS {
             SegmentDescriptor unusedSegmentSelector;
             SegmentDescriptor codeSegmentSelector;
             SegmentDescriptor dataSegmentSelector;
+            SegmentDescriptor taskStateSegmentSelector;
 
         public:
 
-            GlobalDescriptorTable();
-
+            GlobalDescriptorTable(const multiboot_info& multibootHeader);
             ~GlobalDescriptorTable();
 
             common::uint16_t CodeSegmentSelector();
-
             common::uint16_t DataSegmentSelector();
+            common::uint16_t TaskStateSegmentSelector();
         };
     }
 }

@@ -10,12 +10,15 @@ using namespace maxOS::system;
 /**
  * @details Global Descriptor Table
  */
-GlobalDescriptorTable::GlobalDescriptorTable()
-        : nullSegmentSelector(0, 0, 0),                     //Ignored
-          unusedSegmentSelector(0, 0, 0),                   //Ignored
-          codeSegmentSelector(0, 64*1024*1024, 0x9A),       //0x9A Access for code
-          dataSegmentSelector(0, 64*1024*1024, 0x92)        //0x92 Access flag for data
+GlobalDescriptorTable::GlobalDescriptorTable(const multiboot_info& multibootHeader)
+        : nullSegmentSelector(0, 0, 0),                                     //Ignored
+          unusedSegmentSelector(0, 0, 0),                                   //Ignored
+          codeSegmentSelector(0, 1024*multibootHeader.mem_upper, 0x9A),     //0x9A Access for code
+          dataSegmentSelector(0, 1024*multibootHeader.mem_upper, 0x92),     //0x92 Access flag for data
+          taskStateSegmentSelector(0, 1024*multibootHeader.mem_upper, 0)    //Tasks
+
 {
+
     //Tell processor to use this table   (8 bytes)
     uint32_t gdt_t[2];
     gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;             //First and Second byte: The high  bytes of the segment integer
@@ -49,6 +52,16 @@ uint16_t GlobalDescriptorTable::DataSegmentSelector()
 uint16_t GlobalDescriptorTable::CodeSegmentSelector()
 {
     return (uint8_t*)&codeSegmentSelector - (uint8_t*)this;
+}
+
+/**
+ * @details Task State Segment Selector
+ *
+ * @return The task state segment selector offset
+ */
+uint16_t GlobalDescriptorTable::TaskStateSegmentSelector()
+{
+    return (uint8_t*)&taskStateSegmentSelector - (uint8_t*)this;
 }
 
 //Setup GDT for memory

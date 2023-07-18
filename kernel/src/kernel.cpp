@@ -334,7 +334,7 @@ void kernProc(){
 
 #pragma clang diagnostic ignored "-Wwritable-strings"
 
-extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_magic)
+extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*multiboot_magic*/)
 {
 
 
@@ -365,11 +365,11 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
 
 
     printf("[ ] Setting Up Global Descriptor Table... \n");
-    GlobalDescriptorTable gdt;                                                              //Setup GDT
+    GlobalDescriptorTable gdt(multibootHeader);                                                              //Setup GDT
     printf("[x] GDT Setup \n");
 
     printf("[ ] Setting Up Memory Management... \n");
-    uint32_t* memupper = (uint32_t*)(((size_t)multiboot_structure) + 8);                    //memupper is a field at offset 8 in the Multiboot information structure and it indicates the amount upper memory in kilobytes.
+    uint32_t memupper = multibootHeader.mem_upper;                    //memupper is a field at offset 8 in the Multiboot information structure and it indicates the amount upper memory in kilobytes.
                                                                                             //Lower memory starts at address 0, and upper memory starts at address 1 megabyte. The
                                                                                             //maximum possible value for lower memory is 640 kilobytes. The value returned for upper
                                                                                             //memory is maximally the address of the first upper memory hole minus 1 megabyte.
@@ -383,8 +383,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t multiboot_m
     printfHex((heap      ) & 0xFF);
 
 
-    size_t  memSize = (*memupper)*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
-    MemoryManager memoryManager(heap, memSize);                                    //Memory Mangement
+    size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
+    MemoryManager memoryManager(heap, memSize);                                   //Memory Mangement
     //Print the memory adress
     printf(" memSize: 0x");
     printfHex(((size_t)memSize >> 24) & 0xFF);
