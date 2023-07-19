@@ -74,7 +74,7 @@ set(
         ${common_h}/types.h
         ${common_h}/graphicsContext.h ${common_c}/graphicsContext.cpp
         ${common_h}/printf.h ${common_c}/printf.cpp
-        ${common_h}/vector.h ${common_c}/vector_templates.cpp
+        ${common_h}/vector.h
         ${common_h}/colour.h ${common_c}/colour.cpp
 
         ${mem_h}/memorymanagement.h ${mem_c}/memorymanagement.cpp
@@ -84,7 +84,7 @@ set(
         ${fs_h}/fat32.h ${fs_c}/fat32.cpp
         ${fs_h}/filesystem.h ${fs_c}/filesystem.cpp
 
-   include/common/rectangle.h include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h include/gui/font.h src/gui/font.cpp include/system/multiboot.h)
+   include/common/rectangle.h include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h include/gui/font.h src/gui/font.cpp include/system/multiboot.h include/drivers/video/vesa.h src/drivers/video/vesa.cpp)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

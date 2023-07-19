@@ -463,7 +463,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
         PeripheralComponentInterconnectController PCIController;
         PCIController.SelectDrivers(&driverManager, &interrupts);
         printf("\n    -[x]Setup PCI\n");
-    while (true);
 
 
         printf("    -[ ]Setting up CLOCK");

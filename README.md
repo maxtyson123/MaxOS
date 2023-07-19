@@ -37,9 +37,11 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 
 
 ### Current Plans:
-1. Get the windows to move correctly
-2. Rewrite the filesystem
-3. Setup SMB/CIFS protocol
+1. Get VESA Video Mode working
+2. Double Buffering
+3. Fix Window/Mouse Bugs
+4. Rewrite the filesystem
+5. Setup SMB/CIFS protocol
 
 ###  Future Plans
 
