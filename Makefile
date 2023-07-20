@@ -37,6 +37,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/peripherals/mouse.o \
  		  obj/kernel/drivers/video/video.o \
  		  obj/kernel/drivers/video/vga.o \
+ 		  obj/kernel/drivers/video/vesa.o \
  		  obj/kernel/drivers/ata.o \
  		  obj/kernel/drivers/ethernet/amd_am79c973.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \

@@ -68,7 +68,8 @@ namespace maxOS{
             virtual common::uint64_t Read();
         };
 
-        void memcpy(void* destination, const void* source, common::size_t num);
+
+        void* memcpy(void* destination, const void* source, common::uint32_t num);
 
 
     }

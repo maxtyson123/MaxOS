@@ -62,6 +62,7 @@ Kernel Cleanup
 - [ ] Example Telnet Server (GUI) (EMBEDDED)
 - [ ] CMAKE
 - [ ] Fix Fat32 Filesystem
+- [ ] Fix ASM
 
 Road to Userspace
 

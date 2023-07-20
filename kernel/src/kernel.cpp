@@ -15,6 +15,7 @@
 #include <drivers/video/video.h>
 #include <drivers/ata.h>
 #include <drivers/ethernet/amd_am79c973.h>
+#include <drivers/video/vesa.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -609,8 +610,11 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
 
 #ifdef ENABLE_GRAPHICS
 
-    VideoDriver* videoDriver = (VideoDriver*)(driverManager.drivers[2]);    // TODO: need a better way to get the video driver
-    videoDriver ->setMode(320, 200, 8);
+    printf("[ ] Setting Up Graphics... \n");
+    VideoElectronicsStandardsAssociationDriver vesa(&memoryManager, (multiboot_info_t *)&multibootHeader);
+    VideoDriver* videoDriver = (VideoDriver*)&vesa;    // TODO: need a better way to get the video driver
+    videoDriver ->setMode(1024, 768, 32);
+    printf("[x] Graphics Setup \n");
 
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);

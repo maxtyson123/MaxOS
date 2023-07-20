@@ -136,12 +136,18 @@ uint64_t MemIO64Bit::Read(){
     return *((volatile uint64_t*)(address));
 }
 
-void memcpy(void *destination, const void *source, size_t num) {
+/**
+ * Memcpy from https://wiki.osdev.org/Meaty_Skeleton
+ * @param destination The destination to copy to
+ * @param source The source to copy from
+ * @param num The number of bytes to copy
+ * @return The destination
+ */
+void* maxOS::memory::memcpy(void* destination, const void* source, common::uint32_t num) {
 
-    // Copy the data
+    unsigned char* dst = (unsigned char*) destination;
+    const unsigned char* src = (const unsigned char*) source;
     for (size_t i = 0; i < num; i++)
-        ((uint8_t*)destination)[i] = ((uint8_t*)source)[i];
-
-
-
+        dst[i] = src[i];
+    return destination;
 }

@@ -11,8 +11,8 @@
     .long FLAGS
     .long CHECKSUM
     .long 0, 0, 0, 0, 0
-    .long 0 # 0 = set graphics mode
-    .long 1024, 768, 32 # Width, height, depth
+    .long 0                     ; //  0 = set graphics mode
+    .long 1024, 768, 32         ; // Width, height, depth
 
 .section .text
 .extern kernelMain
@@ -23,7 +23,7 @@ loader:
     mov $kernel_stack, %esp     ; // Init the stack
     push %eax                   ; // Save the magic number on the stack
     push %ebx                   ; // Save the address of the multiboot structure on the stack
-    call callConstructors       ; // Init theconstructors
+    call callConstructors       ; // Init the constructors
     call kernelMain
 
 _stop:
