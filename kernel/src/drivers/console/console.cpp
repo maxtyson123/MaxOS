@@ -124,6 +124,14 @@ void Console::putChar(common::uint16_t x, common::uint16_t y, char c, ConsoleCol
  */
 void Console::putString(common::uint16_t x, common::uint16_t y, common::string s, ConsoleColor foreground, ConsoleColor background) {
 
+    // For each character in the string
+    for(const char* si = s; x < getWidth() && *si != '\0'; si++, x++) {
+
+        // Put the character on the console
+        putChar(x,y,*si,foreground,background);
+
+    }
+
 }
 
 /**
@@ -225,6 +233,20 @@ ConsoleArea::ConsoleArea(Console *console, common::uint16_t left, common::uint16
 {
 
 }
+
+ConsoleArea::ConsoleArea(Console *console, common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height,  ConsoleColor foreground, ConsoleColor background)
+        : console(console), left(left), top(top), width(width), height(height)
+{
+
+    // Loop through the area setting the colors
+    for(uint16_t y = top; y < top+height; y++)
+        for(uint16_t x = left; x < left+width; x++){
+            console->setForegroundColor(x,y,foreground);
+            console->setBackgroundColor(x,y,background);
+        }
+
+}
+
 
 ConsoleArea::~ConsoleArea() {
 

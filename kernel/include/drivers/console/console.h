@@ -24,7 +24,7 @@ namespace maxOS {
                 Magenta      = 0x05,
                 Brown        = 0x06,
                 LightGrey    = 0x07,
-                DarkGray     = 0x08,
+                DarkGrey     = 0x08,
                 LightBlue    = 0x09,
                 LightGreen   = 0x0A,
                 LightCyan    = 0x0B,
@@ -53,11 +53,11 @@ namespace maxOS {
 
 
                 virtual void putChar(common::uint16_t x, common::uint16_t y, char c, ConsoleColor foreground, ConsoleColor background);
-                virtual void putString(common::uint16_t x, common::uint16_t y, common::string s, ConsoleColor foreground = LightGray, ConsoleColor background = Black);
+                virtual void putString(common::uint16_t x, common::uint16_t y, common::string s, ConsoleColor foreground = LightGrey, ConsoleColor background = Black);
                 virtual void scrollUp();
-                virtual void scrollUp(common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColor foreground = LightGray, ConsoleColor background = Black, char fill=' ');
+                virtual void scrollUp(common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColor foreground = LightGrey, ConsoleColor background = Black, char fill=' ');
                 virtual void clear();
-                virtual void clear(common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColor foreground = LightGray, ConsoleColor background = Black, char fill=' ');
+                virtual void clear(common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColor foreground = LightGrey, ConsoleColor background = Black, char fill=' ');
                 virtual void invertColors(common::uint16_t x, common::uint16_t y);
             };
 
@@ -71,6 +71,7 @@ namespace maxOS {
                 common::uint16_t height;
             public:
                 ConsoleArea(Console* console, common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height);
+                ConsoleArea(Console* console, common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColor foreground, ConsoleColor background);
                 ~ConsoleArea();
 
                 common::uint16_t getWidth();

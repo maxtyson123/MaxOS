@@ -1,7 +1,8 @@
+int buildCount = 30;
+// This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
 #include <common/types.h>
-#include <common/printf.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -16,6 +17,8 @@
 #include <drivers/ata.h>
 #include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/video/vesa.h>
+#include <drivers/console/console.h>
+#include <drivers/console/textmodeconsole.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -50,6 +53,7 @@ using namespace maxOS::drivers::peripherals;
 using namespace maxOS::drivers::ethernet;
 using namespace maxOS::drivers::video;
 using namespace maxOS::drivers::clock;
+using namespace maxOS::drivers::console;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::gui;
 using namespace maxOS::net;
@@ -60,194 +64,61 @@ using namespace maxOS::filesystem;
 
 #define ENABLE_GRAPHICS
 
-class PrintfKeyboardEventHandler : public KeyboardEventHandler{
-    public:
+class KeyboardToStream : public KeyboardEventHandler
+{
+    OutputStream* stream;
+public:
+    KeyboardToStream(OutputStream* stream)
+    {
+        this->stream = stream;
+    }
 
-        void onKeyDown(char* c){
-
-           if(strcmp(c,"ARRT") == 0){
-
-                console.moveCursor(1,0);
-                return;
-
-            }else if(strcmp(c,"ARLF") == 0){
-
-                console.moveCursor(-1,0);
-                return;
-
-            }else if(strcmp(c,"ARDN") == 0){
-
-                console.moveCursor(0,1);
-                return;
-
-            }else if(strcmp(c,"ARUP") == 0){
-
-                console.moveCursor(0,-1);
-                return;
-
-            }else if(strcmp(c,"BACKSPACE") == 0){
-
-                console.backspace();
-
-           }else{
-
-                printf(c);                          //Print Char
-                printf("_");                        //Line to know where cursor at
-                console.moveCursor(-1,0);      //Move behind the cursor
-
-            }
-        }
+    void OnKeyboardKeyPressed(KeyCode keyCode, KeyboardState)
+    {
+        if(31 < keyCode && keyCode < 127)
+            stream->writeChar((char)keyCode);
+    }
 };
 
 class MouseToConsole: public MouseEventHandler{
 
-    int8_t x, y;
-    public:
-        MouseToConsole()
-        {
-            static uint16_t* VideoMemory = (uint16_t*)0xb8000;
-            x = 40;
-            y = 12;
-            //Show the initial cursor
-            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4           //Get High 4 bits and shift to right (Foreground becomes Background)
-                                  | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
-                                  | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
-        }
+    Console* console;
+    int x;
+    int y;
+    uint8_t buttons;
 
-        void onMouseMoveEvent(int8_t x_offset, int8_t y_offset){
-
-            static uint16_t* VideoMemory = (uint16_t*)0xb8000;
-
-            //Show old cursor
-            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4           //Get High 4 bits and shift to right (Foreground becomes Background)
-                                  | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
-                                  | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
-
-            x += x_offset;     //Movement on the x-axis
-            y += y_offset;     //Movement on the y-axis (note, mouse passes the info inverted)
-
-            //Make sure mouse position not out of bounds
-            if(x < 0) x = 0;
-            if(x >= 80) x = 79;
-
-            if(y < 0) y = 0;
-            if(y >= 25) y = 24;
-
-
-
-            //Show the new cursor by inverting the current character
-            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4           //Get High 4 bits and shift to right (Foreground becomes Background)
-                                  | (VideoMemory[80*y+x] & 0xF000) >> 4         //Get Low 4 bits and shift to left (Background becomes Foreground)
-                                  | (VideoMemory[80*y+x] & 0x00FF);             //Keep the last 8 bytes the same (The character)
-        }
-
-};
-
-class PrintfUDPHandler : public UserDatagramProtocolHandler
-{
 public:
-    void HandleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size)
+    MouseToConsole(Console* console)
+    {
+        this->console = console;
+        buttons = 0;
+        x = console->getWidth()*2;
+        y = console->getHeight()*2;
+    }
+    
+
+    void onMouseMoveEvent(int8_t x, int8_t y)
     {
 
-        char* foo = " ";
-        for(int i = 0; i < size; i++)                                    //Loop through the data
-        {
-            foo[0] = data[i];                                                   //Get the character
-            printf(foo);                                                        //Print the character
-        }
+        console->invertColors(this->x/4,this->y/4);
+
+        this->x += x;
+        if(this->x < 0)
+            this->x = 0;
+        if(this->x >= console->getWidth()*4)
+            this->x = console->getWidth()*4-1;
+
+        this->y += y;
+        if(this->y < 0)
+            this->y = 0;
+        if(this->y >= console->getHeight()*4)
+            this->y = console->getHeight()*4-1;
+
+        console->invertColors(this->x/4,this->y/4);
     }
+
+
 };
-
-class PrintfTCPHandler : public TransmissionControlProtocolHandler
-{
-public:
-    bool HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size)
-    {
-        char* foo = " ";
-        for(int i = 0; i < size; i++)                                    //Loop through the data
-        {
-            foo[0] = data[i];                                                   //Get the character
-            printf(foo);                                                        //Print the character
-        }
-
-        if(size > 9
-           && data[0] == 'G'
-           && data[1] == 'E'
-           && data[2] == 'T'
-           && data[3] == ' '
-           && data[4] == '/'
-           && data[5] == ' '
-           && data[6] == 'H'
-           && data[7] == 'T'
-           && data[8] == 'T'
-           && data[9] == 'P'
-                )
-        {
-            socket->Send((uint8_t*)"HTTP/1.1 200 OK", 15);
-            socket->Disconnect();
-        }
-
-
-        return true;
-    }
-};
-
-/**
- * @details Print a string via a syscall
- *
- * @param str String to print
- */
-void sys_printf(char* str)
-{
-
-
-    //asm("int $0x80" : : "a" (4), "b" (str));        //Call the interrupt 0x80 with the syscall number 4 and the string to print
-    asm volatile( "int $0x80" : "=c"(str) : "a"(4), "b"(str));
-
-}
-
-void temp_sys_kill()
-{
-    asm("int $0x20" : : "a" (37), "b" (1));        //Call the interrupt 0x80 with the syscall number 20 and the process to kill (1 is is kill me)
-}
-
-void proc_exit(char* status)
-{
-    sys_printf("\nProcess Exited with status: ");
-    sys_printf(status);
-    sys_printf("\n");
-    temp_sys_kill();
-
-}
-
-void taskA()
-{
-    for (int i = 0; i < 100; ++i) {
-
-        sys_printf("A");
-    }
-
-
-    for (int i = 0; i < 100; ++i) {
-
-        sys_printf("B");
-    }
-
-    proc_exit("0");
-
-
-
-}
-
-
-
-void taskB()
-{
-    while(true)
-        sys_printf("B");
-}
-
-
 
 //Define what a constructor is
 typedef void (*constructor)();
@@ -262,183 +133,111 @@ extern "C" void callConstructors()
 }
 
 
-class Version{
-    public:
-       int version;            //Set based on a noticeable feature update eg. Keyboard Driver etc. [not] code comment updates etc.
-       int build;              //Commit Number
-       char* buildAuthor;      //Author of the commit (Mostlikly me, but change for pull requests and such)
-        Version(){};
-        ~Version(){};
-
-};
-
-
-///__KERNEL PROCESS VARS__
-
-serial k_sLog = 0;
-InternetProtocolProvider *k_ipv4;
-
-/**
- * @details Main process for the kernel
- *
- * @return Should never return, nor be killed
- */
-void kernProc(){
-    printf("\n[x] Kernel Process Started\n");
-    /*Note: Serial port sends random interrupt before interrupts are activated*/     k_sLog.Write("Devices Ready\n",1); k_sLog.Write("Network Ready\n",1);
-
-    k_sLog.Write("Interrupts Ready\n",1);
-
-    //Kernel is ready, code after here should be in a separate process
-    k_sLog.Write("MaxOS is ready\n",7);
-
-
-
-
-}
-
 #pragma clang diagnostic ignored "-Wwritable-strings"
 
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*multiboot_magic*/)
 {
 
+    //Initialize Console
+    TextModeConsole console;
+    console.clear();
 
-    //NOTE: Will rewrite boot text stuff later
+    // Make a debug console area on the bottom 4 lines of the screen
+    ConsoleArea debugConsoleArea(&console, 0, console.getHeight() - 4, console.getWidth(), 4, Green, DarkGrey);
+    ConsoleStream debugStream(&debugConsoleArea);
 
-    Version* maxOSVer;
-    maxOSVer->version = 28;
-    maxOSVer->build = 85;
-    maxOSVer->buildAuthor = "Max Tyson";
+    // Make a main console area on the top of the screen
+    ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight() - 4);
+    ConsoleStream cout(&mainConsoleArea);
 
-    //Print in header
-    console.lim_x = 80;
-    console.x = 30; console.y = 1;
-    printf("* Max OS Kernel -v0."); printfInt(maxOSVer->version);    printf(" * -b"); printfInt(maxOSVer->build);  printf(" * -a"); printf(maxOSVer->buildAuthor);
+    // Make a null stream
+    ConsoleArea nullConsoleArea(&console, 0, 0, 0, 0);
+    ConsoleStream nullStream(&nullConsoleArea);
 
-    //Reset Console positions
-    console.x = 1; console.y = 3;
+    console.putString(0,0,"                                  Max OS v0.0.1                                 ", Blue, LightGrey);
+    console.putString(0,console.getHeight() - 5,"Debug Log: ", DarkGrey, Black);
 
-    console.ini_x = 2;
-    console.ini_y = 4;
+    cout << "Build: ";
+    cout << buildCount;
+    cout << "\n";
 
-    console.lim_x = 79;
-    console.lim_y = 24;
+    cout << "Setting up system";
 
+    //Setup GDT
+    GlobalDescriptorTable gdt(multibootHeader);
+    debugStream << "Set up GDT, ";
+    cout << ".";
 
-    printf("\n[x] Kernel Booted \n");
-
-
-
-    printf("[ ] Setting Up Global Descriptor Table... \n");
-    GlobalDescriptorTable gdt(multibootHeader);                                                              //Setup GDT
-    printf("[x] GDT Setup \n");
-
-    printf("[ ] Setting Up Memory Management... \n");
+    // Setup Memory
     uint32_t memupper = multibootHeader.mem_upper;                    //memupper is a field at offset 8 in the Multiboot information structure and it indicates the amount upper memory in kilobytes.
                                                                                             //Lower memory starts at address 0, and upper memory starts at address 1 megabyte. The
                                                                                             //maximum possible value for lower memory is 640 kilobytes. The value returned for upper
                                                                                             //memory is maximally the address of the first upper memory hole minus 1 megabyte.
     size_t  heap = 10*1024*1024;                                                            //Start at 10MB
 
-    //Print the heap address
-    printf("heap: 0x");
-    printfHex((heap >> 24) & 0xFF);
-    printfHex((heap >> 16) & 0xFF);
-    printfHex((heap >> 8 ) & 0xFF);
-    printfHex((heap      ) & 0xFF);
-
-
     size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
-    MemoryManager memoryManager(heap, memSize);                                   //Memory Mangement
-    //Print the memory adress
-    printf(" memSize: 0x");
-    printfHex(((size_t)memSize >> 24) & 0xFF);
-    printfHex(((size_t)memSize >> 16) & 0xFF);
-    printfHex(((size_t)memSize >> 8 ) & 0xFF);
-    printfHex(((size_t)memSize      ) & 0xFF);
-
-
+    MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
     void* allocated = memoryManager.malloc(1024);
-    printf(" allocated: 0x");
-    printfHex(((size_t)allocated >> 24) & 0xFF);
-    printfHex(((size_t)allocated >> 16) & 0xFF);
-    printfHex(((size_t)allocated >> 8 ) & 0xFF);
-    printfHex(((size_t)allocated      ) & 0xFF);
-    printf("\n");
+    debugStream << "Set Up Memory Management, ";
+    cout << ".";
 
-    printf("[x] Memory Management Setup \n");
-
-
-    printf("[ ] Setting Thread Manager... \n");
     ThreadManager threadManager;
+    debugStream << "Set Up Memory Management, ";
+    cout << ".";
 
-    /*
-    __Tests__
-    Task task1(&gdt, taskA);
-    Task task2(&gdt, taskB);
-    taskManager.AddTask(&task1);
-    taskManager.AddTask(&task2);
+    InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
+    debugStream << "Set Up Interrupts, ";
+    cout << ".";
 
-     */
-    printf("[x] Task Manager Setup \n");
+    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
+    debugStream << "Set Up System Calls, ";
+    cout << ".";
 
-    printf("[ ] Setting Up Interrupt Manager... \n");
-    InterruptManager interrupts(0x20, &gdt, &threadManager);            //Instantiate the function
-    printf("[x] Interrupt Manager Setup \n", true);
+    cout << "[ Done ]\n";
 
-    printf("[ ] Setting Up Serial Log... \n");
+    cout << "Setting up devices";
+
     serial serialLog(&interrupts);
-    //serialLog.Test();
     serialLog.Write("\n",-1);
     serialLog.Write("Serial Log Started\n");
     serialLog.Write("MaxOS Started\n",7);
-    printf("[x] Serial Log Setup \n");
+    debugStream << "Set Up Serial Log, ";
+    cout << ".";
 
-
-
-    printf("[ ] Setting Up System Calls Handler... \n");
-    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
-    printf("[x] System Calls Handler Setup \n", true);
-
-    serialLog.Write("Memory Management Ready\n",1);
-    serialLog.Write("Tasks Ready\n",1);
-    serialLog.Write("Global Descriptor Table Ready\n",1);
-    serialLog.Write("System Calls Ready\n",1);
-
-
-    printf("[ ] Setting Up Drivers... \n");
 
     DriverManager driverManager;
-        //Keyboard
-        PrintfKeyboardEventHandler kbhandler;
-        KeyboardDriver keyboard(&interrupts);
-        KeyboardInterpreterEN_US usKeyboard;
-        keyboard.connectInputStreamEventHandler(&usKeyboard);
-        driverManager.AddDriver(&keyboard);
-        printf("    -Keyboard setup\n");
 
+    //Keyboard
+    KeyboardToStream kbhandler(&cout);
+    KeyboardDriver keyboard(&interrupts);
+    KeyboardInterpreterEN_US usKeyboard;
+    keyboard.connectInputStreamEventHandler(&usKeyboard);
+    driverManager.AddDriver(&keyboard);
+    debugStream << "Set Up Keyboard, ";
+    cout << ".";
 
-        //Mouse
-        MouseToConsole mouseConsoleHandler;
-        MouseDriver mouse(&interrupts);
-        driverManager.AddDriver(&mouse);
-        printf("    -Mouse setup\n");
+    //Mouse
+    MouseToConsole mouseConsoleHandler(&console);
+    MouseDriver mouse(&interrupts);
+    ConsoleArea consoleMouseArea(&console, 0,1,console.getWidth(), console.getHeight()-2);
+    MouseToConsole mousetoconsole(&consoleMouseArea);
+    mouse.connectMouseEventHandler(&mousetoconsole);
+    driverManager.AddDriver(&mouse);
+    debugStream << "Set Up Mouse, ";
+    cout << ".";
 
-        printf("    -[ ]Setting PCI\n\n");
-        PeripheralComponentInterconnectController PCIController;
-        PCIController.SelectDrivers(&driverManager, &interrupts);
-        printf("\n    -[x]Setup PCI\n");
+    //Clock
+    Clock kernelClock(&interrupts, 1);
+    driverManager.AddDriver(&kernelClock);
 
+    //PCI
+    PeripheralComponentInterconnectController PCIController(&nullStream);
+    PCIController.SelectDrivers(&driverManager, &interrupts);
+    debugStream << "Set Up PCI, ";
+    cout << ".";
 
-        printf("    -[ ]Setting up CLOCK");
-        Clock kernelClock(&interrupts, 1);
-        driverManager.AddDriver(&kernelClock);
-        printf("\n    -[x]Setup CLOCK");
+    cout << "[ DONE ] \n";
 
-
-    printf("[X] Drivers Setup\n");
-
-    printf("[ ] Setting Up ATA Hard Drives... \n");
 /***
     //Interrupt 14 for Primary
     AdvancedTechnologyAttachment ata0m(0x1F0, true, 0);         //Primary master
@@ -512,16 +311,19 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
 
     */
 
-    //Interrupts should be the last thing as once the clock interrupt is sent the multitasker will start doing processes and tasks
-    printf("[ ] Activating Interrupt Descriptor Table... \n");
+    cout << "Activating Everything";
+
+    // Interrupts
     interrupts.Activate();
-    printf("[x] IDT Activated \n", true);
+    debugStream << "Activated Interrupts, ";
+    cout << ".";
 
-    printf("[ ] Activating Drivers... \n");
-    driverManager.ActivateAll();                                //Has to be after interrupts are activated
-    printf("[x] Drivers Activated \n", true);
+    //Drivers
+    driverManager.ActivateAll();
+    debugStream << "Activated Drivers, ";
+    cout << ".";
 
-
+    cout << "[ DONE ] \n";
 
 /***
 
@@ -562,28 +364,24 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
     tcp.Bind(test_tcp_socket, &printfTCPHandler);
       */
 
-    class PrintClockEventHandler : public ClockEventHandler{
-
-        public:
-
-            void onTime(const common::Time& time){
-                printf("Seconds: ");
-                printfInt(time.second);
-            }
-    };
+    while (true);
 
 #ifdef ENABLE_GRAPHICS
 
-    printf("[ ] Setting Up Graphics... \n");
+    cout << "Setting Up Graphics";
+
     VideoElectronicsStandardsAssociationDriver vesa(&memoryManager, (multiboot_info_t *)&multibootHeader);
     VideoDriver* videoDriver = (VideoDriver*)&vesa;    // TODO: need a better way to get the video driver
     videoDriver ->setMode(1024, 768, 32);
-    printf("[x] Graphics Setup \n");
+    debugStream << "Got Video Driver\n";
+    cout << ".";
 
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
     usKeyboard.connectKeyboardEventHandler(&desktop);
     kernelClock.connectClockEventHandler(&desktop);
+    debugStream << "Connected Desktop\n";
+    cout << ".";
 
     widgets::Text testLabel(0, 0, 120, 20, "Hello World");
 
@@ -594,10 +392,12 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
     Window testWindow(150,10, 150, 150, "Window 1");
     desktop.addChild(&testWindow);
 
+    cout << "[ DONE ] \n";
+
 
 #endif
 
-    while (true);
+
 
 }
 

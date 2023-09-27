@@ -43,6 +43,8 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/intel_i217.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
  		  obj/kernel/drivers/clock/clock.o \
+ 		  obj/kernel/drivers/console/console.o \
+ 		  obj/kernel/drivers/console/textmodeconsole.o \
  		  obj/kernel/filesystem/filesystem.o \
  		  obj/kernel/filesystem/fat32.o \
  		  obj/kernel/filesystem/msdospart.o \
@@ -55,6 +57,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/common/graphicsContext.o \
  		  obj/kernel/common/colour.o \
  		  obj/kernel/common/inputStream.o \
+ 		  obj/kernel/common/outputStream.o \
  		  obj/kernel/net/etherframe.o \
  		  obj/kernel/net/arp.o \
  		  obj/kernel/net/ipv4.o \
@@ -148,6 +151,9 @@ filesystem:
 	toolchain/copy_filesystem.sh
 	sync
 
+incrementVersion:
+	toolchain/increment_version.sh
+
 build: maxOS.bin
 	@echo Made Max OS Kernel
 
@@ -165,6 +171,7 @@ build: maxOS.bin
 	make filesystem
 
 	@echo === Made Max OS ===
+	make incrementVersion
 
 
 

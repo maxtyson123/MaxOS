@@ -9,11 +9,6 @@ using namespace maxOS::drivers;
 using namespace maxOS::common;
 using namespace maxOS::filesystem;
 
-
-// TODO: Get rid of printing as it isnt needed in the MBR? Maybe even make a debug stream for later usecaes like this
-void printf(char* str, bool clearLine = false); // Forward declaration
-void printfHex(uint8_t key);                    // Forward declaration
-
 /**
  * @details Read the partition table of a given hard disk
  *
@@ -35,7 +30,6 @@ void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
     */
 
     if(masterBootRecord.magicNumber != 0xAA55){                                                  // Check if the magic number is correct
-        printf("Invalid MBR!");
         return;
     }
 
@@ -43,24 +37,13 @@ void MSDOSPartitionTable::ReadPartitions(AdvancedTechnologyAttachment *hd) {
 
         if(masterBootRecord.primaryPartition[i].partitionId == 0) continue;                      // If the partition id is 0, skip it
 
-        printf("\nPartition ");
-        printfHex(i & 0xFF);                                                                 // Print the partition number
-        printf(": ");
 
         if(masterBootRecord.primaryPartition[i].bootable != 0x80) {                              // Check if the partition is bootable
-            printf("Not ");
+            //Not Bootable
         }
-        printf("Bootable, ");
-
-        printf("Type ");
-        printfHex(masterBootRecord.primaryPartition[i].partitionId);                         // Print the partition type
-        printf("   ");
-
 
         //TODO: Add a message stream
         Fat32 fat32(hd, masterBootRecord.primaryPartition[i].startLBA, 0);              // Create a Fat32 object
 
     }
-    printf("\n");
-
 }

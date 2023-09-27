@@ -8,8 +8,7 @@ using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
+
 
 /**
  * @details This function is the constructor for the serial port
@@ -41,7 +40,7 @@ serial::serial(InterruptManager* interruptManager)
 
     //Check if the serial port is working
     if(interruptEnableRegisterPort.Read() != 0xAE){
-        printf("Serial port not working");
+      //HEL{
     }
 
     //Enable interrupts

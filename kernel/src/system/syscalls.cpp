@@ -9,11 +9,6 @@ using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::system;
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-char printfInt( long num );                     //Forward declaration
-
-
 ///__Handler__///
 
 SyscallHandler::SyscallHandler(InterruptManager* interruptManager, uint8_t InterruptNumber)
@@ -38,7 +33,7 @@ uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
     switch(cpu->eax)
     {
         case 4:                                 //Write
-            printf((char*)cpu->ebx);
+            //printf((char*)cpu->ebx);
             break;
 
          default:

@@ -11,16 +11,15 @@ using namespace maxOS::system;
 
 
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-char printfInt( long num );                     //Forward declaration
 
 ///__Handler__
 
 InterruptHandler::InterruptHandler(uint8_t interrupNumber, InterruptManager *interruptManager){
+
     //Store values given
     this->interrupNumber = interrupNumber;
     this->interruptManager = interruptManager;
+
     //Put itself into handlers array
     interruptManager->interruptHandlers[interrupNumber] = this;
 }
@@ -70,14 +69,16 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 }
 
 
-InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable* globalDescriptorTable,ThreadManager* threadManager)
-        : programmableInterruptControllerMasterCommandPort(0x20),
+InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable* globalDescriptorTable,ThreadManager* threadManager,  OutputStream* handler)
+        : common::InputStream(handler),
+          programmableInterruptControllerMasterCommandPort(0x20),
           programmableInterruptControllerMasterDataPort(0x21),
           programmableInterruptControllerSlaveCommandPort(0xA0),
           programmableInterruptControllerSlaveDataPort(0xA1)
 {
     this->threadManager = threadManager;
     this->hardwareInterruptOffset = hardwareInterruptOffset;
+    this->errorMessages = handler;
     uint32_t CodeSegment = globalDescriptorTable->CodeSegmentSelector();
 
     //Set all the entry's to Ignore so that the ones we don't specify aren't run as there won't be a handler for these and therefore would have caused a protection error
@@ -240,140 +241,140 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
             switch (interrupt) {
 
                 case 0x00:  //Divide by zero
-                    printf("[ERROR] Divide by zero  (int 0x00)");
+                    errorMessages->write("[ERROR] Divide by zero  (int 0x00)");
                     break;
 
                 case 0x01: //Single step
-                    printf("[ERROR] Single step (int 0x01)");
+                    errorMessages->write("[ERROR] Single step (int 0x01)");
                     break;
 
                 case 0x02: //Non maskable interrupt
-                    printf("[ERROR] Non maskable interrupt (int 0x02)");
+                    errorMessages->write("[ERROR] Non maskable interrupt (int 0x02)");
                     break;
 
                 case 0x03: //Breakpoint
-                    printf("[ERROR] Breakpoint (int 0x03)");
+                    errorMessages->write("[ERROR] Breakpoint (int 0x03)");
                     break;
 
                 case 0x04: //Overflow
-                    printf("[ERROR] Overflow (int 0x04)");
+                    errorMessages->write("[ERROR] Overflow (int 0x04)");
                     break;
 
                 case 0x05: //Bounds check
-                    printf("[ERROR] Bounds check  (int 0x05)");
+                    errorMessages->write("[ERROR] Bounds check  (int 0x05)");
                     break;
 
                 case 0x06: //Invalid opcode
-                    printf("[ERROR] Invalid opcode  (int 0x06)");
+                    errorMessages->write("[ERROR] Invalid opcode  (int 0x06)");
                     break;
 
                 case 0x07: //Coprocessor not available
-                    printf("[ERROR] Coprocessor not available  (int 0x07)");
+                    errorMessages->write("[ERROR] Coprocessor not available  (int 0x07)");
                     break;
 
                 case 0x08: //Double fault
-                    printf("[ERROR] Double fault (int 0x08)");
+                    errorMessages->write("[ERROR] Double fault (int 0x08)");
                     break;
 
                 case 0x09: //Coprocessor segment overrun
-                    printf("[ERROR] Coprocessor segment overrun (int 0x09)");
+                    errorMessages->write("[ERROR] Coprocessor segment overrun (int 0x09)");
                     break;
 
                 case 0x0A: //Invalid task state segment
-                    printf("[ERROR] Invalid TSS (int 0x0A)");
+                    errorMessages->write("[ERROR] Invalid TSS (int 0x0A)");
                     break;
 
                 case 0x0B: //Segment not present
-                    printf("[ERROR] Segment not present (int 0x0B)");
+                    errorMessages->write("[ERROR] Segment not present (int 0x0B)");
                     break;
 
                 case 0x0C: //Stack segment fault
-                    printf("[ERROR] Stack segment fault (int 0x0C)");
+                    errorMessages->write("[ERROR] Stack segment fault (int 0x0C)");
                     break;
 
                 case 0x0D: //General protection fault
-                    printf("[ERROR] General protection fault (int 0x0D)");
+                    errorMessages->write("[ERROR] General protection fault (int 0x0D)");
                     while(true);
                     break;
 
                 case 0x0E: //Page fault
-                    printf("[ERROR] Page fault (int 0x0E)");
+                    errorMessages->write("[ERROR] Page fault (int 0x0E)");
                     break;
 
                 case 0x0F: //Reserved
-                    printf("[INFO] Reserved (int 0x0F)");
+                    errorMessages->write("[INFO] Reserved (int 0x0F)");
                     break;
 
                 case 0x10: //x87 FPU floating point error
-                    printf("[ERROR] x87 FPU floating point error (int 0x10)");
+                    errorMessages->write("[ERROR] x87 FPU floating point error (int 0x10)");
                     break;
 
                 case 0x11: //Alignment check
-                    printf("[INFO] Alignment check (int 0x11)");
+                    errorMessages->write("[INFO] Alignment check (int 0x11)");
                     break;
 
                 case 0x12: //Machine check
-                    printf("[INFO] Machine check (int 0x12)");
+                    errorMessages->write("[INFO] Machine check (int 0x12)");
                     break;
 
                 case 0x13: //SIMD floating point exception
-                    printf("[ERROR] SIMD floating point exception (int 0x13)");
+                    errorMessages->write("[ERROR] SIMD floating point exception (int 0x13)");
                     break;
 
                 case 0x14: //Virtualization exception
-                    printf("[ERROR] Virtualization exception (int 0x14)");
+                    errorMessages->write("[ERROR] Virtualization exception (int 0x14)");
                     break;
 
                 case 0x15: //Reserved
-                    printf("[INFO] Reserved (int 0x15)");
+                    errorMessages->write("[INFO] Reserved (int 0x15)");
                     break;
 
                 case 0x16: //Reserved
-                    printf("[INFO] Reserved (int 0x16)");
+                    errorMessages->write("[INFO] Reserved (int 0x16)");
                     break;
 
                 case 0x17: //Reserved
-                    printf("[INFO] Reserved (int 0x17)");
+                    errorMessages->write("[INFO] Reserved (int 0x17)");
                     break;
 
                 case 0x18: //Reserved
-                    printf("[INFO] Reserved (int 0x18)");
+                    errorMessages->write("[INFO] Reserved (int 0x18)");
                     break;
 
                 case 0x19: //Reserved
-                    printf("[INFO] Reserved (int 0x19)");
+                    errorMessages->write("[INFO] Reserved (int 0x19)");
                     break;
 
                 case 0x1A: //Reserved
-                    printf("[INFO] Reserved (int 0x1A)");
+                    errorMessages->write("[INFO] Reserved (int 0x1A)");
                     break;
 
                 case 0x1B: //Reserved
-                    printf("[INFO] Reserved (int 0x1B)");
+                    errorMessages->write("[INFO] Reserved (int 0x1B)");
                     break;
 
                 case 0x1C: //Reserved
-                    printf("[INFO] Reserved (int 0x1C)");
+                    errorMessages->write("[INFO] Reserved (int 0x1C)");
                     break;
 
                 case 0x1D: //Reserved
-                    printf("[INFO] Reserved (int 0x1D)");
+                    errorMessages->write("[INFO] Reserved (int 0x1D)");
                     break;
 
                 case 0x1E: //Reserved
-                    printf("[INFO] Reserved (int 0x1E)");
+                    errorMessages->write("[INFO] Reserved (int 0x1E)");
                     break;
 
                 case 0x1F: //Reserved
-                    printf("[INFO] Reserved (int 0x1F)");
+                    errorMessages->write("[INFO] Reserved (int 0x1F)");
                     break;
 
 
 
                 default:
-                    printf("UNHANDLED INTERRUPT 0x");
-                    printfHex(interrupt);
-                    printf(" ");
+                    errorMessages->write("UNHANDLED INTERRUPT 0x");
+                    errorMessages->writeHex(interrupt);
+                    errorMessages->write(" ");
                     break;
                 
             }

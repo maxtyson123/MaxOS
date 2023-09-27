@@ -12,11 +12,6 @@ using namespace maxOS::drivers::ethernet;
 using namespace maxOS::drivers::video;
 using namespace maxOS::memory;
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-char printfInt( int i);
-
-
 ///__DESCRIPTOR___
 
 PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() {
@@ -29,12 +24,12 @@ PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnec
 
 ///__CONTROLLER___
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController()
+PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(OutputStream* debug)
 : dataPort(0xCFC),      //PCI Controller
   commandPort(0xCF8)    //PCI Controller
 
 {
-
+    this->debugMessagesStream = debug;
 }
 
 PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() {
@@ -127,22 +122,22 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                 }
 
                 //Display INFO
-                printf("    PCI BUS ");
-                printfHex(bus & 0xFF);
+               debugMessagesStream->write("    PCI BUS ");
+               debugMessagesStream->writeHex(bus & 0xFF);
 
-                printf(", DEVICE ");
-                printfHex(device & 0xFF);
+               debugMessagesStream->write(", DEVICE ");
+               debugMessagesStream->writeHex(device & 0xFF);
 
-                printf(", FUNCTION ");
-                printfHex(function & 0xFF);
+               debugMessagesStream->write(", FUNCTION ");
+               debugMessagesStream->writeHex(function & 0xFF);
 
-                printf(", VENDOR ");
-                printfHex((deviceDescriptor.vendor_ID & 0xFF00) >> 8);
-                printfHex(deviceDescriptor.vendor_ID & 0xFF);
+               debugMessagesStream->write(", VENDOR ");
+               debugMessagesStream->writeHex((deviceDescriptor.vendor_ID & 0xFF00) >> 8);
+               debugMessagesStream->writeHex(deviceDescriptor.vendor_ID & 0xFF);
 
-                printf(", DEVICE ");
-                printfHex((deviceDescriptor.device_ID & 0xFF00) >> 8);
-                printfHex(deviceDescriptor.device_ID & 0xFF);
+               debugMessagesStream->write(", DEVICE ");
+               debugMessagesStream->writeHex((deviceDescriptor.device_ID & 0xFF00) >> 8);
+               debugMessagesStream->writeHex(deviceDescriptor.device_ID & 0xFF);
 
                 for (int barNum = 0; barNum < 6; ++barNum) {
                     BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
@@ -164,10 +159,10 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 
 
 
-                if(deviceDescriptor.hasMemoryBase) printf(" (MEMORY)");
-                if(deviceDescriptor.hasPortBase) printf(" (I/O)");
+                if(deviceDescriptor.hasMemoryBase)debugMessagesStream->write(" (MEMORY)");
+                if(deviceDescriptor.hasPortBase)debugMessagesStream->write(" (I/O)");
 
-                printf("\n");
+               debugMessagesStream->write("\n");
             }
 
         }
@@ -223,7 +218,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x2000:
                 {//am79c971
 
-                    printf("    AMD am79c971", true);
+                   debugMessagesStream->write("\r    AMD am79c971");
                     //return MemoryManager::activeMemoryManager -> Instantiate<amd_am79c973>(&dev, interruptManager);
                     amd_am79c973* result = (amd_am79c973*)MemoryManager::activeMemoryManager ->malloc(sizeof(amd_am79c973));
                     new (result) amd_am79c973(&dev, interruptManager);
@@ -247,7 +242,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x003F:
                 {//KeyLargo/Intrepid USB
 
-                    printf("   APPLE KeyLargo/Intrepid USB (NO DRIVER)", true);
+                   debugMessagesStream->write("\r   APPLE KeyLargo/Intrepid USB (NO DRIVER)");
                     break;
 
                 }//end KeyLargo/Intrepid USB
@@ -267,7 +262,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x1111:
                 {//Virtual Video Controller
 
-                    printf("   QEMU Virtual Video Controller (NO DRIVER)", true); //Emulated Video Card
+                   debugMessagesStream->write("\r   QEMU Virtual Video Controller (NO DRIVER)"); //Emulated Video Card
                     break;
 
 
@@ -286,7 +281,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x100E:
                 {//i217 (Ethernet Controller)
 
-                    printf("    INTEL i217", true);
+                   debugMessagesStream->write("\r    INTEL i217");
                     intel_i217* result = (intel_i217*)MemoryManager::activeMemoryManager ->malloc(sizeof(intel_i217));
                     new (result) intel_i217(&dev, interruptManager);
 
@@ -298,7 +293,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x1237:
                 {//440FX
 
-                    printf("   INTEL 440FX (NO DRIVER)", true); //https://en.wikipedia.org/wiki/Intel_440FX (It is a chipset, not a device)
+                   debugMessagesStream->write("\r   INTEL 440FX (NO DRIVER)"); //https://en.wikipedia.org/wiki/Intel_440FX (It is a chipset, not a device)
                     break;
 
                 }//end 440FX
@@ -306,7 +301,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x2415:
                 {//AUDIO CONTROLLER
 
-                    printf("   INTEL  AC'97 AUDIO CONTROLLER (NO DRIVER)", true); //82801AA AC'97 Audio Controller
+                   debugMessagesStream->write("\r   INTEL  AC'97 AUDIO CONTROLLER (NO DRIVER)"); //82801AA AC'97 Audio Controller
                     break;
 
                 }//end AUDIO CONTROLLER
@@ -314,7 +309,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x7000:
                 {//PIIX3 ISA
 
-                    printf("   INTEL PIIX3 ISA (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                   debugMessagesStream->write("\r   INTEL PIIX3 ISA (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
                     break;
 
                 }//end PIIX3 ISA
@@ -322,7 +317,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x7010:
                 {//PIIX4 IDE
 
-                    printf("   INTEL PIIX4 IDE (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                   debugMessagesStream->write("\r   INTEL PIIX4 IDE (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
                     break;
 
                 }//end PIIX4 IDE
@@ -330,7 +325,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x7111:
                 {//PIIX3 IDE
 
-                    printf("   INTEL PIIX3 IDE (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                   debugMessagesStream->write("\r   INTEL PIIX3 IDE (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
                     break;
 
                 }//end PIIX3 IDE
@@ -338,7 +333,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
                 case 0x7113:
                 {//PIIX4 ACPI
 
-                    printf("   INTEL PIIX4 ACPI (NO DRIVER)", true);     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
+                   debugMessagesStream->write("\r   INTEL PIIX4 ACPI (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
                     break;
 
                 }//end PIIX4 ACPI
@@ -356,14 +351,14 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 
                 case 0xBEEF: {//GRAPHICS ADAPTER
 
-                    printf("   VIRTUALBOX GRAPHICS ADAPTER (NO DRIVER)", true);
+                   debugMessagesStream->write("\r   VIRTUALBOX GRAPHICS ADAPTER (NO DRIVER)");
                     break;
 
                 }//end GRAPHICS ADAPTER
 
                 case 0xCAFE: {//GUEST SERVICE
 
-                    printf("   VIRTUALBOX GUEST SERVICE (NO DRIVER)", true);
+                   debugMessagesStream->write("\r   VIRTUALBOX GUEST SERVICE (NO DRIVER)");
                     break;
 
                 }//end GUEST SERVICE
@@ -384,7 +379,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
             {
                 case 0x00:
                 {//VGA
-                    printf("    GRAPHICS VGA", true);
+                   debugMessagesStream->write("\r    GRAPHICS VGA");
                     VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::activeMemoryManager ->malloc(sizeof(VideoGraphicsArray));
                     new (result) VideoGraphicsArray();
 
@@ -443,7 +438,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
 
     if (headerType >= 0x02)  // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
     {
-        printf("       ERROR: unsupported header type found! \n");
+       debugMessagesStream->write("\r       ERROR: unsupported header type found! \n");
         return result;
     }
 
@@ -474,7 +469,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                 {
                     if (result.preFetchable)                                      // unused BARs must be completely 0 (the prefetchable bit must not be set either)
                     {
-                        printf("       ERROR (32bit): BAR NOT WRITEABLE\n");
+                       debugMessagesStream->write("\r       ERROR (32bit): BAR NOT WRITEABLE\n");
                         return result;
                     }
 
@@ -485,7 +480,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                     // it must be a valid 32-bit address :
                     if ( (get_number_of_highest_set_bit(barValue) != 31) || (lowestBit > 31) || (lowestBit < 4) )
                     {
-                        //TODO: MAKE WORK WITH VIRTUALBOX / QEMU printf("       ERROR (32bit): BAR INVALID BITS\n");
+                        //TODO: MAKE WORK WITH VIRTUALBOX / QEMUdebugMessagesStream->write("       ERROR (32bit): BAR INVALID BITS\n");
                         return result;
                     }
 
@@ -503,7 +498,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
             {
                 if (headerType == 0x01)                                                // 20 Bit Mode is not supported for PCI-to-PCI bridges
                 {
-                    printf("       ERROR (20Bit): 20 BIT MODE NOT SUPPORTED\n");
+                   debugMessagesStream->write("\r       ERROR (20Bit): 20 BIT MODE NOT SUPPORTED\n");
                     return result;
                 }
 
@@ -516,7 +511,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                 {
                     if (result.preFetchable)                                      // unused BARs must be completely 0 (the prefetchable bit must not be set either)
                     {
-                        printf("       ERROR (20Bit): BAR NOT WRITEABLE\n");
+                       debugMessagesStream->write("\r       ERROR (20Bit): BAR NOT WRITEABLE\n");
                         return result;
                     }
 
@@ -526,7 +521,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                 // it must be a valid 20-bit address :
                 if ( (get_number_of_highest_set_bit(barValue) != 19) || (lowestBit > 19) || (lowestBit < 4) )
                 {
-                    printf("       ERROR (20Bit): INVAILD BTIS!\n");
+                   debugMessagesStream->write("\r       ERROR (20Bit): INVAILD BTIS!\n");
                     return result;
 
                 }
@@ -542,12 +537,12 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
             {
                 // check whether a 64-bit BAR is even possible at the current position:
                 if (bar >= (max_bars - 1)) {
-                    printf("       ERROR (64bit): BAR CANT STOP AT LAST POS\n");
+                   debugMessagesStream->write("\r       ERROR (64bit): BAR CANT STOP AT LAST POS\n");
                     return result;
                 }
                 // non-prefetchable 64-BARs cannot be used behind bridges (? but they are not forbidden in the spec ?) :
                 if ( !result.preFetchable) {
-                    printf("       ERROR (64bit): BAR non fetchable !\n");
+                   debugMessagesStream->write("\r       ERROR (64bit): BAR non fetchable !\n");
                     return result;
                 }
 
@@ -568,7 +563,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                             || (lowestBit > 31)                                               // lower 32 bits must be 32-bit address
                             || (lowestBit < 4))                                               // lower 32 bits must be 32-bit address
                     {
-                        printf("       ERROR (64bit): INVALID BITS\n");
+                       debugMessagesStream->write("\r       ERROR (64bit): INVALID BITS\n");
                         return result;
                     }
 
@@ -583,7 +578,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
                             || (lowestBit > 63)                                         // lower 32 bits must be 32-bit address
                             || (lowestBit < 36))                                        // lower 32 bits must be 32-bit address
                     {
-                        printf("       ERROR (32bit): INVALID BITS\n");
+                       debugMessagesStream->write("\r       ERROR (32bit): INVALID BITS\n");
                         return result;
                     }
                 }
@@ -610,7 +605,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
 
               if (barValue == 0) // at least one address bit must be 1 (i.e. writable).
               {
-                  printf("       ERROR : NO WRITEABLE BITS");
+                 debugMessagesStream->write("       ERROR : NO WRITEABLE BITS");
                   return result;
               }
 
@@ -620,7 +615,7 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
               // it must either be a valid 32-bit address or a valid 16-bit address :
               if ( ( (highestBit != 31) && (highestBit != 15) ) || (highestBit < lowestBit) || (lowestBit < 2) )
               {
-                  printf("       ERROR : INVAlID BITS");
+                 debugMessagesStream->write("       ERROR : INVAlID BITS");
                   return result;
               }
               **/

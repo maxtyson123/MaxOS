@@ -18,6 +18,10 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 
  
 ## Screenshots
+Booting
+![Screenshot](docs/Screenshots/New_Console.png)
+
+GUI Window System
 ![Screenshot](docs/Screenshots/GUI_windows.png)
 
 
@@ -44,7 +48,7 @@ Kernel Cleanup
 - [x] GUI Draw Rewrite
 - [ ] Usable Desktop                                - Windows Resizing is working but mouse is weird 
 - [x] Timer rewrite
-- [ ] Console rewrite
+- [x] Console rewrite
 - [ ] Better Doxygen Documentation
 - [ ] Use better c++ coding conventions
 - [ ] Codebase cleanup / rewrite

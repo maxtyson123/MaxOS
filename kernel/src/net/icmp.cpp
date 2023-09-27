@@ -8,9 +8,6 @@ using namespace  maxOS;
 using namespace  maxOS::common;
 using namespace  maxOS::net;
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-char printfInt( long num );                     //Forward declaration
 
 InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolProvider *backend)
 : InternetProtocolHandler(backend, 0x01)        // 0x01 is the ICMP protocol
@@ -45,19 +42,9 @@ bool InternetControlMessageProtocol::OnInternetProtocolReceived(uint32_t srcIP_B
     switch (icmp -> type) {
 
         case 0: // Echo reply
-            printf("\nPing response from "); printfHex(srcIP_BE & 0xFF);
-            printf("."); printfHex((srcIP_BE >> 8) & 0xFF);
-            printf("."); printfHex((srcIP_BE >> 16) & 0xFF);
-            printf("."); printfHex((srcIP_BE >> 24) & 0xFF);
-            printf("\n");
-            break;
+
 
         case 8: // Echo request
-            printf("\nPing request from "); printfHex(srcIP_BE & 0xFF);
-            printf("."); printfHex((srcIP_BE >> 8) & 0xFF);
-            printf("."); printfHex((srcIP_BE >> 16) & 0xFF);
-            printf("."); printfHex((srcIP_BE >> 24) & 0xFF);
-            printf("\n");
 
             // Create a response
             icmp -> type = 0;                                                                                                                    // Echo reply

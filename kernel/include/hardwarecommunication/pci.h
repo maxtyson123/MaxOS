@@ -69,8 +69,11 @@ namespace maxOS
         {
                 Port32Bit dataPort;
                 Port32Bit commandPort;
+
+                common::OutputStream* debugMessagesStream;
+
             public:
-                PeripheralComponentInterconnectController();
+                PeripheralComponentInterconnectController(common::OutputStream* debugMessagesStream);
                 ~PeripheralComponentInterconnectController();
 
                 common::uint32_t Read(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset);

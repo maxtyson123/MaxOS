@@ -11,10 +11,6 @@ using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
 using namespace maxOS::memory;
 
-
-void printf(char* str, bool clearLine = false); // Forward declaration
-void printfHex(uint8_t key);                    // Forward declaration
-
 /**
  * @details Construct a new EtherFrameHandler:: EtherFrameHandler object
  *
@@ -92,7 +88,7 @@ EtherFrameProvider::~EtherFrameProvider() {
  */
 bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t size) {
 
-    printf("Handling packet... ");
+
 
     //Check if the size is big enough to contain an ethernet frame
     if(size < sizeof(EtherFrameHeader))
@@ -125,7 +121,7 @@ bool EtherFrameProvider::DataReceived(common::uint8_t* buffer, common::uint32_t 
 
     }
 
-    printf(" Done\n");
+
 
     return sendBack;
 

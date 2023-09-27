@@ -9,6 +9,8 @@
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
 #include <system/multithreading.h>
+#include <common/inputStream.h>
+#include <common/outputStream.h>
 
 
 namespace maxOS {
@@ -30,7 +32,7 @@ namespace maxOS {
 
         };
 
-        class InterruptManager {
+        class InterruptManager : public common::InputStream {
             friend class InterruptHandler;
 
             protected:
@@ -55,6 +57,7 @@ namespace maxOS {
                 } __attribute__((packed));
 
                 common::uint16_t hardwareInterruptOffset;
+                common::OutputStream* errorMessages;
 
                 static void SetInterruptDescriptorTableEntry(common::uint8_t interrupt,
                                                              common::uint16_t codeSegmentSelectorOffset,
@@ -130,7 +133,7 @@ namespace maxOS {
 
 
             public:
-                InterruptManager(common::uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManager);
+                InterruptManager(common::uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManage, common::OutputStream* handler);
 
                 ~InterruptManager();
 

@@ -167,9 +167,6 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(common::uint32_t IP
 
 }
 
-
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
 void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
 {
 
@@ -187,7 +184,6 @@ void AddressResolutionProtocol::BroadcastMACAddress(uint32_t IP_BE)
     //arp.dstMAC = 0xFFFFFFFFFFFF;                                                        // Set the destination MAC address to broadcast
     arp.dstIP = IP_BE;                                                                    // Set the destination IP address to the IP address
 
-    printf("reached send");
     this->Send(arp.dstMAC, (uint8_t*)&arp, sizeof(AddressResolutionProtocolMessage));
 
 }

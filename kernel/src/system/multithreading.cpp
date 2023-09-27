@@ -16,9 +16,6 @@ Thread *ThreadManager::Threads[256] = {nullptr};
 GlobalDescriptorTable *ThreadManager::gdt;
 common::uint8_t ThreadManager::stack[256][5012];
 
-void printf(char* str, bool clearLine = false); //Forward declaration
-void printfHex(uint8_t key);                    //Forward declaration
-
 void Thread::init(GlobalDescriptorTable *gdt, void entrypoint())
 {
     cpustate = (CPUState_Thread *)(stack + 4096 - sizeof(CPUState_Thread));

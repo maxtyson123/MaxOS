@@ -12,8 +12,6 @@ using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
 
 
-void printf(char*, bool=false);
-
 
 ///__RESOLVER__///
 
@@ -205,15 +203,12 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     uint32_t route = dstIP_BE;                                                                                                                               //Set route to destination IP by default
     if((dstIP_BE & subnetMask) != (message->srcIP & subnetMask))                                                                                             //Check if the destination is on the same subnet
         route = defaultGatewayInternetProtocolAddress;                                                                                                                                   //If not, set route to gateway IP
-
-    printf("\nRequesting ARP\n");                                                                                                                            //Print debug info
+                                                                                                                    //Print debug info
     uint32_t MAC = resolver ->Resolve(route);
 
     //Send message
-    printf("\nSending IP packet\n");
     backend -> Send(MAC, this -> etherType_BE, buffer, size + sizeof(InternetProtocolV4Message));      //Send message
     MemoryManager::activeMemoryManager->free(buffer);                                                                                                 //Free memory
-    printf("\nSent IP packet\n");
 }
 
 /**
