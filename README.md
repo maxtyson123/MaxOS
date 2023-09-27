@@ -36,20 +36,13 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
 - [ ] {FIX Later} Fat32 Filesystem through an ATA driver
 
 
-### Current Plans:
-1. Get VESA Video Mode working
-2. Double Buffering
-3. Fix Window/Mouse Bugs
-4. Rewrite the filesystem
-5. Setup SMB/CIFS protocol
-
 ###  Future Plans
 
 Kernel Cleanup
 
-- [ ] VESA Video Mode
+- [ ] VESA Video Mode                               - For now will use VGA
 - [x] GUI Draw Rewrite
-- [ ] Usable Desktop
+- [ ] Usable Desktop                                - Windows Resizing is working but mouse is weird 
 - [x] Timer rewrite
 - [ ] Console rewrite
 - [ ] Better Doxygen Documentation

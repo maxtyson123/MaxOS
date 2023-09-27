@@ -60,42 +60,6 @@ using namespace maxOS::filesystem;
 
 #define ENABLE_GRAPHICS
 
-static Console console;
-
-
-/**
- * @details Print to the Video Memory Debug Console
- *
- * @param  str String to print
- */
-void printf(char* str, bool clearLine = false)
-{
-    console.put_string(str,clearLine);
-}
-
-
-/**
- * @details Print to the Video Memory Debug Console
- *
- * @param  key Hex Value to print
- */
-void printfHex(uint8_t key){
-    console.put_hex(key);
-}
-
-
-/**
- * @details Prints a integer to the screen
- *
- * @param i The integer to print
- * @return None
- */
-char printfInt( int i)
-{
-    printf(console.int_to_string(i));
-
-}
-
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
     public:
 
