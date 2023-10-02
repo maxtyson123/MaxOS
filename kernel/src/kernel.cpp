@@ -1,4 +1,4 @@
-int buildCount = 30;
+int buildCount = 49;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -135,8 +135,10 @@ extern "C" void callConstructors()
 
 #pragma clang diagnostic ignored "-Wwritable-strings"
 
-extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*multiboot_magic*/)
+//TODO: Rewrite multiboot to use the one from the manual: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Example-OS-code
+extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
+
 
     //Initialize Console
     TextModeConsole console;
@@ -160,6 +162,19 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
     cout << "Build: ";
     cout << buildCount;
     cout << "\n";
+
+
+    // Check if the bootloader is valid
+    if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
+    {
+        cout << "Invalid bootloader \n";
+        cout << "Got Magic: ";
+        cout << (uint32_t)multiboot_magic;
+        cout << ", Expected Magic: ";
+        cout << MULTIBOOT_BOOTLOADER_MAGIC;
+        return;
+    }
+    debugStream << "Valid Multiboot Magic, ";
 
     cout << "Setting up system";
 
@@ -364,9 +379,9 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t /*mul
     tcp.Bind(test_tcp_socket, &printfTCPHandler);
       */
 
-    while (true);
 
 #ifdef ENABLE_GRAPHICS
+
 
     cout << "Setting Up Graphics";
 

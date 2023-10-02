@@ -1,5 +1,51 @@
+# Notes
+These are my notes relative to various parts of the OS
+
+# Contents
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [Hardware Communication](#hardware-communication)
+  + [Data Send and Receive](#data-send-and-receive)
+  + [Interrupts](#interrupts)
+  + [Peripheral Component Interconnect (PCI)](#peripheral-component-interconnect-pci)
+  + [Base Address Registers](#base-address-registers)
+  + [RTC Timer](#rtc-timer)
+- [Files And Drives](#files-and-drives)
+  + [Hard-drives](#hard-drives)
+  + [Partion Table](#partion-table)
+  + [Fat 32 File System](#fat-32-file-system)
+- [Graphics](#graphics)
+  + [Graphics Mode {VGA}](#graphics-mode-vga)
+  + [GUI - Framework](#gui-framework)
+- [System Stuff](#system-stuff)
+  + [Multitasking](#multitasking)
+  + [Threads](#threads)
+  + [Dynamic Memory Management / Heap](#dynamic-memory-management-heap)
+  + [System Calls](#system-calls)
+- [Networking](#networking)
+  + [Driver am79c971](#driver-am79c971)
+  + [Handler](#handler)
+  + [Address Resolution Protocol](#address-resolution-protocol)
+  + [Internet Protocol v4](#internet-protocol-v4)
+  + [Internet Control Message Protocol](#internet-control-message-protocol)
+  + [User Datagram Protocol](#user-datagram-protocol)
+  + [Transmission Control Protocol](#transmission-control-protocol)
+  + [Hyper Text Transfer Protocol](#hyper-text-transfer-protocol)
+  + [Domain Name System](#domain-name-system)
+  + [Dynamic Host Configuration Protocol](#dynamic-host-configuration-protocol)
+  + [Secure Shell](#secure-shell)
+  + [File Transfer Protocol](#file-transfer-protocol)
+  + [Simple Mail Transfer Protocol](#simple-mail-transfer-protocol)
+  + [Open Systems Interconnection Model](#open-systems-interconnection-model)
+- [Index](#index)
+  + [Kernel](#kernel)
+
+<!-- TOC end -->
+
+<!-- TOC --><a name="hardware-communication"></a>
 # Hardware Communication
 Here are some notes on how the communication with hardware works, this is used for the keyboard and mouse communication and setting up other devices, e.g. GPU
+<!-- TOC --><a name="data-send-and-receive"></a>
 ### Data Send and Receive
 This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
@@ -14,13 +60,14 @@ This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboar
  outb(0x20, 0x1) //Example using PIC (port 32) and the data 1
 ```
 - To initialize the PIC  ICWs (Initialization Control Words) must be sent
+<!-- TOC --><a name="interrupts"></a>
 ### Interrupts
 This relates to "interrupts.cpp, interruptstubs.s", which are extended by "keyboard.cpp, mouse.cpp".
 See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://wiki.osdev.org/Interrupt_Descriptor_Table), [Stack](https://www.geeksforgeeks.org/introduction-of-stack-based-cpu-organization/)
 - If the PIC sends information without the Interrupt Descriptor Table (IDT) then there will just be a "protection fault"
 - This is because the PIC relays information in the form of interrupts which the OS doesn't know how to handle without an IDT most likely causing it ro crash or restart
-- The information that goes into this table (IDT) is: 
-  - Interrupt number: uint8_t (unsigned 8bit integer) 
+- The information that goes into this table (IDT) is:
+  - Interrupt number: uint8_t (unsigned 8bit integer)
   - handler: address in the ram of where to jump to preform the code/function to handle this interrupt
   - Flags:
   - Segment: tells the processor to switch a certain segment before executing handler, (this is for when the processor is executing code in the userspace, the handler is in the kernelspace and the processor needs to switch to the kernel segment)
@@ -38,11 +85,12 @@ See also [Access Rights](https://wiki.osdev.org/Security#Rings), [IDT](https://w
  }
 ```
 - To get this number as a parameter the CPU would have to push the number onto a stack, which the CPU cant do safely
-- So instead there has to be function for every interrupt, Which can be done most safely in assembly instead of c++ because compilers be compiling 
+- So instead there has to be function for every interrupt, Which can be done most safely in assembly instead of c++ because compilers be compiling
 - From the assembly code a c++ function can then be called (similar to calling kernelMain in loader.s)
 - Once the Interrupt has been received and handled the OS then needs to send a reception message for it continue.
 - Answers (receive messages) only need to be sent to hardware interrupts
 
+<!-- TOC --><a name="peripheral-component-interconnect-pci"></a>
 ### Peripheral Component Interconnect (PCI)
 This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Peripheral_Component_Interconnect)
 - In the computer there is a PCI controller that is connected to the PIC. Devices connected to the PCI controller are generally a GPU (graphics card) or a network/Wi-Fi card
@@ -54,13 +102,14 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - Iterating through the BUS-es and querying the device number will return an uint16_t for the vendor ID and an uint16_t for device ID.
 - The PCI controller will also tell more general information such as class and subclass IDs, which are useful for compatibility modes
 - Once the PCI driver is set up then it becomes easy to extend the OS as in future all that needs to be done is to get the device ID and write drivers for them
+<!-- TOC --><a name="base-address-registers"></a>
 ### Base Address Registers
 - The solution for having multiple PCI devices (two GPUS, two screens etc…) is to have a Base Address Registers (BAR)
 - Base address registers are registers in the PCI configuration space, which in a more simple way is just storing the address of a PCI device in memory
-- There are two types of BARs, one is  the I/O BAR, this is for devices that communicate bit by bit e.g. mouse where the position is read from the port each interrupt 
+- There are two types of BARs, one is  the I/O BAR, this is for devices that communicate bit by bit e.g. mouse where the position is read from the port each interrupt
 - The I/O base address register is 4 bytes long:
 - - Lowest bit:            Type Of register: (I/O bit = 1)
-- - Second-lowest bit:     Reserved 
+- - Second-lowest bit:     Reserved
 - - Bits 3 - 16:           Port Number (MUST BE MULTIPLE OF 4)
 - Memory mapping is another type of BAR, this one is where the device takes x memory location, and to communicate with it just write/read from that location in memory. This is better performance-wise as the CPU can do other tasks while that is updating in the background
 - The Memory Mapping BAR is 4 bytes long:
@@ -68,6 +117,7 @@ This relates to "pci.cpp", See also [PCI](https://www.lowlevel.eu/wiki/Periphera
 - - Second and third: (00 = 32bit BAR) or (01 = 20bit BAR) or (10 = 64bit BAR)
 - - Fourth bit: Prefetch-able bit (e.g. reading from a hard drive in advance because its estimated that the program will need that soon)
 - - Last Twelve: Ram Address (MUST BE MULTIPLE OF 4)
+<!-- TOC --><a name="rtc-timer"></a>
 ### RTC Timer
 See also [RTC](https://wiki.osdev.org/RTC)
 - The RTC (Real Time Clock) is a device that is connected to the PCI controller and is used to keep track of time
@@ -84,7 +134,9 @@ See also [RTC](https://wiki.osdev.org/RTC)
 - - Month:      0x08 (1-12)
 - - Year:       0x09 (0-99)
 
+<!-- TOC --><a name="files-and-drives"></a>
 # Files And Drives
+<!-- TOC --><a name="hard-drives"></a>
 ### Hard-drives
 - History of hard drives: 20 years ago there used to be IDE (Integrated Device Electronics) that was later continued on to ATA (Advanced Technology Attachment) that has now been moved onto what is used to day SATA (Serial Advanced Technology Attachment)
 - As hard drives have been around for a long time, they are well documented and easy to implement
@@ -99,6 +151,7 @@ See also [RTC](https://wiki.osdev.org/RTC)
 - - 28Bits supports hard drives/files upto 4GB whereas 48Bits support hard drives/files upto 8PB
 - Previously to communicate with data on the hard drive the OS had to know the CHS (Cylinder, Head, Sector)  address. As hard drive developed and there were no longer spinning disks and such (e.g. SSDs) a new way of comincating was invented: LBA.
 - LBA stands for Logical Block Address which basically just returns a sector with a given number
+<!-- TOC --><a name="partion-table"></a>
 ### Partion Table
 - This OS will use the MS DOS partition table is because it is the most common and well documented. Additionalym Windows uses it and so does Linux
 - This partion table is simple so it is easy to implement, but it is also limited to 4 primary partitions and 1 extended partition.
@@ -115,6 +168,7 @@ See also [RTC](https://wiki.osdev.org/RTC)
 - - Next 3 bytes: Cylinder Head Sector (CHS) address of the last sector of the partition
 - - Next 4 bytes: LBA address of the first sector of the partition
 - - Next 4 bytes: Number of sectors in the partition
+<!-- TOC --><a name="fat-32-file-system"></a>
 ### Fat 32 File System
 See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT32)
 - The FAT32 file system is the most common file system used in Windows and Linux
@@ -132,7 +186,7 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - - FAT32 Table 2: 4KB (8 sectors) (optional)
 - - Data Section: To the end of the hard drive
 
-- Inside the boot sector there is a BIOS Parameter Block (BPB) 
+- Inside the boot sector there is a BIOS Parameter Block (BPB)
 - The structure of the BPB is as follows:
 - - First 3 bytes: Jump instruction (Jump to the bootstraper)
 - - Next 8 bytes: OEM Name (Name of the OS that created the file system)
@@ -151,7 +205,7 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - Next 4 bytes: Table size (8)
 - - Next 2 bytes: Extended flags (0)
 - - Next 2 bytes: FAT version (0)
-- - Next 4 bytes: Root directory cluster (2) 
+- - Next 4 bytes: Root directory cluster (2)
 - - Next 2 bytes: FS Information sector (1)
 - - Next 2 bytes: Backup boot sector (6)
 - - Next 12 bytes: Reserved (0)
@@ -170,7 +224,7 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - Next 7 bytes: Creation time
 - - Next 2 bytes: Cluster high
 - - Next 4 bytes: Write time e.t.c
-- - Next 2 bytes: Cluster low 
+- - Next 2 bytes: Cluster low
 - - Next 4 bytes: File size
 - The cluster low and high are basicly pointers to where the directory entry is located on the hard drive or where the file is located on the hard drive
 - To read a file you need to read the cluster low and high and then read the cluster from the hard drive
@@ -179,8 +233,10 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - The FAT32 table is used to find the next cluster of a file, when a file is fragmented
 - To expand a file the File Allocation Table has to be edited to point to a new empty cluster, this is done by looping through all the clusters in the FAT and finding one with the value 0x000000 which means it is unused. Then the FAT is edited so that the end of the file is this new cluster, the cluster is marked as used and the finnaly the file is set to use this cluster.
 - A cluster can only belong to one file at a time. This is useful as that means that when a file is being read or expand the operating system doesnt need to split the cluster up.
+<!-- TOC --><a name="graphics"></a>
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication first)
+<!-- TOC --><a name="graphics-mode-vga"></a>
 ### Graphics Mode {VGA}
 - To write pixels and such to the screen for a GUI the graphics card needs to be put into graphics mode (grub puts it into text mode by default)
 - There are two ways of doing this, via the BIOS 0x13 Interrupt or by directly telling the GPU.
@@ -199,6 +255,32 @@ Here are the notes on graphics for the operating system. (May need to read hardw
 - The VGA class that was written should have a class above that call graphicsContext which would define methods such as renderPixel(...), drawRect(...), drawLine(...), drawCircle(...) and sub-classes such as color.
 - The draw functions should rely on the renderPixel function therefore in different graphics modes that are derived from that graphicsContext class can be supported.
 
+### VESA
+- VESA is a legacy extension to VGA that allows for a higher color depth and larger screen resolutions
+- VESA is a standard that is supported by most graphics cards
+- The VESA framebuffer can be acessed from the GRUB Multibooot structure
+- The VESA framebuffer is a memory region that contains the pixels that are displayed on the screen
+- The VESA framebuffer is a linear framebuffer, which means that the pixels are stored in a linear array
+- VESA Supports these  modes:
+- - MODE    RESOLUTION  COLOUR DEPTH    MAXIMUM COLORS
+- - 0x100   640x400     8               256
+- - 0x101   640x480     8               256
+- - 0x102   800x600     4               16
+- - 0x103   800x600     8               256
+- - 0x10D   320x200     15              32768
+- - 0x10E   320x200     16              65536
+- - 0x10F   320x200     24/32           16777216
+- - 0x110   640x480     15              32768
+- - 0x111   640x480     16              65536
+- - 0x112   640x480     24/32           16777216
+- - 0x113   800x600     15              32768
+- - 0x114   800x600     16              65536
+- - 0x115   800x600     24/32           16777216
+- - 0x116   1024x768    15              32768
+- - 0x117   1024x768    16              65536
+- - 0x118   1024x768    24/32           16777216
+- Some BIOS support 24bit color depth whilst others support 32bit color depth
+<!-- TOC --><a name="gui-framework"></a>
 ### GUI - Framework
 See also: Bresenham line algorithm (use for later)
 - The GUI framework will have a base class called Widget, which should have a draw function. This draw function would get a graphicsContext and draw itself onto of it using the graphicContext's draw methods.
@@ -210,9 +292,11 @@ See also: Bresenham line algorithm (use for later)
 - To get which widget to preform the keyEvent or mouseEvent the desktop will have a function of getting the focused widget
 - The desktop will work like the composite widget, but will have to override the mouseHandler class as mouse passes movement in relative to last position (moved x  pixels) so the desktop will have to translate the restiveness into absolute positions
 - For better performance, instead of re-drawing the screen every time just draw it once and then when a gui object changes (e.g. moving a window) memory the object to the new state and then redraw any invalid parts (invalid is where places where there used to be the gui object)
-- To draw text the "modes.c" has various 8x8 Bitmap fonts. Using these fonts a Text widget can be made that gets the characters of a string from the font and then print all the pixels in that character.  
+- To draw text the "modes.c" has various 8x8 Bitmap fonts. Using these fonts a Text widget can be made that gets the characters of a string from the font and then print all the pixels in that character.
 
+<!-- TOC --><a name="system-stuff"></a>
 # System Stuff
+<!-- TOC --><a name="multitasking"></a>
 ### Multitasking
 See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explaining
 - In the RAM there is different places for different species of code. The processor jumps around executing different parts. Somewhere in the RAM there is a STACK where stuff is being pushed a popped
@@ -220,14 +304,15 @@ See also [Stack](https://wiki.osdev.org/Stack), **Note this needs better explain
 - However, to do multithreading the current way of executing in the OS needs to change. First the OS will take another portion of the RAM, reserve it for multitasking, and make its own stack there for every task.
 - Therefore, when a task is created a memory region is made. Information for the processor is then explicitly writen into segments in that region e.g. the instruction pointer at the entry point
 - Previously: the interstubs.s file pushed the current processor values (interstubs line 64: save the registers) and then pushed the stack pointer (interstubs line 80: Invoke C++ handlers) and then load register again
-- (Carrying on "Previously") The handler function would have the pointer to the stack (passed as var: esp). The return value of handle interrupt is then written into esp and then executed by processor. 
+- (Carrying on "Previously") The handler function would have the pointer to the stack (passed as var: esp). The return value of handle interrupt is then written into esp and then executed by processor.
 - Now with multitasking the return value for the handle interrupt function would be changed to point to the top of the new task's stack.
-- To sum up: 
+- To sum up:
 - - The kernel will be executing function "X" and receive an interrupt
 - - kernel will execute the interrupt handler
 - - The interrupt handler will then return a pointer to the new task
 - - Kernel will then execute the new task instead of executing function "X"
 - To schedule processes fairly, a round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum (its allowance of CPU time), and interrupting the job if it is not completed by then. The job is resumed next time a time slot is assigned to that task. If the task terminates or changes its state to waiting during its attributed time quantum, the scheduler selects the first task in the ready queue to execute
+<!-- TOC --><a name="threads"></a>
 ### Threads
 See also: [Thread](https://wiki.osdev.org/Thread)
 - A thread is a lightweight process. It is a sequence of instructions within a program that can be executed independently of other code. Threads can be created and managed by a thread library.
@@ -238,6 +323,7 @@ See also: [Thread](https://wiki.osdev.org/Thread)
 - The thread class will also have a function to get the current thread. This function will be used to get the current thread, and then the thread will be able to access its own stack.
 - Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yeild function on the thread class.
 - Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. Threads are often used to implement concurrency within a process. Threads are also used to implement parallelism, where multiple processes can run simultaneously on a multi-core processor.
+<!-- TOC --><a name="dynamic-memory-management-heap"></a>
 ### Dynamic Memory Management / Heap
 See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list)
 - Before Dynamic Memory Management (DMM), the implementation was very static as there would just be the objects and are allocated on the stack.
@@ -247,7 +333,7 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 ```bash
   [Video Memory] [Text Memory] [BIOS] [ Grub / Bootloader ] [ MaxOS / Kernel ] [ Stack ] [ FREE SPACE ]
 ```
-- However, there is a problem as there is no way to know if GRUB has loaded something behind the kernel e.g. Multiboot structure or Modules . Therefore, it is unknown how much space there is 
+- However, there is a problem as there is no way to know if GRUB has loaded something behind the kernel e.g. Multiboot structure or Modules . Therefore, it is unknown how much space there is
 - To get around this the OS will just get the pointer to the stack and add 4MB to it. Which is not ideal as that is just a guess that is hopefully enough
 - To implement this a class called memory manager will be given the stack point and a size of X. (Can get X from grub)
 - The memory will then be split up into Memory Chunks (a class) that will be structured like the following:
@@ -260,15 +346,18 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 - To find memory easier see [multiboot.h](https://github.com/cstack/osdev/blob/master/multiboot.h), however I will implement my own for copyright reasons which will just use the multiboot structure
 - Now that there is memory management objects will be able to use the "new" and "delete" methods, allowing for virtual deconstructions
 - However, if there is no free memory then the function will return 0 which would work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exception like c++ normally would as currently there is no exception handler
+<!-- TOC --><a name="system-calls"></a>
 ### System Calls
 See also [List of syscalls](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
 - The kernel can load a binary executable from the hard drive and then store it in memory and then attach the memory pointer to task management
 - When the operating system is unsecure from executables, they will be able to use assembly and such to talk to the hard drive and other devices, this can lead to malicious programs.
-- To get around this the kernel has to be put in userspace once fully initiated. Userspace tells the device to ignore "outb" commands and other low level operations. 
+- To get around this the kernel has to be put in userspace once fully initiated. Userspace tells the device to ignore "outb" commands and other low level operations.
 - However, programs do have to communicate with the hard drive and other devices so there has to be some, managed , way of doing so.
-- So instead system calls are used. Basically the program will call a software interrupt (0x80) and then the kernel will read infomation from the AX and BX registers (AX and BX were set before the interrupt, AX is the system call number and BX is parameters) 
+- So instead system calls are used. Basically the program will call a software interrupt (0x80) and then the kernel will read infomation from the AX and BX registers (AX and BX were set before the interrupt, AX is the system call number and BX is parameters)
 - There for the implementation for this just involves setting up an interrupt handler that handles the interrupt 0x80, reads the AX  and BX registers and then runs the relative function
+<!-- TOC --><a name="networking"></a>
 # Networking
+<!-- TOC --><a name="driver-am79c971"></a>
 ### Driver am79c971
 See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) [AMD_AM79C973](https://www.amd.com/system/files/TechDocs/20550.pdf)
 - To get networking capability in the OS a driver for the virtualized network chip (am79c971) has to be written
@@ -277,6 +366,7 @@ See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](h
 - The networking device can have multiple send and receive buffers and for every buffer there needs to be an instance of a struct (which mainly has a pointer to that buffer)
 - A problem with this though is that this is one of those devices that use some bits in the address for other purposes meaning it needs to be a multiple of 16 (similar to bar)
 - So the buffer will be 2KB but then an additional 15 bytes are added on and then 4 bytes are removed. This allows for the multiple of 16 to be found
+<!-- TOC --><a name="handler"></a>
 ### Handler
 See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame)
 - The driver written for the am79c971 can be utilized to receive and send data, however for the device to be useful a protocol handler has to be written.
@@ -289,6 +379,7 @@ See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_fra
 - - Next 46 - 1000 bytes: Data (Payload)
 - - Last 4 bytes: Checksum (CRC)
 - From this data the handler can then interpret the data e.g. discard if the MAC adress isnt for this device or pass the data to the ARP handler if the EtherType is 0x0806 etc.
+<!-- TOC --><a name="address-resolution-protocol"></a>
 ### Address Resolution Protocol
 See also [Wikipedia - ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol)
 - The Address Resolution Protocol (ARP) is a communication protocol used for discovering the link layer address, such as a MAC address, associated with a given internet layer address, typically an IPv4 address.
@@ -302,8 +393,9 @@ See also [Wikipedia - ARP](https://en.wikipedia.org/wiki/Address_Resolution_Prot
 - - Next 4 Bytes: IP address of the sender
 - - Next 6 Bytes: Mac address of the receiver
 - - Next 4 Bytes: IP address of the receiver
-- The reason the MAC address is repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay 
+- The reason the MAC address is repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay
 - Therefore, the ARP packet contains the MAC address of the original device that sent the ARP request.
+<!-- TOC --><a name="internet-protocol-v4"></a>
 ### Internet Protocol v4
 See also [Wikipedia - IPv4](https://en.wikipedia.org/wiki/IPv4), [Wikipedia - IPv4 Header](https://en.wikipedia.org/wiki/IPv4_header)
 - The Internet Protocol (IP) is the principal communications protocol in the Internet protocol suite for relaying datagrams across network boundaries. Its routing function enables internetworking, and essentially establishes the Internet.
@@ -334,6 +426,7 @@ See also [Wikipedia - IPv4](https://en.wikipedia.org/wiki/IPv4), [Wikipedia - IP
 - The source IP address is used to determine who sent the packet. This is used to determine if the packet is for this device. If it is not, the packet is discarded.
 - The destination IP address is used to determine who the packet is for. This is used to determine if the packet is for this device. If it is not, the packet is discarded. If it is, the packet is passed to the next protocol handler.
 - The data is the data that is being sent. This is passed to the next protocol handler.
+<!-- TOC --><a name="internet-control-message-protocol"></a>
 ### Internet Control Message Protocol
 See also [Wikipedia - ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol)
 - The Internet Control Message Protocol (ICMP) is a protocol used by network devices, including routers, to send error messages and operational information indicating, for example, that a requested service is not available or that a host or router could not be reached.
@@ -344,26 +437,28 @@ See also [Wikipedia - ICMP](https://en.wikipedia.org/wiki/Internet_Control_Messa
 - - Next 2 Bytes: Checksum (CRC)
 - - Next 4 Bytes: Data (Optional)
 - Message Types: See [Wikipedia - ICMP Message Types](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+<!-- TOC --><a name="user-datagram-protocol"></a>
 ### User Datagram Protocol
 See also [Wikipedia - UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
 - The User Datagram Protocol (UDP) is one of the core members of the Internet protocol suite. It is a connectionless protocol, meaning that UDP datagrams are not guaranteed to arrive in the same order in which they were sent, and may be duplicated or lost entirely.
-- UDP is used for time-sensitive applications, such as voice over IP (VoIP), streaming media, and real-time multiplayer games. 
+- UDP is used for time-sensitive applications, such as voice over IP (VoIP), streaming media, and real-time multiplayer games.
 - The reason it is used for time sensitive applications is because it does not require the host to acknowledge receipt of the data. This means that if the data is lost it will not be resent and the application will not know. This is fine for time sensitive applications as the data is not needed to be received. In a real time application, if the data is lost then maybe a frame will be skipped but the application will not crash and the user generally will not notice.
 - It is also used for DNS lookups, and for low-latency and loss-tolerating applications, such as real-time audio and video streaming.
 - UDP is a simple protocol, with no handshaking or acknowledgment of data packets. It is used in conjunction with the Internet Protocol (IP) and the Internet Control Message Protocol (ICMP) to provide a best-effort datagram service.
 - The UDP data block is as follows: (known as the payload in the raw-data)
 - - First 2 Bytes: Source Port (Port that the data is coming from)
 - - Next 2 Bytes: Destination Port (Port that the data is going to)
-- - Next 2 Bytes: Length (Length of the UDP data block) 
+- - Next 2 Bytes: Length (Length of the UDP data block)
 - - Next 2 Bytes: Checksum (CRC)
 - - Next 0 - 65507 Bytes: Data (Payload)
 - The reason the ports are repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay
 - Therefore, the UDP packet contains the port of the original device that sent the UDP request.
 - The UDP is just a multiplexer and demultiplexer, similar to CPU in data send / receive section. This means that it does not care what the data is, it just passes it on.
+<!-- TOC --><a name="transmission-control-protocol"></a>
 ### Transmission Control Protocol
 See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
 - The Transmission Control Protocol (TCP) is one of the main protocols of the Internet protocol suite. It originated in the initial network implementation in which it complemented the Internet Protocol. It provides reliable, ordered, and error-checked delivery of a stream of octets (bytes) between applications running on hosts communicating via an IP network. Major internet applications such as the World Wide Web, email, remote administration, and file transfer rely on TCP. Applications that do not require reliable data stream service may use the User Datagram Protocol (UDP), which provides a connectionless datagram service that emphasizes reduced latency over reliability.
-- TCP is a connection-oriented protocol, which means that two computers must first establish a connection before exchanging data. 
+- TCP is a connection-oriented protocol, which means that two computers must first establish a connection before exchanging data.
 - The reason it is connection oriented is that it requires the host to acknowledge receipt of the data. This means that if the data is lost it will be resent and the application will know. This is fine for applications that require the data to be received.
 - TCP is a reliable protocol, which means that it will resend any lost packets. This is done by using a sequence number and an acknowledgement number. The sequence number is the number of the first byte in the data. The acknowledgement number is the number of the next byte that is expected. If the acknowledgement number is not the same as the sequence number, the data is resent.
 - The TCP data block is as follows: (known as the payload in the raw-data)
@@ -391,29 +486,36 @@ See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Pr
 - - ECE: ECN-Echo (64)
 - - CWR: Congestion Window Reduced (128)
 - These flags are used to control the flow of data. For example, the SYN flag is used to start the connection. The ACK flag is used to acknowledge the data. The FIN flag is used to end the connection.
+<!-- TOC --><a name="hyper-text-transfer-protocol"></a>
 ### Hyper Text Transfer Protocol
 See also [Wikipedia - HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
 TBC
+<!-- TOC --><a name="domain-name-system"></a>
 ### Domain Name System
 See also [Wikipedia - DNS](https://en.wikipedia.org/wiki/Domain_Name_System)
 TBC
+<!-- TOC --><a name="dynamic-host-configuration-protocol"></a>
 ### Dynamic Host Configuration Protocol
 See also [Wikipedia - DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol)
 TBC
+<!-- TOC --><a name="secure-shell"></a>
 ### Secure Shell
 See also [Wikipedia - SSH](https://en.wikipedia.org/wiki/Secure_Shell)
 TBC
+<!-- TOC --><a name="file-transfer-protocol"></a>
 ### File Transfer Protocol
 See also [Wikipedia - FTP](https://en.wikipedia.org/wiki/File_Transfer_Protocol)
 TBC
+<!-- TOC --><a name="simple-mail-transfer-protocol"></a>
 ### Simple Mail Transfer Protocol
 See also [Wikipedia - SMTP](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol)
 TBC
 
+<!-- TOC --><a name="open-systems-interconnection-model"></a>
 ### Open Systems Interconnection Model
 See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 - The Open Systems Interconnection (OSI) model is a conceptual model that characterises and standardises the communication functions of a telecommunication or computing system without regard to its underlying internal structure and technology.
-- OSI is a reference model for how information is passed between applications and computer systems. 
+- OSI is a reference model for how information is passed between applications and computer systems.
 - It is structured in a layered approach, with each layer performing a specific function.
 - The layers are as follows:
 - - Application Layer (Handled in the application)
@@ -427,8 +529,11 @@ See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 - The operating system will implement the layers above the network layer (Application, Presentation, Session, Transport) and the network device will implement the layers below the network layer (Data Link, Physical)
 - The reason for this is because the network device is the only thing that can communicate with the physical layer and the network layer. The operating system can only communicate with the application layer and the transport layer.
 
+<!-- TOC --><a name="index"></a>
 # Index
 Here is an index of files in the os, and what notes they  relate to. This is useful for finding the implmentation of code for a specific part of the notes.
+<!-- TOC --><a name="kernel"></a>
+
 ### Kernel
 - [common / printf.cpp : none](#none)
 - [drivers / am79c971.cpp : driver-am79c971](#driver-am79c971)
