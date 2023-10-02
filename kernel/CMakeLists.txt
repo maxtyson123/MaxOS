@@ -83,7 +83,7 @@ set(
         ${fs_h}/fat32.h ${fs_c}/fat32.cpp
         ${fs_h}/filesystem.h ${fs_c}/filesystem.cpp
 
-   include/common/rectangle.h include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h include/gui/font.h src/gui/font.cpp include/system/multiboot.h include/drivers/video/vesa.h src/drivers/video/vesa.cpp include/drivers/console/console.h src/drivers/console/console.cpp include/drivers/console/textmodeconsole.h src/drivers/console/textmodeconsole.cpp)
+   include/common/rectangle.h include/common/coordinates.h include/common/pair.h include/common/constants.h include/common/time.h include/drivers/clock/clock.h src/drivers/clock/clock.cpp src/common/inputStream.cpp include/common/inputStream.h src/common/outputStream.cpp include/common/outputStream.h include/gui/font.h src/gui/font.cpp include/system/multiboot.h include/drivers/video/vesa.h src/drivers/video/vesa.cpp include/drivers/console/console.h src/drivers/console/console.cpp include/drivers/console/textmodeconsole.h src/drivers/console/textmodeconsole.cpp include/drivers/console/vesabootconsole.h src/drivers/console/vesabootconsole.cpp)
 #Ignore standard library
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -Wl,nostdlib -Wl,nodefaultlibs")
 

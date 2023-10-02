@@ -3,7 +3,7 @@
 .set MEMINFO,        1 << 1       ; // Provide memory map
 .set VESA_ENABLED,   1 << 2       ; // Enable VESA support
 .set VESA_DISABLED,  0 << 2       ; // Disable VESA support
-.set FLAGS,          ALIGN | MEMINFO | VESA_DISABLED
+.set FLAGS,          ALIGN | MEMINFO | VESA_ENABLED
 .set CHECKSUM,       -(MAGIC + FLAGS)
 
 .section .multiboot

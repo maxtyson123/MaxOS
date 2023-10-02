@@ -205,21 +205,6 @@ FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachme
     //Read the directory entrys
     ReadEntrys();
 
-
-    fat32MessageStream -> write("Finding the home directory:");
-    //Find the home directory
-    while (currentDirectoryEnumerator -> hasNext()){
-        currentDirectoryEnumerator = (FatDirectoryEnumerator*)currentDirectoryEnumerator -> next();
-
-        if (common::strcmp(currentDirectoryEnumerator -> getDirectoryName(),"HOME    ") == 0){
-            fat32MessageStream -> write("\n HOME directory found");
-            break;
-        }
-    }
-
-    fat32MessageStream -> write("\n Change directory to HOME directory: ");
-    fat32MessageStream -> write(currentDirectoryEnumerator -> getDirectoryName());
-
     while (true);
 
 
@@ -355,10 +340,10 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name) == 0) {              //If the name is the same as the parameter
-            fat32MessageStream -> write("Name already in use");
-            return;
-        }
+       // if (common::strcmp(name, (char*)dirent[i].name) == 0) {              //If the name is the same as the parameter
+      //      fat32MessageStream -> write("Name already in use");
+      //      return;
+      //  }
     }
 
     //Create a new directory entry with the name
@@ -407,11 +392,11 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
-            dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
-            index = i;
-            break;
-        }
+     //   if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
+     //       dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
+    //        index = i;
+    //        break;
+     //   }
     }
 
     //If the directory was not found
@@ -446,10 +431,10 @@ void FatDirectoryTraverser::makeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
-            fat32MessageStream -> write("Name already in use");
-            return;
-        }
+    //    if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
+    //        fat32MessageStream -> write("Name already in use");
+    //        return;
+    //    }
     }
 
     //Create a new directory entry with the name
@@ -493,11 +478,11 @@ void FatDirectoryTraverser::removeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-        if (common::strcmp(name, (char*)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
-            dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
-            index = i;
-            break;
-        }
+      //  if (common::strcmp(name, (char*)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
+      //      dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
+      //      index = i;
+      //      break;
+      //  }
     }
 
     //If the file was not found

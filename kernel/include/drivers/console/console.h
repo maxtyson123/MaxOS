@@ -6,7 +6,7 @@
 #define MAXOS_DRIVERS_CONSOLE_H
 
 #include <common/types.h>
-#include <common/outputstream.h>
+#include <common/outputStream.h>
 
 namespace maxOS {
 

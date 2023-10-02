@@ -429,16 +429,13 @@ static unsigned int  get_number_of_highest_set_bit(uint32_t value)
  */
 BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
-
-
-
     BaseAdressRegister result;
 
     uint32_t headerType = Read(bus,device,function,0x0E) & 0x7F;  //Only get first 7 bits
 
     if (headerType >= 0x02)  // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
     {
-       debugMessagesStream->write("\r       ERROR: unsupported header type found! \n");
+
         return result;
     }
 
@@ -448,181 +445,28 @@ BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegis
     }
 
 
-    const uint32_t barOffset = 0x10 + (bar * 4);                            // Determine the offset of the current BAR (note: bar addresses begin at register 0x10, bars have the size of 4)
+    const uint32_t barOffset = 0x10 + (bar * 4);   // Determine the offset of the current BAR (note: bar addresses begin at register 0x10, bars have the size of 4)
     uint32_t bar_value = Read(bus,device,function,barOffset);
-    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;          //Examine the last bit (check notes: last bit is type)
+    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;  //Examine the last bit (check notes: last bit is type)
     uint32_t temp;
 
     if(result.type == MemoryMapping){
 
-        result.preFetchable = ((Read(bus,device,function,barOffset) >> 3) & 0x1) == 1;              //Examine the 3rd bit (check notes: 3rd bit is prefetchable)
-        switch((bar_value >> 1) & 0x3)                                                                        //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
+        switch((bar_value >> 1) & 0x3) //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
         {
-
-            case 0:                                                                                          // 32 Bit Mode
-            {
-                //Check if there are any readable bits
-                Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
-                const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
-
-                if (barValue == 0)                                                // at least one address bit must be 1 (i.e. writable).
-                {
-                    if (result.preFetchable)                                      // unused BARs must be completely 0 (the prefetchable bit must not be set either)
-                    {
-                       debugMessagesStream->write("\r       ERROR (32bit): BAR NOT WRITEABLE\n");
-                        return result;
-                    }
-
-                }
-                else
-                {
-                    const unsigned  int lowestBit = get_number_of_lowest_set_bit(barValue);
-                    // it must be a valid 32-bit address :
-                    if ( (get_number_of_highest_set_bit(barValue) != 31) || (lowestBit > 31) || (lowestBit < 4) )
-                    {
-                        //TODO: MAKE WORK WITH VIRTUALBOX / QEMUdebugMessagesStream->write("       ERROR (32bit): BAR INVALID BITS\n");
-                        return result;
-                    }
-
-                    //Get the base memory address from the bar_value
-                    result.adress = (uint8_t*)(bar_value  & 0xFFFFFFF0);
-
-
-
-
-                }
-                break;
-            }                                                                                                // END 32 Bit Mode
-
+            //Come back to code memory mapping (see lowlev.eu pci)
+            case 0: // 32 Bit Mode
             case 1: // 20 Bit Mode
-            {
-                if (headerType == 0x01)                                                // 20 Bit Mode is not supported for PCI-to-PCI bridges
-                {
-                   debugMessagesStream->write("\r       ERROR (20Bit): 20 BIT MODE NOT SUPPORTED\n");
-                    return result;
-                }
-
-
-                //Check if there are any readable bits
-                Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
-                const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
-
-                if (barValue == 0)                                                // at least one address bit must be 1 (i.e. writable).
-                {
-                    if (result.preFetchable)                                      // unused BARs must be completely 0 (the prefetchable bit must not be set either)
-                    {
-                       debugMessagesStream->write("\r       ERROR (20Bit): BAR NOT WRITEABLE\n");
-                        return result;
-                    }
-
-                }
-                const unsigned int lowestBit = get_number_of_lowest_set_bit(barValue);
-
-                // it must be a valid 20-bit address :
-                if ( (get_number_of_highest_set_bit(barValue) != 19) || (lowestBit > 19) || (lowestBit < 4) )
-                {
-                   debugMessagesStream->write("\r       ERROR (20Bit): INVAILD BTIS!\n");
-                    return result;
-
-                }
-
-
-                //Get the base memory address from the bar_value
-                result.adress = (uint8_t*)(bar_value  & 0xFFF0);
-
-
-                break;
-            }
             case 2: // 64 Bit Mode
-            {
-                // check whether a 64-bit BAR is even possible at the current position:
-                if (bar >= (max_bars - 1)) {
-                   debugMessagesStream->write("\r       ERROR (64bit): BAR CANT STOP AT LAST POS\n");
-                    return result;
-                }
-                // non-prefetchable 64-BARs cannot be used behind bridges (? but they are not forbidden in the spec ?) :
-                if ( !result.preFetchable) {
-                   debugMessagesStream->write("\r       ERROR (64bit): BAR non fetchable !\n");
-                    return result;
-                }
-
-                Write(bus,device,function, barOffset, 0xFFFFFFF0);                              // overwrite with all 1s
-                Write(bus,device,function, barOffset + 4, 0xFFFFFFFF);                          // overwrite with all 1s
-                const uint32_t barLowValue = Read(bus,device,function, barOffset) & 0xFFFFFFF0;       // and read back again
-                const uint32_t barHighValue = Read(bus,device,function, barOffset + 4);               // and read back again
-
-                unsigned int lowestBit = 0;
-                if (barLowValue != 0) {
-                    // less than 4 GB :
-
-                    lowestBit = get_number_of_lowest_set_bit(barLowValue);
-
-                    // it must be a valid small 64-bit address :
-                    if ((barHighValue != 0xFFFFFFFF)                                          // upper 32 bits must be 1s
-                            || (get_number_of_highest_set_bit(barLowValue) != 31)       // lower 32 bits must be 32-bit address
-                            || (lowestBit > 31)                                               // lower 32 bits must be 32-bit address
-                            || (lowestBit < 4))                                               // lower 32 bits must be 32-bit address
-                    {
-                       debugMessagesStream->write("\r       ERROR (64bit): INVALID BITS\n");
-                        return result;
-                    }
-
-                }
-                else
-                {
-                    // greater than/equal to 4 GB :
-                    lowestBit = get_number_of_lowest_set_bit(barHighValue) + 32;
-
-                    // it must be a valid large 64-bit address :
-                    if ((get_number_of_highest_set_bit(barHighValue) != 31)       // upper 32 bits must be 32-bit address
-                            || (lowestBit > 63)                                         // lower 32 bits must be 32-bit address
-                            || (lowestBit < 36))                                        // lower 32 bits must be 32-bit address
-                    {
-                       debugMessagesStream->write("\r       ERROR (32bit): INVALID BITS\n");
-                        return result;
-                    }
-                }
-
-                //Get the base memory address from the bar_value
-                result.adress = (uint8_t*)((barLowValue & 0xFFFFFFF0) + (barHighValue & 0xFFFFFFFF) << 32);
-
-
-
-                // skip the subsequent BAR for analysis as cannot be used because it contains the upper 32 bits of the previous 64-bit BAR
-                ++bar;
-
-            }
+                break;
         }
 
         //                   Shift bar by 3 (removing last 3 bits) check if it == 0x1
-
+        result.preFetchable = ((bar_value >> 3) & 0x1) == 0x1;
     }
     else
-    {
-        /** fixme: this causes the device to not initialize properly, which means mem map is also probably wrong
-              Write(bus,device,function,barOffset,0xFFFFFFFC);                            // overwrite with all 1s
-              const uint32_t barValue = Read(bus,device,function,barOffset) & 0xFFFFFFFC;       // and read back again
-
-              if (barValue == 0) // at least one address bit must be 1 (i.e. writable).
-              {
-                 debugMessagesStream->write("       ERROR : NO WRITEABLE BITS");
-                  return result;
-              }
-
-              const unsigned int  lowestBit = get_number_of_lowest_set_bit(barValue);
-              const unsigned int  highestBit = get_number_of_highest_set_bit(barValue);
-
-              // it must either be a valid 32-bit address or a valid 16-bit address :
-              if ( ( (highestBit != 31) && (highestBit != 15) ) || (highestBit < lowestBit) || (lowestBit < 2) )
-              {
-                 debugMessagesStream->write("       ERROR : INVAlID BITS");
-                  return result;
-              }
-              **/
-
-
-        // I/O
-        result.adress = (uint8_t*)(bar_value & 0xFFFFFFFC); //~0x3 - use this if things go wrong
+    {  // I/O
+        result.adress = (uint8_t*)(bar_value & ~0x3); //~0x3 = cancle last 2 bits
         result.preFetchable = false;
     }
 

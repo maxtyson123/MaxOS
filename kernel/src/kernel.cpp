@@ -1,4 +1,4 @@
-int buildCount = 49;
+int buildCount = 90;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -164,6 +164,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
 
 
+
     // Check if the bootloader is valid
     if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
@@ -177,6 +178,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     debugStream << "Valid Multiboot Magic, ";
 
     cout << "Setting up system";
+
 
     //Setup GDT
     GlobalDescriptorTable gdt(multibootHeader);
@@ -210,6 +212,8 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     cout << "[ Done ]\n";
 
+
+
     cout << "Setting up devices";
 
     serial serialLog(&interrupts);
@@ -221,6 +225,8 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 
     DriverManager driverManager;
+
+
 
     //Keyboard
     KeyboardToStream kbhandler(&cout);
@@ -241,17 +247,24 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     debugStream << "Set Up Mouse, ";
     cout << ".";
 
+
+
     //Clock
     Clock kernelClock(&interrupts, 1);
     driverManager.AddDriver(&kernelClock);
 
     //PCI
     PeripheralComponentInterconnectController PCIController(&nullStream);
+    
     PCIController.SelectDrivers(&driverManager, &interrupts);
+
+
     debugStream << "Set Up PCI, ";
     cout << ".";
 
     cout << "[ DONE ] \n";
+
+
 
 /***
     //Interrupt 14 for Primary
@@ -326,6 +339,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     */
 
+
     cout << "Activating Everything";
 
     // Interrupts
@@ -383,14 +397,15 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 #ifdef ENABLE_GRAPHICS
 
 
+
     cout << "Setting Up Graphics";
 
     VideoElectronicsStandardsAssociationDriver vesa(&memoryManager, (multiboot_info_t *)&multibootHeader);
-    VideoDriver* videoDriver = (VideoDriver*)&vesa;    // TODO: need a better way to get the video driver
-    videoDriver ->setMode(1024, 768, 32);
+    VideoDriver* videoDriver = (VideoDriver*)&vesa;
+    videoDriver -> setMode(1024, 768, 32);
     debugStream << "Got Video Driver\n";
     cout << ".";
-
+    
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
     usKeyboard.connectKeyboardEventHandler(&desktop);
