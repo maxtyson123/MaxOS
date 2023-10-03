@@ -276,10 +276,15 @@ uint32_t GraphicsContext::colourToInt(Colour colour) {
         default:
         case 32:
         {
-            return (uint32_t)colour.red   << 24
-                   | (uint32_t)colour.green << 16
-                   | (uint32_t)colour.blue  <<  8
-                   | (uint32_t)colour.alpha;
+            uint32_t redHex = ((uint32_t)colour.red & 0xFF) << 16;
+            uint32_t greenHex = ((uint32_t)colour.green & 0xFF) << 8;
+            uint32_t blueHex = (uint32_t)colour.blue & 0xFF;
+            uint32_t alphaHex = ((uint32_t)colour.alpha & 0xFF) << 24;
+
+            uint32_t hexValue = redHex | greenHex | blueHex | alphaHex;
+
+
+            return hexValue;
         }
     }
 }
@@ -325,13 +330,13 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
         default:
         case 32:
         {
-            // 32-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue, 8 bits for alpha (RRRRRRRR,GGGGGGGG,BBBBBBBB,AAAAAAAA)
             Colour result;
 
-            result.red = (colour & 0xFF000000) >> 24;                             // Red,   mask off the top 8 bits and shift right 24 bits (RRRRRRRR000000000000000000000000)
-            result.green = (colour & 0x00FF0000) >> 16;                        // Green, mask off the top 8 bits and shift right 16 bits (00000000GGGGGGGG0000000000000000)
-            result.blue = (colour & 0x0000FF00) >> 8;                          // Blue,  mask off the top 8 bits and shift right 8 bits (0000000000000000BBBBBBBB00000000)
-            result.alpha = (colour & 0x000000FF);                               // Alpha, mask off the top 8 bits (000000000000000000000000AAAAAAAA)
+            uint32_t hexValue = colour;
+            result.red = (hexValue >> 16) & 0xFF;
+            result.green = (hexValue >> 8) & 0xFF;
+            result.blue = hexValue & 0xFF;
+            result.alpha = (hexValue >> 24) & 0xFF;
 
             return result;
 

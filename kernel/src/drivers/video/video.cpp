@@ -48,4 +48,3 @@ bool VideoDriver::setMode(uint32_t width, uint32_t height, uint32_t colorDepth) 
 bool VideoDriver::setTextMode() {
     return false;
 }
-

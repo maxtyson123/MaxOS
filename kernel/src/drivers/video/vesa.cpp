@@ -104,9 +104,3 @@ uint32_t VideoElectronicsStandardsAssociationDriver::getRenderedPixel32Bit(uint3
     // Set the pixel
     return *pixelAddress;                                           // Return the colour of the pixel
 }
-
-
-
-
-
-//TODO: Fix Rendering Pixels

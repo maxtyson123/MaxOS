@@ -27,7 +27,6 @@ namespace maxOS
                 virtual bool supportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colorDepth);
                 bool setMode(common::uint32_t width, common::uint32_t height, common::uint32_t colorDepth);
                 virtual bool setTextMode();
-
             };
 
         }
