@@ -25,14 +25,11 @@ namespace maxOS{
                 bool isUnderlined;
                 bool isStrikethrough;
 
-                common::Colour foregroundColour;
-                common::Colour backgroundColour;
-
                 Font();
                 ~Font();
 
-                virtual void drawText(common::int32_t x, common::int32_t y, common::GraphicsContext* context, common::string text);
-                virtual void drawText(common::int32_t x, common::int32_t y, common::GraphicsContext* context, common::string text, common::Rectangle<int> limitArea);
+                virtual void drawText(common::int32_t x, common::int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, common::string text);
+                virtual void drawText(common::int32_t x, common::int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, common::string text, common::Rectangle<int> limitArea);
 
                 virtual void getFont8x8(common::uint8_t (&font8x8)[2048]);
 

@@ -44,22 +44,21 @@ GUI Window System
 
 Kernel Cleanup
 
-- [x] VESA Video Mode                              
-- [x] GUI Draw Rewrite
-- [ ] Usable Desktop                                - Windows Resizing is working but mouse is weird 
 - [x] Timer rewrite
+- [x] GUI Draw Rewrite
 - [x] Console rewrite
+- [x] VESA Video Mode                              
+- [ ] Kernel Boot Rewrite
+- [ ] Usable Desktop                                - Windows Resizing is working but mouse is weird 
 - [ ] Better Doxygen Documentation
 - [ ] Use better c++ coding conventions
 - [ ] Codebase cleanup / rewrite
 - [ ] Chuck a few more event handlers in there
+- [ ] Example Telnet Server (GUI) (EMBEDDED)
 - [ ] USB
 - [ ] HTTP Protocol, DCHP protocol
-- [ ] Kernel Boot Rewrite
-- [ ] Example Telnet Server (GUI) (EMBEDDED)
 - [ ] CMAKE
 - [ ] Fix Fat32 Filesystem
-- [ ] Fix ASM
 
 Road to Userspace
 

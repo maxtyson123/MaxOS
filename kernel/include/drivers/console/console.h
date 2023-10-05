@@ -44,10 +44,11 @@ namespace maxOS {
                 virtual common::uint16_t getHeight();
 
                 virtual void putChar(common::uint16_t x, common::uint16_t y, char c);
+                virtual char getChar(common::uint16_t x, common::uint16_t y);
+
                 virtual void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor foreground);
                 virtual void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor background);
 
-                virtual char getChar(common::uint16_t x, common::uint16_t y);
                 virtual ConsoleColor getForegroundColor(common::uint16_t x, common::uint16_t y);
                 virtual ConsoleColor getBackgroundColor(common::uint16_t x, common::uint16_t y);
 

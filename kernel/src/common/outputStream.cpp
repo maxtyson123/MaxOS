@@ -120,24 +120,29 @@ void OutputStream::writeInt(int intToWrite) {
         tempWriteInt = -tempWriteInt;
     }
 
-    // Check how many digits the integer has by dividing it by 10 until it is 0 (rounded automatically)
+// Check how many digits the integer has by dividing it by 10 until it is 0 (rounded automatically)
     int digits = 0;
-    for (int i = tempWriteInt; i > 0; i /= 10) {
+    int temp = tempWriteInt; // Copy the value to avoid modifying the original
+    do {
+        temp /= 10;
         digits++;
+    } while (temp != 0);
+
+// Loop through each digit of the integer
+    for (int currentDigit = digits; currentDigit > 0; --currentDigit) {
+
+        // Calculate the divisor to extract the current digit
+        int divisor = 1;
+        for (int i = 1; i < currentDigit; i++) {
+            divisor *= 10;
+        }
+
+        // Calculate the current digit
+        int currentDigitValue = (tempWriteInt / divisor) % 10;
+
+        // Write the current digit to the output stream
+        writeChar('0' + currentDigitValue);
     }
-
-    // Loop through each digit of the integer
-    for (int currentDigit = digits; currentDigit > 0; --currentDigit) {  // (de-increment as writing from left to right)
-
-        // Loop through the digits of the integer until the current digit is reached, dividing the integer by 10 each time to get the next digit
-        for(int digit = 1; digit < currentDigit; digit++)
-            tempWriteInt /= 10;
-
-        // Write the current digit to the output stream (divisor by 10 to get the digit in the ones place)
-        writeChar('0' + tempWriteInt % 10);
-
-    }
-
 
 }
 

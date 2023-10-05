@@ -17,6 +17,10 @@ Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string te
 
     // Set the text
     updateText(text);
+
+    // Set the default colours
+    foregroundColour = Colour(0,0,0);
+    backgroundColour = Colour(255,255,255);
 }
 
 Text::~Text() {
@@ -44,10 +48,10 @@ void Text::draw(GraphicsContext *gc, Rectangle<int>& area) {
     int32_t y = textCoordinates.second;
 
     // Draw the background for the text (TODO: Might not need to do this as the background is drawn by the default draw operation)
-    gc -> fillRectangle(x+area.left, y+area.top, x+area.left+area.width, y+area.top+area.height, this ->font.backgroundColour);
+    gc -> fillRectangle(x+area.left, y+area.top, x+area.left+area.width, y+area.top+area.height, backgroundColour);
 
     // Draw the text
-    this ->font.drawText(x, y, gc, widgetText, area);
+    this ->font.drawText(x, y, foregroundColour, backgroundColour, gc, widgetText, area);
 
 }
 

@@ -10,11 +10,9 @@ using namespace maxOS::drivers::video;
 using namespace maxOS::memory;
 using namespace maxOS::system;
 
-VideoElectronicsStandardsAssociationDriver::VideoElectronicsStandardsAssociationDriver(MemoryManager* memoryManager,  multiboot_info_t* mb_info)
+VideoElectronicsStandardsAssociationDriver::VideoElectronicsStandardsAssociationDriver(multiboot_info_t* mb_info)
         : VideoDriver()
 {
-    // Store the memory manager
-    this->memoryManager = memoryManager;
 
     // Store the multiboot info
     this->multibootInfo = mb_info;

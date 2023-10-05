@@ -94,7 +94,6 @@ namespace maxOS {
                     void renderPixel32Bit( common::uint32_t x,  common::uint32_t y,  common::uint32_t colour);
                     common::uint32_t getRenderedPixel32Bit(common::uint32_t x, common::uint32_t y);
 
-                    memory::MemoryManager* memoryManager;
                     system::multiboot_info_t* multibootInfo;
 
                     common::uint32_t* framebufferAddress;
@@ -102,7 +101,7 @@ namespace maxOS {
                     common::uint16_t pitch;			// number of bytes per horizontal line
 
                 public:
-                    VideoElectronicsStandardsAssociationDriver(memory::MemoryManager* memoryManager, system::multiboot_info_t* mb_info);
+                    VideoElectronicsStandardsAssociationDriver(system::multiboot_info_t* mb_info);
                     ~VideoElectronicsStandardsAssociationDriver();
 
                     bool supportsMode( common::uint32_t width,  common::uint32_t height,  common::uint32_t colorDepth);

@@ -18,9 +18,6 @@ Font::Font() {
     isUnderlined = false;
     isStrikethrough = false;
 
-    foregroundColour = Colour(0,0,0);
-    backgroundColour = Colour(255,255,255);
-
 }
 
 Font::~Font() {
@@ -34,19 +31,19 @@ Font::~Font() {
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  */
-void Font::drawText(int32_t x, int32_t y, GraphicsContext *context, string text) {
+void Font::drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, GraphicsContext *context, string text) {
 
     // Calculate the rectangle of the text
     int32_t top = 0;
     int32_t left = 0;
-    uint32_t width = getTextWidth(text);
-    uint32_t height = getTextHeight(text);
+    uint32_t width = 8;
+    uint32_t height = 8;
 
     // Create the rectangle
     Rectangle<int> textArea(left, top, width, height);
 
     // Draw the text
-    drawText(x, y, context, text, textArea);
+    drawText(x, y, foregroundColour, backgroundColour, context, text, textArea);
 }
 
 
@@ -58,7 +55,7 @@ void Font::drawText(int32_t x, int32_t y, GraphicsContext *context, string text)
  * @param text The text to draw
  * @param limitArea The area of the text to draw
  */
-void Font::drawText(int32_t x, int32_t y, GraphicsContext *context, string text,  Rectangle<int> limitArea) {
+void Font::drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, GraphicsContext *context, string text,  Rectangle<int> limitArea) {
 
     uint8_t font8x8[2048];  // Declare an array to hold the font data
     getFont8x8(font8x8);    // Get the font data

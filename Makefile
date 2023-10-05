@@ -44,7 +44,8 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/drivers/ethernet/ethernet.o \
  		  obj/kernel/drivers/clock/clock.o \
  		  obj/kernel/drivers/console/console.o \
- 		  obj/kernel/drivers/console/textmodeconsole.o \
+ 		  obj/kernel/drivers/console/textmode.o \
+ 		  obj/kernel/drivers/console/vesaboot.o \
  		  obj/kernel/filesystem/filesystem.o \
  		  obj/kernel/filesystem/fat32.o \
  		  obj/kernel/filesystem/msdospart.o \
@@ -188,7 +189,7 @@ runQ_W: maxOS.iso
 	"C:\Program Files\qemu\qemu-system-i386" $(QEMU_PARAMS) $(QEMU_EXTRA_PARAMS)
 
 debugQ: build
-	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S" & gdb -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
+	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S" & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
 
 
 

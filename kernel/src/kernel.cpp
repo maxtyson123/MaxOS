@@ -1,4 +1,4 @@
-int buildCount = 109;
+int buildCount = 187;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -18,7 +18,8 @@ int buildCount = 109;
 #include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/video/vesa.h>
 #include <drivers/console/console.h>
-#include <drivers/console/textmodeconsole.h>
+#include <drivers/console/textmode.h>
+#include <drivers/console/vesaboot.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -139,16 +140,17 @@ extern "C" void callConstructors()
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
 
+    // Initialize the VESA Driver
+    VideoElectronicsStandardsAssociationDriver vesa((multiboot_info_t *)&multibootHeader);
+    VideoDriver* videoDriver = (VideoDriver*)&vesa;
+    videoDriver -> setMode(1024, 768, 32);
 
     //Initialize Console
-    TextModeConsole console;
+    VESABootConsole console(&vesa);
+    //TextModeConsole console;
     console.clear();
 
-    // Make a debug console area on the bottom 4 lines of the screen
-    ConsoleArea debugConsoleArea(&console, 0, console.getHeight() - 4, console.getWidth(), 4, Green, DarkGrey);
-    ConsoleStream debugStream(&debugConsoleArea);
-
-    // Make a main console area on the top of the screen
+    // Make a main console area at the top of the screen
     ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight() - 4);
     ConsoleStream cout(&mainConsoleArea);
 
@@ -156,58 +158,45 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     ConsoleArea nullConsoleArea(&console, 0, 0, 0, 0);
     ConsoleStream nullStream(&nullConsoleArea);
 
-    console.putString(0,0,"                                  Max OS v0.0.1                                 ", Blue, LightGrey);
-    console.putString(0,console.getHeight() - 5,"Debug Log: ", DarkGrey, Black);
+    console.putString(0,0,"                                                         Max OS v0.0.1                                                          ", Blue, LightGrey);
 
-    cout << "Build: ";
-    cout << buildCount;
-    cout << "\n";
-
-
+    cout << "Build: " << buildCount << "\n";
 
     // Check if the bootloader is valid
     if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
         cout << "Invalid bootloader \n";
-        cout << "Got Magic: ";
-        cout << (uint32_t)multiboot_magic;
-        cout << ", Expected Magic: ";
-        cout << MULTIBOOT_BOOTLOADER_MAGIC;
+        cout << "Got Magic: " << (uint32_t)multiboot_magic << ", Expected Magic: " << MULTIBOOT_BOOTLOADER_MAGIC;
         return;
     }
-    debugStream << "Valid Multiboot Magic, ";
+    nullStream << "Valid Multiboot Magic, ";
 
     cout << "Setting up system";
 
 
     //Setup GDT
     GlobalDescriptorTable gdt(multibootHeader);
-    debugStream << "Set up GDT, ";
+    nullStream << "Set up GDT, ";
     cout << ".";
 
     // Setup Memory
-    uint32_t memupper = multibootHeader.mem_upper;                    //memupper is a field at offset 8 in the Multiboot information structure and it indicates the amount upper memory in kilobytes.
-                                                                                            //Lower memory starts at address 0, and upper memory starts at address 1 megabyte. The
-                                                                                            //maximum possible value for lower memory is 640 kilobytes. The value returned for upper
-                                                                                            //memory is maximally the address of the first upper memory hole minus 1 megabyte.
-    size_t  heap = 10*1024*1024;                                                            //Start at 10MB
-
+    uint32_t memupper = multibootHeader.mem_upper;
+    size_t  heap = 10*1024*1024;                                                          //Start at 10MB
     size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
     MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
-    void* allocated = memoryManager.malloc(1024);
-    debugStream << "Set Up Memory Management, ";
+    nullStream << "Set Up Memory Management, ";
     cout << ".";
 
     ThreadManager threadManager;
-    debugStream << "Set Up Memory Management, ";
+    nullStream << "Set Up Thread Management, ";
     cout << ".";
 
     InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
-    debugStream << "Set Up Interrupts, ";
+    nullStream << "Set Up Interrupts, ";
     cout << ".";
 
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
-    debugStream << "Set Up System Calls, ";
+    nullStream << "Set Up System Calls, ";
     cout << ".";
 
     cout << "[ Done ]\n";
@@ -218,7 +207,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     serialLog.Write("\n",-1);
     serialLog.Write("Serial Log Started\n");
     serialLog.Write("MaxOS Started\n",7);
-    debugStream << "Set Up Serial Log, ";
+    nullStream << "Set Up Serial Log, ";
     cout << ".";
 
     DriverManager driverManager;
@@ -229,13 +218,13 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     KeyboardInterpreterEN_US usKeyboard;
     keyboard.connectInputStreamEventHandler(&usKeyboard);
     driverManager.AddDriver(&keyboard);
-    debugStream << "Set Up Keyboard, ";
+    nullStream << "Set Up Keyboard, ";
     cout << ".";
 
     //Mouse
     MouseDriver mouse(&interrupts);
     driverManager.AddDriver(&mouse);
-    debugStream << "Set Up Mouse, ";
+    nullStream << "Set Up Mouse, ";
     cout << ".";
 
     //Clock
@@ -247,7 +236,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     
     PCIController.SelectDrivers(&driverManager, &interrupts);
 
-    debugStream << "Set Up PCI, ";
+    nullStream << "Set Up PCI, ";
     cout << ".";
 
     cout << "[ DONE ] \n";
@@ -256,29 +245,23 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     // Interrupts
     interrupts.Activate();
-    debugStream << "Activated Interrupts, ";
+    nullStream << "Activated Interrupts, ";
     cout << ".";
 
     //Drivers
     driverManager.ActivateAll();
-    debugStream << "Activated Drivers, ";
+    nullStream << "Activated Drivers, ";
     cout << ".";
 
     cout << "[ DONE ] \n";
 
     cout << "Setting Up Graphics";
 
-    VideoElectronicsStandardsAssociationDriver vesa(&memoryManager, (multiboot_info_t *)&multibootHeader);
-    VideoDriver* videoDriver = (VideoDriver*)&vesa;
-    videoDriver -> setMode(1024, 768, 32);
-    debugStream << "Got Video Driver\n";
-    cout << ".";
-
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
     usKeyboard.connectKeyboardEventHandler(&desktop);
     kernelClock.connectClockEventHandler(&desktop);
-    debugStream << "Connected Desktop\n";
+    nullStream << "Connected Desktop\n";
     cout << ".";
 
     widgets::Text testLabel(0, 0, 120, 20, "Hello World");
@@ -293,6 +276,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "[ DONE ] \n";
 
     while(true);
+
 
 }
 
