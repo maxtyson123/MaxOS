@@ -27,14 +27,14 @@ namespace maxOS{
                 common::uint16_t getHeight();
 
                 void putChar(common::uint16_t x, common::uint16_t y, char c);
-                void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor foreground);
-                void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor background);
+                void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground);
+                void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background);
 
                 char getChar(common::uint16_t x, common::uint16_t y);
-                ConsoleColor getForegroundColor(common::uint16_t x, common::uint16_t y);
-                ConsoleColor getBackgroundColor(common::uint16_t x, common::uint16_t y);
+                ConsoleColour getForegroundColor(common::uint16_t x, common::uint16_t y);
+                ConsoleColour getBackgroundColor(common::uint16_t x, common::uint16_t y);
 
-                common::Colour consoleColourToVESA(ConsoleColor colour);
+                common::Colour consoleColourToVESA(ConsoleColour colour);
 
                 common::uint16_t videoMemory[10881];     //128*85
 

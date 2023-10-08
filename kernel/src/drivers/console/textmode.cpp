@@ -58,7 +58,7 @@ void TextModeConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
  * @param y The y coordinate
  * @param foreground The foreground color
  */
-void TextModeConsole::setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor foreground) {
+void TextModeConsole::setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -77,7 +77,7 @@ void TextModeConsole::setForegroundColor(common::uint16_t x, common::uint16_t y,
  * @param y The y coordinate
  * @param background The background color
  */
-void TextModeConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor background) {
+void TextModeConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -116,17 +116,17 @@ char TextModeConsole::getChar(common::uint16_t x, common::uint16_t y) {
  * @param y The y coordinate
  * @return The foreground color at the specified location
  */
-ConsoleColor TextModeConsole::getForegroundColor(common::uint16_t x, common::uint16_t y) {
+ConsoleColour TextModeConsole::getForegroundColor(common::uint16_t x, common::uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
-        return ConsoleColor::White;
+        return ConsoleColour::White;
 
     // Calculate the offset 
     int offset = (y*getWidth() + x);
 
     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-    return (ConsoleColor)((videoMemory[offset] & 0x0F00) >> 8);
+    return (ConsoleColour)((videoMemory[offset] & 0x0F00) >> 8);
 }
 
 /**
@@ -135,17 +135,17 @@ ConsoleColor TextModeConsole::getForegroundColor(common::uint16_t x, common::uin
  * @param y The y coordinate
  * @return The background color at the specified location
  */
- ConsoleColor TextModeConsole::getBackgroundColor(common::uint16_t x, common::uint16_t y) {
+ ConsoleColour TextModeConsole::getBackgroundColor(common::uint16_t x, common::uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
-        return ConsoleColor::Black;
+        return ConsoleColour::Black;
 
     // Calculate the offset 
     int offset = (y*getWidth() + x);
 
     // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
-    return (ConsoleColor)((videoMemory[offset] & 0xF000) >> 12);
+    return (ConsoleColour)((videoMemory[offset] & 0xF000) >> 12);
 }
 
 

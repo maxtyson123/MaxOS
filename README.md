@@ -19,10 +19,10 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
  
 ## Screenshots
 Booting
-![Screenshot](docs/Screenshots/Boot/Console.png)
+![Screenshot](docs/Screenshots/Boot/Console v2.png)
 
 GUI Window System
-![Screenshot](docs/Screenshots/GUI/Windows.png)
+![Screenshot](docs/Screenshots/GUI/Windows%20(VESA).png)
 
 
 
@@ -48,7 +48,7 @@ Kernel Cleanup
 - [x] GUI Draw Rewrite
 - [x] Console rewrite
 - [x] VESA Video Mode                              
-- [ ] Kernel Boot Rewrite
+- [x] Kernel Boot Rewrite
 - [ ] Usable Desktop                                - Windows Resizing is working but mouse is weird 
 - [ ] Better Doxygen Documentation
 - [ ] Use better c++ coding conventions

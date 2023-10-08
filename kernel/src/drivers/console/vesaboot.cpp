@@ -73,7 +73,7 @@ void VESABootConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
  * @param y The y coordinate
  * @param foreground The foreground color
  */
-void VESABootConsole::setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor foreground) {
+void VESABootConsole::setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -92,7 +92,7 @@ void VESABootConsole::setForegroundColor(common::uint16_t x, common::uint16_t y,
  * @param y The y coordinate
  * @param background The background color
  */
-void VESABootConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColor background) {
+void VESABootConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -131,17 +131,17 @@ char VESABootConsole::getChar(common::uint16_t x, common::uint16_t y) {
  * @param y The y coordinate
  * @return The foreground color at the specified location
  */
-ConsoleColor VESABootConsole::getForegroundColor(common::uint16_t x, common::uint16_t y) {
+ConsoleColour VESABootConsole::getForegroundColor(common::uint16_t x, common::uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
-        return ConsoleColor::White;
+        return ConsoleColour::White;
 
     // Calculate the offset
     int offset = (y*getWidth() + x);
 
     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-    return (ConsoleColor)((videoMemory[offset] & 0x0F00) >> 8);
+    return (ConsoleColour)((videoMemory[offset] & 0x0F00) >> 8);
 }
 
 /**
@@ -150,24 +150,24 @@ ConsoleColor VESABootConsole::getForegroundColor(common::uint16_t x, common::uin
  * @param y The y coordinate
  * @return The background color at the specified location
  */
-ConsoleColor VESABootConsole::getBackgroundColor(common::uint16_t x, common::uint16_t y) {
+ConsoleColour VESABootConsole::getBackgroundColor(common::uint16_t x, common::uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
-        return ConsoleColor::Black;
+        return ConsoleColour::Black;
 
     // Calculate the offset
     int offset = (y*getWidth() + x);
 
     // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
-    return (ConsoleColor)((videoMemory[offset] & 0xF000) >> 12);
+    return (ConsoleColour)((videoMemory[offset] & 0xF000) >> 12);
 }
 
 
 
 
 
-common::Colour VESABootConsole::consoleColourToVESA(ConsoleColor colour) {
+common::Colour VESABootConsole::consoleColourToVESA(ConsoleColour colour) {
     switch (colour) {
 
         case Black:

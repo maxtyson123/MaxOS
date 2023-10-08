@@ -1,8 +1,9 @@
-int buildCount = 187;
+int buildCount = 234;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
 #include <common/types.h>
+#include <common/logo.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -150,17 +151,40 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     //TextModeConsole console;
     console.clear();
 
+    char* logo = header_data;
+
+    // Print the logo to center of the screen
+    uint32_t centerX = videoDriver->getWidth()/2;
+    uint32_t centerY = videoDriver->getHeight()/2;
+    for (int logoY = 0; logoY < logo_height; ++logoY) {
+        for (int logoX = 0; logoX < logo_width; ++logoX) {
+
+            // Store the pixel in the logo
+            uint8_t pixel[3] = {0};
+
+            // Get the pixel from the logo
+            LOGO_HEADER_PIXEL(logo, pixel);
+
+            // Draw the pixel
+            videoDriver->putPixel(centerX - logo_width/2 + logoX, centerY - logo_height/2 + logoY, maxOS::common::Colour(pixel[0], pixel[1], pixel[2]));
+        }
+    }
+
+
+    // Make the header
+    ConsoleArea consoleHeader(&console, 0, 0, console.getWidth(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
+    ConsoleStream headerStream(&consoleHeader);
+
+    // Write the header
+    headerStream << "                                                    Max OS v0.01 [build " << buildCount << "]                                                    " ;
+
     // Make a main console area at the top of the screen
-    ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight() - 4);
+    ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
     // Make a null stream
     ConsoleArea nullConsoleArea(&console, 0, 0, 0, 0);
     ConsoleStream nullStream(&nullConsoleArea);
-
-    console.putString(0,0,"                                                         Max OS v0.0.1                                                          ", Blue, LightGrey);
-
-    cout << "Build: " << buildCount << "\n";
 
     // Check if the bootloader is valid
     if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
@@ -169,47 +193,48 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
         cout << "Got Magic: " << (uint32_t)multiboot_magic << ", Expected Magic: " << MULTIBOOT_BOOTLOADER_MAGIC;
         return;
     }
-    nullStream << "Valid Multiboot Magic, ";
+    cout << "Valid Multiboot Magic\n";
 
-    cout << "Setting up system";
+    cout << "\n\n";
 
+    // Make the system setup stream
+    ConsoleArea systemSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleStream systemSetupHeaderStream(&systemSetupHeader);
+    systemSetupHeaderStream << "Setting up system";
 
     //Setup GDT
     GlobalDescriptorTable gdt(multibootHeader);
-    nullStream << "Set up GDT, ";
-    cout << ".";
+    cout << "-- Set Up GDT\n";
+    systemSetupHeaderStream << ".";
 
     // Setup Memory
     uint32_t memupper = multibootHeader.mem_upper;
     size_t  heap = 10*1024*1024;                                                          //Start at 10MB
     size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
     MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
-    nullStream << "Set Up Memory Management, ";
-    cout << ".";
+    cout << "-- Set Up Memory Management\n";
+    systemSetupHeaderStream << ".";
 
     ThreadManager threadManager;
-    nullStream << "Set Up Thread Management, ";
-    cout << ".";
+    cout << "-- Set Up Thread Management\n";
+    systemSetupHeaderStream << ".";
 
     InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
-    nullStream << "Set Up Interrupts, ";
-    cout << ".";
+    cout << "-- Set Up Interrupts\n";
+    systemSetupHeaderStream << ".";
 
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
-    nullStream << "Set Up System Calls, ";
-    cout << ".";
+    cout << "-- Set Up System Calls\n";
+    systemSetupHeaderStream << ".";
 
-    cout << "[ Done ]\n";
+    cout << "\n";
+    systemSetupHeaderStream << "[ DONE ]";
 
-    cout << "Setting up devices";
-
-    serial serialLog(&interrupts);
-    serialLog.Write("\n",-1);
-    serialLog.Write("Serial Log Started\n");
-    serialLog.Write("MaxOS Started\n",7);
-    nullStream << "Set Up Serial Log, ";
-    cout << ".";
-
+    // Make the device setup stream
+    ConsoleArea deviceSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleStream deviceSetupHeaderStream(&deviceSetupHeader);
+    deviceSetupHeaderStream << "Setting up devices";
+    
     DriverManager driverManager;
 
     //Keyboard
@@ -218,51 +243,55 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     KeyboardInterpreterEN_US usKeyboard;
     keyboard.connectInputStreamEventHandler(&usKeyboard);
     driverManager.AddDriver(&keyboard);
-    nullStream << "Set Up Keyboard, ";
-    cout << ".";
+    cout << "-- Set Up Keyboard\n";
+    deviceSetupHeaderStream << ".";
 
     //Mouse
     MouseDriver mouse(&interrupts);
     driverManager.AddDriver(&mouse);
-    nullStream << "Set Up Mouse, ";
-    cout << ".";
+    cout << "-- Set Up Mouse\n";
+    deviceSetupHeaderStream << ".";
 
     //Clock
     Clock kernelClock(&interrupts, 1);
     driverManager.AddDriver(&kernelClock);
+    cout << "-- Set Up Clock\n";
+    deviceSetupHeaderStream << ".";
 
     //PCI
     PeripheralComponentInterconnectController PCIController(&nullStream);
-    
     PCIController.SelectDrivers(&driverManager, &interrupts);
+    cout << "-- Set Up PCI\n";
+    deviceSetupHeaderStream << ".";
 
-    nullStream << "Set Up PCI, ";
-    cout << ".";
+    cout << "\n";
+    deviceSetupHeaderStream << "[ DONE ]";
 
-    cout << "[ DONE ] \n";
-
-    cout << "Activating Everything";
+    // Make the activation stream
+    ConsoleArea activationHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleStream activationHeaderStream(&activationHeader);
+    activationHeaderStream << "Activating";
 
     // Interrupts
     interrupts.Activate();
-    nullStream << "Activated Interrupts, ";
-    cout << ".";
+    cout << "-- Activated Interrupts\n";
+    activationHeaderStream << ".";
 
     //Drivers
     driverManager.ActivateAll();
-    nullStream << "Activated Drivers, ";
-    cout << ".";
+    cout << "-- Activated Drivers\n";
+    activationHeaderStream << ".";
 
-    cout << "[ DONE ] \n";
+    cout << "\n";
+    activationHeaderStream << "[ DONE ]";
 
-    cout << "Setting Up Graphics";
+
+    // Run the GUI 
 
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
     usKeyboard.connectKeyboardEventHandler(&desktop);
     kernelClock.connectClockEventHandler(&desktop);
-    nullStream << "Connected Desktop\n";
-    cout << ".";
 
     widgets::Text testLabel(0, 0, 120, 20, "Hello World");
 
@@ -273,11 +302,8 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     Window testWindow(150,10, 150, 150, "Window 1");
     desktop.addChild(&testWindow);
 
-    cout << "[ DONE ] \n";
-
-    while(true);
-
-
+    // Loop forever
+    while (true);
 }
 
 

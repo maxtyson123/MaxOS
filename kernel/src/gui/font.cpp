@@ -31,13 +31,13 @@ Font::~Font() {
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  */
-void Font::drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, GraphicsContext *context, string text) {
+void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgroundColour, GraphicsContext *context, string text) {
 
     // Calculate the rectangle of the text
     int32_t top = 0;
     int32_t left = 0;
-    uint32_t width = 8;
-    uint32_t height = 8;
+    uint32_t width = getTextWidth(text);
+    uint32_t height = getTextHeight(text);
 
     // Create the rectangle
     Rectangle<int> textArea(left, top, width, height);
@@ -55,7 +55,7 @@ void Font::drawText(int32_t x, int32_t y, common::Colour foregroundColour, commo
  * @param text The text to draw
  * @param limitArea The area of the text to draw
  */
-void Font::drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, GraphicsContext *context, string text,  Rectangle<int> limitArea) {
+void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgroundColour, GraphicsContext *context, string text,  Rectangle<int> limitArea) {
 
     uint8_t font8x8[2048];  // Declare an array to hold the font data
     getFont8x8(font8x8);    // Get the font data
@@ -137,7 +137,7 @@ void Font::drawText(int32_t x, int32_t y, common::Colour foregroundColour, commo
  * @param text The text to get the height of
  * @return The height of the text
  */
-common::uint32_t Font::getTextHeight(common::string text) {
+uint32_t Font::getTextHeight(string text) {
 
     return 8;
 
@@ -148,15 +148,11 @@ common::uint32_t Font::getTextHeight(common::string text) {
  * @param text The text to get the width of
  * @return The width of the text
  */
-common::uint32_t Font::getTextWidth(common::string text) {
-    uint32_t width = 0;
-
-    // Loop through each character and add the width
-    for (char* character = (char *)text;  *character != '\0'; character++) {
-        width += 8;
-    }
-
-    return width;
+uint32_t Font::getTextWidth(string text) {
+    uint32_t length = 0;
+    for(char* c = (char*)text; *c != '\0'; ++c)
+        length++;
+    return length*8;
 }
 
 void Font::getFont8x8(uint8_t (&font8x8)[2048]) {
@@ -174,7 +170,7 @@ AmigaFont::~AmigaFont() {
 
 }
 
-void AmigaFont::getFont8x8(common::uint8_t (&font8x8)[2048]) { uint8_t fontData[2048] =  {
+void AmigaFont::getFont8x8(uint8_t (&font8x8)[2048]) { uint8_t fontData[2048] =  {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x7E, 0x81, 0xA5, 0x81, 0xBD, 0x99, 0x81, 0x7E,
             0x7E, 0xFF, 0xDB, 0xFF, 0xC3, 0xE7, 0xFF, 0x7E,
