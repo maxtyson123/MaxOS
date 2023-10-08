@@ -114,17 +114,18 @@ namespace maxOS{
 
 
                 //Override driver default methods
-                int Reset();
-                void Activate();
-                void Deactivate();
+                common::uint32_t reset();
+                void activate();
+                void deactivate();
 
                 //Override Interrupt default methods
                 common::uint32_t HandleInterrupt(common::uint32_t esp);
 
 
                 //Ethernet Driver functions
-                common::string GetVendorName();
-                common::string GetDeviceName();
+                common::string getVendorName();
+                common::string getDeviceName();
+
                 void DoSend(common::uint8_t* buffer, common::uint32_t size);
                 common::uint64_t GetMediaAccessControlAddress();
                 inline void* operator new(common::uint32_t, intel_i217* p)

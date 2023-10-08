@@ -47,7 +47,7 @@ KeyboardDriver::~KeyboardDriver(){
 /**
  * @details Activate the keyboard driver
  */
-void KeyboardDriver::Activate() {
+void KeyboardDriver::activate() {
     while (commandPort.Read() & 0x1)    //Wait for user to stop pressing key (this is for the start-up key eg.. hold 'F12' for boot menu or hold 'del' for bios ), The wait is needed as the keyboard controller won't send anymore characters until the buffer has been read
         dataPort.Read();
 
@@ -83,6 +83,10 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
 
     return esp;
 
+}
+
+string KeyboardDriver::getDeviceName() {
+    return "Keyboard";
 }
 
 ///___State___

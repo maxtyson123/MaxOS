@@ -87,9 +87,13 @@ namespace maxOS{
                 ~amd_am79c973();
 
                 //Override driver default methods
-                int Reset();
-                void Activate();
-                void Deactivate();
+                common::uint32_t reset();
+                void activate();
+                void deactivate();
+
+                // Naming
+                common::string getVendorName();
+                common::string getDeviceName();
 
                 //Override Interrupt default methods
                 common::uint32_t HandleInterrupt(common::uint32_t esp);

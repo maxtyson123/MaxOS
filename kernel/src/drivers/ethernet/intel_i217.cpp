@@ -287,7 +287,7 @@ void intel_i217::sendInit() {
 
 }
 
-void intel_i217::Activate() {
+void intel_i217::activate() {
 
     driverMessageStream -> write("Activating Intel i217\n");
 
@@ -380,17 +380,6 @@ void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
 }
 
-string intel_i217::GetVendorName()
-{
-    return "INTEL";
-}
-
-string intel_i217::GetDeviceName()
-{
-    return "E1000 (i217)";
-}
-
-
 common::uint64_t intel_i217::GetMediaAccessControlAddress() {
     driverMessageStream -> write("Getting MAC address... ");
     while(ownMAC == 0);
@@ -398,12 +387,20 @@ common::uint64_t intel_i217::GetMediaAccessControlAddress() {
 
 }
 
-int intel_i217::Reset() {
-    return Driver::Reset();
+uint32_t intel_i217::reset() {
+    return Driver::reset();
 }
 
-void intel_i217::Deactivate() {
-    Driver::Deactivate();
+void intel_i217::deactivate() {
+    Driver::deactivate();
+}
+
+common::string intel_i217::getVendorName() {
+    return "Intel";
+}
+
+common::string intel_i217::getDeviceName() {
+    return "E1000 (i217)";
 }
 
 

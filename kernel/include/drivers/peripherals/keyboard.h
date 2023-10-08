@@ -378,7 +378,8 @@ namespace maxOS
 
                 virtual common::uint32_t HandleInterrupt(common::uint32_t esp);
 
-                virtual void Activate();
+                virtual void activate();
+                common::string getDeviceName();
             };
 
         }

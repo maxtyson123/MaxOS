@@ -175,3 +175,11 @@ uint8_t VideoGraphicsArray::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
     return *pixelAddress;                                           // Return the colour of the pixel
 }
 
+string VideoGraphicsArray::getVendorName() {
+    return "IBM"; // VGA was made by IBM
+}
+
+string VideoGraphicsArray::getDeviceName() {
+    return "VGA compatible graphics card";
+}
+

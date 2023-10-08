@@ -5,6 +5,7 @@
 #include <drivers/driver.h>
 using namespace maxOS::common;
 using namespace maxOS::drivers;
+using namespace maxOS::memory;
 
 Driver::Driver(OutputStream* driverMessageStream){
 
@@ -17,16 +18,16 @@ Driver::~Driver(){
     this -> driverMessageStream = 0;
 };
 
-void Driver::Activate(){
+void Driver::activate(){
 
 }
 
-void Driver::Deactivate(){
+void Driver::deactivate(){
 
 }
 
-int Driver::Reset(){
-
+uint32_t Driver::reset(){
+    return 0;
 }
 
 /**
@@ -85,25 +86,106 @@ void Driver::errorMessage(uint32_t hexToWrite) {
 
 }
 
+string Driver::getVendorName()
+{
+    return "Generic";
+}
 
-DriverManager::DriverManager(){
-    numDrivers = 0;
+string Driver::getDeviceName()
+{
+    return "Unknown Driver";
 }
 
 /**
- * @details This function adds a driver to the driver manager
- *
+ * @details This function adds a driver event handler to the driver event handler vector
+ * @param driverEventHandler The driver event handler to add
+ */
+void Driver::connectDriverEventHandler(DriverEventHandler *driverEventHandler) {
+
+    // Add the driver event handler to the driver event handler vector
+    driverEventHandlers.pushBack(driverEventHandler);
+}
+
+/**
+ * @details This function removes a driver event handler from the driver event handler vector
+ * @param driverEventHandler The driver event handler to remove
+ */
+void Driver::disconnectDriverEventHandler(DriverEventHandler *driverEventHandler) {
+
+    // Remove the driver event handler from the driver event handler vector
+    driverEventHandlers.erase(driverEventHandler);
+
+}
+
+
+DriverSelectorEventHandler::DriverSelectorEventHandler()
+{
+}
+
+DriverSelectorEventHandler::~DriverSelectorEventHandler()
+{
+}
+
+/**
+ * @details This function is called when a driver is selected
+ * @param driver The driver that was selected
+ */
+void DriverSelectorEventHandler::onDriverSelected(Driver*)
+{
+}
+
+DriverSelector::DriverSelector()
+{
+}
+
+DriverSelector::~DriverSelector()
+{
+}
+
+void DriverSelector::selectDrivers(DriverSelectorEventHandler*, MemoryManager*, hardwarecommunication::InterruptManager*, OutputStream*)
+{
+}
+
+DriverManager::DriverManager() {
+
+}
+
+DriverManager::~DriverManager() {
+
+    // While there are still drivers in the driver vector
+    while (!drivers.empty()) {
+
+       // Remove the driver
+        removeDriver(*drivers.begin());
+    }
+
+}
+
+/**
+ * @details Adds a driver to the driver vector
  * @param driver The driver to add
  */
-void DriverManager::AddDriver(Driver* drv){
-    drivers[numDrivers] = drv;
-    numDrivers++;
+void DriverManager::addDriver(Driver* driver) {
+    drivers.pushBack(driver);
 }
+
 /**
- * @details This function activates all the drivers in the driver manager
+ * @details Removes a driver from the driver vector
+ * @param driver The driver to remove
  */
-void DriverManager::ActivateAll(){
-    for(int i = 0; i < numDrivers; i++){
-        drivers[i]->Activate();
-    }
+void DriverManager::removeDriver(Driver* driver) {
+
+    // Deactivate the driver
+    driver -> deactivate();
+
+    // Remove the driver from the driver vector
+    drivers.erase(driver);
+
+}
+
+/**
+ * @details When a driver is selected, add it to the driver vector
+ */
+void DriverManager::onDriverSelected(Driver* driver) {
+    addDriver(driver);
 }

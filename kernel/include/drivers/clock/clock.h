@@ -53,10 +53,13 @@ namespace maxOS {
                     Clock(hardwarecommunication::InterruptManager* interruptManager, common::uint16_t timeBetweenEvents = 10);
                     ~Clock();
 
-                    void Activate();
+                    void activate();
                     void connectClockEventHandler(ClockEventHandler* clockEventHandler);
                     void disconnectClockEventHandler(ClockEventHandler* clockEventHandler);
                     void delay(common::uint32_t milliseconds);
+
+                    common::string getVendorName();
+                    common::string getDeviceName();
             };
 
         }

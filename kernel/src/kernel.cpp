@@ -1,4 +1,4 @@
-int buildCount = 234;
+int buildCount = 247;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -242,26 +242,45 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     KeyboardDriver keyboard(&interrupts);
     KeyboardInterpreterEN_US usKeyboard;
     keyboard.connectInputStreamEventHandler(&usKeyboard);
-    driverManager.AddDriver(&keyboard);
+    driverManager.addDriver(&keyboard);
     cout << "-- Set Up Keyboard\n";
     deviceSetupHeaderStream << ".";
 
     //Mouse
     MouseDriver mouse(&interrupts);
-    driverManager.AddDriver(&mouse);
+    driverManager.addDriver(&mouse);
     cout << "-- Set Up Mouse\n";
     deviceSetupHeaderStream << ".";
 
     //Clock
     Clock kernelClock(&interrupts, 1);
-    driverManager.AddDriver(&kernelClock);
+    driverManager.addDriver(&kernelClock);
     cout << "-- Set Up Clock\n";
     deviceSetupHeaderStream << ".";
 
+    //Driver Selectors
+    Vector<DriverSelector*> driverSelectors;
+
     //PCI
     PeripheralComponentInterconnectController PCIController(&nullStream);
-    PCIController.SelectDrivers(&driverManager, &interrupts);
+    driverSelectors.pushBack(&PCIController);
     cout << "-- Set Up PCI\n";
+    deviceSetupHeaderStream << ".";
+
+    //USB
+    //UniversalSerialBusController USBController(&nullStream);
+    //driverSelectors.pushBack(&USBController);
+    //cout << "-- Set Up USB\n";
+    //deviceSetupHeaderStream << ".";
+
+    // Find the drivers
+    cout << "-- Finding Drivers";
+    for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
+    {
+        cout << ".";
+        (*selector)->selectDrivers(&driverManager, &memoryManager, &interrupts, 0);
+    }
+    cout << " Found\n";
     deviceSetupHeaderStream << ".";
 
     cout << "\n";
@@ -270,24 +289,56 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     // Make the activation stream
     ConsoleArea activationHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream activationHeaderStream(&activationHeader);
-    activationHeaderStream << "Activating";
+    activationHeaderStream << "Initializing Hardware";
+
+    // Resetting devices
+    cout << "-- Resetting Devices";
+    uint32_t resetWaitTime = 0;
+    for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
+    {
+        cout << ".";
+        uint32_t waitTime = (*driver)->reset();
+
+        // If the wait time is longer than the current longest wait time, set it as the new longest wait time
+        if(waitTime > resetWaitTime)
+            resetWaitTime = waitTime;
+    }
+    cout << " Reset\n";
+    activationHeaderStream << ".";
 
     // Interrupts
     interrupts.Activate();
+    kernelClock.delay(resetWaitTime);                                            //Wait for the devices to reset (has to be done after interrupts are activated otherwise the clock interrupt wont trigger)
     cout << "-- Activated Interrupts\n";
     activationHeaderStream << ".";
 
-    //Drivers
-    driverManager.ActivateAll();
-    cout << "-- Activated Drivers\n";
+    // Initialize the drivers
+    cout << "-- Initializing Devices";
+    for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
+    {
+        cout << ".";
+        (*driver)->activate();
+    }
+    cout << " Initialized\n";
+    activationHeaderStream << ".";
+
+    // Activate the drivers
+    cout << "-- Activating Devices";
+    for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
+    {
+        cout << ".";
+        (*driver)->activate();
+    }
+    cout << " Activated\n";
     activationHeaderStream << ".";
 
     cout << "\n";
     activationHeaderStream << "[ DONE ]";
 
 
-    // Run the GUI 
 
+    // Run the GUI 
+#ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
     usKeyboard.connectKeyboardEventHandler(&desktop);
@@ -301,6 +352,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     Window testWindow(150,10, 150, 150, "Window 1");
     desktop.addChild(&testWindow);
+#endif
 
     // Loop forever
     while (true);

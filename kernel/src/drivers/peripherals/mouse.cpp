@@ -49,7 +49,7 @@ MouseDriver::~MouseDriver(){
 /**
  * @details Activate the mouse
  */
-void MouseDriver::Activate() {
+void MouseDriver::activate() {
 
 
     commandPort.Write(0xAB);                            //Tell: PIC to send mouse interrupt [or] tell mouse to send interrupts to PIC
@@ -166,4 +166,8 @@ void MouseDriver::disconnectMouseEventHandler(MouseEventHandler *handler) {
     // Remove the handler from the list of handlers
     mouseEventHandlers.erase(handler);
 
+}
+
+string MouseDriver::getDeviceName() {
+    return "Mouse";
 }

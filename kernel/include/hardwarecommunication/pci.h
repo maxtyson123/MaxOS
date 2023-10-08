@@ -20,17 +20,17 @@ namespace maxOS
 {
     namespace hardwarecommunication
     {
-        enum BaseAdressRegisterType{        //Used for the last bit of the address register
+        enum BaseAddressRegisterType{        //Used for the last bit of the address register
             MemoryMapping = 0,
             InputOutput = 1
         };
 
-        class BaseAdressRegister{
+        class BaseAddressRegister{
             public:
                 bool preFetchable;                      //If the memory is pre-fetchable
-                common::uint8_t* adress;                //The address of the register
+                common::uint8_t* address;                //The address of the register
                 common::uint32_t size;                  //The size of the register
-                BaseAdressRegisterType type;            //The type of the register
+                BaseAddressRegisterType type;            //The type of the register
 
         };
 
@@ -58,33 +58,38 @@ namespace maxOS
 
                 common::uint8_t revision;
 
-
-
                 PeripheralComponentInterconnectDeviceDescriptor();
                 ~PeripheralComponentInterconnectDeviceDescriptor();
+
+                common::string getType();
         };
 
 
-        class PeripheralComponentInterconnectController
+        class PeripheralComponentInterconnectController : public drivers::DriverSelector
         {
+
+                // Ports
                 Port32Bit dataPort;
                 Port32Bit commandPort;
 
+                // Debug
                 common::OutputStream* debugMessagesStream;
 
-            public:
+                // I/O
+                common::uint32_t Read(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset);
+                void Write(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset, common::uint32_t value);
+
+                // Device
+                PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(common::uint16_t bus, common::uint16_t device, common::uint16_t function);
+                BaseAddressRegister getBaseAddressRegister(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint16_t bar);       // bar = 0-5 in case of header type 0 [or]  bar = 0-1 in case of header type 1
+                bool DeviceHasFunctions(common::uint16_t bus, common::uint16_t device);
+
+        public:
                 PeripheralComponentInterconnectController(common::OutputStream* debugMessagesStream);
                 ~PeripheralComponentInterconnectController();
 
-                common::uint32_t Read(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset);
-                void Write(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset, common::uint32_t value);
-                bool DeviceHasFunctions(common::uint16_t bus, common::uint16_t device);
-
-                void SelectDrivers(drivers::DriverManager* driverManager, InterruptManager* interruptManager);
+                void selectDrivers(drivers::DriverSelectorEventHandler* handler, memory::MemoryManager* memoryManager, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* errorMessageStream);
                 drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager);
-
-                PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(common::uint16_t bus, common::uint16_t device, common::uint16_t function);
-                BaseAdressRegister GetBaseAdressRegister(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint16_t bar);       // bar = 0-5 in case of header type 0 [or]  bar = 0-1 in case of header type 1
         };
     }
 }

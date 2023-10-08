@@ -43,7 +43,8 @@ namespace maxOS {
                 MouseDriver(hardwarecommunication::InterruptManager *manager);
                 ~MouseDriver();
 
-                virtual void Activate();
+                virtual void activate();
+                common::string getDeviceName();
 
                 void connectMouseEventHandler(MouseEventHandler* handler);
                 void disconnectMouseEventHandler(MouseEventHandler* handler);

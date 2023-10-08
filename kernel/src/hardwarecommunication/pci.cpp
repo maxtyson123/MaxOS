@@ -22,6 +22,53 @@ PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnec
 
 }
 
+string PeripheralComponentInterconnectDeviceDescriptor::getType() {
+    switch (class_id)
+    {
+        case 0x00: return (subclass_id == 0x01) ? "VGA" : "Legacy";
+        case 0x01:
+            switch(subclass_id)
+            {
+                case 0x01:  return "IDE interface";
+                case 0x06:  return "SATA controller";
+                default:    return "Storage";
+            }
+        case 0x02: return "Network";                          // Network
+        case 0x03: return "Display";
+        case 0x04:                                         // Multimedia
+            switch(subclass_id)
+            {
+                case 0x00:  return "Video";
+                case 0x01:
+                case 0x03:  return "Audio";
+                default:    return "Multimedia";
+            }
+        case 0x06:                                            // Bridges
+            switch(subclass_id)
+            {
+                case 0x00:  return "Host bridge";
+                case 0x01:  return "ISA bridge";
+                case 0x04:  return "PCI bridge";
+                default:    return "Bridge";
+            }
+        case 0x07:
+            switch(subclass_id)
+            {
+                case 0x00:  return "Serial controller";
+                case 0x80:  return "Communication controller";
+            }
+            break;
+        case 0x0C:
+            switch(subclass_id)
+            {
+                case 0x03:  return "USB";
+                case 0x05:  return "System Management Bus";
+            }
+            break;
+    }
+    return "Unknown";
+}
+
 ///__CONTROLLER___
 
 PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(OutputStream* debug)
@@ -60,7 +107,7 @@ uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t 
             | ((device & 0x1F) << 11)
             | ((function & 0x07) << 8)
             | (registeroffset & 0xFC);      //Cut off the last two bits of the number
-    commandPort.Write(id);             //The ID is like the adress of the port
+    commandPort.Write(id);             //The ID is like the address of the port
     uint32_t result = dataPort.Read();
     return result >> (8* (registeroffset % 4));
 
@@ -106,7 +153,7 @@ bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus,
  * @param interruptManager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* driverManager, InterruptManager* interruptManager) {
+void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSelectorEventHandler *handler, memory::MemoryManager *memoryManager, hardwarecommunication::InterruptManager *interruptManager, common::OutputStream *errorMessageStream) {
     for (int bus = 0; bus < 8; ++bus) {
 
         for (int device = 0; device < 32; ++device) {
@@ -116,53 +163,25 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
             for (int function = 0; function < numFunctions; ++function) {
                 PeripheralComponentInterconnectDeviceDescriptor deviceDescriptor = GetDeviceDescriptor(bus, device, function);
 
-                //If there is no device then vendor ID is 0x0000, If the device is not ready to react then the vendor ID is 0x0001   (REMOVE 0xFFFF if things go wrong)
+                //If there is no device then vendor ID is 0x0000, If the device is not ready to react then the vendor ID is 0x0001
                 if(deviceDescriptor.vendor_ID == 0x0000 || deviceDescriptor.vendor_ID == 0x0001 || deviceDescriptor.vendor_ID == 0xFFFF){
                     continue;
                 }
 
-                //Display INFO
-               debugMessagesStream->write("    PCI BUS ");
-               debugMessagesStream->writeHex(bus & 0xFF);
+                // Get port number
+                for(int barNum = 5; barNum >= 0; barNum--){
 
-               debugMessagesStream->write(", DEVICE ");
-               debugMessagesStream->writeHex(device & 0xFF);
-
-               debugMessagesStream->write(", FUNCTION ");
-               debugMessagesStream->writeHex(function & 0xFF);
-
-               debugMessagesStream->write(", VENDOR ");
-               debugMessagesStream->writeHex((deviceDescriptor.vendor_ID & 0xFF00) >> 8);
-               debugMessagesStream->writeHex(deviceDescriptor.vendor_ID & 0xFF);
-
-               debugMessagesStream->write(", DEVICE ");
-               debugMessagesStream->writeHex((deviceDescriptor.device_ID & 0xFF00) >> 8);
-               debugMessagesStream->writeHex(deviceDescriptor.device_ID & 0xFF);
-
-                for (int barNum = 0; barNum < 6; ++barNum) {
-                    BaseAdressRegister bar = GetBaseAdressRegister(bus,device,function, barNum);
-                    if(bar.adress && (bar.type == InputOutput)){                                            //Only if the address is really set
-                        deviceDescriptor.portBase = (uint32_t)bar.adress;                                   //The adress returned is the port number for an I/O bar (for memory mapping it would be mem adress)
-                        deviceDescriptor.hasPortBase = true;
-                    }else if(bar.adress && (bar.type == MemoryMapping)){
-                        deviceDescriptor.memoryBase = (uint32_t)bar.adress;
-                        deviceDescriptor.hasMemoryBase = true;
+                    BaseAddressRegister bar = getBaseAddressRegister(bus, device, function, barNum);
+                    if(bar.address && (bar.type == InputOutput)){
+                        deviceDescriptor.portBase = (uint32_t)bar.address;
                     }
-
-
                 }
 
+                // Instantiate the driver and add it to the driver manager
                 Driver* driver = GetDriver(deviceDescriptor, interruptManager);
-                if(driver != 0){    //If there is a driver
-                    driverManager->AddDriver(driver);
+                if(driver != 0){
+                    handler->onDriverSelected(driver);
                 }
-
-
-
-                if(deviceDescriptor.hasMemoryBase)debugMessagesStream->write(" (MEMORY)");
-                if(deviceDescriptor.hasPortBase)debugMessagesStream->write(" (I/O)");
-
-               debugMessagesStream->write("\n");
             }
 
         }
@@ -181,19 +200,19 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
 PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function) {
     PeripheralComponentInterconnectDeviceDescriptor result;
 
-    result.bus = bus;
-    result.device = device;
-    result.function = function;
+    result.bus          = bus;
+    result.device       = device;
+    result.function     = function;
 
-    result.vendor_ID = Read(bus, device, function, 0x00);
-    result.device_ID = Read(bus, device, function, 0x02);
+    result.vendor_ID    = Read(bus, device, function, 0x00);
+    result.device_ID    = Read(bus, device, function, 0x02);
 
-    result.class_id = Read(bus, device, function, 0x0B);
-    result.subclass_id = Read(bus, device, function, 0x0A);
+    result.class_id     = Read(bus, device, function, 0x0B);
+    result.subclass_id  = Read(bus, device, function, 0x0A);
     result.interface_id = Read(bus, device, function, 0x09);
 
-    result.revision = Read(bus, device, function, 0x8);
-    result.interrupt = Read(bus, device, function, 0x3C);
+    result.revision     = Read(bus, device, function, 0x8);
+    result.interrupt    = Read(bus, device, function, 0x3C);
 
     return result;
 }
@@ -399,76 +418,39 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
     return driver;
 }
 
-static unsigned int get_number_of_lowest_set_bit(uint32_t value)
-{
-    unsigned int  pos = 0;
-    uint32_t mask = 0x00000001;
-    while (!(value & mask))
-    { ++pos; mask=mask<<1; }
-    return pos;
-}
-
-/* searches for the highest set bit in a 32-bit value, value must not be 0 */
-static unsigned int  get_number_of_highest_set_bit(uint32_t value)
-{
-    unsigned int  pos = 31;
-    uint32_t mask = 0x80000000;
-    while (!(value & mask))
-    { --pos; mask=mask>>1; }
-    return pos;
-}
 
 /**
- * @details Get the base adress register
+ * @details Get the base address register
  *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
- * @param barNum Base adress register number
- * @return Base adress register
+ * @param barNum Base address register number
+ * @return Base address register
  */
-BaseAdressRegister PeripheralComponentInterconnectController::GetBaseAdressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
+BaseAddressRegister PeripheralComponentInterconnectController::getBaseAddressRegister(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint16_t bar) {
 
-    BaseAdressRegister result;
+    BaseAddressRegister result;
 
-    uint32_t headerType = Read(bus,device,function,0x0E) & 0x7F;  //Only get first 7 bits
-
-    if (headerType >= 0x02)  // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
-    {
-
+    // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
+    uint32_t headerType = Read(bus,device,function,0x0E);
+    if (headerType & 0x3F)
         return result;
-    }
 
-    const int max_bars = 6 - (headerType * 4); // 6 BARs for type 0x00 and 2 BARs for type 0x01:
-    if(bar >= max_bars){
-        return result;
-    }
+    uint32_t bar_value = Read(bus, device, function, 0x10 + 4*bar);         // Get the offset of the base address register (Starts at 0x10)
+    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;                     // Get the type of the base address register from the last bit (Input/Output or Memory Mapping)
+    result.address = (uint8_t*) (bar_value & ~0xF);                                    // Get the address of the base address register (Mask the last 4 bits)
 
 
-    const uint32_t barOffset = 0x10 + (bar * 4);   // Determine the offset of the current BAR (note: bar addresses begin at register 0x10, bars have the size of 4)
-    uint32_t bar_value = Read(bus,device,function,barOffset);
-    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;  //Examine the last bit (check notes: last bit is type)
-    uint32_t temp;
+    // Write all 1's to the register and read it back to get the size of the base address register
+    Write(bus, device, function, 0x10 + 4*bar, 0xFFFFFFF0 | result.type);
 
-    if(result.type == MemoryMapping){
+    // Read the size of the base address register
+    result.size = Read(bus, device, function, 0x10 + 4*bar);
+    result.size = (~result.size | 0xF) + 1;                                             //Get the size of the base address register (Mask the last 4 bits) and add 1
 
-        switch((bar_value >> 1) & 0x3) //Shift by one which removes the last bit (access mode), [& 0x3] gives us only the bits with 0x3
-        {
-            //Come back to code memory mapping (see lowlev.eu pci)
-            case 0: // 32 Bit Mode
-            case 1: // 20 Bit Mode
-            case 2: // 64 Bit Mode
-                break;
-        }
-
-        //                   Shift bar by 3 (removing last 3 bits) check if it == 0x1
-        result.preFetchable = ((bar_value >> 3) & 0x1) == 0x1;
-    }
-    else
-    {  // I/O
-        result.adress = (uint8_t*)(bar_value & ~0x3); //~0x3 = cancle last 2 bits
-        result.preFetchable = false;
-    }
+    // Restore the original value of the base address register
+    Write(bus, device, function, 0x10 + 4*bar, bar_value);
 
     return result;
 }

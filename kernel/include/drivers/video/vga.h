@@ -46,6 +46,9 @@ namespace maxOS{
                        VideoGraphicsArray();
                        ~VideoGraphicsArray();
 
+                        common::string getVendorName();
+                        common::string getDeviceName();
+
                        bool supportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
 
                        inline void* operator new(common::uint32_t, VideoGraphicsArray* p)

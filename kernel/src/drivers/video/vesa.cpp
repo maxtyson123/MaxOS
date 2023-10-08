@@ -102,3 +102,11 @@ uint32_t VideoElectronicsStandardsAssociationDriver::getRenderedPixel32Bit(uint3
     // Set the pixel
     return *pixelAddress;                                           // Return the colour of the pixel
 }
+
+string VideoElectronicsStandardsAssociationDriver::getVendorName() {
+    return "NEC Home Electronics";  // Creator of the VESA standard
+}
+
+string VideoElectronicsStandardsAssociationDriver::getDeviceName() {
+    return "VESA compatible graphics card";
+}

@@ -106,7 +106,7 @@ amd_am79c973::~amd_am79c973()
 /**
  * @details This function activates the device and starts it (Runs when the driver-manger calls activateAll())
  */
-void amd_am79c973::Activate()
+void amd_am79c973::activate()
 {
 
     //TODO: Implment new console driver and use the stream for it here, causes GPF erorr int so return for now
@@ -140,7 +140,7 @@ void amd_am79c973::Activate()
  *
  * @return The amount of ms to wait
  */
-int amd_am79c973::Reset() {
+uint32_t amd_am79c973::reset() {
 
     resetPort.Read();
     resetPort.Write(0);
@@ -293,8 +293,16 @@ uint64_t amd_am79c973::GetMediaAccessControlAddress() {
     return ownMAC;
 }
 
-void amd_am79c973::Deactivate() {
+void amd_am79c973::deactivate() {
 
+}
+
+common::string amd_am79c973::getVendorName() {
+    return "AMD";
+}
+
+common::string amd_am79c973::getDeviceName() {
+    return "PCnet-Fast III (Am79C973)";
 }
 
 

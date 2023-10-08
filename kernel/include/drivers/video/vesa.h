@@ -106,6 +106,9 @@ namespace maxOS {
 
                     bool supportsMode( common::uint32_t width,  common::uint32_t height,  common::uint32_t colorDepth);
 
+                    common::string getVendorName();
+                    common::string getDeviceName();
+
             };
 
         }

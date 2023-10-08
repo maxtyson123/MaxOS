@@ -133,7 +133,7 @@ common::uint8_t Clock::binaryRepresentation(common::uint8_t number) {
 /**
  * @details Activates the clock, reading the status register and setting the binary coded decimal representation flag
  */
-void Clock::Activate() {
+void Clock::activate() {
 
     // Read the status register
     uint8_t status = readHardwareClock(0xb);
@@ -197,6 +197,14 @@ void Clock::delay(common::uint32_t milliseconds) {
         // Wait until the number of ticks is equal to the number of ticks until the delay is over
         while(ticks < ticksUntilDelayIsOver)
             asm volatile("nop"); // execute the "nop" assembly instruction, which does nothing, but prevents the compiler from optimizing away the loop
+}
+
+common::string Clock::getVendorName() {
+    return "Generic";
+}
+
+common::string Clock::getDeviceName() {
+    return "Clock";
 }
 
 
