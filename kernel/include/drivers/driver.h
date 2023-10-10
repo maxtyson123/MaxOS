@@ -41,6 +41,7 @@ namespace maxOS
 
                 virtual void activate();
                 virtual void deactivate();
+                virtual void initialise();
                 virtual common::uint32_t reset();
 
                 virtual common::string getVendorName();

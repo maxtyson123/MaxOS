@@ -177,11 +177,23 @@ void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSel
                     }
                 }
 
+                // Write to the debug stream
+                debugMessagesStream->write(deviceDescriptor.getType());
+                debugMessagesStream->write(": ");
+
                 // Instantiate the driver and add it to the driver manager
                 Driver* driver = GetDriver(deviceDescriptor, interruptManager);
                 if(driver != 0){
                     handler->onDriverSelected(driver);
+                    debugMessagesStream->write(driver->getVendorName());
+                    debugMessagesStream->write(" ");
+                    debugMessagesStream->write(driver->getDeviceName());
+                }else{
+                    listKnownDeivce(deviceDescriptor);
                 }
+
+                // New line
+                debugMessagesStream->write("\n");
             }
 
         }
@@ -229,195 +241,204 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
     Driver* driver = 0;
     switch (dev.vendor_ID)
     {
-        case 0x1022:
-        {//AMD
-
+        case 0x1022:    //AMD
+        {
             switch (dev.device_ID)
             {
-                case 0x2000:
-                {//am79c971
-
-                   debugMessagesStream->write("\r    AMD am79c971");
-                    //return MemoryManager::activeMemoryManager -> Instantiate<amd_am79c973>(&dev, interruptManager);
+                case 0x2000:    //am79c971
+                {
                     amd_am79c973* result = (amd_am79c973*)MemoryManager::activeMemoryManager ->malloc(sizeof(amd_am79c973));
                     new (result) amd_am79c973(&dev, interruptManager);
-
                     return result;
-                    break;
 
-                }//end am79c971
-
+                }
                 default:
                     break;
             }
             break;
-        }//End AMD
-
-        case 0x106B:
-        {//Apple
-
+        }
+        case 0x8086:  //Intel
+        {
             switch (dev.device_ID)
             {
-                case 0x003F:
-                {//KeyLargo/Intrepid USB
-
-                   debugMessagesStream->write("\r   APPLE KeyLargo/Intrepid USB (NO DRIVER)");
-                    break;
-
-                }//end KeyLargo/Intrepid USB
-
-                default:
-                    break;
-            }
-            break;
-        }//End Apple
-
-        case 1234:
-        { //QEMU
-
-            switch (dev.device_ID)
-            {
-
-                case 0x1111:
-                {//Virtual Video Controller
-
-                   debugMessagesStream->write("\r   QEMU Virtual Video Controller (NO DRIVER)"); //Emulated Video Card
-                    break;
-
-
-                }//Virtual Video Controller
-
-            }
-            break;
-        }//End QEMU
-
-        case 0x8086:
-        { //Intel
-
-            switch (dev.device_ID)
-            {
-
-                case 0x100E:
-                {//i217 (Ethernet Controller)
-
-                   debugMessagesStream->write("\r    INTEL i217");
+                case 0x100E: //i217 (Ethernet Controller)
+                {
                     intel_i217* result = (intel_i217*)MemoryManager::activeMemoryManager ->malloc(sizeof(intel_i217));
                     new (result) intel_i217(&dev, interruptManager);
 
-                    return result;                     //Add Driver
-                    break;
-
-                }//end i217
-
-                case 0x1237:
-                {//440FX
-
-                   debugMessagesStream->write("\r   INTEL 440FX (NO DRIVER)"); //https://en.wikipedia.org/wiki/Intel_440FX (It is a chipset, not a device)
-                    break;
-
-                }//end 440FX
-
-                case 0x2415:
-                {//AUDIO CONTROLLER
-
-                   debugMessagesStream->write("\r   INTEL  AC'97 AUDIO CONTROLLER (NO DRIVER)"); //82801AA AC'97 Audio Controller
-                    break;
-
-                }//end AUDIO CONTROLLER
-
-                case 0x7000:
-                {//PIIX3 ISA
-
-                   debugMessagesStream->write("\r   INTEL PIIX3 ISA (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
-                    break;
-
-                }//end PIIX3 ISA
-
-                case 0x7010:
-                {//PIIX4 IDE
-
-                   debugMessagesStream->write("\r   INTEL PIIX4 IDE (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
-                    break;
-
-                }//end PIIX4 IDE
-
-                case 0x7111:
-                {//PIIX3 IDE
-
-                   debugMessagesStream->write("\r   INTEL PIIX3 IDE (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
-                    break;
-
-                }//end PIIX3 IDE
-
-                case 0x7113:
-                {//PIIX4 ACPI
-
-                   debugMessagesStream->write("\r   INTEL PIIX4 ACPI (NO DRIVER)");     //https://en.wikipedia.org/wiki/PCI_IDE_ISA_Xcelerator  (IDE Controller) (SOUTH BRIDGE)
-                    break;
-
-                }//end PIIX4 ACPI
-
+                    return result;
+                }
                 default:
                     break;
-
             }
             break;
         }//End Intel
-
-        case 0x80EE: { //VIRTUALBOX
-
-            switch (dev.device_ID) {
-
-                case 0xBEEF: {//GRAPHICS ADAPTER
-
-                   debugMessagesStream->write("\r   VIRTUALBOX GRAPHICS ADAPTER (NO DRIVER)");
-                    break;
-
-                }//end GRAPHICS ADAPTER
-
-                case 0xCAFE: {//GUEST SERVICE
-
-                   debugMessagesStream->write("\r   VIRTUALBOX GUEST SERVICE (NO DRIVER)");
-                    break;
-
-                }//end GUEST SERVICE
-
-            }
-            break;
-        }//End VIRTUALBOX
-
     }
 
     //If there is no driver for the particular device, go into generic devices
     switch (dev.class_id)
     {
-        case 0x03:
-        {//Graphics
+        case 0x03: //Graphics
+        {
 
             switch (dev.subclass_id)
             {
-                case 0x00:
-                {//VGA
-                   debugMessagesStream->write("\r    GRAPHICS VGA");
+                case 0x00:  //VGA
+                {
                     VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::activeMemoryManager ->malloc(sizeof(VideoGraphicsArray));
                     new (result) VideoGraphicsArray();
 
-                    return result;                     //Add Driver
-                    break;
-
-                }//end VGA
-
-
+                    return result;
+                }
             }
             break;
-
         }
-
     }
 
     return driver;
 }
 
+
+void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralComponentInterconnectDeviceDescriptor dev) {
+    switch (dev.vendor_ID)
+    {
+        case 0x1022:
+        {
+            // The vendor is AMD
+            debugMessagesStream->write("AMD ");
+
+            // List the device
+            switch (dev.device_ID)
+            {
+                default:
+                    debugMessagesStream->writeHex(dev.device_ID);
+                    break;
+            }
+            break;
+        }
+
+        case 0x106B:
+        {
+            // The vendor is Apple
+            debugMessagesStream->write("Apple ");
+
+            // List the device
+            switch (dev.device_ID)
+            {
+                case 0x003F:
+                {
+                    debugMessagesStream->write("KeyLargo/Intrepid USB");
+                    break;
+                }
+
+                default:
+                    debugMessagesStream->writeHex(dev.device_ID);
+                    break;
+            }
+            break;
+        }
+
+        case 1234:
+        {
+            // The vendor is QEMU
+            debugMessagesStream->write("QEMU ");
+
+            // List the device
+            switch (dev.device_ID)
+            {
+
+                case 0x1111:
+                {
+                    debugMessagesStream->write("Virtual Video Controller");
+                    break;
+                }
+            }
+            break;
+        }
+
+        case 0x8086:
+        {
+            // The vendor is Intel
+            debugMessagesStream->write("Intel ");
+
+            // List the device
+            switch (dev.device_ID)
+            {
+
+                case 0x1237:
+                {
+                    debugMessagesStream->write("440FX");
+                    break;
+                }
+
+                case 0x2415:
+                {
+                    debugMessagesStream->write("AC'97");
+                    break;
+                }
+
+                case 0x7000:
+                {
+                    debugMessagesStream->write("PIIX3");
+                    break;
+
+                }
+
+                case 0x7010:
+                {
+                    debugMessagesStream->write("PIIX4");
+                    break;
+
+                }
+
+                case 0x7111:
+                {
+                    debugMessagesStream->write("PIIX3");
+                    break;
+                }
+
+                case 0x7113:
+                {
+                    debugMessagesStream->write("PIIX4 ACPI");
+                    break;
+                }
+
+                default:
+                    break;
+
+            }
+            break;
+        }
+
+        case 0x80EE: {
+
+            // The vendor is VirtualBox
+            debugMessagesStream->write("VirtualBox ");
+
+            // List the device
+            switch (dev.device_ID) {
+
+                case 0xBEEF: {
+                    debugMessagesStream->write("Graphics Adapter");
+                    break;
+                }
+
+                case 0xCAFE: {
+                    debugMessagesStream->write("Guest Service");
+                    break;
+                }
+            }
+            break;
+        }
+
+        default:    // Unknown
+            debugMessagesStream ->writeHex(dev.vendor_ID);
+            debugMessagesStream ->write(" ");
+            debugMessagesStream ->writeHex(dev.device_ID);
+            break;
+
+    }
+}
 
 /**
  * @details Get the base address register
@@ -454,6 +475,7 @@ BaseAddressRegister PeripheralComponentInterconnectController::getBaseAddressReg
 
     return result;
 }
+
 
 
 

@@ -26,6 +26,12 @@ void Driver::deactivate(){
 
 }
 
+
+void Driver::initialise() {
+
+}
+
+
 uint32_t Driver::reset(){
     return 0;
 }
@@ -116,7 +122,6 @@ void Driver::disconnectDriverEventHandler(DriverEventHandler *driverEventHandler
     driverEventHandlers.erase(driverEventHandler);
 
 }
-
 
 DriverSelectorEventHandler::DriverSelectorEventHandler()
 {

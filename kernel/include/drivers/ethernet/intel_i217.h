@@ -96,13 +96,13 @@ namespace maxOS{
 
                 bool readMACAddress();       // Read MAC Address
 
-                void receiveInit();          // Initialize receive descriptors an buffers
-                void sendInit();             // Initialize transmit descriptors an buffers
+                void receiveInit();          // Initialise receive descriptors an buffers
+                void sendInit();             // Initialise transmit descriptors an buffers
 
                 //Ethernet Driver functions
                 MediaAccessControlAddress ownMAC;                //MAC address of the device
                 volatile bool active;                            //Is the device active
-                volatile bool initDone;                          //Is the device initialized
+                volatile bool initDone;                          //Is the device initialised
 
                 void FetchDataReceived();                        //Fetches the data from the buffer
                 void FetchDataSent();                            //Fetches the data from the buffer

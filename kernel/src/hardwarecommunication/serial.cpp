@@ -26,7 +26,7 @@ serial::serial(InterruptManager* interruptManager)
 
 {
 
-    //Initialize the serial port
+    //Initialise the serial port
     interruptEnableRegisterPort.Write(0x00);                //Disable all interrupts
     lineCommandPort.Write(0x80);                            //Enable DLAB (set baud rate divisor)
     interruptEnableRegisterPort.Write(0x03);                //Set divisor to 3 (lo byte) 38400 baud

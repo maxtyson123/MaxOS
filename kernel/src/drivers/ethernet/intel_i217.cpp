@@ -298,7 +298,7 @@ void intel_i217::activate() {
 
     //while (!initDone);                                           //Wait for the init to be done
 
-    //Initialize the send and receive descriptors
+    //Initialise the send and receive descriptors
     receiveInit();
     sendInit();
 

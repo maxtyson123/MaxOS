@@ -129,7 +129,7 @@ void amd_am79c973::activate()
     registerDataPort.Write(temp | 0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
 
     registerAddressPort.Write(0);                           // Tell device to write to register 0
-    registerDataPort.Write(0x42);                           // Tell device that it is initialized and can begin operating
+    registerDataPort.Write(0x42);                           // Tell device that it is initialised and can begin operating
 
     active = true;                                               // Set active to true
     driverMessageStream -> write("AMD am79c973 INIT DONE\n");

@@ -15,8 +15,8 @@ using namespace maxOS::memory;
 /**
  * @details Intialize the FAT32 filesystem
  *
- * @param hd The hard disk to initialize the FAT32 filesystem on
- * @param partitionOffset The offset of the partition to initialize the FAT32 filesystem on
+ * @param hd The hard disk to initialise the FAT32 filesystem on
+ * @param partitionOffset The offset of the partition to initialise the FAT32 filesystem on
  */
 Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset, OutputStream* fat32MessageStream) {
 
@@ -929,7 +929,7 @@ common::uint32_t FatFileReader::GetFileSize() {
 
 FatFileWriter::FatFileWriter(FatDirectoryTraverser* parent, DirectoryEntry file) {
 
-    //Initialize the file writer
+    //Initialise the file writer
     fileInfo = &file;
     traverser = parent;
     offsetPosition = 0;

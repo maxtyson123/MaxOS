@@ -92,7 +92,7 @@ string KeyboardDriver::getDeviceName() {
 ///___State___
 
 /**
- * @details Initialize the keyboard stat with the default values being false
+ * @details Initialise the keyboard stat with the default values being false
  */
 KeyboardState::KeyboardState() {
 

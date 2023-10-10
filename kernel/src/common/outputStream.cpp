@@ -161,27 +161,20 @@ void OutputStream::writeHex(uint32_t hexToWrite) {
         return;
     }
 
-    // Store the hex to write in a temporary variable
-    uint32_t tempWriteHex = hexToWrite;
-
-    // Check how many digits the hex has by dividing it by 16 until it is 0 (rounded automatically)
-    int digits = 0;
-    for (uint32_t i = tempWriteHex; i > 0; i /= 16) {
-        digits++;
+    int length = 0;
+    unsigned int ibak = hexToWrite;
+    while(ibak > 0)
+    {
+        ibak /= 16;
+        length++;
     }
-
-    // Loop through each digit of the hex
-    for (int currentDigit = tempWriteHex; currentDigit > 0; --currentDigit) {
-
-        // Loop through the digits of the integer until the current digit is reached, dividing the integer by 10 each time to get the next digit
-        for(int digit = 1; digit < currentDigit; digit++)
-            tempWriteHex /= 10;
-
-        // Calculate the current digit
-        uint8_t currentHexDigit = tempWriteHex % 16;
-
-        // Write the current digit to the output stream (pass the digit into the hex character array to get the character representation)
-        writeChar("0123456789ABCDEF"[currentHexDigit]);
+    for(; length > 0; length--)
+    {
+        ibak = hexToWrite;
+        for(int j = 1; j < length; j++)
+            ibak /= 16;
+        const char* Hex = "0123456789ABCDEF";
+        writeChar(Hex[ibak % 16]);
     }
 
 }

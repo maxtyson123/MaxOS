@@ -90,6 +90,7 @@ namespace maxOS
 
                 void selectDrivers(drivers::DriverSelectorEventHandler* handler, memory::MemoryManager* memoryManager, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* errorMessageStream);
                 drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager);
+                void listKnownDeivce(PeripheralComponentInterconnectDeviceDescriptor dev);
         };
     }
 }

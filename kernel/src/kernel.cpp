@@ -1,4 +1,4 @@
-int buildCount = 247;
+int buildCount = 287;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -141,12 +141,12 @@ extern "C" void callConstructors()
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
 
-    // Initialize the VESA Driver
+    // Initialise the VESA Driver
     VideoElectronicsStandardsAssociationDriver vesa((multiboot_info_t *)&multibootHeader);
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
     videoDriver -> setMode(1024, 768, 32);
 
-    //Initialize Console
+    //Initialise Console
     VESABootConsole console(&vesa);
     //TextModeConsole console;
     console.clear();
@@ -193,9 +193,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
         cout << "Got Magic: " << (uint32_t)multiboot_magic << ", Expected Magic: " << MULTIBOOT_BOOTLOADER_MAGIC;
         return;
     }
-    cout << "Valid Multiboot Magic\n";
-
-    cout << "\n\n";
+    cout << "\n";
 
     // Make the system setup stream
     ConsoleArea systemSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
@@ -261,8 +259,13 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     //Driver Selectors
     Vector<DriverSelector*> driverSelectors;
 
+    //Make the stream on the side for the PCI
+    ConsoleArea pciConsoleArea(&console, console.getWidth() - 45, 2, 45, console.getHeight(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleStream pciConsoleStream(&pciConsoleArea);
+    console.putString(console.getWidth() - 45, 1, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
+    
     //PCI
-    PeripheralComponentInterconnectController PCIController(&nullStream);
+    PeripheralComponentInterconnectController PCIController(&pciConsoleStream);
     driverSelectors.pushBack(&PCIController);
     cout << "-- Set Up PCI\n";
     deviceSetupHeaderStream << ".";
@@ -312,14 +315,14 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "-- Activated Interrupts\n";
     activationHeaderStream << ".";
 
-    // Initialize the drivers
+    // Initialise the drivers
     cout << "-- Initializing Devices";
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
         cout << ".";
-        (*driver)->activate();
+        (*driver)->initialise();
     }
-    cout << " Initialized\n";
+    cout << " Initialised\n";
     activationHeaderStream << ".";
 
     // Activate the drivers
@@ -337,7 +340,8 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 
 
-    // Run the GUI 
+    // Run the GUI
+
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connectMouseEventHandler(&desktop);
