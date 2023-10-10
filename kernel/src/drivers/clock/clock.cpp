@@ -28,6 +28,18 @@ void ClockEventHandler::onTime(const Time &time) {
 
 }
 
+void ClockEventHandler::onEvent(Event<ClockEvents>* event) {
+
+    switch (event -> type) {
+        case TIME:
+            onTime(*((TimeEvent*)event) -> time);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 ///__Clock__
 
 /**
@@ -80,9 +92,10 @@ uint32_t Clock::HandleInterrupt(uint32_t esp) {
     time.minute = binaryRepresentation(readHardwareClock(0x2));                   // Register 2 is the minute
     time.second = binaryRepresentation(readHardwareClock(0x0));                   // Register 0 is the second
 
-    // Call the onTime function for each event handler
-    for(Vector<ClockEventHandler*>::iterator clockEventHandler = clockEventHandlers.begin(); clockEventHandler != clockEventHandlers.end(); clockEventHandler++)
-        (*clockEventHandler) -> onTime(time);
+    //Raise the clock event
+    TimeEvent* event = new TimeEvent(&time);
+    raiseEvent(event);
+    //TODO: delete event;
 
     return esp;
 }
@@ -153,33 +166,6 @@ void Clock::activate() {
     binaryCodedDecimalRepresentation = useBinaryCodedDecimal;
 }
 
-/**
- * @details Connects an event clockEventHandler to the clock
- *
- * @param clockEventHandler The event clockEventHandler to connect
- */
-void Clock::connectClockEventHandler(ClockEventHandler *clockEventHandler) {
-
-    // Check if the handler is already connected (find returns end if not found)
-    if(clockEventHandlers.find(clockEventHandler) != clockEventHandlers.end())
-        return;
-
-    // Add the event clockEventHandler to the vector of event clockEventHandlers
-    clockEventHandlers.pushBack(clockEventHandler);
-
-}
-
-/**
- * @details Disconnects an event clockEventHandler from the clock
- *
- * @param clockEventHandler The event clockEventHandler to disconnect
- */
-void Clock::disconnectClockEventHandler(ClockEventHandler *clockEventHandler) {
-
-    // Remove the event clockEventHandler from the vector of event clockEventHandlers
-    clockEventHandlers.erase(clockEventHandler);
-
-}
 
 /**
  * @details Delays the program for a specified number of milliseconds (rounded to the nearest 100) by waiting for the number of ticks to equal the number of ticks until the delay is over
@@ -210,4 +196,12 @@ common::string Clock::getDeviceName() {
 
 
 
+TimeEvent::TimeEvent(common::Time* time)
+:Event(ClockEvents::TIME)
+{
+    this -> time = time;
+}
 
+TimeEvent::~TimeEvent() {
+
+}

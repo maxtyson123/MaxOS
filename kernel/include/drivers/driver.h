@@ -8,24 +8,15 @@
 #include <common/outputStream.h>
 #include <memory/memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
-
+#include <common/eventHandler.h>
 namespace maxOS
 {
     namespace drivers {
 
-        class DriverEventHandler
-        {
-            public:
-                DriverEventHandler();
-                ~DriverEventHandler();
-
-                //Todo: yea... this is a bit of a mess. I should probably make a class for the event itself.
-        };
 
         class Driver {
             protected:
                 common::OutputStream* driverMessageStream;
-                common::Vector<DriverEventHandler*> driverEventHandlers;
 
             public:
                 Driver(common::OutputStream* driverMessageStream = 0);
@@ -36,9 +27,6 @@ namespace maxOS
                 void errorMessage(int intToWrite);
                 void errorMessage(common::uint32_t hexToWrite);
 
-                void connectDriverEventHandler(DriverEventHandler* driverEventHandler);
-                void disconnectDriverEventHandler(DriverEventHandler* driverEventHandler);
-
                 virtual void activate();
                 virtual void deactivate();
                 virtual void initialise();
@@ -48,6 +36,7 @@ namespace maxOS
                 virtual common::string getDeviceName();
         };
 
+        //NOTE: Driver doesn't use the EventHandler class because it doesn't need to be connected to anything (May want to change this later)
         class DriverSelectorEventHandler
         {
         public:

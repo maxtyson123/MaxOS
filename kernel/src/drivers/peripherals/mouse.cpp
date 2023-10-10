@@ -15,6 +15,29 @@ using namespace maxOS::hardwarecommunication;
 MouseEventHandler::MouseEventHandler() {
 }
 
+/**
+ * @details This function is called when an event is triggered and calls the appropriate function
+ * @param event The event that was triggered
+ */
+void MouseEventHandler::onEvent(Event<MouseEvents> *event) {
+    switch (event->type){
+
+        case MOUSE_MOVE:
+            this->onMouseMoveEvent(((MouseMoveEvent*)event)->x, ((MouseMoveEvent*)event)->y);
+            break;
+
+        case MOUSE_DOWN:
+            this->onMouseDownEvent(((MouseDownEvent*)event)->button);
+            break;
+
+        case MOUSE_UP:
+            this->onMouseUpEvent(((MouseUpEvent*)event)->button);
+            break;
+
+    }
+}
+
+
 void MouseEventHandler::onMouseDownEvent(uint8_t button){
 
 }
@@ -30,7 +53,6 @@ void MouseEventHandler::onMouseMoveEvent(int8_t x, int8_t y){
 MouseEventHandler::~MouseEventHandler() {
 
 }
-
 
 ///__Driver__
 
@@ -99,75 +121,65 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
     if(offest == 0)//If the mouse data transmission is complete (3rd piece of data is through)
     {
 
-        // Pass the mouse data to the mouse event handlers
-        for(Vector<MouseEventHandler*>::iterator mouseEventHandler = mouseEventHandlers.begin(); mouseEventHandler != mouseEventHandlers.end(); mouseEventHandler++)
-        {
+        // If the mouse is moved (buffer 1 and 2 store x and y)
+        if(buffer[1] != 0 || buffer[2] != 0)
+            raiseEvent(new MouseMoveEvent(buffer[1], -buffer[2]));  // Flip the y axis
 
-            // If the mouse is moved (buffer 1 and 2 store x and y)
-            if(buffer[1] != 0 || buffer[2] != 0)
-                (*mouseEventHandler) -> onMouseMoveEvent((int8_t) buffer[1], -((int8_t) buffer[2]));     //If things go wrong with mouse in the future then y = -buffer[2];
-
-            //Detect button press
-            for (int i = 0; i < 3; ++i) {
+        //Detect button press
+        for (int i = 0; i < 3; ++i) {
 
 
-                //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
-                if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1)))
-                {
-                    //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
-                    if(buttons & (0x1<<i))
-                        (*mouseEventHandler) -> onMouseUpEvent(i + 1);
-                    else
-                        (*mouseEventHandler) -> onMouseDownEvent(i + 1);
-
-                }
+            //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
+            if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1)))
+            {
+                //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
+                if(buttons & (0x1<<i))
+                    raiseEvent(new MouseUpEvent(i + 1));
+                else
+                    raiseEvent(new MouseDownEvent(i + 1));
 
             }
+        }
 
-            // Update the buttons
-            buttons = buffer[0];  // TODO: Maybe do this out side of the loop?
-        };
-
-
-
-
-
+        // Update the buttons
+        buttons = buffer[0];
     }
     return esp;
 }
 
-/**
- * @details Connect a mouse event handler to the mouse driver
- *
- * @param handler the mouse event handler to connect
- */
-void MouseDriver::connectMouseEventHandler(MouseEventHandler *handler) {
-
-    // Check if the handler is already connected (find returns end if not found)
-    if(mouseEventHandlers.find(handler) != mouseEventHandlers.end())
-        return;
-
-    // Add the handler to the list of handlers
-    mouseEventHandlers.pushBack(handler);
-
-}
-
-/**
- * @details Disconnect a mouse event handler from the mouse driver
- *
- * @param handler The mouse event handler to disconnect
- */
-void MouseDriver::disconnectMouseEventHandler(MouseEventHandler *handler) {
-
-    // Check if the handler is connected (find returns end if not found)
-    if(mouseEventHandlers.find(handler) == mouseEventHandlers.end())
-        return;
-
-    // Remove the handler from the list of handlers
-    mouseEventHandlers.erase(handler);
-
-}
-
 string MouseDriver::getDeviceName() {
     return "Mouse";
+}
+
+///__Events__
+
+MouseUpEvent::MouseUpEvent(uint8_t button)
+: Event<MouseEvents>(MouseEvents::MOUSE_UP)
+{
+    this->button = button;
+}
+
+MouseUpEvent::~MouseUpEvent() {
+
+}
+
+MouseDownEvent::MouseDownEvent(uint8_t button)
+: Event<MouseEvents>(MouseEvents::MOUSE_DOWN)
+{
+    this->button = button;
+}
+
+MouseDownEvent::~MouseDownEvent() {
+
+}
+
+MouseMoveEvent::MouseMoveEvent(int8_t x, int8_t y)
+: Event<MouseEvents>(MouseEvents::MOUSE_MOVE)
+{
+    this->x = x;
+    this->y = y;
+}
+
+MouseMoveEvent::~MouseMoveEvent() {
+
 }

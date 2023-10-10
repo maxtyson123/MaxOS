@@ -8,6 +8,7 @@
 
 #include <common/types.h>
 #include <common/vector.h>
+#include <common/eventHandler.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
@@ -16,10 +17,41 @@ namespace maxOS {
     namespace drivers {
         namespace peripherals {
 
-            class MouseEventHandler {
+            enum MouseEvents{
+                MOUSE_MOVE,
+                MOUSE_DOWN,
+                MOUSE_UP
+            };
+
+            class MouseMoveEvent : public common::Event<MouseEvents>{
+                public:
+                    common::int8_t x;
+                    common::int8_t y;
+                    MouseMoveEvent(common::int8_t x, common::int8_t y);
+                    ~MouseMoveEvent();
+            };
+
+            class MouseDownEvent : public common::Event<MouseEvents>{
+                public:
+                    common::uint8_t button;
+                    MouseDownEvent(common::uint8_t button);
+                    ~MouseDownEvent();
+            };
+
+            class MouseUpEvent : public common::Event<MouseEvents>{
+                public:
+                    common::uint8_t button;
+                    MouseUpEvent(common::uint8_t button);
+                    ~MouseUpEvent();
+            };
+
+            class MouseEventHandler : public common::EventHandler<MouseEvents>{
+
                 public:
                     MouseEventHandler();
                     ~MouseEventHandler();
+
+                    void onEvent(common::Event<MouseEvents>* event);
 
                     virtual void onMouseDownEvent(common::uint8_t button);
                     virtual void onMouseUpEvent(common::uint8_t button);
@@ -27,7 +59,7 @@ namespace maxOS {
             };
 
 
-            class MouseDriver : public hardwarecommunication::InterruptHandler, public Driver {
+            class MouseDriver : public hardwarecommunication::InterruptHandler, public Driver, public common::EventManager<MouseEvents>{
                 hardwarecommunication::Port8Bit dataPort;
                 hardwarecommunication::Port8Bit commandPort;
 
@@ -37,18 +69,12 @@ namespace maxOS {
                 common::uint8_t offest;
                 common::uint8_t buttons;
 
-                common::Vector<MouseEventHandler*> mouseEventHandlers;
-
             public:
                 MouseDriver(hardwarecommunication::InterruptManager *manager);
                 ~MouseDriver();
 
                 virtual void activate();
                 common::string getDeviceName();
-
-                void connectMouseEventHandler(MouseEventHandler* handler);
-                void disconnectMouseEventHandler(MouseEventHandler* handler);
-
             };
         }
     }

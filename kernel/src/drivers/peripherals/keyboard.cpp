@@ -30,6 +30,24 @@ void KeyboardEventHandler::onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState)
 {
 }
 
+void KeyboardEventHandler::onEvent(Event<KeyboardEvents> *event) {
+
+    switch (event -> type) {
+
+        case KeyboardEvents::KEYDOWN:
+            this->onKeyDown(((KeyDownEvent*)event)->keyCode, ((KeyDownEvent*)event)->keyboardState);
+            break;
+
+        case KeyboardEvents::KEYUP:
+            this->onKeyUp(((KeyUpEvent*)event)->keyCode, ((KeyUpEvent*)event)->keyboardState);
+            break;
+
+        default:
+            break;
+    }
+
+}
+
 
 
 ///___Driver___
@@ -131,37 +149,20 @@ KeyboardInterpreter::~KeyboardInterpreter() {
 
 }
 
-/**
- * @details Adds a keyboard event handler to the keyboard interpreter
- * @param keyboardEventHandler The keyboard event handler to add
- */
-void KeyboardInterpreter::connectKeyboardEventHandler(KeyboardEventHandler *keyboardEventHandler) {
-
-    // Check if the handler is already connected (find returns end if not found)
-    if(keyboardEventHandlers.find(keyboardEventHandler) != keyboardEventHandlers.end())
-        return;
-
-    // Append to the array
-    this -> keyboardEventHandlers.pushBack(keyboardEventHandler);
-
-}
-
 void KeyboardInterpreter::onKeyRead(bool released, KeyboardState state, KeyCode keyCode) {
 
     // Check if the key is released or pressed
     if(released){
 
         // Pass the release event to the handlers
-        for(Vector<KeyboardEventHandler*>::iterator keyboardEventHandler = keyboardEventHandlers.begin(); keyboardEventHandler != keyboardEventHandlers.end(); keyboardEventHandler++)
-            (*keyboardEventHandler)->onKeyUp(keyCode, state);
+        raiseEvent(new KeyUpEvent(keyCode, state));
 
         // Event handled
         return;
     }
 
     // Pass the press event to the handlers
-    for(Vector<KeyboardEventHandler*>::iterator keyboardEventHandler = keyboardEventHandlers.begin(); keyboardEventHandler != keyboardEventHandlers.end(); keyboardEventHandler++)
-        (*keyboardEventHandler)->onKeyDown(keyCode, state);
+    raiseEvent(new KeyDownEvent(keyCode, state));
 
 }
 
@@ -623,3 +624,25 @@ void KeyboardInterpreterEN_US::onStreamRead(uint8_t scanCode) {
     }
     
 }
+
+KeyDownEvent::KeyDownEvent(KeyCode keyCode, KeyboardState keyboardState)
+: Event<KeyboardEvents>(KeyboardEvents::KEYDOWN){
+    this -> keyCode = keyCode;
+    this -> keyboardState = keyboardState;
+}
+
+KeyDownEvent::~KeyDownEvent() {
+
+}
+
+KeyUpEvent::KeyUpEvent(KeyCode keyCode, KeyboardState keyboardState)
+: Event<KeyboardEvents>(KeyboardEvents::KEYUP){
+    this -> keyCode = keyCode;
+    this -> keyboardState = keyboardState;
+}
+
+KeyUpEvent::~KeyUpEvent() {
+
+}
+
+

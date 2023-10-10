@@ -97,7 +97,7 @@ int_bottom:
     push (interruptnumber)
     call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
 
-    #Switch the stack
+    # Switch the stack
     mov %eax, %esp
 
     # (In reverse ofc) Pop Values From CPUState (multitasking.h)

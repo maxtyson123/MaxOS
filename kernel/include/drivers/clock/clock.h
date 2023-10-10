@@ -10,6 +10,7 @@
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 #include <common/vector.h>
+#include <common/eventHandler.h>
 
 namespace maxOS {
 
@@ -17,19 +18,31 @@ namespace maxOS {
 
         namespace clock {
 
-            class ClockEventHandler {
+            enum ClockEvents{
+                TIME
+            };
+
+            class TimeEvent : public common::Event<ClockEvents>{
+                public:
+                    common::Time* time;
+                    TimeEvent(common::Time* time);
+                    ~TimeEvent();
+            };
+            class ClockEventHandler : public common::EventHandler<ClockEvents>{
 
                 public:
                     ClockEventHandler();
                     ~ClockEventHandler();
 
+                    void onEvent(common::Event<ClockEvents>* event);
+
                     virtual void onTime(const common::Time& time);
 
             };
 
-            class Clock: public Driver, public hardwarecommunication::InterruptHandler{
+            class Clock: public Driver, public hardwarecommunication::InterruptHandler, public common::EventManager<ClockEvents>{
                 private:
-                    volatile common::uint64_t ticks;        // Enusre that the compiler does not optimize this variable out of the code (volatile)
+                    volatile common::uint64_t ticks;        // Ensure that the compiler does not optimize this variable out of the code (volatile)
 
                 protected:
                     // Store all the event clockEventHandlers
@@ -54,8 +67,6 @@ namespace maxOS {
                     ~Clock();
 
                     void activate();
-                    void connectClockEventHandler(ClockEventHandler* clockEventHandler);
-                    void disconnectClockEventHandler(ClockEventHandler* clockEventHandler);
                     void delay(common::uint32_t milliseconds);
 
                     common::string getVendorName();

@@ -8,6 +8,7 @@
 #include <common/types.h>
 #include <common/vector.h>
 #include <common/inputStream.h>
+#include <common/eventHandler.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
@@ -211,20 +212,44 @@ namespace maxOS
 
             };
 
-            class KeyboardEventHandler {
-            public:
-                KeyboardEventHandler();
-                ~KeyboardEventHandler();
-
-                virtual void onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState);
-                virtual void onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState);
+            enum KeyboardEvents{
+                KEYDOWN,
+                KEYUP
             };
 
-            class KeyboardInterpreter : public common::InputStreamEventHandler<common::uint8_t>{
+            class KeyUpEvent : public common::Event<KeyboardEvents>{
+                public:
+                    KeyUpEvent(KeyCode keyCode, KeyboardState keyboardState);
+                    ~KeyUpEvent();
+
+                    KeyCode keyCode;
+                    KeyboardState keyboardState;
+            };
+
+            class KeyDownEvent : public common::Event<KeyboardEvents>{
+                public:
+                    KeyDownEvent(KeyCode keyCode, KeyboardState keyboardState);
+                    ~KeyDownEvent();
+
+                    KeyCode keyCode;
+                    KeyboardState keyboardState;
+            };
+
+            class KeyboardEventHandler : public common::EventHandler<KeyboardEvents>{
+                public:
+                    KeyboardEventHandler();
+                    ~KeyboardEventHandler();
+
+                    virtual void onEvent(common::Event<KeyboardEvents>* event);
+
+                    virtual void onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState);
+                    virtual void onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState);
+            };
+
+            class KeyboardInterpreter : public common::InputStreamEventHandler<common::uint8_t>, public common::EventManager<KeyboardEvents>{
 
             protected:
                 KeyboardState keyBoardState;
-                common::Vector<KeyboardEventHandler*> keyboardEventHandlers;
 
                 bool nextIsExtendedCode0;                                   // Some keyboard codes are 2 bytes long
                 common::uint8_t currentExtendedCode1;
@@ -234,7 +259,6 @@ namespace maxOS
                 KeyboardInterpreter();
                 ~KeyboardInterpreter();
 
-                void connectKeyboardEventHandler(KeyboardEventHandler* keyboardEventHandler);
                 void onKeyRead(bool released, KeyboardState state, KeyCode keyCode);
 
             };

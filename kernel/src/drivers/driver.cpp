@@ -102,27 +102,6 @@ string Driver::getDeviceName()
     return "Unknown Driver";
 }
 
-/**
- * @details This function adds a driver event handler to the driver event handler vector
- * @param driverEventHandler The driver event handler to add
- */
-void Driver::connectDriverEventHandler(DriverEventHandler *driverEventHandler) {
-
-    // Add the driver event handler to the driver event handler vector
-    driverEventHandlers.pushBack(driverEventHandler);
-}
-
-/**
- * @details This function removes a driver event handler from the driver event handler vector
- * @param driverEventHandler The driver event handler to remove
- */
-void Driver::disconnectDriverEventHandler(DriverEventHandler *driverEventHandler) {
-
-    // Remove the driver event handler from the driver event handler vector
-    driverEventHandlers.erase(driverEventHandler);
-
-}
-
 DriverSelectorEventHandler::DriverSelectorEventHandler()
 {
 }

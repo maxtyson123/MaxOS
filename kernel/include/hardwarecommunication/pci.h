@@ -35,13 +35,14 @@ namespace maxOS
         };
 
 
+        //TODO: With USB could be a good idea to make a class for the device descriptor
         class PeripheralComponentInterconnectDeviceDescriptor {
             public:
                 bool hasPortBase;
                 common::uint32_t portBase;  //Port used for communication
 
                 bool hasMemoryBase;
-                common::uint32_t memoryBase;  //Mem adress used for communication
+                common::uint32_t memoryBase;  //Mem address used for communication
 
                 common::uint32_t interrupt; //The interrupt
 

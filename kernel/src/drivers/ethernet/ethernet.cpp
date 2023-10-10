@@ -19,6 +19,8 @@ EthernetDriverEventHandler::~EthernetDriverEventHandler()
 {
 }
 
+
+
 bool EthernetDriverEventHandler::DataReceived(uint8_t*, uint32_t)
 {
     return false;
@@ -32,6 +34,27 @@ void EthernetDriverEventHandler::DataSent(uint8_t*, uint32_t)
 {
 }
 
+void EthernetDriverEventHandler::onEvent(common::Event<EthernetDriverEvents> *event) {
+
+    switch (event -> type) {
+
+        case EthernetDriverEvents::BEFORE_SEND:
+            BeforeSend(((BeforeSendEvent*)event) -> buffer, ((BeforeSendEvent*)event) -> size);
+            break;
+
+        case EthernetDriverEvents::DATA_SENT:
+            DataSent(((DataSentEvent*)event) -> buffer, ((DataSentEvent*)event) -> size);
+            break;
+
+        case EthernetDriverEvents::DATA_RECEIVED:
+            DataReceived(((DataReceivedEvent*)event) -> buffer, ((DataReceivedEvent*)event) -> size);
+            break;
+
+        default:
+            break;
+    }
+}
+
 
 
 ///__ETHERNET DRIVER___
@@ -43,16 +66,6 @@ EthernetDriver::EthernetDriver(OutputStream* ethernetMessageStream)
 
 EthernetDriver::~EthernetDriver()
 {
-}
-
-/**
- * @details Get the device name
- *
- * @return  The device name
- */
-string EthernetDriver::GetDeviceName()
-{
-    return "Ethernet";
 }
 
 /**
@@ -83,9 +96,8 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
     }
     driverMessageStream -> write("\n");
 
-
-    for(Vector<EthernetDriverEventHandler*>::iterator i = ethernetEventHandlers.begin(); i != ethernetEventHandlers.end(); i++)
-        (*i)->BeforeSend(buffer, size);
+    // Raise the event
+    raiseEvent(new BeforeSendEvent(buffer, size));
 
     //Used for debuging  printf("Status: ");
     DoSend(buffer, size);
@@ -119,9 +131,9 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 
     bool SendBack = false;
 
-    //Used for debuging printf("Status: ");
-    for(Vector<EthernetDriverEventHandler*>::iterator i = ethernetEventHandlers.begin(); i != ethernetEventHandlers.end(); i++)
-        if((*i)->DataReceived(buffer, size))
+    //TODO: For now raise event cant return a value, need to find a workaround
+    for(Vector<EventHandler<EthernetDriverEvents>*>::iterator i = handlers.begin(); i != handlers.end(); i++)
+        if(((EthernetDriverEventHandler*)i)->DataReceived(buffer, size))
             SendBack = true;
 
     if(SendBack){
@@ -139,22 +151,7 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
  */
 void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size)
 {
-    for(Vector<EthernetDriverEventHandler*>::iterator i = ethernetEventHandlers.begin(); i != ethernetEventHandlers.end(); i++)
-        (*i)->DataSent(buffer, size);
-}
-
-/**
- * @details Connect the event ethernetDriverEventHandler to the base protocol e.g. etherframe
- *
- * @param ethernetDriverEventHandler The event ethernetDriverEventHandler
- */
-void EthernetDriver::ConnectEventHandler(EthernetDriverEventHandler* ethernetDriverEventHandler)
-{
-    // Check if the handler is already connected (find returns end if not found)
-    if(ethernetEventHandlers.find(ethernetDriverEventHandler) != ethernetEventHandlers.end())
-        return;
-
-    ethernetEventHandlers.pushBack(ethernetDriverEventHandler);
+    raiseEvent(new DataSentEvent(buffer, size));
 }
 
 // if your mac address is e.g. 1c:6f:65:07:ad:1a (see output of ifconfig)
@@ -181,3 +178,38 @@ MediaAccessControlAddress EthernetDriver::CreateMediaAccessControlAddress(uint8_
             | (uint64_t)digit1;
 }
 
+/// __ EVENTS __
+
+DataSentEvent::DataSentEvent(common::uint8_t *buffer, common::uint32_t size)
+: Event(EthernetDriverEvents::DATA_SENT)
+{
+    this -> buffer = buffer;
+    this -> size = size;
+    this -> size = size;
+}
+
+DataSentEvent::~DataSentEvent()
+{
+}
+
+DataReceivedEvent::DataReceivedEvent(common::uint8_t *buffer, common::uint32_t size)
+: Event(EthernetDriverEvents::DATA_RECEIVED)
+{
+    this -> buffer = buffer;
+    this -> size = size;
+}
+
+DataReceivedEvent::~DataReceivedEvent()
+{
+}
+
+BeforeSendEvent::BeforeSendEvent(common::uint8_t *buffer, common::uint32_t size)
+: Event(EthernetDriverEvents::BEFORE_SEND)
+{
+    this -> buffer = buffer;
+    this -> size = size;
+}
+
+BeforeSendEvent::~BeforeSendEvent()
+{
+}

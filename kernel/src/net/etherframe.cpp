@@ -67,7 +67,7 @@ EtherFrameProvider::EtherFrameProvider(EthernetDriver* backend)
 
     //Register this as the event handler for the backend driver
     this->backend = backend;
-    backend -> ConnectEventHandler(this);
+    backend -> connectEventHandler(this);
 
     //Clear frameHandlers on start
     for (uint32_t i = 0; i < 65535; ++i) {

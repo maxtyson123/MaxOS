@@ -1,4 +1,4 @@
-int buildCount = 287;
+int buildCount = 292;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -342,11 +342,12 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     // Run the GUI
 
+#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
-    mouse.connectMouseEventHandler(&desktop);
-    usKeyboard.connectKeyboardEventHandler(&desktop);
-    kernelClock.connectClockEventHandler(&desktop);
+    mouse.connectEventHandler(&desktop);
+    usKeyboard.connectEventHandler(&desktop);
+    kernelClock.connectEventHandler(&desktop);
 
     widgets::Text testLabel(0, 0, 120, 20, "Hello World");
 
