@@ -54,6 +54,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/desktop.o \
  		  obj/kernel/gui/font.o \
  		  obj/kernel/gui/widgets/text.o \
+ 		  obj/kernel/gui/widgets/button.o \
  		  obj/kernel/common/graphicsContext.o \
  		  obj/kernel/common/colour.o \
  		  obj/kernel/common/inputStream.o \
@@ -191,7 +192,8 @@ runQ_W: maxOS.iso
 debugQ: build
 	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S" & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
 
-
+guiDebugQ: build
+	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S -curses" & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym' -tui
 
 install_dep:
 	sudo apt-get update -y

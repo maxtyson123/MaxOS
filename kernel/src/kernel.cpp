@@ -1,4 +1,4 @@
-int buildCount = 292;
+int buildCount = 356;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -26,6 +26,7 @@ int buildCount = 292;
 #include <gui/desktop.h>
 #include <gui/window.h>
 #include <gui/widgets/text.h>
+#include <gui/widgets/button.h>
 
 //NET
 #include <net/etherframe.h>
@@ -349,13 +350,28 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     usKeyboard.connectEventHandler(&desktop);
     kernelClock.connectEventHandler(&desktop);
 
-    widgets::Text testLabel(0, 0, 120, 20, "Hello World");
+    Window testWindow(150,10, 150, 150, "Test Window");
+    widgets::Button testButton(10, 10, 90, 10, "Test Button");
+    class StreamButtonEventHandler : public widgets::ButtonEventHandler
+    {
+    public:
+        ConsoleStream* stream;
+        StreamButtonEventHandler(ConsoleStream* stream) : stream(stream) {}
 
-    Window testWindow2(&testLabel, "Window 2");
-    testWindow2.move(10,10);
-    desktop.addChild(&testWindow2);
+        void onButtonPressed(widgets::Button* button)
+        {
+            *stream << "Button Pressed\n";
+        }
+        void onButtonReleased(widgets::Button* button)
+        {
+            *stream << "Button Released\n";
+        }
+    };
+    StreamButtonEventHandler testButtonEventHandler(&cout);
+    testButton.connectEventHandler(&testButtonEventHandler);
+    testWindow.addChild(&testButton);
 
-    Window testWindow(150,10, 150, 150, "Window 1");
+
     desktop.addChild(&testWindow);
 #endif
 

@@ -61,7 +61,7 @@ MouseDriver::MouseDriver(InterruptManager* manager)
           dataPort(0x60),
           commandPort(0x64)
 {
-    offest = 2; //The mouse is weird and won't write to exactly 0 sometimes, so there has to be different offsets for different os-es
+    offest = 2;
     buttons = 0;
 }
 MouseDriver::~MouseDriver(){
@@ -118,32 +118,32 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
     buffer[offest] = dataPort.Read();       //Read mouse info into buffer
     offest = (offest + 1) % 3;              //Move through the offset
 
-    if(offest == 0)//If the mouse data transmission is complete (3rd piece of data is through)
-    {
+    //If the mouse data transmission is incomplete (3rd piece of data isn't through)
+    if(offest != 0)
+        return esp;
 
-        // If the mouse is moved (buffer 1 and 2 store x and y)
-        if(buffer[1] != 0 || buffer[2] != 0)
-            raiseEvent(new MouseMoveEvent(buffer[1], -buffer[2]));  // Flip the y axis
+    // If the mouse is moved (buffer 1 and 2 store x and y)
+    if(buffer[1] != 0 || buffer[2] != 0)
+        raiseEvent(new MouseMoveEvent(buffer[1], -buffer[2]));  // Flip the y axis
 
-        //Detect button press
-        for (int i = 0; i < 3; ++i) {
+    //Detect button press
+    for (int i = 0; i < 3; ++i) {
 
+        //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
+        if((buffer[0] & (0x1<<i)) != (buttons & (0x1<<i)))
+        {
+            //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
+            if(buttons & (0x1<<i))
+                raiseEvent(new MouseUpEvent(i + 1));
+            else
+                raiseEvent(new MouseDownEvent(i + 1));
 
-            //Check if it's the same as the previous becuase if the current state of the buttons is not equal to the previous state of the buttons , then the button must have been pressed or released
-            if((buffer[0] & (0x01 << i)) !=  (buttons & (0x01<<1)))
-            {
-                //This if condition is true if the previous state of the button was set to 1 (it was pressed) , so now it must be released as the button state has changed
-                if(buttons & (0x1<<i))
-                    raiseEvent(new MouseUpEvent(i + 1));
-                else
-                    raiseEvent(new MouseDownEvent(i + 1));
-
-            }
         }
-
-        // Update the buttons
-        buttons = buffer[0];
     }
+
+    // Update the buttons
+    buttons = buffer[0];
+
     return esp;
 }
 

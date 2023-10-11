@@ -2,8 +2,8 @@
 // Created by 98max on 10/16/2022.
 //
 
-#ifndef MAXOS_GUI_TEXT_H
-#define MAXOS_GUI_TEXT_H
+#ifndef MAXOS_GUI_WDIGETS_TEXT_H
+#define MAXOS_GUI_WDIGETS_TEXT_H
 
 #include <common/types.h>
 #include <common/graphicsContext.h>
@@ -40,4 +40,4 @@ namespace maxOS {
     }
 }
 
-#endif //MAXOS_GUI_TEXT_H
+#endif //MAXOS_GUI_WDIGETS_TEXT_H

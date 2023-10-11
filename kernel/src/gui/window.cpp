@@ -92,7 +92,7 @@ Window::~Window() {
  */
 MouseEventHandler* Window::onMouseButtonPressed(common::uint32_t mouseX, common::uint32_t mouseY, common::uint8_t button){
 
-    maxOS::drivers::peripherals::MouseEventHandler* childrenResult = CompositeWidget::onMouseButtonPressed(X,Y,button);
+    maxOS::drivers::peripherals::MouseEventHandler* childrenResult = CompositeWidget::onMouseButtonPressed(mouseX,mouseY,button);
     Rectangle<int> windowPosition = getPosition();
 
     // Check if the mouse is in the frame

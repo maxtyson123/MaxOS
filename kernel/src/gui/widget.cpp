@@ -540,27 +540,21 @@ void CompositeWidget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t
  */
 peripherals::MouseEventHandler *CompositeWidget::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
 
-    MouseEventHandler* mouseEventHandler = nullptr;
+    MouseEventHandler* mouseEventHandler = 0;
 
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
 
-        // Get the position of the child
-        Rectangle<int> childArea = (*childWidget)->getPosition();
+        // If the mouse was clicked inside the child
+        if((*childWidget)->containsCoordinate(x, y)){
 
-        // Check if the mouse is in the child
-        if(childArea.contains(x, y)){
-
-            // Get the position of the mouse relative to the child
-            uint32_t childX = x - childArea.left;
-            uint32_t childY = y - childArea.top;
-
-            // Call the child's onMouseButtonPressed function
-            mouseEventHandler = (*childWidget)->onMouseButtonPressed(childX, childY, button);
+            // Pass the event to the child
+            mouseEventHandler = (*childWidget)->onMouseButtonPressed(x - (*childWidget)->position.left, y - (*childWidget)->position.top, button);
 
             // Break as the event has been handled
             break;
         }
+
     }
 
     // Return the mouseEventHandler
@@ -580,26 +574,15 @@ void CompositeWidget::onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t butt
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
 
-        // Get the position of the child
-        Rectangle<int> childArea = (*childWidget)->getPosition();
+        // If the mouse was clicked inside the child
+        if((*childWidget)->containsCoordinate(x, y)){
 
-        // Check if the mouse is in the child
-        if(childArea.contains(x, y)){
-
-            // Get the position of the mouse relative to the child
-            uint32_t childX = x - childArea.left;
-            uint32_t childY = y - childArea.top;
-
-            // Call the child's onMouseButtonReleased function
-            (*childWidget)->onMouseButtonReleased(childX, childY, button);
+            // Pass the event to the child
+            (*childWidget)->onMouseButtonReleased(x - (*childWidget)->position.left, y - (*childWidget)->position.top, button);
 
             // Break as the event has been handled
             break;
         }
+
     }
 }
-
-
-
-
-
