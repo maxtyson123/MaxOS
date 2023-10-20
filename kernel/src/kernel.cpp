@@ -1,4 +1,4 @@
-int buildCount = 356;
+int buildCount = 398;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -27,6 +27,7 @@ int buildCount = 356;
 #include <gui/window.h>
 #include <gui/widgets/text.h>
 #include <gui/widgets/button.h>
+#include <gui/widgets/inputbox.h>
 
 //NET
 #include <net/etherframe.h>
@@ -76,10 +77,22 @@ public:
         this->stream = stream;
     }
 
-    void OnKeyboardKeyPressed(KeyCode keyCode, KeyboardState)
+    void onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState)
     {
-        if(31 < keyCode && keyCode < 127)
-            stream->writeChar((char)keyCode);
+        // If the key is a printable character, write it to the stream
+        if(31 < keyDownCode && keyDownCode < 127)
+            stream->writeChar((char)keyDownCode);
+
+        // If it is a backspace, delete the last character
+        if(keyDownCode == KeyCode::backspace)
+            stream->write("\b \b");
+
+        // If it is a newline the prompt
+        if(keyDownCode == KeyCode::enter)
+        {
+            stream->write("\nMaxOS> ");
+        }
+
     }
 };
 
@@ -237,10 +250,11 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     DriverManager driverManager;
 
     //Keyboard
-    KeyboardToStream kbhandler(&cout);
     KeyboardDriver keyboard(&interrupts);
-    KeyboardInterpreterEN_US usKeyboard;
-    keyboard.connectInputStreamEventHandler(&usKeyboard);
+    KeyboardInterpreterEN_US keyboardInterpreter;
+    keyboard.connectInputStreamEventHandler(&keyboardInterpreter);
+    KeyboardToStream kbhandler(&cout);
+    //keyboardInterpreter.connectEventHandler(&kbhandler);
     driverManager.addDriver(&keyboard);
     cout << "-- Set Up Keyboard\n";
     deviceSetupHeaderStream << ".";
@@ -338,41 +352,45 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     cout << "\n";
     activationHeaderStream << "[ DONE ]";
-
-
-
+    
     // Run the GUI
 
 #define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connectEventHandler(&desktop);
-    usKeyboard.connectEventHandler(&desktop);
+    keyboardInterpreter.connectEventHandler(&desktop);
     kernelClock.connectEventHandler(&desktop);
 
-    Window testWindow(150,10, 150, 150, "Test Window");
-    widgets::Button testButton(10, 10, 90, 10, "Test Button");
-    class StreamButtonEventHandler : public widgets::ButtonEventHandler
-    {
-    public:
-        ConsoleStream* stream;
-        StreamButtonEventHandler(ConsoleStream* stream) : stream(stream) {}
+    Window testWindow(150,10, 200, 150, "Test Window");
+    widgets::InputBox testInputBox(10, 10, 150, 20, "test");
 
-        void onButtonPressed(widgets::Button* button)
+    class InputBoxStream : public widgets::InputBoxEventHandler
+    {
+        ConsoleStream* stream;
+        public:
+        InputBoxStream(ConsoleStream* stream)
         {
-            *stream << "Button Pressed\n";
+            this->stream = stream;
         }
-        void onButtonReleased(widgets::Button* button)
+        ~InputBoxStream()
         {
-            *stream << "Button Released\n";
+            this->stream = nullptr;
+        }
+
+        void onInputBoxTextChanged(common::string newText)
+        {
+            *stream << "Input Box Changed: " << newText << "\n";
         }
     };
-    StreamButtonEventHandler testButtonEventHandler(&cout);
-    testButton.connectEventHandler(&testButtonEventHandler);
-    testWindow.addChild(&testButton);
-
-
+    InputBoxStream inputBoxStream(&cout);
+    testInputBox.connectEventHandler(&inputBoxStream);
+    testWindow.addChild(&testInputBox);
     desktop.addChild(&testWindow);
+
+    Window testWindow2(350,100, 200, 150, "Test Window 2");
+    desktop.addChild(&testWindow2);
+
 #endif
 
     // Loop forever

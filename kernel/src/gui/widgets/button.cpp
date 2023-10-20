@@ -20,6 +20,10 @@ ButtonEventHandler::~ButtonEventHandler() {
 
 }
 
+/**
+ * @details Handles the button events
+ * @param event The event to handle
+ */
 void ButtonEventHandler::onEvent(Event<ButtonEvents> *event) {
 
     // Check the event type
@@ -39,10 +43,18 @@ void ButtonEventHandler::onEvent(Event<ButtonEvents> *event) {
 
 }
 
+/**
+ * @details Handles the button pressed event
+ * @param source The source of the event
+ */
 void ButtonEventHandler::onButtonPressed(Button *source) {
 
 }
 
+/**
+ * @details Handles the button released event
+ * @param source The source of the event
+ */
 void ButtonEventHandler::onButtonReleased(Button *source) {
 
 }
@@ -58,6 +70,7 @@ Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, strin
     this -> font = AmigaFont();
     this -> text = text;
     this -> backgroundColour = Colour(0xFF, 0xFF, 0xFF);
+    this -> foregroundColour = Colour(0x00, 0x00, 0x00);
     this -> borderColour = Colour(0x57, 0x57, 0x57);
 }
 
@@ -65,6 +78,11 @@ Button::~Button() {
 
 }
 
+/**
+ * @details Draws the button
+ * @param gc The graphics context to draw to
+ * @param area The area to draw to
+ */
 void Button::draw(GraphicsContext *gc, Rectangle<int> &area) {
 
     // Default Draw Operation
@@ -113,10 +131,17 @@ void Button::draw(GraphicsContext *gc, Rectangle<int> &area) {
 
     // Draw the text
     common::Rectangle<int> textArea(area.left - 1, area.top - 1, area.width, area.height);
-    font.drawText(x + 1, y + 1, Colour(0,0,0), backgroundColour, gc, text,textArea);
+    font.drawText(x + 1, y + 1, foregroundColour, backgroundColour, gc, text,textArea);
 
 }
 
+/**
+ * @details Handles the mouse button pressed event
+ * @param x The x position of the mouse
+ * @param y The y position of the mouse
+ * @param button The button that was pressed
+ * @return The mouse event handler
+ */
 MouseEventHandler* Button::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
     // Raise the button pressed event
     raiseEvent(new ButtonPressedEvent(this));
@@ -129,6 +154,12 @@ MouseEventHandler* Button::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t 
     return Widget::onMouseButtonPressed(x, y, button);
 }
 
+/**
+ * @details Handles the mouse button released event
+ * @param x The x position of the mouse
+ * @param y The y position of the mouse
+ * @param button The button that was released
+ */
 void Button::onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button) {
 
     // Raise the button released event

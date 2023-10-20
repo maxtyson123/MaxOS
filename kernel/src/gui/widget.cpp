@@ -228,6 +228,9 @@ void Widget::onFocusLost() {
  */
 void Widget::bringToFront() {
 
+    // Bring this widget to the front of the screen
+    bringToFront(this);
+
 }
 
 /**
@@ -285,6 +288,7 @@ void Widget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, c
  * @return nullptr
  */
 peripherals::MouseEventHandler* Widget::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
+
     // Bring the widget to the front of the screen
     bringToFront();
 

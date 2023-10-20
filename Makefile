@@ -55,6 +55,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/gui/font.o \
  		  obj/kernel/gui/widgets/text.o \
  		  obj/kernel/gui/widgets/button.o \
+ 		  obj/kernel/gui/widgets/inputbox.o \
  		  obj/kernel/common/graphicsContext.o \
  		  obj/kernel/common/colour.o \
  		  obj/kernel/common/inputStream.o \

@@ -203,7 +203,7 @@ void Desktop::addChild(Widget* childWidget) {
  */
 void Desktop::onTime(const Time &time) {
 
-    // Check if anything is invaild and needs to be redrawn
+    // Check if anything is invalid and needs to be redrawn
     if(invalidAreas.empty())
         return;
 

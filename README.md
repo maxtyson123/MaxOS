@@ -49,16 +49,15 @@ Kernel Cleanup
 - [x] Console rewrite
 - [x] VESA Video Mode                              
 - [x] Kernel Boot Rewrite
-- [ ] Rewrite Event Handlers
-- [ ] USB
-- [ ] Usable Desktop                                - Windows Resizing is working but mouse is weird 
+- [x] Rewrite Event Handlers
+- [ ] Usable Desktop
 - [ ] Better Doxygen Documentation
 - [ ] Use better c++ coding conventions
-- [ ] Codebase cleanup / rewrite
-- [ ] Example Telnet Server (GUI) (EMBEDDED)
+- [ ] Fix Filesystem
+- [ ] USB
 - [ ] HTTP Protocol, DCHP protocol
+- [ ] Codebase cleanup / rewrite
 - [ ] CMAKE
-- [ ] Fix Fat32 Filesystem
 
 Road to Userspace
 

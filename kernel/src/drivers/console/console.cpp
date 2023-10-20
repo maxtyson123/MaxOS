@@ -428,6 +428,12 @@ void ConsoleStream::writeChar(char c) {
         case '\0':
             break;
 
+        // Backspace
+        case '\b':
+            // Decrement the x coordinate
+            cursorX--;
+            break;
+
         default:
             // Put the character on the console
             console->putChar(cursorX, cursorY, c);

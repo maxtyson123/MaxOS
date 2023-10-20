@@ -65,6 +65,7 @@ namespace maxOS {
 
                     // Button Stuff
                     common::Colour backgroundColour;
+                    common::Colour foregroundColour;
                     common::Colour borderColour;
                     gui::AmigaFont font;
                     common::string text;

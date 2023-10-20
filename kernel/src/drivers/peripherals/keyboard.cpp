@@ -180,14 +180,62 @@ KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() {
 
 void KeyboardInterpreterEN_US::onStreamRead(uint8_t scanCode) {
 
-    // TODO: Extended ScanCodes E0, E1
+    int keyType = 0; // Initialize keyType to 0 (0 represents a regular keypress)
 
-    // Check if the key is released or pressed (The 8th bit is set to 1 if key is released and cleared to 0 if key is pressed)
-    bool released = (scanCode & 0x8);
+    // Check if the key was released (bit 7 set) and certain conditions are met
+    bool released = (scanCode & 0x80) && (currentExtendedCode1 || (scanCode != 0xe1)) && (nextIsExtendedCode0 || (scanCode != 0xe0));
+
+    // If the key is released, clear bit 7 (make it a regular key)
+    if (released)
+        scanCode &= ~0x80;
+
+    // If the scanCode is 0xe0, it indicates an extended code
+    if (scanCode == 0xe0)
+    {
+        nextIsExtendedCode0 = true; // Set the e0Code flag to true
+        return;
+    }
+
+    // If e0Code is true, set keyType to 1 and reset e0Code
+    if (nextIsExtendedCode0)
+    {
+        keyType = 1;
+        nextIsExtendedCode0 = false;
+
+        // Check if the scanCode represents a shift key and return (fake shift)
+        if ((KeyboardInterpreterEN_US::KeyCodeEN_US)scanCode == KeyboardInterpreterEN_US::leftShift || (KeyboardInterpreterEN_US::KeyCodeEN_US)scanCode == KeyboardInterpreterEN_US::rightShift)
+            return;
+    }
+
+    // If the scanCode is 0xe1, set the e1Code flag to 1 and return
+    if (scanCode == 0xe1)
+    {
+        currentExtendedCode1 = 1;
+        return;
+    }
+
+    // If e1Code is 1, set e1Code to 2, store the scanCode in e1CodeBuffer, and return
+    if (currentExtendedCode1 == 1)
+    {
+        currentExtendedCode1 = 2;
+        extendedCode1Buffer = scanCode;
+        return;
+    }
+
+    // If e1Code is 2, set keyType to 2, reset e1Code, and update e1CodeBuffer
+    if (currentExtendedCode1 == 2)
+    {
+        keyType = 2;
+        currentExtendedCode1 = 0;
+        extendedCode1Buffer |= (((uint16_t)scanCode) << 8);
+    }
 
     bool isShifting = this -> keyBoardState.leftShift || this -> keyBoardState.rightShift;
     bool shouldBeUpperCase = isShifting != this -> keyBoardState.capsLock;
 
+
+    // TODO: Probabbly a better way to do this
+    if(keyType == 0)
     switch ((KeyCodeEN_US)scanCode) {
 
         // First row
