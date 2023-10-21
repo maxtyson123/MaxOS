@@ -21,8 +21,6 @@ namespace maxOS{
         };
 
 
-
-
         template<class Type> class Vector
         {
         protected:
@@ -57,9 +55,9 @@ namespace maxOS{
 
     //______________________________________Implementation__________________________________________________
         /**
-              * Base Template for VectorIterationHandler
-              * @tparam Type Type of the Vector
-              */
+        * Base Template for VectorIterationHandler
+        * @tparam Type Type of the Vector
+        */
         template<class Type>
         Vector<Type>::Vector() {
             MaxSize = 100;
@@ -192,12 +190,14 @@ namespace maxOS{
 
          * @return The iterator of the element
          */
-        template<class Type>
-        typename Vector<Type>::iterator Vector<Type>::pushFront(Type element) {
-            if (Size >= MaxSize)                               // if the Vector is full
-                return end();                                 // return the end of the Vector
+        template<class Type> typename Vector<Type>::iterator Vector<Type>::pushFront(Type element) {
 
-            for (iterator i = end(); i > begin(); --i)       // for each element in the Vector
+            // Make sure the Vector is not full
+            if (Size >= MaxSize)
+                return end();
+
+            // for each element in the Vector
+            for (iterator i = end(); i > begin(); --i)
                 *i = *(i - 1);                                // move the element one index to the right
 
             elements[0] = element;                          // add the element to front of the Vector
@@ -211,8 +211,7 @@ namespace maxOS{
          * @tparam Type  Type of the Vector
 
          */
-        template<class Type>
-        void Vector<Type>::popFront() {
+        template<class Type> void Vector<Type>::popFront() {
             if (Size > 0)                                     //If the Vector is not empty
             {
                 for (iterator i = begin() + 1; i != end(); ++i) // for each element in the Vector
@@ -226,18 +225,21 @@ namespace maxOS{
          * @tparam Type The type of the Vector
          * @param element The element to remove
          */
-        template<class Type>
-        void Vector<Type>::erase(Type element) {
-            int hits = 0;                                   // number of hits
-            for (iterator i = begin(); i != end(); ++i)      // for each element in the Vector
+        template<class Type> void Vector<Type>::erase(Type element) {
+
+            // Search for the element
+            int hits = 0;
+            for (iterator i = begin(); i != end(); ++i)
             {
-                if (*i ==
-                    element)                           // if the element is equal to the element we are looking for
+                // If it is the element we are looking for
+                if (*i == element)
                 {
-                    ++hits;                                 // increase the number of hits
+                    ++hits;
                 } else {
-                    if (hits > 0)                            // if we have hits
-                        *(i - hits) = *i;                     // move the element one index to the left
+
+                    // if we have hits
+                    if (hits > 0)
+                        *(i - hits) = *i; // move the element to the left
                 }
 
             }
@@ -297,6 +299,27 @@ namespace maxOS{
             for (iterator i = begin(); i != end(); ++i)              // for each element in the Vector
                 callback(*i);                                       // call the callback function
         }
+
+        template<class Type>
+        void VectorIterationHandler<Type>::OnEndOfStream() {
+
+        }
+
+        template<class Type>
+        void VectorIterationHandler<Type>::OnRead(Type) {
+
+        }
+
+        template<class Type>
+        VectorIterationHandler<Type>::~VectorIterationHandler() {
+
+        }
+
+        template<class Type>
+        VectorIterationHandler<Type>::VectorIterationHandler() {
+
+        }
+
     }
 }
 

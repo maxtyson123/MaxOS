@@ -126,12 +126,14 @@ void InputBox::onFocus() {
 
     // Make the border black on focus
     borderColour = Colour(0x00, 0x00, 0x00);
+    invalidate();
 }
 
 void InputBox::onFocusLost() {
 
     // Reset the border colour
     borderColour = Colour(0x57, 0x57, 0x57);
+    invalidate();
 }
 
 void InputBox::onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState) {

@@ -154,8 +154,8 @@ uint32_t amd_am79c973::reset() {
  * @details This function handles the interrupt for the device
  *
  * @param esp The stack pointer (where to return to)
- */
-common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
+*/
+void amd_am79c973::HandleInterrupt() {
 
 
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
@@ -179,11 +179,6 @@ common::uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
     // Reply that it was received
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(temp);                           // Tell device that the interrupt was received
-
-
-
-    return esp;
-
 }
 
 

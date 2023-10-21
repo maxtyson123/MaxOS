@@ -208,9 +208,6 @@ void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area)
         gc -> fillRectangle(windowX + windowFrameRightAreaToDraw.left, windowY + windowFrameRightAreaToDraw.top, windowX + windowFrameRightAreaToDraw.left + windowFrameRightAreaToDraw.width, windowY + windowFrameRightAreaToDraw.top + windowFrameRightAreaToDraw.height, windowFrameColour);
 
     }
-
-    // TODO: This is a hack to get the window border to draw correctly, should make it so that the window border is drawn in the correct place
-    gc -> drawRectangle(windowX+1, windowY+1, windowX + windowPosition.width -1, windowY + windowPosition.height -1, windowFrameBorderColour);
 }
 
 /**

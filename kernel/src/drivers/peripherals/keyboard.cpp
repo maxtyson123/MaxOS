@@ -90,7 +90,7 @@ void KeyboardDriver::activate() {
  * @param esp  The stack pointer
  * @return returns the passed esp
  */
-uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
+void KeyboardDriver::HandleInterrupt(){
 
     // Read the scancode from the keyboard
     uint8_t key = dataPort.Read();      //NOTE: The 8th bit is set to 1 if key is released and cleared to 0 if key is pressed
@@ -98,9 +98,6 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp){
     // Pass the scan code to the handlers
     for(Vector<InputStreamEventHandler<uint8_t>*>::iterator streamEventHandler = inputStreamEventHandlers.begin(); streamEventHandler != inputStreamEventHandlers.end(); streamEventHandler++)
         (*streamEventHandler)->onStreamRead(key);
-
-    return esp;
-
 }
 
 string KeyboardDriver::getDeviceName() {

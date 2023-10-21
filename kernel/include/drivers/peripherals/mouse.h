@@ -63,7 +63,7 @@ namespace maxOS {
                 hardwarecommunication::Port8Bit dataPort;
                 hardwarecommunication::Port8Bit commandPort;
 
-                common::uint32_t HandleInterrupt(common::uint32_t esp);
+                void HandleInterrupt();
 
                 common::uint8_t buffer[3];
                 common::uint8_t offest;

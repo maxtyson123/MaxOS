@@ -23,12 +23,11 @@ namespace maxOS {
                 common::uint8_t interrupNumber;
                 InterruptManager *interruptManager;
 
-                InterruptHandler(common::uint8_t interrupNumber, InterruptManager *interruptManager);
-
+                InterruptHandler(common::uint8_t interrupNumber, InterruptManager *interruptManager = 0);
                 ~InterruptHandler();
 
             public:
-                virtual common::uint32_t HandleInterrupt(common::uint32_t esp);
+                virtual void HandleInterrupt();
 
         };
 
@@ -38,7 +37,9 @@ namespace maxOS {
             protected:
 
                 static InterruptManager *ActiveInterruptManager;
-                InterruptHandler *interruptHandlers[256];
+                static common::OutputStream* errorMessages;
+                common::uint16_t hardwareInterruptOffset;
+                InterruptHandler *interruptHandlers[256];   // Make vector?
                 ThreadManager* threadManager;
 
                 struct GateDescriptor {
@@ -55,9 +56,6 @@ namespace maxOS {
                     common::uint16_t size;
                     common::uint32_t base;
                 } __attribute__((packed));
-
-                common::uint16_t hardwareInterruptOffset;
-                common::OutputStream* errorMessages;
 
                 static void SetInterruptDescriptorTableEntry(common::uint8_t interrupt,
                                                              common::uint16_t codeSegmentSelectorOffset,
@@ -122,8 +120,8 @@ namespace maxOS {
 
 
                 static common::uint32_t HandleInterrupt(common::uint8_t interrupt, common::uint32_t esp);
-
-                common::uint32_t DoHandleInterrupt(common::uint8_t interrupt, common::uint32_t esp);
+                static common::uint32_t HandleInterruptRequest(common::uint32_t esp);
+                common::uint32_t DoHandleInterruptRequest(common::uint8_t interrupt, common::uint32_t esp);
 
                 //PIC Cominunication
                 Port8BitSlow programmableInterruptControllerMasterCommandPort;
@@ -134,13 +132,14 @@ namespace maxOS {
 
             public:
                 InterruptManager(common::uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManage, common::OutputStream* handler);
-
                 ~InterruptManager();
 
                 common::uint16_t HardwareInterruptOffset();
 
-                void Activate();
+                void setInterruptHandler(common::uint8_t interrupt, InterruptHandler *handler);
+                void removeInterruptHandler(common::uint8_t interrupt);
 
+                void Activate();
                 void Deactivate();
 
         };

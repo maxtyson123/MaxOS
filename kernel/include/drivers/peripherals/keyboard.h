@@ -400,7 +400,7 @@ namespace maxOS
                 KeyboardDriver(hardwarecommunication::InterruptManager *manager);
                 ~KeyboardDriver();
 
-                virtual common::uint32_t HandleInterrupt(common::uint32_t esp);
+                void HandleInterrupt();
 
                 virtual void activate();
                 common::string getDeviceName();

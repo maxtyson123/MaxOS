@@ -103,7 +103,7 @@ void MouseDriver::activate() {
  * @param esp
  * @return always returns esp
  */
-uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
+void MouseDriver::HandleInterrupt(){
 
     //The mouse triggers 3 interrupts , one for each byte .
     //Byte 1 : Y overflow | X overflow | Y sign bit | X sign bit | Reserved (1) | Middle button pressed | Right button pressed | Left button pressed
@@ -112,7 +112,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
 
     uint8_t status = commandPort.Read();
     if(!(status & 0x20)) //Only if the 6th bit of data is one then there is data to handle
-        return esp;                      //Otherwise don't bother handling this input
+        return;                      //Otherwise don't bother handling this input
 
 
     buffer[offest] = dataPort.Read();       //Read mouse info into buffer
@@ -120,7 +120,7 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
 
     //If the mouse data transmission is incomplete (3rd piece of data isn't through)
     if(offest != 0)
-        return esp;
+        return;
 
     // If the mouse is moved (buffer 1 and 2 store x and y)
     if(buffer[1] != 0 || buffer[2] != 0)
@@ -143,8 +143,6 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp){
 
     // Update the buttons
     buttons = buffer[0];
-
-    return esp;
 }
 
 string MouseDriver::getDeviceName() {

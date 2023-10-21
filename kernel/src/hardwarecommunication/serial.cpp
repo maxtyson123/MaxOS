@@ -240,9 +240,6 @@ void serial::Write(char* str, int type) {
  * @param esp The stack pointer
  * @return The stack pointer (where the processor will go when the interrupt is finished) (always will be what is passed in)
  */
-uint32_t serial::HandleInterrupt(common::uint32_t esp) {
+void serial::HandleInterrupt() {
    //Handle reading from the serial port
-
-
-    return esp;
 }

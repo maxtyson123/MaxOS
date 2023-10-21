@@ -106,7 +106,7 @@ namespace maxOS{
                 serial(InterruptManager* interruptManager);
                 ~serial();
 
-                common::uint32_t    HandleInterrupt(common::uint32_t esp);
+                void HandleInterrupt();
 
                 void Test();
                 char Read();

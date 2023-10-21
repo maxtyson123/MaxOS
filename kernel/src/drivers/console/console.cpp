@@ -416,7 +416,7 @@ void ConsoleStream::writeChar(char c) {
                 cursorY = console->getHeight()-1;
             }
 
-            // dont break here, we want to go to the next case because of the \r
+            // don't break here, we want to go to the next case because of the \r
 
         // Carriage return
         case '\r':

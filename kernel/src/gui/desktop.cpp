@@ -75,12 +75,18 @@ void Desktop::setFocus(Widget* widget) {
  */
 void Desktop::bringToFront(Widget* frontWidget) {
 
+  /*
+   * 0x563200
+    start        = {elements = {0x563844, 0x563200, 0x563680, 0x56303c, 0x0 <repeats 96 times>}, Size = 4,
+    erased       = {elements = {0x563844, 0x563680, 0x56303c, 0x56303c, 0x0 <repeats 96 times>}, Size = 3,
+    pushed front = {elements = {0x563200, 0x563844, 0x563680, 0x56303c, 0x0 <repeats 96 times>}, Size = 4,
+   */
+
     // Remove the widget from where ever it already is
     children.erase(frontWidget);
 
     // Add it back in the front
     children.pushFront(frontWidget);
-
 }
 
 /**
@@ -214,7 +220,7 @@ void Desktop::onTime(const Time &time) {
     while (!invalidAreas.empty()) {
 
         // Get the first invalid area
-        Rectangle<int32_t> invalidArea = *(invalidAreas.begin());   //get the pointer to the first element
+        Rectangle<int> invalidArea = *(invalidAreas.begin());   //get the pointer to the first element
 
         // Remove the area from the invalid areas
         invalidAreas.popFront();

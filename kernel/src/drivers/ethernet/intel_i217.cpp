@@ -307,7 +307,7 @@ void intel_i217::activate() {
 
 }
 
-common::uint32_t intel_i217::HandleInterrupt(common::uint32_t esp) {
+void intel_i217::HandleInterrupt() {
 
     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
     uint32_t temp = Read(0xc0);                //Read the interrupt status register
@@ -317,10 +317,6 @@ common::uint32_t intel_i217::HandleInterrupt(common::uint32_t esp) {
     if(temp & 0x04) driverMessageStream -> write("INTEL i217 START LINK");//initDone = true;
     if(temp & 0x10) driverMessageStream -> write("INTEL i217 GOOD THRESHOLD");
     if(temp & 0x80) FetchDataReceived();
-
-
-    return esp;
-
 }
 
 void intel_i217::FetchDataReceived() {

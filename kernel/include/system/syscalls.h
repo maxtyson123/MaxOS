@@ -16,7 +16,7 @@ namespace maxOS{
             SyscallHandler(hardwarecommunication::InterruptManager* interruptManager, common::uint8_t interruptNumber);
             ~SyscallHandler();
 
-            virtual common::uint32_t HandleInterrupt(common::uint32_t esp);
+            virtual void HandleInterrupt();
 
         };
 

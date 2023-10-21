@@ -9,8 +9,11 @@ using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::system;
 
+// Define the static variables
 
-
+InterruptManager* InterruptManager::ActiveInterruptManager = 0;
+OutputStream* InterruptManager::errorMessages = 0;
+InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 
 ///__Handler__
 
@@ -18,29 +21,32 @@ InterruptHandler::InterruptHandler(uint8_t interrupNumber, InterruptManager *int
 
     //Store values given
     this->interrupNumber = interrupNumber;
+
+    if(interruptManager == 0) {
+        this->interruptManager = InterruptManager::ActiveInterruptManager;
+    }
+
     this->interruptManager = interruptManager;
 
-    //Put itself into handlers array
-    interruptManager->interruptHandlers[interrupNumber] = this;
-}
-InterruptHandler::~InterruptHandler(){
-    //Remove self from handlers array
-    if(interruptManager->interruptHandlers[interrupNumber] == this){
-        interruptManager->interruptHandlers[interrupNumber] = 0;
-    }
+    // Set the handler in the array
+    this->interruptManager->setInterruptHandler(interrupNumber, this);
 }
 
-uint32_t InterruptHandler::HandleInterrupt(uint32_t esp){
-    //Standard for the handlers, specifics will be created when init each type
-    return esp;
+InterruptHandler::~InterruptHandler(){
+
+    // Unset the handler in the array
+    if(this->interruptManager != 0)
+        this->interruptManager->removeInterruptHandler(interrupNumber);
+
 }
+
+void InterruptHandler::HandleInterrupt() {
+
+}
+
 
 
 ///__Manger__
-
-InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
-
-InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 
 /**
  * @details This function is used to set an entry in the IDT
@@ -78,7 +84,6 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, system::Glo
 {
     this->threadManager = threadManager;
     this->hardwareInterruptOffset = hardwareInterruptOffset;
-    this->errorMessages = handler;
     uint32_t CodeSegment = globalDescriptorTable->CodeSegmentSelector();
 
     //Set all the entry's to Ignore so that the ones we don't specify aren't run as there won't be a handler for these and therefore would have caused a protection error
@@ -185,7 +190,7 @@ InterruptManager::~InterruptManager()
  */
 void InterruptManager::Activate() {
 
-    if(ActiveInterruptManager != 0){                //There shouldn't be another interrupt manager, but for saftey delete anyother ones. This is becuase the processor only has 1 IDT
+    if(ActiveInterruptManager != 0){                //There shouldn't be another interrupt manager, but for safety delete another ones. This is because the processor only has 1 IDT
         ActiveInterruptManager->Deactivate();
     }
 
@@ -218,7 +223,7 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
 
     if(ActiveInterruptManager != 0){
-        return ActiveInterruptManager->DoHandleInterrupt(interrupt, esp);       //Handle the interrupt in OOP mode instead of Static
+        return ActiveInterruptManager->DoHandleInterruptRequest(interrupt, esp);       //Handle the interrupt in OOP mode instead of Static
     }
 
     return esp;
@@ -231,11 +236,12 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
  * @param esp The stack pointer
  * @return The stack pointer
  */
-uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
+uint32_t InterruptManager::DoHandleInterruptRequest(uint8_t interrupt, uint32_t esp)
 {
     if(interruptHandlers[interrupt] != 0){                                //If it has a handler for it
-        esp = interruptHandlers[interrupt]->HandleInterrupt(esp);        //Run the handler
-    }else{
+       interruptHandlers[interrupt]->HandleInterrupt();        //Run the handler
+    }
+    else{
         if(interrupt != 0x20){   //If not the timer interrupt
 
             switch (interrupt) {
@@ -378,8 +384,6 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
                     break;
                 
             }
-          
-
         }
     }
 
@@ -389,21 +393,20 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
     if(interrupt == hardwareInterruptOffset)
     {
         esp = (uint32_t)threadManager->Schedule((CPUState_Thread*)esp);
-        //printf("task switched", true);
-
     }
 
-    if(hardwareInterruptOffset <= interrupt && interrupt < hardwareInterruptOffset+16) //Only if it is hardware (keep in mind that around line: 90, the hardware interrupt was remapped at 0x20) the hardware ranges from 0x20 to 0x30
+    // Acknowledge the interrupt (if it is a hardware interrupt)
+    if(hardwareInterruptOffset <= interrupt && interrupt < hardwareInterruptOffset+16)
     {
         //Send Answer to tell PIC the interrupt was received
-        programmableInterruptControllerMasterCommandPort.Write(0x20);      //0x20 is the answer the PIC wants for master
-        if(0x28 <= interrupt)                                              //Answer the master always, but don't answer the slave unless the slave called the interrupt
-            programmableInterruptControllerSlaveCommandPort.Write(0x20);   //0x20 is the answer the PIC wants for slave
+        programmableInterruptControllerMasterCommandPort.Write(0x20);
+
+        //Answer the master always, but don't answer the slave unless the slave called the interrupt
+        if(0x28 <= interrupt)
+            programmableInterruptControllerSlaveCommandPort.Write(0x20);
     }
 
     CPUState_Thread cpuStateThread = *((CPUState_Thread*)esp);
-
-
 
     return esp;
 }
@@ -415,4 +418,12 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
  */
 uint16_t InterruptManager::HardwareInterruptOffset() {
     return hardwareInterruptOffset;
+}
+
+void InterruptManager::setInterruptHandler(common::uint8_t interrupt, InterruptHandler *handler) {
+    interruptHandlers[interrupt] = handler;
+}
+
+void InterruptManager::removeInterruptHandler(common::uint8_t interrupt) {
+    interruptHandlers[interrupt] = 0;
 }

@@ -119,7 +119,7 @@ namespace maxOS{
                 void deactivate();
 
                 //Override Interrupt default methods
-                common::uint32_t HandleInterrupt(common::uint32_t esp);
+                void HandleInterrupt();
 
 
                 //Ethernet Driver functions

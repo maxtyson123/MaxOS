@@ -19,7 +19,7 @@ MaxOS now has support for hardrives (Fat32 filesytem) and can be booted from an 
  
 ## Screenshots
 Booting
-![Screenshot](docs/Screenshots/Boot/Console%20v2.png)
+![Screenshot](docs/Screenshots/Boot/Console%20v2.png) cd 
 
 GUI Window System
 ![Screenshot](docs/Screenshots/GUI/Windows%20(VESA).png)
@@ -50,37 +50,38 @@ Kernel Cleanup
 - [x] VESA Video Mode                              
 - [x] Kernel Boot Rewrite
 - [x] Rewrite Event Handlers
-- [ ] Usable Desktop
-- [ ] Better Doxygen Documentation
-- [ ] Use better c++ coding conventions
-- [ ] Fix Filesystem
-- [ ] USB
+- [ ] Network Touch Up
 - [ ] HTTP Protocol, DCHP protocol
-- [ ] Codebase cleanup / rewrite
-- [ ] CMAKE
+- [ ] GUI Bug Fixes
+- [ ] Better Commenting and Doxygen Documentation
+- [ ] Use better c++ coding conventions
+- [ ] Fix filesystem (move to linux one?)
+- [ ] USB
+- [ ] Custom Toolchain
+- [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
 
-Road to Userspace
+Road to Userspace pt 1 - kernel core features
 
 - [ ] New Process Manager / Scheduler
+- [ ] Interprocess Communication
+- [ ] Might need an I/O Rewrite (more to come)
+- [ ] Better Memory Management
+- [ ] Paging - ?
+- [ ] Filesystem Fixes
+- [ ] System Calls
+
+Road to Userspace pt 2 - kernel supporting features
+
 - [ ] Elf Loader
 - [ ] Shell
-- [ ] More System Calls
 - [ ] OS Specific Toolchain
 - [ ] LibC
 - [ ] LibM
-- [ ] Interprocess Communication
 - [ ] Services, (GUI Server, Network Server, etc)
 - [ ] LibNet - SMB Needed
-- [ ] Example Telnet Server (GUI) (EXTERNALLY LOADED)
 
-POSIX
-- [ ] Unix Filesystem "proc, bin etc"
-- [ ] Unix System Calls
-- [ ] Other posix stuff
 
 OS Functionality
-
-- [ ] POSIX
 - [ ] ext2 Filesystem
 - [ ] GUI Theming, More GUI Widgets
 - [ ] Game Ports (DOOM etc..)

@@ -58,7 +58,7 @@ namespace maxOS {
                     common::uint16_t ticksUntilNextEvent;
 
                     // Other functions
-                    common::uint32_t HandleInterrupt(common::uint32_t esp);
+                    void HandleInterrupt();
                     common::uint8_t readHardwareClock(common::uint8_t address);
                     common::uint8_t binaryRepresentation(common::uint8_t number);
 

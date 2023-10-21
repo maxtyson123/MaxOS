@@ -68,7 +68,7 @@ Clock::~Clock() {
  * @details Handle the RTC interrupt, It increments the number of ticks and calls the event clockEventHandlers if the number of ticks is equal to the number of ticks between events
  * @param esp The stack pointer
  */
-uint32_t Clock::HandleInterrupt(uint32_t esp) {
+void Clock::HandleInterrupt() {
 
     // Increment the number of ticks and decrement the number of ticks until the next event
     ticks++;
@@ -76,7 +76,7 @@ uint32_t Clock::HandleInterrupt(uint32_t esp) {
 
     // If the number of ticks until the next event is not 0 then return
     if(ticksUntilNextEvent != 0)
-        return esp;
+        return;
 
     // Otherwise, reset the number of ticks until the next event
     ticksUntilNextEvent = ticksBetweenEvents;
@@ -96,8 +96,6 @@ uint32_t Clock::HandleInterrupt(uint32_t esp) {
     TimeEvent* event = new TimeEvent(&time);
     raiseEvent(event);
     //TODO: delete event;
-
-    return esp;
 }
 
 

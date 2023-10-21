@@ -25,23 +25,10 @@ SyscallHandler::~SyscallHandler()
  *
  * @param esp The stack frame
  */
-uint32_t SyscallHandler::HandleInterrupt(uint32_t esp)
+void SyscallHandler::HandleInterrupt()
 {
-    CPUState_Thread* cpu = (CPUState_Thread*)esp;
-
-
-    switch(cpu->eax)
-    {
-        case 4:                                 //Write
-            //printf((char*)cpu->ebx);
-            break;
-
-         default:
-            break;
-    }
-
-
-    return (uint32_t)cpu;
+    // TODO: Get the CPU state from the stack frame
+    return;
 }
 
 ///__Syscall__///
