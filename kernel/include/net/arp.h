@@ -31,7 +31,7 @@ namespace maxOS{
 
         }__attribute__((packed));
 
-        class AddressResolutionProtocol : public EtherFrameHandler, public InternetProtocolAddressResolver
+        class AddressResolutionProtocol : public EthernetFramePayloadHandler, public InternetProtocolAddressResolver
         {
             private:
                 common::uint32_t cacheIPAddress[128];
@@ -39,7 +39,7 @@ namespace maxOS{
                 int numCacheEntries;
                 InternetProtocolProvider* internetProtocolProvider;
             public:
-                AddressResolutionProtocol(EtherFrameProvider* backend, InternetProtocolProvider* internetProtocolHandler);
+                AddressResolutionProtocol(EthernetFrameHandler* backend, InternetProtocolProvider* internetProtocolHandler);
                 ~AddressResolutionProtocol();
 
                 bool OnEtherFrameReceived(common::uint8_t* etherframePayload, common::uint32_t size);

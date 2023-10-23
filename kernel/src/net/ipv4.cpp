@@ -90,8 +90,8 @@ void InternetProtocolHandler::Send(uint32_t dstIP_BE, uint8_t *internetProtocolP
 ///__Provider__///
 
 
-InternetProtocolProvider::InternetProtocolProvider(EtherFrameProvider *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask)
-        : EtherFrameHandler(backend, 0x0800)
+InternetProtocolProvider::InternetProtocolProvider(EthernetFrameHandler *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask)
+        : EthernetFramePayloadHandler(backend, 0x0800)
 {
     //Store vars
     this -> ownInternetProtocolAddress = ownInternetProtocolAddress;
@@ -207,7 +207,7 @@ void InternetProtocolProvider::Send(uint32_t dstIP_BE, uint8_t protocol, uint8_t
     uint32_t MAC = resolver ->Resolve(route);
 
     //Send message
-    backend -> Send(MAC, this -> etherType_BE, buffer, size + sizeof(InternetProtocolV4Message));      //Send message
+    frameHandler -> sendEthernetFrame(MAC, this -> handledType, buffer, size + sizeof(InternetProtocolV4Message));      //Send message
     MemoryManager::activeMemoryManager->free(buffer);                                                                                                 //Free memory
 }
 
@@ -281,6 +281,6 @@ InternetProtocolAddress InternetProtocolProvider::GetInternetProtocolAddress() {
 }
 
 MediaAccessControlAddress InternetProtocolProvider::GetMediaAccessControlAddress() {
-    return backend -> GetMACAddress();
+    return frameHandler -> getMAC();
 }
 

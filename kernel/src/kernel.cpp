@@ -1,4 +1,4 @@
-int buildCount = 421;
+int buildCount = 422;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -30,7 +30,7 @@ int buildCount = 421;
 #include <gui/widgets/inputbox.h>
 
 //NET
-#include <net/etherframe.h>
+#include <net/ethernetframe.h>
 #include <net/arp.h>
 #include <net/ipv4.h>
 #include <net/icmp.h>

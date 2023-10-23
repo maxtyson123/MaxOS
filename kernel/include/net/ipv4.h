@@ -6,7 +6,7 @@
 #define MAXOS_NET_IPV4_H
 
 #include <common/types.h>
-#include <net/etherframe.h>
+#include <net/ethernetframe.h>
 
 namespace maxOS{
 
@@ -57,7 +57,7 @@ namespace maxOS{
                 void Send(common::uint32_t dstIP_BE, common::uint8_t* internetProtocolPayload, common::uint32_t size);
         };
 
-        class InternetProtocolProvider : public net::EtherFrameHandler{
+        class InternetProtocolProvider : public net::EthernetFramePayloadHandler{
 
             friend class InternetProtocolHandler;
             friend class InternetProtocolAddressResolver;
@@ -73,7 +73,7 @@ namespace maxOS{
                 void RegisterInternetProtocolAddressResolver(InternetProtocolAddressResolver* resolver);
 
             public:
-                InternetProtocolProvider(EtherFrameProvider* backend, InternetProtocolAddress ownInternetProtocolAddress,
+                InternetProtocolProvider(EthernetFrameHandler* backend, InternetProtocolAddress ownInternetProtocolAddress,
                                          InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask);
                 ~InternetProtocolProvider();
 

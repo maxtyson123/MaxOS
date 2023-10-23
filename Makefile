@@ -60,7 +60,7 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/common/colour.o \
  		  obj/kernel/common/inputStream.o \
  		  obj/kernel/common/outputStream.o \
- 		  obj/kernel/net/etherframe.o \
+ 		  obj/kernel/net/ethernetframe.o \
  		  obj/kernel/net/arp.o \
  		  obj/kernel/net/ipv4.o \
  		  obj/kernel/net/icmp.o \

@@ -12,8 +12,8 @@ using namespace maxOS::drivers::ethernet;
 
 
 
-net::AddressResolutionProtocol::AddressResolutionProtocol(net::EtherFrameProvider* backend, InternetProtocolProvider* internetProtocolProvider)
-: EtherFrameHandler(backend, 0x0806),
+net::AddressResolutionProtocol::AddressResolutionProtocol(net::EthernetFrameHandler* backend, InternetProtocolProvider* internetProtocolProvider)
+: EthernetFramePayloadHandler(backend, 0x0806),
   InternetProtocolAddressResolver(internetProtocolProvider)
 {
     this -> internetProtocolProvider = internetProtocolProvider;
@@ -103,7 +103,7 @@ void AddressResolutionProtocol::RequestMACAddress(common::uint32_t IP_BE) {
     arpMessage.command = 0x0100;                                                        //Request, encoded in BigEndian
 
     //Set the message's source and destination
-    arpMessage.srcMAC = backend -> GetMACAddress();                                     //Set the source MAC address to the backend's MAC address
+    arpMessage.srcMAC = frameHandler -> getMAC();                                       //Set the source MAC address to the backend's MAC address
     arpMessage.srcIP = internetProtocolProvider -> GetInternetProtocolAddress();        //Set the source IP address to the backend's IP address
     arpMessage.dstMAC = 0xFFFFFFFFFFFF;                                                 //Set the destination MAC address to broadcast
     arpMessage.dstIP = IP_BE;                                                           //Set the destination IP address to the requested IP address
