@@ -67,8 +67,6 @@ sudo mount -o loop /dev/loop0p2 /mnt/maxOS_img_2
 #Echo some test files
 cd /mnt/maxOS_img_2
 sudo  echo 'this is partition 2, file 1. file 2 will span multiple clusters' | sudo tee file1.txt
-#large cluster test:
-for i in $(seq 1 8000); do echo -n 'a'; done | sudo tee file2.txt
 sudo  echo 'END OF FILE2' | sudo tee -a file2.txt
 
 #Install grub

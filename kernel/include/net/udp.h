@@ -7,6 +7,7 @@
 
 
 #include <common/types.h>
+#include <common/eventHandler.h>
 #include <net/ipv4.h>
 #include <memory/memorymanagement.h>
 
@@ -25,23 +26,41 @@ namespace maxOS
 
         } __attribute__((packed));
 
+        enum UserDatagramProtocolEvents{
+            UDP_DATA_RECEIVED,
+        };
+
         //Predefine
         class UserDatagramProtocolSocket;
-        class UserDatagramProtocolProvider;
+        class UserDatagramProtocolHandler;
 
+        typedef common::uint16_t UserDatagramProtocolPort;
 
-        class UserDatagramProtocolHandler
+        class UDPDataReceivedEvent : public common::Event<UserDatagramProtocolEvents>{
+            public:
+                UserDatagramProtocolSocket* socket;
+                common::uint8_t* data;
+                common::uint16_t size;
+
+                UDPDataReceivedEvent(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                ~UDPDataReceivedEvent();
+        };
+
+        class UserDatagramProtocolPayloadHandler: public common::EventHandler<UserDatagramProtocolEvents>
         {
             public:
-                UserDatagramProtocolHandler();
-                ~UserDatagramProtocolHandler();
-                virtual void HandleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                UserDatagramProtocolPayloadHandler();
+                ~UserDatagramProtocolPayloadHandler();
+
+                void onEvent(common::Event<UserDatagramProtocolEvents>* event);
+
+                virtual void handleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
 
         };
 
-        class UserDatagramProtocolSocket
+        class UserDatagramProtocolSocket : public common::EventManager<UserDatagramProtocolEvents>
         {
-            friend class UserDatagramProtocolProvider;
+            friend class UserDatagramProtocolHandler;
             protected:
                 bool listening;
 
@@ -50,40 +69,41 @@ namespace maxOS
 
                 common::uint32_t localIP;
                 common::uint32_t remoteIP;
-                
-                UserDatagramProtocolProvider* backend;
+
                 UserDatagramProtocolHandler* userDatagramProtocolHandler;
 
             public:
-                UserDatagramProtocolSocket(UserDatagramProtocolProvider* backend);
+                UserDatagramProtocolSocket();
                 ~UserDatagramProtocolSocket();  
 
-                virtual void HandleUserDatagramProtocolMessage(common::uint8_t* data, common::uint16_t size);
+                virtual void handleUserDatagramProtocolPayload(common::uint8_t* data, common::uint16_t size);
                 virtual void Send(common::uint8_t* data, common::uint16_t size);
                 virtual void Disconnect();
 
         }; 
 
-        class UserDatagramProtocolProvider : InternetProtocolHandler
+        class UserDatagramProtocolHandler : InternetProtocolPayloadHandler
         {
             protected:
-                UserDatagramProtocolSocket* sockets[65536];
-                common::uint16_t numSockets;
-                common::uint16_t freePort;
+                common::Vector<UserDatagramProtocolSocket*> sockets;
+                static UserDatagramProtocolPort freePorts;
+                common::OutputStream* errorMessages;
 
             public:
-                UserDatagramProtocolProvider(InternetProtocolProvider* backend);
-                ~UserDatagramProtocolProvider();
+                UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
+                ~UserDatagramProtocolHandler();
 
-                virtual bool OnInternetProtocolReceived(common::uint32_t srcIP_BE, common::uint32_t dstIP_BE, common::uint8_t* internetprotocolPayload, common::uint32_t size);
+                virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
                 
-                virtual UserDatagramProtocolSocket* Connect(common::uint32_t ip, common::uint16_t port);
-                virtual UserDatagramProtocolSocket* Listen(common::uint16_t port);
-                
-                virtual void Disconnect(UserDatagramProtocolSocket* socket);
-                virtual void Send(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                UserDatagramProtocolSocket* Connect(common::uint32_t ip, common::uint16_t port);
+                UserDatagramProtocolSocket* Connect(common::string internetProtocolAddressAndPort);
 
-                virtual void Bind(UserDatagramProtocolSocket* socket, UserDatagramProtocolHandler* userDatagramProtocolHandler);
+                UserDatagramProtocolSocket* Listen(common::uint16_t port);
+
+                void Disconnect(UserDatagramProtocolSocket* socket);
+                void Send(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+
+                void Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler);
         };
 
     }

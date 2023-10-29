@@ -50,7 +50,7 @@ Kernel Cleanup
 - [x] VESA Video Mode                              
 - [x] Kernel Boot Rewrite
 - [x] Rewrite Event Handlers
-- [ ] Network Touch Up
+- [x] Network Touch Up
 - [ ] HTTP Protocol, DCHP protocol
 - [ ] GUI Bug Fixes
 - [ ] Better Commenting and Doxygen Documentation
@@ -59,6 +59,7 @@ Kernel Cleanup
 - [ ] USB
 - [ ] Custom Toolchain
 - [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
+- [ ] Clean up all the TODOs
 
 Road to Userspace pt 1 - kernel core features
 

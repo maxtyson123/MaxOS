@@ -13,6 +13,8 @@ namespace maxOS{
 
     namespace net{
 
+        typedef common::uint16_t TransmissionControlProtocolPort;
+
         enum TransmissionControlProtocolSocketState
         {
             CLOSED,
@@ -75,23 +77,60 @@ namespace maxOS{
 
 
         class TransmissionControlProtocolSocket;
-        class TransmissionControlProtocolProvider;
+        class TransmissionControlProtocolHandler;
 
+        enum TransmissionControlProtocolPayloadHandlerEvents
+        {
+            CONNECTED,
+            DISCONNECTED,
+            DATA_RECEIVED
+        };
 
-
-        class TransmissionControlProtocolHandler
+        class DataReceivedEvent : public common::Event<TransmissionControlProtocolPayloadHandlerEvents>
         {
             public:
-                TransmissionControlProtocolHandler();
-                ~TransmissionControlProtocolHandler();
-                virtual bool HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                TransmissionControlProtocolSocket* socket;
+                common::uint8_t* data;
+                common::uint16_t size;
+                DataReceivedEvent(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                ~DataReceivedEvent();
+        };
+
+        class ConnectedEvent : public common::Event<TransmissionControlProtocolPayloadHandlerEvents>
+        {
+            public:
+                TransmissionControlProtocolSocket* socket;
+                ConnectedEvent(TransmissionControlProtocolSocket* socket);
+                ~ConnectedEvent();
+        };
+
+        class DisconnectedEvent : public common::Event<TransmissionControlProtocolPayloadHandlerEvents>
+        {
+            public:
+                TransmissionControlProtocolSocket* socket;
+                DisconnectedEvent(TransmissionControlProtocolSocket* socket);
+                ~DisconnectedEvent();
+        };
+
+        class TransmissionControlProtocolPayloadHandler : public common::EventHandler<TransmissionControlProtocolPayloadHandlerEvents>
+        {
+            public:
+                TransmissionControlProtocolPayloadHandler();
+                ~TransmissionControlProtocolPayloadHandler();
+
+                void onEvent(common::Event<TransmissionControlProtocolPayloadHandlerEvents>* event);
+
+                virtual void handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                virtual void Connected(TransmissionControlProtocolSocket* socket);
+                virtual void Disconnected(TransmissionControlProtocolSocket* socket);
         };
 
 
 
-        class TransmissionControlProtocolSocket
+        class TransmissionControlProtocolSocket : public common::EventManager<TransmissionControlProtocolPayloadHandlerEvents>
         {
-            friend class TransmissionControlProtocolProvider;
+            friend class TransmissionControlProtocolHandler;
+            friend class TransmissionControlProtocolPortListener;
             protected:
                 common::uint16_t remotePort;
                 common::uint32_t remoteIP;
@@ -100,38 +139,44 @@ namespace maxOS{
                 common::uint32_t sequenceNumber;
                 common::uint32_t acknowledgementNumber;
 
-                TransmissionControlProtocolProvider* backend;
                 TransmissionControlProtocolHandler* transmissionControlProtocolHandler;
-
                 TransmissionControlProtocolSocketState state;
             public:
-                TransmissionControlProtocolSocket(TransmissionControlProtocolProvider* backend);
+                TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
                 ~TransmissionControlProtocolSocket();
-                virtual bool HandleTransmissionControlProtocolMessage(common::uint8_t* data, common::uint16_t size);
+
                 virtual void Send(common::uint8_t* data, common::uint16_t size);
                 virtual void Disconnect();
+
+                void Disconnected();
+                void Connected();
+
+                bool handleTransmissionControlProtocolPayload(common::uint8_t* data, common::uint16_t size);
         };
 
-
-        class TransmissionControlProtocolProvider : InternetProtocolHandler
+        class TransmissionControlProtocolHandler : InternetProtocolPayloadHandler
         {
+            friend class TransmissionControlProtocolSocket;
             protected:
-                TransmissionControlProtocolSocket* sockets[65535];
-                common::uint16_t numSockets;
-                common::uint16_t freePort;
+                common::OutputStream* errorMessages;
+                common::Vector<TransmissionControlProtocolSocket*> sockets;
+
+                static TransmissionControlProtocolPort freePorts;
+                void sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size, common::uint16_t flags = 0);
 
             public:
-                TransmissionControlProtocolProvider(InternetProtocolProvider* backend);
-                ~TransmissionControlProtocolProvider();
+                TransmissionControlProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
+                ~TransmissionControlProtocolHandler();
 
-                virtual bool OnInternetProtocolReceived(common::uint32_t srcIP_BE, common::uint32_t dstIP_BE, common::uint8_t* internetprotocolPayload, common::uint32_t size);
+                bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
 
-                virtual TransmissionControlProtocolSocket* Connect(common::uint32_t ip, common::uint16_t port);
-                virtual void Disconnect(TransmissionControlProtocolSocket* socket);
-                virtual void Send(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size, common::uint16_t flags = 0);
+                TransmissionControlProtocolSocket* Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port);
+                TransmissionControlProtocolSocket* Connect(common::string internetProtocolAddressAndPort);
+
+                void Disconnect(TransmissionControlProtocolSocket* socket);
 
                 virtual TransmissionControlProtocolSocket* Listen(common::uint16_t port);
-                virtual void Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
+                virtual void Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolPayloadHandler* handler);
         };
 
 

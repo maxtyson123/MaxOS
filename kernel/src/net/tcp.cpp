@@ -3,6 +3,8 @@
 //
 
 #include <net/tcp.h>
+#include "net/udp.h"
+
 
 using namespace maxOS;
 using namespace maxOS::net;
@@ -11,26 +13,50 @@ using namespace maxOS::memory;
 
 ///__Handler__///
 
-TransmissionControlProtocolHandler::TransmissionControlProtocolHandler()
+TransmissionControlProtocolPayloadHandler::TransmissionControlProtocolPayloadHandler()
 {
 }
 
-TransmissionControlProtocolHandler::~TransmissionControlProtocolHandler()
+TransmissionControlProtocolPayloadHandler::~TransmissionControlProtocolPayloadHandler()
 {
 }
 
-bool TransmissionControlProtocolHandler::HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size)
-{
-    return true;
+void TransmissionControlProtocolPayloadHandler::handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket *socket, uint8_t *data, uint16_t size) {
+
 }
+
+void TransmissionControlProtocolPayloadHandler::Connected(TransmissionControlProtocolSocket *socket) {
+
+}
+
+void TransmissionControlProtocolPayloadHandler::Disconnected(TransmissionControlProtocolSocket *socket) {
+
+}
+
+void TransmissionControlProtocolPayloadHandler::onEvent(Event<TransmissionControlProtocolPayloadHandlerEvents> *event) {
+
+    switch (event -> type)
+    {
+        case CONNECTED:
+            Connected(((ConnectedEvent*)event) -> socket);
+            break;
+        case DISCONNECTED:
+            Disconnected(((DisconnectedEvent*)event) -> socket);
+            break;
+        case DATA_RECEIVED:
+            handleTransmissionControlProtocolPayload(((DataReceivedEvent*)event) -> socket, ((DataReceivedEvent*)event) -> data, ((DataReceivedEvent*)event) -> size);
+            break;
+    }
+}
+
+
 
 ///__Socket__///
 
-TransmissionControlProtocolSocket::TransmissionControlProtocolSocket(TransmissionControlProtocolProvider* backend)
+TransmissionControlProtocolSocket::TransmissionControlProtocolSocket(TransmissionControlProtocolHandler *transmissionControlProtocolHandler)
 {
     //Set the default values
-    this -> backend = backend;
-    transmissionControlProtocolHandler = 0;
+    this -> transmissionControlProtocolHandler = transmissionControlProtocolHandler;
 
     //Closed as default
     state = CLOSED;
@@ -46,11 +72,12 @@ TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket()
  * @param size The size of the data
  * @return True if the connection is to be terminated after hadnling or false if not
  */
-bool TransmissionControlProtocolSocket::HandleTransmissionControlProtocolMessage(uint8_t* data, uint16_t size)
+bool TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload(uint8_t* data, uint16_t size)
 {
-    if(transmissionControlProtocolHandler != 0)
-        return transmissionControlProtocolHandler -> HandleTransmissionControlProtocolMessage(this, data, size);
-    return false;
+    DataReceivedEvent* event = new DataReceivedEvent(this, data, size);
+    raiseEvent(event);
+    MemoryManager::activeMemoryManager->free(event);
+    return true;
 }
 
 /**
@@ -65,7 +92,7 @@ void TransmissionControlProtocolSocket::Send(uint8_t* data, uint16_t size)
     while(state != ESTABLISHED);
 
     //Pass the data to the backend
-    backend -> Send(this, data, size, PSH|ACK);
+    transmissionControlProtocolHandler -> sendTransmissionControlProtocolPacket(this, data, size, PSH|ACK);
 }
 
 /**
@@ -73,24 +100,36 @@ void TransmissionControlProtocolSocket::Send(uint8_t* data, uint16_t size)
  */
 void TransmissionControlProtocolSocket::Disconnect()
 {
-    backend -> Disconnect(this);
+    transmissionControlProtocolHandler -> Disconnect(this);
 }
 
-///__Provider__///
+void TransmissionControlProtocolSocket::Disconnected() {
+    DisconnectedEvent* event = new DisconnectedEvent(this);
+    raiseEvent(event);
+    MemoryManager::activeMemoryManager->free(event);
 
-TransmissionControlProtocolProvider::TransmissionControlProtocolProvider(InternetProtocolProvider* backend)
-        : InternetProtocolHandler(backend, 0x06)
+}
+
+void TransmissionControlProtocolSocket::Connected() {
+    ConnectedEvent* event = new ConnectedEvent(this);
+    raiseEvent(event);
+    MemoryManager::activeMemoryManager->free(event);
+
+}
+
+///__Handler__///
+
+TransmissionControlProtocolPort TransmissionControlProtocolHandler::freePorts = 0x8000;
+
+TransmissionControlProtocolHandler::TransmissionControlProtocolHandler(
+        maxOS::net::InternetProtocolHandler *internetProtocolHandler, common::OutputStream *errorMessages)
+: InternetProtocolPayloadHandler(internetProtocolHandler, 0x06)
 {
-    //Set the default values
-    for(int i = 0; i < 65535; i++)
-        sockets[i] = 0;
-    numSockets = 0;
-
-    //Set the free port to 1024, this is the first port that is not reserved
-    freePort = 1024;
+    this -> errorMessages = errorMessages;
+    
 }
 
-TransmissionControlProtocolProvider::~TransmissionControlProtocolProvider()
+TransmissionControlProtocolHandler::~TransmissionControlProtocolHandler()
 {
 }
 
@@ -103,6 +142,12 @@ uint32_t bigEndian32(uint32_t x)
            | ((x & 0x000000FF) << 24);
 }
 
+uint32_t bigEndian16(uint16_t x)
+{
+    return ((x & 0xFF00) >> 8)
+           | ((x & 0x00FF) << 8);
+}
+
 /**
  * @details Handle the TCP message (provider end)
  *
@@ -112,38 +157,46 @@ uint32_t bigEndian32(uint32_t x)
  * @param size The size of the payload
  * @return True if data is to be sent back or false if not
  */
-bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE, uint32_t dstIP_BE, uint8_t* internetprotocolPayload, uint32_t size)
+bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size)
 {
 
-    //Check if the size is at least 20 bytes, this is the size of the header
-    if(size < 20)
+    //Check if the size is too small
+    if(size < 13)
+    {
         return false;
+    }
+
+    // If it's smaller than the header, return
+    if(size < 4*payloadData[12]/16)             // The lower 4 bits of the 13th byte is the header length
+    {
+        return false;
+    }
 
     //Get the header
-    TransmissionControlProtocolHeader* msg = (TransmissionControlProtocolHeader*)internetprotocolPayload;
+    TransmissionControlProtocolHeader* msg = (TransmissionControlProtocolHeader*)payloadData;
 
-    //Get the connection values
-    uint16_t localPort = msg -> dstPort;
-    uint16_t remotePort = msg -> srcPort;
+    //Get the connection values (convert to host endian)
+    uint16_t localPort = bigEndian16(msg -> dstPort);
+    uint16_t remotePort = bigEndian16(msg -> srcPort);
 
     //Create the socket
     TransmissionControlProtocolSocket* socket = 0;
 
-    for(uint16_t i = 0; i < numSockets && socket == 0; i++)                         //Loop until the socket is found / reaced max
+    for(common::Vector<TransmissionControlProtocolSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++)
     {
-        if( sockets[i] -> localPort == msg -> dstPort                               //Check if the local port is the same as the destination port
-        &&  sockets[i] -> localIP == dstIP_BE                                       //Check if the local IP is the same as the destination IP
-        &&  sockets[i] -> state == LISTEN                                           //Check if the socket is in the LISTEN state
-        && (((msg -> flags) & (SYN | ACK)) == SYN))                                 //Check if the SYN flag is set (allow for acknoweldgement)
+        if( (*currentSocket) -> localPort == localPort                               //Check if the local port is the same as the destination port
+        &&  (*currentSocket) -> localIP == destinationIP                                  //Check if the local IP is the same as the destination IP
+        &&  (*currentSocket) -> state == LISTEN                                           //Check if the socket is in the LISTEN state
+        && (((msg -> flags) & (SYN | ACK)) == SYN))                                       //Check if the SYN flag is set (allow for acknoweldgement)
         {
-            socket = sockets[i];
+            socket = *currentSocket;
         }
-        else if( sockets[i] -> localPort == msg -> dstPort                          //Check if the local port is the same as the destination port
-             &&  sockets[i] -> localIP == dstIP_BE                                  //Check if the local IP is the same as the destination IP
-             &&  sockets[i] -> remotePort == msg -> srcPort                         //Check if the remote port is the same as the source port
-             &&  sockets[i] -> remoteIP == srcIP_BE)                                //Check if the remote IP is the same as the source IP
+        else if( (*currentSocket) -> localPort == localPort                          //Check if the local port is the same as the destination port
+             &&  (*currentSocket) -> localIP == destinationIP                             //Check if the local IP is the same as the destination IP
+             &&  (*currentSocket) -> remotePort == remotePort                         //Check if the remote port is the same as the source port
+             &&  (*currentSocket) -> remoteIP == destinationIP)                           //Check if the remote IP is the same as the source IP
         {
-            socket = sockets[i];
+            socket = *currentSocket;
         }
     }
 
@@ -154,6 +207,7 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
     if(socket != 0 && msg -> flags & RST)
     {
         socket -> state = CLOSED;
+        socket -> Disconnected();
     }
 
     //Check if the socket is found and if the socket is not closed
@@ -178,10 +232,10 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
                 {
                     socket -> state = SYN_RECEIVED;
                     socket -> remotePort = msg -> srcPort;
-                    socket -> remoteIP = srcIP_BE;
+                    socket -> remoteIP = sourceIP;
                     socket -> acknowledgementNumber = bigEndian32( msg -> sequenceNumber ) + 1;
                     socket -> sequenceNumber = 0xbeefcafe;
-                    Send(socket, 0,0, SYN|ACK);
+                    sendTransmissionControlProtocolPacket(socket, 0,0, SYN|ACK);
                     socket -> sequenceNumber++;
                 }
                 else
@@ -195,7 +249,7 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
                     socket -> state = ESTABLISHED;
                     socket -> acknowledgementNumber = bigEndian32( msg -> sequenceNumber ) + 1;
                     socket -> sequenceNumber++;
-                    Send(socket, 0,0, ACK);
+                    sendTransmissionControlProtocolPacket(socket, 0,0, ACK);
                 }
                 else
                     reset = true;
@@ -214,19 +268,20 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
                 {
                     socket -> state = CLOSE_WAIT;
                     socket -> acknowledgementNumber++;
-                    Send(socket, 0,0, ACK);
-                    Send(socket, 0,0, FIN|ACK);
+                    sendTransmissionControlProtocolPacket(socket, 0,0, ACK);
+                    sendTransmissionControlProtocolPacket(socket, 0,0, FIN|ACK);
+                    socket -> Disconnected();
                 }
                 else if(socket -> state == CLOSE_WAIT)
                 {
                     socket -> state = CLOSED;
                 }
-                else if(socket -> state == FIN_WAIT1
-                        || socket -> state == FIN_WAIT2)
+                else if(socket -> state == FIN_WAIT1 || socket -> state == FIN_WAIT2)
                 {
                     socket -> state = CLOSED;
                     socket -> acknowledgementNumber++;
-                    Send(socket, 0,0, ACK);
+                    sendTransmissionControlProtocolPacket(socket, 0,0, ACK);
+                    socket -> Disconnected();
                 }
                 else
                     reset = true;
@@ -237,6 +292,7 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
                 if(socket -> state == SYN_RECEIVED)
                 {
                     socket -> state = ESTABLISHED;
+                    socket -> Connected();
                     return false;
                 }
                 else if(socket -> state == FIN_WAIT1)
@@ -262,15 +318,15 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
                 if(bigEndian32(msg -> sequenceNumber) == socket -> acknowledgementNumber)
                 {
 
-                    reset = !(socket -> HandleTransmissionControlProtocolMessage(internetprotocolPayload + msg -> headerSize32*4,size - msg -> headerSize32*4));
+                    reset = !(socket -> handleTransmissionControlProtocolPayload(payloadData + msg -> headerSize32*4,size - msg -> headerSize32*4));
                     if(!reset)
                     {
                         int x = 0;                                                                      //The number of bytes to send back
                         for(int i = msg -> headerSize32*4; i < size; i++)                               //Loop through the data
-                            if(internetprotocolPayload[i] != 0)                                         //Check if the data is not 0
+                            if(payloadData[i] != 0)                                                     //Check if the data is not 0
                                 x = i;                                                                  //Set the number of bytes to send back to the current index
                         socket -> acknowledgementNumber += x - msg -> headerSize32*4 + 1;               //Increment the acknowledgement number by the number of bytes to send back
-                        Send(socket, 0,0, ACK);                                          //Send the acknowledgement
+                        sendTransmissionControlProtocolPacket(socket, 0,0, ACK);                                          //Send the acknowledgement
                     }
                 }
                 else
@@ -288,30 +344,28 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
     {
         if(socket != 0)                                                             //If the socket exists then send a reset flag
         {
-            Send(socket, 0,0, RST);
+            sendTransmissionControlProtocolPacket(socket, 0,0, RST);
         }
         else                                                                        //If it doesnt exist then create a new socket and send a reset flag
         {
             TransmissionControlProtocolSocket socket(this);                     //Create a new socket
             socket.remotePort = msg -> srcPort;                                         //Set the remote port
-            socket.remoteIP = srcIP_BE;                                                 //Set the remote IP
-            socket.localPort = msg -> dstPort;                                          //Set the local port
-            socket.localIP = dstIP_BE;                                                  //Set the local IP
-            socket.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);       //Set the sequence number
-            socket.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;   //Set the acknowledgement number
-            Send(&socket, 0,0, RST);                               //Send the reset flag
+            socket.remoteIP = sourceIP;                                                 //Set the remote IP
+            socket.localPort = msg -> dstPort;                                                  //Set the local port
+            socket.localIP = destinationIP;                                                     //Set the local IP
+            socket.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);              //Set the sequence number
+            socket.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;          //Set the acknowledgement number
+            sendTransmissionControlProtocolPacket(&socket, 0,0, RST);          //Send the reset flag
         }
     }
 
 
+
     if(socket != 0 && socket -> state == CLOSED)                                        //If the socket is closed then remove it from the list
-        for(uint16_t i = 0; i < numSockets && socket == 0; i++)                         //Loop through the sockets waiting for the socket to be found
-            if(sockets[i] == socket)                                                    //If the socket is found
-            {
-                sockets[i] = sockets[--numSockets];                                     //Remove the socket from the list
-                MemoryManager::activeMemoryManager -> free(socket);              //Free the memory used by the socket
-                break;                                                                  //Break out of the loop
-            }
+    {
+        sockets.erase(socket);
+        return true;
+    }
 
 
 
@@ -326,7 +380,7 @@ bool TransmissionControlProtocolProvider::OnInternetProtocolReceived(uint32_t sr
  * @param size   The size of the data
  * @param flags  The flags to send
  */
-void TransmissionControlProtocolProvider::Send(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size, uint16_t flags)
+void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size, common::uint16_t flags)
 {
     //Get the total size of the packet and the packet with the pseudo header
     uint16_t totalLength = size + sizeof(TransmissionControlProtocolHeader);
@@ -344,8 +398,8 @@ void TransmissionControlProtocolProvider::Send(TransmissionControlProtocolSocket
     msg -> headerSize32 = sizeof(TransmissionControlProtocolHeader)/4;
 
     //Set the ports
-    msg -> srcPort = socket -> localPort;
-    msg -> dstPort = socket -> remotePort;
+    msg -> srcPort = bigEndian16(socket -> localPort);
+    msg -> dstPort = bigEndian16(socket -> remotePort);
 
     //Set TCP related data
     msg -> acknowledgementNumber = bigEndian32( socket -> acknowledgementNumber );
@@ -373,11 +427,11 @@ void TransmissionControlProtocolProvider::Send(TransmissionControlProtocolSocket
 
     //Calculate the checksum
     msg -> checksum = 0;
-    msg -> checksum = InternetProtocolProvider::Checksum((uint16_t*)buffer, lengthInclPHdr);
+    msg -> checksum = InternetProtocolHandler::Checksum((uint16_t*)buffer, lengthInclPHdr);
 
 
     //Send and then free the data
-    InternetProtocolHandler::Send(socket -> remoteIP, (uint8_t*)msg, totalLength);
+    Send(socket -> remoteIP, (uint8_t*)msg, totalLength);
     MemoryManager::activeMemoryManager -> free(buffer);
 }
 
@@ -387,7 +441,7 @@ void TransmissionControlProtocolProvider::Send(TransmissionControlProtocolSocket
  * @param port The port of the remote host
  * @return The socket that is connected to the remote host, 0 if it failed
  */
-TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Connect(uint32_t ip, uint16_t port)
+TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port)
 {
     //Create a new socket
     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(TransmissionControlProtocolSocket));
@@ -401,25 +455,59 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Connect(
         //Set local and remote addresses
         socket -> remotePort = port;
         socket -> remoteIP = ip;
-        socket -> localPort = freePort++;
-        socket -> localIP = backend -> GetInternetProtocolAddress();
+        socket -> localPort = freePorts++;
+        socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
 
         //Convert into big endian
         socket -> remotePort = ((socket -> remotePort & 0xFF00)>>8) | ((socket -> remotePort & 0x00FF) << 8);
         socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);
 
         //Set the socket into the socket array and then set its state
-        sockets[numSockets++] = socket;
+        sockets.pushBack(socket);
         socket -> state = SYN_SENT;
 
         //Dummy sequence number
         socket -> sequenceNumber = 0xbeefcafe;
 
         //Send a sync packet
-        Send(socket, 0,0, SYN);
+        sendTransmissionControlProtocolPacket(socket, 0,0, SYN);
     }
 
     return socket;
+}
+
+
+TransmissionControlProtocolSocket *TransmissionControlProtocolHandler::Connect(common::string internetProtocolAddressAndPort) {
+    // Find the colon (:) character in the input string
+    char* colonPosition = (char*)internetProtocolAddressAndPort;
+    for (; *colonPosition != '\0'; colonPosition++) {
+        if (*colonPosition == ':') {
+            // Break the loop if a colon is found
+            break;
+        }
+    }
+
+    // If no colon is found, return 0
+    if (*colonPosition != ':') {
+        return 0;
+    }
+
+    // Parse the InternetProtocolAddress from the input string
+    InternetProtocolAddress remoteAddress = InternetProtocolHandler::Parse(internetProtocolAddressAndPort);
+
+    // Initialize the TransmissionControlProtocolPort to 0
+    TransmissionControlProtocolPort port = 0;
+
+    // Iterate through the string after the colon to extract the port number
+    for (colonPosition++; *colonPosition != '\0'; colonPosition++) {
+        if ('0' <= *colonPosition && *colonPosition <= '9') {
+            // Calculate the port number by converting characters to integers
+            port = port * 10 + (*colonPosition - '0');
+        }
+    }
+
+    // Connect to the remote address and port
+    return Connect(remoteAddress, port);
 }
 
 /**
@@ -427,11 +515,11 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Connect(
  *
  * @param socket The socket to disconnect
  */
-void TransmissionControlProtocolProvider::Disconnect(TransmissionControlProtocolSocket* socket)
+void TransmissionControlProtocolHandler::Disconnect(TransmissionControlProtocolSocket* socket)
 {
 
     socket -> state = FIN_WAIT1;                            //Begin fin wait sequence
-    Send(socket, 0,0, FIN + ACK);            //Send FIN|ACK packet
+    sendTransmissionControlProtocolPacket(socket, 0,0, FIN + ACK);            //Send FIN|ACK packet
     socket -> sequenceNumber++;                             //Increase the sequence number
 }
 
@@ -441,7 +529,7 @@ void TransmissionControlProtocolProvider::Disconnect(TransmissionControlProtocol
  * @param port The port to listen on
  * @return The socket that will handle the connection
  */
-TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Listen(uint16_t port)
+TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Listen(uint16_t port)
 {
     //Create a new socket
     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(TransmissionControlProtocolSocket));
@@ -454,16 +542,17 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Listen(u
 
         //Configure the socket
         socket -> state = LISTEN;
-        socket -> localIP = backend -> GetInternetProtocolAddress();
+        socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
         socket -> localPort = ((port & 0xFF00)>>8) | ((port & 0x00FF) << 8);
 
         //Add the socket to the socket array
-        sockets[numSockets++] = socket;
+        sockets.pushBack(socket);
     }
 
     //Return the socket
     return socket;
 }
+
 
 /**
  * @details Bind a data handler to this socket
@@ -471,7 +560,40 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolProvider::Listen(u
  * @param socket The socket to bind the handler to
  * @param transmissionControlProtocolHandler The handler to bind
  */
-void TransmissionControlProtocolProvider::Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* transmissionControlProtocolHandler)
+void TransmissionControlProtocolHandler::Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolPayloadHandler* handler)
 {
-    socket -> transmissionControlProtocolHandler = transmissionControlProtocolHandler;
+    socket ->connectEventHandler(handler);
+}
+
+
+/// ___ EVENTS ___ ///
+
+DataReceivedEvent::DataReceivedEvent(TransmissionControlProtocolSocket *socket, common::uint8_t *data, common::uint16_t size)
+: Event(DATA_RECEIVED)
+{
+    this -> socket = socket;
+    this -> data = data;
+    this -> size = size;
+}
+
+DataReceivedEvent::~DataReceivedEvent()
+{
+}
+
+ConnectedEvent::ConnectedEvent(TransmissionControlProtocolSocket *socket)
+: Event(CONNECTED)
+{
+    this -> socket = socket;
+}
+ConnectedEvent::~ConnectedEvent()
+{
+}
+
+DisconnectedEvent::DisconnectedEvent(TransmissionControlProtocolSocket *socket)
+: Event(DISCONNECTED)
+{
+    this -> socket = socket;
+}
+DisconnectedEvent::~DisconnectedEvent()
+{
 }

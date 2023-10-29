@@ -7,26 +7,35 @@ using namespace maxOS::memory;
 
 ///__Handler__
 
-UserDatagramProtocolHandler::UserDatagramProtocolHandler() {
+UserDatagramProtocolPayloadHandler::UserDatagramProtocolPayloadHandler() {
 
 }
 
-UserDatagramProtocolHandler::~UserDatagramProtocolHandler() {
+UserDatagramProtocolPayloadHandler::~UserDatagramProtocolPayloadHandler() {
 
 }
 
-void UserDatagramProtocolHandler::HandleUserDatagramProtocolMessage(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
+void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
 
+}
+
+void UserDatagramProtocolPayloadHandler::onEvent(common::Event<UserDatagramProtocolEvents> *event) {
+
+    switch (event -> type) {
+        case UDP_DATA_RECEIVED:
+            handleUserDatagramProtocolMessage(((UDPDataReceivedEvent*)event) -> socket, ((UDPDataReceivedEvent*)event) -> data, ((UDPDataReceivedEvent*)event) -> size);
+            break;
+        default:
+            break;
+    }
 }
 
 ///__Socket__
 
 
-UserDatagramProtocolSocket::UserDatagramProtocolSocket(UserDatagramProtocolProvider *backend) {
+UserDatagramProtocolSocket::UserDatagramProtocolSocket() {
 
     //Set the instance variables
-    this -> backend = backend;
-    userDatagramProtocolHandler = 0;
     listening = false;
 
 }
@@ -35,43 +44,38 @@ UserDatagramProtocolSocket::~UserDatagramProtocolSocket() {
 
 }
 
-void UserDatagramProtocolSocket::HandleUserDatagramProtocolMessage(uint8_t *data, uint16_t size) {
+void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data, uint16_t size) {
 
-    if(userDatagramProtocolHandler != 0) {
-        userDatagramProtocolHandler -> HandleUserDatagramProtocolMessage(this, data, size);
-    }
+    // Create the event
+    UDPDataReceivedEvent* event = new UDPDataReceivedEvent(this, data, size);
+    raiseEvent(event);
+    MemoryManager::activeMemoryManager->free(event);
 
 }
 
 void UserDatagramProtocolSocket::Send(uint8_t *data, uint16_t size) {
 
-    backend -> Send(this, data, size);
+    userDatagramProtocolHandler -> Send(this, data, size);
 
 }
 
 void UserDatagramProtocolSocket::Disconnect() {
 
-    backend ->Disconnect(this);
+    userDatagramProtocolHandler ->Disconnect(this);
 
 }
 
 ///__Provider__
-UserDatagramProtocolProvider::UserDatagramProtocolProvider(InternetProtocolProvider *backend)
-: InternetProtocolHandler(backend, 0x11)    //0x11 is the UDP protocol number
+
+UserDatagramProtocolPort UserDatagramProtocolHandler::freePorts = 0x8000;
+
+UserDatagramProtocolHandler::UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages)
+: InternetProtocolPayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
 {
-
-    //Clear the sockets
-    for (int i = 0; i < 65535; ++i) {
-        sockets[i] = 0;
-    }
-
-    //Set the instance variables
-    numSockets = 0;
-    freePort = 1024;                    //1024 is the first port that can be used as the rest are reserved
-    
+    this -> errorMessages = errorMessages;
 }
 
-UserDatagramProtocolProvider::~UserDatagramProtocolProvider() {
+UserDatagramProtocolHandler::~UserDatagramProtocolHandler() {
 
 }
 /**
@@ -83,7 +87,7 @@ UserDatagramProtocolProvider::~UserDatagramProtocolProvider() {
  * @param size The size of the UDP payload
  * @return True if the packet is to be sent back to the sender
  */
-bool UserDatagramProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE, uint32_t dstIP_BE, uint8_t *internetprotocolPayload,uint32_t size) {
+bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size) {
 
     //Check the size
     if(size < sizeof(UserDatagramProtocolHeader)) {
@@ -91,37 +95,36 @@ bool UserDatagramProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE,
     }
 
     //Get the header
-    UserDatagramProtocolHeader* header = (UserDatagramProtocolHeader*)internetprotocolPayload;
+    UserDatagramProtocolHeader* header = (UserDatagramProtocolHeader*)payloadData;
 
     //Set the local and remote ports
     uint16_t localPort = header -> destinationPort;
     uint16_t remotePort = header -> sourcePort;
 
-    UserDatagramProtocolSocket* socket = 0;                    //The socket that will be used
-    for (int i = 0; i < numSockets && socket == 0; ++i)        //Loop through the sockets that are in use while the socket is not found
-    {
-        if(sockets[i]->localPort == localPort                  //If the local port (header dst, our port) is the same as the local port of the socket
-        && sockets[i]->localIP == dstIP_BE                     //If the local IP (packet dst, our IP) is the same as the local IP of the socket
-        && sockets[i]->listening)                              //If the socket is listening
+    UserDatagramProtocolSocket* socket = 0;                     //The socket that will be used
+    for(Vector<UserDatagramProtocolSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++) {
+        if((*currentSocket)->localPort == localPort                  //If the local port (header dst, our port) is the same as the local port of the socket
+        && (*currentSocket)->localIP == destinationIP                     //If the local IP (packet dst, our IP) is the same as the local IP of the socket
+        && (*currentSocket)->listening)                              //If the socket is listening
         {
 
-            socket = sockets[i];                               //Set the socket to the socket that is being checked
+            socket = (*currentSocket);                               //Set the socket to the socket that is being checked
             socket->listening = false;                         //Set the socket to not listening, as it is now in use
             socket->remotePort = remotePort;                   //Set the remote port of the socket to the remote port of the packet
-            socket->remoteIP = srcIP_BE;                       //Set the remote IP of the socket to the remote IP of the packet
+            socket->remoteIP = sourceIP;                       //Set the remote IP of the socket to the remote IP of the packet
 
-        }else if(sockets[i]->localPort == localPort            //If the local port (header dst, our port) is the same as the local port of the socket
-              &&  sockets[i]->localIP == dstIP_BE              //If the local IP (packet dst, our IP) is the same as the local IP of the socket
-              &&  sockets[i]->remotePort == remotePort         //If the remote port (header src, their port) is the same as the remote port of the socket
-              &&  sockets[i]->remoteIP == srcIP_BE)            //If the remote IP (packet src, their IP) is the same as the remote IP of the socket
+        }else if((*currentSocket)->localPort == localPort            //If the local port (header dst, our port) is the same as the local port of the socket
+              &&  (*currentSocket)->localIP == destinationIP              //If the local IP (packet dst, our IP) is the same as the local IP of the socket
+              &&  (*currentSocket)->remotePort == remotePort         //If the remote port (header src, their port) is the same as the remote port of the socket
+              &&  (*currentSocket)->remoteIP == sourceIP)            //If the remote IP (packet src, their IP) is the same as the remote IP of the socket
         {
-            socket = sockets[i];                               //Set the socket to the current socket
+            socket = (*currentSocket);                               //Set the socket to the current socket
         }
 
     }
 
     if(socket != 0) {                                          //If the socket is not null then pass the data to the socket
-        socket->HandleUserDatagramProtocolMessage(internetprotocolPayload + sizeof(UserDatagramProtocolHeader), size - sizeof(UserDatagramProtocolHeader));
+        socket->handleUserDatagramProtocolPayload(payloadData + sizeof(UserDatagramProtocolHeader), size - sizeof(UserDatagramProtocolHeader));
     }
 
     //UDP doesn't send back packets, so always return false
@@ -135,30 +138,60 @@ bool UserDatagramProtocolProvider::OnInternetProtocolReceived(uint32_t srcIP_BE,
  * @param port The remote port
  * @return The socket that was connected
  */
-UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, uint16_t port) {
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, uint16_t port) {
 
 
     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 
     if(socket != 0) //If the socket was created
     {
-        new (socket) UserDatagramProtocolSocket(this);    //Create the socket
+        new (socket) UserDatagramProtocolSocket();    //Create the socket
 
         //Configure the socket
         socket -> remotePort = port;                                    //Port to that application wants to connect to
         socket -> remoteIP = ip;                                        //IP to that application wants to connect to
-        socket -> localPort = freePort++;                               //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
-        socket -> localIP = backend -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
+        socket -> localPort = freePorts++;                               //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
+        socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
+        socket -> userDatagramProtocolHandler = this;                    //Set the UDP handler
 
-        //Convet the ports to big endian
-        socket -> remotePort = ((socket -> remotePort & 0xFF00)>>8) | ((socket -> remotePort & 0x00FF) << 8);
-        socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);
-
-
-        sockets[numSockets++] = socket;                   //Add the socket to the list of sockets
+        sockets.pushBack(socket);                                       //Add the socket to the list of sockets
     }
 
     return socket;                                        //Return the socket
+}
+
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(common::string internetProtocolAddressAndPort) {
+
+    // Find the colon (:) character in the input string
+    char* colonPosition = (char*)internetProtocolAddressAndPort;
+    for (; *colonPosition != '\0'; colonPosition++) {
+        if (*colonPosition == ':') {
+            // Break the loop if a colon is found
+            break;
+        }
+    }
+
+    // If no colon is found, return 0
+    if (*colonPosition != ':') {
+        return 0;
+    }
+
+    // Parse the InternetProtocolAddress from the input string
+    InternetProtocolAddress remoteAddress = InternetProtocolHandler::Parse(internetProtocolAddressAndPort);
+
+    // Initialize the TransmissionControlProtocolPort to 0
+    UserDatagramProtocolPort port = 0;
+
+    // Iterate through the string after the colon to extract the port number
+    for (colonPosition++; *colonPosition != '\0'; colonPosition++) {
+        if ('0' <= *colonPosition && *colonPosition <= '9') {
+            // Calculate the port number by converting characters to integers
+            port = port * 10 + (*colonPosition - '0');
+        }
+    }
+
+    // Connect to the remote address and port
+    return Connect(remoteAddress, port);
 }
 
 /**
@@ -167,24 +200,21 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Connect(uint32_t ip, u
  * @param port The port to listen on
  * @return The socket that is listening
  */
-UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) {
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
 
     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 
     if(socket != 0) //If the socket was created
     {
-        new (socket) UserDatagramProtocolSocket(this);    //Create the socket
+        new (socket) UserDatagramProtocolSocket();    //Create the socket
 
         //Configure the socket
         socket -> listening = true;                                     //Set the socket to listening
         socket -> localPort = port;                                     //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
-        socket -> localIP = backend -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
+        socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
+        socket -> userDatagramProtocolHandler = this;                    //Set the UDP handler
 
-        //Convet the port to big endian
-        socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);
-
-
-        sockets[numSockets++] = socket;                   //Add the socket to the list of sockets
+        sockets.pushBack(socket);                                       //Add the socket to the list of sockets
     }
 
     return socket;                                        //Return the socket
@@ -196,18 +226,16 @@ UserDatagramProtocolSocket *UserDatagramProtocolProvider::Listen(uint16_t port) 
  *
  * @param socket The socket to disconnect
  */
-void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket) {
+void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket) {
 
-    for(uint16_t i = 0; i < numSockets && socket == 0; i++){                    //Loop through the sockets that are in use while the socket is not found
 
-        if(sockets[i] == socket)                                                //If the socket is the same as the socket that is being checked
+    for(Vector<UserDatagramProtocolSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++) {
+        if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
         {
-            sockets[i] = sockets[--numSockets];                                 //Replace the socket with the last socket in the list
-            MemoryManager::activeMemoryManager -> free(socket);          //Free the socket
-            break;                                                              //Break out of the loop
+            sockets.erase(currentSocket);                            //Remove the socket from the list of sockets
+            MemoryManager::activeMemoryManager -> free(socket);      //Free the socket
+            break;                                                   //Break out of the loop
         }
-
-
     }
 
 }
@@ -219,7 +247,7 @@ void UserDatagramProtocolProvider::Disconnect(UserDatagramProtocolSocket *socket
  * @param data The data to send
  * @param size The size of the data
  */
-void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
+void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
 
     uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
     uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager->malloc(totalSize);          //Allocate memory for the packet
@@ -232,6 +260,10 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
     header -> destinationPort = socket -> remotePort;                                              //Set the destination port to the remote port of the socket (this is the port that the packet will be sent to)
     header -> length = ((totalSize & 0x00FF) << 8) | ((totalSize & 0xFF00) >> 8);                  //Set the length of the packet
 
+    // Convert the ports into big endian
+    header -> sourcePort = ((header -> sourcePort & 0x00FF) << 8) | ((header -> sourcePort & 0xFF00) >> 8);
+    header -> destinationPort = ((header -> destinationPort & 0x00FF) << 8) | ((header -> destinationPort & 0xFF00) >> 8);
+
     //Copy the data to the buffer
     for (int i = 0; i < size; ++i) {                                                               //Loop through the data
         buffer2[i] = data[i];                                                                      //Copy the data to the buffer
@@ -241,7 +273,7 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
     header -> checksum = 0;                                                                        //Set the checksum to 0, this is becuase UDP doesnt have to have a checksum
 
     //Send the packet
-    InternetProtocolHandler::Send(socket->remoteIP, buffer, totalSize);
+    InternetProtocolPayloadHandler::Send(socket->remoteIP, buffer, totalSize);
 
     //Free the buffer
     MemoryManager::activeMemoryManager->free(buffer);
@@ -254,9 +286,22 @@ void UserDatagramProtocolProvider::Send(UserDatagramProtocolSocket *socket, uint
  * @param socket The socket to bind the handler to
  * @param userDatagramProtocolHandler The handler to bind
  */
-void UserDatagramProtocolProvider::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolHandler *userDatagramProtocolHandler) {
+void UserDatagramProtocolHandler::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler) {
 
-    socket -> userDatagramProtocolHandler = userDatagramProtocolHandler;                                                                   //Set the handler of the socket to the handler that was passed in
+    socket ->handlers.pushBack(userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
 
 
+}
+
+/// ___ Events ___ ///
+UDPDataReceivedEvent::UDPDataReceivedEvent(UserDatagramProtocolSocket *socket, common::uint8_t *data, common::uint16_t size)
+: Event(UDP_DATA_RECEIVED)
+{
+    this -> socket = socket;    //Set the socket
+    this -> data = data;        //Set the data
+    this -> size = size;        //Set the size
+
+}
+
+UDPDataReceivedEvent::~UDPDataReceivedEvent() {
 }

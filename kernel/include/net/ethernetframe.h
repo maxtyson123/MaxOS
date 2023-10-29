@@ -55,10 +55,9 @@ namespace maxOS{
 
             drivers::ethernet::EthernetDriver* ethernetDriver;
             common::OutputStream* errorMessages;
-            memory::MemoryManager* memoryManager;
 
             public:
-                EthernetFrameHandler(drivers::ethernet::EthernetDriver* ethernetDriver, common::OutputStream* errorMessages, memory::MemoryManager* memoryManager);
+                EthernetFrameHandler(drivers::ethernet::EthernetDriver* ethernetDriver, common::OutputStream* errorMessages);
                 ~EthernetFrameHandler();
 
                 drivers::ethernet::MediaAccessControlAddress getMAC();

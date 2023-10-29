@@ -15,56 +15,60 @@ namespace maxOS{
         typedef common::uint32_t InternetProtocolAddress;
         typedef common::uint32_t SubnetMask;
 
-        struct InternetProtocolV4Message
+        struct InternetProtocolV4Header
         {
             common::uint8_t headerLength : 4;
             common::uint8_t version : 4;
-            common::uint8_t tos;
+            common::uint8_t typeOfService;
             common::uint16_t totalLength;
 
-            common::uint16_t ident;
+            common::uint16_t identifier;
             common::uint16_t flagsAndOffset;
 
             common::uint8_t timeToLive;
             common::uint8_t protocol;
             common::uint16_t checksum;
 
-            common::uint32_t srcIP;
-            common::uint32_t dstIP;
+            common::uint32_t sourceIP;
+            common::uint32_t destinationIP;
         } __attribute__((packed));
 
-        class InternetProtocolProvider;
+        class InternetProtocolHandler;
         class InternetProtocolAddressResolver
         {
         public:
-            InternetProtocolAddressResolver(InternetProtocolProvider* internetProtocolProvider);
+            InternetProtocolAddressResolver(InternetProtocolHandler* internetProtocolHandler);
             ~InternetProtocolAddressResolver();
             virtual drivers::ethernet::MediaAccessControlAddress Resolve(InternetProtocolAddress address);
             virtual void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress);
         };
 
-        class InternetProtocolHandler
+        class InternetProtocolPayloadHandler
         {
+            friend class InternetProtocolHandler;
+
             protected:
-                InternetProtocolProvider* backend;
-                common::uint8_t ip_protocol;
+                InternetProtocolHandler* internetProtocolHandler;
+                common::uint8_t ipProtocol;
 
             public:
-                InternetProtocolHandler(InternetProtocolProvider* backend, common::uint8_t protocol);
-                ~InternetProtocolHandler();
+                InternetProtocolPayloadHandler(InternetProtocolHandler* internetProtocolHandler, common::uint8_t protocol);
+                ~InternetProtocolPayloadHandler();
 
-                virtual bool OnInternetProtocolReceived(common::uint32_t srcIP_BE, common::uint32_t dstIP_BE, common::uint8_t* internetprotocolPayload, common::uint32_t size);
-                void Send(common::uint32_t dstIP_BE, common::uint8_t* internetProtocolPayload, common::uint32_t size);
+                virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
+                void Send(InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
         };
 
-        class InternetProtocolProvider : public net::EthernetFramePayloadHandler{
+        class InternetProtocolHandler : public net::EthernetFramePayloadHandler{
 
-            friend class InternetProtocolHandler;
             friend class InternetProtocolAddressResolver;
 
             protected:
-                InternetProtocolHandler* internetProtocolHandlers[255];
+
+                common::Map<common::uint8_t, InternetProtocolPayloadHandler*> internetProtocolPayloadHandlers;
+
                 InternetProtocolAddressResolver* resolver;
+                common::OutputStream* errorMessages;
 
                 InternetProtocolAddress ownInternetProtocolAddress;
                 InternetProtocolAddress defaultGatewayInternetProtocolAddress;
@@ -73,12 +77,15 @@ namespace maxOS{
                 void RegisterInternetProtocolAddressResolver(InternetProtocolAddressResolver* resolver);
 
             public:
-                InternetProtocolProvider(EthernetFrameHandler* backend, InternetProtocolAddress ownInternetProtocolAddress,
-                                         InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask);
-                ~InternetProtocolProvider();
+                InternetProtocolHandler(EthernetFrameHandler* backend,
+                                         InternetProtocolAddress ownInternetProtocolAddress,
+                                         InternetProtocolAddress defaultGatewayInternetProtocolAddress,
+                                         SubnetMask subnetMask,
+                                         common::OutputStream* errorMessages);
+                ~InternetProtocolHandler();
 
-                bool OnEtherFrameReceived(common::uint8_t* etherframePayload, common::uint32_t size);
-                void Send(common::uint32_t dstIP_BE, common::uint8_t protocol, common::uint8_t* data, common::uint32_t size);
+                bool handleEthernetframePayload(common::uint8_t* etherframePayload, common::uint32_t size);
+                void sendInternetProtocolPacket(common::uint32_t dstIP_BE, common::uint8_t protocol, common::uint8_t* data, common::uint32_t size);
 
                 static common::uint16_t Checksum(common::uint16_t* data, common::uint32_t lengthInBytes);
 
@@ -87,6 +94,8 @@ namespace maxOS{
                 static SubnetMask CreateSubnetMask(common::uint8_t digit1, common::uint8_t digit2, common::uint8_t digit3, common::uint8_t digit4);
                 InternetProtocolAddress GetInternetProtocolAddress();
                 drivers::ethernet::MediaAccessControlAddress GetMediaAccessControlAddress();
+
+                void connectInternetProtocolPayloadHandler(InternetProtocolPayloadHandler* internetProtocolPayloadHandler);
 
 
         };

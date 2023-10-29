@@ -153,7 +153,7 @@ bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus,
  * @param interruptManager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSelectorEventHandler *handler, memory::MemoryManager *memoryManager, hardwarecommunication::InterruptManager *interruptManager, common::OutputStream *errorMessageStream) {
+void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interruptManager, common::OutputStream *errorMessageStream) {
     for (int bus = 0; bus < 8; ++bus) {
 
         for (int device = 0; device < 32; ++device) {

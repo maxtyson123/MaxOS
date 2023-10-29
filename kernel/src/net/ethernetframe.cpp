@@ -52,13 +52,12 @@ void EthernetFramePayloadHandler::Send(common::uint64_t destination, common::uin
 }
 
 
-EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, common::OutputStream* errorMessages, memory::MemoryManager* memoryManager)
+EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, common::OutputStream* errorMessages)
 : EthernetDriverEventHandler()
 {
 
     this -> ethernetDriver = driver;
     this -> errorMessages = errorMessages;
-    this -> memoryManager = memoryManager;
 
     driver ->connectEventHandler(this);
 
@@ -150,7 +149,7 @@ void EthernetFrameHandler::sendEthernetFrame(common::uint64_t destinationMAC, co
 
 
     //Allocate memory for the buffer
-    uint8_t* buffer = (uint8_t*)memoryManager -> malloc(size + sizeof(EthernetFrameHeader));
+    uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(size + sizeof(EthernetFrameHeader));
     EthernetFrameHeader* frame = (EthernetFrameHeader*)buffer;
 
     //Put data in the header

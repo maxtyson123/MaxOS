@@ -9,11 +9,12 @@ using namespace  maxOS::common;
 using namespace  maxOS::net;
 
 
-InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolProvider *backend)
-: InternetProtocolHandler(backend, 0x01)        // 0x01 is the ICMP protocol
+InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolHandler *internetProtocolHandler)
+: InternetProtocolPayloadHandler(internetProtocolHandler, 0x01)
 {
 
 }
+
 
 
 InternetControlMessageProtocol::~InternetControlMessageProtocol() {
@@ -29,27 +30,32 @@ InternetControlMessageProtocol::~InternetControlMessageProtocol() {
 
  * @return True if the packet is to be sent back to the sender, false otherwise
  */
-bool InternetControlMessageProtocol::OnInternetProtocolReceived(uint32_t srcIP_BE, uint32_t dstIP_BE, uint8_t *internetprotocolPayload, uint32_t size) {
+bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProtocolAddress sourceIP,
+                                                                   InternetProtocolAddress destinationIP,
+                                                                   uint8_t *payloadData,
+                                                                   uint32_t size)
+{
 
     // Check if the size is at least the size of the header
-    if(size < sizeof(InternetControlMessageProtocolMessage)){
+    if(size < sizeof(InternetControlMessageProtocolHeader)){
         return false;
     }
 
     // Cast the payload to the ICMP header
-    InternetControlMessageProtocolMessage* icmp = (InternetControlMessageProtocolMessage*)internetprotocolPayload;
+    InternetControlMessageProtocolHeader* icmp = (InternetControlMessageProtocolHeader*)payloadData;
 
     switch (icmp -> type) {
 
         case 0: // Echo reply
-
+            // TODO: reply to the ping
+            break;
 
         case 8: // Echo request
 
             // Create a response
             icmp -> type = 0;                                                                                                                    // Echo reply
             icmp -> checksum = 0;                                                                                                                // Reset the checksum
-            icmp -> checksum = InternetProtocolProvider::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolMessage));             // Calculate the checksum
+            icmp -> checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));             // Calculate the checksum
 
             return true;    //Send data back
 
@@ -68,13 +74,13 @@ bool InternetControlMessageProtocol::OnInternetProtocolReceived(uint32_t srcIP_B
  */
 void InternetControlMessageProtocol::RequestEchoReply(uint32_t ip_be) {
 
-    InternetControlMessageProtocolMessage icmp;
+    InternetControlMessageProtocolHeader icmp;
     icmp.type = 8;                      // Echo request
     icmp.code = 0;                      // Code must be 0
     icmp.checksum = 0;                  // Checksum must be 0 to calculate it
-    icmp.restOfHeader = 0x69420;        // Data
+    icmp.data = 0x69420;        // Data
 
-    icmp.checksum = InternetProtocolProvider::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolMessage));
+    icmp.checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));
 
-    InternetProtocolHandler::Send(ip_be, (uint8_t *)&icmp, sizeof(InternetControlMessageProtocolMessage));
+    Send(ip_be, (uint8_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));
 }

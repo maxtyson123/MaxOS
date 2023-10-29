@@ -1,4 +1,4 @@
-int buildCount = 422;
+int buildCount = 442;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -275,7 +275,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     Vector<DriverSelector*> driverSelectors;
 
     //Make the stream on the side for the PCI
-    ConsoleArea pciConsoleArea(&console, console.getWidth() - 45, 2, 45, console.getHeight(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea pciConsoleArea(&console, console.getWidth() - 45, 2, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream pciConsoleStream(&pciConsoleArea);
     console.putString(console.getWidth() - 45, 1, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
     
@@ -296,7 +296,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
     {
         cout << ".";
-        (*selector)->selectDrivers(&driverManager, &memoryManager, &interrupts, 0);
+        (*selector)->selectDrivers(&driverManager, &interrupts, 0);
     }
     cout << " Found\n";
     deviceSetupHeaderStream << ".";
@@ -352,10 +352,71 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     cout << "\n";
     activationHeaderStream << "[ DONE ]";
-    
+
+
+    // Make the network setup stream
+    ConsoleArea networkSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleStream networkSetupHeaderStream(&networkSetupHeader);
+    networkSetupHeaderStream << "Setting up network";
+
+    // Make the stream on the side for the network
+    ConsoleArea networkConsoleArea(&console, console.getWidth() - 45, 2 + console.getHeight()/2, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleStream networkConsoleStream(&networkConsoleArea);
+    console.putString(console.getWidth() - 45, 1 + console.getHeight()/2, "                 Network                    ", ConsoleColour::LightGrey, ConsoleColour::Black);
+
+    // Get the driver
+    EthernetDriver* ethernetDriver = (EthernetDriver*)driverManager.drivers[4];
+    cout << "Got Ethernet Driver: " << ethernetDriver->getDeviceName() << "\n";
+    networkSetupHeaderStream << ".";
+
+    // Ethernet Frame Handler
+    EthernetFrameHandler ethernetFrameHandler(ethernetDriver, &networkConsoleStream);
+    cout << "-- Set Up Ethernet Frame Handler\n";
+    networkSetupHeaderStream << ".";
+
+    // IPv4 (using qemu's default network settings)
+    SubnetMask subnetMask = InternetProtocolHandler::CreateSubnetMask(255, 255, 255, 0);
+    InternetProtocolAddress defaultGateway = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 2);
+    InternetProtocolAddress dnsServer = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 3);
+    InternetProtocolAddress ipAddress = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 15);
+    InternetProtocolHandler internetProtocolHandler(&ethernetFrameHandler, ipAddress, defaultGateway, subnetMask, &networkConsoleStream);
+    cout << "-- Set Up IPv4\n";
+    networkSetupHeaderStream << ".";
+
+    // ARP
+    AddressResolutionProtocol arp(&ethernetFrameHandler, &internetProtocolHandler, &networkConsoleStream);
+    cout << "-- Set Up ARP\n";
+    networkSetupHeaderStream << ".";
+
+    // ICMP
+    InternetControlMessageProtocol icmp(&internetProtocolHandler);
+    cout << "-- Set Up ICMP\n";
+    networkSetupHeaderStream << ".";
+
+    // TCP
+    TransmissionControlProtocolHandler tcp(&internetProtocolHandler, &networkConsoleStream);
+    cout << "-- Set Up TCP\n";
+    networkSetupHeaderStream << ".";
+
+    // UDP
+    UserDatagramProtocolHandler udp(&internetProtocolHandler, &networkConsoleStream);
+    cout << "-- Set Up UDP\n";
+    networkSetupHeaderStream << ".";
+    cout << "\n";
+    networkSetupHeaderStream << "[ DONE ]";
+
+
+    // Run the network
+#define NETWORK
+#ifdef NETWORK
+
+    //TODO: test networking
+
+#endif
+
     // Run the GUI
 
-#define GUI
+//#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connectEventHandler(&desktop);

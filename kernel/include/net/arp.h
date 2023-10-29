@@ -34,22 +34,17 @@ namespace maxOS{
         class AddressResolutionProtocol : public EthernetFramePayloadHandler, public InternetProtocolAddressResolver
         {
             private:
-                common::uint32_t cacheIPAddress[128];
-                common::uint32_t cacheMACAddress[128];
-                int numCacheEntries;
-                InternetProtocolProvider* internetProtocolProvider;
+                common::Map<InternetProtocolAddress, drivers::ethernet::MediaAccessControlAddress> addressCache;
+                InternetProtocolHandler* internetProtocolHandler;
+                common::OutputStream* errorMessages;
             public:
-                AddressResolutionProtocol(EthernetFrameHandler* backend, InternetProtocolProvider* internetProtocolHandler);
+                AddressResolutionProtocol(EthernetFrameHandler* ethernetFrameHandler, InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
                 ~AddressResolutionProtocol();
 
-                bool OnEtherFrameReceived(common::uint8_t* etherframePayload, common::uint32_t size);
+                bool handleEthernetFramePayload(common::uint8_t* data, common::uint32_t size);
 
-                void RequestMACAddress(common::uint32_t IP_BE);
-                common::uint64_t GetMACFromCache(common::uint32_t IP_BE);
-
-                drivers::ethernet::MediaAccessControlAddress Resolve(common::uint32_t IP_BE);
-                void BroadcastMACAddress(common::uint32_t IP_BE);
-
+                void RequestMACAddress(InternetProtocolAddress address);
+                drivers::ethernet::MediaAccessControlAddress Resolve(InternetProtocolAddress address);
                 void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress);
         };
 
