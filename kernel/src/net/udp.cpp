@@ -19,7 +19,7 @@ void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserD
 
 }
 
-void UserDatagramProtocolPayloadHandler::onEvent(common::Event<UserDatagramProtocolEvents> *event) {
+Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::onEvent(common::Event<UserDatagramProtocolEvents> *event) {
 
     switch (event -> type) {
         case UDP_DATA_RECEIVED:
@@ -28,6 +28,8 @@ void UserDatagramProtocolPayloadHandler::onEvent(common::Event<UserDatagramProto
         default:
             break;
     }
+
+    return event;
 }
 
 ///__Socket__

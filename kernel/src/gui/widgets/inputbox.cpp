@@ -19,12 +19,14 @@ InputBoxEventHandler::~InputBoxEventHandler() {
 
 }
 
-void InputBoxEventHandler::onEvent(Event<InputBoxEvents> *event) {
+Event<InputBoxEvents>* InputBoxEventHandler::onEvent(Event<InputBoxEvents> *event) {
     switch (event->type) {
         case INPUTBOX_TEXT_CHANGED:
             onInputBoxTextChanged(((InputBoxTextChangedEvent*)event)->newText);
             break;
     }
+
+    return event;
 }
 
 void InputBoxEventHandler::onInputBoxTextChanged(string newText) {

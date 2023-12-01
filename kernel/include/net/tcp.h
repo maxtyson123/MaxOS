@@ -118,7 +118,7 @@ namespace maxOS{
                 TransmissionControlProtocolPayloadHandler();
                 ~TransmissionControlProtocolPayloadHandler();
 
-                void onEvent(common::Event<TransmissionControlProtocolPayloadHandlerEvents>* event);
+                common::Event<TransmissionControlProtocolPayloadHandlerEvents>* onEvent(common::Event<TransmissionControlProtocolPayloadHandlerEvents>* event);
 
                 virtual void handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
                 virtual void Connected(TransmissionControlProtocolSocket* socket);

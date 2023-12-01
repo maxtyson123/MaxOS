@@ -28,7 +28,7 @@ void ClockEventHandler::onTime(const Time &time) {
 
 }
 
-void ClockEventHandler::onEvent(Event<ClockEvents>* event) {
+Event<ClockEvents>* ClockEventHandler::onEvent(Event<ClockEvents>* event) {
 
     switch (event -> type) {
         case TIME:
@@ -38,6 +38,9 @@ void ClockEventHandler::onEvent(Event<ClockEvents>* event) {
         default:
             break;
     }
+
+    // Return the event
+    return event;
 }
 
 ///__Clock__

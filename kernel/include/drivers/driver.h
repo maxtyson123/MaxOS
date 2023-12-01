@@ -16,9 +16,9 @@ namespace maxOS
 
         class Driver {
             protected:
-                common::OutputStream* driverMessageStream;
-
             public:
+
+                common::OutputStream* driverMessageStream;
                 Driver(common::OutputStream* driverMessageStream = 0);
                 ~Driver();
 

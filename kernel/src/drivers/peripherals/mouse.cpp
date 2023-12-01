@@ -19,7 +19,7 @@ MouseEventHandler::MouseEventHandler() {
  * @details This function is called when an event is triggered and calls the appropriate function
  * @param event The event that was triggered
  */
-void MouseEventHandler::onEvent(Event<MouseEvents> *event) {
+Event<MouseEvents>* MouseEventHandler::onEvent(Event<MouseEvents> *event) {
     switch (event->type){
 
         case MOUSE_MOVE:
@@ -35,6 +35,9 @@ void MouseEventHandler::onEvent(Event<MouseEvents> *event) {
             break;
 
     }
+
+    // Return the event
+    return event;
 }
 
 

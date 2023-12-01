@@ -30,7 +30,7 @@ void KeyboardEventHandler::onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState)
 {
 }
 
-void KeyboardEventHandler::onEvent(Event<KeyboardEvents> *event) {
+Event<KeyboardEvents>* KeyboardEventHandler::onEvent(Event<KeyboardEvents> *event) {
 
     switch (event -> type) {
 
@@ -45,6 +45,8 @@ void KeyboardEventHandler::onEvent(Event<KeyboardEvents> *event) {
         default:
             break;
     }
+
+    return event;
 
 }
 

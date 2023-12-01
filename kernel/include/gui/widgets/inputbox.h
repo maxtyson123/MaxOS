@@ -32,7 +32,7 @@ namespace maxOS{
                 InputBoxEventHandler();
                 ~InputBoxEventHandler();
 
-                virtual void onEvent(common::Event<InputBoxEvents>* event);
+                virtual common::Event<InputBoxEvents>* onEvent(common::Event<InputBoxEvents>* event);
 
                 virtual void onInputBoxTextChanged(common::string newText);
             };

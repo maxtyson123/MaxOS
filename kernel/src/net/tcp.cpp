@@ -33,7 +33,7 @@ void TransmissionControlProtocolPayloadHandler::Disconnected(TransmissionControl
 
 }
 
-void TransmissionControlProtocolPayloadHandler::onEvent(Event<TransmissionControlProtocolPayloadHandlerEvents> *event) {
+Event<TransmissionControlProtocolPayloadHandlerEvents>* TransmissionControlProtocolPayloadHandler::onEvent(Event<TransmissionControlProtocolPayloadHandlerEvents> *event) {
 
     switch (event -> type)
     {
@@ -47,6 +47,8 @@ void TransmissionControlProtocolPayloadHandler::onEvent(Event<TransmissionContro
             handleTransmissionControlProtocolPayload(((DataReceivedEvent*)event) -> socket, ((DataReceivedEvent*)event) -> data, ((DataReceivedEvent*)event) -> size);
             break;
     }
+
+    return event;
 }
 
 
@@ -159,6 +161,8 @@ uint32_t bigEndian16(uint16_t x)
  */
 bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size)
 {
+
+    errorMessages -> write("TCP: Handling TCP message\n");
 
     //Check if the size is too small
     if(size < 13)
@@ -360,6 +364,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
     }
 
 
+    errorMessages ->write("TCP: Handled packet\n");
 
     if(socket != 0 && socket -> state == CLOSED)                                        //If the socket is closed then remove it from the list
     {

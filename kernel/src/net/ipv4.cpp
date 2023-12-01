@@ -110,14 +110,16 @@ InternetProtocolHandler::~InternetProtocolHandler() {
  * @param size The size of the IP packet.
  * @return True if the packet is to be sent back, false otherwise.
  */
-bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* etherframePayload, uint32_t size){
+bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size){
+
+    errorMessages ->write("IP: Handling packet\n");
 
     //Check if the size is big enough to contain an ethernet frame
     if(size < sizeof(InternetProtocolV4Header))
         return false;
 
     //Convert to struct for easier use
-    InternetProtocolV4Header* ipMessage = (InternetProtocolV4Header*)etherframePayload;
+    InternetProtocolV4Header* ipMessage = (InternetProtocolV4Header*)ethernetframePayload;
     bool sendBack = false;
 
     //Only handle if it is for this device
@@ -132,7 +134,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* etherframePayl
         if(handlerIterator != internetProtocolPayloadHandlers.end()) {
             InternetProtocolPayloadHandler* handler = handlerIterator -> second;
             if(handler != 0) {
-                sendBack = handler -> handleInternetProtocolPayload(ipMessage -> sourceIP, ipMessage -> destinationIP, etherframePayload + sizeof(InternetProtocolV4Header), length - sizeof(InternetProtocolV4Header));
+                sendBack = handler -> handleInternetProtocolPayload(ipMessage -> sourceIP, ipMessage -> destinationIP, ethernetframePayload + sizeof(InternetProtocolV4Header), length - sizeof(InternetProtocolV4Header));
             }
         }
 
@@ -154,6 +156,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* etherframePayl
         // TODO: Set the identifier
     }
 
+    errorMessages ->write("IP: Handled packet\n");
     return sendBack;
 }
 

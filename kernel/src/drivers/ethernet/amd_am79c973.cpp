@@ -109,12 +109,6 @@ amd_am79c973::~amd_am79c973()
 void amd_am79c973::activate()
 {
 
-    //TODO: Implment new console driver and use the stream for it here, causes GPF erorr int so return for now
-    return;
-
-    driverMessageStream -> write("Activating AMD 79C973 Ethernet Controller ");
-
-
     initDone = false;                                            // Set initDone to false
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x41);                           // Enable Interrupts and start the device
@@ -132,7 +126,6 @@ void amd_am79c973::activate()
     registerDataPort.Write(0x42);                           // Tell device that it is initialised and can begin operating
 
     active = true;                                               // Set active to true
-    driverMessageStream -> write("AMD am79c973 INIT DONE\n");
 }
 
 /**
@@ -206,8 +199,6 @@ void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
 
     }
 
-
-
     // What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
     for (uint8_t *src = buffer + size -1,                                                   // Set src pointer to the end of the data that is being sent
          *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].address + size -1);       // Take the buffer that has been slected
@@ -227,9 +218,6 @@ void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
 
     registerAddressPort.Write(0);                           // Tell device to write to register 0
     registerDataPort.Write(0x48);                           // Tell device to send the data currently in the buffer
-
-    driverMessageStream -> write(" Done\n");
-
 }
 
 void amd_am79c973::FetchDataReceived()

@@ -84,7 +84,7 @@ namespace maxOS{
                                          common::OutputStream* errorMessages);
                 ~InternetProtocolHandler();
 
-                bool handleEthernetframePayload(common::uint8_t* etherframePayload, common::uint32_t size);
+                bool handleEthernetframePayload(common::uint8_t* ethernetframePayload, common::uint32_t size);
                 void sendInternetProtocolPacket(common::uint32_t dstIP_BE, common::uint8_t protocol, common::uint8_t* data, common::uint32_t size);
 
                 static common::uint16_t Checksum(common::uint16_t* data, common::uint32_t lengthInBytes);

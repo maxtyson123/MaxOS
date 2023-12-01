@@ -19,6 +19,11 @@ namespace maxOS{
                 ~Event();
 
                 EventType type;
+                union {
+                    common::uint8_t* bufferValue;
+                    common::uint32_t intValue;
+                    bool boolValue;
+                } returnValue;
         };
 
         template <typename EventType> class EventHandler
@@ -26,7 +31,7 @@ namespace maxOS{
             public:
                 EventHandler();
                 ~EventHandler();
-                virtual void onEvent(Event<EventType>* event);
+                virtual Event<EventType>* onEvent(Event<EventType>* event);
         };
 
         template <typename EventType> class EventManager
@@ -39,7 +44,7 @@ namespace maxOS{
                 ~EventManager();
                 void connectEventHandler(EventHandler<EventType>* handler);
                 void disconnectEventHandler(EventHandler<EventType>* handler);
-                void raiseEvent(Event<EventType>* event);
+                Vector<Event<EventType>*> raiseEvent(Event<EventType>* event);
         };
 
 
@@ -67,8 +72,8 @@ namespace maxOS{
          * @tparam EventType The type of event
          * @param event The event that was raised
          */
-        template<typename EventType> void EventHandler<EventType>::onEvent(Event<EventType> *event) {
-
+        template<typename EventType> Event<EventType>* EventHandler<EventType>::onEvent(Event<EventType> *event) {
+            return event;
         }
 
         template<typename EventType> EventManager<EventType>::EventManager() {
@@ -114,11 +119,15 @@ namespace maxOS{
          * @tparam EventType The type of event
          * @param event The event to raise
          */
-        template<typename EventType> void EventManager<EventType>::raiseEvent(Event<EventType> *event) {
+        template<typename EventType>  Vector<Event<EventType>*> EventManager<EventType>::raiseEvent(Event<EventType> *event) {
 
+
+            // Store a list of the results of the event handlers
+            Vector<Event<EventType>*> results;
             for(typename Vector<EventHandler<EventType>*>::iterator handler = handlers.begin(); handler != handlers.end(); ++handler) {
-                (*handler)->onEvent(event);
+                results.pushBack((*handler)->onEvent(event));
             }
+            return results;
         }
     }
 }

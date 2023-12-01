@@ -34,7 +34,7 @@ void EthernetDriverEventHandler::DataSent(uint8_t*, uint32_t)
 {
 }
 
-void EthernetDriverEventHandler::onEvent(common::Event<EthernetDriverEvents> *event) {
+Event<EthernetDriverEvents>* EthernetDriverEventHandler::onEvent(common::Event<EthernetDriverEvents> *event) {
 
     switch (event -> type) {
 
@@ -47,12 +47,14 @@ void EthernetDriverEventHandler::onEvent(common::Event<EthernetDriverEvents> *ev
             break;
 
         case EthernetDriverEvents::DATA_RECEIVED:
-            DataReceived(((DataReceivedEvent*)event) -> buffer, ((DataReceivedEvent*)event) -> size);
+            event->returnValue.boolValue = DataReceived(((DataReceivedEvent*)event) -> buffer, ((DataReceivedEvent*)event) -> size);
             break;
 
         default:
             break;
     }
+
+    return event;
 }
 
 
@@ -99,7 +101,6 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
     // Raise the event
     raiseEvent(new BeforeSendEvent(buffer, size));
 
-    //Used for debuging  printf("Status: ");
     DoSend(buffer, size);
 }
 
@@ -128,19 +129,24 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
     }
     driverMessageStream -> write("\n");
 
+    // Raise the event
+    Vector<Event<EthernetDriverEvents>*> values = raiseEvent(new DataReceivedEvent(buffer, size));
 
-    bool SendBack = false;
+    // Loop through the events
+    for(typename Vector<Event<EthernetDriverEvents>*>::iterator event = values.begin(); event != values.end(); ++event) {
+        switch ((*event)->type) {
+            case EthernetDriverEvents::DATA_RECEIVED:
+                if((*event)->returnValue.boolValue){
+                    driverMessageStream -> write("Sending back... \n");
+                    Send(buffer, size);
+                }
+                break;
 
-    //TODO: For now raise event cant return a value, need to find a workaround
-    for(Vector<EventHandler<EthernetDriverEvents>*>::iterator i = handlers.begin(); i != handlers.end(); i++)
-        if(((EthernetDriverEventHandler*)i)->DataReceived(buffer, size))
-            SendBack = true;
-
-    if(SendBack){
-        driverMessageStream -> write("Sending back... \n");
-        Send(buffer, size);
+            default:
+                break;
+        }
     }
-
+    driverMessageStream -> write("DATA HANDLED\n");
 }
 
 /**

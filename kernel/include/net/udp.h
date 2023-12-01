@@ -52,7 +52,7 @@ namespace maxOS
                 UserDatagramProtocolPayloadHandler();
                 ~UserDatagramProtocolPayloadHandler();
 
-                void onEvent(common::Event<UserDatagramProtocolEvents>* event);
+                common::Event<UserDatagramProtocolEvents>* onEvent(common::Event<UserDatagramProtocolEvents>* event);
 
                 virtual void handleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
 

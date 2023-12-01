@@ -24,7 +24,7 @@ ButtonEventHandler::~ButtonEventHandler() {
  * @details Handles the button events
  * @param event The event to handle
  */
-void ButtonEventHandler::onEvent(Event<ButtonEvents> *event) {
+Event<ButtonEvents>* ButtonEventHandler::onEvent(Event<ButtonEvents> *event) {
 
     // Check the event type
     switch (event -> type) {
@@ -40,6 +40,8 @@ void ButtonEventHandler::onEvent(Event<ButtonEvents> *event) {
             break;
 
     }
+
+    return event;
 
 }
 

@@ -46,7 +46,7 @@ namespace maxOS {
                 ButtonEventHandler();
                 ~ButtonEventHandler();
 
-                virtual void onEvent(common::Event<ButtonEvents>* event);
+                virtual common::Event<ButtonEvents>* onEvent(common::Event<ButtonEvents>* event);
 
                 virtual void onButtonPressed(Button* source);
                 virtual void onButtonReleased(Button* source);

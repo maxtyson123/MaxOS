@@ -32,7 +32,7 @@ EthernetFramePayloadHandler::~EthernetFramePayloadHandler() {
 }
 
 
-bool EthernetFramePayloadHandler::handleEthernetframePayload(common::uint8_t *etherframePayload, common::uint32_t size) {
+bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size) {
 
     //By default, don't handle it, will be handled in the override
     return false;
@@ -80,6 +80,7 @@ drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
  */
 bool EthernetFrameHandler::DataReceived(common::uint8_t* buffer, common::uint32_t size) {
 
+    errorMessages -> write("EFH: Data received\n");
 
 
     //Check if the size is big enough to contain an ethernet frame
@@ -102,12 +103,17 @@ bool EthernetFrameHandler::DataReceived(common::uint8_t* buffer, common::uint32_
         if(handlerIterator != frameHandlers.end()) {
 
             //Handle the data
+            errorMessages -> write("EFH: Handling ethernet frame payload\n");
+            // TODO: This doesnt call the override
             sendBack = handlerIterator->second->handleEthernetframePayload(buffer + sizeof(EthernetFrameHeader), size - sizeof(EthernetFrameHeader));
+            errorMessages -> write("..DONE\n");
+            if(sendBack)
+                errorMessages -> write("EFH: Sending back\n");
 
         } else {
 
             //If the handler is not found, print an error message
-            errorMessages -> write("EthernetFrameHandler: Unhandled ethernet frame type 0x");
+            errorMessages -> write("EFH: Unhandled ethernet frame type 0x");
             errorMessages -> writeHex(frame->type);
             errorMessages -> write("\n");
 
@@ -116,6 +122,8 @@ bool EthernetFrameHandler::DataReceived(common::uint8_t* buffer, common::uint32_
 
     //If the data is to be sent back again
     if(sendBack){
+
+        errorMessages -> write("EFH: Sending back\n");
 
         frame -> destinationMAC = frame -> sourceMAC;                             //Set the new destination to be the device the data was received from
         frame -> sourceMAC = ethernetDriver->GetMediaAccessControlAddress();      //Set the new source to be this device's MAC address
@@ -147,6 +155,7 @@ void EthernetFrameHandler::connectHandler(EthernetFramePayloadHandler *handler) 
  */
 void EthernetFrameHandler::sendEthernetFrame(common::uint64_t destinationMAC, common::uint16_t frameType, common::uint8_t* data, common::uint32_t size) {
 
+    errorMessages->write("EFH: Sending frame...");
 
     //Allocate memory for the buffer
     uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(size + sizeof(EthernetFrameHeader));
@@ -163,6 +172,9 @@ void EthernetFrameHandler::sendEthernetFrame(common::uint64_t destinationMAC, co
 
     //Send the data
     ethernetDriver -> Send(buffer, size + sizeof(EthernetFrameHeader));
+
+    errorMessages->write("Done\n");
+
 
     //Free the buffer
     MemoryManager::activeMemoryManager -> free(buffer);

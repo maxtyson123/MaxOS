@@ -126,7 +126,7 @@ DriverSelector::~DriverSelector()
 {
 }
 
-void DriverSelector::selectDrivers(DriverSelectorEventHandler*, MemoryManager*, hardwarecommunication::InterruptManager*, OutputStream*)
+void DriverSelector::selectDrivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*, OutputStream*)
 {
 }
 

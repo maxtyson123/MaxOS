@@ -51,11 +51,12 @@ Kernel Cleanup
 - [x] Kernel Boot Rewrite
 - [x] Rewrite Event Handlers
 - [x] Network Touch Up
-- [ ] HTTP Protocol, DCHP protocol
+- [ ] DCHP protocol
 - [ ] GUI Bug Fixes
 - [ ] Better Commenting and Doxygen Documentation
 - [ ] Use better c++ coding conventions
 - [ ] Fix filesystem (move to linux one?)
+- [ ] HTTP Protocol
 - [ ] USB
 - [ ] Custom Toolchain
 - [ ] CMAKE Build System (and maybe get it building and debugging in CLion)

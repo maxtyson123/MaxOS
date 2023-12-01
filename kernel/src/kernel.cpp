@@ -1,4 +1,4 @@
-int buildCount = 442;
+int buildCount = 466;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -360,12 +360,13 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     networkSetupHeaderStream << "Setting up network";
 
     // Make the stream on the side for the network
-    ConsoleArea networkConsoleArea(&console, console.getWidth() - 45, 2 + console.getHeight()/2, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea networkConsoleArea(&console, console.getWidth() - 40, 2 + console.getHeight()/2, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream networkConsoleStream(&networkConsoleArea);
-    console.putString(console.getWidth() - 45, 1 + console.getHeight()/2, "                 Network                    ", ConsoleColour::LightGrey, ConsoleColour::Black);
+    console.putString(console.getWidth() - 40, 1 + console.getHeight()/2, "                 Network                    ", ConsoleColour::LightGrey, ConsoleColour::Black);
 
     // Get the driver
     EthernetDriver* ethernetDriver = (EthernetDriver*)driverManager.drivers[4];
+    ethernetDriver->driverMessageStream = &networkConsoleStream;
     cout << "Got Ethernet Driver: " << ethernetDriver->getDeviceName() << "\n";
     networkSetupHeaderStream << ".";
 
@@ -377,7 +378,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     // IPv4 (using qemu's default network settings)
     SubnetMask subnetMask = InternetProtocolHandler::CreateSubnetMask(255, 255, 255, 0);
     InternetProtocolAddress defaultGateway = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 2);
-    InternetProtocolAddress dnsServer = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 3);
     InternetProtocolAddress ipAddress = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 15);
     InternetProtocolHandler internetProtocolHandler(&ethernetFrameHandler, ipAddress, defaultGateway, subnetMask, &networkConsoleStream);
     cout << "-- Set Up IPv4\n";
@@ -410,7 +410,47 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 #define NETWORK
 #ifdef NETWORK
 
-    //TODO: test networking
+    // TCPtoStream
+    class TCPtoStream: public TransmissionControlProtocolPayloadHandler{
+
+        ConsoleStream* stream;
+        public:
+        TCPtoStream(ConsoleStream* stream)
+        {
+            this->stream = stream;
+        }
+        ~TCPtoStream()
+        {
+            this->stream = nullptr;
+        }
+
+        void handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t payloadLength)
+        {
+            *stream << "TCP Payload Received: ";
+            for(uint16_t i = 0; i < payloadLength; i++)
+            {
+                *stream << data[i];
+            }
+            *stream << "\n";
+        }
+
+        void Connected(TransmissionControlProtocolSocket* socket)
+        {
+            *stream << "TCP Connection Established\n";
+        }
+
+        void Disconnected(TransmissionControlProtocolSocket* socket)
+        {
+            *stream << "TCP Connection Closed\n";
+        }
+    };
+    
+    TCPtoStream tcpToStream(&networkConsoleStream);
+    TransmissionControlProtocolSocket* tcpSocket = tcp.Listen(1234);
+    tcpSocket -> connectEventHandler(&tcpToStream);
+    cout << "Listening on TCP Port 1234\n";
+    // For sending: ncat -l 127.0.0.1 1234
+    // For receiving: ncat 127.0.0.1 1234
 
 #endif
 

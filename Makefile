@@ -7,7 +7,7 @@ BUILD_COMPLETE ?= make runQ
 AS_PARAMS = --32
 LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -device pcnet,netdev=net0 \
-              -netdev user,id=net0,hostfwd=tcp::5555-:1234 \
+              -netdev user,id=net0,hostfwd=tcp::1234-:1234 \
 		      -m 512 \
 		      -hda maxOS.img \
 		      -vga std \

@@ -240,7 +240,7 @@ namespace maxOS
                     KeyboardEventHandler();
                     ~KeyboardEventHandler();
 
-                    virtual void onEvent(common::Event<KeyboardEvents>* event);
+                    virtual common::Event<KeyboardEvents>* onEvent(common::Event<KeyboardEvents>* event);
 
                     virtual void onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState);
                     virtual void onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState);

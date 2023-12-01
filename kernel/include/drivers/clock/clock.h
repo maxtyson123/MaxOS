@@ -34,7 +34,7 @@ namespace maxOS {
                     ClockEventHandler();
                     ~ClockEventHandler();
 
-                    void onEvent(common::Event<ClockEvents>* event);
+                    common::Event<ClockEvents>* onEvent(common::Event<ClockEvents>* event);
 
                     virtual void onTime(const common::Time& time);
 

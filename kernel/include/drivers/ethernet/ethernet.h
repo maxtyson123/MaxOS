@@ -55,7 +55,7 @@ namespace maxOS{
                     EthernetDriverEventHandler();
                     ~EthernetDriverEventHandler();
 
-                    virtual void onEvent(common::Event<EthernetDriverEvents>* event);
+                    virtual common::Event<EthernetDriverEvents>* onEvent(common::Event<EthernetDriverEvents>* event);
 
                     virtual void BeforeSend(common::uint8_t* buffer, common::uint32_t size);
                     virtual void DataSent(common::uint8_t* buffer, common::uint32_t size);
