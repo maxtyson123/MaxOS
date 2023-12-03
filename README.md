@@ -50,15 +50,13 @@ Kernel Cleanup
 - [x] VESA Video Mode                              
 - [x] Kernel Boot Rewrite
 - [x] Rewrite Event Handlers
-- [x] Network Touch Up
+- [ ] Custom Toolchain
+- [ ] Network Touch Up - Fix Issues with IP, Get it working on QEMU
 - [ ] DCHP protocol
 - [ ] GUI Bug Fixes
 - [ ] Better Commenting and Doxygen Documentation
 - [ ] Use better c++ coding conventions
-- [ ] Fix filesystem (move to linux one?)
-- [ ] HTTP Protocol
 - [ ] USB
-- [ ] Custom Toolchain
 - [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
 - [ ] Clean up all the TODOs
 

@@ -92,7 +92,7 @@ bool EthernetFrameHandler::DataReceived(common::uint8_t* buffer, common::uint32_
     bool sendBack = false;
 
     //Only handle if it is for this device
-    if(frame->destinationMAC == 0xFFFFFFFFFFFF                   //If it is a broadcast
+    if(frame->destinationMAC == 0xFFFFFFFFFFFF                                          //If it is a broadcast
     || frame->destinationMAC == ethernetDriver -> GetMediaAccessControlAddress())      //If it is for this device
     {
 
@@ -102,13 +102,13 @@ bool EthernetFrameHandler::DataReceived(common::uint8_t* buffer, common::uint32_
         // If the handler is found
         if(handlerIterator != frameHandlers.end()) {
 
+
+            //TODO: The override is not being called (IDK WHY)
+
             //Handle the data
             errorMessages -> write("EFH: Handling ethernet frame payload\n");
-            // TODO: This doesnt call the override
             sendBack = handlerIterator->second->handleEthernetframePayload(buffer + sizeof(EthernetFrameHeader), size - sizeof(EthernetFrameHeader));
             errorMessages -> write("..DONE\n");
-            if(sendBack)
-                errorMessages -> write("EFH: Sending back\n");
 
         } else {
 

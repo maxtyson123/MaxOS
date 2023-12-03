@@ -407,7 +407,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 
     // Run the network
-#define NETWORK
+//#define NETWORK
 #ifdef NETWORK
 
     // TCPtoStream
@@ -498,10 +498,4 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     while (true);
 }
 
-
-
-
 #pragma clang diagnostic pop
-
-//MaxOS - May the source be with you...
-//TODO: Fix networking later TCP/UDP listening, - sending works

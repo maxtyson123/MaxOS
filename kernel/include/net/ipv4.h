@@ -59,7 +59,7 @@ namespace maxOS{
                 void Send(InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
         };
 
-        class InternetProtocolHandler : public net::EthernetFramePayloadHandler{
+        class InternetProtocolHandler : public EthernetFramePayloadHandler{
 
             friend class InternetProtocolAddressResolver;
 
@@ -84,7 +84,7 @@ namespace maxOS{
                                          common::OutputStream* errorMessages);
                 ~InternetProtocolHandler();
 
-                bool handleEthernetframePayload(common::uint8_t* ethernetframePayload, common::uint32_t size);
+                bool handleEthernetframePayload(common::uint8_t* ethernetframePayload, common::uint32_t size) override;
                 void sendInternetProtocolPacket(common::uint32_t dstIP_BE, common::uint8_t protocol, common::uint8_t* data, common::uint32_t size);
 
                 static common::uint16_t Checksum(common::uint16_t* data, common::uint32_t lengthInBytes);
