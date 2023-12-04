@@ -1,6 +1,7 @@
 
 GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -g
-GCC_EXEC ?= gcc
+TARGET=i686-elf
+GCC_EXEC ?= $$HOME/opt/cross/bin/$(TARGET)-gcc
 
 BUILD_COMPLETE ?= make runQ
 
@@ -134,21 +135,6 @@ maxOS.bin: linker.ld $(kernel) $(libraries) $(ports) $(programs)
 	ld $(LD_PARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
 	objcopy --only-keep-debug $@ maxOS.sym
 
-maxOS.iso: maxOS.bin
-	mkdir iso
-	mkdir iso/boot
-	mkdir iso/boot/grub
-	cp $< iso/boot
-	echo 'set timeout=0'                      > iso/boot/grub/grub.cfg
-	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
-	echo ''                                  >> iso/boot/grub/grub.cfg
-	echo 'menuentry "Max OS" {' 			 >> iso/boot/grub/grub.cfg
-	echo '  multiboot /boot/maxOS.bin'    	 >> iso/boot/grub/grub.cfg
-	echo '  boot'                            >> iso/boot/grub/grub.cfg
-	echo '}'                                 >> iso/boot/grub/grub.cfg
-	grub-mkrescue --output=maxOS.iso iso
-	rm -rf iso
-
 .PHONY: filesystem
 filesystem:
 	toolchain/copy_filesystem.sh
@@ -176,35 +162,15 @@ build: maxOS.bin
 	@echo === Made Max OS ===
 	make incrementVersion
 
-
-
-test: build
-	echo Testing
-
-
-## QEMU
-
-
-runQ: build
+qemu: build
 	qemu-system-i386 $(QEMU_PARAMS) $(QEMU_EXTRA_PARAMS)
 
-runQ_W: maxOS.iso
-	"C:\Program Files\qemu\qemu-system-i386" $(QEMU_PARAMS) $(QEMU_EXTRA_PARAMS)
-
-debugQ: build
+debug_qemu: build
 	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S" & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
-
-guiDebugQ: build
-	x-terminal-emulator -e make runQ QEMU_EXTRA_PARAMS="-s -S -curses" & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym' -tui
-
-install_dep:
-	sudo apt-get update -y
-	sudo apt-get install g++ binutils libc6-i386 grub-pc xorriso mtools
-
-install_run_dep:
-	sudo apt-get install qemu-system-i386
-	sudo apt-get install gdb
 
 .PHONY: clean
 clean:
 	rm -rf obj
+
+cross_compiler:
+	cd toolchain && ./make_cross_compiler.sh

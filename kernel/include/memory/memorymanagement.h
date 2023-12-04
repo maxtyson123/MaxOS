@@ -34,6 +34,7 @@ namespace maxOS{
 
             void* malloc(common::size_t size);
             void free(void* pointer);
+            int getMemoryUsed();
 
             template<class Type> Type* Instantiate(common::uint32_t numberOfElements=1){
                 Type* result = (Type*)malloc(sizeof(Type)*numberOfElements);
@@ -64,11 +65,6 @@ namespace maxOS{
                 new (result) Type(p1, p2, p3, p4);
                 return result;
             }
-
-
-
-
-
 
         };
     }

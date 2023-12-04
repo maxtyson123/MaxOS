@@ -1,4 +1,4 @@
-int buildCount = 466;
+int buildCount = 488;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
@@ -224,6 +224,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     size_t  heap = 10*1024*1024;                                                          //Start at 10MB
     size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
     MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
+    cout << "Memory: " << (int)memoryManager.getMemoryUsed()/1000000 <<  "MB used, " << (int)memSize/1000000 << "MB available\n";
     cout << "-- Set Up Memory Management\n";
     systemSetupHeaderStream << ".";
 
@@ -454,7 +455,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 #endif
 
-    // Run the GUI
 
 //#define GUI
 #ifdef GUI

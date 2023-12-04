@@ -26,11 +26,7 @@ MemoryManager::MemoryManager(common::size_t start, common::size_t size) {
         first -> prev = 0;
         first -> next = 0;
         first -> size = size - sizeof(MemoryChunk);
-
     }
-
-
-
 }
 
 MemoryManager::~MemoryManager() {
@@ -51,7 +47,6 @@ void* MemoryManager::malloc(common::size_t size) {
 
     //Common way of iterating through a linked list
     for (MemoryChunk* chunk = first; chunk != 0 && result == 0; chunk = chunk->next) { //Iterate through the list of chunks
-
 
         if(chunk -> size > size && !chunk -> allocated){    //If the chunk is big enough and not being used
             result = chunk;
@@ -146,6 +141,22 @@ void MemoryManager::free(void *pointer) {
     }
 
 
+
+}
+
+int MemoryManager::getMemoryUsed() {
+
+        int result = 0;
+
+        for (MemoryChunk* chunk = first; chunk != 0; chunk = chunk->next) { //Iterate through the list of chunks
+
+            if(chunk -> allocated){    //If the chunk is big enough and not being used
+                result += chunk -> size;
+            }
+
+        }
+
+        return result;
 
 }
 
