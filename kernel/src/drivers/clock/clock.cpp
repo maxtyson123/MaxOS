@@ -186,11 +186,11 @@ void Clock::delay(common::uint32_t milliseconds) {
             asm volatile("nop"); // execute the "nop" assembly instruction, which does nothing, but prevents the compiler from optimizing away the loop
 }
 
-common::string Clock::getVendorName() {
+string Clock::getVendorName() {
     return "Generic";
 }
 
-common::string Clock::getDeviceName() {
+string Clock::getDeviceName() {
     return "Clock";
 }
 

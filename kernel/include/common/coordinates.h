@@ -5,7 +5,7 @@
 #ifndef MAXOS_COMMON_COORDINATES_H
 #define MAXOS_COMMON_COORDINATES_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/pair.h>
 
 namespace maxOS{

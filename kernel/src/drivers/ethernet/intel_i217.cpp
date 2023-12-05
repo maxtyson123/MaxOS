@@ -391,11 +391,11 @@ void intel_i217::deactivate() {
     Driver::deactivate();
 }
 
-common::string intel_i217::getVendorName() {
+string intel_i217::getVendorName() {
     return "Intel";
 }
 
-common::string intel_i217::getDeviceName() {
+string intel_i217::getDeviceName() {
     return "E1000 (i217)";
 }
 

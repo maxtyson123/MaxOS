@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_CONSOLE_VESABOOTCONSOLE_H
 #define MAXOS_DRIVERS_CONSOLE_VESABOOTCONSOLE_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <gui/font.h>
 #include <drivers/driver.h>
 #include <drivers/console/console.h>
@@ -23,20 +23,20 @@ namespace maxOS{
                 VESABootConsole(common::GraphicsContext* graphicsContext);
                 ~VESABootConsole();
 
-                common::uint16_t getWidth();
-                common::uint16_t getHeight();
+                uint16_t getWidth();
+                uint16_t getHeight();
 
-                void putChar(common::uint16_t x, common::uint16_t y, char c);
-                void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground);
-                void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background);
+                void putChar(uint16_t x, uint16_t y, char c);
+                void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
+                void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
 
-                char getChar(common::uint16_t x, common::uint16_t y);
-                ConsoleColour getForegroundColor(common::uint16_t x, common::uint16_t y);
-                ConsoleColour getBackgroundColor(common::uint16_t x, common::uint16_t y);
+                char getChar(uint16_t x, uint16_t y);
+                ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
+                ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
 
                 common::Colour consoleColourToVESA(ConsoleColour colour);
 
-                common::uint16_t videoMemory[10881];     //128*85
+                uint16_t videoMemory[10881];     //128*85
 
             protected:
 

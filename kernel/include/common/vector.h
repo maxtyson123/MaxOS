@@ -5,7 +5,7 @@
 #ifndef MAXOS_COMMON_VECTOR_H
 #define MAXOS_COMMON_VECTOR_H
 
-#include <common/types.h>
+#include <stdint.h>
 
 namespace maxOS{
 

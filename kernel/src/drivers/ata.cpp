@@ -148,7 +148,7 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
         uint16_t readData = dataPort.Read();
 
         /*
-        char* foo = "  \0";
+        string foo = "  \0";
         foo[1] = (readData >> 8) & 0x00FF;
         foo[0] = readData & 0x00FF;
         printf(foo);

@@ -5,6 +5,7 @@
 #ifndef MAXOS_COMMON_EVENTHANDLER_H
 #define MAXOS_COMMON_EVENTHANDLER_H
 
+#include <stdint.h>
 #include <common/vector.h>
 
 namespace maxOS{
@@ -20,8 +21,8 @@ namespace maxOS{
 
                 EventType type;
                 union {
-                    common::uint8_t* bufferValue;
-                    common::uint32_t intValue;
+                    uint8_t* bufferValue;
+                    uint32_t intValue;
                     bool boolValue;
                 } returnValue;
         };

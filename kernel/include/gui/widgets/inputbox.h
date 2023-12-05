@@ -5,7 +5,7 @@
 #ifndef MAXOS_GUI_WIDGETS_INPUTBOX_H
 #define MAXOS_GUI_WIDGETS_INPUTBOX_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <gui/widget.h>
 #include <gui/font.h>
 
@@ -21,10 +21,10 @@ namespace maxOS{
 
             class InputBoxTextChangedEvent : public common::Event<InputBoxEvents>{
             public:
-                InputBoxTextChangedEvent(common::string newText);
+                InputBoxTextChangedEvent(string newText);
                 ~InputBoxTextChangedEvent();
 
-                common::string newText;
+                string newText;
             };
 
             class InputBoxEventHandler : public common::EventHandler<InputBoxEvents>{
@@ -34,7 +34,7 @@ namespace maxOS{
 
                 virtual common::Event<InputBoxEvents>* onEvent(common::Event<InputBoxEvents>* event);
 
-                virtual void onInputBoxTextChanged(common::string newText);
+                virtual void onInputBoxTextChanged(string newText);
             };
 
             class InputBox : public Widget, public common::EventManager<InputBoxEvents>{
@@ -43,8 +43,8 @@ namespace maxOS{
                     char widgetText[256];       // Replace with a buffer in memory later
 
                 public:
-                    InputBox(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height);
-                    InputBox(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string text);
+                    InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height);
+                    InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                     ~InputBox();
 
                     void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
@@ -54,15 +54,15 @@ namespace maxOS{
 
                     void onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState);
 
-                    void updateText(common::string newText);
-                    common::string getText();
+                    void updateText(string newText);
+                    string getText();
 
                     // InputBox Variables
                     common::Colour backgroundColour;
                     common::Colour foregroundColour;
                     common::Colour borderColour;
                     gui::AmigaFont font;
-                    common::uint32_t cursorPosition;
+                    uint32_t cursorPosition;
 
             };
         }

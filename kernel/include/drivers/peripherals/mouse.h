@@ -6,7 +6,7 @@
 #define MAX_OS_DRIVERS_PERIPHERALS_MOUSE_H
 
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/vector.h>
 #include <common/eventHandler.h>
 #include <hardwarecommunication/interrupts.h>
@@ -25,23 +25,23 @@ namespace maxOS {
 
             class MouseMoveEvent : public common::Event<MouseEvents>{
                 public:
-                    common::int8_t x;
-                    common::int8_t y;
-                    MouseMoveEvent(common::int8_t x, common::int8_t y);
+                    int8_t x;
+                    int8_t y;
+                    MouseMoveEvent(int8_t x, int8_t y);
                     ~MouseMoveEvent();
             };
 
             class MouseDownEvent : public common::Event<MouseEvents>{
                 public:
-                    common::uint8_t button;
-                    MouseDownEvent(common::uint8_t button);
+                    uint8_t button;
+                    MouseDownEvent(uint8_t button);
                     ~MouseDownEvent();
             };
 
             class MouseUpEvent : public common::Event<MouseEvents>{
                 public:
-                    common::uint8_t button;
-                    MouseUpEvent(common::uint8_t button);
+                    uint8_t button;
+                    MouseUpEvent(uint8_t button);
                     ~MouseUpEvent();
             };
 
@@ -53,9 +53,9 @@ namespace maxOS {
 
                     common::Event<MouseEvents>* onEvent(common::Event<MouseEvents>* event);
 
-                    virtual void onMouseDownEvent(common::uint8_t button);
-                    virtual void onMouseUpEvent(common::uint8_t button);
-                    virtual void onMouseMoveEvent(common::int8_t x, common::int8_t y);
+                    virtual void onMouseDownEvent(uint8_t button);
+                    virtual void onMouseUpEvent(uint8_t button);
+                    virtual void onMouseMoveEvent(int8_t x, int8_t y);
             };
 
 
@@ -65,16 +65,16 @@ namespace maxOS {
 
                 void HandleInterrupt();
 
-                common::uint8_t buffer[3];
-                common::uint8_t offest;
-                common::uint8_t buttons;
+                uint8_t buffer[3];
+                uint8_t offest;
+                uint8_t buttons;
 
             public:
                 MouseDriver(hardwarecommunication::InterruptManager *manager);
                 ~MouseDriver();
 
                 virtual void activate();
-                common::string getDeviceName();
+                string getDeviceName();
             };
         }
     }

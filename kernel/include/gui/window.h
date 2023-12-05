@@ -5,9 +5,9 @@
 #ifndef MaxOS_GUI_WINDOW_H
 #define MaxOS_GUI_WINDOW_H
 
+#include <stdint.h>
 #include <gui/widget.h>
 #include <gui/widgets/text.h>
-#include <common/types.h>
 
 namespace maxOS{
 
@@ -32,21 +32,21 @@ namespace maxOS{
 
             public:
 
-                common::uint8_t windowFrameThickness;
-                common::uint8_t windowTitleBarHeight;
+                uint8_t windowFrameThickness;
+                uint8_t windowTitleBarHeight;
 
                 common::Colour windowAreaColour;
                 common::Colour windowFrameColour;
                 common::Colour windowFrameBorderColour;
 
-                Window(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string titleText);
-                Window(Widget* containedWidget, common::string titleText);
+                Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string titleText);
+                Window(Widget* containedWidget, string titleText);
                 ~Window();
 
                 void drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area);
                 void addChild(Widget* child);
 
-                drivers::peripherals::MouseEventHandler* onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button);
+                drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
 
 
 

@@ -5,7 +5,7 @@
 #ifndef MAXOS_COMMON_FONT_H
 #define MAXOS_COMMON_FONT_H
 
-#include<common/types.h>
+#include <stdint.h>
 #include<common/graphicsContext.h>
 #include<common/rectangle.h>
 
@@ -18,7 +18,7 @@ namespace maxOS{
                 bool is8x8;
 
             public:
-                common::uint16_t fontSize;
+                uint16_t fontSize;
                 bool isBold;
 
                 bool isItalic;
@@ -28,13 +28,13 @@ namespace maxOS{
                 Font();
                 ~Font();
 
-                virtual void drawText(common::int32_t x, common::int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, common::string text);
-                virtual void drawText(common::int32_t x, common::int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, common::string text, common::Rectangle<int> limitArea);
+                virtual void drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, string text);
+                virtual void drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, string text, common::Rectangle<int> limitArea);
 
-                virtual void getFont8x8(common::uint8_t (&font8x8)[2048]);
+                virtual void getFont8x8(uint8_t (&font8x8)[2048]);
 
-                virtual common::uint32_t getTextHeight(common::string text);
-                virtual common::uint32_t getTextWidth(common::string text);
+                virtual uint32_t getTextHeight(string text);
+                virtual uint32_t getTextWidth(string text);
 
         };
 
@@ -44,7 +44,7 @@ namespace maxOS{
                 AmigaFont();
                 ~AmigaFont();
 
-                virtual void getFont8x8(common::uint8_t (&font8x8)[2048]);
+                virtual void getFont8x8(uint8_t (&font8x8)[2048]);
 
         };
     }

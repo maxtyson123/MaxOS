@@ -5,7 +5,7 @@
 #ifndef MAXOS_COMMON_COLOUR_H
 #define MAXOS_COMMON_COLOUR_H
 
-#include <common/types.h>
+#include <stdint.h>
 
 namespace maxOS{
 

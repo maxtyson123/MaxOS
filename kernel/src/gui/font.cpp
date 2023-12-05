@@ -150,7 +150,7 @@ uint32_t Font::getTextHeight(string text) {
  */
 uint32_t Font::getTextWidth(string text) {
     uint32_t length = 0;
-    for(char* c = (char*)text; *c != '\0'; ++c)
+    for(string c = (string)text; *c != '\0'; ++c)
         length++;
     return length*8;
 }

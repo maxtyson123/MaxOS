@@ -59,7 +59,7 @@ void DirectoryTraverser::changeDirectory(DirectoryEnumerator directory) {
  *
  * @param name the name of the directory
  */
-void DirectoryTraverser::makeDirectory(char* name) {
+void DirectoryTraverser::makeDirectory(string name) {
 
 }
 
@@ -131,7 +131,7 @@ DirectoryEnumerator::~DirectoryEnumerator() {
  *
  * @return the name of the directory
  */
-char* DirectoryEnumerator::getDirectoryName() {
+string DirectoryEnumerator::getDirectoryName() {
 
 }
 
@@ -169,8 +169,8 @@ FileEnumerator::~FileEnumerator() {
  *
  * @return the name of the file
  */
-char* FileEnumerator::getFileName() {
-    char* a = "none";
+string FileEnumerator::getFileName() {
+    string a = "none";
     return a;
 }
 

@@ -6,7 +6,6 @@
 #define MAXOS_PROCESS_H
 
 #include <system/multithreading.h>
-#include <common/types.h>
 
 namespace maxOS{
 

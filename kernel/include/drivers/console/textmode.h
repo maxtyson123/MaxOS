@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_CONSOLE_TEXTMODECONSOLE_H
 #define MAXOS_DRIVERS_CONSOLE_TEXTMODECONSOLE_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <drivers/driver.h>
 #include <drivers/console/console.h>
 
@@ -22,19 +22,19 @@ namespace maxOS{
                     TextModeConsole();
                     ~TextModeConsole();
 
-                    common::uint16_t getWidth();
-                    common::uint16_t getHeight();
+                    uint16_t getWidth();
+                    uint16_t getHeight();
 
-                    void putChar(common::uint16_t x, common::uint16_t y, char c);
-                    void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground);
-                    void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background);
+                    void putChar(uint16_t x, uint16_t y, char c);
+                    void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
+                    void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
 
-                    char getChar(common::uint16_t x, common::uint16_t y);
-                    ConsoleColour getForegroundColor(common::uint16_t x, common::uint16_t y);
-                    ConsoleColour getBackgroundColor(common::uint16_t x, common::uint16_t y);
+                    char getChar(uint16_t x, uint16_t y);
+                    ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
+                    ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
 
                 protected:
-                    common::uint16_t* videoMemory;
+                    uint16_t* videoMemory;
             };
 
         }

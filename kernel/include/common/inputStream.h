@@ -5,7 +5,9 @@
 #ifndef MAXOS_COMMON_INPUTSTREAM_H
 #define MAXOS_COMMON_INPUTSTREAM_H
 
+#include <stdint.h>
 #include <common/vector.h>
+#include <common/string.h>
 
 namespace maxOS{
 

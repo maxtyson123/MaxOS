@@ -173,7 +173,7 @@ void OutputStream::writeHex(uint32_t hexToWrite) {
         ibak = hexToWrite;
         for(int j = 1; j < length; j++)
             ibak /= 16;
-        const char* Hex = "0123456789ABCDEF";
+        const string Hex = "0123456789ABCDEF";
         writeChar(Hex[ibak % 16]);
     }
 

@@ -5,7 +5,7 @@
 #ifndef MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
 #include <system/multithreading.h>
@@ -20,10 +20,10 @@ namespace maxOS {
 
         class InterruptHandler {
             protected:
-                common::uint8_t interrupNumber;
+                uint8_t interrupNumber;
                 InterruptManager *interruptManager;
 
-                InterruptHandler(common::uint8_t interrupNumber, InterruptManager *interruptManager = 0);
+                InterruptHandler(uint8_t interrupNumber, InterruptManager *interruptManager = 0);
                 ~InterruptHandler();
 
             public:
@@ -38,30 +38,30 @@ namespace maxOS {
 
                 static InterruptManager *ActiveInterruptManager;
                 static common::OutputStream* errorMessages;
-                common::uint16_t hardwareInterruptOffset;
+                uint16_t hardwareInterruptOffset;
                 InterruptHandler *interruptHandlers[256];   // Make vector?
                 ThreadManager* threadManager;
 
                 struct GateDescriptor {
-                    common::uint16_t handlerAddressLowBits;
-                    common::uint16_t gdt_codeSegmentSelector;
-                    common::uint8_t reserved;
-                    common::uint8_t access;
-                    common::uint16_t handlerAddressHighBits;
+                    uint16_t handlerAddressLowBits;
+                    uint16_t gdt_codeSegmentSelector;
+                    uint8_t reserved;
+                    uint8_t access;
+                    uint16_t handlerAddressHighBits;
                 } __attribute__((packed));
 
                 static GateDescriptor interruptDescriptorTable[256];
 
                 struct InterruptDescriptorTablePointer {
-                    common::uint16_t size;
-                    common::uint32_t base;
+                    uint16_t size;
+                    uint32_t base;
                 } __attribute__((packed));
 
-                static void SetInterruptDescriptorTableEntry(common::uint8_t interrupt,
-                                                             common::uint16_t codeSegmentSelectorOffset,
+                static void SetInterruptDescriptorTableEntry(uint8_t interrupt,
+                                                             uint16_t codeSegmentSelectorOffset,
                                                              void (*handler)(),
-                                                             common::uint8_t DescriptorPrivilegeLevel,
-                                                             common::uint8_t DescriptorType);
+                                                             uint8_t DescriptorPrivilegeLevel,
+                                                             uint8_t DescriptorType);
 
                 static void InterruptIgnore();
 
@@ -119,9 +119,9 @@ namespace maxOS {
                 static void HandleException0x1F();
 
 
-                static common::uint32_t HandleInterrupt(common::uint8_t interrupt, common::uint32_t esp);
-                static common::uint32_t HandleInterruptRequest(common::uint32_t esp);
-                common::uint32_t DoHandleInterruptRequest(common::uint8_t interrupt, common::uint32_t esp);
+                static uint32_t HandleInterrupt(uint8_t interrupt, uint32_t esp);
+                static uint32_t HandleInterruptRequest(uint32_t esp);
+                uint32_t DoHandleInterruptRequest(uint8_t interrupt, uint32_t esp);
 
                 //PIC Cominunication
                 Port8BitSlow programmableInterruptControllerMasterCommandPort;
@@ -131,13 +131,13 @@ namespace maxOS {
 
 
             public:
-                InterruptManager(common::uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManage, common::OutputStream* handler);
+                InterruptManager(uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManage, common::OutputStream* handler);
                 ~InterruptManager();
 
-                common::uint16_t HardwareInterruptOffset();
+                uint16_t HardwareInterruptOffset();
 
-                void setInterruptHandler(common::uint8_t interrupt, InterruptHandler *handler);
-                void removeInterruptHandler(common::uint8_t interrupt);
+                void setInterruptHandler(uint8_t interrupt, InterruptHandler *handler);
+                void removeInterruptHandler(uint8_t interrupt);
 
                 void Activate();
                 void Deactivate();

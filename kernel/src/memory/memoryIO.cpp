@@ -4,7 +4,6 @@
 
 #include <memory/memoryIO.h>
 
-using namespace maxOS::common;
 using namespace maxOS::memory;
 
 MemIO::MemIO(uint64_t address) {
@@ -143,7 +142,7 @@ uint64_t MemIO64Bit::Read(){
  * @param num The number of bytes to copy
  * @return The destination
  */
-void* maxOS::memory::memcpy(void* destination, const void* source, common::uint32_t num) {
+void* maxOS::memory::memcpy(void* destination, const void* source, uint32_t num) {
 
     unsigned char* dst = (unsigned char*) destination;
     const unsigned char* src = (const unsigned char*) source;

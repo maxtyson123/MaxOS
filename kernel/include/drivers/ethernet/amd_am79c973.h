@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_ETHERNET_AMD_AM79C973_H
 #define MAXOS_DRIVERS_ETHERNET_AMD_AM79C973_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <drivers/ethernet/ethernet.h>
 #include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/interrupts.h>
@@ -24,26 +24,26 @@ namespace maxOS{
 
                 struct InitializationBlock{
 
-                    common::uint16_t mode;
+                    uint16_t mode;
                     unsigned reserved1 : 4;
                     unsigned numSendBuffers : 4;
                     unsigned reserved2 : 4;
                     unsigned numRecvBuffers : 4;
-                    common::uint64_t physicalAddress : 48;   //Not 64 bits but will be treated like it is
-                    common::uint16_t reserved3;
-                    common::uint64_t logicalAddress;
-                    common::uint32_t recvBufferDescrAddress;
-                    common::uint32_t sendBufferDescrAddress;
+                    uint64_t physicalAddress : 48;   //Not 64 bits but will be treated like it is
+                    uint16_t reserved3;
+                    uint64_t logicalAddress;
+                    uint32_t recvBufferDescrAddress;
+                    uint32_t sendBufferDescrAddress;
 
 
                 } __attribute__((packed));
 
                 struct BufferDescriptor{
 
-                    common::uint32_t address;
-                    common::uint32_t flags;
-                    common::uint32_t flags2;
-                    common::uint32_t avail;
+                    uint32_t address;
+                    uint32_t flags;
+                    uint32_t flags2;
+                    uint32_t avail;
 
                 } __attribute__((packed));
 
@@ -65,14 +65,14 @@ namespace maxOS{
 
 
                 BufferDescriptor* sendBufferDescr;               //Descriptor entry
-                common::uint8_t sendBufferDescrMemory[2048+15];  //RAM for the send buffer, also 16 byte aligned
-                common::uint8_t sendBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
-                common::uint8_t currentSendBuffer;               //Which buffers are active
+                uint8_t sendBufferDescrMemory[2048+15];  //RAM for the send buffer, also 16 byte aligned
+                uint8_t sendBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
+                uint8_t currentSendBuffer;               //Which buffers are active
 
                 BufferDescriptor* recvBufferDescr;               //Descriptor entry
-                common::uint8_t recvBufferDescrMemory[2048+15];  //RAM for the recive buffer, also 16 byte aligned
-                common::uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
-                common::uint8_t currentRecvBuffer;               //Which buffers are active
+                uint8_t recvBufferDescrMemory[2048+15];  //RAM for the recive buffer, also 16 byte aligned
+                uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
+                uint8_t currentRecvBuffer;               //Which buffers are active
 
                 //Ethernet Driver functions
                 MediaAccessControlAddress ownMAC;                //MAC address of the device
@@ -87,25 +87,20 @@ namespace maxOS{
                 ~amd_am79c973();
 
                 //Override driver default methods
-                common::uint32_t reset();
+                uint32_t reset();
                 void activate();
                 void deactivate();
 
                 // Naming
-                common::string getVendorName();
-                common::string getDeviceName();
+                string getVendorName();
+                string getDeviceName();
 
                 //Override Interrupt default methods
                 void HandleInterrupt();
 
                 //Ethernet Driver functions
-                void DoSend(common::uint8_t* buffer, common::uint32_t size);
-                common::uint64_t GetMediaAccessControlAddress();
-                inline void* operator new(common::uint32_t, amd_am79c973* p)
-                {
-                    return p;
-                }
-
+                void DoSend(uint8_t* buffer, uint32_t size);
+                uint64_t GetMediaAccessControlAddress();
             };
 
 

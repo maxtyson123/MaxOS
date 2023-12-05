@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_ETHERNET_RAWDATAHANDLER_H
 #define MAXOS_DRIVERS_ETHERNET_RAWDATAHANDLER_H
 
-#include <common/types.h>
+#include <stdint.h>
 
 namespace maxOS {
 
@@ -18,7 +18,7 @@ namespace maxOS {
                 public:
                     RawDataHandler();
                     ~RawDataHandler();
-                    virtual bool HandleRawData(common::uint8_t* buffer, common::uint32_t size);
+                    virtual bool HandleRawData(uint8_t* buffer, uint32_t size);
             };
 
 

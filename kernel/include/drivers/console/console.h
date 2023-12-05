@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_CONSOLE_H
 #define MAXOS_DRIVERS_CONSOLE_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/outputStream.h>
 
 namespace maxOS {
@@ -40,51 +40,51 @@ namespace maxOS {
                 Console();
                 ~Console();
 
-                virtual common::uint16_t getWidth();
-                virtual common::uint16_t getHeight();
+                virtual uint16_t getWidth();
+                virtual uint16_t getHeight();
 
-                virtual void putChar(common::uint16_t x, common::uint16_t y, char c);
-                virtual char getChar(common::uint16_t x, common::uint16_t y);
+                virtual void putChar(uint16_t x, uint16_t y, char c);
+                virtual char getChar(uint16_t x, uint16_t y);
 
-                virtual void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground);
-                virtual void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background);
+                virtual void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
+                virtual void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
 
-                virtual ConsoleColour getForegroundColor(common::uint16_t x, common::uint16_t y);
-                virtual ConsoleColour getBackgroundColor(common::uint16_t x, common::uint16_t y);
+                virtual ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
+                virtual ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
 
 
-                virtual void putChar(common::uint16_t x, common::uint16_t y, char c, ConsoleColour foreground, ConsoleColour background);
-                virtual void putString(common::uint16_t x, common::uint16_t y, common::string s, ConsoleColour foreground = LightGrey, ConsoleColour background = Black);
+                virtual void putChar(uint16_t x, uint16_t y, char c, ConsoleColour foreground, ConsoleColour background);
+                virtual void putString(uint16_t x, uint16_t y, string s, ConsoleColour foreground = LightGrey, ConsoleColour background = Black);
                 virtual void scrollUp();
-                virtual void scrollUp(common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
+                virtual void scrollUp(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
                 virtual void clear();
-                virtual void clear(common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
-                virtual void invertColors(common::uint16_t x, common::uint16_t y);
+                virtual void clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
+                virtual void invertColors(uint16_t x, uint16_t y);
             };
 
             class ConsoleArea : public Console
             {
             protected:
                 Console* console;
-                common::uint16_t left;
-                common::uint16_t top;
-                common::uint16_t width;
-                common::uint16_t height;
+                uint16_t left;
+                uint16_t top;
+                uint16_t width;
+                uint16_t height;
             public:
-                ConsoleArea(Console* console, common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height);
-                ConsoleArea(Console* console, common::uint16_t left, common::uint16_t top, common::uint16_t width, common::uint16_t height, ConsoleColour foreground, ConsoleColour background);
+                ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height);
+                ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background);
                 ~ConsoleArea();
 
-                common::uint16_t getWidth();
-                common::uint16_t getHeight();
+                uint16_t getWidth();
+                uint16_t getHeight();
 
-                void putChar(common::uint16_t x, common::uint16_t y, char c);
-                void setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground);
-                void setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background);
+                void putChar(uint16_t x, uint16_t y, char c);
+                void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
+                void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
 
-                char getChar(common::uint16_t x, common::uint16_t y);
-                ConsoleColour getForegroundColor(common::uint16_t x, common::uint16_t y);
-                ConsoleColour getBackgroundColor(common::uint16_t x, common::uint16_t y);
+                char getChar(uint16_t x, uint16_t y);
+                ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
+                ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
             };
 
             class ConsoleStream : public common::OutputStream
@@ -96,13 +96,13 @@ namespace maxOS {
                 ConsoleColour background;
 
             public:
-                common::uint16_t cursorX;
-                common::uint16_t cursorY;
+                uint16_t cursorX;
+                uint16_t cursorY;
 
                 ConsoleStream(Console* console);
                 ~ConsoleStream();
                 void writeChar(char c);
-                void setCursor(common::uint16_t x, common::uint16_t y);
+                void setCursor(uint16_t x, uint16_t y);
             };
 
         }

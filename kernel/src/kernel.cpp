@@ -2,7 +2,7 @@ int buildCount = 488;
 // This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
 
 //Common
-#include <common/types.h>
+#include <stdint.h>
 #include <common/logo.h>
 
 //Hardware com
@@ -165,7 +165,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     //TextModeConsole console;
     console.clear();
 
-    char* logo = header_data;
+    string logo = header_data;
 
     // Print the logo to center of the screen
     uint32_t centerX = videoDriver->getWidth()/2;
@@ -479,7 +479,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
             this->stream = nullptr;
         }
 
-        void onInputBoxTextChanged(common::string newText)
+        void onInputBoxTextChanged(string newText)
         {
             *stream << "Input Box Changed: " << newText << "\n";
         }

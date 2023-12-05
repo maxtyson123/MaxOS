@@ -5,10 +5,13 @@
 #ifndef MAX_OS_DRIVERS_DRIVER_H
 #define MAX_OS_DRIVERS_DRIVER_H
 
+#include <stdint.h>
 #include <common/outputStream.h>
 #include <memory/memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
 #include <common/eventHandler.h>
+#include <common/string.h>
+
 namespace maxOS
 {
     namespace drivers {
@@ -22,18 +25,18 @@ namespace maxOS
                 Driver(common::OutputStream* driverMessageStream = 0);
                 ~Driver();
 
-                void errorMessage(common::string message);
+                void errorMessage(string message);
                 void errorMessage(char charToWrite);
                 void errorMessage(int intToWrite);
-                void errorMessage(common::uint32_t hexToWrite);
+                void errorMessage(uint32_t hexToWrite);
 
                 virtual void activate();
                 virtual void deactivate();
                 virtual void initialise();
-                virtual common::uint32_t reset();
+                virtual uint32_t reset();
 
-                virtual common::string getVendorName();
-                virtual common::string getDeviceName();
+                virtual string getVendorName();
+                virtual string getDeviceName();
         };
 
         //NOTE: Driver doesn't use the EventHandler class because it doesn't need to be connected to anything (May want to change this later)

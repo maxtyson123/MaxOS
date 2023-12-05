@@ -482,9 +482,9 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(I
 }
 
 
-TransmissionControlProtocolSocket *TransmissionControlProtocolHandler::Connect(common::string internetProtocolAddressAndPort) {
+TransmissionControlProtocolSocket *TransmissionControlProtocolHandler::Connect(string internetProtocolAddressAndPort) {
     // Find the colon (:) character in the input string
-    char* colonPosition = (char*)internetProtocolAddressAndPort;
+    string colonPosition = (string)internetProtocolAddressAndPort;
     for (; *colonPosition != '\0'; colonPosition++) {
         if (*colonPosition == ':') {
             // Break the loop if a colon is found

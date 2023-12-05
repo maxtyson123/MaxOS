@@ -280,11 +280,11 @@ void amd_am79c973::deactivate() {
 
 }
 
-common::string amd_am79c973::getVendorName() {
+string amd_am79c973::getVendorName() {
     return "AMD";
 }
 
-common::string amd_am79c973::getDeviceName() {
+string amd_am79c973::getDeviceName() {
     return "PCnet-Fast III (Am79C973)";
 }
 

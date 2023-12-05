@@ -5,7 +5,7 @@
 #ifndef MaxOS_DRIVERS_VGA_H
 #define MaxOS_DRIVERS_VGA_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/video/video.h>
@@ -18,7 +18,7 @@ namespace maxOS{
 
             class VideoGraphicsArray : public VideoDriver{
                 protected:
-                    common::uint8_t* FrameBufferSegment;
+                    uint8_t* FrameBufferSegment;
                     //-The CRT Controller (CRTC) is responsible for controlling the output of video data to the display monitor.
                     //-The graphics controller is responsible for managing the interface between CPU and video memory.
                     //-The sequencer manages the interface between the video data and RAMDAC.
@@ -35,26 +35,21 @@ namespace maxOS{
                     hardwarecommunication::Port8Bit attributeControllerWritePort;   //Attribute Controller Write
                     hardwarecommunication::Port8Bit attributeControllerResetPort;   //Attribute Controller Reset
 
-                    void WriteRegisters(common::uint8_t* registers);                //Send Initialization codes to corresponding port
-                    common::uint8_t* GetFrameBufferSegment();                       //Get offset for segment wanted to use
+                    void WriteRegisters(uint8_t* registers);                //Send Initialization codes to corresponding port
+                    uint8_t* GetFrameBufferSegment();                       //Get offset for segment wanted to use
 
-                    bool internalSetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
-                    void renderPixel8Bit(common::uint32_t x, common::uint32_t y, common::uint8_t colour);
-                    common::uint8_t getRenderedPixel8Bit(common::uint32_t x, common::uint32_t y);
+                    bool internalSetMode(uint32_t width, uint32_t height, uint32_t colourDepth);
+                    void renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour);
+                    uint8_t getRenderedPixel8Bit(uint32_t x, uint32_t y);
 
                 public:
                        VideoGraphicsArray();
                        ~VideoGraphicsArray();
 
-                        common::string getVendorName();
-                        common::string getDeviceName();
+                        string getVendorName();
+                        string getDeviceName();
 
-                       bool supportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colourDepth);
-
-                       inline void* operator new(common::uint32_t, VideoGraphicsArray* p)
-                       {
-                            return p;
-                       }
+                       bool supportsMode(uint32_t width, uint32_t height, uint32_t colourDepth);
                };
         }
 

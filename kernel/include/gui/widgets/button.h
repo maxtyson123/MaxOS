@@ -5,7 +5,7 @@
 #ifndef MAXOS_GUI_WIDGETS_BUTTON_H
 #define MAXOS_GUI_WIDGETS_BUTTON_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/eventHandler.h>
 #include <gui/widget.h>
 #include <gui/font.h>
@@ -55,20 +55,20 @@ namespace maxOS {
             class Button : public Widget, public common::EventManager<ButtonEvents> {
 
                 public:
-                    Button(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string text);
+                    Button(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                     ~Button();
 
                     // Widget Stuff
                     void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
-                    drivers::peripherals::MouseEventHandler* onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button);
-                    void onMouseButtonReleased(common::uint32_t x, common::uint32_t y, common::uint8_t button);
+                    drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
+                    void onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button);
 
                     // Button Stuff
                     common::Colour backgroundColour;
                     common::Colour foregroundColour;
                     common::Colour borderColour;
                     gui::AmigaFont font;
-                    common::string text;
+                    string text;
 
             };
         }

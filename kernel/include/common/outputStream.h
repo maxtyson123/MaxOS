@@ -5,8 +5,9 @@
 #ifndef MAXOS_COMMON_OUTPUTSTREAM_H
 #define MAXOS_COMMON_OUTPUTSTREAM_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/inputStream.h>
+#include <common/string.h>
 
 namespace maxOS{
 

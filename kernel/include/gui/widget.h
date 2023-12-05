@@ -5,7 +5,7 @@
 #ifndef MaxOS_GUI_WIDGET_H
 #define MaxOS_GUI_WIDGET_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/rectangle.h>
 #include <common/vector.h>
 #include <common/graphicsContext.h>
@@ -35,17 +35,17 @@ namespace maxOS{
                 virtual void setFocus(Widget* widget);
                 virtual void bringToFront(Widget* widget);
 
-                common::uint32_t minWidth;
-                common::uint32_t minHeight;
+                uint32_t minWidth;
+                uint32_t minHeight;
 
-                common::uint32_t maxWidth;
-                common::uint32_t maxHeight;
+                uint32_t maxWidth;
+                uint32_t maxHeight;
 
             public:
 
                 // Initializing functions
                 Widget();
-                Widget(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height);
+                Widget(int32_t left, int32_t top, uint32_t width, uint32_t height);
                 ~Widget();
 
                 // Drawing functions
@@ -56,10 +56,10 @@ namespace maxOS{
 
                 // Positioning functions
                 virtual common::Coordinates absoluteCoordinates(common::Coordinates coordinates);
-                virtual bool containsCoordinate(common::uint32_t x, common::uint32_t y);
+                virtual bool containsCoordinate(uint32_t x, uint32_t y);
                 common::Rectangle<int> getPosition();
-                void move(common::int32_t left, common::int32_t top);
-                void resize(common::int32_t width, common::int32_t height);
+                void move(int32_t left, int32_t top);
+                void resize(int32_t width, int32_t height);
 
                 // Focus functions
                 void focus();
@@ -68,11 +68,11 @@ namespace maxOS{
                 void bringToFront();
 
                 // Mouse functions
-                virtual void onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY);
-                virtual void onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY);
-                virtual void onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY);
-                virtual drivers::peripherals::MouseEventHandler* onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button);
-                virtual void onMouseButtonReleased(common::uint32_t x, common::uint32_t y, common::uint8_t button);
+                virtual void onMouseEnterWidget(uint32_t toX, uint32_t toY);
+                virtual void onMouseLeaveWidget(uint32_t fromX, uint32_t fromY);
+                virtual void onMouseMoveWidget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY);
+                virtual drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
+                virtual void onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button);
 
         };
 
@@ -92,7 +92,7 @@ namespace maxOS{
 
                 // Initializing functions
                 CompositeWidget();
-                CompositeWidget(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height);
+                CompositeWidget(int32_t left, int32_t top, uint32_t width, uint32_t height);
                 ~CompositeWidget();
 
                 // Drawing functions
@@ -100,11 +100,11 @@ namespace maxOS{
                 virtual void addChild(Widget* child);
 
                 // Mouse functions
-                virtual void onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY);
-                virtual void onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY);
-                virtual void onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY);
-                virtual drivers::peripherals::MouseEventHandler* onMouseButtonPressed(common::uint32_t x, common::uint32_t y, common::uint8_t button);
-                virtual void onMouseButtonReleased(common::uint32_t x, common::uint32_t y, common::uint8_t button);
+                virtual void onMouseEnterWidget(uint32_t toX, uint32_t toY);
+                virtual void onMouseLeaveWidget(uint32_t fromX, uint32_t fromY);
+                virtual void onMouseMoveWidget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY);
+                virtual drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
+                virtual void onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button);
 
 
         };
@@ -125,7 +125,7 @@ namespace maxOS{
                 WidgetMoverResizer(Widget* widget);
                 ~WidgetMoverResizer();
 
-                void onMouseMoveEvent(common::int8_t x, common::int8_t y);
+                void onMouseMoveEvent(int8_t x, int8_t y);
 
         };
 
@@ -170,7 +170,7 @@ namespace maxOS{
          * @param x The x position of the mouse
          * @param y The y position of the mouse
          */
-        template<int Left, int Top, int Width, int Height> void WidgetMoverResizer<Left, Top, Width, Height>::onMouseMoveEvent(common::int8_t x, common::int8_t y)
+        template<int Left, int Top, int Width, int Height> void WidgetMoverResizer<Left, Top, Width, Height>::onMouseMoveEvent(int8_t x, int8_t y)
         {
 
             Widget* targ = this->targettedWidget;

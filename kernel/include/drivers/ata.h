@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_ATA_H
 #define MAXOS_DRIVERS_ATA_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/outputStream.h>
 #include <hardwarecommunication/port.h>
 
@@ -26,16 +26,16 @@ namespace maxOS{
                 hardwarecommunication::Port8Bit commandPort;
                 hardwarecommunication::Port8Bit controlPort;
                 bool master;
-                common::uint16_t bytesPerSector;
+                uint16_t bytesPerSector;
 
                 common::OutputStream* ataMessageStream;
             public:
-                AdvancedTechnologyAttachment(common::uint16_t portBase, bool master, common::OutputStream* ataMessageStream);
+                AdvancedTechnologyAttachment(uint16_t portBase, bool master, common::OutputStream* ataMessageStream);
                 ~AdvancedTechnologyAttachment();
 
                 void Identify();
-                void Read28(common::uint32_t sector, common::uint8_t* data, int count);
-                void Write28(common::uint32_t sector, common::uint8_t* data, int count);
+                void Read28(uint32_t sector, uint8_t* data, int count);
+                void Write28(uint32_t sector, uint8_t* data, int count);
                 void Flush();                                                                               //Flush Cache  //TODO: See also vid 19 24:20
 
                 //TODO: Make into driver class

@@ -59,7 +59,7 @@ void Text::draw(GraphicsContext *gc, Rectangle<int>& area) {
  * @details Update the text of the widget
  * @param newText The new text to display
  */
-void Text::updateText(common::string newText) {
+void Text::updateText(string newText) {
 
 
     // Copy the new text into the widget by looping through the characters

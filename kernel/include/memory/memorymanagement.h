@@ -5,7 +5,8 @@
 #ifndef MAXOS_SYSTEM_MEMORYMANAGEMENT_H
 #define MAXOS_SYSTEM_MEMORYMANAGEMENT_H
 
-#include <common/types.h>
+#include <stddef.h>
+#include <stdint.h>
 
 namespace maxOS{
 
@@ -17,7 +18,7 @@ namespace maxOS{
             MemoryChunk* prev;
 
             bool allocated;
-            common::size_t size;
+            size_t size;
 
         };
 
@@ -29,14 +30,14 @@ namespace maxOS{
         public:
             static MemoryManager* activeMemoryManager; //Similar to how we have the active interrupt manager
 
-            MemoryManager(common::size_t start, common::size_t size);
+            MemoryManager(size_t start, size_t size);
             ~MemoryManager();
 
-            void* malloc(common::size_t size);
+            void* malloc(size_t size);
             void free(void* pointer);
             int getMemoryUsed();
 
-            template<class Type> Type* Instantiate(common::uint32_t numberOfElements=1){
+            template<class Type> Type* Instantiate(uint32_t numberOfElements=1){
                 Type* result = (Type*)malloc(sizeof(Type)*numberOfElements);
                 new (result) Type();
                 return result;
@@ -75,12 +76,12 @@ namespace maxOS{
 
 
 
-void* operator new(unsigned size);
-void* operator new[](unsigned size);
+void* operator new(size_t size);
+void* operator new[](size_t size);
 
 //Placement New
-void* operator new(unsigned size, void* pointer);
-void* operator new[](unsigned size, void* pointer);
+void* operator new(size_t size, void* pointer);
+void* operator new[](size_t size, void* pointer);
 
 void operator delete(void* pointer);
 void operator delete[](void* pointer);

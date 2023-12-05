@@ -420,10 +420,10 @@ uint16_t InterruptManager::HardwareInterruptOffset() {
     return hardwareInterruptOffset;
 }
 
-void InterruptManager::setInterruptHandler(common::uint8_t interrupt, InterruptHandler *handler) {
+void InterruptManager::setInterruptHandler(uint8_t interrupt, InterruptHandler *handler) {
     interruptHandlers[interrupt] = handler;
 }
 
-void InterruptManager::removeInterruptHandler(common::uint8_t interrupt) {
+void InterruptManager::removeInterruptHandler(uint8_t interrupt) {
     interruptHandlers[interrupt] = 0;
 }

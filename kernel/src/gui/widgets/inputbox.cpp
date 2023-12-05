@@ -221,7 +221,7 @@ void InputBox::updateText(string newText) {
     cursorPosition = 0;
 
     // Copy the new text into the widget text
-    for(char* c = (char*)newText, *buffer = &widgetText[0]; *c != '\0'; ++c, buffer++)
+    for(string c = (string)newText, *buffer = &widgetText[0]; *c != '\0'; ++c, buffer++)
     {
 
         // Update the cursor position and the buffer

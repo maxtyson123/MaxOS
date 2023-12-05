@@ -5,7 +5,7 @@
 #ifndef MAXOS_SYSTEM_MULTITASKING_H
 #define MAXOS_SYSTEM_MULTITASKING_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <system/gdt.h>
 
 namespace maxOS{
@@ -16,29 +16,29 @@ namespace maxOS{
         {
             //Pushed by kernel in interuptstubs
 
-            common::uint32_t eax;           // Accumulating Register
-            common::uint32_t ebx;           // Base Register
-            common::uint32_t ecx;           // Counting Register
-            common::uint32_t edx;           // Data Register
+            uint32_t eax;           // Accumulating Register
+            uint32_t ebx;           // Base Register
+            uint32_t ecx;           // Counting Register
+            uint32_t edx;           // Data Register
 
-            common::uint32_t esi;           // Stack Index
-            common::uint32_t edi;           // Data Index
-            common::uint32_t ebp;           // Stack Base Pointer
+            uint32_t esi;           // Stack Index
+            uint32_t edi;           // Data Index
+            uint32_t ebp;           // Stack Base Pointer
 
             //Elements that have been pushed so far
             /*
-            common::uint32_t gs;
-            common::uint32_t fs;
-            common::uint32_t es;
-            common::uint32_t ds;
+            uint32_t gs;
+            uint32_t fs;
+            uint32_t es;
+            uint32_t ds;
             */
-            common::uint32_t error;         //One int for an error code
+            uint32_t error;         //One int for an error code
 
-            common::uint32_t eip;           // Instruction Pointer
-            common::uint32_t cs;            // Code Segment
-            common::uint32_t eflags;        // Flags
-            common::uint32_t esp;           // Stack Pointer
-            common::uint32_t ss;            // Stack Segment
+            uint32_t eip;           // Instruction Pointer
+            uint32_t cs;            // Code Segment
+            uint32_t eflags;        // Flags
+            uint32_t esp;           // Stack Pointer
+            uint32_t ss;            // Stack Segment
         } __attribute__((packed));
 
 
@@ -46,7 +46,7 @@ namespace maxOS{
         {
             friend class TaskManager;   //Allow TaskManger class to acess private values of this class
         private:
-            common::uint8_t stack[4096]; //Allocate 4kb for this tasks stack
+            uint8_t stack[4096]; //Allocate 4kb for this tasks stack
             CPUState_Task* cpuState;
         public:
             Task(system::GlobalDescriptorTable *gdt, void entrypoint());

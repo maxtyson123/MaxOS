@@ -5,12 +5,11 @@
 #include <memory/memorymanagement.h>
 
 using namespace maxOS;
-using namespace maxOS::common;
 using namespace maxOS::memory;
 
 MemoryManager* MemoryManager::activeMemoryManager = 0;
 
-MemoryManager::MemoryManager(common::size_t start, common::size_t size) {
+MemoryManager::MemoryManager(size_t start, size_t size) {
 
     activeMemoryManager = this;
 
@@ -41,7 +40,7 @@ MemoryManager::~MemoryManager() {
  * @param size size of the block
  * @return a pointer to the block, 0 if no block is available
  */
-void* MemoryManager::malloc(common::size_t size) {
+void* MemoryManager::malloc(size_t size) {
 
     MemoryChunk* result = 0;
 
@@ -165,7 +164,7 @@ int MemoryManager::getMemoryUsed() {
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
 
-void* operator new(unsigned size){
+void* operator new(size_t size){
 
     if(maxOS::memory::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
 
@@ -176,7 +175,7 @@ void* operator new(unsigned size){
     return 0;
 
 }
-void* operator new[](unsigned size){
+void* operator new[](size_t size){
 
     if(maxOS::memory::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
 
@@ -190,12 +189,12 @@ void* operator new[](unsigned size){
 
 //Placement New (see placement new operator)
 
-void* operator new(unsigned size, void* pointer){
+void* operator new(size_t size, void* pointer){
 
     return pointer;
 
 }
-void* operator new[](unsigned size, void* pointer){
+void* operator new[](size_t size, void* pointer){
 
     return pointer;
 

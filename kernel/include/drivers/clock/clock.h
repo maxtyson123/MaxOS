@@ -5,7 +5,7 @@
 #ifndef MAXOS_DRIVERS_CLOCK_CLOCK_H
 #define MAXOS_DRIVERS_CLOCK_CLOCK_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/time.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
@@ -42,7 +42,7 @@ namespace maxOS {
 
             class Clock: public Driver, public hardwarecommunication::InterruptHandler, public common::EventManager<ClockEvents>{
                 private:
-                    volatile common::uint64_t ticks;        // Ensure that the compiler does not optimize this variable out of the code (volatile)
+                    volatile uint64_t ticks;        // Ensure that the compiler does not optimize this variable out of the code (volatile)
 
                 protected:
                     // Store all the event clockEventHandlers
@@ -54,23 +54,23 @@ namespace maxOS {
                     hardwarecommunication::Port8Bit commandPort;
 
                     // Time between events
-                    common::uint16_t ticksBetweenEvents;
-                    common::uint16_t ticksUntilNextEvent;
+                    uint16_t ticksBetweenEvents;
+                    uint16_t ticksUntilNextEvent;
 
                     // Other functions
                     void HandleInterrupt();
-                    common::uint8_t readHardwareClock(common::uint8_t address);
-                    common::uint8_t binaryRepresentation(common::uint8_t number);
+                    uint8_t readHardwareClock(uint8_t address);
+                    uint8_t binaryRepresentation(uint8_t number);
 
                 public:
-                    Clock(hardwarecommunication::InterruptManager* interruptManager, common::uint16_t timeBetweenEvents = 10);
+                    Clock(hardwarecommunication::InterruptManager* interruptManager, uint16_t timeBetweenEvents = 10);
                     ~Clock();
 
                     void activate();
-                    void delay(common::uint32_t milliseconds);
+                    void delay(uint32_t milliseconds);
 
-                    common::string getVendorName();
-                    common::string getDeviceName();
+                    string getVendorName();
+                    string getDeviceName();
             };
 
         }

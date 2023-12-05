@@ -1,12 +1,11 @@
 
-GCC_PARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -g
 TARGET=i686-elf
+
 GCC_EXEC ?= $$HOME/opt/cross/bin/$(TARGET)-gcc
+GCC_PARAMS = -ffreestanding -fno-exceptions -fno-rtti -nostdlib
 
-BUILD_COMPLETE ?= make runQ
+AS_EXEC ?= $$HOME/opt/cross/bin/$(TARGET)-as
 
-AS_PARAMS = --32
-LD_PARAMS = -melf_i386 --verbose
 QEMU_PARAMS = -device pcnet,netdev=net0 \
               -netdev user,id=net0,hostfwd=tcp::1234-:1234 \
 		      -m 512 \
@@ -70,11 +69,6 @@ kernel =  obj/kernel/loader.o \
  		  obj/kernel/net/tcp.o \
  		  obj/kernel/kernel.o
 
-libraries =
-ports =
-programs =
-
-
 .PHONY: default
 default: build;
 
@@ -82,57 +76,16 @@ default: build;
 
 obj/kernel/%.o: kernel/src/%.cpp
 	mkdir -p $(@D)
-	$(GCC_EXEC) $(GCC_PARAMS) -Ikernel/include -c -o $@ $<
+	$(GCC_EXEC) $< -o $@ $(GCC_PARAMS) -Ikernel/include
 
 obj/kernel/%.o: kernel/src/%.s
 	mkdir -p $(@D)
-	as $(AS_PARAMS) -Ikernel/include -o $@ $<
-
-### Libraries ###
-
-obj/libraries/%.o: libraries/src/%.cpp
-	mkdir -p $(@D)
-	$(GCC_EXEC) $(GCC_PARAMS) -Ilibraries/include -c -o $@ $<
-
-obj/libraries/%.o: libraries/src/%.s
-	mkdir -p $(@D)
-	as $(AS_PARAMS) -Ilibraries/include -o $@ $<
-
-buildLibraries: $(libraries)
-	echo Libraries Built
-
-
-### Ports ###
-
-obj/ports/%.o: ports/src/%.cpp
-	mkdir -p $(@D)
-	$(GCC_EXEC) $(GCC_PARAMS) -Iports/include -c -o $@ $<
-
-obj/ports/%.o: ports/src/%.s
-	mkdir -p $(@D)
-	as $(AS_PARAMS) -Iports/include -o $@ $<
-
-buildPorts: $(ports)
-	echo Ports Built
-
-
-### Programs ###
-
-obj/programs/%.o: programs/src/%.cpp
-	mkdir -p $(@D)
-	$(GCC_EXEC) $(GCC_PARAMS) -Iprograms/include -c -o $@ $<
-
-obj/programs/%.o: programs/src/%.s
-	mkdir -p $(@D)
-	as $(AS_PARAMS) -Iprograms/include -o $@ $<
-
-buildPrograms: $(programs)
-	echo Programs Built
+	$(AS_EXEC) -Ikernel/include -o $@ $<
 
 ### Build ###
 
-maxOS.bin: linker.ld $(kernel) $(libraries) $(ports) $(programs)
-	ld $(LD_PARAMS) -T $< -o $@ $(kernel) $(libraries) $(ports) $(programs)
+maxOS.bin: linker.ld $(kernel)
+	ld -melf_i386 --verbose -T $< -o $@ $(kernel)
 	objcopy --only-keep-debug $@ maxOS.sym
 
 .PHONY: filesystem
@@ -145,15 +98,6 @@ incrementVersion:
 
 build: maxOS.bin
 	@echo Made Max OS Kernel
-
-	# Make the libraries
-	@echo Made Max OS Libraries
-
-	# Make the programs
-	@echo Made Max OS Programs
-
-	# Make the ports
-	@echo Made Max OS Ports
 
 	# Make the disk image
 	(ls maxOS.img && echo yes) || toolchain/create_disk_img.sh
@@ -174,3 +118,6 @@ clean:
 
 cross_compiler:
 	cd toolchain && ./make_cross_compiler.sh
+
+test:
+	echo $(kernel)

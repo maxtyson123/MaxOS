@@ -147,12 +147,12 @@ void Fat32::UpdateEntryInFat(drivers::AdvancedTechnologyAttachment *hd, uint32_t
 };
 
 /**
- * @details Check if a char* is a valid FAT32 name
+ * @details Check if a string is a valid FAT32 name
  *
  * @param name Pointer to the char array to check
  * @return true if the name is valid, false otherwise
  */
-bool Fat32::IsValidFAT32Name(char* name) {
+bool Fat32::IsValidFAT32Name(string name) {
 
     // Count the number of characters in the name
     int len = 0;
@@ -270,7 +270,7 @@ void FatDirectoryTraverser::ReadEntrys(){
                     currentFileEnumerator = file;
                 }
 
-                char* foo = "        ";
+                string foo = "        ";
                 for(int j = 0; j < 8; j++)
                     foo[j] = dirent[index].name[j];
                 fat32MessageStream -> write(foo);
@@ -340,7 +340,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-       // if (common::strcmp(name, (char*)dirent[i].name) == 0) {              //If the name is the same as the parameter
+       // if (common::strcmp(name, (string)dirent[i].name) == 0) {              //If the name is the same as the parameter
       //      fat32MessageStream -> write("Name already in use");
       //      return;
       //  }
@@ -392,7 +392,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-     //   if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
+     //   if (common::strcmp(name, (string)dirent[i].name) == 0) {         //If the name is the same as the parameter
      //       dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
     //        index = i;
     //        break;
@@ -431,7 +431,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-    //    if (common::strcmp(name, (char*)dirent[i].name) == 0) {         //If the name is the same as the parameter
+    //    if (common::strcmp(name, (string)dirent[i].name) == 0) {         //If the name is the same as the parameter
     //        fat32MessageStream -> write("Name already in use");
     //        return;
     //    }
@@ -478,7 +478,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-      //  if (common::strcmp(name, (char*)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
+      //  if (common::strcmp(name, (string)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
       //      dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
       //      index = i;
       //      break;
@@ -608,7 +608,7 @@ FatDirectoryEnumerator::~FatDirectoryEnumerator() {
  *
  * @return The name of the directory
  */
-char* FatDirectoryEnumerator::getDirectoryName() {
+string FatDirectoryEnumerator::getDirectoryName() {
     char *foo = "        ";
     for (int j = 0; j < 8; j++)
         foo[j] = directoryInfo -> name[j];
@@ -622,7 +622,7 @@ char* FatDirectoryEnumerator::getDirectoryName() {
  * @param newDirectoryName The new name of the directory
  * @return The old name of the directory
  */
-char *FatDirectoryEnumerator::changeDirectoryName(char* newDirectoryName) {
+char *FatDirectoryEnumerator::changeDirectoryName(string newDirectoryName) {
 
     //Check if the new name is acceptable
     if(!Fat32::IsValidFAT32Name(newDirectoryName)) return nullptr;

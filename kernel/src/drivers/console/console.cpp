@@ -122,10 +122,10 @@ void Console::putChar(common::uint16_t x, common::uint16_t y, char c, ConsoleCol
  * @param foreground The foreground color of the string
  * @param background The background color of the string
  */
-void Console::putString(common::uint16_t x, common::uint16_t y, common::string s, ConsoleColour foreground, ConsoleColour background) {
+void Console::putString(common::uint16_t x, common::uint16_t y, string s, ConsoleColour foreground, ConsoleColour background) {
 
     // For each character in the string
-    for(const char* si = s; x < getWidth() && *si != '\0'; si++, x++) {
+    for(const string si = s; x < getWidth() && *si != '\0'; si++, x++) {
 
         // Put the character on the console
         putChar(x,y,*si,foreground,background);

@@ -10,7 +10,7 @@ using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::peripherals;
 
-Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string titleText)
+Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, string titleText)
 : CompositeWidget(left, top, width, height),
 // Top at -10 for bar height, -5 for frame, + 2 for the border. Width is the width of the window minus the frame on each side. Height is the height of the title bar plus the frame on the top minus the border.
   title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, titleText),
@@ -44,7 +44,7 @@ Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width
 
 }
 
-Window::Window(Widget *containedWidget, common::string titleText)
+Window::Window(Widget *containedWidget, string titleText)
 // Width is the width of the contained widget plus the frame on each side and the border. Height is the height of the contained widget plus the frame on the top and bottom plus the height of the title bar plus the border.
 : CompositeWidget(0, 0, containedWidget -> getPosition().width + 2 * 5 + 2, containedWidget->getPosition().height + 2 * 5 + 10 + 2),
   title(0, -(10 + 5) + 2, containedWidget -> getPosition().width, 10 + 5 - 3, titleText),

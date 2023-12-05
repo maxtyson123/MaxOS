@@ -5,7 +5,7 @@
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 #define MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/vector.h>
 #include <common/inputStream.h>
 #include <common/eventHandler.h>
@@ -19,7 +19,7 @@ namespace maxOS
 
         namespace peripherals{
 
-            enum KeyCode : common::uint16_t{
+            enum KeyCode : uint16_t{
 
                 // Alphabet
                 A = 'A', a = 'a',
@@ -246,14 +246,14 @@ namespace maxOS
                     virtual void onKeyUp(KeyCode keyUpCode, KeyboardState keyUpState);
             };
 
-            class KeyboardInterpreter : public common::InputStreamEventHandler<common::uint8_t>, public common::EventManager<KeyboardEvents>{
+            class KeyboardInterpreter : public common::InputStreamEventHandler<uint8_t>, public common::EventManager<KeyboardEvents>{
 
             protected:
                 KeyboardState keyBoardState;
 
                 bool nextIsExtendedCode0;                                   // Some keyboard codes are 2 bytes long
-                common::uint8_t currentExtendedCode1;
-                common::uint16_t extendedCode1Buffer;
+                uint8_t currentExtendedCode1;
+                uint16_t extendedCode1Buffer;
 
             public:
                 KeyboardInterpreter();
@@ -387,11 +387,11 @@ namespace maxOS
                 KeyboardInterpreterEN_US();
                 ~KeyboardInterpreterEN_US();
 
-                void onStreamRead(common::uint8_t scanCode);
+                void onStreamRead(uint8_t scanCode);
 
             };
 
-            class KeyboardDriver : public hardwarecommunication::InterruptHandler, public Driver, public common::GenericInputStream<common::uint8_t>{
+            class KeyboardDriver : public hardwarecommunication::InterruptHandler, public Driver, public common::GenericInputStream<uint8_t>{
                 hardwarecommunication::Port8Bit dataPort;
                 hardwarecommunication::Port8Bit commandPort;
 
@@ -403,7 +403,7 @@ namespace maxOS
                 void HandleInterrupt();
 
                 virtual void activate();
-                common::string getDeviceName();
+                string getDeviceName();
             };
 
         }

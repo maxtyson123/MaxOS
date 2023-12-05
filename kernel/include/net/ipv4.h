@@ -5,32 +5,32 @@
 #ifndef MAXOS_NET_IPV4_H
 #define MAXOS_NET_IPV4_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <net/ethernetframe.h>
 
 namespace maxOS{
 
     namespace net{
 
-        typedef common::uint32_t InternetProtocolAddress;
-        typedef common::uint32_t SubnetMask;
+        typedef uint32_t InternetProtocolAddress;
+        typedef uint32_t SubnetMask;
 
         struct InternetProtocolV4Header
         {
-            common::uint8_t headerLength : 4;
-            common::uint8_t version : 4;
-            common::uint8_t typeOfService;
-            common::uint16_t totalLength;
+            uint8_t headerLength : 4;
+            uint8_t version : 4;
+            uint8_t typeOfService;
+            uint16_t totalLength;
 
-            common::uint16_t identifier;
-            common::uint16_t flagsAndOffset;
+            uint16_t identifier;
+            uint16_t flagsAndOffset;
 
-            common::uint8_t timeToLive;
-            common::uint8_t protocol;
-            common::uint16_t checksum;
+            uint8_t timeToLive;
+            uint8_t protocol;
+            uint16_t checksum;
 
-            common::uint32_t sourceIP;
-            common::uint32_t destinationIP;
+            uint32_t sourceIP;
+            uint32_t destinationIP;
         } __attribute__((packed));
 
         class InternetProtocolHandler;
@@ -49,14 +49,14 @@ namespace maxOS{
 
             protected:
                 InternetProtocolHandler* internetProtocolHandler;
-                common::uint8_t ipProtocol;
+                uint8_t ipProtocol;
 
             public:
-                InternetProtocolPayloadHandler(InternetProtocolHandler* internetProtocolHandler, common::uint8_t protocol);
+                InternetProtocolPayloadHandler(InternetProtocolHandler* internetProtocolHandler, uint8_t protocol);
                 ~InternetProtocolPayloadHandler();
 
-                virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
-                void Send(InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
+                virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
+                void Send(InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
         };
 
         class InternetProtocolHandler : public EthernetFramePayloadHandler{
@@ -65,7 +65,7 @@ namespace maxOS{
 
             protected:
 
-                common::Map<common::uint8_t, InternetProtocolPayloadHandler*> internetProtocolPayloadHandlers;
+                common::Map<uint8_t, InternetProtocolPayloadHandler*> internetProtocolPayloadHandlers;
 
                 InternetProtocolAddressResolver* resolver;
                 common::OutputStream* errorMessages;
@@ -84,14 +84,14 @@ namespace maxOS{
                                          common::OutputStream* errorMessages);
                 ~InternetProtocolHandler();
 
-                bool handleEthernetframePayload(common::uint8_t* ethernetframePayload, common::uint32_t size) override;
-                void sendInternetProtocolPacket(common::uint32_t dstIP_BE, common::uint8_t protocol, common::uint8_t* data, common::uint32_t size);
+                bool handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size) override;
+                void sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, uint8_t* data, uint32_t size);
 
-                static common::uint16_t Checksum(common::uint16_t* data, common::uint32_t lengthInBytes);
+                static uint16_t Checksum(uint16_t* data, uint32_t lengthInBytes);
 
-                static InternetProtocolAddress CreateInternetProtocolAddress(common::uint8_t digit1, common::uint8_t digit2, common::uint8_t digit3, common::uint8_t digit4);
-                static InternetProtocolAddress Parse(common::string address);
-                static SubnetMask CreateSubnetMask(common::uint8_t digit1, common::uint8_t digit2, common::uint8_t digit3, common::uint8_t digit4);
+                static InternetProtocolAddress CreateInternetProtocolAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4);
+                static InternetProtocolAddress Parse(string address);
+                static SubnetMask CreateSubnetMask(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4);
                 InternetProtocolAddress GetInternetProtocolAddress();
                 drivers::ethernet::MediaAccessControlAddress GetMediaAccessControlAddress();
 

@@ -6,7 +6,7 @@
 #define MAXOS_NET_UDP_H
 
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/eventHandler.h>
 #include <net/ipv4.h>
 #include <memory/memorymanagement.h>
@@ -19,10 +19,10 @@ namespace maxOS
         struct UserDatagramProtocolHeader
         {
 
-            common::uint16_t sourcePort;
-            common::uint16_t destinationPort;
-            common::uint16_t length;
-            common::uint16_t checksum;
+            uint16_t sourcePort;
+            uint16_t destinationPort;
+            uint16_t length;
+            uint16_t checksum;
 
         } __attribute__((packed));
 
@@ -34,15 +34,15 @@ namespace maxOS
         class UserDatagramProtocolSocket;
         class UserDatagramProtocolHandler;
 
-        typedef common::uint16_t UserDatagramProtocolPort;
+        typedef uint16_t UserDatagramProtocolPort;
 
         class UDPDataReceivedEvent : public common::Event<UserDatagramProtocolEvents>{
             public:
                 UserDatagramProtocolSocket* socket;
-                common::uint8_t* data;
-                common::uint16_t size;
+                uint8_t* data;
+                uint16_t size;
 
-                UDPDataReceivedEvent(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                UDPDataReceivedEvent(UserDatagramProtocolSocket* socket, uint8_t* data, uint16_t size);
                 ~UDPDataReceivedEvent();
         };
 
@@ -54,7 +54,7 @@ namespace maxOS
 
                 common::Event<UserDatagramProtocolEvents>* onEvent(common::Event<UserDatagramProtocolEvents>* event);
 
-                virtual void handleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                virtual void handleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, uint8_t* data, uint16_t size);
 
         };
 
@@ -64,11 +64,11 @@ namespace maxOS
             protected:
                 bool listening;
 
-                common::uint16_t localPort;
-                common::uint16_t remotePort;
+                uint16_t localPort;
+                uint16_t remotePort;
 
-                common::uint32_t localIP;
-                common::uint32_t remoteIP;
+                uint32_t localIP;
+                uint32_t remoteIP;
 
                 UserDatagramProtocolHandler* userDatagramProtocolHandler;
 
@@ -76,8 +76,8 @@ namespace maxOS
                 UserDatagramProtocolSocket();
                 ~UserDatagramProtocolSocket();  
 
-                virtual void handleUserDatagramProtocolPayload(common::uint8_t* data, common::uint16_t size);
-                virtual void Send(common::uint8_t* data, common::uint16_t size);
+                virtual void handleUserDatagramProtocolPayload(uint8_t* data, uint16_t size);
+                virtual void Send(uint8_t* data, uint16_t size);
                 virtual void Disconnect();
 
         }; 
@@ -93,15 +93,15 @@ namespace maxOS
                 UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
                 ~UserDatagramProtocolHandler();
 
-                virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
+                virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
                 
-                UserDatagramProtocolSocket* Connect(common::uint32_t ip, common::uint16_t port);
-                UserDatagramProtocolSocket* Connect(common::string internetProtocolAddressAndPort);
+                UserDatagramProtocolSocket* Connect(uint32_t ip, uint16_t port);
+                UserDatagramProtocolSocket* Connect(string internetProtocolAddressAndPort);
 
-                UserDatagramProtocolSocket* Listen(common::uint16_t port);
+                UserDatagramProtocolSocket* Listen(uint16_t port);
 
                 void Disconnect(UserDatagramProtocolSocket* socket);
-                void Send(UserDatagramProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+                void Send(UserDatagramProtocolSocket* socket, uint8_t* data, uint16_t size);
 
                 void Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler);
         };

@@ -5,7 +5,7 @@
 #ifndef MAXOS_SYSTEM_SYSCALLS_H
 #define MAXOS_SYSTEM_SYSCALLS_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <hardwarecommunication/interrupts.h>
 
 namespace maxOS{
@@ -13,7 +13,7 @@ namespace maxOS{
         class SyscallHandler : hardwarecommunication::InterruptHandler{
 
         public:
-            SyscallHandler(hardwarecommunication::InterruptManager* interruptManager, common::uint8_t interruptNumber);
+            SyscallHandler(hardwarecommunication::InterruptManager* interruptManager, uint8_t interruptNumber);
             ~SyscallHandler();
 
             virtual void HandleInterrupt();

@@ -5,7 +5,7 @@
 #ifndef MAXOS_GUI_WDIGETS_TEXT_H
 #define MAXOS_GUI_WDIGETS_TEXT_H
 
-#include <common/types.h>
+#include <stdint.h>
 #include <common/graphicsContext.h>
 #include <gui/widget.h>
 #include <gui/font.h>
@@ -28,11 +28,11 @@ namespace maxOS {
                 common::Colour foregroundColour;
                 common::Colour backgroundColour;
 
-                Text(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, common::string text);
+                Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                 ~Text();
 
                 void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
-                void updateText(common::string newText);
+                void updateText(string newText);
 
             };
         }

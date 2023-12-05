@@ -226,7 +226,7 @@ uint16_t InternetProtocolHandler::Checksum(uint16_t *data, uint32_t lengthInByte
         temp += ((data[i] & 0xFF00) >> 8) | ((data[i] & 0x00FF) << 8);                             //Add data to sum in big endian
 
     if(lengthInBytes % 2)                                                                          //If there is an odd number of bytes
-        temp += ((uint16_t)((char*)data)[lengthInBytes-1]) << 8;                                   //Add the last byte to the sum
+        temp += ((uint16_t)((string)data)[lengthInBytes-1]) << 8;                                   //Add the last byte to the sum
 
     while(temp & 0xFFFF0000)                                                                       //While there is a carry
         temp = (temp & 0xFFFF) + (temp >> 16);                                                     //Add the carry to the sum
@@ -254,7 +254,7 @@ InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     uint8_t currentDigit = 0;
     for(int i = 0; i < 4; i++)
         digits[i] = 0;
-    for(char* i = (char*)address; *i != '\0'; ++i)
+    for(string i = (string)address; *i != '\0'; ++i)
     {
         if('0' <= *i && *i <= '9')
         {

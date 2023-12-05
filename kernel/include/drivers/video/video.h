@@ -5,9 +5,9 @@
 #ifndef MAXOS_DRIVERS_VIDEO_VIDEO_H
 #define MAXOS_DRIVERS_VIDEO_VIDEO_H
 
+#include <stdint.h>
 #include <drivers/driver.h>
 #include <common/graphicsContext.h>
-#include <common/types.h>
 
 namespace maxOS
 {
@@ -18,14 +18,14 @@ namespace maxOS
             class VideoDriver : public Driver, public common::GraphicsContext {
 
             protected:
-                virtual bool internalSetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colorDepth);
+                virtual bool internalSetMode(uint32_t width, uint32_t height, uint32_t colorDepth);
 
             public:
                 VideoDriver();
                 ~VideoDriver();
 
-                virtual bool supportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colorDepth);
-                bool setMode(common::uint32_t width, common::uint32_t height, common::uint32_t colorDepth);
+                virtual bool supportsMode(uint32_t width, uint32_t height, uint32_t colorDepth);
+                bool setMode(uint32_t width, uint32_t height, uint32_t colorDepth);
                 virtual bool setTextMode();
             };
 

@@ -6,7 +6,7 @@
 #define MAXOS_NET_ICMP_H
 
 #include <net/ipv4.h>
-#include <common/types.h>
+#include <stdint.h>
 
 
 namespace maxOS{
@@ -14,11 +14,11 @@ namespace maxOS{
     namespace net{
 
         struct InternetControlMessageProtocolHeader{
-            common::uint8_t type;
-            common::uint8_t code;
+            uint8_t type;
+            uint8_t code;
 
-            common::uint16_t checksum;
-            common::uint32_t data;
+            uint16_t checksum;
+            uint32_t data;
         }__attribute__((packed));                       // Packed to avoid padding
 
         class InternetControlMessageProtocol : InternetProtocolPayloadHandler{
@@ -27,7 +27,7 @@ namespace maxOS{
                 InternetControlMessageProtocol(InternetProtocolHandler* internetProtocolHandler);
                 ~InternetControlMessageProtocol();
 
-                bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size);
+                bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
                 void RequestEchoReply(InternetProtocolAddress address);
         };
 

@@ -5,6 +5,7 @@
 #ifndef MaxOS_COMMON_GRAPHICSCONTEX_H
 #define MaxOS_COMMON_GRAPHICSCONTEX_H
 
+#include <stdint.h>
 #include <common/colour.h>
 
 namespace maxOS {

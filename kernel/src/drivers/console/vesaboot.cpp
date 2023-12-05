@@ -55,7 +55,7 @@ void VESABootConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
     videoMemory[offset] = (videoMemory[offset] & 0xFF00) | (uint16_t)c;
 
     // Convert the char into a string
-    char* s = " ";
+    string s = " ";
     s[0] = c;
 
     Colour foreground = consoleColourToVESA(getForegroundColor(x,y));

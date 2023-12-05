@@ -5,7 +5,7 @@
 #ifndef MAXOS_COMMON_TIME_H
 #define MAXOS_COMMON_TIME_H
 
-#include <common/types.h>
+#include <stdint.h>
 
 namespace maxOS{
 

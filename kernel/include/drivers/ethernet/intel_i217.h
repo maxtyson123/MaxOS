@@ -123,8 +123,8 @@ namespace maxOS{
 
 
                 //Ethernet Driver functions
-                common::string getVendorName();
-                common::string getDeviceName();
+                string getVendorName();
+                string getDeviceName();
 
                 void DoSend(common::uint8_t* buffer, common::uint32_t size);
                 common::uint64_t GetMediaAccessControlAddress();

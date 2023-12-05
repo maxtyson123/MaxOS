@@ -162,10 +162,10 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, ui
     return socket;                                        //Return the socket
 }
 
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(common::string internetProtocolAddressAndPort) {
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string internetProtocolAddressAndPort) {
 
     // Find the colon (:) character in the input string
-    char* colonPosition = (char*)internetProtocolAddressAndPort;
+    string colonPosition = (string)internetProtocolAddressAndPort;
     for (; *colonPosition != '\0'; colonPosition++) {
         if (*colonPosition == ':') {
             // Break the loop if a colon is found

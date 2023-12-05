@@ -4,7 +4,6 @@
 
 #include <system/gdt.h>
 using namespace maxOS;
-using namespace maxOS::common;
 using namespace maxOS::system;
 
 /**

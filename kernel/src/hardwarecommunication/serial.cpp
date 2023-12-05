@@ -94,9 +94,9 @@ int serial::isTransmitEmpty() {
  * @param type The type of the text
  * @param msg The message
  */
-void serial::printHeader(char* col, char* type, char* msg){
+void serial::printHeader(string col, string type, string msg){
 
-    char* message;
+    string message;
     int pos = 0;
 
     message[pos++] = '[';
@@ -169,7 +169,7 @@ void serial::Test(){
  * @param str The message to be written
  * @param type The type of the message 1 = info, 2 = warning, 3 = error, 4 = fatal, 5 = success, 6 = debug, 7 = kernel, 8 = unknown
  */
-void serial::Write(char* str, int type) {
+void serial::Write(string str, int type) {
     Colour t_colour;
     Type t_type;
 

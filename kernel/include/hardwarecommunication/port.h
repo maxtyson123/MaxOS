@@ -5,64 +5,64 @@
 #ifndef MAX_OS_HARDWARECOMMUNICATION_PORT_H
 #define MAX_OS_HARDWARECOMMUNICATION_PORT_H
 
-#include <common/types.h>
+#include <stdint.h>
 namespace maxOS {
     namespace hardwarecommunication {
 
         //Base Class for ports
         class Port {
             protected:  //Protected so that it cant be instantiated bc its purely virtual
-                common::uint16_t portnumber;
+                uint16_t portnumber;
 
-                Port(common::uint16_t portnumber);
+                Port(uint16_t portnumber);
                 ~Port();
         };
 
         class Port8Bit : public Port {
             public:
                 //Constructor / Deconstructor
-                Port8Bit(common::uint16_t portnumber);
+                Port8Bit(uint16_t portnumber);
                 ~Port8Bit();
 
                 //Read / Write function
-                virtual void Write(common::uint8_t data);
+                virtual void Write(uint8_t data);
 
-                virtual common::uint8_t Read();
+                virtual uint8_t Read();
         };
 
         class Port8BitSlow : public Port8Bit {
             public:
                 //Constructor / Deconstructor
-                Port8BitSlow(common::uint16_t portnumber);
+                Port8BitSlow(uint16_t portnumber);
                 ~Port8BitSlow();
 
                 //Read / Write function
-                virtual void Write(common::uint8_t data);
+                virtual void Write(uint8_t data);
                 //---Inherits read methods
         };
 
         class Port16Bit : public Port {
             public:
                 //Constructor / Deconstructor
-                Port16Bit(common::uint16_t portnumber);
+                Port16Bit(uint16_t portnumber);
                 ~Port16Bit();
 
                 //Read / Write function
-                virtual void Write(common::uint16_t data);
+                virtual void Write(uint16_t data);
 
-                virtual common::uint16_t Read();
+                virtual uint16_t Read();
         };
 
         class Port32Bit : public Port {
             public:
                 //Constructor / Deconstructor
-                Port32Bit(common::uint16_t portnumber);
+                Port32Bit(uint16_t portnumber);
                 ~Port32Bit();
 
                 //Read / Write function
-                virtual void Write(common::uint32_t data);
+                virtual void Write(uint32_t data);
 
-                virtual common::uint32_t Read();
+                virtual uint32_t Read();
         };
     }
 }
