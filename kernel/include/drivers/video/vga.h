@@ -6,6 +6,7 @@
 #define MaxOS_DRIVERS_VGA_H
 
 #include <stdint.h>
+#include <common/string.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/video/video.h>

@@ -5,6 +5,8 @@
 #include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/ethernet/intel_i217.h>
 
+
+using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
@@ -153,7 +155,7 @@ bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus,
  * @param interruptManager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interruptManager, common::OutputStream *errorMessageStream) {
+void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interruptManager, OutputStream *errorMessageStream) {
     for (int bus = 0; bus < 8; ++bus) {
 
         for (int device = 0; device < 32; ++device) {
@@ -449,7 +451,7 @@ void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralCompon
  * @param barNum Base address register number
  * @return Base address register
  */
-BaseAddressRegister PeripheralComponentInterconnectController::getBaseAddressRegister(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint16_t bar) {
+BaseAddressRegister PeripheralComponentInterconnectController::getBaseAddressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
     BaseAddressRegister result;
 

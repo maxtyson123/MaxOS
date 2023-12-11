@@ -104,7 +104,7 @@ void AdvancedTechnologyAttachment::Identify() {
  * @param count The amount of data to read from that sector
  */
 
-void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8_t* data, int count)
+void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int count)
 {
     //Dont Allow reading More then a sector
     if(sector & 0xF0000000)
@@ -173,7 +173,7 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sector, common::uint8
  * @param sector The sector to write to
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::Write28(common::uint32_t sector, common::uint8_t* data, int count){
+void AdvancedTechnologyAttachment::Write28(uint32_t sector, uint8_t* data, int count){
 
     //Don't Allow Writing More then a sector
     if(sector > 0x0FFFFFFF)

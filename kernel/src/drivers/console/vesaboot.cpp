@@ -10,7 +10,7 @@ using namespace maxOS::gui;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::console;
 
-VESABootConsole::VESABootConsole(common::GraphicsContext *graphicsContext)
+VESABootConsole::VESABootConsole(GraphicsContext *graphicsContext)
 : Driver(),
   Console()
 {
@@ -42,7 +42,7 @@ uint16_t VESABootConsole::getHeight()
  * @param y The y coordinate
  * @param c The character to place
  */
-void VESABootConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
+void VESABootConsole::putChar(uint16_t x, uint16_t y, char c) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -55,7 +55,7 @@ void VESABootConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
     videoMemory[offset] = (videoMemory[offset] & 0xFF00) | (uint16_t)c;
 
     // Convert the char into a string
-    string s = " ";
+    char* s = " ";
     s[0] = c;
 
     Colour foreground = consoleColourToVESA(getForegroundColor(x,y));
@@ -73,7 +73,7 @@ void VESABootConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
  * @param y The y coordinate
  * @param foreground The foreground color
  */
-void VESABootConsole::setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground) {
+void VESABootConsole::setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -92,7 +92,7 @@ void VESABootConsole::setForegroundColor(common::uint16_t x, common::uint16_t y,
  * @param y The y coordinate
  * @param background The background color
  */
-void VESABootConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background) {
+void VESABootConsole::setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -112,7 +112,7 @@ void VESABootConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y,
  * @param y The y coordinate
  * @return The character at the specified location
  */
-char VESABootConsole::getChar(common::uint16_t x, common::uint16_t y) {
+char VESABootConsole::getChar(uint16_t x, uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -131,7 +131,7 @@ char VESABootConsole::getChar(common::uint16_t x, common::uint16_t y) {
  * @param y The y coordinate
  * @return The foreground color at the specified location
  */
-ConsoleColour VESABootConsole::getForegroundColor(common::uint16_t x, common::uint16_t y) {
+ConsoleColour VESABootConsole::getForegroundColor(uint16_t x, uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -150,7 +150,7 @@ ConsoleColour VESABootConsole::getForegroundColor(common::uint16_t x, common::ui
  * @param y The y coordinate
  * @return The background color at the specified location
  */
-ConsoleColour VESABootConsole::getBackgroundColor(common::uint16_t x, common::uint16_t y) {
+ConsoleColour VESABootConsole::getBackgroundColor(uint16_t x, uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -167,7 +167,7 @@ ConsoleColour VESABootConsole::getBackgroundColor(common::uint16_t x, common::ui
 
 
 
-common::Colour VESABootConsole::consoleColourToVESA(ConsoleColour colour) {
+Colour VESABootConsole::consoleColourToVESA(ConsoleColour colour) {
     switch (colour) {
 
         case Black:

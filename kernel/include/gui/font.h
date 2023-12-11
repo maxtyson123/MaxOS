@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include<common/graphicsContext.h>
 #include<common/rectangle.h>
+#include <common/string.h>
 
 namespace maxOS{
 
@@ -29,7 +30,7 @@ namespace maxOS{
                 ~Font();
 
                 virtual void drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, string text);
-                virtual void drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, string text, common::Rectangle<int> limitArea);
+                virtual void drawText(int32_t x, int32_t y, common::Colour foregroundColour, common::Colour backgroundColour, common::GraphicsContext* context, string text, common::Rectangle<int32_t> limitArea);
 
                 virtual void getFont8x8(uint8_t (&font8x8)[2048]);
 

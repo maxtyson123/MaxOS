@@ -26,7 +26,7 @@ namespace maxOS{
             friend class CompositeWidget;
 
             private:
-                common::Rectangle<int> position;
+                common::Rectangle<int32_t> position;
 
             protected:
                 Widget* parent;
@@ -49,15 +49,15 @@ namespace maxOS{
                 ~Widget();
 
                 // Drawing functions
-                virtual void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                virtual void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
                 void invalidate();
-                virtual void invalidate(common::Rectangle<int>& area);
+                virtual void invalidate(common::Rectangle<int32_t>& area);
                 virtual void addChild(Widget* child);
 
                 // Positioning functions
                 virtual common::Coordinates absoluteCoordinates(common::Coordinates coordinates);
                 virtual bool containsCoordinate(uint32_t x, uint32_t y);
-                common::Rectangle<int> getPosition();
+                common::Rectangle<int32_t> getPosition();
                 void move(int32_t left, int32_t top);
                 void resize(int32_t width, int32_t height);
 
@@ -84,8 +84,8 @@ namespace maxOS{
             protected:
 
                 common::Vector<Widget*> children;
-                void draw(common::GraphicsContext* gc, common::Rectangle<int>& area, common::Vector<Widget*>::iterator start);
-                virtual void drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area, common::Vector<Widget*>::iterator start);
+                virtual void drawSelf(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
 
 
             public:
@@ -96,7 +96,7 @@ namespace maxOS{
                 ~CompositeWidget();
 
                 // Drawing functions
-                virtual void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                virtual void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
                 virtual void addChild(Widget* child);
 
                 // Mouse functions

@@ -50,7 +50,8 @@ Kernel Cleanup
 - [x] VESA Video Mode                              
 - [x] Kernel Boot Rewrite
 - [x] Rewrite Event Handlers
-- [ ] Custom Toolchain
+- [x] Cross-Compiler
+- [ ] Better Scripts
 - [ ] Network Touch Up - Fix Issues with IP, Get it working on QEMU
 - [ ] DCHP protocol
 - [ ] GUI Bug Fixes
@@ -59,6 +60,7 @@ Kernel Cleanup
 - [ ] USB
 - [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
 - [ ] Clean up all the TODOs
+- [ ] Rewrite Readme
 
 Road to Userspace pt 1 - kernel core features
 
@@ -72,13 +74,12 @@ Road to Userspace pt 1 - kernel core features
 
 Road to Userspace pt 2 - kernel supporting features
 
+- [ ] LibC
+- [ ] OS Specific Toolchain
 - [ ] Elf Loader
 - [ ] Shell
-- [ ] OS Specific Toolchain
-- [ ] LibC
-- [ ] LibM
 - [ ] Services, (GUI Server, Network Server, etc)
-- [ ] LibNet - SMB Needed
+- [ ] More Libraries (LibM, LibNet, LibGUI)
 
 
 OS Functionality

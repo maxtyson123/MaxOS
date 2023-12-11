@@ -43,7 +43,7 @@ namespace maxOS{
                 Window(Widget* containedWidget, string titleText);
                 ~Window();
 
-                void drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                void drawSelf(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
                 void addChild(Widget* child);
 
                 drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);

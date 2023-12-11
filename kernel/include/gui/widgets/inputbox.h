@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <gui/widget.h>
 #include <gui/font.h>
+#include <common/string.h>
 
 namespace maxOS{
 
@@ -47,7 +48,7 @@ namespace maxOS{
                     InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                     ~InputBox();
 
-                    void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
 
                     void onFocus();
                     void onFocusLost();

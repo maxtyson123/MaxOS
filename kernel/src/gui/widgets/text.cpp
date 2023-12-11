@@ -34,14 +34,14 @@ Text::~Text() {
  * @param gc The graphics context to draw on
  * @param area The area of the text to draw
  */
-void Text::draw(GraphicsContext *gc, Rectangle<int>& area) {
+void Text::draw(GraphicsContext *gc, Rectangle<int32_t>& area) {
 
     // Default Draw Operation
     Widget::draw(gc, area);
 
     // Get the absolute position of the text
     Coordinates textCoordinates = absoluteCoordinates(Coordinates(0,0));
-    Rectangle<int> textPosition = getPosition();
+    Rectangle<int32_t> textPosition = getPosition();
 
     // Get the x and y position of the text
     int32_t x = textCoordinates.first;

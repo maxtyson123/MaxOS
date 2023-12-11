@@ -31,7 +31,7 @@ namespace maxOS {
                 Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                 ~Text();
 
-                void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
                 void updateText(string newText);
 
             };

@@ -4,7 +4,7 @@
 
 .section .text
 
-.extern _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
+.extern _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhm
 
 
 .macro HandleException num
@@ -95,12 +95,12 @@ int_bottom:
     # Invoke C++ handlers
     pushl %esp
     push (interruptnumber)
-    call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
+    call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhm
 
     # Switch the stack
     mov %eax, %esp
 
-    # (In reverse ofc) Pop Values From CPUState (multitasking.h)
+    # Pop Values From CPUState (multitasking.h)
     popl %eax
     popl %ebx
     popl %ecx

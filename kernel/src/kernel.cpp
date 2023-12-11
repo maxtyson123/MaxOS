@@ -1,9 +1,7 @@
-int buildCount = 488;
-// This is the build counter, it is incremented every time the build script is run. Started 27/09/2023, Commit 129
-
 //Common
 #include <stdint.h>
 #include <common/logo.h>
+#include <common/version.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
@@ -148,7 +146,6 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
-
 #pragma clang diagnostic ignored "-Wwritable-strings"
 
 //TODO: Rewrite multiboot to use the one from the manual: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Example-OS-code
@@ -190,7 +187,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     ConsoleStream headerStream(&consoleHeader);
 
     // Write the header
-    headerStream << "                                                    Max OS v0.01 [build " << buildCount << "]                                                    " ;
+    headerStream << "                                                    Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]                                                    " ;
 
     // Make a main console area at the top of the screen
     ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight(), ConsoleColour::DarkGrey, ConsoleColour::Black);
@@ -207,10 +204,21 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
         cout << "Got Magic: " << (uint32_t)multiboot_magic << ", Expected Magic: " << MULTIBOOT_BOOTLOADER_MAGIC;
         return;
     }
+    cout << "BUILD INFO: " << VERSION_NAME << " on "
+                      << BUILD_DATE.year << "-"
+                      << BUILD_DATE.month << "-"
+                      << BUILD_DATE.day
+                      << " at " << BUILD_DATE.hour << ":"
+                      << BUILD_DATE.minute << ":" << BUILD_DATE.second << " "
+                      << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
+    cout << "\n";
     cout << "\n";
 
+    // Where the areas should start
+    uint32_t areaStart = cout.cursorY;
+
     // Make the system setup stream
-    ConsoleArea systemSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleArea systemSetupHeader(&console, 0, areaStart, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream systemSetupHeaderStream(&systemSetupHeader);
     systemSetupHeaderStream << "Setting up system";
 
@@ -276,9 +284,9 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     Vector<DriverSelector*> driverSelectors;
 
     //Make the stream on the side for the PCI
-    ConsoleArea pciConsoleArea(&console, console.getWidth() - 45, 2, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea pciConsoleArea(&console, console.getWidth() - 45, areaStart+1, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream pciConsoleStream(&pciConsoleArea);
-    console.putString(console.getWidth() - 45, 1, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
+    console.putString(console.getWidth() - 45, areaStart, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
     
     //PCI
     PeripheralComponentInterconnectController PCIController(&pciConsoleStream);
@@ -408,7 +416,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 
     // Run the network
-//#define NETWORK
+#define NETWORK
 #ifdef NETWORK
 
     // TCPtoStream
@@ -450,8 +458,8 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     TransmissionControlProtocolSocket* tcpSocket = tcp.Listen(1234);
     tcpSocket -> connectEventHandler(&tcpToStream);
     cout << "Listening on TCP Port 1234\n";
-    // For sending: ncat -l 127.0.0.1 1234
-    // For receiving: ncat 127.0.0.1 1234
+    // Run in term before boot when using tcp.send   : ncat -l 127.0.0.1 1234
+    // Run in term after  boot when using tcp.listen : ncat 127.0.0.1 1234
 
 #endif
 

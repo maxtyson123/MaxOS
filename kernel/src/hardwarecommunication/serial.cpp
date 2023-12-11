@@ -96,7 +96,7 @@ int serial::isTransmitEmpty() {
  */
 void serial::printHeader(string col, string type, string msg){
 
-    string message;
+    char* message = new char[100];
     int pos = 0;
 
     message[pos++] = '[';

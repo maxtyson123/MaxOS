@@ -31,7 +31,7 @@ namespace maxOS{
 
                 common::Vector<common::Rectangle<int32_t> > invalidAreas;
                 void internalInvalidate(common::Rectangle<int32_t>& area, common::Vector<common::Rectangle<int32_t> >::iterator start, common::Vector<common::Rectangle<int32_t> >::iterator stop);
-                void drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                void drawSelf(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
 
             public:
                 common::Colour colour;

@@ -1,4 +1,4 @@
-name: maxOS
+name: MaxOS
 
 # Controls when the action will run.
 on:
@@ -24,7 +24,29 @@ jobs:
 
       - name: Install Ubuntu Dependencies
         run: |
-          make install_dep
-      - name: Build OS
+          sudo apt update
+          sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev
+
+      - name: Cache toolchain
+        id: cache-toolchain
+        uses: actions/cache@v3
+        with:
+          path: toolchain/cross_compiler
+          key: ${{ runner.os }}-cross_compiler
+
+      - name: Build toolchain
+        if: steps.cache-toolchain.outputs.cache-hit != 'true'
         run: |
+          cd toolchain
+          ./make_cross_compiler.sh --no-deps
+
+      - name: Build maxOS (Release)
+        run: |
+          make updateVersion
           make maxOS.bin
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: Kernel Binary
+          path: maxOS.bin

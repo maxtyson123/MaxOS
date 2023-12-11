@@ -15,7 +15,7 @@ using namespace maxOS::memory;
  * @param frameHandler the handler for the ethernet frame
  * @param etherType the type of the protocol, which will be handled by this handler
  */
-EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* frameHandler, common::uint16_t handledType) {
+EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* frameHandler, uint16_t handledType) {
 
     this -> handledType = handledType;
     this -> frameHandler = frameHandler;
@@ -46,13 +46,13 @@ bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t* ethernetfr
  * @param data the data to send
  * @param size the size of the payload
  */
-void EthernetFramePayloadHandler::Send(common::uint64_t destination, common::uint8_t *data, common::uint32_t size) {
+void EthernetFramePayloadHandler::Send(uint64_t destination, uint8_t *data, uint32_t size) {
 
     frameHandler -> sendEthernetFrame (destination, handledType, data, size);
 }
 
 
-EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, common::OutputStream* errorMessages)
+EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream* errorMessages)
 : EthernetDriverEventHandler()
 {
 
@@ -78,7 +78,7 @@ drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
  * @param buffer the buffer with the received data
  * @param size the size of the received data
  */
-bool EthernetFrameHandler::DataReceived(common::uint8_t* buffer, common::uint32_t size) {
+bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
 
     errorMessages -> write("EFH: Data received\n");
 
@@ -153,7 +153,7 @@ void EthernetFrameHandler::connectHandler(EthernetFramePayloadHandler *handler) 
  * @param buffer the data to send
  * @param size the size of the payload
  */
-void EthernetFrameHandler::sendEthernetFrame(common::uint64_t destinationMAC, common::uint16_t frameType, common::uint8_t* data, common::uint32_t size) {
+void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t frameType, uint8_t* data, uint32_t size) {
 
     errorMessages->write("EFH: Sending frame...");
 

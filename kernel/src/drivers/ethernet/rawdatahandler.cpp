@@ -5,7 +5,6 @@
 #include <drivers/ethernet/rawdatahandler.h>
 
 using namespace maxOS;
-using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::ethernet;
 

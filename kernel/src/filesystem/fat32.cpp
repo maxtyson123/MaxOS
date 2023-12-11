@@ -18,7 +18,7 @@ using namespace maxOS::memory;
  * @param hd The hard disk to initialise the FAT32 filesystem on
  * @param partitionOffset The offset of the partition to initialise the FAT32 filesystem on
  */
-Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, common::uint32_t partitionOffset, OutputStream* fat32MessageStream) {
+Fat32::Fat32(drivers::AdvancedTechnologyAttachment *hd, uint32_t partitionOffset, OutputStream* fat32MessageStream) {
 
     drive = hd;
     partOffset = partitionOffset;
@@ -177,7 +177,7 @@ bool Fat32::IsValidFAT32Name(string name) {
 
 ///__DirectoryTraverser__///
 
-FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, common::uint32_t dirSec, common::uint32_t dataStart, common::uint32_t clusterSectorCount, common::uint32_t fatLoc, common::uint32_t fat_size, common::OutputStream* outStream) {
+FatDirectoryTraverser::FatDirectoryTraverser(drivers::AdvancedTechnologyAttachment* ataDevice, uint32_t dirSec, uint32_t dataStart, uint32_t clusterSectorCount, uint32_t fatLoc, uint32_t fat_size, OutputStream* outStream) {
 
     //TODO: Add error checks
     //TODO: File extensions
@@ -270,7 +270,7 @@ void FatDirectoryTraverser::ReadEntrys(){
                     currentFileEnumerator = file;
                 }
 
-                string foo = "        ";
+                char* foo = "        ";
                 for(int j = 0; j < 8; j++)
                     foo[j] = dirent[index].name[j];
                 fat32MessageStream -> write(foo);
@@ -324,7 +324,7 @@ void FatDirectoryTraverser::changeDirectory(FatDirectoryEnumerator* directory) {
 
 }
 
-void FatDirectoryTraverser::makeDirectory(char *name) {
+void FatDirectoryTraverser::makeDirectory(string name) {
 
     //Check if the name is a valid FAT32 name
     if(!Fat32::IsValidFAT32Name(name)) return;
@@ -340,7 +340,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-       // if (common::strcmp(name, (string)dirent[i].name) == 0) {              //If the name is the same as the parameter
+       // if (strcmp(name, (string)dirent[i].name) == 0) {              //If the name is the same as the parameter
       //      fat32MessageStream -> write("Name already in use");
       //      return;
       //  }
@@ -378,7 +378,7 @@ void FatDirectoryTraverser::makeDirectory(char *name) {
 
 }
 
-void FatDirectoryTraverser::removeDirectory(char *name) {
+void FatDirectoryTraverser::removeDirectory(string name) {
     int index = -1;
 
     //Loop  through all the dirictory entrys
@@ -392,7 +392,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-     //   if (common::strcmp(name, (string)dirent[i].name) == 0) {         //If the name is the same as the parameter
+     //   if (strcmp(name, (string)dirent[i].name) == 0) {         //If the name is the same as the parameter
      //       dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
     //        index = i;
     //        break;
@@ -415,7 +415,7 @@ void FatDirectoryTraverser::removeDirectory(char *name) {
     UpdateDirectoryEntrysToDisk();
 }
 
-void FatDirectoryTraverser::makeFile(char *name) {
+void FatDirectoryTraverser::makeFile(string name) {
 
     //Check if the name is a valid FAT32 name
     if(!Fat32::IsValidFAT32Name(name)) return;
@@ -431,7 +431,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-    //    if (common::strcmp(name, (string)dirent[i].name) == 0) {         //If the name is the same as the parameter
+    //    if (strcmp(name, (string)dirent[i].name) == 0) {         //If the name is the same as the parameter
     //        fat32MessageStream -> write("Name already in use");
     //        return;
     //    }
@@ -464,7 +464,7 @@ void FatDirectoryTraverser::makeFile(char *name) {
     UpdateDirectoryEntrysToDisk();
 }
 
-void FatDirectoryTraverser::removeFile(char *name) {
+void FatDirectoryTraverser::removeFile(string name) {
    int index = -1;
 
     //Loop  through all the dirictory entrys
@@ -478,7 +478,7 @@ void FatDirectoryTraverser::removeFile(char *name) {
         if (dirent[i].name[0] == 0xE5)                                  //If the name is 0xE5 then the entry is free
             continue;
 
-      //  if (common::strcmp(name, (string)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
+      //  if (strcmp(name, (string)dirent[i].name) == 0 ) {        //If the name is the same as the parameter
       //      dirent[i].name[0] = 0xE5;                                   //Set the name to 0xE5 to indicate that the entry is free
       //      index = i;
       //      break;
@@ -609,7 +609,7 @@ FatDirectoryEnumerator::~FatDirectoryEnumerator() {
  * @return The name of the directory
  */
 string FatDirectoryEnumerator::getDirectoryName() {
-    char *foo = "        ";
+    char* foo = "        ";
     for (int j = 0; j < 8; j++)
         foo[j] = directoryInfo -> name[j];
 
@@ -622,7 +622,7 @@ string FatDirectoryEnumerator::getDirectoryName() {
  * @param newDirectoryName The new name of the directory
  * @return The old name of the directory
  */
-char *FatDirectoryEnumerator::changeDirectoryName(string newDirectoryName) {
+string FatDirectoryEnumerator::changeDirectoryName(string newDirectoryName) {
 
     //Check if the new name is acceptable
     if(!Fat32::IsValidFAT32Name(newDirectoryName)) return nullptr;
@@ -699,8 +699,8 @@ FatFileEnumerator::~FatFileEnumerator() {
  *
  * @return The name of the file
  */
-char *FatFileEnumerator::getFileName() {
-    char *foo = "        ";
+string FatFileEnumerator::getFileName() {
+    char* foo = "        ";
     for (int j = 0; j < 8; j++)
         foo[j] = fileInfo -> name[j];
 
@@ -713,7 +713,7 @@ char *FatFileEnumerator::getFileName() {
  * @param newFileName The new filename
  * @return The old filename
  */
-char *FatFileEnumerator::changeFileName(char *newFileName) {
+string FatFileEnumerator::changeFileName(string newFileName) {
     //Check if the new name is acceptable
     if(!Fat32::IsValidFAT32Name(newFileName)) return nullptr;
 
@@ -799,7 +799,7 @@ FatFileReader::~FatFileReader() {
  * @param size The number of bytes to read
  * @return The number of bytes read. If this is less than size then the end of the file has been reached.
  */
-common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t size) {
+uint32_t FatFileReader::Read(uint8_t *data, uint32_t size) {
 
     //TODO: fix performance issues
 
@@ -886,7 +886,7 @@ common::uint32_t FatFileReader::Read(common::uint8_t *data, common::uint32_t siz
  * @param seek The type of seek to perform. (SEEK_SET, offset = position) (SEEK_CUR, offset = offset + position)  (SEEK_END, offset = fileSize + position)
  * @return The new position of the file offset
  */
-common::uint32_t FatFileReader::Seek(common::uint32_t position, SeekType seek) {
+uint32_t FatFileReader::Seek(uint32_t position, SeekType seek) {
 
     switch (seek) {
         case SEEK_SET:
@@ -910,7 +910,7 @@ common::uint32_t FatFileReader::Seek(common::uint32_t position, SeekType seek) {
  *
  * @return the current position of the file offset
  */
-common::uint32_t FatFileReader::GetPosition() {
+uint32_t FatFileReader::GetPosition() {
     return offsetPosition;
 }
 
@@ -919,7 +919,7 @@ common::uint32_t FatFileReader::GetPosition() {
  *
  * @return the size of the file
  */
-common::uint32_t FatFileReader::GetFileSize() {
+uint32_t FatFileReader::GetFileSize() {
     return fileInfo -> size;
 }
 
@@ -946,7 +946,7 @@ FatFileWriter::~FatFileWriter() {
  * @param size The size that is to be written
  * @return The number of bytes written, if this is less than size then then there is insufficient space on the disk
  */
-common::uint32_t FatFileWriter::Write(common::uint8_t *data, common::uint32_t size) {
+uint32_t FatFileWriter::Write(uint8_t *data, uint32_t size) {
 
 
     //TODO: Write larger then the size of the file (e.g. grow the file)
@@ -1063,7 +1063,7 @@ common::uint32_t FatFileWriter::Write(common::uint8_t *data, common::uint32_t si
 
 
 
-common::uint32_t FatFileWriter::Seek(common::uint32_t position, SeekType seek) {
+uint32_t FatFileWriter::Seek(uint32_t position, SeekType seek) {
     switch (seek) {
         case SEEK_SET:
             offsetPosition = position;
@@ -1093,10 +1093,10 @@ bool FatFileWriter::Flush() {
 
 }
 
-common::uint32_t FatFileWriter::GetPosition() {
+uint32_t FatFileWriter::GetPosition() {
     return offsetPosition;
 }
 
-common::uint32_t FatFileWriter::GetFileSize() {
+uint32_t FatFileWriter::GetFileSize() {
     return fileInfo -> size;
 }

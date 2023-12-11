@@ -58,7 +58,7 @@ Widget::~Widget(){
  * @param gc The graphics context to draw the widgets pixels on
  * @param area The area of the widget to draw
  */
-void Widget::draw(GraphicsContext *gc, Rectangle<int> &area) {
+void Widget::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
 }
 
@@ -71,7 +71,7 @@ void Widget::invalidate() {
     Coordinates absCoords = absoluteCoordinates(Coordinates(0,0));
 
     // Create a rectangle with the absolute coordinates and the size of the widget
-    Rectangle<int> invalidArea = Rectangle<int>(absCoords.first, absCoords.second, position.width, position.height);
+    Rectangle<int32_t> invalidArea = Rectangle<int32_t>(absCoords.first, absCoords.second, position.width, position.height);
 
     // Invalidate the area
     invalidate(invalidArea);
@@ -83,7 +83,7 @@ void Widget::invalidate() {
  *
  * @param area The area of the widget to invalidate
  */
-void Widget::invalidate(Rectangle<int> &area) {
+void Widget::invalidate(Rectangle<int32_t> &area) {
 
         // If the widget has a parent, invalidate the area relative to the parent
         if(parent != 0){
@@ -134,7 +134,7 @@ bool Widget::containsCoordinate(uint32_t x, uint32_t y) {
  *
  * @return The position of the widget
  */
-Rectangle<int> Widget::getPosition() {
+Rectangle<int32_t> Widget::getPosition() {
     return position;
 }
 
@@ -171,13 +171,13 @@ void Widget::resize(int32_t width, int32_t height) {
     if(height > maxHeight) height = maxHeight;
 
     // Store the old position, set the new position
-    Rectangle<int> oldPosition = position;
+    Rectangle<int32_t> oldPosition = position;
     position.width = width;
     position.height = height;
 
     // Find the areas that need to be redrawn by subtracting the old position from the new position, and vice versa
-    Vector<Rectangle<int>> invalidAreasOld = oldPosition.subtract(position);
-    Vector<Rectangle<int>> invalidAreasNew = position.subtract(oldPosition);
+    Vector<Rectangle<int32_t>> invalidAreasOld = oldPosition.subtract(position);
+    Vector<Rectangle<int32_t>> invalidAreasNew = position.subtract(oldPosition);
 
     //Loop through the areas that need to be redrawn and invalidate them
     for(int i = 0; i < invalidAreasOld.size(); i++){
@@ -253,7 +253,7 @@ void Widget::bringToFront(Widget *widget) {
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void Widget::onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY) {
+void Widget::onMouseEnterWidget(uint32_t toX, uint32_t toY) {
 
 }
 
@@ -263,7 +263,7 @@ void Widget::onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY) {
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void Widget::onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY) {
+void Widget::onMouseLeaveWidget(uint32_t fromX, uint32_t fromY) {
 
 }
 
@@ -275,7 +275,7 @@ void Widget::onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY) 
  * @param toX The x new coordinate of the mouse
  * @param toY The y new coordinate of the mouse
  */
-void Widget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY) {
+void Widget::onMouseMoveWidget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
 
 }
 
@@ -332,7 +332,7 @@ CompositeWidget::~CompositeWidget() {
  * @param gc The graphics context to draw to
  * @param area The area to draw
  */
-void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int> &area) {
+void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
     // Draw the widget with its children
     draw(gc, area, children.begin());
@@ -346,25 +346,25 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int> &area) {
  * @param area The area to draw
  * @param start The child to start drawing from
  */
-void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int> &area, Vector<Widget *>::iterator start) {
+void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area, Vector<Widget *>::iterator start) {
 
     // Draw the widget
     Widget::draw(gc, area);
 
     // Get the comp widgets own are
-    Rectangle<int> ownArea = getPosition();
+    Rectangle<int32_t> ownArea = getPosition();
 
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = start; childWidget != children.end(); childWidget++){
 
         // Get the position of the child
-        Rectangle<int> childArea = (*childWidget)->getPosition();
+        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
 
         // Check if the child is in the area that needs to be redrawn
         if(area.intersects(childArea)){
 
             // Get the area that needs to be redrawn
-            Rectangle<int> redrawArea = area.intersection(childArea);
+            Rectangle<int32_t> redrawArea = area.intersection(childArea);
 
             // Translate the area so that it is relative to the child
             redrawArea.left -= childArea.left;
@@ -374,10 +374,10 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int> &area, Vector<Wid
             (*childWidget)->draw(gc, redrawArea);
 
             // Get what is left to draw (the area that is not covered by the child)
-            Vector<Rectangle<int>> restDrawArea = area.subtract(childArea);
+            Vector<Rectangle<int32_t>> restDrawArea = area.subtract(childArea);
 
             // Loop through the areas that need to be redrawn
-            for(Vector<Rectangle<int>>::iterator restAreaPart = restDrawArea.begin(); restAreaPart != restDrawArea.end(); restAreaPart++){
+            for(Vector<Rectangle<int32_t>>::iterator restAreaPart = restDrawArea.begin(); restAreaPart != restDrawArea.end(); restAreaPart++){
 
                 // Call the draw function again with the part of the area, starting from the next child as the children up to this point have already been drawn
                 draw(gc, *restAreaPart, childWidget + 1);
@@ -399,7 +399,7 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int> &area, Vector<Wid
  * @param gc The graphics context to draw to
  * @param area The area to draw
  */
-void CompositeWidget::drawSelf(GraphicsContext *gc, Rectangle<int> &area) {
+void CompositeWidget::drawSelf(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
 }
 
@@ -423,13 +423,13 @@ void CompositeWidget::addChild(Widget *child) {
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseEnterWidget(common::uint32_t toX, common::uint32_t toY) {
+void CompositeWidget::onMouseEnterWidget(uint32_t toX, uint32_t toY) {
 
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
 
         // Get the position of the child
-        Rectangle<int> childArea = (*childWidget)->getPosition();
+        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
 
         // Check if the mouse is in the child
         if(childArea.contains(toX, toY)){
@@ -453,12 +453,12 @@ void CompositeWidget::onMouseEnterWidget(common::uint32_t toX, common::uint32_t 
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseLeaveWidget(common::uint32_t fromX, common::uint32_t fromY) {
+void CompositeWidget::onMouseLeaveWidget(uint32_t fromX, uint32_t fromY) {
     // Loop through the children
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
 
         // Get the position of the child
-        Rectangle<int> childArea = (*childWidget)->getPosition();
+        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
 
         // Check if the mouse is in the child
         if(childArea.contains(fromX, fromY)){
@@ -484,7 +484,7 @@ void CompositeWidget::onMouseLeaveWidget(common::uint32_t fromX, common::uint32_
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t fromY, common::uint32_t toX, common::uint32_t toY) {
+void CompositeWidget::onMouseMoveWidget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
 
     Widget* leftChild = nullptr;
     Widget* enteredChild = nullptr;
@@ -493,7 +493,7 @@ void CompositeWidget::onMouseMoveWidget(common::uint32_t fromX, common::uint32_t
     for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
 
         // Get the position of the child
-        Rectangle<int> childArea = (*childWidget)->getPosition();
+        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
 
         // Check if the mouse is in the child
         bool mouseInFrom = childArea.contains(fromX, fromY);

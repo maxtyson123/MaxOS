@@ -1,11 +1,15 @@
+#!/bin/bash
+source ./maxOS.sh
+
 #Remove Old image
-rm -rf maxOS.img
+rm -rf ../maxOS.img  || warn "Could not remove old image"
 
 #Create a 2GB image
-qemu-img create maxOS.img 2G #000000000
+qemu-img create ../maxOS.img 2G  || fail "Could not create image"
 
 #Partion the image
-fdisk maxOS.img -u=cylinders << EOF
+msg "Partioning image"
+fdisk ../maxOS.img -u=cylinders << EOF
 o
 n
 p
@@ -22,52 +26,34 @@ a
 w
 EOF
 
-#Install Filesystem Tools
-sudo apt-get install dosfstools
-
 #Try and unmount the old mount points
-sudo umount /mnt/maxOS_img_1 || { echo "umount failed but not to worry" ; : ; }
+sudo umount /mnt/maxOS_img_1 || warn "Couldn't unmount old mount point"
+sudo umount /mnt/maxOS_img_2 || warn "Couldn't unmount old mount point"
 
-#Try and unmount the old mount points
-sudo umount /mnt/maxOS_img_2 || { echo "umount failed but not to worry" ; : ; }
-
-#Close the loop devices
+#Close the loop devices and attach the image to a loop device
+msg "Attaching image to loop device"
 sudo losetup -D
-
-#Mount the image to a loop device
-sudo losetup --partscan /dev/loop0 maxOS.img
+sudo losetup --partscan /dev/loop0 ../maxOS.img  || fail "Could not mount image to loop device"
 
 ## IMAGE 1
+msg "Creating filesystem for partition 1"
 
-#Create a FAT32 Filesystem (partion 1)
-sudo mkfs.vfat -F 32 /dev/loop0p1
+#Create a FAT32 Filesystem
+sudo mkfs.vfat -F 32 /dev/loop0p1 || fail "Could not create filesystem"
 
-#Create a directory for the mount point
-sudo mkdir -p /mnt/maxOS_img_1
-
-#Mount the image to the mount point
-sudo mount -o loop /dev/loop0p1 /mnt/maxOS_img_1
-
-#Echo some test files
-cd /mnt/maxOS_img_1
-sudo  echo 'this is partition 1, file 1' | sudo tee file1.txt
-sudo  echo 'this is partition 1, file 2' | sudo tee file2.txt
+#Create a directory for the mount point and mount the image to the mount point
+sudo mkdir -p /mnt/maxOS_img_1 || fail "Could not create mount point"
+sudo mount -o loop /dev/loop0p1 /mnt/maxOS_img_1  || fail "Could not mount image to mount point"
 
 ## IMAGE 2
+msg "Creating filesystem for partition 2"
 
 #Create a FAT32 Filesystem (partion 2)
-sudo mkfs.vfat -F 32 /dev/loop0p2
+sudo mkfs.vfat -F 32 /dev/loop0p2 || fail "Could not create filesystem"
 
 #Create a directory for the mount point
-sudo mkdir -p /mnt/maxOS_img_2
+sudo mkdir -p /mnt/maxOS_img_2  || fail "Could not create mount point"
+sudo mount -o loop /dev/loop0p2 /mnt/maxOS_img_2  || fail "Could not mount image to mount point"
 
-#Mount the image to the mount point
-sudo mount -o loop /dev/loop0p2 /mnt/maxOS_img_2
-
-#Echo some test files
-cd /mnt/maxOS_img_2
-sudo  echo 'this is partition 2, file 1. file 2 will span multiple clusters' | sudo tee file1.txt
-sudo  echo 'END OF FILE2' | sudo tee -a file2.txt
-
-#Install grub
-sudo grub-install --root-directory=/mnt/maxOS_img_1 --no-floppy --modules="normal part_msdos ext2" /dev/loop0
+#Install grub to the image
+sudo grub-install --root-directory=/mnt/maxOS_img_1 --no-floppy --modules="normal part_msdos ext2" /dev/loop0 || fail "Could not install grub"

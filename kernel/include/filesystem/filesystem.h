@@ -6,7 +6,7 @@
 #define MAXOS_FILESYSTEM_FILESYSTEM_H
 
 #include <stdint.h>
-
+#include <common/string.h>
 
 namespace maxOS{
 

@@ -140,7 +140,7 @@ void Desktop::internalInvalidate(Rectangle<int32_t> &area, Vector<Rectangle<int3
     }
 
     // Add the area to the invalid areas, store where it was added
-    Vector<Rectangle<int> >::iterator vectorPosition = invalidAreas.pushBack(area);
+    Vector<Rectangle<int32_t>>::iterator vectorPosition = invalidAreas.pushBack(area);
 
     // If the position is the last item then the invalidation buffer is full
     if(vectorPosition == invalidAreas.end()){
@@ -160,7 +160,7 @@ void Desktop::internalInvalidate(Rectangle<int32_t> &area, Vector<Rectangle<int3
  * @param gc The graphics context to draw with
  * @param area The area to draw
  */
-void Desktop::drawSelf(common::GraphicsContext *gc, Rectangle<common::int32_t> &area) {
+void Desktop::drawSelf(common::GraphicsContext *gc, Rectangle<int32_t> &area) {
 
     //TODO: Draw a background image instead
 
@@ -220,7 +220,7 @@ void Desktop::onTime(const Time &time) {
     while (!invalidAreas.empty()) {
 
         // Get the first invalid area
-        Rectangle<int> invalidArea = *(invalidAreas.begin());   //get the pointer to the first element
+        Rectangle<int32_t> invalidArea = *(invalidAreas.begin());   //get the pointer to the first element
 
         // Remove the area from the invalid areas
         invalidAreas.popFront();
@@ -240,7 +240,7 @@ void Desktop::onTime(const Time &time) {
  *
  * @param area The area that is now invalid
  */
-void Desktop::invalidate(Rectangle<common::int32_t> &area) {
+void Desktop::invalidate(Rectangle<int32_t> &area) {
 
     // Invalidate the area
     internalInvalidate(area, invalidAreas.begin(), invalidAreas.end());
@@ -257,7 +257,7 @@ void Desktop::invalidate(Rectangle<common::int32_t> &area) {
 void Desktop::onMouseMoveEvent(int8_t x, int8_t y) {
 
     // Store the position of the desktop for calculations
-    Rectangle<int> desktopPosition = getPosition();
+    Rectangle<int32_t> desktopPosition = getPosition();
 
     // Calculate the position of the mouse on the desktop
     int32_t newMouseX = mouseX + x;

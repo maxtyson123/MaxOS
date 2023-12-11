@@ -5,7 +5,8 @@
 #ifndef MAXOS_DRIVERS_ETHERNET_INTEL_I127_H
 #define MAXOS_DRIVERS_ETHERNET_INTEL_I127_H
 
-#include <common/types.h>
+#include <stddef.h>
+#include <common/outputStream.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/interrupts.h>
@@ -26,72 +27,72 @@ namespace maxOS{
 
 
                 struct receiveDescriptor {
-                    common::uint64_t bufferAddress;              // The address of the receive buffer
-                    common::uint16_t length;                     // The length of the received frame
-                    common::uint16_t checksum;                   // The checksum of the received frame
-                    common::uint8_t status;                      // The status of the received frame
-                    common::uint8_t errors;                      // Any errors that occurred
-                    common::uint16_t special;                    // Special
+                    uint64_t bufferAddress;              // The address of the receive buffer
+                    uint16_t length;                     // The length of the received frame
+                    uint16_t checksum;                   // The checksum of the received frame
+                    uint8_t status;                      // The status of the received frame
+                    uint8_t errors;                      // Any errors that occurred
+                    uint16_t special;                    // Special
                 } __attribute__((packed));
 
                 struct sendDescriptor {
-                    common::uint64_t bufferAddress;             // The address of the send buffer
-                    common::uint16_t length;                    // The length of the send frame
-                    common::uint8_t cso;                        // The checksum offset
-                    common::uint8_t cmd;                        // The command
-                    common::uint8_t status;                     // The status
-                    common::uint8_t css;                        // The checksum start
-                    common::uint16_t special;                   // Special
+                    uint64_t bufferAddress;             // The address of the send buffer
+                    uint16_t length;                    // The length of the send frame
+                    uint8_t cso;                        // The checksum offset
+                    uint8_t cmd;                        // The command
+                    uint8_t status;                     // The status
+                    uint8_t css;                        // The checksum start
+                    uint16_t special;                   // Special
                 } __attribute__((packed));
 
-                common::uint8_t bar_type;                        // The type of base address register
-                common::uint16_t portBase;                       // The base address of the port I/O registers
-                common::uint64_t memBase;                        // The base address of the memory registers
-                common::uint8_t macAddress[6];                   // The MAC address of the device
+                uint8_t bar_type;                        // The type of base address register
+                uint16_t portBase;                       // The base address of the port I/O registers
+                uint64_t memBase;                        // The base address of the memory registers
+                uint8_t macAddress[6];                   // The MAC address of the device
 
 
                 //Registers Addresses (Main Registers)
-                common::uint16_t controlRegister;                // The control register
-                common::uint16_t statusRegister;                 // The status register
-                common::uint16_t epromRegister;                  // The address of the eeprom register
-                common::uint16_t controlExtRegister;             // The control extension register
-                common::uint16_t interruptMaskRegister;          // The interrupt mask register
+                uint16_t controlRegister;                // The control register
+                uint16_t statusRegister;                 // The status register
+                uint16_t epromRegister;                  // The address of the eeprom register
+                uint16_t controlExtRegister;             // The control extension register
+                uint16_t interruptMaskRegister;          // The interrupt mask register
 
                 //Registers Addresses (Receive Registers)
-                common::uint16_t receiveControlRegister;         // The receive control register
-                common::uint16_t receiveDescriptorLowRegister;   // The receive descriptor low register
-                common::uint16_t receiveDescriptorHighRegister;  // The receive descriptor high register
-                common::uint16_t receiveDescriptorLengthRegister;// The receive descriptor length register
-                common::uint16_t receiveDescriptorHeadRegister;  // The receive descriptor head register
-                common::uint16_t receiveDescriptorTailRegister;  // The receive descriptor tail register
+                uint16_t receiveControlRegister;         // The receive control register
+                uint16_t receiveDescriptorLowRegister;   // The receive descriptor low register
+                uint16_t receiveDescriptorHighRegister;  // The receive descriptor high register
+                uint16_t receiveDescriptorLengthRegister;// The receive descriptor length register
+                uint16_t receiveDescriptorHeadRegister;  // The receive descriptor head register
+                uint16_t receiveDescriptorTailRegister;  // The receive descriptor tail register
 
                 //Registers Addresses (Send Registers)
-                common::uint16_t sendControlRegister;            // The send control register
-                common::uint16_t sendDescriptorLowRegister;      // The send descriptor low register
-                common::uint16_t sendDescriptorHighRegister;     // The send descriptor high register
-                common::uint16_t sendDescriptorLengthRegister;   // The send descriptor length register
-                common::uint16_t sendDescriptorHeadRegister;     // The send descriptor head register
-                common::uint16_t sendDescriptorTailRegister;     // The send descriptor tail register
+                uint16_t sendControlRegister;            // The send control register
+                uint16_t sendDescriptorLowRegister;      // The send descriptor low register
+                uint16_t sendDescriptorHighRegister;     // The send descriptor high register
+                uint16_t sendDescriptorLengthRegister;   // The send descriptor length register
+                uint16_t sendDescriptorHeadRegister;     // The send descriptor head register
+                uint16_t sendDescriptorTailRegister;     // The send descriptor tail register
 
 
 
 
                 //Buffers
                 struct receiveDescriptor *receiveDsrctrs[32];    // The receive descriptors
-                common::uint16_t currentReceiveBuffer;           // The current receive buffer
+                uint16_t currentReceiveBuffer;           // The current receive buffer
 
                 struct sendDescriptor *sendDsrctrs[8];           // The send descriptors
-                common::uint16_t currentSendBuffer;              // The current send buffer
+                uint16_t currentSendBuffer;              // The current send buffer
 
 
                 // Write Commands and read results From NICs either using MemIO or IO Ports
-                void Write(common::uint16_t address, common::uint32_t data);
-                common::uint32_t Read(common::uint16_t address);
+                void Write(uint16_t address, uint32_t data);
+                uint32_t Read(uint16_t address);
 
                 //EPROM (Device Memory)
                 bool epromPresent;                                   // Whether or not the EPROM is present
                 bool detectEEProm();                                 // Return true if EEProm exist, else it returns false and set the eerprom_existsdata member
-                common::uint32_t eepromRead( common::uint8_t addr);  // Read 4 bytes from a specific EEProm Address
+                uint32_t eepromRead( uint8_t addr);  // Read 4 bytes from a specific EEProm Address
 
 
                 bool readMACAddress();       // Read MAC Address
@@ -114,7 +115,7 @@ namespace maxOS{
 
 
                 //Override driver default methods
-                common::uint32_t reset();
+                uint32_t reset();
                 void activate();
                 void deactivate();
 
@@ -126,14 +127,8 @@ namespace maxOS{
                 string getVendorName();
                 string getDeviceName();
 
-                void DoSend(common::uint8_t* buffer, common::uint32_t size);
-                common::uint64_t GetMediaAccessControlAddress();
-                inline void* operator new(common::uint32_t, intel_i217* p)
-                {
-                    return p;
-                }
-
-
+                void DoSend(uint8_t* buffer, uint32_t size);
+                uint64_t GetMediaAccessControlAddress();
             };
 
         }

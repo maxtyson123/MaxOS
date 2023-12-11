@@ -1,3 +1,7 @@
+// Ignore warnings for this file
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
 /*  GIMP header image file format (RGB): C:\Users\98max\CLionProjects\max-os\kernel\include\common\logo.h  */
 
 static unsigned int logo_width = 335;
@@ -4451,3 +4455,4 @@ static char *header_data =
 	"!(`\\!(`\\!(\\[!(4F!1%\"!A)#!A)#!Q-$!Q-$!Q-$!Q-$!A)#!A)#!A)#!A)#!1%\""
 	"!1%\"!!!!!!!!!!!!!!!!!!!!!!!!!1%\"!1%\"!A)#!A)#!1%\"!1%\"!1%\"!1%\"!!!!"
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+#pragma GCC diagnostic pop

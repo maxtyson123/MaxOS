@@ -59,7 +59,7 @@ namespace maxOS {
                     ~Button();
 
                     // Widget Stuff
-                    void draw(common::GraphicsContext* gc, common::Rectangle<int>& area);
+                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
                     drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
                     void onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button);
 

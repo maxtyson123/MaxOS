@@ -19,7 +19,7 @@ void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserD
 
 }
 
-Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::onEvent(common::Event<UserDatagramProtocolEvents> *event) {
+Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::onEvent(Event<UserDatagramProtocolEvents> *event) {
 
     switch (event -> type) {
         case UDP_DATA_RECEIVED:
@@ -71,7 +71,7 @@ void UserDatagramProtocolSocket::Disconnect() {
 
 UserDatagramProtocolPort UserDatagramProtocolHandler::freePorts = 0x8000;
 
-UserDatagramProtocolHandler::UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages)
+UserDatagramProtocolHandler::UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
 {
     this -> errorMessages = errorMessages;
@@ -89,7 +89,7 @@ UserDatagramProtocolHandler::~UserDatagramProtocolHandler() {
  * @param size The size of the UDP payload
  * @return True if the packet is to be sent back to the sender
  */
-bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size) {
+bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) {
 
     //Check the size
     if(size < sizeof(UserDatagramProtocolHeader)) {
@@ -296,7 +296,7 @@ void UserDatagramProtocolHandler::Bind(UserDatagramProtocolSocket *socket, UserD
 }
 
 /// ___ Events ___ ///
-UDPDataReceivedEvent::UDPDataReceivedEvent(UserDatagramProtocolSocket *socket, common::uint8_t *data, common::uint16_t size)
+UDPDataReceivedEvent::UDPDataReceivedEvent(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size)
 : Event(UDP_DATA_RECEIVED)
 {
     this -> socket = socket;    //Set the socket

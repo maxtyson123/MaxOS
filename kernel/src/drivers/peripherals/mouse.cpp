@@ -4,6 +4,7 @@
 
 #include <drivers/peripherals/mouse.h>
 
+using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::peripherals;

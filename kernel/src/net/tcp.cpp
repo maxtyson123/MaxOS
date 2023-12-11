@@ -124,7 +124,7 @@ void TransmissionControlProtocolSocket::Connected() {
 TransmissionControlProtocolPort TransmissionControlProtocolHandler::freePorts = 0x8000;
 
 TransmissionControlProtocolHandler::TransmissionControlProtocolHandler(
-        maxOS::net::InternetProtocolHandler *internetProtocolHandler, common::OutputStream *errorMessages)
+        maxOS::net::InternetProtocolHandler *internetProtocolHandler, OutputStream *errorMessages)
 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x06)
 {
     this -> errorMessages = errorMessages;
@@ -159,7 +159,7 @@ uint32_t bigEndian16(uint16_t x)
  * @param size The size of the payload
  * @return True if data is to be sent back or false if not
  */
-bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, common::uint8_t* payloadData, common::uint32_t size)
+bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size)
 {
 
     errorMessages -> write("TCP: Handling TCP message\n");
@@ -186,7 +186,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
     //Create the socket
     TransmissionControlProtocolSocket* socket = 0;
 
-    for(common::Vector<TransmissionControlProtocolSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++)
+    for(Vector<TransmissionControlProtocolSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++)
     {
         if( (*currentSocket) -> localPort == localPort                               //Check if the local port is the same as the destination port
         &&  (*currentSocket) -> localIP == destinationIP                                  //Check if the local IP is the same as the destination IP
@@ -385,7 +385,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
  * @param size   The size of the data
  * @param flags  The flags to send
  */
-void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size, common::uint16_t flags)
+void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size, uint16_t flags)
 {
     //Get the total size of the packet and the packet with the pseudo header
     uint16_t totalLength = size + sizeof(TransmissionControlProtocolHeader);
@@ -573,7 +573,7 @@ void TransmissionControlProtocolHandler::Bind(TransmissionControlProtocolSocket*
 
 /// ___ EVENTS ___ ///
 
-DataReceivedEvent::DataReceivedEvent(TransmissionControlProtocolSocket *socket, common::uint8_t *data, common::uint16_t size)
+DataReceivedEvent::DataReceivedEvent(TransmissionControlProtocolSocket *socket, uint8_t *data, uint16_t size)
 : Event(DATA_RECEIVED)
 {
     this -> socket = socket;

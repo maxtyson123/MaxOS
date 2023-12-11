@@ -38,7 +38,7 @@ uint16_t TextModeConsole::getHeight()
  * @param y The y coordinate
  * @param c The character to place
  */
-void TextModeConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
+void TextModeConsole::putChar(uint16_t x, uint16_t y, char c) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -58,7 +58,7 @@ void TextModeConsole::putChar(common::uint16_t x, common::uint16_t y, char c) {
  * @param y The y coordinate
  * @param foreground The foreground color
  */
-void TextModeConsole::setForegroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour foreground) {
+void TextModeConsole::setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -77,7 +77,7 @@ void TextModeConsole::setForegroundColor(common::uint16_t x, common::uint16_t y,
  * @param y The y coordinate
  * @param background The background color
  */
-void TextModeConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y, ConsoleColour background) {
+void TextModeConsole::setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -97,7 +97,7 @@ void TextModeConsole::setBackgroundColor(common::uint16_t x, common::uint16_t y,
  * @param y The y coordinate
  * @return The character at the specified location
  */
-char TextModeConsole::getChar(common::uint16_t x, common::uint16_t y) {
+char TextModeConsole::getChar(uint16_t x, uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -116,7 +116,7 @@ char TextModeConsole::getChar(common::uint16_t x, common::uint16_t y) {
  * @param y The y coordinate
  * @return The foreground color at the specified location
  */
-ConsoleColour TextModeConsole::getForegroundColor(common::uint16_t x, common::uint16_t y) {
+ConsoleColour TextModeConsole::getForegroundColor(uint16_t x, uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())
@@ -135,7 +135,7 @@ ConsoleColour TextModeConsole::getForegroundColor(common::uint16_t x, common::ui
  * @param y The y coordinate
  * @return The background color at the specified location
  */
- ConsoleColour TextModeConsole::getBackgroundColor(common::uint16_t x, common::uint16_t y) {
+ ConsoleColour TextModeConsole::getBackgroundColor(uint16_t x, uint16_t y) {
 
     // If the coordinates are out of bounds, return
     if(x >= getWidth() || y >= getHeight())

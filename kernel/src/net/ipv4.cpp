@@ -64,8 +64,8 @@ InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() {
  */
 bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(maxOS::net::InternetProtocolAddress sourceIP,
                                                                    maxOS::net::InternetProtocolAddress destinationIP,
-                                                                   common::uint8_t *payloadData,
-                                                                   common::uint32_t size) {
+                                                                   uint8_t *payloadData,
+                                                                   uint32_t size) {
     return false;
 }
 
@@ -89,7 +89,7 @@ void InternetProtocolPayloadHandler::Send(InternetProtocolAddress destinationIP,
 
 
 
-InternetProtocolHandler::InternetProtocolHandler(EthernetFrameHandler *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask, common::OutputStream* errorMessages)
+InternetProtocolHandler::InternetProtocolHandler(EthernetFrameHandler *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask, OutputStream* errorMessages)
         : EthernetFramePayloadHandler(backend, 0x0800)
 {
     //Store vars

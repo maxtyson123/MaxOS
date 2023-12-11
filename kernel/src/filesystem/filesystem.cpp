@@ -5,7 +5,6 @@
 #include <filesystem/filesystem.h>
 
 using namespace maxOS;
-using namespace maxOS::common;
 using namespace maxOS::filesystem;
 
 ///__FileSystem__///
@@ -68,7 +67,7 @@ void DirectoryTraverser::makeDirectory(string name) {
  *
  * @param name the name of the directory to remove
  */
-void DirectoryTraverser::removeDirectory(char *name) {
+void DirectoryTraverser::removeDirectory(string name) {
 
 }
 
@@ -98,7 +97,7 @@ DirectoryEnumerator* DirectoryTraverser::getDirectoryEnumerator() {
  *
  * @param name the name of the file
  */
-void DirectoryTraverser::makeFile(char *name) {
+void DirectoryTraverser::makeFile(string name) {
 
 }
 
@@ -107,7 +106,7 @@ void DirectoryTraverser::makeFile(char *name) {
  *
  * @param name the name of the file
  */
-void DirectoryTraverser::removeFile(char *name) {
+void DirectoryTraverser::removeFile(string name) {
 
 }
 
@@ -229,7 +228,7 @@ FileReader::~FileReader() {
  * @param size the size of the data to read
  * @return the amount of data read
  */
-uint32_t FileReader::Read(common::uint8_t *data, common::uint32_t size) {
+uint32_t FileReader::Read(uint8_t *data, uint32_t size) {
 
 }
 
@@ -240,7 +239,7 @@ uint32_t FileReader::Read(common::uint8_t *data, common::uint32_t size) {
  * @param seek The type of seek to perform. (SEEK_SET, offset = position) (SEEK_CUR, offset = offset + position)  (SEEK_END, offset = fileSize + position)
  * @return the position in the file
  */
-uint32_t FileReader::Seek(common::uint32_t position, SeekType seek) {
+uint32_t FileReader::Seek(uint32_t position, SeekType seek) {
 
 }
 
@@ -249,7 +248,7 @@ uint32_t FileReader::Seek(common::uint32_t position, SeekType seek) {
  *
  * @return the current position in the file
  */
-common::uint32_t FileReader::GetPosition() {
+uint32_t FileReader::GetPosition() {
     return 0;
 }
 
@@ -258,7 +257,7 @@ common::uint32_t FileReader::GetPosition() {
  *
  * @return the size of the file
  */
-common::uint32_t FileReader::GetFileSize() {
+uint32_t FileReader::GetFileSize() {
     return 0;
 }
 
@@ -281,7 +280,7 @@ FileWriter::~FileWriter() {
  * @param size the size of the data to write
  * @return the amount of data written
  */
-uint32_t FileWriter::Write(common::uint8_t *data, common::uint32_t size) {
+uint32_t FileWriter::Write(uint8_t *data, uint32_t size) {
     return 0;
 }
 
@@ -292,7 +291,7 @@ uint32_t FileWriter::Write(common::uint8_t *data, common::uint32_t size) {
  * @param seek The type of seek to perform. (SEEK_SET, offset = position) (SEEK_CUR, offset = offset + position)  (SEEK_END, offset = fileSize + position)
  * @return how many bytes the position has been moved
  */
-common::uint32_t FileWriter::Seek(common::uint32_t position, SeekType seek) {
+uint32_t FileWriter::Seek(uint32_t position, SeekType seek) {
     return 0;
 }
 
@@ -319,7 +318,7 @@ bool FileWriter::Flush() {
  *
  * @return the current position in the file
  */
-common::uint32_t FileWriter::GetPosition() {
+uint32_t FileWriter::GetPosition() {
     return 0;
 }
 
@@ -328,7 +327,7 @@ common::uint32_t FileWriter::GetPosition() {
  *
  * @return the size of the file
  */
-common::uint32_t FileWriter::GetFileSize() {
+uint32_t FileWriter::GetFileSize() {
     return 0;
 }
 

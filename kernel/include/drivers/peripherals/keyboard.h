@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <common/vector.h>
+#include <common/string.h>
 #include <common/inputStream.h>
 #include <common/eventHandler.h>
 #include <hardwarecommunication/interrupts.h>

@@ -106,13 +106,13 @@ size_t sys_write(int fd, const void *buf, size_t count){
  * @return On success, these system calls return a nonnegative integer that is a file descriptor for the
        newly opened file.  On error, -1 is returned
  */
-int sys_open(const char *pathname, int flags, mode_t mode){
+/* int sys_open(const char *pathname, int flags, mode_t mode){
 
         asm("int $0x80" : : "a" (5), "b" (pathname), "c" (flags), "d" (mode));
         //TODO: Return the file descriptor
         //https://man7.org/linux/man-pages/man2/open.2.html
 
-}
+} */
 
 /**
  * @details closes a file descriptor, so that it no longer refers to any
@@ -139,13 +139,13 @@ int sys_close(int fd){
        specified and one or more child(ren) specified by pid exist, but have not yet changed state,
        then 0 is returned.  On error, -1 is returned
  */
-pid_t sys_waitpid(pid_t pid, int *status, int options) {
+/* pid_t sys_waitpid(pid_t pid, int *status, int options) {
 
     uint32_t data = 7;
     asm volatile( "int $0x80" : "=a"(data) : "b" (pid), "c" (status), "d" (options));             //Call the interrupt, passing the syscall number and the argument
     return data;
     //https://man7.org/linux/man-pages/man2/waitpid.2.html
-}
+} */
 
 /**
  * @ details equivalent to calling open() with flags
@@ -156,13 +156,13 @@ pid_t sys_waitpid(pid_t pid, int *status, int options) {
  * @return On success, these system calls return a nonnegative integer that is a file descriptor for the
        newly opened file.  On error, -1 is returned
  */
-int sys_creat(const char *pathname, mode_t mode){
+/* int sys_creat(const char *pathname, mode_t mode){
 
     uint32_t data = 8;
     asm volatile( "int $0x80" : "=a"(data) :"b" (pathname), "c" (mode));
     //TODO: Return the file descriptor
     //https://man7.org/linux/man-pages/man2/open.2.html#:~:text=O_TRUNC%20is%20unspecified.-,creat,-()%0A%20%20%20%20%20%20%20A%20call
-}
+} */
 
 /**
  * @details creates a new link (also known as a hard link) to an

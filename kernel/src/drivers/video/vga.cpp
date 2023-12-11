@@ -4,7 +4,7 @@
 
 #include <drivers/video/vga.h>
 
-using namespace maxOS::common;
+using namespace maxOS;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::video;
 using namespace maxOS::hardwarecommunication;

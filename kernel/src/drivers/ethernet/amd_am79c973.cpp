@@ -158,10 +158,10 @@ void amd_am79c973::HandleInterrupt() {
     // Note: Cant be switch case as multiple errors can occur at the same time
 
     // Errors
-    if((temp & 0x8000) == 0x8000) errorMessage("AMD am79c973 ERROR\n");
-    if((temp & 0x2000) == 0x2000) errorMessage("AMD am79c973 COLLISION ERROR\n");
-    if((temp & 0x1000) == 0x1000) errorMessage("AMD am79c973 MISSED FRAME\n");
-    if((temp & 0x0800) == 0x0800) errorMessage("AMD am79c973 MEMORY ERROR\n");
+    if((temp & 0x8000) == 0x8000) errorMessage("AMD am79c973 ERROR: ");
+    if((temp & 0x2000) == 0x2000) errorMessage("COLLISION ERROR\n");
+    if((temp & 0x1000) == 0x1000) errorMessage("MISSED FRAME\n");
+    if((temp & 0x0800) == 0x0800) errorMessage("MEMORY ERROR\n");
 
 
     // Responses
@@ -187,7 +187,7 @@ void amd_am79c973::HandleInterrupt() {
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
-void amd_am79c973::DoSend(common::uint8_t *buffer, uint32_t size) {
+void amd_am79c973::DoSend(uint8_t *buffer, uint32_t size) {
 
     while(!active);
 

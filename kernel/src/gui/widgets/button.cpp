@@ -85,14 +85,14 @@ Button::~Button() {
  * @param gc The graphics context to draw to
  * @param area The area to draw to
  */
-void Button::draw(GraphicsContext *gc, Rectangle<int> &area) {
+void Button::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
     // Default Draw Operation
     Widget::draw(gc, area);
 
     // Get the absolute position of the button
     Coordinates buttonCoordinates = absoluteCoordinates(Coordinates(0,0));
-    Rectangle<int> buttonPosition = getPosition();
+    Rectangle<int32_t> buttonPosition = getPosition();
 
     // Get the x and y position of the button
     int32_t x = buttonCoordinates.first;
@@ -104,35 +104,35 @@ void Button::draw(GraphicsContext *gc, Rectangle<int> &area) {
     // Draw the border  (TODO: Make a border class?? Window uses it too)
 
     // Top Border
-    if(area.intersects(Rectangle<int>(0,0,buttonPosition.width,1))){
+    if(area.intersects(Rectangle<int32_t>(0,0,buttonPosition.width,1))){
 
         // Start in the top left corner of the button and end in the top right corner
         gc ->drawLine(x + area.left, y, x + area.left + area.width - 1, y,borderColour);
     }
 
     // Left Border
-    if(area.intersects(Rectangle<int>(0,0,1,buttonPosition.height))){
+    if(area.intersects(Rectangle<int32_t>(0,0,1,buttonPosition.height))){
 
         // Start in the top left corner and end in the bottom left corner
         gc ->drawLine(x, y + area.top, x, y + area.top + area.height - 1,borderColour);
     }
 
     // Right Border
-    if(area.intersects(Rectangle<int>(0,buttonPosition.height - 1,buttonPosition.width,1))){
+    if(area.intersects(Rectangle<int32_t>(0,buttonPosition.height - 1,buttonPosition.width,1))){
 
         // Start in the top right corner and end in the bottom right corner
         gc ->drawLine(x + area.left, y + buttonPosition.height - 1, x + area.left + area.width - 1, y + buttonPosition.height - 1,borderColour);
     }
 
     // Bottom Border
-    if(area.intersects(Rectangle<int>(buttonPosition.width - 1,0,1,buttonPosition.height))){
+    if(area.intersects(Rectangle<int32_t>(buttonPosition.width - 1,0,1,buttonPosition.height))){
 
         // Start in the bottom left corner and end in the bottom right corner
         gc ->drawLine(x + buttonPosition.width - 1, y + area.top, x + buttonPosition.width - 1, y + area.top + area.height - 1,borderColour);
     }
 
     // Draw the text
-    common::Rectangle<int> textArea(area.left - 1, area.top - 1, area.width, area.height);
+    common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
     font.drawText(x + 1, y + 1, foregroundColour, backgroundColour, gc, text,textArea);
 
 }

@@ -5,8 +5,8 @@
 #include <gui/font.h>
 
 using namespace maxOS;
-using namespace maxOS::gui;
 using namespace maxOS::common;
+using namespace maxOS::gui;
 
 
 Font::Font() {
@@ -40,7 +40,7 @@ void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgr
     uint32_t height = getTextHeight(text);
 
     // Create the rectangle
-    Rectangle<int> textArea(left, top, width, height);
+    Rectangle<int32_t> textArea(left, top, width, height);
 
     // Draw the text
     drawText(x, y, foregroundColour, backgroundColour, context, text, textArea);
@@ -55,7 +55,7 @@ void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgr
  * @param text The text to draw
  * @param limitArea The area of the text to draw
  */
-void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgroundColour, GraphicsContext *context, string text,  Rectangle<int> limitArea) {
+void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgroundColour, GraphicsContext *context, string text,  Rectangle<int32_t> limitArea) {
 
     uint8_t font8x8[2048];  // Declare an array to hold the font data
     getFont8x8(font8x8);    // Get the font data

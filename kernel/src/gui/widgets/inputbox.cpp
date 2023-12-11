@@ -4,6 +4,7 @@
 
 #include <gui/widgets/inputbox.h>
 
+using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::gui;
 using namespace maxOS::gui::widgets;
@@ -73,14 +74,14 @@ InputBox::~InputBox() {
 
 }
 
-void InputBox::draw(GraphicsContext *gc, Rectangle<int> &area) {
+void InputBox::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
     // Default Draw
     Widget::draw(gc, area);
 
     // Get the absolute position of the input box
     Coordinates inputBoxCoordinates = absoluteCoordinates(Coordinates(0,0));
-    Rectangle<int> inputBoxPosition = getPosition();
+    Rectangle<int32_t> inputBoxPosition = getPosition();
 
     // Get the x and y position of the input box
     int32_t x = inputBoxCoordinates.first;
@@ -92,35 +93,35 @@ void InputBox::draw(GraphicsContext *gc, Rectangle<int> &area) {
     // Draw the border  (TODO: Make this a function because it is used in multiple places)
 
     // Top Border
-    if(area.intersects(Rectangle<int>(0,0,inputBoxPosition.width,1))){
+    if(area.intersects(Rectangle<int32_t>(0,0,inputBoxPosition.width,1))){
 
         // Start in the top left corner of the button and end in the top right corner
         gc ->drawLine(x + area.left, y, x + area.left + area.width - 1, y,borderColour);
     }
 
     // Left Border
-    if(area.intersects(Rectangle<int>(0,0,1,inputBoxPosition.height))){
+    if(area.intersects(Rectangle<int32_t>(0,0,1,inputBoxPosition.height))){
 
         // Start in the top left corner and end in the bottom left corner
         gc ->drawLine(x, y + area.top, x, y + area.top + area.height - 1,borderColour);
     }
 
     // Right Border
-    if(area.intersects(Rectangle<int>(0,inputBoxPosition.height - 1,inputBoxPosition.width,1))){
+    if(area.intersects(Rectangle<int32_t>(0,inputBoxPosition.height - 1,inputBoxPosition.width,1))){
 
         // Start in the top right corner and end in the bottom right corner
         gc ->drawLine(x + area.left, y + inputBoxPosition.height - 1, x + area.left + area.width - 1, y + inputBoxPosition.height - 1,borderColour);
     }
 
     // Bottom Border
-    if(area.intersects(Rectangle<int>(inputBoxPosition.width - 1,0,1,inputBoxPosition.height))){
+    if(area.intersects(Rectangle<int32_t>(inputBoxPosition.width - 1,0,1,inputBoxPosition.height))){
 
         // Start in the bottom left corner and end in the bottom right corner
         gc ->drawLine(x + inputBoxPosition.width - 1, y + area.top, x + inputBoxPosition.width - 1, y + area.top + area.height - 1,borderColour);
     }
 
     // Draw the text
-    common::Rectangle<int> textArea(area.left - 1, area.top - 1, area.width, area.height);
+    common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
     font.drawText(x + 1, y + 1, foregroundColour, backgroundColour, gc, &widgetText[0],textArea);
 }
 
@@ -221,7 +222,7 @@ void InputBox::updateText(string newText) {
     cursorPosition = 0;
 
     // Copy the new text into the widget text
-    for(string c = (string)newText, *buffer = &widgetText[0]; *c != '\0'; ++c, buffer++)
+    for(char* c = (char*)newText, *buffer = &widgetText[0]; *c != '\0'; ++c, buffer++)
     {
 
         // Update the cursor position and the buffer

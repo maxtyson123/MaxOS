@@ -10,7 +10,7 @@ using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::peripherals;
 
-Window::Window(common::int32_t left, common::int32_t top, common::uint32_t width, common::uint32_t height, string titleText)
+Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string titleText)
 : CompositeWidget(left, top, width, height),
 // Top at -10 for bar height, -5 for frame, + 2 for the border. Width is the width of the window minus the frame on each side. Height is the height of the title bar plus the frame on the top minus the border.
   title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, titleText),
@@ -90,10 +90,10 @@ Window::~Window() {
  * @param y The y coordinate of the mouse.
  * @param button The button that is pressed.
  */
-MouseEventHandler* Window::onMouseButtonPressed(common::uint32_t mouseX, common::uint32_t mouseY, common::uint8_t button){
+MouseEventHandler* Window::onMouseButtonPressed(uint32_t mouseX, uint32_t mouseY, uint8_t button){
 
     maxOS::drivers::peripherals::MouseEventHandler* childrenResult = CompositeWidget::onMouseButtonPressed(mouseX,mouseY,button);
-    Rectangle<int> windowPosition = getPosition();
+    Rectangle<int32_t> windowPosition = getPosition();
 
     // Check if the mouse is in the frame
     if(mouseX <= windowFrameThickness)                                                  // This means the mouse is in the left as the x position (relative to this object) has not passed the frame
@@ -140,33 +140,33 @@ MouseEventHandler* Window::onMouseButtonPressed(common::uint32_t mouseX, common:
  *
  * @param gc The graphics context to draw on.
  */
-void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area){
+void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int32_t>& area){
 
     // Get the positioning of the window
     Coordinates windowAbsolutePosition = CompositeWidget::absoluteCoordinates(Coordinates(0,0));
-    Rectangle<int> windowPosition = this -> getPosition();
+    Rectangle<int32_t> windowPosition = this -> getPosition();
     int32_t windowX = windowAbsolutePosition.first;
     int32_t windowY = windowAbsolutePosition.second;
 
     // Create an area for the window contents
-    Rectangle<int> windowContentsArea(windowFrameThickness, windowFrameThickness + windowTitleBarHeight, windowPosition.width - 2 * windowFrameThickness, windowPosition.height - 2 * windowFrameThickness - windowTitleBarHeight);
+    Rectangle<int32_t> windowContentsArea(windowFrameThickness, windowFrameThickness + windowTitleBarHeight, windowPosition.width - 2 * windowFrameThickness, windowPosition.height - 2 * windowFrameThickness - windowTitleBarHeight);
 
     // Check if the window contents area is in the area to draw
     if(windowContentsArea.intersects(area)){
 
         // Get the parts of the window contents area that are in the area to draw
-        Rectangle<int> windowContentsAreaToDraw = windowContentsArea.intersection(area);
+        Rectangle<int32_t> windowContentsAreaToDraw = windowContentsArea.intersection(area);
 
         // Draw the window contents area (adding windowX and windowY to draw in the correct place)
         gc -> fillRectangle(windowContentsAreaToDraw.left + windowX, windowContentsAreaToDraw.top + windowY, windowContentsAreaToDraw.left + windowContentsAreaToDraw.width + windowX, windowContentsAreaToDraw.top + windowContentsAreaToDraw.height + windowY, windowAreaColour);
     }
 
     // Draw the top of the window frame and the title bar (does not include left and right borders so start at windowFrameThickness and end at windowPosition.width - windowFrameThickness)
-    Rectangle<int> windowFrameTopArea(windowFrameThickness, 0, windowPosition.width - 2 * windowFrameThickness, windowFrameThickness + windowTitleBarHeight);
+    Rectangle<int32_t> windowFrameTopArea(windowFrameThickness, 0, windowPosition.width - 2 * windowFrameThickness, windowFrameThickness + windowTitleBarHeight);
     if(windowFrameTopArea.intersects(area)){
 
         // Get the parts of the window frame top area that are in the area to draw
-        Rectangle<int> windowFrameTopAreaToDraw = windowFrameTopArea.intersection(area);
+        Rectangle<int32_t> windowFrameTopAreaToDraw = windowFrameTopArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
         gc -> fillRectangle(windowFrameTopAreaToDraw.left + windowX, windowFrameTopAreaToDraw.top + windowY, windowFrameTopAreaToDraw.left + windowFrameTopAreaToDraw.width + windowX, windowFrameTopAreaToDraw.top + windowFrameTopAreaToDraw.height + windowY, windowFrameColour);
@@ -174,11 +174,11 @@ void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area)
     }
 
     // Draw the bottom of the window frame (does not include left and right borders so start at windowFrameThickness and end at windowPosition.width - windowFrameThickness)
-    Rectangle<int> windowFrameBottomArea(windowFrameThickness, windowPosition.height - windowFrameThickness, windowPosition.width - 2*windowFrameThickness, windowFrameThickness);
+    Rectangle<int32_t> windowFrameBottomArea(windowFrameThickness, windowPosition.height - windowFrameThickness, windowPosition.width - 2*windowFrameThickness, windowFrameThickness);
     if(windowFrameBottomArea.intersects(area)){
 
         // Get the parts of the window frame top area that are in the area to draw
-        Rectangle<int> windowFrameBottomAreaToDraw = windowFrameBottomArea.intersection(area);
+        Rectangle<int32_t> windowFrameBottomAreaToDraw = windowFrameBottomArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
         gc -> fillRectangle(windowX + windowFrameBottomAreaToDraw.left, windowY + windowFrameBottomAreaToDraw.top, windowX + windowFrameBottomAreaToDraw.left + windowFrameBottomAreaToDraw.width, windowY + windowFrameBottomAreaToDraw.top + windowFrameBottomAreaToDraw.height, windowFrameColour);
@@ -186,11 +186,11 @@ void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area)
     }
 
     // Draw the left of the window frame
-    Rectangle<int> windowFrameLeftArea(0,0, windowFrameThickness, windowPosition.height);
+    Rectangle<int32_t> windowFrameLeftArea(0,0, windowFrameThickness, windowPosition.height);
     if(windowFrameLeftArea.intersects(area)){
 
         // Get the parts of the window frame top area that are in the area to draw
-        Rectangle<int> windowFrameLeftAreaToDraw = windowFrameLeftArea.intersection(area);
+        Rectangle<int32_t> windowFrameLeftAreaToDraw = windowFrameLeftArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
         gc -> fillRectangle(windowX + windowFrameLeftAreaToDraw.left, windowY + windowFrameLeftAreaToDraw.top, windowX + windowFrameLeftAreaToDraw.left + windowFrameLeftAreaToDraw.width, windowY + windowFrameLeftAreaToDraw.top + windowFrameLeftAreaToDraw.height, windowFrameColour);
@@ -198,11 +198,11 @@ void Window::drawSelf(common::GraphicsContext* gc, common::Rectangle<int>& area)
     }
 
     // Draw the right of the window frame
-    Rectangle<int> windowFrameRightArea(windowPosition.width - windowFrameThickness, 0, windowFrameThickness, windowPosition.height);
+    Rectangle<int32_t> windowFrameRightArea(windowPosition.width - windowFrameThickness, 0, windowFrameThickness, windowPosition.height);
     if(windowFrameRightArea.intersects(area)){
 
         // Get the parts of the window frame top area that are in the area to draw
-        Rectangle<int> windowFrameRightAreaToDraw = windowFrameRightArea.intersection(area);
+        Rectangle<int32_t> windowFrameRightAreaToDraw = windowFrameRightArea.intersection(area);
 
         // Draw the window frame top area (adding windowX and windowY to draw in the correct place)
         gc -> fillRectangle(windowX + windowFrameRightAreaToDraw.left, windowY + windowFrameRightAreaToDraw.top, windowX + windowFrameRightAreaToDraw.left + windowFrameRightAreaToDraw.width, windowY + windowFrameRightAreaToDraw.top + windowFrameRightAreaToDraw.height, windowFrameColour);
@@ -222,7 +222,7 @@ void Window::addChild(Widget *child) {
     if(child != 0){
 
         // Get the position of the child
-        Rectangle<int> childPosition = child -> getPosition();
+        Rectangle<int32_t> childPosition = child -> getPosition();
 
         // Set the position of the child to be relative to the window frame and border
         child -> move(childPosition.left + windowFrameThickness + 1, childPosition.top + windowFrameThickness + windowTitleBarHeight + 1);

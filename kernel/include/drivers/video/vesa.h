@@ -6,6 +6,7 @@
 #define MAXOS_VIDEO_VESA_H
 
 #include <stdint.h>
+#include <common/string.h>
 #include <drivers/video/video.h>
 #include <memory/memorymanagement.h>
 #include <system/multiboot.h>

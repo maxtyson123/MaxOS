@@ -12,7 +12,7 @@ using namespace maxOS::drivers::ethernet;
 
 
 
-net::AddressResolutionProtocol::AddressResolutionProtocol(EthernetFrameHandler* ethernetFrameHandler, InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages)
+net::AddressResolutionProtocol::AddressResolutionProtocol(EthernetFrameHandler* ethernetFrameHandler, InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
 : EthernetFramePayloadHandler(ethernetFrameHandler, 0x0806),
   InternetProtocolAddressResolver(internetProtocolHandler)
 {
@@ -31,7 +31,7 @@ net::AddressResolutionProtocol::~AddressResolutionProtocol() {
  * @param size The size of the ARP packet.
  * @return True if the device should send a response, false otherwise.
  */
-bool AddressResolutionProtocol::handleEthernetFramePayload(common::uint8_t* etherframePayload, common::uint32_t size) {
+bool AddressResolutionProtocol::handleEthernetFramePayload(uint8_t* etherframePayload, uint32_t size) {
 
     //Check if the size is correct
     if(size < sizeof(AddressResolutionProtocolMessage))

@@ -6,7 +6,6 @@
 #define nullptr 0
 
 using namespace maxOS;
-using namespace maxOS::common;
 using namespace maxOS::system;
 
 
@@ -14,7 +13,7 @@ int ThreadManager::numThreads = 0;
 int ThreadManager::currentThread = -1;
 Thread *ThreadManager::Threads[256] = {nullptr};
 GlobalDescriptorTable *ThreadManager::gdt;
-common::uint8_t ThreadManager::stack[256][5012];
+uint8_t ThreadManager::stack[256][5012];
 
 void Thread::init(GlobalDescriptorTable *gdt, void entrypoint())
 {

@@ -86,7 +86,7 @@ intel_i217::~intel_i217() {
 }
 
 
-void intel_i217::Write(common::uint16_t address, common::uint32_t data) {
+void intel_i217::Write(uint16_t address, uint32_t data) {
 
     //Note: These Ports/MemIO cant be init in the constructor like they normaly would as it depends wether the device is using IO or MemIO, and checking that in every function would be messy
 
@@ -108,7 +108,7 @@ void intel_i217::Write(common::uint16_t address, common::uint32_t data) {
 
 }
 
-common::uint32_t intel_i217::Read(common::uint16_t address) {
+uint32_t intel_i217::Read(uint16_t address) {
 
     //Note: These Ports/MemIO cant be init in the constructor like they normaly would as it depends wether the device is using IO or MemIO, and checking that in every function would be messy
     if(bar_type == 0) {                                             // If the base address register is memory mapped
@@ -376,7 +376,7 @@ void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
 }
 
-common::uint64_t intel_i217::GetMediaAccessControlAddress() {
+uint64_t intel_i217::GetMediaAccessControlAddress() {
     driverMessageStream -> write("Getting MAC address... ");
     while(ownMAC == 0);
     return ownMAC;

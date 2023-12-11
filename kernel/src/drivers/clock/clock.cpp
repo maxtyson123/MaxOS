@@ -133,7 +133,7 @@ uint8_t Clock::readHardwareClock(uint8_t address)
  * @param number The number to convert
  * @return The binary representation of the number or the number itself if the binary coded decimal representation is not used
  */
-common::uint8_t Clock::binaryRepresentation(common::uint8_t number) {
+uint8_t Clock::binaryRepresentation(uint8_t number) {
 
     // If the binary coded decimal representation is not used, return the number
     if(!binaryCodedDecimalRepresentation)
@@ -173,7 +173,7 @@ void Clock::activate() {
  *
  * @param milliseconds How many milliseconds to delay the program for
  */
-void Clock::delay(common::uint32_t milliseconds) {
+void Clock::delay(uint32_t milliseconds) {
 
         // Round the number of milliseconds to the nearest 100
         uint64_t roundedMilliseconds =  ((milliseconds+99)/100);
@@ -197,7 +197,7 @@ string Clock::getDeviceName() {
 
 
 
-TimeEvent::TimeEvent(common::Time* time)
+TimeEvent::TimeEvent(Time* time)
 :Event(ClockEvents::TIME)
 {
     this -> time = time;

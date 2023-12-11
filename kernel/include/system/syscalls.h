@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <hardwarecommunication/interrupts.h>
+#include <stddef.h>
 
 namespace maxOS{
     namespace system{

@@ -34,7 +34,7 @@ void EthernetDriverEventHandler::DataSent(uint8_t*, uint32_t)
 {
 }
 
-Event<EthernetDriverEvents>* EthernetDriverEventHandler::onEvent(common::Event<EthernetDriverEvents> *event) {
+Event<EthernetDriverEvents>* EthernetDriverEventHandler::onEvent(Event<EthernetDriverEvents> *event) {
 
     switch (event -> type) {
 
@@ -186,7 +186,7 @@ MediaAccessControlAddress EthernetDriver::CreateMediaAccessControlAddress(uint8_
 
 /// __ EVENTS __
 
-DataSentEvent::DataSentEvent(common::uint8_t *buffer, common::uint32_t size)
+DataSentEvent::DataSentEvent(uint8_t *buffer, uint32_t size)
 : Event(EthernetDriverEvents::DATA_SENT)
 {
     this -> buffer = buffer;
@@ -198,7 +198,7 @@ DataSentEvent::~DataSentEvent()
 {
 }
 
-DataReceivedEvent::DataReceivedEvent(common::uint8_t *buffer, common::uint32_t size)
+DataReceivedEvent::DataReceivedEvent(uint8_t *buffer, uint32_t size)
 : Event(EthernetDriverEvents::DATA_RECEIVED)
 {
     this -> buffer = buffer;
@@ -209,7 +209,7 @@ DataReceivedEvent::~DataReceivedEvent()
 {
 }
 
-BeforeSendEvent::BeforeSendEvent(common::uint8_t *buffer, common::uint32_t size)
+BeforeSendEvent::BeforeSendEvent(uint8_t *buffer, uint32_t size)
 : Event(EthernetDriverEvents::BEFORE_SEND)
 {
     this -> buffer = buffer;
