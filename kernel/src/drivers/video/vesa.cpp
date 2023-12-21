@@ -72,10 +72,10 @@ bool VideoElectronicsStandardsAssociationDriver::internalSetMode(uint32_t width,
  */
 bool VideoElectronicsStandardsAssociationDriver::supportsMode(uint32_t width, uint32_t height, uint32_t colorDepth) {
 
-    // Will change to detect mode later
-    if(width == 640 && height == 480 && colorDepth == 16) return true;
-    if(width == 800 && height == 600 && colorDepth == 16) return true;
-    if(width == 1024 && height == 768 && colorDepth == 32) return true;
+    // Check if the mode is supported
+    if(width == (int)multibootInfo->framebuffer_width && height == (int)multibootInfo->framebuffer_height && colorDepth == (int)multibootInfo->framebuffer_bpp) {
+        return true;
+    }
     return false;
 }
 

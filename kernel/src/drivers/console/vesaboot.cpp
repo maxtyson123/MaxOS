@@ -7,6 +7,7 @@
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::gui;
+using namespace maxOS::memory;
 using namespace maxOS::drivers;
 using namespace maxOS::drivers::console;
 
@@ -20,6 +21,9 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphicsContext)
 
     // Set the font
     this->font = AmigaFont();
+
+    // Malloc the video memory
+    videoMemory = (uint16_t*)MemoryManager::activeMemoryManager->malloc(graphicsContext->getWidth() * graphicsContext->getHeight() * sizeof(uint16_t));
 }
 
 VESABootConsole::~VESABootConsole()
@@ -29,12 +33,12 @@ VESABootConsole::~VESABootConsole()
 
 uint16_t VESABootConsole::getWidth()
 {
-    return 128;      // 1024 pixels / 8 pixels per character
+    return graphicsContext->getWidth() / 8;       // 8 pixels per character
 }
 
 uint16_t VESABootConsole::getHeight()
 {
-    return 85;       // 768 pixels / 8 pixels per character plus 1 pixel for spacing
+    return graphicsContext->getHeight() / 9;      // 9 pixels per character
 }
 /**
  * Places a character at the specified location

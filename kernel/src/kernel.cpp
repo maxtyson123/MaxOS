@@ -152,10 +152,16 @@ extern "C" void callConstructors()
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
 
+    // Memory Management has to be set up first so that the video driver can use it
+    uint32_t memupper = multibootHeader.mem_upper;
+    size_t  heap = 10*1024*1024;                                                          //Start at 10MB
+    size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
+    MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
+
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociationDriver vesa((multiboot_info_t *)&multibootHeader);
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
-    videoDriver -> setMode(1024, 768, 32);
+    videoDriver -> setMode((int)multibootHeader.framebuffer_width, (int)multibootHeader.framebuffer_height, (int)multibootHeader.framebuffer_bpp);
 
     //Initialise Console
     VESABootConsole console(&vesa);
@@ -185,9 +191,15 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     // Make the header
     ConsoleArea consoleHeader(&console, 0, 0, console.getWidth(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
     ConsoleStream headerStream(&consoleHeader);
+    headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
+
+    // Calc the length of the header
+    uint32_t headerLength = headerStream.cursorX;
+    uint32_t headerPadding = (console.getWidth() - headerLength)/2;
+    headerStream.setCursor(0,0);
 
     // Write the header
-    headerStream << "                                                    Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]                                                    " ;
+    for(uint32_t i = 0; i < headerPadding; i++) headerStream << " "; headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]"; for(uint32_t i = 0; i < headerPadding; i++) headerStream << " ";
 
     // Make a main console area at the top of the screen
     ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight(), ConsoleColour::DarkGrey, ConsoleColour::Black);
@@ -214,6 +226,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     cout << "\n";
 
+
     // Where the areas should start
     uint32_t areaStart = cout.cursorY;
 
@@ -227,11 +240,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "-- Set Up GDT\n";
     systemSetupHeaderStream << ".";
 
-    // Setup Memory
-    uint32_t memupper = multibootHeader.mem_upper;
-    size_t  heap = 10*1024*1024;                                                          //Start at 10MB
-    size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
-    MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
+    // Print that the memory has been set up
     cout << "Memory: " << (int)memoryManager.getMemoryUsed()/1000000 <<  "MB used, " << (int)memSize/1000000 << "MB available\n";
     cout << "-- Set Up Memory Management\n";
     systemSetupHeaderStream << ".";
@@ -380,7 +389,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     networkSetupHeaderStream << ".";
 
     // Ethernet Frame Handler
-    EthernetFrameHandler ethernetFrameHandler(ethernetDriver, &networkConsoleStream);
+    EtherFrameProvider ethernetFrameHandler(ethernetDriver, &networkConsoleStream);
     cout << "-- Set Up Ethernet Frame Handler\n";
     networkSetupHeaderStream << ".";
 
@@ -398,7 +407,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     networkSetupHeaderStream << ".";
 
     // ICMP
-    InternetControlMessageProtocol icmp(&internetProtocolHandler);
+    InternetControlMessageProtocol icmp(&internetProtocolHandler, &networkConsoleStream);
     cout << "-- Set Up ICMP\n";
     networkSetupHeaderStream << ".";
 
@@ -453,7 +462,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
             *stream << "TCP Connection Closed\n";
         }
     };
-    
+    icmp.RequestEchoReply(defaultGateway);
     TCPtoStream tcpToStream(&networkConsoleStream);
     TransmissionControlProtocolSocket* tcpSocket = tcp.Listen(1234);
     tcpSocket -> connectEventHandler(&tcpToStream);

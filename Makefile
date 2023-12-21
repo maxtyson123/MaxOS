@@ -56,6 +56,13 @@ build:
 
 all: $(kernel)
 
+iso: maxOS.bin
+	mkdir -p iso/boot/grub
+	cp maxOS.bin iso/boot/maxOS.bin
+	cp filesystem/boot/grub.cfg iso/boot/grub/grub.cfg
+	grub-mkrescue -o maxOS.iso iso
+	rm -rf iso
+
 ### Run ###
 
 qemu: build
@@ -66,6 +73,10 @@ qemuDebug: build
 
 qemuGDB: build
 	x-terminal-emulator -e make qemuDebug & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
+
+virtualbox: iso
+	# Run the virtual machine
+	"/mnt/c/Program Files/Oracle/VirtualBox/VirtualBoxVM.exe" --startvm "Max OS"
 
 ### Other Tools ###
 
@@ -82,6 +93,6 @@ disk_img:
 
 install_deps:
 	sudo apt-get update -y
-	sudo apt-get install -y grub-pc qemu-system-i386 gdb dosfstools bridge-utils
+	sudo apt-get install -y grub-pc qemu-system-i386 gdb dosfstools bridge-utils xorriso
 
 

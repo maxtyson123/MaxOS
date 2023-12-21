@@ -12,7 +12,7 @@
     .long CHECKSUM
     .long 0, 0, 0, 0, 0
     .long 0                     ; //  0 = set graphics mode
-    .long 1024, 768, 32         ; // Width, height, depth
+    .long 0, 0, 0               ; // Width, height, depth (0 = use current)
 
 .section .text
 .extern kernelMain
@@ -24,7 +24,7 @@ loader:
     push %eax                   ; // Save the magic number on the stack
     push %ebx                   ; // Save the address of the multiboot structure on the stack
     call callConstructors       ; // Init the constructors
-    call kernelMain
+    call kernelMain             ; // Call the kernel
 
 _stop:
     cli

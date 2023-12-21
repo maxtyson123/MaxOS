@@ -36,7 +36,8 @@ namespace maxOS{
 
                 common::Colour consoleColourToVESA(ConsoleColour colour);
 
-                uint16_t videoMemory[10881];     //128*85
+                // pointer to the video memory
+                uint16_t* videoMemory;
 
             protected:
 
