@@ -51,13 +51,10 @@ Kernel Cleanup
 - [x] Kernel Boot Rewrite
 - [x] Rewrite Event Handlers
 - [x] Cross-Compiler
-- [ ] Better Scripts
-- [ ] Network Touch Up - Fix Issues with IP, Get it working on QEMU
-- [ ] DCHP protocol
-- [ ] GUI Bug Fixes
+- [x] Better Scripts
+- [x] GUI Bug Fixes
 - [ ] Better Commenting and Doxygen Documentation
 - [ ] Use better c++ coding conventions
-- [ ] USB
 - [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
 - [ ] Clean up all the TODOs
 - [ ] Rewrite Readme

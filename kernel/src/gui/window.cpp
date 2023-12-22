@@ -36,8 +36,8 @@ Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, strin
     windowAreaColour            = Colour(0xff, 0xff, 0xff);    // White
     windowFrameBorderColour     = Colour(0x00, 0x00, 0x00);    // Black
     windowFrameColour           = Colour(0x57,0x57,0x57);      // Davy's Grey
-    title.foregroundColour = Colour(0xff, 0xff, 0xff);    // White
-    title.backgroundColour = windowFrameColour;
+    title.foregroundColour      = Colour(0xff, 0xff, 0xff);    // White
+    title.backgroundColour      = windowFrameColour;
 
     // Add the title to the window
     Window::addChild(&title);

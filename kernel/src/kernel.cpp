@@ -371,7 +371,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     activationHeaderStream << "[ DONE ]";
 
-
     // Make the network setup stream
     ConsoleArea networkSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream networkSetupHeaderStream(&networkSetupHeader);
@@ -389,7 +388,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     networkSetupHeaderStream << ".";
 
     // Ethernet Frame Handler
-    EtherFrameProvider ethernetFrameHandler(ethernetDriver, &networkConsoleStream);
+    EthernetFrameHandler ethernetFrameHandler(ethernetDriver, &networkConsoleStream);
     cout << "-- Set Up Ethernet Frame Handler\n";
     networkSetupHeaderStream << ".";
 
@@ -425,7 +424,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 
     // Run the network
-#define NETWORK
+//#define NETWORK
 #ifdef NETWORK
 
     // TCPtoStream
@@ -462,10 +461,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
             *stream << "TCP Connection Closed\n";
         }
     };
-    icmp.RequestEchoReply(defaultGateway);
-    TCPtoStream tcpToStream(&networkConsoleStream);
-    TransmissionControlProtocolSocket* tcpSocket = tcp.Listen(1234);
-    tcpSocket -> connectEventHandler(&tcpToStream);
     cout << "Listening on TCP Port 1234\n";
     // Run in term before boot when using tcp.send   : ncat -l 127.0.0.1 1234
     // Run in term after  boot when using tcp.listen : ncat 127.0.0.1 1234
@@ -473,7 +468,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 #endif
 
 
-//#define GUI
+#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connectEventHandler(&desktop);

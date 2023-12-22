@@ -372,7 +372,7 @@ uint32_t GraphicsContext::getHeight() {
 void GraphicsContext::putPixel(int32_t x, int32_t y, Colour colour) {
 
     // Convert the colour to an integer and then print it
-    renderPixel(x,y, colourToInt(colour));
+    putPixel(x,y, colourToInt(colour));
 }
 
 /**
@@ -384,7 +384,6 @@ void GraphicsContext::putPixel(int32_t x, int32_t y, Colour colour) {
  */
 void GraphicsContext::putPixel(int32_t x, int32_t y, int32_t colour) {
 
-    // Check if the pixel is within the width of the screen
     if (0 > x || (uint32_t)x >= width) {
         return;
     }
@@ -487,7 +486,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
         if(yMin < 0) yMin = 0;
         if((uint32_t)yMax >= height) yMax = height - 1;
 
-        // Mirror the Y axis as directly calling renderPixel will not do this
+        // Mirror the Y axis as directly calling putPixel will not do this
         if(mirrorYAxis)
         {
             int32_t temp = yMax;
@@ -502,7 +501,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 
         // Draw the line
         for(int32_t y = yMin; y <= yMax; ++y)
-            renderPixel(x0, y, colour);
+            putPixel(x0, y, colour);
 
         return;
     }
@@ -514,7 +513,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
         if(x0 < 0) x0 = 0;
         if((uint32_t)x1 >= width) x1 = width-1;
 
-        // Mirror the Y axis as directly calling renderPixel will not do this
+        // Mirror the Y axis as directly calling putPixel will not do this
         if(mirrorYAxis)
             y0 = height-y0-1;
 
@@ -524,7 +523,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 
         // Draw the line
         for(int32_t x = x0; x <= x1; ++x)
-            renderPixel(x,y0,colour);
+            putPixel(x,y0,colour);
     }
 
     // If the line is not horizontal or vertical then it must be a diagonal line
@@ -539,7 +538,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 
         // Start at minimum x and increment x by 1
         for(int32_t x = x0; x <= x1; x++, y+=slope)
-            renderPixel(x, (int32_t)y, colour);
+            putPixel(x, (int32_t)y, colour);
     }
 
     // If the line is more vertical than horizontal, increment y by 1 and increment x by the inverse of the slope
@@ -553,7 +552,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 
         // Start at minimum y and increment y by 1
         for(int32_t y = yMin; y <= yMax; x+=slope, y++)
-            renderPixel((int32_t)x, y, colour);
+            putPixel((int32_t)x, y, colour);
     }
 
 
@@ -639,7 +638,7 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
     if(xMin < 0) xMin = 0;
     if((uint32_t)xMax > width) xMax = width;
 
-    // Mirror the Y axis as directly calling renderPixel will not do this
+    // Mirror the Y axis as directly calling putPixel will not do this
     if(mirrorYAxis)
     {
         uint32_t temp = y1;             // Store the maximum y value
@@ -650,7 +649,7 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
     // Draw the rectangle
     for(int32_t y = y0; y < y1; ++y){
         for (int32_t x = xMin; x < xMax; ++x) {
-            renderPixel(x, y, colour);
+            putPixel(x, y, colour);
         }
     }
 
@@ -684,7 +683,7 @@ void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
     if(y0 < 0) y0 = 0;
     if((uint32_t)y0 > height) y0 = height;
 
-    // Mirror the Y axis as directly calling renderPixel will not do this
+    // Mirror the Y axis as directly calling putPixel will not do this
     if(mirrorYAxis)
         y0 = height-y0-1;
 
@@ -698,7 +697,7 @@ void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
 
             // If the point is within the circle, draw it but make sure it is only part of the outline
             if(x*x + y*y <= radius*radius && x*x + y*y >= (radius-1)*(radius-1))
-                renderPixel(x0+x,y0+y,colour);
+                putPixel(x0+x,y0+y,colour);
         }
     }
 
@@ -734,7 +733,7 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
         if(y0 < 0) y0 = 0;
         if((uint32_t)y0 > height) y0 = height;
 
-        // Mirror the Y axis as directly calling renderPixel will not do this
+        // Mirror the Y axis as directly calling putPixel will not do this
         if(mirrorYAxis)
             y0 = height-y0-1;
 
@@ -748,7 +747,7 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
 
                 // Only draw the pixel if it is within the circle
                 if(x*x + y*y <= radius*radius)
-                    renderPixel(x0+x,y0+y,colour);
+                    putPixel(x0+x,y0+y,colour);
             }
         }
 

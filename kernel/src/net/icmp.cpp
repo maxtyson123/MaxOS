@@ -9,10 +9,10 @@ using namespace  maxOS::common;
 using namespace  maxOS::net;
 
 
-InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolHandler *internetProtocolHandler)
+InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolHandler *internetProtocolHandler, OutputStream* errorMessages)
 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x01)
 {
-
+    this -> errorMessages = errorMessages;
 }
 
 
@@ -35,6 +35,8 @@ bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProto
                                                                    uint8_t *payloadData,
                                                                    uint32_t size)
 {
+
+    errorMessages -> write("ICMP received a packet\n");
 
     // Check if the size is at least the size of the header
     if(size < sizeof(InternetControlMessageProtocolHeader)){
@@ -74,6 +76,8 @@ bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProto
  */
 void InternetControlMessageProtocol::RequestEchoReply(uint32_t ip_be) {
 
+    errorMessages -> write("ICMP: Sending echo request\n");
+
     InternetControlMessageProtocolHeader icmp;
     icmp.type = 8;                      // Echo request
     icmp.code = 0;                      // Code must be 0
@@ -83,4 +87,6 @@ void InternetControlMessageProtocol::RequestEchoReply(uint32_t ip_be) {
     icmp.checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));
 
     Send(ip_be, (uint8_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));
+
+    errorMessages -> write("ICMP: Echo request sent\n");
 }

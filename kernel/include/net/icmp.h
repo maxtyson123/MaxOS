@@ -7,6 +7,7 @@
 
 #include <net/ipv4.h>
 #include <stdint.h>
+#include <common/outputStream.h>
 
 
 namespace maxOS{
@@ -23,8 +24,10 @@ namespace maxOS{
 
         class InternetControlMessageProtocol : InternetProtocolPayloadHandler{
 
+            common::OutputStream* errorMessages;
+
             public:
-                InternetControlMessageProtocol(InternetProtocolHandler* internetProtocolHandler);
+                InternetControlMessageProtocol(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
                 ~InternetControlMessageProtocol();
 
                 bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);

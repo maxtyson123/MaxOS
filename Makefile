@@ -72,7 +72,8 @@ qemuDebug: build
 	cd toolchain && ./run_qemu.sh --debug
 
 qemuGDB: build
-	x-terminal-emulator -e make qemuDebug & gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
+	make qemuDebug
+	gdb -ex 'set remotetimeout 300' -ex 'target remote localhost:1234' -ex 'symbol-file maxOS.sym'
 
 virtualbox: iso
 	# Run the virtual machine

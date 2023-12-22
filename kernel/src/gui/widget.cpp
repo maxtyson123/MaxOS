@@ -179,6 +179,13 @@ void Widget::resize(int32_t width, int32_t height) {
     Vector<Rectangle<int32_t>> invalidAreasOld = oldPosition.subtract(position);
     Vector<Rectangle<int32_t>> invalidAreasNew = position.subtract(oldPosition);
 
+    // Right and Bottom require to be fully invalidated
+    if(position.width > oldPosition.width || position.height > oldPosition.height || oldPosition.width > position.width || oldPosition.height > position.height){
+        invalidate();
+        return;
+    }
+
+
     //Loop through the areas that need to be redrawn and invalidate them
     for(int i = 0; i < invalidAreasOld.size(); i++){
         invalidate(invalidAreasOld[i]);
