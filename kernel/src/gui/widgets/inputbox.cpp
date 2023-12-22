@@ -20,53 +20,46 @@ InputBoxEventHandler::~InputBoxEventHandler() {
 
 }
 
-Event<InputBoxEvents>* InputBoxEventHandler::onEvent(Event<InputBoxEvents> *event) {
+Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents> *event) {
     switch (event->type) {
         case INPUTBOX_TEXT_CHANGED:
-            onInputBoxTextChanged(((InputBoxTextChangedEvent*)event)->newText);
+            on_input_box_text_changed(((InputBoxTextChangedEvent *)event)->new_text);
             break;
     }
 
     return event;
 }
 
-void InputBoxEventHandler::onInputBoxTextChanged(string newText) {
+void InputBoxEventHandler::on_input_box_text_changed(string new_text) {
 
 }
 
 /// ___ InputBox ___ ///
 
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
-: Widget(left, top, width, height)
+: Widget(left, top, width, height),
+  font(AmigaFont()),
+  background_colour(Colour(0xFF, 0xFF, 0xFF)),
+  foreground_colour(Colour(0x00, 0x00, 0x00)),
+  border_colour(Colour(0x57, 0x57, 0x57))
 {
-
-    // Set the defaults
-    this -> font = AmigaFont();
-    cursorPosition = 0;
-    backgroundColour = Colour(0xFF, 0xFF, 0xFF);
-    foregroundColour = Colour(0x00, 0x00, 0x00);
-    borderColour = Colour(0x57, 0x57, 0x57);
-
     // Clear the text buffer
-    widgetText[0] = '\0';
+    widget_text[0] = '\0';
 }
 
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
-: Widget(left, top, width, height)
+: Widget(left, top, width, height),
+  font(AmigaFont()),
+  background_colour(Colour(0xFF, 0xFF, 0xFF)),
+  foreground_colour(Colour(0x00, 0x00, 0x00)),
+  border_colour(Colour(0x57, 0x57, 0x57))
 {
 
-    // Set the defaults
-    this -> font = AmigaFont();
-    cursorPosition = 0;
-    backgroundColour = Colour(0xFF, 0xFF, 0xFF);
-    foregroundColour = Colour(0x00, 0x00, 0x00);
-    borderColour = Colour(0x57, 0x57, 0x57);
-
     // Clear the text buffer
-    widgetText[0] = '\0';
+    widget_text[0] = '\0';
 
     // Update the text
-    updateText(text);
+    update_text(text);
 
 }
 
@@ -79,16 +72,17 @@ void InputBox::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
     // Default Draw
     Widget::draw(gc, area);
 
-    // Get the absolute position of the input box
-    Coordinates inputBoxCoordinates = absoluteCoordinates(Coordinates(0,0));
-    Rectangle<int32_t> inputBoxPosition = getPosition();
+    // Get the absolute m_position of the input box
+    Coordinates inputBoxCoordinates = absolute_coordinates(Coordinates(0, 0));
+    Rectangle<int32_t> inputBoxPosition = position();
 
-    // Get the x and y position of the input box
+    // Get the x and y m_position of the input box
     int32_t x = inputBoxCoordinates.first;
     int32_t y = inputBoxCoordinates.second;
 
     // Draw the background for the input box
-    gc -> fillRectangle(x + area.left, y + area.top, x + area.left + area.width, y + area.top + area.height, backgroundColour);
+    gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
+                       y + area.top + area.height, background_colour);
 
     // Draw the border  (TODO: Make this a function because it is used in multiple places)
 
@@ -96,82 +90,89 @@ void InputBox::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
     if(area.intersects(Rectangle<int32_t>(0,0,inputBoxPosition.width,1))){
 
         // Start in the top left corner of the button and end in the top right corner
-        gc ->drawLine(x + area.left, y, x + area.left + area.width - 1, y,borderColour);
+        gc->draw_line(x + area.left, y, x + area.left + area.width - 1, y,
+                      border_colour);
     }
 
     // Left Border
     if(area.intersects(Rectangle<int32_t>(0,0,1,inputBoxPosition.height))){
 
         // Start in the top left corner and end in the bottom left corner
-        gc ->drawLine(x, y + area.top, x, y + area.top + area.height - 1,borderColour);
+        gc->draw_line(x, y + area.top, x, y + area.top + area.height - 1,
+                      border_colour);
     }
 
     // Right Border
     if(area.intersects(Rectangle<int32_t>(0,inputBoxPosition.height - 1,inputBoxPosition.width,1))){
 
         // Start in the top right corner and end in the bottom right corner
-        gc ->drawLine(x + area.left, y + inputBoxPosition.height - 1, x + area.left + area.width - 1, y + inputBoxPosition.height - 1,borderColour);
+        gc->draw_line(x + area.left, y + inputBoxPosition.height - 1,
+                      x + area.left + area.width - 1,
+                      y + inputBoxPosition.height - 1, border_colour);
     }
 
     // Bottom Border
     if(area.intersects(Rectangle<int32_t>(inputBoxPosition.width - 1,0,1,inputBoxPosition.height))){
 
         // Start in the bottom left corner and end in the bottom right corner
-        gc ->drawLine(x + inputBoxPosition.width - 1, y + area.top, x + inputBoxPosition.width - 1, y + area.top + area.height - 1,borderColour);
+        gc->draw_line(x + inputBoxPosition.width - 1, y + area.top,
+                      x + inputBoxPosition.width - 1,
+                      y + area.top + area.height - 1, border_colour);
     }
 
     // Draw the text
     common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
-    font.drawText(x + 1, y + 1, foregroundColour, backgroundColour, gc, &widgetText[0],textArea);
+    font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc,
+                   &widget_text[0], textArea);
 }
 
-void InputBox::onFocus() {
+void InputBox::on_focus() {
 
     // Make the border black on focus
-    borderColour = Colour(0x00, 0x00, 0x00);
+    border_colour = Colour(0x00, 0x00, 0x00);
     invalidate();
 }
 
-void InputBox::onFocusLost() {
+void InputBox::on_focus_lost() {
 
     // Reset the border colour
-    borderColour = Colour(0x57, 0x57, 0x57);
+    border_colour = Colour(0x57, 0x57, 0x57);
     invalidate();
 }
 
-void InputBox::onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState) {
+void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 
     // Handle the key press
     switch(keyDownCode)
     {
         case KeyCode::backspace:
         {
-            if(cursorPosition == 0)
+            if(cursor_position == 0)
                 break;
 
-            cursorPosition--;
+            cursor_position--;
             // no break - we move the cursor to the left and use the <Delete> code
         }
         case KeyCode::deleteKey:
         {
             // Move the text to the left
-            for(uint32_t i = cursorPosition; widgetText[i] != '\0'; ++i)
-                widgetText[i] = widgetText[i+1];
+            for(uint32_t i = cursor_position; widget_text[i] != '\0'; ++i)
+              widget_text[i] = widget_text[i+1];
             break;
         }
         case KeyCode::leftArrow:
         {
             // If the cursor is not at the beginning of the text, move it to the left
-            if(cursorPosition > 0)
-                cursorPosition--;
+            if(cursor_position > 0)
+              cursor_position--;
             break;
         }
         case KeyCode::rightArrow:
         {
 
             // If the cursor is not at the end of the text, move it to the right
-            if(widgetText[cursorPosition] != '\0')
-                cursorPosition++;
+            if(widget_text[cursor_position] != '\0')
+              cursor_position++;
             break;
         }
         default:
@@ -181,23 +182,23 @@ void InputBox::onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState) {
             if(31 < keyDownCode && keyDownCode < 127)
             {
 
-                uint32_t length = cursorPosition;
+                uint32_t length = cursor_position;
 
                 // Find the length of the text buffer
-                while (widgetText[length] != '\0') {
+                while (widget_text[length] != '\0') {
                     ++length;
                 }
 
                 // Shift elements to the right
-                while (length > cursorPosition) {
-                    widgetText[length + 1] = widgetText[length];
+                while (length > cursor_position) {
+                  widget_text[length + 1] = widget_text[length];
                     --length;
                 }
 
                 // Insert the new character
-                widgetText[cursorPosition + 1] = widgetText[cursorPosition];
-                widgetText[cursorPosition] = (uint8_t)keyDownCode;
-                cursorPosition++;
+                widget_text[cursor_position + 1] = widget_text[cursor_position];
+                widget_text[cursor_position] = (uint8_t)keyDownCode;
+                cursor_position++;
             }else{
 
                 // Dont want to redraw the widget if nothing has changed
@@ -212,44 +213,45 @@ void InputBox::onKeyDown(KeyCode keyDownCode, KeyboardState keyDownState) {
 
     // Fire the text changed event
     if(keyDownCode != KeyCode::leftArrow && keyDownCode != KeyCode::rightArrow)
-        raiseEvent(new InputBoxTextChangedEvent(&widgetText[0]));
+      raise_event(new InputBoxTextChangedEvent(&widget_text[0]));
 
 }
 
-void InputBox::updateText(string newText) {
+void InputBox::update_text(string new_text) {
 
     // Rewrite the text, start at the beginning
-    cursorPosition = 0;
+    cursor_position = 0;
 
     // Copy the new text into the widget text
-    for(char* c = (char*)newText, *buffer = &widgetText[0]; *c != '\0'; ++c, buffer++)
+    for(char* c = (char*)new_text, *buffer = &widget_text[0]; *c != '\0'; ++c, buffer++)
     {
 
-        // Update the cursor position and the buffer
-        cursorPosition++;
+        // Update the cursor m_position and the buffer
+        cursor_position++;
         *buffer = *c;
     }
 
-    // Write the null terminator
-    widgetText[cursorPosition] = '\0';
+    // write the null terminator
+    widget_text[cursor_position] = '\0';
 
     // Redraw the widget
     invalidate();
 
     // Fire the text changed event
-    raiseEvent(new InputBoxTextChangedEvent(newText));
+    raise_event(new InputBoxTextChangedEvent(new_text));
 
 }
 
-string InputBox::getText() {
-    return &widgetText[0];
+string InputBox::get_text() {
+    return &widget_text[0];
 }
 
 /// ___ Events ___ ///
 
-InputBoxTextChangedEvent::InputBoxTextChangedEvent(string newText)
-: Event(INPUTBOX_TEXT_CHANGED) {
-    this->newText = newText;
+InputBoxTextChangedEvent::InputBoxTextChangedEvent(string new_text)
+: Event(INPUTBOX_TEXT_CHANGED),
+  new_text(new_text)
+{
 }
 
 InputBoxTextChangedEvent::~InputBoxTextChangedEvent() {

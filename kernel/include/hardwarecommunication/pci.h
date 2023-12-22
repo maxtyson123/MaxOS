@@ -22,24 +22,31 @@ namespace maxOS
             InputOutput = 1
         };
 
+        /**
+         * @class BaseAddressRegister
+         * @brief Used to store the base address register
+         */
         class BaseAddressRegister{
             public:
-                bool preFetchable;                      //If the memory is pre-fetchable
-                uint8_t* address;                //The address of the register
-                uint32_t size;                  //The size of the register
-                BaseAddressRegisterType type;            //The type of the register
+                bool pre_fetchable;
+                uint8_t* address;
+                uint32_t size;
+                BaseAddressRegisterType type;
 
         };
 
 
-        //TODO: With USB could be a good idea to make a class for the device descriptor
+        /**
+         * @class PeripheralComponentInterconnectDeviceDescriptor
+         * @brief Stores information about a PCI device
+         */
         class PeripheralComponentInterconnectDeviceDescriptor {
             public:
-                bool hasPortBase;
-                uint32_t portBase;  //Port used for communication
+                bool has_port_base;
+                uint32_t port_base;  //Port used for communication
 
-                bool hasMemoryBase;
-                uint32_t memoryBase;  //Mem address used for communication
+                bool has_memory_base;
+                uint32_t memory_base;  //Mem address used for communication
 
                 uint32_t interrupt; //The interrupt
 
@@ -47,8 +54,8 @@ namespace maxOS
                 uint16_t device;
                 uint16_t function;
 
-                uint16_t vendor_ID;
-                uint16_t device_ID;
+                uint16_t vendor_id;
+                uint16_t device_id;
 
                 uint8_t class_id;
                 uint8_t subclass_id;
@@ -59,36 +66,40 @@ namespace maxOS
                 PeripheralComponentInterconnectDeviceDescriptor();
                 ~PeripheralComponentInterconnectDeviceDescriptor();
 
-                string getType();
+                string get_type();
         };
 
 
+        /**
+         * @class PeripheralComponentInterconnectController
+         * @brief Handles the selecting and loading of drivers for PCI devices
+         */
         class PeripheralComponentInterconnectController : public drivers::DriverSelector
         {
+          private:
+                  // Ports
+                  Port32Bit m_data_port;
+                  Port32Bit m_command_port;
 
-                // Ports
-                Port32Bit dataPort;
-                Port32Bit commandPort;
+                  // Debug
+                  common::OutputStream* m_debug_messages_stream;
 
-                // Debug
-                common::OutputStream* debugMessagesStream;
+                  // I/O
+                  uint32_t read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset);
+                  void write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
 
-                // I/O
-                uint32_t Read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset);
-                void Write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
+                  // Device
+                  PeripheralComponentInterconnectDeviceDescriptor get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function);
+                  BaseAddressRegister get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);
+                  bool device_has_functions(uint16_t bus, uint16_t device);
 
-                // Device
-                PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function);
-                BaseAddressRegister getBaseAddressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);       // bar = 0-5 in case of header type 0 [or]  bar = 0-1 in case of header type 1
-                bool DeviceHasFunctions(uint16_t bus, uint16_t device);
+          public:
+                  PeripheralComponentInterconnectController(common::OutputStream*);
+                  ~PeripheralComponentInterconnectController();
 
-        public:
-                PeripheralComponentInterconnectController(common::OutputStream* debugMessagesStream);
-                ~PeripheralComponentInterconnectController();
-
-                void selectDrivers(drivers::DriverSelectorEventHandler* handler, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* errorMessageStream);
-                drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager);
-                void listKnownDeivce(PeripheralComponentInterconnectDeviceDescriptor dev);
+                  void select_drivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager* interrupt_manager, common::OutputStream* error_message_stream);
+                  drivers::Driver* get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interrupt_manager);
+                  void list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev);
         };
     }
 }

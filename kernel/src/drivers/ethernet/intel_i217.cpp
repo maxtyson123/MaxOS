@@ -24,7 +24,8 @@ using namespace memory;
 
 intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager, OutputStream* intelNetMessageStream)
 : EthernetDriver(intelNetMessageStream),
-  InterruptHandler(deviceDescriptor->interrupt + interruptManager->HardwareInterruptOffset(), interruptManager)
+  InterruptHandler(deviceDescriptor->interrupt +
+                           interruptManager->hardware_interrupt_offset(), interruptManager)
 
 {
 
@@ -50,9 +51,9 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     sendDescriptorTailRegister = 0x3818;
 
     // Get BAR0 type, io_base address and MMIO base address
-    bar_type = 1; // deviceDescriptor -> hasMemoryBase ? 0 : 1;  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
-    portBase = deviceDescriptor -> portBase;
-    //TODO: memBase = deviceDescriptor -> memoryBase;
+    bar_type = 1; // deviceDescriptor -> has_memory_base ? 0 : 1;  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
+    portBase = deviceDescriptor ->port_base;
+    //TODO: memBase = deviceDescriptor -> memory_base;
 
     initDone = false;
     active = false;
@@ -69,7 +70,7 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 
     }else{
 
-        errorMessage("ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
+      error_message("ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
         while (true);
     }
 
@@ -93,15 +94,15 @@ void intel_i217::Write(uint16_t address, uint32_t data) {
     if(bar_type == 0) {                                             // If the base address register is memory mapped
 
         MemIO32Bit dataMem(memBase + address);              // Create a 32 bit memory class at the address
-        dataMem.Write(data);                                       // Write the data to the memory adress
+        dataMem.write(data);                                       // write the data to the memory adress
 
     } else {
 
         Port32Bit commandPort(portBase);            // Create a 32 bit port at the address
         Port32Bit dataPort(portBase + 4);           // Create a 32 bit port at the address + 4
 
-        commandPort.Write(address);                     // Write the address to the command port
-        dataPort.Write(data);                                // Write the data to the data port
+        commandPort.write(address);                     // write the address to the command port
+        dataPort.write(data);                                // write the data to the data port
 
 
     }
@@ -114,15 +115,15 @@ uint32_t intel_i217::Read(uint16_t address) {
     if(bar_type == 0) {                                             // If the base address register is memory mapped
 
         MemIO32Bit dataMem(memBase + address);               // Create a 32 bit memory class at the address
-        return dataMem.Read();                                      // Read the data from the memory adress
+        return dataMem.read();                                      // read the data from the memory adress
 
     } else{
 
         Port32Bit commandPort(portBase);            // Create a 32 bit port at the address
         Port32Bit dataPort(portBase + 4);           // Create a 32 bit port at the address + 4
 
-        commandPort.Write(address);                     // Write the address to the command port
-        return dataPort.Read();                              // Read the data from the data port
+        commandPort.write(address);                     // write the address to the command port
+        return dataPort.read();                              // read the data from the data port
 
     }
 
@@ -135,7 +136,7 @@ bool intel_i217::detectEEProm() {
 
     for(int i = 0; i < 1000 && ! epromPresent; i++)     //Loop 1000 times or until the EEProm is detected
     {
-        val = Read( 0x0014);                    // Read the register
+        val = Read( 0x0014);                    // read the register
 
         if(val & 0x10)                                 // If the EEProm is detected
             epromPresent = true;
@@ -151,12 +152,12 @@ uint32_t intel_i217::eepromRead( uint8_t addr)
     uint32_t tmp = 0;                                                               // A temporary variable
     if ( epromPresent)                                                              // If the EEProm is detected
     {
-        Write( epromRegister, (1) | ((uint32_t)(addr) << 8) );         // Write the address to the register
+        Write( epromRegister, (1) | ((uint32_t)(addr) << 8) );         // write the address to the register
         while( !((tmp = Read(epromRegister)) & (1 << 4)) );                 // Wait for the EEProm to be ready
     }
     else
     {
-        Write( epromRegister, (1) | ((uint32_t)(addr) << 2) );        // Write the address to the register
+        Write( epromRegister, (1) | ((uint32_t)(addr) << 2) );        // write the address to the register
         while( !((tmp = Read(epromRegister)) & (1 << 1)) );                // Wait for the EEProm to be ready
     }
     data = (uint16_t)((tmp >> 16) & 0xFFFF);                                      // Get the data from the register
@@ -168,15 +169,15 @@ bool intel_i217::readMACAddress() {
     {
         uint32_t temp;
 
-        temp = eepromRead(0);                                                   //Read the first 16 bits of the MAC address
-        macAddress[0] = temp &0xff;                                                  //Get the first 8 bits of the MAC address
+        temp = eepromRead(0);                                                   //read the m_first_memory_chunk 16 bits of the MAC address
+        macAddress[0] = temp &0xff;                                                  //Get the m_first_memory_chunk 8 bits of the MAC address
         macAddress[1] = temp >> 8;                                                   //Get the second 8 bits of the MAC address
 
-        temp = eepromRead( 1);                                                  //Read the second 16 bits of the MAC address
+        temp = eepromRead( 1);                                                  //read the second 16 bits of the MAC address
         macAddress[2] = temp &0xff;                                                  //Get the third 8 bits of the MAC address
         macAddress[3] = temp >> 8;                                                   //Get the fourth 8 bits of the MAC address
 
-        temp = eepromRead( 2);                                                  //Read the third 16 bits of the MAC address
+        temp = eepromRead( 2);                                                  //read the third 16 bits of the MAC address
         macAddress[4] = temp &0xff;                                                  //Get the fifth 8 bits of the MAC address
         macAddress[5] = temp >> 8;                                                   //Get the sixth 8 bits of the MAC address
     }
@@ -202,21 +203,22 @@ void intel_i217::receiveInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
     struct receiveDescriptor *descs;                                                                                        //A pointer to the receive descriptors
-    ptr = (uint8_t *)(MemoryManager::activeMemoryManager->malloc(sizeof(struct receiveDescriptor)*32 + 16));           //Allocate memory for the receive descriptors
+    ptr = (uint8_t *)(MemoryManager::s_active_memory_manager->malloc(sizeof(struct receiveDescriptor)*32 + 16));           //Allocate memory for the receive descriptors
     descs = (struct receiveDescriptor *)ptr;                                                                                //Set the pointer to the receive descriptors
 
     for(int i = 0; i < 32; i++)
     {
         receiveDsrctrs[i] = (struct receiveDescriptor *)((uint8_t *)descs + i*16);
-        receiveDsrctrs[i] -> bufferAddress = (uint64_t)(uint8_t *)(MemoryManager::activeMemoryManager->malloc(8192 + 16));
+        receiveDsrctrs[i] -> bufferAddress = (uint64_t)(uint8_t *)(MemoryManager::s_active_memory_manager
+                                      ->malloc(8192 + 16));
         receiveDsrctrs[i] -> status = 0;
     }
 
-    //Write the send descriptor list address to the register
+    //write the send descriptor list address to the register
     Write(sendDescriptorLowRegister, (uint32_t)((uint64_t)ptr >> 32) );
     Write(sendDescriptorHighRegister, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
 
-    //Write the recieve descriptor list address to the register
+    //write the recieve descriptor list address to the register
     Write(receiveDescriptorLowRegister, (uint64_t)ptr);
     Write(receiveDescriptorHighRegister, 0);
 
@@ -246,7 +248,7 @@ void intel_i217::sendInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
     struct sendDescriptor *descs;                                                                                           //A pointer to the send descriptors
-    ptr = (uint8_t *)(MemoryManager::activeMemoryManager->malloc(sizeof(struct sendDescriptor)*8 + 16));                //Allocate memory for the send descriptors
+    ptr = (uint8_t *)(MemoryManager::s_active_memory_manager->malloc(sizeof(struct sendDescriptor)*8 + 16));                //Allocate memory for the send descriptors
     descs = (struct sendDescriptor *)ptr;                                                                                   //Set the pointer to the send descriptors
 
 
@@ -258,7 +260,7 @@ void intel_i217::sendInit() {
         sendDsrctrs[i] -> status = (1 << 0);    // Descriptor Done
     }
 
-    //Write the send descriptor list address to the register
+    //write the send descriptor list address to the register
     Write(sendDescriptorHighRegister, (uint32_t)((uint64_t)ptr >> 32) );
     Write(sendDescriptorLowRegister, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
 
@@ -282,14 +284,14 @@ void intel_i217::sendInit() {
 
 
     // In the case of I217 (id = 0x0410) and 82577LM (id = 0x10EA) packets will not be sent if the TCTRL is not configured using the following bits.
-    // Write(sendControlRegister,  0b0110000000000111111000011111010);
-    //Write(0x0410,  0x0060200A);
+    // write(sendControlRegister,  0b0110000000000111111000011111010);
+    //write(0x0410,  0x0060200A);
 
 }
 
 void intel_i217::activate() {
 
-    driverMessageStream -> write("Activating Intel i217\n");
+  m_driver_message_stream-> write("Activating Intel i217\n");
 
     //Enable interrupts
     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
@@ -303,25 +305,27 @@ void intel_i217::activate() {
     sendInit();
 
     active = true;                                               // Set active to true
-    driverMessageStream -> write("Intel i217 INIT DONE\n");
+    m_driver_message_stream-> write("Intel i217 INIT DONE\n");
 
 }
 
-void intel_i217::HandleInterrupt() {
+void intel_i217::handle_interrupt() {
 
     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
-    uint32_t temp = Read(0xc0);                //Read the interrupt status register
+    uint32_t temp = Read(0xc0);                //read the interrupt status register
 
-    driverMessageStream -> write("Interrupt from INTEL i217");
+    m_driver_message_stream-> write("Interrupt from INTEL i217");
 
-    if(temp & 0x04) driverMessageStream -> write("INTEL i217 START LINK");//initDone = true;
-    if(temp & 0x10) driverMessageStream -> write("INTEL i217 GOOD THRESHOLD");
+    if(temp & 0x04)
+      m_driver_message_stream-> write("INTEL i217 START LINK");//initDone = true;
+    if(temp & 0x10)
+      m_driver_message_stream-> write("INTEL i217 GOOD THRESHOLD");
     if(temp & 0x80) FetchDataReceived();
 }
 
 void intel_i217::FetchDataReceived() {
 
-    driverMessageStream -> write("Fetching data... ");
+  m_driver_message_stream-> write("Fetching data... ");
 
     uint16_t old_cur;
     bool got_packet = false;
@@ -344,14 +348,14 @@ void intel_i217::FetchDataReceived() {
         old_cur = currentReceiveBuffer;                         //Save the current receive buffer
         currentReceiveBuffer = (currentReceiveBuffer + 1) % 32; //Increment the current receive buffer
 
-        Write(receiveDescriptorTailRegister, old_cur ); //Write the old current receive buffer to the tail register
+        Write(receiveDescriptorTailRegister, old_cur ); //write the old current receive buffer to the tail register
     }
 
 }
 
 void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
-    driverMessageStream -> write("Sending package... ");
+  m_driver_message_stream-> write("Sending package... ");
     while(!active);
 
     //Put params into send buffer
@@ -368,16 +372,16 @@ void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
     uint8_t old_cur = currentSendBuffer;                                    //Save the current send buffer
     currentSendBuffer = (currentSendBuffer + 1) % 8;                        //Increment the current send buffer
-    Write(sendDescriptorTailRegister, currentSendBuffer);       //Write the current send buffer to the tail register
+    Write(sendDescriptorTailRegister, currentSendBuffer);       //write the current send buffer to the tail register
 
     //Wait for the packet to be sent
     while(!(sendDsrctrs[old_cur]->status & 0xff));
-    driverMessageStream -> write(" Done\n");
+    m_driver_message_stream-> write(" Done\n");
 
 }
 
 uint64_t intel_i217::GetMediaAccessControlAddress() {
-    driverMessageStream -> write("Getting MAC address... ");
+  m_driver_message_stream-> write("Getting MAC address... ");
     while(ownMAC == 0);
     return ownMAC;
 
@@ -391,11 +395,11 @@ void intel_i217::deactivate() {
     Driver::deactivate();
 }
 
-string intel_i217::getVendorName() {
+string intel_i217::get_vendor_name() {
     return "Intel";
 }
 
-string intel_i217::getDeviceName() {
+string intel_i217::get_device_name() {
     return "E1000 (i217)";
 }
 

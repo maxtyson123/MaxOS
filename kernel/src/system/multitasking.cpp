@@ -10,35 +10,26 @@ using namespace maxOS::system;
 ///__TASK__
 
 Task::Task(GlobalDescriptorTable *gdt, void entrypoint()) {
-    //              start of stack + size of stack - size of entry
-    cpuState = (CPUState_Task*)(stack + 4096 - sizeof(CPUState_Task));
+
+
+    //Set up stack
+    m_cpu_state = (CPUState *)(m_stack + 4096 - sizeof(CPUState));
 
     //Set phony entries
 
-    cpuState -> eax = 0;
-    cpuState -> ebx = 0;
-    cpuState -> ecx = 0;
-    cpuState -> edx = 0;
+    m_cpu_state-> eax = 0;
+    m_cpu_state-> ebx = 0;
+    m_cpu_state-> ecx = 0;
+    m_cpu_state-> edx = 0;
 
-    cpuState -> esi = 0;
-    cpuState -> edi = 0;
-    cpuState -> ebp = 0;
+    m_cpu_state-> esi = 0;
+    m_cpu_state-> edi = 0;
+    m_cpu_state-> ebp = 0;
 
-    /*
-    cpuState -> gs = 0;
-    cpuState -> fs = 0;
-    cpuState -> es = 0;
-    cpuState -> ds = 0;
-    */
-
-    //cpuState -> error = 0;
-
-    // cpuState -> esp = ;  //commented out becuase its only for user space and different security levels
-
-    cpuState -> eip = (uint32_t)entrypoint;         // Instruction pointer is set to entry point  (note: ignore error, it compiles)
-    cpuState -> cs = gdt->CodeSegmentSelector();    // Offset of the code segment
-    //state segment not used unless security
-    cpuState -> eflags = 0x202;
+    // Set up the function pointer
+    m_cpu_state-> eip = (uint32_t)entrypoint;
+    m_cpu_state-> cs = gdt->code_segment_selector();
+    m_cpu_state-> eflags = 0x202;
 }
 
 Task::~Task() {
@@ -49,10 +40,6 @@ Task::~Task() {
 
 TaskManager::TaskManager() {
 
-    //Default Values
-    numTasks = 0;
-    currentTask = -1;
-
 }
 
 TaskManager::~TaskManager() {
@@ -60,48 +47,38 @@ TaskManager::~TaskManager() {
 }
 
 /**
- * @details Adds a task to the task manager
+ * @brief Adds a task to the task manager
  *
  * @param task The task to add
  */
-bool TaskManager::AddTask(Task *task) {
+bool TaskManager::add_task(Task *task) {
 
-    if(numTasks >= 256){ //Array IS full
-        return false;
-    }
-
-    tasks[numTasks++] = task;
+    m_tasks.push_back(task);
     return true;
 
 }
 
 /**
- * @details Switches to the next task
+ * @brief Switches to the next task
  *
  * @param cpuState The current CPU state
  * @return The new CPU state
  */
-CPUState_Task *TaskManager::Schedule(CPUState_Task *cpuState) {
+CPUState *TaskManager::schedule(CPUState *cpuState) {
 
-    if(numTasks <= 0){      //If there's no tasks yet
-        return cpuState;    //Restore old cpu state
-    }
+    // If there's no tasks then don't schedule
+    if(m_tasks.size() <= 0)
+        return cpuState;
 
-    if(currentTask >= 0){
-        tasks[currentTask] -> cpuState = cpuState;   //Restore the old value (put task back into list of tasks)
-    }
+    // If there is a task running, save its state
+    if(m_current_task >= 0)
+      m_tasks[m_current_task] ->m_cpu_state = cpuState;
 
-    if(++currentTask >= numTasks){ //If current task exceeds size of tasks
-        currentTask %= numTasks;   //Restart from beginning
-    }
+    // Switch to the next task (and loop back to the start if needed)
+    if(++m_current_task >= m_tasks.size())
+      m_current_task %= m_tasks.size();
 
-    /*
-    if(tasks[currentTask] -> killMe){
-        tasks[currentTask] = tasks[numTasks];
-        numTasks - 1;
-    }
-     */
-
-    return tasks[currentTask] -> cpuState;
+    // Start the next task
+    return m_tasks[m_current_task] ->m_cpu_state;
 
 }

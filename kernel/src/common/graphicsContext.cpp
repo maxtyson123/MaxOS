@@ -6,86 +6,84 @@
 
 using namespace maxOS::common;
 
-GraphicsContext::GraphicsContext() {
-    width = 0;
-    height = 0;
-    colorDepth = 0;
-    mirrorYAxis = false;
+GraphicsContext::GraphicsContext()
+{
+
 
     // VirtualBox VGA palette
-    colourPallet[0x00] = Colour(0x00,0x00,0x00);    // Black
-    colourPallet[0x01] = Colour(0x00,0x00,0xA8);    // Duke Blue
-    colourPallet[0x02] = Colour(0x00,0xA8,0x00);    // Islamic Green
-    colourPallet[0x03] = Colour(0x00,0xA8,0xA8);    // Persian Green
-    colourPallet[0x04] = Colour(0xA8,0x00,0x00);    // Dark Candy Apple Red
-    colourPallet[0x05] = Colour(0xA8,0x00,0xA8);    // Heliotrope Magenta
+    m_colour_pallet[0x00] = Colour(0x00,0x00,0x00);    // Black
+    m_colour_pallet[0x01] = Colour(0x00,0x00,0xA8);    // Duke Blue
+    m_colour_pallet[0x02] = Colour(0x00,0xA8,0x00);    // Islamic Green
+    m_colour_pallet[0x03] = Colour(0x00,0xA8,0xA8);    // Persian Green
+    m_colour_pallet[0x04] = Colour(0xA8,0x00,0x00);    // Dark Candy Apple Red
+    m_colour_pallet[0x05] = Colour(0xA8,0x00,0xA8);    // Heliotrope Magenta
 
-    colourPallet[0x06] = Colour(0xA8,0xA8,0x00);    // Light Gold
-    colourPallet[0x07] = Colour(0xA8,0xA8,0xA8);    // Dark Gray (X11)
-    colourPallet[0x08] = Colour(0x00,0x00,0x57);    // Cetacean Blue
-    colourPallet[0x09] = Colour(0x00,0x00,0xFF);    // Blue
-    colourPallet[0x0A] = Colour(0x00,0xA8,0x57);    // Green (Pigment)
-    colourPallet[0x0B] = Colour(0x00,0xA8,0xFF);    // Vivid Cerulean
-    colourPallet[0x0C] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
-    colourPallet[0x0D] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
-    colourPallet[0x0E] = Colour(0xA8,0xA8,0x57);    // Olive Green
-    colourPallet[0x0F] = Colour(0xA8,0xA8,0xFF);    // Maximum Blue Purple
+    m_colour_pallet[0x06] = Colour(0xA8,0xA8,0x00);    // Light Gold
+    m_colour_pallet[0x07] = Colour(0xA8,0xA8,0xA8);    // Dark Gray (X11)
+    m_colour_pallet[0x08] = Colour(0x00,0x00,0x57);    // Cetacean Blue
+    m_colour_pallet[0x09] = Colour(0x00,0x00,0xFF);    // Blue
+    m_colour_pallet[0x0A] = Colour(0x00,0xA8,0x57);    // Green (Pigment)
+    m_colour_pallet[0x0B] = Colour(0x00,0xA8,0xFF);    // Vivid Cerulean
+    m_colour_pallet[0x0C] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+    m_colour_pallet[0x0D] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+    m_colour_pallet[0x0E] = Colour(0xA8,0xA8,0x57);    // Olive Green
+    m_colour_pallet[0x0F] = Colour(0xA8,0xA8,0xFF);    // Maximum Blue Purple
 
-    colourPallet[0x10] = Colour(0x00,0x57,0x00);    // Dark Green (X11)
-    colourPallet[0x11] = Colour(0x00,0x57,0xA8);    // Cobalt Blue
-    colourPallet[0x12] = Colour(0x00,0xFF,0x00);    // Electric Green
-    colourPallet[0x13] = Colour(0x00,0xFF,0xA8);    // Medium Spring Green
-    colourPallet[0x14] = Colour(0xA8,0x57,0x00);    // Windsor Tan
-    colourPallet[0x15] = Colour(0xA8,0x57,0xA8);    // Purpureus
-    colourPallet[0x16] = Colour(0xA8,0xFF,0x00);    // Spring Bud
-    colourPallet[0x17] = Colour(0xA8,0xFF,0xA8);    // Mint Green
-    colourPallet[0x18] = Colour(0x00,0x57,0x57);    // Midnight Green (Eagle Green)
-    colourPallet[0x19] = Colour(0x00,0x57,0xFF);    // Blue (RYB)
-    colourPallet[0x1A] = Colour(0x00,0xFF,0x57);    // Malachite
-    colourPallet[0x1B] = Colour(0x00,0xFF,0xFF);    // Aqua
-    colourPallet[0x1C] = Colour(0xA8,0x57,0x57);    // Middle Red Purple
-    colourPallet[0x1D] = Colour(0xA8,0x57,0xFF);    // Lavender Indigo
-    colourPallet[0x1E] = Colour(0xA8,0xFF,0x57);    // Olive Green
-    colourPallet[0x1F] = Colour(0xA8,0xFF,0xFF);    // Celeste
+    m_colour_pallet[0x10] = Colour(0x00,0x57,0x00);    // Dark Green (X11)
+    m_colour_pallet[0x11] = Colour(0x00,0x57,0xA8);    // Cobalt Blue
+    m_colour_pallet[0x12] = Colour(0x00,0xFF,0x00);    // Electric Green
+    m_colour_pallet[0x13] = Colour(0x00,0xFF,0xA8);    // Medium Spring Green
+    m_colour_pallet[0x14] = Colour(0xA8,0x57,0x00);    // Windsor Tan
+    m_colour_pallet[0x15] = Colour(0xA8,0x57,0xA8);    // Purpureus
+    m_colour_pallet[0x16] = Colour(0xA8,0xFF,0x00);    // Spring Bud
+    m_colour_pallet[0x17] = Colour(0xA8,0xFF,0xA8);    // Mint Green
+    m_colour_pallet[0x18] = Colour(0x00,0x57,0x57);    // Midnight Green (Eagle Green)
+    m_colour_pallet[0x19] = Colour(0x00,0x57,0xFF);    // Blue (RYB)
+    m_colour_pallet[0x1A] = Colour(0x00,0xFF,0x57);    // Malachite
+    m_colour_pallet[0x1B] = Colour(0x00,0xFF,0xFF);    // Aqua
+    m_colour_pallet[0x1C] = Colour(0xA8,0x57,0x57);    // Middle Red Purple
+    m_colour_pallet[0x1D] = Colour(0xA8,0x57,0xFF);    // Lavender Indigo
+    m_colour_pallet[0x1E] = Colour(0xA8,0xFF,0x57);    // Olive Green
+    m_colour_pallet[0x1F] = Colour(0xA8,0xFF,0xFF);    // Celeste
 
-    colourPallet[0x20] = Colour(0x57,0x00,0x00);    // Blood Red
-    colourPallet[0x21] = Colour(0x57,0x00,0xA8);    // Metallic Violet
-    colourPallet[0x22] = Colour(0x57,0xA8,0x00);    // Kelly Green
-    colourPallet[0x23] = Colour(0x57,0xA8,0xA8);    // Cadet Blue
-    colourPallet[0x24] = Colour(0xFF,0x00,0x00);    // Red
-    colourPallet[0x25] = Colour(0xFF,0x00,0xA8);    // Fashion Fuchsia
-    colourPallet[0x26] = Colour(0xFF,0xA8,0x00);    // Chrome Yellow
-    colourPallet[0x27] = Colour(0xFF,0xA8,0xA8);    // Light Salmon Pink
-    colourPallet[0x28] = Colour(0x57,0x00,0x57);    // Imperial Purple
-    colourPallet[0x29] = Colour(0x57,0x00,0xFF);    // Electric Indigo
-    colourPallet[0x2A] = Colour(0x57,0xA8,0x57);    // Apple
-    colourPallet[0x2B] = Colour(0x57,0xA8,0xFF);    // Blue Jeans
-    colourPallet[0x2C] = Colour(0xFF,0x00,0x57);    // Folly
-    colourPallet[0x2D] = Colour(0xFF,0x00,0xFF);    // Fuchsia
-    colourPallet[0x2E] = Colour(0xFF,0xA8,0x57);    // Rajah
-    colourPallet[0x2F] = Colour(0xFF,0xA8,0xFF);    // Rich Brilliant Lavender
+    m_colour_pallet[0x20] = Colour(0x57,0x00,0x00);    // Blood Red
+    m_colour_pallet[0x21] = Colour(0x57,0x00,0xA8);    // Metallic Violet
+    m_colour_pallet[0x22] = Colour(0x57,0xA8,0x00);    // Kelly Green
+    m_colour_pallet[0x23] = Colour(0x57,0xA8,0xA8);    // Cadet Blue
+    m_colour_pallet[0x24] = Colour(0xFF,0x00,0x00);    // Red
+    m_colour_pallet[0x25] = Colour(0xFF,0x00,0xA8);    // Fashion Fuchsia
+    m_colour_pallet[0x26] = Colour(0xFF,0xA8,0x00);    // Chrome Yellow
+    m_colour_pallet[0x27] = Colour(0xFF,0xA8,0xA8);    // Light Salmon Pink
+    m_colour_pallet[0x28] = Colour(0x57,0x00,0x57);    // Imperial Purple
+    m_colour_pallet[0x29] = Colour(0x57,0x00,0xFF);    // Electric Indigo
+    m_colour_pallet[0x2A] = Colour(0x57,0xA8,0x57);    // Apple
+    m_colour_pallet[0x2B] = Colour(0x57,0xA8,0xFF);    // Blue Jeans
+    m_colour_pallet[0x2C] = Colour(0xFF,0x00,0x57);    // Folly
+    m_colour_pallet[0x2D] = Colour(0xFF,0x00,0xFF);    // Fuchsia
+    m_colour_pallet[0x2E] = Colour(0xFF,0xA8,0x57);    // Rajah
+    m_colour_pallet[0x2F] = Colour(0xFF,0xA8,0xFF);    // Rich Brilliant Lavender
 
-    colourPallet[0x30] = Colour(0x57,0x57,0x00);    // Dark Bronze (Coin)
-    colourPallet[0x31] = Colour(0x57,0x57,0xA8);    // Liberty
-    colourPallet[0x32] = Colour(0x57,0xFF,0x00);    // Chlorophyll Green
-    colourPallet[0x33] = Colour(0x57,0xFF,0xA8);    // Medium Aquamarine
-    colourPallet[0x34] = Colour(0xFF,0x57,0x00);    // Orange (Pantone)
-    colourPallet[0x35] = Colour(0xFF,0x57,0xA8);    // Brilliant Rose
-    colourPallet[0x36] = Colour(0xFF,0xFF,0x00);    // Yellow
-    colourPallet[0x37] = Colour(0xFF,0xFF,0xA8);    // Calamansi
-    colourPallet[0x38] = Colour(0x57,0x57,0x57);    // Davy's Grey
-    colourPallet[0x39] = Colour(0x57,0x57,0xFF);    // Very Light Blue
-    colourPallet[0x3A] = Colour(0x57,0xFF,0x57);    // Screamin' Green
-    colourPallet[0x3B] = Colour(0x57,0xFF,0xFF);    // Electric Blue
-    colourPallet[0x3C] = Colour(0xFF,0x57,0x57);    // Sunset Orange
-    colourPallet[0x3D] = Colour(0xFF,0x57,0xFF);    // Shocking Pink (Crayola)
-    colourPallet[0x3E] = Colour(0xFF,0xFF,0x57);    // Shocking Pink (Crayola)
-    colourPallet[0x3F] = Colour(0xFF,0xFF,0xFF);    // White
+    m_colour_pallet[0x30] = Colour(0x57,0x57,0x00);    // Dark Bronze (Coin)
+    m_colour_pallet[0x31] = Colour(0x57,0x57,0xA8);    // Liberty
+    m_colour_pallet[0x32] = Colour(0x57,0xFF,0x00);    // Chlorophyll Green
+    m_colour_pallet[0x33] = Colour(0x57,0xFF,0xA8);    // Medium Aquamarine
+    m_colour_pallet[0x34] = Colour(0xFF,0x57,0x00);    // Orange (Pantone)
+    m_colour_pallet[0x35] = Colour(0xFF,0x57,0xA8);    // Brilliant Rose
+    m_colour_pallet[0x36] = Colour(0xFF,0xFF,0x00);    // Yellow
+    m_colour_pallet[0x37] = Colour(0xFF,0xFF,0xA8);    // Calamansi
+    m_colour_pallet[0x38] = Colour(0x57,0x57,0x57);    // Davy's Grey
+    m_colour_pallet[0x39] = Colour(0x57,0x57,0xFF);    // Very Light Blue
+    m_colour_pallet[0x3A] = Colour(0x57,0xFF,0x57);    // Screamin' Green
+    m_colour_pallet[0x3B] = Colour(0x57,0xFF,0xFF);    // Electric Blue
+    m_colour_pallet[0x3C] = Colour(0xFF,0x57,0x57);    // Sunset Orange
+    m_colour_pallet[0x3D] = Colour(0xFF,0x57,0xFF);    // Shocking Pink (Crayola)
+    m_colour_pallet[0x3E] = Colour(0xFF,0xFF,0x57);    // Shocking Pink (Crayola)
+    m_colour_pallet[0x3F] = Colour(0xFF,0xFF,0xFF);    // White
 
 
     // Set the rest of the palette to black
-    for(uint8_t colorCode = 255; colorCode >= 0x40; --colorCode)
-        colourPallet[colorCode] = Colour(0,0,0);
+    for(uint8_t color_code = 255; color_code >= 0x40; --color_code)
+      m_colour_pallet[color_code] = Colour(0,0,0);
 
 
 }
@@ -95,27 +93,27 @@ GraphicsContext::~GraphicsContext() {
 }
 
 /**
- * @details Renders a pixel to the screen, automatically uses the correct color depth
+ * @brief Renders a pixel to the screen based on the current color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
  */
-void GraphicsContext::renderPixel(uint32_t x, uint32_t y, uint32_t colour) {
+void GraphicsContext::render_pixel(uint32_t x, uint32_t y, uint32_t colour) {
 
-    // Call the correct putPixel function based on the color depth
-    switch (colorDepth) {
+    // Call the correct put_pixel function based on the color depth
+    switch (m_color_depth) {
         case 8:
-            renderPixel8Bit(x, y, colour);
+          render_pixel_8_bit(x, y, colour);
             break;
         case 16:
-            renderPixel16Bit(x, y, colour);
+          render_pixel_16_bit(x, y, colour);
             break;
         case 24:
-            renderPixel24Bit(x, y, colour);
+          render_pixel_24_bit(x, y, colour);
             break;
         case 32:
-            renderPixel32Bit(x, y, colour);
+          render_pixel_32_bit(x, y, colour);
             break;
     }
 
@@ -123,123 +121,123 @@ void GraphicsContext::renderPixel(uint32_t x, uint32_t y, uint32_t colour) {
 }
 
 /**
- * @details Renders a pixel to the screen using the 8 bit color depth
+ * @brief Renders a pixel to the screen using the 8 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 8Bit colour of the pixel
  */
-void GraphicsContext::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour) {
+void GraphicsContext::render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour) {
 
 }
 
 /**
- * @details Renders a pixel to the screen using the 16 bit color depth
+ * @brief Renders a pixel to the screen using the 16 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 16Bit colour of the pixel
  */
-void GraphicsContext::renderPixel16Bit(uint32_t x, uint32_t y, uint16_t colour) {
+void GraphicsContext::render_pixel_16_bit(uint32_t x, uint32_t y, uint16_t colour) {
 
 }
 
 /**
- * @details Renders a pixel to the screen using the 24 bit color depth
+ * @brief Renders a pixel to the screen using the 24 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 24Bit colour of the pixel
  */
-void GraphicsContext::renderPixel24Bit(uint32_t x, uint32_t y, uint32_t colour) {
+void GraphicsContext::render_pixel_24_bit(uint32_t x, uint32_t y, uint32_t colour) {
 
 }
 
 /**
- * @details Renders a pixel to the screen using the 32 bit color depth
+ * @brief Renders a pixel to the screen using the 32 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 32Bit colour of the pixel
  */
-void GraphicsContext::renderPixel32Bit(uint32_t x, uint32_t y, uint32_t colour) {
+void GraphicsContext::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colour) {
 
 }
 
 /**
- * @details Gets the colour of a pixel on the screen, automatically uses the correct color depth
+ * @brief Gets the colour of a pixel on the screen, automatically uses the correct color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The colour of the pixel
  */
-uint32_t GraphicsContext::getRenderedPixel(uint32_t x, uint32_t y) {
-    // Call the correct getPixel function based on the color depth
-    switch (colorDepth) {
+uint32_t GraphicsContext::get_rendered_pixel(uint32_t x, uint32_t y) {
+    // Call the correct get_pixel function based on the color depth
+    switch (m_color_depth) {
         case 8:
-            return getRenderedPixel8Bit(x, y);
+            return get_rendered_pixel_8_bit(x, y);
         case 16:
-            return getRenderedPixel16Bit(x, y);
+            return get_rendered_pixel_16_bit(x, y);
         case 24:
-            return getRenderedPixel24Bit(x, y);
+            return get_rendered_pixel_24_bit(x, y);
         case 32:
-            return getRenderedPixel32Bit(x, y);
+            return get_rendered_pixel_32_bit(x, y);
     }
 }
 
 /**
- * @details Gets the colour of a pixel on the screen using the 8 bit color depth
+ * @brief Gets the colour of a pixel on the screen using the 8 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 8Bit colour of the pixel
  */
-uint8_t GraphicsContext::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
+uint8_t GraphicsContext::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
 /**
- * @details Gets the colour of a pixel on the screen using the 16 bit color depth
+ * @brief Gets the colour of a pixel on the screen using the 16 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 16Bit colour of the pixel
  */
-uint16_t GraphicsContext::getRenderedPixel16Bit(uint32_t x, uint32_t y) {
+uint16_t GraphicsContext::get_rendered_pixel_16_bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
 /**
- * @details Gets the colour of a pixel on the screen using the 24 bit color depth
+ * @brief Gets the colour of a pixel on the screen using the 24 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 24Bit colour of the pixel
  */
-uint32_t GraphicsContext::getRenderedPixel24Bit(uint32_t x, uint32_t y) {
+uint32_t GraphicsContext::get_rendered_pixel_24_bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
 /**
- * @details Gets the colour of a pixel on the screen using the 32 bit color depth
+ * @brief Gets the colour of a pixel on the screen using the 32 bit color depth
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @return The 32Bit colour of the pixel
  */
-uint32_t GraphicsContext::getRenderedPixel32Bit(uint32_t x, uint32_t y) {
+uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
     return 0;
 }
 
 /**
- * @details Converts a colour to an integer value based on the current color depth
+ * @brief Converts a colour to an integer value based on the current color depth
  *
  * @param colour The colour class to convert
  * @return The integer value of the colour
  */
-uint32_t GraphicsContext::colourToInt(Colour colour) {
+uint32_t GraphicsContext::colour_to_int(Colour colour) {
 
-    switch(colorDepth)
+    switch(m_color_depth)
     {
         case 8:
         {
@@ -247,7 +245,7 @@ uint32_t GraphicsContext::colourToInt(Colour colour) {
             int mindistance = 0xfffffff;
             for(uint32_t i = 0; i <= 255; ++i)
             {
-                Colour* c = &colourPallet[i];
+                Colour* c = &m_colour_pallet[i];
                 int distance =
                         ((int)colour.red-(int)c->red)*((int)colour.red-(int)c->red)
                         +((int)colour.green-(int)c->green)*((int)colour.green-(int)c->green)
@@ -276,12 +274,12 @@ uint32_t GraphicsContext::colourToInt(Colour colour) {
         default:
         case 32:
         {
-            uint32_t redHex = ((uint32_t)colour.red & 0xFF) << 16;
-            uint32_t greenHex = ((uint32_t)colour.green & 0xFF) << 8;
-            uint32_t blueHex = (uint32_t)colour.blue & 0xFF;
-            uint32_t alphaHex = ((uint32_t)colour.alpha & 0xFF) << 24;
+            uint32_t red_hex = ((uint32_t)colour.red & 0xFF) << 16;
+            uint32_t green_hex = ((uint32_t)colour.green & 0xFF) << 8;
+            uint32_t blue_hex = (uint32_t)colour.blue & 0xFF;
+            uint32_t alpha_hex = ((uint32_t)colour.alpha & 0xFF) << 24;
 
-            uint32_t hexValue = redHex | greenHex | blueHex | alphaHex;
+            uint32_t hexValue = red_hex | green_hex | blue_hex | alpha_hex;
 
 
             return hexValue;
@@ -290,17 +288,18 @@ uint32_t GraphicsContext::colourToInt(Colour colour) {
 }
 
 /**
- * @details Converts an integer value to a colour based on the current color depth
+ * @brief Converts an integer value to a colour based on the current color depth
  *
  * @param colour The integer value to convert
  * @return The colour class of the integer value
  */
-Colour GraphicsContext::intToColour(uint32_t colour) {
-    switch (colorDepth) {
+Colour GraphicsContext::int_to_colour(uint32_t colour) {
+    switch (m_color_depth) {
 
         case 8:
         {
-            return colourPallet[colour & 0xFF]; //Mask off the top 24 bits and return the colour from the pallet (e.g. 0x00FF0000 -> 0x000000FF -> colourPallet[0xFF])
+            // Return the colour from the palette
+            return m_colour_pallet[colour & 0xFF];
         }
 
         case 16:
@@ -308,9 +307,9 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
             // 16-Bit Colour: 5 bits for red, 6 bits for green, 5 bits for blue (RRRRR,GGGGGG,BBBBB)
             Colour result;
 
-            result.red = (colour & 0xF800) >> 8;                                 // Red,   mask off the top 5 bits and shift right 8 bits (0000000000000000RRRRR000)
-            result.green = (colour & 0x07E0) >> 3;                               // Green, mask off the top 6 bits and shift right 3 bits (000000000000GGGGGG000000)
-            result.blue = (colour & 0x001F) << 3;                                // Blue,  mask off the top 5 bits and shift left 3 bits (000000000000000000000BBBBB)
+            result.red = (colour & 0xF800) >> 8;
+            result.green = (colour & 0x07E0) >> 3;
+            result.blue = (colour & 0x001F) << 3;
 
             return result;
         }
@@ -320,9 +319,9 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
             // 24-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue (RRRRRRRR,GGGGGGGG,BBBBBBBB)
             Colour result;
 
-            result.red = (colour & 0xFF0000) >> 16;                               // Red,   mask off the top 8 bits and shift right 16 bits (RRRRRRRR0000000000000000)
-            result.green = (colour & 0x00FF00) >> 8;                              // Green, mask off the top 8 bits and shift right 8 bits (00000000GGGGGGGG00000000)
-            result.blue = (colour & 0x0000FF);                                    // Blue,  mask off the top 8 bits (0000000000000000BBBBBBBB)
+            result.red = (colour & 0xFF0000) >> 16;
+            result.green = (colour & 0x00FF00) >> 8;
+            result.blue = (colour & 0x0000FF);
 
             return result;
         }
@@ -332,11 +331,11 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
         {
             Colour result;
 
-            uint32_t hexValue = colour;
-            result.red = (hexValue >> 16) & 0xFF;
-            result.green = (hexValue >> 8) & 0xFF;
-            result.blue = hexValue & 0xFF;
-            result.alpha = (hexValue >> 24) & 0xFF;
+            uint32_t hex_value = colour;
+            result.red = (hex_value >> 16) & 0xFF;
+            result.green = (hex_value >> 8) & 0xFF;
+            result.blue = hex_value & 0xFF;
+            result.alpha = (hex_value >> 24) & 0xFF;
 
             return result;
 
@@ -345,38 +344,38 @@ Colour GraphicsContext::intToColour(uint32_t colour) {
 }
 
 /**
- * @details Gets the width of the screen
+ * @brief Gets the width of the screen
  *
  * @return The width of the screen
  */
-uint32_t GraphicsContext::getWidth() {
-    return width;
+uint32_t GraphicsContext::get_width() {
+    return m_width;
 }
 
 /**
- * @details Gets the height of the screen
+ * @brief Gets the height of the screen
  *
  * @return The height of the screen
  */
-uint32_t GraphicsContext::getHeight() {
-    return height;
+uint32_t GraphicsContext::get_height() {
+    return m_height;
 }
 
 /**
- * @details Renders a pixel to the screen
+ * @brief Renders a pixel to the screen (automatically converts the colour to an integer)
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
  */
-void GraphicsContext::putPixel(int32_t x, int32_t y, Colour colour) {
+void GraphicsContext::put_pixel(int32_t x, int32_t y, Colour colour) {
 
     // Convert the colour to an integer and then print it
-    putPixel(x,y, colourToInt(colour));
+    putPixel(x,y, colour_to_int(colour));
 }
 
 /**
- * @details Renders a pixel to the screen
+ * @brief Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
@@ -384,55 +383,55 @@ void GraphicsContext::putPixel(int32_t x, int32_t y, Colour colour) {
  */
 void GraphicsContext::putPixel(int32_t x, int32_t y, int32_t colour) {
 
-    if (0 > x || (uint32_t)x >= width) {
+    if (0 > x || (uint32_t)x >= m_width) {
         return;
     }
 
-    // Check if the pixel is within the height of the screen
-    if (0 > y || (uint32_t) y >= height) {
+    // Check if the pixel is within the m_height of the screen
+    if (0 > y || (uint32_t) y >= m_height) {
         return;
     }
 
     // Render the pixel
-    renderPixel(x, mirrorYAxis ? height-y-1 : y, colour);
+    render_pixel(x, mirror_y_axis ? m_height - y - 1 : y, colour);
 
 }
 
 /**
- * @details Gets the colour of a pixel
+ * @brief Gets the colour of a pixel, or returns black if the pixel is outside the screen
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
- * @return The colour of the pixel
+ * @return The colour of the pixel or black if the pixel is outside the screen
  */
-Colour GraphicsContext::getPixel(int32_t x, int32_t y) {
+Colour GraphicsContext::get_pixel(int32_t x, int32_t y) {
 
-    // Check if the pixel is within the width of the screen
-    if (0 > x || (uint32_t)x >= width) {
+    // Check if the pixel is within the m_width of the screen
+    if (0 > x || (uint32_t)x >= m_width) {
         return Colour(0,0,0);
     }
 
-    // Check if the pixel is within the height of the screen
-    if (0 > y || (uint32_t) y >= height) {
+    // Check if the pixel is within the m_height of the screen
+    if (0 > y || (uint32_t) y >= m_height) {
         return Colour(0,0,0);
     }
 
     // Get the pixel and convert it to a colour
-    uint32_t translatedColor = getRenderedPixel(x, mirrorYAxis ? height-y-1 : y);
-    return intToColour(translatedColor);
+    uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height - y - 1 : y);
+    return int_to_colour(translated_color);
 
 
 }
 
 /**
- * @details Inverts a pixel
+ * @brief Inverts a pixel
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  */
-void GraphicsContext::invertPixel(int32_t x, int32_t y) {
+void GraphicsContext::invert_pixel(int32_t x, int32_t y) {
     // Get the pixel
-    Colour colour = getPixel(x,y);
+    Colour colour = get_pixel(x, y);
 
     // Invert the pixel
     colour.red = 255 - colour.red;
@@ -440,85 +439,86 @@ void GraphicsContext::invertPixel(int32_t x, int32_t y) {
     colour.blue = 255 - colour.blue;
 
     // Render the pixel
-    putPixel(x,y,colour);
+    put_pixel(x, y, colour);
 }
 
 
 /**
- * @details Draws a line on the screen
+ * @brief Draws a line on the screen
  *
- * @param x0 The x coordinate of the first point
- * @param y0 The y coordinate of the first point
+ * @param x0 The x coordinate of the m_first_memory_chunk point
+ * @param y0 The y coordinate of the m_first_memory_chunk point
  * @param x1 The x coordinate of the final point
  * @param y1 The y coordinate of the final point
  * @param colour The colour of the line
  */
-void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
-    drawLine(x0,y0,x1,y1,colourToInt(colour));
+void GraphicsContext::draw_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+    drawLine(x0,y0,x1,y1, colour_to_int(colour));
 }
 
 /**
- * @details Draws a line on the screen
+ * @brief Draws a line on the screen
  *
- * @param x0 The x coordinate of the first point
- * @param y0 The y coordinate of the first point
+ * @param x0 The x coordinate of the m_first_memory_chunk point
+ * @param y0 The y coordinate of the m_first_memory_chunk point
  * @param x1 The x coordinate of the final point
  * @param y1 The y coordinate of the final point
  * @param colour The colour of the line
  */
 void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
 
-    // Store the minimum and maximum y values by checking which one is larger/smaller
-    bool y0IsSmaller = y0 < y1;
-    int32_t yMin = y0IsSmaller ? y0 : y1;
-    int32_t yMax = y0IsSmaller ? y1 : y0;
+    // Store the minimum and maximum y values
+    bool y_0_is_smaller = y0 < y1;
+    int32_t y_min = y_0_is_smaller ? y0 : y1;
+    int32_t y_max = y_0_is_smaller ? y1 : y0;
 
-    // If x1 is smaller than x0, reverse the points to draw from left to right
+    //Reverse the points to draw from left to right
     if(x1 < x0){
         drawLine(x1,y1,x0,y0,colour);
         return;
     }
 
-    // If the line is vertical, draw it
+    // Vertical line
     if(x1 == x0)
     {
         // Force the line to be within the screen
-        if(yMin < 0) yMin = 0;
-        if((uint32_t)yMax >= height) yMax = height - 1;
+        if(y_min < 0) y_min = 0;
+        if((uint32_t)y_max >= m_height)
+          y_max = m_height - 1;
 
-        // Mirror the Y axis as directly calling putPixel will not do this
-        if(mirrorYAxis)
+        // Mirror the Y axis as directly calling put_pixel will not do this
+        if(mirror_y_axis)
         {
-            int32_t temp = yMax;
-            yMax = height - yMin - 1;
-            yMin = height - temp - 1;
+            int32_t temp = y_max;
+            y_max = m_height - y_min - 1;
+            y_min = m_height - temp - 1;
         }
 
         // Check that the line is within the screen
-        if (0 > x0 || (uint32_t) x0 >= width) {
+        if (0 > x0 || (uint32_t) x0 >= m_width) {
             return;
         }
 
         // Draw the line
-        for(int32_t y = yMin; y <= yMax; ++y)
+        for(int32_t y = y_min; y <= y_max; ++y)
             putPixel(x0, y, colour);
 
         return;
     }
 
-    // If the line is horizontal, draw it
+    // Horizontal line
     if(y1 == y0)
     {
         // Ensure the line is within the screen
         if(x0 < 0) x0 = 0;
-        if((uint32_t)x1 >= width) x1 = width-1;
+        if((uint32_t)x1 >= m_width) x1 = m_width -1;
 
-        // Mirror the Y axis as directly calling putPixel will not do this
-        if(mirrorYAxis)
-            y0 = height-y0-1;
+        // Mirror the Y axis as directly calling put_pixel will not do this
+        if(mirror_y_axis)
+            y0 = m_height -y0-1;
 
         // Check that the line is within the screen
-        if (0 > y0 || (uint32_t) y0 >= height)
+        if (0 > y0 || (uint32_t) y0 >= m_height)
             return;
 
         // Draw the line
@@ -528,39 +528,30 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 
     // If the line is not horizontal or vertical then it must be a diagonal line
     // Find the slope of the line
-    float slope = ((float)(y1-y0))/(x1-x0);              // Change in y over change in x
+    float slope = ((float)(y1-y0))/(x1-x0);
 
-    // If the line is more horizontal than vertical, increment x by 1 and increment y by the slope
+    // A slope that is more horizontal should be drawn by incrementing x
     if(-1 <= slope && slope <= 1)
     {
-        // Start at minimum y and increment y by the slope
         float y = y0;
-
-        // Start at minimum x and increment x by 1
         for(int32_t x = x0; x <= x1; x++, y+=slope)
             putPixel(x, (int32_t)y, colour);
     }
 
-    // If the line is more vertical than horizontal, increment y by 1 and increment x by the inverse of the slope
+    // A slope that is more vertical should be drawn by incrementing y
     else
     {
         // Invert the slope
         slope = 1.0f/slope;
 
-        // Start at minimum x and increment x by the inverse of the slope
         float x = x0;
-
-        // Start at minimum y and increment y by 1
-        for(int32_t y = yMin; y <= yMax; x+=slope, y++)
+        for(int32_t y = y_min; y <= y_max; x+=slope, y++)
             putPixel((int32_t)x, y, colour);
     }
-
-
-
 }
 
 /**
- * @details Draws a rectangle on the screen
+ * @brief Draws a rectangle on the screen
  *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
@@ -568,13 +559,13 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
  * @param y1 The y coordinate of the bottom right corner
  * @param colour The colour of the rectangle
  */
-void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
-    drawRectangle(x0,y0,x1,y1,colourToInt(colour));
+void GraphicsContext::draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+  draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
 
 }
 
 /**
- * @details Draws a rectangle on the screen
+ * @brief Draws a rectangle on the screen
  *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
@@ -582,7 +573,7 @@ void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
  * @param y1 The y coordinate of the bottom right corner
  * @param colour The colour of the rectangle
  */
-void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
+void GraphicsContext::draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
 
     // Ensure x and y 0 is smaller than x and y 1
     --y0;
@@ -597,7 +588,7 @@ void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
 }
 
 /**
- * @details Draws a rectangle on the screen, filled with a colour
+ * @brief Draws a rectangle on the screen, filled with a colour
  *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
@@ -605,12 +596,12 @@ void GraphicsContext::drawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
  * @param y1 The y coordinate of the bottom right corner
  * @param colour The colour of the rectangle
  */
-void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
-    fillRectangle(x0,y0,x1,y1,colourToInt(colour));
+void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+  fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
 }
 
 /**
- * @details Draws a rectangle on the screen, filled with a colour
+ * @brief Draws a rectangle on the screen, filled with a colour
  *
  * @param x0 The x coordinate of the top left corner
  * @param y0 The y coordinate of the top left corner
@@ -618,37 +609,38 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
  * @param y1 The y coordinate of the bottom right corner
  * @param colour The colour of the rectangle
  */
-void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
+void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour) {
 
     // Draw from left to right
     if(y1 < y0){
-        fillRectangle(x1,y1,x0,y0,colour);
+      fill_rectangle(x1, y1, x0, y0, colour);
         return;
     }
 
     // Make sure the rectangle is within the height of the screen
     if(y0 < 0) y0 = 0;
-    if((uint32_t)y1 > height) y1 = height;
+    if((uint32_t)y1 > m_height) y1 = m_height;
 
     // Make sure the rectangle is within the width of the screen
-    bool x0IsSmaller = x0 < x1;
-    int32_t xMin = x0IsSmaller ? x0 : x1;
-    int32_t xMax = x0IsSmaller ? x1 : x0;
+    bool x_0_is_smaller = x0 < x1;
+    int32_t x_min = x_0_is_smaller ? x0 : x1;
+    int32_t x_max = x_0_is_smaller ? x1 : x0;
 
-    if(xMin < 0) xMin = 0;
-    if((uint32_t)xMax > width) xMax = width;
+    if(x_min < 0) x_min = 0;
+    if((uint32_t)x_max > m_width)
+      x_max = m_width;
 
-    // Mirror the Y axis as directly calling putPixel will not do this
-    if(mirrorYAxis)
+    // Mirror the Y axis as directly calling put_pixel will not do this
+    if(mirror_y_axis)
     {
-        uint32_t temp = y1;             // Store the maximum y value
-        y1 = height - y0 - 1;           // Set the maximum y value to the minimum y value
-        y0 = height - temp - 1;         // Set the minimum y value to the maximum y value
+        uint32_t temp = y1;
+        y1 = m_height - y0 - 1;
+        y0 = m_height - temp - 1;
     }
 
     // Draw the rectangle
     for(int32_t y = y0; y < y1; ++y){
-        for (int32_t x = xMin; x < xMax; ++x) {
+        for (int32_t x = x_min; x < x_max; ++x) {
             putPixel(x, y, colour);
         }
     }
@@ -656,38 +648,37 @@ void GraphicsContext::fillRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t 
 }
 
 /**
- * @details Draws a circle on the screen
+ * @brief Draws a circle on the screen
  *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle
  * @param colour The colour of the circle
  */
-void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, Colour colour){
-    drawCircle(x0,y0,radius,colourToInt(colour));
+void GraphicsContext::draw_circle(int32_t x0, int32_t y0, int32_t radius, Colour colour){
+  draw_circle(x0, y0, radius, colour_to_int(colour));
 }
 
 /**
- * @details Draws a circle on the screen
+ * @brief Draws a circle on the screen
  *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle
  * @param colour The colour of the circle
  */
-void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour) {
+void GraphicsContext::draw_circle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour) {
 
     // Make sure the circle is with in the width and height of the screen
     if(x0 < 0) x0 = 0;
-    if((uint32_t)x0 > width) x0 = width;
+    if((uint32_t)x0 > m_width) x0 = m_width;
     if(y0 < 0) y0 = 0;
-    if((uint32_t)y0 > height) y0 = height;
+    if((uint32_t)y0 > m_height) y0 = m_height;
 
-    // Mirror the Y axis as directly calling putPixel will not do this
-    if(mirrorYAxis)
-        y0 = height-y0-1;
+    // Mirror the Y axis as directly calling put_pixel will not do this
+    if(mirror_y_axis)
+        y0 = m_height -y0-1;
 
-    // Draw the circle
 
     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
     for(int32_t x = -radius; x <= radius; ++x){
@@ -705,20 +696,20 @@ void GraphicsContext::drawCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
 }
 
 /**
- * @details Draws a circle on the screen, filled with a colour
+ * @brief Draws a circle on the screen, filled with a colour
  *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
  * @param radius The radius of the circle
  * @param colour The colour of the circle
  */
-void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, Colour colour) {
-    fillCircle(x0,y0,radius,colourToInt(colour));
+void GraphicsContext::fill_circle(int32_t x0, int32_t y0, int32_t radius, Colour colour) {
+    fillCircle(x0,y0,radius, colour_to_int(colour));
 
 }
 
 /**
- * @details Draws a circle on the screen, filled with a colour
+ * @brief Draws a circle on the screen, filled with a colour
  *
  * @param x0 The x coordinate of the centre of the circle
  * @param y0 The y coordinate of the centre of the circle
@@ -729,13 +720,13 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
 
         // Make sure the circle is with in the width and height of the screen
         if(x0 < 0) x0 = 0;
-        if((uint32_t)x0 > width) x0 = width;
+        if((uint32_t)x0 > m_width) x0 = m_width;
         if(y0 < 0) y0 = 0;
-        if((uint32_t)y0 > height) y0 = height;
+        if((uint32_t)y0 > m_height) y0 = m_height;
 
-        // Mirror the Y axis as directly calling putPixel will not do this
-        if(mirrorYAxis)
-            y0 = height-y0-1;
+        // Mirror the Y axis as directly calling put_pixel will not do this
+        if(mirror_y_axis)
+            y0 = m_height -y0-1;
 
         // Draw the circle
 
@@ -750,5 +741,4 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
                     putPixel(x0+x,y0+y,colour);
             }
         }
-
 }

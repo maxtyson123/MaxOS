@@ -13,38 +13,38 @@ namespace maxOS{
 
     namespace drivers{
 
+        /**
+         * @class AdvancedTechnologyAttachment
+         * @brief Driver for the ATA controller, handles the reading and writing of data to the hard drive
+         */
         class AdvancedTechnologyAttachment{
 
             protected:
-                hardwarecommunication::Port16Bit dataPort;
-                hardwarecommunication::Port8Bit errorPort;
-                hardwarecommunication::Port8Bit sectorCountPort;
-                hardwarecommunication::Port8Bit LBAlowPort;
-                hardwarecommunication::Port8Bit LBAmidPort;
-                hardwarecommunication::Port8Bit LBAHiPort;
-                hardwarecommunication::Port8Bit devicePort;
-                hardwarecommunication::Port8Bit commandPort;
-                hardwarecommunication::Port8Bit controlPort;
-                bool master;
-                uint16_t bytesPerSector;
+                hardwarecommunication::Port16Bit m_data_port;
+                hardwarecommunication::Port8Bit m_error_port;
+                hardwarecommunication::Port8Bit m_sector_count_port;
+                hardwarecommunication::Port8Bit m_LBA_low_port;
+                hardwarecommunication::Port8Bit m_LBA_mid_port;
+                hardwarecommunication::Port8Bit m_LBA_high_Port;
+                hardwarecommunication::Port8Bit m_device_port;
+                hardwarecommunication::Port8Bit m_command_port;
+                hardwarecommunication::Port8Bit m_control_port;
+                bool m_is_master;
+                uint16_t m_bytes_per_sector { 512 };
 
-                common::OutputStream* ataMessageStream;
+                common::OutputStream* ata_message_stream;
             public:
-                AdvancedTechnologyAttachment(uint16_t portBase, bool master, common::OutputStream* ataMessageStream);
+                AdvancedTechnologyAttachment(uint16_t port_base, bool master, common::OutputStream* output_stream);
                 ~AdvancedTechnologyAttachment();
 
-                void Identify();
-                void Read28(uint32_t sector, uint8_t* data, int count);
-                void Write28(uint32_t sector, uint8_t* data, int count);
-                void Flush();                                                                               //Flush Cache  //TODO: See also vid 19 24:20
+                void identify();
+                void read_28(uint32_t sector, uint8_t* data, int count);
+                void write_28(uint32_t sector, uint8_t* data, int count);
+                void flush();                                                                          //TODO: See also vid 19 24:20
 
                 //TODO: Make into driver class
-
-
         };
-
     }
-
 }
 
 #endif //MAXOS_DRIVERS_ATA_H

@@ -25,7 +25,7 @@ EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* f
 }
 
 /**
- * @details Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list
+ * @brief Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list
  *
  */
 EthernetFramePayloadHandler::~EthernetFramePayloadHandler() {
@@ -40,7 +40,7 @@ bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t* ethernetfr
 }
 
 /**
- * @details Send an packet via the backend driver
+ * @brief Send an packet via the backend driver
  *
  * @param dstMAC the destination MAC address
  * @param data the data to send
@@ -59,7 +59,7 @@ EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream*
     this -> ethernetDriver = driver;
     this -> errorMessages = errorMessages;
 
-    driver ->connectEventHandler(this);
+    driver->connect_event_handler(this);
 
 }
 
@@ -73,7 +73,7 @@ drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
 
 
 /**
- * @details Handle the received packet
+ * @brief Handle the received packet
  *
  * @param buffer the buffer with the received data
  * @param size the size of the received data
@@ -114,7 +114,7 @@ bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
 
             //If the handler is not found, print an error message
             errorMessages -> write("EFH: Unhandled ethernet frame type 0x");
-            errorMessages -> writeHex(frame->type);
+            errorMessages->write_hex(frame->type);
             errorMessages -> write("\n");
 
         }
@@ -146,7 +146,7 @@ void EthernetFrameHandler::connectHandler(EthernetFramePayloadHandler *handler) 
 }
 
 /**
- * @details Send an packet via the backend driver
+ * @brief Send an packet via the backend driver
  *
  * @param dstMAC_BE the destination MAC address
  * @param etherType_BE the type of the protocol
@@ -158,7 +158,7 @@ void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t f
     errorMessages->write("EFH: Sending frame...");
 
     //Allocate memory for the buffer
-    uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(size + sizeof(EthernetFrameHeader));
+    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(size + sizeof(EthernetFrameHeader));
     EthernetFrameHeader* frame = (EthernetFrameHeader*)buffer;
 
     //Put data in the header
@@ -177,5 +177,5 @@ void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t f
 
 
     //Free the buffer
-    MemoryManager::activeMemoryManager -> free(buffer);
+    MemoryManager::s_active_memory_manager-> free(buffer);
 }

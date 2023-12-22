@@ -59,6 +59,6 @@
 
 # Other
 - Clipboard
-- Privelges (Rings, Read/Write)
+- Privelges (Rings, read/write)
 - Apps installer
 - App store

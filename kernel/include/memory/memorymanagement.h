@@ -22,55 +22,26 @@ namespace maxOS{
 
         };
 
+        /**
+         * @class MemoryManager
+         * @brief Handles memory allocation and deallocation
+         */
         class MemoryManager{
 
-        protected:
-            MemoryChunk* first;
+          protected:
+              MemoryChunk* m_first_memory_chunk;
 
-        public:
-            static MemoryManager* activeMemoryManager; //Similar to how we have the active interrupt manager
+          public:
+              static MemoryManager* s_active_memory_manager;
 
-            MemoryManager(size_t start, size_t size);
-            ~MemoryManager();
+              MemoryManager(size_t start, size_t size);
+              ~MemoryManager();
 
-            void* malloc(size_t size);
-            void free(void* pointer);
-            int getMemoryUsed();
-
-            template<class Type> Type* Instantiate(uint32_t numberOfElements=1){
-                Type* result = (Type*)malloc(sizeof(Type)*numberOfElements);
-                new (result) Type();
-                return result;
-            }
-
-            template<class Type, class Parameter1> Type* Instantiate(Parameter1 p1){
-                Type* result = (Type*)malloc(sizeof(Type));
-                new (result) Type(p1);
-                return result;
-            }
-
-            template<class Type, class Parameter1, class Parameter2> Type* Instantiate(Parameter1 p1, Parameter2 p2)     {
-                Type* result = (Type*)malloc(sizeof(Type));
-                new (result) Type(p1, p2);
-                return result;
-            }
-
-            template<class Type, class Parameter1, class Parameter2, class Parameter3> Type* Instantiate(Parameter1 p1, Parameter2 p2, Parameter3 p3) {
-                Type* result = (Type*)malloc(sizeof(Type));
-                new (result) Type(p1, p2, p3);
-                return result;
-            }
-
-            template<class Type, class Parameter1, class Parameter2, class Parameter3, class Parameter4> Type* Instantiate(Parameter1 p1, Parameter2 p2, Parameter3 p3, Parameter4 p4) {
-                Type* result = (Type*)malloc(sizeof(Type));
-                new (result) Type(p1, p2, p3, p4);
-                return result;
-            }
-
+              void* malloc(size_t size);
+              void free(void* pointer);
+              int memory_used();
         };
     }
-
-
 }
 
 
@@ -83,7 +54,7 @@ void* operator new[](size_t size);
 void* operator new(size_t size, void* pointer);
 void* operator new[](size_t size, void* pointer);
 
-void operator delete(void* pointer);
-void operator delete[](void* pointer);
+void operator delete(void* pointer, size_t size);
+void operator delete[](void* pointer, size_t size);
 
 #endif //MAXOS_SYSTEM_MEMORYMANAGEMENT_H

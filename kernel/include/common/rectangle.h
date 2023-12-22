@@ -14,75 +14,56 @@ namespace maxOS{
         // A rectangle template for use in the GUI system
         template<class Type> class Rectangle{
             public:
-                Type left;
-                Type top;
-                Type width;
-                Type height;
+                Type left { 0 };
+                Type top { 0 };
+                Type width { 0 };
+                Type height { 0 };
 
                 Rectangle();
                 Rectangle(Type left, Type top, Type width, Type height);
                 ~Rectangle();
 
-                bool intersects(const Rectangle<Type>& other);
-                Rectangle<Type> intersection(const Rectangle<Type>& other);
-                Vector<Rectangle<Type> > subtract(const Rectangle<Type>& other);
-                bool contains(const Rectangle<Type>& other);
+                bool intersects(const Rectangle<Type>&);
+                Rectangle<Type> intersection(const Rectangle<Type>&);
+
+                Vector<Rectangle<Type> > subtract(const Rectangle<Type>&);
+
+                bool contains(const Rectangle<Type>&);
                 bool contains(Type x, Type y);
         };
 
         ///_______________________________________________TEMPLATES_________________________________________________________________///
 
-        /**
-         * @details A rectangle template for use in the GUI system
-         *
-         * @tparam Type Type of the rectangle
-         */
         template<class Type> Rectangle<Type>::Rectangle(){
-            left = 0;
-            top = 0;
-            height = 0;
-            width = 0;
         }
 
-        /**
-        * @details A rectangle template for use in the GUI system
-        *
-        * @tparam Type The type of the rectangle
-        * @param left
-        * @param top
-        * @param width
-        * @param height
-        */
-        template<class Type> Rectangle<Type>::Rectangle(Type left, Type top, Type width, Type height){
-            // If the width is negative, adjust the left
+
+        template<class Type> Rectangle<Type>::Rectangle(Type left, Type top, Type width, Type height)
+        : left(left),
+          top(top),
+          width(width),
+          height(height)
+        {
+
+            // If the width is negative, move the left and make the width positive
             if(width < 0)
             {
-                left += width;      // Add the width to the left, what this does is move the left to the right
-                width *= -1;        // Multiply the width by -1, what this does is make the width positive
+                left += width;
+                width *= -1;
             }
 
-            // If the height is negative, adjust the top
+            // If the m_height is negative, move the top and make the height positive
             if(height < 0)
             {
-                top += height;     // Add the height to the top, what this does is move the top down
-                height *= -1;      // Multiply the height by -1, what this does is make the height positive
+                top += height;
+                height *= -1;
             }
 
             // Set the values
             this->left = left;
-            //this -> right = left + width; # The right is not needed, it can be calculated from the left and width
             this->top = top;
-            //this -> bottom = top + height; # The bottom is not needed, it can be calculated from the top and height
-
-            this->width = width;
-            this->height = height;
         }
 
-        /**
-         * @details Destructor
-         *
-         * @tparam Type The type of the rectangle
-         */
         template<class Type> Rectangle<Type>::~Rectangle()
         {
         }
@@ -116,7 +97,7 @@ namespace maxOS{
         }
 
         /**
-          * @details Returns the intersection of this rectangle and another rectangle
+          * @details Returns a retangle that represents the intersection of this rectangle and another rectangle
           *
           * @tparam Type The type of the rectangle
           * @param other The other rectangle
@@ -127,13 +108,13 @@ namespace maxOS{
             if(!intersects(other))
                 return Rectangle<Type>();
 
-            // Get the left and top of the intersection
-            Type left = this -> left > other.left ? this -> left : other.left;       // Check if the left of this rectangle is greater than the left of the other rectangle, if it is, use the left of this rectangle, otherwise use the left of the other rectangle
-            Type top = this -> top > other.top ? this -> top : other.top;            // Check if the top of this rectangle is greater than the top of the other rectangle, if it is, use the top of this rectangle, otherwise use the top of the other rectangle
+            // Get the left and top of the intersection using the maximum of the two
+            Type left = this -> left > other.left ? this -> left : other.left;
+            Type top = this -> top > other.top ? this -> top : other.top;
 
-            // Get the right and bottom of the intersection
-            Type right = this -> left + this -> width < other.left + other.width ? this -> left + this -> width : other.left + other.width;    // Check if the right of this rectangle is less than the right of the other rectangle, if it is, use the right of this rectangle, otherwise use the right of the other rectangle
-            Type bottom = this -> top + this -> height < other.top + other.height ? this -> top + this -> height : other.top + other.height;   // Check if the bottom of this rectangle is less than the bottom of the other rectangle, if it is, use the bottom of this rectangle, otherwise use the bottom of the other rectangle
+            // Get the right and bottom of the intersection using the minimum of the two
+            Type right = this -> left + this -> width < other.left + other.width ? this -> left + this -> width : other.left + other.width;
+            Type bottom = this -> top + this -> height < other.top + other.height ? this -> top + this -> height : other.top + other.height;
 
             // Return the intersection
             return Rectangle<Type>(left, top, right - left, bottom - top);
@@ -151,10 +132,10 @@ namespace maxOS{
             // Store the result rectangle
             Vector<Rectangle<Type> > result;
 
-            // If the rectangles don't intersect, return this rectangle
+            // Make sure the rectangles intersect
             if(!intersects(other))
             {
-                result.pushBack(*this);
+              result.push_back(*this);
                 return result;
             }
 
@@ -163,34 +144,29 @@ namespace maxOS{
             Type minRight = (left + width < other.left + other.width ? left + width : other.left + other.width);
             Type minBottom = (top + height < other.top + other.height ? top+height : other.top + other.height);
 
+            // Add the non intersecting rectangles to the result
 
-            // If the top of the other rectangle is above the top of this rectangle then this rectangle must be inside the other rectangle
-            if(top < other.top)
-            {
-                // Create a rectangle from the top of this rectangle to the top of the other rectangle (the block above the other rectangle)
-                result.pushBack(Rectangle<Type>(maxLeft, top, minRight - maxLeft, other.top - top));
-            }
+            // Add non-overlapping region above if current top is less than other top
+            if (top < other.top)
+              result.push_back(Rectangle<Type>(maxLeft, top, minRight - maxLeft,
+                                               other.top - top));
 
-            // If the left of this rectangle is to the left of the left of the other rectangle then this rectangle must be inside the other rectangle
-            if(left < other.left)
-            {
-                // Create a rectangle from the left of this rectangle to the left of the other rectangle (the block to the left of the other rectangle)
-                result.pushBack(Rectangle<Type>(left, top, other.left - left, height));
-            }
+            // Add non-overlapping region to the left if current left is less than other left
+            if (left < other.left)
+              result.push_back(
+                  Rectangle<Type>(left, top, other.left - left, height));
 
-            // If the right of this rectangle is to the right of the right of the other rectangle then this rectangle must be inside the other rectangle
-            if(left +width > other.left + other.width)
-            {
-                // Create a rectangle from the right of the other rectangle to the right of this rectangle (the block to the right of the other rectangle)
-                result.pushBack(Rectangle<Type>(other.left + other.width, top, (left+width) - (other.left+other.width) + 1,height));
-            }
+            // Add non-overlapping region to the right if current right is greater than other right
+            if (left + width > other.left + other.width)
+              result.push_back(Rectangle<Type>(
+                  other.left + other.width, top,
+                  (left + width) - (other.left + other.width) + 1, height));
 
-            // If the bottom of this rectangle is below the bottom of the other rectangle then this rectangle must be inside the other rectangle
-            if(this -> top + this -> height > other.top + other.height)
-            {
-                // Create a rectangle from the bottom of the other rectangle to the bottom of this rectangle (the block below the other rectangle)
-                result.pushBack(Rectangle<Type>(maxLeft, minBottom, minRight-maxLeft, top+height-minBottom + 1));
-            }
+            // Add non-overlapping region below if current bottom is greater than other bottom
+            if (this->top + this->height > other.top + other.height)
+              result.push_back(Rectangle<Type>(maxLeft, minBottom,
+                                               minRight - maxLeft,
+                                               top + height - minBottom + 1));
 
             return result;
         }
@@ -203,6 +179,7 @@ namespace maxOS{
         * @return True if this rectangle contains the other rectangle, false otherwise
         */
         template<class Type> bool Rectangle<Type>::contains(const Rectangle<Type>& other){
+
             // If the other rectangle is to the left of this rectangle
             if(other.left + other.width <= left)
                 return false;
@@ -225,15 +202,16 @@ namespace maxOS{
 
 
         /**
-           * @details Checks if this rectangle contains a point
-           *
-           * @tparam Type The type of the rectangle
-           * @param x The x coordinate of the point
-           * @param y The y coordinate of the point
-           * @return True if this rectangle contains the point, false otherwise
-           */
+         * @details Checks if this rectangle contains a point
+         *
+         * @tparam Type The type of the rectangle
+         * @param x The x coordinate of the point
+         * @param y The y coordinate of the point
+         * @return True if this rectangle contains the point, false otherwise
+         */
         template<class Type> bool Rectangle<Type>::contains(Type x, Type y){
-            // If the point is to the left of this rectangle
+
+           // If the point is to the left of this rectangle
             if(x < left)
                 return false;
 
@@ -255,9 +233,5 @@ namespace maxOS{
         }
 
     }
-
 }
-
-
-
 #endif //MAXOS_COMMON_RECTANGLE_H

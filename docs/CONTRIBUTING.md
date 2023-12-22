@@ -16,7 +16,7 @@ To keep the code understanble please make sure it is formatted and reable. Addit
 ## We Use [GitHub Flow](https://guides.github.com/introduction/flow/index.html), So All Code Changes Happen Through Pull Requests
 Pull requests are the best way to propose changes to the codebase (we use [GitHub Flow](https://guides.github.com/introduction/flow/index.html)). We actively welcome your pull requests:
 
-1. Fork the repo and create your branch from `master`.
+1. Fork the repo and create your branch from `m_is_master`.
 2. If you've added code that should be tested, add tests.
 3. If you've changed APIs, update the documentation.
 4. Ensure the test suite passes.
@@ -26,12 +26,12 @@ Pull requests are the best way to propose changes to the codebase (we use [GitHu
 ## Report bugs using GitHub's [issues](https://github.com/briandk/transcriptase-atom/issues)
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](); it's that easy!
 
-## Write bug reports with detail, background, and sample code
+## write bug reports with detail, m_background, and sample code
 [This is an example](http://stackoverflow.com/q/12488905/180626) of a bug report someone wrote, and I think it's not a bad model. Here's [another example from Craig Hockenberry](http://www.openradar.me/11905408), an app developer whom I greatly respect.
 
 **Great Bug Reports** tend to have:
 
-- A quick summary and/or background
+- A quick summary and/or m_background
 - Steps to reproduce
   - Be specific!
   - Give sample code if you can. [This stackoverflow question](http://stackoverflow.com/q/12488905/180626) includes sample code that *anyone* with a base R setup can run to reproduce what I was seeing

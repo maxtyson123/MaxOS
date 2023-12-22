@@ -10,32 +10,24 @@ using namespace maxOS::gui;
 using namespace maxOS::drivers::peripherals;
 
 /**
- * @details Creates a new desktop with the given graphics context
+ * @brief Creates a new desktop with the given graphics context
  *
  * @param gc The graphics context to use
  */
 Desktop::Desktop(GraphicsContext *gc)
-: CompositeWidget(0,0,gc -> getWidth(), gc -> getHeight()),
+: CompositeWidget(0,0, gc->get_width(), gc->get_height()),
   MouseEventHandler(),
-  ClockEventHandler()
+  ClockEventHandler(),
+  m_graphics_context(gc),
+  colour(Colour(0xA8, 0xA8, 0xA8))
 {
 
-    // Dragged and focussed widget are null
-    draggedWidget = 0;
-    focussedWidget = 0;
-
-    // Set the graphics context
-    graphicsContext = gc;
-
-    // Set the mouse position to the center of the screen
-    mouseX = gc -> getWidth() / 2;
-    mouseY = gc -> getHeight() / 2;
-
-    // Set the desktop colour
-    colour = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
+    // Set the mouse m_position to the center of the screen
+    m_mouse_x = gc->get_width() / 2;
+    m_mouse_y = gc->get_height() / 2;
 
     // Draw the initial mouse cursor
-    invertMouseCursor();
+    invert_mouse_cursor();
 
     // Draw the desktop
     Widget::invalidate();
@@ -46,93 +38,76 @@ Desktop::~Desktop() {
 }
 
 /**
- * @details Updates the currently focussed widget to be the given widget
+ * @brief Updates the currently focussed widget to be the given widget
  *
  * @param widget The widget that is now in focus
  */
-void Desktop::setFocus(Widget* widget) {
+void Desktop::set_focus(Widget* widget) {
 
-    // Check if there already was a focussed widget
-    if(this -> focussedWidget != 0){
+    // If there is a widget in focus then send a focus lost event to it
+    if(this ->m_focussed_widget != nullptr)
+      this->m_focussed_widget->on_focus_lost();
 
-        // Send a focus lost event to the old focussed widget
-        this -> focussedWidget -> onFocusLost();
-
-    }
-
-    // Set the new focussed widget
-    this -> focussedWidget = widget;
-
-    // Send a focus gained event to the new focussed widget
-    this -> focussedWidget -> onFocus();
+    // Focus the new widget and send a focus event to it
+    this ->m_focussed_widget = widget;
+    this->m_focussed_widget->on_focus();
 
 }
 
 /**
- * @details Brings the given widget to the front of the desktop
+ * @brief Brings the given widget to the front of the desktop
  *
- * @param frontWidget The widget to bring to the front
+ * @param front_widget The widget to bring to the front
  */
-void Desktop::bringToFront(Widget* frontWidget) {
-
-  /*
-   * 0x563200
-    start        = {elements = {0x563844, 0x563200, 0x563680, 0x56303c, 0x0 <repeats 96 times>}, Size = 4,
-    erased       = {elements = {0x563844, 0x563680, 0x56303c, 0x56303c, 0x0 <repeats 96 times>}, Size = 3,
-    pushed front = {elements = {0x563200, 0x563844, 0x563680, 0x56303c, 0x0 <repeats 96 times>}, Size = 4,
-   */
+void Desktop::bring_to_front(Widget*front_widget) {
 
     // Remove the widget from where ever it already is
-    children.erase(frontWidget);
+    m_children.erase(front_widget);
 
     // Add it back in the front
-    children.pushFront(frontWidget);
+    m_children.push_front(front_widget);
 }
 
 /**
- * @details Draws the mouse cursor at the current mouse position by inverting the pixels (mouse is a plus sign)
+ * @brief Draws the mouse cursor at the current mouse m_position by inverting the pixels (mouse is a plus sign)
  */
-void Desktop::invertMouseCursor() {
+void Desktop::invert_mouse_cursor() {
 
     //TODO: Get image drawing going and draw a proper mouse
 
     // Draw the horizontal line
-    for (int x = mouseX - 3; x <= mouseX + 3; ++x) {
-        graphicsContext->invertPixel(x, mouseY);
+    for (int x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
+      m_graphics_context->invert_pixel(x, m_mouse_y);
     }
 
     // Draw the vertical line
-    for (int y = mouseY - 3; y <= mouseY + 3; ++y) {
-        graphicsContext->invertPixel(mouseX, y);
+    for (int y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
+      m_graphics_context->invert_pixel(m_mouse_x, y);
     }
 }
 
 /**
- * @details Goes through the passed areas and invalidates the areas that are covered by the given area
+ * @brief Goes through the passed areas and invalidates the areas that are covered by the given area
  *
  * @param area The area that is now invalid
  * @param start The start of the invalid areas
  * @param stop The end of the invalid areas
  */
-void Desktop::internalInvalidate(Rectangle<int32_t> &area, Vector<Rectangle<int32_t>>::iterator start, Vector<Rectangle<int32_t>>::iterator stop) {
+void Desktop::internal_invalidate(common::Rectangle<int32_t>&area, Vector<Rectangle<int32_t>>::iterator start, Vector<Rectangle<int32_t>>::iterator stop) {
 
     // Loop through the invalid rectangles
-    for(Vector<Rectangle<int32_t>>::iterator invaildRect = start; invaildRect != stop; invaildRect++){
+    for(Vector<Rectangle<int32_t>>::iterator invaild_rect = start; invaild_rect != stop; invaild_rect++){
 
         // Check if the area intersects with the invalid rectangle
-        if(!area.intersects(*invaildRect))
+        if(!area.intersects(*invaild_rect))
             continue;
 
         // Get the parts of the area that are covered by the invalid rectangle
-        Vector<Rectangle<int32_t>> coveredAreas = area.subtract(*invaildRect);
+        Vector<Rectangle<int32_t>> coveredAreas = area.subtract(*invaild_rect);
 
-        // Loop through the covered areas
-        for(Vector<Rectangle<int32_t>>::iterator coveredArea = coveredAreas.begin(); coveredArea != coveredAreas.end(); coveredArea++){
-
-            // Invalidate the covered area
-            internalInvalidate(*coveredArea, invaildRect + 1, stop);
-
-        }
+        // Invalidate the covered areas
+        for(Vector<Rectangle<int32_t>>::iterator coveredArea = coveredAreas.begin(); coveredArea != coveredAreas.end(); coveredArea++)
+            internal_invalidate(*coveredArea, invaild_rect + 1, stop);
 
         // The entire area will be invalidated by now
         return;
@@ -140,128 +115,115 @@ void Desktop::internalInvalidate(Rectangle<int32_t> &area, Vector<Rectangle<int3
     }
 
     // Add the area to the invalid areas, store where it was added
-    Vector<Rectangle<int32_t>>::iterator vectorPosition = invalidAreas.pushBack(area);
+    Vector<Rectangle<int32_t>>::iterator vectorPosition = m_invalid_areas.push_back(area);
 
-    // If the position is the last item then the invalidation buffer is full
-    if(vectorPosition == invalidAreas.end()){
+    // If the m_position is the last item then the invalidation buffer is full
+    if(vectorPosition == m_invalid_areas.end()){
 
-        // Clear the invalid areas
-        invalidAreas.clear();
-
-        // Invalidate the whole desktop
+        // Invalidate the entire desktop
+        m_invalid_areas.clear();
         Widget::invalidate();
 
     }
 }
 
 /**
- * @details Draws a certain area of the desktop
+ * @brief Draws a certain area of the desktop
  *
  * @param gc The graphics context to draw with
  * @param area The area to draw
  */
-void Desktop::drawSelf(common::GraphicsContext *gc, Rectangle<int32_t> &area) {
+void Desktop::draw_self(common::GraphicsContext *gc, common::Rectangle<int32_t> &area) {
 
     //TODO: Draw a background image instead
 
     // Calculate the rectangle
     int32_t topCornerX = area.left;
     int32_t topCornerY = area.top;
-
     int32_t bottomCornerX = area.left + area.width;
     int32_t bottomCornerY = area.top + area.height;
 
     // Draw the background, a rectangle the size of the desktop of the given colour
-    gc -> fillRectangle(topCornerX, topCornerY, bottomCornerX, bottomCornerY, colour);
+    gc->fill_rectangle(topCornerX, topCornerY, bottomCornerX, bottomCornerY, colour);
 
 }
 
 /**
- * @details Adds a child widget to the desktop
+ * @brief Adds a child widget to the desktop
  *
  * @param widget The widget to add
  */
-void Desktop::addChild(Widget* childWidget) {
+void Desktop::add_child(Widget*child_widget) {
 
     // Check if the new widget is under the mouse
-    bool underMouse = childWidget -> containsCoordinate(mouseX, mouseY);
+    bool underMouse = child_widget->contains_coordinate(m_mouse_x, m_mouse_y);
 
-    // If the mouse is over the new widget then send a mouse leave event to anything that used to be in this position
-    if(underMouse){
-
-        // Handle the mouse leaving this spot (as it has entered the new widget)
-        CompositeWidget::onMouseLeaveWidget(mouseX, mouseY);
-    }
+    // If the mouse is over the widget then send a mouse leave event to the child widget as it is no longer under the mouse
+    if(underMouse)
+      CompositeWidget::on_mouse_leave_widget(m_mouse_x, m_mouse_y);
 
     // Add the widget to the desktop
-    CompositeWidget::addChild(childWidget);
+    CompositeWidget::add_child(child_widget);
 
     // If the mouse is over the new widget then send a mouse enter event to the child widget
-    if(underMouse){
-        CompositeWidget::onMouseEnterWidget(mouseX, mouseY);
-    }
+    if(underMouse)
+      CompositeWidget::on_mouse_enter_widget(m_mouse_x, m_mouse_y);
 }
 
 /**
- * @details Redraws the desktop when a time event occurs
+ * @brief Redraws the desktop when a time event occurs
  *
  * @param time The time when the event occurred
  */
-void Desktop::onTime(const Time &time) {
+void Desktop::on_time(common::Time const &time) {
 
     // Check if anything is invalid and needs to be redrawn
-    if(invalidAreas.empty())
+    if(m_invalid_areas.empty())
         return;
 
     // Erase the mouse cursor
-    invertMouseCursor();
+    invert_mouse_cursor();
 
     // Loop through the invalid areas
-    while (!invalidAreas.empty()) {
+    while (!m_invalid_areas.empty()) {
 
-        // Get the first invalid area
-        Rectangle<int32_t> invalidArea = *(invalidAreas.begin());   //get the pointer to the first element
-
-        // Remove the area from the invalid areas
-        invalidAreas.popFront();
-
-        // Draw the area
-        draw(graphicsContext, invalidArea);
+        // Redraw the m_first_memory_chunk area
+        Rectangle<int32_t> invalidArea = *(m_invalid_areas.begin());
+        m_invalid_areas.pop_front();
+        draw(m_graphics_context, invalidArea);
 
     }
 
     // Can now draw the mouse cursor
-    invertMouseCursor();
+    invert_mouse_cursor();
 
 }
 
 /**
- * @details Invalidate the given area of the desktop
+ * @brief Invalidate the given area of the desktop
  *
  * @param area The area that is now invalid
  */
 void Desktop::invalidate(Rectangle<int32_t> &area) {
 
     // Invalidate the area
-    internalInvalidate(area, invalidAreas.begin(), invalidAreas.end());
+    internal_invalidate(area, m_invalid_areas.begin(), m_invalid_areas.end());
 
 }
 
 
 /**
- * @details When the mouse moves on the desktop update the position of the mouse and redraw the cursor. Pass the event to the widget that the mouse is over
+ * @brief When the mouse moves on the desktop update the m_position of the mouse and redraw the cursor. Pass the event to the widget that the mouse is over
  *
- * @param x The x position of the mouse
- * @param y The y position of the mouse
+ * @param x The x m_position of the mouse
+ * @param y The y m_position of the mouse
  */
-void Desktop::onMouseMoveEvent(int8_t x, int8_t y) {
+void Desktop::on_mouse_move_event(int8_t x, int8_t y) {
 
-    // Store the position of the desktop for calculations
-    Rectangle<int32_t> desktopPosition = getPosition();
-
-    // Calculate the position of the mouse on the desktop
-    int32_t newMouseX = mouseX + x;
-    int32_t newMouseY = mouseY + y;
+    // Calculate the m_position of the mouse on the desktop
+    Rectangle<int32_t> desktopPosition = position();
+    int32_t newMouseX = m_mouse_x + x;
+    int32_t newMouseY = m_mouse_y + y;
 
     // Restrain the mouse to the desktop
     if(newMouseX < 0) newMouseX = 0;
@@ -269,77 +231,72 @@ void Desktop::onMouseMoveEvent(int8_t x, int8_t y) {
     if(newMouseX > desktopPosition.width) newMouseX = desktopPosition.width - 1;
     if(newMouseY > desktopPosition.height) newMouseY = desktopPosition.height - 1;
 
-    // Remove the old cursor from the screen as it will be redrawn in the new position
-    invertMouseCursor();
+    // Remove the old cursor from the screen as it will be redrawn in the new m_position
+    invert_mouse_cursor();
 
-    // Check if the mouse is currently dragging a widget
-    if(draggedWidget != 0)
-    {
-        // Pass the mouse move event to the widget being dragged
-        draggedWidget -> onMouseMoveEvent(newMouseX - mouseX, newMouseY - mouseY);
-    }
+    // If a widget is being dragged then pass the event to it
+    if(m_dragged_widget != 0)
+        m_dragged_widget->on_mouse_move_event(newMouseX - m_mouse_x, newMouseY - m_mouse_y);
 
     // Handle the mouse moving event (pass it to the widget that the mouse is over)
-    CompositeWidget::onMouseMoveWidget(mouseX, mouseY, newMouseX, newMouseY);
+    CompositeWidget::on_mouse_move_widget(m_mouse_x, m_mouse_y, newMouseX,
+                                          newMouseY);
 
-    // Update the mouse position
-    mouseX = newMouseX;
-    mouseY = newMouseY;
+    // Update the mouse m_position
+    m_mouse_x = newMouseX;
+    m_mouse_y = newMouseY;
 
     // Draw the new cursor
-    invertMouseCursor();
+    invert_mouse_cursor();
 }
 
 /**
- * @details When the mouse button is pressed pass the event to the widget that the mouse is over
+ * @brief When the mouse button is pressed pass the event to the widget that the mouse is over
  *
  * @param button The button that was pressed
  */
-void Desktop::onMouseDownEvent(uint8_t button) {
+void Desktop::on_mouse_down_event(uint8_t button) {
 
     // The widget that handled the event becomes the widget being dragged
-    draggedWidget = CompositeWidget::onMouseButtonPressed(mouseX, mouseY, button);
+    m_dragged_widget = CompositeWidget::on_mouse_button_pressed(m_mouse_x, m_mouse_y, button);
 
 }
 
 /**
- * @details When the mouse button is released pass the event to the widget that the mouse is over
+ * @brief When the mouse button is released pass the event to the widget that the mouse is over
  *
  * @param button The button that was released
  */
-void Desktop::onMouseUpEvent(uint8_t button) {
+void Desktop::on_mouse_up_event(uint8_t button) {
 
     // Pass the event to the widget
-    CompositeWidget::onMouseButtonReleased(mouseX, mouseY, button);
+    CompositeWidget::on_mouse_button_released(m_mouse_x, m_mouse_y, button);
 
     // Dragging has stopped
-    draggedWidget = 0;
+    m_dragged_widget = 0;
 
 }
 
 /**
- * @details When a key is pressed pass the event to the widget that is currently focussed
+ * @brief When a key is pressed pass the event to the widget that is currently focussed
  * @param keyDownCode The key that was pressed
  * @param keyDownState The state of the keyboard
  */
-void Desktop::onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState) {
+void Desktop::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 
     // Pass the event to the widget that is  in focus
-    if (focussedWidget != 0) {
-        focussedWidget -> onKeyDown(keyDownCode, keyDownState);
-    }
+    if (m_focussed_widget != 0)
+      m_focussed_widget->on_key_down(keyDownCode, keyDownState);
 }
 
 /**
- * @details When a key is pressed pass the event to the widget that is currently focussed
+ * @brief When a key is pressed pass the event to the widget that is currently focussed
  * @param keyUpCode The key that was pressed
  * @param keyUpState The state of the keyboard
  */
-void Desktop::onKeyUp(drivers::peripherals::KeyCode keyUpCode, drivers::peripherals::KeyboardState keyUpState) {
+void Desktop::on_key_up(KeyCode keyUpCode, KeyboardState keyUpState) {
 
     // Pass the event to the widget that is  in focus
-    if (focussedWidget != 0) {
-        focussedWidget -> onKeyUp(keyUpCode, keyUpState);
-    }
+    if (m_focussed_widget != 0)
+      m_focussed_widget->on_key_up(keyUpCode, keyUpState);
 }
-

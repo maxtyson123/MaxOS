@@ -111,14 +111,14 @@ namespace maxOS{
             /* The above fields plus this one must equal 0 mod 2^32. */
             multiboot_uint32_t checksum;
 
-            /* These are only valid if MULTIBOOT_AOUT_KLUDGE is set.  */
+            /* These are only m_valid if MULTIBOOT_AOUT_KLUDGE is set.  */
             multiboot_uint32_t header_addr;
             multiboot_uint32_t load_addr;
             multiboot_uint32_t load_end_addr;
             multiboot_uint32_t bss_end_addr;
             multiboot_uint32_t entry_addr;
 
-            /* These are only valid if MULTIBOOT_VIDEO_MODE is set.  */
+            /* These are only m_valid if MULTIBOOT_VIDEO_MODE is set.  */
             multiboot_uint32_t mode_type;
             multiboot_uint32_t width;
             multiboot_uint32_t height;

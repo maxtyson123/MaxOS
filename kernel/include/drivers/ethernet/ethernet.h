@@ -24,7 +24,10 @@ namespace maxOS{
                 DATA_RECEIVED
             };
 
-
+            /**
+             * @class BeforeSendEvent
+             * @brief Event that is triggered before data is sent, holds the buffer and size of the data
+             */
             class BeforeSendEvent : public common::Event<EthernetDriverEvents>{
                 public:
                     uint8_t* buffer;
@@ -33,6 +36,10 @@ namespace maxOS{
                     ~BeforeSendEvent();
             };
 
+            /**
+             * @class DataSentEvent
+             * @brief Event that is triggered when data is sent, holds the buffer and size of the data
+             */
             class DataSentEvent : public common::Event<EthernetDriverEvents>{
                 public:
                     uint8_t* buffer;
@@ -41,6 +48,10 @@ namespace maxOS{
                     ~DataSentEvent();
             };
 
+            /**
+             * @class DataReceivedEvent
+             * @brief Event that is triggered when data is received, holds the buffer and size of the data
+             */
             class DataReceivedEvent : public common::Event<EthernetDriverEvents>{
                 public:
                     uint8_t* buffer;
@@ -49,20 +60,29 @@ namespace maxOS{
                     ~DataReceivedEvent();
             };
 
+            /**
+             * @class EthernetDriverEventHandler
+             * @brief Handles the events that are triggered by the Ethernet Driver
+             */
             class EthernetDriverEventHandler : public common::EventHandler<EthernetDriverEvents>
             {
                 public:
                     EthernetDriverEventHandler();
                     ~EthernetDriverEventHandler();
 
-                    virtual common::Event<EthernetDriverEvents>* onEvent(common::Event<EthernetDriverEvents>* event);
+                    virtual common::Event<EthernetDriverEvents>*
+                    on_event(common::Event<EthernetDriverEvents>* event);
 
                     virtual void BeforeSend(uint8_t* buffer, uint32_t size);
                     virtual void DataSent(uint8_t* buffer, uint32_t size);
                     virtual bool DataReceived(uint8_t* buffer, uint32_t size);
             };
 
-        class EthernetDriver : public Driver, public common::EventManager<EthernetDriverEvents>
+            /**
+             * @class EthernetDriver
+             * @brief Driver for the Ethernet Controller, manages the sending and receiving of data, the mac address, and the events
+             */
+            class EthernetDriver : public Driver, public common::EventManager<EthernetDriverEvents>
             {
                 protected:
                     virtual void DoSend(uint8_t* buffer, uint32_t size);

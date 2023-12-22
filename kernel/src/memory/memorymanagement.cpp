@@ -7,35 +7,35 @@
 using namespace maxOS;
 using namespace maxOS::memory;
 
-MemoryManager* MemoryManager::activeMemoryManager = 0;
+MemoryManager* MemoryManager::s_active_memory_manager = 0;
 
-MemoryManager::MemoryManager(size_t start, size_t size) {
+MemoryManager::MemoryManager(size_t start, size_t size)
+{
 
-    activeMemoryManager = this;
+    s_active_memory_manager = this;
 
-    //Prevent wirting outside the area that is allowed to write
+    //Prevent wiring outside the area that is allowed to write
     if(size < sizeof(MemoryChunk)){
 
-        this -> first = 0;
+        this ->m_first_memory_chunk = 0;
 
     }else{
 
-        this -> first = (MemoryChunk*)start;
-        first -> allocated = false;
-        first -> prev = 0;
-        first -> next = 0;
-        first -> size = size - sizeof(MemoryChunk);
+        this ->m_first_memory_chunk = (MemoryChunk*)start;
+        m_first_memory_chunk-> allocated = false;
+        m_first_memory_chunk-> prev = 0;
+        m_first_memory_chunk-> next = 0;
+        m_first_memory_chunk-> size = size - sizeof(MemoryChunk);
     }
 }
 
 MemoryManager::~MemoryManager() {
-    if(activeMemoryManager == this){
-        activeMemoryManager = 0;
-    }
+    if(s_active_memory_manager == this)
+      s_active_memory_manager = 0;
 }
 
 /**
- * @details Allocates a block of memory
+ * @brief Allocates a block of memory
  *
  * @param size size of the block
  * @return a pointer to the block, 0 if no block is available
@@ -44,119 +44,101 @@ void* MemoryManager::malloc(size_t size) {
 
     MemoryChunk* result = 0;
 
-    //Common way of iterating through a linked list
-    for (MemoryChunk* chunk = first; chunk != 0 && result == 0; chunk = chunk->next) { //Iterate through the list of chunks
-
-        if(chunk -> size > size && !chunk -> allocated){    //If the chunk is big enough and not being used
+    // Find the next free chunk that is big enough
+    for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0 && result == 0; chunk = chunk->next) {
+        if(chunk -> size > size && !chunk -> allocated)
             result = chunk;
-        }
-
     }
 
-    if(result == 0){
+    // If there is no free chunk then return 0
+    if(result == 0)
         return 0;
+
+    // If there is space to split the chunk
+    if(result -> size < size + sizeof(MemoryChunk) + 1) {
+        result->allocated = true;
+        return (void *)(((size_t)result) + sizeof(MemoryChunk));
     }
 
-    //The result must have been set to a memory chunk because it did not return
 
-    if(result -> size < size + sizeof(MemoryChunk) + 1){    //Check if there is space for the new data and another memory chunk (for splitting). The + 1 is there so that the split chunk will actually have space for data, not just the header
+    // Create a new chunk after the current one
+    MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
 
-        //If there isn't space to split then there will just be a few bytes left over, not a problem
-        result -> allocated = true;
+    // Set the new chunk's properties and insert it into the linked list
+    temp -> allocated = false;
+    temp -> size =  result->size - size - sizeof(MemoryChunk);
+    temp -> prev = result;
+    temp -> next = result -> next;
 
-    }else{
-        //If there is space then split the chunk
+    // If there is a chunk after the current one then set its previous to the new chunk
+    if(temp -> next != 0)
+       temp -> next -> prev = temp;
 
-        MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size); //Add size memory chunk (header) and size of data to get to get the position of the next chunk
+    // Current chunk is now allocated and is pointing to the new chunk
+    result->size = size;
+    result -> allocated = true;
+    result->next = temp;
 
-        temp -> allocated = false;                                          //Just created so wont be allocated
-        temp -> size =  result->size - size - sizeof(MemoryChunk);          //Get old size of the free chunk, take away the requested data and the header size
-        temp -> prev = result;                                              //The previous is now the newly allocated chunk
-        temp -> next = result -> next;                                      //The next pointer from the old chunk
-
-        if(temp -> next != 0){                                              //If there was something in front of this chunk
-           temp -> next -> prev = temp;                                     //The chunk in front's previous pointer must be set to the newly split chunk
-        }
-
-        result->size = size;                                                //The results new size is the requested data (excess has now been split off)
-        result->next = temp;                                                //Point it to the split chunk
-        result -> allocated = true;
-
-    }
-
-    return (void*)(((size_t)result) + sizeof(MemoryChunk));                 //Return the pointer to the newly allocated memory chunk
-    return result;
-
+    return (void*)(((size_t)result) + sizeof(MemoryChunk));
 }
 
 
 /**
- * @details Frees a block of memory
+ * @brief Frees a block of memory
  *
  * @param pointer A pointer to the block
  */
 void MemoryManager::free(void *pointer) {
 
 
-    MemoryChunk* chunk = (MemoryChunk*)((size_t)pointer - sizeof(MemoryChunk));     //Subtract size of MemoryChunk as the pointer is seprate from the header
+    // Create a new free chunk
+    MemoryChunk* chunk = (MemoryChunk*)((size_t)pointer - sizeof(MemoryChunk));
+    chunk -> allocated = false;
 
-    chunk -> allocated = false;                                                     //Chunk is now free
+    // If there is a free chunk before this chunk then merge them
+    if(chunk -> prev != 0 && !chunk -> prev -> allocated){
 
+        // Increase the previous chunk's size and remove the current chunk from the linked list
+        chunk->prev->size += chunk->size + sizeof(MemoryChunk);
+        chunk -> prev -> next = chunk -> next;
 
-    //To merge you pretty much tell the chunk that is free that it has all this extra data and then move this pointer to the free chunk
+        // If there is a next chunk then ensure this chunk is removed from its linked list
+        if(chunk -> next != 0)
+            chunk -> next -> prev = chunk->prev;
 
-    //Merge the chunk behind
-    if(chunk -> prev != 0 && !chunk -> prev -> allocated){                          //If there is a chunk behind this chunk and its free
-
-        chunk -> prev -> next = chunk -> next;                                      //Set the previous chunk next to the chunk in front of this (remove it from the backward linked list)
-
-        chunk->prev->size += chunk->size + sizeof(MemoryChunk);                     //Add the size that has been freed and its header
-
-        if(chunk -> next != 0){                                                     //If there is a chunk infront of this chunk
-
-            chunk -> next -> prev = chunk->prev;                                    //Set the chunk in front of this chunk  to the chunk behind this this (remove it from the forward linked list)
-
-        }
-
-        chunk = chunk -> prev;                                                      //Move the chunk pointer to the previous chunk
+        // Chunk is now the previous chunk
+        chunk = chunk -> prev;
 
     }
 
-    //Merge the chunk infront
-    if(chunk -> next != 0 && !chunk -> next -> allocated){                          //If there is a chunk infront this chunk and its free
+    // If there is a free chunk after this chunk then merge them
+    if(chunk -> next != 0 && !chunk -> next -> allocated){
 
-        chunk -> size += chunk -> next -> size + sizeof(MemoryChunk);             //Add the size that has been freed and its header
-
+        // Increase the current chunk's size and remove the next chunk from the linked list
+        chunk -> size += chunk -> next -> size + sizeof(MemoryChunk);
         chunk -> next = chunk -> next -> next;
 
-        if(chunk -> next != 0){                                                     //If there is a chunk infront of this new chunk
-
-            chunk -> next -> prev = chunk;                                         //Set the chunk in front of this chunk  to the chunk behind this this (remove it from the forward linked list)
-
-        }
-
-
+        // Remove the just merged chunk from the linked list
+        if(chunk -> next != 0)
+            chunk -> next -> prev = chunk;
 
     }
-
-
-
 }
 
-int MemoryManager::getMemoryUsed() {
+/**
+ * @brief Returns the amount of memory used
+ * @return The amount of memory used
+ */
+int MemoryManager::memory_used() {
 
         int result = 0;
 
-        for (MemoryChunk* chunk = first; chunk != 0; chunk = chunk->next) { //Iterate through the list of chunks
-
-            if(chunk -> allocated){    //If the chunk is big enough and not being used
+        // Loop through all the chunks and add up the size of the allocated chunks
+        for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0; chunk = chunk->next)
+            if(chunk -> allocated)
                 result += chunk -> size;
-            }
-
-        }
 
         return result;
-
 }
 
 
@@ -166,28 +148,23 @@ int MemoryManager::getMemoryUsed() {
 
 void* operator new(size_t size){
 
-    if(maxOS::memory::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
-
-        return maxOS::memory::MemoryManager::activeMemoryManager -> malloc(size);
-
-    }
+    // Use the memory manager to allocate the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
 
     return 0;
 
 }
+
 void* operator new[](size_t size){
 
-    if(maxOS::memory::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
-
-        return maxOS::memory::MemoryManager::activeMemoryManager -> malloc(size);
-
-    }
+    // Use the memory manager to allocate the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
 
     return 0;
 
 }
-
-//Placement New (see placement new operator)
 
 void* operator new(size_t size, void* pointer){
 
@@ -200,22 +177,19 @@ void* operator new[](size_t size, void* pointer){
 
 }
 
-void operator delete(void* pointer){
+// NOTE: The size_t parameter is ignored, compiler was just complaining
+void operator delete(void* pointer, size_t size){
 
-    if(maxOS::memory::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
-
-        return maxOS::memory::MemoryManager::activeMemoryManager -> free(pointer);
-
-    }
+    // Use the memory manager to free the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
 
 }
 
-void operator delete[](void* pointer){
+void operator delete[](void* pointer, size_t size){
 
-    if(maxOS::memory::MemoryManager::activeMemoryManager != 0){     //Check if there is a memory manager
-
-        return maxOS::memory::MemoryManager::activeMemoryManager -> free(pointer);
-
-    }
+    // Use the memory manager to free the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
 
 }

@@ -8,97 +8,113 @@ using namespace maxOS::common;
 using namespace maxOS::drivers;
 using namespace maxOS::memory;
 
-Driver::Driver(OutputStream* driverMessageStream){
-
-    // Set the driver message stream
-    this -> driverMessageStream = driverMessageStream;
+Driver::Driver(OutputStream* driverMessageStream)
+: m_driver_message_stream(driverMessageStream) {
 
 };
 
 Driver::~Driver(){
-    this -> driverMessageStream = 0;
+    this ->m_driver_message_stream = 0;
 };
 
+/**
+ * @brief activate the driver
+ */
 void Driver::activate(){
 
 }
 
+/**
+ * @brief deactivate the driver
+ */
 void Driver::deactivate(){
 
 }
 
-
+/**
+ * @brief Initialise the driver
+ */
 void Driver::initialise() {
 
 }
 
-
+/**
+ * @brief Reset the driver
+ *
+ * @return How long in milliseconds it took to reset the driver
+ */
 uint32_t Driver::reset(){
     return 0;
 }
 
 /**
- * @details This function writes a message to the driver message stream if it is not null
- * @param message  The message to write
+ * @brief write a message to the driver message stream if it is not null
+ *
+ * @param message The message to write
  */
-void Driver::errorMessage(string message) {
+void Driver::error_message(string message) {
 
-    // Check if the driver message stream is not null
-    if( driverMessageStream != 0) {
-        // Write the message to the driver message stream
-        driverMessageStream -> write(message);
-    }
+    // If there is a driver message stream write the message to it
+    if(m_driver_message_stream != 0)
+        m_driver_message_stream-> write(message);
 
 }
 
 /**
- * @details This function writes a character to the driver message stream if it is not null
- * @param charToWrite The character to write
+ * @brief write a character to the driver message stream if it is not null
+ *
+ * @param char_to_write The character to write
  */
-void Driver::errorMessage(char charToWrite) {
+void Driver::error_message(char char_to_write) {
 
-    // Check if the driver message stream is not null
-    if( driverMessageStream != 0) {
-        // Write the character to the driver message stream
-        driverMessageStream -> writeChar(charToWrite);
-    }
+    // If there is a driver message stream write the character to it
+    if(m_driver_message_stream != 0)
+      m_driver_message_stream-> write_char(char_to_write);
 
 }
 
 
 /**
- * @details This function writes a int to the driver message stream if it is not null
- * @param intToWrite  The int to write
+ * @brief write an integer to the driver message stream if it is not null
+ *
+ * @param int_to_write The integer to write
  */
-void Driver::errorMessage(int intToWrite) {
+void Driver::error_message(int int_to_write) {
 
-    // Check if the driver message stream is not null
-    if( driverMessageStream != 0) {
-        // Write the character to the driver message stream
-        driverMessageStream -> writeInt(intToWrite);
-    }
+    // If there is a driver message stream write the integer to it
+    if(m_driver_message_stream != 0)
+            m_driver_message_stream-> write_int(int_to_write);
 }
 
 /**
- * @details This function writes a hex to the driver message stream if it is not null
- * @param hexToWrite  The hex to write
+ * @brief write a hex to the driver message stream if it is not null
+ *
+ * @param hex_to_write The hex to write
  */
-void Driver::errorMessage(uint32_t hexToWrite) {
+void Driver::error_message(uint32_t hex_to_write) {
 
-    // Check if the driver message stream is not null
-    if( driverMessageStream != 0) {
-        // Write the character to the driver message stream
-        driverMessageStream -> writeHex(hexToWrite);
-    }
+    // If there is a driver message stream write the hex to it
+    if(m_driver_message_stream != 0)
+      m_driver_message_stream->write_hex(hex_to_write);
 
 }
 
-string Driver::getVendorName()
+/**
+ * @brief Get the vendor name of the driver
+ *
+ * @return The vendor name of the driver
+ */
+string Driver::get_vendor_name()
 {
     return "Generic";
 }
 
-string Driver::getDeviceName()
+/**
+ * @brief Get the device name of the driver
+ *
+ * @return The device name of the driver
+ */
+string Driver::get_device_name()
 {
     return "Unknown Driver";
 }
@@ -112,10 +128,11 @@ DriverSelectorEventHandler::~DriverSelectorEventHandler()
 }
 
 /**
- * @details This function is called when a driver is selected
+ * @brief This function is called when a driver is selected
+ *
  * @param driver The driver that was selected
  */
-void DriverSelectorEventHandler::onDriverSelected(Driver*)
+void DriverSelectorEventHandler::on_driver_selected(Driver*)
 {
 }
 
@@ -127,7 +144,10 @@ DriverSelector::~DriverSelector()
 {
 }
 
-void DriverSelector::selectDrivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*, OutputStream*)
+/**
+ * @brief Select the drivers
+ */
+void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*, common::OutputStream *)
 {
 }
 
@@ -137,40 +157,39 @@ DriverManager::DriverManager() {
 
 DriverManager::~DriverManager() {
 
-    // While there are still drivers in the driver vector
-    while (!drivers.empty()) {
-
-       // Remove the driver
-        removeDriver(*drivers.begin());
-    }
+    // Remove any drivers that are still attached
+    while (!drivers.empty())
+       remove_driver(*drivers.begin());
 
 }
 
 /**
- * @details Adds a driver to the driver vector
+ * @brief Adds a driver to the manager
+ *
  * @param driver The driver to add
  */
-void DriverManager::addDriver(Driver* driver) {
-    drivers.pushBack(driver);
+void DriverManager::add_driver(Driver* driver){
+  drivers.push_back(driver);
 }
 
 /**
- * @details Removes a driver from the driver vector
+ * @brief Removes a driver from the driver vector
+ *
  * @param driver The driver to remove
  */
-void DriverManager::removeDriver(Driver* driver) {
+void DriverManager::remove_driver(Driver* driver) {
 
-    // Deactivate the driver
+    // deactivate the driver
     driver -> deactivate();
 
-    // Remove the driver from the driver vector
+    // Remove the driver
     drivers.erase(driver);
 
 }
 
 /**
- * @details When a driver is selected, add it to the driver vector
+ * @brief When a driver is selected add it to the manager
  */
-void DriverManager::onDriverSelected(Driver* driver) {
-    addDriver(driver);
+void DriverManager::on_driver_selected(Driver* driver) {
+  add_driver(driver);
 }

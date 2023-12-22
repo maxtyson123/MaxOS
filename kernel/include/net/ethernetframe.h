@@ -50,7 +50,7 @@ namespace maxOS{
         class EthernetFrameHandler : public drivers::ethernet::EthernetDriverEventHandler{
             protected:
 
-            // A map of the handlers and the ethernet frame type they handle
+            // A map of the m_handlers and the ethernet frame type they handle
             common::Map<uint16_t , EthernetFramePayloadHandler*> frameHandlers;
 
             drivers::ethernet::EthernetDriver* ethernetDriver;

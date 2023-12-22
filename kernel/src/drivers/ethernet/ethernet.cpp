@@ -34,7 +34,7 @@ void EthernetDriverEventHandler::DataSent(uint8_t*, uint32_t)
 {
 }
 
-Event<EthernetDriverEvents>* EthernetDriverEventHandler::onEvent(Event<EthernetDriverEvents> *event) {
+Event<EthernetDriverEvents>* EthernetDriverEventHandler::on_event(Event<EthernetDriverEvents> *event) {
 
     switch (event -> type) {
 
@@ -47,7 +47,7 @@ Event<EthernetDriverEvents>* EthernetDriverEventHandler::onEvent(Event<EthernetD
             break;
 
         case EthernetDriverEvents::DATA_RECEIVED:
-            event->returnValue.boolValue = DataReceived(((DataReceivedEvent*)event) -> buffer, ((DataReceivedEvent*)event) -> size);
+            event->return_value.boolValue = DataReceived(((DataReceivedEvent*)event) -> buffer, ((DataReceivedEvent*)event) -> size);
             break;
 
         default:
@@ -71,7 +71,7 @@ EthernetDriver::~EthernetDriver()
 }
 
 /**
- * @details Get the MAC address
+ * @brief Get the MAC address
  *
  * @return the MAC address
  */
@@ -81,63 +81,64 @@ MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress()
 }
 
 /**
- * @details Send data to the network via the driver backend
+ * @brief Send data to the network via the driver backend
  *
  * @param buffer  The buffer to send
  * @param size The size of the buffer
  */
 void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
 {
-    driverMessageStream -> write("Sending: ");
+  m_driver_message_stream-> write("Sending: ");
 
     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
     for(int i = displayType; i < size; i++)
     {
-        driverMessageStream -> writeHex(buffer[i]);
-        driverMessageStream -> write(" ");
+      m_driver_message_stream->write_hex(buffer[i]);
+      m_driver_message_stream-> write(" ");
     }
-    driverMessageStream -> write("\n");
+    m_driver_message_stream-> write("\n");
 
     // Raise the event
-    raiseEvent(new BeforeSendEvent(buffer, size));
+    raise_event(new BeforeSendEvent(buffer, size));
 
     DoSend(buffer, size);
 }
 
 /**
- * @details (Device Side) Send the data
+ * @brief (Device Side) Send the data
  */
 void EthernetDriver::DoSend(uint8_t*, uint32_t)
 {
 }
 
 /**
- * @details Handle the recieved data
+ * @brief Handle the recieved data
  *
  * @param buffer The buffer to handle
  * @param size The size of the buffer
  */
 void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 {
-    driverMessageStream -> write("Receiving: ");
+  m_driver_message_stream-> write("Receiving: ");
     //size = 64;
     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
     for(int i = displayType; i < size; i++)
     {
-        driverMessageStream -> writeHex(buffer[i]);
-        driverMessageStream -> write(" ");
+      m_driver_message_stream->write_hex(buffer[i]);
+      m_driver_message_stream-> write(" ");
     }
-    driverMessageStream -> write("\n");
+    m_driver_message_stream-> write("\n");
 
     // Raise the event
-    Vector<Event<EthernetDriverEvents>*> values = raiseEvent(new DataReceivedEvent(buffer, size));
+    Vector<Event<EthernetDriverEvents>*> values =
+        raise_event(new DataReceivedEvent(buffer, size));
 
     // Loop through the events
     for(typename Vector<Event<EthernetDriverEvents>*>::iterator event = values.begin(); event != values.end(); ++event) {
         switch ((*event)->type) {
             case EthernetDriverEvents::DATA_RECEIVED:
-                if((*event)->returnValue.boolValue){
-                    driverMessageStream -> write("Sending back... \n");
+                if((*event)->return_value.boolValue){
+                  m_driver_message_stream-> write("Sending back... \n");
                     Send(buffer, size);
                 }
                 break;
@@ -146,26 +147,26 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
                 break;
         }
     }
-    driverMessageStream -> write("DATA HANDLED\n");
+    m_driver_message_stream-> write("DATA HANDLED\n");
 }
 
 /**
- * @details Send data
+ * @brief Send data
  *
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
 void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size)
 {
-    raiseEvent(new DataSentEvent(buffer, size));
+  raise_event(new DataSentEvent(buffer, size));
 }
 
 // if your mac address is e.g. 1c:6f:65:07:ad:1a (see output of ifconfig)
 // then you would call CreateMediaAccessControlAddress(0x1c, 0x6f, 0x65, 0x07, 0xad, 0x1a)
 /**
- * @details Create a Media Access Control Address
+ * @brief Create a Media Access Control Address
  *
- * @param digit1 The first digit
+ * @param digit1 The m_first_memory_chunk digit
  * @param digit2 The second digit
  * @param digit3 The third digit
  * @param digit4 The fourth digit

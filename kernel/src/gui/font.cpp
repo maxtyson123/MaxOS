@@ -11,13 +11,6 @@ using namespace maxOS::gui;
 
 Font::Font() {
 
-    fontSize = 8;   //TODO: Use this
-
-    isBold = false;
-    isItalic = false;
-    isUnderlined = false;
-    isStrikethrough = false;
-
 }
 
 Font::~Font() {
@@ -25,84 +18,82 @@ Font::~Font() {
 }
 
 /**
- * @details Write the entire text to the screen
+ * @brief write the entire text to the screen
  * @param x The x coordinate of the text
  * @param y The y coordinate of the text
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  */
-void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgroundColour, GraphicsContext *context, string text) {
+void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
+                     common::Colour background_colour,
+                     common::GraphicsContext *context, string text) {
 
     // Calculate the rectangle of the text
     int32_t top = 0;
     int32_t left = 0;
-    uint32_t width = getTextWidth(text);
-    uint32_t height = getTextHeight(text);
+    uint32_t width = get_text_width(text);
+    uint32_t height = get_text_height(text);
 
     // Create the rectangle
-    Rectangle<int32_t> textArea(left, top, width, height);
+    Rectangle<int32_t> text_area(left, top, width, height);
 
     // Draw the text
-    drawText(x, y, foregroundColour, backgroundColour, context, text, textArea);
+    draw_text(x, y, foreground_colour, background_colour, context, text, text_area);
 }
 
 
 /**
- * @details Write the entire text to the screen
+ * @brief write the entire text to the screen
+ *
  * @param x The x coordinate of the text
  * @param y The y coordinate of the text
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  * @param limitArea The area of the text to draw
  */
-void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgroundColour, GraphicsContext *context, string text,  Rectangle<int32_t> limitArea) {
+void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
+                     common::Colour background_colour,
+                     common::GraphicsContext *context, string text,
+                     common::Rectangle<int32_t> limitArea)
+{
 
-    uint8_t font8x8[2048];  // Declare an array to hold the font data
-    getFont8x8(font8x8);    // Get the font data
+    // Get the font
+    uint8_t font8x8[2048];
+    get_font_8_x_8(font8x8);
 
     // Convert the colours
-    uint32_t foreground = context->colourToInt(foregroundColour);
-    uint32_t background = context->colourToInt(backgroundColour);
+    uint32_t foreground = context->colour_to_int(foreground_colour);
+    uint32_t background = context->colour_to_int(background_colour);
 
     // Ensure the area is within the actual area of the text
     if (limitArea.top < 0) {
-
-        // Move the area down to fake the desired top and set the top to 0
         limitArea.height += limitArea.top;
         limitArea.top = 0;
     }
 
     if (limitArea.left < 0) {
-
-        // Move the area right to fake the desired left and set the left to 0
         limitArea.width += limitArea.left;
         limitArea.left = 0;
     }
 
-    if (limitArea.top + limitArea.height > getTextHeight(text)) {
+    // Clamp the height and width max
+    if (limitArea.top + limitArea.height > get_text_height(text))
+        limitArea.height = get_text_height(text) - limitArea.top;
 
-        // Set the height to the maximum height
-        limitArea.height = getTextHeight(text) - limitArea.top;
-    }
+    if (limitArea.left + limitArea.width > get_text_width(text))
+        limitArea.width = get_text_width(text) - limitArea.left;
 
-    if (limitArea.left + limitArea.width > getTextWidth(text)) {
-
-        // Set the width to the maximum width
-        limitArea.width = getTextWidth(text) - limitArea.left;
-    }
 
     // Calculate limits
     int32_t xLimit = limitArea.left + limitArea.width;
     int32_t yLimit = limitArea.top + limitArea.height;
 
-
     // Draw the text from top to bottom
     for (int yBitMapOffset = limitArea.top; yBitMapOffset <yLimit; yBitMapOffset++){
-
         for (int xBitMapOffset = limitArea.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
 
             // If the y is the middle then add a strikethrough
-            if (isStrikethrough && yBitMapOffset == yLimit / 2) {
+            if (is_strikethrough && yBitMapOffset == yLimit / 2) {
 
                 // Draw the pixel
                 context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
@@ -110,7 +101,7 @@ void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgr
             }
 
             // If the y is the bottom then add an underline
-            if (isUnderlined && yBitMapOffset == yLimit - 1) {
+            if (is_underlined && yBitMapOffset == yLimit - 1) {
 
                 // Draw the pixel
                 context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
@@ -120,7 +111,7 @@ void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgr
             //TODO: Bold, Italic
 
             // Get the character
-            uint8_t character = text[xBitMapOffset/8];       // Divide by 8 as each character is 8 pixels wide.
+            uint8_t character = text[xBitMapOffset/8];
 
            // Check if this pixel  is set or not
            bool set = font8x8[(uint16_t)character * 8 + yBitMapOffset] & (128 >> (xBitMapOffset % 8));
@@ -133,44 +124,43 @@ void Font::drawText(int32_t x, int32_t y, Colour foregroundColour, Colour backgr
 }
 
 /**
- * @details Get the height of the text
+ * @brief Get the height of the text
+ *
  * @param text The text to get the height of
  * @return The height of the text
  */
-uint32_t Font::getTextHeight(string text) {
+uint32_t Font::get_text_height(string text) {
 
     return 8;
 
 }
 
 /**
- * @details Get the width of the text
+ * @brief Get the width of the text
+ *
  * @param text The text to get the width of
  * @return The width of the text
  */
-uint32_t Font::getTextWidth(string text) {
+uint32_t Font::get_text_width(string text) {
     uint32_t length = 0;
     for(string c = (string)text; *c != '\0'; ++c)
         length++;
     return length*8;
 }
 
-void Font::getFont8x8(uint8_t (&font8x8)[2048]) {
+void Font::get_font_8_x_8(uint8_t (&font8x8)[2048]) {
 
 }
 
-
 AmigaFont::AmigaFont() {
-
 
 }
 
 AmigaFont::~AmigaFont() {
 
-
 }
 
-void AmigaFont::getFont8x8(uint8_t (&font8x8)[2048]) { uint8_t fontData[2048] =  {
+void AmigaFont::get_font_8_x_8(uint8_t (&font8x8)[2048]) { uint8_t fontData[2048] =  {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x7E, 0x81, 0xA5, 0x81, 0xBD, 0x99, 0x81, 0x7E,
             0x7E, 0xFF, 0xDB, 0xFF, 0xC3, 0xE7, 0xFF, 0x7E,
@@ -433,4 +423,3 @@ void AmigaFont::getFont8x8(uint8_t (&font8x8)[2048]) { uint8_t fontData[2048] = 
         font8x8[i] = fontData[i];
     }
 }
-

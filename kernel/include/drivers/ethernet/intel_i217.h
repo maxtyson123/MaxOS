@@ -22,9 +22,11 @@ namespace maxOS{
         namespace ethernet{
 
 
+            /**
+             * @class Intel I217
+             * @brief Driver for the Intel I217 Ethernet Controller
+             */
             class intel_i217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
-
-
 
                 struct receiveDescriptor {
                     uint64_t bufferAddress;              // The address of the receive buffer
@@ -85,17 +87,17 @@ namespace maxOS{
                 uint16_t currentSendBuffer;              // The current send buffer
 
 
-                // Write Commands and read results From NICs either using MemIO or IO Ports
+                // write Commands and read results From NICs either using MemIO or IO Ports
                 void Write(uint16_t address, uint32_t data);
                 uint32_t Read(uint16_t address);
 
                 //EPROM (Device Memory)
                 bool epromPresent;                                   // Whether or not the EPROM is present
                 bool detectEEProm();                                 // Return true if EEProm exist, else it returns false and set the eerprom_existsdata member
-                uint32_t eepromRead( uint8_t addr);  // Read 4 bytes from a specific EEProm Address
+                uint32_t eepromRead( uint8_t addr);  // read 4 bytes from a specific EEProm Address
 
 
-                bool readMACAddress();       // Read MAC Address
+                bool readMACAddress();       // read MAC Address
 
                 void receiveInit();          // Initialise receive descriptors an buffers
                 void sendInit();             // Initialise transmit descriptors an buffers
@@ -120,12 +122,12 @@ namespace maxOS{
                 void deactivate();
 
                 //Override Interrupt default methods
-                void HandleInterrupt();
+                void handle_interrupt();
 
 
                 //Ethernet Driver functions
-                string getVendorName();
-                string getDeviceName();
+                string get_vendor_name();
+                string get_device_name();
 
                 void DoSend(uint8_t* buffer, uint32_t size);
                 uint64_t GetMediaAccessControlAddress();

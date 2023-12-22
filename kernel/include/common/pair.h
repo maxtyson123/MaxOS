@@ -9,6 +9,13 @@ namespace maxOS {
 
     namespace common {
 
+        /**
+         * @class Pair
+         * @brief A pair of two objects
+         *
+         * @tparam First The type of the m_first_memory_chunk object
+         * @tparam Second The type of the second object
+         */
         template<class First, class Second> class Pair {
             public:
                 First first;
@@ -19,24 +26,21 @@ namespace maxOS {
                 ~Pair();
         };
 
-        //_____________________________Implementation___________________________________________
+        ///_____________________________Implementation___________________________________________///
         template<class First, class Second> Pair<First,Second>::Pair()
         {
         }
 
         template<class First, class Second> Pair<First,Second>::Pair(First first, Second second)
+        : first(first),
+          second(second)
         {
-            this->first = first;
-            this->second = second;
+
         }
 
         template<class First, class Second> Pair<First,Second>::~Pair()
         {
         }
-
-
-        //Note, The GUI fucked it self soley because pair was implmented inline ffs
-
     }
 
 }

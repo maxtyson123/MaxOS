@@ -13,21 +13,31 @@ namespace maxOS{
 
     namespace common{
 
+        /**
+         * @class OutputStream
+         * @brief A stream that can be written to.
+         *
+         * @tparam Type The type of the elements that will be written to the stream.
+         */
         template<class Type> class GenericOutputStream : public InputStreamProcessor<Type,Type>
         {
             public:
                 GenericOutputStream();
                 ~GenericOutputStream();
 
-                void onStreamRead(Type readElement);
-                void onEndOfStream(GenericInputStream<Type>* stream);
+                void on_stream_read(Type) override;
+                void on_end_of_stream(GenericInputStream<Type>*) override;
 
-                virtual void write(Type writeElement);
+                virtual void write(Type);
                 virtual void close();
 
-                virtual GenericOutputStream<Type>& operator << (Type writeElement);
+                virtual GenericOutputStream<Type>& operator << (Type);
         };
 
+        /**
+         * @class OutputStream
+         * @brief A stream that strings can be written to.
+         */
         class OutputStream : public GenericOutputStream<string>
         {
 
@@ -39,15 +49,15 @@ namespace maxOS{
                 virtual void carriageReturn();
                 virtual void clear();
 
-                virtual void write(string stringToWrite);
-                virtual void writeChar(char charToWrite);
-                virtual void writeInt(int intToWrite);
-                virtual void writeHex(uint32_t hexToWrite);
+                virtual void write(string string_to_write) override;
+                virtual void write_char(char char_to_write);
+                virtual void write_int(int int_to_write);
+                virtual void write_hex(uint32_t hex_to_write);
 
-                OutputStream& operator << (int intToWrite);
-                OutputStream& operator << (uint32_t hexToWrite);
-                OutputStream& operator << (string stringToWrite);
-                OutputStream& operator << (char charToWrite);
+                OutputStream& operator << (string string_to_write) override;
+                OutputStream& operator << (int int_to_write);
+                OutputStream& operator << (uint32_t hex_to_write);
+                OutputStream& operator << (char char_to_write);
         };
 
 
@@ -55,7 +65,8 @@ namespace maxOS{
         ///__________________________________________Templates__________________________________________________///
 
         /**
-         * @details Constructor of the GenericOutputStream class.
+         * @brief Constructor of the GenericOutputStream class.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
          */
         template<class Type> GenericOutputStream<Type>::GenericOutputStream() {
@@ -63,7 +74,8 @@ namespace maxOS{
         }
 
         /**
-         * @details Destructor of the GenericOutputStream class.
+         * @brief Destructor of the GenericOutputStream class.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
          */
         template<class Type> GenericOutputStream<Type>::~GenericOutputStream() {
@@ -71,52 +83,56 @@ namespace maxOS{
         }
 
         /**
-         * @details This function is called when an element is read from the stream.
+         * @brief Writes the date that was read from the input stream to the output stream.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
-         * @param readElement The element that was read from the stream.
+         * @param read_element The element that was read from the stream.
          */
-        template<class Type> void GenericOutputStream<Type>::onStreamRead(Type readElement) {
+        template<class Type> void GenericOutputStream<Type>::on_stream_read(Type read_element) {
 
             // When something is read from the input stream, it is written to the output stream.
-            write(readElement);
+            write(read_element);
 
-            // Pass the element to any handlers.
-            for(typename  Vector<InputStreamEventHandler<Type>*>::iterator inputStreamEventHandler = this -> inputStreamEventHandlers.begin(); inputStreamEventHandler != this -> inputStreamEventHandlers.end(); ++inputStreamEventHandler)
-                (*inputStreamEventHandler)->onStreamRead(readElement);
+            // Pass the element to any handlers
+            for(auto& input_stream_event_handler : this ->m_input_stream_event_handlers)
+              input_stream_event_handler->on_stream_read(read_element);
 
 
         }
 
         /**
-         * @details This function is called when the end of the stream is reached.
+         * @brief Close the stream and remove it from the list of streams when the end of the stream is reached.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
          * @param stream The stream that reached the end.
          */
-        template<class Type> void GenericOutputStream<Type>::onEndOfStream(GenericInputStream<Type> *stream) {
+        template<class Type> void GenericOutputStream<Type>::on_end_of_stream(GenericInputStream<Type> *stream) {
 
             // Close the stream.
             close();
 
-            // Pass the event to any handlers.
-            for(typename  Vector<InputStreamEventHandler<Type>*>::iterator inputStreamEventHandler = this -> inputStreamEventHandlers.begin(); inputStreamEventHandler != this -> inputStreamEventHandlers.end(); ++inputStreamEventHandler)
-                (*inputStreamEventHandler) -> onEndOfStream(stream);
+            // Pass the event to any handlers
+            for(auto& input_stream_event_handler : this ->m_input_stream_event_handlers)
+                input_stream_event_handler->on_end_of_stream(stream);
 
-            // Handle the event on this class
-            InputStreamProcessor<Type, Type>::onEndOfStream(stream);
+            // Remove the stream from the list of streams.
+            InputStreamProcessor<Type, Type>::on_end_of_stream(stream);
 
         }
 
         /**
-         * @details This function writes an element to the stream.
+         * @brief write an element to the stream.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
-         * @param writeElement The element that will be written to the stream.
+         * @param write_element The element that will be written to the stream.
          */
-        template<class Type> void GenericOutputStream<Type>::write(Type writeElement) {
+        template<class Type> void GenericOutputStream<Type>::write(Type write_element) {
 
         }
 
         /**
-         * @details This function closes the stream.
+         * @brief Close the stream.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
          */
         template<class Type> void GenericOutputStream<Type>::close() {
@@ -124,24 +140,20 @@ namespace maxOS{
         }
 
         /**
-         * @details This function writes an element to the stream.
+         * @brief Overload the << operator to write an element to the stream.
+         *
          * @tparam Type The type of the elements that will be written to the stream.
-         * @param writeElement The element that will be written to the stream.
-         * @return The stream.
+         * @param write_element The element that will be written to the stream.
+         * @return The stream
          */
-        template<class Type> GenericOutputStream<Type> &GenericOutputStream<Type>::operator << (Type writeElement) {
+        template<class Type> GenericOutputStream<Type> &GenericOutputStream<Type>::operator << (Type write_element) {
 
-            // Write the element to the stream.
-            write(writeElement);
+            // write the element to the stream.
+            write(write_element);
 
             // Return the stream.
             return *this;
-
         }
-
     }
-
 }
-
-
 #endif //MAXOS_COMMON_OUTPUTSTREAM_H

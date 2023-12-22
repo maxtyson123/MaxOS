@@ -54,7 +54,7 @@ InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() {
 }
 
 /**
- * @details Called when an IP packet is received. (Deafult, does nothing, overide for use)
+ * @brief Called when an IP packet is received. (Deafult, does nothing, overide for use)
  *
  * @param srcIP_BE The source IP address.
  * @param dstIP_BE The destination IP address.
@@ -70,7 +70,7 @@ bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(maxOS::net::I
 }
 
 /**
- * @details Sends an IP packet.
+ * @brief Sends an IP packet.
  *
  * @param dstIP_BE The destination IP address.
  * @param internetprotocolPayload The payload of the IP packet.
@@ -104,7 +104,7 @@ InternetProtocolHandler::~InternetProtocolHandler() {
 }
 
 /**
- * @details Called when an IP packet is received.
+ * @brief Called when an IP packet is received.
  *
  * @param etherframePayload The payload of the IP packet.
  * @param size The size of the IP packet.
@@ -162,7 +162,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
 
 
 /**
- * @details Sends an IP packet.
+ * @brief Sends an IP packet.
  *
  * @param dstIP_BE The destination IP address.
  * @param protocol The protocol of the IP packet.
@@ -171,7 +171,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
  */
 void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, uint8_t *data, uint32_t size) {
 
-    uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager -> malloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
+    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
     InternetProtocolV4Header *message = (InternetProtocolV4Header*)buffer;                                                                            //Convert to struct for easier use
 
     message -> version = 4;                                                                                                                           //Set version
@@ -208,11 +208,11 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
 
     //Send message
     frameHandler -> sendEthernetFrame(MAC, this -> handledType, buffer, size + sizeof(InternetProtocolV4Header));      //Send message
-    MemoryManager::activeMemoryManager->free(buffer);                                                                                                 //Free memory
+    MemoryManager::s_active_memory_manager->free(buffer);                                                                                                 //Free memory
 }
 
 /**
- * @details Creates a checksum for the given data.
+ * @brief Creates a checksum for the given data.
  *
  * @param data The data to create a checksum for.
  * @param lengthInBytes The length of the data in bytes.

@@ -15,24 +15,29 @@ namespace maxOS {
     namespace gui {
 
         namespace widgets{
+
+            /**
+             * @class Text
+             * @brief A box that can be used to display text
+             */
             class Text : public Widget{
 
             protected:
-                char widgetText[256];
+                char m_widget_text[256];    //TODO: Replace with a buffer in memory later
 
             public:
 
-                //TODO: Redo so that it uses some generified font class
+                //TODO: Redo so that it uses some generified m_font class
                 AmigaFont font;
 
-                common::Colour foregroundColour;
-                common::Colour backgroundColour;
+                common::Colour foreground_colour;
+                common::Colour background_colour;
 
                 Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                 ~Text();
 
-                void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
-                void updateText(string newText);
+                void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
+                void update_text(string);
 
             };
         }

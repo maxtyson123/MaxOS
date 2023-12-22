@@ -16,44 +16,38 @@ namespace maxOS{
         class Window : public CompositeWidget{
 
             protected:
-                widgets::Text title;
+                widgets::Text m_title;
 
-                // Resizers
-                WidgetMover windowWidgetMover;
-                WidgetMoverResizerTop windowWidgetMoverResizerTop;
-                WidgetMoverResizerBottom windowWidgetMoverResizerBottom;
-                WidgetMoverResizerLeft windowWidgetMoverResizerLeft;
-                WidgetMoverResizerRight windowWidgetMoverResizerRight;
-                WidgetMoverResizerTopLeft windowWidgetMoverResizerTopLeft;
-                WidgetMoverResizerTopRight windowWidgetMoverResizerTopRight;
-                WidgetMoverResizerBottomLeft windowWidgetMoverResizerBottomLeft;
-                WidgetMoverResizerBottomRight windowWidgetMoverResizerBottomRight;
+                // Resizes
+                WidgetMover                   m_mover;
+                WidgetMoverResizerTop         m_resizer_top;
+                WidgetMoverResizerBottom      m_resizer_bottom;
+                WidgetMoverResizerLeft        m_resizer_left;
+                WidgetMoverResizerRight       m_resizer_right;
+                WidgetMoverResizerTopLeft     m_resizer_top_left;
+                WidgetMoverResizerTopRight    m_resizer_top_right;
+                WidgetMoverResizerBottomLeft  m_resizer_bottom_left;
+                WidgetMoverResizerBottomRight m_resizer_bottom_right;
 
 
             public:
 
-                uint8_t windowFrameThickness;
-                uint8_t windowTitleBarHeight;
+                uint8_t frame_thickness { 5 };
+                uint8_t title_bar_height { 10 };
 
-                common::Colour windowAreaColour;
-                common::Colour windowFrameColour;
-                common::Colour windowFrameBorderColour;
+                common::Colour area_colour;
+                common::Colour frame_colour;
+                common::Colour frame_border_colour;
 
-                Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string titleText);
-                Window(Widget* containedWidget, string titleText);
+                Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string title_text);
+                Window(Widget* containedWidget, string title_text);
                 ~Window();
 
-                void drawSelf(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
-                void addChild(Widget* child);
+                void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
+                void add_child(Widget* child);
 
-                drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
-
-
-
+                drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button);
         };
-
     }
-
 }
-
 #endif //MaxOS_GUI_WINDOW_H

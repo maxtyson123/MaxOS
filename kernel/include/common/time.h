@@ -11,6 +11,9 @@ namespace maxOS{
 
     namespace common{
 
+        /**
+         * @struct Time
+         */
         struct Time{
 
             uint16_t year;

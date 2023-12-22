@@ -21,43 +21,44 @@ ButtonEventHandler::~ButtonEventHandler() {
 }
 
 /**
- * @details Handles the button events
+ * @brief Handles the button events
+ *
  * @param event The event to handle
  */
-Event<ButtonEvents>* ButtonEventHandler::onEvent(Event<ButtonEvents> *event) {
+Event<ButtonEvents>* ButtonEventHandler::on_event(Event<ButtonEvents> *event) {
 
     // Check the event type
     switch (event -> type) {
 
         // Button pressed
         case BUTTON_PRESSED:
-            onButtonPressed(((ButtonPressedEvent*)event) -> source);
+            on_button_pressed(((ButtonPressedEvent *)event)->source);
             break;
 
         // Button released
         case BUTTON_RELEASED:
-            onButtonReleased(((ButtonReleasedEvent*)event) -> source);
+            on_button_released(((ButtonReleasedEvent *)event)->source);
             break;
 
     }
-
     return event;
+}
+
+/**
+ * @brief Handles the button pressed event
+ *
+ * @param source The source of the event
+ */
+void ButtonEventHandler::on_button_pressed(Button *source) {
 
 }
 
 /**
- * @details Handles the button pressed event
+ * @brief Handles the button released event
+ *
  * @param source The source of the event
  */
-void ButtonEventHandler::onButtonPressed(Button *source) {
-
-}
-
-/**
- * @details Handles the button released event
- * @param source The source of the event
- */
-void ButtonEventHandler::onButtonReleased(Button *source) {
+void ButtonEventHandler::on_button_released(Button *source) {
 
 }
 
@@ -66,14 +67,14 @@ void ButtonEventHandler::onButtonReleased(Button *source) {
 //// ___ Button ___
 
 Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
-: Widget(left, top, width, height)
+: Widget(left, top, width, height),
+  font(AmigaFont()),
+  text(text),
+  background_colour(Colour(0xFF, 0xFF, 0xFF)),
+  foreground_colour(Colour(0x00, 0x00, 0x00)),
+  border_colour(Colour(0x57, 0x57, 0x57))
 {
-    // Set the default values
-    this -> font = AmigaFont();
-    this -> text = text;
-    this -> backgroundColour = Colour(0xFF, 0xFF, 0xFF);
-    this -> foregroundColour = Colour(0x00, 0x00, 0x00);
-    this -> borderColour = Colour(0x57, 0x57, 0x57);
+
 }
 
 Button::~Button() {
@@ -81,7 +82,8 @@ Button::~Button() {
 }
 
 /**
- * @details Draws the button
+ * @brief Draws the button
+ *
  * @param gc The graphics context to draw to
  * @param area The area to draw to
  */
@@ -90,16 +92,17 @@ void Button::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
     // Default Draw Operation
     Widget::draw(gc, area);
 
-    // Get the absolute position of the button
-    Coordinates buttonCoordinates = absoluteCoordinates(Coordinates(0,0));
-    Rectangle<int32_t> buttonPosition = getPosition();
+    // Get the absolute m_position of the button
+    Coordinates buttonCoordinates = absolute_coordinates(Coordinates(0, 0));
+    Rectangle<int32_t> buttonPosition = position();
 
-    // Get the x and y position of the button
+    // Get the x and y m_position of the button
     int32_t x = buttonCoordinates.first;
     int32_t y = buttonCoordinates.second;
 
     // Draw the background for the button
-    gc -> fillRectangle(x + area.left, y + area.top, x + area.left + area.width, y + area.top + area.height, backgroundColour);
+    gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
+                       y + area.top + area.height, background_colour);
 
     // Draw the border  (TODO: Make a border class?? Window uses it too)
 
@@ -107,79 +110,91 @@ void Button::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
     if(area.intersects(Rectangle<int32_t>(0,0,buttonPosition.width,1))){
 
         // Start in the top left corner of the button and end in the top right corner
-        gc ->drawLine(x + area.left, y, x + area.left + area.width - 1, y,borderColour);
+        gc->draw_line(x + area.left, y, x + area.left + area.width - 1, y,
+                      border_colour);
     }
 
     // Left Border
     if(area.intersects(Rectangle<int32_t>(0,0,1,buttonPosition.height))){
 
         // Start in the top left corner and end in the bottom left corner
-        gc ->drawLine(x, y + area.top, x, y + area.top + area.height - 1,borderColour);
+        gc->draw_line(x, y + area.top, x, y + area.top + area.height - 1,
+                      border_colour);
     }
 
     // Right Border
     if(area.intersects(Rectangle<int32_t>(0,buttonPosition.height - 1,buttonPosition.width,1))){
 
         // Start in the top right corner and end in the bottom right corner
-        gc ->drawLine(x + area.left, y + buttonPosition.height - 1, x + area.left + area.width - 1, y + buttonPosition.height - 1,borderColour);
+        gc->draw_line(x + area.left, y + buttonPosition.height - 1,
+                      x + area.left + area.width - 1,
+                      y + buttonPosition.height - 1, border_colour);
     }
 
     // Bottom Border
     if(area.intersects(Rectangle<int32_t>(buttonPosition.width - 1,0,1,buttonPosition.height))){
 
         // Start in the bottom left corner and end in the bottom right corner
-        gc ->drawLine(x + buttonPosition.width - 1, y + area.top, x + buttonPosition.width - 1, y + area.top + area.height - 1,borderColour);
+        gc->draw_line(x + buttonPosition.width - 1, y + area.top,
+                      x + buttonPosition.width - 1,
+                      y + area.top + area.height - 1, border_colour);
     }
 
     // Draw the text
     common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
-    font.drawText(x + 1, y + 1, foregroundColour, backgroundColour, gc, text,textArea);
+    font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, text,
+                   textArea);
 
 }
 
 /**
- * @details Handles the mouse button pressed event
- * @param x The x position of the mouse
- * @param y The y position of the mouse
+ * @brief Handles the mouse button pressed event
+ *
+ * @param x The x m_position of the mouse
+ * @param y The y m_position of the mouse
  * @param button The button that was pressed
  * @return The mouse event handler
  */
-MouseEventHandler* Button::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
-    // Raise the button pressed event
-    raiseEvent(new ButtonPressedEvent(this));
+MouseEventHandler* Button::on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) {
+
+    // Raise the event
+    raise_event(new ButtonPressedEvent(this));
 
     // Change the button colour
-    backgroundColour = Colour(0x57, 0x57, 0x57);
+    background_colour = Colour(0x57, 0x57, 0x57);
     Widget::invalidate();
 
     // Pass the event on (that it was handled)
-    return Widget::onMouseButtonPressed(x, y, button);
+    return Widget::on_mouse_button_pressed(x, y, button);
 }
 
 /**
- * @details Handles the mouse button released event
- * @param x The x position of the mouse
- * @param y The y position of the mouse
+ * @brief Handles the mouse button released event
+ *
+ * @param x The x m_position of the mouse
+ * @param y The y m_position of the mouse
  * @param button The button that was released
  */
-void Button::onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button) {
+void Button::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
 
     // Raise the button released event
-    raiseEvent(new ButtonReleasedEvent(this));
+    raise_event(new ButtonReleasedEvent(this));
 
     // Change the button colour
-    backgroundColour = Colour(0xFF, 0xFF, 0xFF);
+    background_colour = Colour(0xFF, 0xFF, 0xFF);
     Widget::invalidate();
 
     // Pass the event on (that it was handled)
-    Widget::onMouseButtonReleased(x, y, button);
+    Widget::on_mouse_button_released(x, y, button);
 }
 
 /// ___ Event ___
 
 ButtonReleasedEvent::ButtonReleasedEvent(Button *source)
-: Event(ButtonEvents::BUTTON_RELEASED) {
-    this -> source = source;
+: Event(ButtonEvents::BUTTON_RELEASED),
+  source(source)
+{
+
 }
 
 ButtonReleasedEvent::~ButtonReleasedEvent() {
@@ -187,8 +202,9 @@ ButtonReleasedEvent::~ButtonReleasedEvent() {
 }
 
 ButtonPressedEvent::ButtonPressedEvent(Button *source)
-: Event(ButtonEvents::BUTTON_PRESSED) {
-    this -> source = source;
+: Event(ButtonEvents::BUTTON_PRESSED),
+  source(source)
+{
 }
 
 ButtonPressedEvent::~ButtonPressedEvent() {

@@ -20,50 +20,62 @@ namespace maxOS{
                 INPUTBOX_TEXT_CHANGED
             };
 
+            /**
+             * @class InputBoxTextChangedEvent
+             * @brief Event that is triggered when the text in an input box is changed
+             */
             class InputBoxTextChangedEvent : public common::Event<InputBoxEvents>{
-            public:
-                InputBoxTextChangedEvent(string newText);
-                ~InputBoxTextChangedEvent();
+              public:
+                  InputBoxTextChangedEvent(string);
+                  ~InputBoxTextChangedEvent();
 
-                string newText;
+                  string new_text;
             };
 
+            /**
+             * @class InputBoxEventHandler
+             * @brief Handles input box events
+             */
             class InputBoxEventHandler : public common::EventHandler<InputBoxEvents>{
             public:
                 InputBoxEventHandler();
                 ~InputBoxEventHandler();
 
-                virtual common::Event<InputBoxEvents>* onEvent(common::Event<InputBoxEvents>* event);
+                virtual common::Event<InputBoxEvents>* on_event(common::Event<InputBoxEvents>* event) override;
 
-                virtual void onInputBoxTextChanged(string newText);
+                virtual void on_input_box_text_changed(string);
             };
 
+            /**
+             * @class InputBox
+             * @brief A box that can be used to input text
+             */
             class InputBox : public Widget, public common::EventManager<InputBoxEvents>{
 
                 protected:
-                    char widgetText[256];       // Replace with a buffer in memory later
+                    char widget_text[256];       //TODO: Replace with a buffer in memory later
 
                 public:
                     InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height);
                     InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
                     ~InputBox();
 
-                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
+                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
 
-                    void onFocus();
-                    void onFocusLost();
+                    void on_focus() override;
+                    void on_focus_lost() override;
 
-                    void onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState);
+                    void on_key_down(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState) override;
 
-                    void updateText(string newText);
-                    string getText();
+                    void update_text(string);
+                    string get_text();
 
                     // InputBox Variables
-                    common::Colour backgroundColour;
-                    common::Colour foregroundColour;
-                    common::Colour borderColour;
+                    common::Colour background_colour;
+                    common::Colour foreground_colour;
+                    common::Colour border_colour;
                     gui::AmigaFont font;
-                    uint32_t cursorPosition;
+                    uint32_t cursor_position { 0 };
 
             };
         }

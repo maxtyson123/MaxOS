@@ -14,36 +14,12 @@ Widget::Widget()
 : KeyboardEventHandler()
 {
 
-    // No parent, not valid
-    parent = 0;
-    valid = false;
-
-    // Set the minimum size to 5px
-    minWidth = 5;
-    minHeight = 5;
-
-    // Set tne maximum size to the maximum value of a 32 bit integer
-    maxWidth = 0x8FFFFFFF;
-    maxHeight = 0x8FFFFFFF;
-
 }
 
 Widget::Widget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : KeyboardEventHandler(),
-  position(left, top, width, height)
+  m_position(left, top, width, height)
 {
-
-    // No parent, not valid
-    parent = 0;
-    valid = false;
-
-    // Set the minimum size to 5px
-    minWidth = 5;
-    minHeight = 5;
-
-    // Set tne maximum size to the maximum value of a 32 bit integer
-    maxWidth = 0x8FFFFFFF;
-    maxHeight = 0x8FFFFFFF;
 
 }
 
@@ -53,7 +29,7 @@ Widget::~Widget(){
 }
 
 /**
- * @details Draw the widget on the screen
+ * @brief Draw the widget on the screen
  *
  * @param gc The graphics context to draw the widgets pixels on
  * @param area The area of the widget to draw
@@ -63,15 +39,15 @@ void Widget::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 }
 
 /**
- * @details Invalidates the entire widget. This forces the widget to be redrawn on the next screen update
+ * @brief Invalidates the entire widget. This forces the widget to be redrawn on the next screen update
  */
 void Widget::invalidate() {
 
     // Convert the relative coordinates to absolute coordinates
-    Coordinates absCoords = absoluteCoordinates(Coordinates(0,0));
+    Coordinates coordinates = absolute_coordinates(Coordinates(0, 0));
 
     // Create a rectangle with the absolute coordinates and the size of the widget
-    Rectangle<int32_t> invalidArea = Rectangle<int32_t>(absCoords.first, absCoords.second, position.width, position.height);
+    Rectangle<int32_t> invalidArea = Rectangle<int32_t>(coordinates.first, coordinates.second, m_position.width, m_position.height);
 
     // Invalidate the area
     invalidate(invalidArea);
@@ -79,225 +55,221 @@ void Widget::invalidate() {
 }
 
 /**
- * @details Invalidates a specific area of the widget. This forces that part of the screen to be redrawn on the next screen update
+ * @brief Invalidates a specific area of the widget. This forces that part of the screen to be redrawn on the next screen update
  *
  * @param area The area of the widget to invalidate
  */
 void Widget::invalidate(Rectangle<int32_t> &area) {
 
-        // If the widget has a parent, invalidate the area relative to the parent
-        if(parent != 0){
-            parent -> invalidate(area);
-        }
-
+    // If the widget has a parent, invalidate the area of the parent
+    if(m_parent != 0)
+        m_parent->invalidate(area);
 }
 
 /**
- * @details Set the parent of a widget to this widget, making it into a child
+ * @brief Set the parent of a widget to this widget, making it into a child
  *
  * @param child The child to add
  */
-void Widget::addChild(Widget *child) {
+void Widget::add_child(Widget *child) {
 
-    // Set the parent of the child to this widget
-    child -> parent = this;
+    // Parent the child to this widget
+    child ->m_parent = this;
 
 }
 
-Coordinates Widget::absoluteCoordinates(Coordinates coordinates) {
+Coordinates Widget::absolute_coordinates(common::Coordinates coordinates) {
 
-    // If the widget has a parent, add the coordinates of the parent to the coordinates of the widget
-    if(parent != 0){
-        return parent -> absoluteCoordinates(Coordinates(coordinates.first + position.left, coordinates.second + position.top));
-    }
+    // Return the parents absolute coordinates
+    if(m_parent != 0)
+        return m_parent->absolute_coordinates(Coordinates(coordinates.first + m_position.left, coordinates.second + m_position.top));
 
-    // If the widget has no parent, return the coordinates of the widget
-    return Coordinates(coordinates.first + position.left, coordinates.second + position.top);
+    // If the widget has no m_parent, return the coordinates of the widget
+    return Coordinates(coordinates.first + m_position.left, coordinates.second + m_position.top);
 
 }
 
 /**
- * @details Check if the widget contains a specific coordinate
+ * @brief Check if the widget contains a specific coordinate
  *
  * @param x The x coordinate
  * @param y The y coordinate
  * @return True if the widget contains the coordinate, false if it does not
  */
-bool Widget::containsCoordinate(uint32_t x, uint32_t y) {
+bool Widget::contains_coordinate(uint32_t x, uint32_t y) {
 
     // Check if the coordinates are within the bounds of the widget
-    return position.contains(x,y);
+    return m_position.contains(x,y);
 }
 
 /**
- * @details Get the position of the widget
+ * @brief Get the position of the widget
  *
  * @return The position of the widget
  */
-Rectangle<int32_t> Widget::getPosition() {
-    return position;
+Rectangle<int32_t> Widget::position() {
+    return m_position;
 }
 
 /**
- * @details Set the position of the widget, and invalidate the old and new positions so they are redrawn
+ * @brief Set the position of the widget, and invalidate the old and new positions so they are redrawn
  *
  * @param left The new left position of the rectangle
  * @param top The new top position of the rectangle
  */
 void Widget::move(int32_t left, int32_t top) {
-    // Widget is no longer valid as it needs to be redrawn somewhere else. This means the old position needs to be invalidated so the pixels behind this widget are redrawn
+
+    // Invalidate the old position
     invalidate();
 
     // Set the new position
-    position.left = left;
-    position.top = top;
+    m_position.left = left;
+    m_position.top = top;
 
-    // Widget is now valid so update the pixels in the new position
+    // Re draw the widget in the new position
     invalidate();
 }
 
 /**
- * @details Set the size of the widget, and invalidate the old and new positions so they are redrawn
+ * @brief Set the size of the widget, and invalidate the old and new positions so they are redrawn
  *
- * @param width The new width of the rectangle
- * @param height The new height of the rectangle
+ * @param width The new m_width of the rectangle
+ * @param height The new m_height of the rectangle
  */
 void Widget::resize(int32_t width, int32_t height) {
 
     // Restrict the width and height to the minimum and maximum values
-    if(width < minWidth) width = minWidth;
-    if(height < minHeight) height = minHeight;
-    if(width > maxWidth) width = maxWidth;
-    if(height > maxHeight) height = maxHeight;
+    if(width < m_min_width) width = m_min_width;
+    if(height < m_min_height) height = m_min_height;
+    if(width > m_max_width) width = m_max_width;
+    if(height > m_max_height) height = m_max_height;
 
     // Store the old position, set the new position
-    Rectangle<int32_t> oldPosition = position;
-    position.width = width;
-    position.height = height;
+    Rectangle<int32_t> old_position = m_position;
+    m_position.width = width;
+    m_position.height = height;
 
     // Find the areas that need to be redrawn by subtracting the old position from the new position, and vice versa
-    Vector<Rectangle<int32_t>> invalidAreasOld = oldPosition.subtract(position);
-    Vector<Rectangle<int32_t>> invalidAreasNew = position.subtract(oldPosition);
+    Vector<Rectangle<int32_t>> invalid_areas_old = old_position.subtract(m_position);
+    Vector<Rectangle<int32_t>> invalid_areas_new = m_position.subtract(old_position);
 
-    // Right and Bottom require to be fully invalidated
-    if(position.width > oldPosition.width || position.height > oldPosition.height || oldPosition.width > position.width || oldPosition.height > position.height){
+    // Right and Bottom require to be fully invalidated TODO: Fix this hack
+    if(m_position.width > old_position.width || m_position.height > old_position.height || old_position.width > m_position.width || old_position.height > m_position.height){
         invalidate();
         return;
     }
 
-
     //Loop through the areas that need to be redrawn and invalidate them
-    for(int i = 0; i < invalidAreasOld.size(); i++){
-        invalidate(invalidAreasOld[i]);
-    }
+    for(int i = 0; i < invalid_areas_old.size(); i++)
+        invalidate(invalid_areas_old[i]);
 
-    for(int i = 0; i < invalidAreasNew.size(); i++){
-        invalidate(invalidAreasNew[i]);
-    }
+    for(int i = 0; i < invalid_areas_new.size(); i++)
+        invalidate(invalid_areas_new[i]);
+
 }
 
 /**
- * @details Set the current focuesd widget to be this widget
+ * @brief Set the current focused widget to be this widget
  */
 void Widget::focus() {
+
     // Set the focus the widget to this widget
-    setFocus(this);
+    set_focus(this);
 }
 
 /**
- * @details Sets the widget that is currently focussed
+ * @brief Sets the widget that is currently focussed
+ *
  * @param widget The widget to set as focussed
  */
-void Widget::setFocus(Widget *widget) {
+void Widget::set_focus(Widget *widget) {
 
-    // If the widget has a parent, set the focus of the parent to this widget
-    if(parent != 0){
-        parent->setFocus(widget);
-    }
+    // Focus the parent to this widget
+    if(m_parent != 0)
+      m_parent->set_focus(widget);
 }
 
 /**
- * @details Handles the event when the widget is focussed
+ * @brief Handles the event when the widget is focussed
  */
-void Widget::onFocus() {
-
-}
-
-/**
- * @details Handles the event when the widget is unfocussed
- */
-void Widget::onFocusLost() {
+void Widget::on_focus() {
 
 }
 
 /**
- * @details Brings this widget to the front of the screen
+ * @brief Handles the event when the widget is unfocused
  */
-void Widget::bringToFront() {
+void Widget::on_focus_lost() {
+
+}
+
+/**
+ * @brief Brings this widget to the front of the screen
+ */
+void Widget::bring_to_front() {
 
     // Bring this widget to the front of the screen
-    bringToFront(this);
+    bring_to_front(this);
 
 }
 
 /**
- * @details Brings a specific widget to the front of the screen
+ * @brief Brings a specific widget to the front of the screen
  *
  * @param widget The widget to bring to the front
  */
-void Widget::bringToFront(Widget *widget) {
+void Widget::bring_to_front(Widget *widget) {
 
-    // If the widget has a parent, bring the widget to the front of the parent
-    if(parent != 0){
-        parent->bringToFront(widget);
-    }
+    // Bring the parent to the front of the screen
+    if(m_parent != 0)
+       m_parent->bring_to_front(widget);
 
 }
 
 /**
- * @details Handles the event when the mouse is moved on to the widget
+ * @brief Handles the event when the mouse is moved on to the widget
  *
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void Widget::onMouseEnterWidget(uint32_t toX, uint32_t toY) {
+void Widget::on_mouse_enter_widget(uint32_t toX, uint32_t toY) {
 
 }
 
 /**
- * @details Handles the event when the mouse is moved out of the widget
+ * @brief Handles the event when the mouse is moved out of the widget
  *
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void Widget::onMouseLeaveWidget(uint32_t fromX, uint32_t fromY) {
+void Widget::on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) {
 
 }
 
 /**
- * @details Handles the event when the mouse is moved over the widget
+ * @brief Handles the event when the mouse is moved over the widget
  *
  * @param fromX The x original coordinate of the mouse
  * @param fromY The y original coordinate of the mouse
  * @param toX The x new coordinate of the mouse
  * @param toY The y new coordinate of the mouse
  */
-void Widget::onMouseMoveWidget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
+void Widget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
 
 }
 
 /**
- * @details Handles the event when the mouse is pressed on the widget
+ * @brief Handles the event when the mouse is pressed on the widget
  *
  * @param x The x coordinate of the mouse when it was pressed
  * @param y The y coordinate of the mouse when it was pressed
  * @param button The button that was pressed
  * @return nullptr
  */
-peripherals::MouseEventHandler* Widget::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
+peripherals::MouseEventHandler* Widget::on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) {
 
     // Bring the widget to the front of the screen
-    bringToFront();
+    bring_to_front();
 
     // Focus the widget
     focus();
@@ -307,13 +279,13 @@ peripherals::MouseEventHandler* Widget::onMouseButtonPressed(uint32_t x, uint32_
 }
 
 /**
- * @details Handles the event when the mouse is released on the widget
+ * @brief Handles the event when the mouse is released on the widget
  *
  * @param x The x coordinate of the mouse when it was released
  * @param y The y coordinate of the mouse when it was released
  * @param button The button that was released
  */
-void Widget::onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button) {
+void Widget::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
 
 }
 
@@ -334,20 +306,20 @@ CompositeWidget::~CompositeWidget() {
 }
 
 /**
- * @details Draws a section of the widget and its children
+ * @brief Draws a section of the widget and its m_children
  *
  * @param gc The graphics context to draw to
  * @param area The area to draw
  */
 void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
-    // Draw the widget with its children
-    draw(gc, area, children.begin());
+    // Draw the widget with its m_children
+    draw(gc, area, m_children.begin());
 
 }
 
 /**
- * @details Draws a section of the widget and the children after a specific child
+ * @brief Draws a section of the widget and the m_children after a specific child
  *
  * @param gc The graphics context to draw to
  * @param area The area to draw
@@ -358,38 +330,31 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area, Vector
     // Draw the widget
     Widget::draw(gc, area);
 
-    // Get the comp widgets own are
-    Rectangle<int32_t> ownArea = getPosition();
+    // Get the area of the widget
+    Rectangle<int32_t> own_area = position();
 
-    // Loop through the children
-    for(Vector<Widget*>::iterator childWidget = start; childWidget != children.end(); childWidget++){
+    //Note: has to use iterator as the start is not necessarily the m_first_memory_chunk child
+    for(Vector<Widget*>::iterator child_widget = start; child_widget != m_children.end(); child_widget++){
 
-        // Get the position of the child
-        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
+        Rectangle<int32_t> child_area = (*child_widget)->position();
 
         // Check if the child is in the area that needs to be redrawn
-        if(area.intersects(childArea)){
+        if(area.intersects(child_area)){
 
             // Get the area that needs to be redrawn
-            Rectangle<int32_t> redrawArea = area.intersection(childArea);
+            Rectangle<int32_t> rectangle = area.intersection(child_area);
 
             // Translate the area so that it is relative to the child
-            redrawArea.left -= childArea.left;
-            redrawArea.top -= childArea.top;
+            rectangle.left -= child_area.left;
+            rectangle.top -= child_area.top;
 
             // Draw the child
-            (*childWidget)->draw(gc, redrawArea);
+            (*child_widget)->draw(gc, rectangle);
 
-            // Get what is left to draw (the area that is not covered by the child)
-            Vector<Rectangle<int32_t>> restDrawArea = area.subtract(childArea);
-
-            // Loop through the areas that need to be redrawn
-            for(Vector<Rectangle<int32_t>>::iterator restAreaPart = restDrawArea.begin(); restAreaPart != restDrawArea.end(); restAreaPart++){
-
-                // Call the draw function again with the part of the area, starting from the next child as the children up to this point have already been drawn
-                draw(gc, *restAreaPart, childWidget + 1);
-
-            }
+            // Draw what is left of the area that needs to be redrawn
+            Vector<Rectangle<int32_t>> rest_draw_area = area.subtract(child_area);
+            for(Vector<Rectangle<int32_t>>::iterator rest_area_part = rest_draw_area.begin(); rest_area_part != rest_draw_area.end(); rest_area_part++)
+                draw(gc, *rest_area_part, child_widget + 1);
 
             // Return as the entire area has now been drawn
             return;
@@ -397,56 +362,51 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area, Vector
     }
 
     // Now draw the widget itself
-    drawSelf(gc, area);
+    draw_self(gc, area);
 }
 
 /**
- * @details Draws the widget itself (should be overridden by the derived class)
+ * @brief Draws the widget itself (should be overridden by the derived class)
  *
  * @param gc The graphics context to draw to
  * @param area The area to draw
  */
-void CompositeWidget::drawSelf(GraphicsContext *gc, Rectangle<int32_t> &area) {
+void CompositeWidget::draw_self(common::GraphicsContext *gc, common::Rectangle<int32_t> &area) {
 
 }
 
 /**
- * @details Adds a child to the widget
+ * @brief Adds a child to the widget
  *
  * @param child The child to add
  */
-void CompositeWidget::addChild(Widget *child) {
+void CompositeWidget::add_child(Widget *child) {
 
-        // Add the child to the list of children
-    children.pushBack(child);
-
-        // Set the parent of the child to this widget
-        Widget::addChild(child);
+        // Store the child and parent the child to this widget
+        m_children.push_back(child);
+        Widget::add_child(child);
 }
 
 /**
- * @details Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
+ * @brief Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
  *
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseEnterWidget(uint32_t toX, uint32_t toY) {
+void CompositeWidget::on_mouse_enter_widget(uint32_t toX, uint32_t toY) {
 
-    // Loop through the children
-    for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
-
-        // Get the position of the child
-        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
+    for(auto&child_widget : m_children){
 
         // Check if the mouse is in the child
-        if(childArea.contains(toX, toY)){
+        Rectangle<int32_t> child_area = child_widget->position();
+        if(child_area.contains(toX, toY)){
 
             // Get the position of the mouse relative to the child
-            uint32_t childX = toX - childArea.left;
-            uint32_t childY = toY - childArea.top;
+            uint32_t child_x = toX - child_area.left;
+            uint32_t child_y = toY - child_area.top;
 
-            // Call the child's onMouseEnterWidget function
-            (*childWidget)->onMouseEnterWidget(childX, childY);
+            // Call the child's on_mouse_enter_widget function
+            child_widget->on_mouse_enter_widget(child_x, child_y);
 
             // Break as the event has been handled
             break;
@@ -455,145 +415,122 @@ void CompositeWidget::onMouseEnterWidget(uint32_t toX, uint32_t toY) {
 
 }
 /**
- * @details Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
+ * @brief Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
  *
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseLeaveWidget(uint32_t fromX, uint32_t fromY) {
-    // Loop through the children
-    for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
+void CompositeWidget::on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) {
 
-        // Get the position of the child
-        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
+    for(auto&child_widget : m_children){
 
         // Check if the mouse is in the child
-        if(childArea.contains(fromX, fromY)){
+        Rectangle<int32_t> child_area = child_widget->position();
+        if(child_area.contains(fromX, fromY)){
 
             // Get the position of the mouse relative to the child
-            uint32_t childX = fromX - childArea.left;
-            uint32_t childY = fromY - childArea.top;
+            uint32_t child_x = fromX - child_area.left;
+            uint32_t child_y = fromY - child_area.top;
 
-            // Call the child's onMouseLeaveWidget function
-            (*childWidget)->onMouseLeaveWidget(childX, childY);
+            // Call the child's on_mouse_leave_widget function
+            child_widget->on_mouse_leave_widget(child_x, child_y);
 
-            // Break as the event has been handled
+            // Event has been handled
             break;
         }
     }
 }
 
 /**
- * @details Passes the event to the child that the mouse is over, also generates a leave/enter event for children (Event handling should be done by the derived class)
+ * @brief Passes the event to the child that the mouse is over, also generates a leave/enter event for children
  *
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void CompositeWidget::onMouseMoveWidget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
+void CompositeWidget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
 
-    Widget* leftChild = nullptr;
-    Widget* enteredChild = nullptr;
+    Widget* left_child = nullptr;
+    Widget* entered_child = nullptr;
 
-    // Loop through the children
-    for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
-
-        // Get the position of the child
-        Rectangle<int32_t> childArea = (*childWidget)->getPosition();
+    for(auto&child_widget : m_children){
 
         // Check if the mouse is in the child
-        bool mouseInFrom = childArea.contains(fromX, fromY);
-        bool mouseInTo = childArea.contains(toX, toY);
+        Rectangle<int32_t> child_area = child_widget->position();
+        bool mouse_in_from = child_area.contains(fromX, fromY);
+        bool mouse_in_to = child_area.contains(toX, toY);
 
         // If the mouse started in the child
-        if(mouseInFrom){
+        if(mouse_in_from){
 
-            // Check if the mouse moved out of the child
-            if(!mouseInTo){
-
-                // The mouse started in the child but is now outside it so it must have left the child
-                leftChild = *childWidget;
+            // The mouse moved out of the child
+            if(!mouse_in_to){
+                left_child = child_widget;
                 continue;
             }
 
-            // This means the mouse is still in the child so pass the event to the child
-            (*childWidget)->onMouseMoveWidget(fromX, fromY, toX, toY);
+            // Mouse still in the child
+            child_widget->on_mouse_move_widget(fromX, fromY, toX, toY);
 
         }else{
 
-            // Check if the mouse moved into the child
-            if(mouseInTo){
-                // The mouse started outside the child but is now in it so it must have entered the child
-                enteredChild = *childWidget;
-            }
-
+            // Mouse moved into the child
+            if(mouse_in_to)
+                entered_child = child_widget;
         }
 
-        // Pass the events to the children
-        if(leftChild != nullptr){
-            leftChild->onMouseLeaveWidget(fromX, fromY);
-        }
+        // Pass the events to the child
+        if(left_child != nullptr)
+          left_child->on_mouse_leave_widget(fromX, fromY);
 
-        if(enteredChild != nullptr){
-            enteredChild->onMouseEnterWidget(toX, toY);
-        }
+        if(entered_child != nullptr)
+          entered_child->on_mouse_enter_widget(toX, toY);
     }
 }
 
 /**
- * @details Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
+ * @brief Passes the event to the child that the mouse is over.
  *
  * @param x The x coordinate of the mouse
  * @param y The y coordinate of the mouse
  * @param button The button that was pressed
  * @return The object that has the mouseEventHandler which handled the event
  */
-peripherals::MouseEventHandler *CompositeWidget::onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button) {
+peripherals::MouseEventHandler *CompositeWidget::on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) {
 
-    MouseEventHandler* mouseEventHandler = 0;
+    MouseEventHandler*mouse_event_handler = 0;
 
-    // Loop through the children
-    for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
+    for(auto&child_widget : m_children){
 
-        // If the mouse was clicked inside the child
-        if((*childWidget)->containsCoordinate(x, y)){
-
-            // Pass the event to the child
-            mouseEventHandler = (*childWidget)->onMouseButtonPressed(x - (*childWidget)->position.left, y - (*childWidget)->position.top, button);
-
-            // Break as the event has been handled
+        // Pass the event to the child
+        if(child_widget->contains_coordinate(x, y)){
+            mouse_event_handler = child_widget -> on_mouse_button_pressed(x - child_widget->m_position.left, y - child_widget->m_position.top, button);
             break;
         }
 
     }
 
-    // Return the mouseEventHandler
-    return mouseEventHandler;
+    return mouse_event_handler;
 
 }
 
 /**
- * @details Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
+ * @brief Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
  *
  * @param x The x coordinate of the mouse
  * @param y The y coordinate of the mouse
  * @param button The button that was released
  */
-void CompositeWidget::onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button) {
+void CompositeWidget::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
 
-    // Loop through the children
-    for(Vector<Widget*>::iterator childWidget = children.begin(); childWidget != children.end(); childWidget++){
+    // Loop through the m_children
+    for(auto&child_widget : m_children){
 
-        // If the mouse was clicked inside the child
-        if((*childWidget)->containsCoordinate(x, y)){
-
-            // Pass the event to the child
-            (*childWidget)->onMouseButtonReleased(x - (*childWidget)->position.left, y - (*childWidget)->position.top, button);
-
-            // Break as the event has been handled
+        // Pass the event to the child
+        if(child_widget->contains_coordinate(x, y)){
+            child_widget->on_mouse_button_released(x - child_widget->m_position.left, y - child_widget->m_position.top, button);
             break;
         }
-
     }
 }

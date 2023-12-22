@@ -21,7 +21,7 @@ InternetControlMessageProtocol::~InternetControlMessageProtocol() {
 
 }
 /**
- * @details Called by the InternetProtocolProvider when a new packet has arrived
+ * @brief Called by the InternetProtocolProvider when a new packet has arrived
  *
  * @param srcIP_BE  The source IP address of the packet
  * @param dstIP_BE  The destination IP address of the packet
@@ -70,7 +70,7 @@ bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProto
 }
 
 /**
- * @details Sends an ICMP echo request to the specified IP address
+ * @brief Sends an ICMP echo request to the specified IP address
  *
  * @param ip_be The IP address to send the request to
  */

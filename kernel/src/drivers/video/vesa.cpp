@@ -10,26 +10,20 @@ using namespace maxOS::drivers::video;
 using namespace maxOS::memory;
 using namespace maxOS::system;
 
-VideoElectronicsStandardsAssociationDriver::VideoElectronicsStandardsAssociationDriver(multiboot_info_t* mb_info)
-        : VideoDriver()
+VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_info_t* mb_info)
+: VideoDriver(),
+  m_multiboot_info(mb_info),
+  m_framebuffer_address((uint32_t*)mb_info->framebuffer_addr),
+  m_bpp(mb_info->framebuffer_bpp),
+  m_pitch(mb_info->framebuffer_pitch)
 {
+}
 
-    // Store the multiboot info
-    this->multibootInfo = mb_info;
-
-    // Info from multiboot
-    this->framebufferAddress = (uint32_t*)multibootInfo->framebuffer_addr;
-    this->bpp = multibootInfo->framebuffer_bpp;
-    this->pitch = multibootInfo->framebuffer_pitch;
-
+VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation(){
 
 }
 
-VideoElectronicsStandardsAssociationDriver::~VideoElectronicsStandardsAssociationDriver(){
-
-}
-
-bool VideoElectronicsStandardsAssociationDriver::init() {
+bool VideoElectronicsStandardsAssociation::init() {
 
     //Multiboot inits this for us
     return true;
@@ -37,17 +31,17 @@ bool VideoElectronicsStandardsAssociationDriver::init() {
 
 /**
  * @brief Sets the mode of the VESA driver (TODO: List of modes)
+ *
  * @param width Width of the screen
  * @param height Height of the screen
- * @param colorDepth Color depth of the screen
+ * @param color_depth Color depth of the screen
  * @return True if the mode was set successfully, false otherwise
  */
-bool VideoElectronicsStandardsAssociationDriver::internalSetMode(uint32_t width, uint32_t height, uint32_t colorDepth) {
+bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
 
     // Check if the mode is supported
-    if(!supportsMode(width, height, colorDepth)) {
-        // Mode is not supported
+    if(!supports_mode(width, height, color_depth)) {
         return false;
     }
 
@@ -65,15 +59,16 @@ bool VideoElectronicsStandardsAssociationDriver::internalSetMode(uint32_t width,
 
 /**
  * @brief Checks if the VESA driver supports the given mode
- * @param width The width of the screen
- * @param height The height of the screen
- * @param colorDepth The color depth of the screen
+ *
+ * @param width The m_width of the screen
+ * @param height The m_height of the screen
+ * @param color_depth The color depth of the screen
  * @return
  */
-bool VideoElectronicsStandardsAssociationDriver::supportsMode(uint32_t width, uint32_t height, uint32_t colorDepth) {
+bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
     // Check if the mode is supported
-    if(width == (int)multibootInfo->framebuffer_width && height == (int)multibootInfo->framebuffer_height && colorDepth == (int)multibootInfo->framebuffer_bpp) {
+    if(width == (int)m_multiboot_info->framebuffer_width && height == (int)m_multiboot_info->framebuffer_height && color_depth == (int)m_multiboot_info->framebuffer_bpp) {
         return true;
     }
     return false;
@@ -81,32 +76,55 @@ bool VideoElectronicsStandardsAssociationDriver::supportsMode(uint32_t width, ui
 
 /**
  * @brief Renders a pixel on the screen in 32 bit mode
+ *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The 32bit colour of the pixel
  */
-void VideoElectronicsStandardsAssociationDriver::renderPixel32Bit(uint32_t x, uint32_t y, uint32_t colour) {
+void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colour) {
 
     // Get the address of the pixel
-    uint32_t* pixelAddress = (uint32_t*)((uint8_t *)framebufferAddress + pitch * (y) + bpp * (x) / 8);
+    uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
 
     // Set the pixel
-    *pixelAddress = colour;
+    *pixel_address = colour;
 
 }
 
-uint32_t VideoElectronicsStandardsAssociationDriver::getRenderedPixel32Bit(uint32_t x, uint32_t y) {
-    // Get the address of the pixel
-    uint32_t* pixelAddress = (uint32_t*)((uint8_t *)framebufferAddress + pitch * (y) + bpp * (x) / 8);
+/**
+ * @brief Gets the colour of a pixel on the screen in 32 bit mode
+ *
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The 32bit colour of the pixel
+ */
+uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
 
-    // Set the pixel
-    return *pixelAddress;                                           // Return the colour of the pixel
+    // Get the address of the pixel
+    uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+
+    // Return the pixel
+    return *pixel_address;
 }
 
-string VideoElectronicsStandardsAssociationDriver::getVendorName() {
+/**
+ * @brief Renders a pixel on the screen in 16 bit mode
+ *
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @param colour The 16bit colour of the pixel
+ */
+string VideoElectronicsStandardsAssociation::get_vendor_name() {
     return "NEC Home Electronics";  // Creator of the VESA standard
 }
 
-string VideoElectronicsStandardsAssociationDriver::getDeviceName() {
+/**
+ * @brief Gets the colour of a pixel on the screen in 16 bit mode
+ *
+ * @param x The x coordinate of the pixel
+ * @param y The y coordinate of the pixel
+ * @return The 16bit colour of the pixel
+ */
+string VideoElectronicsStandardsAssociation::get_device_name() {
     return "VESA compatible graphics card";
 }

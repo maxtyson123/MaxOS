@@ -13,6 +13,10 @@ namespace maxOS {
 
         namespace ethernet {
 
+            /**
+             * @class RawDataHandler
+             * @brief Handles raw data received from the ethernet controller
+             */
             class RawDataHandler
             {
                 public:

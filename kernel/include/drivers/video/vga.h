@@ -17,43 +17,41 @@ namespace maxOS{
 
         namespace video{
 
+            /**
+             * @class VideoGraphicsArray
+             * @brief Driver for the VGA graphics controller, handles the rendering of pixels to the screen
+             */
             class VideoGraphicsArray : public VideoDriver{
                 protected:
-                    uint8_t* FrameBufferSegment;
-                    //-The CRT Controller (CRTC) is responsible for controlling the output of video data to the display monitor.
-                    //-The graphics controller is responsible for managing the interface between CPU and video memory.
-                    //-The sequencer manages the interface between the video data and RAMDAC.
+                    hardwarecommunication::Port8Bit m_misc_port;
+                    hardwarecommunication::Port8Bit m_crtc_index_port;
+                    hardwarecommunication::Port8Bit crtc_data_port;
+                    hardwarecommunication::Port8Bit m_sequence_index_port;
+                    hardwarecommunication::Port8Bit m_sequence_data_port;
+                    hardwarecommunication::Port8Bit m_graphics_controller_index_port;
+                    hardwarecommunication::Port8Bit m_graphics_controller_data_port;
+                    hardwarecommunication::Port8Bit m_attribute_controller_index_port;
+                    hardwarecommunication::Port8Bit m_attribute_controller_read_port;
+                    hardwarecommunication::Port8Bit m_attribute_controller_write_port;
+                    hardwarecommunication::Port8Bit m_attribute_controller_reset_port;
 
-                    hardwarecommunication::Port8Bit miscPort;                       //Miscellaneous
-                    hardwarecommunication::Port8Bit crtcIndexPort;                  //cathode ray tube controller (index)
-                    hardwarecommunication::Port8Bit crtcDataPort;                   //cathode ray tube controller (data)
-                    hardwarecommunication::Port8Bit sequenceIndexPort;              //Sequence Index
-                    hardwarecommunication::Port8Bit sequenceDataPort;               //Sequence Data
-                    hardwarecommunication::Port8Bit graphicsControllerIndexPort;    //Graphics Controller Index
-                    hardwarecommunication::Port8Bit graphicsControllerDataPort;     //Graphics Controller Data
-                    hardwarecommunication::Port8Bit attributeControllerIndexPort;   //Attribute Controller Index
-                    hardwarecommunication::Port8Bit attributeControllerReadPort;    //Attribute Controller Read
-                    hardwarecommunication::Port8Bit attributeControllerWritePort;   //Attribute Controller Write
-                    hardwarecommunication::Port8Bit attributeControllerResetPort;   //Attribute Controller Reset
+                    void write_registers(uint8_t* registers);
+                    uint8_t* get_frame_buffer_segment();
 
-                    void WriteRegisters(uint8_t* registers);                //Send Initialization codes to corresponding port
-                    uint8_t* GetFrameBufferSegment();                       //Get offset for segment wanted to use
-
-                    bool internalSetMode(uint32_t width, uint32_t height, uint32_t colourDepth);
-                    void renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour);
-                    uint8_t getRenderedPixel8Bit(uint32_t x, uint32_t y);
+                    bool internal_set_mode(uint32_t width, uint32_t height, uint32_t colour_depth) final;
+                    void render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour) final;
+                    uint8_t get_rendered_pixel_8_bit(uint32_t x, uint32_t y) final;
 
                 public:
                        VideoGraphicsArray();
                        ~VideoGraphicsArray();
 
-                        string getVendorName();
-                        string getDeviceName();
+                        string get_vendor_name() final;
+                        string get_device_name() final;
 
-                       bool supportsMode(uint32_t width, uint32_t height, uint32_t colourDepth);
-               };
+                       bool supports_mode(uint32_t width, uint32_t height, uint32_t colour_depth) final;
+           };
         }
-
     }
 }
 

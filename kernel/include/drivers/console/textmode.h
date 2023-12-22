@@ -15,26 +15,29 @@ namespace maxOS{
 
         namespace console {
 
+            /**
+             * @class TextModeConsole
+             * @brief Driver for the text mode console, handles the printing of characters and strings to the screen using VGA
+             */
             class TextModeConsole : public Driver, public Console
             {
+                protected:
+                    uint16_t* m_video_memory { (uint16_t*)0xB8000 };
 
                 public:
                     TextModeConsole();
                     ~TextModeConsole();
 
-                    uint16_t getWidth();
-                    uint16_t getHeight();
+                    uint16_t width() final;
+                    uint16_t height() final;
 
-                    void putChar(uint16_t x, uint16_t y, char c);
-                    void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
-                    void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
+                    void put_character(uint16_t x, uint16_t y, char c) final;
+                    void set_foreground_color(uint16_t x, uint16_t y, ConsoleColour) final;
+                    void set_background_color(uint16_t x, uint16_t y, ConsoleColour) final;
 
-                    char getChar(uint16_t x, uint16_t y);
-                    ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
-                    ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
-
-                protected:
-                    uint16_t* videoMemory;
+                    char get_character(uint16_t x, uint16_t y) final;
+                    ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
+                    ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
             };
 
         }

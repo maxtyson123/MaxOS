@@ -25,33 +25,49 @@ namespace maxOS {
                 BUTTON_RELEASED
             };
 
+            /**
+             * @class ButtonPressedEvent
+             * @brief Event that is triggered when a button is pressed
+             */
             class ButtonPressedEvent : public common::Event<ButtonEvents>{
-            public:
-                ButtonPressedEvent(Button* source);
-                ~ButtonPressedEvent();
+                public:
+                    ButtonPressedEvent(Button*);
+                    ~ButtonPressedEvent();
 
-                Button* source;
+                    Button* source;
             };
 
+            /**
+             * @class ButtonReleasedEvent
+             * @brief Event that is triggered when a button is released
+             */
             class ButtonReleasedEvent : public common::Event<ButtonEvents>{
-            public:
-                ButtonReleasedEvent(Button* source);
-                ~ButtonReleasedEvent();
+                public:
+                    ButtonReleasedEvent(Button*);
+                    ~ButtonReleasedEvent();
 
-                Button* source;
+                    Button* source;
             };
 
+            /**
+             * @class ButtonEventHandler
+             * @brief Handles button events
+             */
             class ButtonEventHandler : public common::EventHandler<ButtonEvents>{
-            public:
-                ButtonEventHandler();
-                ~ButtonEventHandler();
+                public:
+                    ButtonEventHandler();
+                    ~ButtonEventHandler();
 
-                virtual common::Event<ButtonEvents>* onEvent(common::Event<ButtonEvents>* event);
+                    virtual common::Event<ButtonEvents>* on_event(common::Event<ButtonEvents>*) override;
 
-                virtual void onButtonPressed(Button* source);
-                virtual void onButtonReleased(Button* source);
+                    virtual void on_button_pressed(Button* source);
+                    virtual void on_button_released(Button* source);
             };
 
+            /**
+             * @class Button
+             * @brief A button widget, can be clicked
+             */
             class Button : public Widget, public common::EventManager<ButtonEvents> {
 
                 public:
@@ -59,17 +75,16 @@ namespace maxOS {
                     ~Button();
 
                     // Widget Stuff
-                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
-                    drivers::peripherals::MouseEventHandler* onMouseButtonPressed(uint32_t x, uint32_t y, uint8_t button);
-                    void onMouseButtonReleased(uint32_t x, uint32_t y, uint8_t button);
+                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
+                    drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) override;
+                    void on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) override;
 
                     // Button Stuff
-                    common::Colour backgroundColour;
-                    common::Colour foregroundColour;
-                    common::Colour borderColour;
+                    common::Colour background_colour;
+                    common::Colour foreground_colour;
+                    common::Colour border_colour;
                     gui::AmigaFont font;
                     string text;
-
             };
         }
     }

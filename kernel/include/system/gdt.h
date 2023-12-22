@@ -10,43 +10,51 @@
 
 namespace maxOS {
     namespace system {
-        class GlobalDescriptorTable {
-        public:
-            class SegmentDescriptor {
+
+        /**
+         * @class SegmentDescriptor
+         * @brief Stores data for the segment descriptors in the GDT
+         */
+        class SegmentDescriptor {
             private:
-                uint16_t limit_lo;      //Low Bytes of the pointer       (Least Significant)
-                uint16_t base_lo;       //Low Bytes of the pointer        (Least Significant)
-                uint8_t base_hi;        //One byte extension for the pointer
-                uint8_t type;           //Excess Bytes
-                uint8_t flags_limit_hi; //High Bytes of the pointer        (Most Significant)
-                uint8_t base_vhi;       //High Bytes of the pointer        (Most Significant)
+              uint16_t m_limit_lo;
+              uint16_t m_base_lo;
+              uint8_t m_base_hi;
+              uint8_t m_type;
+              uint8_t m_flags_limit_hi;
+              uint8_t m_base_vhi;
+
             public:
-                SegmentDescriptor(uint32_t base, uint32_t limit,
-                                  uint8_t type);
+              SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type);
 
-                //Return Pointer and the limit
-                uint32_t Base();
+              uint32_t base();
+              uint32_t limit();
 
-                uint32_t Limit();
+        } __attribute__((packed));
 
-            } __attribute__((packed)); //Tell GCC not to change any of the alignment in the structure. The packed attribute specifies that a variable or structure field should have the smallest possible alignment, one byte for a variable, and one bit for a field, unless you specify a larger value with the aligned attribute.
 
-        private:
-            SegmentDescriptor nullSegmentSelector;
-            SegmentDescriptor unusedSegmentSelector;
-            SegmentDescriptor codeSegmentSelector;
-            SegmentDescriptor dataSegmentSelector;
-            SegmentDescriptor taskStateSegmentSelector;
+        /**
+         * @class GlobalDescriptorTable
+         * @brief Sets up the GDT in the CPU
+         */
+        class GlobalDescriptorTable {
 
-        public:
+          private:
+              SegmentDescriptor m_null_segment_selector;
+              SegmentDescriptor m_unused_segment_selector;
+              SegmentDescriptor m_code_segment_selector;
+              SegmentDescriptor m_data_segment_selector;
+              SegmentDescriptor m_task_state_segment_selector;
 
-            GlobalDescriptorTable(const multiboot_info& multibootHeader);
-            ~GlobalDescriptorTable();
+          public:
 
-            uint16_t CodeSegmentSelector();
-            uint16_t DataSegmentSelector();
-            uint16_t TaskStateSegmentSelector();
-        };
+              GlobalDescriptorTable(const multiboot_info& multiboot_header);
+              ~GlobalDescriptorTable();
+
+              uint16_t code_segment_selector();
+              uint16_t data_segment_selector();
+              uint16_t task_state_segment_selector();
+          };
     }
 }
 

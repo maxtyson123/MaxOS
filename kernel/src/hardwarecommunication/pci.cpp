@@ -24,7 +24,11 @@ PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnec
 
 }
 
-string PeripheralComponentInterconnectDeviceDescriptor::getType() {
+/**
+ * @brief Get the type of the device
+ * @return Type of the device as a string (or Unknown if the type is not known)
+ */
+string PeripheralComponentInterconnectDeviceDescriptor::get_type() {
     switch (class_id)
     {
         case 0x00: return (subclass_id == 0x01) ? "VGA" : "Legacy";
@@ -35,9 +39,9 @@ string PeripheralComponentInterconnectDeviceDescriptor::getType() {
                 case 0x06:  return "SATA controller";
                 default:    return "Storage";
             }
-        case 0x02: return "Network";                          // Network
+        case 0x02: return "Network";
         case 0x03: return "Display";
-        case 0x04:                                         // Multimedia
+        case 0x04:
             switch(subclass_id)
             {
                 case 0x00:  return "Video";
@@ -45,7 +49,7 @@ string PeripheralComponentInterconnectDeviceDescriptor::getType() {
                 case 0x03:  return "Audio";
                 default:    return "Multimedia";
             }
-        case 0x06:                                            // Bridges
+        case 0x06:
             switch(subclass_id)
             {
                 case 0x00:  return "Host bridge";
@@ -73,12 +77,12 @@ string PeripheralComponentInterconnectDeviceDescriptor::getType() {
 
 ///__CONTROLLER___
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(OutputStream* debug)
-: dataPort(0xCFC),      //PCI Controller
-  commandPort(0xCF8)    //PCI Controller
-
+PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(OutputStream*stream)
+: m_data_port(0xCFC),
+  m_command_port(0xCF8),
+  m_debug_messages_stream(stream)
 {
-    this->debugMessagesStream = debug;
+
 }
 
 PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() {
@@ -86,37 +90,32 @@ PeripheralComponentInterconnectController::~PeripheralComponentInterconnectContr
 }
 
 /**
- * @details Read data from the PCI Controller
+ * @brief read data from the PCI Controller
  *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
  * @param registeroffset Register offset
- * @return  data from the PCI Controller
+ * @return data from the PCI Controller
  */
-uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset) {
-    //Structure of the address I / O port :
-    //31    | Enable bit
-    //30-24 | Reserved
-    //23-16 | Bus number
-    //15-11 | Device number
-    //10-8  | Function number
-    //7-0   | Register number , bit 0 and bit 1 are 0
+uint32_t PeripheralComponentInterconnectController::read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset) {
 
-    uint32_t id =
-            0x1 << 31
-            | ((bus & 0xFF) << 16)
-            | ((device & 0x1F) << 11)
-            | ((function & 0x07) << 8)
-            | (registeroffset & 0xFC);      //Cut off the last two bits of the number
-    commandPort.Write(id);             //The ID is like the address of the port
-    uint32_t result = dataPort.Read();
+    // Calculate the id
+    uint32_t id = 0x1 << 31
+                | ((bus & 0xFF) << 16)
+                | ((device & 0x1F) << 11)
+                | ((function & 0x07) << 8)
+                | (registeroffset & 0xFC);
+    m_command_port.write(id);
+
+    // read the data from the port
+    uint32_t result = m_data_port.read();
     return result >> (8* (registeroffset % 4));
 
 }
 
 /**
- * @details Write data to the PCI Controller
+ * @brief write data to the PCI Controller
  *
  * @param bus Bus number
  * @param device Device number
@@ -124,133 +123,134 @@ uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t 
  * @param registeroffset Register offset
  * @param value Value to write
  */
-void PeripheralComponentInterconnectController::Write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value) {
-    uint32_t id =
-            0x1 << 31
-            | ((bus & 0xFF) << 16)
-            | ((device & 0x1F) << 11)
-            | ((function & 0x07) << 8)
-            | (registeroffset & 0xFC);
-    commandPort.Write(id);
-    dataPort.Write(value);
+void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value) {
+
+    // Calculate the id
+    uint32_t id = 0x1 << 31
+                  | ((bus & 0xFF) << 16)
+                  | ((device & 0x1F) << 11)
+                  | ((function & 0x07) << 8)
+                  | (registeroffset & 0xFC);
+    m_command_port.write(id);
+
+    // write the data to the port
+    m_data_port.write(value);
 }
 
 /**
- * @details Check if the device has a function
+ * @brief Check if the device has a function
  *
  * @param bus Bus number
  * @param device Device number
  * @return true if the device has a function
  */
-bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus, uint16_t device) {
+bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bus, uint16_t device) {
 
-    //0x0E
-    return Read(bus,device,0,0x0E) & (1<<7);    //Read address, the 7th bit of it returns if there is a function
+    return read(bus, device, 0, 0x0E) & (1<<7);
 }
 
 /**
- * @details Select the driver for the device
+ * @brief Select the driver for the device
  *
  * @param driverManager device driver manager
- * @param interruptManager Interrupt manager
+ * @param interrupt_manager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::selectDrivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interruptManager, OutputStream *errorMessageStream) {
+void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interrupt_manager, common::OutputStream *error_message_stream)
+{
     for (int bus = 0; bus < 8; ++bus) {
-
         for (int device = 0; device < 32; ++device) {
 
-            int numFunctions = (DeviceHasFunctions(bus,device)) ? 8 : 1;
+            int numFunctions = (device_has_functions(bus, device)) ? 8 : 1;
 
             for (int function = 0; function < numFunctions; ++function) {
-                PeripheralComponentInterconnectDeviceDescriptor deviceDescriptor = GetDeviceDescriptor(bus, device, function);
 
-                //If there is no device then vendor ID is 0x0000, If the device is not ready to react then the vendor ID is 0x0001
-                if(deviceDescriptor.vendor_ID == 0x0000 || deviceDescriptor.vendor_ID == 0x0001 || deviceDescriptor.vendor_ID == 0xFFFF){
+                // Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
+                PeripheralComponentInterconnectDeviceDescriptor deviceDescriptor = get_device_descriptor(bus, device, function);
+                if(deviceDescriptor.vendor_id == 0x0000 || deviceDescriptor.vendor_id == 0x0001 || deviceDescriptor.vendor_id == 0xFFFF)
                     continue;
-                }
+
 
                 // Get port number
                 for(int barNum = 5; barNum >= 0; barNum--){
-
-                    BaseAddressRegister bar = getBaseAddressRegister(bus, device, function, barNum);
-                    if(bar.address && (bar.type == InputOutput)){
-                        deviceDescriptor.portBase = (uint32_t)bar.address;
-                    }
+                    BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
+                    if(bar.address && (bar.type == InputOutput))
+                        deviceDescriptor.port_base = (uint32_t)bar.address;
                 }
 
-                // Write to the debug stream
-                debugMessagesStream->write(deviceDescriptor.getType());
-                debugMessagesStream->write(": ");
+                // write to the debug stream
+                m_debug_messages_stream->write(deviceDescriptor.get_type());
+                m_debug_messages_stream->write(": ");
 
-                // Instantiate the driver and add it to the driver manager
-                Driver* driver = GetDriver(deviceDescriptor, interruptManager);
+                // Select the driver and print information about the device
+                Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
                 if(driver != 0){
-                    handler->onDriverSelected(driver);
-                    debugMessagesStream->write(driver->getVendorName());
-                    debugMessagesStream->write(" ");
-                    debugMessagesStream->write(driver->getDeviceName());
+                  handler->on_driver_selected(driver);
+                  m_debug_messages_stream->write(driver->get_vendor_name());
+                  m_debug_messages_stream->write(" ");
+                  m_debug_messages_stream->write(driver->get_device_name());
                 }else{
-                    listKnownDeivce(deviceDescriptor);
+                  list_known_deivce(deviceDescriptor);
                 }
 
                 // New line
-                debugMessagesStream->write("\n");
+                m_debug_messages_stream->write("\n");
             }
-
         }
     }
-
 }
 
 /**
- * @details Get the device descriptor
+ * @brief Get the device descriptor
  *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
  * @return Device descriptor
  */
-PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function) {
+PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function) {
     PeripheralComponentInterconnectDeviceDescriptor result;
 
     result.bus          = bus;
     result.device       = device;
     result.function     = function;
 
-    result.vendor_ID    = Read(bus, device, function, 0x00);
-    result.device_ID    = Read(bus, device, function, 0x02);
+    result.vendor_id    = read(bus, device, function, 0x00);
+    result.device_id    = read(bus, device, function, 0x02);
 
-    result.class_id     = Read(bus, device, function, 0x0B);
-    result.subclass_id  = Read(bus, device, function, 0x0A);
-    result.interface_id = Read(bus, device, function, 0x09);
+    result.class_id     = read(bus, device, function, 0x0B);
+    result.subclass_id  = read(bus, device, function, 0x0A);
+    result.interface_id = read(bus, device, function, 0x09);
 
-    result.revision     = Read(bus, device, function, 0x8);
-    result.interrupt    = Read(bus, device, function, 0x3C);
+    result.revision     = read(bus, device, function, 0x8);
+    result.interrupt    = read(bus, device, function, 0x3C);
 
     return result;
 }
 
 /**
- * @details Get the driver for the device
+ * @brief Get the driver for the device
  *
  * @param dev Device descriptor
- * @param interruptManager Interrupt manager
+ * @param interrupt_manager Interrupt manager
  * @return Driver for the device, 0 if there is no driver
  */
-Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interruptManager) {
+Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager*interrupt_manager) {
+
+    // Dont use new here, manually allocate memory instead
 
     Driver* driver = 0;
-    switch (dev.vendor_ID)
+    switch (dev.vendor_id)
     {
         case 0x1022:    //AMD
         {
-            switch (dev.device_ID)
+            switch (dev.device_id)
             {
                 case 0x2000:    //am79c971
                 {
-                    amd_am79c973* result = (amd_am79c973*)MemoryManager::activeMemoryManager ->malloc(sizeof(amd_am79c973));
-                    new (result) amd_am79c973(&dev, interruptManager);
+                    amd_am79c973* result = (amd_am79c973*)MemoryManager::s_active_memory_manager
+                          ->malloc(sizeof(amd_am79c973));
+                    new (result) amd_am79c973(&dev, interrupt_manager);
                     return result;
 
                 }
@@ -261,13 +261,13 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
         }
         case 0x8086:  //Intel
         {
-            switch (dev.device_ID)
+            switch (dev.device_id)
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    intel_i217* result = (intel_i217*)MemoryManager::activeMemoryManager ->malloc(sizeof(intel_i217));
-                    new (result) intel_i217(&dev, interruptManager);
-
+                    intel_i217* result = (intel_i217*)MemoryManager::s_active_memory_manager
+                          ->malloc(sizeof(intel_i217));
+                    new (result) intel_i217(&dev, interrupt_manager);
                     return result;
                 }
                 default:
@@ -287,9 +287,8 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
             {
                 case 0x00:  //VGA
                 {
-                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::activeMemoryManager ->malloc(sizeof(VideoGraphicsArray));
+                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::s_active_memory_manager->malloc(sizeof(VideoGraphicsArray));
                     new (result) VideoGraphicsArray();
-
                     return result;
                 }
             }
@@ -301,20 +300,20 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 }
 
 
-void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralComponentInterconnectDeviceDescriptor dev) {
-    switch (dev.vendor_ID)
+void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev) {
+    switch (dev.vendor_id)
     {
         case 0x1022:
         {
             // The vendor is AMD
-            debugMessagesStream->write("AMD ");
+            m_debug_messages_stream->write("AMD ");
 
             // List the device
-            switch (dev.device_ID)
+            switch (dev.device_id)
             {
                 default:
-                    debugMessagesStream->writeHex(dev.device_ID);
-                    break;
+                  m_debug_messages_stream->write_hex(dev.device_id);
+                  break;
             }
             break;
         }
@@ -322,19 +321,19 @@ void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralCompon
         case 0x106B:
         {
             // The vendor is Apple
-            debugMessagesStream->write("Apple ");
+            m_debug_messages_stream->write("Apple ");
 
             // List the device
-            switch (dev.device_ID)
+            switch (dev.device_id)
             {
                 case 0x003F:
                 {
-                    debugMessagesStream->write("KeyLargo/Intrepid USB");
-                    break;
+                  m_debug_messages_stream->write("KeyLargo/Intrepid USB");
+                  break;
                 }
 
                 default:
-                    debugMessagesStream->writeHex(dev.device_ID);
+                  m_debug_messages_stream->write_hex(dev.device_id);
                     break;
             }
             break;
@@ -343,15 +342,15 @@ void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralCompon
         case 1234:
         {
             // The vendor is QEMU
-            debugMessagesStream->write("QEMU ");
+            m_debug_messages_stream->write("QEMU ");
 
             // List the device
-            switch (dev.device_ID)
+            switch (dev.device_id)
             {
 
                 case 0x1111:
                 {
-                    debugMessagesStream->write("Virtual Video Controller");
+                  m_debug_messages_stream->write("Virtual Video Controller");
                     break;
                 }
             }
@@ -361,47 +360,47 @@ void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralCompon
         case 0x8086:
         {
             // The vendor is Intel
-            debugMessagesStream->write("Intel ");
+            m_debug_messages_stream->write("Intel ");
 
             // List the device
-            switch (dev.device_ID)
+            switch (dev.device_id)
             {
 
                 case 0x1237:
                 {
-                    debugMessagesStream->write("440FX");
+                  m_debug_messages_stream->write("440FX");
                     break;
                 }
 
                 case 0x2415:
                 {
-                    debugMessagesStream->write("AC'97");
+                  m_debug_messages_stream->write("AC'97");
                     break;
                 }
 
                 case 0x7000:
                 {
-                    debugMessagesStream->write("PIIX3");
+                  m_debug_messages_stream->write("PIIX3");
                     break;
 
                 }
 
                 case 0x7010:
                 {
-                    debugMessagesStream->write("PIIX4");
+                  m_debug_messages_stream->write("PIIX4");
                     break;
 
                 }
 
                 case 0x7111:
                 {
-                    debugMessagesStream->write("PIIX3");
+                  m_debug_messages_stream->write("PIIX3");
                     break;
                 }
 
                 case 0x7113:
                 {
-                    debugMessagesStream->write("PIIX4 ACPI");
+                  m_debug_messages_stream->write("PIIX4 ACPI");
                     break;
                 }
 
@@ -415,18 +414,18 @@ void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralCompon
         case 0x80EE: {
 
             // The vendor is VirtualBox
-            debugMessagesStream->write("VirtualBox ");
+            m_debug_messages_stream->write("VirtualBox ");
 
             // List the device
-            switch (dev.device_ID) {
+            switch (dev.device_id) {
 
                 case 0xBEEF: {
-                    debugMessagesStream->write("Graphics Adapter");
+                  m_debug_messages_stream->write("Graphics Adapter");
                     break;
                 }
 
                 case 0xCAFE: {
-                    debugMessagesStream->write("Guest Service");
+                  m_debug_messages_stream->write("Guest Service");
                     break;
                 }
             }
@@ -434,57 +433,44 @@ void PeripheralComponentInterconnectController::listKnownDeivce(PeripheralCompon
         }
 
         default:    // Unknown
-            debugMessagesStream ->writeHex(dev.vendor_ID);
-            debugMessagesStream ->write(" ");
-            debugMessagesStream ->writeHex(dev.device_ID);
-            break;
+          m_debug_messages_stream->write_hex(dev.vendor_id);
+          m_debug_messages_stream->write(" ");
+          m_debug_messages_stream->write_hex(dev.device_id);
+          break;
 
     }
 }
 
 /**
- * @details Get the base address register
+ * @brief Get the base address register
  *
  * @param bus Bus number
  * @param device Device number
  * @param function Function number
- * @param barNum Base address register number
- * @return Base address register
+ * @param barNum base address register number
+ * @return base address register
  */
-BaseAddressRegister PeripheralComponentInterconnectController::getBaseAddressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
+BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
     BaseAddressRegister result;
 
     // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
-    uint32_t headerType = Read(bus,device,function,0x0E);
+    uint32_t headerType = read(bus, device, function, 0x0E);
     if (headerType & 0x3F)
         return result;
 
-    uint32_t bar_value = Read(bus, device, function, 0x10 + 4*bar);         // Get the offset of the base address register (Starts at 0x10)
-    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;                     // Get the type of the base address register from the last bit (Input/Output or Memory Mapping)
-    result.address = (uint8_t*) (bar_value & ~0xF);                                    // Get the address of the base address register (Mask the last 4 bits)
+    // read the base address register
+    uint32_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
+    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;
+    result.address = (uint8_t*) (bar_value & ~0xF);
 
-
-    // Write all 1's to the register and read it back to get the size of the base address register
-    Write(bus, device, function, 0x10 + 4*bar, 0xFFFFFFF0 | result.type);
-
-    // Read the size of the base address register
-    result.size = Read(bus, device, function, 0x10 + 4*bar);
-    result.size = (~result.size | 0xF) + 1;                                             //Get the size of the base address register (Mask the last 4 bits) and add 1
+    // read the size of the base address register
+    write(bus, device, function, 0x10 + 4 * bar, 0xFFFFFFF0 | result.type);
+    result.size = read(bus, device, function, 0x10 + 4 * bar);
+    result.size = (~result.size | 0xF) + 1;
 
     // Restore the original value of the base address register
-    Write(bus, device, function, 0x10 + 4*bar, bar_value);
+    write(bus, device, function, 0x10 + 4 * bar, bar_value);
 
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-

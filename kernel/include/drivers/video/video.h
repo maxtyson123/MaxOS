@@ -15,18 +15,21 @@ namespace maxOS
     {
         namespace video
         {
+            /**
+             * @class VideoDriver
+             * @brief Driver for the video controller, handles the setting of the video mode
+             */
             class VideoDriver : public Driver, public common::GraphicsContext {
 
-            protected:
-                virtual bool internalSetMode(uint32_t width, uint32_t height, uint32_t colorDepth);
+              protected:
+                  virtual bool internal_set_mode(uint32_t width, uint32_t height, uint32_t color_depth);
 
-            public:
-                VideoDriver();
-                ~VideoDriver();
+              public:
+                  VideoDriver();
+                  ~VideoDriver();
 
-                virtual bool supportsMode(uint32_t width, uint32_t height, uint32_t colorDepth);
-                bool setMode(uint32_t width, uint32_t height, uint32_t colorDepth);
-                virtual bool setTextMode();
+                  virtual bool supports_mode(uint32_t width, uint32_t height, uint32_t color_depth);
+                  bool set_mode(uint32_t width, uint32_t height, uint32_t colorDepth);
             };
 
         }

@@ -12,14 +12,14 @@ using namespace maxOS::hardwarecommunication;
 
 amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
         :   EthernetDriver(amdNetMessageStream),
-            InterruptHandler(dev -> interrupt + interrupts -> HardwareInterruptOffset(), interrupts),
-            MACAddress0Port(dev -> portBase),
-            MACAddress2Port(dev -> portBase + 0x02),
-            MACAddress4Port(dev -> portBase + 0x04),
-            registerDataPort(dev -> portBase + 0x10),
-            registerAddressPort(dev -> portBase + 0x12),
-            resetPort(dev -> portBase + 0x14),
-            busControlRegisterDataPort(dev -> portBase + 0x16)
+            InterruptHandler(dev -> interrupt + interrupts->hardware_interrupt_offset(), interrupts),
+            MACAddress0Port(dev ->port_base),
+            MACAddress2Port(dev ->port_base + 0x02),
+            MACAddress4Port(dev ->port_base + 0x04),
+            registerDataPort(dev ->port_base + 0x10),
+            registerAddressPort(dev ->port_base + 0x12),
+            resetPort(dev ->port_base + 0x14),
+            busControlRegisterDataPort(dev ->port_base + 0x16)
 {
     // No active buffer at the start
     currentSendBuffer = 0;
@@ -30,12 +30,12 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     initDone = false;
 
     // Get the MAC adresses (split up in little endian order)
-    uint64_t MAC0 = MACAddress0Port.Read() % 256;
-    uint64_t MAC1 = MACAddress0Port.Read() / 256;
-    uint64_t MAC2 = MACAddress2Port.Read() % 256;
-    uint64_t MAC3 = MACAddress2Port.Read() / 256;
-    uint64_t MAC4 = MACAddress4Port.Read() % 256;
-    uint64_t MAC5 = MACAddress4Port.Read() / 256;
+    uint64_t MAC0 = MACAddress0Port.read() % 256;
+    uint64_t MAC1 = MACAddress0Port.read() / 256;
+    uint64_t MAC2 = MACAddress2Port.read() % 256;
+    uint64_t MAC3 = MACAddress2Port.read() / 256;
+    uint64_t MAC4 = MACAddress4Port.read() % 256;
+    uint64_t MAC5 = MACAddress4Port.read() / 256;
 
     // Combine MAC addresses into one 48 bit number
     ownMAC = MAC5 << 40
@@ -46,12 +46,12 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
              | MAC0;
 
     // Set the device to 32 bit mode
-    registerAddressPort.Write(20);              // Tell device to write to register 20
-    busControlRegisterDataPort.Write(0x102);    // Write desired data
+    registerAddressPort.write(20);              // Tell device to write to register 20
+    busControlRegisterDataPort.write(0x102);    // write desired data
 
     // Reset the stop bit (tell device it's not supposed to be reset now)
-    registerAddressPort.Write(0);               // Tell device to write to register 0
-    registerDataPort.Write(0x04);               // Write desired data
+    registerAddressPort.write(0);               // Tell device to write to register 0
+    registerDataPort.write(0x04);               // write desired data
 
     // Set the initialization block
     initBlock.mode = 0x0000;                         // Promiscuous mode = false   ( promiscuous mode tells it to receive all packets, not just broadcasts and those for its own MAC address)
@@ -89,10 +89,12 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     }
 
     // Move initialization block into device
-    registerAddressPort.Write(1);                                     // Tell device to write to register 1
-    registerDataPort.Write( (uint32_t)(&initBlock) & 0xFFFF );             // Write address data
-    registerAddressPort.Write(2);                                     // Tell device to write to register 2
-    registerDataPort.Write( ((uint32_t)(&initBlock) >> 16) & 0xFFFF );     // Write shifted address data
+    registerAddressPort.write(1);                                     // Tell device to write to register 1
+    registerDataPort.write((uint32_t)(&initBlock) &
+                           0xFFFF);             // write address data
+    registerAddressPort.write(2);                                     // Tell device to write to register 2
+    registerDataPort.write(((uint32_t)(&initBlock) >> 16) &
+                           0xFFFF);     // write shifted address data
 
 
 }
@@ -104,39 +106,40 @@ amd_am79c973::~amd_am79c973()
 
 
 /**
- * @details This function activates the device and starts it (Runs when the driver-manger calls activateAll())
+ * @brief This function activates the device and starts it (Runs when the driver-manger calls activateAll())
  */
 void amd_am79c973::activate()
 {
 
     initDone = false;                                            // Set initDone to false
-    registerAddressPort.Write(0);                           // Tell device to write to register 0
-    registerDataPort.Write(0x41);                           // Enable Interrupts and start the device
+    registerAddressPort.write(0);                           // Tell device to write to register 0
+    registerDataPort.write(0x41);                           // Enable Interrupts and start the device
     while(!initDone);                                            // Wait for initDone to be set to true
 
+    registerAddressPort.write(4);                           // Tell device to read from register 4
+    uint32_t temp = registerDataPort.read();                     // Get current data
 
+    registerAddressPort.write(4);                           // Tell device to write to register 4
+    registerDataPort.write(
+        temp |
+        0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
 
-    registerAddressPort.Write(4);                           // Tell device to read from register 4
-    uint32_t temp = registerDataPort.Read();                     // Get current data
-
-    registerAddressPort.Write(4);                           // Tell device to write to register 4
-    registerDataPort.Write(temp | 0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
-
-    registerAddressPort.Write(0);                           // Tell device to write to register 0
-    registerDataPort.Write(0x42);                           // Tell device that it is initialised and can begin operating
+    registerAddressPort.write(0);                           // Tell device to write to register 0
+    registerDataPort.write(
+        0x42);                           // Tell device that it is initialised and can begin operating
 
     active = true;                                               // Set active to true
 }
 
 /**
- * @details This function resets the device
+ * @brief This function resets the device
  *
  * @return The amount of ms to wait
  */
 uint32_t amd_am79c973::reset() {
 
-    resetPort.Read();
-    resetPort.Write(0);
+  resetPort.read();
+    resetPort.write(0);
     return 10;                      // 10 means wait for 10ms
 
 }
@@ -144,24 +147,28 @@ uint32_t amd_am79c973::reset() {
 
 
 /**
- * @details This function handles the interrupt for the device
+ * @brief This function handles the interrupt for the device
  *
  * @param esp The stack pointer (where to return to)
 */
-void amd_am79c973::HandleInterrupt() {
+void amd_am79c973::handle_interrupt() {
 
 
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
-    registerAddressPort.Write(0);                           // Tell device to read from register 0
-    uint32_t temp = registerDataPort.Read();                     // Get current data
+    registerAddressPort.write(0);                           // Tell device to read from register 0
+    uint32_t temp = registerDataPort.read();                     // Get current data
 
     // Note: Cant be switch case as multiple errors can occur at the same time
 
     // Errors
-    if((temp & 0x8000) == 0x8000) errorMessage("AMD am79c973 ERROR: ");
-    if((temp & 0x2000) == 0x2000) errorMessage("COLLISION ERROR\n");
-    if((temp & 0x1000) == 0x1000) errorMessage("MISSED FRAME\n");
-    if((temp & 0x0800) == 0x0800) errorMessage("MEMORY ERROR\n");
+    if((temp & 0x8000) == 0x8000)
+      error_message("AMD am79c973 ERROR: ");
+    if((temp & 0x2000) == 0x2000)
+      error_message("COLLISION ERROR\n");
+    if((temp & 0x1000) == 0x1000)
+      error_message("MISSED FRAME\n");
+    if((temp & 0x0800) == 0x0800)
+      error_message("MEMORY ERROR\n");
 
 
     // Responses
@@ -170,8 +177,8 @@ void amd_am79c973::HandleInterrupt() {
     if((temp & 0x0100) == 0x0100) initDone = true;//
 
     // Reply that it was received
-    registerAddressPort.Write(0);                           // Tell device to write to register 0
-    registerDataPort.Write(temp);                           // Tell device that the interrupt was received
+    registerAddressPort.write(0);                           // Tell device to write to register 0
+    registerDataPort.write(temp);                           // Tell device that the interrupt was received
 }
 
 
@@ -182,7 +189,7 @@ void amd_am79c973::HandleInterrupt() {
 //  Furthermore, STP (Start of Packet, 0x02000000) and ENP (End of Packet, 0x01000000) should be set - this indicates that the data is not split up, but that it is a single Ethernet packet.
 //  Furthermore, bits 12-15 must be set (0x0000F000, are probably reserved) and bits 0-11 are negative Size of the package.
 /**
- * @details This function sends a package
+ * @brief This function sends a package
  *
  * @param buffer The buffer to send
  * @param size The size of the buffer
@@ -192,7 +199,7 @@ void amd_am79c973::DoSend(uint8_t *buffer, uint32_t size) {
     while(!active);
 
     int sendDescriptor = currentSendBuffer;              // Get where data has been written to
-    currentSendBuffer = (currentSendBuffer + 1) % 8;    // Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different tasks in parallel)
+    currentSendBuffer = (currentSendBuffer + 1) % 8;    // Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different m_tasks in parallel)
 
     if(size > 1518){                                    // If attempt to send more than 1518 bytes at once it will be too large
         size = 1518;                                    // Discard all data after that  (Generally if data is bigger than that at driver level then a higher up network layer must have made a mistake)
@@ -215,9 +222,9 @@ void amd_am79c973::DoSend(uint8_t *buffer, uint32_t size) {
     sendBufferDescr[sendDescriptor].flags = 0x8300F000                       // Encode the size of what is being sent
                                             | ((uint16_t)((-size) & 0xFFF));;
 
-
-    registerAddressPort.Write(0);                           // Tell device to write to register 0
-    registerDataPort.Write(0x48);                           // Tell device to send the data currently in the buffer
+    registerAddressPort.write(0);                           // Tell device to write to register 0
+    registerDataPort.write(
+        0x48);                           // Tell device to send the data currently in the buffer
 }
 
 void amd_am79c973::FetchDataReceived()
@@ -236,7 +243,7 @@ void amd_am79c973::FetchDataReceived()
             FireDataReceived(buffer, size);                                             //Pass data to handler
         }
 
-        recvBufferDescr[currentRecvBuffer].flags2 = 0;                                  //Write that the data has been read and can now be used again
+        recvBufferDescr[currentRecvBuffer].flags2 = 0;                                  //write that the data has been read and can now be used again
         recvBufferDescr[currentRecvBuffer].flags = 0x8000F7FF;                          //Clear the buffer
     }
 }
@@ -267,7 +274,7 @@ void amd_am79c973::FetchDataSent()
 
 
 /**
- * @details This function gets the MAC address
+ * @brief This function gets the MAC address
  *
  * @return The MAC address
  */
@@ -280,11 +287,11 @@ void amd_am79c973::deactivate() {
 
 }
 
-string amd_am79c973::getVendorName() {
+string amd_am79c973::get_vendor_name() {
     return "AMD";
 }
 
-string amd_am79c973::getDeviceName() {
+string amd_am79c973::get_device_name() {
     return "PCnet-Fast III (Am79C973)";
 }
 

@@ -20,141 +20,150 @@ Console::~Console() {
 }
 
 /**
- * Get the width of the console in characters
+ * @brief Get the width of the console in characters
+ *
  * @return The width of the console in characters
  */
-uint16_t Console::getWidth() {
+uint16_t Console::width() {
     return 0;
 }
 
 /**
- * Get the height of the console in characters
+ * @brief Get the height of the console in characters
+ *
  * @return  The height of the console in characters
  */
-uint16_t Console::getHeight() {
+uint16_t Console::height() {
     return 0;
 }
 
 /**
- * Put a character on the console
+ * @brief Put a character on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  */
-void Console::putChar(uint16_t x, uint16_t y, char c) {
+void Console::put_character(uint16_t x, uint16_t y, char c) {
 
 }
 
 /**
- * Set the foreground color of a character on the console
+ * @brief Set the foreground color of a character on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @param foreground The foreground color to set
  */
-void Console::setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground) {
+void Console::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) {
 
 }
 
 /**
- * Set the background color of a character on the console
+ * @brief Set the background color of a character on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @param background The background color to set
  */
-void Console::setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background) {
+void Console::set_background_color(uint16_t x, uint16_t y, ConsoleColour background) {
 
 }
 
 /**
- * Get the character at a given coordinate on the console
+ * @brief  Get the character at a given coordinate on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @return The character at the given coordinate
  */
-char Console::getChar(uint16_t x, uint16_t y) {
+char Console::get_character(uint16_t x, uint16_t y) {
     return ' ';
 }
 
 /**
- * Get the background color of a character on the console
+ * @brief Get the background color of a character on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @return The background color of the character
  */
-ConsoleColour Console::getForegroundColor(uint16_t x, uint16_t y) {
+ConsoleColour Console::get_foreground_color(uint16_t x, uint16_t y) {
     return Green;
 }
 
 /**
- * Get the background color of a character on the console
+ * @brief Get the background color of a character on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @return The background color of the character
  */
-ConsoleColour Console::getBackgroundColor(uint16_t x, uint16_t y) {
+ConsoleColour Console::get_background_color(uint16_t x, uint16_t y) {
     return Green;
 }
 
 /**
- * Put a character on the console with a given foreground and background color
+ * @brief Put a character on the console with a given foreground and background color
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  * @param foreground The foreground color of the character
  * @param background The background color of the character
  */
-void Console::putChar(uint16_t x, uint16_t y, char c, ConsoleColour foreground, ConsoleColour background) {
+void Console::put_character(uint16_t x, uint16_t y, char c, ConsoleColour foreground, ConsoleColour background) {
 
     // Set the colors of the character
-    setForegroundColor(x, y, foreground);
-    setBackgroundColor(x, y, background);
+    set_foreground_color(x, y, foreground);
+    set_background_color(x, y, background);
 
     // Put the character on the console
-    putChar(x, y, c);
+    put_character(x, y, c);
 
 }
 
 /**
- * Put a string on the console
+ * @brief Put a string on the console
+ *
  * @param x The x coordinate of the string
  * @param y The y coordinate of the string
  * @param s The string to put on the console
  * @param foreground The foreground color of the string
  * @param background The background color of the string
  */
-void Console::putString(uint16_t x, uint16_t y, string s, ConsoleColour foreground, ConsoleColour background) {
+void Console::put_string(uint16_t x, uint16_t y, string s, ConsoleColour foreground, ConsoleColour background) {
 
     // For each character in the string
-    for(const char* si = s; x < getWidth() && *si != '\0'; si++, x++) {
+    for(const char* si = s; x < width() && *si != '\0'; si++, x++) {
 
         // Put the character on the console
-        putChar(x,y,*si,foreground,background);
-
+        put_character(x, y, *si, foreground, background);
     }
-
 }
 
 /**
- * Scroll the console up by 1 line
+ * @brief Scroll the console up by 1 line
  */
-void Console::scrollUp() {
+void Console::scroll_up() {
 
     // Scroll the console up by 1 line
-    scrollUp(0, 0, getWidth(), getHeight());
+    scroll_up(0, 0, width(), height());
 
 }
 
 /**
- * Scroll an area of the console up by 1 line
+ * @brief Scroll an area of the console up by 1 line
+ *
  * @param left The left coordinate of the area to scroll
  * @param top The top coordinate of the area to scroll
- * @param width The width of the area to scroll
- * @param height The height of the area to scroll
+ * @param width The m_width of the area to scroll
+ * @param height The m_height of the area to scroll
  * @param foreground The foreground color of the new line
  * @param background The background color of the new line
  * @param fill The character to fill the new line with
  */
-void Console::scrollUp(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
+void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
     // For each line in the area to scroll (except the last line)
     for(uint16_t y = top; y < top+height-1; y++){
@@ -163,18 +172,17 @@ void Console::scrollUp(uint16_t left, uint16_t top, uint16_t width, uint16_t hei
         for(uint16_t x = left; x < left+width; x++) {
 
             // Put the character from the line below
-            putChar(x, y, getChar(x, y+1), getForegroundColor(x, y+1), getBackgroundColor(x, y+1));
+            put_character(x, y, get_character(x, y + 1),
+                          get_foreground_color(x, y + 1),
+                          get_background_color(x, y + 1));
 
         }
     }
 
-    // For each character in the last line
-    for(uint16_t x = left; x < left+width; x++) {
+    // Fill the last line with the fill character
+    for(uint16_t x = left; x < left+width; x++)
+        put_character(x, top + height - 1, fill, foreground, background);
 
-        // Put the fill character
-        putChar(x, top+height-1, fill, foreground, background);
-
-    }
 }
 
 /**
@@ -183,45 +191,46 @@ void Console::scrollUp(uint16_t left, uint16_t top, uint16_t width, uint16_t hei
 void Console::clear() {
 
     // Clear the console
-    clear(0, 0, getWidth(), getHeight());
+    clear(0, 0, width(), height());
 
 }
 
 /**
- * Clear an area of the console
+ * @brief Clear an area of the console
+ *
  * @param left The left coordinate of the area to clear
  * @param top The top coordinate of the area to clear
- * @param width The width of the area to clear
- * @param height The height of the area to clear
+ * @param width The m_width of the area to clear
+ * @param height The m_height of the area to clear
  * @param foreground The foreground color of the area
  * @param background The background color of the area
  * @param fill The character to fill the area with
  */
 void Console::clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
-    // For each line in the area to clear
+    // Put the fill character in the areas
     for(uint16_t y = top; y < top+height; y++)
         for(uint16_t x = left; x < left+width; x++){
-            // Put the fill character
-            putChar(x,y,fill,foreground,background);
+            put_character(x, y, fill, foreground, background);
         }
 
 }
 
 /**
- * Invert the colors of a character on the console
+ * @brief Invert the colors of a character on the console
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  */
-void Console::invertColors(uint16_t x, uint16_t y) {
+void Console::invert_colors(uint16_t x, uint16_t y) {
 
     // Get the colors of the character
-    ConsoleColour foreground = getForegroundColor(x, y);
-    ConsoleColour background = getBackgroundColor(x, y);
+    ConsoleColour foreground = get_foreground_color(x, y);
+    ConsoleColour background = get_background_color(x, y);
 
     // Set the colors of the character
-    setForegroundColor(x, y, background);
-    setBackgroundColor(x, y, foreground);
+    set_foreground_color(x, y, background);
+    set_background_color(x, y, foreground);
 }
 
 
@@ -229,20 +238,28 @@ void Console::invertColors(uint16_t x, uint16_t y) {
 
 
 ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t width, uint16_t height)
-: console(console), left(left), top(top), width(width), height(height)
+: m_console(console),
+  m_left(left),
+  m_top(top),
+  m_width(width),
+  m_height(height)
 {
 
 }
 
 ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background)
-        : console(console), left(left), top(top), width(width), height(height)
+: m_console(console),
+  m_left(left),
+  m_top(top),
+  m_width(width),
+  m_height(height)
 {
 
     // Loop through the area setting the colors
     for(uint16_t y = top; y < top+height; y++)
         for(uint16_t x = left; x < left+width; x++){
-            console->setForegroundColor(x,y,foreground);
-            console->setBackgroundColor(x,y,background);
+          console->set_foreground_color(x, y, foreground);
+          console->set_background_color(x, y, background);
         }
 
 }
@@ -253,125 +270,134 @@ ConsoleArea::~ConsoleArea() {
 }
 
 /**
- * Return the width of the console area
+ * @brief Return the width of the console area
+ *
  * @return The width of the console area
  */
-uint16_t ConsoleArea::getWidth() {
-    return width;
+uint16_t ConsoleArea::width() {
+    return m_width;
 }
 
 /**
- * Return the height of the console area
+ * @brief Return the height of the console area
+ *
  * @return The height of the console area
  */
-uint16_t ConsoleArea::getHeight() {
-    return height;
+uint16_t ConsoleArea::height() {
+    return m_height;
 }
 
 /**
- * Place a character on the console area if the coordinates are within the area
+ * @brief Place a character on the console area if the coordinates are within the area
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  */
-void ConsoleArea::putChar(uint16_t x, uint16_t y, char c) {
+void ConsoleArea::put_character(uint16_t x, uint16_t y, char c) {
 
     // Make sure the coordinates are within the console area
-    if(x >= width || y >= height)
+    if(x >= m_width || y >= m_height)
         return;
 
     // Put the character on the console
-    console->putChar(left+x, top+y, c);
+    m_console->put_character(m_left + x, m_top + y, c);
 
 }
 
 /**
- * Change the foreground color of a character on the console area if the coordinates are within the area
+ * @brief Change the foreground color of a character on the console area if the coordinates are within the area
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @param foreground The foreground color of the character
  */
-void ConsoleArea::setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground) {
-
-        // Make sure the coordinates are within the console area
-        if(x >= width || y >= height)
-            return;
-
-        // Set the foreground color of the character
-        console -> setForegroundColor(left + x, top + y, foreground);
-
-}
-
-void ConsoleArea::setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background) {
+void ConsoleArea::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) {
 
     // Make sure the coordinates are within the console area
-    if(x >= width || y >= height)
+    if(x >= m_width || y >= m_height)
         return;
 
-    // Set the background color of the character
-    console -> setBackgroundColor(left + x, top + y, background);
+    // Set the foreground color of the character
+    m_console->set_foreground_color(m_left + x, m_top + y, foreground);
 
 }
 
 /**
- * Return the character at the given coordinates if the coordinates are within the console area
+ * @brief Change the background color of a character on the console area if the coordinates are within the area
+ *
+ * @param x The x coordinate of the character
+ * @param y The y coordinate of the character
+ * @param background The background color of the character
+ */
+void ConsoleArea::set_background_color(uint16_t x, uint16_t y, ConsoleColour background) {
+
+    // Make sure the coordinates are within the console area
+    if(x >= m_width || y >= m_height)
+        return;
+
+    // Set the background color of the character
+    m_console->set_background_color(m_left + x, m_top + y, background);
+
+}
+
+/**
+ * @brief Return the character at the given coordinates if the coordinates are within the console area
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @return The character at the given coordinates, if the coordinates are within the console area otherwise " "
  */
-char ConsoleArea::getChar(uint16_t x, uint16_t y) {
+char ConsoleArea::get_character(uint16_t x, uint16_t y) {
 
     // Make sure the coordinates are within the console area
-    if(x >= width || y >= height)
+    if(x >= m_width || y >= m_height)
         return ' ';
 
     // Return the character at the given coordinates
-    return console->getChar(left+x, top+y);
+    return m_console->get_character(m_left + x, m_top + y);
 }
 
 /**
- * Return the foreground color of the character at the given coordinates if the coordinates are within the console area
+ * @brief Return the foreground color of the character at the given coordinates if the coordinates are within the console area
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @return The foreground color of the character at the given coordinates, if the coordinates are within the console area otherwise ConsoleColour::LightGrey
  */
-ConsoleColour ConsoleArea::getForegroundColor(uint16_t x, uint16_t y) {
+ConsoleColour ConsoleArea::get_foreground_color(uint16_t x, uint16_t y) {
 
     // Make sure the coordinates are within the console area
-    if(x >= width || y >= height)
+    if(x >= m_width || y >= m_height)
         return ConsoleColour::LightGrey;
 
     // Return the foreground color of the character at the given coordinates
-    return console->getForegroundColor(left+x, top+y);
+    return m_console->get_foreground_color(m_left + x, m_top + y);
 
 }
 
 /**
- * Return the background color of the character at the given coordinates if the coordinates are within the console area
+ * @brief Return the background color of the character at the given coordinates if the coordinates are within the console area
+ *
  * @param x The x coordinate of the character
  * @param y The y coordinate of the character
  * @return The background color of the character at the given coordinates, if the coordinates are within the console area otherwise ConsoleColour::Black
  */
-ConsoleColour ConsoleArea::getBackgroundColor(uint16_t x, uint16_t y) {
+ConsoleColour ConsoleArea::get_background_color(uint16_t x, uint16_t y) {
 
     // Make sure the coordinates are within the console area
-    if(x >= width || y >= height)
+    if(x >= m_width || y >= m_height)
         return ConsoleColour::Black;
 
     // Return the background color of the character at the given coordinates
-    return console->getBackgroundColor(left+x, top+y);
+    return m_console->get_background_color(m_left + x, m_top + y);
 }
 
 
 ///____ Console Stream ____///
-ConsoleStream::ConsoleStream(Console *console) {
-
-    // Set the x and y coordinates to 0
-    cursorX = 0;
-    cursorY = 0;
-
-    // Set the console
-    this->console = console;
+ConsoleStream::ConsoleStream(Console *console)
+: m_console(console)
+{
 
 }
 
@@ -380,25 +406,26 @@ ConsoleStream::~ConsoleStream() {
 }
 
 /**
- * Write a character to the console stream
+ * @brief write a character to the console stream
+ *
  * @param c The character to write
  */
-void ConsoleStream::writeChar(char c) {
+void ConsoleStream::write_char(char c) {
 
     // If the character placement is more than the width of the console go on a new line
-    if(cursorX >= console->getWidth()) {
+    if(m_cursor_x >= m_console->width()) {
 
         // Go to the start of the next line
-        cursorX = 0;
+        m_cursor_x = 0;
 
         // Increment the y coordinate but if it is more than the height of the console scroll the console
-        if(++cursorY >= console->getHeight()){
+        if(++m_cursor_y >= m_console->height()){
 
             // Scroll the console
-            console->scrollUp();
+            m_console->scroll_up();
 
             // Decrement the y coordinate
-            cursorY = console->getHeight()-1;
+            m_cursor_y = m_console->height()-1;
         }
     }
 
@@ -407,13 +434,13 @@ void ConsoleStream::writeChar(char c) {
         // New line
         case '\n':
             // Increment the y coordinate but if it is more than the height of the console scroll the console
-            if(++cursorY >= console->getHeight()){
+            if(++m_cursor_y >= m_console->height()){
 
                 // Scroll the console
-                console->scrollUp();
+                m_console->scroll_up();
 
                 // Decrement the y coordinate
-                cursorY = console->getHeight()-1;
+                m_cursor_y = m_console->height()-1;
             }
 
             // don't break here, we want to go to the next case because of the \r
@@ -421,7 +448,7 @@ void ConsoleStream::writeChar(char c) {
         // Carriage return
         case '\r':
             // Go to the start of the next line
-            cursorX = 0;
+            m_cursor_x = 0;
             break;
 
         // Null Terminator
@@ -431,15 +458,15 @@ void ConsoleStream::writeChar(char c) {
         // Backspace
         case '\b':
             // Decrement the x coordinate
-            cursorX--;
+            m_cursor_x--;
             break;
 
         default:
             // Put the character on the console
-            console->putChar(cursorX, cursorY, c);
+            m_console->put_character(m_cursor_x, m_cursor_y, c);
 
             // Increment the x coordinate
-            cursorX++;
+            m_cursor_x++;
             break;
 
     }
@@ -447,14 +474,14 @@ void ConsoleStream::writeChar(char c) {
 }
 
 /**
- * Set the position of the cursor
+ * @brief Set the m_position of the cursor
+ *
  * @param x The x coordinate of the cursor
  * @param y The y coordinate of the cursor
  */
-void ConsoleStream::setCursor(uint16_t x, uint16_t y) {
+void ConsoleStream::set_cursor(uint16_t x, uint16_t y) {
 
     // Set the x and y coordinates
-    cursorX = x;
-    cursorY = y;
+    m_cursor_x = x;
+    m_cursor_y = y;
 }
-

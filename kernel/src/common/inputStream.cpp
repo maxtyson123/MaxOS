@@ -7,7 +7,8 @@
 using namespace maxOS;
 using namespace maxOS::common;
 
-InputStream::InputStream(InputStreamEventHandler<string> *inputStreamEventHandler)
-: GenericInputStream<string>::GenericInputStream(inputStreamEventHandler) {
+InputStream::InputStream(InputStreamEventHandler<string> *input_stream_event_handler)
+: GenericInputStream<string>::GenericInputStream(
+          input_stream_event_handler) {
 
 }

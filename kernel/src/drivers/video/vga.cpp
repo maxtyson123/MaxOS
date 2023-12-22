@@ -12,17 +12,17 @@ using namespace maxOS::hardwarecommunication;
 // http://files.osdev.org/mirrors/geezer/osd/graphics/modes.c - helpful so thanks
 
 VideoGraphicsArray::VideoGraphicsArray()
-:miscPort(0x3C2),
- crtcIndexPort(0x3D4),
- crtcDataPort(0x3D5),
- sequenceIndexPort(0x3C4),
- sequenceDataPort(0x3C5),
- graphicsControllerIndexPort(0x3CE),
- graphicsControllerDataPort(0x3CF),
- attributeControllerIndexPort(0x3C0),
- attributeControllerReadPort(0x3C1),
- attributeControllerWritePort(0x3C0),
- attributeControllerResetPort(0x3DA)
+: m_misc_port(0x3C2),
+  m_crtc_index_port(0x3D4),
+  crtc_data_port(0x3D5),
+  m_sequence_index_port(0x3C4),
+  m_sequence_data_port(0x3C5),
+  m_graphics_controller_index_port(0x3CE),
+  m_graphics_controller_data_port(0x3CF),
+  m_attribute_controller_index_port(0x3C0),
+  m_attribute_controller_read_port(0x3C1),
+  m_attribute_controller_write_port(0x3C0),
+  m_attribute_controller_reset_port(0x3DA)
 {
 }
 
@@ -31,79 +31,80 @@ VideoGraphicsArray::~VideoGraphicsArray() {
 }
 
 /**
- * @details This function is used to write to the VGA registers.
+ * @brief This function is used to write to the VGA registers.
  *
  * @param registers  The VGA registers to write to.
  */
-void VideoGraphicsArray::WriteRegisters(uint8_t* registers)
+void VideoGraphicsArray::write_registers(uint8_t* registers)
 {
-    //MISC (1 val)
-    miscPort.Write(*(registers++));                                     //Get pointer to register, write first to misc, and increase pointer
+    // Move to the next register
+    m_misc_port.write(*(registers++));
 
-    //SEQ (5 vals)
+    // Set the sequencer registers
     for (uint8_t i = 0; i < 5; i++ ) {
-        sequenceIndexPort.Write(i);                                     //Tell where the data is to be written
-        sequenceDataPort.Write(*(registers++));                         //Get pointer to register, first to sequence, and increase pointer
+      m_sequence_index_port.write(i);
+      m_sequence_data_port.write(*(registers++));
     }
 
-    //Unlock CRTC controller (registers 0-7 of port 0x3D4 are write protected by the protect bit (bit 7 of index 0x11) so we must clear it to write to the registers .)
-    crtcIndexPort.Write(0x03);
-    crtcDataPort.Write(crtcDataPort.Read() | 0x80);                    //Set 0x03 (third's) first bit to 1
-    crtcIndexPort.Write(0x11);
-    crtcDataPort.Write(crtcDataPort.Read() | ~0x80);                   //Set 0x11 (eleventh's) first bit to 0
+    // Clear protection bit to enable writing to CR0-7
+    m_crtc_index_port.write(0x03);
+    crtc_data_port.write(crtc_data_port.read() | 0x80);
+    m_crtc_index_port.write(0x11);
+    crtc_data_port.write(crtc_data_port.read() | ~0x80);
 
-    //Make sure that the unlock isn't overwritten
-    registers[0x03] = registers[0x03] | 0x80;                               //In the register 0x03 also set first 1
-    registers[0x11] = registers[0x11] & ~0x80;                              //In the register 0x11 also set first 0
+    // Ensure protection bit is set
+    registers[0x03] = registers[0x03] | 0x80;
+    registers[0x11] = registers[0x11] & ~0x80;
 
-    //CRTC (25 vals)
+    // write the CRTC registers
     for (uint8_t i = 0; i < 25; i++ ) {
-        crtcIndexPort.Write(i);                                        //Tell where the data is to be written
-        crtcDataPort.Write(*(registers++));                            //Get pointer to register, write to cathode thingy, and increase pointer
+      m_crtc_index_port.write(i);
+      crtc_data_port.write(*(registers++));
     }
 
-    //GC (9 vals)
+    // write the graphics controller registers
     for(uint8_t i = 0; i < 9; i++)
     {
-        graphicsControllerIndexPort.Write(i);                          //Tell where the data is to be written
-        graphicsControllerDataPort.Write(*(registers++));              //Get pointer to register, write to graphics controller, and increase pointer
+      m_graphics_controller_index_port.write(i);
+      m_graphics_controller_data_port.write(*(registers++));
     }
 
-    //AC (21 vals)
+    // write the attribute controller registers
     for(uint8_t i = 0; i < 21; i++)
     {
-        attributeControllerResetPort.Read();                                //Reset the Controller
-        attributeControllerIndexPort.Write(i);                         //Tell where the data is to be written
-        attributeControllerWritePort.Write(*(registers++));            //Get pointer to register, write to attribute controller, and increase pointer
+      m_attribute_controller_reset_port.read();
+      m_attribute_controller_index_port.write(i);
+      m_attribute_controller_write_port.write(*(registers++));
     }
 
-    //Re-Lock CRTC and unblank display
-    attributeControllerResetPort.Read();
-    attributeControllerIndexPort.Write(0x20);
+    // Re-Lock CRTC and unblank display
+    m_attribute_controller_reset_port.read();
+    m_attribute_controller_index_port.write(0x20);
 
 }
 
 /**
- * @details This function is used to get the maximum resolution of the VGA and colour depth.
+ * @brief Checks if the specified resolution is supported.
  *
  * @return True if the specified resolution is supported, otherwise false.
  */
-bool VideoGraphicsArray::supportsMode(uint32_t width, uint32_t height, uint32_t colourDepth)
+bool VideoGraphicsArray::supports_mode(uint32_t width, uint32_t height, uint32_t colour_depth)
 {
-    return width == 320 && height == 200 && colourDepth == 8;
+    return width == 320 && height == 200 && colour_depth == 8;
 }
 
 /**
- * @details This function is used to set the specified resolution and colour depth.
+ * @brief Set the resolution of the screen.
  *
  * @param width The width of the resolution.
  * @param height The height of the resolution.
- * @param colourDepth The colour depth of the resolution.
- * @return True if the specified resolution is supported, otherwise false.
+ * @param colour_depth The colour depth of the resolution.
+ *
+ * @return True if the card was able to set the resolution, otherwise false.
  */
-bool VideoGraphicsArray::internalSetMode(uint32_t width, uint32_t height, uint32_t colourDepth)
+bool VideoGraphicsArray::internal_set_mode(uint32_t width, uint32_t height, uint32_t colour_depth)
 {
-    if(!supportsMode(width, height, colourDepth))
+    if(!supports_mode(width, height, colour_depth))
         return false;
 
     //Values from osdev / modes.c
@@ -127,24 +128,25 @@ bool VideoGraphicsArray::internalSetMode(uint32_t width, uint32_t height, uint32
                     0x41, 0x00, 0x0F, 0x00, 0x00
             };
 
-    WriteRegisters(g_320x200x256);
+    write_registers(g_320x200x256);
     return true;
 }
 
 /**
- * @details This function is used to get the framebuffer address.
+ * @brief This function is used to get the framebuffer address.
  *
  * @return The framebuffer address.
  */
-uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
+uint8_t* VideoGraphicsArray::get_frame_buffer_segment()
 {
 
     // Optimise so that dont have to read and write to the port every time
     return (uint8_t*)0xA0000;
 
-    //Read data from index number 6
-    graphicsControllerIndexPort.Write(0x06);
-    uint8_t segmentNumber = graphicsControllerDataPort.Read() & (3<<2); //Shift by 2 as only intrested in bits 3 & 4 (& 3 so all the other bits are removed)
+    //read data from index number 6
+    m_graphics_controller_index_port.write(0x06);
+    uint8_t segmentNumber =
+        m_graphics_controller_data_port.read() & (3<<2); //Shift by 2 as only intrested in bits 3 & 4 (& 3 so all the other bits are removed)
     switch(segmentNumber)
     {
         default:
@@ -156,30 +158,52 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment()
 }
 
 
-//8 bit vga mode only has 256 colours. colorIndex selects which one to display
 /**
- * @details This function is used to put a pixel on the screen.
+ * @brief Puts a 8 bit pixel on the screen.
  *
  * @param x The x coordinate of the pixel.
  * @param y The y coordinate of the pixel.
  * @param colour The colour of the pixel.
  */
-void VideoGraphicsArray::renderPixel8Bit(uint32_t x, uint32_t y, uint8_t colour){
+void VideoGraphicsArray::render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour){
 
-    uint8_t* pixelAddress = GetFrameBufferSegment() + 320*y + x;    // Get where to put the pixel in memory and x y pos
-    *pixelAddress = colour;                                         // Set the colour of the pixel
+    // Get the address of the pixel
+    uint8_t*pixel_address = get_frame_buffer_segment() + 320*y + x;
+
+    // Set the pixel
+    *pixel_address = colour;
 }
 
-uint8_t VideoGraphicsArray::getRenderedPixel8Bit(uint32_t x, uint32_t y) {
-    uint8_t* pixelAddress = GetFrameBufferSegment() + y*320 + x;    // Get where the pixel is in memory and x y pos
-    return *pixelAddress;                                           // Return the colour of the pixel
+/**
+ * @brief Gets a 8 bit pixel from the screen.
+ *
+ * @param x The x coordinate of the pixel.
+ * @param y The y coordinate of the pixel.
+ * @return The colour of the pixel.
+ */
+uint8_t VideoGraphicsArray::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
+
+    // Get the address of the pixel
+    uint8_t*pixel_address = get_frame_buffer_segment() + 320*y + x;
+
+    // Return the pixel
+    return *pixel_address;
 }
 
-string VideoGraphicsArray::getVendorName() {
+/**
+ * @brief Gets the name of the vendor.
+ *
+ * @return The name of the vendor.
+ */
+string VideoGraphicsArray::get_vendor_name() {
     return "IBM"; // VGA was made by IBM
 }
 
-string VideoGraphicsArray::getDeviceName() {
+/**
+ * @brief Gets the name of the device.
+ *
+ * @return The name of the device.
+ */
+string VideoGraphicsArray::get_device_name() {
     return "VGA compatible graphics card";
 }
-

@@ -19,7 +19,7 @@ void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserD
 
 }
 
-Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::onEvent(Event<UserDatagramProtocolEvents> *event) {
+Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::on_event(Event<UserDatagramProtocolEvents> *event) {
 
     switch (event -> type) {
         case UDP_DATA_RECEIVED:
@@ -50,8 +50,8 @@ void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data
 
     // Create the event
     UDPDataReceivedEvent* event = new UDPDataReceivedEvent(this, data, size);
-    raiseEvent(event);
-    MemoryManager::activeMemoryManager->free(event);
+    raise_event(event);
+    MemoryManager::s_active_memory_manager->free(event);
 
 }
 
@@ -81,7 +81,7 @@ UserDatagramProtocolHandler::~UserDatagramProtocolHandler() {
 
 }
 /**
- * @details Handle the recivement of an UDP packet
+ * @brief Handle the recivement of an UDP packet
  *
  * @param srcIP_BE The source IP address in big endian
  * @param dstIP_BE  The destination IP address in big endian
@@ -143,7 +143,7 @@ bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocol
 UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, uint16_t port) {
 
 
-    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 
     if(socket != 0) //If the socket was created
     {
@@ -156,7 +156,7 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, ui
         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
         socket -> userDatagramProtocolHandler = this;                    //Set the UDP handler
 
-        sockets.pushBack(socket);                                       //Add the socket to the list of sockets
+        sockets.push_back(socket);                                       //Add the socket to the list of sockets
     }
 
     return socket;                                        //Return the socket
@@ -197,14 +197,14 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string internet
 }
 
 /**
- * @details Listens for incoming packets on the port
+ * @brief Listens for incoming packets on the port
  *
  * @param port The port to listen on
  * @return The socket that is listening
  */
 UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
 
-    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::activeMemoryManager -> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 
     if(socket != 0) //If the socket was created
     {
@@ -216,7 +216,7 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
         socket -> userDatagramProtocolHandler = this;                    //Set the UDP handler
 
-        sockets.pushBack(socket);                                       //Add the socket to the list of sockets
+        sockets.push_back(socket);                                       //Add the socket to the list of sockets
     }
 
     return socket;                                        //Return the socket
@@ -224,7 +224,7 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
 }
 
 /**
- * @details Disconnects the socket from the remote IP and port
+ * @brief Disconnects the socket from the remote IP and port
  *
  * @param socket The socket to disconnect
  */
@@ -235,7 +235,7 @@ void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket)
         if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
         {
             sockets.erase(currentSocket);                            //Remove the socket from the list of sockets
-            MemoryManager::activeMemoryManager -> free(socket);      //Free the socket
+            MemoryManager::s_active_memory_manager-> free(socket);      //Free the socket
             break;                                                   //Break out of the loop
         }
     }
@@ -243,7 +243,7 @@ void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket)
 }
 
 /**
- * @details Sends a packet to the remote IP and port
+ * @brief Sends a packet to the remote IP and port
  *
  * @param socket The socket to send the packet from
  * @param data The data to send
@@ -252,7 +252,7 @@ void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket)
 void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
 
     uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
-    uint8_t* buffer = (uint8_t*)MemoryManager::activeMemoryManager->malloc(totalSize);          //Allocate memory for the packet
+    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager->malloc(totalSize);          //Allocate memory for the packet
     uint8_t* buffer2 = buffer + sizeof(UserDatagramProtocolHeader);                                 //Get the buffer that will be used to store the data
 
     UserDatagramProtocolHeader* header = (UserDatagramProtocolHeader*)buffer;                       //Create the header of the packet
@@ -278,19 +278,20 @@ void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, uint8
     InternetProtocolPayloadHandler::Send(socket->remoteIP, buffer, totalSize);
 
     //Free the buffer
-    MemoryManager::activeMemoryManager->free(buffer);
+    MemoryManager::s_active_memory_manager->free(buffer);
 
 }
 
 /**
- * @details Binds a handler to the socket
+ * @brief Binds a handler to the socket
  *
  * @param socket The socket to bind the handler to
  * @param userDatagramProtocolHandler The handler to bind
  */
 void UserDatagramProtocolHandler::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler) {
 
-    socket ->handlers.pushBack(userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
+  socket->m_handlers.push_back(
+      userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
 
 
 }

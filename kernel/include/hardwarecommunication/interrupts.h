@@ -18,50 +18,54 @@ namespace maxOS {
 
         class InterruptManager;
 
+        /**
+         * @class InterruptHandler
+         * @brief Handles a certain interrupt number
+         */
         class InterruptHandler {
             protected:
-                uint8_t interrupNumber;
-                InterruptManager *interruptManager;
+                uint8_t m_interrupt_number;
+                InterruptManager* m_interrupt_manager;
 
-                InterruptHandler(uint8_t interrupNumber, InterruptManager *interruptManager = 0);
+                InterruptHandler(uint8_t interrupt_number, InterruptManager*interrupt_manager = 0);
                 ~InterruptHandler();
 
             public:
-                virtual void HandleInterrupt();
+                virtual void handle_interrupt();
 
         };
 
+        /**
+         * @class InterruptManager
+         * @brief Handles all interrupts and passes them to the correct handler
+         */
         class InterruptManager : public common::InputStream {
             friend class InterruptHandler;
 
             protected:
 
-                static InterruptManager *ActiveInterruptManager;
-                static common::OutputStream* errorMessages;
-                uint16_t hardwareInterruptOffset;
-                InterruptHandler *interruptHandlers[256];   // Make vector?
-                ThreadManager* threadManager;
+                static InterruptManager* s_active_interrupt_manager;
+                static common::OutputStream* s_error_messages;
+                uint16_t m_hardware_interrupt_offset;
+                InterruptHandler* m_interrupt_handlers[256];   //TODO: Make vector?
+                system::ThreadManager* m_thread_manager;
 
                 struct GateDescriptor {
-                    uint16_t handlerAddressLowBits;
-                    uint16_t gdt_codeSegmentSelector;
-                    uint8_t reserved;
-                    uint8_t access;
-                    uint16_t handlerAddressHighBits;
+                    uint16_t  handler_address_low_bits;
+                    uint16_t  gdt_code_segment_selector;
+                    uint8_t   reserved;
+                    uint8_t   access;
+                    uint16_t handler_address_high_bits;
                 } __attribute__((packed));
 
-                static GateDescriptor interruptDescriptorTable[256];
+                static GateDescriptor s_interrupt_descriptor_table[256];
 
                 struct InterruptDescriptorTablePointer {
                     uint16_t size;
                     uint32_t base;
                 } __attribute__((packed));
 
-                static void SetInterruptDescriptorTableEntry(uint8_t interrupt,
-                                                             uint16_t codeSegmentSelectorOffset,
-                                                             void (*handler)(),
-                                                             uint8_t DescriptorPrivilegeLevel,
-                                                             uint8_t DescriptorType);
+                static void set_interrupt_descriptor_table_entry(uint8_t interrupt, uint16_t code_segment_selector_offset, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t descriptor_type);
 
                 static void InterruptIgnore();
 
@@ -121,26 +125,26 @@ namespace maxOS {
 
                 static uint32_t HandleInterrupt(uint8_t interrupt, uint32_t esp);
                 static uint32_t HandleInterruptRequest(uint32_t esp);
-                uint32_t DoHandleInterruptRequest(uint8_t interrupt, uint32_t esp);
+                uint32_t handle_interrupt_request(uint8_t interrupt, uint32_t esp);
 
                 //PIC Cominunication
-                Port8BitSlow programmableInterruptControllerMasterCommandPort;
-                Port8BitSlow programmableInterruptControllerMasterDataPort;
-                Port8BitSlow programmableInterruptControllerSlaveCommandPort;
-                Port8BitSlow programmableInterruptControllerSlaveDataPort;
+                Port8BitSlow pic_master_command_port;
+                Port8BitSlow pic_master_data_port;
+                Port8BitSlow pic_slave_command_port;
+                Port8BitSlow pic_slave_data_port;
 
 
             public:
-                InterruptManager(uint16_t hardwareInterruptOffset, system::GlobalDescriptorTable *globalDescriptorTable, ThreadManager* threadManage, common::OutputStream* handler);
+                InterruptManager(uint16_t hardware_interrupt_offset, system::GlobalDescriptorTable*global_descriptor_table, system::ThreadManager* thread_manager, common::OutputStream* handler);
                 ~InterruptManager();
 
-                uint16_t HardwareInterruptOffset();
+                uint16_t hardware_interrupt_offset();
 
-                void setInterruptHandler(uint8_t interrupt, InterruptHandler *handler);
-                void removeInterruptHandler(uint8_t interrupt);
+                void set_interrupt_handler(uint8_t interrupt, InterruptHandler *handler);
+                void remove_interrupt_handler(uint8_t interrupt);
 
-                void Activate();
-                void Deactivate();
+                void activate();
+                void deactivate();
 
         };
     }

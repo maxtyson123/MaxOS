@@ -9,20 +9,20 @@ using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
 
-AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t portBase, bool master, OutputStream* ataMessageStream)
-: dataPort(portBase),
-  errorPort(portBase + 1),
-  sectorCountPort(portBase + 2),
-  LBAlowPort(portBase + 3),
-  LBAmidPort(portBase + 4),
-  LBAHiPort(portBase + 5),
-  devicePort(portBase + 6),
-  commandPort(portBase + 7),
-  controlPort(portBase + 0x206)
+AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master, OutputStream*output_stream)
+: m_data_port(port_base),
+  m_error_port(port_base + 1),
+  m_sector_count_port(port_base + 2),
+  m_LBA_low_port(port_base + 3),
+  m_LBA_mid_port(port_base + 4),
+  m_LBA_high_Port(port_base + 5),
+  m_device_port(port_base + 6),
+  m_command_port(port_base + 7),
+  m_control_port(port_base + 0x206),
+  m_is_master(master),
+  ata_message_stream(output_stream)
 {
-    bytesPerSector = 512;
-    this -> master = master;
-    this -> ataMessageStream = ataMessageStream;
+
 }
 
 AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() {
@@ -30,226 +30,184 @@ AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() {
 }
 
 /**
- * @details This function Identifiers the ATA device
+ * @brief Identify the ATA device
  */
-void AdvancedTechnologyAttachment::Identify() {
+void AdvancedTechnologyAttachment::identify() {
 
-    devicePort.Write(master ? 0xA0 : 0xB0);     //Select Device Master(0xA0) / Slave(0xB0)
-    controlPort.Write(0);                       //Clear HOB bit (HOB : Set this to read back the High Order Byte of the last LBA48 value sent to an IO port.)
+  // Select the device (master or slave)
+  m_device_port.write(m_is_master ? 0xA0 : 0xB0);
 
-    //Floating Bus check : First you select the master, then read in the value of the status register and then compare it with 0xFF (is an invalid status value).
-    devicePort.Write(0xA0);                     //Select Master (0xA0)
-    uint8_t status = commandPort.Read();             //Read Status
-    if(status == 0xFF){                              //IF status is 0xFF then there is no device
-        ataMessageStream -> write("Invalid Status");
-        return;                                      //Return, beacuse if there is no master then there wont be a slave either
-    }
+  // Reset the HOB (High Order Byte)
+  m_control_port.write(0);
 
-    devicePort.Write(master ? 0xA0 : 0xB0);     //Select Device Master(0xA0) / Slave(0xB0)
-    sectorCountPort.Write(0);                   //Sector Doesn't Matter when Identifying so select sec 0
-    LBAlowPort.Write(0);                        //Same here
-    LBAmidPort.Write(0);                        //Same here
-    LBAHiPort.Write(0);                         //Same here
-    commandPort.Write(0x0EC);                   //Command For Identifying
+  // Check if the master is present
+  m_device_port.write(0xA0);
+  uint8_t status = m_command_port.read();
+  if(status == 0xFF){
+    ata_message_stream-> write("Invalid Status");
+    return;
+  }
 
-    status = commandPort.Read();                     //Read Status
-    if(status == 0x00){                              //IF status is 0x00 then there is no device
-        ataMessageStream -> write("No Device");
-        return;                                      //There is no slave/master
-    }
+  // Select the device (master or slave)
+  m_device_port.write(m_is_master ? 0xA0 : 0xB0);
 
-    //Can take a while for there to be an answer to the identify command,
-    while (
-            ((status & 0x80) == 0x80)                 //Device is busy
-            &&
-            ((status & 0x01) != 0x01)                 //There was an error
-          )
-    {
-        status = commandPort.Read();
-    }
+  // Clear the ports
+  m_sector_count_port.write(0);
+  m_LBA_low_port.write(0);
+  m_LBA_mid_port.write(0);
+  m_LBA_high_Port.write(0);
 
-    //Check for any errors
-    if(status & 0x01){
+  // Send the identify command
+  m_command_port.write(0x0EC);
 
-        ataMessageStream -> write("ERROR");
-        return;
+  // Check if the device is present
+  status = m_command_port.read();
+  if(status == 0x00)
+    return;
 
-    }
+  // Wait for the device to be ready or for an error to occur
+  while (((status & 0x80) == 0x80)  && ((status & 0x01) != 0x01))
+    status = m_command_port.read();
 
-    //We are reading 2 bytes from data port so , it will be 256 , so total bytes read are 512 (512 is bytes per sector)
-    bool stopPrint = false;
-    for (uint16_t i = 0; i < 256; ++i) {
+  //Check for any errors
+  if(status & 0x01){
+    ata_message_stream-> write("ERROR");
+    return;
+  }
 
-        uint16_t data = dataPort.Read();
-        char *text = "  \0";
-        text[0] = (data >> 8) & 0xFF;
-        text[1] = data & 0xFF;
-        if(text[0] == 'K'){
-            ataMessageStream -> write(text);
-            stopPrint = true;       //Stop the messed up text from showing
-        }
-
-        if(!stopPrint) ataMessageStream -> write(text);
-
-    }
-
-
+  // read the data and print it
+  for (uint16_t i = 0; i < 256; ++i) {
+      uint16_t data = m_data_port.read();
+      char *text = "  \0";
+      text[0] = (data >> 8) & 0xFF;
+      text[1] = data & 0xFF;
+      ata_message_stream-> write(text);
+  }
 }
 
 /**
- * @details This function reads a sector from the ATA device
+ * @brief read a sector from the ATA device
  *
  * @param sector The sector to read
  * @param data The data to read into
  * @param count The amount of data to read from that sector
  */
-
-void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int count)
+void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int count)
 {
-    //Dont Allow reading More then a sector
-    if(sector & 0xF0000000)
-        return;
-    if(count > bytesPerSector)
+    // Don't allow reading more then a sector
+    if(sector & 0xF0000000 || count > m_bytes_per_sector)
         return;
 
-    devicePort.Write((master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
-    errorPort.Write(0);
-    sectorCountPort.Write(1);
+    // Select the device (master or slave) and reset it
+    m_device_port.write((m_is_master ? 0xE0 : 0xF0) |
+                        ((sector & 0x0F000000) >> 24));
+    m_error_port.write(0);
+    m_sector_count_port.write(1);
 
+    // Split the sector into the ports
+    m_LBA_low_port.write(sector & 0x000000FF);
+    m_LBA_mid_port.write((sector & 0x0000FF00) >> 8);
+    m_LBA_high_Port.write((sector & 0x00FF0000) >> 16);
 
-    LBAlowPort.Write(  sector & 0x000000FF );              //Split the sector into the port (put the low 8 bits ito this port)
-    LBAmidPort.Write( (sector & 0x0000FF00) >> 8);         //Split the sector into the port  (put the mid 8 bits ito this port)
-    LBAHiPort.Write( (sector & 0x00FF0000) >> 16);         //Split the sector into the port (put the hi 8 bits ito this port)
-    commandPort.Write(0x20);                              //Command For Reading
+    // Send the read command
+    m_command_port.write(0x20);
 
+    // Make sure the device is there
+    uint8_t status = m_command_port.read();
+    if(status == 0x00)
+      return;
 
-
-
-    uint8_t status = commandPort.Read();                     //Read Status
-    if(status == 0x00){                                     //IF status is 0x00 then there is no device
-        ataMessageStream -> write("No Device");
-        return;                                              //There is no slave/master
-    }
-
-    //Can take a while for the disk to be fully read
-    while(((status & 0x80) == 0x80)
-      && ((status & 0x01) != 0x01))
-        status = commandPort.Read();
+    // Wait for the device to be ready or for an error to occur
+    while(((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
+        status = m_command_port.read();
 
     //Check for any errors
-    if(status & 0x01){
+    if(status & 0x01)
         return;
 
-    }
-
-    //We are reading 2 bytes to the data port so , it will be 256 , so has to be incremented by 2
+    // read the data and store it in the array
     for(uint16_t i = 0; i < count; i+= 2)
     {
-        uint16_t readData = dataPort.Read();
+        uint16_t read_data = m_data_port.read();
 
-        /*
-        string foo = "  \0";
-        foo[1] = (readData >> 8) & 0x00FF;
-        foo[0] = readData & 0x00FF;
-        printf(foo);
-        */
+        data[i] = read_data & 0x00FF;
 
-        //Place into the data array
-        data[i] = readData & 0x00FF;
-
-        //If we are not at the end of the array, place the next byte into the array as it is incremented by 2 each loop
+        // Place the next byte in the array if there is one
         if(i+1 < count)
-            data[i+1] = (readData >> 8) & 0x00FF;
+            data[i+1] = (read_data >> 8) & 0x00FF;
     }
 
-    //Hard Drive must have a full sector read, even if the data isnt the size of a full sector
-    for(uint16_t i = count + (count % 2); i < bytesPerSector; i+= 2)
-        dataPort.Read();
+    // read the remaining bytes
+    for(uint16_t i = count + (count % 2); i < m_bytes_per_sector; i+= 2)
+      m_data_port.read();
 }
 
 /**
- * @details This function writes a sector to the ATA device
+ * @brief write to a sector on the ATA device
  *
  * @param sector The sector to write to
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::Write28(uint32_t sector, uint8_t* data, int count){
+void AdvancedTechnologyAttachment::write_28(uint32_t sector, uint8_t* data, int count){
 
-    //Don't Allow Writing More then a sector
-    if(sector > 0x0FFFFFFF)
-        return;
-    if(count > 512)
+    // Don't allow writing more then a sector
+    if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)
         return;
 
+    // Select the device (master or slave) and reset it
+    m_device_port.write(m_is_master ? 0xE0
+                                    : 0xF0 | ((sector & 0x0F000000) >> 24));
+    m_error_port.write(0);
+    m_sector_count_port.write(1);
 
+    // Split the sector into the ports
+    m_LBA_low_port.write(sector & 0x000000FF);
+    m_LBA_mid_port.write((sector & 0x0000FF00) >> 8);
+    m_LBA_high_Port.write((sector & 0x00FF0000) >> 16);
 
-    devicePort.Write(master ? 0xE0 : 0xF0 | ((sector & 0x0F000000) >> 24) );     //Select Device Master(0xE0) / Slave(0xF0), and add spare bits
-    errorPort.Write(0);                                                          //Clear Previous Errors
-    sectorCountPort.Write(1);                                                    // For now only read/write a single sector         TODO: Fix this
+    // Send the write command
+    m_command_port.write(0x30);
 
+    // write the data to the device
+    for (uint16_t i = 0; i < m_bytes_per_sector; i+= 2) {
 
-    LBAlowPort.Write(  sector & 0x000000FF );              //Split the sector into the port (put the low 8 bits ito this port)
-    LBAmidPort.Write( (sector & 0x0000FF00) >> 8);         //Split the sector into the port  (put the mid 8 bits ito this port)
-    LBAHiPort.Write( (sector & 0x00FF0000) >> 16);         //Split the sector into the port (put the hi 8 bits ito this port)
-    commandPort.Write(0x30);                              //Command For Writing
+        uint16_t  writeData = data[i];
 
-    ataMessageStream -> write("Writing to ATA: ");
+        // Place the next byte in the array if there is one
+        if(i+1 < count)
+            writeData |= ((uint16_t)data[i+1]) << 8;
 
-
-    //We are write 2 bytes to the data port so , it will be 256 , so has to be incremented by 2
-    for (uint16_t i = 0; i < bytesPerSector ; i+= 2) {
-
-        uint16_t  writeData = data[i];                          //Get the i'th byte from the data
-        if(i+1 < count)                                         //Check if next byte is there also
-            writeData |= ((uint16_t)data[i+1]) << 8;            //Write that byte
-        dataPort.Write(writeData);                         //Write the data
-        char *text = "  \0";
-        text[1] = (writeData >> 8) & 0xFF;
-        text[0] = writeData & 0xFF;
-
-        if(i < count)                                           //Prevent random shit from throwing up on my screen
-            ataMessageStream -> write(text);
+        m_data_port.write(writeData);
     }
 
-    //Hard Drive must have a full sector written, even if the data isnt the size of a full sector
-    for(int i = count + (count%2); i < bytesPerSector; i += 2)      //If count isnt an even number then it would have already had it's byte written
-        dataPort.Write(0x0000);
-
+    // write the remaining bytes
+    for(int i = count + (count%2); i < m_bytes_per_sector; i += 2)
+      m_data_port.write(0x0000);
 }
 /**
- * @details Flush the ATA device
+ * @brief Flush the cache of the ATA device
  */
-void AdvancedTechnologyAttachment::Flush() {
+void AdvancedTechnologyAttachment::flush() {
 
-    devicePort.Write(master ? 0xE0 : 0xF0);     //Select Device Master(0xE0) / Slave(0xF0)
+  // Select the device (master or slave)
+  m_device_port.write(m_is_master ? 0xE0 : 0xF0);
 
-    commandPort.Write(0xE7);                   //Command For Flushing
+  // Send the flush command
+  m_command_port.write(0xE7);
 
-    uint8_t status = commandPort.Read();                     //Read Status
-    if(status == 0x00){                              //IF status is 0x00 then there is no device
-        ataMessageStream -> write("No Device");
-        return;                                      //There is no slave/master
-    }
+  // Make sure the device is there
+  uint8_t status = m_command_port.read();
+  if(status == 0x00)
+    return;
 
-    //Can take a while for there to be an answer to the flush command,
-    while (
-            ((status & 0x80) == 0x80)                 //Device is busy
-            &&
-            ((status & 0x01) != 0x01)                 //There was an error
-            )
-    {
-        status = commandPort.Read();
-    }
 
-    //Check for any errors
-    if(status & 0x01){
+  // Wait for the device to be ready or for an error to occur
+  while (((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
+      status = m_command_port.read();
 
-        ataMessageStream -> write("ERROR");
-        return;
+  if(status & 0x01)
+      return;
 
-    }
-
-    //Flush complete
 }
 
 

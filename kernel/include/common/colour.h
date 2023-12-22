@@ -12,13 +12,18 @@ namespace maxOS{
     namespace common
     {
 
+        /***
+         * @class Colour
+         * @brief Stores the red, green, blue and alpha values of a colour
+         */
         class Colour
         {
             public:
-                uint8_t red;
-                uint8_t green;
-                uint8_t blue;
-                uint8_t alpha;
+                uint8_t red { 0 };
+                uint8_t green { 0 };
+                uint8_t blue { 0 };
+                uint8_t alpha { 0 };
+
 
                 Colour();
                 Colour(uint8_t red, uint8_t green, uint8_t blue);

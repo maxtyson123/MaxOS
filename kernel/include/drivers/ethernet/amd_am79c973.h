@@ -20,6 +20,10 @@ namespace maxOS{
 
             class amd_am79c973;
 
+            /**
+             * @class AMD AM79C973
+             * @brief Driver for the AMD AM79C973 Ethernet Controller
+             */
             class amd_am79c973 : public EthernetDriver, public hardwarecommunication::InterruptHandler{
 
                 struct InitializationBlock{
@@ -92,11 +96,11 @@ namespace maxOS{
                 void deactivate();
 
                 // Naming
-                string getVendorName();
-                string getDeviceName();
+                string get_vendor_name();
+                string get_device_name();
 
                 //Override Interrupt default methods
-                void HandleInterrupt();
+                void handle_interrupt();
 
                 //Ethernet Driver functions
                 void DoSend(uint8_t* buffer, uint32_t size);

@@ -3,38 +3,38 @@
 //
 #include <system/multithreading.h>
 
-#define nullptr 0
-
 using namespace maxOS;
 using namespace maxOS::system;
 
 
-int ThreadManager::numThreads = 0;
-int ThreadManager::currentThread = -1;
-Thread *ThreadManager::Threads[256] = {nullptr};
-GlobalDescriptorTable *ThreadManager::gdt;
-uint8_t ThreadManager::stack[256][5012];
 
-void Thread::init(GlobalDescriptorTable *gdt, void entrypoint())
-{
-    cpustate = (CPUState_Thread *)(stack + 4096 - sizeof(CPUState_Thread));
+Thread::Thread() {
 
-    cpustate->eax = 0;
-    cpustate->ebx = 0;
-    cpustate->ecx = 0;
-    cpustate->edx = 0;
-
-    cpustate->esi = 0;
-    cpustate->edi = 0;
-    cpustate->ebp = 0;
-
-    cpustate->eip = (uint32_t)entrypoint;           // Set the entry point
-    cpustate->eflags = 0x202;                       // Interrupts enabled
-    yieldStatus = false;
 }
 
 Thread::~Thread()
 {
+}
+
+void Thread::init(GlobalDescriptorTable *gdt, void entrypoint())
+{
+
+  // Set up stack
+  m_cpu_state = (CPUState*)(m_stack + 4096 - sizeof(CPUState));
+
+  m_cpu_state->eax = 0;
+  m_cpu_state->ebx = 0;
+  m_cpu_state->ecx = 0;
+  m_cpu_state->edx = 0;
+
+  m_cpu_state->esi = 0;
+  m_cpu_state->edi = 0;
+  m_cpu_state->ebp = 0;
+
+  // Set up function pointer
+  m_cpu_state->eip = (uint32_t)entrypoint;
+  m_cpu_state->eflags = 0x202;
+  m_yield_status = false;
 }
 
 ThreadManager::ThreadManager()
@@ -42,8 +42,7 @@ ThreadManager::ThreadManager()
 }
 
 ThreadManager::ThreadManager(GlobalDescriptorTable *gdt)
-{
-    this->gdt = gdt;
+{ m_gdt = gdt;
 }
 
 ThreadManager::~ThreadManager()
@@ -51,153 +50,77 @@ ThreadManager::~ThreadManager()
 }
 
 /**
- * @details Add a thread to an empty place in the array
+ * @brief Add a thread to an empty place in the array
  *
  * @param Thread thread to add
- * @return true if succesfully added
+ * @return true if successfully added
  * @return false if error
  */
-int ThreadManager::CreateThread(void entrypoint())
+int ThreadManager::create_thread(void entrypoint())
 {
+    // Create a new thread
+    Thread* new_thread = new Thread();
+    new_thread -> init(m_gdt, entrypoint);
+    new_thread -> m_tid = m_threads.size();
+    new_thread -> m_cpu_state -> cs = m_gdt-> code_segment_selector();
 
-    if (numThreads >= 256)                                                  // if there are more than 256 threads, return false
-        return false;
-
-    int i = 0;
-    while (i <= 256)                                                        // find an empty place in the array
-    {
-        if (Threads[i] == nullptr)                                          // if the place is empty
-        {
-            Thread *th = (Thread *)(stack[i] + (5012 - sizeof(Thread)));    // init space for thread
-            th->init(gdt, entrypoint);                                      // init thread
-            th->tid = i;                                                    // set thread id
-            Threads[numThreads] = th;                                       // add thread to array
-            Threads[numThreads]->cpustate->cs = gdt->CodeSegmentSelector(); // set code segment
-            numThreads++;                                                   // increment number of threads
-            return th->tid;                                                 // return thread id
-        }
-
-    i++;                                                                    // increment i
-    }
-
-    return -1;                                                              // if no empty place was found, return -1
+    // Add the thread to the array
+    m_threads.push_back(new_thread);
+    return new_thread -> m_tid;
 }
 
 /**
- * @details Schedules the next thread to be executed by checking its yieldsStatus.
+ * @brief Schedules the next thread to be executed by checking its yieldsStatus.
  *
- * @param cpustate state
- * @return CPUState_Thread* thread to be executed state
+ * @param cpu_state state
+ * @return CPUState* The state of the next thread to be executed
  */
-CPUState_Thread *ThreadManager::Schedule(CPUState_Thread* cpustate)
+CPUState* ThreadManager::schedule(CPUState*cpu_state)
 {
 
-    if(cpustate -> eax == 37){                                              // if eax is 37, it means that the thread is being killed
-        TerminateThread(currentThread);                                  // kill the thread
+    // If the eax register is 37, terminate the thread
+    if(cpu_state-> eax == 37)
+      terminate_thread(m_current_thread);
+
+    // If there are no threads to schedule, return the current state
+    if (m_threads.size() <= 0 || m_threads[m_current_thread] == nullptr)
+        return cpu_state;
+
+    // Save the current state
+    m_threads[m_current_thread]->m_cpu_state = cpu_state;
+
+    // Switch to the next thread
+    if(++m_current_thread >= m_threads.size())
+      m_current_thread %= m_threads.size();
+
+    // If this thread is yielded then skip it
+    if(m_threads[m_current_thread]->m_yield_status){
+      m_threads[m_current_thread]->m_yield_status = false;
+        return schedule(cpu_state);
     }
 
-    if (numThreads <= 0)                                                    // if there are no threads, return cpustate
-        return cpustate;
-
-
-
-
-
-    if (currentThread >= 0 && Threads[currentThread] != nullptr)            // if there is a current thread
-        Threads[currentThread++]->cpustate = cpustate;
-
-
-
-    int i = currentThread;                                                  // set i to currentThread
-
-    while (i < 256)
-    {
-
-        if (i >= 0 && Threads[i] != nullptr)                                // if there is a thread in the array
-        {
-
-            if (Threads[i]->yieldStatus)                                    // if the thread is yielded
-                Threads[i]->yieldStatus = false;                            // set yieldStatus to false
-            else
-            {
-                currentThread = i;                                          // set currentThread to i
-                return Threads[i] -> cpustate;                              // return the state of the thread
-            }
-        }
-
-        i++;
-        if (i >= 256)                                                       // if i is greater than 256
-            i = 0;
-    }
-
-
-    return cpustate;
+    // Return the next thread's state
+    return m_threads[m_current_thread]->m_cpu_state;
 }
 
 /**
- * @details Terminates a thread by removing it from an array by making its pointer nullptr
+ * @brief Terminates a thread
  *
  * @param tid thread id to terminate
- * @return true if sucessfully terminated
- * @return false if error
+ * @return true if successfully terminated thread or false if error
  */
-bool ThreadManager::TerminateThread(int tid)
+bool ThreadManager::terminate_thread(int tid)
 {
-    // if tid is out of bounds, return false
-    if (tid < 0 || tid >= 256)
+    // Check if the thread is actually running
+    if (tid < 0 || tid >= m_threads.size())
         return false;
 
-    // if there is no thread in the array, return false
-    if (Threads[tid] == nullptr)
-        return false;
+    // Delete the thread
+    delete m_threads[tid];
 
-    // Set the pointer to nullptr
-    Threads[tid] = nullptr;
-    numThreads--;
-    return true;
-}
-
-/**
- * @details Joins a thread by waiting to finish
- *
- * @param other thread to join
- * @return true if succesfully joined
- * @return false if error
- */
-bool ThreadManager::JoinThreads(int other)
-{
-    //check if thread is already terminated or null
-    if (Threads[other] == nullptr)
-        return false;
-    if (Threads[other]->yieldStatus)
-        return false;
-
-    while (true)
-    {
-        if (Threads[other] == nullptr)
-            break;
-    }
+    // Erase the thread from the array
+    m_threads.erase(m_threads.begin() + tid);
+    // TODO: Thread ID needs to be updated
 
     return true;
-}
-
-/**
- * @details Makes yield status true of the current thread
- *
- */
-void ThreadManager::YieldThreads(int tid)
-{
-    Threads[tid]->yieldStatus = true;
-}
-
-/**
- * @details Checks if a thread is terminated
- *
- * @param tid thread id to check
- * @return false if thread is terminated
- */
-bool ThreadManager::CheckThreads(int tid) {
-
-    return Threads[tid] == nullptr;
-
 }

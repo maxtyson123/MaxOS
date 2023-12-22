@@ -34,76 +34,93 @@ namespace maxOS {
                 White        = 0x0F
             };
 
+            /**
+             * @class Console
+             * @brief Abstract class for a console, allows for the printing of characters and strings with colours
+             */
             class Console
             {
-            public:
-                Console();
-                ~Console();
+              public:
+                  Console();
+                  ~Console();
 
-                virtual uint16_t getWidth();
-                virtual uint16_t getHeight();
+                  virtual uint16_t width();
+                  virtual uint16_t height();
 
-                virtual void putChar(uint16_t x, uint16_t y, char c);
-                virtual char getChar(uint16_t x, uint16_t y);
+                  virtual void put_character(uint16_t x, uint16_t y, char c);
+                  virtual char get_character(uint16_t x, uint16_t y);
 
-                virtual void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
-                virtual void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
+                  virtual void set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground);
+                  virtual void set_background_color(uint16_t x, uint16_t y, ConsoleColour background);
 
-                virtual ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
-                virtual ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
+                  virtual ConsoleColour get_foreground_color(uint16_t x, uint16_t y);
+                  virtual ConsoleColour get_background_color(uint16_t x, uint16_t y);
 
 
-                virtual void putChar(uint16_t x, uint16_t y, char c, ConsoleColour foreground, ConsoleColour background);
-                virtual void putString(uint16_t x, uint16_t y, string s, ConsoleColour foreground = LightGrey, ConsoleColour background = Black);
-                virtual void scrollUp();
-                virtual void scrollUp(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
-                virtual void clear();
-                virtual void clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
-                virtual void invertColors(uint16_t x, uint16_t y);
+                  virtual void put_character(uint16_t x, uint16_t y, char c, ConsoleColour foreground, ConsoleColour background);
+                  virtual void put_string(uint16_t x, uint16_t y, string s, ConsoleColour foreground = LightGrey, ConsoleColour background = Black);
+
+                  virtual void scroll_up();
+                  virtual void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill= ' ');
+
+                  virtual void clear();
+                  virtual void clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground = LightGrey, ConsoleColour background = Black, char fill=' ');
+
+                  virtual void invert_colors(uint16_t x, uint16_t y);
+
             };
 
+            /**
+             * @class ConsoleArea
+             * @brief A console that is a subsection of another console, limited by a width and height
+             */
             class ConsoleArea : public Console
             {
-            protected:
-                Console* console;
-                uint16_t left;
-                uint16_t top;
-                uint16_t width;
-                uint16_t height;
-            public:
-                ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height);
-                ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background);
-                ~ConsoleArea();
+              protected:
+                  Console* m_console;
+                  uint16_t m_left;
+                  uint16_t m_top;
+                  uint16_t m_width;
+                  uint16_t m_height;
+              public:
+                  ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height);
+                  ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background);
+                  ~ConsoleArea();
 
-                uint16_t getWidth();
-                uint16_t getHeight();
+                  uint16_t width() override;
+                  uint16_t height() override;
 
-                void putChar(uint16_t x, uint16_t y, char c);
-                void setForegroundColor(uint16_t x, uint16_t y, ConsoleColour foreground);
-                void setBackgroundColor(uint16_t x, uint16_t y, ConsoleColour background);
+                  void put_character(uint16_t x, uint16_t y, char c) override;
+                  void set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) override;
+                  void set_background_color(uint16_t x, uint16_t y, ConsoleColour background) override;
 
-                char getChar(uint16_t x, uint16_t y);
-                ConsoleColour getForegroundColor(uint16_t x, uint16_t y);
-                ConsoleColour getBackgroundColor(uint16_t x, uint16_t y);
+                  char get_character(uint16_t x, uint16_t y) override;
+                  ConsoleColour get_foreground_color(uint16_t x, uint16_t y) override;
+                  ConsoleColour get_background_color(uint16_t x, uint16_t y) override;
             };
 
+            /**
+             * @class ConsoleStream
+             * @brief A stream that can be used to write to a console
+             */
             class ConsoleStream : public common::OutputStream
             {
-            protected:
-                Console* console;
+              protected:
+                  Console* m_console;
 
-                ConsoleColour foreground;
-                ConsoleColour background;
+                  ConsoleColour m_foreground;
+                  ConsoleColour m_background;
 
-            public:
-                uint16_t cursorX;
-                uint16_t cursorY;
+              public:
+                  uint16_t m_cursor_x { 0 };
+                  uint16_t m_cursor_y { 0 };
 
-                ConsoleStream(Console* console);
-                ~ConsoleStream();
-                void writeChar(char c);
-                void setCursor(uint16_t x, uint16_t y);
-            };
+                  ConsoleStream(Console*);
+                  ~ConsoleStream();
+
+                  void write_char(char c) override;
+                  void set_cursor(uint16_t x, uint16_t y);
+              };
 
         }
     }

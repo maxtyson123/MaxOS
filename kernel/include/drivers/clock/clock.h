@@ -22,55 +22,68 @@ namespace maxOS {
                 TIME
             };
 
+            /**
+             * @class TimeEvent
+             * @brief Event that is triggered when the clock ticks, holds the current time
+             */
             class TimeEvent : public common::Event<ClockEvents>{
                 public:
                     common::Time* time;
-                    TimeEvent(common::Time* time);
+                    TimeEvent(common::Time*);
                     ~TimeEvent();
             };
+
+            /**
+             * @class ClockEventHandler
+             */
             class ClockEventHandler : public common::EventHandler<ClockEvents>{
 
                 public:
                     ClockEventHandler();
                     ~ClockEventHandler();
 
-                    common::Event<ClockEvents>* onEvent(common::Event<ClockEvents>* event);
+                    common::Event<ClockEvents>* on_event(common::Event<ClockEvents>* event) override;
 
-                    virtual void onTime(const common::Time& time);
+                    virtual void on_time(const common::Time& time);
 
             };
 
+            /**
+             * @class Clock
+             * @brief Driver for the CMOS Real Time Clock
+             */
             class Clock: public Driver, public hardwarecommunication::InterruptHandler, public common::EventManager<ClockEvents>{
                 private:
-                    volatile uint64_t ticks;        // Ensure that the compiler does not optimize this variable out of the code (volatile)
+
+                  // Ensure that the compiler does not optimize this variable out of the code (volatile)
+                  volatile uint64_t m_ticks;
 
                 protected:
-                    // Store all the event clockEventHandlers
-                    common::Vector<ClockEventHandler*> clockEventHandlers;
-                    bool binaryCodedDecimalRepresentation;
+                  
+                    bool m_binary_coded_decimal_representation;
 
                     // Ports
-                    hardwarecommunication::Port8Bit dataPort;
-                    hardwarecommunication::Port8Bit commandPort;
+                    hardwarecommunication::Port8Bit m_data_port;
+                    hardwarecommunication::Port8Bit m_command_port;
 
                     // Time between events
-                    uint16_t ticksBetweenEvents;
-                    uint16_t ticksUntilNextEvent;
+                    uint16_t m_ticks_between_events { 0 };
+                    uint16_t m_ticks_until_next_event { 1 };
 
                     // Other functions
-                    void HandleInterrupt();
-                    uint8_t readHardwareClock(uint8_t address);
-                    uint8_t binaryRepresentation(uint8_t number);
+                    void handle_interrupt() final;
+                    uint8_t read_hardware_clock(uint8_t address);
+                    uint8_t binary_representation(uint8_t number);
 
                 public:
-                    Clock(hardwarecommunication::InterruptManager* interruptManager, uint16_t timeBetweenEvents = 10);
+                    Clock(hardwarecommunication::InterruptManager* interrupt_manager, uint16_t time_between_events = 10);
                     ~Clock();
 
-                    void activate();
+                    void activate() override;
                     void delay(uint32_t milliseconds);
 
-                    string getVendorName();
-                    string getDeviceName();
+                    string get_vendor_name() final;
+                    string get_device_name() final;
             };
 
         }

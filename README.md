@@ -53,8 +53,8 @@ Kernel Cleanup
 - [x] Cross-Compiler
 - [x] Better Scripts
 - [x] GUI Bug Fixes
-- [ ] Better Commenting and Doxygen Documentation
-- [ ] Use better c++ coding conventions
+- [x] Better Commenting and Doxygen Documentation
+- [x] Use better c++ coding conventions
 - [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
 - [ ] Clean up all the TODOs
 - [ ] Rewrite Readme

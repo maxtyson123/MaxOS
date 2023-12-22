@@ -6,7 +6,6 @@
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
-#include <hardwarecommunication/serial.h>
 
 //Drivers
 #include <drivers/driver.h>
@@ -63,77 +62,6 @@ using namespace maxOS::system;
 using namespace maxOS::memory;
 using namespace maxOS::filesystem;
 
-
-#define ENABLE_GRAPHICS
-
-class KeyboardToStream : public KeyboardEventHandler
-{
-    OutputStream* stream;
-public:
-    KeyboardToStream(OutputStream* stream)
-    {
-        this->stream = stream;
-    }
-
-    void onKeyDown(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState)
-    {
-        // If the key is a printable character, write it to the stream
-        if(31 < keyDownCode && keyDownCode < 127)
-            stream->writeChar((char)keyDownCode);
-
-        // If it is a backspace, delete the last character
-        if(keyDownCode == KeyCode::backspace)
-            stream->write("\b \b");
-
-        // If it is a newline the prompt
-        if(keyDownCode == KeyCode::enter)
-        {
-            stream->write("\nMaxOS> ");
-        }
-
-    }
-};
-
-class MouseToConsole: public MouseEventHandler{
-
-    Console* console;
-    int x;
-    int y;
-    uint8_t buttons;
-
-public:
-    MouseToConsole(Console* console)
-    {
-        this->console = console;
-        buttons = 0;
-        x = console->getWidth()*2;
-        y = console->getHeight()*2;
-    }
-    
-
-    void onMouseMoveEvent(int8_t x, int8_t y)
-    {
-
-        console->invertColors(this->x/4,this->y/4);
-
-        this->x += x;
-        if(this->x < 0)
-            this->x = 0;
-        if(this->x >= console->getWidth()*4)
-            this->x = console->getWidth()*4-1;
-
-        this->y += y;
-        if(this->y < 0)
-            this->y = 0;
-        if(this->y >= console->getHeight()*4)
-            this->y = console->getHeight()*4-1;
-
-        console->invertColors(this->x/4,this->y/4);
-    }
-
-
-};
-
 //Define what a constructor is
 typedef void (*constructor)();
 
@@ -146,33 +74,39 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
-#pragma clang diagnostic ignored "-Wwritable-strings"
-
 //TODO: Rewrite multiboot to use the one from the manual: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Example-OS-code
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
 
-    // Memory Management has to be set up first so that the video driver can use it
+    // Memory Management has to be set up m_first_memory_chunk so that the video driver can use it
     uint32_t memupper = multibootHeader.mem_upper;
     size_t  heap = 10*1024*1024;                                                          //Start at 10MB
     size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
     MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
 
     // Initialise the VESA Driver
-    VideoElectronicsStandardsAssociationDriver vesa((multiboot_info_t *)&multibootHeader);
+    VideoElectronicsStandardsAssociation vesa((multiboot_info_t *)&multibootHeader);
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
-    videoDriver -> setMode((int)multibootHeader.framebuffer_width, (int)multibootHeader.framebuffer_height, (int)multibootHeader.framebuffer_bpp);
+    videoDriver->set_mode((int)multibootHeader.framebuffer_width,
+                          (int)multibootHeader.framebuffer_height,
+                          (int)multibootHeader.framebuffer_bpp);
 
-    //Initialise Console
+    // Initialise Console
     VESABootConsole console(&vesa);
-    //TextModeConsole console;
     console.clear();
 
-    string logo = header_data;
+    // Check if the bootloader is m_valid
+    if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
+    {
+      console.put_string(0, 0, "Invalid bootloader", ConsoleColour::Red,
+                         ConsoleColour::Black);
+        asm("hlt");
+    }
 
     // Print the logo to center of the screen
-    uint32_t centerX = videoDriver->getWidth()/2;
-    uint32_t centerY = videoDriver->getHeight()/2;
+    string logo = header_data;
+    uint32_t centerX = videoDriver->get_width()/2;
+    uint32_t centerY = videoDriver->get_height()/2;
     for (int logoY = 0; logoY < logo_height; ++logoY) {
         for (int logoX = 0; logoX < logo_width; ++logoX) {
 
@@ -183,39 +117,33 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
             LOGO_HEADER_PIXEL(logo, pixel);
 
             // Draw the pixel
-            videoDriver->putPixel(centerX - logo_width/2 + logoX, centerY - logo_height/2 + logoY, maxOS::common::Colour(pixel[0], pixel[1], pixel[2]));
+            videoDriver->put_pixel(
+                centerX - logo_width / 2 + logoX,
+                centerY - logo_height / 2 + logoY,
+                common::Colour(pixel[0], pixel[1], pixel[2]));
         }
     }
 
 
     // Make the header
-    ConsoleArea consoleHeader(&console, 0, 0, console.getWidth(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
+    ConsoleArea consoleHeader(&console, 0, 0, console.width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
     ConsoleStream headerStream(&consoleHeader);
     headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
 
     // Calc the length of the header
-    uint32_t headerLength = headerStream.cursorX;
-    uint32_t headerPadding = (console.getWidth() - headerLength)/2;
-    headerStream.setCursor(0,0);
+    uint32_t headerLength = headerStream.m_cursor_x;
+    uint32_t headerPadding = (console.width() - headerLength)/2;
+    headerStream.set_cursor(0, 0);
 
-    // Write the header
+    // write the header
     for(uint32_t i = 0; i < headerPadding; i++) headerStream << " "; headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]"; for(uint32_t i = 0; i < headerPadding; i++) headerStream << " ";
 
     // Make a main console area at the top of the screen
-    ConsoleArea mainConsoleArea(&console, 0, 1, console.getWidth(), console.getHeight(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea mainConsoleArea(&console, 0, 1, console.width(),
+                                console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
-    // Make a null stream
-    ConsoleArea nullConsoleArea(&console, 0, 0, 0, 0);
-    ConsoleStream nullStream(&nullConsoleArea);
-
-    // Check if the bootloader is valid
-    if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
-    {
-        cout << "Invalid bootloader \n";
-        cout << "Got Magic: " << (uint32_t)multiboot_magic << ", Expected Magic: " << MULTIBOOT_BOOTLOADER_MAGIC;
-        return;
-    }
+    // Print the build info
     cout << "BUILD INFO: " << VERSION_NAME << " on "
                       << BUILD_DATE.year << "-"
                       << BUILD_DATE.month << "-"
@@ -228,10 +156,10 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
 
     // Where the areas should start
-    uint32_t areaStart = cout.cursorY;
+    uint32_t areaStart = cout.m_cursor_y;
 
     // Make the system setup stream
-    ConsoleArea systemSetupHeader(&console, 0, areaStart, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleArea systemSetupHeader(&console, 0, areaStart, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream systemSetupHeaderStream(&systemSetupHeader);
     systemSetupHeaderStream << "Setting up system";
 
@@ -241,7 +169,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     systemSetupHeaderStream << ".";
 
     // Print that the memory has been set up
-    cout << "Memory: " << (int)memoryManager.getMemoryUsed()/1000000 <<  "MB used, " << (int)memSize/1000000 << "MB available\n";
+    cout << "Memory: " << (int)memoryManager.memory_used()/1000000 <<  "MB used, " << (int)memSize/1000000 << "MB available\n";
     cout << "-- Set Up Memory Management\n";
     systemSetupHeaderStream << ".";
 
@@ -261,7 +189,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     systemSetupHeaderStream << "[ DONE ]";
 
     // Make the device setup stream
-    ConsoleArea deviceSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleArea deviceSetupHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream deviceSetupHeaderStream(&deviceSetupHeader);
     deviceSetupHeaderStream << "Setting up devices";
     
@@ -270,22 +198,20 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     //Keyboard
     KeyboardDriver keyboard(&interrupts);
     KeyboardInterpreterEN_US keyboardInterpreter;
-    keyboard.connectInputStreamEventHandler(&keyboardInterpreter);
-    KeyboardToStream kbhandler(&cout);
-    //keyboardInterpreter.connectEventHandler(&kbhandler);
-    driverManager.addDriver(&keyboard);
+    keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
+    driverManager.add_driver(&keyboard);
     cout << "-- Set Up Keyboard\n";
     deviceSetupHeaderStream << ".";
 
     //Mouse
     MouseDriver mouse(&interrupts);
-    driverManager.addDriver(&mouse);
+    driverManager.add_driver(&mouse);
     cout << "-- Set Up Mouse\n";
     deviceSetupHeaderStream << ".";
 
     //Clock
     Clock kernelClock(&interrupts, 1);
-    driverManager.addDriver(&kernelClock);
+    driverManager.add_driver(&kernelClock);
     cout << "-- Set Up Clock\n";
     deviceSetupHeaderStream << ".";
 
@@ -293,13 +219,15 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     Vector<DriverSelector*> driverSelectors;
 
     //Make the stream on the side for the PCI
-    ConsoleArea pciConsoleArea(&console, console.getWidth() - 45, areaStart+1, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea pciConsoleArea(&console, console.width() - 45, areaStart+1, 45, console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream pciConsoleStream(&pciConsoleArea);
-    console.putString(console.getWidth() - 45, areaStart, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
+    console.put_string(console.width() - 45, areaStart,
+                       "                 PCI Devices                 ",
+                       ConsoleColour::LightGrey, ConsoleColour::Black);
     
     //PCI
     PeripheralComponentInterconnectController PCIController(&pciConsoleStream);
-    driverSelectors.pushBack(&PCIController);
+    driverSelectors.push_back(&PCIController);
     cout << "-- Set Up PCI\n";
     deviceSetupHeaderStream << ".";
 
@@ -314,7 +242,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
     {
         cout << ".";
-        (*selector)->selectDrivers(&driverManager, &interrupts, 0);
+        (*selector)->select_drivers(&driverManager, &interrupts, 0);
     }
     cout << " Found\n";
     deviceSetupHeaderStream << ".";
@@ -323,7 +251,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     deviceSetupHeaderStream << "[ DONE ]";
 
     // Make the activation stream
-    ConsoleArea activationHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleArea activationHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream activationHeaderStream(&activationHeader);
     activationHeaderStream << "Initializing Hardware";
 
@@ -343,7 +271,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     activationHeaderStream << ".";
 
     // Interrupts
-    interrupts.Activate();
+    interrupts.activate();
     kernelClock.delay(resetWaitTime);                                            //Wait for the devices to reset (has to be done after interrupts are activated otherwise the clock interrupt wont trigger)
     cout << "-- Activated Interrupts\n";
     activationHeaderStream << ".";
@@ -358,7 +286,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << " Initialised\n";
     activationHeaderStream << ".";
 
-    // Activate the drivers
+    // activate the drivers
     cout << "-- Activating Devices";
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
@@ -372,19 +300,22 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     activationHeaderStream << "[ DONE ]";
 
     // Make the network setup stream
-    ConsoleArea networkSetupHeader(&console, 0, cout.cursorY, console.getWidth(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
+    ConsoleArea networkSetupHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream networkSetupHeaderStream(&networkSetupHeader);
     networkSetupHeaderStream << "Setting up network";
 
     // Make the stream on the side for the network
-    ConsoleArea networkConsoleArea(&console, console.getWidth() - 40, 2 + console.getHeight()/2, 45, console.getHeight()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea networkConsoleArea(&console, console.width() - 40, 2 + console.height()/2, 45,
+        console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream networkConsoleStream(&networkConsoleArea);
-    console.putString(console.getWidth() - 40, 1 + console.getHeight()/2, "                 Network                    ", ConsoleColour::LightGrey, ConsoleColour::Black);
+    console.put_string(console.width() - 40, 1 + console.height() / 2,
+                       "                 Network                    ",
+                       ConsoleColour::LightGrey, ConsoleColour::Black);
 
     // Get the driver
     EthernetDriver* ethernetDriver = (EthernetDriver*)driverManager.drivers[4];
-    ethernetDriver->driverMessageStream = &networkConsoleStream;
-    cout << "Got Ethernet Driver: " << ethernetDriver->getDeviceName() << "\n";
+    ethernetDriver->m_driver_message_stream = &networkConsoleStream;
+    cout << "Got Ethernet Driver: " << ethernetDriver->get_device_name() << "\n";
     networkSetupHeaderStream << ".";
 
     // Ethernet Frame Handler
@@ -423,57 +354,11 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     networkSetupHeaderStream << "[ DONE ]";
 
 
-    // Run the network
-//#define NETWORK
-#ifdef NETWORK
-
-    // TCPtoStream
-    class TCPtoStream: public TransmissionControlProtocolPayloadHandler{
-
-        ConsoleStream* stream;
-        public:
-        TCPtoStream(ConsoleStream* stream)
-        {
-            this->stream = stream;
-        }
-        ~TCPtoStream()
-        {
-            this->stream = nullptr;
-        }
-
-        void handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t payloadLength)
-        {
-            *stream << "TCP Payload Received: ";
-            for(uint16_t i = 0; i < payloadLength; i++)
-            {
-                *stream << data[i];
-            }
-            *stream << "\n";
-        }
-
-        void Connected(TransmissionControlProtocolSocket* socket)
-        {
-            *stream << "TCP Connection Established\n";
-        }
-
-        void Disconnected(TransmissionControlProtocolSocket* socket)
-        {
-            *stream << "TCP Connection Closed\n";
-        }
-    };
-    cout << "Listening on TCP Port 1234\n";
-    // Run in term before boot when using tcp.send   : ncat -l 127.0.0.1 1234
-    // Run in term after  boot when using tcp.listen : ncat 127.0.0.1 1234
-
-#endif
-
-
-#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
-    mouse.connectEventHandler(&desktop);
-    keyboardInterpreter.connectEventHandler(&desktop);
-    kernelClock.connectEventHandler(&desktop);
+    mouse.connect_event_handler(&desktop);
+    keyboardInterpreter.connect_event_handler(&desktop);
+    kernelClock.connect_event_handler(&desktop);
 
     Window testWindow(150,10, 200, 150, "Test Window");
     widgets::InputBox testInputBox(10, 10, 150, 20, "test");
@@ -491,23 +376,22 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
             this->stream = nullptr;
         }
 
-        void onInputBoxTextChanged(string newText)
+        void on_input_box_text_changed(string newText)
         {
             *stream << "Input Box Changed: " << newText << "\n";
         }
     };
     InputBoxStream inputBoxStream(&cout);
-    testInputBox.connectEventHandler(&inputBoxStream);
-    testWindow.addChild(&testInputBox);
-    desktop.addChild(&testWindow);
+    testInputBox.connect_event_handler(&inputBoxStream);
+    testWindow.add_child(&testInputBox);
+    desktop.add_child(&testWindow);
 
     Window testWindow2(350,100, 200, 150, "Test Window 2");
-    desktop.addChild(&testWindow2);
+    desktop.add_child(&testWindow2);
 
 #endif
 
-    // Loop forever
+    // Wait
     while (true);
-}
 
-#pragma clang diagnostic pop
+}

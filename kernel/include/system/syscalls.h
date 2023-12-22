@@ -14,10 +14,10 @@ namespace maxOS{
         class SyscallHandler : hardwarecommunication::InterruptHandler{
 
         public:
-            SyscallHandler(hardwarecommunication::InterruptManager* interruptManager, uint8_t interruptNumber);
+            SyscallHandler(hardwarecommunication::InterruptManager*interrupt_manager, uint8_t interrupt_number);
             ~SyscallHandler();
 
-            virtual void HandleInterrupt();
+            virtual void handle_interrupt();
 
         };
 

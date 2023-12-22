@@ -11,68 +11,64 @@
 namespace maxOS{
     namespace memory{
 
-        //Base class for memory I/o
+        /**
+         * @class MemIO
+         * @brief base class for all memory IO
+         */
         class MemIO {
-            protected:  //Protected so that it cant be instantiated bc its purely virtual
-                uint64_t address;
+            protected:
+                uint32_t m_address;
 
-                MemIO(uint64_t address);
+                MemIO(uint32_t address);
                 ~MemIO();
             };
 
+        /**
+         * @class MemIO8Bit
+         * @brief Handles 8 bit memory IO
+         */
         class MemIO8Bit : public MemIO {
             public:
-                //Constructor / Deconstructor
-                MemIO8Bit(uint64_t address);
+                MemIO8Bit(uint32_t address);
                 ~MemIO8Bit();
 
-                //Read / Write function
-                virtual void Write(uint8_t data);
-
-                virtual uint8_t Read();
+                virtual void write(uint8_t data);
+                virtual uint8_t read();
             };
 
 
         class MemIO16Bit : public MemIO {
             public:
-                //Constructor / Deconstructor
-                MemIO16Bit(uint64_t address);
+                MemIO16Bit(uint32_t address);
                 ~MemIO16Bit();
 
-                //Read / Write function
-                virtual void Write(uint16_t data);
-
-                virtual uint16_t Read();
+                virtual void write(uint16_t data);
+                virtual uint16_t read();
             };
 
         class MemIO32Bit : public MemIO {
             public:
-                //Constructor / Deconstructor
-                MemIO32Bit(uint64_t address);
+                MemIO32Bit(uint32_t address);
                 ~MemIO32Bit();
 
-                //Read / Write function
-                virtual void Write(uint32_t data);
-
-                virtual uint32_t Read();
+                virtual void write(uint32_t data);
+                virtual uint32_t read();
             };
 
         class MemIO64Bit : public MemIO {
         public:
-            //Constructor / Deconstructor
-            MemIO64Bit(uint64_t address);
+            MemIO64Bit(uint32_t address);
             ~MemIO64Bit();
 
-            //Read / Write function
-            virtual void Write(uint64_t data);
-
-            virtual uint64_t Read();
+            virtual void write(uint64_t data);
+            virtual uint64_t read();
         };
 
 
-        void* memcpy(void* destination, const void* source, uint32_t num);
-
-
+        static void* memcpy(void* destination, const void* source, uint32_t num);
+        static void* memset(void* ptr, int value, uint32_t num);
+        static void* memmove(void* destination, const void* source, uint32_t num);
+        static int memcmp(const void* ptr1, const void* ptr2, uint32_t num);
     }
 }
 
