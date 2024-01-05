@@ -1,0 +1,961 @@
+.TH "maxOS::hardwarecommunication::InterruptManager" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and passes them to the correct handler\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <interrupts\&.h>\fP
+.PP
+Inherits \fBmaxOS::common::InputStream\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInterruptManager\fP (uint16_t \fBhardware_interrupt_offset\fP, \fBsystem::GlobalDescriptorTable\fP *global_descriptor_table, \fBsystem::ThreadManager\fP *thread_manager, \fBcommon::OutputStream\fP *handler)"
+.br
+.RI "\fBManger\fP "
+.ti -1c
+.RI "\fB~InterruptManager\fP ()"
+.br
+.ti -1c
+.RI "uint16_t \fBhardware_interrupt_offset\fP ()"
+.br
+.RI "Returns the offset of the hardware interrupt\&. "
+.ti -1c
+.RI "void \fBset_interrupt_handler\fP (uint8_t interrupt, \fBInterruptHandler\fP *handler)"
+.br
+.RI "Sets the interrupt handler for the interrupt\&. "
+.ti -1c
+.RI "void \fBremove_interrupt_handler\fP (uint8_t interrupt)"
+.br
+.RI "Removes the interrupt handler for the interrupt\&. "
+.ti -1c
+.RI "void \fBactivate\fP ()"
+.br
+.RI "Activates the interrupt manager and starts interrupts (also deactivates the current interrupt manager) "
+.ti -1c
+.RI "void \fBdeactivate\fP ()"
+.br
+.RI "Deactivates the interrupt manager and stops interrupts\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBhandle_interrupt_request\fP (uint8_t interrupt, uint32_t \fBesp\fP)"
+.br
+.RI "Handles the interrupt request and runs the interrupt handler if there is one\&. "
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBset_interrupt_descriptor_table_entry\fP (uint8_t interrupt, uint16_t code_segment_selector_offset, void(*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t descriptor_type)"
+.br
+.RI "Sets an entry in the Interrupt Descriptor Table\&. "
+.ti -1c
+.RI "static void \fBInterruptIgnore\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x00\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x01\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x02\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x03\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x04\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x05\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x06\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x07\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x08\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x09\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x0A\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x0B\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x0C\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x0D\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x0E\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x80\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x0F\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleInterruptRequest0x31\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x00\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x01\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x02\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x03\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x04\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x05\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x06\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x07\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x08\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x09\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x0A\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x0B\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x0C\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x0D\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x0E\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x0F\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x10\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x11\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x12\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x13\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x14\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x15\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x16\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x17\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x18\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x19\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x1A\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x1B\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x1C\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x1D\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x1E\fP ()"
+.br
+.ti -1c
+.RI "static void \fBHandleException0x1F\fP ()"
+.br
+.ti -1c
+.RI "static uint32_t \fBHandleInterrupt\fP (uint8_t interrupt, uint32_t \fBesp\fP)"
+.br
+.RI "Handles the interrupt request by passing it to the interrupt manager\&. "
+.ti -1c
+.RI "static uint32_t \fBHandleInterruptRequest\fP (uint32_t \fBesp\fP)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint16_t \fBm_hardware_interrupt_offset\fP"
+.br
+.ti -1c
+.RI "\fBInterruptHandler\fP * \fBm_interrupt_handlers\fP [256]"
+.br
+.ti -1c
+.RI "\fBsystem::ThreadManager\fP * \fBm_thread_manager\fP"
+.br
+.ti -1c
+.RI "\fBPort8BitSlow\fP \fBpic_master_command_port\fP"
+.br
+.ti -1c
+.RI "\fBPort8BitSlow\fP \fBpic_master_data_port\fP"
+.br
+.ti -1c
+.RI "\fBPort8BitSlow\fP \fBpic_slave_command_port\fP"
+.br
+.ti -1c
+.RI "\fBPort8BitSlow\fP \fBpic_slave_data_port\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBInterruptManager\fP * \fBs_active_interrupt_manager\fP = 0"
+.br
+.ti -1c
+.RI "static \fBcommon::OutputStream\fP * \fBs_error_messages\fP = 0"
+.br
+.ti -1c
+.RI "static \fBGateDescriptor\fP \fBs_interrupt_descriptor_table\fP [256]"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBInterruptHandler\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles all interrupts and passes them to the correct handler\&. 
+.PP
+Definition at line 63 of file interrupts\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "InterruptManager::InterruptManager (uint16_t hardware_interrupt_offset, \fBsystem::GlobalDescriptorTable\fP * global_descriptor_table, \fBsystem::ThreadManager\fP * thread_manager, \fBcommon::OutputStream\fP * handler)"
+
+.PP
+\fBManger\fP 
+.PP
+Definition at line 46 of file interrupts\&.cpp\&.
+.PP
+.nf
+47 : common::InputStream(handler),
+48   pic_master_command_port(0x20),
+49   pic_master_data_port(0x21),
+50   pic_slave_command_port(0xA0),
+51   pic_slave_data_port(0xA1),
+52   m_thread_manager(thread_manager),
+53   m_hardware_interrupt_offset(hardware_interrupt_offset)
+54 {
+55     uint32_t code_segment = global_descriptor_table->code_segment_selector();
+56 
+57     // By default ignore all interrupts so any un handled interrupts wont cause a fault
+58     const uint8_t IDT_INTERRUPT_GATE = 0xE;
+59     for(uint8_t i = 255; i > 0; --i)
+60     {
+61       set_interrupt_descriptor_table_entry(i, code_segment, &InterruptIgnore, 0, IDT_INTERRUPT_GATE);
+62       m_interrupt_handlers[i] = 0;
+63     }
+64 
+65     // First is also clear
+66     set_interrupt_descriptor_table_entry(0, code_segment, &InterruptIgnore, 0,IDT_INTERRUPT_GATE);
+67     m_interrupt_handlers[0] = 0;
+68 
+69 
+70 
+71     //Set Up the base interrupts
+72     set_interrupt_descriptor_table_entry(0x00, code_segment, &HandleException0x00, 0, IDT_INTERRUPT_GATE);   //Division by zero
+73     set_interrupt_descriptor_table_entry(0x01, code_segment, &HandleException0x01, 0, IDT_INTERRUPT_GATE);   //Single-step interrupt (see trap flag)
+74     set_interrupt_descriptor_table_entry(0x02, code_segment, &HandleException0x02, 0, IDT_INTERRUPT_GATE);   //NMI
+75     set_interrupt_descriptor_table_entry(0x03, code_segment, &HandleException0x03, 0, IDT_INTERRUPT_GATE);   //Breakpoint (which benefits from the shorter 0xCC encoding of INT 3)
+76     set_interrupt_descriptor_table_entry(0x04, code_segment, &HandleException0x04, 0, IDT_INTERRUPT_GATE);   //Overflow
+77     set_interrupt_descriptor_table_entry(0x05, code_segment, &HandleException0x05, 0, IDT_INTERRUPT_GATE);   //Bound Range Exceeded
+78     set_interrupt_descriptor_table_entry(0x06, code_segment, &HandleException0x06, 0, IDT_INTERRUPT_GATE);   //Invalid Opcode
+79     set_interrupt_descriptor_table_entry(0x07, code_segment, &HandleException0x07, 0, IDT_INTERRUPT_GATE);   //Coprocessor not available
+80     set_interrupt_descriptor_table_entry(0x08, code_segment, &HandleException0x08, 0, IDT_INTERRUPT_GATE);   //Double Fault
+81     set_interrupt_descriptor_table_entry(0x09, code_segment, &HandleException0x09, 0, IDT_INTERRUPT_GATE);   //Coprocessor Segment Overrun (386 or earlier only)
+82     set_interrupt_descriptor_table_entry(0x0A, code_segment, &HandleException0x0A, 0, IDT_INTERRUPT_GATE);   //Invalid Task State Segment
+83     set_interrupt_descriptor_table_entry(0x0B, code_segment, &HandleException0x0B, 0, IDT_INTERRUPT_GATE);   //Segment not present
+84     set_interrupt_descriptor_table_entry(0x0C, code_segment, &HandleException0x0C, 0, IDT_INTERRUPT_GATE);   //Stack Segment Fault
+85     set_interrupt_descriptor_table_entry(0x0D, code_segment, &HandleException0x0D, 0, IDT_INTERRUPT_GATE);   //General Protection Fault
+86     set_interrupt_descriptor_table_entry(0x0E, code_segment, &HandleException0x0E, 0, IDT_INTERRUPT_GATE);   //Page Fault
+87     set_interrupt_descriptor_table_entry(0x0F, code_segment, &HandleException0x0F, 0, IDT_INTERRUPT_GATE);   //reserved
+88     set_interrupt_descriptor_table_entry(0x10, code_segment, &HandleException0x10, 0, IDT_INTERRUPT_GATE);   //x87 Floating Point Exception
+89     set_interrupt_descriptor_table_entry(0x11, code_segment, &HandleException0x11, 0, IDT_INTERRUPT_GATE);   //Alignment Check
+90     set_interrupt_descriptor_table_entry(0x12, code_segment, &HandleException0x12, 0, IDT_INTERRUPT_GATE);   //Machine Check
+91     set_interrupt_descriptor_table_entry(0x13, code_segment, &HandleException0x13, 0, IDT_INTERRUPT_GATE);   //SIMD Floating-Point Exception
+92     set_interrupt_descriptor_table_entry(0x14, code_segment, &HandleException0x14, 0, IDT_INTERRUPT_GATE);   //Virtualization Exception
+93     set_interrupt_descriptor_table_entry(0x15, code_segment, &HandleException0x15, 0, IDT_INTERRUPT_GATE);   //Control Protection Exception
+94     set_interrupt_descriptor_table_entry(0x16, code_segment, &HandleException0x16, 0, IDT_INTERRUPT_GATE);   //reserved
+95     set_interrupt_descriptor_table_entry(0x17, code_segment, &HandleException0x17, 0, IDT_INTERRUPT_GATE);   //reserved
+96     set_interrupt_descriptor_table_entry(0x18, code_segment, &HandleException0x18, 0, IDT_INTERRUPT_GATE);   //reserved
+97     set_interrupt_descriptor_table_entry(0x19, code_segment, &HandleException0x19, 0, IDT_INTERRUPT_GATE);   //reserved
+98     set_interrupt_descriptor_table_entry(0x1A, code_segment, &HandleException0x1A, 0, IDT_INTERRUPT_GATE);   //reserved
+99     set_interrupt_descriptor_table_entry(0x1B, code_segment, &HandleException0x1B, 0, IDT_INTERRUPT_GATE);   //reserved
+100     set_interrupt_descriptor_table_entry(0x1C, code_segment, &HandleException0x1C, 0, IDT_INTERRUPT_GATE);   //reserved
+101     set_interrupt_descriptor_table_entry(0x1D, code_segment, &HandleException0x1D, 0, IDT_INTERRUPT_GATE);   //reserved
+102     set_interrupt_descriptor_table_entry(0x1E, code_segment, &HandleException0x1E, 0, IDT_INTERRUPT_GATE);   //reserved
+103     set_interrupt_descriptor_table_entry(0x1F, code_segment, &HandleException0x1F, 0, IDT_INTERRUPT_GATE);   //reserved
+104 
+105 
+106     //Set up the hardware interrupts (offset by 0x20) //Ranges 0x20 - 0x30
+107     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x00, code_segment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);  //0x20 - Default PIC interval   / Timer
+108     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x01, code_segment, &HandleInterruptRequest0x01, 0, IDT_INTERRUPT_GATE);  //0x21 - Keyboard
+109     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x02, code_segment, &HandleInterruptRequest0x02, 0, IDT_INTERRUPT_GATE);  //0x22 - Cascade (used internally by the two PICs\&. never raised)
+110     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x03, code_segment, &HandleInterruptRequest0x03, 0, IDT_INTERRUPT_GATE);  //0x23 - COM2, COM4
+111     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x04, code_segment, &HandleInterruptRequest0x04, 0, IDT_INTERRUPT_GATE);  //0x24 - COM1, COM3
+112     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x05, code_segment, &HandleInterruptRequest0x05, 0, IDT_INTERRUPT_GATE);  //0x25 - LPT2, LPT4
+113     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x06, code_segment, &HandleInterruptRequest0x06, 0, IDT_INTERRUPT_GATE);  //0x26 - LPT1
+114     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x07, code_segment, &HandleInterruptRequest0x07, 0, IDT_INTERRUPT_GATE);  //0x27 - Floppy Disk
+115     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x08, code_segment, &HandleInterruptRequest0x08, 0, IDT_INTERRUPT_GATE);  //0x28 - CMOS Real Time Clock
+116     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x09, code_segment, &HandleInterruptRequest0x09, 0, IDT_INTERRUPT_GATE);  //0x29 - Free for peripherals / legacy SCSI / NIC
+117     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0A, code_segment, &HandleInterruptRequest0x0A, 0, IDT_INTERRUPT_GATE);  //0x2A - Free for peripherals / SCSI / NIC
+118     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0B, code_segment, &HandleInterruptRequest0x0B, 0, IDT_INTERRUPT_GATE);  //0x2B - Free for peripherals / SCSI / NIC
+119     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0C, code_segment, &HandleInterruptRequest0x0C, 0, IDT_INTERRUPT_GATE);  //0x0C - Mouse
+120     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0D, code_segment, &HandleInterruptRequest0x0D, 0, IDT_INTERRUPT_GATE);  //0x2D - FPU / Coprocessor / Inter-processor
+121     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0E, code_segment, &HandleInterruptRequest0x0E, 0, IDT_INTERRUPT_GATE);  //0x2E - Primary ATA Hard Disk
+122     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0F, code_segment, &HandleInterruptRequest0x0F, 0, IDT_INTERRUPT_GATE);  //0x2F - Secondary ATA Hard Disk
+123     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x60, code_segment, &HandleInterruptRequest0x80, 0, IDT_INTERRUPT_GATE);  //0x80 - Sys calls
+124 
+125     //Send Initialization Control Words
+126     pic_master_command_port\&.write(0x11);
+127     pic_slave_command_port\&.write(0x11);
+128 
+129     // Remap the PIC to use the hardware interrupt offset
+130     pic_master_data_port\&.write(hardware_interrupt_offset);
+131     pic_slave_data_port\&.write(hardware_interrupt_offset + 8);
+132 
+133     //Tell PICs their roles
+134     pic_master_data_port\&.write(0x04);  //Master
+135     pic_slave_data_port\&.write(0x02);   //Slave
+136 
+137     //Tell PICS that they are in 8086 mode
+138     pic_master_data_port\&.write(0x01);
+139     pic_slave_data_port\&.write(0x01);
+140 
+141     // Clear the interrupt mask to enable all interrupts
+142     pic_master_data_port\&.write(0x00);
+143     pic_slave_data_port\&.write(0x00);
+144 
+145     //Tell the processor to use the IDT
+146     InterruptDescriptorTablePointer idt_pointer;
+147     idt_pointer\&.size  = 256*sizeof(GateDescriptor) - 1;
+148     idt_pointer\&.base  = (uint32_t)s_interrupt_descriptor_table;
+149     asm volatile("lidt %0" : : "m" (idt_pointer));
+150 };
+.fi
+.PP
+References maxOS::hardwarecommunication::InterruptDescriptorTablePointer::base, maxOS::system::GlobalDescriptorTable::code_segment_selector(), HandleException0x00(), HandleException0x01(), HandleException0x02(), HandleException0x03(), HandleException0x04(), HandleException0x05(), HandleException0x06(), HandleException0x07(), HandleException0x08(), HandleException0x09(), HandleException0x0A(), HandleException0x0B(), HandleException0x0C(), HandleException0x0D(), HandleException0x0E(), HandleException0x0F(), HandleException0x10(), HandleException0x11(), HandleException0x12(), HandleException0x13(), HandleException0x14(), HandleException0x15(), HandleException0x16(), HandleException0x17(), HandleException0x18(), HandleException0x19(), HandleException0x1A(), HandleException0x1B(), HandleException0x1C(), HandleException0x1D(), HandleException0x1E(), HandleException0x1F(), HandleInterruptRequest0x00(), HandleInterruptRequest0x01(), HandleInterruptRequest0x02(), HandleInterruptRequest0x03(), HandleInterruptRequest0x04(), HandleInterruptRequest0x05(), HandleInterruptRequest0x06(), HandleInterruptRequest0x07(), HandleInterruptRequest0x08(), HandleInterruptRequest0x09(), HandleInterruptRequest0x0A(), HandleInterruptRequest0x0B(), HandleInterruptRequest0x0C(), HandleInterruptRequest0x0D(), HandleInterruptRequest0x0E(), HandleInterruptRequest0x0F(), HandleInterruptRequest0x80(), hardware_interrupt_offset(), maxOS::drivers::peripherals::i, InterruptIgnore(), m_interrupt_handlers, pic_master_command_port, pic_master_data_port, pic_slave_command_port, pic_slave_data_port, s_interrupt_descriptor_table, set_interrupt_descriptor_table_entry(), maxOS::hardwarecommunication::InterruptDescriptorTablePointer::size, and maxOS::hardwarecommunication::Port8BitSlow::write()\&.
+.SS "InterruptManager::~InterruptManager ()"
+
+.PP
+Definition at line 152 of file interrupts\&.cpp\&.
+.PP
+.nf
+153 {
+154   deactivate();
+155 }
+.fi
+.PP
+References deactivate()\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void InterruptManager::activate ()"
+
+.PP
+Activates the interrupt manager and starts interrupts (also deactivates the current interrupt manager) 
+.PP
+Definition at line 184 of file interrupts\&.cpp\&.
+.PP
+.nf
+184                                 {
+185 
+186     // Deactivate the current interrupt manager
+187     if(s_active_interrupt_manager != 0)
+188       s_active_interrupt_manager->deactivate();
+189 
+190     // Set the current interrupt manager and start interrupts
+191     s_active_interrupt_manager = this;
+192     asm("sti");
+193 
+194 }
+.fi
+.PP
+References deactivate(), and s_active_interrupt_manager\&.
+.SS "void InterruptManager::deactivate ()"
+
+.PP
+Deactivates the interrupt manager and stops interrupts\&. 
+.PP
+Definition at line 199 of file interrupts\&.cpp\&.
+.PP
+.nf
+200 {
+201 
+202     // If this is the active interrupt manager, deactivate it and stop interrupts
+203     if(s_active_interrupt_manager == this){
+204       s_active_interrupt_manager = 0;
+205       asm("cli");
+206     }
+207 }
+.fi
+.PP
+References s_active_interrupt_manager\&.
+.PP
+Referenced by activate(), and ~InterruptManager()\&.
+.SS "uint32_t InterruptManager::handle_interrupt_request (uint8_t interrupt, uint32_t esp)\fC [protected]\fP"
+
+.PP
+Handles the interrupt request and runs the interrupt handler if there is one\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterruptNumber\fP The interrupt number 
+.br
+\fIesp\fP The stack pointer 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The stack pointer 
+.RE
+.PP
+
+.PP
+Definition at line 234 of file interrupts\&.cpp\&.
+.PP
+.nf
+235 {
+236 
+237     // If there is an interrupt handler, run it
+238     if(m_interrupt_handlers[interrupt] != 0){
+239       m_interrupt_handlers[interrupt]->handle_interrupt();
+240     }
+241     else if(interrupt != 0x20){
+242 
+243         switch (interrupt) {
+244 
+245             case 0x00: s_error_messages->write("[ERROR] Divide by zero  (int 0x00)"); break;
+246             case 0x01: s_error_messages->write("[ERROR] Single-step interrupt (int 0x01)"); break;
+247             case 0x02: s_error_messages->write("[ERROR] Non maskable interrupt (int 0x02)"); break;
+248             case 0x03: s_error_messages->write("[ERROR] Breakpoint (int 0x03)"); break;
+249             case 0x04: s_error_messages->write("[ERROR] Overflow (int 0x04)"); break;
+250             case 0x05: s_error_messages->write("[ERROR] Bounds check  (int 0x05)"); break;
+251             case 0x06: s_error_messages->write("[ERROR] Invalid opcode  (int 0x06)"); break;
+252             case 0x07: s_error_messages->write("[ERROR] Coprocessor not available  (int 0x07)"); break;
+253             case 0x08: s_error_messages->write("[ERROR] Double fault (int 0x08)"); break;
+254             case 0x09: s_error_messages->write("[ERROR] Coprocessor segment overrun (int 0x09)"); break;
+255             case 0x0A: s_error_messages->write("[ERROR] Invalid TSS (int 0x0A)"); break;
+256             case 0x0B: s_error_messages->write("[ERROR] Segment not present (int 0x0B)"); break;
+257             case 0x0C: s_error_messages->write("[ERROR] Stack segment fault (int 0x0C)"); break;
+258             case 0x0D: s_error_messages->write("[ERROR] General protection fault (int 0x0D)"); break;
+259             case 0x0E: s_error_messages->write("[ERROR] Page fault (int 0x0E)"); break;
+260             case 0x0F: s_error_messages->write("[INFO] Reserved (int 0x0F)"); break;
+261             case 0x10: s_error_messages->write("[ERROR] x87 FPU floating point error (int 0x10)"); break;
+262             case 0x11: s_error_messages->write("[INFO] Alignment check (int 0x11)"); break;
+263             case 0x12: s_error_messages->write("[INFO] Machine check (int 0x12)"); break;
+264             case 0x13: s_error_messages->write("[ERROR] SIMD floating point exception (int 0x13)"); break;
+265             case 0x14: s_error_messages->write("[ERROR] Virtualization exception (int 0x14)"); break;
+266             case 0x15: s_error_messages->write("[INFO] Reserved (int 0x15)"); break;
+267             case 0x16: s_error_messages->write("[INFO] Reserved (int 0x16)"); break;
+268             case 0x17: s_error_messages->write("[INFO] Reserved (int 0x17)"); break;
+269             case 0x18: s_error_messages->write("[INFO] Reserved (int 0x18)"); break;
+270             case 0x19: s_error_messages->write("[INFO] Reserved (int 0x19)"); break;
+271             case 0x1A: s_error_messages->write("[INFO] Reserved (int 0x1A)"); break;
+272             case 0x1B: s_error_messages->write("[INFO] Reserved (int 0x1B)"); break;
+273             case 0x1C: s_error_messages->write("[INFO] Reserved (int 0x1C)"); break;
+274             case 0x1D: s_error_messages->write("[INFO] Reserved (int 0x1D)"); break;
+275             case 0x1E: s_error_messages->write("[INFO] Reserved (int 0x1E)"); break;
+276             case 0x1F: s_error_messages->write("[INFO] Reserved (int 0x1F)"); break;
+277 
+278             default:
+279               s_error_messages->write("UNHANDLED INTERRUPT 0x");
+280               s_error_messages->write_hex(interrupt);
+281               s_error_messages->write(" ");
+282                 break;
+283 
+284         }
+285     }
+286 
+287     //Timer interrupt for m_tasks
+288     if(interrupt == m_hardware_interrupt_offset)
+289     {
+290         esp = (uint32_t)m_thread_manager->schedule((CPUState*)esp);
+291     }
+292 
+293     // Acknowledge the interrupt (if it is a hardware interrupt)
+294     if(m_hardware_interrupt_offset <= interrupt && interrupt < m_hardware_interrupt_offset +16)
+295     {
+296       pic_master_command_port\&.write(0x20);
+297 
+298         // Answer the slave PIC if it was the one that sent the interrupt
+299         if(0x28 <= interrupt)
+300           pic_slave_command_port\&.write(0x20);
+301     }
+302 
+303     return esp;
+304 }
+.fi
+.PP
+References esp, maxOS::hardwarecommunication::InterruptHandler::handle_interrupt(), m_hardware_interrupt_offset, m_interrupt_handlers, m_thread_manager, pic_master_command_port, pic_slave_command_port, s_error_messages, maxOS::system::ThreadManager::schedule(), maxOS::hardwarecommunication::Port8BitSlow::write(), maxOS::common::OutputStream::write(), and maxOS::common::OutputStream::write_hex()\&.
+.PP
+Referenced by HandleInterrupt()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x00 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x01 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x02 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x03 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x04 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x05 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x06 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x07 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x08 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x09 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x0A ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x0B ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x0C ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x0D ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x0E ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x0F ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x10 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x11 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x12 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x13 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x14 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x15 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x16 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x17 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x18 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x19 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x1A ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x1B ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x1C ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x1D ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x1E ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleException0x1F ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "uint32_t InterruptManager::HandleInterrupt (uint8_t interrupt, uint32_t esp)\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Handles the interrupt request by passing it to the interrupt manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterruptNumber\fP The interrupt number 
+.br
+\fIesp\fP The stack pointer 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The stack pointer 
+.RE
+.PP
+
+.PP
+Definition at line 216 of file interrupts\&.cpp\&.
+.PP
+.nf
+217 {
+218 
+219     // If there is an active interrupt manager, handle the interrupt
+220     if(s_active_interrupt_manager != 0)
+221         return s_active_interrupt_manager->handle_interrupt_request(interrupt, esp);
+222 
+223     // CPU can continue
+224     return esp;
+225 }
+.fi
+.PP
+References esp, handle_interrupt_request(), and s_active_interrupt_manager\&.
+.SS "static uint32_t maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest (uint32_t esp)\fC [static]\fP, \fC [protected]\fP"
+
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x00 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x01 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x02 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x03 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x04 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x05 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x06 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x07 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x08 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x09 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x0A ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x0B ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x0C ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x0D ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x0E ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x0F ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x31 ()\fC [static]\fP, \fC [protected]\fP"
+
+.SS "static void maxOS::hardwarecommunication::InterruptManager::HandleInterruptRequest0x80 ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "uint16_t InterruptManager::hardware_interrupt_offset ()"
+
+.PP
+Returns the offset of the hardware interrupt\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The offset of the hardware interrupt 
+.RE
+.PP
+
+.PP
+Definition at line 311 of file interrupts\&.cpp\&.
+.PP
+.nf
+311                                                      {
+312     return m_hardware_interrupt_offset;
+313 }
+.fi
+.PP
+References m_hardware_interrupt_offset\&.
+.PP
+Referenced by InterruptManager()\&.
+.SS "static void maxOS::hardwarecommunication::InterruptManager::InterruptIgnore ()\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Referenced by InterruptManager()\&.
+.SS "void InterruptManager::remove_interrupt_handler (uint8_t interrupt)"
+
+.PP
+Removes the interrupt handler for the interrupt\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterrupt\fP The interrupt number 
+.RE
+.PP
+
+.PP
+Definition at line 330 of file interrupts\&.cpp\&.
+.PP
+.nf
+330                                                                  {
+331   m_interrupt_handlers[interrupt] = 0;
+332 }
+.fi
+.PP
+References m_interrupt_handlers\&.
+.PP
+Referenced by maxOS::hardwarecommunication::InterruptHandler::~InterruptHandler()\&.
+.SS "void InterruptManager::set_interrupt_descriptor_table_entry (uint8_t interrupt, uint16_t code_segment_selector_offset, void(*)() handler, uint8_t DescriptorPrivilegeLevel, uint8_t descriptor_type)\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Sets an entry in the Interrupt Descriptor Table\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterrupt\fP Interrupt number 
+.br
+\fIcode_segment_selector_offset\fP Code segment 
+.br
+\fIhandler\fP Interrupt Handler 
+.br
+\fIDescriptorPrivilegeLevel\fP Descriptor Privilege Level 
+.br
+\fIdescriptor_type\fP Descriptor Type 
+.RE
+.PP
+
+.PP
+Definition at line 167 of file interrupts\&.cpp\&.
+.PP
+.nf
+168 {
+169   // Store the handler function in the IDT
+170   s_interrupt_descriptor_table[interrupt]\&.handler_address_low_bits = ((uint32_t) handler) & 0xFFFF;
+171   s_interrupt_descriptor_table[interrupt]\&.handler_address_high_bits = (((uint32_t) handler) >> 16) & 0xFFFF;
+172   s_interrupt_descriptor_table[interrupt]\&.gdt_code_segment_selector = code_segment_selector_offset;
+173 
+174   // Set the access
+175   const uint8_t IDT_DESC_PRESENT = 0x80;
+176   s_interrupt_descriptor_table[interrupt]\&.access = IDT_DESC_PRESENT | ((DescriptorPrivilegeLevel & 3) << 5) | descriptor_type;
+177   s_interrupt_descriptor_table[interrupt]\&.reserved = 0;
+178 }
+.fi
+.PP
+References maxOS::hardwarecommunication::GateDescriptor::access, maxOS::hardwarecommunication::GateDescriptor::gdt_code_segment_selector, maxOS::hardwarecommunication::GateDescriptor::handler_address_high_bits, maxOS::hardwarecommunication::GateDescriptor::handler_address_low_bits, maxOS::hardwarecommunication::GateDescriptor::reserved, and s_interrupt_descriptor_table\&.
+.PP
+Referenced by InterruptManager()\&.
+.SS "void InterruptManager::set_interrupt_handler (uint8_t interrupt, \fBInterruptHandler\fP * handler)"
+
+.PP
+Sets the interrupt handler for the interrupt\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterrupt\fP The interrupt number 
+.br
+\fIhandler\fP The interrupt handler 
+.RE
+.PP
+
+.PP
+Definition at line 321 of file interrupts\&.cpp\&.
+.PP
+.nf
+321                                                                                          {
+322   m_interrupt_handlers[interrupt] = handler;
+323 }
+.fi
+.PP
+References m_interrupt_handlers\&.
+.PP
+Referenced by maxOS::hardwarecommunication::InterruptHandler::InterruptHandler()\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBInterruptHandler\fP\fC [friend]\fP"
+
+.PP
+Definition at line 64 of file interrupts\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint16_t maxOS::hardwarecommunication::InterruptManager::m_hardware_interrupt_offset\fC [protected]\fP"
+
+.PP
+Definition at line 70 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request(), and hardware_interrupt_offset()\&.
+.SS "\fBInterruptHandler\fP* maxOS::hardwarecommunication::InterruptManager::m_interrupt_handlers[256]\fC [protected]\fP"
+
+.PP
+Definition at line 71 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request(), InterruptManager(), remove_interrupt_handler(), and set_interrupt_handler()\&.
+.SS "\fBsystem::ThreadManager\fP* maxOS::hardwarecommunication::InterruptManager::m_thread_manager\fC [protected]\fP"
+
+.PP
+Definition at line 72 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request()\&.
+.SS "\fBPort8BitSlow\fP maxOS::hardwarecommunication::InterruptManager::pic_master_command_port\fC [protected]\fP"
+
+.PP
+Definition at line 139 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request(), and InterruptManager()\&.
+.SS "\fBPort8BitSlow\fP maxOS::hardwarecommunication::InterruptManager::pic_master_data_port\fC [protected]\fP"
+
+.PP
+Definition at line 140 of file interrupts\&.h\&.
+.PP
+Referenced by InterruptManager()\&.
+.SS "\fBPort8BitSlow\fP maxOS::hardwarecommunication::InterruptManager::pic_slave_command_port\fC [protected]\fP"
+
+.PP
+Definition at line 141 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request(), and InterruptManager()\&.
+.SS "\fBPort8BitSlow\fP maxOS::hardwarecommunication::InterruptManager::pic_slave_data_port\fC [protected]\fP"
+
+.PP
+Definition at line 142 of file interrupts\&.h\&.
+.PP
+Referenced by InterruptManager()\&.
+.SS "\fBInterruptManager\fP * InterruptManager::s_active_interrupt_manager = 0\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Definition at line 68 of file interrupts\&.h\&.
+.PP
+Referenced by activate(), deactivate(), and HandleInterrupt()\&.
+.SS "OutputStream * InterruptManager::s_error_messages = 0\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Definition at line 69 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request()\&.
+.SS "\fBGateDescriptor\fP InterruptManager::s_interrupt_descriptor_table\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Definition at line 74 of file interrupts\&.h\&.
+.PP
+Referenced by InterruptManager(), and set_interrupt_descriptor_table_entry()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

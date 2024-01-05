@@ -1,0 +1,83 @@
+.TH "/home/runner/work/max-os/max-os/kernel/include/drivers/peripherals/keyboard.h" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/max-os/max-os/kernel/include/drivers/peripherals/keyboard.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <common/vector\&.h>\fP
+.br
+\fC#include <common/string\&.h>\fP
+.br
+\fC#include <common/inputStream\&.h>\fP
+.br
+\fC#include <common/eventHandler\&.h>\fP
+.br
+\fC#include <hardwarecommunication/interrupts\&.h>\fP
+.br
+\fC#include <hardwarecommunication/port\&.h>\fP
+.br
+\fC#include <drivers/driver\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyboardState\fP"
+.br
+.RI "Holds the state of the keyboard\&. "
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyUpEvent\fP"
+.br
+.RI "Event that is triggered when a key is released\&. "
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyDownEvent\fP"
+.br
+.RI "Event that is triggered when a key is pressed\&. "
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyboardEventHandler\fP"
+.br
+.RI "Handles the events that are triggered by the Keyboard \fBDriver\fP\&. "
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyboardInterpreter\fP"
+.br
+.RI "Interprets the scan codes from the keyboard\&. "
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyboardInterpreterEN_US\fP"
+.br
+.RI "Interprets the scan codes from the keyboard for the EN_US keyboard layout\&. "
+.ti -1c
+.RI "class \fBmaxOS::drivers::peripherals::KeyboardDriver\fP"
+.br
+.RI "\fBDriver\fP for the Keyboard Controller, manages the events and the keyboard state\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI " \fBmaxOS\fP"
+.br
+.ti -1c
+.RI " \fBmaxOS::drivers\fP"
+.br
+.ti -1c
+.RI " \fBmaxOS::drivers::peripherals\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBmaxOS::drivers::peripherals::KeyCode\fP : uint16_t { \fBmaxOS::drivers::peripherals::A\fP = 'A', \fBmaxOS::drivers::peripherals::a\fP = 'a', \fBmaxOS::drivers::peripherals::B\fP = 'B', \fBmaxOS::drivers::peripherals::b\fP = 'b', \fBmaxOS::drivers::peripherals::C\fP = 'C', \fBmaxOS::drivers::peripherals::c\fP = 'c', \fBmaxOS::drivers::peripherals::D\fP = 'D', \fBmaxOS::drivers::peripherals::d\fP = 'd', \fBmaxOS::drivers::peripherals::E\fP = 'E', \fBmaxOS::drivers::peripherals::e\fP = 'e', \fBmaxOS::drivers::peripherals::F\fP = 'F', \fBmaxOS::drivers::peripherals::f\fP = 'f', \fBmaxOS::drivers::peripherals::G\fP = 'G', \fBmaxOS::drivers::peripherals::g\fP = 'g', \fBmaxOS::drivers::peripherals::H\fP = 'H', \fBmaxOS::drivers::peripherals::h\fP = 'h', \fBmaxOS::drivers::peripherals::I\fP = 'I', \fBmaxOS::drivers::peripherals::i\fP = 'i', \fBmaxOS::drivers::peripherals::J\fP = 'J', \fBmaxOS::drivers::peripherals::j\fP = 'j', \fBmaxOS::drivers::peripherals::K\fP = 'K', \fBmaxOS::drivers::peripherals::k\fP = 'k', \fBmaxOS::drivers::peripherals::L\fP = 'L', \fBmaxOS::drivers::peripherals::l\fP = 'l', \fBmaxOS::drivers::peripherals::M\fP = 'M', \fBmaxOS::drivers::peripherals::m\fP = 'm', \fBmaxOS::drivers::peripherals::N\fP = 'N', \fBmaxOS::drivers::peripherals::n\fP = 'n', \fBmaxOS::drivers::peripherals::O\fP = 'O', \fBmaxOS::drivers::peripherals::o\fP = 'o', \fBmaxOS::drivers::peripherals::P\fP = 'P', \fBmaxOS::drivers::peripherals::p\fP = 'p', \fBmaxOS::drivers::peripherals::Q\fP = 'Q', \fBmaxOS::drivers::peripherals::q\fP = 'q', \fBmaxOS::drivers::peripherals::R\fP = 'R', \fBmaxOS::drivers::peripherals::r\fP = 'r', \fBmaxOS::drivers::peripherals::S\fP = 'S', \fBmaxOS::drivers::peripherals::s\fP = 's', \fBmaxOS::drivers::peripherals::T\fP = 'T', \fBmaxOS::drivers::peripherals::t\fP = 't', \fBmaxOS::drivers::peripherals::U\fP = 'U', \fBmaxOS::drivers::peripherals::u\fP = 'u', \fBmaxOS::drivers::peripherals::V\fP = 'V', \fBmaxOS::drivers::peripherals::v\fP = 'v', \fBmaxOS::drivers::peripherals::W\fP = 'W', \fBmaxOS::drivers::peripherals::w\fP = 'w', \fBmaxOS::drivers::peripherals::X\fP = 'X', \fBmaxOS::drivers::peripherals::x\fP = 'x', \fBmaxOS::drivers::peripherals::Y\fP = 'Y', \fBmaxOS::drivers::peripherals::y\fP = 'y', \fBmaxOS::drivers::peripherals::Z\fP = 'Z', \fBmaxOS::drivers::peripherals::z\fP = 'z', \fBmaxOS::drivers::peripherals::zero\fP = '0', \fBmaxOS::drivers::peripherals::one\fP = '1', \fBmaxOS::drivers::peripherals::two\fP = '2', \fBmaxOS::drivers::peripherals::three\fP = '3', \fBmaxOS::drivers::peripherals::four\fP = '4', \fBmaxOS::drivers::peripherals::five\fP = '5', \fBmaxOS::drivers::peripherals::six\fP = '6', \fBmaxOS::drivers::peripherals::seven\fP = '7', \fBmaxOS::drivers::peripherals::eight\fP = '8', \fBmaxOS::drivers::peripherals::nine\fP = '9', \fBmaxOS::drivers::peripherals::comma\fP = ',', \fBmaxOS::drivers::peripherals::fullStop\fP = '\&.', \fBmaxOS::drivers::peripherals::exclamationMark\fP = '!', \fBmaxOS::drivers::peripherals::questionMark\fP = '?', \fBmaxOS::drivers::peripherals::quotationMark\fP = '\\"', \fBmaxOS::drivers::peripherals::semicolon\fP = ';', \fBmaxOS::drivers::peripherals::colon\fP = ':', \fBmaxOS::drivers::peripherals::apostrophe\fP = '\\'', \fBmaxOS::drivers::peripherals::slantedApostrophe\fP = '`', \fBmaxOS::drivers::peripherals::powerSign\fP = '^', \fBmaxOS::drivers::peripherals::dollarSign\fP = '$', \fBmaxOS::drivers::peripherals::percentSign\fP = '', \fBmaxOS::drivers::peripherals::andSign\fP = '&', \fBmaxOS::drivers::peripherals::atSign\fP = '@', \fBmaxOS::drivers::peripherals::underscore\fP = '_', \fBmaxOS::drivers::peripherals::lineThing\fP = '|', \fBmaxOS::drivers::peripherals::hash\fP = '#', \fBmaxOS::drivers::peripherals::backslash\fP = '\\\\', \fBmaxOS::drivers::peripherals::forwardSlash\fP = '/', \fBmaxOS::drivers::peripherals::squigglyLine\fP = '~', \fBmaxOS::drivers::peripherals::plus\fP = '+', \fBmaxOS::drivers::peripherals::minus\fP = '-', \fBmaxOS::drivers::peripherals::equals\fP = '=', \fBmaxOS::drivers::peripherals::multiply\fP = '*', \fBmaxOS::drivers::peripherals::lessThan\fP = '<', \fBmaxOS::drivers::peripherals::greaterThan\fP = '>', \fBmaxOS::drivers::peripherals::openBracket\fP = '(', \fBmaxOS::drivers::peripherals::closeBracket\fP = ')', \fBmaxOS::drivers::peripherals::openSquareBracket\fP = '[', \fBmaxOS::drivers::peripherals::closeSquareBracket\fP = ']', \fBmaxOS::drivers::peripherals::openCurlyBracket\fP = '{', \fBmaxOS::drivers::peripherals::closeCurlyBracket\fP = '}', \fBmaxOS::drivers::peripherals::space\fP = ' ', \fBmaxOS::drivers::peripherals::tab\fP = '\\t', \fBmaxOS::drivers::peripherals::enter\fP = '\\n', \fBmaxOS::drivers::peripherals::backspace\fP = '\\b', \fBmaxOS::drivers::peripherals::f1\fP = 1000, \fBmaxOS::drivers::peripherals::f2\fP, \fBmaxOS::drivers::peripherals::f3\fP, \fBmaxOS::drivers::peripherals::f4\fP, \fBmaxOS::drivers::peripherals::f5\fP, \fBmaxOS::drivers::peripherals::f6\fP, \fBmaxOS::drivers::peripherals::f7\fP, \fBmaxOS::drivers::peripherals::f8\fP, \fBmaxOS::drivers::peripherals::f9\fP, \fBmaxOS::drivers::peripherals::f10\fP, \fBmaxOS::drivers::peripherals::f11\fP, \fBmaxOS::drivers::peripherals::f12\fP, \fBmaxOS::drivers::peripherals::escape\fP, \fBmaxOS::drivers::peripherals::printScreen\fP, \fBmaxOS::drivers::peripherals::scrollLock\fP, \fBmaxOS::drivers::peripherals::pauseBreak\fP, \fBmaxOS::drivers::peripherals::upArrow\fP, \fBmaxOS::drivers::peripherals::downArrow\fP, \fBmaxOS::drivers::peripherals::leftArrow\fP, \fBmaxOS::drivers::peripherals::rightArrow\fP, \fBmaxOS::drivers::peripherals::insert\fP, \fBmaxOS::drivers::peripherals::home\fP, \fBmaxOS::drivers::peripherals::pageUp\fP, \fBmaxOS::drivers::peripherals::deleteKey\fP, \fBmaxOS::drivers::peripherals::end\fP, \fBmaxOS::drivers::peripherals::pageDown\fP, \fBmaxOS::drivers::peripherals::capsLock\fP, \fBmaxOS::drivers::peripherals::leftShift\fP, \fBmaxOS::drivers::peripherals::leftControl\fP, \fBmaxOS::drivers::peripherals::leftOS\fP, \fBmaxOS::drivers::peripherals::leftAlt\fP, \fBmaxOS::drivers::peripherals::rightAlt\fP, \fBmaxOS::drivers::peripherals::functionKey\fP, \fBmaxOS::drivers::peripherals::rightControl\fP, \fBmaxOS::drivers::peripherals::rightShift\fP, \fBmaxOS::drivers::peripherals::numberPadLock\fP, \fBmaxOS::drivers::peripherals::numberPadForwardSlash\fP, \fBmaxOS::drivers::peripherals::numberPadMultiply\fP, \fBmaxOS::drivers::peripherals::numberPadMinus\fP, \fBmaxOS::drivers::peripherals::numberPadPlus\fP, \fBmaxOS::drivers::peripherals::numberPadEnter\fP, \fBmaxOS::drivers::peripherals::numberPadZero\fP, \fBmaxOS::drivers::peripherals::numberPadOne\fP, \fBmaxOS::drivers::peripherals::numberPadTwo\fP, \fBmaxOS::drivers::peripherals::numberPadThree\fP, \fBmaxOS::drivers::peripherals::numberPadFour\fP, \fBmaxOS::drivers::peripherals::numberPadFive\fP, \fBmaxOS::drivers::peripherals::numberPadSix\fP, \fBmaxOS::drivers::peripherals::numberPadSeven\fP, \fBmaxOS::drivers::peripherals::numberPadEight\fP, \fBmaxOS::drivers::peripherals::numberPadNine\fP, \fBmaxOS::drivers::peripherals::numberPadFullStop\fP, \fBmaxOS::drivers::peripherals::numberPadHome\fP, \fBmaxOS::drivers::peripherals::numberPadPageDown\fP, \fBmaxOS::drivers::peripherals::numberPadPageUp\fP, \fBmaxOS::drivers::peripherals::numberPadEnd\fP, \fBmaxOS::drivers::peripherals::numberPadInsert\fP, \fBmaxOS::drivers::peripherals::numberPadUpArrow\fP, \fBmaxOS::drivers::peripherals::numberPadDownArrow\fP, \fBmaxOS::drivers::peripherals::numberPadLeftArrow\fP, \fBmaxOS::drivers::peripherals::numberPadRightArrow\fP }"
+.br
+.ti -1c
+.RI "enum \fBmaxOS::drivers::peripherals::KeyboardEvents\fP { \fBmaxOS::drivers::peripherals::KEYDOWN\fP, \fBmaxOS::drivers::peripherals::KEYUP\fP }"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

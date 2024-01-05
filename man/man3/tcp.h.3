@@ -1,0 +1,210 @@
+.TH "/home/runner/work/max-os/max-os/kernel/include/net/tcp.h" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/max-os/max-os/kernel/include/net/tcp.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <net/ipv4\&.h>\fP
+.br
+\fC#include <memory/memorymanagement\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmaxOS::net::TransmissionControlProtocolHeader\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::net::TransmissionControlProtocolPseudoHeader\fP"
+.br
+.ti -1c
+.RI "class \fBmaxOS::net::DataReceivedEvent\fP"
+.br
+.ti -1c
+.RI "class \fBmaxOS::net::ConnectedEvent\fP"
+.br
+.ti -1c
+.RI "class \fBmaxOS::net::DisconnectedEvent\fP"
+.br
+.ti -1c
+.RI "class \fBmaxOS::net::TransmissionControlProtocolPayloadHandler\fP"
+.br
+.ti -1c
+.RI "class \fBmaxOS::net::TransmissionControlProtocolSocket\fP"
+.br
+.ti -1c
+.RI "class \fBmaxOS::net::TransmissionControlProtocolHandler\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI " \fBmaxOS\fP"
+.br
+.ti -1c
+.RI " \fBmaxOS::net\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef uint16_t \fBmaxOS::net::TransmissionControlProtocolPort\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBmaxOS::net::TransmissionControlProtocolSocketState\fP { \fBmaxOS::net::CLOSED\fP, \fBmaxOS::net::LISTEN\fP, \fBmaxOS::net::SYN_SENT\fP, \fBmaxOS::net::SYN_RECEIVED\fP, \fBmaxOS::net::ESTABLISHED\fP, \fBmaxOS::net::FIN_WAIT1\fP, \fBmaxOS::net::FIN_WAIT2\fP, \fBmaxOS::net::CLOSING\fP, \fBmaxOS::net::TIME_WAIT\fP, \fBmaxOS::net::CLOSE_WAIT\fP }"
+.br
+.ti -1c
+.RI "enum \fBmaxOS::net::TransmissionControlProtocolFlag\fP { \fBmaxOS::net::FIN\fP = 1, \fBmaxOS::net::SYN\fP = 2, \fBmaxOS::net::RST\fP = 4, \fBmaxOS::net::PSH\fP = 8, \fBmaxOS::net::ACK\fP = 16, \fBmaxOS::net::URG\fP = 32, \fBmaxOS::net::ECE\fP = 64, \fBmaxOS::net::CWR\fP = 128, \fBmaxOS::net::NS\fP = 256 }"
+.br
+.ti -1c
+.RI "enum \fBmaxOS::net::TransmissionControlProtocolPayloadHandlerEvents\fP { \fBmaxOS::net::CONNECTED\fP, \fBmaxOS::net::DISCONNECTED\fP, \fBmaxOS::net::DATA_RECEIVED\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmaxOS::net::AddressResolutionProtocolMessage\fP \fBmaxOS::net::__attribute__\fP ((packed))"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint16_t \fBsrcPort\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBdstPort\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsequenceNumber\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBacknowledgementNumber\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBreserved\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBheaderSize32\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBflags\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBwindowSize\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBchecksum\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBurgentPtr\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBoptions\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsrcIP\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBdstIP\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBprotocol\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBtotalLength\fP"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "uint32_t acknowledgementNumber"
+
+.PP
+Definition at line 20 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint16_t checksum"
+
+.PP
+Definition at line 27 of file tcp\&.h\&.
+.SS "uint32_t dstIP"
+
+.PP
+Definition at line 18 of file tcp\&.h\&.
+.SS "uint16_t dstPort"
+
+.PP
+Definition at line 18 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint8_t flags"
+
+.PP
+Definition at line 24 of file tcp\&.h\&.
+.SS "uint8_t headerSize32"
+
+.PP
+Definition at line 23 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint32_t options"
+
+.PP
+Definition at line 30 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint16_t protocol"
+
+.PP
+Definition at line 19 of file tcp\&.h\&.
+.SS "uint8_t reserved"
+
+.PP
+Definition at line 22 of file tcp\&.h\&.
+.SS "uint32_t sequenceNumber"
+
+.PP
+Definition at line 19 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::Connect(), maxOS::net::TransmissionControlProtocolHandler::Disconnect(), maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint32_t srcIP"
+
+.PP
+Definition at line 17 of file tcp\&.h\&.
+.SS "uint16_t srcPort"
+
+.PP
+Definition at line 17 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint16_t totalLength"
+
+.PP
+Definition at line 20 of file tcp\&.h\&.
+.SS "uint16_t urgentPtr"
+
+.PP
+Definition at line 28 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint16_t windowSize"
+
+.PP
+Definition at line 26 of file tcp\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

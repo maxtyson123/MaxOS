@@ -1,0 +1,643 @@
+.TH "maxOS::common::Vector< Type >" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::common::Vector< Type > \- Dynamically stores an array of elements\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vector\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef Type * \fBiterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVector\fP ()"
+.br
+.RI "______________________________________Implementation__________________________________________________ "
+.ti -1c
+.RI "\fBVector\fP (int \fBsize\fP, Type element)"
+.br
+.RI "Constructor for \fBVector\fP\&. "
+.ti -1c
+.RI "\fB~Vector\fP ()"
+.br
+.ti -1c
+.RI "Type & \fBoperator[]\fP (int index)"
+.br
+.RI "Overloads the [] operator to return the element at the index\&. "
+.ti -1c
+.RI "bool \fBempty\fP ()"
+.br
+.RI "Checks if the \fBVector\fP is empty\&. "
+.ti -1c
+.RI "uint32_t \fBsize\fP ()"
+.br
+.RI "Returns the number of elements in the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBbegin\fP ()"
+.br
+.RI "Returns the m_first_memory_chunk element of the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBend\fP ()"
+.br
+.RI "Returns the last element of the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBfind\fP (Type)"
+.br
+.RI "Finds an element in the \fBVector\fP and returns the iterator of the element\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBpush_back\fP (Type)"
+.br
+.RI "Adds an element to the end of the vector and returns the iterator of the element\&. "
+.ti -1c
+.RI "void \fBpop_back\fP ()"
+.br
+.RI "Removes the last element from the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBpush_front\fP (Type)"
+.br
+.RI "Adds an element to the front of the \fBVector\fP and returns the iterator of the element\&. "
+.ti -1c
+.RI "void \fBpop_front\fP ()"
+.br
+.RI "Removes the m_first_memory_chunk element from the \fBVector\fP\&. "
+.ti -1c
+.RI "void \fBerase\fP (Type)"
+.br
+.RI "Removes all elements from the \fBVector\fP that are equal to the element\&. "
+.ti -1c
+.RI "void \fBerase\fP (\fBiterator\fP position)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.RI "Removes all elements from the \fBVector\fP\&. "
+.ti -1c
+.RI "void \fBiterate\fP (\fBVectorIterationHandler\fP< Type > *)"
+.br
+.RI "Iterates over the \fBVector\fP and calls the OnRead function of the handler for each element\&. "
+.ti -1c
+.RI "void \fBIterate\fP (void callback(Type &))"
+.br
+.RI "Iterates over the \fBVector\fP and calls the callback function for each element\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "Type \fBm_elements\fP [100]"
+.br
+.ti -1c
+.RI "uint32_t \fBm_size\fP { 0 }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_max_size\fP { 100 }"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class maxOS::common::Vector< Type >"
+Dynamically stores an array of elements\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 36 of file vector\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<class Type > typedef Type* \fBmaxOS::common::Vector\fP< Type >::\fBiterator\fP"
+
+.PP
+Definition at line 43 of file vector\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBmaxOS::common::Vector\fP< Type >::\fBVector\fP"
+
+.PP
+______________________________________Implementation__________________________________________________ Constructor for \fBVector\fP
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 78 of file vector\&.h\&.
+.PP
+.nf
+78                                                   {
+79 
+80         }
+.fi
+.SS "template<class Type > \fBmaxOS::common::Vector\fP< Type >::\fBVector\fP (int Size, Type element)"
+
+.PP
+Constructor for \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fISize\fP Size of the \fBVector\fP 
+.br
+\fIelement\fP Element to fill the \fBVector\fP with 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file vector\&.h\&.
+.PP
+.nf
+89                                                                         {
+90 
+91           // Make sure the size is not bigger than the max size
+92           if (Size > m_max_size)
+93           Size = m_max_size;
+94 
+95           // Fill the Vector with the element
+96           for (int i = 0; i < Size; ++i)
+97                   m_elements[i] = element;
+98 
+99           // Set the size of the Vector
+100           m_size = Size;
+101         }
+.fi
+.SS "template<class Type > \fBmaxOS::common::Vector\fP< Type >::~\fBVector\fP"
+
+.PP
+Definition at line 104 of file vector\&.h\&.
+.PP
+.nf
+104                                                    {
+105         }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > \fBVector\fP< Type >::\fBiterator\fP \fBmaxOS::common::Vector\fP< Type >::begin"
+
+.PP
+Returns the m_first_memory_chunk element of the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The m_first_memory_chunk element of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 138 of file vector\&.h\&.
+.PP
+.nf
+138                                                                                {
+139             return &m_elements[0];
+140         }
+.fi
+.PP
+Referenced by maxOS::common::Map< uint16_t, maxOS::net::EthernetFramePayloadHandler * >::begin(), maxOS::gui::CompositeWidget::draw(), maxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), and maxOS::gui::Desktop::internal_invalidate()\&.
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::clear"
+
+.PP
+Removes all elements from the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 307 of file vector\&.h\&.
+.PP
+.nf
+307                                                       {
+308           m_size = 0;
+309         }
+.fi
+.PP
+Referenced by maxOS::common::Map< uint16_t, maxOS::net::EthernetFramePayloadHandler * >::clear()\&.
+.SS "template<class Type > bool \fBmaxOS::common::Vector\fP< Type >::empty"
+
+.PP
+Checks if the \fBVector\fP is empty\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the \fBVector\fP is empty, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 176 of file vector\&.h\&.
+.PP
+.nf
+176                                                       {
+177             return begin() == end();
+178         }
+.fi
+.PP
+Referenced by maxOS::common::Map< uint16_t, maxOS::net::EthernetFramePayloadHandler * >::empty()\&.
+.SS "template<class Type > \fBVector\fP< Type >::\fBiterator\fP \fBmaxOS::common::Vector\fP< Type >::end"
+
+.PP
+Returns the last element of the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The last element of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 148 of file vector\&.h\&.
+.PP
+.nf
+148                                                                               {
+149             return &m_elements[0] + m_size;
+150          }
+.fi
+.PP
+Referenced by maxOS::gui::CompositeWidget::draw(), maxOS::common::Map< uint16_t, maxOS::net::EthernetFramePayloadHandler * >::end(), maxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), and maxOS::gui::Desktop::internal_invalidate()\&.
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::erase (\fBiterator\fP position)"
+
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::erase (Type element)"
+
+.PP
+Removes all elements from the \fBVector\fP that are equal to the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to remove 
+.RE
+.PP
+
+.PP
+Definition at line 258 of file vector\&.h\&.
+.PP
+.nf
+258                                                                   {
+259 
+260             // Search for the element
+261             int hits = 0;
+262             for (iterator i = begin(); i != end(); ++i)
+263             {
+264                 // If it is the element we are looking for
+265                 if (*i == element)
+266                 {
+267                     ++hits;
+268                 } else {
+269 
+270                     // If there are hits move the element to the left
+271                     if (hits > 0)
+272                         *(i - hits) = *i;
+273                 }
+274 
+275             }
+276 
+277             // Decrease the size of the Vector
+278             m_size -= hits;
+279         }
+.fi
+.PP
+Referenced by maxOS::common::Map< uint16_t, maxOS::net::EthernetFramePayloadHandler * >::erase()\&.
+.SS "template<class Type > \fBVector\fP< Type >::\fBiterator\fP \fBmaxOS::common::Vector\fP< Type >::find (Type element)"
+
+.PP
+Finds an element in the \fBVector\fP and returns the iterator of the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to find 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The iterator of the element or the end of the \fBVector\fP if the element is not found 
+.RE
+.PP
+
+.PP
+Definition at line 159 of file vector\&.h\&.
+.PP
+.nf
+159                                                                                           {
+160 
+161             // Find the element
+162             for (iterator i = begin(); i != end(); ++i)
+163             if (*i == element)
+164                     return i;
+165 
+166             // The element must not be in the Vector
+167             return end();
+168         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::iterate (\fBVectorIterationHandler\fP< Type > * vector_iteration_handler)"
+
+.PP
+Iterates over the \fBVector\fP and calls the OnRead function of the handler for each element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIvector_iteration_handler\fP The handler 
+.RE
+.PP
+
+.PP
+Definition at line 317 of file vector\&.h\&.
+.PP
+.nf
+317                                                                                                               {
+318 
+319           // Call the OnRead function of the handler for each element
+320           for(auto& element : m_elements)
+321             vector_iteration_handler->on_read(element);
+322 
+323           // Call the OnEndOfStream function of the handler
+324           vector_iteration_handler->on_end_of_stream();
+325         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::Iterate (void  callbackType &)"
+
+.PP
+Iterates over the \fBVector\fP and calls the callback function for each element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIcallback\fP The callback function 
+.RE
+.PP
+
+.PP
+Definition at line 334 of file vector\&.h\&.
+.PP
+.nf
+334                                                                              {
+335 
+336            // Call the callback function for each element
+337            for(auto& element : m_elements)
+338               callback(element);
+339         }
+.fi
+.SS "template<class Type > Type & \fBmaxOS::common::Vector\fP< Type >::operator[] (int index)"
+
+.PP
+Overloads the [] operator to return the element at the index\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the element 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the element at the index 
+.RE
+.PP
+
+.PP
+Definition at line 114 of file vector\&.h\&.
+.PP
+.nf
+114                                                                      {
+115 
+116           // If the index is in the Vector
+117           if (index <= m_size)
+118               return m_elements[index];
+119 
+120         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::pop_back"
+
+.PP
+Removes the last element from the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 202 of file vector\&.h\&.
+.PP
+.nf
+202                                                          {
+203             // Remove the last element from the Vector
+204             if (m_size > 0)
+205                     --m_size;
+206         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::Vector\fP< Type >::pop_front"
+
+.PP
+Removes the m_first_memory_chunk element from the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 238 of file vector\&.h\&.
+.PP
+.nf
+238                                                           {
+239 
+240           // Make sure the Vector is not empty
+241           if (m_size == 0)
+242             return;
+243 
+244           // Move all elements one index to the left
+245           for (iterator i = begin(); i != end(); ++i)
+246               *i = *(i + 1);
+247 
+248           // Decrease the size of the Vector
+249           --m_size;
+250         }
+.fi
+.SS "template<class Type > \fBVector\fP< Type >::\fBiterator\fP \fBmaxOS::common::Vector\fP< Type >::push_back (Type element)"
+
+.PP
+Adds an element to the end of the vector and returns the iterator of the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The iterator of the element, if the \fBVector\fP is full it returns the end of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 188 of file vector\&.h\&.
+.PP
+.nf
+188                                                                                                {
+189             // Return the end of the Vector if it is full
+190             if (m_size >= m_max_size)
+191                     return end();
+192 
+193             // Add the element to the Vector and return the iterator of the element
+194             m_elements[m_size++] = element;
+195             return end() - 1;
+196         }
+.fi
+.PP
+Referenced by maxOS::common::Map< uint16_t, maxOS::net::EthernetFramePayloadHandler * >::insert(), maxOS::common::EventManager< EthernetDriverEvents >::raise_event(), and maxOS::common::Rectangle< int32_t >::subtract()\&.
+.SS "template<class Type > \fBVector\fP< Type >::\fBiterator\fP \fBmaxOS::common::Vector\fP< Type >::push_front (Type element)"
+
+.PP
+Adds an element to the front of the \fBVector\fP and returns the iterator of the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The iterator of the element, if the \fBVector\fP is full it returns the end of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 215 of file vector\&.h\&.
+.PP
+.nf
+215                                                                                                 {
+216 
+217             // Make sure the Vector is not full
+218             if (m_size >= m_max_size)
+219                 return end();
+220 
+221             // Move all elements one index to the right
+222             for (iterator i = end(); i > begin(); --i)
+223                 *i = *(i - 1);
+224 
+225             // Add the element to the front of the Vector
+226             m_elements[0] = element;
+227             ++m_size;
+228 
+229             // Return the iterator of the element
+230             return begin();
+231         }
+.fi
+.SS "template<class Type > uint32_t \fBmaxOS::common::Vector\fP< Type >::size"
+
+.PP
+Returns the number of elements in the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The size of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line 128 of file vector\&.h\&.
+.PP
+.nf
+128                                                          {
+129             return m_size;
+130         }
+.fi
+.PP
+Referenced by maxOS::gui::Widget::resize()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Type > Type \fBmaxOS::common::Vector\fP< Type >::m_elements[100]\fC [protected]\fP"
+
+.PP
+Definition at line 39 of file vector\&.h\&.
+.SS "template<class Type > uint32_t \fBmaxOS::common::Vector\fP< Type >::m_max_size { 100 }\fC [protected]\fP"
+
+.PP
+Definition at line 41 of file vector\&.h\&.
+.SS "template<class Type > uint32_t \fBmaxOS::common::Vector\fP< Type >::m_size { 0 }\fC [protected]\fP"
+
+.PP
+Definition at line 40 of file vector\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

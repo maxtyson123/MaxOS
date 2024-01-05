@@ -1,0 +1,312 @@
+\hypertarget{classmaxOS_1_1memory_1_1MemoryManager}{}\doxysection{max\+OS\+::memory\+::Memory\+Manager Class Reference}
+\label{classmaxOS_1_1memory_1_1MemoryManager}\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+
+
+Handles memory allocation and deallocation.  
+
+
+
+
+{\ttfamily \#include $<$memorymanagement.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ae610c6483812da7e9f99fea507dffae9}{Memory\+Manager}} (size\+\_\+t start, size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}})
+\item 
+\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ad4570910ccfc14b2da679bee58ee8f48}{$\sim$\+Memory\+Manager}} ()
+\item 
+void $\ast$ \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_a90f2d5bec98f1e6cdd71c87853baaab9}{malloc}} (size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}})
+\begin{DoxyCompactList}\small\item\em Allocates a block of memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_a7123a072d7307c6ee61759fa7da6f677}{free}} (void $\ast$pointer)
+\begin{DoxyCompactList}\small\item\em Frees a block of memory. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_aba582f32d87efac7782b6ec2b6faaa03}{memory\+\_\+used}} ()
+\begin{DoxyCompactList}\small\item\em Returns the amount of memory used. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{s\+\_\+active\+\_\+memory\+\_\+manager}} = 0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{Memory\+Chunk}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\+\_\+first\+\_\+memory\+\_\+chunk}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles memory allocation and deallocation. 
+
+Definition at line 33 of file memorymanagement.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_ae610c6483812da7e9f99fea507dffae9}\label{classmaxOS_1_1memory_1_1MemoryManager_ae610c6483812da7e9f99fea507dffae9}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!MemoryManager@{MemoryManager}}
+\index{MemoryManager@{MemoryManager}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{MemoryManager()}{MemoryManager()}}
+{\footnotesize\ttfamily Memory\+Manager\+::\+Memory\+Manager (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{start,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line 12 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15     \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{s\_active\_memory\_manager}} = \textcolor{keyword}{this};}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     \textcolor{comment}{//Prevent wiring outside the area that is allowed to write}}
+\DoxyCodeLine{18     \textcolor{keywordflow}{if}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} < \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}))\{}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20         \textcolor{keyword}{this} -\/>\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}} = 0;}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22     \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24         \textcolor{keyword}{this} -\/>m\_first\_memory\_chunk = (\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)start;}
+\DoxyCodeLine{25         \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}}-\/> allocated = \textcolor{keyword}{false};}
+\DoxyCodeLine{26         \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}}-\/> prev = 0;}
+\DoxyCodeLine{27         \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}}-\/> next = 0;}
+\DoxyCodeLine{28         \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}}-\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{29     \}}
+\DoxyCodeLine{30 \}}
+
+\end{DoxyCode}
+
+
+References m\+\_\+first\+\_\+memory\+\_\+chunk, s\+\_\+active\+\_\+memory\+\_\+manager, and size.
+
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_ad4570910ccfc14b2da679bee58ee8f48}\label{classmaxOS_1_1memory_1_1MemoryManager_ad4570910ccfc14b2da679bee58ee8f48}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!````~MemoryManager@{$\sim$MemoryManager}}
+\index{````~MemoryManager@{$\sim$MemoryManager}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{$\sim$MemoryManager()}{~MemoryManager()}}
+{\footnotesize\ttfamily Memory\+Manager\+::$\sim$\+Memory\+Manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 32 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{32                               \{}
+\DoxyCodeLine{33     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{s\_active\_memory\_manager}} == \textcolor{keyword}{this})}
+\DoxyCodeLine{34       \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{s\_active\_memory\_manager}} = 0;}
+\DoxyCodeLine{35 \}}
+
+\end{DoxyCode}
+
+
+References s\+\_\+active\+\_\+memory\+\_\+manager.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_a7123a072d7307c6ee61759fa7da6f677}\label{classmaxOS_1_1memory_1_1MemoryManager_a7123a072d7307c6ee61759fa7da6f677}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!free@{free}}
+\index{free@{free}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{free()}{free()}}
+{\footnotesize\ttfamily void Memory\+Manager\+::free (\begin{DoxyParamCaption}\item[{void $\ast$}]{pointer }\end{DoxyParamCaption})}
+
+
+
+Frees a block of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pointer} & A pointer to the block \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 91 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{91                                       \{}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94     \textcolor{comment}{// Create a new free chunk}}
+\DoxyCodeLine{95     \mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}* chunk = (\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)((\textcolor{keywordtype}{size\_t})pointer -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{96     chunk -\/> allocated = \textcolor{keyword}{false};}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98     \textcolor{comment}{// If there is a free chunk before this chunk then merge them}}
+\DoxyCodeLine{99     \textcolor{keywordflow}{if}(chunk -\/> prev != 0 \&\& !chunk -\/> prev -\/> allocated)\{}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101         \textcolor{comment}{// Increase the previous chunk's size and remove the current chunk from the linked list}}
+\DoxyCodeLine{102         chunk-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a1160d2f025ac5f0eb86bc63cf0ef2519}{prev}}-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a49be199997280ec4c2228dab77fed31c}{size}} += chunk-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a49be199997280ec4c2228dab77fed31c}{size}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{103         chunk -\/> prev -\/> next = chunk -\/> next;}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105         \textcolor{comment}{// If there is a next chunk then ensure this chunk is removed from its linked list}}
+\DoxyCodeLine{106         \textcolor{keywordflow}{if}(chunk -\/> next != 0)}
+\DoxyCodeLine{107             chunk -\/> next -\/> prev = chunk-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a1160d2f025ac5f0eb86bc63cf0ef2519}{prev}};}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109         \textcolor{comment}{// Chunk is now the previous chunk}}
+\DoxyCodeLine{110         chunk = chunk -\/> prev;}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112     \}}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{114     \textcolor{comment}{// If there is a free chunk after this chunk then merge them}}
+\DoxyCodeLine{115     \textcolor{keywordflow}{if}(chunk -\/> next != 0 \&\& !chunk -\/> next -\/> allocated)\{}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117         \textcolor{comment}{// Increase the current chunk's size and remove the next chunk from the linked list}}
+\DoxyCodeLine{118         chunk -\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} += chunk -\/> next -\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{119         chunk -\/> next = chunk -\/> next -\/> next;}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121         \textcolor{comment}{// Remove the just merged chunk from the linked list}}
+\DoxyCodeLine{122         \textcolor{keywordflow}{if}(chunk -\/> next != 0)}
+\DoxyCodeLine{123             chunk -\/> next -\/> prev = chunk;}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125     \}}
+\DoxyCodeLine{126 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::memory\+::\+Memory\+Chunk\+::prev, size, and max\+O\+S\+::memory\+::\+Memory\+Chunk\+::size.
+
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_a90f2d5bec98f1e6cdd71c87853baaab9}\label{classmaxOS_1_1memory_1_1MemoryManager_a90f2d5bec98f1e6cdd71c87853baaab9}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!malloc@{malloc}}
+\index{malloc@{malloc}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{malloc()}{malloc()}}
+{\footnotesize\ttfamily void $\ast$ Memory\+Manager\+::malloc (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Allocates a block of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & size of the block \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the block, 0 if no block is available 
+\end{DoxyReturn}
+
+
+Definition at line 43 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{43                                        \{}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45     \mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}* result = 0;}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     \textcolor{comment}{// Find the next free chunk that is big enough}}
+\DoxyCodeLine{48     \textcolor{keywordflow}{for} (\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}* chunk = \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}}; chunk != 0 \&\& result == 0; chunk = chunk-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a3adaca9aca73de0a3553141ba35ad054}{next}}) \{}
+\DoxyCodeLine{49         \textcolor{keywordflow}{if}(chunk -\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} > \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} \&\& !chunk -\/> allocated)}
+\DoxyCodeLine{50             result = chunk;}
+\DoxyCodeLine{51     \}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \textcolor{comment}{// If there is no free chunk then return 0}}
+\DoxyCodeLine{54     \textcolor{keywordflow}{if}(result == 0)}
+\DoxyCodeLine{55         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57     \textcolor{comment}{// If there is space to split the chunk}}
+\DoxyCodeLine{58     \textcolor{keywordflow}{if}(result -\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}) + 1) \{}
+\DoxyCodeLine{59         result-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a95db1b93201c8e7b2bcc334660a5932f}{allocated}} = \textcolor{keyword}{true};}
+\DoxyCodeLine{60         \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void} *)(((size\_t)result) + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{61     \}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64     \textcolor{comment}{// Create a new chunk after the current one}}
+\DoxyCodeLine{65     \mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}* temp = (\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)((\textcolor{keywordtype}{size\_t})result + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}) + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67     \textcolor{comment}{// Set the new chunk's properties and insert it into the linked list}}
+\DoxyCodeLine{68     temp -\/> allocated = \textcolor{keyword}{false};}
+\DoxyCodeLine{69     temp -\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} =  result-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a49be199997280ec4c2228dab77fed31c}{size}} -\/ \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{70     temp -\/> prev = result;}
+\DoxyCodeLine{71     temp -\/> next = result -\/> next;}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73     \textcolor{comment}{// If there is a chunk after the current one then set its previous to the new chunk}}
+\DoxyCodeLine{74     \textcolor{keywordflow}{if}(temp -\/> next != 0)}
+\DoxyCodeLine{75        temp -\/> next -\/> prev = temp;}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{comment}{// Current chunk is now allocated and is pointing to the new chunk}}
+\DoxyCodeLine{78     result-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a49be199997280ec4c2228dab77fed31c}{size}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
+\DoxyCodeLine{79     result -\/> allocated = \textcolor{keyword}{true};}
+\DoxyCodeLine{80     result-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a3adaca9aca73de0a3553141ba35ad054}{next}} = temp;}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)(((size\_t)result) + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{83 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::memory\+::\+Memory\+Chunk\+::allocated, m\+\_\+first\+\_\+memory\+\_\+chunk, max\+O\+S\+::memory\+::\+Memory\+Chunk\+::next, size, and max\+O\+S\+::memory\+::\+Memory\+Chunk\+::size.
+
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_aba582f32d87efac7782b6ec2b6faaa03}\label{classmaxOS_1_1memory_1_1MemoryManager_aba582f32d87efac7782b6ec2b6faaa03}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!memory\_used@{memory\_used}}
+\index{memory\_used@{memory\_used}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{memory\_used()}{memory\_used()}}
+{\footnotesize\ttfamily int Memory\+Manager\+::memory\+\_\+used (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the amount of memory used. 
+
+\begin{DoxyReturn}{Returns}
+The amount of memory used 
+\end{DoxyReturn}
+
+
+Definition at line 132 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{132                                \{}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134         \textcolor{keywordtype}{int} result = 0;}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136         \textcolor{comment}{// Loop through all the chunks and add up the size of the allocated chunks}}
+\DoxyCodeLine{137         \textcolor{keywordflow}{for} (\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}* chunk = \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}{m\_first\_memory\_chunk}}; chunk != 0; chunk = chunk-\/>\mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk_a3adaca9aca73de0a3553141ba35ad054}{next}})}
+\DoxyCodeLine{138             \textcolor{keywordflow}{if}(chunk -\/> allocated)}
+\DoxyCodeLine{139                 result += chunk -\/> \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141         \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{142 \}}
+
+\end{DoxyCode}
+
+
+References m\+\_\+first\+\_\+memory\+\_\+chunk, max\+O\+S\+::memory\+::\+Memory\+Chunk\+::next, and size.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}\label{classmaxOS_1_1memory_1_1MemoryManager_af1c8a7109dead81397ee8c85b24afe66}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!m\_first\_memory\_chunk@{m\_first\_memory\_chunk}}
+\index{m\_first\_memory\_chunk@{m\_first\_memory\_chunk}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{m\_first\_memory\_chunk}{m\_first\_memory\_chunk}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{Memory\+Chunk}}$\ast$ max\+O\+S\+::memory\+::\+Memory\+Manager\+::m\+\_\+first\+\_\+memory\+\_\+chunk\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 36 of file memorymanagement.\+h.
+
+
+
+Referenced by malloc(), memory\+\_\+used(), and Memory\+Manager().
+
+\mbox{\Hypertarget{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}\label{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}} 
+\index{maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}!s\_active\_memory\_manager@{s\_active\_memory\_manager}}
+\index{s\_active\_memory\_manager@{s\_active\_memory\_manager}!maxOS::memory::MemoryManager@{maxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{s\_active\_memory\_manager}{s\_active\_memory\_manager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}} $\ast$ Memory\+Manager\+::s\+\_\+active\+\_\+memory\+\_\+manager = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 39 of file memorymanagement.\+h.
+
+
+
+Referenced by Memory\+Manager(), operator delete(), operator delete\mbox{[}$\,$\mbox{]}(), operator new(), operator new\mbox{[}$\,$\mbox{]}(), and $\sim$\+Memory\+Manager().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/max-\/os/max-\/os/kernel/include/memory/\mbox{\hyperlink{memorymanagement_8h}{memorymanagement.\+h}}\item 
+/home/runner/work/max-\/os/max-\/os/kernel/src/memory/\mbox{\hyperlink{memorymanagement_8cpp}{memorymanagement.\+cpp}}\end{DoxyCompactItemize}

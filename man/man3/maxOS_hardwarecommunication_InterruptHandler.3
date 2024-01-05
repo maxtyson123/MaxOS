@@ -1,0 +1,115 @@
+.TH "maxOS::hardwarecommunication::InterruptHandler" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::hardwarecommunication::InterruptHandler \- Handles a certain interrupt number\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <interrupts\&.h>\fP
+.PP
+Inherited by \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::ethernet::amd_am79c973\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, and \fBmaxOS::system::SyscallHandler\fP\fC [private]\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBhandle_interrupt\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, \fBInterruptManager\fP *interrupt_manager=0)"
+.br
+.RI "\fBHandler\fP "
+.ti -1c
+.RI "\fB~InterruptHandler\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.ti -1c
+.RI "\fBInterruptManager\fP * \fBm_interrupt_manager\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles a certain interrupt number\&. 
+.PP
+Definition at line 25 of file interrupts\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "InterruptHandler::InterruptHandler (uint8_t interrupt_number, \fBInterruptManager\fP * interrupt_manager = \fC0\fP)\fC [protected]\fP"
+
+.PP
+\fBHandler\fP 
+.PP
+Definition at line 20 of file interrupts\&.cpp\&.
+.PP
+.nf
+21 : m_interrupt_number(interrupt_number),
+22   m_interrupt_manager(interrupt_manager)
+23 {
+24     // Set the handler in the array
+25     m_interrupt_manager->set_interrupt_handler(interrupt_number, this);
+26 }
+.fi
+.PP
+References m_interrupt_manager, and maxOS::hardwarecommunication::InterruptManager::set_interrupt_handler()\&.
+.SS "InterruptHandler::~InterruptHandler ()\fC [protected]\fP"
+
+.PP
+Definition at line 28 of file interrupts\&.cpp\&.
+.PP
+.nf
+28                                    {
+29 
+30     // Unset the handler in the array
+31     if(this->m_interrupt_manager != 0)
+32       this->m_interrupt_manager->remove_interrupt_handler(m_interrupt_number);
+33 
+34 }
+.fi
+.PP
+References m_interrupt_manager, m_interrupt_number, and maxOS::hardwarecommunication::InterruptManager::remove_interrupt_handler()\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void InterruptHandler::handle_interrupt ()\fC [virtual]\fP"
+
+.PP
+Reimplemented in \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, \fBmaxOS::drivers::ethernet::amd_am79c973\fP, and \fBmaxOS::system::SyscallHandler\fP\&.
+.PP
+Definition at line 36 of file interrupts\&.cpp\&.
+.PP
+.nf
+36                                         {
+37 
+38 }
+.fi
+.PP
+Referenced by maxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBInterruptManager\fP* maxOS::hardwarecommunication::InterruptHandler::m_interrupt_manager\fC [protected]\fP"
+
+.PP
+Definition at line 28 of file interrupts\&.h\&.
+.PP
+Referenced by InterruptHandler(), and ~InterruptHandler()\&.
+.SS "uint8_t maxOS::hardwarecommunication::InterruptHandler::m_interrupt_number\fC [protected]\fP"
+
+.PP
+Definition at line 27 of file interrupts\&.h\&.
+.PP
+Referenced by ~InterruptHandler()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

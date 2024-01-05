@@ -1,0 +1,144 @@
+.TH "maxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::gui::WidgetMoverResizer< Left, Top, Width, Height > \- A template class that allows you to move and resize a widget\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <widget\&.h>\fP
+.PP
+Inherits \fBmaxOS::drivers::peripherals::MouseEventHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBWidgetMoverResizer\fP (\fBWidget\fP *widget)"
+.br
+.RI "________________________________Tempaltes________________________________/// "
+.ti -1c
+.RI "\fB~WidgetMoverResizer\fP ()"
+.br
+.ti -1c
+.RI "void \fBon_mouse_move_event\fP (int8_t x, int8_t y)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBWidget\fP * \fBtargettedWidget\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<int Left, int Top, int Width, int Height>
+.br
+class maxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >"
+A template class that allows you to move and resize a widget\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fILeft\fP Left 
+.br
+\fITop\fP Top 
+.br
+\fIWidth\fP Width 
+.br
+\fIHeight\fP Height 
+.RE
+.PP
+
+.PP
+Definition at line 123 of file widget\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<int Left, int Top, int Width, int Height> \fBmaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::\fBWidgetMoverResizer\fP (\fBWidget\fP * target)"
+
+.PP
+________________________________Tempaltes________________________________/// \fBWidgetMoverResizer\fP is a template class that allows you to move and resize a widget
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fILeft\fP The left edge of the widget 
+.br
+\fITop\fP The top edge of the widget 
+.br
+\fIWidth\fP The m_width of the widget 
+.br
+\fIHeight\fP The m_height of the widget 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fItarget\fP The widget to move and resize 
+.RE
+.PP
+
+.PP
+Definition at line 159 of file widget\&.h\&.
+.PP
+.nf
+160                 : drivers::peripherals::MouseEventHandler()
+161         {
+162             this -> targettedWidget = target;
+163         }
+.fi
+.SS "template<int Left, int Top, int Width, int Height> \fBmaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::~\fBWidgetMoverResizer\fP"
+
+.PP
+Definition at line 165 of file widget\&.h\&.
+.PP
+.nf
+166         {
+167         }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<int Left, int Top, int Width, int Height> void \fBmaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::on_mouse_move_event (int8_t x, int8_t y)\fC [virtual]\fP"
+OnMouseMoved is called when the mouse is moved\&. Resizes and moves the widget when this happens\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x m_position of the mouse 
+.br
+\fIy\fP The y m_position of the mouse 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::drivers::peripherals::MouseEventHandler\fP\&.
+.PP
+Definition at line 175 of file widget\&.h\&.
+.PP
+.nf
+176         {
+177 
+178             Widget* targ = this->targettedWidget;
+179 
+180             // If there is actually a size of the widget to change
+181             if(Left != 0 || Top != 0)
+182                 // Move the widget to the left or right, and up or down
+183                 targ -> move(targ ->m_position\&.left + Left * x, targ ->m_position\&.top + Top * y);
+184 
+185             // If there is actually a size of the widget to change
+186             if(Width != 0 || Height != 0)
+187                 // Resize the widget to the left or right, and up or down
+188                 targ -> resize( targ ->m_position\&.width + Width*x, targ ->m_position\&.height + Height*y);
+189         }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<int Left, int Top, int Width, int Height> \fBWidget\fP* \fBmaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::targettedWidget\fC [protected]\fP"
+
+.PP
+Definition at line 125 of file widget\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

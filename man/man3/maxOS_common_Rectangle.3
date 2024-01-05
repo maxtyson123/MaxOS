@@ -1,0 +1,411 @@
+.TH "maxOS::common::Rectangle< Type >" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::common::Rectangle< Type > \- Stores the left, top, width and height of a rectangle\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <rectangle\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRectangle\fP ()"
+.br
+.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
+.ti -1c
+.RI "\fBRectangle\fP (Type \fBleft\fP, Type \fBtop\fP, Type \fBwidth\fP, Type \fBheight\fP)"
+.br
+.ti -1c
+.RI "\fB~Rectangle\fP ()"
+.br
+.ti -1c
+.RI "bool \fBintersects\fP (const \fBRectangle\fP< Type > &)"
+.br
+.ti -1c
+.RI "\fBRectangle\fP< Type > \fBintersection\fP (const \fBRectangle\fP< Type > &)"
+.br
+.ti -1c
+.RI "\fBVector\fP< \fBRectangle\fP< Type > > \fBsubtract\fP (const \fBRectangle\fP< Type > &)"
+.br
+.ti -1c
+.RI "bool \fBcontains\fP (const \fBRectangle\fP< Type > &)"
+.br
+.ti -1c
+.RI "bool \fBcontains\fP (Type x, Type y)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "Type \fBleft\fP { 0 }"
+.br
+.ti -1c
+.RI "Type \fBtop\fP { 0 }"
+.br
+.ti -1c
+.RI "Type \fBwidth\fP { 0 }"
+.br
+.ti -1c
+.RI "Type \fBheight\fP { 0 }"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class maxOS::common::Rectangle< Type >"
+Stores the left, top, width and height of a rectangle\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the rectangle 
+.RE
+.PP
+
+.PP
+Definition at line 20 of file rectangle\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBmaxOS::common::Rectangle\fP< Type >::\fBRectangle\fP"
+
+.PP
+_______________________________________________TEMPLATES_________________________________________________________________/// 
+.PP
+Definition at line 42 of file rectangle\&.h\&.
+.PP
+.nf
+42                                                        {
+43         }
+.fi
+.SS "template<class Type > \fBmaxOS::common::Rectangle\fP< Type >::\fBRectangle\fP (Type left, Type top, Type width, Type height)"
+
+.PP
+Definition at line 46 of file rectangle\&.h\&.
+.PP
+.nf
+47         : left(left),
+48           top(top),
+49           width(width),
+50           height(height)
+51         {
+52 
+53             // If the width is negative, move the left and make the width positive
+54             if(width < 0)
+55             {
+56                 left += width;
+57                 width *= -1;
+58             }
+59 
+60             // If the m_height is negative, move the top and make the height positive
+61             if(height < 0)
+62             {
+63                 top += height;
+64                 height *= -1;
+65             }
+66 
+67             // Set the values
+68             this->left = left;
+69             this->top = top;
+70         }
+.fi
+.SS "template<class Type > \fBmaxOS::common::Rectangle\fP< Type >::~\fBRectangle\fP"
+
+.PP
+Definition at line 72 of file rectangle\&.h\&.
+.PP
+.nf
+73         {
+74         }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > bool \fBmaxOS::common::Rectangle\fP< Type >::contains (const \fBRectangle\fP< Type > & other)"
+Checks if this rectangle contains another rectangle
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the rectangle 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other rectangle 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if this rectangle contains the other rectangle, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 186 of file rectangle\&.h\&.
+.PP
+.nf
+186                                                                                        {
+187 
+188             // If the other rectangle is to the left of this rectangle
+189             if(other\&.left + other\&.width <= left)
+190                 return false;
+191 
+192             // If the other rectangle is to the right of this rectangle
+193             if(other\&.left >= left + width)
+194                 return false;
+195 
+196             // If the other rectangle is above this rectangle
+197             if(other\&.top + other\&.height <= top)
+198                 return false;
+199 
+200             // If the other rectangle is below this rectangle
+201             if(other\&.top >= top + height)
+202                 return false;
+203 
+204             // If none of the above conditions are true, then the rectangles intersect
+205             return true;
+206         }
+.fi
+.PP
+Referenced by maxOS::gui::Widget::contains_coordinate(), maxOS::gui::CompositeWidget::on_mouse_enter_widget(), maxOS::gui::CompositeWidget::on_mouse_leave_widget(), and maxOS::gui::CompositeWidget::on_mouse_move_widget()\&.
+.SS "template<class Type > bool \fBmaxOS::common::Rectangle\fP< Type >::contains (Type x, Type y)"
+Checks if this rectangle contains a point
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the rectangle 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the point 
+.br
+\fIy\fP The y coordinate of the point 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if this rectangle contains the point, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 217 of file rectangle\&.h\&.
+.PP
+.nf
+217                                                                          {
+218 
+219            // If the point is to the left of this rectangle
+220             if(x < left)
+221                 return false;
+222 
+223             // If the point is to the right of this rectangle
+224             if(x >= left + width)
+225                 return false;
+226 
+227             // If the point is above this rectangle
+228             if(y < top)
+229                 return false;
+230 
+231             // If the point is below this rectangle
+232             if(y >= top + height)
+233                 return false;
+234 
+235             // If none of the above conditions are true, then the point is inside the rectangle
+236             return true;
+237 
+238         }
+.fi
+.SS "template<class Type > \fBRectangle\fP< Type > \fBmaxOS::common::Rectangle\fP< Type >::intersection (const \fBRectangle\fP< Type > & other)"
+Returns a retangle that represents the intersection of this rectangle and another rectangle
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the rectangle 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other rectangle 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The intersection of the two rectangles 
+.RE
+.PP
+
+.PP
+Definition at line 111 of file rectangle\&.h\&.
+.PP
+.nf
+111                                                                                                       {
+112             // If the rectangles don't intersect, return an empty rectangle
+113             if(!intersects(other))
+114                 return Rectangle<Type>();
+115 
+116             // Get the left and top of the intersection using the maximum of the two
+117             Type left = this -> left > other\&.left ? this -> left : other\&.left;
+118             Type top = this -> top > other\&.top ? this -> top : other\&.top;
+119 
+120             // Get the right and bottom of the intersection using the minimum of the two
+121             Type right = this -> left + this -> width < other\&.left + other\&.width ? this -> left + this -> width : other\&.left + other\&.width;
+122             Type bottom = this -> top + this -> height < other\&.top + other\&.height ? this -> top + this -> height : other\&.top + other\&.height;
+123 
+124             // Return the intersection
+125             return Rectangle<Type>(left, top, right - left, bottom - top);
+126         }
+.fi
+.PP
+Referenced by maxOS::gui::CompositeWidget::draw(), and maxOS::gui::Window::draw_self()\&.
+.SS "template<class Type > bool \fBmaxOS::common::Rectangle\fP< Type >::intersects (const \fBRectangle\fP< Type > & other)"
+Checks if the rectangle intersects with another rectangle
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the rectangle 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other rectangle 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the rectangles intersect, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 83 of file rectangle\&.h\&.
+.PP
+.nf
+83                                                                                          {
+84             // If the other rectangle is to the left of this rectangle
+85             if(other\&.left + other\&.width <= left)
+86                 return false;
+87 
+88             // If the other rectangle is to the right of this rectangle
+89             if(other\&.left >= left + width)
+90                 return false;
+91 
+92             // If the other rectangle is above this rectangle
+93             if(other\&.top + other\&.height <= top)
+94                 return false;
+95 
+96             // If the other rectangle is below this rectangle
+97             if(other\&.top >= top + height)
+98                 return false;
+99 
+100             // If none of the above conditions are true, then the rectangles intersect
+101             return true;
+102         }
+.fi
+.PP
+Referenced by maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::CompositeWidget::draw(), maxOS::gui::Window::draw_self(), and maxOS::gui::Desktop::internal_invalidate()\&.
+.SS "template<class Type > \fBVector\fP< \fBRectangle\fP< Type > > \fBmaxOS::common::Rectangle\fP< Type >::subtract (const \fBRectangle\fP< Type > & other)"
+Subtracts a rectangle from this rectangle
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the rectangle 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The rectangle to subtract 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A vector of rectangles that represent the subtraction 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file rectangle\&.h\&.
+.PP
+.nf
+135                                                                                                            {
+136 
+137             // Store the result rectangle
+138             Vector<Rectangle<Type> > result;
+139 
+140             // Make sure the rectangles intersect
+141             if(!intersects(other))
+142             {
+143               result\&.push_back(*this);
+144                 return result;
+145             }
+146 
+147             // Get the minimum and maximum values for the width and height
+148             Type maxLeft = left > other\&.left ? left : other\&.left;
+149             Type minRight = (left + width < other\&.left + other\&.width ? left + width : other\&.left + other\&.width);
+150             Type minBottom = (top + height < other\&.top + other\&.height ? top+height : other\&.top + other\&.height);
+151 
+152             // Add the non intersecting rectangles to the result
+153 
+154             // Add non-overlapping region above if current top is less than other top
+155             if (top < other\&.top)
+156               result\&.push_back(Rectangle<Type>(maxLeft, top, minRight - maxLeft,
+157                                                other\&.top - top));
+158 
+159             // Add non-overlapping region to the left if current left is less than other left
+160             if (left < other\&.left)
+161               result\&.push_back(
+162                   Rectangle<Type>(left, top, other\&.left - left, height));
+163 
+164             // Add non-overlapping region to the right if current right is greater than other right
+165             if (left + width > other\&.left + other\&.width)
+166               result\&.push_back(Rectangle<Type>(
+167                   other\&.left + other\&.width, top,
+168                   (left + width) - (other\&.left + other\&.width) + 1, height));
+169 
+170             // Add non-overlapping region below if current bottom is greater than other bottom
+171             if (this->top + this->height > other\&.top + other\&.height)
+172               result\&.push_back(Rectangle<Type>(maxLeft, minBottom,
+173                                                minRight - maxLeft,
+174                                                top + height - minBottom + 1));
+175 
+176             return result;
+177         }
+.fi
+.PP
+Referenced by maxOS::gui::CompositeWidget::draw(), maxOS::gui::Desktop::internal_invalidate(), and maxOS::gui::Widget::resize()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Type > Type \fBmaxOS::common::Rectangle\fP< Type >::height { 0 }"
+
+.PP
+Definition at line 25 of file rectangle\&.h\&.
+.PP
+Referenced by maxOS::common::Rectangle< int32_t >::contains(), maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::Desktop::draw_self(), maxOS::gui::Window::draw_self(), maxOS::gui::Font::draw_text(), maxOS::common::Rectangle< int32_t >::intersection(), maxOS::common::Rectangle< int32_t >::intersects(), maxOS::gui::Widget::invalidate(), maxOS::gui::Window::on_mouse_button_pressed(), maxOS::gui::Desktop::on_mouse_move_event(), maxOS::gui::WidgetMoverResizer< 0, 1, 0, \-1 >::on_mouse_move_event(), maxOS::gui::Widget::resize(), and maxOS::common::Rectangle< int32_t >::subtract()\&.
+.SS "template<class Type > Type \fBmaxOS::common::Rectangle\fP< Type >::left { 0 }"
+
+.PP
+Definition at line 22 of file rectangle\&.h\&.
+.PP
+Referenced by maxOS::gui::Widget::absolute_coordinates(), maxOS::gui::Window::add_child(), maxOS::common::Rectangle< int32_t >::contains(), maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::CompositeWidget::draw(), maxOS::gui::Desktop::draw_self(), maxOS::gui::Window::draw_self(), maxOS::gui::Font::draw_text(), maxOS::common::Rectangle< int32_t >::intersection(), maxOS::common::Rectangle< int32_t >::intersects(), maxOS::gui::Widget::move(), maxOS::gui::CompositeWidget::on_mouse_enter_widget(), maxOS::gui::CompositeWidget::on_mouse_leave_widget(), and maxOS::common::Rectangle< int32_t >::subtract()\&.
+.SS "template<class Type > Type \fBmaxOS::common::Rectangle\fP< Type >::top { 0 }"
+
+.PP
+Definition at line 23 of file rectangle\&.h\&.
+.PP
+Referenced by maxOS::gui::Widget::absolute_coordinates(), maxOS::gui::Window::add_child(), maxOS::common::Rectangle< int32_t >::contains(), maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::CompositeWidget::draw(), maxOS::gui::Desktop::draw_self(), maxOS::gui::Window::draw_self(), maxOS::gui::Font::draw_text(), maxOS::common::Rectangle< int32_t >::intersection(), maxOS::common::Rectangle< int32_t >::intersects(), maxOS::gui::Widget::move(), maxOS::gui::CompositeWidget::on_mouse_enter_widget(), maxOS::gui::CompositeWidget::on_mouse_leave_widget(), maxOS::gui::WidgetMoverResizer< 0, 1, 0, \-1 >::on_mouse_move_event(), and maxOS::common::Rectangle< int32_t >::subtract()\&.
+.SS "template<class Type > Type \fBmaxOS::common::Rectangle\fP< Type >::width { 0 }"
+
+.PP
+Definition at line 24 of file rectangle\&.h\&.
+.PP
+Referenced by maxOS::common::Rectangle< int32_t >::contains(), maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::Desktop::draw_self(), maxOS::gui::Window::draw_self(), maxOS::gui::Font::draw_text(), maxOS::common::Rectangle< int32_t >::intersection(), maxOS::common::Rectangle< int32_t >::intersects(), maxOS::gui::Widget::invalidate(), maxOS::gui::Window::on_mouse_button_pressed(), maxOS::gui::Desktop::on_mouse_move_event(), maxOS::gui::Widget::resize(), and maxOS::common::Rectangle< int32_t >::subtract()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,141 @@
+.TH "maxOS::system::GlobalDescriptorTable" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::system::GlobalDescriptorTable \- Sets up the GDT in the CPU\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gdt\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGlobalDescriptorTable\fP (const \fBmultiboot_info\fP &\fBmultiboot_header\fP)"
+.br
+.RI "Global Descriptor Table\&. "
+.ti -1c
+.RI "\fB~GlobalDescriptorTable\fP ()"
+.br
+.ti -1c
+.RI "uint16_t \fBcode_segment_selector\fP ()"
+.br
+.RI "Code Segment Selector\&. "
+.ti -1c
+.RI "uint16_t \fBdata_segment_selector\fP ()"
+.br
+.RI "Data Segment Selector\&. "
+.ti -1c
+.RI "uint16_t \fBtask_state_segment_selector\fP ()"
+.br
+.RI "\fBTask\fP State Segment Selector\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Sets up the GDT in the CPU\&. 
+.PP
+Definition at line 40 of file gdt\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GlobalDescriptorTable::GlobalDescriptorTable (const \fBmultiboot_info\fP & multiboot_header)"
+
+.PP
+Global Descriptor Table\&. 
+.PP
+Definition at line 91 of file gdt\&.cpp\&.
+.PP
+.nf
+92 : m_null_segment_selector(0, 0, 0), m_unused_segment_selector(0, 0, 0),
+93   m_code_segment_selector(0, 1024* multiboot_header\&.mem_upper, 0x9A),
+94   m_data_segment_selector(0, 1024* multiboot_header\&.mem_upper, 0x92),
+95   m_task_state_segment_selector(0, 1024* multiboot_header\&.mem_upper, 0)
+96 
+97 {
+98 
+99     // Create GDT
+100     uint32_t gdt_t[2];
+101     gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;
+102     gdt_t[1] = (uint32_t)this;
+103 
+104     // Tell processor to use this table
+105     asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));
+106 
+107 }
+.fi
+.SS "GlobalDescriptorTable::~GlobalDescriptorTable ()"
+
+.PP
+Definition at line 109 of file gdt\&.cpp\&.
+.PP
+.nf
+110 {
+111 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint16_t GlobalDescriptorTable::code_segment_selector ()"
+
+.PP
+Code Segment Selector\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The code segment selector offset 
+.RE
+.PP
+
+.PP
+Definition at line 129 of file gdt\&.cpp\&.
+.PP
+.nf
+130 {
+131     return (uint8_t*)&m_code_segment_selector - (uint8_t*)this;
+132 }
+.fi
+.PP
+Referenced by maxOS::hardwarecommunication::InterruptManager::InterruptManager(), and maxOS::system::Task::Task()\&.
+.SS "uint16_t GlobalDescriptorTable::data_segment_selector ()"
+
+.PP
+Data Segment Selector\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The data segment selector offset 
+.RE
+.PP
+
+.PP
+Definition at line 119 of file gdt\&.cpp\&.
+.PP
+.nf
+120 {
+121     return (uint8_t*)&m_data_segment_selector - (uint8_t*)this;
+122 }
+.fi
+.SS "uint16_t GlobalDescriptorTable::task_state_segment_selector ()"
+
+.PP
+\fBTask\fP State Segment Selector\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The task state segment selector offset 
+.RE
+.PP
+
+.PP
+Definition at line 139 of file gdt\&.cpp\&.
+.PP
+.nf
+140 {
+141     return (uint8_t*)&m_task_state_segment_selector - (uint8_t*)this;
+142 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

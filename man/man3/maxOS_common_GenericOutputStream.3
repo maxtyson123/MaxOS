@@ -1,0 +1,262 @@
+.TH "maxOS::common::GenericOutputStream< Type >" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::common::GenericOutputStream< Type > \- A stream that can be written to\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <outputStream\&.h>\fP
+.PP
+Inherits \fBmaxOS::common::InputStreamProcessor< Type, Type >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericOutputStream\fP ()"
+.br
+.RI "__________________________________________Templates__________________________________________________/// "
+.ti -1c
+.RI "\fB~GenericOutputStream\fP ()"
+.br
+.RI "Destructor of the \fBGenericOutputStream\fP class\&. "
+.ti -1c
+.RI "void \fBon_stream_read\fP (Type) override"
+.br
+.RI "Writes the date that was read from the input stream to the output stream\&. "
+.ti -1c
+.RI "void \fBon_end_of_stream\fP (\fBGenericInputStream\fP< Type > *) override"
+.br
+.RI "Close the stream and remove it from the list of streams when the end of the stream is reached\&. "
+.ti -1c
+.RI "virtual void \fBwrite\fP (Type)"
+.br
+.RI "write an element to the stream\&. "
+.ti -1c
+.RI "virtual void \fBclose\fP ()"
+.br
+.RI "Close the stream\&. "
+.ti -1c
+.RI "virtual \fBGenericOutputStream\fP< Type > & \fBoperator<<\fP (Type)"
+.br
+.RI "Overload the << operator to write an element to the stream\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class maxOS::common::GenericOutputStream< Type >"
+A stream that can be written to\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 22 of file outputStream\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBmaxOS::common::GenericOutputStream\fP< Type >::\fBGenericOutputStream\fP"
+
+.PP
+__________________________________________Templates__________________________________________________/// Constructor of the \fBGenericOutputStream\fP class\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 72 of file outputStream\&.h\&.
+.PP
+.nf
+72                                                                             {
+73 
+74         }
+.fi
+.SS "template<class Type > \fBmaxOS::common::GenericOutputStream\fP< Type >::~\fBGenericOutputStream\fP"
+
+.PP
+Destructor of the \fBGenericOutputStream\fP class\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 81 of file outputStream\&.h\&.
+.PP
+.nf
+81                                                                              {
+82 
+83         }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > void \fBmaxOS::common::GenericOutputStream\fP< Type >::close\fC [virtual]\fP"
+
+.PP
+Close the stream\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 138 of file outputStream\&.h\&.
+.PP
+.nf
+138                                                                    {
+139 
+140         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::GenericOutputStream\fP< Type >::on_end_of_stream (\fBGenericInputStream\fP< Type > * stream)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Close the stream and remove it from the list of streams when the end of the stream is reached\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP The stream that reached the end\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::common::InputStreamProcessor< Type, Type >\fP\&.
+.PP
+Definition at line 109 of file outputStream\&.h\&.
+.PP
+.nf
+109                                                                                                               {
+110 
+111             // Close the stream\&.
+112             close();
+113 
+114             // Pass the event to any handlers
+115             for(auto& input_stream_event_handler : this ->m_input_stream_event_handlers)
+116                 input_stream_event_handler->on_end_of_stream(stream);
+117 
+118             // Remove the stream from the list of streams\&.
+119             InputStreamProcessor<Type, Type>::on_end_of_stream(stream);
+120 
+121         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::GenericOutputStream\fP< Type >::on_stream_read (Type read_element)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Writes the date that was read from the input stream to the output stream\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIread_element\fP The element that was read from the stream\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::common::InputStreamEventHandler< Type >\fP\&.
+.PP
+Definition at line 91 of file outputStream\&.h\&.
+.PP
+.nf
+91                                                                                              {
+92 
+93             // When something is read from the input stream, it is written to the output stream\&.
+94             write(read_element);
+95 
+96             // Pass the element to any handlers
+97             for(auto& input_stream_event_handler : this ->m_input_stream_event_handlers)
+98               input_stream_event_handler->on_stream_read(read_element);
+99 
+100 
+101         }
+.fi
+.SS "template<class Type > \fBGenericOutputStream\fP< Type > & \fBmaxOS::common::GenericOutputStream\fP< Type >::operator<< (Type write_element)\fC [virtual]\fP"
+
+.PP
+Overload the << operator to write an element to the stream\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIwrite_element\fP The element that will be written to the stream\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The stream 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::common::OutputStream\fP\&.
+.PP
+Definition at line 149 of file outputStream\&.h\&.
+.PP
+.nf
+149                                                                                                                   {
+150 
+151             // write the element to the stream\&.
+152             write(write_element);
+153 
+154             // Return the stream\&.
+155             return *this;
+156         }
+.fi
+.SS "template<class Type > void \fBmaxOS::common::GenericOutputStream\fP< Type >::write (Type write_element)\fC [virtual]\fP"
+
+.PP
+write an element to the stream\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the elements that will be written to the stream\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIwrite_element\fP The element that will be written to the stream\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::common::OutputStream\fP\&.
+.PP
+Definition at line 129 of file outputStream\&.h\&.
+.PP
+.nf
+129                                                                                      {
+130 
+131         }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,132 @@
+.TH "maxOS::drivers::ethernet::EthernetDriverEventHandler" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::drivers::ethernet::EthernetDriverEventHandler \- Handles the events that are triggered by the Ethernet \fBDriver\fP\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ethernet\&.h>\fP
+.PP
+Inherits \fBmaxOS::common::EventHandler< EthernetDriverEvents >\fP\&.
+.PP
+Inherited by \fBmaxOS::net::EthernetFrameHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEthernetDriverEventHandler\fP ()"
+.br
+.RI "__EVENT HANDLER___ "
+.ti -1c
+.RI "\fB~EthernetDriverEventHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > *event)"
+.br
+.ti -1c
+.RI "virtual void \fBBeforeSend\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBDataSent\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "virtual bool \fBDataReceived\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the events that are triggered by the Ethernet \fBDriver\fP\&. 
+.PP
+Definition at line 67 of file ethernet\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "EthernetDriverEventHandler::EthernetDriverEventHandler ()"
+
+.PP
+__EVENT HANDLER___ 
+.PP
+Definition at line 14 of file ethernet\&.cpp\&.
+.PP
+.nf
+15 {
+16 }
+.fi
+.SS "EthernetDriverEventHandler::~EthernetDriverEventHandler ()"
+
+.PP
+Definition at line 18 of file ethernet\&.cpp\&.
+.PP
+.nf
+19 {
+20 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void EthernetDriverEventHandler::BeforeSend (uint8_t * buffer, uint32_t size)\fC [virtual]\fP"
+
+.PP
+Definition at line 29 of file ethernet\&.cpp\&.
+.PP
+.nf
+30 {
+31 }
+.fi
+.SS "bool EthernetDriverEventHandler::DataReceived (uint8_t * buffer, uint32_t size)\fC [virtual]\fP"
+
+.PP
+Reimplemented in \fBmaxOS::net::EthernetFrameHandler\fP\&.
+.PP
+Definition at line 24 of file ethernet\&.cpp\&.
+.PP
+.nf
+25 {
+26     return false;
+27 }
+.fi
+.SS "void EthernetDriverEventHandler::DataSent (uint8_t * buffer, uint32_t size)\fC [virtual]\fP"
+
+.PP
+Definition at line 33 of file ethernet\&.cpp\&.
+.PP
+.nf
+34 {
+35 }
+.fi
+.SS "\fBEvent\fP< \fBEthernetDriverEvents\fP > * EthernetDriverEventHandler::on_event (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * event)\fC [virtual]\fP"
+
+.PP
+Definition at line 37 of file ethernet\&.cpp\&.
+.PP
+.nf
+37                                                                                                     {
+38 
+39     switch (event -> type) {
+40 
+41         case EthernetDriverEvents::BEFORE_SEND:
+42             BeforeSend(((BeforeSendEvent*)event) -> buffer, ((BeforeSendEvent*)event) -> size);
+43             break;
+44 
+45         case EthernetDriverEvents::DATA_SENT:
+46             DataSent(((DataSentEvent*)event) -> buffer, ((DataSentEvent*)event) -> size);
+47             break;
+48 
+49         case EthernetDriverEvents::DATA_RECEIVED:
+50             event->return_value\&.boolValue = DataReceived(((DataReceivedEvent*)event) -> buffer, ((DataReceivedEvent*)event) -> size);
+51             break;
+52 
+53         default:
+54             break;
+55     }
+56 
+57     return event;
+58 }
+.fi
+.PP
+References maxOS::drivers::ethernet::BEFORE_SEND, maxOS::drivers::ethernet::DATA_RECEIVED, maxOS::drivers::ethernet::DATA_SENT, size, and type\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,113 @@
+.TH "maxOS::hardwarecommunication::Port16Bit" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::hardwarecommunication::Port16Bit \- Handles 16 bit ports\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <port\&.h>\fP
+.PP
+Inherits \fBmaxOS::hardwarecommunication::Port\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPort16Bit\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port16Bit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint16_t \fBdata\fP)"
+.br
+.RI "write a word to the port "
+.ti -1c
+.RI "virtual uint16_t \fBread\fP ()"
+.br
+.RI "read a word from the port "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Handles 16 bit ports\&. 
+.PP
+Definition at line 53 of file port\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Port16Bit::Port16Bit (uint16_t port_number)"
+
+.PP
+Definition at line 66 of file port\&.cpp\&.
+.PP
+.nf
+67 : Port(port_number)
+68 {
+69 }
+.fi
+.SS "Port16Bit::~Port16Bit ()"
+
+.PP
+Definition at line 71 of file port\&.cpp\&.
+.PP
+.nf
+71                       {
+72 
+73 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint16_t Port16Bit::read ()\fC [virtual]\fP"
+
+.PP
+read a word from the port 
+.PP
+\fBReturns\fP
+.RS 4
+the word read 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file port\&.cpp\&.
+.PP
+.nf
+89                         {
+90     uint16_t result;
+91     __asm__ volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
+92     return result;
+93 }
+.fi
+.PP
+References maxOS::hardwarecommunication::Port::m_port_number\&.
+.PP
+Referenced by maxOS::drivers::ethernet::amd_am79c973::activate(), maxOS::drivers::ethernet::amd_am79c973::amd_am79c973(), maxOS::drivers::ethernet::amd_am79c973::handle_interrupt(), maxOS::drivers::AdvancedTechnologyAttachment::identify(), maxOS::drivers::AdvancedTechnologyAttachment::read_28(), and maxOS::drivers::ethernet::amd_am79c973::reset()\&.
+.SS "void Port16Bit::write (uint16_t data)\fC [virtual]\fP"
+
+.PP
+write a word to the port 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the word to write 
+.RE
+.PP
+
+.PP
+Definition at line 80 of file port\&.cpp\&.
+.PP
+.nf
+80                                   {
+81     __asm__ volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
+82 }
+.fi
+.PP
+References data, and maxOS::hardwarecommunication::Port::m_port_number\&.
+.PP
+Referenced by maxOS::drivers::ethernet::amd_am79c973::activate(), maxOS::drivers::ethernet::amd_am79c973::amd_am79c973(), maxOS::drivers::ethernet::amd_am79c973::DoSend(), maxOS::drivers::ethernet::amd_am79c973::handle_interrupt(), maxOS::drivers::ethernet::amd_am79c973::reset(), and maxOS::drivers::AdvancedTechnologyAttachment::write_28()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

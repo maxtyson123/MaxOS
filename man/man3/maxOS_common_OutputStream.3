@@ -1,0 +1,478 @@
+.TH "maxOS::common::OutputStream" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::common::OutputStream \- A stream that strings can be written to\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <outputStream\&.h>\fP
+.PP
+Inherits \fBmaxOS::common::GenericOutputStream< string >\fP\&.
+.PP
+Inherited by \fBmaxOS::drivers::console::ConsoleStream\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBOutputStream\fP ()"
+.br
+.ti -1c
+.RI "\fB~OutputStream\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBlineFeed\fP ()"
+.br
+.RI "Writes a newline to the output stream\&. "
+.ti -1c
+.RI "virtual void \fBcarriageReturn\fP ()"
+.br
+.RI "Writes a carriage return to the output stream\&. "
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.RI "Clears the output stream\&. "
+.ti -1c
+.RI "virtual void \fBwrite\fP (\fBstring\fP string_to_write) override"
+.br
+.RI "Writes a string to the output stream\&. "
+.ti -1c
+.RI "virtual void \fBwrite_char\fP (char char_to_write)"
+.br
+.RI "Writes a character to the output stream\&. "
+.ti -1c
+.RI "virtual void \fBwrite_int\fP (int int_to_write)"
+.br
+.RI "Writes an integer to the output stream\&. "
+.ti -1c
+.RI "virtual void \fBwrite_hex\fP (uint32_t hex_to_write)"
+.br
+.RI "Writes a hex to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBstring\fP string_to_write) override"
+.br
+.RI "Writes a string to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (int int_to_write)"
+.br
+.RI "Writes a interger to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (uint32_t hex_to_write)"
+.br
+.RI "Writes a hexadecimal to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (char char_to_write)"
+.br
+.RI "Writes a character to the output stream\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+A stream that strings can be written to\&. 
+.PP
+Definition at line 41 of file outputStream\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "OutputStream::OutputStream ()"
+
+.PP
+Definition at line 10 of file outputStream\&.cpp\&.
+.PP
+.nf
+11 : GenericOutputStream<string>::GenericOutputStream()
+12 {
+13 
+14 }
+.fi
+.SS "OutputStream::~OutputStream ()"
+
+.PP
+Definition at line 16 of file outputStream\&.cpp\&.
+.PP
+.nf
+16                             {
+17 
+18 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void OutputStream::carriageReturn ()\fC [virtual]\fP"
+
+.PP
+Writes a carriage return to the output stream\&. 
+.PP
+Definition at line 33 of file outputStream\&.cpp\&.
+.PP
+.nf
+33                                   {
+34 
+35     // write the text representation of a carriage return to the output stream\&.
+36     write_char('\r');
+37 
+38 }
+.fi
+.PP
+References write_char()\&.
+.PP
+Referenced by write()\&.
+.SS "void OutputStream::clear ()\fC [virtual]\fP"
+
+.PP
+Clears the output stream\&. 
+.PP
+Definition at line 43 of file outputStream\&.cpp\&.
+.PP
+.nf
+43                          {
+44 
+45 }
+.fi
+.SS "void OutputStream::lineFeed ()\fC [virtual]\fP"
+
+.PP
+Writes a newline to the output stream\&. 
+.PP
+Definition at line 23 of file outputStream\&.cpp\&.
+.PP
+.nf
+23                             {
+24 
+25     // write the text representation of a newline to the output stream\&.
+26     write_char('\n');
+27 
+28 }
+.fi
+.PP
+References write_char()\&.
+.PP
+Referenced by write()\&.
+.SS "\fBOutputStream\fP & OutputStream::operator<< (char char_to_write)"
+
+.PP
+Writes a character to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIchar_to_write\fP The character to write to the output stream\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The output stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 229 of file outputStream\&.cpp\&.
+.PP
+.nf
+229                                                          {
+230 
+231     // Call the writeChar function to write the character to the output stream
+232     write_char(char_to_write);
+233 
+234     // Return the output stream
+235     return *this;
+236 
+237 }
+.fi
+.PP
+References write_char()\&.
+.SS "\fBOutputStream\fP & OutputStream::operator<< (int int_to_write)"
+
+.PP
+Writes a interger to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIint_to_write\fP The integer to write to the output stream\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The output stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 187 of file outputStream\&.cpp\&.
+.PP
+.nf
+187                                                          {
+188 
+189     // Call the writeInt function to write the integer to the output stream
+190     write_int(int_to_write);
+191 
+192     // Return the output stream
+193     return *this;
+194 }
+.fi
+.PP
+References write_int()\&.
+.SS "\fBOutputStream\fP & OutputStream::operator<< (\fBstring\fP string_to_write)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Writes a string to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring_to_write\fP The string to write to the output stream\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The output stream\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::common::GenericOutputStream< string >\fP\&.
+.PP
+Definition at line 215 of file outputStream\&.cpp\&.
+.PP
+.nf
+215                                                                {
+216 
+217     // Call the write function to write the string to the output stream
+218     write(string_to_write);
+219 
+220     // Return the output stream
+221     return *this;
+222 }
+.fi
+.PP
+References write()\&.
+.SS "\fBOutputStream\fP & OutputStream::operator<< (uint32_t hex_to_write)"
+
+.PP
+Writes a hexadecimal to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhex_to_write\fP The hex to write to the output stream\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The output stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 201 of file outputStream\&.cpp\&.
+.PP
+.nf
+201                                                               {
+202 
+203     // Call the write_hex function to write the hex to the output stream
+204     write_hex(hex_to_write);
+205 
+206     // Return the output stream
+207     return *this;
+208 }
+.fi
+.PP
+References write_hex()\&.
+.SS "void OutputStream::write (\fBstring\fP string_to_write)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Writes a string to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring_to_write\fP The string to write to the output stream\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::common::GenericOutputStream< string >\fP\&.
+.PP
+Definition at line 51 of file outputStream\&.cpp\&.
+.PP
+.nf
+51                                                {
+52 
+53     // Loop until broken
+54     while (true) {
+55 
+56         // Switch on the current character
+57         switch (*string_to_write) {
+58 
+59             // If the current character is a newline
+60             case '\n':
+61 
+62                 // write a newline to the output stream
+63                 lineFeed();
+64                 break;
+65 
+66             // If the current character is a carriage return
+67             case '\r':
+68 
+69                 // write a carriage return to the output stream
+70                 carriageReturn();
+71                 break;
+72 
+73             // If the current character is a null terminator
+74             case '\0':
+75                 return;
+76 
+77             // If the current character is any other character
+78             default:
+79 
+80                 // write the current character to the output stream
+81                 write_char(*string_to_write);
+82                 break;
+83 
+84         }
+85 
+86         // Increment the pointer to the next character
+87         string_to_write++;
+88 
+89     }
+90 
+91 }
+.fi
+.PP
+References carriageReturn(), lineFeed(), and write_char()\&.
+.PP
+Referenced by maxOS::hardwarecommunication::InterruptManager::handle_interrupt_request(), maxOS::net::InternetProtocolHandler::handleEthernetframePayload(), maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), maxOS::hardwarecommunication::PeripheralComponentInterconnectController::list_known_deivce(), operator<<(), maxOS::hardwarecommunication::PeripheralComponentInterconnectController::select_drivers(), maxOS::net::EthernetFrameHandler::sendEthernetFrame(), and write_hex()\&.
+.SS "void OutputStream::write_char (char char_to_write)\fC [virtual]\fP"
+
+.PP
+Writes a character to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIchar_to_write\fP The character to write to the output stream\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::drivers::console::ConsoleStream\fP\&.
+.PP
+Definition at line 97 of file outputStream\&.cpp\&.
+.PP
+.nf
+97                                                 {
+98 
+99 }
+.fi
+.PP
+Referenced by carriageReturn(), lineFeed(), operator<<(), write(), write_hex(), and write_int()\&.
+.SS "void OutputStream::write_hex (uint32_t hex_to_write)\fC [virtual]\fP"
+
+.PP
+Writes a hex to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwriteHex\fP The hex to write to the output stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 153 of file outputStream\&.cpp\&.
+.PP
+.nf
+153                                                   {
+154 
+155     // write the hex prefix to the output stream
+156     write("0x");
+157 
+158     // If the hex is 0 then write a 0 to the output stream and return as no more calculations are needed
+159     if (hex_to_write == 0) {
+160         write("0");
+161         return;
+162     }
+163 
+164     int length = 0;
+165     unsigned int ibak = hex_to_write;
+166     while(ibak > 0)
+167     {
+168         ibak /= 16;
+169         length++;
+170     }
+171     for(; length > 0; length--)
+172     {
+173         ibak = hex_to_write;
+174         for(int j = 1; j < length; j++)
+175             ibak /= 16;
+176         const string Hex = "0123456789ABCDEF";
+177         write_char(Hex[ibak % 16]);
+178     }
+179 
+180 }
+.fi
+.PP
+References maxOS::drivers::peripherals::j, length, write(), and write_char()\&.
+.PP
+Referenced by maxOS::net::EthernetFrameHandler::DataReceived(), maxOS::drivers::Driver::error_message(), maxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), maxOS::hardwarecommunication::InterruptManager::handle_interrupt_request(), maxOS::hardwarecommunication::PeripheralComponentInterconnectController::list_known_deivce(), operator<<(), and maxOS::drivers::ethernet::EthernetDriver::Send()\&.
+.SS "void OutputStream::write_int (int int_to_write)\fC [virtual]\fP"
+
+.PP
+Writes an integer to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIint_to_write\fP The integer to write to the output stream\&. 
+.RE
+.PP
+
+.PP
+Definition at line 105 of file outputStream\&.cpp\&.
+.PP
+.nf
+105                                              {
+106 
+107     // If the integer is 0 then write a 0 to the output stream and return as no more calculations are needed
+108     if (int_to_write == 0) {
+109       write_char('0');
+110         return;
+111     }
+112 
+113     // Store the int to write in a temporary variable
+114     int temp_write_int = int_to_write;
+115 
+116     // If the integer is negative then write a minus sign to the output stream and make the integer positive
+117     bool is_negative = int_to_write <= 0;
+118     if (is_negative) {
+119       write_char('-');
+120       temp_write_int = -temp_write_int;
+121     }
+122 
+123 // Check how many digits the integer has by dividing it by 10 until it is 0 (rounded automatically)
+124     int digits = 0;
+125     int temp = temp_write_int; // Copy the value to avoid modifying the original
+126     do {
+127         temp /= 10;
+128         digits++;
+129     } while (temp != 0);
+130 
+131 // Loop through each digit of the integer
+132     for (int current_digit = digits; current_digit > 0; --current_digit) {
+133 
+134         // Calculate the divisor to extract the current digit
+135         int divisor = 1;
+136         for (int i = 1; i < current_digit; i++) {
+137             divisor *= 10;
+138         }
+139 
+140         // Calculate the current digit
+141         int current_digit_value = (temp_write_int / divisor) % 10;
+142 
+143         // write the current digit to the output stream
+144         write_char('0' + current_digit_value);
+145     }
+146 
+147 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i, and write_char()\&.
+.PP
+Referenced by operator<<()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,60 @@
+.TH "/home/runner/work/max-os/max-os/kernel/src/net/tcp.cpp" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/max-os/max-os/kernel/src/net/tcp.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <net/tcp\&.h>\fP
+.br
+\fC#include 'net/udp\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBbigEndian32\fP (uint32_t x)"
+.br
+.ti -1c
+.RI "uint32_t \fBbigEndian16\fP (uint16_t x)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "uint32_t bigEndian16 (uint16_t x)"
+
+.PP
+Definition at line 147 of file tcp\&.cpp\&.
+.PP
+.nf
+148 {
+149     return ((x & 0xFF00) >> 8)
+150            | ((x & 0x00FF) << 8);
+151 }
+.fi
+.PP
+References maxOS::drivers::peripherals::x\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint32_t bigEndian32 (uint32_t x)"
+
+.PP
+Definition at line 139 of file tcp\&.cpp\&.
+.PP
+.nf
+140 {
+141     return ((x & 0xFF000000) >> 24)
+142            | ((x & 0x00FF0000) >> 8)
+143            | ((x & 0x0000FF00) << 8)
+144            | ((x & 0x000000FF) << 24);
+145 }
+.fi
+.PP
+References maxOS::drivers::peripherals::x\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

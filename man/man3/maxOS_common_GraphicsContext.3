@@ -1,0 +1,1413 @@
+.TH "maxOS::common::GraphicsContext" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::common::GraphicsContext \- Draws pixels to the screen, and handles drawing lines, rectangles and circles\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <graphicsContext\&.h>\fP
+.PP
+Inherited by \fBmaxOS::drivers::video::VideoDriver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fB~GraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBcolour_to_int\fP (\fBColour\fP)"
+.br
+.RI "Converts a colour to an integer value based on the current color depth\&. "
+.ti -1c
+.RI "\fBColour\fP \fBint_to_colour\fP (uint32_t)"
+.br
+.RI "Converts an integer value to a colour based on the current color depth\&. "
+.ti -1c
+.RI "uint32_t \fBget_width\fP ()"
+.br
+.RI "Gets the width of the screen\&. "
+.ti -1c
+.RI "uint32_t \fBget_height\fP ()"
+.br
+.RI "Gets the height of the screen\&. "
+.ti -1c
+.RI "void \fBput_pixel\fP (int32_t x, int32_t y, \fBColour\fP colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
+.ti -1c
+.RI "void \fBputPixel\fP (int32_t x, int32_t y, int32_t colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
+.ti -1c
+.RI "\fBColour\fP \fBget_pixel\fP (int32_t x, int32_t y)"
+.br
+.RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
+.ti -1c
+.RI "void \fBinvert_pixel\fP (int32_t x, int32_t y)"
+.br
+.RI "Inverts a pixel\&. "
+.ti -1c
+.RI "void \fBdraw_line\fP (int32_t x0, int32_t y0, int32_t x1, int32_t y1, \fBColour\fP colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "void \fBdrawLine\fP (int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "void \fBdraw_rectangle\fP (int32_t x0, int32_t y0, int32_t x1, int32_t y1, \fBColour\fP colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "void \fBdraw_rectangle\fP (int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "void \fBfill_rectangle\fP (int32_t x0, int32_t y0, int32_t x1, int32_t y1, \fBColour\fP colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "void \fBfill_rectangle\fP (int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "void \fBdraw_circle\fP (int32_t x0, int32_t y0, int32_t radius, \fBColour\fP colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "void \fBdraw_circle\fP (int32_t x0, int32_t y0, int32_t radius, uint32_t colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "void \fBfill_circle\fP (int32_t x0, int32_t y0, int32_t radius, \fBColour\fP colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "void \fBfillCircle\fP (int32_t x0, int32_t y0, int32_t radius, uint32_t colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBrender_pixel\fP (uint32_t x, uint32_t y, uint32_t colour)"
+.br
+.RI "Renders a pixel to the screen based on the current color depth\&. "
+.ti -1c
+.RI "virtual void \fBrender_pixel_8_bit\fP (uint32_t x, uint32_t y, uint8_t colour)"
+.br
+.RI "Renders a pixel to the screen using the 8 bit color depth\&. "
+.ti -1c
+.RI "virtual void \fBrender_pixel_16_bit\fP (uint32_t x, uint32_t y, uint16_t colour)"
+.br
+.RI "Renders a pixel to the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "virtual void \fBrender_pixel_24_bit\fP (uint32_t x, uint32_t y, uint32_t colour)"
+.br
+.RI "Renders a pixel to the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "virtual void \fBrender_pixel_32_bit\fP (uint32_t x, uint32_t y, uint32_t colour)"
+.br
+.RI "Renders a pixel to the screen using the 32 bit color depth\&. "
+.ti -1c
+.RI "virtual uint32_t \fBget_rendered_pixel\fP (uint32_t x, uint32_t y)"
+.br
+.RI "Gets the colour of a pixel on the screen, automatically uses the correct color depth\&. "
+.ti -1c
+.RI "virtual uint8_t \fBget_rendered_pixel_8_bit\fP (uint32_t x, uint32_t y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 8 bit color depth\&. "
+.ti -1c
+.RI "virtual uint16_t \fBget_rendered_pixel_16_bit\fP (uint32_t x, uint32_t y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "virtual uint32_t \fBget_rendered_pixel_24_bit\fP (uint32_t x, uint32_t y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "virtual uint32_t \fBget_rendered_pixel_32_bit\fP (uint32_t x, uint32_t y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 32 bit color depth\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBmirror_y_axis\fP { false }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_width\fP { 0 }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_height\fP { 0 }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_color_depth\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Draws pixels to the screen, and handles drawing lines, rectangles and circles\&. 
+.PP
+Definition at line 19 of file graphicsContext\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GraphicsContext::GraphicsContext ()"
+
+.PP
+Definition at line 9 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+10 {
+11 
+12 
+13     // VirtualBox VGA palette
+14     m_colour_pallet[0x00] = Colour(0x00,0x00,0x00);    // Black
+15     m_colour_pallet[0x01] = Colour(0x00,0x00,0xA8);    // Duke Blue
+16     m_colour_pallet[0x02] = Colour(0x00,0xA8,0x00);    // Islamic Green
+17     m_colour_pallet[0x03] = Colour(0x00,0xA8,0xA8);    // Persian Green
+18     m_colour_pallet[0x04] = Colour(0xA8,0x00,0x00);    // Dark Candy Apple Red
+19     m_colour_pallet[0x05] = Colour(0xA8,0x00,0xA8);    // Heliotrope Magenta
+20 
+21     m_colour_pallet[0x06] = Colour(0xA8,0xA8,0x00);    // Light Gold
+22     m_colour_pallet[0x07] = Colour(0xA8,0xA8,0xA8);    // Dark Gray (X11)
+23     m_colour_pallet[0x08] = Colour(0x00,0x00,0x57);    // Cetacean Blue
+24     m_colour_pallet[0x09] = Colour(0x00,0x00,0xFF);    // Blue
+25     m_colour_pallet[0x0A] = Colour(0x00,0xA8,0x57);    // Green (Pigment)
+26     m_colour_pallet[0x0B] = Colour(0x00,0xA8,0xFF);    // Vivid Cerulean
+27     m_colour_pallet[0x0C] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+28     m_colour_pallet[0x0D] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+29     m_colour_pallet[0x0E] = Colour(0xA8,0xA8,0x57);    // Olive Green
+30     m_colour_pallet[0x0F] = Colour(0xA8,0xA8,0xFF);    // Maximum Blue Purple
+31 
+32     m_colour_pallet[0x10] = Colour(0x00,0x57,0x00);    // Dark Green (X11)
+33     m_colour_pallet[0x11] = Colour(0x00,0x57,0xA8);    // Cobalt Blue
+34     m_colour_pallet[0x12] = Colour(0x00,0xFF,0x00);    // Electric Green
+35     m_colour_pallet[0x13] = Colour(0x00,0xFF,0xA8);    // Medium Spring Green
+36     m_colour_pallet[0x14] = Colour(0xA8,0x57,0x00);    // Windsor Tan
+37     m_colour_pallet[0x15] = Colour(0xA8,0x57,0xA8);    // Purpureus
+38     m_colour_pallet[0x16] = Colour(0xA8,0xFF,0x00);    // Spring Bud
+39     m_colour_pallet[0x17] = Colour(0xA8,0xFF,0xA8);    // Mint Green
+40     m_colour_pallet[0x18] = Colour(0x00,0x57,0x57);    // Midnight Green (Eagle Green)
+41     m_colour_pallet[0x19] = Colour(0x00,0x57,0xFF);    // Blue (RYB)
+42     m_colour_pallet[0x1A] = Colour(0x00,0xFF,0x57);    // Malachite
+43     m_colour_pallet[0x1B] = Colour(0x00,0xFF,0xFF);    // Aqua
+44     m_colour_pallet[0x1C] = Colour(0xA8,0x57,0x57);    // Middle Red Purple
+45     m_colour_pallet[0x1D] = Colour(0xA8,0x57,0xFF);    // Lavender Indigo
+46     m_colour_pallet[0x1E] = Colour(0xA8,0xFF,0x57);    // Olive Green
+47     m_colour_pallet[0x1F] = Colour(0xA8,0xFF,0xFF);    // Celeste
+48 
+49     m_colour_pallet[0x20] = Colour(0x57,0x00,0x00);    // Blood Red
+50     m_colour_pallet[0x21] = Colour(0x57,0x00,0xA8);    // Metallic Violet
+51     m_colour_pallet[0x22] = Colour(0x57,0xA8,0x00);    // Kelly Green
+52     m_colour_pallet[0x23] = Colour(0x57,0xA8,0xA8);    // Cadet Blue
+53     m_colour_pallet[0x24] = Colour(0xFF,0x00,0x00);    // Red
+54     m_colour_pallet[0x25] = Colour(0xFF,0x00,0xA8);    // Fashion Fuchsia
+55     m_colour_pallet[0x26] = Colour(0xFF,0xA8,0x00);    // Chrome Yellow
+56     m_colour_pallet[0x27] = Colour(0xFF,0xA8,0xA8);    // Light Salmon Pink
+57     m_colour_pallet[0x28] = Colour(0x57,0x00,0x57);    // Imperial Purple
+58     m_colour_pallet[0x29] = Colour(0x57,0x00,0xFF);    // Electric Indigo
+59     m_colour_pallet[0x2A] = Colour(0x57,0xA8,0x57);    // Apple
+60     m_colour_pallet[0x2B] = Colour(0x57,0xA8,0xFF);    // Blue Jeans
+61     m_colour_pallet[0x2C] = Colour(0xFF,0x00,0x57);    // Folly
+62     m_colour_pallet[0x2D] = Colour(0xFF,0x00,0xFF);    // Fuchsia
+63     m_colour_pallet[0x2E] = Colour(0xFF,0xA8,0x57);    // Rajah
+64     m_colour_pallet[0x2F] = Colour(0xFF,0xA8,0xFF);    // Rich Brilliant Lavender
+65 
+66     m_colour_pallet[0x30] = Colour(0x57,0x57,0x00);    // Dark Bronze (Coin)
+67     m_colour_pallet[0x31] = Colour(0x57,0x57,0xA8);    // Liberty
+68     m_colour_pallet[0x32] = Colour(0x57,0xFF,0x00);    // Chlorophyll Green
+69     m_colour_pallet[0x33] = Colour(0x57,0xFF,0xA8);    // Medium Aquamarine
+70     m_colour_pallet[0x34] = Colour(0xFF,0x57,0x00);    // Orange (Pantone)
+71     m_colour_pallet[0x35] = Colour(0xFF,0x57,0xA8);    // Brilliant Rose
+72     m_colour_pallet[0x36] = Colour(0xFF,0xFF,0x00);    // Yellow
+73     m_colour_pallet[0x37] = Colour(0xFF,0xFF,0xA8);    // Calamansi
+74     m_colour_pallet[0x38] = Colour(0x57,0x57,0x57);    // Davy's Grey
+75     m_colour_pallet[0x39] = Colour(0x57,0x57,0xFF);    // Very Light Blue
+76     m_colour_pallet[0x3A] = Colour(0x57,0xFF,0x57);    // Screamin' Green
+77     m_colour_pallet[0x3B] = Colour(0x57,0xFF,0xFF);    // Electric Blue
+78     m_colour_pallet[0x3C] = Colour(0xFF,0x57,0x57);    // Sunset Orange
+79     m_colour_pallet[0x3D] = Colour(0xFF,0x57,0xFF);    // Shocking Pink (Crayola)
+80     m_colour_pallet[0x3E] = Colour(0xFF,0xFF,0x57);    // Shocking Pink (Crayola)
+81     m_colour_pallet[0x3F] = Colour(0xFF,0xFF,0xFF);    // White
+82 
+83 
+84     // Set the rest of the palette to black
+85     for(uint8_t color_code = 255; color_code >= 0x40; --color_code)
+86       m_colour_pallet[color_code] = Colour(0,0,0);
+87 
+88 
+89 }
+.fi
+.PP
+References m_colour_pallet\&.
+.SS "GraphicsContext::~GraphicsContext ()"
+
+.PP
+Definition at line 91 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+91                                   {
+92 
+93 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t GraphicsContext::colour_to_int (\fBColour\fP colour)"
+
+.PP
+Converts a colour to an integer value based on the current color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcolour\fP The colour class to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The integer value of the colour 
+.RE
+.PP
+
+.PP
+Definition at line 238 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+238                                                      {
+239 
+240     switch(m_color_depth)
+241     {
+242         case 8:
+243         {
+244             uint32_t result = 0;
+245             int mindistance = 0xfffffff;
+246             for(uint32_t i = 0; i <= 255; ++i)
+247             {
+248                 Colour* c = &m_colour_pallet[i];
+249                 int distance =
+250                         ((int)colour\&.red-(int)c->red)*((int)colour\&.red-(int)c->red)
+251                         +((int)colour\&.green-(int)c->green)*((int)colour\&.green-(int)c->green)
+252                         +((int)colour\&.blue-(int)c->blue)*((int)colour\&.blue-(int)c->blue);
+253                 if(distance < mindistance)
+254                 {
+255                     mindistance = distance;
+256                     result = i;
+257                 }
+258             }
+259             return result;
+260         }
+261         case 16:
+262         {
+263             // 16-Bit colours RRRRRGGGGGGBBBBB
+264             return ((uint16_t)(colour\&.red   & 0xF8)) << 8
+265                    | ((uint16_t)(colour\&.green & 0xFC)) << 3
+266                    | ((uint16_t)(colour\&.blue  & 0xF8) >> 3);
+267         }
+268         case 24:
+269         {
+270             return (uint32_t)colour\&.red   << 16
+271                    | (uint32_t)colour\&.green << 8
+272                    | (uint32_t)colour\&.blue;
+273         }
+274         default:
+275         case 32:
+276         {
+277             uint32_t red_hex = ((uint32_t)colour\&.red & 0xFF) << 16;
+278             uint32_t green_hex = ((uint32_t)colour\&.green & 0xFF) << 8;
+279             uint32_t blue_hex = (uint32_t)colour\&.blue & 0xFF;
+280             uint32_t alpha_hex = ((uint32_t)colour\&.alpha & 0xFF) << 24;
+281 
+282             uint32_t hexValue = red_hex | green_hex | blue_hex | alpha_hex;
+283 
+284 
+285             return hexValue;
+286         }
+287     }
+288 }
+.fi
+.PP
+References maxOS::common::Colour::alpha, maxOS::common::Colour::blue, maxOS::drivers::peripherals::c, maxOS::common::Colour::green, maxOS::drivers::peripherals::i, m_color_depth, m_colour_pallet, and maxOS::common::Colour::red\&.
+.PP
+Referenced by draw_circle(), draw_line(), draw_rectangle(), maxOS::gui::Font::draw_text(), fill_circle(), fill_rectangle(), and put_pixel()\&.
+.SS "void GraphicsContext::draw_circle (int32_t x0, int32_t y0, int32_t radius, \fBColour\fP colour)"
+
+.PP
+Draws a circle on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the centre of the circle 
+.br
+\fIy0\fP The y coordinate of the centre of the circle 
+.br
+\fIradius\fP The radius of the circle 
+.br
+\fIcolour\fP The colour of the circle 
+.RE
+.PP
+
+.PP
+Definition at line 658 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+658                                                                                       {
+659   draw_circle(x0, y0, radius, colour_to_int(colour));
+660 }
+.fi
+.PP
+References colour_to_int()\&.
+.SS "void GraphicsContext::draw_circle (int32_t x0, int32_t y0, int32_t radius, uint32_t colour)"
+
+.PP
+Draws a circle on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the centre of the circle 
+.br
+\fIy0\fP The y coordinate of the centre of the circle 
+.br
+\fIradius\fP The radius of the circle 
+.br
+\fIcolour\fP The colour of the circle 
+.RE
+.PP
+
+.PP
+Definition at line 670 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+670                                                                                          {
+671 
+672     // Make sure the circle is with in the width and height of the screen
+673     if(x0 < 0) x0 = 0;
+674     if((uint32_t)x0 > m_width) x0 = m_width;
+675     if(y0 < 0) y0 = 0;
+676     if((uint32_t)y0 > m_height) y0 = m_height;
+677 
+678     // Mirror the Y axis as directly calling put_pixel will not do this
+679     if(mirror_y_axis)
+680         y0 = m_height -y0-1;
+681 
+682 
+683     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+684     for(int32_t x = -radius; x <= radius; ++x){
+685 
+686         // Draw a line from the top most point of the circle to the bottom most point of the circle
+687         for(int32_t y = -radius; y <= radius; ++y){
+688 
+689             // If the point is within the circle, draw it but make sure it is only part of the outline
+690             if(x*x + y*y <= radius*radius && x*x + y*y >= (radius-1)*(radius-1))
+691                 putPixel(x0+x,y0+y,colour);
+692         }
+693     }
+694 
+695 
+696 }
+.fi
+.PP
+References m_height, m_width, mirror_y_axis, putPixel(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.SS "void GraphicsContext::draw_line (int32_t x0, int32_t y0, int32_t x1, int32_t y1, \fBColour\fP colour)"
+
+.PP
+Draws a line on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the m_first_memory_chunk point 
+.br
+\fIy0\fP The y coordinate of the m_first_memory_chunk point 
+.br
+\fIx1\fP The x coordinate of the final point 
+.br
+\fIy1\fP The y coordinate of the final point 
+.br
+\fIcolour\fP The colour of the line 
+.RE
+.PP
+
+.PP
+Definition at line 455 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+455                                                                                              {
+456     drawLine(x0,y0,x1,y1, colour_to_int(colour));
+457 }
+.fi
+.PP
+References colour_to_int(), and drawLine()\&.
+.PP
+Referenced by maxOS::gui::widgets::InputBox::draw(), and maxOS::gui::widgets::Button::draw()\&.
+.SS "void GraphicsContext::draw_rectangle (int32_t x0, int32_t y0, int32_t x1, int32_t y1, \fBColour\fP colour)"
+
+.PP
+Draws a rectangle on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the top left corner 
+.br
+\fIy0\fP The y coordinate of the top left corner 
+.br
+\fIx1\fP The x coordinate of the bottom right corner 
+.br
+\fIy1\fP The y coordinate of the bottom right corner 
+.br
+\fIcolour\fP The colour of the rectangle 
+.RE
+.PP
+
+.PP
+Definition at line 562 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+562                                                                                                   {
+563   draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
+564 
+565 }
+.fi
+.PP
+References colour_to_int()\&.
+.SS "void GraphicsContext::draw_rectangle (int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour)"
+
+.PP
+Draws a rectangle on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the top left corner 
+.br
+\fIy0\fP The y coordinate of the top left corner 
+.br
+\fIx1\fP The x coordinate of the bottom right corner 
+.br
+\fIy1\fP The y coordinate of the bottom right corner 
+.br
+\fIcolour\fP The colour of the rectangle 
+.RE
+.PP
+
+.PP
+Definition at line 576 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+576                                                                                                     {
+577 
+578     // Ensure x and y 0 is smaller than x and y 1
+579     --y0;
+580     --x0;
+581 
+582     // Draw the rectangle
+583     drawLine(x0,y0,x1,y0,colour); // Top
+584     drawLine(x0,y1,x1,y1,colour); // Bottom
+585     drawLine(x0,y0,x0,y1,colour); // Left
+586     drawLine(x1,y0,x1,y1,colour); // Right
+587 
+588 }
+.fi
+.PP
+References drawLine()\&.
+.SS "void GraphicsContext::drawLine (int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour)"
+
+.PP
+Draws a line on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the m_first_memory_chunk point 
+.br
+\fIy0\fP The y coordinate of the m_first_memory_chunk point 
+.br
+\fIx1\fP The x coordinate of the final point 
+.br
+\fIy1\fP The y coordinate of the final point 
+.br
+\fIcolour\fP The colour of the line 
+.RE
+.PP
+
+.PP
+Definition at line 468 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+468                                                                                               {
+469 
+470     // Store the minimum and maximum y values
+471     bool y_0_is_smaller = y0 < y1;
+472     int32_t y_min = y_0_is_smaller ? y0 : y1;
+473     int32_t y_max = y_0_is_smaller ? y1 : y0;
+474 
+475     //Reverse the points to draw from left to right
+476     if(x1 < x0){
+477         drawLine(x1,y1,x0,y0,colour);
+478         return;
+479     }
+480 
+481     // Vertical line
+482     if(x1 == x0)
+483     {
+484         // Force the line to be within the screen
+485         if(y_min < 0) y_min = 0;
+486         if((uint32_t)y_max >= m_height)
+487           y_max = m_height - 1;
+488 
+489         // Mirror the Y axis as directly calling put_pixel will not do this
+490         if(mirror_y_axis)
+491         {
+492             int32_t temp = y_max;
+493             y_max = m_height - y_min - 1;
+494             y_min = m_height - temp - 1;
+495         }
+496 
+497         // Check that the line is within the screen
+498         if (0 > x0 || (uint32_t) x0 >= m_width) {
+499             return;
+500         }
+501 
+502         // Draw the line
+503         for(int32_t y = y_min; y <= y_max; ++y)
+504             putPixel(x0, y, colour);
+505 
+506         return;
+507     }
+508 
+509     // Horizontal line
+510     if(y1 == y0)
+511     {
+512         // Ensure the line is within the screen
+513         if(x0 < 0) x0 = 0;
+514         if((uint32_t)x1 >= m_width) x1 = m_width -1;
+515 
+516         // Mirror the Y axis as directly calling put_pixel will not do this
+517         if(mirror_y_axis)
+518             y0 = m_height -y0-1;
+519 
+520         // Check that the line is within the screen
+521         if (0 > y0 || (uint32_t) y0 >= m_height)
+522             return;
+523 
+524         // Draw the line
+525         for(int32_t x = x0; x <= x1; ++x)
+526             putPixel(x,y0,colour);
+527     }
+528 
+529     // If the line is not horizontal or vertical then it must be a diagonal line
+530     // Find the slope of the line
+531     float slope = ((float)(y1-y0))/(x1-x0);
+532 
+533     // A slope that is more horizontal should be drawn by incrementing x
+534     if(-1 <= slope && slope <= 1)
+535     {
+536         float y = y0;
+537         for(int32_t x = x0; x <= x1; x++, y+=slope)
+538             putPixel(x, (int32_t)y, colour);
+539     }
+540 
+541     // A slope that is more vertical should be drawn by incrementing y
+542     else
+543     {
+544         // Invert the slope
+545         slope = 1\&.0f/slope;
+546 
+547         float x = x0;
+548         for(int32_t y = y_min; y <= y_max; x+=slope, y++)
+549             putPixel((int32_t)x, y, colour);
+550     }
+551 }
+.fi
+.PP
+References m_height, m_width, mirror_y_axis, putPixel(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by draw_line(), and draw_rectangle()\&.
+.SS "void GraphicsContext::fill_circle (int32_t x0, int32_t y0, int32_t radius, \fBColour\fP colour)"
+
+.PP
+Draws a circle on the screen, filled with a colour\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the centre of the circle 
+.br
+\fIy0\fP The y coordinate of the centre of the circle 
+.br
+\fIradius\fP The radius of the circle 
+.br
+\fIcolour\fP The colour of the circle 
+.RE
+.PP
+
+.PP
+Definition at line 706 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+706                                                                                        {
+707     fillCircle(x0,y0,radius, colour_to_int(colour));
+708 
+709 }
+.fi
+.PP
+References colour_to_int(), and fillCircle()\&.
+.SS "void GraphicsContext::fill_rectangle (int32_t x0, int32_t y0, int32_t x1, int32_t y1, \fBColour\fP colour)"
+
+.PP
+Draws a rectangle on the screen, filled with a colour\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the top left corner 
+.br
+\fIy0\fP The y coordinate of the top left corner 
+.br
+\fIx1\fP The x coordinate of the bottom right corner 
+.br
+\fIy1\fP The y coordinate of the bottom right corner 
+.br
+\fIcolour\fP The colour of the rectangle 
+.RE
+.PP
+
+.PP
+Definition at line 599 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+599                                                                                                   {
+600   fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
+601 }
+.fi
+.PP
+References colour_to_int()\&.
+.PP
+Referenced by maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::Desktop::draw_self(), maxOS::gui::Window::draw_self(), and fill_rectangle()\&.
+.SS "void GraphicsContext::fill_rectangle (int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour)"
+
+.PP
+Draws a rectangle on the screen, filled with a colour\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the top left corner 
+.br
+\fIy0\fP The y coordinate of the top left corner 
+.br
+\fIx1\fP The x coordinate of the bottom right corner 
+.br
+\fIy1\fP The y coordinate of the bottom right corner 
+.br
+\fIcolour\fP The colour of the rectangle 
+.RE
+.PP
+
+.PP
+Definition at line 612 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+612                                                                                                     {
+613 
+614     // Draw from left to right
+615     if(y1 < y0){
+616       fill_rectangle(x1, y1, x0, y0, colour);
+617         return;
+618     }
+619 
+620     // Make sure the rectangle is within the height of the screen
+621     if(y0 < 0) y0 = 0;
+622     if((uint32_t)y1 > m_height) y1 = m_height;
+623 
+624     // Make sure the rectangle is within the width of the screen
+625     bool x_0_is_smaller = x0 < x1;
+626     int32_t x_min = x_0_is_smaller ? x0 : x1;
+627     int32_t x_max = x_0_is_smaller ? x1 : x0;
+628 
+629     if(x_min < 0) x_min = 0;
+630     if((uint32_t)x_max > m_width)
+631       x_max = m_width;
+632 
+633     // Mirror the Y axis as directly calling put_pixel will not do this
+634     if(mirror_y_axis)
+635     {
+636         uint32_t temp = y1;
+637         y1 = m_height - y0 - 1;
+638         y0 = m_height - temp - 1;
+639     }
+640 
+641     // Draw the rectangle
+642     for(int32_t y = y0; y < y1; ++y){
+643         for (int32_t x = x_min; x < x_max; ++x) {
+644             putPixel(x, y, colour);
+645         }
+646     }
+647 
+648 }
+.fi
+.PP
+References fill_rectangle(), m_height, m_width, mirror_y_axis, putPixel(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.SS "void GraphicsContext::fillCircle (int32_t x0, int32_t y0, int32_t radius, uint32_t colour)"
+
+.PP
+Draws a circle on the screen, filled with a colour\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx0\fP The x coordinate of the centre of the circle 
+.br
+\fIy0\fP The y coordinate of the centre of the circle 
+.br
+\fIradius\fP The radius of the circle 
+.br
+\fIcolour\fP The colour of the circle 
+.RE
+.PP
+
+.PP
+Definition at line 719 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+719                                                                                         {
+720 
+721         // Make sure the circle is with in the width and height of the screen
+722         if(x0 < 0) x0 = 0;
+723         if((uint32_t)x0 > m_width) x0 = m_width;
+724         if(y0 < 0) y0 = 0;
+725         if((uint32_t)y0 > m_height) y0 = m_height;
+726 
+727         // Mirror the Y axis as directly calling put_pixel will not do this
+728         if(mirror_y_axis)
+729             y0 = m_height -y0-1;
+730 
+731         // Draw the circle
+732 
+733         // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+734         for(int32_t x = -radius; x <= radius; ++x){
+735 
+736             // Draw a line from the top most point of the circle to the bottom most point of the circle
+737             for(int32_t y = -radius; y <= radius; ++y){
+738 
+739                 // Only draw the pixel if it is within the circle
+740                 if(x*x + y*y <= radius*radius)
+741                     putPixel(x0+x,y0+y,colour);
+742             }
+743         }
+744 }
+.fi
+.PP
+References m_height, m_width, mirror_y_axis, putPixel(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by fill_circle()\&.
+.SS "uint32_t GraphicsContext::get_height ()"
+
+.PP
+Gets the height of the screen\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The height of the screen 
+.RE
+.PP
+
+.PP
+Definition at line 360 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+360                                      {
+361     return m_height;
+362 }
+.fi
+.PP
+References m_height\&.
+.PP
+Referenced by maxOS::gui::Desktop::Desktop(), maxOS::drivers::console::VESABootConsole::height(), and maxOS::drivers::console::VESABootConsole::VESABootConsole()\&.
+.SS "\fBColour\fP GraphicsContext::get_pixel (int32_t x, int32_t y)"
+
+.PP
+Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The colour of the pixel or black if the pixel is outside the screen 
+.RE
+.PP
+
+.PP
+Definition at line 407 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+407                                                       {
+408 
+409     // Check if the pixel is within the m_width of the screen
+410     if (0 > x || (uint32_t)x >= m_width) {
+411         return Colour(0,0,0);
+412     }
+413 
+414     // Check if the pixel is within the m_height of the screen
+415     if (0 > y || (uint32_t) y >= m_height) {
+416         return Colour(0,0,0);
+417     }
+418 
+419     // Get the pixel and convert it to a colour
+420     uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height - y - 1 : y);
+421     return int_to_colour(translated_color);
+422 
+423 
+424 }
+.fi
+.PP
+References get_rendered_pixel(), int_to_colour(), m_height, m_width, mirror_y_axis, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by invert_pixel()\&.
+.SS "uint32_t GraphicsContext::get_rendered_pixel (uint32_t x, uint32_t y)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the colour of a pixel on the screen, automatically uses the correct color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 174 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+174                                                                    {
+175     // Call the correct get_pixel function based on the color depth
+176     switch (m_color_depth) {
+177         case 8:
+178             return get_rendered_pixel_8_bit(x, y);
+179         case 16:
+180             return get_rendered_pixel_16_bit(x, y);
+181         case 24:
+182             return get_rendered_pixel_24_bit(x, y);
+183         case 32:
+184             return get_rendered_pixel_32_bit(x, y);
+185     }
+186 }
+.fi
+.PP
+References get_rendered_pixel_16_bit(), get_rendered_pixel_24_bit(), get_rendered_pixel_32_bit(), get_rendered_pixel_8_bit(), m_color_depth, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by get_pixel()\&.
+.SS "uint16_t GraphicsContext::get_rendered_pixel_16_bit (uint32_t x, uint32_t y)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the colour of a pixel on the screen using the 16 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The 16Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 206 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+206                                                                           {
+207     return 0;
+208 }
+.fi
+.PP
+Referenced by get_rendered_pixel()\&.
+.SS "uint32_t GraphicsContext::get_rendered_pixel_24_bit (uint32_t x, uint32_t y)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the colour of a pixel on the screen using the 24 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The 24Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 217 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+217                                                                           {
+218     return 0;
+219 }
+.fi
+.PP
+Referenced by get_rendered_pixel()\&.
+.SS "uint32_t GraphicsContext::get_rendered_pixel_32_bit (uint32_t x, uint32_t y)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the colour of a pixel on the screen using the 32 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The 32Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
+.PP
+Definition at line 228 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+228                                                                           {
+229     return 0;
+230 }
+.fi
+.PP
+Referenced by get_rendered_pixel()\&.
+.SS "uint8_t GraphicsContext::get_rendered_pixel_8_bit (uint32_t x, uint32_t y)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the colour of a pixel on the screen using the 8 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The 8Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::drivers::video::VideoGraphicsArray\fP\&.
+.PP
+Definition at line 195 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+195                                                                         {
+196     return 0;
+197 }
+.fi
+.PP
+Referenced by get_rendered_pixel()\&.
+.SS "uint32_t GraphicsContext::get_width ()"
+
+.PP
+Gets the width of the screen\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The width of the screen 
+.RE
+.PP
+
+.PP
+Definition at line 351 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+351                                     {
+352     return m_width;
+353 }
+.fi
+.PP
+References m_width\&.
+.PP
+Referenced by maxOS::gui::Desktop::Desktop(), maxOS::drivers::console::VESABootConsole::VESABootConsole(), and maxOS::drivers::console::VESABootConsole::width()\&.
+.SS "\fBColour\fP GraphicsContext::int_to_colour (uint32_t colour)"
+
+.PP
+Converts an integer value to a colour based on the current color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcolour\fP The integer value to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The colour class of the integer value 
+.RE
+.PP
+
+.PP
+Definition at line 296 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+296                                                      {
+297     switch (m_color_depth) {
+298 
+299         case 8:
+300         {
+301             // Return the colour from the palette
+302             return m_colour_pallet[colour & 0xFF];
+303         }
+304 
+305         case 16:
+306         {
+307             // 16-Bit Colour: 5 bits for red, 6 bits for green, 5 bits for blue (RRRRR,GGGGGG,BBBBB)
+308             Colour result;
+309 
+310             result\&.red = (colour & 0xF800) >> 8;
+311             result\&.green = (colour & 0x07E0) >> 3;
+312             result\&.blue = (colour & 0x001F) << 3;
+313 
+314             return result;
+315         }
+316 
+317         case 24:
+318         {
+319             // 24-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue (RRRRRRRR,GGGGGGGG,BBBBBBBB)
+320             Colour result;
+321 
+322             result\&.red = (colour & 0xFF0000) >> 16;
+323             result\&.green = (colour & 0x00FF00) >> 8;
+324             result\&.blue = (colour & 0x0000FF);
+325 
+326             return result;
+327         }
+328 
+329         default:
+330         case 32:
+331         {
+332             Colour result;
+333 
+334             uint32_t hex_value = colour;
+335             result\&.red = (hex_value >> 16) & 0xFF;
+336             result\&.green = (hex_value >> 8) & 0xFF;
+337             result\&.blue = hex_value & 0xFF;
+338             result\&.alpha = (hex_value >> 24) & 0xFF;
+339 
+340             return result;
+341 
+342         }
+343     }
+344 }
+.fi
+.PP
+References maxOS::common::Colour::alpha, maxOS::common::Colour::blue, maxOS::common::Colour::green, m_color_depth, m_colour_pallet, and maxOS::common::Colour::red\&.
+.PP
+Referenced by get_pixel()\&.
+.SS "void GraphicsContext::invert_pixel (int32_t x, int32_t y)"
+
+.PP
+Inverts a pixel\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 432 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+432                                                        {
+433     // Get the pixel
+434     Colour colour = get_pixel(x, y);
+435 
+436     // Invert the pixel
+437     colour\&.red = 255 - colour\&.red;
+438     colour\&.green = 255 - colour\&.green;
+439     colour\&.blue = 255 - colour\&.blue;
+440 
+441     // Render the pixel
+442     put_pixel(x, y, colour);
+443 }
+.fi
+.PP
+References maxOS::common::Colour::blue, get_pixel(), maxOS::common::Colour::green, put_pixel(), maxOS::common::Colour::red, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by maxOS::gui::Desktop::invert_mouse_cursor()\&.
+.SS "void GraphicsContext::put_pixel (int32_t x, int32_t y, \fBColour\fP colour)"
+
+.PP
+Renders a pixel to the screen (automatically converts the colour to an integer) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 371 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+371                                                                    {
+372 
+373     // Convert the colour to an integer and then print it
+374     putPixel(x,y, colour_to_int(colour));
+375 }
+.fi
+.PP
+References colour_to_int(), putPixel(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by invert_pixel()\&.
+.SS "void GraphicsContext::putPixel (int32_t x, int32_t y, int32_t colour)"
+
+.PP
+Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 384 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+384                                                                    {
+385 
+386     if (0 > x || (uint32_t)x >= m_width) {
+387         return;
+388     }
+389 
+390     // Check if the pixel is within the m_height of the screen
+391     if (0 > y || (uint32_t) y >= m_height) {
+392         return;
+393     }
+394 
+395     // Render the pixel
+396     render_pixel(x, mirror_y_axis ? m_height - y - 1 : y, colour);
+397 
+398 }
+.fi
+.PP
+References m_height, m_width, mirror_y_axis, render_pixel(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by draw_circle(), drawLine(), fill_rectangle(), fillCircle(), and put_pixel()\&.
+.SS "void GraphicsContext::render_pixel (uint32_t x, uint32_t y, uint32_t colour)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Renders a pixel to the screen based on the current color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 102 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+102                                                                           {
+103 
+104     // Call the correct put_pixel function based on the color depth
+105     switch (m_color_depth) {
+106         case 8:
+107           render_pixel_8_bit(x, y, colour);
+108             break;
+109         case 16:
+110           render_pixel_16_bit(x, y, colour);
+111             break;
+112         case 24:
+113           render_pixel_24_bit(x, y, colour);
+114             break;
+115         case 32:
+116           render_pixel_32_bit(x, y, colour);
+117             break;
+118     }
+119 
+120 
+121 }
+.fi
+.PP
+References m_color_depth, render_pixel_16_bit(), render_pixel_24_bit(), render_pixel_32_bit(), render_pixel_8_bit(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.PP
+Referenced by putPixel()\&.
+.SS "void GraphicsContext::render_pixel_16_bit (uint32_t x, uint32_t y, uint16_t colour)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Renders a pixel to the screen using the 16 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The 16Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 141 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+141                                                                                  {
+142 
+143 }
+.fi
+.PP
+Referenced by render_pixel()\&.
+.SS "void GraphicsContext::render_pixel_24_bit (uint32_t x, uint32_t y, uint32_t colour)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Renders a pixel to the screen using the 24 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The 24Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Definition at line 152 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+152                                                                                  {
+153 
+154 }
+.fi
+.PP
+Referenced by render_pixel()\&.
+.SS "void GraphicsContext::render_pixel_32_bit (uint32_t x, uint32_t y, uint32_t colour)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Renders a pixel to the screen using the 32 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The 32Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
+.PP
+Definition at line 163 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+163                                                                                  {
+164 
+165 }
+.fi
+.PP
+Referenced by render_pixel()\&.
+.SS "void GraphicsContext::render_pixel_8_bit (uint32_t x, uint32_t y, uint8_t colour)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Renders a pixel to the screen using the 8 bit color depth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the pixel 
+.br
+\fIy\fP The y coordinate of the pixel 
+.br
+\fIcolour\fP The 8Bit colour of the pixel 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBmaxOS::drivers::video::VideoGraphicsArray\fP\&.
+.PP
+Definition at line 130 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+130                                                                                {
+131 
+132 }
+.fi
+.PP
+Referenced by render_pixel()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint32_t maxOS::common::GraphicsContext::m_color_depth { 0 }\fC [protected]\fP"
+
+.PP
+Definition at line 26 of file graphicsContext\&.h\&.
+.PP
+Referenced by colour_to_int(), get_rendered_pixel(), int_to_colour(), render_pixel(), and maxOS::drivers::video::VideoDriver::set_mode()\&.
+.SS "\fBColour\fP maxOS::common::GraphicsContext::m_colour_pallet[256]\fC [protected]\fP"
+
+.PP
+Definition at line 28 of file graphicsContext\&.h\&.
+.PP
+Referenced by colour_to_int(), GraphicsContext(), and int_to_colour()\&.
+.SS "uint32_t maxOS::common::GraphicsContext::m_height { 0 }\fC [protected]\fP"
+
+.PP
+Definition at line 25 of file graphicsContext\&.h\&.
+.PP
+Referenced by draw_circle(), drawLine(), fill_rectangle(), fillCircle(), get_height(), get_pixel(), putPixel(), and maxOS::drivers::video::VideoDriver::set_mode()\&.
+.SS "uint32_t maxOS::common::GraphicsContext::m_width { 0 }\fC [protected]\fP"
+
+.PP
+Definition at line 24 of file graphicsContext\&.h\&.
+.PP
+Referenced by draw_circle(), drawLine(), fill_rectangle(), fillCircle(), get_pixel(), get_width(), putPixel(), and maxOS::drivers::video::VideoDriver::set_mode()\&.
+.SS "bool maxOS::common::GraphicsContext::mirror_y_axis { false }\fC [protected]\fP"
+
+.PP
+Definition at line 22 of file graphicsContext\&.h\&.
+.PP
+Referenced by draw_circle(), drawLine(), fill_rectangle(), fillCircle(), get_pixel(), and putPixel()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

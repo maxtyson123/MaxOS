@@ -1,0 +1,178 @@
+\hypertarget{memorymanagement_8h}{}\doxysection{/home/runner/work/max-\/os/max-\/os/kernel/include/memory/memorymanagement.h File Reference}
+\label{memorymanagement_8h}\index{/home/runner/work/max-\/os/max-\/os/kernel/include/memory/memorymanagement.h@{/home/runner/work/max-\/os/max-\/os/kernel/include/memory/memorymanagement.h}}
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmaxOS_1_1memory_1_1MemoryChunk}{max\+O\+S\+::memory\+::\+Memory\+Chunk}}
+\begin{DoxyCompactList}\small\item\em Stores information about a memory chunk in the memory manager linked list. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager}{max\+O\+S\+::memory\+::\+Memory\+Manager}}
+\begin{DoxyCompactList}\small\item\em Handles memory allocation and deallocation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemaxOS}{max\+OS}}
+\item 
+ \mbox{\hyperlink{namespacemaxOS_1_1memory}{max\+O\+S\+::memory}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{memorymanagement_8h_a205ed048fdf5259c2e8e0cb60ee8f719}{operator new}} (size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}})
+\item 
+void $\ast$ \mbox{\hyperlink{memorymanagement_8h_a63ce4f64887b9307317aee5baae6b18f}{operator new\mbox{[}$\,$\mbox{]}}} (size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}})
+\item 
+void $\ast$ \mbox{\hyperlink{memorymanagement_8h_ae0ba0aed3ba61449296beaf009191b04}{operator new}} (size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}}, void $\ast$pointer)
+\item 
+void $\ast$ \mbox{\hyperlink{memorymanagement_8h_a9a3ae373d88429518b3e716b1b812df6}{operator new\mbox{[}$\,$\mbox{]}}} (size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}}, void $\ast$pointer)
+\item 
+void \mbox{\hyperlink{memorymanagement_8h_a104328316faddcc91b28e28f19d8b310}{operator delete}} (void $\ast$pointer, size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}})
+\item 
+void \mbox{\hyperlink{memorymanagement_8h_a3906c3f0ff62331886289271f4235d7a}{operator delete\mbox{[}$\,$\mbox{]}}} (void $\ast$pointer, size\+\_\+t \mbox{\hyperlink{multiboot_8h_a6d813a0f2b5281b18dea3f4cda696c33}{size}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{memorymanagement_8h_a104328316faddcc91b28e28f19d8b310}\label{memorymanagement_8h_a104328316faddcc91b28e28f19d8b310}} 
+\index{memorymanagement.h@{memorymanagement.h}!operator delete@{operator delete}}
+\index{operator delete@{operator delete}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{operator delete()}{operator delete()}}
+{\footnotesize\ttfamily void operator delete (\begin{DoxyParamCaption}\item[{void $\ast$}]{pointer,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line 181 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{181                                                 \{}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183     \textcolor{comment}{// Use the memory manager to free the memory}}
+\DoxyCodeLine{184     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}} != 0)}
+\DoxyCodeLine{185         \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}}-\/> free(pointer);}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::memory\+::\+Memory\+Manager\+::s\+\_\+active\+\_\+memory\+\_\+manager.
+
+\mbox{\Hypertarget{memorymanagement_8h_a3906c3f0ff62331886289271f4235d7a}\label{memorymanagement_8h_a3906c3f0ff62331886289271f4235d7a}} 
+\index{memorymanagement.h@{memorymanagement.h}!operator delete\mbox{[}\mbox{]}@{operator delete[]}}
+\index{operator delete\mbox{[}\mbox{]}@{operator delete[]}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{operator delete[]()}{operator delete[]()}}
+{\footnotesize\ttfamily void operator delete\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{void $\ast$}]{pointer,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line 189 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{189                                                   \{}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191     \textcolor{comment}{// Use the memory manager to free the memory}}
+\DoxyCodeLine{192     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}} != 0)}
+\DoxyCodeLine{193         \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}}-\/> free(pointer);}
+\DoxyCodeLine{194 }
+\DoxyCodeLine{195 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::memory\+::\+Memory\+Manager\+::s\+\_\+active\+\_\+memory\+\_\+manager.
+
+\mbox{\Hypertarget{memorymanagement_8h_a205ed048fdf5259c2e8e0cb60ee8f719}\label{memorymanagement_8h_a205ed048fdf5259c2e8e0cb60ee8f719}} 
+\index{memorymanagement.h@{memorymanagement.h}!operator new@{operator new}}
+\index{operator new@{operator new}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{operator new()}{operator new()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void$\ast$ operator new (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line 149 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{149                                \{}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151     \textcolor{comment}{// Use the memory manager to allocate the memory}}
+\DoxyCodeLine{152     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}} != 0)}
+\DoxyCodeLine{153         \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}}-\/> malloc(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{155     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::memory\+::\+Memory\+Manager\+::s\+\_\+active\+\_\+memory\+\_\+manager, and size.
+
+\mbox{\Hypertarget{memorymanagement_8h_ae0ba0aed3ba61449296beaf009191b04}\label{memorymanagement_8h_ae0ba0aed3ba61449296beaf009191b04}} 
+\index{memorymanagement.h@{memorymanagement.h}!operator new@{operator new}}
+\index{operator new@{operator new}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{operator new()}{operator new()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void$\ast$ operator new (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size,  }\item[{void $\ast$}]{pointer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 169 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{169                                               \{}
+\DoxyCodeLine{170 }
+\DoxyCodeLine{171     \textcolor{keywordflow}{return} pointer;}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{memorymanagement_8h_a63ce4f64887b9307317aee5baae6b18f}\label{memorymanagement_8h_a63ce4f64887b9307317aee5baae6b18f}} 
+\index{memorymanagement.h@{memorymanagement.h}!operator new\mbox{[}\mbox{]}@{operator new[]}}
+\index{operator new\mbox{[}\mbox{]}@{operator new[]}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{operator new[]()}{operator new[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void$\ast$ operator new\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line 159 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{159                                  \{}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161     \textcolor{comment}{// Use the memory manager to allocate the memory}}
+\DoxyCodeLine{162     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}} != 0)}
+\DoxyCodeLine{163         \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}{maxOS::memory::MemoryManager::s\_active\_memory\_manager}}-\/> malloc(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::memory\+::\+Memory\+Manager\+::s\+\_\+active\+\_\+memory\+\_\+manager, and size.
+
+\mbox{\Hypertarget{memorymanagement_8h_a9a3ae373d88429518b3e716b1b812df6}\label{memorymanagement_8h_a9a3ae373d88429518b3e716b1b812df6}} 
+\index{memorymanagement.h@{memorymanagement.h}!operator new\mbox{[}\mbox{]}@{operator new[]}}
+\index{operator new\mbox{[}\mbox{]}@{operator new[]}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{operator new[]()}{operator new[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void$\ast$ operator new\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size,  }\item[{void $\ast$}]{pointer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 174 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{174                                                 \{}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176     \textcolor{keywordflow}{return} pointer;}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178 \}}
+
+\end{DoxyCode}

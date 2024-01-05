@@ -1,0 +1,443 @@
+.TH "maxOS::gui::widgets::InputBox" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::gui::widgets::InputBox \- A box that can be used to input text\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inputbox\&.h>\fP
+.PP
+Inherits \fBmaxOS::gui::Widget\fP, and \fBmaxOS::common::EventManager< InputBoxEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInputBox\fP (int32_t left, int32_t top, uint32_t width, uint32_t height)"
+.br
+.RI "___ \fBInputBox\fP ___ /// "
+.ti -1c
+.RI "\fBInputBox\fP (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP text)"
+.br
+.ti -1c
+.RI "\fB~InputBox\fP ()"
+.br
+.ti -1c
+.RI "void \fBdraw\fP (\fBcommon::GraphicsContext\fP *gc, \fBcommon::Rectangle\fP< int32_t > &area) override"
+.br
+.RI "Draw the widget on the screen\&. "
+.ti -1c
+.RI "void \fBon_focus\fP () override"
+.br
+.RI "Handles the event when the widget is focussed\&. "
+.ti -1c
+.RI "void \fBon_focus_lost\fP () override"
+.br
+.RI "Handles the event when the widget is unfocused\&. "
+.ti -1c
+.RI "void \fBon_key_down\fP (\fBdrivers::peripherals::KeyCode\fP keyDownCode, \fBdrivers::peripherals::KeyboardState\fP keyDownState) override"
+.br
+.RI "Handle the key down event\&. "
+.ti -1c
+.RI "void \fBupdate_text\fP (\fBstring\fP)"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBget_text\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcommon::Colour\fP \fBbackground_colour\fP"
+.br
+.ti -1c
+.RI "\fBcommon::Colour\fP \fBforeground_colour\fP"
+.br
+.ti -1c
+.RI "\fBcommon::Colour\fP \fBborder_colour\fP"
+.br
+.ti -1c
+.RI "\fBgui::AmigaFont\fP \fBfont\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBcursor_position\fP { 0 }"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "char \fBwidget_text\fP [256]"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+A box that can be used to input text\&. 
+.PP
+Definition at line 53 of file inputbox\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "InputBox::InputBox (int32_t left, int32_t top, uint32_t width, uint32_t height)"
+
+.PP
+___ \fBInputBox\fP ___ /// 
+.PP
+Definition at line 39 of file inputbox\&.cpp\&.
+.PP
+.nf
+40 : Widget(left, top, width, height),
+41   font(AmigaFont()),
+42   background_colour(Colour(0xFF, 0xFF, 0xFF)),
+43   foreground_colour(Colour(0x00, 0x00, 0x00)),
+44   border_colour(Colour(0x57, 0x57, 0x57))
+45 {
+46     // Clear the text buffer
+47     widget_text[0] = '\0';
+48 }
+.fi
+.PP
+References widget_text\&.
+.SS "InputBox::InputBox (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP text)"
+
+.PP
+Definition at line 50 of file inputbox\&.cpp\&.
+.PP
+.nf
+51 : Widget(left, top, width, height),
+52   font(AmigaFont()),
+53   background_colour(Colour(0xFF, 0xFF, 0xFF)),
+54   foreground_colour(Colour(0x00, 0x00, 0x00)),
+55   border_colour(Colour(0x57, 0x57, 0x57))
+56 {
+57 
+58     // Clear the text buffer
+59     widget_text[0] = '\0';
+60 
+61     // Update the text
+62     update_text(text);
+63 
+64 }
+.fi
+.PP
+References update_text(), and widget_text\&.
+.SS "InputBox::~InputBox ()"
+
+.PP
+Definition at line 66 of file inputbox\&.cpp\&.
+.PP
+.nf
+66                     {
+67 
+68 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void InputBox::draw (\fBcommon::GraphicsContext\fP * gc, \fBcommon::Rectangle\fP< int32_t > & area)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Draw the widget on the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIgc\fP The graphics context to draw the widgets pixels on 
+.br
+\fIarea\fP The area of the widget to draw 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::gui::Widget\fP\&.
+.PP
+Definition at line 70 of file inputbox\&.cpp\&.
+.PP
+.nf
+70                                                                  {
+71 
+72     // Default Draw
+73     Widget::draw(gc, area);
+74 
+75     // Get the absolute m_position of the input box
+76     Coordinates inputBoxCoordinates = absolute_coordinates(Coordinates(0, 0));
+77     Rectangle<int32_t> inputBoxPosition = position();
+78 
+79     // Get the x and y m_position of the input box
+80     int32_t x = inputBoxCoordinates\&.first;
+81     int32_t y = inputBoxCoordinates\&.second;
+82 
+83     // Draw the background for the input box
+84     gc->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width,
+85                        y + area\&.top + area\&.height, background_colour);
+86 
+87     // Draw the border  (TODO: Make this a function because it is used in multiple places)
+88 
+89     // Top Border
+90     if(area\&.intersects(Rectangle<int32_t>(0,0,inputBoxPosition\&.width,1))){
+91 
+92         // Start in the top left corner of the button and end in the top right corner
+93         gc->draw_line(x + area\&.left, y, x + area\&.left + area\&.width - 1, y,
+94                       border_colour);
+95     }
+96 
+97     // Left Border
+98     if(area\&.intersects(Rectangle<int32_t>(0,0,1,inputBoxPosition\&.height))){
+99 
+100         // Start in the top left corner and end in the bottom left corner
+101         gc->draw_line(x, y + area\&.top, x, y + area\&.top + area\&.height - 1,
+102                       border_colour);
+103     }
+104 
+105     // Right Border
+106     if(area\&.intersects(Rectangle<int32_t>(0,inputBoxPosition\&.height - 1,inputBoxPosition\&.width,1))){
+107 
+108         // Start in the top right corner and end in the bottom right corner
+109         gc->draw_line(x + area\&.left, y + inputBoxPosition\&.height - 1,
+110                       x + area\&.left + area\&.width - 1,
+111                       y + inputBoxPosition\&.height - 1, border_colour);
+112     }
+113 
+114     // Bottom Border
+115     if(area\&.intersects(Rectangle<int32_t>(inputBoxPosition\&.width - 1,0,1,inputBoxPosition\&.height))){
+116 
+117         // Start in the bottom left corner and end in the bottom right corner
+118         gc->draw_line(x + inputBoxPosition\&.width - 1, y + area\&.top,
+119                       x + inputBoxPosition\&.width - 1,
+120                       y + area\&.top + area\&.height - 1, border_colour);
+121     }
+122 
+123     // Draw the text
+124     common::Rectangle<int32_t> textArea(area\&.left - 1, area\&.top - 1, area\&.width, area\&.height);
+125     font\&.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc,
+126                    &widget_text[0], textArea);
+127 }
+.fi
+.PP
+References maxOS::gui::Widget::absolute_coordinates(), background_colour, border_colour, maxOS::gui::Widget::draw(), maxOS::common::GraphicsContext::draw_line(), maxOS::gui::Font::draw_text(), maxOS::common::GraphicsContext::fill_rectangle(), maxOS::common::Pair< First, Second >::first, font, foreground_colour, maxOS::common::Rectangle< Type >::height, maxOS::common::Rectangle< Type >::intersects(), maxOS::common::Rectangle< Type >::left, maxOS::gui::Widget::position(), maxOS::common::Pair< First, Second >::second, maxOS::common::Rectangle< Type >::top, widget_text, maxOS::common::Rectangle< Type >::width, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+.SS "\fBstring\fP InputBox::get_text ()"
+
+.PP
+Definition at line 245 of file inputbox\&.cpp\&.
+.PP
+.nf
+245                           {
+246     return &widget_text[0];
+247 }
+.fi
+.PP
+References widget_text\&.
+.SS "void InputBox::on_focus ()\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Handles the event when the widget is focussed\&. 
+.PP
+Reimplemented from \fBmaxOS::gui::Widget\fP\&.
+.PP
+Definition at line 129 of file inputbox\&.cpp\&.
+.PP
+.nf
+129                         {
+130 
+131     // Make the border black on focus
+132     border_colour = Colour(0x00, 0x00, 0x00);
+133     invalidate();
+134 }
+.fi
+.PP
+References border_colour, and maxOS::gui::Widget::invalidate()\&.
+.SS "void InputBox::on_focus_lost ()\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Handles the event when the widget is unfocused\&. 
+.PP
+Reimplemented from \fBmaxOS::gui::Widget\fP\&.
+.PP
+Definition at line 136 of file inputbox\&.cpp\&.
+.PP
+.nf
+136                              {
+137 
+138     // Reset the border colour
+139     border_colour = Colour(0x57, 0x57, 0x57);
+140     invalidate();
+141 }
+.fi
+.PP
+References border_colour, and maxOS::gui::Widget::invalidate()\&.
+.SS "void InputBox::on_key_down (\fBdrivers::peripherals::KeyCode\fP key_down_code, \fBdrivers::peripherals::KeyboardState\fP key_down_state)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Handle the key down event\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIkey_down_code\fP The keycode of the key that was pressed 
+.br
+\fIkey_down_state\fP The state of the keyboard when the key was pressed 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBmaxOS::drivers::peripherals::KeyboardEventHandler\fP\&.
+.PP
+Definition at line 143 of file inputbox\&.cpp\&.
+.PP
+.nf
+143                                                                           {
+144 
+145     // Handle the key press
+146     switch(keyDownCode)
+147     {
+148         case KeyCode::backspace:
+149         {
+150             if(cursor_position == 0)
+151                 break;
+152 
+153             cursor_position--;
+154             // no break - we move the cursor to the left and use the <Delete> code
+155         }
+156         case KeyCode::deleteKey:
+157         {
+158             // Move the text to the left
+159             for(uint32_t i = cursor_position; widget_text[i] != '\0'; ++i)
+160               widget_text[i] = widget_text[i+1];
+161             break;
+162         }
+163         case KeyCode::leftArrow:
+164         {
+165             // If the cursor is not at the beginning of the text, move it to the left
+166             if(cursor_position > 0)
+167               cursor_position--;
+168             break;
+169         }
+170         case KeyCode::rightArrow:
+171         {
+172 
+173             // If the cursor is not at the end of the text, move it to the right
+174             if(widget_text[cursor_position] != '\0')
+175               cursor_position++;
+176             break;
+177         }
+178         default:
+179         {
+180 
+181             // If the key is a printable character, add it to the text
+182             if(31 < keyDownCode && keyDownCode < 127)
+183             {
+184 
+185                 uint32_t length = cursor_position;
+186 
+187                 // Find the length of the text buffer
+188                 while (widget_text[length] != '\0') {
+189                     ++length;
+190                 }
+191 
+192                 // Shift elements to the right
+193                 while (length > cursor_position) {
+194                   widget_text[length + 1] = widget_text[length];
+195                     --length;
+196                 }
+197 
+198                 // Insert the new character
+199                 widget_text[cursor_position + 1] = widget_text[cursor_position];
+200                 widget_text[cursor_position] = (uint8_t)keyDownCode;
+201                 cursor_position++;
+202             }else{
+203 
+204                 // Dont want to redraw the widget if nothing has changed
+205                 return;
+206             }
+207             break;
+208         }
+209     }
+210 
+211     // Redraw the widget
+212     invalidate();
+213 
+214     // Fire the text changed event
+215     if(keyDownCode != KeyCode::leftArrow && keyDownCode != KeyCode::rightArrow)
+216       raise_event(new InputBoxTextChangedEvent(&widget_text[0]));
+217 
+218 }
+.fi
+.PP
+References maxOS::drivers::peripherals::backspace, cursor_position, maxOS::drivers::peripherals::deleteKey, maxOS::drivers::peripherals::i, maxOS::gui::Widget::invalidate(), maxOS::drivers::peripherals::leftArrow, length, maxOS::common::EventManager< InputBoxEvents >::raise_event(), maxOS::drivers::peripherals::rightArrow, and widget_text\&.
+.SS "void InputBox::update_text (\fBstring\fP new_text)"
+
+.PP
+Definition at line 220 of file inputbox\&.cpp\&.
+.PP
+.nf
+220                                           {
+221 
+222     // Rewrite the text, start at the beginning
+223     cursor_position = 0;
+224 
+225     // Copy the new text into the widget text
+226     for(char* c = (char*)new_text, *buffer = &widget_text[0]; *c != '\0'; ++c, buffer++)
+227     {
+228 
+229         // Update the cursor m_position and the buffer
+230         cursor_position++;
+231         *buffer = *c;
+232     }
+233 
+234     // write the null terminator
+235     widget_text[cursor_position] = '\0';
+236 
+237     // Redraw the widget
+238     invalidate();
+239 
+240     // Fire the text changed event
+241     raise_event(new InputBoxTextChangedEvent(new_text));
+242 
+243 }
+.fi
+.PP
+References maxOS::drivers::peripherals::c, cursor_position, maxOS::gui::Widget::invalidate(), maxOS::common::EventManager< InputBoxEvents >::raise_event(), and widget_text\&.
+.PP
+Referenced by InputBox()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBcommon::Colour\fP maxOS::gui::widgets::InputBox::background_colour"
+
+.PP
+Definition at line 74 of file inputbox\&.h\&.
+.PP
+Referenced by draw()\&.
+.SS "\fBcommon::Colour\fP maxOS::gui::widgets::InputBox::border_colour"
+
+.PP
+Definition at line 76 of file inputbox\&.h\&.
+.PP
+Referenced by draw(), on_focus(), and on_focus_lost()\&.
+.SS "uint32_t maxOS::gui::widgets::InputBox::cursor_position { 0 }"
+
+.PP
+Definition at line 78 of file inputbox\&.h\&.
+.PP
+Referenced by on_key_down(), and update_text()\&.
+.SS "\fBgui::AmigaFont\fP maxOS::gui::widgets::InputBox::font"
+
+.PP
+Definition at line 77 of file inputbox\&.h\&.
+.PP
+Referenced by draw()\&.
+.SS "\fBcommon::Colour\fP maxOS::gui::widgets::InputBox::foreground_colour"
+
+.PP
+Definition at line 75 of file inputbox\&.h\&.
+.PP
+Referenced by draw()\&.
+.SS "char maxOS::gui::widgets::InputBox::widget_text[256]\fC [protected]\fP"
+
+.PP
+Definition at line 56 of file inputbox\&.h\&.
+.PP
+Referenced by draw(), get_text(), InputBox(), on_key_down(), and update_text()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

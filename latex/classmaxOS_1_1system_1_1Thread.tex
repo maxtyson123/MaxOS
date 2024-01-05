@@ -1,0 +1,127 @@
+\hypertarget{classmaxOS_1_1system_1_1Thread}{}\doxysection{max\+OS\+::system\+::Thread Class Reference}
+\label{classmaxOS_1_1system_1_1Thread}\index{maxOS::system::Thread@{maxOS::system::Thread}}
+
+
+A execution thread that can be scheduled by the \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager}{Thread\+Manager}}.  
+
+
+
+
+{\ttfamily \#include $<$multithreading.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmaxOS_1_1system_1_1Thread_a95c703fb8f2f27cb64f475a8c940864a}{Thread}} ()
+\item 
+\mbox{\hyperlink{classmaxOS_1_1system_1_1Thread_a37d9edd3a1a776cbc27dedff949c9726}{$\sim$\+Thread}} ()
+\item 
+void \mbox{\hyperlink{classmaxOS_1_1system_1_1Thread_afc5de70880100ad260e328c5da7c6e43}{init}} (\mbox{\hyperlink{classmaxOS_1_1system_1_1GlobalDescriptorTable}{system\+::\+Global\+Descriptor\+Table}} $\ast$gdt, void entrypoint())
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classmaxOS_1_1system_1_1Thread_a2a28fc3c6cee05204a42286ac77ace1a}{Thread\+Manager}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A execution thread that can be scheduled by the \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager}{Thread\+Manager}}. 
+
+Definition at line 21 of file multithreading.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmaxOS_1_1system_1_1Thread_a95c703fb8f2f27cb64f475a8c940864a}\label{classmaxOS_1_1system_1_1Thread_a95c703fb8f2f27cb64f475a8c940864a}} 
+\index{maxOS::system::Thread@{maxOS::system::Thread}!Thread@{Thread}}
+\index{Thread@{Thread}!maxOS::system::Thread@{maxOS::system::Thread}}
+\doxysubsubsection{\texorpdfstring{Thread()}{Thread()}}
+{\footnotesize\ttfamily Thread\+::\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 11 of file multithreading.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{11                \{}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classmaxOS_1_1system_1_1Thread_a37d9edd3a1a776cbc27dedff949c9726}\label{classmaxOS_1_1system_1_1Thread_a37d9edd3a1a776cbc27dedff949c9726}} 
+\index{maxOS::system::Thread@{maxOS::system::Thread}!````~Thread@{$\sim$Thread}}
+\index{````~Thread@{$\sim$Thread}!maxOS::system::Thread@{maxOS::system::Thread}}
+\doxysubsubsection{\texorpdfstring{$\sim$Thread()}{~Thread()}}
+{\footnotesize\ttfamily Thread\+::$\sim$\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 15 of file multithreading.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{16 \{}
+\DoxyCodeLine{17 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmaxOS_1_1system_1_1Thread_afc5de70880100ad260e328c5da7c6e43}\label{classmaxOS_1_1system_1_1Thread_afc5de70880100ad260e328c5da7c6e43}} 
+\index{maxOS::system::Thread@{maxOS::system::Thread}!init@{init}}
+\index{init@{init}!maxOS::system::Thread@{maxOS::system::Thread}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void Thread\+::init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmaxOS_1_1system_1_1GlobalDescriptorTable}{system\+::\+Global\+Descriptor\+Table}} $\ast$}]{gdt,  }\item[{void }]{entrypoint() }\end{DoxyParamCaption})}
+
+
+
+Definition at line 19 of file multithreading.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{20 \{}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22   \textcolor{comment}{// Set up stack}}
+\DoxyCodeLine{23   m\_cpu\_state = (\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState}{CPUState}}*)(m\_stack + 4096 -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState}{CPUState}}));}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a33f4b85716d4e134a9d1e83082209921}{eax}} = 0;}
+\DoxyCodeLine{26   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a664ddd2be8305b8bdfa27c20cfc131d2}{ebx}} = 0;}
+\DoxyCodeLine{27   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a949f4e247892b90f692496db728f2ec6}{ecx}} = 0;}
+\DoxyCodeLine{28   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a77e52bda083158039e03b6ebe21add09}{edx}} = 0;}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a7a5abf7c8d9bf6e5d8b7995ea6e9ac98}{esi}} = 0;}
+\DoxyCodeLine{31   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a54e59c53989607cbfbd92ed72c7e90eb}{edi}} = 0;}
+\DoxyCodeLine{32   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a71b3233ef0cd361a9bf5c1bbe45fc387}{ebp}} = 0;}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34   \textcolor{comment}{// Set up function pointer}}
+\DoxyCodeLine{35   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_aacb873750d04eec71071fb51edfb268b}{eip}} = (uint32\_t)entrypoint;}
+\DoxyCodeLine{36   m\_cpu\_state-\/>\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState_a85ba3358039bca45c318902d1dfa6354}{eflags}} = 0x202;}
+\DoxyCodeLine{37   m\_yield\_status = \textcolor{keyword}{false};}
+\DoxyCodeLine{38 \}}
+
+\end{DoxyCode}
+
+
+References max\+O\+S\+::system\+::\+C\+P\+U\+State\+::eax, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::ebp, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::ebx, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::ecx, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::edi, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::edx, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::eflags, max\+O\+S\+::system\+::\+C\+P\+U\+State\+::eip, and max\+O\+S\+::system\+::\+C\+P\+U\+State\+::esi.
+
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classmaxOS_1_1system_1_1Thread_a2a28fc3c6cee05204a42286ac77ace1a}\label{classmaxOS_1_1system_1_1Thread_a2a28fc3c6cee05204a42286ac77ace1a}} 
+\index{maxOS::system::Thread@{maxOS::system::Thread}!ThreadManager@{ThreadManager}}
+\index{ThreadManager@{ThreadManager}!maxOS::system::Thread@{maxOS::system::Thread}}
+\doxysubsubsection{\texorpdfstring{ThreadManager}{ThreadManager}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager}{Thread\+Manager}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Definition at line 23 of file multithreading.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/max-\/os/max-\/os/kernel/include/system/\mbox{\hyperlink{multithreading_8h}{multithreading.\+h}}\item 
+/home/runner/work/max-\/os/max-\/os/kernel/src/system/\mbox{\hyperlink{multithreading_8cpp}{multithreading.\+cpp}}\end{DoxyCompactItemize}

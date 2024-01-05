@@ -1,0 +1,351 @@
+.TH "/home/runner/work/max-os/max-os/kernel/include/system/multiboot.h" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/max-os/max-os/kernel/include/system/multiboot.h
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_header\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_aout_symbol_table\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_elf_section_header_table\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_info\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_color\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_mmap_entry\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_mod_list\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::system::multiboot_apm_info\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI " \fBmaxOS\fP"
+.br
+.ti -1c
+.RI " \fBmaxOS::system\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBMULTIBOOT_SEARCH\fP   8192"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_HEADER_ALIGN\fP   4"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_HEADER_MAGIC\fP   0x1BADB002"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_BOOTLOADER_MAGIC\fP   0x2BADB002"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MOD_ALIGN\fP   0x00001000"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_ALIGN\fP   0x00000004"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_PAGE_ALIGN\fP   0x00000001"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MEMORY_INFO\fP   0x00000002"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_VIDEO_MODE\fP   0x00000004"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_AOUT_KLUDGE\fP   0x00010000"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_MEMORY\fP   0x00000001"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_BOOTDEV\fP   0x00000002"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_CMDLINE\fP   0x00000004"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_MODS\fP   0x00000008"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_AOUT_SYMS\fP   0x00000010"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_ELF_SHDR\fP   0X00000020"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_MEM_MAP\fP   0x00000040"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_DRIVE_INFO\fP   0x00000080"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_CONFIG_TABLE\fP   0x00000100"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_BOOT_LOADER_NAME\fP   0x00000200"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_APM_TABLE\fP   0x00000400"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_VBE_INFO\fP   0x00000800"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_INFO_FRAMEBUFFER_INFO\fP   0x00001000"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_FRAMEBUFFER_TYPE_INDEXED\fP   0"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_FRAMEBUFFER_TYPE_RGB\fP   1"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT\fP   2"
+.br
+.ti -1c
+.RI "#define \fBCHECK_FLAG\fP(\fBflags\fP,  bit)   ((\fBflags\fP) & (1 << (bit)))"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MEMORY_AVAILABLE\fP   1"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MEMORY_RESERVED\fP   2"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MEMORY_ACPI_RECLAIMABLE\fP   3"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MEMORY_NVS\fP   4"
+.br
+.ti -1c
+.RI "#define \fBMULTIBOOT_MEMORY_BADRAM\fP   5"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef unsigned char \fBmaxOS::system::multiboot_uint8_t\fP"
+.br
+.ti -1c
+.RI "typedef unsigned short \fBmaxOS::system::multiboot_uint16_t\fP"
+.br
+.ti -1c
+.RI "typedef unsigned int \fBmaxOS::system::multiboot_uint32_t\fP"
+.br
+.ti -1c
+.RI "typedef unsigned long long \fBmaxOS::system::multiboot_uint64_t\fP"
+.br
+.ti -1c
+.RI "typedef struct multiboot_aout_symbol_table \fBmaxOS::system::multiboot_aout_symbol_table_t\fP"
+.br
+.ti -1c
+.RI "typedef struct multiboot_elf_section_header_table \fBmaxOS::system::multiboot_elf_section_header_table_t\fP"
+.br
+.ti -1c
+.RI "typedef struct multiboot_info \fBmaxOS::system::multiboot_info_t\fP"
+.br
+.ti -1c
+.RI "typedef struct multiboot_mmap_entry \fBmaxOS::system::multiboot_memory_map_t\fP"
+.br
+.ti -1c
+.RI "typedef struct multiboot_mod_list \fBmaxOS::system::multiboot_module_t\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "class \fBmaxOS::system::SegmentDescriptor\fP \fBmaxOS::system::__attribute__\fP ((packed))"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "multiboot_uint32_t \fBsize\fP"
+.br
+.ti -1c
+.RI "multiboot_uint64_t \fBaddr\fP"
+.br
+.ti -1c
+.RI "multiboot_uint64_t \fBlen\fP"
+.br
+.ti -1c
+.RI "multiboot_uint32_t \fBtype\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define CHECK_FLAG(\fBflags\fP, bit)   ((\fBflags\fP) & (1 << (bit)))"
+
+.PP
+Definition at line 206 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_AOUT_KLUDGE   0x00010000"
+
+.PP
+Definition at line 57 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_BOOTLOADER_MAGIC   0x2BADB002"
+
+.PP
+Definition at line 37 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT   2"
+
+.PP
+Definition at line 205 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED   0"
+
+.PP
+Definition at line 203 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_FRAMEBUFFER_TYPE_RGB   1"
+
+.PP
+Definition at line 204 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_HEADER_ALIGN   4"
+
+.PP
+Definition at line 31 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_HEADER_MAGIC   0x1BADB002"
+
+.PP
+Definition at line 34 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_ALIGN   0x00000004"
+
+.PP
+Definition at line 43 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_AOUT_SYMS   0x00000010"
+
+.PP
+Definition at line 73 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_APM_TABLE   0x00000400"
+
+.PP
+Definition at line 90 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_BOOT_LOADER_NAME   0x00000200"
+
+.PP
+Definition at line 87 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_BOOTDEV   0x00000002"
+
+.PP
+Definition at line 64 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_CMDLINE   0x00000004"
+
+.PP
+Definition at line 66 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_CONFIG_TABLE   0x00000100"
+
+.PP
+Definition at line 84 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_DRIVE_INFO   0x00000080"
+
+.PP
+Definition at line 81 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_ELF_SHDR   0X00000020"
+
+.PP
+Definition at line 75 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_FRAMEBUFFER_INFO   0x00001000"
+
+.PP
+Definition at line 94 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_MEM_MAP   0x00000040"
+
+.PP
+Definition at line 78 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_MEMORY   0x00000001"
+
+.PP
+Definition at line 62 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_MODS   0x00000008"
+
+.PP
+Definition at line 68 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_INFO_VBE_INFO   0x00000800"
+
+.PP
+Definition at line 93 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE   3"
+
+.PP
+Definition at line 107 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MEMORY_AVAILABLE   1"
+
+.PP
+Definition at line 105 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MEMORY_BADRAM   5"
+
+.PP
+Definition at line 109 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MEMORY_INFO   0x00000002"
+
+.PP
+Definition at line 51 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MEMORY_NVS   4"
+
+.PP
+Definition at line 108 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MEMORY_RESERVED   2"
+
+.PP
+Definition at line 106 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_MOD_ALIGN   0x00001000"
+
+.PP
+Definition at line 40 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_PAGE_ALIGN   0x00000001"
+
+.PP
+Definition at line 48 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_SEARCH   8192"
+
+.PP
+Definition at line 30 of file multiboot\&.h\&.
+.SS "#define MULTIBOOT_VIDEO_MODE   0x00000004"
+
+.PP
+Definition at line 54 of file multiboot\&.h\&.
+.SH "Variable Documentation"
+.PP 
+.SS "multiboot_uint64_t addr"
+
+.PP
+Definition at line 103 of file multiboot\&.h\&.
+.SS "multiboot_uint64_t len"
+
+.PP
+Definition at line 104 of file multiboot\&.h\&.
+.SS "multiboot_uint32_t size"
+
+.PP
+Definition at line 102 of file multiboot\&.h\&.
+.SS "multiboot_uint32_t type"
+
+.PP
+Definition at line 110 of file multiboot\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,154 @@
+.TH "/home/runner/work/max-os/max-os/kernel/include/memory/memorymanagement.h" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/max-os/max-os/kernel/include/memory/memorymanagement.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmaxOS::memory::MemoryChunk\fP"
+.br
+.RI "Stores information about a memory chunk in the memory manager linked list\&. "
+.ti -1c
+.RI "class \fBmaxOS::memory::MemoryManager\fP"
+.br
+.RI "Handles memory allocation and deallocation\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI " \fBmaxOS\fP"
+.br
+.ti -1c
+.RI " \fBmaxOS::memory\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBoperator new\fP (size_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "void * \fBoperator new[]\fP (size_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "void * \fBoperator new\fP (size_t \fBsize\fP, void *pointer)"
+.br
+.ti -1c
+.RI "void * \fBoperator new[]\fP (size_t \fBsize\fP, void *pointer)"
+.br
+.ti -1c
+.RI "void \fBoperator delete\fP (void *pointer, size_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "void \fBoperator delete[]\fP (void *pointer, size_t \fBsize\fP)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void operator delete (void * pointer, size_t size)"
+
+.PP
+Definition at line 181 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+181                                                 {
+182 
+183     // Use the memory manager to free the memory
+184     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+185         return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+186 
+187 }
+.fi
+.PP
+References maxOS::memory::MemoryManager::s_active_memory_manager\&.
+.SS "void operator delete[] (void * pointer, size_t size)"
+
+.PP
+Definition at line 189 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+189                                                   {
+190 
+191     // Use the memory manager to free the memory
+192     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+193         return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+194 
+195 }
+.fi
+.PP
+References maxOS::memory::MemoryManager::s_active_memory_manager\&.
+.SS "void* operator new (size_t size)"
+
+.PP
+Definition at line 149 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+149                                {
+150 
+151     // Use the memory manager to allocate the memory
+152     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+153         return maxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
+154 
+155     return 0;
+156 
+157 }
+.fi
+.PP
+References maxOS::memory::MemoryManager::s_active_memory_manager, and size\&.
+.SS "void* operator new (size_t size, void * pointer)"
+
+.PP
+Definition at line 169 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+169                                               {
+170 
+171     return pointer;
+172 
+173 }
+.fi
+.SS "void* operator new[] (size_t size)"
+
+.PP
+Definition at line 159 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+159                                  {
+160 
+161     // Use the memory manager to allocate the memory
+162     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+163         return maxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
+164 
+165     return 0;
+166 
+167 }
+.fi
+.PP
+References maxOS::memory::MemoryManager::s_active_memory_manager, and size\&.
+.SS "void* operator new[] (size_t size, void * pointer)"
+
+.PP
+Definition at line 174 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+174                                                 {
+175 
+176     return pointer;
+177 
+178 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

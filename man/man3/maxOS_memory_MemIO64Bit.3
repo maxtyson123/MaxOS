@@ -1,0 +1,107 @@
+.TH "maxOS::memory::MemIO64Bit" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::memory::MemIO64Bit \- Handles 64 bit memory IO\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memoryIO\&.h>\fP
+.PP
+Inherits \fBmaxOS::memory::MemIO\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemIO64Bit\fP (uint32_t \fBaddress\fP)"
+.br
+.ti -1c
+.RI "\fB~MemIO64Bit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint64_t \fBdata\fP)"
+.br
+.RI "Writes data to the memory address\&. "
+.ti -1c
+.RI "virtual uint64_t \fBread\fP ()"
+.br
+.RI "Reads data from the memory address\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Handles 64 bit memory IO\&. 
+.PP
+Definition at line 69 of file memoryIO\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MemIO64Bit::MemIO64Bit (uint32_t address)"
+
+.PP
+Definition at line 100 of file memoryIO\&.cpp\&.
+.PP
+.nf
+101         : MemIO(address)
+102 {
+103 }
+.fi
+.SS "MemIO64Bit::~MemIO64Bit ()"
+
+.PP
+Definition at line 105 of file memoryIO\&.cpp\&.
+.PP
+.nf
+105                         {
+106 
+107 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint64_t MemIO64Bit::read ()\fC [virtual]\fP"
+
+.PP
+Reads data from the memory address\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the data read 
+.RE
+.PP
+
+.PP
+Definition at line 123 of file memoryIO\&.cpp\&.
+.PP
+.nf
+123                          {
+124     return *((volatile uint64_t*)(m_address));
+125 }
+.fi
+.PP
+References maxOS::memory::MemIO::m_address\&.
+.SS "void MemIO64Bit::write (uint64_t data)\fC [virtual]\fP"
+
+.PP
+Writes data to the memory address\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the data to write 
+.RE
+.PP
+
+.PP
+Definition at line 114 of file memoryIO\&.cpp\&.
+.PP
+.nf
+114                                    {
+115     (*((volatile uint64_t*)(m_address)))=(data);
+116 }
+.fi
+.PP
+References data, and maxOS::memory::MemIO::m_address\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

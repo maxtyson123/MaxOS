@@ -1,0 +1,342 @@
+.TH "/home/runner/work/max-os/max-os/kernel/include/filesystem/fat32.h" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/max-os/max-os/kernel/include/filesystem/fat32.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <drivers/ata\&.h>\fP
+.br
+\fC#include <filesystem/filesystem\&.h>\fP
+.br
+\fC#include <common/vector\&.h>\fP
+.br
+\fC#include <memory/memorymanagement\&.h>\fP
+.br
+\fC#include <common/outputStream\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmaxOS::filesystem::BiosParameterBlock32\fP"
+.br
+.ti -1c
+.RI "struct \fBmaxOS::filesystem::DirectoryEntry\fP"
+.br
+.RI "Stores information about a file or directory\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI " \fBmaxOS\fP"
+.br
+.ti -1c
+.RI " \fBmaxOS::filesystem\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmaxOS::filesystem::BiosParameterBlock32\fP \fBmaxOS::filesystem::__attribute__\fP ((packed))"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBjump\fP [3]"
+.br
+.ti -1c
+.RI "uint8_t \fBOEM_name\fP [8]"
+.br
+.ti -1c
+.RI "uint16_t \fBbytes_per_sector\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBsectors_per_cluster\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBreserved_sectors\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBtable_copies\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBroot_entries\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBtotal_sectors_16\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBmedia_type\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfat_sector_count\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBsectors_per_track\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBhead_count\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBhidden_sectors\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBtotal_sectors_32\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBtable_size_32\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBextended_flags\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfat_version\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBroot_cluster\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfat_info\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBbackup_sector\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBreserved0\fP [12]"
+.br
+.ti -1c
+.RI "uint8_t \fBdrive_number\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBreserved_1\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBboot_signature\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBuint_32\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBvolume_label\fP [11]"
+.br
+.ti -1c
+.RI "uint8_t \fBfile_system_type\fP [8]"
+.br
+.ti -1c
+.RI "uint8_t \fBname\fP [8]"
+.br
+.ti -1c
+.RI "uint8_t \fBextension\fP [3]"
+.br
+.ti -1c
+.RI "uint8_t \fBattributes\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBreserved\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBcreation_time_tenth\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBcreation_time\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBcreation_date\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBlast_access_date\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfirst_cluster_high\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBlast_write_time\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBlast_write_date\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfirst_cluster_low\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsize\fP"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "uint8_t attributes"
+
+.PP
+Definition at line 5 of file fat32\&.h\&.
+.SS "uint16_t backup_sector"
+
+.PP
+Definition at line 23 of file fat32\&.h\&.
+.SS "uint8_t boot_signature"
+
+.PP
+Definition at line 27 of file fat32\&.h\&.
+.SS "uint16_t bytes_per_sector"
+
+.PP
+Definition at line 5 of file fat32\&.h\&.
+.SS "uint16_t creation_date"
+
+.PP
+Definition at line 10 of file fat32\&.h\&.
+.SS "uint16_t creation_time"
+
+.PP
+Definition at line 9 of file fat32\&.h\&.
+.SS "uint8_t creation_time_tenth"
+
+.PP
+Definition at line 8 of file fat32\&.h\&.
+.SS "uint8_t drive_number"
+
+.PP
+Definition at line 25 of file fat32\&.h\&.
+.SS "uint16_t extended_flags"
+
+.PP
+Definition at line 19 of file fat32\&.h\&.
+.SS "uint8_t extension[3]"
+
+.PP
+Definition at line 4 of file fat32\&.h\&.
+.SS "uint16_t fat_info"
+
+.PP
+Definition at line 22 of file fat32\&.h\&.
+.SS "uint16_t fat_sector_count"
+
+.PP
+Definition at line 12 of file fat32\&.h\&.
+.SS "uint16_t fat_version"
+
+.PP
+Definition at line 20 of file fat32\&.h\&.
+.SS "uint8_t file_system_type[8]"
+
+.PP
+Definition at line 30 of file fat32\&.h\&.
+.SS "uint16_t first_cluster_high"
+
+.PP
+Definition at line 13 of file fat32\&.h\&.
+.SS "uint16_t first_cluster_low"
+
+.PP
+Definition at line 18 of file fat32\&.h\&.
+.SS "uint16_t head_count"
+
+.PP
+Definition at line 14 of file fat32\&.h\&.
+.SS "uint32_t hidden_sectors"
+
+.PP
+Definition at line 15 of file fat32\&.h\&.
+.SS "uint8_t jump[3]"
+
+.PP
+Definition at line 3 of file fat32\&.h\&.
+.SS "uint16_t last_access_date"
+
+.PP
+Definition at line 11 of file fat32\&.h\&.
+.SS "uint16_t last_write_date"
+
+.PP
+Definition at line 16 of file fat32\&.h\&.
+.SS "uint16_t last_write_time"
+
+.PP
+Definition at line 15 of file fat32\&.h\&.
+.SS "uint8_t media_type"
+
+.PP
+Definition at line 11 of file fat32\&.h\&.
+.SS "uint8_t name[8]"
+
+.PP
+Definition at line 3 of file fat32\&.h\&.
+.SS "uint8_t OEM_name[8]"
+
+.PP
+Definition at line 4 of file fat32\&.h\&.
+.SS "uint8_t reserved"
+
+.PP
+Definition at line 6 of file fat32\&.h\&.
+.PP
+Referenced by maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint8_t reserved0[12]"
+
+.PP
+Definition at line 24 of file fat32\&.h\&.
+.SS "uint8_t reserved_1"
+
+.PP
+Definition at line 26 of file fat32\&.h\&.
+.SS "uint16_t reserved_sectors"
+
+.PP
+Definition at line 7 of file fat32\&.h\&.
+.SS "uint32_t root_cluster"
+
+.PP
+Definition at line 21 of file fat32\&.h\&.
+.SS "uint16_t root_entries"
+
+.PP
+Definition at line 9 of file fat32\&.h\&.
+.SS "uint8_t sectors_per_cluster"
+
+.PP
+Definition at line 6 of file fat32\&.h\&.
+.SS "uint16_t sectors_per_track"
+
+.PP
+Definition at line 13 of file fat32\&.h\&.
+.SS "uint32_t size"
+
+.PP
+Definition at line 20 of file fat32\&.h\&.
+.PP
+Referenced by maxOS::net::EthernetFrameHandler::DataReceived(), maxOS::drivers::ethernet::amd_am79c973::DoSend(), maxOS::drivers::ethernet::intel_i217::DoSend(), maxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), maxOS::drivers::ethernet::EthernetDriver::FireDataSent(), maxOS::memory::MemoryManager::free(), maxOS::net::AddressResolutionProtocol::handleEthernetFramePayload(), maxOS::net::InternetProtocolHandler::handleEthernetframePayload(), maxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload(), maxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload(), maxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), maxOS::net::TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload(), maxOS::net::UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(), maxOS::memory::MemoryManager::malloc(), maxOS::memory::MemoryManager::memory_used(), maxOS::memory::MemoryManager::MemoryManager(), maxOS::net::UserDatagramProtocolPayloadHandler::on_event(), maxOS::drivers::ethernet::EthernetDriverEventHandler::on_event(), maxOS::net::TransmissionControlProtocolPayloadHandler::on_event(), operator new(), operator new[](), maxOS::net::EthernetFramePayloadHandler::Send(), maxOS::net::InternetProtocolPayloadHandler::Send(), maxOS::net::UserDatagramProtocolSocket::Send(), maxOS::drivers::ethernet::EthernetDriver::Send(), maxOS::net::UserDatagramProtocolHandler::Send(), maxOS::net::TransmissionControlProtocolSocket::Send(), maxOS::net::EthernetFrameHandler::sendEthernetFrame(), maxOS::net::InternetProtocolHandler::sendInternetProtocolPacket(), and maxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SS "uint8_t table_copies"
+
+.PP
+Definition at line 8 of file fat32\&.h\&.
+.SS "uint32_t table_size_32"
+
+.PP
+Definition at line 18 of file fat32\&.h\&.
+.SS "uint16_t total_sectors_16"
+
+.PP
+Definition at line 10 of file fat32\&.h\&.
+.SS "uint32_t total_sectors_32"
+
+.PP
+Definition at line 16 of file fat32\&.h\&.
+.SS "uint32_t uint_32"
+
+.PP
+Definition at line 28 of file fat32\&.h\&.
+.SS "uint8_t volume_label[11]"
+
+.PP
+Definition at line 29 of file fat32\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.
