@@ -11,7 +11,12 @@ namespace maxOS{
 
     namespace common{
 
-        // A rectangle template for use in the GUI system
+        /**
+         * @class Rectangle
+         * @brief Stores the left, top, width and height of a rectangle
+         *
+         * @tparam Type The type of the rectangle
+         */
         template<class Type> class Rectangle{
             public:
                 Type left { 0 };

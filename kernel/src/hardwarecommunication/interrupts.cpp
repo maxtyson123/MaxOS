@@ -13,7 +13,7 @@ using namespace maxOS::system;
 
 InterruptManager* InterruptManager::s_active_interrupt_manager = 0;
 OutputStream* InterruptManager::s_error_messages = 0;
-InterruptManager::GateDescriptor InterruptManager::s_interrupt_descriptor_table[256];
+GateDescriptor InterruptManager::s_interrupt_descriptor_table[256];
 
 ///__Handler__
 

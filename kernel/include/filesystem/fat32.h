@@ -16,6 +16,10 @@ namespace maxOS{
 
     namespace filesystem{
 
+         /**
+         * @struct BiosParameterBlock
+         * @brief Stores information about the FAT32 filesystem
+         */
         struct BiosParameterBlock32{
 
             uint8_t     jump[3];
@@ -49,6 +53,10 @@ namespace maxOS{
 
         } __attribute__((packed));
 
+        /**
+         * @struct DirectoryEntry
+         * @brief Stores information about a file or directory
+         */
         struct DirectoryEntry{
 
             uint8_t     name[8];

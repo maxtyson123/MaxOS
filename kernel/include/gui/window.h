@@ -13,6 +13,10 @@ namespace maxOS{
 
     namespace gui{
 
+        /**
+         * @class Window
+         * @brief A window that can be moved and resized and contains a widget.
+         */
         class Window : public CompositeWidget{
 
             protected:

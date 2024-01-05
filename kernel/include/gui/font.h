@@ -43,7 +43,10 @@ namespace maxOS{
 
         };
 
-
+        /**
+         * @class AmigaFont
+         * @brief A font that uses the Amiga 8x8 font
+         */
         class AmigaFont : public Font{
             public:
                 AmigaFont();

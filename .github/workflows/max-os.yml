@@ -50,3 +50,25 @@ jobs:
         with:
           name: Kernel Binary
           path: maxOS.bin
+
+  generate-docs:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Generate Docs
+        run: |
+          make documentation
+
+      - name: Upload to branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: docs
+          FOLDER: docs/doxy
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build: ({sha}) {msg}"

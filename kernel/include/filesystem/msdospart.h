@@ -14,6 +14,10 @@ namespace maxOS{
 
     namespace filesystem{
 
+        /**
+         * @struct PartitionTableEntry
+         * @brief Stores information about a partition
+         */
         struct PartitionTableEntry{
 
             uint8_t     bootable;              // 0x80 = bootable, 0x00 = not bootable
@@ -33,6 +37,10 @@ namespace maxOS{
 
         } __attribute__((packed));
 
+        /**
+         * @struct MasterBootRecord
+         * @brief Stores information about the master boot record
+         */
         struct MasterBootRecord{
 
             uint8_t     bootloader[440];

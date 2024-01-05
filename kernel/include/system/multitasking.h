@@ -13,6 +13,10 @@ namespace maxOS{
 
     namespace system{
 
+        /**
+         * @struct CPUState
+         * @brief Stores the state of the CPU registers
+         */
         struct CPUState {
             //Pushed by kernel in interupt_stubs
 

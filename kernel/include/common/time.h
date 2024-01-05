@@ -13,6 +13,7 @@ namespace maxOS{
 
         /**
          * @struct Time
+         * @brief Stores the year, month, day, hour, minute and second of a time.
          */
         struct Time{
 

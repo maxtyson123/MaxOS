@@ -12,7 +12,7 @@ namespace maxOS{
     namespace common
     {
 
-        /***
+        /**
          * @class Colour
          * @brief Stores the red, green, blue and alpha values of a colour
          */

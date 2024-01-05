@@ -13,6 +13,10 @@ namespace maxOS{
 
             class Process;
 
+            /**
+             * @class Process
+             * @breif TODO
+             */
             class Process{
                 // TODO: Re-work process class
             };

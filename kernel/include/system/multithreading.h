@@ -14,6 +14,10 @@ namespace maxOS{
 
   namespace system{
 
+      /**
+       * @class Thread
+       * @brief A execution thread that can be scheduled by the ThreadManager
+       */
       class Thread
       {
           friend class ThreadManager;
@@ -29,7 +33,10 @@ namespace maxOS{
                   void init(system::GlobalDescriptorTable *gdt, void entrypoint());
       };
 
-
+      /**
+       * @class ThreadManager
+       * @brief Manages the scheduling of threads
+       */
       class ThreadManager
       {
           private:

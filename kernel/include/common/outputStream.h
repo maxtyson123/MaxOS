@@ -14,7 +14,7 @@ namespace maxOS{
     namespace common{
 
         /**
-         * @class OutputStream
+         * @class GenericOutputStream
          * @brief A stream that can be written to.
          *
          * @tparam Type The type of the elements that will be written to the stream.

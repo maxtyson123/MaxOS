@@ -83,14 +83,21 @@ virtualbox: iso
 
 .PHONY: clean
 clean:
+	# Remove the kernel object files
 	rm -rf obj
 	rm -f maxOS.bin maxOS.sym maxOS.img
+
+	# Remove all files and folders in the docs/doxy folder except for the Doxyfile
+	cd docs/doxy && find . ! -name 'Doxyfile' -type f -exec rm -f {} +
 
 cross_compiler:
 	cd toolchain && ./make_cross_compiler.sh
 
 disk_img:
 	cd toolchain && ./create_disk_img.sh
+
+documentation:
+	cd toolchain && ./make_documentation.sh
 
 install_deps:
 	sudo apt-get update -y

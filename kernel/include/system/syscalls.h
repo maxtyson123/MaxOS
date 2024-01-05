@@ -11,6 +11,11 @@
 
 namespace maxOS{
     namespace system{
+
+        /**
+         * @class SyscallHandler
+         * @brief Handles system calls
+         */
         class SyscallHandler : hardwarecommunication::InterruptHandler{
 
         public:

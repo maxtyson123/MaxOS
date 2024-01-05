@@ -36,6 +36,27 @@ namespace maxOS {
         };
 
         /**
+         * @struct GateDescriptor
+         * @brief Describes a gate in the Interrupt Descriptor Table
+         */
+        struct GateDescriptor {
+          uint16_t  handler_address_low_bits;
+          uint16_t  gdt_code_segment_selector;
+          uint8_t   reserved;
+          uint8_t   access;
+          uint16_t handler_address_high_bits;
+        } __attribute__((packed));
+
+        /**
+         * @struct InterruptDescriptorTablePointer
+         * @brief Describes the Interrupt Descriptor Table
+         */
+        struct InterruptDescriptorTablePointer {
+          uint16_t size;
+          uint32_t base;
+        } __attribute__((packed));
+
+        /**
          * @class InterruptManager
          * @brief Handles all interrupts and passes them to the correct handler
          */
@@ -50,20 +71,7 @@ namespace maxOS {
                 InterruptHandler* m_interrupt_handlers[256];   //TODO: Make vector?
                 system::ThreadManager* m_thread_manager;
 
-                struct GateDescriptor {
-                    uint16_t  handler_address_low_bits;
-                    uint16_t  gdt_code_segment_selector;
-                    uint8_t   reserved;
-                    uint8_t   access;
-                    uint16_t handler_address_high_bits;
-                } __attribute__((packed));
-
                 static GateDescriptor s_interrupt_descriptor_table[256];
-
-                struct InterruptDescriptorTablePointer {
-                    uint16_t size;
-                    uint32_t base;
-                } __attribute__((packed));
 
                 static void set_interrupt_descriptor_table_entry(uint8_t interrupt, uint16_t code_segment_selector_offset, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t descriptor_type);
 

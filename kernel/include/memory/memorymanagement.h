@@ -12,6 +12,10 @@ namespace maxOS{
 
     namespace memory{
 
+        /**
+         * @struct MemoryChunk
+         * @brief Stores information about a memory chunk in the memory manager linked list
+         */
         struct MemoryChunk{
 
             MemoryChunk* next;

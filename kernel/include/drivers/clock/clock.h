@@ -35,6 +35,7 @@ namespace maxOS {
 
             /**
              * @class ClockEventHandler
+             * @brief Handles the events triggered by the clock
              */
             class ClockEventHandler : public common::EventHandler<ClockEvents>{
 

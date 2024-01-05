@@ -36,7 +36,10 @@ namespace maxOS{
                 virtual uint8_t read();
             };
 
-
+        /**
+         * @class MemIO16Bit
+         * @brief Handles 16 bit memory IO
+         */
         class MemIO16Bit : public MemIO {
             public:
                 MemIO16Bit(uint32_t address);
@@ -46,6 +49,10 @@ namespace maxOS{
                 virtual uint16_t read();
             };
 
+        /**
+         * @class MemIO32Bit
+         * @brief Handles 32 bit memory IO
+         */
         class MemIO32Bit : public MemIO {
             public:
                 MemIO32Bit(uint32_t address);
@@ -55,6 +62,10 @@ namespace maxOS{
                 virtual uint32_t read();
             };
 
+        /**
+         * @class MemIO64Bit
+         * @brief Handles 64 bit memory IO
+         */
         class MemIO64Bit : public MemIO {
         public:
             MemIO64Bit(uint32_t address);
