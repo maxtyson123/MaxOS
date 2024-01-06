@@ -70,3 +70,6 @@ make install-target-libgcc    || fail "Installing libgcc failed"
 
 # Make a  build directory for cmake
 mkdir cmake-build
+
+# Setup the first version of the kernel
+./version.sh --force

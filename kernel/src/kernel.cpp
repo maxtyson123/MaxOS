@@ -353,7 +353,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     networkSetupHeaderStream << "[ DONE ]";
 
-    cout << "Its working now!? v4.5";
+    cout << "Its working now!? v4.7";
 
 #ifdef GUI
     Desktop desktop(videoDriver);

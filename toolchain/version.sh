@@ -30,8 +30,16 @@ GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 GIT_COMMIT="$(git rev-list --count HEAD)"
 GIT_AUTHOR="$(git log -1 --pretty=format:'%an')"
 
+# Make the output file
+OUTPUT_FILE="${SCRIPTDIR}/../kernel/include/common/version.h.tmp"
+
+# If we are forcing it then remove the tmp option
+if [ "$1" == "--force" ]; then
+  OUTPUT_FILE="${SCRIPTDIR}/../kernel/include/common/version.h"
+fi
+
 # Write the version header
-cat > "${SCRIPTDIR}/../kernel/include/common/version.h.tmp" << EOF
+cat > "${OUTPUT_FILE}" << EOF
 //
 // This file is generated automatically by the maxOS build system.
 //
