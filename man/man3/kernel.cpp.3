@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp" 3 "Fri Jan 5 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -177,7 +177,7 @@ Definition at line 78 of file kernel\&.cpp\&.
 128     // Make the header
 129     ConsoleArea consoleHeader(&console, 0, 0, console\&.width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
 130     ConsoleStream headerStream(&consoleHeader);
-131     headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
+131     headerStream << "MaxOSdd v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
 132 
 133     // Calc the length of the header
 134     uint32_t headerLength = headerStream\&.m_cursor_x;
@@ -402,48 +402,49 @@ Definition at line 78 of file kernel\&.cpp\&.
 353     cout << "\n";
 354     networkSetupHeaderStream << "[ DONE ]";
 355 
-356 
-357 #ifdef GUI
-358     Desktop desktop(videoDriver);
-359     mouse\&.connect_event_handler(&desktop);
-360     keyboardInterpreter\&.connect_event_handler(&desktop);
-361     kernelClock\&.connect_event_handler(&desktop);
-362 
-363     Window testWindow(150,10, 200, 150, "Test Window");
-364     widgets::InputBox testInputBox(10, 10, 150, 20, "test");
-365 
-366     class InputBoxStream : public widgets::InputBoxEventHandler
-367     {
-368         ConsoleStream* stream;
-369         public:
-370         InputBoxStream(ConsoleStream* stream)
-371         {
-372             this->stream = stream;
-373         }
-374         ~InputBoxStream()
-375         {
-376             this->stream = nullptr;
-377         }
-378 
-379         void on_input_box_text_changed(string newText)
-380         {
-381             *stream << "Input Box Changed: " << newText << "\n";
-382         }
-383     };
-384     InputBoxStream inputBoxStream(&cout);
-385     testInputBox\&.connect_event_handler(&inputBoxStream);
-386     testWindow\&.add_child(&testInputBox);
-387     desktop\&.add_child(&testWindow);
-388 
-389     Window testWindow2(350,100, 200, 150, "Test Window 2");
-390     desktop\&.add_child(&testWindow2);
-391 
-392 #endif
-393 
-394     // Wait
-395     while (true);
-396 
-397 }
+356     cout << "Its working now!? v4\&.5";
+357 
+358 #ifdef GUI
+359     Desktop desktop(videoDriver);
+360     mouse\&.connect_event_handler(&desktop);
+361     keyboardInterpreter\&.connect_event_handler(&desktop);
+362     kernelClock\&.connect_event_handler(&desktop);
+363 
+364     Window testWindow(150,10, 200, 150, "Test Window");
+365     widgets::InputBox testInputBox(10, 10, 150, 20, "test");
+366 
+367     class InputBoxStream : public widgets::InputBoxEventHandler
+368     {
+369         ConsoleStream* stream;
+370         public:
+371         InputBoxStream(ConsoleStream* stream)
+372         {
+373             this->stream = stream;
+374         }
+375         ~InputBoxStream()
+376         {
+377             this->stream = nullptr;
+378         }
+379 
+380         void on_input_box_text_changed(string newText)
+381         {
+382             *stream << "Input Box Changed: " << newText << "\n";
+383         }
+384     };
+385     InputBoxStream inputBoxStream(&cout);
+386     testInputBox\&.connect_event_handler(&inputBoxStream);
+387     testWindow\&.add_child(&testInputBox);
+388     desktop\&.add_child(&testWindow);
+389 
+390     Window testWindow2(350,100, 200, 150, "Test Window 2");
+391     desktop\&.add_child(&testWindow2);
+392 
+393 #endif
+394 
+395     // Wait
+396     while (true);
+397 
+398 }
 .fi
 .PP
 References maxOS::drivers::console::Black, maxOS::drivers::console::Console::clear(), maxOS::system::multiboot_info::framebuffer_bpp, maxOS::system::multiboot_info::framebuffer_height, maxOS::system::multiboot_info::framebuffer_width, maxOS::system::multiboot_info::mem_upper, MULTIBOOT_BOOTLOADER_MAGIC, maxOS::drivers::console::Console::put_string(), maxOS::drivers::console::Red, and maxOS::drivers::video::VideoDriver::set_mode()\&.
