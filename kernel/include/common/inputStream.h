@@ -162,7 +162,7 @@ namespace maxOS{
          * @tparam Type the type of data the stream is handling
          * @param read_element The element that was read from the stream
          */
-        template<class Type> void InputStreamEventHandler<Type>::on_stream_read(Type read_element) {
+        template<class Type> void InputStreamEventHandler<Type>::on_stream_read(Type) {
 
         }
 

@@ -49,7 +49,7 @@ Event<MouseEvents>* MouseEventHandler::on_event(Event<MouseEvents> *event) {
  *
  * @param button The button that was pressed
  */
-void MouseEventHandler::on_mouse_down_event(uint8_t button){
+void MouseEventHandler::on_mouse_down_event(uint8_t){
 
 }
 
@@ -58,7 +58,7 @@ void MouseEventHandler::on_mouse_down_event(uint8_t button){
  *
  * @param button The button that was released
  */
-void MouseEventHandler::on_mouse_up_event(uint8_t button){
+void MouseEventHandler::on_mouse_up_event(uint8_t){
 
 }
 
@@ -68,7 +68,7 @@ void MouseEventHandler::on_mouse_up_event(uint8_t button){
  * @param x How much the mouse moved in the x direction
  * @param y How much the mouse moved in the y direction
  */
-void MouseEventHandler::on_mouse_move_event(int8_t x, int8_t y){
+void MouseEventHandler::on_mouse_move_event(int8_t, int8_t){
 
 }
 

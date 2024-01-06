@@ -51,12 +51,15 @@ namespace maxOS{
 
 
 
-void* operator new(size_t size);
-void* operator new[](size_t size);
+void* operator new(size_t size) throw();
+void* operator new[](size_t size) throw();
 
 //Placement New
 void* operator new(size_t size, void* pointer);
 void* operator new[](size_t size, void* pointer);
+
+void operator delete(void* pointer);
+void operator delete[](void* pointer);
 
 void operator delete(void* pointer, size_t size);
 void operator delete[](void* pointer, size_t size);

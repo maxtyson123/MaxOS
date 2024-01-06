@@ -108,7 +108,6 @@ namespace maxOS{
                 volatile bool initDone;                          //Is the device initialised
 
                 void FetchDataReceived();                        //Fetches the data from the buffer
-                void FetchDataSent();                            //Fetches the data from the buffer
 
             public:
 

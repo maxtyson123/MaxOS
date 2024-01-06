@@ -147,7 +147,7 @@ DriverSelector::~DriverSelector()
 /**
  * @brief Select the drivers
  */
-void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*, common::OutputStream *)
+void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*)
 {
 }
 

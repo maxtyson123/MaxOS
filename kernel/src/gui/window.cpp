@@ -45,9 +45,9 @@ Window::Window(Widget *containedWidget, string title_text)
   m_title(0, -(10 + 5) + 2, containedWidget->position().width, 10 + 5 - 3,title_text),
   m_mover(this),
   m_resizer_top(this),
+  m_resizer_bottom(this),
   m_resizer_left(this),
   m_resizer_right(this),
-  m_resizer_bottom(this),
   m_resizer_top_left(this),
   m_resizer_top_right(this),
   m_resizer_bottom_left(this),
@@ -90,34 +90,38 @@ MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mou
     // Bring the window to the front
     bring_to_front();
 
-    if(mouseX <= frame_thickness)
+    // Convert the mouse coordinates to a int32_t
+    int32_t x = (int32_t) mouseX;
+    int32_t y = (int32_t) mouseY;
+
+    if(x <= frame_thickness)
     {
-        if(mouseY <= frame_thickness)
+        if(y <= frame_thickness)
             return &m_resizer_top_left;
 
-        else if(mouseY < window_position.height - frame_thickness)
+        else if(y < window_position.height - frame_thickness)
             return &m_resizer_left;
 
         else
             return &m_resizer_bottom_left;
     }
-    else if(mouseX < window_position.width - frame_thickness)
+    else if(x < window_position.width - frame_thickness)
     {
-        if(mouseY <= frame_thickness)
+        if(y <= frame_thickness)
             return &m_resizer_top;
 
-        else if(mouseY < frame_thickness + title_bar_height)
+        else if(y < frame_thickness + title_bar_height)
             return &m_mover;
 
-        else if(mouseY >= window_position.height - frame_thickness)
+        else if(y >= window_position.height - frame_thickness)
             return &m_resizer_bottom;
     }
     else
     {
-        if(mouseY <= frame_thickness)
+        if(y <= frame_thickness)
             return &m_resizer_top_right;
 
-        else if(mouseY < window_position.height-frame_thickness)
+        else if(y < window_position.height-frame_thickness)
             return &m_resizer_right;
 
         else

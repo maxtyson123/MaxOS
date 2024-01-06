@@ -16,6 +16,8 @@ Widget::Widget()
 
 }
 
+
+
 Widget::Widget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : KeyboardEventHandler(),
   m_position(left, top, width, height)
@@ -34,7 +36,7 @@ Widget::~Widget(){
  * @param gc The graphics context to draw the widgets pixels on
  * @param area The area of the widget to draw
  */
-void Widget::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
+void Widget::draw(GraphicsContext*, Rectangle<int32_t>&) {
 
 }
 
@@ -139,10 +141,10 @@ void Widget::move(int32_t left, int32_t top) {
 void Widget::resize(int32_t width, int32_t height) {
 
     // Restrict the width and height to the minimum and maximum values
-    if(width < m_min_width) width = m_min_width;
-    if(height < m_min_height) height = m_min_height;
-    if(width > m_max_width) width = m_max_width;
-    if(height > m_max_height) height = m_max_height;
+    if(width < (int)m_min_width) width = m_min_width;
+    if(height < (int)m_min_height) height = m_min_height;
+    if(width > (int)m_max_width) width = m_max_width;
+    if(height > (int)m_max_height) height = m_max_height;
 
     // Store the old position, set the new position
     Rectangle<int32_t> old_position = m_position;
@@ -160,10 +162,10 @@ void Widget::resize(int32_t width, int32_t height) {
     }
 
     //Loop through the areas that need to be redrawn and invalidate them
-    for(int i = 0; i < invalid_areas_old.size(); i++)
+    for(uint32_t i = 0; i < invalid_areas_old.size(); i++)
         invalidate(invalid_areas_old[i]);
 
-    for(int i = 0; i < invalid_areas_new.size(); i++)
+    for(uint32_t i = 0; i < invalid_areas_new.size(); i++)
         invalidate(invalid_areas_new[i]);
 
 }
@@ -232,7 +234,7 @@ void Widget::bring_to_front(Widget *widget) {
  * @param toX The x coordinate of the mouse
  * @param toY The y coordinate of the mouse
  */
-void Widget::on_mouse_enter_widget(uint32_t toX, uint32_t toY) {
+void Widget::on_mouse_enter_widget(uint32_t, uint32_t) {
 
 }
 
@@ -242,7 +244,7 @@ void Widget::on_mouse_enter_widget(uint32_t toX, uint32_t toY) {
  * @param fromX The x coordinate of the mouse
  * @param fromY The y coordinate of the mouse
  */
-void Widget::on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) {
+void Widget::on_mouse_leave_widget(uint32_t, uint32_t) {
 
 }
 
@@ -254,7 +256,7 @@ void Widget::on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) {
  * @param toX The x new coordinate of the mouse
  * @param toY The y new coordinate of the mouse
  */
-void Widget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
+void Widget::on_mouse_move_widget(uint32_t, uint32_t, uint32_t, uint32_t) {
 
 }
 
@@ -266,7 +268,7 @@ void Widget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, 
  * @param button The button that was pressed
  * @return nullptr
  */
-peripherals::MouseEventHandler* Widget::on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) {
+peripherals::MouseEventHandler* Widget::on_mouse_button_pressed(uint32_t, uint32_t, uint8_t) {
 
     // Bring the widget to the front of the screen
     bring_to_front();
@@ -285,7 +287,7 @@ peripherals::MouseEventHandler* Widget::on_mouse_button_pressed(uint32_t x, uint
  * @param y The y coordinate of the mouse when it was released
  * @param button The button that was released
  */
-void Widget::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
+void Widget::on_mouse_button_released(uint32_t, uint32_t, uint8_t) {
 
 }
 
@@ -371,7 +373,7 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area, Vector
  * @param gc The graphics context to draw to
  * @param area The area to draw
  */
-void CompositeWidget::draw_self(common::GraphicsContext *gc, common::Rectangle<int32_t> &area) {
+void CompositeWidget::draw_self(common::GraphicsContext*, common::Rectangle<int32_t>&) {
 
 }
 

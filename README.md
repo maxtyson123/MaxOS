@@ -55,8 +55,8 @@ Kernel Cleanup
 - [x] GUI Bug Fixes
 - [x] Better Commenting and Doxygen Documentation
 - [x] Use better c++ coding conventions
-- [ ] CMAKE Build System (and maybe get it building and debugging in CLion)
-- [ ] Clean up all the TODOs
+- [x] CMAKE Build System
+- [ ] Clean up all the TODOs & Errors
 - [ ] Rewrite Readme
 
 Road to Userspace pt 1 - kernel core features

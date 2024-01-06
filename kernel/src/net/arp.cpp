@@ -58,7 +58,6 @@ bool AddressResolutionProtocol::handleEthernetFramePayload(uint8_t* etherframePa
                     arpMessage -> srcMAC = internetProtocolHandler -> GetMediaAccessControlAddress();                      //Set the source MAC to this MAC
                     arpMessage -> srcIP = internetProtocolHandler -> GetInternetProtocolAddress();                         //Set the source IP to this IP
                     return true;
-                    break;
 
                 //Response
                 case 0x0200:

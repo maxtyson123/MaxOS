@@ -97,7 +97,7 @@ namespace maxOS
                   PeripheralComponentInterconnectController(common::OutputStream*);
                   ~PeripheralComponentInterconnectController();
 
-                  void select_drivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager* interrupt_manager, common::OutputStream* error_message_stream);
+                  void select_drivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager* interrupt_manager) override;
                   drivers::Driver* get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interrupt_manager);
                   void list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev);
         };

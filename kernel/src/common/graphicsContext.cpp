@@ -127,7 +127,7 @@ void GraphicsContext::render_pixel(uint32_t x, uint32_t y, uint32_t colour) {
  * @param y The y coordinate of the pixel
  * @param colour The 8Bit colour of the pixel
  */
-void GraphicsContext::render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour) {
+void GraphicsContext::render_pixel_8_bit(uint32_t, uint32_t, uint8_t) {
 
 }
 
@@ -138,7 +138,7 @@ void GraphicsContext::render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour)
  * @param y The y coordinate of the pixel
  * @param colour The 16Bit colour of the pixel
  */
-void GraphicsContext::render_pixel_16_bit(uint32_t x, uint32_t y, uint16_t colour) {
+void GraphicsContext::render_pixel_16_bit(uint32_t, uint32_t, uint16_t) {
 
 }
 
@@ -149,7 +149,7 @@ void GraphicsContext::render_pixel_16_bit(uint32_t x, uint32_t y, uint16_t colou
  * @param y The y coordinate of the pixel
  * @param colour The 24Bit colour of the pixel
  */
-void GraphicsContext::render_pixel_24_bit(uint32_t x, uint32_t y, uint32_t colour) {
+void GraphicsContext::render_pixel_24_bit(uint32_t, uint32_t, uint32_t) {
 
 }
 
@@ -160,7 +160,7 @@ void GraphicsContext::render_pixel_24_bit(uint32_t x, uint32_t y, uint32_t colou
  * @param y The y coordinate of the pixel
  * @param colour The 32Bit colour of the pixel
  */
-void GraphicsContext::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colour) {
+void GraphicsContext::render_pixel_32_bit(uint32_t, uint32_t, uint32_t) {
 
 }
 
@@ -169,7 +169,7 @@ void GraphicsContext::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colou
  *
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
- * @return The colour of the pixel
+ * @return The colour of the pixel or white if the pixel is not supported
  */
 uint32_t GraphicsContext::get_rendered_pixel(uint32_t x, uint32_t y) {
     // Call the correct get_pixel function based on the color depth
@@ -183,6 +183,8 @@ uint32_t GraphicsContext::get_rendered_pixel(uint32_t x, uint32_t y) {
         case 32:
             return get_rendered_pixel_32_bit(x, y);
     }
+
+    return colour_to_int(Colour(0xFF, 0xFF, 0xFF));
 }
 
 /**
@@ -192,7 +194,7 @@ uint32_t GraphicsContext::get_rendered_pixel(uint32_t x, uint32_t y) {
  * @param y The y coordinate of the pixel
  * @return The 8Bit colour of the pixel
  */
-uint8_t GraphicsContext::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
+uint8_t GraphicsContext::get_rendered_pixel_8_bit(uint32_t, uint32_t) {
     return 0;
 }
 
@@ -203,7 +205,7 @@ uint8_t GraphicsContext::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
  * @param y The y coordinate of the pixel
  * @return The 16Bit colour of the pixel
  */
-uint16_t GraphicsContext::get_rendered_pixel_16_bit(uint32_t x, uint32_t y) {
+uint16_t GraphicsContext::get_rendered_pixel_16_bit(uint32_t, uint32_t) {
     return 0;
 }
 
@@ -214,7 +216,7 @@ uint16_t GraphicsContext::get_rendered_pixel_16_bit(uint32_t x, uint32_t y) {
  * @param y The y coordinate of the pixel
  * @return The 24Bit colour of the pixel
  */
-uint32_t GraphicsContext::get_rendered_pixel_24_bit(uint32_t x, uint32_t y) {
+uint32_t GraphicsContext::get_rendered_pixel_24_bit(uint32_t, uint32_t) {
     return 0;
 }
 
@@ -225,7 +227,7 @@ uint32_t GraphicsContext::get_rendered_pixel_24_bit(uint32_t x, uint32_t y) {
  * @param y The y coordinate of the pixel
  * @return The 32Bit colour of the pixel
  */
-uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
+uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t, uint32_t) {
     return 0;
 }
 

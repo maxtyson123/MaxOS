@@ -26,7 +26,7 @@ VideoDriver::~VideoDriver() {
  * @param color_depth The color depth of the screen
  * @return true If the mode was set successfully false otherwise
  */
-bool VideoDriver::internal_set_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
+bool VideoDriver::internal_set_mode(uint32_t, uint32_t, uint32_t) {
     return false;
 }
 
@@ -38,7 +38,7 @@ bool VideoDriver::internal_set_mode(uint32_t width, uint32_t height, uint32_t co
  * @param color_depth The color depth of the screen
  * @return true If the mode is supported, false otherwise
  */
-bool VideoDriver::supports_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
+bool VideoDriver::supports_mode(uint32_t, uint32_t, uint32_t) {
     return false;
 }
 

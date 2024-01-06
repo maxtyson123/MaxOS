@@ -30,7 +30,7 @@ namespace maxOS{
                   Thread();
                   ~Thread();
 
-                  void init(system::GlobalDescriptorTable *gdt, void entrypoint());
+                  void init(void entrypoint());
       };
 
       /**
@@ -43,7 +43,7 @@ namespace maxOS{
               // Vector for threads and stack
               common::Vector<Thread*> m_threads;
 
-              int m_current_thread;
+              uint32_t m_current_thread;
               system::GlobalDescriptorTable*m_gdt;
 
           public:
@@ -51,10 +51,10 @@ namespace maxOS{
               ThreadManager(system::GlobalDescriptorTable *gdt);
               ~ThreadManager();
 
-              int create_thread(void entrypoint());
+              uint32_t create_thread(void entrypoint());
               CPUState*schedule(CPUState *cpu_state);
 
-              bool terminate_thread(int tid);
+              bool terminate_thread(uint32_t tid);
       };
   }
 }

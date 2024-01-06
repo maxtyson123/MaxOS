@@ -32,7 +32,7 @@ EthernetFramePayloadHandler::~EthernetFramePayloadHandler() {
 }
 
 
-bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size) {
+bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t*, uint32_t) {
 
     //By default, don't handle it, will be handled in the override
     return false;

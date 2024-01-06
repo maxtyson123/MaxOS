@@ -46,10 +46,7 @@ bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uin
     }
 
     // Initialise the VESA driver
-    if(!init()) {
-        // VESA driver could not be initialised
-        return false;
-    }
+    // None needed
 
     // Return true if the mode was set successfully
     return true;
@@ -68,7 +65,7 @@ bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uin
 bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
     // Check if the mode is supported
-    if(width == (int)m_multiboot_info->framebuffer_width && height == (int)m_multiboot_info->framebuffer_height && color_depth == (int)m_multiboot_info->framebuffer_bpp) {
+    if(width == (uint32_t)m_multiboot_info->framebuffer_width && height == (uint32_t)m_multiboot_info->framebuffer_height && color_depth == (uint32_t)m_multiboot_info->framebuffer_bpp) {
         return true;
     }
     return false;

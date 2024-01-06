@@ -16,7 +16,7 @@ Thread::~Thread()
 {
 }
 
-void Thread::init(GlobalDescriptorTable *gdt, void entrypoint())
+void Thread::init(void entrypoint())
 {
 
   // Set up stack
@@ -56,11 +56,11 @@ ThreadManager::~ThreadManager()
  * @return true if successfully added
  * @return false if error
  */
-int ThreadManager::create_thread(void entrypoint())
+uint32_t ThreadManager::create_thread(void entrypoint())
 {
     // Create a new thread
     Thread* new_thread = new Thread();
-    new_thread -> init(m_gdt, entrypoint);
+    new_thread -> init(entrypoint);
     new_thread -> m_tid = m_threads.size();
     new_thread -> m_cpu_state -> cs = m_gdt-> code_segment_selector();
 
@@ -109,10 +109,10 @@ CPUState* ThreadManager::schedule(CPUState*cpu_state)
  * @param tid thread id to terminate
  * @return true if successfully terminated thread or false if error
  */
-bool ThreadManager::terminate_thread(int tid)
+bool ThreadManager::terminate_thread(uint32_t tid)
 {
     // Check if the thread is actually running
-    if (tid < 0 || tid >= m_threads.size())
+    if (tid >= m_threads.size())
         return false;
 
     // Delete the thread

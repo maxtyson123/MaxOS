@@ -21,15 +21,15 @@ TransmissionControlProtocolPayloadHandler::~TransmissionControlProtocolPayloadHa
 {
 }
 
-void TransmissionControlProtocolPayloadHandler::handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket *socket, uint8_t *data, uint16_t size) {
+void TransmissionControlProtocolPayloadHandler::handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket*, uint8_t*, uint16_t) {
 
 }
 
-void TransmissionControlProtocolPayloadHandler::Connected(TransmissionControlProtocolSocket *socket) {
+void TransmissionControlProtocolPayloadHandler::Connected(TransmissionControlProtocolSocket*) {
 
 }
 
-void TransmissionControlProtocolPayloadHandler::Disconnected(TransmissionControlProtocolSocket *socket) {
+void TransmissionControlProtocolPayloadHandler::Disconnected(TransmissionControlProtocolSocket*) {
 
 }
 
@@ -314,6 +314,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
                     break;
 
                 // no break, because of piggybacking
+                [[fallthrough]];
 
             default:
 
@@ -326,7 +327,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
                     if(!reset)
                     {
                         int x = 0;                                                                      //The number of bytes to send back
-                        for(int i = msg -> headerSize32*4; i < size; i++)                               //Loop through the data
+                        for(uint32_t i = msg -> headerSize32*4; i < size; i++)                          //Loop through the data
                             if(payloadData[i] != 0)                                                     //Check if the data is not 0
                                 x = i;                                                                  //Set the number of bytes to send back to the current index
                         socket -> acknowledgementNumber += x - msg -> headerSize32*4 + 1;               //Increment the acknowledgement number by the number of bytes to send back
@@ -420,9 +421,13 @@ void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(T
     //Increase the sequence number
     socket -> sequenceNumber += size;
 
-    //Copy the data into the buffer
-    for(int i = 0; i < size; i++)
-        buffer2[i] = data[i];
+    // Check if the data is not null
+    if(data != 0)
+    {
+            //Copy the data into the buffer
+            for(int i = 0; i < size; i++)
+            buffer2[i] = data[i];
+    }
 
     //Set the pseudo header
     phdr -> srcIP = socket -> localIP;

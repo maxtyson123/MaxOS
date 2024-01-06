@@ -66,7 +66,7 @@ namespace maxOS
           public:
               DriverSelector();
               ~DriverSelector();
-              virtual void select_drivers(DriverSelectorEventHandler* handler, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* errorMessageStream);
+              virtual void select_drivers(DriverSelectorEventHandler* handler, hardwarecommunication::InterruptManager* interruptManager);
         };
 
         /**

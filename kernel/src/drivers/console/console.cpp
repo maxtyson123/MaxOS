@@ -44,7 +44,7 @@ uint16_t Console::height() {
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  */
-void Console::put_character(uint16_t x, uint16_t y, char c) {
+void Console::put_character(uint16_t, uint16_t, char) {
 
 }
 
@@ -55,7 +55,7 @@ void Console::put_character(uint16_t x, uint16_t y, char c) {
  * @param y The y coordinate of the character
  * @param foreground The foreground color to set
  */
-void Console::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) {
+void Console::set_foreground_color(uint16_t, uint16_t, ConsoleColour) {
 
 }
 
@@ -66,7 +66,7 @@ void Console::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foregro
  * @param y The y coordinate of the character
  * @param background The background color to set
  */
-void Console::set_background_color(uint16_t x, uint16_t y, ConsoleColour background) {
+void Console::set_background_color(uint16_t, uint16_t, ConsoleColour) {
 
 }
 
@@ -77,7 +77,7 @@ void Console::set_background_color(uint16_t x, uint16_t y, ConsoleColour backgro
  * @param y The y coordinate of the character
  * @return The character at the given coordinate
  */
-char Console::get_character(uint16_t x, uint16_t y) {
+char Console::get_character(uint16_t, uint16_t) {
     return ' ';
 }
 
@@ -88,7 +88,7 @@ char Console::get_character(uint16_t x, uint16_t y) {
  * @param y The y coordinate of the character
  * @return The background color of the character
  */
-ConsoleColour Console::get_foreground_color(uint16_t x, uint16_t y) {
+ConsoleColour Console::get_foreground_color(uint16_t, uint16_t) {
     return Green;
 }
 
@@ -99,7 +99,7 @@ ConsoleColour Console::get_foreground_color(uint16_t x, uint16_t y) {
  * @param y The y coordinate of the character
  * @return The background color of the character
  */
-ConsoleColour Console::get_background_color(uint16_t x, uint16_t y) {
+ConsoleColour Console::get_background_color(uint16_t, uint16_t) {
     return Green;
 }
 
@@ -444,6 +444,7 @@ void ConsoleStream::write_char(char c) {
             }
 
             // don't break here, we want to go to the next case because of the \r
+            [[fallthrough]];
 
         // Carriage return
         case '\r':

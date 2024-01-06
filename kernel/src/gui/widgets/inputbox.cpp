@@ -30,7 +30,7 @@ Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents> *eve
     return event;
 }
 
-void InputBoxEventHandler::on_input_box_text_changed(string new_text) {
+void InputBoxEventHandler::on_input_box_text_changed(string) {
 
 }
 
@@ -38,10 +38,10 @@ void InputBoxEventHandler::on_input_box_text_changed(string new_text) {
 
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : Widget(left, top, width, height),
-  font(AmigaFont()),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
-  border_colour(Colour(0x57, 0x57, 0x57))
+  border_colour(Colour(0x57, 0x57, 0x57)),
+  font(AmigaFont())
 {
     // Clear the text buffer
     widget_text[0] = '\0';
@@ -49,10 +49,10 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
 : Widget(left, top, width, height),
-  font(AmigaFont()),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
-  border_colour(Colour(0x57, 0x57, 0x57))
+  border_colour(Colour(0x57, 0x57, 0x57)),
+  font(AmigaFont())
 {
 
     // Clear the text buffer
@@ -140,7 +140,7 @@ void InputBox::on_focus_lost() {
     invalidate();
 }
 
-void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
+void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 
     // Handle the key press
     switch(keyDownCode)
@@ -152,6 +152,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 
             cursor_position--;
             // no break - we move the cursor to the left and use the <Delete> code
+            [[fallthrough]];
         }
         case KeyCode::deleteKey:
         {

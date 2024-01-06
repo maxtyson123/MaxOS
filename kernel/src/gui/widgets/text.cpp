@@ -61,7 +61,7 @@ void Text::update_text(string new_text) {
 
 
     // Copy the new text into the widget by looping through the characters
-    for(uint32_t i = 0; i < 1000; i++)
+    for(uint32_t i = 0; i < 256; i++)
     {
         // Set the character
         this ->m_widget_text[i] = new_text[i];

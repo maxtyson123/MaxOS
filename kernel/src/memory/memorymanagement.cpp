@@ -146,7 +146,7 @@ int MemoryManager::memory_used() {
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
 
-void* operator new(size_t size){
+void* operator new(size_t size) throw(){
 
     // Use the memory manager to allocate the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
@@ -156,7 +156,7 @@ void* operator new(size_t size){
 
 }
 
-void* operator new[](size_t size){
+void* operator new[](size_t size) throw(){
 
     // Use the memory manager to allocate the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
@@ -166,19 +166,18 @@ void* operator new[](size_t size){
 
 }
 
-void* operator new(size_t size, void* pointer){
+void* operator new(size_t, void* pointer){
 
     return pointer;
 
 }
-void* operator new[](size_t size, void* pointer){
+void* operator new[](size_t, void* pointer){
 
     return pointer;
 
 }
 
-// NOTE: The size_t parameter is ignored, compiler was just complaining
-void operator delete(void* pointer, size_t size){
+void operator delete(void* pointer){
 
     // Use the memory manager to free the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
@@ -186,7 +185,24 @@ void operator delete(void* pointer, size_t size){
 
 }
 
-void operator delete[](void* pointer, size_t size){
+void operator delete[](void* pointer){
+
+    // Use the memory manager to free the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+
+}
+
+// NOTE: The size_t parameter is ignored, compiler was just complaining
+void operator delete(void* pointer, size_t){
+
+    // Use the memory manager to free the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+
+}
+
+void operator delete[](void* pointer, size_t){
 
     // Use the memory manager to free the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)

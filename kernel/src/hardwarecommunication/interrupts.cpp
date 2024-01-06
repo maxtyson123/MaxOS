@@ -45,13 +45,14 @@ void InterruptHandler::handle_interrupt() {
 
 InterruptManager::InterruptManager(uint16_t hardware_interrupt_offset, system::GlobalDescriptorTable*global_descriptor_table,ThreadManager*thread_manager,  OutputStream* handler)
 : common::InputStream(handler),
+  m_hardware_interrupt_offset(hardware_interrupt_offset),
+  m_thread_manager(thread_manager),
   pic_master_command_port(0x20),
   pic_master_data_port(0x21),
   pic_slave_command_port(0xA0),
-  pic_slave_data_port(0xA1),
-  m_thread_manager(thread_manager),
-  m_hardware_interrupt_offset(hardware_interrupt_offset)
+  pic_slave_data_port(0xA1)
 {
+
     uint32_t code_segment = global_descriptor_table->code_segment_selector();
 
     // By default ignore all interrupts so any un handled interrupts wont cause a fault

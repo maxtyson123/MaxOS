@@ -30,8 +30,8 @@ InternetControlMessageProtocol::~InternetControlMessageProtocol() {
 
  * @return True if the packet is to be sent back to the sender, false otherwise
  */
-bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProtocolAddress sourceIP,
-                                                                   InternetProtocolAddress destinationIP,
+bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProtocolAddress,
+                                                                   InternetProtocolAddress,
                                                                    uint8_t *payloadData,
                                                                    uint32_t size)
 {

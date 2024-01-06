@@ -78,10 +78,8 @@ void AdvancedTechnologyAttachment::identify() {
   // read the data and print it
   for (uint16_t i = 0; i < 256; ++i) {
       uint16_t data = m_data_port.read();
-      char *text = "  \0";
-      text[0] = (data >> 8) & 0xFF;
-      text[1] = data & 0xFF;
-      ata_message_stream-> write(text);
+      ata_message_stream-> write(" 0x");
+      ata_message_stream-> write_hex(data);
   }
 }
 

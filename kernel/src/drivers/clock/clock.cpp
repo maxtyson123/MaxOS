@@ -24,7 +24,7 @@ ClockEventHandler::~ClockEventHandler() {
  * @param time The current time
  *
  */
-void ClockEventHandler::on_time(common::Time const &time) {
+void ClockEventHandler::on_time(common::Time const &) {
 
 }
 

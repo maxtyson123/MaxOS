@@ -46,7 +46,7 @@ namespace maxOS{
             Vector(int size, Type element);
             ~Vector();
 
-            Type& operator[](int index);
+            Type& operator[](uint32_t index);
 
             bool empty();
             uint32_t size();
@@ -109,13 +109,16 @@ namespace maxOS{
          *
          * @tparam Type Type of the Vector
          * @param index The index of the element
-         * @return the element at the index
+         * @return the element at the index or the end of the Vector if the index is out of bounds
          */
-        template<class Type> Type &Vector<Type>::operator[](int index) {
+        template<class Type> Type &Vector<Type>::operator[](uint32_t index) {
 
-          // If the index is in the Vector
-          if (index <= m_size)
-              return m_elements[index];
+            // If the index is in the Vector
+            if (index <= m_size)
+                return m_elements[index];
+
+            // Return the last element of the Vector
+            return m_elements[m_size - 1];
 
         }
 

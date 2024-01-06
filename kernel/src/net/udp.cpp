@@ -15,7 +15,7 @@ UserDatagramProtocolPayloadHandler::~UserDatagramProtocolPayloadHandler() {
 
 }
 
-void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
+void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket*, uint8_t *, uint16_t) {
 
 }
 

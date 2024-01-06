@@ -77,10 +77,10 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
     }
 
     // Clamp the height and width max
-    if (limitArea.top + limitArea.height > get_text_height(text))
+    if (limitArea.top + limitArea.height > (int)get_text_height(text))
         limitArea.height = get_text_height(text) - limitArea.top;
 
-    if (limitArea.left + limitArea.width > get_text_width(text))
+    if (limitArea.left + limitArea.width > (int)get_text_width(text))
         limitArea.width = get_text_width(text) - limitArea.left;
 
 
@@ -129,7 +129,7 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
  * @param text The text to get the height of
  * @return The height of the text
  */
-uint32_t Font::get_text_height(string text) {
+uint32_t Font::get_text_height(string) {
 
     return 8;
 
@@ -148,7 +148,7 @@ uint32_t Font::get_text_width(string text) {
     return length*8;
 }
 
-void Font::get_font_8_x_8(uint8_t (&font8x8)[2048]) {
+void Font::get_font_8_x_8(uint8_t (&)[2048]) {
 
 }
 

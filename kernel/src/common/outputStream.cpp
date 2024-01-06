@@ -94,7 +94,7 @@ void OutputStream::write(string string_to_write) {
  * @brief Writes a character to the output stream.
  * @param char_to_write The character to write to the output stream.
  */
-void OutputStream::write_char(char char_to_write) {
+void OutputStream::write_char(char) {
 
 }
 

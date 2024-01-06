@@ -67,7 +67,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
 
     // Convert the char into a string
-    char* s = " ";
+    char s[] = " ";
     s[0] = c;
 
     Colour foreground = console_colour_to_vesa(get_foreground_color(x, y));
@@ -185,7 +185,7 @@ ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
  * @brief Converts a ConsoleColour to a Colour
  *
  * @param colour The ConsoleColour to convert
- * @return The Colour
+ * @return The Colour or black if the ConsoleColour is invalid
  */
 Colour VESABootConsole::console_colour_to_vesa(ConsoleColour colour) {
     switch (colour) {
@@ -238,4 +238,6 @@ Colour VESABootConsole::console_colour_to_vesa(ConsoleColour colour) {
         case White:
             return Colour(255, 255, 255);
     }
+
+    return Colour(0, 0, 0);
 }

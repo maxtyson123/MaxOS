@@ -91,7 +91,7 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
   m_driver_message_stream-> write("Sending: ");
 
     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
-    for(int i = displayType; i < size; i++)
+    for(uint32_t i = displayType; i < size; i++)
     {
       m_driver_message_stream->write_hex(buffer[i]);
       m_driver_message_stream-> write(" ");
@@ -122,7 +122,7 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
   m_driver_message_stream-> write("Receiving: ");
     //size = 64;
     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
-    for(int i = displayType; i < size; i++)
+    for(uint32_t i = displayType; i < size; i++)
     {
       m_driver_message_stream->write_hex(buffer[i]);
       m_driver_message_stream-> write(" ");

@@ -74,6 +74,9 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
+
+
+
 //TODO: Rewrite multiboot to use the one from the manual: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Example-OS-code
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
@@ -107,8 +110,8 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     string logo = header_data;
     uint32_t centerX = videoDriver->get_width()/2;
     uint32_t centerY = videoDriver->get_height()/2;
-    for (int logoY = 0; logoY < logo_height; ++logoY) {
-        for (int logoX = 0; logoX < logo_width; ++logoX) {
+    for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
+        for (uint32_t logoX = 0; logoX < logo_width; ++logoX) {
 
             // Store the pixel in the logo
             uint8_t pixel[3] = {0};
@@ -136,7 +139,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     headerStream.set_cursor(0, 0);
 
     // write the header
-    for(uint32_t i = 0; i < headerPadding; i++) headerStream << " "; headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]"; for(uint32_t i = 0; i < headerPadding; i++) headerStream << " ";
+    for(uint32_t i = 0; i < headerPadding; i++){ headerStream << " ";}; headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]"; for(uint32_t i = 0; i < headerPadding; i++){ headerStream << " ";};
 
     // Make a main console area at the top of the screen
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(),
@@ -242,7 +245,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
     {
         cout << ".";
-        (*selector)->select_drivers(&driverManager, &interrupts, 0);
+        (*selector)->select_drivers(&driverManager, &interrupts);
     }
     cout << " Found\n";
     deviceSetupHeaderStream << ".";
@@ -353,8 +356,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     networkSetupHeaderStream << "[ DONE ]";
 
-    cout << "Its working now!? v4.7";
-
+#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connect_event_handler(&desktop);
