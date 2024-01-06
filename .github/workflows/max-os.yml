@@ -25,7 +25,7 @@ jobs:
       - name: Install Ubuntu Dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev
+          sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake
 
       - name: Cache toolchain
         id: cache-toolchain
@@ -42,14 +42,16 @@ jobs:
 
       - name: Build maxOS (Release)
         run: |
-          make updateVersion
-          make maxOS.bin
+          mkdir cmake-build
+          cd cmake-build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
+          make install
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
           name: Kernel Binary
-          path: maxOS.bin
+          path: filesystem/boot/maxosk32
 
   generate-docs:
     # The type of runner that the job will run on
