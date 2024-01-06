@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <system/multiboot.h>
 
 namespace maxOS{
 
@@ -38,7 +39,7 @@ namespace maxOS{
           public:
               static MemoryManager* s_active_memory_manager;
 
-              MemoryManager(size_t start, size_t size);
+              MemoryManager(system::multiboot_info_t* boot_info);
               ~MemoryManager();
 
               void* malloc(size_t size);

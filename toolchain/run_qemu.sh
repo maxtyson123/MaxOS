@@ -75,7 +75,6 @@ else
   if [ "$USE_KVM" -ne "0" ]; then
     msg "Using KVM accelerator."
     ACCELERATOR="-enable-kvm"
-    #TODO: TEST
   fi
 
 fi
