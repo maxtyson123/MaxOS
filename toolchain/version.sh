@@ -1,6 +1,9 @@
 #!/bin/bash
-source ./maxOS.sh
 
+SCRIPTDIR=$(dirname "$BASH_SOURCE")
+source $SCRIPTDIR/maxOS.sh
+
+msg "Incrementing build count"
 # If the buildCount file doesn't exist, create it
 if [ ! -f ".buildCount" ]; then
   echo "0" > .buildCount
@@ -10,6 +13,7 @@ fi
 new_value=$(($(cat .buildCount) + 1))
 echo "$new_value" > .buildCount
 
+msg "Writing version header"
 # Version data
 MAJOR_VERSION="0"
 MINOR_VERSION="1"
@@ -26,10 +30,16 @@ GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 GIT_COMMIT="$(git rev-list --count HEAD)"
 GIT_AUTHOR="$(git log -1 --pretty=format:'%an')"
 
+# Make the output file
+OUTPUT_FILE="${SCRIPTDIR}/../kernel/include/common/version.h.tmp"
 
+# If we are forcing it then remove the tmp option
+if [ "$1" == "--force" ]; then
+  OUTPUT_FILE="${SCRIPTDIR}/../kernel/include/common/version.h"
+fi
 
 # Write the version header
-cat > "../kernel/include/common/version.h" << EOF
+cat > "${OUTPUT_FILE}" << EOF
 //
 // This file is generated automatically by the maxOS build system.
 //

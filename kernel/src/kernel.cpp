@@ -128,7 +128,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     // Make the header
     ConsoleArea consoleHeader(&console, 0, 0, console.width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
     ConsoleStream headerStream(&consoleHeader);
-    headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
+    headerStream << "MaxOSdd v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
 
     // Calc the length of the header
     uint32_t headerLength = headerStream.m_cursor_x;
@@ -353,6 +353,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     networkSetupHeaderStream << "[ DONE ]";
 
+    cout << "Its working now!? v4.7";
 
 #ifdef GUI
     Desktop desktop(videoDriver);
