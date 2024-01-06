@@ -4,7 +4,6 @@ SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/maxOS.sh
 
 msg "Incrementing build count"
-
 # If the buildCount file doesn't exist, create it
 if [ ! -f ".buildCount" ]; then
   echo "0" > .buildCount

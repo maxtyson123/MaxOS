@@ -15,6 +15,17 @@ FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
 ADD_EXECUTABLE(kernel ${KERNEL_SRCS})
 TARGET_COMPILE_DEFINITIONS(kernel PUBLIC MAXOS_KERNEL)
 
+# Update the version before building
+ADD_CUSTOM_COMMAND(
+    COMMENT "Versioning kernel"
+    TARGET kernel
+    PRE_BUILD
+    COMMAND ${CMAKE_SOURCE_DIR}/toolchain/version.sh
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 # Linker
 SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
 SET_TARGET_PROPERTIES(kernel PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})

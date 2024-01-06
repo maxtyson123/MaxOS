@@ -5,7 +5,7 @@ source ./maxOS.sh
 if [ "$1" != "--no-deps" ]; then
     msg "Installing extra dependencies"
     sudo apt update
-    sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev
+    sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake
 fi
 
 # Make A Directory For The Cross Compiler
@@ -67,3 +67,6 @@ make all-gcc                  || fail "Building gcc failed"
 make all-target-libgcc        || fail "Building libgcc failed"
 make install-gcc              || fail "Installing gcc failed"
 make install-target-libgcc    || fail "Installing libgcc failed"
+
+# Make a  build directory for cmake
+mkdir cmake-build
