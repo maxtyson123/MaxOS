@@ -1,8 +1,13 @@
 #!/bin/bash
-source ./maxOS.sh
 
-#Remove Old image
-rm -rf ../maxOS.img  || warn "Could not remove old image"
+SCRIPTDIR=$(dirname "$BASH_SOURCE")
+source $SCRIPTDIR/maxOS.sh
+
+# If the disk image already exists, delete it
+if [ -f ../maxOS.img ]; then
+   msg "Image already setup"
+   exit 0
+fi
 
 #Create a 2GB image
 qemu-img create ../maxOS.img 2G  || fail "Could not create image"

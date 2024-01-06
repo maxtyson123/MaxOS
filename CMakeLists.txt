@@ -26,5 +26,27 @@ ADD_SUBDIRECTORY(kernel)
 #ADD_SUBDIRECTORY(programs)
 #ADD_SUBDIRECTORY(ports)
 
-# TODO: Build disk image
+ADD_CUSTOM_TARGET(image
+        # Create the disk image
+        COMMENT "Creating disk image"
+        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/create_disk_img.sh
+        BYPRODUCTS ${CMAKE_SOURCE_DIR}/maxOS.img
+
+        # Copy the files to the disk image
+        COMMENT "Copying files to disk image"
+        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/copy_filesystem.sh
+
+        # Ensure it runs in the terminal
+        USES_TERMINAL
+)
+
+ADD_CUSTOM_TARGET(run
+        # Run qemu
+        COMMENT "Running qemu"
+        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_qemu.sh
+
+        # Ensure it runs in the terminal
+        USES_TERMINAL
+)
+
 # TODO: Run qemu

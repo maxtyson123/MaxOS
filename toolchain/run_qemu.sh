@@ -1,5 +1,6 @@
 #!/bin/bash
-source ./maxOS.sh
+SCRIPTDIR=$(dirname "$BASH_SOURCE")
+source $SCRIPTDIR/maxOS.sh
 
 # Parse the args
 while [ "$#" -gt "0" ]; do
