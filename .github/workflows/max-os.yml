@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: toolchain/cross_compiler
-          key: ${{ runner.os }}-cross_compiler
+          key: ${{ runner.os }}-cross_compiler_1
 
       - name: Build toolchain
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
@@ -42,10 +42,7 @@ jobs:
 
       - name: Build maxOS (Release)
         run: |
-          mkdir cmake-build
-          cd toolchain
-          ./version.sh --force
-          cd ../cmake-build
+          cd cmake-build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
           make install
 
