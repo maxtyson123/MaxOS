@@ -248,7 +248,7 @@ Colour VESABootConsole::console_colour_to_vesa(ConsoleColour colour) {
 void VESABootConsole::print_logo() {
 
       // Load the logo
-      string logo = header_data;
+      const char* logo = header_data;
 
       // Find the center of the screen
       uint32_t center_x = m_graphics_context->get_width()/2;

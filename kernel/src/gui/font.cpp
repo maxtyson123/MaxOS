@@ -142,10 +142,7 @@ uint32_t Font::get_text_height(string) {
  * @return The width of the text
  */
 uint32_t Font::get_text_width(string text) {
-    uint32_t length = 0;
-    for(string c = (string)text; *c != '\0'; ++c)
-        length++;
-    return length*8;
+    return text.length()*8;
 }
 
 void Font::get_font_8_x_8(uint8_t (&)[2048]) {

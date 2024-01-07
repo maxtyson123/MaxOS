@@ -224,12 +224,9 @@ void InputBox::update_text(string new_text) {
     cursor_position = 0;
 
     // Copy the new text into the widget text
-    for(char* c = (char*)new_text, *buffer = &widget_text[0]; *c != '\0'; ++c, buffer++)
-    {
-
-        // Update the cursor m_position and the buffer
+    for (int i = 0; i < new_text.length(); ++i) {
         cursor_position++;
-        *buffer = *c;
+        widget_text[i] = new_text[i];
     }
 
     // write the null terminator

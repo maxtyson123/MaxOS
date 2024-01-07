@@ -84,15 +84,21 @@ void print_boot_header(Console* console){
   // Make the header
   ConsoleArea consoleHeader(console, 0, 0, console -> width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
   ConsoleStream headerStream(&consoleHeader);
-  headerStream << "MaxOS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
 
-  // Calc the length of the header
-  uint32_t headerLength = headerStream.m_cursor_x;
-  uint32_t headerPadding = (console -> width() - headerLength)/2;
-  headerStream.set_cursor(0, 0);
+  // Calculate the header
+  string header = string("MaxOS v") + string(VERSION_STRING) + " [build " + string(BUILD_NUMBER) + "]";
+  int headerPadding = (console -> width() - header.length()) / 2;
 
-  // write the header
-  for(uint32_t i = 0; i < headerPadding; i++){ headerStream << " ";}; headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]"; for(uint32_t i = 0; i < headerPadding; i++){ headerStream << " ";};
+  // Print the headers
+  for(int i = 0; i < headerPadding; i++)
+        headerStream << " ";
+
+  headerStream << header;
+
+  for (int i1 = 0; i1 < headerPadding; ++i1) {
+        headerStream << " ";
+  }
+
 }
 
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
@@ -123,7 +129,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     print_boot_header(&console);
 
     // Print the build info
-    cout << "BUILD INFO: " << VERSION_NAME << " on " << BUILD_DATE.year << "-" << BUILD_DATE.month << "-" << BUILD_DATE.day << " at " << BUILD_DATE.hour << ":" << BUILD_DATE.minute << ":" << BUILD_DATE.second << " " << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n\n";
+    cout << "BUILD INFO: " << VERSION_NAME << " on " << BUILD_DATE.year << "-" << BUILD_DATE.month << "-" << BUILD_DATE.day << " at " << BUILD_DATE.hour << ":" << BUILD_DATE.minute << ":" << BUILD_DATE.second << " " << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
 
     // Check the multiboot flags
     cout << "Checking Multiboot Flags";
@@ -132,6 +138,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "[ DONE ]\n";
 
     // Where the areas should start
+    cout.set_cursor(cout.m_cursor_x, cout.m_cursor_y + 1); //Move the cursor down one (so the header is not overwritten
     uint32_t areaStart = cout.m_cursor_y;
 
     // Make the system setup stream
@@ -196,9 +203,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     //Make the stream on the side for the PCI
     ConsoleArea pciConsoleArea(&console, console.width() - 45, areaStart+1, 45, console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream pciConsoleStream(&pciConsoleArea);
-    console.put_string(console.width() - 45, areaStart,
-                       "                 PCI Devices                 ",
-                       ConsoleColour::LightGrey, ConsoleColour::Black);
+    console.put_string(console.width() - 45, areaStart, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
     
     //PCI
     PeripheralComponentInterconnectController PCIController(&pciConsoleStream);

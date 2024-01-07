@@ -57,16 +57,18 @@ namespace maxOS{
     namespace common
     {
 
+        typedef const char*              vstring;
+
        const uint8_t MAJOR_VERSION  = ${MAJOR_VERSION};
        const uint8_t MINOR_VERSION  = ${MINOR_VERSION};
-       const string VERSION_STRING  = "${MAJOR_VERSION}.${MINOR_VERSION}";
-       const string VERSION_NAME    = "${VERSION_NAME}";
+       const vstring VERSION_STRING  = "${MAJOR_VERSION}.${MINOR_VERSION}";
+       const vstring VERSION_NAME    = "${VERSION_NAME}";
        const int BUILD_NUMBER       = ${BUILD_NUMBER};
        const Time BUILD_DATE        = {${BUILD_YEAR}, ${BUILD_MONTH}, ${BUILD_DAY}, ${BUILD_HOUR}, ${BUILD_MINUTE}, ${BUILD_SECOND}};
-       const string GIT_REVISION    = "${GIT_REVISION}";
-       const string GIT_BRANCH      = "${GIT_BRANCH}";
+       const vstring GIT_REVISION    = "${GIT_REVISION}";
+       const vstring GIT_BRANCH      = "${GIT_BRANCH}";
        const int GIT_COMMIT         = ${GIT_COMMIT};
-       const string GIT_AUTHOR      = "${GIT_AUTHOR}";
+       const vstring GIT_AUTHOR      = "${GIT_AUTHOR}";
 
     }
 

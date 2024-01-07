@@ -50,44 +50,40 @@ void OutputStream::clear() {
  */
 void OutputStream::write(string string_to_write) {
 
-    // Loop until broken
-    while (true) {
 
-        // Switch on the current character
-        switch (*string_to_write) {
+    // Loop through the string
+    for (int i = 0; i < string_to_write.length(); ++i) {
 
-            // If the current character is a newline
-            case '\n':
+      // Switch on the current character
+      switch (string_to_write[i]) {
 
-                // write a newline to the output stream
-                lineFeed();
-                break;
+        // If the current character is a newline
+        case '\n':
 
-            // If the current character is a carriage return
-            case '\r':
+          // write a newline to the output stream
+          lineFeed();
+          break;
 
-                // write a carriage return to the output stream
-                carriageReturn();
-                break;
+        // If the current character is a carriage return
+        case '\r':
 
-            // If the current character is a null terminator
-            case '\0':
-                return;
+          // write a carriage return to the output stream
+          carriageReturn();
+          break;
 
-            // If the current character is any other character
-            default:
+        // If the current character is a null terminator
+        case '\0':
+          return;
 
-                // write the current character to the output stream
-                write_char(*string_to_write);
-                break;
+        // If the current character is any other character
+        default:
 
-        }
+          // write the current character to the output stream
+          write_char(string_to_write[i]);
+          break;
 
-        // Increment the pointer to the next character
-        string_to_write++;
-
+      }
     }
-
 }
 
 /**
