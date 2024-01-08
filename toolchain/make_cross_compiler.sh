@@ -71,7 +71,6 @@ make install-target-libgcc    || fail "Installing libgcc failed"
 #  Leave the build directory
 cd ../../
 
-
 # Make a  build directory for cmake
 mkdir ../cmake-build
 
