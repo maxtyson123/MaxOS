@@ -75,7 +75,7 @@ CPUState *TaskManager::schedule(CPUState *cpuState) {
       m_tasks[m_current_task] ->m_cpu_state = cpuState;
 
     // Switch to the next task (and loop back to the start if needed)
-    if(++m_current_task >= m_tasks.size())
+    if((uint32_t )++m_current_task >= m_tasks.size())
       m_current_task %= m_tasks.size();
 
     // Start the next task

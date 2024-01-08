@@ -156,7 +156,7 @@ bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bu
  * @param interrupt_manager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interrupt_manager, common::OutputStream *error_message_stream)
+void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interrupt_manager)
 {
     for (int bus = 0; bus < 8; ++bus) {
         for (int device = 0; device < 32; ++device) {
@@ -248,8 +248,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x2000:    //am79c971
                 {
-                    amd_am79c973* result = (amd_am79c973*)MemoryManager::s_active_memory_manager
-                          ->malloc(sizeof(amd_am79c973));
+                    amd_am79c973* result = (amd_am79c973*)MemoryManager::s_active_memory_manager ->malloc(sizeof(amd_am79c973));
                     new (result) amd_am79c973(&dev, interrupt_manager);
                     return result;
 

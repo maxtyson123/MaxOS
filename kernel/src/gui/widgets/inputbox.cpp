@@ -3,6 +3,7 @@
 //
 
 #include <gui/widgets/inputbox.h>
+#include <gui/font/amiga_font.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -30,7 +31,7 @@ Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents> *eve
     return event;
 }
 
-void InputBoxEventHandler::on_input_box_text_changed(string new_text) {
+void InputBoxEventHandler::on_input_box_text_changed(string) {
 
 }
 
@@ -38,25 +39,21 @@ void InputBoxEventHandler::on_input_box_text_changed(string new_text) {
 
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : Widget(left, top, width, height),
-  font(AmigaFont()),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
-  border_colour(Colour(0x57, 0x57, 0x57))
+  border_colour(Colour(0x57, 0x57, 0x57)),
+  font((uint8_t*)AMIGA_FONT)
 {
-    // Clear the text buffer
-    widget_text[0] = '\0';
+
 }
 
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
 : Widget(left, top, width, height),
-  font(AmigaFont()),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
-  border_colour(Colour(0x57, 0x57, 0x57))
+  border_colour(Colour(0x57, 0x57, 0x57)),
+  font((uint8_t*)AMIGA_FONT)
 {
-
-    // Clear the text buffer
-    widget_text[0] = '\0';
 
     // Update the text
     update_text(text);
@@ -122,8 +119,7 @@ void InputBox::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
     // Draw the text
     common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
-    font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc,
-                   &widget_text[0], textArea);
+    font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, m_widget_text, textArea);
 }
 
 void InputBox::on_focus() {
@@ -140,7 +136,7 @@ void InputBox::on_focus_lost() {
     invalidate();
 }
 
-void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
+void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 
     // Handle the key press
     switch(keyDownCode)
@@ -152,12 +148,17 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 
             cursor_position--;
             // no break - we move the cursor to the left and use the <Delete> code
+            [[fallthrough]];
         }
         case KeyCode::deleteKey:
         {
             // Move the text to the left
-            for(uint32_t i = cursor_position; widget_text[i] != '\0'; ++i)
-              widget_text[i] = widget_text[i+1];
+            for (int i = cursor_position; i < m_widget_text.length(); ++i)
+              m_widget_text[i] = m_widget_text[i+1];
+
+            // Put a null character at the end of the string
+            m_widget_text[m_widget_text.length() - 1] = '\0';
+
             break;
         }
         case KeyCode::leftArrow:
@@ -171,7 +172,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
         {
 
             // If the cursor is not at the end of the text, move it to the right
-            if(widget_text[cursor_position] != '\0')
+            if(m_widget_text[cursor_position] != '\0')
               cursor_position++;
             break;
         }
@@ -181,23 +182,27 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
             // If the key is a printable character, add it to the text
             if(31 < keyDownCode && keyDownCode < 127)
             {
-
                 uint32_t length = cursor_position;
 
                 // Find the length of the text buffer
-                while (widget_text[length] != '\0') {
-                    ++length;
+                while (m_widget_text[length] != '\0') {
+                  ++length;
+                }
+
+                // Check if we need to make space for the new character
+                if (length >= m_widget_text.length()) {
+                  m_widget_text += " ";
                 }
 
                 // Shift elements to the right
                 while (length > cursor_position) {
-                  widget_text[length + 1] = widget_text[length];
-                    --length;
+                  m_widget_text[length + 1] = m_widget_text[length];
+                  --length;
                 }
 
                 // Insert the new character
-                widget_text[cursor_position + 1] = widget_text[cursor_position];
-                widget_text[cursor_position] = (uint8_t)keyDownCode;
+                m_widget_text[cursor_position + 1] = m_widget_text[cursor_position];
+                m_widget_text[cursor_position] = (uint8_t)keyDownCode;
                 cursor_position++;
             }else{
 
@@ -213,26 +218,14 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 
     // Fire the text changed event
     if(keyDownCode != KeyCode::leftArrow && keyDownCode != KeyCode::rightArrow)
-      raise_event(new InputBoxTextChangedEvent(&widget_text[0]));
+      raise_event(new InputBoxTextChangedEvent(m_widget_text));
 
 }
 
 void InputBox::update_text(string new_text) {
 
-    // Rewrite the text, start at the beginning
-    cursor_position = 0;
-
-    // Copy the new text into the widget text
-    for(char* c = (char*)new_text, *buffer = &widget_text[0]; *c != '\0'; ++c, buffer++)
-    {
-
-        // Update the cursor m_position and the buffer
-        cursor_position++;
-        *buffer = *c;
-    }
-
-    // write the null terminator
-    widget_text[cursor_position] = '\0';
+    m_widget_text.copy(new_text);
+    cursor_position = m_widget_text.length();
 
     // Redraw the widget
     invalidate();
@@ -243,7 +236,7 @@ void InputBox::update_text(string new_text) {
 }
 
 string InputBox::get_text() {
-    return &widget_text[0];
+    return m_widget_text;
 }
 
 /// ___ Events ___ ///

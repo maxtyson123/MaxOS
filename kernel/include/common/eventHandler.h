@@ -151,6 +151,10 @@ namespace maxOS{
             for(auto& handler : m_handlers) {
                 results.push_back(handler->on_event(event));
             }
+
+            // Free the memory used by the event
+            delete event;
+
             return results;
         }
     }

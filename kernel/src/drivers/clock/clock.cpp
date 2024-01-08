@@ -24,7 +24,7 @@ ClockEventHandler::~ClockEventHandler() {
  * @param time The current time
  *
  */
-void ClockEventHandler::on_time(common::Time const &time) {
+void ClockEventHandler::on_time(common::Time const &) {
 
 }
 
@@ -90,13 +90,10 @@ void Clock::handle_interrupt() {
     time.day = binary_representation(read_hardware_clock(0x7));                      // Register 7 is the day
     time.hour = binary_representation(read_hardware_clock(0x4));                     // Register 4 is the hour
     time.minute = binary_representation(read_hardware_clock(0x2));                   // Register 2 is the minute
-    time.second = binary_representation(
-read_hardware_clock(0x0));                   // Register 0 is the second
+    time.second = binary_representation(read_hardware_clock(0x0));                   // Register 0 is the second
 
     //Raise the clock event
-    TimeEvent* event = new TimeEvent(&time);
-    raise_event(event);
-    //TODO: delete event;
+    raise_event(new TimeEvent(&time));
 }
 
 

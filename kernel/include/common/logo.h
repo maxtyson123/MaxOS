@@ -1,6 +1,8 @@
 // Ignore warnings for this file
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+#pragma GCC diagnostic ignored "-Wtrigraphs"
+
 
 /*  GIMP header image file format (RGB): C:\Users\98max\CLionProjects\max-os\kernel\include\common\logo.h  */
 

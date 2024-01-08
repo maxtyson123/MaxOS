@@ -5,12 +5,12 @@
 #ifndef MAXOS_FILESYSTEM_FAT32_H
 #define MAXOS_FILESYSTEM_FAT32_H
 
-#include <stdint.h>
-#include <drivers/ata.h>
-#include <filesystem/filesystem.h>
-#include <common/vector.h>
-#include <memory/memorymanagement.h>
+#include "drivers/disk/ata.h"
 #include <common/outputStream.h>
+#include <common/vector.h>
+#include <filesystem/filesystem.h>
+#include <memory/memorymanagement.h>
+#include <stdint.h>
 
 namespace maxOS{
 

@@ -56,8 +56,7 @@ namespace maxOS {
             class Clock: public Driver, public hardwarecommunication::InterruptHandler, public common::EventManager<ClockEvents>{
                 private:
 
-                  // Ensure that the compiler does not optimize this variable out of the code (volatile)
-                  volatile uint64_t m_ticks;
+                  uint64_t m_ticks;
 
                 protected:
                   

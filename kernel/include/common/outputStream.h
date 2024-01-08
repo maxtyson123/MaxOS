@@ -126,7 +126,7 @@ namespace maxOS{
          * @tparam Type The type of the elements that will be written to the stream.
          * @param write_element The element that will be written to the stream.
          */
-        template<class Type> void GenericOutputStream<Type>::write(Type write_element) {
+        template<class Type> void GenericOutputStream<Type>::write(Type) {
 
         }
 

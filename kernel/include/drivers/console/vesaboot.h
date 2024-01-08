@@ -9,6 +9,7 @@
 #include <gui/font.h>
 #include <drivers/driver.h>
 #include <drivers/console/console.h>
+#include <common/logo.h>
 
 namespace maxOS{
 
@@ -22,6 +23,11 @@ namespace maxOS{
              */
             class VESABootConsole : public Driver, public Console
             {
+
+                protected:
+                    uint16_t* m_video_memory;
+                    common::GraphicsContext* m_graphics_context;
+                    gui::Font m_font;
 
                 public:
                     VESABootConsole(common::GraphicsContext*);
@@ -40,10 +46,7 @@ namespace maxOS{
 
                     common::Colour console_colour_to_vesa(ConsoleColour);
 
-                protected:
-                    uint16_t* m_video_memory;
-                    common::GraphicsContext* m_graphics_context;
-                    gui::AmigaFont m_font;
+                    void print_logo();
             };
 
         }

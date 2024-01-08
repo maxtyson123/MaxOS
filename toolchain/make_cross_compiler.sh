@@ -68,8 +68,11 @@ make all-target-libgcc        || fail "Building libgcc failed"
 make install-gcc              || fail "Installing gcc failed"
 make install-target-libgcc    || fail "Installing libgcc failed"
 
+#  Leave the build directory
+cd ../../
+
 # Make a  build directory for cmake
-mkdir cmake-build
+mkdir ../cmake-build
 
 # Setup the first version of the kernel
 ./version.sh --force

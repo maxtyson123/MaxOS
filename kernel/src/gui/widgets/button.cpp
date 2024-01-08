@@ -3,6 +3,7 @@
 //
 
 #include <gui/widgets/button.h>
+#include <gui/font/amiga_font.h>
 
 using namespace maxOS::common;
 using namespace maxOS::gui;
@@ -49,7 +50,7 @@ Event<ButtonEvents>* ButtonEventHandler::on_event(Event<ButtonEvents> *event) {
  *
  * @param source The source of the event
  */
-void ButtonEventHandler::on_button_pressed(Button *source) {
+void ButtonEventHandler::on_button_pressed(Button*) {
 
 }
 
@@ -58,7 +59,7 @@ void ButtonEventHandler::on_button_pressed(Button *source) {
  *
  * @param source The source of the event
  */
-void ButtonEventHandler::on_button_released(Button *source) {
+void ButtonEventHandler::on_button_released(Button*) {
 
 }
 
@@ -68,11 +69,11 @@ void ButtonEventHandler::on_button_released(Button *source) {
 
 Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
 : Widget(left, top, width, height),
-  font(AmigaFont()),
-  text(text),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
-  border_colour(Colour(0x57, 0x57, 0x57))
+  border_colour(Colour(0x57, 0x57, 0x57)),
+  font((uint8_t*)AMIGA_FONT),
+  text(text)
 {
 
 }

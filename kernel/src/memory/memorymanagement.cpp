@@ -9,8 +9,12 @@ using namespace maxOS::memory;
 
 MemoryManager* MemoryManager::s_active_memory_manager = 0;
 
-MemoryManager::MemoryManager(size_t start, size_t size)
+MemoryManager::MemoryManager(system::multiboot_info_t* boot_info)
 {
+
+
+    size_t  heap = 10*1024*1024;
+    size_t  size = boot_info->mem_upper*1024 - heap - 10*1024;
 
     s_active_memory_manager = this;
 
@@ -21,7 +25,7 @@ MemoryManager::MemoryManager(size_t start, size_t size)
 
     }else{
 
-        this ->m_first_memory_chunk = (MemoryChunk*)start;
+        this ->m_first_memory_chunk = (MemoryChunk*)heap;
         m_first_memory_chunk-> allocated = false;
         m_first_memory_chunk-> prev = 0;
         m_first_memory_chunk-> next = 0;
@@ -146,7 +150,7 @@ int MemoryManager::memory_used() {
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
 
-void* operator new(size_t size){
+void* operator new(size_t size) throw(){
 
     // Use the memory manager to allocate the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
@@ -156,7 +160,7 @@ void* operator new(size_t size){
 
 }
 
-void* operator new[](size_t size){
+void* operator new[](size_t size) throw(){
 
     // Use the memory manager to allocate the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
@@ -166,19 +170,18 @@ void* operator new[](size_t size){
 
 }
 
-void* operator new(size_t size, void* pointer){
+void* operator new(size_t, void* pointer){
 
     return pointer;
 
 }
-void* operator new[](size_t size, void* pointer){
+void* operator new[](size_t, void* pointer){
 
     return pointer;
 
 }
 
-// NOTE: The size_t parameter is ignored, compiler was just complaining
-void operator delete(void* pointer, size_t size){
+void operator delete(void* pointer){
 
     // Use the memory manager to free the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
@@ -186,7 +189,24 @@ void operator delete(void* pointer, size_t size){
 
 }
 
-void operator delete[](void* pointer, size_t size){
+void operator delete[](void* pointer){
+
+    // Use the memory manager to free the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+
+}
+
+// NOTE: The size_t parameter is ignored, compiler was just complaining
+void operator delete(void* pointer, size_t){
+
+    // Use the memory manager to free the memory
+    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+
+}
+
+void operator delete[](void* pointer, size_t){
 
     // Use the memory manager to free the memory
     if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)

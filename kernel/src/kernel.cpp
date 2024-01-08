@@ -1,6 +1,5 @@
 //Common
 #include <stdint.h>
-#include <common/logo.h>
 #include <common/version.h>
 
 //Hardware com
@@ -8,16 +7,16 @@
 #include <hardwarecommunication/pci.h>
 
 //Drivers
-#include <drivers/driver.h>
-#include <drivers/peripherals/keyboard.h>
-#include <drivers/peripherals/mouse.h>
-#include <drivers/video/video.h>
-#include <drivers/ata.h>
-#include <drivers/ethernet/amd_am79c973.h>
-#include <drivers/video/vesa.h>
+#include "drivers/disk/ata.h"
 #include <drivers/console/console.h>
 #include <drivers/console/textmode.h>
 #include <drivers/console/vesaboot.h>
+#include <drivers/driver.h>
+#include <drivers/ethernet/amd_am79c973.h>
+#include <drivers/peripherals/keyboard.h>
+#include <drivers/peripherals/mouse.h>
+#include <drivers/video/vesa.h>
+#include <drivers/video/video.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -74,88 +73,73 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
-//TODO: Rewrite multiboot to use the one from the manual: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Example-OS-code
+
+bool check_multiboot_flag(uint32_t flags, uint32_t bit)
+{
+    return (flags & (1 << bit)) > 0;
+}
+
+void print_boot_header(Console* console){
+
+  // Make the header
+  ConsoleArea consoleHeader(console, 0, 0, console -> width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
+  ConsoleStream headerStream(&consoleHeader);
+
+  // Calculate the header
+  string header = string("MaxOS v") + string(VERSION_STRING) + " [build " + string(BUILD_NUMBER) + "]";
+  int headerPadding = (console -> width() - header.length()) / 2;
+
+  // Print the headers
+  for(int i = 0; i < headerPadding; i++)
+        headerStream << " ";
+
+  headerStream << header;
+
+  for (int i1 = 0; i1 < headerPadding; ++i1) {
+        headerStream << " ";
+  }
+
+}
+
 extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
 {
 
-    // Memory Management has to be set up m_first_memory_chunk so that the video driver can use it
-    uint32_t memupper = multibootHeader.mem_upper;
-    size_t  heap = 10*1024*1024;                                                          //Start at 10MB
-    size_t  memSize = memupper*1024 - heap - 10*1024;                                    //Convert memupper into MB, then subtract the hep and some padding
-    MemoryManager memoryManager(heap, memSize);                                //Memory Mangement
+    // Get the multiboot info structure
+    Multiboot multiboot((multiboot_info_t*)&multibootHeader, multiboot_magic);
+
+    // Set up the memory manager
+    MemoryManager memoryManager(multiboot.get_boot_info());
 
     // Initialise the VESA Driver
-    VideoElectronicsStandardsAssociation vesa((multiboot_info_t *)&multibootHeader);
+    VideoElectronicsStandardsAssociation vesa(multiboot.get_boot_info());
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
-    videoDriver->set_mode((int)multibootHeader.framebuffer_width,
-                          (int)multibootHeader.framebuffer_height,
-                          (int)multibootHeader.framebuffer_bpp);
+    videoDriver->set_mode((int)multiboot.get_boot_info() -> framebuffer_width,
+                          (int)multiboot.get_boot_info() -> framebuffer_height,
+                          (int)multiboot.get_boot_info() -> framebuffer_bpp);
 
     // Initialise Console
     VESABootConsole console(&vesa);
     console.clear();
+    console.print_logo();
 
-    // Check if the bootloader is m_valid
-    if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
-    {
-      console.put_string(0, 0, "Invalid bootloader", ConsoleColour::Red,
-                         ConsoleColour::Black);
-        asm("hlt");
-    }
-
-    // Print the logo to center of the screen
-    string logo = header_data;
-    uint32_t centerX = videoDriver->get_width()/2;
-    uint32_t centerY = videoDriver->get_height()/2;
-    for (int logoY = 0; logoY < logo_height; ++logoY) {
-        for (int logoX = 0; logoX < logo_width; ++logoX) {
-
-            // Store the pixel in the logo
-            uint8_t pixel[3] = {0};
-
-            // Get the pixel from the logo
-            LOGO_HEADER_PIXEL(logo, pixel);
-
-            // Draw the pixel
-            videoDriver->put_pixel(
-                centerX - logo_width / 2 + logoX,
-                centerY - logo_height / 2 + logoY,
-                common::Colour(pixel[0], pixel[1], pixel[2]));
-        }
-    }
-
-
-    // Make the header
-    ConsoleArea consoleHeader(&console, 0, 0, console.width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
-    ConsoleStream headerStream(&consoleHeader);
-    headerStream << "MaxOSdd v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]";
-
-    // Calc the length of the header
-    uint32_t headerLength = headerStream.m_cursor_x;
-    uint32_t headerPadding = (console.width() - headerLength)/2;
-    headerStream.set_cursor(0, 0);
-
-    // write the header
-    for(uint32_t i = 0; i < headerPadding; i++) headerStream << " "; headerStream << "Max OS v" << VERSION_STRING <<" [build " << BUILD_NUMBER << "]"; for(uint32_t i = 0; i < headerPadding; i++) headerStream << " ";
-
-    // Make a main console area at the top of the screen
-    ConsoleArea mainConsoleArea(&console, 0, 1, console.width(),
-                                console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    // Create a stream for the console
+    ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
-    // Print the build info
-    cout << "BUILD INFO: " << VERSION_NAME << " on "
-                      << BUILD_DATE.year << "-"
-                      << BUILD_DATE.month << "-"
-                      << BUILD_DATE.day
-                      << " at " << BUILD_DATE.hour << ":"
-                      << BUILD_DATE.minute << ":" << BUILD_DATE.second << " "
-                      << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
-    cout << "\n";
-    cout << "\n";
+    // Print the header
+    print_boot_header(&console);
 
+    // Print the build info
+    cout << "BUILD INFO: " << VERSION_NAME << " on " << BUILD_DATE.year << "-" << BUILD_DATE.month << "-" << BUILD_DATE.day << " at " << BUILD_DATE.hour << ":" << BUILD_DATE.minute << ":" << BUILD_DATE.second << " " << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
+
+    // Check the multiboot flags
+    cout << "Checking Multiboot Flags";
+    if(!multiboot.check_flags(&cout))
+        asm("hlt");
+    cout << "[ DONE ]\n";
 
     // Where the areas should start
+    cout.set_cursor(cout.m_cursor_x, cout.m_cursor_y + 1); //Move the cursor down one (so the header is not overwritten
     uint32_t areaStart = cout.m_cursor_y;
 
     // Make the system setup stream
@@ -169,7 +153,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     systemSetupHeaderStream << ".";
 
     // Print that the memory has been set up
-    cout << "Memory: " << (int)memoryManager.memory_used()/1000000 <<  "MB used, " << (int)memSize/1000000 << "MB available\n";
     cout << "-- Set Up Memory Management\n";
     systemSetupHeaderStream << ".";
 
@@ -221,9 +204,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     //Make the stream on the side for the PCI
     ConsoleArea pciConsoleArea(&console, console.width() - 45, areaStart+1, 45, console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream pciConsoleStream(&pciConsoleArea);
-    console.put_string(console.width() - 45, areaStart,
-                       "                 PCI Devices                 ",
-                       ConsoleColour::LightGrey, ConsoleColour::Black);
+    console.put_string(console.width() - 45, areaStart, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
     
     //PCI
     PeripheralComponentInterconnectController PCIController(&pciConsoleStream);
@@ -242,7 +223,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
     {
         cout << ".";
-        (*selector)->select_drivers(&driverManager, &interrupts, 0);
+        (*selector)->select_drivers(&driverManager, &interrupts);
     }
     cout << " Found\n";
     deviceSetupHeaderStream << ".";
@@ -353,8 +334,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     networkSetupHeaderStream << "[ DONE ]";
 
-    cout << "Its working now!? v4.7";
-
+#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connect_event_handler(&desktop);

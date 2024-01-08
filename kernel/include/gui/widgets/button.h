@@ -83,7 +83,7 @@ namespace maxOS {
                     common::Colour background_colour;
                     common::Colour foreground_colour;
                     common::Colour border_colour;
-                    gui::AmigaFont font;
+                    gui::Font font;
                     string text;
             };
         }

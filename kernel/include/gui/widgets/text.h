@@ -23,12 +23,11 @@ namespace maxOS {
             class Text : public Widget{
 
             protected:
-                char m_widget_text[256];    //TODO: Replace with a buffer in memory later
+                string m_widget_text;
 
             public:
 
-                //TODO: Redo so that it uses some generified m_font class
-                AmigaFont font;
+                gui::Font font;
 
                 common::Colour foreground_colour;
                 common::Colour background_colour;

@@ -3,6 +3,7 @@
 //
 
 #include <drivers/console/vesaboot.h>
+#include <gui/font/amiga_font.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -15,7 +16,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 : Driver(),
   Console(),
   m_graphics_context(graphics_context),
-  m_font(AmigaFont())
+  m_font((uint8_t*)AMIGA_FONT)
 {
 
     // Malloc the video memory
@@ -67,7 +68,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
 
     // Convert the char into a string
-    char* s = " ";
+    char s[] = " ";
     s[0] = c;
 
     Colour foreground = console_colour_to_vesa(get_foreground_color(x, y));
@@ -185,7 +186,7 @@ ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
  * @brief Converts a ConsoleColour to a Colour
  *
  * @param colour The ConsoleColour to convert
- * @return The Colour
+ * @return The Colour or black if the ConsoleColour is invalid
  */
 Colour VESABootConsole::console_colour_to_vesa(ConsoleColour colour) {
     switch (colour) {
@@ -238,4 +239,36 @@ Colour VESABootConsole::console_colour_to_vesa(ConsoleColour colour) {
         case White:
             return Colour(255, 255, 255);
     }
+
+    return Colour(0, 0, 0);
+}
+
+/**
+ * @brief Prints the logo to the center of the screen
+ */
+void VESABootConsole::print_logo() {
+
+      // Load the logo
+      const char* logo = header_data;
+
+      // Find the center of the screen
+      uint32_t center_x = m_graphics_context->get_width()/2;
+      uint32_t center_y = m_graphics_context->get_height()/2;
+
+      // Draw the logo
+      for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
+        for (uint32_t logoX = 0; logoX < logo_width; ++logoX) {
+
+          // Store the pixel in the logo
+          uint8_t pixel[3] = {0};
+
+          // Get the pixel from the logo
+          LOGO_HEADER_PIXEL(logo, pixel);
+
+          // Draw the pixel
+          m_graphics_context->put_pixel(center_x - logo_width / 2 + logoX,
+                                        center_y - logo_height / 2 + logoY,
+                                    common::Colour(pixel[0], pixel[1], pixel[2]));
+        }
+      }
 }

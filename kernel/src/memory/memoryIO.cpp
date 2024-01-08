@@ -124,6 +124,7 @@ uint64_t MemIO64Bit::read(){
     return *((volatile uint64_t*)(m_address));
 }
 
+
 /**
  * @brief Copies a block of memory from one location to another
  *
@@ -134,7 +135,7 @@ uint64_t MemIO64Bit::read(){
  * @param num The number of bytes to copy
  * @return The destination
  */
-void* maxOS::memory::memcpy(void* destination, const void* source, uint32_t num) {
+void* memcpy(void* destination, const void* source, uint32_t num) {
 
     unsigned char* dst = (unsigned char*) destination;
     const unsigned char* src = (const unsigned char*) source;
@@ -152,7 +153,7 @@ void* maxOS::memory::memcpy(void* destination, const void* source, uint32_t num)
  * @param num The number of bytes to fill
  * @return The pointer to the block of memory
  */
-void* maxOS::memory::memset(void* ptr, int value, uint32_t num) {
+void* memset(void* ptr, int value, uint32_t num) {
     unsigned char* dst = (unsigned char*) ptr;
     for (size_t i = 0; i < num; i++)
         dst[i] = (unsigned char) value;
@@ -167,7 +168,7 @@ void* maxOS::memory::memset(void* ptr, int value, uint32_t num) {
  * @param num The number of bytes to copy
  * @return The destination
  */
-void* maxOS::memory::memmove(void* destination, const void* source, uint32_t num) {
+void* memmove(void* destination, const void* source, uint32_t num) {
     unsigned char* dst = (unsigned char*) destination;
     const unsigned char* src = (const unsigned char*) source;
     if (dst < src) {
@@ -188,7 +189,7 @@ void* maxOS::memory::memmove(void* destination, const void* source, uint32_t num
  * @param num The number of bytes to compare
  * @return 0 if the blocks of memory are equal, -1 if ptr1 < ptr2, 1 if ptr1 > ptr2
  */
-int maxOS::memory::memcmp(const void* ptr1, const void* ptr2, uint32_t num) {
+int memcmp(const void* ptr1, const void* ptr2, uint32_t num) {
   const unsigned char *p1 = (const unsigned char *)ptr1;
   const unsigned char *p2 = (const unsigned char *)ptr2;
   for (size_t i = 0; i < num; i++) {
@@ -198,4 +199,12 @@ int maxOS::memory::memcmp(const void* ptr1, const void* ptr2, uint32_t num) {
       return 1;
   }
   return 0;
+}
+
+// Make sure the memory functions are used
+void memFunctions() {
+    memcpy(nullptr, nullptr, 0);
+    memset(nullptr, 0, 0);
+    memmove(nullptr, nullptr, 0);
+    memcmp(nullptr, nullptr, 0);
 }

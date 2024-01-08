@@ -5,11 +5,50 @@
 #ifndef MAXOS_STRING_H
 #define MAXOS_STRING_H
 
+#include <stdint.h>
 
 namespace maxOS {
 
-    // Todo make a string class
-    typedef const char*              string;
+    class String {
+        private:
+          char* m_string;
+          int m_length;
+
+          int lex_value(String const &other) const;
+
+        public:
+
+          String();
+          String(char const *string);
+          String(String const &other);
+          String(int value);
+          ~String();
+
+          void copy(String const &other);
+
+          int length() const;
+          char* c_str();
+          const char* c_str() const;
+
+          String &operator = (String const &other);
+          String operator + (String const &other) const;
+          String &operator += (String const &other);
+
+          bool operator == (String const &other) const;
+          bool operator != (String const &other) const;
+
+          bool operator < (String const &other) const;
+          bool operator > (String const &other) const;
+
+          bool operator <= (String const &other) const;
+          bool operator >= (String const &other) const;
+
+          char& operator [] (int index);
+          char& operator [] (int index) const;
+
+    };
+
+    typedef String              string;
 
 }
 

@@ -5,7 +5,7 @@
 #include <filesystem/msdospart.h>
 
 using namespace maxOS;
-using namespace maxOS::drivers;
+using namespace maxOS::drivers::disk;
 using namespace maxOS::common;
 using namespace maxOS::filesystem;
 
@@ -14,7 +14,7 @@ using namespace maxOS::filesystem;
  *
  * @param hd The hard disk to read the partition table from
  */
-void MSDOSPartitionTable::read_partitions(drivers::AdvancedTechnologyAttachment *hd) {
+void MSDOSPartitionTable::read_partitions(AdvancedTechnologyAttachment *hd) {
 
     // read the MBR from the hard disk
     MasterBootRecord masterBootRecord;

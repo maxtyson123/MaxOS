@@ -76,12 +76,12 @@ void Desktop::invert_mouse_cursor() {
     //TODO: Get image drawing going and draw a proper mouse
 
     // Draw the horizontal line
-    for (int x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
+    for (uint32_t x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
       m_graphics_context->invert_pixel(x, m_mouse_y);
     }
 
     // Draw the vertical line
-    for (int y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
+    for (uint32_t y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
       m_graphics_context->invert_pixel(m_mouse_x, y);
     }
 }
@@ -175,7 +175,7 @@ void Desktop::add_child(Widget*child_widget) {
  *
  * @param time The time when the event occurred
  */
-void Desktop::on_time(common::Time const &time) {
+void Desktop::on_time(common::Time const &) {
 
     // Check if anything is invalid and needs to be redrawn
     if(m_invalid_areas.empty())

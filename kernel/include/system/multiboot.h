@@ -22,6 +22,7 @@
 #ifndef MULTIBOOT_HEADER
 #define MULTIBOOT_HEADER 1
 
+#include "common/outputStream.h"
 namespace maxOS{
     namespace system{
 
@@ -275,6 +276,27 @@ namespace maxOS{
         };
 
 #endif /* ! ASM_FILE */
+
+
+        /**
+         * @class Multiboot
+         * @brief Parses the multiboot header and provides access to the multiboot info structure, checks if the multiboot header is valid
+         */
+        class Multiboot {
+
+          protected:
+                multiboot_info_t* m_boot_info;
+                uint32_t m_magic;
+
+                bool check_flag(uint32_t flag, uint32_t bit);
+
+          public:
+            Multiboot(multiboot_info_t* boot_info, uint32_t magic);
+            ~Multiboot();
+
+            multiboot_info_t* get_boot_info();
+            bool check_flags(common::OutputStream* error_stream);
+        };
 
     }
 }

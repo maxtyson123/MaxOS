@@ -2,15 +2,17 @@
 // Created by 98max on 24/10/2022.
 //
 
-#include <drivers/ata.h>
+#include <drivers/disk/ata.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
 using namespace maxOS::hardwarecommunication;
 using namespace maxOS::drivers;
+using namespace maxOS::drivers::disk;
 
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master, OutputStream*output_stream)
-: m_data_port(port_base),
+: Driver(output_stream),
+  m_data_port(port_base),
   m_error_port(port_base + 1),
   m_sector_count_port(port_base + 2),
   m_LBA_low_port(port_base + 3),
@@ -78,10 +80,8 @@ void AdvancedTechnologyAttachment::identify() {
   // read the data and print it
   for (uint16_t i = 0; i < 256; ++i) {
       uint16_t data = m_data_port.read();
-      char *text = "  \0";
-      text[0] = (data >> 8) & 0xFF;
-      text[1] = data & 0xFF;
-      ata_message_stream-> write(text);
+      ata_message_stream-> write(" 0x");
+      ata_message_stream-> write_hex(data);
   }
 }
 
@@ -210,4 +210,30 @@ void AdvancedTechnologyAttachment::flush() {
 
 }
 
+/**
+ * @brief Activate the ATA device
+ */
+void AdvancedTechnologyAttachment::activate() {
+  Driver::activate();
+}
 
+/**
+ * @brief Get the device name
+ *
+ * @return The name of the device
+ */
+string AdvancedTechnologyAttachment::get_device_name() {
+
+    return "Advanced Technology Attachment";
+
+}
+
+/**
+ * @brief Get the vendor name
+ *
+ * @return The name of the vendor
+ */
+string AdvancedTechnologyAttachment::get_vendor_name() {
+
+    return "IDE";
+}

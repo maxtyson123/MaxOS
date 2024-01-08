@@ -29,7 +29,7 @@ KeyboardEventHandler::~KeyboardEventHandler() {
  * @param key_down_code The keycode of the key that was pressed
  * @param key_down_state The state of the keyboard when the key was pressed
  */
-void KeyboardEventHandler::on_key_down(KeyCode key_down_code, KeyboardState key_down_state)
+void KeyboardEventHandler::on_key_down(KeyCode, KeyboardState)
 {
 }
 
@@ -39,7 +39,7 @@ void KeyboardEventHandler::on_key_down(KeyCode key_down_code, KeyboardState key_
  * @param key_up_code The keycode of the key that was released
  * @param key_up_state The state of the keyboard when the key was released
  */
-void KeyboardEventHandler::on_key_up(KeyCode key_up_code, KeyboardState key_up_state)
+void KeyboardEventHandler::on_key_up(KeyCode, KeyboardState)
 {
 }
 
@@ -232,7 +232,7 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
     bool should_be_upper_case = is_shifting != this ->m_keyboard_state.caps_lock;
 
 
-    // TODO: Probabbly a better way to do this
+    // TODO: Probabbly a better way to do this (investigate when adding more keyboard layouts)
     if(keyType == 0)
     switch ((KeyCodeEN_US)scan_code) {
 
@@ -297,13 +297,6 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
         case KeyCodeEN_US::scrollLock:
             onKeyRead(released, this ->m_keyboard_state, KeyCode::scrollLock);
             break;
-
-        /*
-         * TODO: Implement pause/break, it conflicts with numlock, I prefer numlock so that is why it is not implemented
-        case KeyCodeEN_US::pauseBreak:
-            onKeyRead(released, this -> m_keyboard_state, KeyCode::pauseBreak);
-            break;
-        */
 
         // Second row
         case KeyCodeEN_US::squigglyLine:

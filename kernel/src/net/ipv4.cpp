@@ -28,11 +28,11 @@ InternetProtocolAddressResolver::~InternetProtocolAddressResolver() {
 
 }
 
-MediaAccessControlAddress InternetProtocolAddressResolver::Resolve(InternetProtocolAddress address) {
+MediaAccessControlAddress InternetProtocolAddressResolver::Resolve(InternetProtocolAddress) {
     return 0xFFFFFFFFFFFF; // the broadcast address
 }
 
-void InternetProtocolAddressResolver::Store(InternetProtocolAddress internetProtocolAddress, MediaAccessControlAddress mediaAccessControlAddress) {
+void InternetProtocolAddressResolver::Store(InternetProtocolAddress, MediaAccessControlAddress) {
 
 }
 
@@ -62,10 +62,10 @@ InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() {
  * @param size The size of the IP packet.
  * @return True if the packet was handled, false otherwise.
  */
-bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(maxOS::net::InternetProtocolAddress sourceIP,
-                                                                   maxOS::net::InternetProtocolAddress destinationIP,
-                                                                   uint8_t *payloadData,
-                                                                   uint32_t size) {
+bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(maxOS::net::InternetProtocolAddress,
+                                                                   maxOS::net::InternetProtocolAddress,
+                                                                   uint8_t *,
+                                                                   uint32_t) {
     return false;
 }
 
@@ -125,7 +125,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
     //Only handle if it is for this device
     if(ipMessage -> destinationIP == GetInternetProtocolAddress())
     {
-        int length = ipMessage -> totalLength;                          //Get length of the message
+        uint32_t length = ipMessage -> totalLength;                          //Get length of the message
         if(length > size)                                               //Check if the length is bigger than the size of the message
             length = size;                                              //If so, set length to size (this stops heartbleed attacks as it will not read past the end of the message, which the attacker could have filled with data)
 
@@ -195,9 +195,9 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
     message -> checksum = Checksum((uint16_t*)message, sizeof(InternetProtocolV4Header));                                             //Calculate checksum
 
     //Copy data
-    uint8_t* databuffer = buffer + sizeof(InternetProtocolV4Header);                                                                                  //Get pointer to the data
-    for(int i = 0; i < size; i++)                                                                                                                            //Loop through data
-        databuffer[i] = data[i];                                                                                                                             //Copy data
+    uint8_t* data_buffer = buffer + sizeof(InternetProtocolV4Header);                                                                                  //Get pointer to the data
+    for(uint32_t i = 0; i < size; i++)                                                                                                                            //Loop through data
+      data_buffer[i] = data[i];                                                                                                                             //Copy data
 
     //Check if the destination is on the same subnet, The if condition determines if the destination device is on the same Local network as the source device . and if they are not on the same local network then we resolve the ip address of the gateway .
     InternetProtocolAddress route = dstIP_BE;                                                                                                                               //Set route to destination IP by default
@@ -222,11 +222,11 @@ uint16_t InternetProtocolHandler::Checksum(uint16_t *data, uint32_t lengthInByte
 
     uint32_t temp = 0;                                                                             //Init sum
 
-    for(int i = 0; i < lengthInBytes/2; i++)                                                       //Loop through data (/2 bc bytes)
+    for(uint32_t i = 0; i < lengthInBytes/2; i++)                                                       //Loop through data (/2 bc bytes)
         temp += ((data[i] & 0xFF00) >> 8) | ((data[i] & 0x00FF) << 8);                             //Add data to sum in big endian
 
     if(lengthInBytes % 2)                                                                          //If there is an odd number of bytes
-        temp += ((uint16_t)((string)data)[lengthInBytes-1]) << 8;                                   //Add the last byte to the sum
+        temp += ((uint16_t)((char*)data)[lengthInBytes-1]) << 8;                                   //Add the last byte to the sum
 
     while(temp & 0xFFFF0000)                                                                       //While there is a carry
         temp = (temp & 0xFFFF) + (temp >> 16);                                                     //Add the carry to the sum
@@ -254,19 +254,15 @@ InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     uint8_t currentDigit = 0;
     for(int i = 0; i < 4; i++)
         digits[i] = 0;
-    for(string i = (string)address; *i != '\0'; ++i)
-    {
-        if('0' <= *i && *i <= '9')
-        {
-            digits[currentDigit] = digits[currentDigit] * 10 + *i - '0';
-        }
-        else
-        {
-            if(currentDigit >= 3)
-                break;
+
+    for(int i = 0; i < address.length(); i++) {
+        if(address[i] == '.') {
             currentDigit++;
+            continue;
         }
 
+        digits[currentDigit] *= 10;
+        digits[currentDigit] += address[i] - '0';
     }
 
     return CreateInternetProtocolAddress(digits[0], digits[1], digits[2], digits[3]);

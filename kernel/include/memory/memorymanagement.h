@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <system/multiboot.h>
 
 namespace maxOS{
 
@@ -38,7 +39,7 @@ namespace maxOS{
           public:
               static MemoryManager* s_active_memory_manager;
 
-              MemoryManager(size_t start, size_t size);
+              MemoryManager(system::multiboot_info_t* boot_info);
               ~MemoryManager();
 
               void* malloc(size_t size);
@@ -51,12 +52,15 @@ namespace maxOS{
 
 
 
-void* operator new(size_t size);
-void* operator new[](size_t size);
+void* operator new(size_t size) throw();
+void* operator new[](size_t size) throw();
 
 //Placement New
 void* operator new(size_t size, void* pointer);
 void* operator new[](size_t size, void* pointer);
+
+void operator delete(void* pointer);
+void operator delete[](void* pointer);
 
 void operator delete(void* pointer, size_t size);
 void operator delete[](void* pointer, size_t size);

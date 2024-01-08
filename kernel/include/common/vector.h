@@ -36,24 +36,27 @@ namespace maxOS{
         template<class Type> class Vector
         {
         protected:
-            Type m_elements[100]; //Todo: make this dynamic
+            Type* m_elements;
             uint32_t m_size { 0 };
-            uint32_t m_max_size { 100 };
+            uint32_t m_capacity { 1 };
+
+            void increase_size();
+
         public:
             typedef Type* iterator;
 
             Vector();
-            Vector(int size, Type element);
+            Vector(int Size, Type element);
             ~Vector();
 
-            Type& operator[](int index);
+            Type& operator[](uint32_t index) const;
 
-            bool empty();
-            uint32_t size();
+            bool empty() const;
+            uint32_t size() const;
 
-            iterator begin();
-            iterator end();
-            iterator find(Type);
+            iterator begin() const;
+            iterator end() const;
+            iterator find(Type) const;
 
             iterator push_back(Type);
             void pop_back();
@@ -69,7 +72,7 @@ namespace maxOS{
             void Iterate(void callback(Type&));
         };
 
-    ///______________________________________Implementation__________________________________________________
+        ///______________________________________Implementation__________________________________________________
         /**
         * @brief Constructor for Vector
         *
@@ -77,31 +80,54 @@ namespace maxOS{
         */
         template<class Type> Vector<Type>::Vector() {
 
+            // Allocate space for the array
+            m_elements = new Type[m_capacity];
+
         }
 
         /**
         * @brief Constructor for Vector
          *
         * @tparam Type Type of the Vector
-        * @param Size Size of the Vector
+        * @param size Size of the Vector
         * @param element Element to fill the Vector with
         */
-        template<class Type> Vector<Type>::Vector(int Size, Type element) {
+        template<class Type> Vector<Type>::Vector(int size, Type element) {
 
-          // Make sure the size is not bigger than the max size
-          if (Size > m_max_size)
-          Size = m_max_size;
+            // Allocate space for the array
+            m_elements = new Type[size];
 
-          // Fill the Vector with the element
-          for (int i = 0; i < Size; ++i)
-                  m_elements[i] = element;
-
-          // Set the size of the Vector
-          m_size = Size;
+            // Push all the elements to the Vector
+            for (int i = 0; i < size; ++i)
+                    push_back(element);
         }
 
 
         template<class Type> Vector<Type>::~Vector() {
+
+            // De-allocate the array
+            delete[] m_elements;
+
+        }
+
+        template <class Type> void Vector<Type>::increase_size() {
+
+            // Allocate more space for the array
+            Type* new_elements = new Type[m_capacity * 2];
+
+            // Copy the elements to the new array
+            for (uint32_t i = 0; i < m_size; ++i)
+              new_elements[i] = m_elements[i];
+
+            // De-allocate the old array
+            delete[] m_elements;
+
+            // Set the new array
+            m_elements = new_elements;
+
+            // Increase the capacity of the Vector
+            m_capacity *= 2;
+
         }
 
         /**
@@ -109,13 +135,16 @@ namespace maxOS{
          *
          * @tparam Type Type of the Vector
          * @param index The index of the element
-         * @return the element at the index
+         * @return the element at the index or the end of the Vector if the index is out of bounds
          */
-        template<class Type> Type &Vector<Type>::operator[](int index) {
+        template<class Type> Type &Vector<Type>::operator[](uint32_t index) const{
 
-          // If the index is in the Vector
-          if (index <= m_size)
-              return m_elements[index];
+            // If the index is in the Vector
+            if (index <= m_size)
+                return m_elements[index];
+
+            // Return the last element of the Vector
+            return m_elements[m_size - 1];
 
         }
 
@@ -125,7 +154,7 @@ namespace maxOS{
          * @tparam Type Type of the Vector
          * @return The size of the Vector
          */
-        template<class Type> uint32_t Vector<Type>::size() {
+        template<class Type> uint32_t Vector<Type>::size() const{
             return m_size;
         }
 
@@ -135,7 +164,7 @@ namespace maxOS{
          * @tparam Type Type of the Vector
          * @return The m_first_memory_chunk element of the Vector
          */
-        template<class Type> typename Vector<Type>::iterator Vector<Type>::begin() {
+        template<class Type> typename Vector<Type>::iterator Vector<Type>::begin() const{
             return &m_elements[0];
         }
 
@@ -145,7 +174,7 @@ namespace maxOS{
          * @tparam Type Type of the Vector
          * @return The last element of the Vector
          */
-         template<class Type> typename Vector<Type>::iterator Vector<Type>::end() {
+         template<class Type> typename Vector<Type>::iterator Vector<Type>::end() const{
             return &m_elements[0] + m_size;
          }
 
@@ -156,12 +185,12 @@ namespace maxOS{
          * @param element The element to find
          * @return The iterator of the element or the end of the Vector if the element is not found
          */
-        template<class Type> typename Vector<Type>::iterator Vector<Type>::find(Type element) {
+        template<class Type> typename Vector<Type>::iterator Vector<Type>::find(Type element) const{
 
             // Find the element
             for (iterator i = begin(); i != end(); ++i)
-            if (*i == element)
-                    return i;
+              if (*i == element)
+                      return i;
 
             // The element must not be in the Vector
             return end();
@@ -173,7 +202,7 @@ namespace maxOS{
          * @tparam Type Type of the Vector
          * @return True if the Vector is empty, false otherwise
          */
-        template<class Type> bool Vector<Type>::empty() {
+        template<class Type> bool Vector<Type>::empty() const{
             return begin() == end();
         }
 
@@ -186,9 +215,10 @@ namespace maxOS{
          * @return The iterator of the element, if the Vector is full it returns the end of the Vector
          */
         template<class Type> typename Vector<Type>::iterator Vector<Type>::push_back(Type element) {
-            // Return the end of the Vector if it is full
-            if (m_size >= m_max_size)
-                    return end();
+
+            // Check if we need to allocate more space for the array
+            if(m_size == m_capacity)
+                increase_size();
 
             // Add the element to the Vector and return the iterator of the element
             m_elements[m_size++] = element;
@@ -200,6 +230,7 @@ namespace maxOS{
          * @tparam Type Type of the Vector
          */
         template<class Type> void Vector<Type>::pop_back() {
+
             // Remove the last element from the Vector
             if (m_size > 0)
                     --m_size;
@@ -214,9 +245,10 @@ namespace maxOS{
          */
         template<class Type> typename Vector<Type>::iterator Vector<Type>::push_front(Type element) {
 
-            // Make sure the Vector is not full
-            if (m_size >= m_max_size)
-                return end();
+            // Check if we need to allocate more space for the array
+            if(m_size == m_capacity){
+                    increase_size();
+            }
 
             // Move all elements one index to the right
             for (iterator i = end(); i > begin(); --i)

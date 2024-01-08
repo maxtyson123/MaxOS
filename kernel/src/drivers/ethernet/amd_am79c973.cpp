@@ -18,8 +18,8 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
             MACAddress4Port(dev ->port_base + 0x04),
             registerDataPort(dev ->port_base + 0x10),
             registerAddressPort(dev ->port_base + 0x12),
-            resetPort(dev ->port_base + 0x14),
-            busControlRegisterDataPort(dev ->port_base + 0x16)
+            busControlRegisterDataPort(dev ->port_base + 0x16),
+            resetPort(dev ->port_base + 0x14)
 {
     // No active buffer at the start
     currentSendBuffer = 0;

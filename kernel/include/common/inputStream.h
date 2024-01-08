@@ -80,7 +80,7 @@ namespace maxOS{
         template<class Type> class InputStreamBuffer : protected InputStreamProcessor<Type, Type*>
         {
             protected:
-                Type m_buffer[10240]; //TODO: Probaby make this dynamic
+                Type m_buffer[10240];
                 int m_offset { 0 };
                 Type m_event_fire_element;
                 Type m_termination_element;
@@ -162,7 +162,7 @@ namespace maxOS{
          * @tparam Type the type of data the stream is handling
          * @param read_element The element that was read from the stream
          */
-        template<class Type> void InputStreamEventHandler<Type>::on_stream_read(Type read_element) {
+        template<class Type> void InputStreamEventHandler<Type>::on_stream_read(Type) {
 
         }
 

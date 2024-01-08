@@ -31,6 +31,7 @@ ADD_CUSTOM_TARGET(image
         COMMENT "Creating disk image"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/create_disk_img.sh
         BYPRODUCTS ${CMAKE_SOURCE_DIR}/maxOS.img
+        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/boot/MaxOSk32
 
         # Copy the files to the disk image
         COMMENT "Copying files to disk image"
@@ -48,5 +49,3 @@ ADD_CUSTOM_TARGET(run
         # Ensure it runs in the terminal
         USES_TERMINAL
 )
-
-# TODO: Run qemu

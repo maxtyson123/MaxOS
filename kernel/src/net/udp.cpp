@@ -15,7 +15,7 @@ UserDatagramProtocolPayloadHandler::~UserDatagramProtocolPayloadHandler() {
 
 }
 
-void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
+void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket*, uint8_t *, uint16_t) {
 
 }
 
@@ -162,38 +162,11 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, ui
     return socket;                                        //Return the socket
 }
 
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string internetProtocolAddressAndPort) {
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string) {
 
-    // Find the colon (:) character in the input string
-    string colonPosition = (string)internetProtocolAddressAndPort;
-    for (; *colonPosition != '\0'; colonPosition++) {
-        if (*colonPosition == ':') {
-            // Break the loop if a colon is found
-            break;
-        }
-    }
+  //TODO NEW STRING PARSEING
 
-    // If no colon is found, return 0
-    if (*colonPosition != ':') {
-        return 0;
-    }
-
-    // Parse the InternetProtocolAddress from the input string
-    InternetProtocolAddress remoteAddress = InternetProtocolHandler::Parse(internetProtocolAddressAndPort);
-
-    // Initialize the TransmissionControlProtocolPort to 0
-    UserDatagramProtocolPort port = 0;
-
-    // Iterate through the string after the colon to extract the port number
-    for (colonPosition++; *colonPosition != '\0'; colonPosition++) {
-        if ('0' <= *colonPosition && *colonPosition <= '9') {
-            // Calculate the port number by converting characters to integers
-            port = port * 10 + (*colonPosition - '0');
-        }
-    }
-
-    // Connect to the remote address and port
-    return Connect(remoteAddress, port);
+  return nullptr;
 }
 
 /**

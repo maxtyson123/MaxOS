@@ -68,7 +68,7 @@ namespace maxOS {
                 static InterruptManager* s_active_interrupt_manager;
                 static common::OutputStream* s_error_messages;
                 uint16_t m_hardware_interrupt_offset;
-                InterruptHandler* m_interrupt_handlers[256];   //TODO: Make vector?
+                InterruptHandler* m_interrupt_handlers[256];
                 system::ThreadManager* m_thread_manager;
 
                 static GateDescriptor s_interrupt_descriptor_table[256];

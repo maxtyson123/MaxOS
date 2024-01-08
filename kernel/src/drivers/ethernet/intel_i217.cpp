@@ -328,11 +328,9 @@ void intel_i217::FetchDataReceived() {
   m_driver_message_stream-> write("Fetching data... ");
 
     uint16_t old_cur;
-    bool got_packet = false;
 
     while((receiveDsrctrs[currentReceiveBuffer] -> status & 0x1))
     {
-        got_packet = true;
         uint8_t *buffer = (uint8_t *)receiveDsrctrs[currentReceiveBuffer] -> bufferAddress;
         uint16_t size = receiveDsrctrs[currentReceiveBuffer] -> length;
 
