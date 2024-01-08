@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/maxtyson123/MaxOS">
-    <img src="docs/Screenshots/Logo.png" alt="Logo" width="80" height="80">
+    <img src="docs/Screenshots/Logo.png" alt="Logo" width="120" height="80">
   </a>
 
 <h3 align="center">Max OS</h3>
@@ -76,7 +76,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Max OS Screen Shot][product-screenshot]](docs/Screenshots/GUI/Windows20%(VESA.png))
+[![MaxOS][product-screenshot]](#)
 
 Max OS is a hobby operating system developed for the 32bit platform using C++ and Assembly. The project is currently in the early stages of development and is not yet ready for use. The project is being developed as a learning experience and is not intended to be used as a production operating system.
 
@@ -119,25 +119,25 @@ Note: If you want to run the operating system in a virtual machine, you will nee
    git clone https://github.com/maxtyson123/MaxOS.git
    cd MaxOS
    ```
-   
+
 2. Create the cross compiler (This will take a while)
    ```sh
    cd toolchain
    ./make_cross_compiler.sh
    cd ../
    ```
-   
+
 3. Generate makefiles
    ```sh
    cd cmake-build
    cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
    ```
-   
+
 4. Clean the build directory
    ```sh
    make clean
    ```
-   
+
 5. Build the operating system & Run it in QEMU
    ```sh
    make install image run
@@ -229,6 +229,7 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[product-screenshot]: docs/Screenshots/Boot/Console_v2.png
 [contributors-shield]: https://img.shields.io/github/contributors/maxtyson123/MaxOS.svg?style=for-the-badge
 [contributors-url]: https://github.com/maxtyson123/MaxOS/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/maxtyson123/MaxOS.svg?style=for-the-badge
