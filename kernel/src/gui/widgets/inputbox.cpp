@@ -3,6 +3,7 @@
 //
 
 #include <gui/widgets/inputbox.h>
+#include <gui/font/amiga_font.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -41,7 +42,7 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
   border_colour(Colour(0x57, 0x57, 0x57)),
-  font(AmigaFont())
+  font((uint8_t*)AMIGA_FONT)
 {
 
 }
@@ -51,7 +52,7 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, s
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
   border_colour(Colour(0x57, 0x57, 0x57)),
-  font(AmigaFont())
+  font((uint8_t*)AMIGA_FONT)
 {
 
     // Update the text

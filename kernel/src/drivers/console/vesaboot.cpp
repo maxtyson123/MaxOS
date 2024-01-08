@@ -3,6 +3,7 @@
 //
 
 #include <drivers/console/vesaboot.h>
+#include <gui/font/amiga_font.h>
 
 using namespace maxOS;
 using namespace maxOS::common;
@@ -15,7 +16,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 : Driver(),
   Console(),
   m_graphics_context(graphics_context),
-  m_font(AmigaFont())
+  m_font((uint8_t*)AMIGA_FONT)
 {
 
     // Malloc the video memory

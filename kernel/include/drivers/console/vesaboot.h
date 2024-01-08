@@ -27,7 +27,7 @@ namespace maxOS{
                 protected:
                     uint16_t* m_video_memory;
                     common::GraphicsContext* m_graphics_context;
-                    gui::AmigaFont m_font;
+                    gui::Font m_font;
 
                 public:
                     VESABootConsole(common::GraphicsContext*);
