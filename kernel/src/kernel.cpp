@@ -7,16 +7,16 @@
 #include <hardwarecommunication/pci.h>
 
 //Drivers
-#include <drivers/driver.h>
-#include <drivers/peripherals/keyboard.h>
-#include <drivers/peripherals/mouse.h>
-#include <drivers/video/video.h>
-#include <drivers/ata.h>
-#include <drivers/ethernet/amd_am79c973.h>
-#include <drivers/video/vesa.h>
+#include "drivers/disk/ata.h"
 #include <drivers/console/console.h>
 #include <drivers/console/textmode.h>
 #include <drivers/console/vesaboot.h>
+#include <drivers/driver.h>
+#include <drivers/ethernet/amd_am79c973.h>
+#include <drivers/peripherals/keyboard.h>
+#include <drivers/peripherals/mouse.h>
+#include <drivers/video/vesa.h>
+#include <drivers/video/video.h>
 
 //GUI
 #include <gui/desktop.h>
@@ -120,6 +120,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     // Initialise Console
     VESABootConsole console(&vesa);
     console.clear();
+    console.print_logo();
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);

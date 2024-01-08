@@ -53,7 +53,7 @@ namespace maxOS{
             class InputBox : public Widget, public common::EventManager<InputBoxEvents>{
 
                 protected:
-                    char widget_text[256];       //TODO: Replace with a buffer in memory later
+                    string m_widget_text = "                                                                          ";
 
                 public:
                     InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height);

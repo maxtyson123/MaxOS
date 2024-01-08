@@ -14,7 +14,6 @@ namespace maxOS {
           char* m_string;
           int m_length;
 
-          void copy(String const &other);
           int lex_value(String const &other) const;
 
         public:
@@ -25,7 +24,10 @@ namespace maxOS {
           String(int value);
           ~String();
 
+          void copy(String const &other);
+
           int length() const;
+          char* c_str();
           const char* c_str() const;
 
           String &operator = (String const &other);
@@ -41,8 +43,9 @@ namespace maxOS {
           bool operator <= (String const &other) const;
           bool operator >= (String const &other) const;
 
-          char operator [] (int index);
-          char &operator [] (int index) const;
+          char& operator [] (int index);
+          char& operator [] (int index) const;
+
     };
 
     typedef String              string;

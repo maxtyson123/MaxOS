@@ -487,7 +487,7 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(I
 }
 
 
-TransmissionControlProtocolSocket *TransmissionControlProtocolHandler::Connect(string internetProtocolAddressAndPort) {
+TransmissionControlProtocolSocket *TransmissionControlProtocolHandler::Connect(string) {
 
   //TODO NEW STRING PARSEING
 

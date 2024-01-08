@@ -188,9 +188,6 @@ namespace maxOS
                 numberPadDownArrow,
                 numberPadLeftArrow,
                 numberPadRightArrow,
-
-                //TODO: Probably should add more but these are the ones on my keyboard
-
             };
 
             /**

@@ -4,9 +4,12 @@
 #include <common/string.h>
 
 maxOS::String::String()
-: m_string(nullptr),
-  m_length(0)
 {
+
+  // String that only contains the null terminator
+  m_string = new char[1];
+  m_string[0] = '\0';
+  m_length = 1;
 
 }
 
@@ -24,6 +27,34 @@ maxOS::String::String(char const *string)
   // Copy the string
   for (int i = 0; i < m_length; i++)
           m_string[i] = string[i];
+
+  // Write the null terminator
+  m_string[m_length] = '\0';
+}
+
+
+maxOS::String::String(int value) {
+
+  // The length of the string
+  m_length = 0;
+
+  // The value of the string
+  int temp = value;
+
+  // Get the length of the string
+  while (temp != 0) {
+    temp /= 10;
+    m_length++;
+  }
+
+  // Allocate memory for the string (and null terminator)
+  m_string = new char[m_length + 1];
+
+  // Copy the string
+  for (int i = m_length - 1; i >= 0; i--) {
+    m_string[i] = (value % 10) + '0';
+    value /= 10;
+  }
 
   // Write the null terminator
   m_string[m_length] = '\0';
@@ -98,6 +129,13 @@ maxOS::String &maxOS::String::operator = (maxOS::String const &other) {
 
     // Return the string
     return *this;
+
+}
+
+char* maxOS::String::c_str() {
+
+    // Return the string
+    return m_string;
 
 }
 
@@ -284,50 +322,24 @@ maxOS::String &maxOS::String::operator += (maxOS::String const &other) {
     return *this;
 }
 
+
 /**
  * @brief Returns the character at the specified index
  *
  * @param index The index of the character
  * @return The character at the specified index
  */
-char maxOS::String::operator[](int index){
-
-    return m_string[index];
+char& maxOS::String::operator[](int index) {
+  return m_string[index];
 }
+
 
 /**
  * @brief Returns the character at the specified index
  *
- * @param index the index of the character
+ * @param index The index of the character
  * @return The character at the specified index
  */
 char& maxOS::String::operator[](int index) const {
-
     return m_string[index];
-}
-maxOS::String::String(int value) {
-
-    // The length of the string
-    m_length = 0;
-
-    // The value of the string
-    int temp = value;
-
-    // Get the length of the string
-    while (temp != 0) {
-       temp /= 10;
-       m_length++;
-    }
-
-    // Allocate memory for the string (and null terminator)
-    m_string = new char[m_length + 1];
-
-    // Copy the string
-    for (int i = m_length - 1; i >= 0; i--) {
-       m_string[i] = (value % 10) + '0';
-       value /= 10;
-    }
-
-    // Write the null terminator
-    m_string[m_length] = '\0';
 }

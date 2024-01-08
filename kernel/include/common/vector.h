@@ -116,7 +116,7 @@ namespace maxOS{
             Type* new_elements = new Type[m_capacity * 2];
 
             // Copy the elements to the new array
-            for (int i = 0; i < m_size; ++i)
+            for (uint32_t i = 0; i < m_size; ++i)
               new_elements[i] = m_elements[i];
 
             // De-allocate the old array

@@ -5,10 +5,9 @@
 #ifndef MAXOS_FILESYSTEM_MSDOSPART_H
 #define MAXOS_FILESYSTEM_MSDOSPART_H
 
-#include <stdint.h>
-#include <drivers/ata.h>
+#include "drivers/disk/ata.h"
 #include <filesystem/fat32.h>
-
+#include <stdint.h>
 
 namespace maxOS{
 
@@ -59,7 +58,7 @@ namespace maxOS{
          */
         class MSDOSPartitionTable{
             public:
-                static void read_partitions(drivers::AdvancedTechnologyAttachment *hd);
+                static void read_partitions(drivers::disk::AdvancedTechnologyAttachment *hd);
 
         };
     }

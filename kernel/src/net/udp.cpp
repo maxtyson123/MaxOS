@@ -162,7 +162,7 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, ui
     return socket;                                        //Return the socket
 }
 
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string internetProtocolAddressAndPort) {
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string) {
 
   //TODO NEW STRING PARSEING
 
