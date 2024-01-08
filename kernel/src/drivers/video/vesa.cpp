@@ -30,7 +30,7 @@ bool VideoElectronicsStandardsAssociation::init() {
 }
 
 /**
- * @brief Sets the mode of the VESA driver (TODO: List of modes)
+ * @brief Sets the mode of the VESA driver
  *
  * @param width Width of the screen
  * @param height Height of the screen
@@ -39,16 +39,7 @@ bool VideoElectronicsStandardsAssociation::init() {
  */
 bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
-
-    // Check if the mode is supported
-    if(!supports_mode(width, height, color_depth)) {
-        return false;
-    }
-
-    // Initialise the VESA driver
-    // None needed
-
-    // Return true if the mode was set successfully
+    // Best mode is set by the bootloader
     return true;
 
 

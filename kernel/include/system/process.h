@@ -15,7 +15,7 @@ namespace maxOS{
 
             /**
              * @class Process
-             * @breif TODO
+             * @breif not done
              */
             class Process{
                 // TODO: Re-work process class

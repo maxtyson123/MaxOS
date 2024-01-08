@@ -109,7 +109,7 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
                 continue;
             }
 
-            //TODO: Bold, Italic
+            //TODO: Bold, Italic when other fonts are working
 
             // Get the character
             uint8_t character = text[xBitMapOffset/8];

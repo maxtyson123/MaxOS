@@ -5,14 +5,15 @@
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 #define MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 
-#include <stdint.h>
-#include <common/vector.h>
-#include <common/string.h>
-#include <common/inputStream.h>
+#include <common/map.h>
 #include <common/eventHandler.h>
+#include <common/inputStream.h>
+#include <common/string.h>
+#include <common/vector.h>
+#include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
-#include <drivers/driver.h>
+#include <stdint.h>
 
 namespace maxOS
 {
