@@ -129,27 +129,26 @@ Definition at line 34 of file arp.\+cpp.
 \DoxyCodeLine{58                     arpMessage -\/> \mbox{\hyperlink{arp_8h_a46444771ae92e57ee3ad2b3930f6cdaf}{srcMAC}} = internetProtocolHandler -\/> GetMediaAccessControlAddress();                      \textcolor{comment}{//Set the source MAC to this MAC}}
 \DoxyCodeLine{59                     arpMessage -\/> \mbox{\hyperlink{arp_8h_a2c21b87d7d19b79e094d74112253a776}{srcIP}} = internetProtocolHandler -\/> GetInternetProtocolAddress();                         \textcolor{comment}{//Set the source IP to this IP}}
 \DoxyCodeLine{60                     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{61                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{62 }
-\DoxyCodeLine{63                 \textcolor{comment}{//Response}}
-\DoxyCodeLine{64                 \textcolor{keywordflow}{case} 0x0200:}
-\DoxyCodeLine{65                     addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_af2d7f388b98a4dd79e0909b46e076671}{insert}}((\mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}})arpMessage -\/> \mbox{\hyperlink{arp_8h_a2c21b87d7d19b79e094d74112253a776}{srcIP}}, (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1ethernet_a6fad3f62f91a21251eb141e990287b1c}{MediaAccessControlAddress}})arpMessage -\/> \mbox{\hyperlink{arp_8h_a46444771ae92e57ee3ad2b3930f6cdaf}{srcMAC}});     \textcolor{comment}{//Insert the MAC address into the cache}}
-\DoxyCodeLine{66                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{67 }
-\DoxyCodeLine{68                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{69                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{70 }
-\DoxyCodeLine{71             \}}
-\DoxyCodeLine{72 }
-\DoxyCodeLine{73         \}}
-\DoxyCodeLine{74 }
-\DoxyCodeLine{75     \}}
-\DoxyCodeLine{76 }
-\DoxyCodeLine{77     \textcolor{comment}{//By default, don't send anything back}}
-\DoxyCodeLine{78     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62                 \textcolor{comment}{//Response}}
+\DoxyCodeLine{63                 \textcolor{keywordflow}{case} 0x0200:}
+\DoxyCodeLine{64                     addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_af2d7f388b98a4dd79e0909b46e076671}{insert}}((\mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}})arpMessage -\/> \mbox{\hyperlink{arp_8h_a2c21b87d7d19b79e094d74112253a776}{srcIP}}, (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1ethernet_a6fad3f62f91a21251eb141e990287b1c}{MediaAccessControlAddress}})arpMessage -\/> \mbox{\hyperlink{arp_8h_a46444771ae92e57ee3ad2b3930f6cdaf}{srcMAC}});     \textcolor{comment}{//Insert the MAC address into the cache}}
+\DoxyCodeLine{65                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{68                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70             \}}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72         \}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     \}}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76     \textcolor{comment}{//By default, don't send anything back}}
+\DoxyCodeLine{77     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{78 }
 \DoxyCodeLine{79 }
-\DoxyCodeLine{80 }
-\DoxyCodeLine{81 \}}
+\DoxyCodeLine{80 \}}
 
 \end{DoxyCode}
 
@@ -173,33 +172,33 @@ Request the M\+AC address of a given IP address.
 \end{DoxyParams}
 
 
-Definition at line 89 of file arp.\+cpp.
+Definition at line 88 of file arp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{89                                                                                  \{}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91     \textcolor{comment}{//When a MAC adress is requested, instantiate a new ARP message block on the stack}}
-\DoxyCodeLine{92     \mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage}{AddressResolutionProtocolMessage}} arpMessage;}
-\DoxyCodeLine{93 }
-\DoxyCodeLine{94     \textcolor{comment}{//Set the message's values}}
-\DoxyCodeLine{95     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_ac657dc1afaacc295e61c24586f7f3fc8}{hardwareType}} = 0x0100;                                                   \textcolor{comment}{//Ethernet, encoded in BigEndian}}
-\DoxyCodeLine{96     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a80788447bcdc0553377dcbe5eebd5fff}{protocol}} = 0x0008;                                                       \textcolor{comment}{//IPv4, encoded in BigEndian}}
-\DoxyCodeLine{97     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a1302327bb3ca77a65bff9c46fab1c81f}{hardwareAddressSize}} = 6;                                                 \textcolor{comment}{//MAC address size}}
-\DoxyCodeLine{98     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_afdf4118e6a88f88f536711f152c85333}{protocolAddressSize}} = 4;                                                 \textcolor{comment}{//IPv4 address size}}
-\DoxyCodeLine{99     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a9b15eaae7481b491244bcc9b86d631d0}{command}} = 0x0100;                                                        \textcolor{comment}{//Request, encoded in BigEndian}}
-\DoxyCodeLine{100 }
-\DoxyCodeLine{101     \textcolor{comment}{//Set the message's source and destination}}
-\DoxyCodeLine{102     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a6799773b583fd0353aa29b928b95d165}{srcMAC}} = \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFramePayloadHandler_ab9c1505188cd0695cdaccd0d004e1410}{frameHandler}} -\/> getMAC();                                       \textcolor{comment}{//Set the source MAC address to the backend's MAC address}}
-\DoxyCodeLine{103     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a125a642c1a470851403e4008a3507a5f}{srcIP}} = internetProtocolHandler -\/> GetInternetProtocolAddress();        \textcolor{comment}{//Set the source IP address to the backend's IP address}}
-\DoxyCodeLine{104     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a20a591583104c10a9ea2f8216757d83c}{dstMAC}} = 0xFFFFFFFFFFFF;                                                 \textcolor{comment}{//Set the destination MAC address to broadcast}}
-\DoxyCodeLine{105     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a28777e77e4505aad22f4336e518320bd}{dstIP}} = \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}};                                                           \textcolor{comment}{//Set the destination IP address to the requested IP address}}
-\DoxyCodeLine{106 }
-\DoxyCodeLine{107     \textcolor{comment}{//Send the message}}
-\DoxyCodeLine{108     \textcolor{keyword}{this} -\/> \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFramePayloadHandler_a739be2fa5af3976cc46a1c6e4705fa43}{Send}}(arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a20a591583104c10a9ea2f8216757d83c}{dstMAC}}, (uint8\_t*)\&arpMessage, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage}{AddressResolutionProtocolMessage}}));}
+\DoxyCodeLine{88                                                                                  \{}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90     \textcolor{comment}{//When a MAC adress is requested, instantiate a new ARP message block on the stack}}
+\DoxyCodeLine{91     \mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage}{AddressResolutionProtocolMessage}} arpMessage;}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93     \textcolor{comment}{//Set the message's values}}
+\DoxyCodeLine{94     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_ac657dc1afaacc295e61c24586f7f3fc8}{hardwareType}} = 0x0100;                                                   \textcolor{comment}{//Ethernet, encoded in BigEndian}}
+\DoxyCodeLine{95     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a80788447bcdc0553377dcbe5eebd5fff}{protocol}} = 0x0008;                                                       \textcolor{comment}{//IPv4, encoded in BigEndian}}
+\DoxyCodeLine{96     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a1302327bb3ca77a65bff9c46fab1c81f}{hardwareAddressSize}} = 6;                                                 \textcolor{comment}{//MAC address size}}
+\DoxyCodeLine{97     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_afdf4118e6a88f88f536711f152c85333}{protocolAddressSize}} = 4;                                                 \textcolor{comment}{//IPv4 address size}}
+\DoxyCodeLine{98     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a9b15eaae7481b491244bcc9b86d631d0}{command}} = 0x0100;                                                        \textcolor{comment}{//Request, encoded in BigEndian}}
+\DoxyCodeLine{99 }
+\DoxyCodeLine{100     \textcolor{comment}{//Set the message's source and destination}}
+\DoxyCodeLine{101     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a6799773b583fd0353aa29b928b95d165}{srcMAC}} = \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFramePayloadHandler_ab9c1505188cd0695cdaccd0d004e1410}{frameHandler}} -\/> getMAC();                                       \textcolor{comment}{//Set the source MAC address to the backend's MAC address}}
+\DoxyCodeLine{102     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a125a642c1a470851403e4008a3507a5f}{srcIP}} = internetProtocolHandler -\/> GetInternetProtocolAddress();        \textcolor{comment}{//Set the source IP address to the backend's IP address}}
+\DoxyCodeLine{103     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a20a591583104c10a9ea2f8216757d83c}{dstMAC}} = 0xFFFFFFFFFFFF;                                                 \textcolor{comment}{//Set the destination MAC address to broadcast}}
+\DoxyCodeLine{104     arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a28777e77e4505aad22f4336e518320bd}{dstIP}} = \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}};                                                           \textcolor{comment}{//Set the destination IP address to the requested IP address}}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106     \textcolor{comment}{//Send the message}}
+\DoxyCodeLine{107     \textcolor{keyword}{this} -\/> \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFramePayloadHandler_a739be2fa5af3976cc46a1c6e4705fa43}{Send}}(arpMessage.\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage_a20a591583104c10a9ea2f8216757d83c}{dstMAC}}, (uint8\_t*)\&arpMessage, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1AddressResolutionProtocolMessage}{AddressResolutionProtocolMessage}}));}
+\DoxyCodeLine{108 }
 \DoxyCodeLine{109 }
-\DoxyCodeLine{110 }
-\DoxyCodeLine{111 \}}
+\DoxyCodeLine{110 \}}
 
 \end{DoxyCode}
 
@@ -234,31 +233,31 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolAddress
 
 
 
-Definition at line 120 of file arp.\+cpp.
+Definition at line 119 of file arp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{120                                                                                             \{}
-\DoxyCodeLine{121 }
-\DoxyCodeLine{122     \textcolor{keyword}{volatile} \mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Map<InternetProtocolAddress, MediaAccessControlAddress>::iterator}} cacheIterator = addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_ab5b38544b3188986b33db651988f9784}{find}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}); \textcolor{comment}{//Check if the MAC address is in the cache}}
-\DoxyCodeLine{123 }
-\DoxyCodeLine{124     \textcolor{comment}{//If not, request it}}
-\DoxyCodeLine{125     \textcolor{keywordflow}{if}(addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_a4ae2c264d4b692d31ff34e56d2f16779}{end}}() == cacheIterator)\{}
-\DoxyCodeLine{126         \mbox{\hyperlink{classmaxOS_1_1net_1_1AddressResolutionProtocol_ad84350376c832ffd8519595245eb9f7f}{RequestMACAddress}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
-\DoxyCodeLine{127     \}}
-\DoxyCodeLine{128 }
-\DoxyCodeLine{129     \textcolor{comment}{//TODO: Add clock to wait}}
-\DoxyCodeLine{130 }
-\DoxyCodeLine{131     \textcolor{comment}{//This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT}}
-\DoxyCodeLine{132     \textcolor{keywordflow}{while} (cacheIterator == addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_a4ae2c264d4b692d31ff34e56d2f16779}{end}}()) \{                         \textcolor{comment}{//Wait until the MAC address is found}}
-\DoxyCodeLine{133         cacheIterator = addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_ab5b38544b3188986b33db651988f9784}{find}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
-\DoxyCodeLine{134     \}}
-\DoxyCodeLine{135 }
-\DoxyCodeLine{136     \textcolor{comment}{//Return the MAC address}}
-\DoxyCodeLine{137 }
-\DoxyCodeLine{138     \textcolor{keywordflow}{return} cacheIterator -\/> second;}
-\DoxyCodeLine{139 }
-\DoxyCodeLine{140 \}}
+\DoxyCodeLine{119                                                                                             \{}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121     \textcolor{keyword}{volatile} \mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Map<InternetProtocolAddress, MediaAccessControlAddress>::iterator}} cacheIterator = addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_ab5b38544b3188986b33db651988f9784}{find}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}); \textcolor{comment}{//Check if the MAC address is in the cache}}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     \textcolor{comment}{//If not, request it}}
+\DoxyCodeLine{124     \textcolor{keywordflow}{if}(addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_a4ae2c264d4b692d31ff34e56d2f16779}{end}}() == cacheIterator)\{}
+\DoxyCodeLine{125         \mbox{\hyperlink{classmaxOS_1_1net_1_1AddressResolutionProtocol_ad84350376c832ffd8519595245eb9f7f}{RequestMACAddress}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
+\DoxyCodeLine{126     \}}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{128     \textcolor{comment}{//TODO: Add clock to wait}}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130     \textcolor{comment}{//This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT}}
+\DoxyCodeLine{131     \textcolor{keywordflow}{while} (cacheIterator == addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_a4ae2c264d4b692d31ff34e56d2f16779}{end}}()) \{                         \textcolor{comment}{//Wait until the MAC address is found}}
+\DoxyCodeLine{132         cacheIterator = addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_ab5b38544b3188986b33db651988f9784}{find}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
+\DoxyCodeLine{133     \}}
+\DoxyCodeLine{134 }
+\DoxyCodeLine{135     \textcolor{comment}{//Return the MAC address}}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137     \textcolor{keywordflow}{return} cacheIterator -\/> second;}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139 \}}
 
 \end{DoxyCode}
 
@@ -277,13 +276,13 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolAddress
 
 
 
-Definition at line 142 of file arp.\+cpp.
+Definition at line 141 of file arp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{142                                                                                                                                           \{}
-\DoxyCodeLine{143     addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_af2d7f388b98a4dd79e0909b46e076671}{insert}}(internetProtocolAddress, mediaAccessControlAddress);}
-\DoxyCodeLine{144 \}}
+\DoxyCodeLine{141                                                                                                                                           \{}
+\DoxyCodeLine{142     addressCache.\mbox{\hyperlink{classmaxOS_1_1common_1_1Map_af2d7f388b98a4dd79e0909b46e076671}{insert}}(internetProtocolAddress, mediaAccessControlAddress);}
+\DoxyCodeLine{143 \}}
 
 \end{DoxyCode}
 

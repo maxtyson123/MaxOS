@@ -2,6 +2,7 @@ var namespacemaxOS_1_1system =
 [
     [ "CPUState", "structmaxOS_1_1system_1_1CPUState.html", "structmaxOS_1_1system_1_1CPUState" ],
     [ "GlobalDescriptorTable", "classmaxOS_1_1system_1_1GlobalDescriptorTable.html", "classmaxOS_1_1system_1_1GlobalDescriptorTable" ],
+    [ "Multiboot", "classmaxOS_1_1system_1_1Multiboot.html", "classmaxOS_1_1system_1_1Multiboot" ],
     [ "multiboot_aout_symbol_table", "structmaxOS_1_1system_1_1multiboot__aout__symbol__table.html", "structmaxOS_1_1system_1_1multiboot__aout__symbol__table" ],
     [ "multiboot_apm_info", "structmaxOS_1_1system_1_1multiboot__apm__info.html", "structmaxOS_1_1system_1_1multiboot__apm__info" ],
     [ "multiboot_color", "structmaxOS_1_1system_1_1multiboot__color.html", "structmaxOS_1_1system_1_1multiboot__color" ],

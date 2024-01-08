@@ -8,6 +8,7 @@ var multiboot_8h =
     [ "multiboot_mmap_entry", "structmaxOS_1_1system_1_1multiboot__mmap__entry.html", "structmaxOS_1_1system_1_1multiboot__mmap__entry" ],
     [ "multiboot_mod_list", "structmaxOS_1_1system_1_1multiboot__mod__list.html", "structmaxOS_1_1system_1_1multiboot__mod__list" ],
     [ "multiboot_apm_info", "structmaxOS_1_1system_1_1multiboot__apm__info.html", "structmaxOS_1_1system_1_1multiboot__apm__info" ],
+    [ "Multiboot", "classmaxOS_1_1system_1_1Multiboot.html", "classmaxOS_1_1system_1_1Multiboot" ],
     [ "CHECK_FLAG", "multiboot_8h.html#af9e2d06236aa8e8b6d4ed55bd94c7dc3", null ],
     [ "MULTIBOOT_AOUT_KLUDGE", "multiboot_8h.html#a791f0c6a97c36de5388c990503ee4639", null ],
     [ "MULTIBOOT_BOOTLOADER_MAGIC", "multiboot_8h.html#aacd617f4e3daafd6eab95fb6215ccae4", null ],

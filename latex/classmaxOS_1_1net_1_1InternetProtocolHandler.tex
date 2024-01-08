@@ -34,7 +34,7 @@ static uint16\+\_\+t \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandl
 \begin{DoxyCompactList}\small\item\em Creates a checksum for the given data. \end{DoxyCompactList}\item 
 static \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{Internet\+Protocol\+Address}} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a3f7fcfa4bd0b8ea9dcc76d987affd875}{Create\+Internet\+Protocol\+Address}} (uint8\+\_\+t digit1, uint8\+\_\+t digit2, uint8\+\_\+t digit3, uint8\+\_\+t digit4)
 \item 
-static \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{Internet\+Protocol\+Address}} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_afe355c241075103457e041325d9b86c0}{Parse}} (\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}} \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}})
+static \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{Internet\+Protocol\+Address}} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_afe355c241075103457e041325d9b86c0}{Parse}} (\mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}} \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}})
 \item 
 static \mbox{\hyperlink{namespacemaxOS_1_1net_a8c823821695194f776d83809d63dc725}{Subnet\+Mask}} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a381d0d9daecb7fd7118125cb1e083cd4}{Create\+Subnet\+Mask}} (uint8\+\_\+t digit1, uint8\+\_\+t digit2, uint8\+\_\+t digit3, uint8\+\_\+t digit4)
 \end{DoxyCompactItemize}
@@ -149,11 +149,11 @@ Definition at line 221 of file ipv4.\+cpp.
 \DoxyCodeLine{222 }
 \DoxyCodeLine{223     uint32\_t temp = 0;                                                                             \textcolor{comment}{//Init sum}}
 \DoxyCodeLine{224 }
-\DoxyCodeLine{225     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < lengthInBytes/2; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)                                                       \textcolor{comment}{//Loop through data (/2 bc bytes)}}
+\DoxyCodeLine{225     \textcolor{keywordflow}{for}(uint32\_t \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < lengthInBytes/2; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)                                                       \textcolor{comment}{//Loop through data (/2 bc bytes)}}
 \DoxyCodeLine{226         temp += ((\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] \& 0xFF00) >> 8) | ((\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] \& 0x00FF) << 8);                             \textcolor{comment}{//Add data to sum in big endian}}
 \DoxyCodeLine{227 }
 \DoxyCodeLine{228     \textcolor{keywordflow}{if}(lengthInBytes \% 2)                                                                          \textcolor{comment}{//If there is an odd number of bytes}}
-\DoxyCodeLine{229         temp += ((uint16\_t)((\textcolor{keywordtype}{string})\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}})[lengthInBytes-\/1]) << 8;                                   \textcolor{comment}{//Add the last byte to the sum}}
+\DoxyCodeLine{229         temp += ((uint16\_t)((\textcolor{keywordtype}{char}*)\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}})[lengthInBytes-\/1]) << 8;                                   \textcolor{comment}{//Add the last byte to the sum}}
 \DoxyCodeLine{230 }
 \DoxyCodeLine{231     \textcolor{keywordflow}{while}(temp \& 0xFFFF0000)                                                                       \textcolor{comment}{//While there is a carry}}
 \DoxyCodeLine{232         temp = (temp \& 0xFFFF) + (temp >> 16);                                                     \textcolor{comment}{//Add the carry to the sum}}
@@ -178,13 +178,13 @@ Referenced by handle\+Ethernetframe\+Payload(), max\+O\+S\+::net\+::\+Internet\+
 
 
 
-Definition at line 287 of file ipv4.\+cpp.
+Definition at line 283 of file ipv4.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{287                                                                                                                                    \{}
-\DoxyCodeLine{288     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a71d5bd208c9559576c4a5c2070d809bb}{internetProtocolPayloadHandlers}}.insert(internetProtocolPayloadHandler -\/> ipProtocol, internetProtocolPayloadHandler);}
-\DoxyCodeLine{289 \}}
+\DoxyCodeLine{283                                                                                                                                    \{}
+\DoxyCodeLine{284     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a71d5bd208c9559576c4a5c2070d809bb}{internetProtocolPayloadHandlers}}.insert(internetProtocolPayloadHandler -\/> ipProtocol, internetProtocolPayloadHandler);}
+\DoxyCodeLine{285 \}}
 
 \end{DoxyCode}
 
@@ -228,13 +228,13 @@ Referenced by Create\+Subnet\+Mask(), and Parse().
 
 
 
-Definition at line 275 of file ipv4.\+cpp.
+Definition at line 271 of file ipv4.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{275                                                                                                                    \{}
-\DoxyCodeLine{276     \textcolor{keywordflow}{return} (\mbox{\hyperlink{namespacemaxOS_1_1net_a8c823821695194f776d83809d63dc725}{SubnetMask}})\mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a3f7fcfa4bd0b8ea9dcc76d987affd875}{CreateInternetProtocolAddress}}(digit1, digit2, digit3, digit4);}
-\DoxyCodeLine{277 \}}
+\DoxyCodeLine{271                                                                                                                    \{}
+\DoxyCodeLine{272     \textcolor{keywordflow}{return} (\mbox{\hyperlink{namespacemaxOS_1_1net_a8c823821695194f776d83809d63dc725}{SubnetMask}})\mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a3f7fcfa4bd0b8ea9dcc76d987affd875}{CreateInternetProtocolAddress}}(digit1, digit2, digit3, digit4);}
+\DoxyCodeLine{273 \}}
 
 \end{DoxyCode}
 
@@ -249,13 +249,13 @@ References Create\+Internet\+Protocol\+Address().
 
 
 
-Definition at line 279 of file ipv4.\+cpp.
+Definition at line 275 of file ipv4.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{279                                                                             \{}
-\DoxyCodeLine{280     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a061258d1aed4df48353cd47c2e65f966}{ownInternetProtocolAddress}};}
-\DoxyCodeLine{281 \}}
+\DoxyCodeLine{275                                                                             \{}
+\DoxyCodeLine{276     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a061258d1aed4df48353cd47c2e65f966}{ownInternetProtocolAddress}};}
+\DoxyCodeLine{277 \}}
 
 \end{DoxyCode}
 
@@ -274,13 +274,13 @@ Referenced by handle\+Ethernetframe\+Payload(), and send\+Internet\+Protocol\+Pa
 
 
 
-Definition at line 283 of file ipv4.\+cpp.
+Definition at line 279 of file ipv4.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{283                                                                                 \{}
-\DoxyCodeLine{284     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFramePayloadHandler_ab9c1505188cd0695cdaccd0d004e1410}{frameHandler}} -\/> getMAC();}
-\DoxyCodeLine{285 \}}
+\DoxyCodeLine{279                                                                                 \{}
+\DoxyCodeLine{280     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFramePayloadHandler_ab9c1505188cd0695cdaccd0d004e1410}{frameHandler}} -\/> getMAC();}
+\DoxyCodeLine{281 \}}
 
 \end{DoxyCode}
 
@@ -332,7 +332,7 @@ Definition at line 113 of file ipv4.\+cpp.
 \DoxyCodeLine{125     \textcolor{comment}{//Only handle if it is for this device}}
 \DoxyCodeLine{126     \textcolor{keywordflow}{if}(ipMessage -\/> \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destinationIP}} == \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_af055b5794e36d06d1c2de7200266336a}{GetInternetProtocolAddress}}())}
 \DoxyCodeLine{127     \{}
-\DoxyCodeLine{128         \textcolor{keywordtype}{int} \mbox{\hyperlink{intel__i217_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}} = ipMessage -\/> \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}};                          \textcolor{comment}{//Get length of the message}}
+\DoxyCodeLine{128         uint32\_t \mbox{\hyperlink{intel__i217_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}} = ipMessage -\/> \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}};                          \textcolor{comment}{//Get length of the message}}
 \DoxyCodeLine{129         \textcolor{keywordflow}{if}(\mbox{\hyperlink{intel__i217_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}} > \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})                                               \textcolor{comment}{//Check if the length is bigger than the size of the message}}
 \DoxyCodeLine{130             \mbox{\hyperlink{intel__i217_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};                                              \textcolor{comment}{//If so, set length to size (this stops heartbleed attacks as it will not read past the end of the message, which the attacker could have filled with data)}}
 \DoxyCodeLine{131 }
@@ -376,7 +376,7 @@ References checksum, Checksum(), destination\+IP, error\+Messages, Get\+Internet
 \index{maxOS::net::InternetProtocolHandler@{maxOS::net::InternetProtocolHandler}!Parse@{Parse}}
 \index{Parse@{Parse}!maxOS::net::InternetProtocolHandler@{maxOS::net::InternetProtocolHandler}}
 \doxysubsubsection{\texorpdfstring{Parse()}{Parse()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{Internet\+Protocol\+Address}} Internet\+Protocol\+Handler\+::\+Parse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}}}]{address }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{Internet\+Protocol\+Address}} Internet\+Protocol\+Handler\+::\+Parse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}}}]{address }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -390,32 +390,24 @@ Definition at line 251 of file ipv4.\+cpp.
 \DoxyCodeLine{254     uint8\_t currentDigit = 0;}
 \DoxyCodeLine{255     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < 4; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)}
 \DoxyCodeLine{256         digits[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = 0;}
-\DoxyCodeLine{257     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{string} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = (\textcolor{keywordtype}{string})\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}; *\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} != \textcolor{charliteral}{'\(\backslash\)0'}; ++\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}})}
-\DoxyCodeLine{258     \{}
-\DoxyCodeLine{259         \textcolor{keywordflow}{if}(\textcolor{charliteral}{'0'} <= *\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} \&\& *\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} <= \textcolor{charliteral}{'9'})}
-\DoxyCodeLine{260         \{}
-\DoxyCodeLine{261             digits[currentDigit] = digits[currentDigit] * 10 + *\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} -\/ \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}.length(); \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++) \{}
+\DoxyCodeLine{259         \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] == \textcolor{charliteral}{'.'}) \{}
+\DoxyCodeLine{260             currentDigit++;}
+\DoxyCodeLine{261             \textcolor{keywordflow}{continue};}
 \DoxyCodeLine{262         \}}
-\DoxyCodeLine{263         \textcolor{keywordflow}{else}}
-\DoxyCodeLine{264         \{}
-\DoxyCodeLine{265             \textcolor{keywordflow}{if}(currentDigit >= 3)}
-\DoxyCodeLine{266                 \textcolor{keywordflow}{break};}
-\DoxyCodeLine{267             currentDigit++;}
-\DoxyCodeLine{268         \}}
-\DoxyCodeLine{269 }
-\DoxyCodeLine{270     \}}
-\DoxyCodeLine{271 }
-\DoxyCodeLine{272     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a3f7fcfa4bd0b8ea9dcc76d987affd875}{CreateInternetProtocolAddress}}(digits[0], digits[1], digits[2], digits[3]);}
-\DoxyCodeLine{273 \}}
+\DoxyCodeLine{263 }
+\DoxyCodeLine{264         digits[currentDigit] *= 10;}
+\DoxyCodeLine{265         digits[currentDigit] += \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] -\/ \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{266     \}}
+\DoxyCodeLine{267 }
+\DoxyCodeLine{268     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_a3f7fcfa4bd0b8ea9dcc76d987affd875}{CreateInternetProtocolAddress}}(digits[0], digits[1], digits[2], digits[3]);}
+\DoxyCodeLine{269 \}}
 
 \end{DoxyCode}
 
 
 References address, Create\+Internet\+Protocol\+Address(), and max\+O\+S\+::drivers\+::peripherals\+::i.
-
-
-
-Referenced by max\+O\+S\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Connect(), and max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Connect().
 
 \mbox{\Hypertarget{classmaxOS_1_1net_1_1InternetProtocolHandler_a64f10c98db6120cf3cffcdf2d33d6db1}\label{classmaxOS_1_1net_1_1InternetProtocolHandler_a64f10c98db6120cf3cffcdf2d33d6db1}} 
 \index{maxOS::net::InternetProtocolHandler@{maxOS::net::InternetProtocolHandler}!RegisterInternetProtocolAddressResolver@{RegisterInternetProtocolAddressResolver}}
@@ -493,9 +485,9 @@ Definition at line 172 of file ipv4.\+cpp.
 \DoxyCodeLine{195     message -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{Checksum}}((uint16\_t*)message, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}}));                                             \textcolor{comment}{//Calculate checksum}}
 \DoxyCodeLine{196 }
 \DoxyCodeLine{197     \textcolor{comment}{//Copy data}}
-\DoxyCodeLine{198     uint8\_t* databuffer = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}});                                                                                  \textcolor{comment}{//Get pointer to the data}}
-\DoxyCodeLine{199     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)                                                                                                                            \textcolor{comment}{//Loop through data}}
-\DoxyCodeLine{200         databuffer[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}];                                                                                                                             \textcolor{comment}{//Copy data}}
+\DoxyCodeLine{198     uint8\_t* data\_buffer = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}});                                                                                  \textcolor{comment}{//Get pointer to the data}}
+\DoxyCodeLine{199     \textcolor{keywordflow}{for}(uint32\_t \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)                                                                                                                            \textcolor{comment}{//Loop through data}}
+\DoxyCodeLine{200       data\_buffer[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}];                                                                                                                             \textcolor{comment}{//Copy data}}
 \DoxyCodeLine{201 }
 \DoxyCodeLine{202     \textcolor{comment}{//Check if the destination is on the same subnet, The if condition determines if the destination device is on the same Local network as the source device . and if they are not on the same local network then we resolve the ip address of the gateway .}}
 \DoxyCodeLine{203     \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}} route = dstIP\_BE;                                                                                                                               \textcolor{comment}{//Set route to destination IP by default}}

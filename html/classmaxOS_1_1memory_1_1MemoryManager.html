@@ -110,8 +110,8 @@ $(document).ready(function(){initNavTree('classmaxOS_1_1memory_1_1MemoryManager.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae610c6483812da7e9f99fea507dffae9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmaxOS_1_1memory_1_1MemoryManager.html#ae610c6483812da7e9f99fea507dffae9">MemoryManager</a> (size_t start, size_t <a class="el" href="multiboot_8h.html#a6d813a0f2b5281b18dea3f4cda696c33">size</a>)</td></tr>
-<tr class="separator:ae610c6483812da7e9f99fea507dffae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a508fd5598b26aeed3d3c760a4aea7c70"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmaxOS_1_1memory_1_1MemoryManager.html#a508fd5598b26aeed3d3c760a4aea7c70">MemoryManager</a> (<a class="el" href="namespacemaxOS_1_1system.html#a889196374503f8156ce2443298fa15e7">system::multiboot_info_t</a> *boot_info)</td></tr>
+<tr class="separator:a508fd5598b26aeed3d3c760a4aea7c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4570910ccfc14b2da679bee58ee8f48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmaxOS_1_1memory_1_1MemoryManager.html#ad4570910ccfc14b2da679bee58ee8f48">~MemoryManager</a> ()</td></tr>
 <tr class="separator:ad4570910ccfc14b2da679bee58ee8f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90f2d5bec98f1e6cdd71c87853baaab9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmaxOS_1_1memory_1_1MemoryManager.html#a90f2d5bec98f1e6cdd71c87853baaab9">malloc</a> (size_t <a class="el" href="multiboot_8h.html#a6d813a0f2b5281b18dea3f4cda696c33">size</a>)</td></tr>
@@ -137,10 +137,10 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Handles memory allocation and deallocation. </p>
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8h_source.html#l00033">33</a> of file <a class="el" href="memorymanagement_8h_source.html">memorymanagement.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8h_source.html#l00034">34</a> of file <a class="el" href="memorymanagement_8h_source.html">memorymanagement.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae610c6483812da7e9f99fea507dffae9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae610c6483812da7e9f99fea507dffae9">&#9670;&nbsp;</a></span>MemoryManager()</h2>
+<a id="a508fd5598b26aeed3d3c760a4aea7c70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a508fd5598b26aeed3d3c760a4aea7c70">&#9670;&nbsp;</a></span>MemoryManager()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,19 +148,9 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">MemoryManager::MemoryManager </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>start</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="namespacemaxOS_1_1system.html#a889196374503f8156ce2443298fa15e7">system::multiboot_info_t</a> *&#160;</td>
+          <td class="paramname"><em>boot_info</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -168,24 +158,28 @@ Protected Attributes</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00012">12</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
 <div class="fragment"><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">s_active_memory_manager</a> = <span class="keyword">this</span>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="comment">//Prevent wiring outside the area that is allowed to write</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &lt; <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>)){</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">this</span> -&gt;<a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a> = 0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }<span class="keywordflow">else</span>{</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keywordtype">size_t</span>  heap = 10*1024*1024;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">size_t</span>  <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> = boot_info-&gt;<a class="code" href="structmaxOS_1_1system_1_1multiboot__info.html#a8a310bd335e655d0c988e10f7045ed2f">mem_upper</a>*1024 - heap - 10*1024;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">s_active_memory_manager</a> = <span class="keyword">this</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">//Prevent wiring outside the area that is allowed to write</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &lt; <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>)){</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">this</span> -&gt;m_first_memory_chunk = (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>*)start;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; allocated = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; prev = 0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; next = 0;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> = <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> - <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">this</span> -&gt;<a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a> = 0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }<span class="keywordflow">else</span>{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">this</span> -&gt;m_first_memory_chunk = (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>*)heap;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; allocated = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; prev = 0;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; next = 0;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>-&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> = <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> - <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00036">m_first_memory_chunk</a>, <a class="el" href="memorymanagement_8h_source.html#l00039">s_active_memory_manager</a>, and <a class="el" href="fat32_8h_source.html#l00020">size</a>.</p>
+<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00037">m_first_memory_chunk</a>, <a class="el" href="multiboot_8h_source.html#l00156">maxOS::system::multiboot_info::mem_upper</a>, <a class="el" href="memorymanagement_8h_source.html#l00040">s_active_memory_manager</a>, and <a class="el" href="fat32_8h_source.html#l00020">size</a>.</p>
 
 </div>
 </div>
@@ -204,13 +198,13 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00032">32</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                              {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">s_active_memory_manager</a> == <span class="keyword">this</span>)</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;      <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">s_active_memory_manager</a> = 0;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00036">36</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                              {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">s_active_memory_manager</a> == <span class="keyword">this</span>)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">s_active_memory_manager</a> = 0;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00039">s_active_memory_manager</a>.</p>
+<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00040">s_active_memory_manager</a>.</p>
 
 </div>
 </div>
@@ -239,45 +233,45 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00091">91</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                                      {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">// Create a new free chunk</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* chunk = (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>*)((<span class="keywordtype">size_t</span>)pointer - <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>));</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    chunk -&gt; allocated = <span class="keyword">false</span>;</div>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00095">95</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                                      {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment">// If there is a free chunk before this chunk then merge them</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">if</span>(chunk -&gt; prev != 0 &amp;&amp; !chunk -&gt; prev -&gt; allocated){</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="comment">// Increase the previous chunk&#39;s size and remove the current chunk from the linked list</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a1160d2f025ac5f0eb86bc63cf0ef2519">prev</a>-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> += chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        chunk -&gt; prev -&gt; next = chunk -&gt; next;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment">// Create a new free chunk</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* chunk = (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>*)((<span class="keywordtype">size_t</span>)pointer - <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>));</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    chunk -&gt; allocated = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">// If there is a free chunk before this chunk then merge them</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">if</span>(chunk -&gt; prev != 0 &amp;&amp; !chunk -&gt; prev -&gt; allocated){</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="comment">// If there is a next chunk then ensure this chunk is removed from its linked list</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">if</span>(chunk -&gt; next != 0)</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            chunk -&gt; next -&gt; prev = chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a1160d2f025ac5f0eb86bc63cf0ef2519">prev</a>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="comment">// Increase the previous chunk&#39;s size and remove the current chunk from the linked list</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a1160d2f025ac5f0eb86bc63cf0ef2519">prev</a>-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> += chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        chunk -&gt; prev -&gt; next = chunk -&gt; next;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="comment">// Chunk is now the previous chunk</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        chunk = chunk -&gt; prev;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="comment">// If there is a free chunk after this chunk then merge them</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordflow">if</span>(chunk -&gt; next != 0 &amp;&amp; !chunk -&gt; next -&gt; allocated){</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="comment">// Increase the current chunk&#39;s size and remove the next chunk from the linked list</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        chunk -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> += chunk -&gt; next -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        chunk -&gt; next = chunk -&gt; next -&gt; next;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="comment">// If there is a next chunk then ensure this chunk is removed from its linked list</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">if</span>(chunk -&gt; next != 0)</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            chunk -&gt; next -&gt; prev = chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a1160d2f025ac5f0eb86bc63cf0ef2519">prev</a>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="comment">// Chunk is now the previous chunk</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        chunk = chunk -&gt; prev;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="comment">// If there is a free chunk after this chunk then merge them</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">if</span>(chunk -&gt; next != 0 &amp;&amp; !chunk -&gt; next -&gt; allocated){</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="comment">// Remove the just merged chunk from the linked list</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">if</span>(chunk -&gt; next != 0)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            chunk -&gt; next -&gt; prev = chunk;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="comment">// Increase the current chunk&#39;s size and remove the next chunk from the linked list</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        chunk -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> += chunk -&gt; next -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        chunk -&gt; next = chunk -&gt; next -&gt; next;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="comment">// Remove the just merged chunk from the linked list</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordflow">if</span>(chunk -&gt; next != 0)</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            chunk -&gt; next -&gt; prev = chunk;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    }</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00022">maxOS::memory::MemoryChunk::prev</a>, <a class="el" href="fat32_8h_source.html#l00020">size</a>, and <a class="el" href="memorymanagement_8h_source.html#l00025">maxOS::memory::MemoryChunk::size</a>.</p>
+<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00023">maxOS::memory::MemoryChunk::prev</a>, <a class="el" href="fat32_8h_source.html#l00020">size</a>, and <a class="el" href="memorymanagement_8h_source.html#l00026">maxOS::memory::MemoryChunk::size</a>.</p>
 
 </div>
 </div>
@@ -306,50 +300,50 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the block, 0 if no block is available </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00043">43</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                                       {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* result = 0;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="comment">// Find the next free chunk that is big enough</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* chunk = <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>; chunk != 0 &amp;&amp; result == 0; chunk = chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">next</a>) {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">if</span>(chunk -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &amp;&amp; !chunk -&gt; allocated)</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            result = chunk;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// If there is no free chunk then return 0</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">if</span>(result == 0)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00047">47</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                                       {</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* result = 0;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// Find the next free chunk that is big enough</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* chunk = <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>; chunk != 0 &amp;&amp; result == 0; chunk = chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">next</a>) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">if</span>(chunk -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &amp;&amp; !chunk -&gt; allocated)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            result = chunk;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// If there is space to split the chunk</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">if</span>(result -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &lt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>) + 1) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a95db1b93201c8e7b2bcc334660a5932f">allocated</a> = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> (<span class="keywordtype">void</span> *)(((size_t)result) + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>));</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// Create a new chunk after the current one</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* temp = (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>*)((<span class="keywordtype">size_t</span>)result + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>) + <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a>);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// If there is no free chunk then return 0</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">if</span>(result == 0)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="comment">// If there is space to split the chunk</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">if</span>(result -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> &lt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>) + 1) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a95db1b93201c8e7b2bcc334660a5932f">allocated</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">return</span> (<span class="keywordtype">void</span> *)(((size_t)result) + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>));</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Set the new chunk&#39;s properties and insert it into the linked list</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    temp -&gt; allocated = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    temp -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> =  result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> - <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> - <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    temp -&gt; prev = result;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    temp -&gt; next = result -&gt; next;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">// If there is a chunk after the current one then set its previous to the new chunk</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">if</span>(temp -&gt; next != 0)</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;       temp -&gt; next -&gt; prev = temp;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">// Create a new chunk after the current one</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* temp = (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>*)((<span class="keywordtype">size_t</span>)result + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>) + <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a>);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">// Set the new chunk&#39;s properties and insert it into the linked list</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    temp -&gt; allocated = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    temp -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> =  result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> - <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a> - <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    temp -&gt; prev = result;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    temp -&gt; next = result -&gt; next;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// Current chunk is now allocated and is pointing to the new chunk</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> = <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    result -&gt; allocated = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">next</a> = temp;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)(((size_t)result) + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>));</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// If there is a chunk after the current one then set its previous to the new chunk</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span>(temp -&gt; next != 0)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;       temp -&gt; next -&gt; prev = temp;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// Current chunk is now allocated and is pointing to the new chunk</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">size</a> = <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    result -&gt; allocated = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    result-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">next</a> = temp;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)(((size_t)result) + <span class="keyword">sizeof</span>(<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>));</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00024">maxOS::memory::MemoryChunk::allocated</a>, <a class="el" href="memorymanagement_8h_source.html#l00036">m_first_memory_chunk</a>, <a class="el" href="memorymanagement_8h_source.html#l00021">maxOS::memory::MemoryChunk::next</a>, <a class="el" href="fat32_8h_source.html#l00020">size</a>, and <a class="el" href="memorymanagement_8h_source.html#l00025">maxOS::memory::MemoryChunk::size</a>.</p>
+<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00025">maxOS::memory::MemoryChunk::allocated</a>, <a class="el" href="memorymanagement_8h_source.html#l00037">m_first_memory_chunk</a>, <a class="el" href="memorymanagement_8h_source.html#l00022">maxOS::memory::MemoryChunk::next</a>, <a class="el" href="fat32_8h_source.html#l00020">size</a>, and <a class="el" href="memorymanagement_8h_source.html#l00026">maxOS::memory::MemoryChunk::size</a>.</p>
 
 </div>
 </div>
@@ -371,20 +365,20 @@ Protected Attributes</h2></td></tr>
 <p>Returns the amount of memory used. </p>
 <dl class="section return"><dt>Returns</dt><dd>The amount of memory used </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00132">132</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                               {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">int</span> result = 0;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="comment">// Loop through all the chunks and add up the size of the allocated chunks</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* chunk = <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>; chunk != 0; chunk = chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">next</a>)</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            <span class="keywordflow">if</span>(chunk -&gt; allocated)</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                result += chunk -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a>;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8cpp_source.html#l00136">136</a> of file <a class="el" href="memorymanagement_8cpp_source.html">memorymanagement.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                               {</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">int</span> result = 0;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="comment">// Loop through all the chunks and add up the size of the allocated chunks</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html">MemoryChunk</a>* chunk = <a class="code" href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">m_first_memory_chunk</a>; chunk != 0; chunk = chunk-&gt;<a class="code" href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">next</a>)</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keywordflow">if</span>(chunk -&gt; allocated)</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                result += chunk -&gt; <a class="code" href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00036">m_first_memory_chunk</a>, <a class="el" href="memorymanagement_8h_source.html#l00021">maxOS::memory::MemoryChunk::next</a>, and <a class="el" href="fat32_8h_source.html#l00020">size</a>.</p>
+<p class="reference">References <a class="el" href="memorymanagement_8h_source.html#l00037">m_first_memory_chunk</a>, <a class="el" href="memorymanagement_8h_source.html#l00022">maxOS::memory::MemoryChunk::next</a>, and <a class="el" href="fat32_8h_source.html#l00020">size</a>.</p>
 
 </div>
 </div>
@@ -409,9 +403,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8h_source.html#l00036">36</a> of file <a class="el" href="memorymanagement_8h_source.html">memorymanagement.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8h_source.html#l00037">37</a> of file <a class="el" href="memorymanagement_8h_source.html">memorymanagement.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="memorymanagement_8cpp_source.html#l00043">malloc()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00132">memory_used()</a>, and <a class="el" href="memorymanagement_8cpp_source.html#l00012">MemoryManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="memorymanagement_8cpp_source.html#l00047">malloc()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00136">memory_used()</a>, and <a class="el" href="memorymanagement_8cpp_source.html#l00012">MemoryManager()</a>.</p>
 
 </div>
 </div>
@@ -435,9 +429,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="memorymanagement_8h_source.html#l00039">39</a> of file <a class="el" href="memorymanagement_8h_source.html">memorymanagement.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="memorymanagement_8h_source.html#l00040">40</a> of file <a class="el" href="memorymanagement_8h_source.html">memorymanagement.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="memorymanagement_8cpp_source.html#l00012">MemoryManager()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00181">operator delete()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00189">operator delete[]()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00149">operator new()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00159">operator new[]()</a>, and <a class="el" href="memorymanagement_8cpp_source.html#l00032">~MemoryManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="memorymanagement_8cpp_source.html#l00012">MemoryManager()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00184">operator delete()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00192">operator delete[]()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00153">operator new()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00163">operator new[]()</a>, and <a class="el" href="memorymanagement_8cpp_source.html#l00036">~MemoryManager()</a>.</p>
 
 </div>
 </div>
@@ -447,14 +441,15 @@ Protected Attributes</h2></td></tr>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassmaxOS_1_1memory_1_1MemoryManager_html_af1c8a7109dead81397ee8c85b24afe66"><div class="ttname"><a href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">maxOS::memory::MemoryManager::m_first_memory_chunk</a></div><div class="ttdeci">MemoryChunk * m_first_memory_chunk</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00036">memorymanagement.h:36</a></div></div>
+<div class="ttc" id="aclassmaxOS_1_1memory_1_1MemoryManager_html_af1c8a7109dead81397ee8c85b24afe66"><div class="ttname"><a href="classmaxOS_1_1memory_1_1MemoryManager.html#af1c8a7109dead81397ee8c85b24afe66">maxOS::memory::MemoryManager::m_first_memory_chunk</a></div><div class="ttdeci">MemoryChunk * m_first_memory_chunk</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00037">memorymanagement.h:37</a></div></div>
 <div class="ttc" id="afat32_8h_html_ab2c6b258f02add8fdf4cfc7c371dd772"><div class="ttname"><a href="fat32_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a></div><div class="ttdeci">uint32_t size</div><div class="ttdef"><b>Definition:</b> <a href="fat32_8h_source.html#l00020">fat32.h:20</a></div></div>
-<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a3adaca9aca73de0a3553141ba35ad054"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">maxOS::memory::MemoryChunk::next</a></div><div class="ttdeci">MemoryChunk * next</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00021">memorymanagement.h:21</a></div></div>
-<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a95db1b93201c8e7b2bcc334660a5932f"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a95db1b93201c8e7b2bcc334660a5932f">maxOS::memory::MemoryChunk::allocated</a></div><div class="ttdeci">bool allocated</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00024">memorymanagement.h:24</a></div></div>
-<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a1160d2f025ac5f0eb86bc63cf0ef2519"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a1160d2f025ac5f0eb86bc63cf0ef2519">maxOS::memory::MemoryChunk::prev</a></div><div class="ttdeci">MemoryChunk * prev</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00022">memorymanagement.h:22</a></div></div>
-<div class="ttc" id="aclassmaxOS_1_1memory_1_1MemoryManager_html_ac72c7219ae81f7abd58d5f4d7ce29291"><div class="ttname"><a href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">maxOS::memory::MemoryManager::s_active_memory_manager</a></div><div class="ttdeci">static MemoryManager * s_active_memory_manager</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00039">memorymanagement.h:39</a></div></div>
-<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html">maxOS::memory::MemoryChunk</a></div><div class="ttdoc">Stores information about a memory chunk in the memory manager linked list.</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00019">memorymanagement.h:19</a></div></div>
-<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a49be199997280ec4c2228dab77fed31c"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">maxOS::memory::MemoryChunk::size</a></div><div class="ttdeci">size_t size</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00025">memorymanagement.h:25</a></div></div>
+<div class="ttc" id="astructmaxOS_1_1system_1_1multiboot__info_html_a8a310bd335e655d0c988e10f7045ed2f"><div class="ttname"><a href="structmaxOS_1_1system_1_1multiboot__info.html#a8a310bd335e655d0c988e10f7045ed2f">maxOS::system::multiboot_info::mem_upper</a></div><div class="ttdeci">multiboot_uint32_t mem_upper</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00156">multiboot.h:156</a></div></div>
+<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a3adaca9aca73de0a3553141ba35ad054"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054">maxOS::memory::MemoryChunk::next</a></div><div class="ttdeci">MemoryChunk * next</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00022">memorymanagement.h:22</a></div></div>
+<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a95db1b93201c8e7b2bcc334660a5932f"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a95db1b93201c8e7b2bcc334660a5932f">maxOS::memory::MemoryChunk::allocated</a></div><div class="ttdeci">bool allocated</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00025">memorymanagement.h:25</a></div></div>
+<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a1160d2f025ac5f0eb86bc63cf0ef2519"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a1160d2f025ac5f0eb86bc63cf0ef2519">maxOS::memory::MemoryChunk::prev</a></div><div class="ttdeci">MemoryChunk * prev</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00023">memorymanagement.h:23</a></div></div>
+<div class="ttc" id="aclassmaxOS_1_1memory_1_1MemoryManager_html_ac72c7219ae81f7abd58d5f4d7ce29291"><div class="ttname"><a href="classmaxOS_1_1memory_1_1MemoryManager.html#ac72c7219ae81f7abd58d5f4d7ce29291">maxOS::memory::MemoryManager::s_active_memory_manager</a></div><div class="ttdeci">static MemoryManager * s_active_memory_manager</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00040">memorymanagement.h:40</a></div></div>
+<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html">maxOS::memory::MemoryChunk</a></div><div class="ttdoc">Stores information about a memory chunk in the memory manager linked list.</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00020">memorymanagement.h:20</a></div></div>
+<div class="ttc" id="astructmaxOS_1_1memory_1_1MemoryChunk_html_a49be199997280ec4c2228dab77fed31c"><div class="ttname"><a href="structmaxOS_1_1memory_1_1MemoryChunk.html#a49be199997280ec4c2228dab77fed31c">maxOS::memory::MemoryChunk::size</a></div><div class="ttdeci">size_t size</div><div class="ttdef"><b>Definition:</b> <a href="memorymanagement_8h_source.html#l00026">memorymanagement.h:26</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -126,7 +126,7 @@ Definition at line 114 of file event\+Handler.\+h.
 \end{DoxyCode}
 
 
-Referenced by max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Bind(), and max\+O\+S\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Ethernet\+Frame\+Handler().
+Referenced by max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Bind(), max\+O\+S\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Ethernet\+Frame\+Handler(), and kernel\+Main().
 
 \mbox{\Hypertarget{classmaxOS_1_1common_1_1EventManager_a59eb6a6c50271478092b427bb9197240}\label{classmaxOS_1_1common_1_1EventManager_a59eb6a6c50271478092b427bb9197240}} 
 \index{maxOS::common::EventManager$<$ EventType $>$@{maxOS::common::EventManager$<$ EventType $>$}!disconnect\_event\_handler@{disconnect\_event\_handler}}
@@ -203,8 +203,12 @@ Definition at line 146 of file event\+Handler.\+h.
 \DoxyCodeLine{151             \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\& handler : \mbox{\hyperlink{classmaxOS_1_1common_1_1EventManager_aedd025f7928793b03a999e74271ecf57}{m\_handlers}}) \{}
 \DoxyCodeLine{152                 results.push\_back(handler-\/>on\_event(event));}
 \DoxyCodeLine{153             \}}
-\DoxyCodeLine{154             \textcolor{keywordflow}{return} results;}
-\DoxyCodeLine{155         \}}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{155             \textcolor{comment}{// Free the memory used by the event}}
+\DoxyCodeLine{156             \textcolor{keyword}{delete} event;}
+\DoxyCodeLine{157 }
+\DoxyCodeLine{158             \textcolor{keywordflow}{return} results;}
+\DoxyCodeLine{159         \}}
 
 \end{DoxyCode}
 

@@ -18,11 +18,11 @@ Manages the scheduling of threads.
 \item 
 \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_a18eb12d3d752075318c3672c8efffd5b}{$\sim$\+Thread\+Manager}} ()
 \item 
-int \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_ac7bad00a6e546e8e40ccaeb6c6563464}{create\+\_\+thread}} (void entrypoint())
+uint32\+\_\+t \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_a0f009cec2a685669e967af321e1d3da0}{create\+\_\+thread}} (void entrypoint())
 \begin{DoxyCompactList}\small\item\em Add a thread to an empty place in the array. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState}{C\+P\+U\+State}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_adb9a4c54a2bb144b4d50cae4ca6a6066}{schedule}} (\mbox{\hyperlink{structmaxOS_1_1system_1_1CPUState}{C\+P\+U\+State}} $\ast$cpu\+\_\+state)
 \begin{DoxyCompactList}\small\item\em Schedules the next thread to be executed by checking its yields\+Status. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_abb113874c6b8d0f021cdd0b54249d4eb}{terminate\+\_\+thread}} (int tid)
+bool \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_a5c25c5bb8333ce799a89568f9b6dc879}{terminate\+\_\+thread}} (uint32\+\_\+t tid)
 \begin{DoxyCompactList}\small\item\em Terminates a thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -85,11 +85,11 @@ Definition at line 48 of file multithreading.\+cpp.
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{classmaxOS_1_1system_1_1ThreadManager_ac7bad00a6e546e8e40ccaeb6c6563464}\label{classmaxOS_1_1system_1_1ThreadManager_ac7bad00a6e546e8e40ccaeb6c6563464}} 
+\mbox{\Hypertarget{classmaxOS_1_1system_1_1ThreadManager_a0f009cec2a685669e967af321e1d3da0}\label{classmaxOS_1_1system_1_1ThreadManager_a0f009cec2a685669e967af321e1d3da0}} 
 \index{maxOS::system::ThreadManager@{maxOS::system::ThreadManager}!create\_thread@{create\_thread}}
 \index{create\_thread@{create\_thread}!maxOS::system::ThreadManager@{maxOS::system::ThreadManager}}
 \doxysubsubsection{\texorpdfstring{create\_thread()}{create\_thread()}}
-{\footnotesize\ttfamily int Thread\+Manager\+::create\+\_\+thread (\begin{DoxyParamCaption}\item[{void }]{entrypoint() }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily uint32\+\_\+t Thread\+Manager\+::create\+\_\+thread (\begin{DoxyParamCaption}\item[{void }]{entrypoint() }\end{DoxyParamCaption})}
 
 
 
@@ -114,7 +114,7 @@ Definition at line 59 of file multithreading.\+cpp.
 \DoxyCodeLine{60 \{}
 \DoxyCodeLine{61     \textcolor{comment}{// Create a new thread}}
 \DoxyCodeLine{62     \mbox{\hyperlink{classmaxOS_1_1system_1_1Thread}{Thread}}* new\_thread = \textcolor{keyword}{new} \mbox{\hyperlink{classmaxOS_1_1system_1_1Thread}{Thread}}();}
-\DoxyCodeLine{63     new\_thread -\/> init(m\_gdt, entrypoint);}
+\DoxyCodeLine{63     new\_thread -\/> init(entrypoint);}
 \DoxyCodeLine{64     new\_thread -\/> m\_tid = m\_threads.size();}
 \DoxyCodeLine{65     new\_thread -\/> m\_cpu\_state -\/> \mbox{\hyperlink{multitasking_8h_a8519dc239502dfcbac171b3128dc7054}{cs}} = m\_gdt-\/> code\_segment\_selector();}
 \DoxyCodeLine{66 }
@@ -156,7 +156,7 @@ Definition at line 78 of file multithreading.\+cpp.
 \DoxyCodeLine{80 }
 \DoxyCodeLine{81     \textcolor{comment}{// If the eax register is 37, terminate the thread}}
 \DoxyCodeLine{82     \textcolor{keywordflow}{if}(cpu\_state-\/> \mbox{\hyperlink{multitasking_8h_a93d929ad1fc57af9d4f1793c361fb4f2}{eax}} == 37)}
-\DoxyCodeLine{83       \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_abb113874c6b8d0f021cdd0b54249d4eb}{terminate\_thread}}(m\_current\_thread);}
+\DoxyCodeLine{83       \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager_a5c25c5bb8333ce799a89568f9b6dc879}{terminate\_thread}}(m\_current\_thread);}
 \DoxyCodeLine{84 }
 \DoxyCodeLine{85     \textcolor{comment}{// If there are no threads to schedule, return the current state}}
 \DoxyCodeLine{86     \textcolor{keywordflow}{if} (m\_threads.size() <= 0 || m\_threads[m\_current\_thread] == \textcolor{keyword}{nullptr})}
@@ -188,11 +188,11 @@ References eax, and terminate\+\_\+thread().
 
 Referenced by max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request().
 
-\mbox{\Hypertarget{classmaxOS_1_1system_1_1ThreadManager_abb113874c6b8d0f021cdd0b54249d4eb}\label{classmaxOS_1_1system_1_1ThreadManager_abb113874c6b8d0f021cdd0b54249d4eb}} 
+\mbox{\Hypertarget{classmaxOS_1_1system_1_1ThreadManager_a5c25c5bb8333ce799a89568f9b6dc879}\label{classmaxOS_1_1system_1_1ThreadManager_a5c25c5bb8333ce799a89568f9b6dc879}} 
 \index{maxOS::system::ThreadManager@{maxOS::system::ThreadManager}!terminate\_thread@{terminate\_thread}}
 \index{terminate\_thread@{terminate\_thread}!maxOS::system::ThreadManager@{maxOS::system::ThreadManager}}
 \doxysubsubsection{\texorpdfstring{terminate\_thread()}{terminate\_thread()}}
-{\footnotesize\ttfamily bool Thread\+Manager\+::terminate\+\_\+thread (\begin{DoxyParamCaption}\item[{int}]{tid }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool Thread\+Manager\+::terminate\+\_\+thread (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{tid }\end{DoxyParamCaption})}
 
 
 
@@ -214,7 +214,7 @@ Definition at line 112 of file multithreading.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{113 \{}
 \DoxyCodeLine{114     \textcolor{comment}{// Check if the thread is actually running}}
-\DoxyCodeLine{115     \textcolor{keywordflow}{if} (tid < 0 || tid >= m\_threads.size())}
+\DoxyCodeLine{115     \textcolor{keywordflow}{if} (tid >= m\_threads.size())}
 \DoxyCodeLine{116         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
 \DoxyCodeLine{117 }
 \DoxyCodeLine{118     \textcolor{comment}{// Delete the thread}}

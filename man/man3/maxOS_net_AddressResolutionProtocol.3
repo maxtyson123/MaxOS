@@ -1,4 +1,4 @@
-.TH "maxOS::net::AddressResolutionProtocol" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::net::AddressResolutionProtocol" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -115,27 +115,26 @@ Definition at line 34 of file arp\&.cpp\&.
 58                     arpMessage -> srcMAC = internetProtocolHandler -> GetMediaAccessControlAddress();                      //Set the source MAC to this MAC
 59                     arpMessage -> srcIP = internetProtocolHandler -> GetInternetProtocolAddress();                         //Set the source IP to this IP
 60                     return true;
-61                     break;
-62 
-63                 //Response
-64                 case 0x0200:
-65                     addressCache\&.insert((InternetProtocolAddress)arpMessage -> srcIP, (MediaAccessControlAddress)arpMessage -> srcMAC);     //Insert the MAC address into the cache
-66                     break;
-67 
-68                 default:
-69                     break;
-70 
-71             }
-72 
-73         }
-74 
-75     }
-76 
-77     //By default, don't send anything back
-78     return false;
+61 
+62                 //Response
+63                 case 0x0200:
+64                     addressCache\&.insert((InternetProtocolAddress)arpMessage -> srcIP, (MediaAccessControlAddress)arpMessage -> srcMAC);     //Insert the MAC address into the cache
+65                     break;
+66 
+67                 default:
+68                     break;
+69 
+70             }
+71 
+72         }
+73 
+74     }
+75 
+76     //By default, don't send anything back
+77     return false;
+78 
 79 
-80 
-81 }
+80 }
 .fi
 .PP
 References command, dstIP, dstMAC, hardwareAddressSize, hardwareType, maxOS::common::Map< Key, Value >::insert(), protocol, protocolAddressSize, size, srcIP, and srcMAC\&.
@@ -151,32 +150,32 @@ Request the MAC address of a given IP address\&.
 .PP
 
 .PP
-Definition at line 89 of file arp\&.cpp\&.
+Definition at line 88 of file arp\&.cpp\&.
 .PP
 .nf
-89                                                                                  {
-90 
-91     //When a MAC adress is requested, instantiate a new ARP message block on the stack
-92     AddressResolutionProtocolMessage arpMessage;
-93 
-94     //Set the message's values
-95     arpMessage\&.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian
-96     arpMessage\&.protocol = 0x0008;                                                       //IPv4, encoded in BigEndian
-97     arpMessage\&.hardwareAddressSize = 6;                                                 //MAC address size
-98     arpMessage\&.protocolAddressSize = 4;                                                 //IPv4 address size
-99     arpMessage\&.command = 0x0100;                                                        //Request, encoded in BigEndian
-100 
-101     //Set the message's source and destination
-102     arpMessage\&.srcMAC = frameHandler -> getMAC();                                       //Set the source MAC address to the backend's MAC address
-103     arpMessage\&.srcIP = internetProtocolHandler -> GetInternetProtocolAddress();        //Set the source IP address to the backend's IP address
-104     arpMessage\&.dstMAC = 0xFFFFFFFFFFFF;                                                 //Set the destination MAC address to broadcast
-105     arpMessage\&.dstIP = address;                                                           //Set the destination IP address to the requested IP address
-106 
-107     //Send the message
-108     this -> Send(arpMessage\&.dstMAC, (uint8_t*)&arpMessage, sizeof(AddressResolutionProtocolMessage));
+88                                                                                  {
+89 
+90     //When a MAC adress is requested, instantiate a new ARP message block on the stack
+91     AddressResolutionProtocolMessage arpMessage;
+92 
+93     //Set the message's values
+94     arpMessage\&.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian
+95     arpMessage\&.protocol = 0x0008;                                                       //IPv4, encoded in BigEndian
+96     arpMessage\&.hardwareAddressSize = 6;                                                 //MAC address size
+97     arpMessage\&.protocolAddressSize = 4;                                                 //IPv4 address size
+98     arpMessage\&.command = 0x0100;                                                        //Request, encoded in BigEndian
+99 
+100     //Set the message's source and destination
+101     arpMessage\&.srcMAC = frameHandler -> getMAC();                                       //Set the source MAC address to the backend's MAC address
+102     arpMessage\&.srcIP = internetProtocolHandler -> GetInternetProtocolAddress();        //Set the source IP address to the backend's IP address
+103     arpMessage\&.dstMAC = 0xFFFFFFFFFFFF;                                                 //Set the destination MAC address to broadcast
+104     arpMessage\&.dstIP = address;                                                           //Set the destination IP address to the requested IP address
+105 
+106     //Send the message
+107     this -> Send(arpMessage\&.dstMAC, (uint8_t*)&arpMessage, sizeof(AddressResolutionProtocolMessage));
+108 
 109 
-110 
-111 }
+110 }
 .fi
 .PP
 References address, maxOS::net::AddressResolutionProtocolMessage::command, maxOS::net::AddressResolutionProtocolMessage::dstIP, maxOS::net::AddressResolutionProtocolMessage::dstMAC, maxOS::net::EthernetFramePayloadHandler::frameHandler, maxOS::net::AddressResolutionProtocolMessage::hardwareAddressSize, maxOS::net::AddressResolutionProtocolMessage::hardwareType, maxOS::net::AddressResolutionProtocolMessage::protocol, maxOS::net::AddressResolutionProtocolMessage::protocolAddressSize, maxOS::net::EthernetFramePayloadHandler::Send(), maxOS::net::AddressResolutionProtocolMessage::srcIP, and maxOS::net::AddressResolutionProtocolMessage::srcMAC\&.
@@ -201,30 +200,30 @@ The MAC address of the IP address\&.
 .PP
 Reimplemented from \fBmaxOS::net::InternetProtocolAddressResolver\fP\&.
 .PP
-Definition at line 120 of file arp\&.cpp\&.
+Definition at line 119 of file arp\&.cpp\&.
 .PP
 .nf
-120                                                                                             {
-121 
-122     volatile Map<InternetProtocolAddress, MediaAccessControlAddress>::iterator cacheIterator = addressCache\&.find(address); //Check if the MAC address is in the cache
-123 
-124     //If not, request it
-125     if(addressCache\&.end() == cacheIterator){
-126         RequestMACAddress(address);
-127     }
-128 
-129     //TODO: Add clock to wait
-130 
-131     //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
-132     while (cacheIterator == addressCache\&.end()) {                         //Wait until the MAC address is found
-133         cacheIterator = addressCache\&.find(address);
-134     }
-135 
-136     //Return the MAC address
-137 
-138     return cacheIterator -> second;
-139 
-140 }
+119                                                                                             {
+120 
+121     volatile Map<InternetProtocolAddress, MediaAccessControlAddress>::iterator cacheIterator = addressCache\&.find(address); //Check if the MAC address is in the cache
+122 
+123     //If not, request it
+124     if(addressCache\&.end() == cacheIterator){
+125         RequestMACAddress(address);
+126     }
+127 
+128     //TODO: Add clock to wait
+129 
+130     //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
+131     while (cacheIterator == addressCache\&.end()) {                         //Wait until the MAC address is found
+132         cacheIterator = addressCache\&.find(address);
+133     }
+134 
+135     //Return the MAC address
+136 
+137     return cacheIterator -> second;
+138 
+139 }
 .fi
 .PP
 References address, maxOS::common::Map< Key, Value >::end(), maxOS::common::Map< Key, Value >::find(), and RequestMACAddress()\&.
@@ -233,12 +232,12 @@ References address, maxOS::common::Map< Key, Value >::end(), maxOS::common::Map<
 .PP
 Reimplemented from \fBmaxOS::net::InternetProtocolAddressResolver\fP\&.
 .PP
-Definition at line 142 of file arp\&.cpp\&.
+Definition at line 141 of file arp\&.cpp\&.
 .PP
 .nf
-142                                                                                                                                           {
-143     addressCache\&.insert(internetProtocolAddress, mediaAccessControlAddress);
-144 }
+141                                                                                                                                           {
+142     addressCache\&.insert(internetProtocolAddress, mediaAccessControlAddress);
+143 }
 .fi
 .PP
 References maxOS::common::Map< Key, Value >::insert()\&.

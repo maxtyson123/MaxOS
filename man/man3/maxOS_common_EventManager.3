@@ -1,4 +1,4 @@
-.TH "maxOS::common::EventManager< EventType >" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::common::EventManager< EventType >" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -111,7 +111,7 @@ Definition at line 114 of file eventHandler\&.h\&.
 122         }
 .fi
 .PP
-Referenced by maxOS::net::TransmissionControlProtocolHandler::Bind(), and maxOS::net::EthernetFrameHandler::EthernetFrameHandler()\&.
+Referenced by maxOS::net::TransmissionControlProtocolHandler::Bind(), maxOS::net::EthernetFrameHandler::EthernetFrameHandler(), and kernelMain()\&.
 .SS "template<typename EventType > void \fBmaxOS::common::EventManager\fP< EventType >::disconnect_event_handler (\fBEventHandler\fP< EventType > * handler)"
 
 .PP
@@ -174,8 +174,12 @@ Definition at line 146 of file eventHandler\&.h\&.
 151             for(auto& handler : m_handlers) {
 152                 results\&.push_back(handler->on_event(event));
 153             }
-154             return results;
-155         }
+154 
+155             // Free the memory used by the event
+156             delete event;
+157 
+158             return results;
+159         }
 .fi
 .SH "Member Data Documentation"
 .PP 

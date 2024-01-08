@@ -1,7 +1,6 @@
 var hierarchy =
 [
     [ "maxOS::net::AddressResolutionProtocolMessage", "structmaxOS_1_1net_1_1AddressResolutionProtocolMessage.html", null ],
-    [ "maxOS::drivers::AdvancedTechnologyAttachment", "classmaxOS_1_1drivers_1_1AdvancedTechnologyAttachment.html", null ],
     [ "AMD", "classAMD.html", null ],
     [ "maxOS::hardwarecommunication::BaseAddressRegister", "classmaxOS_1_1hardwarecommunication_1_1BaseAddressRegister.html", null ],
     [ "BiosParameterBlock", "structBiosParameterBlock.html", null ],
@@ -18,6 +17,7 @@ var hierarchy =
       [ "maxOS::drivers::clock::Clock", "classmaxOS_1_1drivers_1_1clock_1_1Clock.html", null ],
       [ "maxOS::drivers::console::TextModeConsole", "classmaxOS_1_1drivers_1_1console_1_1TextModeConsole.html", null ],
       [ "maxOS::drivers::console::VESABootConsole", "classmaxOS_1_1drivers_1_1console_1_1VESABootConsole.html", null ],
+      [ "maxOS::drivers::disk::AdvancedTechnologyAttachment", "classmaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html", null ],
       [ "maxOS::drivers::ethernet::EthernetDriver", "classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html", [
         [ "maxOS::drivers::ethernet::amd_am79c973", "classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973.html", null ],
         [ "maxOS::drivers::ethernet::intel_i217", "classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217.html", null ]
@@ -152,9 +152,7 @@ var hierarchy =
     [ "maxOS::common::EventManager< UserDatagramProtocolEvents >", "classmaxOS_1_1common_1_1EventManager.html", [
       [ "maxOS::net::UserDatagramProtocolSocket", "classmaxOS_1_1net_1_1UserDatagramProtocolSocket.html", null ]
     ] ],
-    [ "maxOS::gui::Font", "classmaxOS_1_1gui_1_1Font.html", [
-      [ "maxOS::gui::AmigaFont", "classmaxOS_1_1gui_1_1AmigaFont.html", null ]
-    ] ],
+    [ "maxOS::gui::Font", "classmaxOS_1_1gui_1_1Font.html", null ],
     [ "maxOS::hardwarecommunication::GateDescriptor", "structmaxOS_1_1hardwarecommunication_1_1GateDescriptor.html", null ],
     [ "maxOS::common::GenericInputStream", "classmaxOS_1_1common_1_1GenericInputStream.html", null ],
     [ "maxOS::common::GenericInputStream< ProcessorType >", "classmaxOS_1_1common_1_1GenericInputStream.html", [
@@ -237,6 +235,7 @@ var hierarchy =
     [ "maxOS::memory::MemoryChunk", "structmaxOS_1_1memory_1_1MemoryChunk.html", null ],
     [ "maxOS::memory::MemoryManager", "classmaxOS_1_1memory_1_1MemoryManager.html", null ],
     [ "maxOS::filesystem::MSDOSPartitionTable", "classmaxOS_1_1filesystem_1_1MSDOSPartitionTable.html", null ],
+    [ "maxOS::system::Multiboot", "classmaxOS_1_1system_1_1Multiboot.html", null ],
     [ "maxOS::system::multiboot_aout_symbol_table", "structmaxOS_1_1system_1_1multiboot__aout__symbol__table.html", null ],
     [ "maxOS::system::multiboot_apm_info", "structmaxOS_1_1system_1_1multiboot__apm__info.html", null ],
     [ "maxOS::system::multiboot_color", "structmaxOS_1_1system_1_1multiboot__color.html", null ],
@@ -264,6 +263,7 @@ var hierarchy =
     [ "maxOS::common::Rectangle< Type >", "classmaxOS_1_1common_1_1Rectangle.html", null ],
     [ "maxOS::common::Rectangle< int32_t >", "classmaxOS_1_1common_1_1Rectangle.html", null ],
     [ "maxOS::system::SegmentDescriptor", "classmaxOS_1_1system_1_1SegmentDescriptor.html", null ],
+    [ "maxOS::String", "classmaxOS_1_1String.html", null ],
     [ "maxOS::system::Task", "classmaxOS_1_1system_1_1Task.html", null ],
     [ "maxOS::system::TaskManager", "classmaxOS_1_1system_1_1TaskManager.html", null ],
     [ "maxOS::system::Thread", "classmaxOS_1_1system_1_1Thread.html", null ],

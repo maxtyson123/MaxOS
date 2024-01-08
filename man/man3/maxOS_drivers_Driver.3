@@ -1,4 +1,4 @@
-.TH "maxOS::drivers::Driver" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::drivers::Driver" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,7 +10,7 @@ maxOS::drivers::Driver \- base class for all drivers, handles the activation, de
 .PP
 \fC#include <driver\&.h>\fP
 .PP
-Inherited by \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, \fBmaxOS::drivers::ethernet::EthernetDriver\fP, \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, and \fBmaxOS::drivers::video::VideoDriver\fP\&.
+Inherited by \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, \fBmaxOS::drivers::disk::AdvancedTechnologyAttachment\fP, \fBmaxOS::drivers::ethernet::EthernetDriver\fP, \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, and \fBmaxOS::drivers::video::VideoDriver\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -102,7 +102,7 @@ Definition at line 16 of file driver\&.cpp\&.
 .PP
 activate the driver 
 .PP
-Reimplemented in \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, and \fBmaxOS::drivers::ethernet::amd_am79c973\fP\&.
+Reimplemented in \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, \fBmaxOS::drivers::disk::AdvancedTechnologyAttachment\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, and \fBmaxOS::drivers::ethernet::amd_am79c973\fP\&.
 .PP
 Definition at line 23 of file driver\&.cpp\&.
 .PP
@@ -111,6 +111,8 @@ Definition at line 23 of file driver\&.cpp\&.
 24 
 25 }
 .fi
+.PP
+Referenced by maxOS::drivers::disk::AdvancedTechnologyAttachment::activate()\&.
 .SS "void Driver::deactivate ()\fC [virtual]\fP"
 
 .PP
@@ -240,7 +242,7 @@ The device name of the driver
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, \fBmaxOS::drivers::video::VideoGraphicsArray\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, and \fBmaxOS::drivers::ethernet::amd_am79c973\fP\&.
+Reimplemented in \fBmaxOS::drivers::peripherals::KeyboardDriver\fP, \fBmaxOS::drivers::peripherals::MouseDriver\fP, \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::disk::AdvancedTechnologyAttachment\fP, \fBmaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, \fBmaxOS::drivers::video::VideoGraphicsArray\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, and \fBmaxOS::drivers::ethernet::amd_am79c973\fP\&.
 .PP
 Definition at line 117 of file driver\&.cpp\&.
 .PP
@@ -250,7 +252,7 @@ Definition at line 117 of file driver\&.cpp\&.
 120 }
 .fi
 .PP
-Referenced by maxOS::hardwarecommunication::PeripheralComponentInterconnectController::select_drivers()\&.
+Referenced by kernelMain(), and maxOS::hardwarecommunication::PeripheralComponentInterconnectController::select_drivers()\&.
 .SS "\fBstring\fP Driver::get_vendor_name ()\fC [virtual]\fP"
 
 .PP
@@ -263,7 +265,7 @@ The vendor name of the driver
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, \fBmaxOS::drivers::video::VideoGraphicsArray\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, and \fBmaxOS::drivers::ethernet::amd_am79c973\fP\&.
+Reimplemented in \fBmaxOS::drivers::clock::Clock\fP, \fBmaxOS::drivers::disk::AdvancedTechnologyAttachment\fP, \fBmaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, \fBmaxOS::drivers::video::VideoGraphicsArray\fP, \fBmaxOS::drivers::ethernet::intel_i217\fP, and \fBmaxOS::drivers::ethernet::amd_am79c973\fP\&.
 .PP
 Definition at line 107 of file driver\&.cpp\&.
 .PP
@@ -316,7 +318,7 @@ Referenced by maxOS::drivers::ethernet::intel_i217::reset()\&.
 .PP
 Definition at line 28 of file driver\&.h\&.
 .PP
-Referenced by maxOS::drivers::ethernet::intel_i217::activate(), maxOS::drivers::ethernet::intel_i217::DoSend(), error_message(), maxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), maxOS::drivers::ethernet::intel_i217::GetMediaAccessControlAddress(), maxOS::drivers::ethernet::intel_i217::handle_interrupt(), and maxOS::drivers::ethernet::EthernetDriver::Send()\&.
+Referenced by maxOS::drivers::ethernet::intel_i217::activate(), maxOS::drivers::ethernet::intel_i217::DoSend(), error_message(), maxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), maxOS::drivers::ethernet::intel_i217::GetMediaAccessControlAddress(), maxOS::drivers::ethernet::intel_i217::handle_interrupt(), kernelMain(), and maxOS::drivers::ethernet::EthernetDriver::Send()\&.
 
 .SH "Author"
 .PP 

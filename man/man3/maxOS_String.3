@@ -1,0 +1,639 @@
+.TH "maxOS::String" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+maxOS::String
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <string\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBString\fP ()"
+.br
+.ti -1c
+.RI "\fBString\fP (char const *\fBstring\fP)"
+.br
+.ti -1c
+.RI "\fBString\fP (\fBString\fP const &other)"
+.br
+.ti -1c
+.RI "\fBString\fP (int value)"
+.br
+.ti -1c
+.RI "\fB~String\fP ()"
+.br
+.ti -1c
+.RI "void \fBcopy\fP (\fBString\fP const &other)"
+.br
+.RI "Copies the other string\&. "
+.ti -1c
+.RI "int \fBlength\fP () const"
+.br
+.RI "Returns the length of the string\&. "
+.ti -1c
+.RI "char * \fBc_str\fP ()"
+.br
+.RI "Returns the string as a c string\&. "
+.ti -1c
+.RI "const char * \fBc_str\fP () const"
+.br
+.ti -1c
+.RI "\fBString\fP & \fBoperator=\fP (\fBString\fP const &other)"
+.br
+.RI "Sets the string to the other string\&. "
+.ti -1c
+.RI "\fBString\fP \fBoperator+\fP (\fBString\fP const &other) const"
+.br
+.RI "Adds the other string to the string\&. "
+.ti -1c
+.RI "\fBString\fP & \fBoperator+=\fP (\fBString\fP const &other)"
+.br
+.RI "Adds the other string to the string\&. "
+.ti -1c
+.RI "bool \fBoperator==\fP (\fBString\fP const &other) const"
+.br
+.RI "Checks if one string is equal to another\&. "
+.ti -1c
+.RI "bool \fBoperator!=\fP (\fBString\fP const &other) const"
+.br
+.RI "Checks if one string is not equal to another\&. "
+.ti -1c
+.RI "bool \fBoperator<\fP (\fBString\fP const &other) const"
+.br
+.RI "Checks if the sum of the ascii values of the characters in the string is less than the sum of the ascii values of the characters in the other string\&. "
+.ti -1c
+.RI "bool \fBoperator>\fP (\fBString\fP const &other) const"
+.br
+.RI "Checks if the sum of the ascii values of the characters in the string is greater than the sum of the ascii values of the characters in the other string\&. "
+.ti -1c
+.RI "bool \fBoperator<=\fP (\fBString\fP const &other) const"
+.br
+.RI "Checks if the sum of the ascii values of the characters in the string is less than or equal to the sum of the ascii values of the characters in the other string\&. "
+.ti -1c
+.RI "bool \fBoperator>=\fP (\fBString\fP const &other) const"
+.br
+.RI "Checks if the sum of the ascii values of the characters in the string is greater than or equal to the sum of the ascii values of the characters in the other string\&. "
+.ti -1c
+.RI "char & \fBoperator[]\fP (int index)"
+.br
+.RI "Returns the character at the specified index\&. "
+.ti -1c
+.RI "char & \fBoperator[]\fP (int index) const"
+.br
+.RI "Returns the character at the specified index\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 12 of file string\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "maxOS::String::String ()"
+
+.PP
+Definition at line 6 of file string\&.cpp\&.
+.PP
+.nf
+7 {
+8 
+9   // String that only contains the null terminator
+10   m_string = new char[1];
+11   m_string[0] = '\0';
+12   m_length = 1;
+13 
+14 }
+.fi
+.SS "maxOS::String::String (char const * string)"
+
+.PP
+Definition at line 16 of file string\&.cpp\&.
+.PP
+.nf
+17 {
+18 
+19   // Get the length of the string
+20   m_length = 0;
+21   while (string[m_length] != '\0')
+22           m_length++;
+23 
+24   // Allocate memory for the string (and null terminator)
+25   m_string = new char[m_length + 1];
+26 
+27   // Copy the string
+28   for (int i = 0; i < m_length; i++)
+29           m_string[i] = string[i];
+30 
+31   // Write the null terminator
+32   m_string[m_length] = '\0';
+33 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i\&.
+.SS "maxOS::String::String (\fBmaxOS::String\fP const & other)"
+
+.PP
+Definition at line 63 of file string\&.cpp\&.
+.PP
+.nf
+63                                             {
+64   // Copy the other string
+65   copy(other);
+66 }
+.fi
+.SS "maxOS::String::String (int value)"
+
+.PP
+Definition at line 36 of file string\&.cpp\&.
+.PP
+.nf
+36                              {
+37 
+38   // The length of the string
+39   m_length = 0;
+40 
+41   // The value of the string
+42   int temp = value;
+43 
+44   // Get the length of the string
+45   while (temp != 0) {
+46     temp /= 10;
+47     m_length++;
+48   }
+49 
+50   // Allocate memory for the string (and null terminator)
+51   m_string = new char[m_length + 1];
+52 
+53   // Copy the string
+54   for (int i = m_length - 1; i >= 0; i--) {
+55     m_string[i] = (value % 10) + '0';
+56     value /= 10;
+57   }
+58 
+59   // Write the null terminator
+60   m_string[m_length] = '\0';
+61 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i\&.
+.SS "maxOS::String::~String ()"
+
+.PP
+Definition at line 69 of file string\&.cpp\&.
+.PP
+.nf
+69                      {
+70 
+71   // Free the memory
+72   delete[] m_string;
+73 
+74 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "const char * maxOS::String::c_str ()"
+
+.PP
+Returns the string as a c string\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The string as an array of characters 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file string\&.cpp\&.
+.PP
+.nf
+135                          {
+136 
+137     // Return the string
+138     return m_string;
+139 
+140 }
+.fi
+.SS "const char* maxOS::String::c_str () const"
+
+.SS "void maxOS::String::copy (\fBmaxOS::String\fP const & other)"
+
+.PP
+Copies the other string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+
+.PP
+Definition at line 81 of file string\&.cpp\&.
+.PP
+.nf
+81                                                {
+82 
+83   // Get the length of the string
+84   m_length = other\&.length();
+85 
+86   // Allocate memory for the string (and null terminator)
+87   m_string = new char[m_length + 1];
+88 
+89   // Copy the string
+90   for (int i = 0; i < m_length; i++)
+91     m_string[i] = other[i];
+92 
+93   // Write the null terminator
+94   m_string[m_length] = '\0';
+95 
+96 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i, and length()\&.
+.PP
+Referenced by maxOS::gui::widgets::Text::update_text(), and maxOS::gui::widgets::InputBox::update_text()\&.
+.SS "int maxOS::String::length () const"
+
+.PP
+Returns the length of the string\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The length of the string 
+.RE
+.PP
+
+.PP
+Definition at line 159 of file string\&.cpp\&.
+.PP
+.nf
+159                               {
+160 
+161     // Return the length
+162     return m_length;
+163 
+164 }
+.fi
+.PP
+Referenced by copy(), maxOS::gui::Font::get_text_width(), maxOS::gui::widgets::InputBox::on_key_down(), operator+(), operator+=(), operator==(), print_boot_header(), maxOS::gui::widgets::InputBox::update_text(), and maxOS::common::OutputStream::write()\&.
+.SS "bool maxOS::String::operator!= (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Checks if one string is not equal to another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are not equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file string\&.cpp\&.
+.PP
+.nf
+193                                                              {
+194 
+195     // If the strings are equal, return false
+196     if (*this == other)
+197       return false;
+198 
+199     // The strings are not equal
+200     return true;
+201 
+202 }
+.fi
+.SS "\fBmaxOS::String\fP maxOS::String::operator+ (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Adds the other string to the string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The concatenated string 
+.RE
+.PP
+
+.PP
+Definition at line 262 of file string\&.cpp\&.
+.PP
+.nf
+262                                                                    {
+263 
+264   // The concatenated string
+265   String concatenated;
+266 
+267   // The length of the concatenated string
+268   int length = m_length + other\&.length();
+269   concatenated\&.m_length = length;
+270 
+271   // Allocate memory for the concatenated string (and null terminator)
+272   concatenated\&.m_string = new char[length + 1];
+273 
+274   // Copy the first string
+275   for (int i = 0; i < m_length; i++)
+276     concatenated\&.m_string[i] = m_string[i];
+277 
+278   // Copy the second string
+279   for(int i = 0; i < other\&.length(); i++)
+280     concatenated\&.m_string[m_length + i] = other[i];
+281 
+282   // Write the null terminator
+283   concatenated\&.m_string[length] = '\0';
+284 
+285   // Return the concatenated string
+286   return concatenated;
+287 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i, length, and length()\&.
+.SS "\fBmaxOS::String\fP & maxOS::String::operator+= (\fBmaxOS::String\fP const & other)"
+
+.PP
+Adds the other string to the string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The concatenated string 
+.RE
+.PP
+
+.PP
+Definition at line 295 of file string\&.cpp\&.
+.PP
+.nf
+295                                                                {
+296 
+297     // The concatenated string
+298     String concatenated;
+299 
+300     // The length of the concatenated string
+301     int length = m_length + other\&.length();
+302     concatenated\&.m_length = length;
+303 
+304     // Allocate memory for the concatenated string (and null terminator)
+305     concatenated\&.m_string = new char[length + 1];
+306 
+307     // Copy the first string
+308     for (int i = 0; i < m_length; i++)
+309       concatenated\&.m_string[i] = m_string[i];
+310 
+311     // Copy the second string
+312     for (int i = 0; i < other\&.length(); i++)
+313       concatenated\&.m_string[m_length + i] = other[i];
+314 
+315     // Write the null terminator
+316     concatenated\&.m_string[length] = '\0';
+317 
+318     // Copy the concatenated string
+319     copy(concatenated);
+320 
+321     // Return the concatenated string
+322     return *this;
+323 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i, length, and length()\&.
+.SS "bool maxOS::String::operator< (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Checks if the sum of the ascii values of the characters in the string is less than the sum of the ascii values of the characters in the other string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the string is less than the other, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 210 of file string\&.cpp\&.
+.PP
+.nf
+210                                                             {
+211 
+212   // If the sum of this is less than the sum of the other, return true
+213   return lex_value(*this) < lex_value(other);
+214 
+215 }
+.fi
+.SS "bool maxOS::String::operator<= (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Checks if the sum of the ascii values of the characters in the string is less than or equal to the sum of the ascii values of the characters in the other string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the string is less than or equal to the other, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 236 of file string\&.cpp\&.
+.PP
+.nf
+236                                                              {
+237 
+238   // If the sum of this is less than or equal to the sum of the other, return true
+239   return lex_value(*this) <= lex_value(other);
+240 
+241 }
+.fi
+.SS "\fBmaxOS::String\fP & maxOS::String::operator= (\fBmaxOS::String\fP const & other)"
+
+.PP
+Sets the string to the other string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+\fBString\fP& The string 
+.RE
+.PP
+
+.PP
+Definition at line 126 of file string\&.cpp\&.
+.PP
+.nf
+126                                                               {
+127     // Copy the other string
+128     copy(other);
+129 
+130     // Return the string
+131     return *this;
+132 
+133 }
+.fi
+.SS "bool maxOS::String::operator== (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Checks if one string is equal to another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 172 of file string\&.cpp\&.
+.PP
+.nf
+172                                                              {
+173 
+174     // Check if the lengths are equal
+175     if (m_length != other\&.length())
+176       return false;
+177 
+178     // Check if the characters are equal
+179     for (int i = 0; i < m_length; i++)
+180       if (m_string[i] != other[i])
+181         return false;
+182 
+183     // The strings are equal
+184     return true;
+185 
+186 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i, and length()\&.
+.SS "bool maxOS::String::operator> (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Checks if the sum of the ascii values of the characters in the string is greater than the sum of the ascii values of the characters in the other string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the string is greater than the other, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 223 of file string\&.cpp\&.
+.PP
+.nf
+223                                                             {
+224 
+225   // If the sum of this is greater than the sum of the other, return true
+226   return lex_value(*this) > lex_value(other);
+227 
+228 }
+.fi
+.SS "bool maxOS::String::operator>= (\fBmaxOS::String\fP const & other) const"
+
+.PP
+Checks if the sum of the ascii values of the characters in the string is greater than or equal to the sum of the ascii values of the characters in the other string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the string is greater than or equal to the other, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 249 of file string\&.cpp\&.
+.PP
+.nf
+249                                                              {
+250 
+251     // If the sum of this is greater than or equal to the sum of the other, return true
+252     return lex_value(*this) >= lex_value(other);
+253 
+254 }
+.fi
+.SS "char & maxOS::String::operator[] (int index)"
+
+.PP
+Returns the character at the specified index\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the specified index 
+.RE
+.PP
+
+.PP
+Definition at line 332 of file string\&.cpp\&.
+.PP
+.nf
+332                                        {
+333   return m_string[index];
+334 }
+.fi
+.SS "char & maxOS::String::operator[] (int index) const"
+
+.PP
+Returns the character at the specified index\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the specified index 
+.RE
+.PP
+
+.PP
+Definition at line 343 of file string\&.cpp\&.
+.PP
+.nf
+343                                              {
+344     return m_string[index];
+345 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

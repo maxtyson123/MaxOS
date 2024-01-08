@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/multiboot.h" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/multiboot.h" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,6 +6,9 @@
 .SH SYNOPSIS
 .br
 .PP
+\fC#include 'common/outputStream\&.h'\fP
+.br
+
 .SS "Classes"
 
 .in +1c
@@ -33,6 +36,10 @@
 .ti -1c
 .RI "struct \fBmaxOS::system::multiboot_apm_info\fP"
 .br
+.ti -1c
+.RI "class \fBmaxOS::system::Multiboot\fP"
+.br
+.RI "Parses the multiboot header and provides access to the multiboot info structure, checks if the multiboot header is valid\&. "
 .in -1c
 .SS "Namespaces"
 
@@ -203,149 +210,149 @@
 .SS "#define CHECK_FLAG(\fBflags\fP, bit)   ((\fBflags\fP) & (1 << (bit)))"
 
 .PP
-Definition at line 206 of file multiboot\&.h\&.
+Definition at line 207 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_AOUT_KLUDGE   0x00010000"
 
 .PP
-Definition at line 57 of file multiboot\&.h\&.
+Definition at line 58 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_BOOTLOADER_MAGIC   0x2BADB002"
 
 .PP
-Definition at line 37 of file multiboot\&.h\&.
+Definition at line 38 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT   2"
 
 .PP
-Definition at line 205 of file multiboot\&.h\&.
+Definition at line 206 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED   0"
 
 .PP
-Definition at line 203 of file multiboot\&.h\&.
+Definition at line 204 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_FRAMEBUFFER_TYPE_RGB   1"
 
 .PP
-Definition at line 204 of file multiboot\&.h\&.
+Definition at line 205 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_HEADER_ALIGN   4"
 
 .PP
-Definition at line 31 of file multiboot\&.h\&.
+Definition at line 32 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_HEADER_MAGIC   0x1BADB002"
 
 .PP
-Definition at line 34 of file multiboot\&.h\&.
+Definition at line 35 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_ALIGN   0x00000004"
 
 .PP
-Definition at line 43 of file multiboot\&.h\&.
+Definition at line 44 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_AOUT_SYMS   0x00000010"
 
 .PP
-Definition at line 73 of file multiboot\&.h\&.
+Definition at line 74 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_APM_TABLE   0x00000400"
 
 .PP
-Definition at line 90 of file multiboot\&.h\&.
+Definition at line 91 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_BOOT_LOADER_NAME   0x00000200"
 
 .PP
-Definition at line 87 of file multiboot\&.h\&.
+Definition at line 88 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_BOOTDEV   0x00000002"
 
 .PP
-Definition at line 64 of file multiboot\&.h\&.
+Definition at line 65 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_CMDLINE   0x00000004"
 
 .PP
-Definition at line 66 of file multiboot\&.h\&.
+Definition at line 67 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_CONFIG_TABLE   0x00000100"
 
 .PP
-Definition at line 84 of file multiboot\&.h\&.
+Definition at line 85 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_DRIVE_INFO   0x00000080"
 
 .PP
-Definition at line 81 of file multiboot\&.h\&.
+Definition at line 82 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_ELF_SHDR   0X00000020"
 
 .PP
-Definition at line 75 of file multiboot\&.h\&.
+Definition at line 76 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_FRAMEBUFFER_INFO   0x00001000"
 
 .PP
-Definition at line 94 of file multiboot\&.h\&.
+Definition at line 95 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_MEM_MAP   0x00000040"
 
 .PP
-Definition at line 78 of file multiboot\&.h\&.
+Definition at line 79 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_MEMORY   0x00000001"
 
 .PP
-Definition at line 62 of file multiboot\&.h\&.
+Definition at line 63 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_MODS   0x00000008"
 
 .PP
-Definition at line 68 of file multiboot\&.h\&.
+Definition at line 69 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_INFO_VBE_INFO   0x00000800"
 
 .PP
-Definition at line 93 of file multiboot\&.h\&.
+Definition at line 94 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE   3"
 
 .PP
-Definition at line 107 of file multiboot\&.h\&.
+Definition at line 108 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MEMORY_AVAILABLE   1"
 
 .PP
-Definition at line 105 of file multiboot\&.h\&.
+Definition at line 106 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MEMORY_BADRAM   5"
 
 .PP
-Definition at line 109 of file multiboot\&.h\&.
+Definition at line 110 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MEMORY_INFO   0x00000002"
 
 .PP
-Definition at line 51 of file multiboot\&.h\&.
+Definition at line 52 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MEMORY_NVS   4"
 
 .PP
-Definition at line 108 of file multiboot\&.h\&.
+Definition at line 109 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MEMORY_RESERVED   2"
 
 .PP
-Definition at line 106 of file multiboot\&.h\&.
+Definition at line 107 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_MOD_ALIGN   0x00001000"
 
 .PP
-Definition at line 40 of file multiboot\&.h\&.
+Definition at line 41 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_PAGE_ALIGN   0x00000001"
 
 .PP
-Definition at line 48 of file multiboot\&.h\&.
+Definition at line 49 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_SEARCH   8192"
 
 .PP
-Definition at line 30 of file multiboot\&.h\&.
+Definition at line 31 of file multiboot\&.h\&.
 .SS "#define MULTIBOOT_VIDEO_MODE   0x00000004"
 
 .PP
-Definition at line 54 of file multiboot\&.h\&.
+Definition at line 55 of file multiboot\&.h\&.
 .SH "Variable Documentation"
 .PP 
 .SS "multiboot_uint64_t addr"
 
 .PP
-Definition at line 103 of file multiboot\&.h\&.
+Definition at line 104 of file multiboot\&.h\&.
 .SS "multiboot_uint64_t len"
 
 .PP
-Definition at line 104 of file multiboot\&.h\&.
+Definition at line 105 of file multiboot\&.h\&.
 .SS "multiboot_uint32_t size"
 
 .PP
-Definition at line 102 of file multiboot\&.h\&.
+Definition at line 103 of file multiboot\&.h\&.
 .SS "multiboot_uint32_t type"
 
 .PP
-Definition at line 110 of file multiboot\&.h\&.
+Definition at line 111 of file multiboot\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

@@ -21,7 +21,7 @@ bool \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ab
 \begin{DoxyCompactList}\small\item\em Handle the T\+CP message (provider end) \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a17ee7c16c6b71cd8087694a5bbbdbfc2}{Connect}} (\mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{Internet\+Protocol\+Address}} ip, \mbox{\hyperlink{namespacemaxOS_1_1net_ac3a0656aefa32bf06fe9577285dc5957}{Transmission\+Control\+Protocol\+Port}} port)
 \begin{DoxyCompactList}\small\item\em Connect to a remote host through the T\+CP protocol. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ab7028b648665398ab3800cf639f9050c}{Connect}} (\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}} internet\+Protocol\+Address\+And\+Port)
+\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ab7028b648665398ab3800cf639f9050c}{Connect}} (\mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}} internet\+Protocol\+Address\+And\+Port)
 \item 
 void \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ae456df7930b51668b3568f04bc622b54}{Disconnect}} (\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$socket)
 \begin{DoxyCompactList}\small\item\em Begin the disconnect process. \end{DoxyCompactList}\item 
@@ -122,13 +122,13 @@ Bind a data handler to this socket.
 \end{DoxyParams}
 
 
-Definition at line 568 of file tcp.\+cpp.
+Definition at line 547 of file tcp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{569 \{}
-\DoxyCodeLine{570   socket-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1EventManager_ad92d3d8264a5fe4a0cddb58e249c7670}{connect\_event\_handler}}(handler);}
-\DoxyCodeLine{571 \}}
+\DoxyCodeLine{548 \{}
+\DoxyCodeLine{549   socket-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1EventManager_ad92d3d8264a5fe4a0cddb58e249c7670}{connect\_event\_handler}}(handler);}
+\DoxyCodeLine{550 \}}
 
 \end{DoxyCode}
 
@@ -157,103 +157,69 @@ The socket that is connected to the remote host, 0 if it failed
 \end{DoxyReturn}
 
 
-Definition at line 449 of file tcp.\+cpp.
+Definition at line 454 of file tcp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{450 \{}
-\DoxyCodeLine{451     \textcolor{comment}{//Create a new socket}}
-\DoxyCodeLine{452     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
-\DoxyCodeLine{453 }
-\DoxyCodeLine{454     \textcolor{comment}{//If there is space for the socket}}
-\DoxyCodeLine{455     \textcolor{keywordflow}{if}(socket != 0)}
-\DoxyCodeLine{456     \{}
-\DoxyCodeLine{457         \textcolor{comment}{//Set the socket}}
-\DoxyCodeLine{458         \textcolor{keyword}{new} (socket) \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a6cb78908521ca4ec70a18ed72b6b96bf}{TransmissionControlProtocolSocket}}(\textcolor{keyword}{this});}
-\DoxyCodeLine{459 }
-\DoxyCodeLine{460         \textcolor{comment}{//Set local and remote addresses}}
-\DoxyCodeLine{461         socket -\/> remotePort = port;}
-\DoxyCodeLine{462         socket -\/> remoteIP = ip;}
-\DoxyCodeLine{463         socket -\/> localPort = \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_aff5fa7f511f8c6c29944e3b3c801ff24}{freePorts}}++;}
-\DoxyCodeLine{464         socket -\/> localIP = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a3adb1aeac42ac73a8c52c2d00ebd9a2f}{internetProtocolHandler}} -\/> GetInternetProtocolAddress();}
-\DoxyCodeLine{465 }
-\DoxyCodeLine{466         \textcolor{comment}{//Convert into big endian}}
-\DoxyCodeLine{467         socket -\/> remotePort = ((socket -\/> remotePort \& 0xFF00)>>8) | ((socket -\/> remotePort \& 0x00FF) << 8);}
-\DoxyCodeLine{468         socket -\/> localPort = ((socket -\/> localPort \& 0xFF00)>>8) | ((socket -\/> localPort \& 0x00FF) << 8);}
-\DoxyCodeLine{469 }
-\DoxyCodeLine{470         \textcolor{comment}{//Set the socket into the socket array and then set its state}}
-\DoxyCodeLine{471         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a808523124196c3f969dfb80ba63572c8}{sockets}}.push\_back(socket);}
-\DoxyCodeLine{472         socket -\/> state = \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8a85b031dafe6562bc4f160b2e1205aa09}{SYN\_SENT}};}
-\DoxyCodeLine{473 }
-\DoxyCodeLine{474         \textcolor{comment}{//Dummy sequence number}}
-\DoxyCodeLine{475         socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} = 0xbeefcafe;}
-\DoxyCodeLine{476 }
-\DoxyCodeLine{477         \textcolor{comment}{//Send a sync packet}}
-\DoxyCodeLine{478         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca20ec4c36fc18a99ba2232dec0f88eb3f}{SYN}});}
-\DoxyCodeLine{479     \}}
-\DoxyCodeLine{480 }
-\DoxyCodeLine{481     \textcolor{keywordflow}{return} socket;}
-\DoxyCodeLine{482 \}}
+\DoxyCodeLine{455 \{}
+\DoxyCodeLine{456     \textcolor{comment}{//Create a new socket}}
+\DoxyCodeLine{457     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
+\DoxyCodeLine{458 }
+\DoxyCodeLine{459     \textcolor{comment}{//If there is space for the socket}}
+\DoxyCodeLine{460     \textcolor{keywordflow}{if}(socket != 0)}
+\DoxyCodeLine{461     \{}
+\DoxyCodeLine{462         \textcolor{comment}{//Set the socket}}
+\DoxyCodeLine{463         \textcolor{keyword}{new} (socket) \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a6cb78908521ca4ec70a18ed72b6b96bf}{TransmissionControlProtocolSocket}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{464 }
+\DoxyCodeLine{465         \textcolor{comment}{//Set local and remote addresses}}
+\DoxyCodeLine{466         socket -\/> remotePort = port;}
+\DoxyCodeLine{467         socket -\/> remoteIP = ip;}
+\DoxyCodeLine{468         socket -\/> localPort = \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_aff5fa7f511f8c6c29944e3b3c801ff24}{freePorts}}++;}
+\DoxyCodeLine{469         socket -\/> localIP = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a3adb1aeac42ac73a8c52c2d00ebd9a2f}{internetProtocolHandler}} -\/> GetInternetProtocolAddress();}
+\DoxyCodeLine{470 }
+\DoxyCodeLine{471         \textcolor{comment}{//Convert into big endian}}
+\DoxyCodeLine{472         socket -\/> remotePort = ((socket -\/> remotePort \& 0xFF00)>>8) | ((socket -\/> remotePort \& 0x00FF) << 8);}
+\DoxyCodeLine{473         socket -\/> localPort = ((socket -\/> localPort \& 0xFF00)>>8) | ((socket -\/> localPort \& 0x00FF) << 8);}
+\DoxyCodeLine{474 }
+\DoxyCodeLine{475         \textcolor{comment}{//Set the socket into the socket array and then set its state}}
+\DoxyCodeLine{476         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a808523124196c3f969dfb80ba63572c8}{sockets}}.push\_back(socket);}
+\DoxyCodeLine{477         socket -\/> state = \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8a85b031dafe6562bc4f160b2e1205aa09}{SYN\_SENT}};}
+\DoxyCodeLine{478 }
+\DoxyCodeLine{479         \textcolor{comment}{//Dummy sequence number}}
+\DoxyCodeLine{480         socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} = 0xbeefcafe;}
+\DoxyCodeLine{481 }
+\DoxyCodeLine{482         \textcolor{comment}{//Send a sync packet}}
+\DoxyCodeLine{483         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca20ec4c36fc18a99ba2232dec0f88eb3f}{SYN}});}
+\DoxyCodeLine{484     \}}
+\DoxyCodeLine{485 }
+\DoxyCodeLine{486     \textcolor{keywordflow}{return} socket;}
+\DoxyCodeLine{487 \}}
 
 \end{DoxyCode}
 
 
 References free\+Ports, max\+O\+S\+::net\+::\+Internet\+Protocol\+Payload\+Handler\+::internet\+Protocol\+Handler, send\+Transmission\+Control\+Protocol\+Packet(), sequence\+Number, sockets, max\+O\+S\+::net\+::\+S\+YN, max\+O\+S\+::net\+::\+S\+Y\+N\+\_\+\+S\+E\+NT, and Transmission\+Control\+Protocol\+Socket.
 
-
-
-Referenced by Connect().
-
 \mbox{\Hypertarget{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ab7028b648665398ab3800cf639f9050c}\label{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ab7028b648665398ab3800cf639f9050c}} 
 \index{maxOS::net::TransmissionControlProtocolHandler@{maxOS::net::TransmissionControlProtocolHandler}!Connect@{Connect}}
 \index{Connect@{Connect}!maxOS::net::TransmissionControlProtocolHandler@{maxOS::net::TransmissionControlProtocolHandler}}
 \doxysubsubsection{\texorpdfstring{Connect()}{Connect()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$ Transmission\+Control\+Protocol\+Handler\+::\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}}}]{internet\+Protocol\+Address\+And\+Port }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$ Transmission\+Control\+Protocol\+Handler\+::\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}}}]{internet\+Protocol\+Address\+And\+Port }\end{DoxyParamCaption})}
 
 
 
-Definition at line 485 of file tcp.\+cpp.
+Definition at line 490 of file tcp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{485                                                                                                                     \{}
-\DoxyCodeLine{486     \textcolor{comment}{// Find the colon (:) character in the input string}}
-\DoxyCodeLine{487     \textcolor{keywordtype}{string} colonPosition = (\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}})internetProtocolAddressAndPort;}
-\DoxyCodeLine{488     \textcolor{keywordflow}{for} (; *colonPosition != \textcolor{charliteral}{'\(\backslash\)0'}; colonPosition++) \{}
-\DoxyCodeLine{489         \textcolor{keywordflow}{if} (*colonPosition == \textcolor{charliteral}{':'}) \{}
-\DoxyCodeLine{490             \textcolor{comment}{// Break the loop if a colon is found}}
-\DoxyCodeLine{491             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{492         \}}
-\DoxyCodeLine{493     \}}
-\DoxyCodeLine{494 }
-\DoxyCodeLine{495     \textcolor{comment}{// If no colon is found, return 0}}
-\DoxyCodeLine{496     \textcolor{keywordflow}{if} (*colonPosition != \textcolor{charliteral}{':'}) \{}
-\DoxyCodeLine{497         \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{498     \}}
-\DoxyCodeLine{499 }
-\DoxyCodeLine{500     \textcolor{comment}{// Parse the InternetProtocolAddress from the input string}}
-\DoxyCodeLine{501     \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}} remoteAddress = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_afe355c241075103457e041325d9b86c0}{InternetProtocolHandler::Parse}}(internetProtocolAddressAndPort);}
-\DoxyCodeLine{502 }
-\DoxyCodeLine{503     \textcolor{comment}{// Initialize the TransmissionControlProtocolPort to 0}}
-\DoxyCodeLine{504     \mbox{\hyperlink{namespacemaxOS_1_1net_ac3a0656aefa32bf06fe9577285dc5957}{TransmissionControlProtocolPort}} port = 0;}
-\DoxyCodeLine{505 }
-\DoxyCodeLine{506     \textcolor{comment}{// Iterate through the string after the colon to extract the port number}}
-\DoxyCodeLine{507     \textcolor{keywordflow}{for} (colonPosition++; *colonPosition != \textcolor{charliteral}{'\(\backslash\)0'}; colonPosition++) \{}
-\DoxyCodeLine{508         \textcolor{keywordflow}{if} (\textcolor{charliteral}{'0'} <= *colonPosition \&\& *colonPosition <= \textcolor{charliteral}{'9'}) \{}
-\DoxyCodeLine{509             \textcolor{comment}{// Calculate the port number by converting characters to integers}}
-\DoxyCodeLine{510             port = port * 10 + (*colonPosition -\/ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{511         \}}
-\DoxyCodeLine{512     \}}
-\DoxyCodeLine{513 }
-\DoxyCodeLine{514     \textcolor{comment}{// Connect to the remote address and port}}
-\DoxyCodeLine{515     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a17ee7c16c6b71cd8087694a5bbbdbfc2}{Connect}}(remoteAddress, port);}
-\DoxyCodeLine{516 \}}
+\DoxyCodeLine{490                                                                                      \{}
+\DoxyCodeLine{491 }
+\DoxyCodeLine{492   \textcolor{comment}{//TODO NEW STRING PARSEING}}
+\DoxyCodeLine{493 }
+\DoxyCodeLine{494   \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{495 \}}
 
 \end{DoxyCode}
-
-
-References Connect(), max\+O\+S\+::net\+::\+Internet\+Protocol\+Handler\+::\+Parse(), and max\+O\+S\+::string.
-
 \mbox{\Hypertarget{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ae456df7930b51668b3568f04bc622b54}\label{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ae456df7930b51668b3568f04bc622b54}} 
 \index{maxOS::net::TransmissionControlProtocolHandler@{maxOS::net::TransmissionControlProtocolHandler}!Disconnect@{Disconnect}}
 \index{Disconnect@{Disconnect}!maxOS::net::TransmissionControlProtocolHandler@{maxOS::net::TransmissionControlProtocolHandler}}
@@ -271,16 +237,16 @@ Begin the disconnect process.
 \end{DoxyParams}
 
 
-Definition at line 523 of file tcp.\+cpp.
+Definition at line 502 of file tcp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{524 \{}
-\DoxyCodeLine{525 }
-\DoxyCodeLine{526     socket -\/> state = \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8a0b994147e6a7e8aee930bffb4edb6b32}{FIN\_WAIT1}};                            \textcolor{comment}{//Begin fin wait sequence}}
-\DoxyCodeLine{527     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288cacbe9c8b3fd1be16375db02cf13b8426f}{FIN}} + \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288cac39429d5f83fbf4480bbaa8e9989101a}{ACK}});            \textcolor{comment}{//Send FIN|ACK packet}}
-\DoxyCodeLine{528     socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}}++;                             \textcolor{comment}{//Increase the sequence number}}
-\DoxyCodeLine{529 \}}
+\DoxyCodeLine{503 \{}
+\DoxyCodeLine{504 }
+\DoxyCodeLine{505     socket -\/> state = \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8a0b994147e6a7e8aee930bffb4edb6b32}{FIN\_WAIT1}};                            \textcolor{comment}{//Begin fin wait sequence}}
+\DoxyCodeLine{506     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288cacbe9c8b3fd1be16375db02cf13b8426f}{FIN}} + \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288cac39429d5f83fbf4480bbaa8e9989101a}{ACK}});            \textcolor{comment}{//Send FIN|ACK packet}}
+\DoxyCodeLine{507     socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}}++;                             \textcolor{comment}{//Increase the sequence number}}
+\DoxyCodeLine{508 \}}
 
 \end{DoxyCode}
 
@@ -475,68 +441,69 @@ Definition at line 162 of file tcp.\+cpp.
 \DoxyCodeLine{314                     \textcolor{keywordflow}{break};}
 \DoxyCodeLine{315 }
 \DoxyCodeLine{316                 \textcolor{comment}{// no break, because of piggybacking}}
-\DoxyCodeLine{317 }
-\DoxyCodeLine{318             \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{319 }
-\DoxyCodeLine{320                 \textcolor{comment}{//By default handle the data}}
-\DoxyCodeLine{321 }
-\DoxyCodeLine{322                 \textcolor{keywordflow}{if}(\mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}(msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}}) == socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}})}
-\DoxyCodeLine{323                 \{}
-\DoxyCodeLine{324 }
-\DoxyCodeLine{325                     reset = !(socket -\/> handleTransmissionControlProtocolPayload(payloadData + msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4,\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/ msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4));}
-\DoxyCodeLine{326                     \textcolor{keywordflow}{if}(!reset)}
-\DoxyCodeLine{327                     \{}
-\DoxyCodeLine{328                         \textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} = 0;                                                                      \textcolor{comment}{//The number of bytes to send back}}
-\DoxyCodeLine{329                         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)                               \textcolor{comment}{//Loop through the data}}
-\DoxyCodeLine{330                             \textcolor{keywordflow}{if}(payloadData[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] != 0)                                                     \textcolor{comment}{//Check if the data is not 0}}
-\DoxyCodeLine{331                                 \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} = \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}};                                                                  \textcolor{comment}{//Set the number of bytes to send back to the current index}}
-\DoxyCodeLine{332                         socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} += \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} -\/ msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4 + 1;               \textcolor{comment}{//Increment the acknowledgement number by the number of bytes to send back}}
-\DoxyCodeLine{333                         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288cac39429d5f83fbf4480bbaa8e9989101a}{ACK}});                                          \textcolor{comment}{//Send the acknowledgement}}
-\DoxyCodeLine{334                     \}}
-\DoxyCodeLine{335                 \}}
-\DoxyCodeLine{336                 \textcolor{keywordflow}{else}}
-\DoxyCodeLine{337                 \{}
-\DoxyCodeLine{338                     \textcolor{comment}{// data in wrong order}}
-\DoxyCodeLine{339                     reset = \textcolor{keyword}{true};}
-\DoxyCodeLine{340                 \}}
-\DoxyCodeLine{341 }
-\DoxyCodeLine{342         \}}
-\DoxyCodeLine{343     \}}
-\DoxyCodeLine{344 }
+\DoxyCodeLine{317                 [[fallthrough]];}
+\DoxyCodeLine{318 }
+\DoxyCodeLine{319             \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{320 }
+\DoxyCodeLine{321                 \textcolor{comment}{//By default handle the data}}
+\DoxyCodeLine{322 }
+\DoxyCodeLine{323                 \textcolor{keywordflow}{if}(\mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}(msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}}) == socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}})}
+\DoxyCodeLine{324                 \{}
+\DoxyCodeLine{325 }
+\DoxyCodeLine{326                     reset = !(socket -\/> handleTransmissionControlProtocolPayload(payloadData + msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4,\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/ msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4));}
+\DoxyCodeLine{327                     \textcolor{keywordflow}{if}(!reset)}
+\DoxyCodeLine{328                     \{}
+\DoxyCodeLine{329                         \textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} = 0;                                                                      \textcolor{comment}{//The number of bytes to send back}}
+\DoxyCodeLine{330                         \textcolor{keywordflow}{for}(uint32\_t \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)                          \textcolor{comment}{//Loop through the data}}
+\DoxyCodeLine{331                             \textcolor{keywordflow}{if}(payloadData[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] != 0)                                                     \textcolor{comment}{//Check if the data is not 0}}
+\DoxyCodeLine{332                                 \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} = \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}};                                                                  \textcolor{comment}{//Set the number of bytes to send back to the current index}}
+\DoxyCodeLine{333                         socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} += \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} -\/ msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}}*4 + 1;               \textcolor{comment}{//Increment the acknowledgement number by the number of bytes to send back}}
+\DoxyCodeLine{334                         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288cac39429d5f83fbf4480bbaa8e9989101a}{ACK}});                                          \textcolor{comment}{//Send the acknowledgement}}
+\DoxyCodeLine{335                     \}}
+\DoxyCodeLine{336                 \}}
+\DoxyCodeLine{337                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{338                 \{}
+\DoxyCodeLine{339                     \textcolor{comment}{// data in wrong order}}
+\DoxyCodeLine{340                     reset = \textcolor{keyword}{true};}
+\DoxyCodeLine{341                 \}}
+\DoxyCodeLine{342 }
+\DoxyCodeLine{343         \}}
+\DoxyCodeLine{344     \}}
 \DoxyCodeLine{345 }
 \DoxyCodeLine{346 }
-\DoxyCodeLine{347     \textcolor{keywordflow}{if}(reset)                                                                       \textcolor{comment}{//If the socket is to be reset}}
-\DoxyCodeLine{348     \{}
-\DoxyCodeLine{349         \textcolor{keywordflow}{if}(socket != 0)                                                             \textcolor{comment}{//If the socket exists then send a reset flag}}
-\DoxyCodeLine{350         \{}
-\DoxyCodeLine{351             \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca31cabdff85581b8e911b181b628e83be}{RST}});}
-\DoxyCodeLine{352         \}}
-\DoxyCodeLine{353         \textcolor{keywordflow}{else}                                                                        \textcolor{comment}{//If it doesnt exist then create a new socket and send a reset flag}}
-\DoxyCodeLine{354         \{}
-\DoxyCodeLine{355             \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}} socket(\textcolor{keyword}{this});                     \textcolor{comment}{//Create a new socket}}
-\DoxyCodeLine{356             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a774a603e810b39dbf44a6edf8fe103bb}{remotePort}} = msg -\/> \mbox{\hyperlink{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8}{srcPort}};                                         \textcolor{comment}{//Set the remote port}}
-\DoxyCodeLine{357             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a831a45e082ae10012cce8639d091b2ee}{remoteIP}} = \mbox{\hyperlink{ipv4_8h_aed74aa5789cabec794d6961455e80db3}{sourceIP}};                                                 \textcolor{comment}{//Set the remote IP}}
-\DoxyCodeLine{358             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a2393bd54f9aca116e6ff94086f7d7ab5}{localPort}} = msg -\/> \mbox{\hyperlink{tcp_8h_ac01766720e5781a418710ebf1ba5379e}{dstPort}};                                                  \textcolor{comment}{//Set the local port}}
-\DoxyCodeLine{359             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a2852168de0b476f3852d285e5092be92}{localIP}} = \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destinationIP}};                                                     \textcolor{comment}{//Set the local IP}}
-\DoxyCodeLine{360             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_ae122b236c9f1601a00256e76bc4b685a}{sequenceNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}(msg -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}});              \textcolor{comment}{//Set the sequence number}}
-\DoxyCodeLine{361             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_aa2864940c530277ea7e792b148f2e682}{acknowledgementNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}(msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}}) + 1;          \textcolor{comment}{//Set the acknowledgement number}}
-\DoxyCodeLine{362             \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(\&socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca31cabdff85581b8e911b181b628e83be}{RST}});          \textcolor{comment}{//Send the reset flag}}
-\DoxyCodeLine{363         \}}
-\DoxyCodeLine{364     \}}
-\DoxyCodeLine{365 }
+\DoxyCodeLine{347 }
+\DoxyCodeLine{348     \textcolor{keywordflow}{if}(reset)                                                                       \textcolor{comment}{//If the socket is to be reset}}
+\DoxyCodeLine{349     \{}
+\DoxyCodeLine{350         \textcolor{keywordflow}{if}(socket != 0)                                                             \textcolor{comment}{//If the socket exists then send a reset flag}}
+\DoxyCodeLine{351         \{}
+\DoxyCodeLine{352             \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca31cabdff85581b8e911b181b628e83be}{RST}});}
+\DoxyCodeLine{353         \}}
+\DoxyCodeLine{354         \textcolor{keywordflow}{else}                                                                        \textcolor{comment}{//If it doesnt exist then create a new socket and send a reset flag}}
+\DoxyCodeLine{355         \{}
+\DoxyCodeLine{356             \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}} socket(\textcolor{keyword}{this});                     \textcolor{comment}{//Create a new socket}}
+\DoxyCodeLine{357             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a774a603e810b39dbf44a6edf8fe103bb}{remotePort}} = msg -\/> \mbox{\hyperlink{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8}{srcPort}};                                         \textcolor{comment}{//Set the remote port}}
+\DoxyCodeLine{358             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a831a45e082ae10012cce8639d091b2ee}{remoteIP}} = \mbox{\hyperlink{ipv4_8h_aed74aa5789cabec794d6961455e80db3}{sourceIP}};                                                 \textcolor{comment}{//Set the remote IP}}
+\DoxyCodeLine{359             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a2393bd54f9aca116e6ff94086f7d7ab5}{localPort}} = msg -\/> \mbox{\hyperlink{tcp_8h_ac01766720e5781a418710ebf1ba5379e}{dstPort}};                                                  \textcolor{comment}{//Set the local port}}
+\DoxyCodeLine{360             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_a2852168de0b476f3852d285e5092be92}{localIP}} = \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destinationIP}};                                                     \textcolor{comment}{//Set the local IP}}
+\DoxyCodeLine{361             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_ae122b236c9f1601a00256e76bc4b685a}{sequenceNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}(msg -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}});              \textcolor{comment}{//Set the sequence number}}
+\DoxyCodeLine{362             socket.\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket_aa2864940c530277ea7e792b148f2e682}{acknowledgementNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}(msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}}) + 1;          \textcolor{comment}{//Set the acknowledgement number}}
+\DoxyCodeLine{363             \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{sendTransmissionControlProtocolPacket}}(\&socket, 0,0, \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca31cabdff85581b8e911b181b628e83be}{RST}});          \textcolor{comment}{//Send the reset flag}}
+\DoxyCodeLine{364         \}}
+\DoxyCodeLine{365     \}}
 \DoxyCodeLine{366 }
-\DoxyCodeLine{367     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a8bedb5143f41c426fb4bda0a503bb125}{errorMessages}} -\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"TCP: Handled packet\(\backslash\)n"});}
-\DoxyCodeLine{368 }
-\DoxyCodeLine{369     \textcolor{keywordflow}{if}(socket != 0 \&\& socket -\/> state == \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8ac0582d073da4f6dfdd4aa5983f0aca46}{CLOSED}})                                        \textcolor{comment}{//If the socket is closed then remove it from the list}}
-\DoxyCodeLine{370     \{}
-\DoxyCodeLine{371         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a808523124196c3f969dfb80ba63572c8}{sockets}}.erase(socket);}
-\DoxyCodeLine{372         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{373     \}}
-\DoxyCodeLine{374 }
+\DoxyCodeLine{367 }
+\DoxyCodeLine{368     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a8bedb5143f41c426fb4bda0a503bb125}{errorMessages}} -\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"TCP: Handled packet\(\backslash\)n"});}
+\DoxyCodeLine{369 }
+\DoxyCodeLine{370     \textcolor{keywordflow}{if}(socket != 0 \&\& socket -\/> state == \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8ac0582d073da4f6dfdd4aa5983f0aca46}{CLOSED}})                                        \textcolor{comment}{//If the socket is closed then remove it from the list}}
+\DoxyCodeLine{371     \{}
+\DoxyCodeLine{372         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a808523124196c3f969dfb80ba63572c8}{sockets}}.erase(socket);}
+\DoxyCodeLine{373         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{374     \}}
 \DoxyCodeLine{375 }
 \DoxyCodeLine{376 }
-\DoxyCodeLine{377     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{378 \}}
+\DoxyCodeLine{377 }
+\DoxyCodeLine{378     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{379 \}}
 
 \end{DoxyCode}
 
@@ -563,32 +530,32 @@ The socket that will handle the connection
 \end{DoxyReturn}
 
 
-Definition at line 537 of file tcp.\+cpp.
+Definition at line 516 of file tcp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{538 \{}
-\DoxyCodeLine{539     \textcolor{comment}{//Create a new socket}}
-\DoxyCodeLine{540     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
-\DoxyCodeLine{541 }
-\DoxyCodeLine{542     \textcolor{comment}{//If there is space for the socket}}
-\DoxyCodeLine{543     \textcolor{keywordflow}{if}(socket != 0)}
-\DoxyCodeLine{544     \{}
-\DoxyCodeLine{545         \textcolor{comment}{//Set the socket}}
-\DoxyCodeLine{546         \textcolor{keyword}{new} (socket) \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a6cb78908521ca4ec70a18ed72b6b96bf}{TransmissionControlProtocolSocket}}(\textcolor{keyword}{this});}
-\DoxyCodeLine{547 }
-\DoxyCodeLine{548         \textcolor{comment}{//Configure the socket}}
-\DoxyCodeLine{549         socket -\/> state = \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8a56252a0c93c53f83dc0b20badbf38b08}{LISTEN}};}
-\DoxyCodeLine{550         socket -\/> localIP = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a3adb1aeac42ac73a8c52c2d00ebd9a2f}{internetProtocolHandler}} -\/> GetInternetProtocolAddress();}
-\DoxyCodeLine{551         socket -\/> localPort = ((port \& 0xFF00)>>8) | ((port \& 0x00FF) << 8);}
-\DoxyCodeLine{552 }
-\DoxyCodeLine{553         \textcolor{comment}{//Add the socket to the socket array}}
-\DoxyCodeLine{554         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a808523124196c3f969dfb80ba63572c8}{sockets}}.push\_back(socket);}
-\DoxyCodeLine{555     \}}
-\DoxyCodeLine{556 }
-\DoxyCodeLine{557     \textcolor{comment}{//Return the socket}}
-\DoxyCodeLine{558     \textcolor{keywordflow}{return} socket;}
-\DoxyCodeLine{559 \}}
+\DoxyCodeLine{517 \{}
+\DoxyCodeLine{518     \textcolor{comment}{//Create a new socket}}
+\DoxyCodeLine{519     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
+\DoxyCodeLine{520 }
+\DoxyCodeLine{521     \textcolor{comment}{//If there is space for the socket}}
+\DoxyCodeLine{522     \textcolor{keywordflow}{if}(socket != 0)}
+\DoxyCodeLine{523     \{}
+\DoxyCodeLine{524         \textcolor{comment}{//Set the socket}}
+\DoxyCodeLine{525         \textcolor{keyword}{new} (socket) \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a6cb78908521ca4ec70a18ed72b6b96bf}{TransmissionControlProtocolSocket}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{526 }
+\DoxyCodeLine{527         \textcolor{comment}{//Configure the socket}}
+\DoxyCodeLine{528         socket -\/> state = \mbox{\hyperlink{namespacemaxOS_1_1net_af461188b92ce6b75f84da8d98c1cc3f8a56252a0c93c53f83dc0b20badbf38b08}{LISTEN}};}
+\DoxyCodeLine{529         socket -\/> localIP = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a3adb1aeac42ac73a8c52c2d00ebd9a2f}{internetProtocolHandler}} -\/> GetInternetProtocolAddress();}
+\DoxyCodeLine{530         socket -\/> localPort = ((port \& 0xFF00)>>8) | ((port \& 0x00FF) << 8);}
+\DoxyCodeLine{531 }
+\DoxyCodeLine{532         \textcolor{comment}{//Add the socket to the socket array}}
+\DoxyCodeLine{533         \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler_a808523124196c3f969dfb80ba63572c8}{sockets}}.push\_back(socket);}
+\DoxyCodeLine{534     \}}
+\DoxyCodeLine{535 }
+\DoxyCodeLine{536     \textcolor{comment}{//Return the socket}}
+\DoxyCodeLine{537     \textcolor{keywordflow}{return} socket;}
+\DoxyCodeLine{538 \}}
 
 \end{DoxyCode}
 
@@ -618,63 +585,67 @@ Send a packet (Throught the provider)
 \end{DoxyParams}
 
 
-Definition at line 388 of file tcp.\+cpp.
+Definition at line 389 of file tcp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{389 \{}
-\DoxyCodeLine{390     \textcolor{comment}{//Get the total size of the packet and the packet with the pseudo header}}
-\DoxyCodeLine{391     uint16\_t \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}});}
-\DoxyCodeLine{392     uint16\_t lengthInclPHdr = \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}});}
-\DoxyCodeLine{393 }
-\DoxyCodeLine{394     \textcolor{comment}{//Create a buffer for the packet}}
-\DoxyCodeLine{395     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/> malloc(lengthInclPHdr);}
-\DoxyCodeLine{396     uint8\_t* buffer2 = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}) + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}});}
-\DoxyCodeLine{397 }
-\DoxyCodeLine{398     \textcolor{comment}{//Create the headers}}
-\DoxyCodeLine{399     \mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}}* phdr = (\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}}*)buffer;}
-\DoxyCodeLine{400     \mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}* msg = (\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}*)(buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}}));}
-\DoxyCodeLine{401 }
-\DoxyCodeLine{402     \textcolor{comment}{//Size is translated into 32bit}}
-\DoxyCodeLine{403     msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}} = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}})/4;}
-\DoxyCodeLine{404 }
-\DoxyCodeLine{405     \textcolor{comment}{//Set the ports}}
-\DoxyCodeLine{406     msg -\/> \mbox{\hyperlink{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8}{srcPort}} = \mbox{\hyperlink{tcp_8cpp_abfe30d4c4185706700ed78df8308a63e}{bigEndian16}}(socket -\/> localPort);}
-\DoxyCodeLine{407     msg -\/> \mbox{\hyperlink{tcp_8h_ac01766720e5781a418710ebf1ba5379e}{dstPort}} = \mbox{\hyperlink{tcp_8cpp_abfe30d4c4185706700ed78df8308a63e}{bigEndian16}}(socket -\/> remotePort);}
-\DoxyCodeLine{408 }
-\DoxyCodeLine{409     \textcolor{comment}{//Set TCP related data}}
-\DoxyCodeLine{410     msg -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}( socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} );}
-\DoxyCodeLine{411     msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}( socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} );}
-\DoxyCodeLine{412     msg -\/> \mbox{\hyperlink{fat32_8h_acb7bc06bed6f6408d719334fc41698c7}{reserved}} = 0;}
-\DoxyCodeLine{413     msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} = \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}};}
-\DoxyCodeLine{414     msg -\/> \mbox{\hyperlink{tcp_8h_a6b2a31b20954529dabfe0f32eda1cf11}{windowSize}} = 0xFFFF;}
-\DoxyCodeLine{415     msg -\/> \mbox{\hyperlink{tcp_8h_aca974d34b50135a7d9b524a8fc2f5d00}{urgentPtr}} = 0;}
-\DoxyCodeLine{416 }
-\DoxyCodeLine{417     \textcolor{comment}{//Through the options allow for the MSS to be set}}
-\DoxyCodeLine{418     msg -\/> \mbox{\hyperlink{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7}{options}} = ((\mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} \& \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca20ec4c36fc18a99ba2232dec0f88eb3f}{SYN}}) != 0) ? 0xB4050402 : 0;}
-\DoxyCodeLine{419 }
-\DoxyCodeLine{420     \textcolor{comment}{//Increase the sequence number}}
-\DoxyCodeLine{421     socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} += \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
-\DoxyCodeLine{422 }
-\DoxyCodeLine{423     \textcolor{comment}{//Copy the data into the buffer}}
-\DoxyCodeLine{424     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)}
-\DoxyCodeLine{425         buffer2[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}];}
-\DoxyCodeLine{426 }
-\DoxyCodeLine{427     \textcolor{comment}{//Set the pseudo header}}
-\DoxyCodeLine{428     phdr -\/> \mbox{\hyperlink{arp_8h_a2c21b87d7d19b79e094d74112253a776}{srcIP}} = socket -\/> localIP;}
-\DoxyCodeLine{429     phdr -\/> \mbox{\hyperlink{arp_8h_a2287eab8c0183320980c7a0addb74a5a}{dstIP}} = socket -\/> remoteIP;}
-\DoxyCodeLine{430     phdr -\/> \mbox{\hyperlink{arp_8h_ab551400c74271f35d0c79f81d29cffbb}{protocol}} = 0x0600;}
-\DoxyCodeLine{431     phdr -\/> \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} = ((\mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} \& 0x00FF) << 8) | ((\mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} \& 0xFF00) >> 8);}
-\DoxyCodeLine{432 }
-\DoxyCodeLine{433     \textcolor{comment}{//Calculate the checksum}}
-\DoxyCodeLine{434     msg -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = 0;}
-\DoxyCodeLine{435     msg -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{InternetProtocolHandler::Checksum}}((uint16\_t*)buffer, lengthInclPHdr);}
-\DoxyCodeLine{436 }
+\DoxyCodeLine{390 \{}
+\DoxyCodeLine{391     \textcolor{comment}{//Get the total size of the packet and the packet with the pseudo header}}
+\DoxyCodeLine{392     uint16\_t \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}});}
+\DoxyCodeLine{393     uint16\_t lengthInclPHdr = \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}});}
+\DoxyCodeLine{394 }
+\DoxyCodeLine{395     \textcolor{comment}{//Create a buffer for the packet}}
+\DoxyCodeLine{396     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/> malloc(lengthInclPHdr);}
+\DoxyCodeLine{397     uint8\_t* buffer2 = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}) + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}});}
+\DoxyCodeLine{398 }
+\DoxyCodeLine{399     \textcolor{comment}{//Create the headers}}
+\DoxyCodeLine{400     \mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}}* phdr = (\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}}*)buffer;}
+\DoxyCodeLine{401     \mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}* msg = (\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}*)(buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}}));}
+\DoxyCodeLine{402 }
+\DoxyCodeLine{403     \textcolor{comment}{//Size is translated into 32bit}}
+\DoxyCodeLine{404     msg -\/> \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{headerSize32}} = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}})/4;}
+\DoxyCodeLine{405 }
+\DoxyCodeLine{406     \textcolor{comment}{//Set the ports}}
+\DoxyCodeLine{407     msg -\/> \mbox{\hyperlink{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8}{srcPort}} = \mbox{\hyperlink{tcp_8cpp_abfe30d4c4185706700ed78df8308a63e}{bigEndian16}}(socket -\/> localPort);}
+\DoxyCodeLine{408     msg -\/> \mbox{\hyperlink{tcp_8h_ac01766720e5781a418710ebf1ba5379e}{dstPort}} = \mbox{\hyperlink{tcp_8cpp_abfe30d4c4185706700ed78df8308a63e}{bigEndian16}}(socket -\/> remotePort);}
+\DoxyCodeLine{409 }
+\DoxyCodeLine{410     \textcolor{comment}{//Set TCP related data}}
+\DoxyCodeLine{411     msg -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}( socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} );}
+\DoxyCodeLine{412     msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}( socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} );}
+\DoxyCodeLine{413     msg -\/> \mbox{\hyperlink{fat32_8h_acb7bc06bed6f6408d719334fc41698c7}{reserved}} = 0;}
+\DoxyCodeLine{414     msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} = \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}};}
+\DoxyCodeLine{415     msg -\/> \mbox{\hyperlink{tcp_8h_a6b2a31b20954529dabfe0f32eda1cf11}{windowSize}} = 0xFFFF;}
+\DoxyCodeLine{416     msg -\/> \mbox{\hyperlink{tcp_8h_aca974d34b50135a7d9b524a8fc2f5d00}{urgentPtr}} = 0;}
+\DoxyCodeLine{417 }
+\DoxyCodeLine{418     \textcolor{comment}{//Through the options allow for the MSS to be set}}
+\DoxyCodeLine{419     msg -\/> \mbox{\hyperlink{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7}{options}} = ((\mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} \& \mbox{\hyperlink{namespacemaxOS_1_1net_a306db96e97ff11fdb579107e0cf1288ca20ec4c36fc18a99ba2232dec0f88eb3f}{SYN}}) != 0) ? 0xB4050402 : 0;}
+\DoxyCodeLine{420 }
+\DoxyCodeLine{421     \textcolor{comment}{//Increase the sequence number}}
+\DoxyCodeLine{422     socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} += \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
+\DoxyCodeLine{423 }
+\DoxyCodeLine{424     \textcolor{comment}{// Check if the data is not null}}
+\DoxyCodeLine{425     \textcolor{keywordflow}{if}(\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}} != 0)}
+\DoxyCodeLine{426     \{}
+\DoxyCodeLine{427             \textcolor{comment}{//Copy the data into the buffer}}
+\DoxyCodeLine{428             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)}
+\DoxyCodeLine{429             buffer2[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}];}
+\DoxyCodeLine{430     \}}
+\DoxyCodeLine{431 }
+\DoxyCodeLine{432     \textcolor{comment}{//Set the pseudo header}}
+\DoxyCodeLine{433     phdr -\/> \mbox{\hyperlink{arp_8h_a2c21b87d7d19b79e094d74112253a776}{srcIP}} = socket -\/> localIP;}
+\DoxyCodeLine{434     phdr -\/> \mbox{\hyperlink{arp_8h_a2287eab8c0183320980c7a0addb74a5a}{dstIP}} = socket -\/> remoteIP;}
+\DoxyCodeLine{435     phdr -\/> \mbox{\hyperlink{arp_8h_ab551400c74271f35d0c79f81d29cffbb}{protocol}} = 0x0600;}
+\DoxyCodeLine{436     phdr -\/> \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} = ((\mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} \& 0x00FF) << 8) | ((\mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} \& 0xFF00) >> 8);}
 \DoxyCodeLine{437 }
-\DoxyCodeLine{438     \textcolor{comment}{//Send and then free the data}}
-\DoxyCodeLine{439     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a547124e71c39318710ca97724adc447b}{Send}}(socket -\/> remoteIP, (uint8\_t*)msg, \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}});}
-\DoxyCodeLine{440     MemoryManager::s\_active\_memory\_manager-\/> free(buffer);}
-\DoxyCodeLine{441 \}}
+\DoxyCodeLine{438     \textcolor{comment}{//Calculate the checksum}}
+\DoxyCodeLine{439     msg -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = 0;}
+\DoxyCodeLine{440     msg -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{InternetProtocolHandler::Checksum}}((uint16\_t*)buffer, lengthInclPHdr);}
+\DoxyCodeLine{441 }
+\DoxyCodeLine{442 }
+\DoxyCodeLine{443     \textcolor{comment}{//Send and then free the data}}
+\DoxyCodeLine{444     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a547124e71c39318710ca97724adc447b}{Send}}(socket -\/> remoteIP, (uint8\_t*)msg, \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}});}
+\DoxyCodeLine{445     MemoryManager::s\_active\_memory\_manager-\/> free(buffer);}
+\DoxyCodeLine{446 \}}
 
 \end{DoxyCode}
 

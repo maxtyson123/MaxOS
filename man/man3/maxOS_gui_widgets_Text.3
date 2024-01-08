@@ -1,4 +1,4 @@
-.TH "maxOS::gui::widgets::Text" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::gui::widgets::Text" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -33,7 +33,7 @@ Inherits \fBmaxOS::gui::Widget\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBAmigaFont\fP \fBfont\fP"
+.RI "\fBgui::Font\fP \fBfont\fP"
 .br
 .ti -1c
 .RI "\fBcommon::Colour\fP \fBforeground_colour\fP"
@@ -46,7 +46,7 @@ Inherits \fBmaxOS::gui::Widget\fP\&.
 
 .in +1c
 .ti -1c
-.RI "char \fBm_widget_text\fP [256]"
+.RI "\fBstring\fP \fBm_widget_text\fP"
 .br
 .in -1c
 .SS "Additional Inherited Members"
@@ -60,30 +60,28 @@ Definition at line 23 of file text\&.h\&.
 .SS "Text::Text (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP text)"
 
 .PP
-Definition at line 12 of file text\&.cpp\&.
+Definition at line 13 of file text\&.cpp\&.
 .PP
 .nf
-13 : Widget(left, top, width, height),
-14   font(AmigaFont()),
-15   foreground_colour(Colour(0,0,0)),
-16   background_colour(Colour(255,255,255))
-17 {
-18     // Set the text
-19     update_text(text);
-20 }
+14 : Widget(left, top, width, height),
+15   font((uint8_t*)AMIGA_FONT),
+16   foreground_colour(Colour(0,0,0)),
+17   background_colour(Colour(255,255,255))
+18 {
+19     // Set the text
+20     update_text(text);
+21 }
 .fi
-.PP
-References update_text()\&.
 .SS "Text::~Text ()"
 
 .PP
-Definition at line 22 of file text\&.cpp\&.
+Definition at line 23 of file text\&.cpp\&.
 .PP
 .nf
-22             {
-23 
+23             {
 24 
-25 }
+25 
+26 }
 .fi
 .SH "Member Function Documentation"
 .PP 
@@ -103,31 +101,29 @@ Draw the text on the screen\&.
 .PP
 Reimplemented from \fBmaxOS::gui::Widget\fP\&.
 .PP
-Definition at line 33 of file text\&.cpp\&.
+Definition at line 34 of file text\&.cpp\&.
 .PP
 .nf
-33                                                              {
-34 
-35     // Default Draw Operation
-36     Widget::draw(gc, area);
-37 
-38     // Get the absolute m_position of the text
-39     Coordinates textCoordinates = absolute_coordinates(Coordinates(0, 0));
-40     Rectangle<int32_t> textPosition = position();
-41 
-42     // Get the x and y m_position of the text
-43     int32_t x = textCoordinates\&.first;
-44     int32_t y = textCoordinates\&.second;
-45 
-46     // Draw the background for the text (TODO: Might not need to do this as the background is drawn by the default draw operation)
-47     gc->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width,
-48                        y + area\&.top + area\&.height, background_colour);
+34                                                              {
+35 
+36     // Default Draw Operation
+37     Widget::draw(gc, area);
+38 
+39     // Get the absolute m_position of the text
+40     Coordinates textCoordinates = absolute_coordinates(Coordinates(0, 0));
+41     Rectangle<int32_t> textPosition = position();
+42 
+43     // Get the x and y m_position of the text
+44     int32_t x = textCoordinates\&.first;
+45     int32_t y = textCoordinates\&.second;
+46 
+47     // Draw the background (as the text might not fill the entire area)
+48     gc->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width, y + area\&.top + area\&.height, background_colour);
 49 
 50     // Draw the text
-51     this->font\&.draw_text(x, y, foreground_colour, background_colour, gc,
-52                          m_widget_text, area);
-53 
-54 }
+51     this->font\&.draw_text(x, y, foreground_colour, background_colour, gc, m_widget_text, area);
+52 
+53 }
 .fi
 .PP
 References maxOS::gui::Widget::absolute_coordinates(), background_colour, maxOS::gui::Widget::draw(), maxOS::gui::Font::draw_text(), maxOS::common::GraphicsContext::fill_rectangle(), maxOS::common::Pair< First, Second >::first, font, foreground_colour, maxOS::common::Rectangle< Type >::height, maxOS::common::Rectangle< Type >::left, m_widget_text, maxOS::gui::Widget::position(), maxOS::common::Pair< First, Second >::second, maxOS::common::Rectangle< Type >::top, maxOS::common::Rectangle< Type >::width, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -143,58 +139,48 @@ Update the text of the widget\&.
 .PP
 
 .PP
-Definition at line 60 of file text\&.cpp\&.
+Definition at line 59 of file text\&.cpp\&.
 .PP
 .nf
-60                                       {
+59                                       {
+60 
 61 
-62 
-63     // Copy the new text into the widget by looping through the characters
-64     for(uint32_t i = 0; i < 1000; i++)
-65     {
-66         // Set the character
-67         this ->m_widget_text[i] = new_text[i];
-68 
-69         // Check if the end of the string has been reached
-70         if(new_text[i] == '\0')
-71             break;
-72     }
-73 
-74     // New text has  been set so invalidate the widget
-75     invalidate();
-76 
-77 }
+62     // Set the text
+63     m_widget_text\&.copy(new_text);
+64 
+65     // New text has  been set so invalidate the widget
+66     invalidate();
+67 
+68 }
 .fi
 .PP
-References maxOS::drivers::peripherals::i, and maxOS::gui::Widget::invalidate()\&.
-.PP
-Referenced by Text()\&.
+References maxOS::String::copy(), maxOS::gui::Widget::invalidate(), and m_widget_text\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBcommon::Colour\fP maxOS::gui::widgets::Text::background_colour"
 
 .PP
-Definition at line 34 of file text\&.h\&.
+Definition at line 33 of file text\&.h\&.
 .PP
 Referenced by draw(), and maxOS::gui::Window::Window()\&.
-.SS "\fBAmigaFont\fP maxOS::gui::widgets::Text::font"
+.SS "\fBgui::Font\fP maxOS::gui::widgets::Text::font"
 
 .PP
-Definition at line 31 of file text\&.h\&.
+Definition at line 30 of file text\&.h\&.
 .PP
 Referenced by draw()\&.
 .SS "\fBcommon::Colour\fP maxOS::gui::widgets::Text::foreground_colour"
 
 .PP
-Definition at line 33 of file text\&.h\&.
+Definition at line 32 of file text\&.h\&.
 .PP
 Referenced by draw(), and maxOS::gui::Window::Window()\&.
-.SS "char maxOS::gui::widgets::Text::m_widget_text[256]\fC [protected]\fP"
+.SS "\fBstring\fP maxOS::gui::widgets::Text::m_widget_text\fC [protected]\fP"
 
 .PP
 Definition at line 26 of file text\&.h\&.
 .PP
-Referenced by draw()\&.
+Referenced by draw(), and update_text()\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memoryIO.h" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memoryIO.h" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -45,6 +45,186 @@
 .RI " \fBmaxOS::memory\fP"
 .br
 .in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBmemcpy\fP (void *destination, const void *source, uint32_t num)"
+.br
+.RI "Copies a block of memory from one location to another\&. "
+.ti -1c
+.RI "void * \fBmemset\fP (void *ptr, int value, uint32_t num)"
+.br
+.RI "Fills a block of memory with a specified value\&. "
+.ti -1c
+.RI "void * \fBmemmove\fP (void *destination, const void *source, uint32_t num)"
+.br
+.RI "Copies a block of memory from one location to another\&. "
+.ti -1c
+.RI "int \fBmemcmp\fP (const void *ptr1, const void *ptr2, uint32_t num)"
+.br
+.RI "Compares two blocks of memory\&. "
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int memcmp (const void * ptr1, const void * ptr2, uint32_t num)"
+
+.PP
+Compares two blocks of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr1\fP The m_first_memory_chunk block of memory 
+.br
+\fIptr2\fP The second block of memory 
+.br
+\fInum\fP The number of bytes to compare 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if the blocks of memory are equal, -1 if ptr1 < ptr2, 1 if ptr1 > ptr2 
+.RE
+.PP
+
+.PP
+Definition at line 192 of file memoryIO\&.cpp\&.
+.PP
+.nf
+192                                                              {
+193   const unsigned char *p1 = (const unsigned char *)ptr1;
+194   const unsigned char *p2 = (const unsigned char *)ptr2;
+195   for (size_t i = 0; i < num; i++) {
+196     if (p1[i] < p2[i])
+197       return -1;
+198     if (p1[i] > p2[i])
+199       return 1;
+200   }
+201   return 0;
+202 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i\&.
+.PP
+Referenced by memFunctions()\&.
+.SS "void* memcpy (void * destination, const void * source, uint32_t num)"
+
+.PP
+Copies a block of memory from one location to another\&. 
+.PP
+\fBSee also\fP
+.RS 4
+https://wiki.osdev.org/Meaty_Skeleton#memcpy.28.29
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP The destination to copy to 
+.br
+\fIsource\fP The source to copy from 
+.br
+\fInum\fP The number of bytes to copy 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The destination 
+.RE
+.PP
+
+.PP
+Definition at line 138 of file memoryIO\&.cpp\&.
+.PP
+.nf
+138                                                                   {
+139 
+140     unsigned char* dst = (unsigned char*) destination;
+141     const unsigned char* src = (const unsigned char*) source;
+142     for (size_t i = 0; i < num; i++)
+143         dst[i] = src[i];
+144     return destination;
+145 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i\&.
+.PP
+Referenced by memFunctions()\&.
+.SS "void* memmove (void * destination, const void * source, uint32_t num)"
+
+.PP
+Copies a block of memory from one location to another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP The destination to copy to 
+.br
+\fIsource\fP The source to copy from 
+.br
+\fInum\fP The number of bytes to copy 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The destination 
+.RE
+.PP
+
+.PP
+Definition at line 171 of file memoryIO\&.cpp\&.
+.PP
+.nf
+171                                                                    {
+172     unsigned char* dst = (unsigned char*) destination;
+173     const unsigned char* src = (const unsigned char*) source;
+174     if (dst < src) {
+175         for (size_t i = 0; i < num; i++)
+176             dst[i] = src[i];
+177     } else {
+178         for (size_t i = num; i != 0; i--)
+179             dst[i-1] = src[i-1];
+180     }
+181     return destination;
+182 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i\&.
+.PP
+Referenced by memFunctions()\&.
+.SS "void* memset (void * ptr, int value, uint32_t num)"
+
+.PP
+Fills a block of memory with a specified value\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP The pointer to the block of memory 
+.br
+\fIvalue\fP The value to fill the block of memory with 
+.br
+\fInum\fP The number of bytes to fill 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pointer to the block of memory 
+.RE
+.PP
+
+.PP
+Definition at line 156 of file memoryIO\&.cpp\&.
+.PP
+.nf
+156                                                  {
+157     unsigned char* dst = (unsigned char*) ptr;
+158     for (size_t i = 0; i < num; i++)
+159         dst[i] = (unsigned char) value;
+160     return ptr;
+161 }
+.fi
+.PP
+References maxOS::drivers::peripherals::i\&.
+.PP
+Referenced by memFunctions()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

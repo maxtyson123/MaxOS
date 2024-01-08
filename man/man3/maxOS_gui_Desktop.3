@@ -1,4 +1,4 @@
-.TH "maxOS::gui::Desktop" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::gui::Desktop" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -197,6 +197,8 @@ Definition at line 156 of file desktop\&.cpp\&.
 .fi
 .PP
 References maxOS::gui::CompositeWidget::add_child(), maxOS::gui::Widget::contains_coordinate(), m_mouse_x, m_mouse_y, maxOS::gui::CompositeWidget::on_mouse_enter_widget(), and maxOS::gui::CompositeWidget::on_mouse_leave_widget()\&.
+.PP
+Referenced by kernelMain()\&.
 .SS "void Desktop::bring_to_front (\fBWidget\fP * front_widget)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
@@ -357,12 +359,12 @@ Definition at line 74 of file desktop\&.cpp\&.
 76     //TODO: Get image drawing going and draw a proper mouse
 77 
 78     // Draw the horizontal line
-79     for (int x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
+79     for (uint32_t x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
 80       m_graphics_context->invert_pixel(x, m_mouse_y);
 81     }
 82 
 83     // Draw the vertical line
-84     for (int y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
+84     for (uint32_t y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
 85       m_graphics_context->invert_pixel(m_mouse_x, y);
 86     }
 87 }
@@ -552,7 +554,7 @@ Reimplemented from \fBmaxOS::drivers::clock::ClockEventHandler\fP\&.
 Definition at line 178 of file desktop\&.cpp\&.
 .PP
 .nf
-178                                             {
+178                                         {
 179 
 180     // Check if anything is invalid and needs to be redrawn
 181     if(m_invalid_areas\&.empty())

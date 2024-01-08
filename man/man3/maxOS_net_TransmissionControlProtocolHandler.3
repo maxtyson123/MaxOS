@@ -1,4 +1,4 @@
-.TH "maxOS::net::TransmissionControlProtocolHandler" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::net::TransmissionControlProtocolHandler" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -120,12 +120,12 @@ Bind a data handler to this socket\&.
 .PP
 
 .PP
-Definition at line 568 of file tcp\&.cpp\&.
+Definition at line 547 of file tcp\&.cpp\&.
 .PP
 .nf
-569 {
-570   socket->connect_event_handler(handler);
-571 }
+548 {
+549   socket->connect_event_handler(handler);
+550 }
 .fi
 .PP
 References maxOS::common::EventManager< EventType >::connect_event_handler()\&.
@@ -148,88 +148,58 @@ The socket that is connected to the remote host, 0 if it failed
 .PP
 
 .PP
-Definition at line 449 of file tcp\&.cpp\&.
+Definition at line 454 of file tcp\&.cpp\&.
 .PP
 .nf
-450 {
-451     //Create a new socket
-452     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
-453 
-454     //If there is space for the socket
-455     if(socket != 0)
-456     {
-457         //Set the socket
-458         new (socket) TransmissionControlProtocolSocket(this);
-459 
-460         //Set local and remote addresses
-461         socket -> remotePort = port;
-462         socket -> remoteIP = ip;
-463         socket -> localPort = freePorts++;
-464         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
-465 
-466         //Convert into big endian
-467         socket -> remotePort = ((socket -> remotePort & 0xFF00)>>8) | ((socket -> remotePort & 0x00FF) << 8);
-468         socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);
-469 
-470         //Set the socket into the socket array and then set its state
-471         sockets\&.push_back(socket);
-472         socket -> state = SYN_SENT;
-473 
-474         //Dummy sequence number
-475         socket -> sequenceNumber = 0xbeefcafe;
-476 
-477         //Send a sync packet
-478         sendTransmissionControlProtocolPacket(socket, 0,0, SYN);
-479     }
-480 
-481     return socket;
-482 }
+455 {
+456     //Create a new socket
+457     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
+458 
+459     //If there is space for the socket
+460     if(socket != 0)
+461     {
+462         //Set the socket
+463         new (socket) TransmissionControlProtocolSocket(this);
+464 
+465         //Set local and remote addresses
+466         socket -> remotePort = port;
+467         socket -> remoteIP = ip;
+468         socket -> localPort = freePorts++;
+469         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
+470 
+471         //Convert into big endian
+472         socket -> remotePort = ((socket -> remotePort & 0xFF00)>>8) | ((socket -> remotePort & 0x00FF) << 8);
+473         socket -> localPort = ((socket -> localPort & 0xFF00)>>8) | ((socket -> localPort & 0x00FF) << 8);
+474 
+475         //Set the socket into the socket array and then set its state
+476         sockets\&.push_back(socket);
+477         socket -> state = SYN_SENT;
+478 
+479         //Dummy sequence number
+480         socket -> sequenceNumber = 0xbeefcafe;
+481 
+482         //Send a sync packet
+483         sendTransmissionControlProtocolPacket(socket, 0,0, SYN);
+484     }
+485 
+486     return socket;
+487 }
 .fi
 .PP
 References freePorts, maxOS::net::InternetProtocolPayloadHandler::internetProtocolHandler, sendTransmissionControlProtocolPacket(), sequenceNumber, sockets, maxOS::net::SYN, maxOS::net::SYN_SENT, and TransmissionControlProtocolSocket\&.
-.PP
-Referenced by Connect()\&.
 .SS "\fBTransmissionControlProtocolSocket\fP * TransmissionControlProtocolHandler::Connect (\fBstring\fP internetProtocolAddressAndPort)"
 
 .PP
-Definition at line 485 of file tcp\&.cpp\&.
+Definition at line 490 of file tcp\&.cpp\&.
 .PP
 .nf
-485                                                                                                                     {
-486     // Find the colon (:) character in the input string
-487     string colonPosition = (string)internetProtocolAddressAndPort;
-488     for (; *colonPosition != '\0'; colonPosition++) {
-489         if (*colonPosition == ':') {
-490             // Break the loop if a colon is found
-491             break;
-492         }
-493     }
-494 
-495     // If no colon is found, return 0
-496     if (*colonPosition != ':') {
-497         return 0;
-498     }
-499 
-500     // Parse the InternetProtocolAddress from the input string
-501     InternetProtocolAddress remoteAddress = InternetProtocolHandler::Parse(internetProtocolAddressAndPort);
-502 
-503     // Initialize the TransmissionControlProtocolPort to 0
-504     TransmissionControlProtocolPort port = 0;
-505 
-506     // Iterate through the string after the colon to extract the port number
-507     for (colonPosition++; *colonPosition != '\0'; colonPosition++) {
-508         if ('0' <= *colonPosition && *colonPosition <= '9') {
-509             // Calculate the port number by converting characters to integers
-510             port = port * 10 + (*colonPosition - '0');
-511         }
-512     }
-513 
-514     // Connect to the remote address and port
-515     return Connect(remoteAddress, port);
-516 }
+490                                                                                      {
+491 
+492   //TODO NEW STRING PARSEING
+493 
+494   return nullptr;
+495 }
 .fi
-.PP
-References Connect(), maxOS::net::InternetProtocolHandler::Parse(), and maxOS::string\&.
 .SS "void TransmissionControlProtocolHandler::Disconnect (\fBTransmissionControlProtocolSocket\fP * socket)"
 
 .PP
@@ -242,15 +212,15 @@ Begin the disconnect process\&.
 .PP
 
 .PP
-Definition at line 523 of file tcp\&.cpp\&.
+Definition at line 502 of file tcp\&.cpp\&.
 .PP
 .nf
-524 {
-525 
-526     socket -> state = FIN_WAIT1;                            //Begin fin wait sequence
-527     sendTransmissionControlProtocolPacket(socket, 0,0, FIN + ACK);            //Send FIN|ACK packet
-528     socket -> sequenceNumber++;                             //Increase the sequence number
-529 }
+503 {
+504 
+505     socket -> state = FIN_WAIT1;                            //Begin fin wait sequence
+506     sendTransmissionControlProtocolPacket(socket, 0,0, FIN + ACK);            //Send FIN|ACK packet
+507     socket -> sequenceNumber++;                             //Increase the sequence number
+508 }
 .fi
 .PP
 References maxOS::net::ACK, maxOS::net::FIN, maxOS::net::FIN_WAIT1, sendTransmissionControlProtocolPacket(), and sequenceNumber\&.
@@ -436,68 +406,69 @@ Definition at line 162 of file tcp\&.cpp\&.
 314                     break;
 315 
 316                 // no break, because of piggybacking
-317 
-318             default:
-319 
-320                 //By default handle the data
-321 
-322                 if(bigEndian32(msg -> sequenceNumber) == socket -> acknowledgementNumber)
-323                 {
-324 
-325                     reset = !(socket -> handleTransmissionControlProtocolPayload(payloadData + msg -> headerSize32*4,size - msg -> headerSize32*4));
-326                     if(!reset)
-327                     {
-328                         int x = 0;                                                                      //The number of bytes to send back
-329                         for(int i = msg -> headerSize32*4; i < size; i++)                               //Loop through the data
-330                             if(payloadData[i] != 0)                                                     //Check if the data is not 0
-331                                 x = i;                                                                  //Set the number of bytes to send back to the current index
-332                         socket -> acknowledgementNumber += x - msg -> headerSize32*4 + 1;               //Increment the acknowledgement number by the number of bytes to send back
-333                         sendTransmissionControlProtocolPacket(socket, 0,0, ACK);                                          //Send the acknowledgement
-334                     }
-335                 }
-336                 else
-337                 {
-338                     // data in wrong order
-339                     reset = true;
-340                 }
-341 
-342         }
-343     }
-344 
+317                 [[fallthrough]];
+318 
+319             default:
+320 
+321                 //By default handle the data
+322 
+323                 if(bigEndian32(msg -> sequenceNumber) == socket -> acknowledgementNumber)
+324                 {
+325 
+326                     reset = !(socket -> handleTransmissionControlProtocolPayload(payloadData + msg -> headerSize32*4,size - msg -> headerSize32*4));
+327                     if(!reset)
+328                     {
+329                         int x = 0;                                                                      //The number of bytes to send back
+330                         for(uint32_t i = msg -> headerSize32*4; i < size; i++)                          //Loop through the data
+331                             if(payloadData[i] != 0)                                                     //Check if the data is not 0
+332                                 x = i;                                                                  //Set the number of bytes to send back to the current index
+333                         socket -> acknowledgementNumber += x - msg -> headerSize32*4 + 1;               //Increment the acknowledgement number by the number of bytes to send back
+334                         sendTransmissionControlProtocolPacket(socket, 0,0, ACK);                                          //Send the acknowledgement
+335                     }
+336                 }
+337                 else
+338                 {
+339                     // data in wrong order
+340                     reset = true;
+341                 }
+342 
+343         }
+344     }
 345 
 346 
-347     if(reset)                                                                       //If the socket is to be reset
-348     {
-349         if(socket != 0)                                                             //If the socket exists then send a reset flag
-350         {
-351             sendTransmissionControlProtocolPacket(socket, 0,0, RST);
-352         }
-353         else                                                                        //If it doesnt exist then create a new socket and send a reset flag
-354         {
-355             TransmissionControlProtocolSocket socket(this);                     //Create a new socket
-356             socket\&.remotePort = msg -> srcPort;                                         //Set the remote port
-357             socket\&.remoteIP = sourceIP;                                                 //Set the remote IP
-358             socket\&.localPort = msg -> dstPort;                                                  //Set the local port
-359             socket\&.localIP = destinationIP;                                                     //Set the local IP
-360             socket\&.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);              //Set the sequence number
-361             socket\&.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;          //Set the acknowledgement number
-362             sendTransmissionControlProtocolPacket(&socket, 0,0, RST);          //Send the reset flag
-363         }
-364     }
-365 
+347 
+348     if(reset)                                                                       //If the socket is to be reset
+349     {
+350         if(socket != 0)                                                             //If the socket exists then send a reset flag
+351         {
+352             sendTransmissionControlProtocolPacket(socket, 0,0, RST);
+353         }
+354         else                                                                        //If it doesnt exist then create a new socket and send a reset flag
+355         {
+356             TransmissionControlProtocolSocket socket(this);                     //Create a new socket
+357             socket\&.remotePort = msg -> srcPort;                                         //Set the remote port
+358             socket\&.remoteIP = sourceIP;                                                 //Set the remote IP
+359             socket\&.localPort = msg -> dstPort;                                                  //Set the local port
+360             socket\&.localIP = destinationIP;                                                     //Set the local IP
+361             socket\&.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);              //Set the sequence number
+362             socket\&.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;          //Set the acknowledgement number
+363             sendTransmissionControlProtocolPacket(&socket, 0,0, RST);          //Send the reset flag
+364         }
+365     }
 366 
-367     errorMessages ->write("TCP: Handled packet\n");
-368 
-369     if(socket != 0 && socket -> state == CLOSED)                                        //If the socket is closed then remove it from the list
-370     {
-371         sockets\&.erase(socket);
-372         return true;
-373     }
-374 
+367 
+368     errorMessages ->write("TCP: Handled packet\n");
+369 
+370     if(socket != 0 && socket -> state == CLOSED)                                        //If the socket is closed then remove it from the list
+371     {
+372         sockets\&.erase(socket);
+373         return true;
+374     }
 375 
 376 
-377     return false;
-378 }
+377 
+378     return false;
+379 }
 .fi
 .PP
 References maxOS::net::ACK, acknowledgementNumber, maxOS::net::TransmissionControlProtocolSocket::acknowledgementNumber, bigEndian16(), bigEndian32(), maxOS::net::CLOSE_WAIT, maxOS::net::CLOSED, destinationIP, dstPort, errorMessages, maxOS::net::ESTABLISHED, maxOS::net::FIN, maxOS::net::FIN_WAIT1, maxOS::net::FIN_WAIT2, flags, headerSize32, maxOS::drivers::peripherals::i, maxOS::net::LISTEN, maxOS::net::TransmissionControlProtocolSocket::localIP, maxOS::net::TransmissionControlProtocolSocket::localPort, maxOS::net::TransmissionControlProtocolSocket::remoteIP, maxOS::net::TransmissionControlProtocolSocket::remotePort, maxOS::net::RST, sendTransmissionControlProtocolPacket(), sequenceNumber, maxOS::net::TransmissionControlProtocolSocket::sequenceNumber, size, sockets, sourceIP, srcPort, maxOS::net::SYN, maxOS::net::SYN_RECEIVED, maxOS::net::SYN_SENT, maxOS::common::OutputStream::write(), and maxOS::drivers::peripherals::x\&.
@@ -518,31 +489,31 @@ The socket that will handle the connection
 .PP
 
 .PP
-Definition at line 537 of file tcp\&.cpp\&.
+Definition at line 516 of file tcp\&.cpp\&.
 .PP
 .nf
-538 {
-539     //Create a new socket
-540     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
-541 
-542     //If there is space for the socket
-543     if(socket != 0)
-544     {
-545         //Set the socket
-546         new (socket) TransmissionControlProtocolSocket(this);
-547 
-548         //Configure the socket
-549         socket -> state = LISTEN;
-550         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
-551         socket -> localPort = ((port & 0xFF00)>>8) | ((port & 0x00FF) << 8);
-552 
-553         //Add the socket to the socket array
-554         sockets\&.push_back(socket);
-555     }
-556 
-557     //Return the socket
-558     return socket;
-559 }
+517 {
+518     //Create a new socket
+519     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
+520 
+521     //If there is space for the socket
+522     if(socket != 0)
+523     {
+524         //Set the socket
+525         new (socket) TransmissionControlProtocolSocket(this);
+526 
+527         //Configure the socket
+528         socket -> state = LISTEN;
+529         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
+530         socket -> localPort = ((port & 0xFF00)>>8) | ((port & 0x00FF) << 8);
+531 
+532         //Add the socket to the socket array
+533         sockets\&.push_back(socket);
+534     }
+535 
+536     //Return the socket
+537     return socket;
+538 }
 .fi
 .PP
 References maxOS::net::InternetProtocolPayloadHandler::internetProtocolHandler, maxOS::net::LISTEN, sockets, and TransmissionControlProtocolSocket\&.
@@ -564,62 +535,66 @@ Send a packet (Throught the provider)
 .PP
 
 .PP
-Definition at line 388 of file tcp\&.cpp\&.
+Definition at line 389 of file tcp\&.cpp\&.
 .PP
 .nf
-389 {
-390     //Get the total size of the packet and the packet with the pseudo header
-391     uint16_t totalLength = size + sizeof(TransmissionControlProtocolHeader);
-392     uint16_t lengthInclPHdr = totalLength + sizeof(TransmissionControlProtocolPseudoHeader);
-393 
-394     //Create a buffer for the packet
-395     uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(lengthInclPHdr);
-396     uint8_t* buffer2 = buffer + sizeof(TransmissionControlProtocolHeader) + sizeof(TransmissionControlProtocolPseudoHeader);
-397 
-398     //Create the headers
-399     TransmissionControlProtocolPseudoHeader* phdr = (TransmissionControlProtocolPseudoHeader*)buffer;
-400     TransmissionControlProtocolHeader* msg = (TransmissionControlProtocolHeader*)(buffer + sizeof(TransmissionControlProtocolPseudoHeader));
-401 
-402     //Size is translated into 32bit
-403     msg -> headerSize32 = sizeof(TransmissionControlProtocolHeader)/4;
-404 
-405     //Set the ports
-406     msg -> srcPort = bigEndian16(socket -> localPort);
-407     msg -> dstPort = bigEndian16(socket -> remotePort);
-408 
-409     //Set TCP related data
-410     msg -> acknowledgementNumber = bigEndian32( socket -> acknowledgementNumber );
-411     msg -> sequenceNumber = bigEndian32( socket -> sequenceNumber );
-412     msg -> reserved = 0;
-413     msg -> flags = flags;
-414     msg -> windowSize = 0xFFFF;
-415     msg -> urgentPtr = 0;
-416 
-417     //Through the options allow for the MSS to be set
-418     msg -> options = ((flags & SYN) != 0) ? 0xB4050402 : 0;
-419 
-420     //Increase the sequence number
-421     socket -> sequenceNumber += size;
-422 
-423     //Copy the data into the buffer
-424     for(int i = 0; i < size; i++)
-425         buffer2[i] = data[i];
-426 
-427     //Set the pseudo header
-428     phdr -> srcIP = socket -> localIP;
-429     phdr -> dstIP = socket -> remoteIP;
-430     phdr -> protocol = 0x0600;
-431     phdr -> totalLength = ((totalLength & 0x00FF) << 8) | ((totalLength & 0xFF00) >> 8);
-432 
-433     //Calculate the checksum
-434     msg -> checksum = 0;
-435     msg -> checksum = InternetProtocolHandler::Checksum((uint16_t*)buffer, lengthInclPHdr);
-436 
+390 {
+391     //Get the total size of the packet and the packet with the pseudo header
+392     uint16_t totalLength = size + sizeof(TransmissionControlProtocolHeader);
+393     uint16_t lengthInclPHdr = totalLength + sizeof(TransmissionControlProtocolPseudoHeader);
+394 
+395     //Create a buffer for the packet
+396     uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(lengthInclPHdr);
+397     uint8_t* buffer2 = buffer + sizeof(TransmissionControlProtocolHeader) + sizeof(TransmissionControlProtocolPseudoHeader);
+398 
+399     //Create the headers
+400     TransmissionControlProtocolPseudoHeader* phdr = (TransmissionControlProtocolPseudoHeader*)buffer;
+401     TransmissionControlProtocolHeader* msg = (TransmissionControlProtocolHeader*)(buffer + sizeof(TransmissionControlProtocolPseudoHeader));
+402 
+403     //Size is translated into 32bit
+404     msg -> headerSize32 = sizeof(TransmissionControlProtocolHeader)/4;
+405 
+406     //Set the ports
+407     msg -> srcPort = bigEndian16(socket -> localPort);
+408     msg -> dstPort = bigEndian16(socket -> remotePort);
+409 
+410     //Set TCP related data
+411     msg -> acknowledgementNumber = bigEndian32( socket -> acknowledgementNumber );
+412     msg -> sequenceNumber = bigEndian32( socket -> sequenceNumber );
+413     msg -> reserved = 0;
+414     msg -> flags = flags;
+415     msg -> windowSize = 0xFFFF;
+416     msg -> urgentPtr = 0;
+417 
+418     //Through the options allow for the MSS to be set
+419     msg -> options = ((flags & SYN) != 0) ? 0xB4050402 : 0;
+420 
+421     //Increase the sequence number
+422     socket -> sequenceNumber += size;
+423 
+424     // Check if the data is not null
+425     if(data != 0)
+426     {
+427             //Copy the data into the buffer
+428             for(int i = 0; i < size; i++)
+429             buffer2[i] = data[i];
+430     }
+431 
+432     //Set the pseudo header
+433     phdr -> srcIP = socket -> localIP;
+434     phdr -> dstIP = socket -> remoteIP;
+435     phdr -> protocol = 0x0600;
+436     phdr -> totalLength = ((totalLength & 0x00FF) << 8) | ((totalLength & 0xFF00) >> 8);
 437 
-438     //Send and then free the data
-439     Send(socket -> remoteIP, (uint8_t*)msg, totalLength);
-440     MemoryManager::s_active_memory_manager-> free(buffer);
-441 }
+438     //Calculate the checksum
+439     msg -> checksum = 0;
+440     msg -> checksum = InternetProtocolHandler::Checksum((uint16_t*)buffer, lengthInclPHdr);
+441 
+442 
+443     //Send and then free the data
+444     Send(socket -> remoteIP, (uint8_t*)msg, totalLength);
+445     MemoryManager::s_active_memory_manager-> free(buffer);
+446 }
 .fi
 .PP
 References acknowledgementNumber, bigEndian16(), bigEndian32(), checksum, maxOS::net::InternetProtocolHandler::Checksum(), data, dstIP, dstPort, flags, headerSize32, maxOS::drivers::peripherals::i, options, protocol, reserved, maxOS::net::InternetProtocolPayloadHandler::Send(), sequenceNumber, size, srcIP, srcPort, maxOS::net::SYN, totalLength, urgentPtr, and windowSize\&.

@@ -12,7 +12,7 @@ var classmaxOS_1_1gui_1_1widgets_1_1InputBox =
     [ "background_colour", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#a2dd44829d1d39cc3fe9a0d0fe49e740d", null ],
     [ "border_colour", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#a5c9ca08a0b175470c6d7f014861e9608", null ],
     [ "cursor_position", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#afefe24326ca893f281ec83a7dc0e5035", null ],
-    [ "font", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#a18db529fc353637c382496f258d46a49", null ],
+    [ "font", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#a556b86988b143f3f3ad7acf9a0554e90", null ],
     [ "foreground_colour", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#a5d528182df59b342526b8850db081de9", null ],
-    [ "widget_text", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#a4322c10ef165ecbc7dd43cdc36019b46", null ]
+    [ "m_widget_text", "classmaxOS_1_1gui_1_1widgets_1_1InputBox.html#ad2f5957982821efcd018bf79d8438053", null ]
 ];

@@ -1,4 +1,4 @@
-.TH "maxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -39,7 +39,7 @@ Inherits \fBmaxOS::drivers::video::VideoDriver\fP\&.
 .ti -1c
 .RI "bool \fBinternal_set_mode\fP (uint32_t width, uint32_t height, uint32_t) final"
 .br
-.RI "Sets the mode of the VESA driver (TODO: List of modes) "
+.RI "Sets the mode of the VESA driver\&. "
 .ti -1c
 .RI "void \fBrender_pixel_32_bit\fP (uint32_t x, uint32_t y, uint32_t colour) final"
 .br
@@ -120,12 +120,12 @@ The 16bit colour of the pixel
 .PP
 Reimplemented from \fBmaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 128 of file vesa\&.cpp\&.
+Definition at line 116 of file vesa\&.cpp\&.
 .PP
 .nf
-128                                                              {
-129     return "VESA compatible graphics card";
-130 }
+116                                                              {
+117     return "VESA compatible graphics card";
+118 }
 .fi
 .SS "uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit (uint32_t x, uint32_t y)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
@@ -148,17 +148,17 @@ The 32bit colour of the pixel
 .PP
 Reimplemented from \fBmaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 101 of file vesa\&.cpp\&.
+Definition at line 89 of file vesa\&.cpp\&.
 .PP
 .nf
-101                                                                                                {
-102 
-103     // Get the address of the pixel
-104     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-105 
-106     // Return the pixel
-107     return *pixel_address;
-108 }
+89                                                                                                {
+90 
+91     // Get the address of the pixel
+92     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+93 
+94     // Return the pixel
+95     return *pixel_address;
+96 }
 .fi
 .PP
 References m_bpp, m_framebuffer_address, m_pitch, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -180,17 +180,17 @@ Renders a pixel on the screen in 16 bit mode\&.
 .PP
 Reimplemented from \fBmaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 117 of file vesa\&.cpp\&.
+Definition at line 105 of file vesa\&.cpp\&.
 .PP
 .nf
-117                                                              {
-118     return "NEC Home Electronics";  // Creator of the VESA standard
-119 }
+105                                                              {
+106     return "NEC Home Electronics";  // Creator of the VESA standard
+107 }
 .fi
 .SS "bool VideoElectronicsStandardsAssociation::internal_set_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
-Sets the mode of the VESA driver (TODO: List of modes) 
+Sets the mode of the VESA driver\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -215,26 +215,12 @@ Definition at line 40 of file vesa\&.cpp\&.
 .nf
 40                                                                                                                   {
 41 
-42 
-43     // Check if the mode is supported
-44     if(!supports_mode(width, height, color_depth)) {
-45         return false;
-46     }
-47 
-48     // Initialise the VESA driver
-49     if(!init()) {
-50         // VESA driver could not be initialised
-51         return false;
-52     }
-53 
-54     // Return true if the mode was set successfully
-55     return true;
-56 
-57 
-58 }
+42     // Best mode is set by the bootloader
+43     return true;
+44 
+45 
+46 }
 .fi
-.PP
-References supports_mode()\&.
 .SS "void VideoElectronicsStandardsAssociation::render_pixel_32_bit (uint32_t x, uint32_t y, uint32_t colour)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
@@ -253,18 +239,18 @@ Renders a pixel on the screen in 32 bit mode\&.
 .PP
 Reimplemented from \fBmaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 84 of file vesa\&.cpp\&.
+Definition at line 72 of file vesa\&.cpp\&.
 .PP
 .nf
-84                                                                                                       {
-85 
-86     // Get the address of the pixel
-87     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-88 
-89     // Set the pixel
-90     *pixel_address = colour;
-91 
-92 }
+72                                                                                                       {
+73 
+74     // Get the address of the pixel
+75     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+76 
+77     // Set the pixel
+78     *pixel_address = colour;
+79 
+80 }
 .fi
 .PP
 References m_bpp, m_framebuffer_address, m_pitch, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -290,22 +276,20 @@ Checks if the VESA driver supports the given mode\&.
 .PP
 Reimplemented from \fBmaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 68 of file vesa\&.cpp\&.
+Definition at line 56 of file vesa\&.cpp\&.
 .PP
 .nf
-68                                                                                                               {
-69 
-70     // Check if the mode is supported
-71     if(width == (int)m_multiboot_info->framebuffer_width && height == (int)m_multiboot_info->framebuffer_height && color_depth == (int)m_multiboot_info->framebuffer_bpp) {
-72         return true;
-73     }
-74     return false;
-75 }
+56                                                                                                               {
+57 
+58     // Check if the mode is supported
+59     if(width == (uint32_t)m_multiboot_info->framebuffer_width && height == (uint32_t)m_multiboot_info->framebuffer_height && color_depth == (uint32_t)m_multiboot_info->framebuffer_bpp) {
+60         return true;
+61     }
+62     return false;
+63 }
 .fi
 .PP
 References maxOS::system::multiboot_info::framebuffer_bpp, maxOS::system::multiboot_info::framebuffer_height, maxOS::system::multiboot_info::framebuffer_width, and m_multiboot_info\&.
-.PP
-Referenced by internal_set_mode()\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t maxOS::drivers::video::VideoElectronicsStandardsAssociation::m_bpp\fC [protected]\fP"

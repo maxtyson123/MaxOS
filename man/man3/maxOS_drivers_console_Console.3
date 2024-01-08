@@ -1,4 +1,4 @@
-.TH "maxOS::drivers::console::Console" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::drivers::console::Console" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -115,15 +115,15 @@ Definition at line 18 of file console\&.cpp\&.
 .SS "void Console::clear ()\fC [virtual]\fP"
 Clear the console 
 .PP
-Definition at line 191 of file console\&.cpp\&.
+Definition at line 188 of file console\&.cpp\&.
 .PP
 .nf
-191                     {
+188                     {
+189 
+190     // Clear the console
+191     clear(0, 0, width(), height());
 192 
-193     // Clear the console
-194     clear(0, 0, width(), height());
-195 
-196 }
+193 }
 .fi
 .PP
 Referenced by kernelMain()\&.
@@ -151,18 +151,18 @@ Clear an area of the console\&.
 .PP
 
 .PP
-Definition at line 209 of file console\&.cpp\&.
+Definition at line 206 of file console\&.cpp\&.
 .PP
 .nf
-209                                                                                                                                                {
-210 
-211     // Put the fill character in the areas
-212     for(uint16_t y = top; y < top+height; y++)
-213         for(uint16_t x = left; x < left+width; x++){
-214             put_character(x, y, fill, foreground, background);
-215         }
-216 
-217 }
+206                                                                                                                                                {
+207 
+208     // Put the fill character in the areas
+209     for(uint16_t y = top; y < top+height; y++)
+210         for(uint16_t x = left; x < left+width; x++){
+211             put_character(x, y, fill, foreground, background);
+212         }
+213 
+214 }
 .fi
 .PP
 References maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -185,12 +185,12 @@ The background color of the character
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::VESABootConsole\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::TextModeConsole\fP\&.
 .PP
 Definition at line 102 of file console\&.cpp\&.
 .PP
 .nf
-102                                                                   {
+102                                                               {
 103     return Green;
 104 }
 .fi
@@ -217,12 +217,12 @@ The character at the given coordinate
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::VESABootConsole\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::TextModeConsole\fP\&.
 .PP
 Definition at line 80 of file console\&.cpp\&.
 .PP
 .nf
-80                                                   {
+80                                               {
 81     return ' ';
 82 }
 .fi
@@ -247,12 +247,12 @@ The background color of the character
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::VESABootConsole\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::TextModeConsole\fP\&.
 .PP
 Definition at line 91 of file console\&.cpp\&.
 .PP
 .nf
-91                                                                   {
+91                                                               {
 92     return Green;
 93 }
 .fi
@@ -272,7 +272,7 @@ The height of the console in characters
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::VESABootConsole\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::TextModeConsole\fP\&.
 .PP
 Definition at line 36 of file console\&.cpp\&.
 .PP
@@ -297,19 +297,19 @@ Invert the colors of a character on the console\&.
 .PP
 
 .PP
-Definition at line 225 of file console\&.cpp\&.
+Definition at line 222 of file console\&.cpp\&.
 .PP
 .nf
-225                                                   {
-226 
-227     // Get the colors of the character
-228     ConsoleColour foreground = get_foreground_color(x, y);
-229     ConsoleColour background = get_background_color(x, y);
-230 
-231     // Set the colors of the character
-232     set_foreground_color(x, y, background);
-233     set_background_color(x, y, foreground);
-234 }
+222                                                   {
+223 
+224     // Get the colors of the character
+225     ConsoleColour foreground = get_foreground_color(x, y);
+226     ConsoleColour background = get_background_color(x, y);
+227 
+228     // Set the colors of the character
+229     set_foreground_color(x, y, background);
+230     set_background_color(x, y, foreground);
+231 }
 .fi
 .PP
 References maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -334,7 +334,7 @@ Reimplemented in \fBmaxOS::drivers::console::VESABootConsole\fP, \fBmaxOS::drive
 Definition at line 47 of file console\&.cpp\&.
 .PP
 .nf
-47                                                           {
+47                                                     {
 48 
 49 }
 .fi
@@ -376,7 +376,7 @@ Definition at line 115 of file console\&.cpp\&.
 .fi
 .PP
 References maxOS::drivers::peripherals::c, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
-.SS "void Console::put_string (uint16_t x, uint16_t y, \fBstring\fP s, \fBConsoleColour\fP foreground = \fC\fBLightGrey\fP\fP, \fBConsoleColour\fP background = \fC\fBBlack\fP\fP)\fC [virtual]\fP"
+.SS "void Console::put_string (uint16_t x, uint16_t y, \fBstring\fP string, \fBConsoleColour\fP foreground = \fC\fBLightGrey\fP\fP, \fBConsoleColour\fP background = \fC\fBBlack\fP\fP)\fC [virtual]\fP"
 
 .PP
 Put a string on the console\&. 
@@ -399,18 +399,15 @@ Put a string on the console\&.
 Definition at line 135 of file console\&.cpp\&.
 .PP
 .nf
-135                                                                                                              {
+135                                                                                                                   {
 136 
-137     // For each character in the string
-138     for(const char* si = s; x < width() && *si != '\0'; si++, x++) {
-139 
-140         // Put the character on the console
-141         put_character(x, y, *si, foreground, background);
-142     }
-143 }
+137     // Print each character on the screen
+138     for(int i = 0; i < string\&.length(); i++)
+139             put_character(x + i, y, string[i], foreground, background);
+140 }
 .fi
 .PP
-References maxOS::drivers::peripherals::s, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
+References maxOS::drivers::peripherals::i, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
 .PP
 Referenced by kernelMain()\&.
 .SS "void Console::scroll_up ()\fC [virtual]\fP"
@@ -418,15 +415,15 @@ Referenced by kernelMain()\&.
 .PP
 Scroll the console up by 1 line\&. 
 .PP
-Definition at line 148 of file console\&.cpp\&.
+Definition at line 145 of file console\&.cpp\&.
 .PP
 .nf
-148                         {
+145                         {
+146 
+147     // Scroll the console up by 1 line
+148     scroll_up(0, 0, width(), height());
 149 
-150     // Scroll the console up by 1 line
-151     scroll_up(0, 0, width(), height());
-152 
-153 }
+150 }
 .fi
 .PP
 Referenced by maxOS::drivers::console::ConsoleStream::write_char()\&.
@@ -454,30 +451,30 @@ Scroll an area of the console up by 1 line\&.
 .PP
 
 .PP
-Definition at line 166 of file console\&.cpp\&.
+Definition at line 163 of file console\&.cpp\&.
 .PP
 .nf
-166                                                                                                                                                    {
+163                                                                                                                                                    {
+164 
+165     // For each line in the area to scroll (except the last line)
+166     for(uint16_t y = top; y < top+height-1; y++){
 167 
-168     // For each line in the area to scroll (except the last line)
-169     for(uint16_t y = top; y < top+height-1; y++){
+168         // For each character in the line
+169         for(uint16_t x = left; x < left+width; x++) {
 170 
-171         // For each character in the line
-172         for(uint16_t x = left; x < left+width; x++) {
-173 
-174             // Put the character from the line below
-175             put_character(x, y, get_character(x, y + 1),
-176                           get_foreground_color(x, y + 1),
-177                           get_background_color(x, y + 1));
+171             // Put the character from the line below
+172             put_character(x, y, get_character(x, y + 1),
+173                           get_foreground_color(x, y + 1),
+174                           get_background_color(x, y + 1));
+175 
+176         }
+177     }
 178 
-179         }
-180     }
-181 
-182     // Fill the last line with the fill character
-183     for(uint16_t x = left; x < left+width; x++)
-184         put_character(x, top + height - 1, fill, foreground, background);
-185 
-186 }
+179     // Fill the last line with the fill character
+180     for(uint16_t x = left; x < left+width; x++)
+181         put_character(x, top + height - 1, fill, foreground, background);
+182 
+183 }
 .fi
 .PP
 References maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -497,12 +494,12 @@ Set the background color of a character on the console\&.
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::TextModeConsole\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::ConsoleArea\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::VESABootConsole\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::ConsoleArea\fP\&.
 .PP
 Definition at line 69 of file console\&.cpp\&.
 .PP
 .nf
-69                                                                                    {
+69                                                                     {
 70 
 71 }
 .fi
@@ -524,12 +521,12 @@ Set the foreground color of a character on the console\&.
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::TextModeConsole\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::ConsoleArea\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::VESABootConsole\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::ConsoleArea\fP\&.
 .PP
 Definition at line 58 of file console\&.cpp\&.
 .PP
 .nf
-58                                                                                    {
+58                                                                     {
 59 
 60 }
 .fi
@@ -547,7 +544,7 @@ The width of the console in characters
 .PP
 
 .PP
-Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::TextModeConsole\fP, and \fBmaxOS::drivers::console::VESABootConsole\fP\&.
+Reimplemented in \fBmaxOS::drivers::console::ConsoleArea\fP, \fBmaxOS::drivers::console::VESABootConsole\fP, and \fBmaxOS::drivers::console::TextModeConsole\fP\&.
 .PP
 Definition at line 27 of file console\&.cpp\&.
 .PP

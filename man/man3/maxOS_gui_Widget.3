@@ -1,4 +1,4 @@
-.TH "maxOS::gui::Widget" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::gui::Widget" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -165,43 +165,43 @@ Definition at line 13 of file widget\&.cpp\&.
 .SS "Widget::Widget (int32_t left, int32_t top, uint32_t width, uint32_t height)"
 
 .PP
-Definition at line 19 of file widget\&.cpp\&.
+Definition at line 21 of file widget\&.cpp\&.
 .PP
 .nf
-20 : KeyboardEventHandler(),
-21   m_position(left, top, width, height)
-22 {
-23 
-24 }
+22 : KeyboardEventHandler(),
+23   m_position(left, top, width, height)
+24 {
+25 
+26 }
 .fi
 .SS "Widget::~Widget ()"
 
 .PP
-Definition at line 27 of file widget\&.cpp\&.
+Definition at line 29 of file widget\&.cpp\&.
 .PP
 .nf
-27                {
-28 
-29 }
+29                {
+30 
+31 }
 .fi
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBCoordinates\fP Widget::absolute_coordinates (\fBcommon::Coordinates\fP coordinates)\fC [virtual]\fP"
 
 .PP
-Definition at line 81 of file widget\&.cpp\&.
+Definition at line 83 of file widget\&.cpp\&.
 .PP
 .nf
-81                                                                       {
-82 
-83     // Return the parents absolute coordinates
-84     if(m_parent != 0)
-85         return m_parent->absolute_coordinates(Coordinates(coordinates\&.first + m_position\&.left, coordinates\&.second + m_position\&.top));
-86 
-87     // If the widget has no m_parent, return the coordinates of the widget
-88     return Coordinates(coordinates\&.first + m_position\&.left, coordinates\&.second + m_position\&.top);
-89 
-90 }
+83                                                                       {
+84 
+85     // Return the parents absolute coordinates
+86     if(m_parent != 0)
+87         return m_parent->absolute_coordinates(Coordinates(coordinates\&.first + m_position\&.left, coordinates\&.second + m_position\&.top));
+88 
+89     // If the widget has no m_parent, return the coordinates of the widget
+90     return Coordinates(coordinates\&.first + m_position\&.left, coordinates\&.second + m_position\&.top);
+91 
+92 }
 .fi
 .PP
 References absolute_coordinates(), maxOS::common::Pair< First, Second >::first, maxOS::common::Rectangle< Type >::left, m_parent, maxOS::common::Pair< First, Second >::second, and maxOS::common::Rectangle< Type >::top\&.
@@ -221,15 +221,15 @@ Set the parent of a widget to this widget, making it into a child\&.
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP, \fBmaxOS::gui::Window\fP, and \fBmaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line 74 of file widget\&.cpp\&.
+Definition at line 76 of file widget\&.cpp\&.
 .PP
 .nf
-74                                     {
-75 
-76     // Parent the child to this widget
-77     child ->m_parent = this;
-78 
-79 }
+76                                     {
+77 
+78     // Parent the child to this widget
+79     child ->m_parent = this;
+80 
+81 }
 .fi
 .PP
 References m_parent\&.
@@ -240,15 +240,15 @@ Referenced by maxOS::gui::CompositeWidget::add_child()\&.
 .PP
 Brings this widget to the front of the screen\&. 
 .PP
-Definition at line 209 of file widget\&.cpp\&.
+Definition at line 211 of file widget\&.cpp\&.
 .PP
 .nf
-209                             {
-210 
-211     // Bring this widget to the front of the screen
-212     bring_to_front(this);
-213 
-214 }
+211                             {
+212 
+213     // Bring this widget to the front of the screen
+214     bring_to_front(this);
+215 
+216 }
 .fi
 .PP
 Referenced by maxOS::gui::Window::on_mouse_button_pressed(), and on_mouse_button_pressed()\&.
@@ -266,16 +266,16 @@ Brings a specific widget to the front of the screen\&.
 .PP
 Reimplemented in \fBmaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line 221 of file widget\&.cpp\&.
+Definition at line 223 of file widget\&.cpp\&.
 .PP
 .nf
-221                                           {
-222 
-223     // Bring the parent to the front of the screen
-224     if(m_parent != 0)
-225        m_parent->bring_to_front(widget);
-226 
-227 }
+223                                           {
+224 
+225     // Bring the parent to the front of the screen
+226     if(m_parent != 0)
+227        m_parent->bring_to_front(widget);
+228 
+229 }
 .fi
 .PP
 References bring_to_front(), and m_parent\&.
@@ -300,14 +300,14 @@ True if the widget contains the coordinate, false if it does not
 .PP
 
 .PP
-Definition at line 99 of file widget\&.cpp\&.
+Definition at line 101 of file widget\&.cpp\&.
 .PP
 .nf
-99                                                        {
-100 
-101     // Check if the coordinates are within the bounds of the widget
-102     return m_position\&.contains(x,y);
-103 }
+101                                                        {
+102 
+103     // Check if the coordinates are within the bounds of the widget
+104     return m_position\&.contains(x,y);
+105 }
 .fi
 .PP
 References maxOS::common::Rectangle< Type >::contains(), maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
@@ -329,12 +329,12 @@ Draw the widget on the screen\&.
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP, \fBmaxOS::gui::widgets::Button\fP, \fBmaxOS::gui::widgets::InputBox\fP, and \fBmaxOS::gui::widgets::Text\fP\&.
 .PP
-Definition at line 37 of file widget\&.cpp\&.
+Definition at line 39 of file widget\&.cpp\&.
 .PP
 .nf
-37                                                                {
-38 
-39 }
+39                                                        {
+40 
+41 }
 .fi
 .PP
 Referenced by maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), and maxOS::gui::CompositeWidget::draw()\&.
@@ -343,14 +343,14 @@ Referenced by maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::
 .PP
 Set the current focused widget to be this widget\&. 
 .PP
-Definition at line 174 of file widget\&.cpp\&.
+Definition at line 176 of file widget\&.cpp\&.
 .PP
 .nf
-174                    {
-175 
-176     // Set the focus the widget to this widget
-177     set_focus(this);
-178 }
+176                    {
+177 
+178     // Set the focus the widget to this widget
+179     set_focus(this);
+180 }
 .fi
 .PP
 References set_focus()\&.
@@ -361,21 +361,21 @@ Referenced by on_mouse_button_pressed()\&.
 .PP
 Invalidates the entire widget\&. This forces the widget to be redrawn on the next screen update\&. 
 .PP
-Definition at line 44 of file widget\&.cpp\&.
+Definition at line 46 of file widget\&.cpp\&.
 .PP
 .nf
-44                         {
-45 
-46     // Convert the relative coordinates to absolute coordinates
-47     Coordinates coordinates = absolute_coordinates(Coordinates(0, 0));
-48 
-49     // Create a rectangle with the absolute coordinates and the size of the widget
-50     Rectangle<int32_t> invalidArea = Rectangle<int32_t>(coordinates\&.first, coordinates\&.second, m_position\&.width, m_position\&.height);
-51 
-52     // Invalidate the area
-53     invalidate(invalidArea);
-54 
-55 }
+46                         {
+47 
+48     // Convert the relative coordinates to absolute coordinates
+49     Coordinates coordinates = absolute_coordinates(Coordinates(0, 0));
+50 
+51     // Create a rectangle with the absolute coordinates and the size of the widget
+52     Rectangle<int32_t> invalidArea = Rectangle<int32_t>(coordinates\&.first, coordinates\&.second, m_position\&.width, m_position\&.height);
+53 
+54     // Invalidate the area
+55     invalidate(invalidArea);
+56 
+57 }
 .fi
 .PP
 References absolute_coordinates(), maxOS::common::Pair< First, Second >::first, maxOS::common::Rectangle< Type >::height, maxOS::common::Pair< First, Second >::second, and maxOS::common::Rectangle< Type >::width\&.
@@ -395,15 +395,15 @@ Invalidates a specific area of the widget\&. This forces that part of the screen
 .PP
 Reimplemented in \fBmaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line 62 of file widget\&.cpp\&.
+Definition at line 64 of file widget\&.cpp\&.
 .PP
 .nf
-62                                                 {
-63 
-64     // If the widget has a parent, invalidate the area of the parent
-65     if(m_parent != 0)
-66         m_parent->invalidate(area);
-67 }
+64                                                 {
+65 
+66     // If the widget has a parent, invalidate the area of the parent
+67     if(m_parent != 0)
+68         m_parent->invalidate(area);
+69 }
 .fi
 .PP
 References invalidate(), and m_parent\&.
@@ -421,21 +421,21 @@ Set the position of the widget, and invalidate the old and new positions so they
 .PP
 
 .PP
-Definition at line 120 of file widget\&.cpp\&.
+Definition at line 122 of file widget\&.cpp\&.
 .PP
 .nf
-120                                            {
-121 
-122     // Invalidate the old position
-123     invalidate();
-124 
-125     // Set the new position
-126     m_position\&.left = left;
-127     m_position\&.top = top;
-128 
-129     // Re draw the widget in the new position
-130     invalidate();
-131 }
+122                                            {
+123 
+124     // Invalidate the old position
+125     invalidate();
+126 
+127     // Set the new position
+128     m_position\&.left = left;
+129     m_position\&.top = top;
+130 
+131     // Re draw the widget in the new position
+132     invalidate();
+133 }
 .fi
 .PP
 References invalidate(), maxOS::common::Rectangle< Type >::left, and maxOS::common::Rectangle< Type >::top\&.
@@ -448,12 +448,12 @@ Handles the event when the widget is focussed\&.
 .PP
 Reimplemented in \fBmaxOS::gui::widgets::InputBox\fP\&.
 .PP
-Definition at line 195 of file widget\&.cpp\&.
+Definition at line 197 of file widget\&.cpp\&.
 .PP
 .nf
-195                       {
-196 
-197 }
+197                       {
+198 
+199 }
 .fi
 .PP
 Referenced by maxOS::gui::Desktop::set_focus()\&.
@@ -464,12 +464,12 @@ Handles the event when the widget is unfocused\&.
 .PP
 Reimplemented in \fBmaxOS::gui::widgets::InputBox\fP\&.
 .PP
-Definition at line 202 of file widget\&.cpp\&.
+Definition at line 204 of file widget\&.cpp\&.
 .PP
 .nf
-202                            {
-203 
-204 }
+204                            {
+205 
+206 }
 .fi
 .PP
 Referenced by maxOS::gui::Desktop::set_focus()\&.
@@ -496,20 +496,20 @@ nullptr
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP, \fBmaxOS::gui::widgets::Button\fP, and \fBmaxOS::gui::Window\fP\&.
 .PP
-Definition at line 269 of file widget\&.cpp\&.
+Definition at line 271 of file widget\&.cpp\&.
 .PP
 .nf
-269                                                                                                     {
-270 
-271     // Bring the widget to the front of the screen
-272     bring_to_front();
-273 
-274     // Focus the widget
-275     focus();
-276 
-277     // Return 0 as the event has been handled
-278     return 0;
-279 }
+271                                                                                          {
+272 
+273     // Bring the widget to the front of the screen
+274     bring_to_front();
+275 
+276     // Focus the widget
+277     focus();
+278 
+279     // Return 0 as the event has been handled
+280     return 0;
+281 }
 .fi
 .PP
 References bring_to_front(), and focus()\&.
@@ -533,12 +533,12 @@ Handles the event when the mouse is released on the widget\&.
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP, and \fBmaxOS::gui::widgets::Button\fP\&.
 .PP
-Definition at line 288 of file widget\&.cpp\&.
+Definition at line 290 of file widget\&.cpp\&.
 .PP
 .nf
-288                                                                             {
-289 
-290 }
+290                                                                  {
+291 
+292 }
 .fi
 .PP
 Referenced by maxOS::gui::widgets::Button::on_mouse_button_released()\&.
@@ -558,12 +558,12 @@ Handles the event when the mouse is moved on to the widget\&.
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line 235 of file widget\&.cpp\&.
+Definition at line 237 of file widget\&.cpp\&.
 .PP
 .nf
-235                                                              {
-236 
-237 }
+237                                                      {
+238 
+239 }
 .fi
 .PP
 Referenced by maxOS::gui::CompositeWidget::on_mouse_move_widget()\&.
@@ -583,12 +583,12 @@ Handles the event when the mouse is moved out of the widget\&.
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line 245 of file widget\&.cpp\&.
+Definition at line 247 of file widget\&.cpp\&.
 .PP
 .nf
-245                                                                  {
-246 
-247 }
+247                                                      {
+248 
+249 }
 .fi
 .PP
 Referenced by maxOS::gui::CompositeWidget::on_mouse_move_widget()\&.
@@ -612,12 +612,12 @@ Handles the event when the mouse is moved over the widget\&.
 .PP
 Reimplemented in \fBmaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line 257 of file widget\&.cpp\&.
+Definition at line 259 of file widget\&.cpp\&.
 .PP
 .nf
-257                                                                                             {
-258 
-259 }
+259                                                                         {
+260 
+261 }
 .fi
 .PP
 Referenced by maxOS::gui::CompositeWidget::on_mouse_move_widget()\&.
@@ -633,12 +633,12 @@ The position of the widget
 .PP
 
 .PP
-Definition at line 110 of file widget\&.cpp\&.
+Definition at line 112 of file widget\&.cpp\&.
 .PP
 .nf
-110                                     {
-111     return m_position;
-112 }
+112                                     {
+113     return m_position;
+114 }
 .fi
 .PP
 Referenced by maxOS::gui::Window::add_child(), maxOS::gui::widgets::Text::draw(), maxOS::gui::widgets::InputBox::draw(), maxOS::gui::widgets::Button::draw(), maxOS::gui::CompositeWidget::draw(), maxOS::gui::Window::draw_self(), maxOS::gui::Window::on_mouse_button_pressed(), and maxOS::gui::Desktop::on_mouse_move_event()\&.
@@ -656,40 +656,40 @@ Set the size of the widget, and invalidate the old and new positions so they are
 .PP
 
 .PP
-Definition at line 139 of file widget\&.cpp\&.
+Definition at line 141 of file widget\&.cpp\&.
 .PP
 .nf
-139                                                  {
-140 
-141     // Restrict the width and height to the minimum and maximum values
-142     if(width < m_min_width) width = m_min_width;
-143     if(height < m_min_height) height = m_min_height;
-144     if(width > m_max_width) width = m_max_width;
-145     if(height > m_max_height) height = m_max_height;
-146 
-147     // Store the old position, set the new position
-148     Rectangle<int32_t> old_position = m_position;
-149     m_position\&.width = width;
-150     m_position\&.height = height;
-151 
-152     // Find the areas that need to be redrawn by subtracting the old position from the new position, and vice versa
-153     Vector<Rectangle<int32_t>> invalid_areas_old = old_position\&.subtract(m_position);
-154     Vector<Rectangle<int32_t>> invalid_areas_new = m_position\&.subtract(old_position);
-155 
-156     // Right and Bottom require to be fully invalidated TODO: Fix this hack
-157     if(m_position\&.width > old_position\&.width || m_position\&.height > old_position\&.height || old_position\&.width > m_position\&.width || old_position\&.height > m_position\&.height){
-158         invalidate();
-159         return;
-160     }
-161 
-162     //Loop through the areas that need to be redrawn and invalidate them
-163     for(int i = 0; i < invalid_areas_old\&.size(); i++)
-164         invalidate(invalid_areas_old[i]);
-165 
-166     for(int i = 0; i < invalid_areas_new\&.size(); i++)
-167         invalidate(invalid_areas_new[i]);
-168 
-169 }
+141                                                  {
+142 
+143     // Restrict the width and height to the minimum and maximum values
+144     if(width < (int)m_min_width) width = m_min_width;
+145     if(height < (int)m_min_height) height = m_min_height;
+146     if(width > (int)m_max_width) width = m_max_width;
+147     if(height > (int)m_max_height) height = m_max_height;
+148 
+149     // Store the old position, set the new position
+150     Rectangle<int32_t> old_position = m_position;
+151     m_position\&.width = width;
+152     m_position\&.height = height;
+153 
+154     // Find the areas that need to be redrawn by subtracting the old position from the new position, and vice versa
+155     Vector<Rectangle<int32_t>> invalid_areas_old = old_position\&.subtract(m_position);
+156     Vector<Rectangle<int32_t>> invalid_areas_new = m_position\&.subtract(old_position);
+157 
+158     // Right and Bottom require to be fully invalidated TODO: Fix this hack
+159     if(m_position\&.width > old_position\&.width || m_position\&.height > old_position\&.height || old_position\&.width > m_position\&.width || old_position\&.height > m_position\&.height){
+160         invalidate();
+161         return;
+162     }
+163 
+164     //Loop through the areas that need to be redrawn and invalidate them
+165     for(uint32_t i = 0; i < invalid_areas_old\&.size(); i++)
+166         invalidate(invalid_areas_old[i]);
+167 
+168     for(uint32_t i = 0; i < invalid_areas_new\&.size(); i++)
+169         invalidate(invalid_areas_new[i]);
+170 
+171 }
 .fi
 .PP
 References maxOS::common::Rectangle< Type >::height, maxOS::drivers::peripherals::i, invalidate(), m_max_height, m_max_width, m_min_height, m_min_width, maxOS::common::Vector< Type >::size(), maxOS::common::Rectangle< Type >::subtract(), and maxOS::common::Rectangle< Type >::width\&.
@@ -707,15 +707,15 @@ Sets the widget that is currently focussed\&.
 .PP
 Reimplemented in \fBmaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line 185 of file widget\&.cpp\&.
+Definition at line 187 of file widget\&.cpp\&.
 .PP
 .nf
-185                                      {
-186 
-187     // Focus the parent to this widget
-188     if(m_parent != 0)
-189       m_parent->set_focus(widget);
-190 }
+187                                      {
+188 
+189     // Focus the parent to this widget
+190     if(m_parent != 0)
+191       m_parent->set_focus(widget);
+192 }
 .fi
 .PP
 References m_parent, and set_focus()\&.

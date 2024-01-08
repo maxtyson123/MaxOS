@@ -1,4 +1,4 @@
-.TH "maxOS::gui::Window" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::gui::Window" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -144,9 +144,9 @@ Definition at line 43 of file window\&.cpp\&.
 45   m_title(0, -(10 + 5) + 2, containedWidget->position()\&.width, 10 + 5 - 3,title_text),
 46   m_mover(this),
 47   m_resizer_top(this),
-48   m_resizer_left(this),
-49   m_resizer_right(this),
-50   m_resizer_bottom(this),
+48   m_resizer_bottom(this),
+49   m_resizer_left(this),
+50   m_resizer_right(this),
 51   m_resizer_top_left(this),
 52   m_resizer_top_right(this),
 53   m_resizer_bottom_left(this),
@@ -197,28 +197,28 @@ Adds a child to the window\&.
 .PP
 Reimplemented from \fBmaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line 188 of file window\&.cpp\&.
+Definition at line 192 of file window\&.cpp\&.
 .PP
 .nf
-188                                     {
-189 
-190     // If there is a child to add
-191     if(child != 0){
-192 
-193         // Change the position of the child to be inside the window contents
-194         Rectangle<int32_t> childPosition = child->position();
-195         child -> move(childPosition\&.left + frame_thickness + 1, childPosition\&.top + frame_thickness + title_bar_height + 1);
+192                                     {
+193 
+194     // If there is a child to add
+195     if(child != 0){
 196 
-197     }
-198 
-199     // Add the child to the window
-200     CompositeWidget::add_child(child);
-201 }
+197         // Change the position of the child to be inside the window contents
+198         Rectangle<int32_t> childPosition = child->position();
+199         child -> move(childPosition\&.left + frame_thickness + 1, childPosition\&.top + frame_thickness + title_bar_height + 1);
+200 
+201     }
+202 
+203     // Add the child to the window
+204     CompositeWidget::add_child(child);
+205 }
 .fi
 .PP
 References maxOS::gui::CompositeWidget::add_child(), frame_thickness, maxOS::common::Rectangle< Type >::left, maxOS::gui::Widget::move(), maxOS::gui::Widget::position(), title_bar_height, and maxOS::common::Rectangle< Type >::top\&.
 .PP
-Referenced by Window()\&.
+Referenced by kernelMain(), and Window()\&.
 .SS "void Window::draw_self (\fBcommon::GraphicsContext\fP * gc, \fBcommon::Rectangle\fP< int32_t > & area)\fC [virtual]\fP"
 
 .PP
@@ -233,54 +233,54 @@ Draws the window and its children\&.
 .PP
 Reimplemented from \fBmaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line 136 of file window\&.cpp\&.
+Definition at line 140 of file window\&.cpp\&.
 .PP
 .nf
-136                                                                                {
-137 
-138     // Get the positioning of the window
-139     Coordinates window_absolute_position = CompositeWidget::absolute_coordinates(Coordinates(0, 0));
-140     Rectangle<int32_t> windowPosition = this->position();
-141     int32_t window_x = window_absolute_position\&.first;
-142     int32_t window_y = window_absolute_position\&.second;
-143 
-144     // Create an area for the window contents
-145     Rectangle<int32_t> window_contents_area( frame_thickness, frame_thickness + title_bar_height, windowPosition\&.width - 2 * frame_thickness, windowPosition\&.height - 2 * frame_thickness - title_bar_height);
-146 
-147     // Draw the window contents if they are in the area to draw
-148     if(window_contents_area\&.intersects(area)){
-149         Rectangle<int32_t> contents_drawable = window_contents_area\&.intersection(area);
-150         gc->fill_rectangle(contents_drawable\&.left + window_x, contents_drawable\&.top + window_y, contents_drawable\&.left + contents_drawable\&.width + window_x, contents_drawable\&.top + contents_drawable\&.height + window_y,area_colour);
-151     }
-152 
-153     // Draw the frame if it is in the area to draw
-154     Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, windowPosition\&.width - 2 * frame_thickness,frame_thickness + title_bar_height);
-155     if(window_frame_top_area\&.intersects(area)){
-156         Rectangle<int32_t> frame_drawable = window_frame_top_area\&.intersection(area);
-157         gc->fill_rectangle(frame_drawable\&.left + window_x, frame_drawable\&.top + window_y, frame_drawable\&.left + frame_drawable\&.width + window_x, frame_drawable\&.top + frame_drawable\&.height + window_y, frame_colour);
-158     }
-159 
-160     // Draw the bottom of the window frame
-161     Rectangle<int32_t> window_frame_bottom_area(frame_thickness, windowPosition\&.height - frame_thickness, windowPosition\&.width - 2* frame_thickness, frame_thickness);
-162     if(window_frame_bottom_area\&.intersects(area)){
-163         Rectangle<int32_t> bottom_drawable = window_frame_bottom_area\&.intersection(area);
-164         gc->fill_rectangle(window_x + bottom_drawable\&.left, window_y + bottom_drawable\&.top, window_x + bottom_drawable\&.left + bottom_drawable\&.width, window_y + bottom_drawable\&.top + bottom_drawable\&.height, frame_colour);
-165     }
-166 
-167     // Draw the left of the window frame
-168     Rectangle<int32_t> window_frame_left_area(0,0, frame_thickness, windowPosition\&.height);
-169     if(window_frame_left_area\&.intersects(area)){
-170         Rectangle<int32_t> left_drawable = window_frame_left_area\&.intersection(area);
-171         gc->fill_rectangle(window_x + left_drawable\&.left, window_y + left_drawable\&.top, window_x + left_drawable\&.left + left_drawable\&.width, window_y + left_drawable\&.top + left_drawable\&.height,frame_colour);
-172     }
-173 
-174     // Draw the right of the window frame
-175     Rectangle<int32_t> window_frame_right_area(windowPosition\&.width - frame_thickness, 0, frame_thickness, windowPosition\&.height);
-176     if(window_frame_right_area\&.intersects(area)){
-177         Rectangle<int32_t> right_drawable = window_frame_right_area\&.intersection(area);
-178         gc->fill_rectangle(window_x + right_drawable\&.left, window_y + right_drawable\&.top, window_x + right_drawable\&.left + right_drawable\&.width, window_y + right_drawable\&.top + right_drawable\&.height, frame_colour);
-179     }
-180 }
+140                                                                                {
+141 
+142     // Get the positioning of the window
+143     Coordinates window_absolute_position = CompositeWidget::absolute_coordinates(Coordinates(0, 0));
+144     Rectangle<int32_t> windowPosition = this->position();
+145     int32_t window_x = window_absolute_position\&.first;
+146     int32_t window_y = window_absolute_position\&.second;
+147 
+148     // Create an area for the window contents
+149     Rectangle<int32_t> window_contents_area( frame_thickness, frame_thickness + title_bar_height, windowPosition\&.width - 2 * frame_thickness, windowPosition\&.height - 2 * frame_thickness - title_bar_height);
+150 
+151     // Draw the window contents if they are in the area to draw
+152     if(window_contents_area\&.intersects(area)){
+153         Rectangle<int32_t> contents_drawable = window_contents_area\&.intersection(area);
+154         gc->fill_rectangle(contents_drawable\&.left + window_x, contents_drawable\&.top + window_y, contents_drawable\&.left + contents_drawable\&.width + window_x, contents_drawable\&.top + contents_drawable\&.height + window_y,area_colour);
+155     }
+156 
+157     // Draw the frame if it is in the area to draw
+158     Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, windowPosition\&.width - 2 * frame_thickness,frame_thickness + title_bar_height);
+159     if(window_frame_top_area\&.intersects(area)){
+160         Rectangle<int32_t> frame_drawable = window_frame_top_area\&.intersection(area);
+161         gc->fill_rectangle(frame_drawable\&.left + window_x, frame_drawable\&.top + window_y, frame_drawable\&.left + frame_drawable\&.width + window_x, frame_drawable\&.top + frame_drawable\&.height + window_y, frame_colour);
+162     }
+163 
+164     // Draw the bottom of the window frame
+165     Rectangle<int32_t> window_frame_bottom_area(frame_thickness, windowPosition\&.height - frame_thickness, windowPosition\&.width - 2* frame_thickness, frame_thickness);
+166     if(window_frame_bottom_area\&.intersects(area)){
+167         Rectangle<int32_t> bottom_drawable = window_frame_bottom_area\&.intersection(area);
+168         gc->fill_rectangle(window_x + bottom_drawable\&.left, window_y + bottom_drawable\&.top, window_x + bottom_drawable\&.left + bottom_drawable\&.width, window_y + bottom_drawable\&.top + bottom_drawable\&.height, frame_colour);
+169     }
+170 
+171     // Draw the left of the window frame
+172     Rectangle<int32_t> window_frame_left_area(0,0, frame_thickness, windowPosition\&.height);
+173     if(window_frame_left_area\&.intersects(area)){
+174         Rectangle<int32_t> left_drawable = window_frame_left_area\&.intersection(area);
+175         gc->fill_rectangle(window_x + left_drawable\&.left, window_y + left_drawable\&.top, window_x + left_drawable\&.left + left_drawable\&.width, window_y + left_drawable\&.top + left_drawable\&.height,frame_colour);
+176     }
+177 
+178     // Draw the right of the window frame
+179     Rectangle<int32_t> window_frame_right_area(windowPosition\&.width - frame_thickness, 0, frame_thickness, windowPosition\&.height);
+180     if(window_frame_right_area\&.intersects(area)){
+181         Rectangle<int32_t> right_drawable = window_frame_right_area\&.intersection(area);
+182         gc->fill_rectangle(window_x + right_drawable\&.left, window_y + right_drawable\&.top, window_x + right_drawable\&.left + right_drawable\&.width, window_y + right_drawable\&.top + right_drawable\&.height, frame_colour);
+183     }
+184 }
 .fi
 .PP
 References maxOS::gui::Widget::absolute_coordinates(), area_colour, maxOS::common::GraphicsContext::fill_rectangle(), maxOS::common::Pair< First, Second >::first, frame_colour, frame_thickness, maxOS::common::Rectangle< Type >::height, maxOS::common::Rectangle< Type >::intersection(), maxOS::common::Rectangle< Type >::intersects(), maxOS::common::Rectangle< Type >::left, maxOS::gui::Widget::position(), maxOS::common::Pair< First, Second >::second, title_bar_height, maxOS::common::Rectangle< Type >::top, and maxOS::common::Rectangle< Type >::width\&.
@@ -314,46 +314,50 @@ Definition at line 84 of file window\&.cpp\&.
 90     // Bring the window to the front
 91     bring_to_front();
 92 
-93     if(mouseX <= frame_thickness)
-94     {
-95         if(mouseY <= frame_thickness)
-96             return &m_resizer_top_left;
-97 
-98         else if(mouseY < window_position\&.height - frame_thickness)
-99             return &m_resizer_left;
-100 
-101         else
-102             return &m_resizer_bottom_left;
-103     }
-104     else if(mouseX < window_position\&.width - frame_thickness)
-105     {
-106         if(mouseY <= frame_thickness)
-107             return &m_resizer_top;
-108 
-109         else if(mouseY < frame_thickness + title_bar_height)
-110             return &m_mover;
-111 
-112         else if(mouseY >= window_position\&.height - frame_thickness)
-113             return &m_resizer_bottom;
-114     }
-115     else
-116     {
-117         if(mouseY <= frame_thickness)
-118             return &m_resizer_top_right;
-119 
-120         else if(mouseY < window_position\&.height-frame_thickness)
-121             return &m_resizer_right;
-122 
-123         else
-124             return &m_resizer_bottom_right;
-125     }
+93     // Convert the mouse coordinates to a int32_t
+94     int32_t x = (int32_t) mouseX;
+95     int32_t y = (int32_t) mouseY;
+96 
+97     if(x <= frame_thickness)
+98     {
+99         if(y <= frame_thickness)
+100             return &m_resizer_top_left;
+101 
+102         else if(y < window_position\&.height - frame_thickness)
+103             return &m_resizer_left;
+104 
+105         else
+106             return &m_resizer_bottom_left;
+107     }
+108     else if(x < window_position\&.width - frame_thickness)
+109     {
+110         if(y <= frame_thickness)
+111             return &m_resizer_top;
+112 
+113         else if(y < frame_thickness + title_bar_height)
+114             return &m_mover;
+115 
+116         else if(y >= window_position\&.height - frame_thickness)
+117             return &m_resizer_bottom;
+118     }
+119     else
+120     {
+121         if(y <= frame_thickness)
+122             return &m_resizer_top_right;
+123 
+124         else if(y < window_position\&.height-frame_thickness)
+125             return &m_resizer_right;
 126 
-127     return child_result;
-128 
-129 }
+127         else
+128             return &m_resizer_bottom_right;
+129     }
+130 
+131     return child_result;
+132 
+133 }
 .fi
 .PP
-References maxOS::gui::Widget::bring_to_front(), frame_thickness, maxOS::common::Rectangle< Type >::height, m_mover, m_resizer_bottom, m_resizer_bottom_left, m_resizer_bottom_right, m_resizer_left, m_resizer_right, m_resizer_top, m_resizer_top_left, m_resizer_top_right, maxOS::gui::CompositeWidget::on_mouse_button_pressed(), maxOS::gui::Widget::position(), title_bar_height, and maxOS::common::Rectangle< Type >::width\&.
+References maxOS::gui::Widget::bring_to_front(), frame_thickness, maxOS::common::Rectangle< Type >::height, m_mover, m_resizer_bottom, m_resizer_bottom_left, m_resizer_bottom_right, m_resizer_left, m_resizer_right, m_resizer_top, m_resizer_top_left, m_resizer_top_right, maxOS::gui::CompositeWidget::on_mouse_button_pressed(), maxOS::gui::Widget::position(), title_bar_height, maxOS::common::Rectangle< Type >::width, maxOS::drivers::peripherals::x, and maxOS::drivers::peripherals::y\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBcommon::Colour\fP maxOS::gui::Window::area_colour"

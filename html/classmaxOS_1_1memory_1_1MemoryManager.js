@@ -1,6 +1,6 @@
 var classmaxOS_1_1memory_1_1MemoryManager =
 [
-    [ "MemoryManager", "classmaxOS_1_1memory_1_1MemoryManager.html#ae610c6483812da7e9f99fea507dffae9", null ],
+    [ "MemoryManager", "classmaxOS_1_1memory_1_1MemoryManager.html#a508fd5598b26aeed3d3c760a4aea7c70", null ],
     [ "~MemoryManager", "classmaxOS_1_1memory_1_1MemoryManager.html#ad4570910ccfc14b2da679bee58ee8f48", null ],
     [ "free", "classmaxOS_1_1memory_1_1MemoryManager.html#a7123a072d7307c6ee61759fa7da6f677", null ],
     [ "malloc", "classmaxOS_1_1memory_1_1MemoryManager.html#a90f2d5bec98f1e6cdd71c87853baaab9", null ],

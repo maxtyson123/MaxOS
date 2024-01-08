@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logo_5fheader_5fpixel_2771',['LOGO_HEADER_PIXEL',['../logo_8h.html#a110a220384a7eb45fd382195d6081afb',1,'logo.h']]]
+  ['gui_2832',['GUI',['../kernel_8cpp.html#a06d4b1d48749e9ebe59a895513ee6a40',1,'kernel.cpp']]]
 ];

@@ -21,7 +21,7 @@ virtual bool \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_a
 \begin{DoxyCompactList}\small\item\em Handle the recivement of an U\+DP packet. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{User\+Datagram\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_ac07b1874719e671286bcdbe8518639c8}{Connect}} (uint32\+\_\+t ip, uint16\+\_\+t port)
 \item 
-\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{User\+Datagram\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_ab8b715815b027579174e4110db6c4954}{Connect}} (\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}} internet\+Protocol\+Address\+And\+Port)
+\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{User\+Datagram\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_ab8b715815b027579174e4110db6c4954}{Connect}} (\mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}} internet\+Protocol\+Address\+And\+Port)
 \item 
 \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{User\+Datagram\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_a327403661a9781a76ca31757d95141e1}{Listen}} (uint16\+\_\+t port)
 \begin{DoxyCompactList}\small\item\em Listens for incoming packets on the port. \end{DoxyCompactList}\item 
@@ -114,17 +114,17 @@ Binds a handler to the socket.
 \end{DoxyParams}
 
 
-Definition at line 291 of file udp.\+cpp.
+Definition at line 264 of file udp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{291                                                                                                                                                  \{}
-\DoxyCodeLine{292 }
-\DoxyCodeLine{293   socket-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1EventManager_aedd025f7928793b03a999e74271ecf57}{m\_handlers}}.push\_back(}
-\DoxyCodeLine{294       userDatagramProtocolPayloadHandler);                                                                \textcolor{comment}{//Set the handler of the socket to the handler that was passed in}}
-\DoxyCodeLine{295 }
-\DoxyCodeLine{296 }
-\DoxyCodeLine{297 \}}
+\DoxyCodeLine{264                                                                                                                                                  \{}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266   socket-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1EventManager_aedd025f7928793b03a999e74271ecf57}{m\_handlers}}.push\_back(}
+\DoxyCodeLine{267       userDatagramProtocolPayloadHandler);                                                                \textcolor{comment}{//Set the handler of the socket to the handler that was passed in}}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270 \}}
 
 \end{DoxyCode}
 
@@ -135,7 +135,7 @@ References max\+O\+S\+::common\+::\+Event\+Manager$<$ Event\+Type $>$\+::m\+\_\+
 \index{maxOS::net::UserDatagramProtocolHandler@{maxOS::net::UserDatagramProtocolHandler}!Connect@{Connect}}
 \index{Connect@{Connect}!maxOS::net::UserDatagramProtocolHandler@{maxOS::net::UserDatagramProtocolHandler}}
 \doxysubsubsection{\texorpdfstring{Connect()}{Connect()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{User\+Datagram\+Protocol\+Socket}} $\ast$ User\+Datagram\+Protocol\+Handler\+::\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}}}]{internet\+Protocol\+Address\+And\+Port }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{User\+Datagram\+Protocol\+Socket}} $\ast$ User\+Datagram\+Protocol\+Handler\+::\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}}}]{internet\+Protocol\+Address\+And\+Port }\end{DoxyParamCaption})}
 
 
 
@@ -143,45 +143,14 @@ Definition at line 165 of file udp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{165                                                                                                       \{}
+\DoxyCodeLine{165                                                                        \{}
 \DoxyCodeLine{166 }
-\DoxyCodeLine{167     \textcolor{comment}{// Find the colon (:) character in the input string}}
-\DoxyCodeLine{168     \textcolor{keywordtype}{string} colonPosition = (\mbox{\hyperlink{namespacemaxOS_afb37cc4e82c35155b8c0785e8d9fa937}{string}})internetProtocolAddressAndPort;}
-\DoxyCodeLine{169     \textcolor{keywordflow}{for} (; *colonPosition != \textcolor{charliteral}{'\(\backslash\)0'}; colonPosition++) \{}
-\DoxyCodeLine{170         \textcolor{keywordflow}{if} (*colonPosition == \textcolor{charliteral}{':'}) \{}
-\DoxyCodeLine{171             \textcolor{comment}{// Break the loop if a colon is found}}
-\DoxyCodeLine{172             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{173         \}}
-\DoxyCodeLine{174     \}}
-\DoxyCodeLine{175 }
-\DoxyCodeLine{176     \textcolor{comment}{// If no colon is found, return 0}}
-\DoxyCodeLine{177     \textcolor{keywordflow}{if} (*colonPosition != \textcolor{charliteral}{':'}) \{}
-\DoxyCodeLine{178         \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{179     \}}
-\DoxyCodeLine{180 }
-\DoxyCodeLine{181     \textcolor{comment}{// Parse the InternetProtocolAddress from the input string}}
-\DoxyCodeLine{182     \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}} remoteAddress = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler_afe355c241075103457e041325d9b86c0}{InternetProtocolHandler::Parse}}(internetProtocolAddressAndPort);}
-\DoxyCodeLine{183 }
-\DoxyCodeLine{184     \textcolor{comment}{// Initialize the TransmissionControlProtocolPort to 0}}
-\DoxyCodeLine{185     \mbox{\hyperlink{namespacemaxOS_1_1net_afc8a950397110025de12c883a06bfb4c}{UserDatagramProtocolPort}} port = 0;}
-\DoxyCodeLine{186 }
-\DoxyCodeLine{187     \textcolor{comment}{// Iterate through the string after the colon to extract the port number}}
-\DoxyCodeLine{188     \textcolor{keywordflow}{for} (colonPosition++; *colonPosition != \textcolor{charliteral}{'\(\backslash\)0'}; colonPosition++) \{}
-\DoxyCodeLine{189         \textcolor{keywordflow}{if} (\textcolor{charliteral}{'0'} <= *colonPosition \&\& *colonPosition <= \textcolor{charliteral}{'9'}) \{}
-\DoxyCodeLine{190             \textcolor{comment}{// Calculate the port number by converting characters to integers}}
-\DoxyCodeLine{191             port = port * 10 + (*colonPosition -\/ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{192         \}}
-\DoxyCodeLine{193     \}}
-\DoxyCodeLine{194 }
-\DoxyCodeLine{195     \textcolor{comment}{// Connect to the remote address and port}}
-\DoxyCodeLine{196     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_ac07b1874719e671286bcdbe8518639c8}{Connect}}(remoteAddress, port);}
-\DoxyCodeLine{197 \}}
+\DoxyCodeLine{167   \textcolor{comment}{//TODO NEW STRING PARSEING}}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169   \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{170 \}}
 
 \end{DoxyCode}
-
-
-References Connect(), max\+O\+S\+::net\+::\+Internet\+Protocol\+Handler\+::\+Parse(), and max\+O\+S\+::string.
-
 \mbox{\Hypertarget{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_ac07b1874719e671286bcdbe8518639c8}\label{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_ac07b1874719e671286bcdbe8518639c8}} 
 \index{maxOS::net::UserDatagramProtocolHandler@{maxOS::net::UserDatagramProtocolHandler}!Connect@{Connect}}
 \index{Connect@{Connect}!maxOS::net::UserDatagramProtocolHandler@{maxOS::net::UserDatagramProtocolHandler}}
@@ -231,10 +200,6 @@ Definition at line 143 of file udp.\+cpp.
 
 References free\+Ports, max\+O\+S\+::net\+::\+Internet\+Protocol\+Payload\+Handler\+::internet\+Protocol\+Handler, and sockets.
 
-
-
-Referenced by Connect().
-
 \mbox{\Hypertarget{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_acb5aa84d9781aed0d2c32725bf4e469d}\label{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_acb5aa84d9781aed0d2c32725bf4e469d}} 
 \index{maxOS::net::UserDatagramProtocolHandler@{maxOS::net::UserDatagramProtocolHandler}!Disconnect@{Disconnect}}
 \index{Disconnect@{Disconnect}!maxOS::net::UserDatagramProtocolHandler@{maxOS::net::UserDatagramProtocolHandler}}
@@ -252,23 +217,23 @@ Disconnects the socket from the remote IP and port.
 \end{DoxyParams}
 
 
-Definition at line 231 of file udp.\+cpp.
+Definition at line 204 of file udp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{231                                                                                \{}
-\DoxyCodeLine{232 }
-\DoxyCodeLine{233 }
-\DoxyCodeLine{234     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Vector<UserDatagramProtocolSocket*>::iterator}} currentSocket = \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.begin(); currentSocket != \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.end(); currentSocket++) \{}
-\DoxyCodeLine{235         \textcolor{keywordflow}{if}((*currentSocket) == socket)                               \textcolor{comment}{//If the socket is the same as the socket that is being checked}}
-\DoxyCodeLine{236         \{}
-\DoxyCodeLine{237             \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.erase(currentSocket);                            \textcolor{comment}{//Remove the socket from the list of sockets}}
-\DoxyCodeLine{238             MemoryManager::s\_active\_memory\_manager-\/> free(socket);      \textcolor{comment}{//Free the socket}}
-\DoxyCodeLine{239             \textcolor{keywordflow}{break};                                                   \textcolor{comment}{//Break out of the loop}}
-\DoxyCodeLine{240         \}}
-\DoxyCodeLine{241     \}}
-\DoxyCodeLine{242 }
-\DoxyCodeLine{243 \}}
+\DoxyCodeLine{204                                                                                \{}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Vector<UserDatagramProtocolSocket*>::iterator}} currentSocket = \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.begin(); currentSocket != \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.end(); currentSocket++) \{}
+\DoxyCodeLine{208         \textcolor{keywordflow}{if}((*currentSocket) == socket)                               \textcolor{comment}{//If the socket is the same as the socket that is being checked}}
+\DoxyCodeLine{209         \{}
+\DoxyCodeLine{210             \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.erase(currentSocket);                            \textcolor{comment}{//Remove the socket from the list of sockets}}
+\DoxyCodeLine{211             MemoryManager::s\_active\_memory\_manager-\/> free(socket);      \textcolor{comment}{//Free the socket}}
+\DoxyCodeLine{212             \textcolor{keywordflow}{break};                                                   \textcolor{comment}{//Break out of the loop}}
+\DoxyCodeLine{213         \}}
+\DoxyCodeLine{214     \}}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216 \}}
 
 \end{DoxyCode}
 
@@ -379,30 +344,30 @@ The socket that is listening
 \end{DoxyReturn}
 
 
-Definition at line 205 of file udp.\+cpp.
+Definition at line 178 of file udp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{205                                                                              \{}
-\DoxyCodeLine{206 }
-\DoxyCodeLine{207     \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}* socket = (\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}));   \textcolor{comment}{//Allocate memory for the socket}}
-\DoxyCodeLine{208 }
-\DoxyCodeLine{209     \textcolor{keywordflow}{if}(socket != 0) \textcolor{comment}{//If the socket was created}}
-\DoxyCodeLine{210     \{}
-\DoxyCodeLine{211         \textcolor{keyword}{new} (socket) \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}();    \textcolor{comment}{//Create the socket}}
-\DoxyCodeLine{212 }
-\DoxyCodeLine{213         \textcolor{comment}{//Configure the socket}}
-\DoxyCodeLine{214         socket -\/> listening = \textcolor{keyword}{true};                                     \textcolor{comment}{//Set the socket to listening}}
-\DoxyCodeLine{215         socket -\/> localPort = port;                                     \textcolor{comment}{//Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)}}
-\DoxyCodeLine{216         socket -\/> localIP = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a3adb1aeac42ac73a8c52c2d00ebd9a2f}{internetProtocolHandler}} -\/> GetInternetProtocolAddress();    \textcolor{comment}{//IP that we will use to connect to the remote application}}
-\DoxyCodeLine{217         socket -\/> userDatagramProtocolHandler = \textcolor{keyword}{this};                    \textcolor{comment}{//Set the UDP handler}}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219         \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.push\_back(socket);                                       \textcolor{comment}{//Add the socket to the list of sockets}}
-\DoxyCodeLine{220     \}}
-\DoxyCodeLine{221 }
-\DoxyCodeLine{222     \textcolor{keywordflow}{return} socket;                                        \textcolor{comment}{//Return the socket}}
-\DoxyCodeLine{223 }
-\DoxyCodeLine{224 \}}
+\DoxyCodeLine{178                                                                              \{}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180     \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}* socket = (\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}));   \textcolor{comment}{//Allocate memory for the socket}}
+\DoxyCodeLine{181 }
+\DoxyCodeLine{182     \textcolor{keywordflow}{if}(socket != 0) \textcolor{comment}{//If the socket was created}}
+\DoxyCodeLine{183     \{}
+\DoxyCodeLine{184         \textcolor{keyword}{new} (socket) \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}();    \textcolor{comment}{//Create the socket}}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186         \textcolor{comment}{//Configure the socket}}
+\DoxyCodeLine{187         socket -\/> listening = \textcolor{keyword}{true};                                     \textcolor{comment}{//Set the socket to listening}}
+\DoxyCodeLine{188         socket -\/> localPort = port;                                     \textcolor{comment}{//Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)}}
+\DoxyCodeLine{189         socket -\/> localIP = \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a3adb1aeac42ac73a8c52c2d00ebd9a2f}{internetProtocolHandler}} -\/> GetInternetProtocolAddress();    \textcolor{comment}{//IP that we will use to connect to the remote application}}
+\DoxyCodeLine{190         socket -\/> userDatagramProtocolHandler = \textcolor{keyword}{this};                    \textcolor{comment}{//Set the UDP handler}}
+\DoxyCodeLine{191 }
+\DoxyCodeLine{192         \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler_aa9a599435fd7dcbe64c96cc9d54b16a2}{sockets}}.push\_back(socket);                                       \textcolor{comment}{//Add the socket to the list of sockets}}
+\DoxyCodeLine{193     \}}
+\DoxyCodeLine{194 }
+\DoxyCodeLine{195     \textcolor{keywordflow}{return} socket;                                        \textcolor{comment}{//Return the socket}}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197 \}}
 
 \end{DoxyCode}
 
@@ -430,42 +395,42 @@ Sends a packet to the remote IP and port.
 \end{DoxyParams}
 
 
-Definition at line 252 of file udp.\+cpp.
+Definition at line 225 of file udp.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{252                                                                                                        \{}
-\DoxyCodeLine{253 }
-\DoxyCodeLine{254     uint16\_t totalSize = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}) + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};                                 \textcolor{comment}{//Get the total size of the packet}}
-\DoxyCodeLine{255     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/>malloc(totalSize);          \textcolor{comment}{//Allocate memory for the packet}}
-\DoxyCodeLine{256     uint8\_t* buffer2 = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}});                                 \textcolor{comment}{//Get the buffer that will be used to store the data}}
-\DoxyCodeLine{257 }
-\DoxyCodeLine{258     \mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}* header = (\mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}*)buffer;                       \textcolor{comment}{//Create the header of the packet}}
-\DoxyCodeLine{259 }
-\DoxyCodeLine{260     \textcolor{comment}{//Set the header}}
-\DoxyCodeLine{261     header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} = socket -\/> localPort;                                                    \textcolor{comment}{//Set the source port to the local port of the socket    (this is the port that the packet will be sent from)}}
-\DoxyCodeLine{262     header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} = socket -\/> remotePort;                                              \textcolor{comment}{//Set the destination port to the remote port of the socket (this is the port that the packet will be sent to)}}
-\DoxyCodeLine{263     header -\/> \mbox{\hyperlink{intel__i217_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}} = ((totalSize \& 0x00FF) << 8) | ((totalSize \& 0xFF00) >> 8);                  \textcolor{comment}{//Set the length of the packet}}
-\DoxyCodeLine{264 }
-\DoxyCodeLine{265     \textcolor{comment}{// Convert the ports into big endian}}
-\DoxyCodeLine{266     header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} = ((header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} \& 0x00FF) << 8) | ((header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} \& 0xFF00) >> 8);}
-\DoxyCodeLine{267     header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} = ((header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} \& 0x00FF) << 8) | ((header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} \& 0xFF00) >> 8);}
-\DoxyCodeLine{268 }
-\DoxyCodeLine{269     \textcolor{comment}{//Copy the data to the buffer}}
-\DoxyCodeLine{270     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; ++\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}) \{                                                               \textcolor{comment}{//Loop through the data}}
-\DoxyCodeLine{271         buffer2[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}];                                                                      \textcolor{comment}{//Copy the data to the buffer}}
-\DoxyCodeLine{272     \}}
-\DoxyCodeLine{273 }
-\DoxyCodeLine{274     \textcolor{comment}{//Set the checksum}}
-\DoxyCodeLine{275     header -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = 0;                                                                        \textcolor{comment}{//Set the checksum to 0, this is becuase UDP doesnt have to have a checksum}}
-\DoxyCodeLine{276 }
-\DoxyCodeLine{277     \textcolor{comment}{//Send the packet}}
-\DoxyCodeLine{278     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a547124e71c39318710ca97724adc447b}{InternetProtocolPayloadHandler::Send}}(socket-\/>\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket_a40423249f46515866c854c3ab1fc865b}{remoteIP}}, buffer, totalSize);}
-\DoxyCodeLine{279 }
-\DoxyCodeLine{280     \textcolor{comment}{//Free the buffer}}
-\DoxyCodeLine{281     MemoryManager::s\_active\_memory\_manager-\/>free(buffer);}
-\DoxyCodeLine{282 }
-\DoxyCodeLine{283 \}}
+\DoxyCodeLine{225                                                                                                        \{}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{227     uint16\_t totalSize = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}) + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};                                 \textcolor{comment}{//Get the total size of the packet}}
+\DoxyCodeLine{228     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/>malloc(totalSize);          \textcolor{comment}{//Allocate memory for the packet}}
+\DoxyCodeLine{229     uint8\_t* buffer2 = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}});                                 \textcolor{comment}{//Get the buffer that will be used to store the data}}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231     \mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}* header = (\mbox{\hyperlink{structmaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}*)buffer;                       \textcolor{comment}{//Create the header of the packet}}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233     \textcolor{comment}{//Set the header}}
+\DoxyCodeLine{234     header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} = socket -\/> localPort;                                                    \textcolor{comment}{//Set the source port to the local port of the socket    (this is the port that the packet will be sent from)}}
+\DoxyCodeLine{235     header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} = socket -\/> remotePort;                                              \textcolor{comment}{//Set the destination port to the remote port of the socket (this is the port that the packet will be sent to)}}
+\DoxyCodeLine{236     header -\/> \mbox{\hyperlink{intel__i217_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}} = ((totalSize \& 0x00FF) << 8) | ((totalSize \& 0xFF00) >> 8);                  \textcolor{comment}{//Set the length of the packet}}
+\DoxyCodeLine{237 }
+\DoxyCodeLine{238     \textcolor{comment}{// Convert the ports into big endian}}
+\DoxyCodeLine{239     header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} = ((header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} \& 0x00FF) << 8) | ((header -\/> \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{sourcePort}} \& 0xFF00) >> 8);}
+\DoxyCodeLine{240     header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} = ((header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} \& 0x00FF) << 8) | ((header -\/> \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destinationPort}} \& 0xFF00) >> 8);}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242     \textcolor{comment}{//Copy the data to the buffer}}
+\DoxyCodeLine{243     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; ++\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}) \{                                                               \textcolor{comment}{//Loop through the data}}
+\DoxyCodeLine{244         buffer2[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}] = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}[\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}];                                                                      \textcolor{comment}{//Copy the data to the buffer}}
+\DoxyCodeLine{245     \}}
+\DoxyCodeLine{246 }
+\DoxyCodeLine{247     \textcolor{comment}{//Set the checksum}}
+\DoxyCodeLine{248     header -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = 0;                                                                        \textcolor{comment}{//Set the checksum to 0, this is becuase UDP doesnt have to have a checksum}}
+\DoxyCodeLine{249 }
+\DoxyCodeLine{250     \textcolor{comment}{//Send the packet}}
+\DoxyCodeLine{251     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolPayloadHandler_a547124e71c39318710ca97724adc447b}{InternetProtocolPayloadHandler::Send}}(socket-\/>\mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolSocket_a40423249f46515866c854c3ab1fc865b}{remoteIP}}, buffer, totalSize);}
+\DoxyCodeLine{252 }
+\DoxyCodeLine{253     \textcolor{comment}{//Free the buffer}}
+\DoxyCodeLine{254     MemoryManager::s\_active\_memory\_manager-\/>free(buffer);}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256 \}}
 
 \end{DoxyCode}
 

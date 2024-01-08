@@ -39,7 +39,9 @@ char \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a3e0e1
 \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188}{Console\+Colour}} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\+\_\+background\+\_\+color}} (uint16\+\_\+t x, uint16\+\_\+t y) final
 \begin{DoxyCompactList}\small\item\em Gets the background color at the specified location. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{common\+::\+Colour}} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c41b6cb3d6ce1408202ab9b52b6c290}{console\+\_\+colour\+\_\+to\+\_\+vesa}} (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188}{Console\+Colour}})
-\begin{DoxyCompactList}\small\item\em Converts a Console\+Colour to a Colour. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Converts a Console\+Colour to a Colour. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_aa6b467dc00deb18332a2ea29557dc6b1}{print\+\_\+logo}} ()
+\begin{DoxyCompactList}\small\item\em Prints the logo to the center of the screen. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -47,7 +49,7 @@ uint16\+\_\+t $\ast$ \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABo
 \item 
 \mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext}{common\+::\+Graphics\+Context}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\+\_\+graphics\+\_\+context}}
 \item 
-\mbox{\hyperlink{classmaxOS_1_1gui_1_1AmigaFont}{gui\+::\+Amiga\+Font}} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad688b2d1da84da2e59e9ff0cb7968d74}{m\+\_\+font}}
+\mbox{\hyperlink{classmaxOS_1_1gui_1_1Font}{gui\+::\+Font}} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af53966fd8fdb1daa37dc8b8f7fa017c1}{m\+\_\+font}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
@@ -55,7 +57,7 @@ uint16\+\_\+t $\ast$ \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABo
 \doxysubsection{Detailed Description}
 \mbox{\hyperlink{classmaxOS_1_1drivers_1_1Driver}{Driver}} for the V\+E\+SA \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console}{Console}} during boot, handles the printing of characters and strings to the screen using V\+E\+SA. 
 
-Definition at line 23 of file vesaboot.\+h.
+Definition at line 24 of file vesaboot.\+h.
 
 
 
@@ -68,26 +70,22 @@ Definition at line 23 of file vesaboot.\+h.
 
 
 
-Definition at line 14 of file vesaboot.\+cpp.
+Definition at line 15 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{15 : \mbox{\hyperlink{classmaxOS_1_1drivers_1_1Driver_ad69102adf099f472b9eba69c5ae20d81}{Driver}}(),}
-\DoxyCodeLine{16   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_aba16cfd9f0894eb1312b1bc1155b6646}{Console}}(),}
-\DoxyCodeLine{17   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}(graphics\_context),}
-\DoxyCodeLine{18   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad688b2d1da84da2e59e9ff0cb7968d74}{m\_font}}(\mbox{\hyperlink{classmaxOS_1_1gui_1_1AmigaFont}{AmigaFont}}())}
-\DoxyCodeLine{19 \{}
-\DoxyCodeLine{20 }
-\DoxyCodeLine{21     \textcolor{comment}{// Malloc the video memory}}
-\DoxyCodeLine{22     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}} = (uint16\_t*)MemoryManager::s\_active\_memory\_manager-\/>malloc(}
-\DoxyCodeLine{23         graphics\_context-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_aa73ac7858cd08d2dcf062d78af17cefb}{get\_width}}() * graphics\_context-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_a0e77713e749b2844edb03fe4031e9207}{get\_height}}() * \textcolor{keyword}{sizeof}(uint16\_t));}
-\DoxyCodeLine{24 \}}
+\DoxyCodeLine{16 : \mbox{\hyperlink{classmaxOS_1_1drivers_1_1Driver_ad69102adf099f472b9eba69c5ae20d81}{Driver}}(),}
+\DoxyCodeLine{17   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_aba16cfd9f0894eb1312b1bc1155b6646}{Console}}(),}
+\DoxyCodeLine{18   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}(graphics\_context),}
+\DoxyCodeLine{19   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af53966fd8fdb1daa37dc8b8f7fa017c1}{m\_font}}((uint8\_t*)AMIGA\_FONT)}
+\DoxyCodeLine{20 \{}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22     \textcolor{comment}{// Malloc the video memory}}
+\DoxyCodeLine{23     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}} = (uint16\_t*)MemoryManager::s\_active\_memory\_manager-\/>malloc(}
+\DoxyCodeLine{24         graphics\_context-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_aa73ac7858cd08d2dcf062d78af17cefb}{get\_width}}() * graphics\_context-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_a0e77713e749b2844edb03fe4031e9207}{get\_height}}() * \textcolor{keyword}{sizeof}(uint16\_t));}
+\DoxyCodeLine{25 \}}
 
 \end{DoxyCode}
-
-
-References max\+O\+S\+::common\+::\+Graphics\+Context\+::get\+\_\+height(), max\+O\+S\+::common\+::\+Graphics\+Context\+::get\+\_\+width(), and m\+\_\+video\+\_\+memory.
-
 \mbox{\Hypertarget{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4da16a8ab78efd5fc6c3018baf8b0b86}\label{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4da16a8ab78efd5fc6c3018baf8b0b86}} 
 \index{maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}!````~VESABootConsole@{$\sim$VESABootConsole}}
 \index{````~VESABootConsole@{$\sim$VESABootConsole}!maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}}
@@ -96,13 +94,13 @@ References max\+O\+S\+::common\+::\+Graphics\+Context\+::get\+\_\+height(), max\
 
 
 
-Definition at line 26 of file vesaboot.\+cpp.
+Definition at line 27 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{27 \{}
-\DoxyCodeLine{28 }
-\DoxyCodeLine{29 \}}
+\DoxyCodeLine{28 \{}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \}}
 
 \end{DoxyCode}
 
@@ -124,66 +122,68 @@ Converts a Console\+Colour to a Colour.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The Colour 
+The Colour or black if the Console\+Colour is invalid 
 \end{DoxyReturn}
 
 
-Definition at line 190 of file vesaboot.\+cpp.
+Definition at line 191 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{190                                                                    \{}
-\DoxyCodeLine{191     \textcolor{keywordflow}{switch} (colour) \{}
-\DoxyCodeLine{192 }
-\DoxyCodeLine{193         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{Black}}:}
-\DoxyCodeLine{194             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 0, 0);}
-\DoxyCodeLine{195 }
-\DoxyCodeLine{196         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188afd7ee2de2c7cc9510ee09b09a6b8e0a0}{Blue}}:}
-\DoxyCodeLine{197             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 0, 255);}
-\DoxyCodeLine{198 }
-\DoxyCodeLine{199         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa3dfc79d2ef538624be30f0b0f6c349c}{Green}}:}
-\DoxyCodeLine{200             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 255, 0);}
-\DoxyCodeLine{201 }
-\DoxyCodeLine{202         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a7fcc9da33bcc6255920eb4330c0d6fd8}{Cyan}}:}
-\DoxyCodeLine{203             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 170, 170);}
-\DoxyCodeLine{204 }
-\DoxyCodeLine{205         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188abf67ffbacd6e245aec24387cdee7a038}{Red}}:}
-\DoxyCodeLine{206             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 0, 0);}
-\DoxyCodeLine{207 }
-\DoxyCodeLine{208         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ada2a04cd180512182f8e50f484e453cd}{Magenta}}:}
-\DoxyCodeLine{209             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 0, 170);}
-\DoxyCodeLine{210 }
-\DoxyCodeLine{211         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a6980260479dad48cbbb4acbeaf443d}{Brown}}:}
-\DoxyCodeLine{212             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 85, 0);}
-\DoxyCodeLine{213 }
-\DoxyCodeLine{214         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{LightGrey}}:}
-\DoxyCodeLine{215             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 170, 170);}
-\DoxyCodeLine{216 }
-\DoxyCodeLine{217         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa49158f8ed070e8487c5ebbbbc026326}{DarkGrey}}:}
-\DoxyCodeLine{218             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 85, 85);}
-\DoxyCodeLine{219 }
-\DoxyCodeLine{220         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a9e6d39691e5aa902ee1dcaa060d69b7c}{LightBlue}}:}
-\DoxyCodeLine{221             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 85, 255);}
-\DoxyCodeLine{222 }
-\DoxyCodeLine{223         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188af3c556f1e35caa0937e2d2518af0c2cc}{LightGreen}}:}
-\DoxyCodeLine{224             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 255, 85);}
-\DoxyCodeLine{225 }
-\DoxyCodeLine{226         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a991472607dd1ec43511a776d7b6e5948}{LightCyan}}:}
-\DoxyCodeLine{227             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 255, 255);}
-\DoxyCodeLine{228 }
-\DoxyCodeLine{229         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ac8b646efaf4d21426cbb4dea0453f0fc}{LightRed}}:}
-\DoxyCodeLine{230             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 85, 85);}
-\DoxyCodeLine{231 }
-\DoxyCodeLine{232         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a7d5fe9a71c98349db7fd09b04a378372}{LightMagenta}}:}
-\DoxyCodeLine{233             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 85, 255);}
-\DoxyCodeLine{234 }
-\DoxyCodeLine{235         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a386ad2bed940d76b7599a6749285f691}{Yellow}}:}
-\DoxyCodeLine{236             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 255, 85);}
-\DoxyCodeLine{237 }
-\DoxyCodeLine{238         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a662b3c84ae35f91d9b06d791fddf76f2}{White}}:}
-\DoxyCodeLine{239             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 255, 255);}
-\DoxyCodeLine{240     \}}
-\DoxyCodeLine{241 \}}
+\DoxyCodeLine{191                                                                    \{}
+\DoxyCodeLine{192     \textcolor{keywordflow}{switch} (colour) \{}
+\DoxyCodeLine{193 }
+\DoxyCodeLine{194         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{Black}}:}
+\DoxyCodeLine{195             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 0, 0);}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188afd7ee2de2c7cc9510ee09b09a6b8e0a0}{Blue}}:}
+\DoxyCodeLine{198             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 0, 255);}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa3dfc79d2ef538624be30f0b0f6c349c}{Green}}:}
+\DoxyCodeLine{201             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 255, 0);}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a7fcc9da33bcc6255920eb4330c0d6fd8}{Cyan}}:}
+\DoxyCodeLine{204             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 170, 170);}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{206         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188abf67ffbacd6e245aec24387cdee7a038}{Red}}:}
+\DoxyCodeLine{207             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 0, 0);}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ada2a04cd180512182f8e50f484e453cd}{Magenta}}:}
+\DoxyCodeLine{210             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 0, 170);}
+\DoxyCodeLine{211 }
+\DoxyCodeLine{212         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a6980260479dad48cbbb4acbeaf443d}{Brown}}:}
+\DoxyCodeLine{213             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 85, 0);}
+\DoxyCodeLine{214 }
+\DoxyCodeLine{215         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{LightGrey}}:}
+\DoxyCodeLine{216             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(170, 170, 170);}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{218         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa49158f8ed070e8487c5ebbbbc026326}{DarkGrey}}:}
+\DoxyCodeLine{219             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 85, 85);}
+\DoxyCodeLine{220 }
+\DoxyCodeLine{221         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a9e6d39691e5aa902ee1dcaa060d69b7c}{LightBlue}}:}
+\DoxyCodeLine{222             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 85, 255);}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188af3c556f1e35caa0937e2d2518af0c2cc}{LightGreen}}:}
+\DoxyCodeLine{225             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 255, 85);}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{227         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a991472607dd1ec43511a776d7b6e5948}{LightCyan}}:}
+\DoxyCodeLine{228             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(85, 255, 255);}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ac8b646efaf4d21426cbb4dea0453f0fc}{LightRed}}:}
+\DoxyCodeLine{231             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 85, 85);}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a7d5fe9a71c98349db7fd09b04a378372}{LightMagenta}}:}
+\DoxyCodeLine{234             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 85, 255);}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a386ad2bed940d76b7599a6749285f691}{Yellow}}:}
+\DoxyCodeLine{237             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 255, 85);}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239         \textcolor{keywordflow}{case} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a662b3c84ae35f91d9b06d791fddf76f2}{White}}:}
+\DoxyCodeLine{240             \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(255, 255, 255);}
+\DoxyCodeLine{241     \}}
+\DoxyCodeLine{242 }
+\DoxyCodeLine{243     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}}(0, 0, 0);}
+\DoxyCodeLine{244 \}}
 
 \end{DoxyCode}
 
@@ -220,22 +220,22 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 171 of file vesaboot.\+cpp.
+Definition at line 172 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{171                                                                           \{}
-\DoxyCodeLine{172 }
-\DoxyCodeLine{173     \textcolor{comment}{// If the coordinates are out of bounds, return}}
-\DoxyCodeLine{174     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{175         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}};}
-\DoxyCodeLine{176 }
-\DoxyCodeLine{177     \textcolor{comment}{// Calculate the offset}}
-\DoxyCodeLine{178     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
-\DoxyCodeLine{179 }
-\DoxyCodeLine{180     \textcolor{comment}{// Return the background color at the offset, by masking the background color with the current background color (bits 12-\/15)}}
-\DoxyCodeLine{181     \textcolor{keywordflow}{return} (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188}{ConsoleColour}})((\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0xF000) >> 12);}
-\DoxyCodeLine{182 \}}
+\DoxyCodeLine{172                                                                           \{}
+\DoxyCodeLine{173 }
+\DoxyCodeLine{174     \textcolor{comment}{// If the coordinates are out of bounds, return}}
+\DoxyCodeLine{175     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{176         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}};}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178     \textcolor{comment}{// Calculate the offset}}
+\DoxyCodeLine{179     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181     \textcolor{comment}{// Return the background color at the offset, by masking the background color with the current background color (bits 12-\/15)}}
+\DoxyCodeLine{182     \textcolor{keywordflow}{return} (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188}{ConsoleColour}})((\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0xF000) >> 12);}
+\DoxyCodeLine{183 \}}
 
 \end{DoxyCode}
 
@@ -272,22 +272,22 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 131 of file vesaboot.\+cpp.
+Definition at line 132 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{131                                                           \{}
-\DoxyCodeLine{132 }
-\DoxyCodeLine{133     \textcolor{comment}{// If the coordinates are out of bounds, return}}
-\DoxyCodeLine{134     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{135         \textcolor{keywordflow}{return} \textcolor{charliteral}{' '};}
-\DoxyCodeLine{136 }
-\DoxyCodeLine{137     \textcolor{comment}{// Calculate the offset}}
-\DoxyCodeLine{138     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
-\DoxyCodeLine{139 }
-\DoxyCodeLine{140     \textcolor{comment}{// Return the character at the offset, by masking the character with the current character (last 8 bits)}}
-\DoxyCodeLine{141     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{char})(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0x00FF);}
-\DoxyCodeLine{142 \}}
+\DoxyCodeLine{132                                                           \{}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134     \textcolor{comment}{// If the coordinates are out of bounds, return}}
+\DoxyCodeLine{135     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{136         \textcolor{keywordflow}{return} \textcolor{charliteral}{' '};}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138     \textcolor{comment}{// Calculate the offset}}
+\DoxyCodeLine{139     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141     \textcolor{comment}{// Return the character at the offset, by masking the character with the current character (last 8 bits)}}
+\DoxyCodeLine{142     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{char})(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0x00FF);}
+\DoxyCodeLine{143 \}}
 
 \end{DoxyCode}
 
@@ -320,22 +320,22 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 151 of file vesaboot.\+cpp.
+Definition at line 152 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{151                                                                           \{}
-\DoxyCodeLine{152 }
-\DoxyCodeLine{153     \textcolor{comment}{// If the coordinates are out of bounds, return}}
-\DoxyCodeLine{154     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{155         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a662b3c84ae35f91d9b06d791fddf76f2}{ConsoleColour::White}};}
-\DoxyCodeLine{156 }
-\DoxyCodeLine{157     \textcolor{comment}{// Calculate the offset}}
-\DoxyCodeLine{158     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
-\DoxyCodeLine{159 }
-\DoxyCodeLine{160     \textcolor{comment}{// Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-\/11)}}
-\DoxyCodeLine{161     \textcolor{keywordflow}{return} (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188}{ConsoleColour}})((\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0x0F00) >> 8);}
-\DoxyCodeLine{162 \}}
+\DoxyCodeLine{152                                                                           \{}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154     \textcolor{comment}{// If the coordinates are out of bounds, return}}
+\DoxyCodeLine{155     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{156         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a662b3c84ae35f91d9b06d791fddf76f2}{ConsoleColour::White}};}
+\DoxyCodeLine{157 }
+\DoxyCodeLine{158     \textcolor{comment}{// Calculate the offset}}
+\DoxyCodeLine{159     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161     \textcolor{comment}{// Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-\/11)}}
+\DoxyCodeLine{162     \textcolor{keywordflow}{return} (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188}{ConsoleColour}})((\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0x0F00) >> 8);}
+\DoxyCodeLine{163 \}}
 
 \end{DoxyCode}
 
@@ -365,13 +365,13 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 46 of file vesaboot.\+cpp.
+Definition at line 47 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{47 \{}
-\DoxyCodeLine{48     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_a0e77713e749b2844edb03fe4031e9207}{get\_height}}() / 9;      \textcolor{comment}{// 9 pixels per character}}
-\DoxyCodeLine{49 \}}
+\DoxyCodeLine{48 \{}
+\DoxyCodeLine{49     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_a0e77713e749b2844edb03fe4031e9207}{get\_height}}() / 9;      \textcolor{comment}{// 9 pixels per character}}
+\DoxyCodeLine{50 \}}
 
 \end{DoxyCode}
 
@@ -380,7 +380,55 @@ References max\+O\+S\+::common\+::\+Graphics\+Context\+::get\+\_\+height(), and 
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), kernel\+Main(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+
+\mbox{\Hypertarget{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_aa6b467dc00deb18332a2ea29557dc6b1}\label{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_aa6b467dc00deb18332a2ea29557dc6b1}} 
+\index{maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}!print\_logo@{print\_logo}}
+\index{print\_logo@{print\_logo}!maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}}
+\doxysubsubsection{\texorpdfstring{print\_logo()}{print\_logo()}}
+{\footnotesize\ttfamily void V\+E\+S\+A\+Boot\+Console\+::print\+\_\+logo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Prints the logo to the center of the screen. 
+
+
+
+Definition at line 249 of file vesaboot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{249                                  \{}
+\DoxyCodeLine{250 }
+\DoxyCodeLine{251       \textcolor{comment}{// Load the logo}}
+\DoxyCodeLine{252       \textcolor{keyword}{const} \textcolor{keywordtype}{char}* logo = header\_data;}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254       \textcolor{comment}{// Find the center of the screen}}
+\DoxyCodeLine{255       uint32\_t center\_x = \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_aa73ac7858cd08d2dcf062d78af17cefb}{get\_width}}()/2;}
+\DoxyCodeLine{256       uint32\_t center\_y = \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_a0e77713e749b2844edb03fe4031e9207}{get\_height}}()/2;}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258       \textcolor{comment}{// Draw the logo}}
+\DoxyCodeLine{259       \textcolor{keywordflow}{for} (uint32\_t logoY = 0; logoY < logo\_height; ++logoY) \{}
+\DoxyCodeLine{260         \textcolor{keywordflow}{for} (uint32\_t logoX = 0; logoX < logo\_width; ++logoX) \{}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262           \textcolor{comment}{// Store the pixel in the logo}}
+\DoxyCodeLine{263           uint8\_t pixel[3] = \{0\};}
+\DoxyCodeLine{264 }
+\DoxyCodeLine{265           \textcolor{comment}{// Get the pixel from the logo}}
+\DoxyCodeLine{266           \mbox{\hyperlink{logo_8h_a110a220384a7eb45fd382195d6081afb}{LOGO\_HEADER\_PIXEL}}(logo, pixel);}
+\DoxyCodeLine{267 }
+\DoxyCodeLine{268           \textcolor{comment}{// Draw the pixel}}
+\DoxyCodeLine{269           \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_a5154fe72c891ead614c75f3c2163b7ba}{put\_pixel}}(center\_x -\/ logo\_width / 2 + logoX,}
+\DoxyCodeLine{270                                         center\_y -\/ logo\_height / 2 + logoY,}
+\DoxyCodeLine{271                                     \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{common::Colour}}(pixel[0], pixel[1], pixel[2]));}
+\DoxyCodeLine{272         \}}
+\DoxyCodeLine{273       \}}
+\DoxyCodeLine{274 \}}
+
+\end{DoxyCode}
+
+
+Referenced by kernel\+Main().
 
 \mbox{\Hypertarget{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4c3e7d6a676f0a7c67f3cd13c50a989e}\label{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4c3e7d6a676f0a7c67f3cd13c50a989e}} 
 \index{maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}!put\_character@{put\_character}}
@@ -407,35 +455,35 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 57 of file vesaboot.\+cpp.
+Definition at line 58 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{57                                                                   \{}
-\DoxyCodeLine{58 }
-\DoxyCodeLine{59     \textcolor{comment}{// If the coordinates are out of bounds, return}}
-\DoxyCodeLine{60     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{61         \textcolor{keywordflow}{return};}
-\DoxyCodeLine{62 }
-\DoxyCodeLine{63     \textcolor{comment}{// Calculate the offset}}
-\DoxyCodeLine{64     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
-\DoxyCodeLine{65 }
-\DoxyCodeLine{66     \textcolor{comment}{// Set the character at the offset, by masking the character with the current character (last 8 bits)}}
-\DoxyCodeLine{67     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0xFF00) | (uint16\_t)\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a7a950d5540041b6d962c3c5d240a4828}{c}};}
-\DoxyCodeLine{68 }
-\DoxyCodeLine{69     \textcolor{comment}{// Convert the char into a string}}
-\DoxyCodeLine{70     \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a694e6520400ef8d005aa3a78369f034d}{s}} = \textcolor{stringliteral}{" "};}
-\DoxyCodeLine{71     \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a694e6520400ef8d005aa3a78369f034d}{s}}[0] = \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a7a950d5540041b6d962c3c5d240a4828}{c}};}
-\DoxyCodeLine{72 }
-\DoxyCodeLine{73     \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}} foreground = \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c41b6cb3d6ce1408202ab9b52b6c290}{console\_colour\_to\_vesa}}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{get\_foreground\_color}}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}));}
-\DoxyCodeLine{74     \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}} background = \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c41b6cb3d6ce1408202ab9b52b6c290}{console\_colour\_to\_vesa}}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\_background\_color}}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}));}
-\DoxyCodeLine{75 }
-\DoxyCodeLine{76     \textcolor{comment}{// Use the m\_font to draw the character}}
-\DoxyCodeLine{77     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad688b2d1da84da2e59e9ff0cb7968d74}{m\_font}}.\mbox{\hyperlink{classmaxOS_1_1gui_1_1Font_aa80fe1e9d019a378fdf59f901fc1d886}{draw\_text}}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} * 8, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} * 9, foreground, background, \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}},}
-\DoxyCodeLine{78                      \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a694e6520400ef8d005aa3a78369f034d}{s}});}
-\DoxyCodeLine{79 }
+\DoxyCodeLine{58                                                                   \{}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60     \textcolor{comment}{// If the coordinates are out of bounds, return}}
+\DoxyCodeLine{61     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{62         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64     \textcolor{comment}{// Calculate the offset}}
+\DoxyCodeLine{65     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67     \textcolor{comment}{// Set the character at the offset, by masking the character with the current character (last 8 bits)}}
+\DoxyCodeLine{68     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0xFF00) | (uint16\_t)\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a7a950d5540041b6d962c3c5d240a4828}{c}};}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70     \textcolor{comment}{// Convert the char into a string}}
+\DoxyCodeLine{71     \textcolor{keywordtype}{char} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a694e6520400ef8d005aa3a78369f034d}{s}}[] = \textcolor{stringliteral}{" "};}
+\DoxyCodeLine{72     \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a694e6520400ef8d005aa3a78369f034d}{s}}[0] = \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a7a950d5540041b6d962c3c5d240a4828}{c}};}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}} foreground = \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c41b6cb3d6ce1408202ab9b52b6c290}{console\_colour\_to\_vesa}}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{get\_foreground\_color}}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}));}
+\DoxyCodeLine{75     \mbox{\hyperlink{classmaxOS_1_1common_1_1Colour}{Colour}} background = \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c41b6cb3d6ce1408202ab9b52b6c290}{console\_colour\_to\_vesa}}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\_background\_color}}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}));}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{comment}{// Use the m\_font to draw the character}}
+\DoxyCodeLine{78     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af53966fd8fdb1daa37dc8b8f7fa017c1}{m\_font}}.\mbox{\hyperlink{classmaxOS_1_1gui_1_1Font_aa80fe1e9d019a378fdf59f901fc1d886}{draw\_text}}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} * 8, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} * 9, foreground, background, \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}},}
+\DoxyCodeLine{79                      \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a694e6520400ef8d005aa3a78369f034d}{s}});}
 \DoxyCodeLine{80 }
-\DoxyCodeLine{81 \}}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82 \}}
 
 \end{DoxyCode}
 
@@ -467,23 +515,23 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 110 of file vesaboot.\+cpp.
+Definition at line 111 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{110                                                                                            \{}
-\DoxyCodeLine{111 }
-\DoxyCodeLine{112     \textcolor{comment}{// If the coordinates are out of bounds, return}}
-\DoxyCodeLine{113     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{114         \textcolor{keywordflow}{return};}
-\DoxyCodeLine{115 }
-\DoxyCodeLine{116     \textcolor{comment}{// Calculate the offset}}
-\DoxyCodeLine{117     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119     \textcolor{comment}{// Set the background color at the offset, by masking the background color with the current background color (bits 12-\/15)}}
-\DoxyCodeLine{120     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0x0FFF) | ((uint16\_t)background << 12);}
-\DoxyCodeLine{121 }
-\DoxyCodeLine{122 \}}
+\DoxyCodeLine{111                                                                                            \{}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113     \textcolor{comment}{// If the coordinates are out of bounds, return}}
+\DoxyCodeLine{114     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{115         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117     \textcolor{comment}{// Calculate the offset}}
+\DoxyCodeLine{118     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120     \textcolor{comment}{// Set the background color at the offset, by masking the background color with the current background color (bits 12-\/15)}}
+\DoxyCodeLine{121     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0x0FFF) | ((uint16\_t)background << 12);}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123 \}}
 
 \end{DoxyCode}
 
@@ -515,22 +563,22 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 90 of file vesaboot.\+cpp.
+Definition at line 91 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{90                                                                                            \{}
-\DoxyCodeLine{91 }
-\DoxyCodeLine{92     \textcolor{comment}{// If the coordinates are out of bounds, return}}
-\DoxyCodeLine{93     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{94         \textcolor{keywordflow}{return};}
-\DoxyCodeLine{95 }
-\DoxyCodeLine{96     \textcolor{comment}{// Calculate the offset}}
-\DoxyCodeLine{97     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
-\DoxyCodeLine{98 }
-\DoxyCodeLine{99     \textcolor{comment}{// Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-\/11)}}
-\DoxyCodeLine{100     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0xF0FF) | ((uint16\_t)foreground << 8);}
-\DoxyCodeLine{101 \}}
+\DoxyCodeLine{91                                                                                            \{}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93     \textcolor{comment}{// If the coordinates are out of bounds, return}}
+\DoxyCodeLine{94     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() || \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}} >= \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{95         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97     \textcolor{comment}{// Calculate the offset}}
+\DoxyCodeLine{98     \textcolor{keywordtype}{int} offset = (\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4ad4c852bd3a0d121b5134d5b85d2d7cec}{y}}* \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}() + \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4adba0b26586463c1871896762f205c0e2}{x}});}
+\DoxyCodeLine{99 }
+\DoxyCodeLine{100     \textcolor{comment}{// Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-\/11)}}
+\DoxyCodeLine{101     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4cfac3ca8ceb694e6c7f22ab97abbbde}{m\_video\_memory}}[offset] \& 0xF0FF) | ((uint16\_t)foreground << 8);}
+\DoxyCodeLine{102 \}}
 
 \end{DoxyCode}
 
@@ -556,13 +604,13 @@ Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 36 of file vesaboot.\+cpp.
+Definition at line 37 of file vesaboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{37 \{}
-\DoxyCodeLine{38     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_aa73ac7858cd08d2dcf062d78af17cefb}{get\_width}}() / 8;       \textcolor{comment}{// 8 pixels per character}}
-\DoxyCodeLine{39 \}}
+\DoxyCodeLine{38 \{}
+\DoxyCodeLine{39     \textcolor{keywordflow}{return} \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad2d0fc790e49041cbe5d7c8a091101b9}{m\_graphics\_context}}-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1GraphicsContext_aa73ac7858cd08d2dcf062d78af17cefb}{get\_width}}() / 8;       \textcolor{comment}{// 8 pixels per character}}
+\DoxyCodeLine{40 \}}
 
 \end{DoxyCode}
 
@@ -571,20 +619,20 @@ References max\+O\+S\+::common\+::\+Graphics\+Context\+::get\+\_\+width(), and m
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), kernel\+Main(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
 
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad688b2d1da84da2e59e9ff0cb7968d74}\label{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad688b2d1da84da2e59e9ff0cb7968d74}} 
+\mbox{\Hypertarget{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af53966fd8fdb1daa37dc8b8f7fa017c1}\label{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole_af53966fd8fdb1daa37dc8b8f7fa017c1}} 
 \index{maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}!m\_font@{m\_font}}
 \index{m\_font@{m\_font}!maxOS::drivers::console::VESABootConsole@{maxOS::drivers::console::VESABootConsole}}
 \doxysubsubsection{\texorpdfstring{m\_font}{m\_font}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1gui_1_1AmigaFont}{gui\+::\+Amiga\+Font}} max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::m\+\_\+font\hspace{0.3cm}{\ttfamily [protected]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmaxOS_1_1gui_1_1Font}{gui\+::\+Font}} max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::m\+\_\+font\hspace{0.3cm}{\ttfamily [protected]}}
 
 
 
-Definition at line 46 of file vesaboot.\+h.
+Definition at line 30 of file vesaboot.\+h.
 
 
 
@@ -598,7 +646,7 @@ Referenced by put\+\_\+character().
 
 
 
-Definition at line 45 of file vesaboot.\+h.
+Definition at line 29 of file vesaboot.\+h.
 
 
 
@@ -612,11 +660,11 @@ Referenced by height(), put\+\_\+character(), and width().
 
 
 
-Definition at line 44 of file vesaboot.\+h.
+Definition at line 28 of file vesaboot.\+h.
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), set\+\_\+foreground\+\_\+color(), and V\+E\+S\+A\+Boot\+Console().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
 
 
 

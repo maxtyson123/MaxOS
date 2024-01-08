@@ -7,5 +7,6 @@ var namespacemaxOS =
     [ "hardwarecommunication", "namespacemaxOS_1_1hardwarecommunication.html", "namespacemaxOS_1_1hardwarecommunication" ],
     [ "memory", "namespacemaxOS_1_1memory.html", "namespacemaxOS_1_1memory" ],
     [ "net", "namespacemaxOS_1_1net.html", "namespacemaxOS_1_1net" ],
-    [ "system", "namespacemaxOS_1_1system.html", "namespacemaxOS_1_1system" ]
+    [ "system", "namespacemaxOS_1_1system.html", "namespacemaxOS_1_1system" ],
+    [ "String", "classmaxOS_1_1String.html", "classmaxOS_1_1String" ]
 ];

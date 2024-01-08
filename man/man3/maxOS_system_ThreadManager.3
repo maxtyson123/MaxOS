@@ -1,4 +1,4 @@
-.TH "maxOS::system::ThreadManager" 3 "Sat Jan 6 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "maxOS::system::ThreadManager" 3 "Mon Jan 8 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,7 +22,7 @@ maxOS::system::ThreadManager \- Manages the scheduling of threads\&.
 .RI "\fB~ThreadManager\fP ()"
 .br
 .ti -1c
-.RI "int \fBcreate_thread\fP (void entrypoint())"
+.RI "uint32_t \fBcreate_thread\fP (void entrypoint())"
 .br
 .RI "Add a thread to an empty place in the array\&. "
 .ti -1c
@@ -30,7 +30,7 @@ maxOS::system::ThreadManager \- Manages the scheduling of threads\&.
 .br
 .RI "Schedules the next thread to be executed by checking its yieldsStatus\&. "
 .ti -1c
-.RI "bool \fBterminate_thread\fP (int tid)"
+.RI "bool \fBterminate_thread\fP (uint32_t tid)"
 .br
 .RI "Terminates a thread\&. "
 .in -1c
@@ -70,7 +70,7 @@ Definition at line 48 of file multithreading\&.cpp\&.
 .fi
 .SH "Member Function Documentation"
 .PP 
-.SS "int ThreadManager::create_thread (void  entrypoint())"
+.SS "uint32_t ThreadManager::create_thread (void  entrypoint())"
 
 .PP
 Add a thread to an empty place in the array\&. 
@@ -95,7 +95,7 @@ Definition at line 59 of file multithreading\&.cpp\&.
 60 {
 61     // Create a new thread
 62     Thread* new_thread = new Thread();
-63     new_thread -> init(m_gdt, entrypoint);
+63     new_thread -> init(entrypoint);
 64     new_thread -> m_tid = m_threads\&.size();
 65     new_thread -> m_cpu_state -> cs = m_gdt-> code_segment_selector();
 66 
@@ -157,7 +157,7 @@ Definition at line 78 of file multithreading\&.cpp\&.
 References eax, and terminate_thread()\&.
 .PP
 Referenced by maxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\&.
-.SS "bool ThreadManager::terminate_thread (int tid)"
+.SS "bool ThreadManager::terminate_thread (uint32_t tid)"
 
 .PP
 Terminates a thread\&. 
@@ -179,7 +179,7 @@ Definition at line 112 of file multithreading\&.cpp\&.
 .nf
 113 {
 114     // Check if the thread is actually running
-115     if (tid < 0 || tid >= m_threads\&.size())
+115     if (tid >= m_threads\&.size())
 116         return false;
 117 
 118     // Delete the thread

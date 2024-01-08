@@ -22,7 +22,7 @@ Inheritance diagram for max\+OS\+::hardwarecommunication\+::Peripheral\+Componen
 \begin{DoxyCompactList}\small\item\em \+\_\+\+\_\+\+C\+O\+N\+T\+R\+O\+L\+L\+E\+R\+\_\+\+\_\+\+\_\+ \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_a355955bf5e632fc0b0f9276986a18dd7}{$\sim$\+Peripheral\+Component\+Interconnect\+Controller}} ()
 \item 
-void \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ac25d2d2f6ed315454ebbfac26070d72b}{select\+\_\+drivers}} (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelectorEventHandler}{drivers\+::\+Driver\+Selector\+Event\+Handler}} $\ast$handler, \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1InterruptManager}{hardwarecommunication\+::\+Interrupt\+Manager}} $\ast$interrupt\+\_\+manager, \mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$error\+\_\+message\+\_\+stream)
+void \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ad7dc1c715ecfdc809893ce363a688ce3}{select\+\_\+drivers}} (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelectorEventHandler}{drivers\+::\+Driver\+Selector\+Event\+Handler}} $\ast$handler, \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1InterruptManager}{hardwarecommunication\+::\+Interrupt\+Manager}} $\ast$interrupt\+\_\+manager) override
 \begin{DoxyCompactList}\small\item\em Select the driver for the device. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaxOS_1_1drivers_1_1Driver}{drivers\+::\+Driver}} $\ast$ \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ad3499aa1e24262d36e5b1456ea3e92c1}{get\+\_\+driver}} (\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor}{Peripheral\+Component\+Interconnect\+Device\+Descriptor}} dev, \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1InterruptManager}{Interrupt\+Manager}} $\ast$interrupt\+\_\+manager)
 \begin{DoxyCompactList}\small\item\em Get the driver for the device. \end{DoxyCompactList}\item 
@@ -121,56 +121,55 @@ Definition at line 238 of file pci.\+cpp.
 \DoxyCodeLine{248             \{}
 \DoxyCodeLine{249                 \textcolor{keywordflow}{case} 0x2000:    \textcolor{comment}{//am79c971}}
 \DoxyCodeLine{250                 \{}
-\DoxyCodeLine{251                     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}* result = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}*)MemoryManager::s\_active\_memory\_manager}
-\DoxyCodeLine{252                           -\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}));}
-\DoxyCodeLine{253                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}(\&dev, interrupt\_manager);}
-\DoxyCodeLine{254                     \textcolor{keywordflow}{return} result;}
-\DoxyCodeLine{255 }
-\DoxyCodeLine{256                 \}}
-\DoxyCodeLine{257                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{258                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{259             \}}
-\DoxyCodeLine{260             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{261         \}}
-\DoxyCodeLine{262         \textcolor{keywordflow}{case} 0x8086:  \textcolor{comment}{//Intel}}
-\DoxyCodeLine{263         \{}
-\DoxyCodeLine{264             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
-\DoxyCodeLine{265             \{}
-\DoxyCodeLine{266                 \textcolor{keywordflow}{case} 0x100E: \textcolor{comment}{//i217 (Ethernet Controller)}}
-\DoxyCodeLine{267                 \{}
-\DoxyCodeLine{268                     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}* result = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}*)MemoryManager::s\_active\_memory\_manager}
-\DoxyCodeLine{269                           -\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}));}
-\DoxyCodeLine{270                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}(\&dev, interrupt\_manager);}
-\DoxyCodeLine{271                     \textcolor{keywordflow}{return} result;}
-\DoxyCodeLine{272                 \}}
-\DoxyCodeLine{273                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{274                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{275             \}}
-\DoxyCodeLine{276             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{277         \}\textcolor{comment}{//End Intel}}
-\DoxyCodeLine{278     \}}
-\DoxyCodeLine{279 }
-\DoxyCodeLine{280     \textcolor{comment}{//If there is no driver for the particular device, go into generic devices}}
-\DoxyCodeLine{281     \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a4b4a73fa4835731965c2c24ee70bac1d}{class\_id}})}
-\DoxyCodeLine{282     \{}
-\DoxyCodeLine{283         \textcolor{keywordflow}{case} 0x03: \textcolor{comment}{//Graphics}}
-\DoxyCodeLine{284         \{}
-\DoxyCodeLine{285 }
-\DoxyCodeLine{286             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a30e57fa5c651aca222e09c7cc7b87c71}{subclass\_id}})}
-\DoxyCodeLine{287             \{}
-\DoxyCodeLine{288                 \textcolor{keywordflow}{case} 0x00:  \textcolor{comment}{//VGA}}
-\DoxyCodeLine{289                 \{}
-\DoxyCodeLine{290                     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}* result = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}*)MemoryManager::s\_active\_memory\_manager-\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}));}
-\DoxyCodeLine{291                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}();}
-\DoxyCodeLine{292                     \textcolor{keywordflow}{return} result;}
-\DoxyCodeLine{293                 \}}
-\DoxyCodeLine{294             \}}
-\DoxyCodeLine{295             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{296         \}}
-\DoxyCodeLine{297     \}}
-\DoxyCodeLine{298 }
-\DoxyCodeLine{299     \textcolor{keywordflow}{return} driver;}
-\DoxyCodeLine{300 \}}
+\DoxyCodeLine{251                     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}* result = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}*)MemoryManager::s\_active\_memory\_manager -\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}));}
+\DoxyCodeLine{252                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}(\&dev, interrupt\_manager);}
+\DoxyCodeLine{253                     \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255                 \}}
+\DoxyCodeLine{256                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{257                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{258             \}}
+\DoxyCodeLine{259             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{260         \}}
+\DoxyCodeLine{261         \textcolor{keywordflow}{case} 0x8086:  \textcolor{comment}{//Intel}}
+\DoxyCodeLine{262         \{}
+\DoxyCodeLine{263             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
+\DoxyCodeLine{264             \{}
+\DoxyCodeLine{265                 \textcolor{keywordflow}{case} 0x100E: \textcolor{comment}{//i217 (Ethernet Controller)}}
+\DoxyCodeLine{266                 \{}
+\DoxyCodeLine{267                     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}* result = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}*)MemoryManager::s\_active\_memory\_manager}
+\DoxyCodeLine{268                           -\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}));}
+\DoxyCodeLine{269                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}(\&dev, interrupt\_manager);}
+\DoxyCodeLine{270                     \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{271                 \}}
+\DoxyCodeLine{272                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{273                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{274             \}}
+\DoxyCodeLine{275             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{276         \}\textcolor{comment}{//End Intel}}
+\DoxyCodeLine{277     \}}
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279     \textcolor{comment}{//If there is no driver for the particular device, go into generic devices}}
+\DoxyCodeLine{280     \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a4b4a73fa4835731965c2c24ee70bac1d}{class\_id}})}
+\DoxyCodeLine{281     \{}
+\DoxyCodeLine{282         \textcolor{keywordflow}{case} 0x03: \textcolor{comment}{//Graphics}}
+\DoxyCodeLine{283         \{}
+\DoxyCodeLine{284 }
+\DoxyCodeLine{285             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a30e57fa5c651aca222e09c7cc7b87c71}{subclass\_id}})}
+\DoxyCodeLine{286             \{}
+\DoxyCodeLine{287                 \textcolor{keywordflow}{case} 0x00:  \textcolor{comment}{//VGA}}
+\DoxyCodeLine{288                 \{}
+\DoxyCodeLine{289                     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}* result = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}*)MemoryManager::s\_active\_memory\_manager-\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}));}
+\DoxyCodeLine{290                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}();}
+\DoxyCodeLine{291                     \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{292                 \}}
+\DoxyCodeLine{293             \}}
+\DoxyCodeLine{294             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{295         \}}
+\DoxyCodeLine{296     \}}
+\DoxyCodeLine{297 }
+\DoxyCodeLine{298     \textcolor{keywordflow}{return} driver;}
+\DoxyCodeLine{299 \}}
 
 \end{DoxyCode}
 
@@ -189,150 +188,150 @@ Referenced by select\+\_\+drivers().
 
 
 
-Definition at line 303 of file pci.\+cpp.
+Definition at line 302 of file pci.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{303                                                                                                                      \{}
-\DoxyCodeLine{304     \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_afa96f5e0f3d5f5e93d7e6c66d84a7e0b}{vendor\_id}})}
-\DoxyCodeLine{305     \{}
-\DoxyCodeLine{306         \textcolor{keywordflow}{case} 0x1022:}
-\DoxyCodeLine{307         \{}
-\DoxyCodeLine{308             \textcolor{comment}{// The vendor is AMD}}
-\DoxyCodeLine{309             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"AMD "});}
-\DoxyCodeLine{310 }
-\DoxyCodeLine{311             \textcolor{comment}{// List the device}}
-\DoxyCodeLine{312             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
-\DoxyCodeLine{313             \{}
-\DoxyCodeLine{314                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{315                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}});}
-\DoxyCodeLine{316                   \textcolor{keywordflow}{break};}
-\DoxyCodeLine{317             \}}
-\DoxyCodeLine{318             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{319         \}}
-\DoxyCodeLine{320 }
-\DoxyCodeLine{321         \textcolor{keywordflow}{case} 0x106B:}
-\DoxyCodeLine{322         \{}
-\DoxyCodeLine{323             \textcolor{comment}{// The vendor is Apple}}
-\DoxyCodeLine{324             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Apple "});}
-\DoxyCodeLine{325 }
-\DoxyCodeLine{326             \textcolor{comment}{// List the device}}
-\DoxyCodeLine{327             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
-\DoxyCodeLine{328             \{}
-\DoxyCodeLine{329                 \textcolor{keywordflow}{case} 0x003F:}
-\DoxyCodeLine{330                 \{}
-\DoxyCodeLine{331                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"KeyLargo/Intrepid USB"});}
-\DoxyCodeLine{332                   \textcolor{keywordflow}{break};}
-\DoxyCodeLine{333                 \}}
-\DoxyCodeLine{334 }
-\DoxyCodeLine{335                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{336                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}});}
-\DoxyCodeLine{337                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{338             \}}
-\DoxyCodeLine{339             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{340         \}}
-\DoxyCodeLine{341 }
-\DoxyCodeLine{342         \textcolor{keywordflow}{case} 1234:}
-\DoxyCodeLine{343         \{}
-\DoxyCodeLine{344             \textcolor{comment}{// The vendor is QEMU}}
-\DoxyCodeLine{345             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"QEMU "});}
-\DoxyCodeLine{346 }
-\DoxyCodeLine{347             \textcolor{comment}{// List the device}}
-\DoxyCodeLine{348             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
-\DoxyCodeLine{349             \{}
-\DoxyCodeLine{350 }
-\DoxyCodeLine{351                 \textcolor{keywordflow}{case} 0x1111:}
-\DoxyCodeLine{352                 \{}
-\DoxyCodeLine{353                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Virtual Video Controller"});}
-\DoxyCodeLine{354                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{355                 \}}
-\DoxyCodeLine{356             \}}
-\DoxyCodeLine{357             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{358         \}}
-\DoxyCodeLine{359 }
-\DoxyCodeLine{360         \textcolor{keywordflow}{case} 0x8086:}
-\DoxyCodeLine{361         \{}
-\DoxyCodeLine{362             \textcolor{comment}{// The vendor is Intel}}
-\DoxyCodeLine{363             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Intel "});}
-\DoxyCodeLine{364 }
-\DoxyCodeLine{365             \textcolor{comment}{// List the device}}
-\DoxyCodeLine{366             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
-\DoxyCodeLine{367             \{}
-\DoxyCodeLine{368 }
-\DoxyCodeLine{369                 \textcolor{keywordflow}{case} 0x1237:}
-\DoxyCodeLine{370                 \{}
-\DoxyCodeLine{371                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"440FX"});}
-\DoxyCodeLine{372                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{373                 \}}
-\DoxyCodeLine{374 }
-\DoxyCodeLine{375                 \textcolor{keywordflow}{case} 0x2415:}
-\DoxyCodeLine{376                 \{}
-\DoxyCodeLine{377                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"AC'97"});}
-\DoxyCodeLine{378                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{379                 \}}
-\DoxyCodeLine{380 }
-\DoxyCodeLine{381                 \textcolor{keywordflow}{case} 0x7000:}
-\DoxyCodeLine{382                 \{}
-\DoxyCodeLine{383                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX3"});}
-\DoxyCodeLine{384                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{385 }
-\DoxyCodeLine{386                 \}}
-\DoxyCodeLine{387 }
-\DoxyCodeLine{388                 \textcolor{keywordflow}{case} 0x7010:}
-\DoxyCodeLine{389                 \{}
-\DoxyCodeLine{390                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX4"});}
-\DoxyCodeLine{391                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{392 }
-\DoxyCodeLine{393                 \}}
-\DoxyCodeLine{394 }
-\DoxyCodeLine{395                 \textcolor{keywordflow}{case} 0x7111:}
-\DoxyCodeLine{396                 \{}
-\DoxyCodeLine{397                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX3"});}
-\DoxyCodeLine{398                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{399                 \}}
-\DoxyCodeLine{400 }
-\DoxyCodeLine{401                 \textcolor{keywordflow}{case} 0x7113:}
-\DoxyCodeLine{402                 \{}
-\DoxyCodeLine{403                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX4 ACPI"});}
-\DoxyCodeLine{404                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{405                 \}}
-\DoxyCodeLine{406 }
-\DoxyCodeLine{407                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{408                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{409 }
-\DoxyCodeLine{410             \}}
-\DoxyCodeLine{411             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{412         \}}
-\DoxyCodeLine{413 }
-\DoxyCodeLine{414         \textcolor{keywordflow}{case} 0x80EE: \{}
-\DoxyCodeLine{415 }
-\DoxyCodeLine{416             \textcolor{comment}{// The vendor is VirtualBox}}
-\DoxyCodeLine{417             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"VirtualBox "});}
-\DoxyCodeLine{418 }
-\DoxyCodeLine{419             \textcolor{comment}{// List the device}}
-\DoxyCodeLine{420             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}}) \{}
-\DoxyCodeLine{421 }
-\DoxyCodeLine{422                 \textcolor{keywordflow}{case} 0xBEEF: \{}
-\DoxyCodeLine{423                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Graphics Adapter"});}
-\DoxyCodeLine{424                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{425                 \}}
-\DoxyCodeLine{426 }
-\DoxyCodeLine{427                 \textcolor{keywordflow}{case} 0xCAFE: \{}
-\DoxyCodeLine{428                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Guest Service"});}
-\DoxyCodeLine{429                     \textcolor{keywordflow}{break};}
-\DoxyCodeLine{430                 \}}
-\DoxyCodeLine{431             \}}
-\DoxyCodeLine{432             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{433         \}}
-\DoxyCodeLine{434 }
-\DoxyCodeLine{435         \textcolor{keywordflow}{default}:    \textcolor{comment}{// Unknown}}
-\DoxyCodeLine{436           m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_afa96f5e0f3d5f5e93d7e6c66d84a7e0b}{vendor\_id}});}
-\DoxyCodeLine{437           m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{" "});}
-\DoxyCodeLine{438           m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}});}
-\DoxyCodeLine{439           \textcolor{keywordflow}{break};}
-\DoxyCodeLine{440 }
-\DoxyCodeLine{441     \}}
-\DoxyCodeLine{442 \}}
+\DoxyCodeLine{302                                                                                                                      \{}
+\DoxyCodeLine{303     \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_afa96f5e0f3d5f5e93d7e6c66d84a7e0b}{vendor\_id}})}
+\DoxyCodeLine{304     \{}
+\DoxyCodeLine{305         \textcolor{keywordflow}{case} 0x1022:}
+\DoxyCodeLine{306         \{}
+\DoxyCodeLine{307             \textcolor{comment}{// The vendor is AMD}}
+\DoxyCodeLine{308             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"AMD "});}
+\DoxyCodeLine{309 }
+\DoxyCodeLine{310             \textcolor{comment}{// List the device}}
+\DoxyCodeLine{311             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
+\DoxyCodeLine{312             \{}
+\DoxyCodeLine{313                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{314                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}});}
+\DoxyCodeLine{315                   \textcolor{keywordflow}{break};}
+\DoxyCodeLine{316             \}}
+\DoxyCodeLine{317             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{318         \}}
+\DoxyCodeLine{319 }
+\DoxyCodeLine{320         \textcolor{keywordflow}{case} 0x106B:}
+\DoxyCodeLine{321         \{}
+\DoxyCodeLine{322             \textcolor{comment}{// The vendor is Apple}}
+\DoxyCodeLine{323             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Apple "});}
+\DoxyCodeLine{324 }
+\DoxyCodeLine{325             \textcolor{comment}{// List the device}}
+\DoxyCodeLine{326             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
+\DoxyCodeLine{327             \{}
+\DoxyCodeLine{328                 \textcolor{keywordflow}{case} 0x003F:}
+\DoxyCodeLine{329                 \{}
+\DoxyCodeLine{330                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"KeyLargo/Intrepid USB"});}
+\DoxyCodeLine{331                   \textcolor{keywordflow}{break};}
+\DoxyCodeLine{332                 \}}
+\DoxyCodeLine{333 }
+\DoxyCodeLine{334                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{335                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}});}
+\DoxyCodeLine{336                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{337             \}}
+\DoxyCodeLine{338             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{339         \}}
+\DoxyCodeLine{340 }
+\DoxyCodeLine{341         \textcolor{keywordflow}{case} 1234:}
+\DoxyCodeLine{342         \{}
+\DoxyCodeLine{343             \textcolor{comment}{// The vendor is QEMU}}
+\DoxyCodeLine{344             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"QEMU "});}
+\DoxyCodeLine{345 }
+\DoxyCodeLine{346             \textcolor{comment}{// List the device}}
+\DoxyCodeLine{347             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
+\DoxyCodeLine{348             \{}
+\DoxyCodeLine{349 }
+\DoxyCodeLine{350                 \textcolor{keywordflow}{case} 0x1111:}
+\DoxyCodeLine{351                 \{}
+\DoxyCodeLine{352                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Virtual Video Controller"});}
+\DoxyCodeLine{353                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{354                 \}}
+\DoxyCodeLine{355             \}}
+\DoxyCodeLine{356             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{357         \}}
+\DoxyCodeLine{358 }
+\DoxyCodeLine{359         \textcolor{keywordflow}{case} 0x8086:}
+\DoxyCodeLine{360         \{}
+\DoxyCodeLine{361             \textcolor{comment}{// The vendor is Intel}}
+\DoxyCodeLine{362             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Intel "});}
+\DoxyCodeLine{363 }
+\DoxyCodeLine{364             \textcolor{comment}{// List the device}}
+\DoxyCodeLine{365             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}})}
+\DoxyCodeLine{366             \{}
+\DoxyCodeLine{367 }
+\DoxyCodeLine{368                 \textcolor{keywordflow}{case} 0x1237:}
+\DoxyCodeLine{369                 \{}
+\DoxyCodeLine{370                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"440FX"});}
+\DoxyCodeLine{371                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{372                 \}}
+\DoxyCodeLine{373 }
+\DoxyCodeLine{374                 \textcolor{keywordflow}{case} 0x2415:}
+\DoxyCodeLine{375                 \{}
+\DoxyCodeLine{376                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"AC'97"});}
+\DoxyCodeLine{377                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{378                 \}}
+\DoxyCodeLine{379 }
+\DoxyCodeLine{380                 \textcolor{keywordflow}{case} 0x7000:}
+\DoxyCodeLine{381                 \{}
+\DoxyCodeLine{382                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX3"});}
+\DoxyCodeLine{383                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{384 }
+\DoxyCodeLine{385                 \}}
+\DoxyCodeLine{386 }
+\DoxyCodeLine{387                 \textcolor{keywordflow}{case} 0x7010:}
+\DoxyCodeLine{388                 \{}
+\DoxyCodeLine{389                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX4"});}
+\DoxyCodeLine{390                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{391 }
+\DoxyCodeLine{392                 \}}
+\DoxyCodeLine{393 }
+\DoxyCodeLine{394                 \textcolor{keywordflow}{case} 0x7111:}
+\DoxyCodeLine{395                 \{}
+\DoxyCodeLine{396                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX3"});}
+\DoxyCodeLine{397                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{398                 \}}
+\DoxyCodeLine{399 }
+\DoxyCodeLine{400                 \textcolor{keywordflow}{case} 0x7113:}
+\DoxyCodeLine{401                 \{}
+\DoxyCodeLine{402                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"PIIX4 ACPI"});}
+\DoxyCodeLine{403                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{404                 \}}
+\DoxyCodeLine{405 }
+\DoxyCodeLine{406                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{407                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{408 }
+\DoxyCodeLine{409             \}}
+\DoxyCodeLine{410             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{411         \}}
+\DoxyCodeLine{412 }
+\DoxyCodeLine{413         \textcolor{keywordflow}{case} 0x80EE: \{}
+\DoxyCodeLine{414 }
+\DoxyCodeLine{415             \textcolor{comment}{// The vendor is VirtualBox}}
+\DoxyCodeLine{416             m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"VirtualBox "});}
+\DoxyCodeLine{417 }
+\DoxyCodeLine{418             \textcolor{comment}{// List the device}}
+\DoxyCodeLine{419             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}}) \{}
+\DoxyCodeLine{420 }
+\DoxyCodeLine{421                 \textcolor{keywordflow}{case} 0xBEEF: \{}
+\DoxyCodeLine{422                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Graphics Adapter"});}
+\DoxyCodeLine{423                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{424                 \}}
+\DoxyCodeLine{425 }
+\DoxyCodeLine{426                 \textcolor{keywordflow}{case} 0xCAFE: \{}
+\DoxyCodeLine{427                   m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"Guest Service"});}
+\DoxyCodeLine{428                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{429                 \}}
+\DoxyCodeLine{430             \}}
+\DoxyCodeLine{431             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{432         \}}
+\DoxyCodeLine{433 }
+\DoxyCodeLine{434         \textcolor{keywordflow}{default}:    \textcolor{comment}{// Unknown}}
+\DoxyCodeLine{435           m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_afa96f5e0f3d5f5e93d7e6c66d84a7e0b}{vendor\_id}});}
+\DoxyCodeLine{436           m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{" "});}
+\DoxyCodeLine{437           m\_debug\_messages\_stream-\/>\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(dev.\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a8cf5c86f59f3712245ab3de755e97923}{device\_id}});}
+\DoxyCodeLine{438           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{439 }
+\DoxyCodeLine{440     \}}
+\DoxyCodeLine{441 \}}
 
 \end{DoxyCode}
 
@@ -343,11 +342,11 @@ References max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interc
 
 Referenced by select\+\_\+drivers().
 
-\mbox{\Hypertarget{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ac25d2d2f6ed315454ebbfac26070d72b}\label{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ac25d2d2f6ed315454ebbfac26070d72b}} 
+\mbox{\Hypertarget{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ad7dc1c715ecfdc809893ce363a688ce3}\label{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ad7dc1c715ecfdc809893ce363a688ce3}} 
 \index{maxOS::hardwarecommunication::PeripheralComponentInterconnectController@{maxOS::hardwarecommunication::PeripheralComponentInterconnectController}!select\_drivers@{select\_drivers}}
 \index{select\_drivers@{select\_drivers}!maxOS::hardwarecommunication::PeripheralComponentInterconnectController@{maxOS::hardwarecommunication::PeripheralComponentInterconnectController}}
 \doxysubsubsection{\texorpdfstring{select\_drivers()}{select\_drivers()}}
-{\footnotesize\ttfamily void Peripheral\+Component\+Interconnect\+Controller\+::select\+\_\+drivers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelectorEventHandler}{drivers\+::\+Driver\+Selector\+Event\+Handler}} $\ast$}]{handler,  }\item[{\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1InterruptManager}{hardwarecommunication\+::\+Interrupt\+Manager}} $\ast$}]{interrupt\+\_\+manager,  }\item[{\mbox{\hyperlink{classmaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$}]{error\+\_\+message\+\_\+stream }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Peripheral\+Component\+Interconnect\+Controller\+::select\+\_\+drivers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelectorEventHandler}{drivers\+::\+Driver\+Selector\+Event\+Handler}} $\ast$}]{handler,  }\item[{\mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1InterruptManager}{hardwarecommunication\+::\+Interrupt\+Manager}} $\ast$}]{interrupt\+\_\+manager }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -365,7 +364,7 @@ Driver for the device
 \end{DoxyReturn}
 
 
-Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelector_a02dbf388fe58fdf82fa546a6a4945848}{max\+O\+S\+::drivers\+::\+Driver\+Selector}}.
+Reimplemented from \mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelector_a58b9eb7f96d223fde9417d4682fa12c1}{max\+O\+S\+::drivers\+::\+Driver\+Selector}}.
 
 
 
