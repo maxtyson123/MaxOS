@@ -80,7 +80,7 @@ namespace maxOS{
         template<class Type> class InputStreamBuffer : protected InputStreamProcessor<Type, Type*>
         {
             protected:
-                Type m_buffer[10240]; //TODO: Probaby make this dynamic
+                Type m_buffer[10240];
                 int m_offset { 0 };
                 Type m_event_fire_element;
                 Type m_termination_element;

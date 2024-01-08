@@ -45,8 +45,6 @@ namespace maxOS {
           char &operator [] (int index) const;
     };
 
-
-    // Todo make a string class
     typedef String              string;
 
 }

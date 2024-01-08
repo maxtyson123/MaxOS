@@ -333,6 +333,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     cout << "\n";
     networkSetupHeaderStream << "[ DONE ]";
 
+#define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
     mouse.connect_event_handler(&desktop);
