@@ -48,7 +48,7 @@ namespace maxOS {
 
           public:
 
-              GlobalDescriptorTable(const multiboot_info& multiboot_header);
+              GlobalDescriptorTable(multiboot_tag_basic_meminfo* meminfo);
               ~GlobalDescriptorTable();
 
               uint16_t code_segment_selector();

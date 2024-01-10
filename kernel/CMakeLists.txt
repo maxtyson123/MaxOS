@@ -1,7 +1,6 @@
 # Set the standard and flags
 SET(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -nostdlib -Wall -Wextra -Wno-address-of-packed-member
-                      -Wno-trigraphs -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g")
+SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -Wno-address-of-packed-member -Wno-trigraphs -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g")
 
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "")
@@ -13,13 +12,13 @@ SET_SOURCE_FILES_PROPERTIES(${ASM_SRCS} PROPERTIES LANGUAGE ASM)
 FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
 
 # Create the kernel
-ADD_EXECUTABLE(MaxOSk32 ${KERNEL_SRCS})
-TARGET_COMPILE_DEFINITIONS(MaxOSk32 PUBLIC MAXOS_KERNEL)
+ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS})
+TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
 # Update the version before building
 ADD_CUSTOM_COMMAND(
     COMMENT "Versioning kernel"
-    TARGET MaxOSk32
+    TARGET MaxOSk64
     PRE_BUILD
     COMMAND ${CMAKE_SOURCE_DIR}/toolchain/version.sh
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h
@@ -29,12 +28,12 @@ ADD_CUSTOM_COMMAND(
 
 # Linker
 SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
-SET_TARGET_PROPERTIES(MaxOSk32 PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-TARGET_LINK_LIBRARIES(MaxOSk32 gcc)
-TARGET_LINK_OPTIONS(MaxOSk32 PRIVATE -T ${LINKER_SCRIPT} -nostdlib)
+SET_TARGET_PROPERTIES(MaxOSk64 PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
+TARGET_LINK_LIBRARIES(MaxOSk64 gcc)
+TARGET_LINK_OPTIONS(MaxOSk64 PRIVATE -T ${LINKER_SCRIPT} -nostdlib)
 
 # Set the include directories
-TARGET_INCLUDE_DIRECTORIES(MaxOSk32 PRIVATE include)
+TARGET_INCLUDE_DIRECTORIES(MaxOSk64 PRIVATE include)
 
 # Install kernel
-INSTALL(TARGETS MaxOSk32 DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)
+INSTALL(TARGETS MaxOSk64 DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)

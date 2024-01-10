@@ -35,7 +35,6 @@
 
 //SYSTEM
 #include <system/process.h>
-#include <system/gdt.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
 #include <system/multithreading.h>
@@ -103,19 +102,14 @@ void print_boot_header(Console* console){
 
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
-
-    // Check if the magic number is valid
-    if(magic != MULTIBOOT2_BOOTLOADER_MAGIC){
-
-        asm("hlt");
-
-    }
-
     // Where the kernel ends
     extern unsigned int kernel_end;
 
     // Make the multiboot header
     Multiboot multiboot(addr);
+
+    // Init memory management
+    MemoryManager memoryManager(multiboot.get_basic_meminfo());
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
@@ -133,6 +127,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
+    if(magic == MULTIBOOT2_BOOTLOADER_MAGIC)
+        cout << "Multiboot2 Bootloader Detected\n";
+
+    return;
+
     // Print the header
     print_boot_header(&console);
 
@@ -149,7 +148,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     systemSetupHeaderStream << "Setting up system";
 
     //Setup GDT
-    GlobalDescriptorTable gdt(multibootHeader);
+    GlobalDescriptorTable gdt(multiboot.get_basic_meminfo());
     cout << "-- Set Up GDT\n";
     systemSetupHeaderStream << ".";
 

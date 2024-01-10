@@ -21,7 +21,7 @@ _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
 _ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
     movb $\num + IRQ_BASE, (interruptnumber)
     #Push 0  for the error
-    pushl $0
+    push $0
     jmp int_bottom
 .endm
 
@@ -82,35 +82,35 @@ HandleInterruptRequest 0x80
 int_bottom:
 
     # Push Values From CPUState (multitasking.h)
-    pushl %ebp
-    pushl %edi
-    pushl %esi
+    push %bp
+    push %di
+    push %si
 
-    pushl %edx
-    pushl %ecx
-    pushl %ebx
-    pushl %eax
+    push %dx
+    push %cx
+    push %bx
+    push %ax
 
 
     # Invoke C++ handlers
-    pushl %esp
+    push %sp
     push (interruptnumber)
     call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhm
 
     # Switch the stack
-    mov %eax, %esp
+    mov %ax, %sp
 
     # Pop Values From CPUState (multitasking.h)
-    popl %eax
-    popl %ebx
-    popl %ecx
-    popl %edx
+    pop %ax
+    pop %bx
+    pop %cx
+    pop %dx
 
-    popl %esi
-    popl %edi
-    popl %ebp
+    pop %si
+    pop %di
+    pop %bp
 
-    add $4, %esp
+    add $4, %sp
 
 .global _ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
 _ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:

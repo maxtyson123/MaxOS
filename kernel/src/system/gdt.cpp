@@ -88,11 +88,11 @@ uint32_t SegmentDescriptor::limit()
 /**
  * @brief Global Descriptor Table
  */
-GlobalDescriptorTable::GlobalDescriptorTable(const multiboot_info&multiboot_header)
+GlobalDescriptorTable::GlobalDescriptorTable(multiboot_tag_basic_meminfo* meminfo)
 : m_null_segment_selector(0, 0, 0), m_unused_segment_selector(0, 0, 0),
-  m_code_segment_selector(0, 1024* multiboot_header.mem_upper, 0x9A),
-  m_data_segment_selector(0, 1024* multiboot_header.mem_upper, 0x92),
-  m_task_state_segment_selector(0, 1024* multiboot_header.mem_upper, 0)
+  m_code_segment_selector(0, 1024* meminfo -> mem_upper, 0x9A),
+  m_data_segment_selector(0, 1024* meminfo -> mem_upper, 0x92),
+  m_task_state_segment_selector(0, 1024* meminfo -> mem_upper, 0)
 
 {
 

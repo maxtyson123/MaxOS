@@ -39,7 +39,7 @@ namespace maxOS{
           public:
               static MemoryManager* s_active_memory_manager;
 
-              MemoryManager(system::multiboot_info_t* boot_info);
+              MemoryManager(multiboot_tag_basic_meminfo* meminfo);
               ~MemoryManager();
 
               void* malloc(size_t size);

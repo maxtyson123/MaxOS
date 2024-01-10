@@ -9,12 +9,12 @@ using namespace maxOS::memory;
 
 MemoryManager* MemoryManager::s_active_memory_manager = 0;
 
-MemoryManager::MemoryManager(system::multiboot_info_t* boot_info)
+MemoryManager::MemoryManager(multiboot_tag_basic_meminfo* meminfo)
 {
 
 
     size_t  heap = 10*1024*1024;
-    size_t  size = boot_info->mem_upper*1024 - heap - 10*1024;
+    size_t  size = meminfo->mem_upper*1024 - heap - 10*1024;
 
     s_active_memory_manager = this;
 
