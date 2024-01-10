@@ -101,21 +101,28 @@ void print_boot_header(Console* console){
 
 }
 
-extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
+extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
-    // Get the multiboot info structure
-    Multiboot multiboot((multiboot_info_t*)&multibootHeader, multiboot_magic);
+    // Check if the magic number is valid
+    if(magic != MULTIBOOT2_BOOTLOADER_MAGIC){
 
-    // Set up the memory manager
-    MemoryManager memoryManager(multiboot.get_boot_info());
+        asm("hlt");
+
+    }
+
+    // Where the kernel ends
+    extern unsigned int kernel_end;
+
+    // Make the multiboot header
+    Multiboot multiboot(addr);
 
     // Initialise the VESA Driver
-    VideoElectronicsStandardsAssociation vesa(multiboot.get_boot_info());
+    VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
-    videoDriver->set_mode((int)multiboot.get_boot_info() -> framebuffer_width,
-                          (int)multiboot.get_boot_info() -> framebuffer_height,
-                          (int)multiboot.get_boot_info() -> framebuffer_bpp);
+    videoDriver->set_mode((int)multiboot.get_framebuffer()->common.framebuffer_width,
+                          (int)multiboot.get_framebuffer()->common.framebuffer_height,
+                          (int)multiboot.get_framebuffer()->common.framebuffer_bpp);
 
     // Initialise Console
     VESABootConsole console(&vesa);
@@ -131,12 +138,6 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
 
     // Print the build info
     cout << "BUILD INFO: " << VERSION_NAME << " on " << BUILD_DATE.year << "-" << BUILD_DATE.month << "-" << BUILD_DATE.day << " at " << BUILD_DATE.hour << ":" << BUILD_DATE.minute << ":" << BUILD_DATE.second << " " << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
-
-    // Check the multiboot flags
-    cout << "Checking Multiboot Flags";
-    if(!multiboot.check_flags(&cout))
-        asm("hlt");
-    cout << "[ DONE ]\n";
 
     // Where the areas should start
     cout.set_cursor(cout.m_cursor_x, cout.m_cursor_y + 1); //Move the cursor down one (so the header is not overwritten

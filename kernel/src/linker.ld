@@ -1,32 +1,41 @@
-ENTRY(loader)
-OUTPUT_FORMAT(elf32-i386)
-OUTPUT_ARCH(i386:i386)
+ENTRY(_start)
 
 SECTIONS
 {
-  . = 0x0100000;
+    . = 1M;
 
-  .text :
-  {
-    *(.multiboot)
-    *(.text*)
-    *(.rodata)
-  }
+    KERNEL_START = .;
+    KERNEL_VIRT_BASE = 0xFFFFFFFF8000000;
 
-  .data  :
-  {
-    start_ctors = .;
-    KEEP(*( .init_array ));
-    KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
-    end_ctors = .;
+    .mb2_hdr :
+    {
+        /* Be sure that the multiboot2 header is at the beginning */
+        KEEP(*(.mb2_hdr))
+    }
 
-    *(.data)
-  }
+    .mb2_text :
+    {
+        /* Space for the assembly stub to get us into long mode */
+        .mb2_text
+    }
 
-  .bss  :
-  {
-    *(.bss)
-  }
+    . += KERNEL_VIRT_BASE
 
-  /DISCARD/ : { *(.fini_array*) *(.comment) }
+    .text ALIGN(4K) : AT(. - KERNEL_VIRT_BASE)
+    {
+        *(.text)
+    }
+
+    .rodata ALIGN(4K) : AT(. - KERNEL_VIRT_BASE)
+    {
+        *(.rodata)
+    }
+
+    .data ALIGN(4K) : AT(. - KERNEL_VIRT_BASE)
+    {
+        *(COMMON)
+        *(.data)
+        *(.bss)
+    }
+    KERNEL_END = .;
 }

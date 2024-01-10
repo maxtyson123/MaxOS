@@ -1,6 +1,7 @@
 # Set the standard and flags
 SET(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_FLAGS "-ffreestanding -fno-exceptions -fno-rtti -nostdlib -Wall -Wextra -Wno-address-of-packed-member -Wno-trigraphs")
+SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -nostdlib -Wall -Wextra -Wno-address-of-packed-member
+                      -Wno-trigraphs -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g")
 
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "")

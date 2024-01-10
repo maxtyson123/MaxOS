@@ -14,7 +14,7 @@ cd ./cross_compiler
 
 # Prefix should be a bin directory in the current directory
 export PREFIX="$PWD/cross"
-export TARGET=i686-elf
+export TARGET=x86_64-elf
 export PATH="$PREFIX/bin:$PATH"
 
 # Store versions in a variable
