@@ -9,12 +9,25 @@ using namespace maxOS::memory;
 
 MemoryManager* MemoryManager::s_active_memory_manager = 0;
 
-MemoryManager::MemoryManager(multiboot_tag_basic_meminfo* meminfo)
+MemoryManager::MemoryManager(multiboot_tag_mmap* memory_map)
 {
 
+     size_t heap = 0;
+     size_t size = 0;
 
-    size_t  heap = 10*1024*1024;
-    size_t  size = meminfo->mem_upper*1024 - heap - 10*1024;
+    // Find the available memory
+    for (multiboot_memory_map_t* mmap = memory_map->entries; (unsigned long)mmap < (unsigned long)memory_map + memory_map->size;
+         mmap = (multiboot_memory_map_t*)((unsigned long)mmap + memory_map->entry_size)) {
+
+        // If the memory is available then use it
+        if(mmap -> type == MULTIBOOT_MEMORY_AVAILABLE){
+            heap = mmap -> addr;
+            size = mmap -> len;
+        }
+    }
+
+    // Add a 10MB offset to the heap
+        heap += 0x1000000;
 
     s_active_memory_manager = this;
 

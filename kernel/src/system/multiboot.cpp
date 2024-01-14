@@ -26,6 +26,10 @@ Multiboot::Multiboot(unsigned long addr) {
               m_bootloader_name = (multiboot_tag_string *)tag;
               break;
 
+          case MULTIBOOT_TAG_TYPE_MMAP:
+                m_mmap = (multiboot_tag_mmap *)tag;
+                break;
+
       }
     }
 }
@@ -50,5 +54,11 @@ multiboot_tag_basic_meminfo *Multiboot::get_basic_meminfo() {
 multiboot_tag_string *Multiboot::get_bootloader_name() {
 
     return m_bootloader_name;
+
+}
+
+multiboot_tag_mmap *Multiboot::get_mmap() {
+
+    return m_mmap;
 
 }

@@ -422,6 +422,7 @@ namespace maxOS {
           multiboot_tag_framebuffer* m_framebuffer;
           multiboot_tag_basic_meminfo* m_basic_meminfo;
           multiboot_tag_string* m_bootloader_name;
+          multiboot_tag_mmap* m_mmap;
 
         public:
           Multiboot(unsigned long addr);
@@ -430,6 +431,7 @@ namespace maxOS {
           multiboot_tag_framebuffer* get_framebuffer();
           multiboot_tag_basic_meminfo* get_basic_meminfo();
           multiboot_tag_string* get_bootloader_name();
+          multiboot_tag_mmap* get_mmap();
     };
   }
 }

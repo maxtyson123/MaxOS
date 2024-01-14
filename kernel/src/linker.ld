@@ -1,41 +1,44 @@
-ENTRY(_start)
+ENTRY(start)
 
-SECTIONS
-{
+SECTIONS {
     . = 1M;
 
-    KERNEL_START = .;
-    KERNEL_VIRT_BASE = 0xFFFFFFFF8000000;
-
-    .mb2_hdr :
+    _kernel_start =.;
+    _kern_virtual_offset = 0xffffffff80000000;
+    .multiboot_header :
     {
-        /* Be sure that the multiboot2 header is at the beginning */
-        KEEP(*(.mb2_hdr))
+        /* Be sure that multiboot header is at the beginning */
+        *(.multiboot_header)
     }
 
-    .mb2_text :
+    .multiboot.text :
     {
-        /* Space for the assembly stub to get us into long mode */
-        .mb2_text
+        *(.multiboot.text)
     }
 
-    . += KERNEL_VIRT_BASE
+    . += _kern_virtual_offset;
+	/* Add a symbol that indicates the start address of the kernel. */
+	.text ALIGN (4K) : AT (ADDR (.text) - _kern_virtual_offset)
+	{
+		*(.text)
+	}
+	.rodata ALIGN (4K) : AT (ADDR (.rodata) - _kern_virtual_offset)
+	{
+		*(.rodata)
+	}
+	.data ALIGN (4K) : AT (ADDR (.data) - _kern_virtual_offset)
+	{
+		 start_ctors = .;
+          KEEP(*( .init_array ));
+          KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
+          end_ctors = .;
 
-    .text ALIGN(4K) : AT(. - KERNEL_VIRT_BASE)
-    {
-        *(.text)
-    }
+          *(.data)
+	}
+	.bss ALIGN (4K) : AT (ADDR (.bss) - _kern_virtual_offset)
+	{
+		*(.bss)
+	}
 
-    .rodata ALIGN(4K) : AT(. - KERNEL_VIRT_BASE)
-    {
-        *(.rodata)
-    }
-
-    .data ALIGN(4K) : AT(. - KERNEL_VIRT_BASE)
-    {
-        *(COMMON)
-        *(.data)
-        *(.bss)
-    }
-    KERNEL_END = .;
+    _kernel_end = .;
 }

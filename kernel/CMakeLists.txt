@@ -3,8 +3,8 @@ SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -Wno-address-of-packed-member -Wno-trigraphs -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g")
 
 # Enable assembly
-SET(CMAKE_ASM_FLAGS "")
-SET(CMAKE_ASM_COMPILE_OBJECT "<CMAKE_ASM_COMPILER> <FLAGS> -o <OBJECT> <SOURCE>")
+SET(CMAKE_ASM_FLAGS "-f elf64")
+SET(CMAKE_ASM_COMPILE_OBJECT "nasm <FLAGS> -o <OBJECT> <SOURCE>")
 FILE(GLOB_RECURSE ASM_SRCS src/*.s)
 SET_SOURCE_FILES_PROPERTIES(${ASM_SRCS} PROPERTIES LANGUAGE ASM)
 
@@ -30,7 +30,7 @@ ADD_CUSTOM_COMMAND(
 SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
 SET_TARGET_PROPERTIES(MaxOSk64 PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 TARGET_LINK_LIBRARIES(MaxOSk64 gcc)
-TARGET_LINK_OPTIONS(MaxOSk64 PRIVATE -T ${LINKER_SCRIPT} -nostdlib)
+TARGET_LINK_OPTIONS(MaxOSk64 PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
 
 # Set the include directories
 TARGET_INCLUDE_DIRECTORIES(MaxOSk64 PRIVATE include)

@@ -102,14 +102,12 @@ void print_boot_header(Console* console){
 
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
-    // Where the kernel ends
-    extern unsigned int kernel_end;
 
     // Make the multiboot header
     Multiboot multiboot(addr);
 
     // Init memory management
-    MemoryManager memoryManager(multiboot.get_basic_meminfo());
+    MemoryManager memoryManager(multiboot.get_mmap());
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
@@ -122,6 +120,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VESABootConsole console(&vesa);
     console.clear();
     console.print_logo();
+
+    while (true);
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
