@@ -1,14 +1,16 @@
 //Common
 #include <stdint.h>
 #include <common/version.h>
+#include <common/kprint.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
 
 //Drivers
-#include "drivers/disk/ata.h"
+#include <drivers/disk/ata.h>
 #include <drivers/console/console.h>
+#include <drivers/console/serial.h>
 #include <drivers/console/textmode.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
@@ -102,6 +104,10 @@ void print_boot_header(Console* console){
 
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
+
+    // Initialise the serial console
+    SerialConsole serialConsole;
+    _kprintf("Max OS booted\n");
 
     // Make the multiboot header
     Multiboot multiboot(addr);

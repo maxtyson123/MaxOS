@@ -3,7 +3,9 @@
 //
 #include <common/string.h>
 
-MaxOS::String::String()
+using namespace MaxOS;
+
+String::String()
 {
 
   // String that only contains the null terminator
@@ -13,7 +15,7 @@ MaxOS::String::String()
 
 }
 
-MaxOS::String::String(char const *string)
+String::String(char const *string)
 {
 
   // Get the length of the string
@@ -33,7 +35,7 @@ MaxOS::String::String(char const *string)
 }
 
 
-MaxOS::String::String(int value) {
+String::String(int value) {
 
   // The length of the string
   m_length = 0;
@@ -60,13 +62,13 @@ MaxOS::String::String(int value) {
   m_string[m_length] = '\0';
 }
 
-MaxOS::String::String(String const &other) {
+String::String(String const &other) {
   // Copy the other string
   copy(other);
 }
 
 
-MaxOS::String::~String() {
+String::~String() {
 
   // Free the memory
   delete[] m_string;
@@ -78,7 +80,7 @@ MaxOS::String::~String() {
  *
  * @param other The other string
  */
-void MaxOS::String::copy(String const &other) {
+void String::copy(String const &other) {
 
   // Get the length of the string
   m_length = other.length();
@@ -101,7 +103,7 @@ void MaxOS::String::copy(String const &other) {
  * @param string The string
  * @return The sum of the ascii values of the characters in the string
  */
-int MaxOS::String::lex_value(String const &string) const {
+int String::lex_value(String const &string) const {
 
     // The sum of the ascii values of the characters in the string
     int sum = 0;
@@ -123,7 +125,7 @@ int MaxOS::String::lex_value(String const &string) const {
  * @param other
  * @return String& The string
  */
-String &MaxOS::String::operator = (String const &other) {
+String &String::operator = (String const &other) {
     // Copy the other string
     copy(other);
 
@@ -132,7 +134,7 @@ String &MaxOS::String::operator = (String const &other) {
 
 }
 
-char* MaxOS::String::c_str() {
+char* String::c_str() {
 
     // Return the string
     return m_string;
@@ -144,7 +146,7 @@ char* MaxOS::String::c_str() {
  *
  * @return The string as an array of characters
  */
-const char* MaxOS::String::c_str() const {
+const char* String::c_str() const {
 
     // Return the string
     return m_string;
@@ -156,7 +158,7 @@ const char* MaxOS::String::c_str() const {
  *
  * @return The length of the string
  */
-int MaxOS::String::length() const {
+int String::length() const {
 
     // Return the length
     return m_length;
@@ -169,7 +171,7 @@ int MaxOS::String::length() const {
  * @param other The other string
  * @return True if the strings are equal, false otherwise
  */
-bool MaxOS::String::operator == (String const &other) const {
+bool String::operator == (String const &other) const {
 
     // Check if the lengths are equal
     if (m_length != other.length())
@@ -190,7 +192,7 @@ bool MaxOS::String::operator == (String const &other) const {
  * @param other The other string
  * @return True if the strings are not equal, false otherwise
  */
-bool MaxOS::String::operator != (String const &other) const {
+bool String::operator != (String const &other) const {
 
     // If the strings are equal, return false
     if (*this == other)
@@ -207,7 +209,7 @@ bool MaxOS::String::operator != (String const &other) const {
  * @param other The other string
  * @return True if the string is less than the other, false otherwise
  */
-bool MaxOS::String::operator < (String const &other) const {
+bool String::operator < (String const &other) const {
 
   // If the sum of this is less than the sum of the other, return true
   return lex_value(*this) < lex_value(other);
@@ -220,7 +222,7 @@ bool MaxOS::String::operator < (String const &other) const {
  * @param other The other string
  * @return True if the string is greater than the other, false otherwise
  */
-bool MaxOS::String::operator > (String const &other) const {
+bool String::operator > (String const &other) const {
 
   // If the sum of this is greater than the sum of the other, return true
   return lex_value(*this) > lex_value(other);
@@ -233,7 +235,7 @@ bool MaxOS::String::operator > (String const &other) const {
  * @param other The other string
  * @return True if the string is less than or equal to the other, false otherwise
  */
-bool MaxOS::String::operator <= (String const &other) const {
+bool String::operator <= (String const &other) const {
 
   // If the sum of this is less than or equal to the sum of the other, return true
   return lex_value(*this) <= lex_value(other);
@@ -246,7 +248,7 @@ bool MaxOS::String::operator <= (String const &other) const {
  * @param other The other string
  * @return True if the string is greater than or equal to the other, false otherwise
  */
-bool MaxOS::String::operator >= (String const &other) const {
+bool String::operator >= (String const &other) const {
 
     // If the sum of this is greater than or equal to the sum of the other, return true
     return lex_value(*this) >= lex_value(other);
@@ -259,7 +261,7 @@ bool MaxOS::String::operator >= (String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-String MaxOS::String::operator + (String const &other) const {
+String String::operator + (String const &other) const {
 
   // The concatenated string
   String concatenated;
@@ -292,7 +294,7 @@ String MaxOS::String::operator + (String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-MaxOS::String &MaxOS::String::operator += (String const &other) {
+String &String::operator += (String const &other) {
 
     // The concatenated string
     String concatenated;
@@ -329,7 +331,7 @@ MaxOS::String &MaxOS::String::operator += (String const &other) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char& MaxOS::String::operator[](int index) {
+char& String::operator[](int index) {
   return m_string[index];
 }
 
@@ -340,6 +342,6 @@ char& MaxOS::String::operator[](int index) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char& MaxOS::String::operator[](int index) const {
+char& String::operator[](int index) const {
     return m_string[index];
 }
