@@ -7,10 +7,6 @@
 
 #include <drivers/console/serial.h>
 
-namespace MaxOS{
-
-    void _kprintf(const char* format, ...);
-    void _kitoa(char* buffer, int base, int number);
-}
+void _kprintf(const char* format, ...);
 
 #endif // MAXOS_KPRINT_H

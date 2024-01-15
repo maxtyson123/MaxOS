@@ -102,12 +102,14 @@ void print_boot_header(Console* console){
 
 }
 
+
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
     // Initialise the serial console
     SerialConsole serialConsole;
-    _kprintf("Max OS booted\n");
+
+    _kprintf("MaxOS booted\n");
 
     // Make the multiboot header
     Multiboot multiboot(addr);

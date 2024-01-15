@@ -4,6 +4,8 @@
 
 #include <common/graphicsContext.h>
 
+#include <common/kprint.h>
+
 using namespace MaxOS::common;
 
 GraphicsContext::GraphicsContext()
