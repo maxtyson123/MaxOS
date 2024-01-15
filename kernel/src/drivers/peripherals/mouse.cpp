@@ -4,11 +4,11 @@
 
 #include <drivers/peripherals/mouse.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::peripherals;
-using namespace maxOS::hardwarecommunication;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::peripherals;
+using namespace MaxOS::hardwarecommunication;
 
 
 ///__Handler__

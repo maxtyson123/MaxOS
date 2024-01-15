@@ -4,8 +4,8 @@
 
 #include <drivers/video/video.h>
 
-using namespace maxOS::drivers::video;
-using namespace maxOS::common;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::common;
 
 VideoDriver::VideoDriver()
 : Driver(),

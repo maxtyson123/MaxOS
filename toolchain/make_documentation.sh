@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./maxOS.sh
+source ./MaxOS.sh
 
 # Go to the project root directory
 cd ../docs/doxy

@@ -1,32 +1,44 @@
-ENTRY(loader)
-OUTPUT_FORMAT(elf32-i386)
-OUTPUT_ARCH(i386:i386)
+ENTRY(start)
 
-SECTIONS
-{
-  . = 0x0100000;
+SECTIONS {
+    . = 1M;
 
-  .text :
-  {
-    *(.multiboot)
-    *(.text*)
-    *(.rodata)
-  }
+    _kernel_start =.;
+    _kern_virtual_offset = 0xffffffff80000000;
+    .multiboot_header :
+    {
+        /* Be sure that multiboot header is at the beginning */
+        *(.multiboot_header)
+    }
 
-  .data  :
-  {
-    start_ctors = .;
-    KEEP(*( .init_array ));
-    KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
-    end_ctors = .;
+    .multiboot.text :
+    {
+        *(.multiboot.text)
+    }
 
-    *(.data)
-  }
+    . += _kern_virtual_offset;
+	/* Add a symbol that indicates the start address of the kernel. */
+	.text ALIGN (4K) : AT (ADDR (.text) - _kern_virtual_offset)
+	{
+		*(.text)
+	}
+	.rodata ALIGN (4K) : AT (ADDR (.rodata) - _kern_virtual_offset)
+	{
+		*(.rodata)
+	}
+	.data ALIGN (4K) : AT (ADDR (.data) - _kern_virtual_offset)
+	{
+		 start_ctors = .;
+          KEEP(*( .init_array ));
+          KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
+          end_ctors = .;
 
-  .bss  :
-  {
-    *(.bss)
-  }
+          *(.data)
+	}
+	.bss ALIGN (4K) : AT (ADDR (.bss) - _kern_virtual_offset)
+	{
+		*(.bss)
+	}
 
-  /DISCARD/ : { *(.fini_array*) *(.comment) }
+    _kernel_end = .;
 }

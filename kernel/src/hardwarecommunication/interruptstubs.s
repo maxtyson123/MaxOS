@@ -1,30 +1,24 @@
+section .data
+    IRQ_BASE equ 0x20
+    interruptnumber db 0
 
+section .text
+    extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
 
-.set IRQ_BASE, 0x20
+    %macro HandleException 1
+    global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev
+    _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
+        mov byte [interruptnumber], %1
+        jmp int_bottom
+    %endmacro
 
-.section .text
-
-.extern _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhm
-
-
-.macro HandleException num
-.global _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException\num\()Ev
-_ZN5maxOS21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
-    movb $\num, (interruptnumber)
-    #For an exception , the processor pushes an error value automatically
-    jmp int_bottom
-.endm
-
-
-.macro HandleInterruptRequest num
-.global _ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev
-_ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
-    movb $\num + IRQ_BASE, (interruptnumber)
-    #Push 0  for the error
-    pushl $0
-    jmp int_bottom
-.endm
-
+    %macro HandleInterruptRequest 1
+    global _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev
+    _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
+        mov byte [interruptnumber], %1 + IRQ_BASE
+        push 0
+        jmp int_bottom
+    %endmacro
 
 HandleException 0x00
 HandleException 0x01
@@ -59,7 +53,6 @@ HandleException 0x1D
 HandleException 0x1E
 HandleException 0x1F
 
-
 HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01
 HandleInterruptRequest 0x02
@@ -80,43 +73,31 @@ HandleInterruptRequest 0x31
 HandleInterruptRequest 0x80
 
 int_bottom:
+    push bp
+    push di
+    push si
 
-    # Push Values From CPUState (multitasking.h)
-    pushl %ebp
-    pushl %edi
-    pushl %esi
+    push dx
+    push cx
+    push bx
+    push ax
 
-    pushl %edx
-    pushl %ecx
-    pushl %ebx
-    pushl %eax
+    push sp
+    push interruptnumber
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
+    mov ax, sp
 
+    pop ax
+    pop bx
+    pop cx
+    pop dx
 
-    # Invoke C++ handlers
-    pushl %esp
-    push (interruptnumber)
-    call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhm
+    pop si
+    pop di
+    pop bp
 
-    # Switch the stack
-    mov %eax, %esp
+    add sp, 4
 
-    # Pop Values From CPUState (multitasking.h)
-    popl %eax
-    popl %ebx
-    popl %ecx
-    popl %edx
-
-    popl %esi
-    popl %edi
-    popl %ebp
-
-    add $4, %esp
-
-.global _ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
-_ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
-
+global _ZN5MaxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
+_ZN5MaxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
     iret
-
-
-.data
-    interruptnumber: .byte 0

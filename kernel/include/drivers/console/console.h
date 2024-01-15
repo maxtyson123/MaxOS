@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <common/outputStream.h>
 
-namespace maxOS {
+namespace MaxOS {
 
     namespace drivers {
 

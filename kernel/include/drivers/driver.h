@@ -12,7 +12,7 @@
 #include <common/eventHandler.h>
 #include <common/string.h>
 
-namespace maxOS
+namespace MaxOS
 {
     namespace drivers {
 

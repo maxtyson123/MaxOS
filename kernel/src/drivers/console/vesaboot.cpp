@@ -5,12 +5,12 @@
 #include <drivers/console/vesaboot.h>
 #include <gui/font/amiga_font.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::gui;
-using namespace maxOS::memory;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::console;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
+using namespace MaxOS::memory;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::console;
 
 VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 : Driver(),
@@ -20,8 +20,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 {
 
     // Malloc the video memory
-    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(
-        graphics_context->get_width() * graphics_context->get_height() * sizeof(uint16_t));
+    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(graphics_context->get_width() * graphics_context->get_height() * sizeof(uint16_t));
 }
 
 VESABootConsole::~VESABootConsole()
@@ -75,8 +74,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     Colour background = console_colour_to_vesa(get_background_color(x, y));
 
     // Use the m_font to draw the character
-    m_font.draw_text(x * 8, y * 9, foreground, background, m_graphics_context,
-                     s);
+    m_font.draw_text(x * 8, y * 9, foreground, background, m_graphics_context, s);
 
 
 }

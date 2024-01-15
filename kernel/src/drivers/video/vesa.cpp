@@ -4,18 +4,18 @@
 
 #include <drivers/video/vesa.h>
 
-using namespace maxOS;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::video;
-using namespace maxOS::memory;
-using namespace maxOS::system;
+using namespace MaxOS;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::memory;
+using namespace MaxOS::system;
 
-VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_info_t* mb_info)
+VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info)
 : VideoDriver(),
-  m_multiboot_info(mb_info),
-  m_framebuffer_address((uint32_t*)mb_info->framebuffer_addr),
-  m_bpp(mb_info->framebuffer_bpp),
-  m_pitch(mb_info->framebuffer_pitch)
+  m_framebuffer_info(framebuffer_info),
+  m_framebuffer_address((uint64_t *)framebuffer_info->common.framebuffer_addr),
+  m_bpp(framebuffer_info->common.framebuffer_bpp),
+  m_pitch(framebuffer_info->common.framebuffer_pitch)
 {
 }
 
@@ -56,7 +56,7 @@ bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uin
 bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
     // Check if the mode is supported
-    if(width == (uint32_t)m_multiboot_info->framebuffer_width && height == (uint32_t)m_multiboot_info->framebuffer_height && color_depth == (uint32_t)m_multiboot_info->framebuffer_bpp) {
+    if(width == (uint32_t)m_framebuffer_info->common.framebuffer_width && height == (uint32_t)m_framebuffer_info->common.framebuffer_height && color_depth == (uint32_t)m_framebuffer_info->common.framebuffer_bpp) {
         return true;
     }
     return false;

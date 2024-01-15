@@ -7,7 +7,7 @@
 
 #include <common/vector.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace common{
 

@@ -11,7 +11,7 @@
 #include <net/ipv4.h>
 #include <memory/memorymanagement.h>
 
-namespace maxOS
+namespace MaxOS
 {
     namespace net
     {

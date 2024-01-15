@@ -4,8 +4,8 @@
 
 #include <common/inputStream.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
+using namespace MaxOS;
+using namespace MaxOS::common;
 
 InputStream::InputStream(InputStreamEventHandler<string> *input_stream_event_handler)
 : GenericInputStream<string>::GenericInputStream(

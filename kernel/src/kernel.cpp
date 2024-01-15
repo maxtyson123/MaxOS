@@ -1,14 +1,16 @@
 //Common
 #include <stdint.h>
 #include <common/version.h>
+#include <common/kprint.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
 
 //Drivers
-#include "drivers/disk/ata.h"
+#include <drivers/disk/ata.h>
 #include <drivers/console/console.h>
+#include <drivers/console/serial.h>
 #include <drivers/console/textmode.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
@@ -35,7 +37,6 @@
 
 //SYSTEM
 #include <system/process.h>
-#include <system/gdt.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
 #include <system/multithreading.h>
@@ -46,20 +47,20 @@
 //FILESYSTEM
 #include <filesystem/msdospart.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::peripherals;
-using namespace maxOS::drivers::ethernet;
-using namespace maxOS::drivers::video;
-using namespace maxOS::drivers::clock;
-using namespace maxOS::drivers::console;
-using namespace maxOS::hardwarecommunication;
-using namespace maxOS::gui;
-using namespace maxOS::net;
-using namespace maxOS::system;
-using namespace maxOS::memory;
-using namespace maxOS::filesystem;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::peripherals;
+using namespace MaxOS::drivers::ethernet;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::drivers::clock;
+using namespace MaxOS::drivers::console;
+using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::gui;
+using namespace MaxOS::net;
+using namespace MaxOS::system;
+using namespace MaxOS::memory;
+using namespace MaxOS::filesystem;
 
 //Define what a constructor is
 typedef void (*constructor)();
@@ -101,21 +102,30 @@ void print_boot_header(Console* console){
 
 }
 
-extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multiboot_magic)
+
+extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
-    // Get the multiboot info structure
-    Multiboot multiboot((multiboot_info_t*)&multibootHeader, multiboot_magic);
+    // Initialise the serial console
+    SerialConsole serialConsole;
 
-    // Set up the memory manager
-    MemoryManager memoryManager(multiboot.get_boot_info());
+    _kprintf("MaxOS booted\n");
+
+    // TODO: Now that it is in a 64bit mode in the higher half some things need to be rewritten
+    while (true);
+
+    // Make the multiboot header
+    Multiboot multiboot(addr);
+
+    // Init memory management
+    MemoryManager memoryManager(multiboot.get_mmap());
 
     // Initialise the VESA Driver
-    VideoElectronicsStandardsAssociation vesa(multiboot.get_boot_info());
+    VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
-    videoDriver->set_mode((int)multiboot.get_boot_info() -> framebuffer_width,
-                          (int)multiboot.get_boot_info() -> framebuffer_height,
-                          (int)multiboot.get_boot_info() -> framebuffer_bpp);
+    videoDriver->set_mode((int)multiboot.get_framebuffer()->common.framebuffer_width,
+                          (int)multiboot.get_framebuffer()->common.framebuffer_height,
+                          (int)multiboot.get_framebuffer()->common.framebuffer_bpp);
 
     // Initialise Console
     VESABootConsole console(&vesa);
@@ -126,17 +136,16 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
+    if(magic == MULTIBOOT2_BOOTLOADER_MAGIC)
+        cout << "Multiboot2 Bootloader Detected\n";
+
+    return;
+
     // Print the header
     print_boot_header(&console);
 
     // Print the build info
     cout << "BUILD INFO: " << VERSION_NAME << " on " << BUILD_DATE.year << "-" << BUILD_DATE.month << "-" << BUILD_DATE.day << " at " << BUILD_DATE.hour << ":" << BUILD_DATE.minute << ":" << BUILD_DATE.second << " " << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
-
-    // Check the multiboot flags
-    cout << "Checking Multiboot Flags";
-    if(!multiboot.check_flags(&cout))
-        asm("hlt");
-    cout << "[ DONE ]\n";
 
     // Where the areas should start
     cout.set_cursor(cout.m_cursor_x, cout.m_cursor_y + 1); //Move the cursor down one (so the header is not overwritten
@@ -148,7 +157,7 @@ extern "C" void kernelMain(const multiboot_info& multibootHeader, uint32_t multi
     systemSetupHeaderStream << "Setting up system";
 
     //Setup GDT
-    GlobalDescriptorTable gdt(multibootHeader);
+    GlobalDescriptorTable gdt(multiboot.get_basic_meminfo());
     cout << "-- Set Up GDT\n";
     systemSetupHeaderStream << ".";
 

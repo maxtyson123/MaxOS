@@ -3,8 +3,8 @@
 //
 #include <system/multithreading.h>
 
-using namespace maxOS;
-using namespace maxOS::system;
+using namespace MaxOS;
+using namespace MaxOS::system;
 
 
 

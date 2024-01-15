@@ -14,7 +14,7 @@
 #include <drivers/peripherals/mouse.h>
 
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace gui{
 

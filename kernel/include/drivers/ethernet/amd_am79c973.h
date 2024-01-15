@@ -12,7 +12,7 @@
 #include <hardwarecommunication/port.h>
 
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers{
 

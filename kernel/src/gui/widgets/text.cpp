@@ -5,10 +5,10 @@
 #include <gui/font/amiga_font.h>
 #include <gui/widgets/text.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::gui;
-using namespace maxOS::gui::widgets;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
+using namespace MaxOS::gui::widgets;
 
 Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
 : Widget(left, top, width, height),

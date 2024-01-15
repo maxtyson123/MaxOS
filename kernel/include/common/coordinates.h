@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <common/pair.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace common{
 

@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <common/string.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace filesystem{
 

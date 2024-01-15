@@ -25,14 +25,14 @@ jobs:
       - name: Install Ubuntu Dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake
+          sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake nasm
 
       - name: Cache toolchain
         id: cache-toolchain
         uses: actions/cache@v3
         with:
           path: toolchain/cross_compiler
-          key: ${{ runner.os }}-cross_compiler_1
+          key: ${{ runner.os }}-cross_compiler_2
 
       - name: Build toolchain
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
@@ -40,8 +40,9 @@ jobs:
           cd toolchain
           ./make_cross_compiler.sh --no-deps
 
-      - name: Build maxOS (Release)
+      - name: Build MaxOS (Release)
         run: |
+          mkdir -p cmake-build
           cd cmake-build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
           make install
@@ -50,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Kernel Binary
-          path: filesystem/boot/MaxOSk32
+          path: filesystem/boot/MaxOSk64
 
   generate-docs:
     # The type of runner that the job will run on

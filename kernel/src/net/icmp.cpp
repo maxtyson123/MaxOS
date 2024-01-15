@@ -4,9 +4,9 @@
 
 #include <net/icmp.h>
 
-using namespace  maxOS;
-using namespace  maxOS::common;
-using namespace  maxOS::net;
+using namespace  MaxOS;
+using namespace  MaxOS::common;
+using namespace  MaxOS::net;
 
 
 InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolHandler *internetProtocolHandler, OutputStream* errorMessages)

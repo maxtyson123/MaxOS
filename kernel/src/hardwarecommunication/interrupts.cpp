@@ -4,10 +4,10 @@
 
 #include <hardwarecommunication/interrupts.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::hardwarecommunication;
-using namespace maxOS::system;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::system;
 
 // Define the static variables
 

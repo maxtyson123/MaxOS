@@ -4,7 +4,7 @@
 
 #include <memory/memoryIO.h>
 
-using namespace maxOS::memory;
+using namespace MaxOS::memory;
 
 MemIO::MemIO(uint32_t address)
 : m_address(address)

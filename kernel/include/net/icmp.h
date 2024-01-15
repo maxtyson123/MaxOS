@@ -10,7 +10,7 @@
 #include <common/outputStream.h>
 
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace net{
 

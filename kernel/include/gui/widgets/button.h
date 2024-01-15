@@ -11,7 +11,7 @@
 #include <gui/font.h>
 
 
-namespace maxOS {
+namespace MaxOS {
 
     namespace gui {
 

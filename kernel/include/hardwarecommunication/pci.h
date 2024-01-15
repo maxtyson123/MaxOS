@@ -13,7 +13,7 @@
 #include <hardwarecommunication/interrupts.h>
 #include <drivers/video/vga.h>
 
-namespace maxOS
+namespace MaxOS
 {
     namespace hardwarecommunication
     {

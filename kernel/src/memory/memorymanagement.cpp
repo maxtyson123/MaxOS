@@ -4,17 +4,30 @@
 
 #include <memory/memorymanagement.h>
 
-using namespace maxOS;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::memory;
 
 MemoryManager* MemoryManager::s_active_memory_manager = 0;
 
-MemoryManager::MemoryManager(system::multiboot_info_t* boot_info)
+MemoryManager::MemoryManager(multiboot_tag_mmap* memory_map)
 {
 
+     size_t heap = 0;
+     size_t size = 0;
 
-    size_t  heap = 10*1024*1024;
-    size_t  size = boot_info->mem_upper*1024 - heap - 10*1024;
+    // Find the available memory
+    for (multiboot_memory_map_t* mmap = memory_map->entries; (unsigned long)mmap < (unsigned long)memory_map + memory_map->size;
+         mmap = (multiboot_memory_map_t*)((unsigned long)mmap + memory_map->entry_size)) {
+
+        // If the memory is available then use it
+        if(mmap -> type == MULTIBOOT_MEMORY_AVAILABLE){
+            heap = mmap -> addr;
+            size = mmap -> len;
+        }
+    }
+
+    // Add a 10MB offset to the heap
+        heap += 0x1000000;
 
     s_active_memory_manager = this;
 
@@ -153,8 +166,8 @@ int MemoryManager::memory_used() {
 void* operator new(size_t size) throw(){
 
     // Use the memory manager to allocate the memory
-    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return maxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
+    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
 
     return 0;
 
@@ -163,8 +176,8 @@ void* operator new(size_t size) throw(){
 void* operator new[](size_t size) throw(){
 
     // Use the memory manager to allocate the memory
-    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return maxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
+    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
 
     return 0;
 
@@ -184,16 +197,16 @@ void* operator new[](size_t, void* pointer){
 void operator delete(void* pointer){
 
     // Use the memory manager to free the memory
-    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
 
 }
 
 void operator delete[](void* pointer){
 
     // Use the memory manager to free the memory
-    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
 
 }
 
@@ -201,15 +214,15 @@ void operator delete[](void* pointer){
 void operator delete(void* pointer, size_t){
 
     // Use the memory manager to free the memory
-    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
 
 }
 
 void operator delete[](void* pointer, size_t){
 
     // Use the memory manager to free the memory
-    if(maxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return maxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
 
 }

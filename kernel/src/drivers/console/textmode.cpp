@@ -4,10 +4,10 @@
 
 #include <drivers/console/textmode.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::console;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::console;
 
 TextModeConsole::TextModeConsole()
 : Driver(),

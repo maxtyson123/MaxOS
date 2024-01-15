@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
-source $SCRIPTDIR/maxOS.sh
+source $SCRIPTDIR/MaxOS.sh
 
 # Parse the args
 while [ "$#" -gt "0" ]; do
@@ -48,7 +48,7 @@ fi
 # Get the image path
 if [ -z "$IMAGE_PATH" ]; then
   msg "Using default image path."
-  IMAGE_PATH="../maxOS.img"
+  IMAGE_PATH="../MaxOS.img"
 else
 
   # Check if the image path is valid
@@ -84,10 +84,10 @@ QEMU_EXECUTABLE=""
 # Check if on linux or windows
 if [ "$IN_WSL" -ne "0" ]; then
   msg "Using windows qemu."
-  QEMU_EXECUTABLE="/mnt/c/Program Files/qemu/qemu-system-i386.exe"
+  QEMU_EXECUTABLE="/mnt/c/Program Files/qemu/qemu-system-x86_64.exe"
 else
   msg "Using linux qemu."
-  QEMU_EXECUTABLE="qemu-system-i386"
+  QEMU_EXECUTABLE="qemu-system-x86_64"
 fi
 
 # Check what display type to use
@@ -129,7 +129,9 @@ fi
 # Create the args
 QEMU_ARGS=""
 QEMU_ARGS="$QEMU_ARGS -m 512"                               # 512 MB of RAM
+QEMU_ARGS="$QEMU_ARGS -smp cores=4"                         # 4 cores
 QEMU_ARGS="$QEMU_ARGS -serial stdio"                        # Use stdio for serial
+QEMU_ARGS="$QEMU_ARGS -d int"                               # Debug interrupts
 QEMU_ARGS="$QEMU_ARGS $DEBUG"                               # Enable debugging
 QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                         # Enable acceleration
 QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                        # Enable display

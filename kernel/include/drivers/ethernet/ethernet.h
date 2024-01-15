@@ -10,7 +10,7 @@
 #include <common/vector.h>
 #include <common/eventHandler.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers{
 

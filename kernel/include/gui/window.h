@@ -9,7 +9,7 @@
 #include <gui/widget.h>
 #include <gui/widgets/text.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace gui{
 

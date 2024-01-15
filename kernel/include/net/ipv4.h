@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <net/ethernetframe.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace net{
 

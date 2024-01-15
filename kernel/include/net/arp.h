@@ -9,7 +9,7 @@
 
 #include <net/ipv4.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace net{
 

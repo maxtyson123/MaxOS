@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-namespace maxOS {
+namespace MaxOS {
 
     class String {
         private:

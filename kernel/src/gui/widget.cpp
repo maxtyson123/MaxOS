@@ -3,10 +3,10 @@
 //
 #include <gui/widget.h>
 
-using namespace maxOS::common;
-using namespace maxOS::gui;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::peripherals;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::peripherals;
 
 ///__DEFAULT WIDGET__
 

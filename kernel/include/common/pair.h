@@ -5,7 +5,7 @@
 #ifndef MAXOS_PAIR_H
 #define MAXOS_PAIR_H
 
-namespace maxOS {
+namespace MaxOS {
 
     namespace common {
 

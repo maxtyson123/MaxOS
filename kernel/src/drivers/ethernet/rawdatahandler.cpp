@@ -4,9 +4,9 @@
 
 #include <drivers/ethernet/rawdatahandler.h>
 
-using namespace maxOS;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::ethernet;
+using namespace MaxOS;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::ethernet;
 
 RawDataHandler::RawDataHandler()
 {

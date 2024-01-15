@@ -4,8 +4,8 @@
 
 #include <common/outputStream.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
+using namespace MaxOS;
+using namespace MaxOS::common;
 
 OutputStream::OutputStream()
 : GenericOutputStream<string>::GenericOutputStream()

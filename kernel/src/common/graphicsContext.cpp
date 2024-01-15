@@ -4,7 +4,9 @@
 
 #include <common/graphicsContext.h>
 
-using namespace maxOS::common;
+#include <common/kprint.h>
+
+using namespace MaxOS::common;
 
 GraphicsContext::GraphicsContext()
 {
@@ -527,6 +529,9 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
         for(int32_t x = x0; x <= x1; ++x)
             putPixel(x,y0,colour);
     }
+
+    // TODO: Slope once SSE is implemented
+    return;
 
     // If the line is not horizontal or vertical then it must be a diagonal line
     // Find the slope of the line

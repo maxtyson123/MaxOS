@@ -6,7 +6,7 @@
 #define MAX_OS_HARDWARECOMMUNICATION_PORT_H
 
 #include <stdint.h>
-namespace maxOS {
+namespace MaxOS {
     namespace hardwarecommunication {
 
         /**

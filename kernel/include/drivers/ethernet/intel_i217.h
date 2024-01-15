@@ -15,7 +15,7 @@
 #include <memory/memorymanagement.h>
 #include <drivers/ethernet/ethernet.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers {
 

@@ -10,7 +10,7 @@
 #include <drivers/ethernet/ethernet.h>
 #include <memory/memorymanagement.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace net{
 

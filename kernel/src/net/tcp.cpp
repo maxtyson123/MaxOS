@@ -6,10 +6,10 @@
 #include "net/udp.h"
 
 
-using namespace maxOS;
-using namespace maxOS::net;
-using namespace maxOS::common;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::net;
+using namespace MaxOS::common;
+using namespace MaxOS::memory;
 
 ///__Handler__///
 
@@ -124,7 +124,7 @@ void TransmissionControlProtocolSocket::Connected() {
 TransmissionControlProtocolPort TransmissionControlProtocolHandler::freePorts = 0x8000;
 
 TransmissionControlProtocolHandler::TransmissionControlProtocolHandler(
-        maxOS::net::InternetProtocolHandler *internetProtocolHandler, OutputStream *errorMessages)
+        MaxOS::net::InternetProtocolHandler *internetProtocolHandler, OutputStream *errorMessages)
 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x06)
 {
     this -> errorMessages = errorMessages;
