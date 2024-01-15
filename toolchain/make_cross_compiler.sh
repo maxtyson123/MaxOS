@@ -5,7 +5,7 @@ source ./MaxOS.sh
 if [ "$1" != "--no-deps" ]; then
     msg "Installing extra dependencies"
     sudo apt update
-    sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake
+    sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake nasm
 fi
 
 # Make A Directory For The Cross Compiler
