@@ -1,4 +1,4 @@
 var namespaces_dup =
 [
-    [ "maxOS", "namespacemaxOS.html", "namespacemaxOS" ]
+    [ "MaxOS", "namespaceMaxOS.html", "namespaceMaxOS" ]
 ];

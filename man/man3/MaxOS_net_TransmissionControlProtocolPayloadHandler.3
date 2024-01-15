@@ -1,0 +1,122 @@
+.TH "MaxOS::net::TransmissionControlProtocolPayloadHandler" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::TransmissionControlProtocolPayloadHandler
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tcp\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< TransmissionControlProtocolPayloadHandlerEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTransmissionControlProtocolPayloadHandler\fP ()"
+.br
+.RI "\fBHandler\fP/// "
+.ti -1c
+.RI "\fB~TransmissionControlProtocolPayloadHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBcommon::Event\fP< \fBTransmissionControlProtocolPayloadHandlerEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBTransmissionControlProtocolPayloadHandlerEvents\fP > *event)"
+.br
+.ti -1c
+.RI "virtual void \fBhandleTransmissionControlProtocolPayload\fP (\fBTransmissionControlProtocolSocket\fP *socket, uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBConnected\fP (\fBTransmissionControlProtocolSocket\fP *socket)"
+.br
+.ti -1c
+.RI "virtual void \fBDisconnected\fP (\fBTransmissionControlProtocolSocket\fP *socket)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 115 of file tcp\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TransmissionControlProtocolPayloadHandler::TransmissionControlProtocolPayloadHandler ()"
+
+.PP
+\fBHandler\fP/// 
+.PP
+Definition at line 16 of file tcp\&.cpp\&.
+.PP
+.nf
+17 {
+18 }
+.fi
+.SS "TransmissionControlProtocolPayloadHandler::~TransmissionControlProtocolPayloadHandler ()"
+
+.PP
+Definition at line 20 of file tcp\&.cpp\&.
+.PP
+.nf
+21 {
+22 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void TransmissionControlProtocolPayloadHandler::Connected (\fBTransmissionControlProtocolSocket\fP * socket)\fC [virtual]\fP"
+
+.PP
+Definition at line 28 of file tcp\&.cpp\&.
+.PP
+.nf
+28                                                                                             {
+29 
+30 }
+.fi
+.SS "void TransmissionControlProtocolPayloadHandler::Disconnected (\fBTransmissionControlProtocolSocket\fP * socket)\fC [virtual]\fP"
+
+.PP
+Definition at line 32 of file tcp\&.cpp\&.
+.PP
+.nf
+32                                                                                                {
+33 
+34 }
+.fi
+.SS "void TransmissionControlProtocolPayloadHandler::handleTransmissionControlProtocolPayload (\fBTransmissionControlProtocolSocket\fP * socket, uint8_t * data, uint16_t size)\fC [virtual]\fP"
+
+.PP
+Definition at line 24 of file tcp\&.cpp\&.
+.PP
+.nf
+24                                                                                                                                                {
+25 
+26 }
+.fi
+.SS "\fBEvent\fP< \fBTransmissionControlProtocolPayloadHandlerEvents\fP > * TransmissionControlProtocolPayloadHandler::on_event (\fBcommon::Event\fP< \fBTransmissionControlProtocolPayloadHandlerEvents\fP > * event)"
+
+.PP
+Definition at line 36 of file tcp\&.cpp\&.
+.PP
+.nf
+36                                                                                                                                                                          {
+37 
+38     switch (event -> type)
+39     {
+40         case CONNECTED:
+41             Connected(((ConnectedEvent*)event) -> socket);
+42             break;
+43         case DISCONNECTED:
+44             Disconnected(((DisconnectedEvent*)event) -> socket);
+45             break;
+46         case DATA_RECEIVED:
+47             handleTransmissionControlProtocolPayload(((DataReceivedEvent*)event) -> socket, ((DataReceivedEvent*)event) -> data, ((DataReceivedEvent*)event) -> size);
+48             break;
+49     }
+50 
+51     return event;
+52 }
+.fi
+.PP
+References MaxOS::net::CONNECTED, data, MaxOS::net::DATA_RECEIVED, MaxOS::net::DISCONNECTED, size, and type\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

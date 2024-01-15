@@ -1,0 +1,161 @@
+.TH "MaxOS::net::InternetControlMessageProtocol" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::InternetControlMessageProtocol
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <icmp\&.h>\fP
+.PP
+Inherits \fBMaxOS::net::InternetProtocolPayloadHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInternetControlMessageProtocol\fP (\fBInternetProtocolHandler\fP *\fBinternetProtocolHandler\fP, \fBcommon::OutputStream\fP *errorMessages)"
+.br
+.ti -1c
+.RI "\fB~InternetControlMessageProtocol\fP ()"
+.br
+.ti -1c
+.RI "bool \fBhandleInternetProtocolPayload\fP (\fBInternetProtocolAddress\fP \fBsourceIP\fP, \fBInternetProtocolAddress\fP \fBdestinationIP\fP, uint8_t *payloadData, uint32_t \fBsize\fP)"
+.br
+.RI "Called by the InternetProtocolProvider when a new packet has arrived\&. "
+.ti -1c
+.RI "void \fBRequestEchoReply\fP (\fBInternetProtocolAddress\fP \fBaddress\fP)"
+.br
+.RI "Sends an ICMP echo request to the specified IP address\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 25 of file icmp\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "InternetControlMessageProtocol::InternetControlMessageProtocol (\fBInternetProtocolHandler\fP * internetProtocolHandler, \fBcommon::OutputStream\fP * errorMessages)"
+
+.PP
+Definition at line 12 of file icmp\&.cpp\&.
+.PP
+.nf
+13 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x01)
+14 {
+15     this -> errorMessages = errorMessages;
+16 }
+.fi
+.SS "InternetControlMessageProtocol::~InternetControlMessageProtocol ()"
+
+.PP
+Definition at line 20 of file icmp\&.cpp\&.
+.PP
+.nf
+20                                                                 {
+21 
+22 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool InternetControlMessageProtocol::handleInternetProtocolPayload (\fBInternetProtocolAddress\fP sourceIP, \fBInternetProtocolAddress\fP destinationIP, uint8_t * payloadData, uint32_t size)\fC [virtual]\fP"
+
+.PP
+Called by the InternetProtocolProvider when a new packet has arrived\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsrcIP_BE\fP The source IP address of the packet 
+.br
+\fIdstIP_BE\fP The destination IP address of the packet 
+.br
+\fIinternetprotocolPayload\fP The payload of the packet 
+.br
+\fIsize\fP The size of the payload
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the packet is to be sent back to the sender, false otherwise 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::net::InternetProtocolPayloadHandler\fP\&.
+.PP
+Definition at line 33 of file icmp\&.cpp\&.
+.PP
+.nf
+37 {
+38 
+39     errorMessages -> write("ICMP received a packet\n");
+40 
+41     // Check if the size is at least the size of the header
+42     if(size < sizeof(InternetControlMessageProtocolHeader)){
+43         return false;
+44     }
+45 
+46     // Cast the payload to the ICMP header
+47     InternetControlMessageProtocolHeader* icmp = (InternetControlMessageProtocolHeader*)payloadData;
+48 
+49     switch (icmp -> type) {
+50 
+51         case 0: // Echo reply
+52             // TODO: reply to the ping
+53             break;
+54 
+55         case 8: // Echo request
+56 
+57             // Create a response
+58             icmp -> type = 0;                                                                                                                    // Echo reply
+59             icmp -> checksum = 0;                                                                                                                // Reset the checksum
+60             icmp -> checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));             // Calculate the checksum
+61 
+62             return true;    //Send data back
+63 
+64     }
+65 
+66     return false;
+67 
+68     //TODO: Implement the rest of the ICMP messages
+69 
+70 }
+.fi
+.PP
+References checksum, MaxOS::net::InternetProtocolHandler::Checksum(), size, and type\&.
+.SS "void InternetControlMessageProtocol::RequestEchoReply (\fBInternetProtocolAddress\fP address)"
+
+.PP
+Sends an ICMP echo request to the specified IP address\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIip_be\fP The IP address to send the request to 
+.RE
+.PP
+
+.PP
+Definition at line 77 of file icmp\&.cpp\&.
+.PP
+.nf
+77                                                                     {
+78 
+79     errorMessages -> write("ICMP: Sending echo request\n");
+80 
+81     InternetControlMessageProtocolHeader icmp;
+82     icmp\&.type = 8;                      // Echo request
+83     icmp\&.code = 0;                      // Code must be 0
+84     icmp\&.checksum = 0;                  // Checksum must be 0 to calculate it
+85     icmp\&.data = 0x69420;        // Data
+86 
+87     icmp\&.checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));
+88 
+89     Send(ip_be, (uint8_t *)&icmp, sizeof(InternetControlMessageProtocolHeader));
+90 
+91     errorMessages -> write("ICMP: Echo request sent\n");
+92 }
+.fi
+.PP
+References MaxOS::net::InternetControlMessageProtocolHeader::checksum, MaxOS::net::InternetProtocolHandler::Checksum(), MaxOS::net::InternetControlMessageProtocolHeader::code, MaxOS::net::InternetControlMessageProtocolHeader::data, MaxOS::net::InternetProtocolPayloadHandler::Send(), and MaxOS::net::InternetControlMessageProtocolHeader::type\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

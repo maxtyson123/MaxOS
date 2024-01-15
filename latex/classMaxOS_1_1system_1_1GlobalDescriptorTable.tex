@@ -1,0 +1,169 @@
+\hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable}{}\doxysection{Max\+OS\+::system\+::Global\+Descriptor\+Table Class Reference}
+\label{classMaxOS_1_1system_1_1GlobalDescriptorTable}\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+
+
+Sets up the G\+DT in the C\+PU.  
+
+
+
+
+{\ttfamily \#include $<$gdt.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a783efbd31775f282996c14d18beea281}{Global\+Descriptor\+Table}} (\mbox{\hyperlink{structmultiboot__tag__basic__meminfo}{multiboot\+\_\+tag\+\_\+basic\+\_\+meminfo}} $\ast$meminfo)
+\begin{DoxyCompactList}\small\item\em Global Descriptor Table. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}{$\sim$\+Global\+Descriptor\+Table}} ()
+\item 
+uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a650bfeee75da086944d8d1a9ff7727e9}{code\+\_\+segment\+\_\+selector}} ()
+\begin{DoxyCompactList}\small\item\em Code Segment Selector. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_aa589381716d80753934aa1942ed747e9}{data\+\_\+segment\+\_\+selector}} ()
+\begin{DoxyCompactList}\small\item\em Data Segment Selector. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a5e48f09987b778342c4a59619ebcca4f}{task\+\_\+state\+\_\+segment\+\_\+selector}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classMaxOS_1_1system_1_1Task}{Task}} State Segment Selector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Sets up the G\+DT in the C\+PU. 
+
+Definition at line 40 of file gdt.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_a783efbd31775f282996c14d18beea281}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_a783efbd31775f282996c14d18beea281}} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!GlobalDescriptorTable@{GlobalDescriptorTable}}
+\index{GlobalDescriptorTable@{GlobalDescriptorTable}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{GlobalDescriptorTable()}{GlobalDescriptorTable()}}
+{\footnotesize\ttfamily Global\+Descriptor\+Table\+::\+Global\+Descriptor\+Table (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmultiboot__tag__basic__meminfo}{multiboot\+\_\+tag\+\_\+basic\+\_\+meminfo}} $\ast$}]{meminfo }\end{DoxyParamCaption})}
+
+
+
+Global Descriptor Table. 
+
+
+
+Definition at line 91 of file gdt.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{92 : m\_null\_segment\_selector(0, 0, 0), m\_unused\_segment\_selector(0, 0, 0),}
+\DoxyCodeLine{93   m\_code\_segment\_selector(0, 1024* meminfo -\/> mem\_upper, 0x9A),}
+\DoxyCodeLine{94   m\_data\_segment\_selector(0, 1024* meminfo -\/> mem\_upper, 0x92),}
+\DoxyCodeLine{95   m\_task\_state\_segment\_selector(0, 1024* meminfo -\/> mem\_upper, 0)}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97 \{}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99     \textcolor{comment}{// Create GDT}}
+\DoxyCodeLine{100     uint32\_t gdt\_t[2];}
+\DoxyCodeLine{101     gdt\_t[0] = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a783efbd31775f282996c14d18beea281}{GlobalDescriptorTable}}) << 16;}
+\DoxyCodeLine{102     gdt\_t[1] = (uint32\_t)\textcolor{keyword}{this};}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104     \textcolor{comment}{// Tell processor to use this table}}
+\DoxyCodeLine{105     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"lgdt (\%0)"}: :\textcolor{stringliteral}{"p"} (((uint8\_t *) gdt\_t)+2));}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!````~GlobalDescriptorTable@{$\sim$GlobalDescriptorTable}}
+\index{````~GlobalDescriptorTable@{$\sim$GlobalDescriptorTable}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{$\sim$GlobalDescriptorTable()}{~GlobalDescriptorTable()}}
+{\footnotesize\ttfamily Global\+Descriptor\+Table\+::$\sim$\+Global\+Descriptor\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 109 of file gdt.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{110 \{}
+\DoxyCodeLine{111 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_a650bfeee75da086944d8d1a9ff7727e9}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_a650bfeee75da086944d8d1a9ff7727e9}} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!code\_segment\_selector@{code\_segment\_selector}}
+\index{code\_segment\_selector@{code\_segment\_selector}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{code\_segment\_selector()}{code\_segment\_selector()}}
+{\footnotesize\ttfamily uint16\+\_\+t Global\+Descriptor\+Table\+::code\+\_\+segment\+\_\+selector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Code Segment Selector. 
+
+\begin{DoxyReturn}{Returns}
+The code segment selector offset 
+\end{DoxyReturn}
+
+
+Definition at line 129 of file gdt.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{130 \{}
+\DoxyCodeLine{131     \textcolor{keywordflow}{return} (uint8\_t*)\&m\_code\_segment\_selector -\/ (uint8\_t*)\textcolor{keyword}{this};}
+\DoxyCodeLine{132 \}}
+
+\end{DoxyCode}
+
+
+Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Interrupt\+Manager(), and Max\+O\+S\+::system\+::\+Task\+::\+Task().
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_aa589381716d80753934aa1942ed747e9}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_aa589381716d80753934aa1942ed747e9}} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!data\_segment\_selector@{data\_segment\_selector}}
+\index{data\_segment\_selector@{data\_segment\_selector}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{data\_segment\_selector()}{data\_segment\_selector()}}
+{\footnotesize\ttfamily uint16\+\_\+t Global\+Descriptor\+Table\+::data\+\_\+segment\+\_\+selector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Data Segment Selector. 
+
+\begin{DoxyReturn}{Returns}
+The data segment selector offset 
+\end{DoxyReturn}
+
+
+Definition at line 119 of file gdt.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{120 \{}
+\DoxyCodeLine{121     \textcolor{keywordflow}{return} (uint8\_t*)\&m\_data\_segment\_selector -\/ (uint8\_t*)\textcolor{keyword}{this};}
+\DoxyCodeLine{122 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_a5e48f09987b778342c4a59619ebcca4f}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_a5e48f09987b778342c4a59619ebcca4f}} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!task\_state\_segment\_selector@{task\_state\_segment\_selector}}
+\index{task\_state\_segment\_selector@{task\_state\_segment\_selector}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{task\_state\_segment\_selector()}{task\_state\_segment\_selector()}}
+{\footnotesize\ttfamily uint16\+\_\+t Global\+Descriptor\+Table\+::task\+\_\+state\+\_\+segment\+\_\+selector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{classMaxOS_1_1system_1_1Task}{Task}} State Segment Selector. 
+
+\begin{DoxyReturn}{Returns}
+The task state segment selector offset 
+\end{DoxyReturn}
+
+
+Definition at line 139 of file gdt.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{140 \{}
+\DoxyCodeLine{141     \textcolor{keywordflow}{return} (uint8\_t*)\&m\_task\_state\_segment\_selector -\/ (uint8\_t*)\textcolor{keyword}{this};}
+\DoxyCodeLine{142 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/system/\mbox{\hyperlink{gdt_8h}{gdt.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/system/\mbox{\hyperlink{gdt_8cpp}{gdt.\+cpp}}\end{DoxyCompactItemize}

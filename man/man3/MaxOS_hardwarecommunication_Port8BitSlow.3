@@ -1,0 +1,86 @@
+.TH "MaxOS::hardwarecommunication::Port8BitSlow" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::Port8BitSlow \- Handles 8 bit ports (slow)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <port\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::Port8Bit\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPort8BitSlow\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port8BitSlow\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint8_t \fBdata\fP) final"
+.br
+.RI "write a byte to the port (slow) "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Handles 8 bit ports (slow) 
+.PP
+Definition at line 41 of file port\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Port8BitSlow::Port8BitSlow (uint16_t port_number)"
+
+.PP
+Definition at line 47 of file port\&.cpp\&.
+.PP
+.nf
+48 : Port8Bit(port_number)
+49 {
+50 }
+.fi
+.SS "Port8BitSlow::~Port8BitSlow ()"
+
+.PP
+Definition at line 52 of file port\&.cpp\&.
+.PP
+.nf
+52                             {
+53 
+54 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void Port8BitSlow::write (uint8_t data)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+write a byte to the port (slow) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the byte to write 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::Port8Bit\fP\&.
+.PP
+Definition at line 61 of file port\&.cpp\&.
+.PP
+.nf
+61                                     {
+62     __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (data), "Nd" (m_port_number));
+63 }
+.fi
+.PP
+References data, and MaxOS::hardwarecommunication::Port::m_port_number\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request(), and MaxOS::hardwarecommunication::InterruptManager::InterruptManager()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

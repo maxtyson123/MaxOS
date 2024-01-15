@@ -1,0 +1,146 @@
+.TH "MaxOS::drivers::SerialConsole" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::SerialConsole \- A driver for the serial output\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <serial\&.h>\fP
+.PP
+Inherits \fBMaxOS::drivers::Driver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSerialConsole\fP ()"
+.br
+.ti -1c
+.RI "\fB~SerialConsole\fP ()"
+.br
+.ti -1c
+.RI "void \fBput_character\fP (char c)"
+.br
+.RI "Waits for the serial port to be ready, then writes a character to it\&. "
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBSerialConsole\fP * \fBs_active_serial_console\fP = 0"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+A driver for the serial output\&. 
+.PP
+Definition at line 21 of file serial\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MaxOS::drivers::SerialConsole::SerialConsole ()"
+
+.PP
+Definition at line 9 of file serial\&.cpp\&.
+.PP
+.nf
+10 : m_data_port(0x3F8),
+11   m_interrupt_enable_port(0x3F9),
+12   m_fifo_control_port(0x3FA),
+13   m_line_control_port(0x3FB),
+14   m_modem_control_port(0x3FC),
+15   m_line_status_port(0x3FD)
+16 {
+17 
+18   // Disable all interrupts
+19   m_interrupt_enable_port\&.write(0x00);
+20 
+21   // Enable DLAB (set baud rate divisor)
+22   m_line_control_port\&.write(0x80);
+23 
+24   // Set divisor to 3
+25   m_data_port\&.write(0x03);
+26   m_interrupt_enable_port\&.write(0x00);
+27 
+28   // 8 bits, no parity, one stop bit
+29   m_line_control_port\&.write(0x03);
+30 
+31   // Enable FIFO, clear them, with 14-byte threshold
+32   m_fifo_control_port\&.write(0xC7);
+33 
+34   // IRQs enabled, RTS/DSR set
+35   m_modem_control_port\&.write(0x0B);
+36 
+37   // Test serial chip
+38   m_modem_control_port\&.write(0x1E);
+39   m_data_port\&.write(0xAE);
+40   if (m_data_port\&.read() != 0xAE)
+41     return;
+42 
+43   // Enable serial chip
+44   m_modem_control_port\&.write(0x0F);
+45 
+46   // Set the active serial console
+47   s_active_serial_console = this;
+48 
+49 }
+.fi
+.PP
+References MaxOS::hardwarecommunication::Port8Bit::read(), s_active_serial_console, and MaxOS::hardwarecommunication::Port8Bit::write()\&.
+.SS "MaxOS::drivers::SerialConsole::~SerialConsole ()"
+
+.PP
+Definition at line 51 of file serial\&.cpp\&.
+.PP
+.nf
+51                                           {
+52 
+53     // If this is the active serial console, set it to null
+54     if (s_active_serial_console == this)
+55             s_active_serial_console = 0;
+56 
+57 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void MaxOS::drivers::SerialConsole::put_character (char c)"
+
+.PP
+Waits for the serial port to be ready, then writes a character to it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIc\fP The character to write 
+.RE
+.PP
+
+.PP
+Definition at line 63 of file serial\&.cpp\&.
+.PP
+.nf
+63                                                     {
+64 
+65     // Wait for the serial port to be ready
+66     while (0 == (m_line_status_port\&.read() & 0x20));
+67 
+68     // Write the character
+69     m_data_port\&.write(c);
+70 
+71 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::c\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMaxOS::drivers::SerialConsole\fP * MaxOS::drivers::SerialConsole::s_active_serial_console = 0\fC [static]\fP"
+
+.PP
+Definition at line 32 of file serial\&.h\&.
+.PP
+Referenced by SerialConsole()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

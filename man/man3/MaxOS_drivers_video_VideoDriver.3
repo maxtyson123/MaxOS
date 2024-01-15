@@ -1,0 +1,188 @@
+.TH "MaxOS::drivers::video::VideoDriver" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::video::VideoDriver \- \fBDriver\fP for the video controller, handles the setting of the video mode\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <video\&.h>\fP
+.PP
+Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::GraphicsContext\fP\&.
+.PP
+Inherited by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, and \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVideoDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~VideoDriver\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.br
+.RI "Check if the video driver supports a certain mode\&. "
+.ti -1c
+.RI "bool \fBset_mode\fP (uint32_t width, uint32_t height, uint32_t colorDepth)"
+.br
+.RI "Set the mode of the video driver\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual bool \fBinternal_set_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.br
+.RI "Set the mode of the video driver\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+\fBDriver\fP for the video controller, handles the setting of the video mode\&. 
+.PP
+Definition at line 22 of file video\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "VideoDriver::VideoDriver ()"
+
+.PP
+Definition at line 10 of file video\&.cpp\&.
+.PP
+.nf
+11 : Driver(),
+12   GraphicsContext()
+13 {
+14 
+15 }
+.fi
+.SS "VideoDriver::~VideoDriver ()"
+
+.PP
+Definition at line 17 of file video\&.cpp\&.
+.PP
+.nf
+17                           {
+18 
+19 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool VideoDriver::internal_set_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Set the mode of the video driver\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the screen 
+.br
+\fIheight\fP The height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true If the mode was set successfully false otherwise 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, and \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
+.PP
+Definition at line 29 of file video\&.cpp\&.
+.PP
+.nf
+29                                                                 {
+30     return false;
+31 }
+.fi
+.PP
+Referenced by set_mode()\&.
+.SS "bool VideoDriver::set_mode (uint32_t width, uint32_t height, uint32_t colorDepth)"
+
+.PP
+Set the mode of the video driver\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the screen 
+.br
+\fIheight\fP The height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true If the mode was set successfully (and the screen was updated) false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file video\&.cpp\&.
+.PP
+.nf
+53                                                                                {
+54 
+55     // Check if the mode is supported
+56     if(!supports_mode(width, height, colorDepth))
+57         return false;
+58 
+59     // Set the mode
+60     if(internal_set_mode(width, height, colorDepth))
+61     {
+62         this -> m_width = width;
+63         this -> m_height = height;
+64         this -> m_color_depth = colorDepth;
+65         return true;
+66     }
+67 
+68     // If setting the mode failed, return false
+69     return false;
+70 }
+.fi
+.PP
+References internal_set_mode(), MaxOS::common::GraphicsContext::m_color_depth, MaxOS::common::GraphicsContext::m_height, MaxOS::common::GraphicsContext::m_width, and supports_mode()\&.
+.PP
+Referenced by kernelMain()\&.
+.SS "bool VideoDriver::supports_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [virtual]\fP"
+
+.PP
+Check if the video driver supports a certain mode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the screen 
+.br
+\fIheight\fP The height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true If the mode is supported, false otherwise 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, and \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
+.PP
+Definition at line 41 of file video\&.cpp\&.
+.PP
+.nf
+41                                                             {
+42     return false;
+43 }
+.fi
+.PP
+Referenced by set_mode()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

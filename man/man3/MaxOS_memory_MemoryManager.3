@@ -1,0 +1,278 @@
+.TH "MaxOS::memory::MemoryManager" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memorymanagement\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemoryManager\fP (\fBmultiboot_tag_mmap\fP *memory_map)"
+.br
+.ti -1c
+.RI "\fB~MemoryManager\fP ()"
+.br
+.ti -1c
+.RI "void * \fBmalloc\fP (size_t \fBsize\fP)"
+.br
+.RI "Allocates a block of memory\&. "
+.ti -1c
+.RI "void \fBfree\fP (void *pointer)"
+.br
+.RI "Frees a block of memory\&. "
+.ti -1c
+.RI "int \fBmemory_used\fP ()"
+.br
+.RI "Returns the amount of memory used\&. "
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBMemoryManager\fP * \fBs_active_memory_manager\fP = 0"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMemoryChunk\fP * \fBm_first_memory_chunk\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles memory allocation and deallocation\&. 
+.PP
+Definition at line 34 of file memorymanagement\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MemoryManager::MemoryManager (\fBmultiboot_tag_mmap\fP * memory_map)"
+
+.PP
+Definition at line 12 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+13 {
+14 
+15      size_t heap = 0;
+16      size_t size = 0;
+17 
+18     // Find the available memory
+19     for (multiboot_memory_map_t* mmap = memory_map->entries; (unsigned long)mmap < (unsigned long)memory_map + memory_map->size;
+20          mmap = (multiboot_memory_map_t*)((unsigned long)mmap + memory_map->entry_size)) {
+21 
+22         // If the memory is available then use it
+23         if(mmap -> type == MULTIBOOT_MEMORY_AVAILABLE){
+24             heap = mmap -> addr;
+25             size = mmap -> len;
+26         }
+27     }
+28 
+29     // Add a 10MB offset to the heap
+30         heap += 0x1000000;
+31 
+32     s_active_memory_manager = this;
+33 
+34     //Prevent wiring outside the area that is allowed to write
+35     if(size < sizeof(MemoryChunk)){
+36 
+37         this ->m_first_memory_chunk = 0;
+38 
+39     }else{
+40 
+41         this ->m_first_memory_chunk = (MemoryChunk*)heap;
+42         m_first_memory_chunk-> allocated = false;
+43         m_first_memory_chunk-> prev = 0;
+44         m_first_memory_chunk-> next = 0;
+45         m_first_memory_chunk-> size = size - sizeof(MemoryChunk);
+46     }
+47 }
+.fi
+.PP
+References multiboot_tag_mmap::entries, multiboot_tag_mmap::entry_size, m_first_memory_chunk, MULTIBOOT_MEMORY_AVAILABLE, s_active_memory_manager, size, multiboot_tag_mmap::size, and type\&.
+.SS "MemoryManager::~MemoryManager ()"
+
+.PP
+Definition at line 49 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+49                               {
+50     if(s_active_memory_manager == this)
+51       s_active_memory_manager = 0;
+52 }
+.fi
+.PP
+References s_active_memory_manager\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void MemoryManager::free (void * pointer)"
+
+.PP
+Frees a block of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP A pointer to the block 
+.RE
+.PP
+
+.PP
+Definition at line 108 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+108                                       {
+109 
+110 
+111     // Create a new free chunk
+112     MemoryChunk* chunk = (MemoryChunk*)((size_t)pointer - sizeof(MemoryChunk));
+113     chunk -> allocated = false;
+114 
+115     // If there is a free chunk before this chunk then merge them
+116     if(chunk -> prev != 0 && !chunk -> prev -> allocated){
+117 
+118         // Increase the previous chunk's size and remove the current chunk from the linked list
+119         chunk->prev->size += chunk->size + sizeof(MemoryChunk);
+120         chunk -> prev -> next = chunk -> next;
+121 
+122         // If there is a next chunk then ensure this chunk is removed from its linked list
+123         if(chunk -> next != 0)
+124             chunk -> next -> prev = chunk->prev;
+125 
+126         // Chunk is now the previous chunk
+127         chunk = chunk -> prev;
+128 
+129     }
+130 
+131     // If there is a free chunk after this chunk then merge them
+132     if(chunk -> next != 0 && !chunk -> next -> allocated){
+133 
+134         // Increase the current chunk's size and remove the next chunk from the linked list
+135         chunk -> size += chunk -> next -> size + sizeof(MemoryChunk);
+136         chunk -> next = chunk -> next -> next;
+137 
+138         // Remove the just merged chunk from the linked list
+139         if(chunk -> next != 0)
+140             chunk -> next -> prev = chunk;
+141 
+142     }
+143 }
+.fi
+.PP
+References MaxOS::memory::MemoryChunk::prev, size, and MaxOS::memory::MemoryChunk::size\&.
+.SS "void * MemoryManager::malloc (size_t size)"
+
+.PP
+Allocates a block of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP size of the block 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+a pointer to the block, 0 if no block is available 
+.RE
+.PP
+
+.PP
+Definition at line 60 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+60                                        {
+61 
+62     MemoryChunk* result = 0;
+63 
+64     // Find the next free chunk that is big enough
+65     for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0 && result == 0; chunk = chunk->next) {
+66         if(chunk -> size > size && !chunk -> allocated)
+67             result = chunk;
+68     }
+69 
+70     // If there is no free chunk then return 0
+71     if(result == 0)
+72         return 0;
+73 
+74     // If there is space to split the chunk
+75     if(result -> size < size + sizeof(MemoryChunk) + 1) {
+76         result->allocated = true;
+77         return (void *)(((size_t)result) + sizeof(MemoryChunk));
+78     }
+79 
+80 
+81     // Create a new chunk after the current one
+82     MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
+83 
+84     // Set the new chunk's properties and insert it into the linked list
+85     temp -> allocated = false;
+86     temp -> size =  result->size - size - sizeof(MemoryChunk);
+87     temp -> prev = result;
+88     temp -> next = result -> next;
+89 
+90     // If there is a chunk after the current one then set its previous to the new chunk
+91     if(temp -> next != 0)
+92        temp -> next -> prev = temp;
+93 
+94     // Current chunk is now allocated and is pointing to the new chunk
+95     result->size = size;
+96     result -> allocated = true;
+97     result->next = temp;
+98 
+99     return (void*)(((size_t)result) + sizeof(MemoryChunk));
+100 }
+.fi
+.PP
+References MaxOS::memory::MemoryChunk::allocated, m_first_memory_chunk, MaxOS::memory::MemoryChunk::next, size, and MaxOS::memory::MemoryChunk::size\&.
+.SS "int MemoryManager::memory_used ()"
+
+.PP
+Returns the amount of memory used\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The amount of memory used 
+.RE
+.PP
+
+.PP
+Definition at line 149 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+149                                {
+150 
+151         int result = 0;
+152 
+153         // Loop through all the chunks and add up the size of the allocated chunks
+154         for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0; chunk = chunk->next)
+155             if(chunk -> allocated)
+156                 result += chunk -> size;
+157 
+158         return result;
+159 }
+.fi
+.PP
+References m_first_memory_chunk, MaxOS::memory::MemoryChunk::next, and size\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMemoryChunk\fP* MaxOS::memory::MemoryManager::m_first_memory_chunk\fC [protected]\fP"
+
+.PP
+Definition at line 37 of file memorymanagement\&.h\&.
+.PP
+Referenced by malloc(), memory_used(), and MemoryManager()\&.
+.SS "\fBMemoryManager\fP * MemoryManager::s_active_memory_manager = 0\fC [static]\fP"
+
+.PP
+Definition at line 40 of file memorymanagement\&.h\&.
+.PP
+Referenced by MemoryManager(), operator delete(), operator delete[](), operator new(), operator new[](), and ~MemoryManager()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

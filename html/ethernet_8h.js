@@ -1,15 +1,15 @@
 var ethernet_8h =
 [
-    [ "BeforeSendEvent", "classmaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent.html", "classmaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent" ],
-    [ "DataSentEvent", "classmaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent.html", "classmaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent" ],
-    [ "DataReceivedEvent", "classmaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent.html", "classmaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent" ],
-    [ "EthernetDriverEventHandler", "classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler.html", "classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler" ],
-    [ "EthernetDriver", "classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html", "classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver" ],
-    [ "MediaAccessControlAddress", "ethernet_8h.html#a6fad3f62f91a21251eb141e990287b1c", null ],
-    [ "EthernetDriverEvents", "ethernet_8h.html#afefb50ee2b655854c9a8a5d6b1a4e460", [
-      [ "BEFORE_SEND", "ethernet_8h.html#afefb50ee2b655854c9a8a5d6b1a4e460a1f7c64e663239c90bb099474586300b8", null ],
-      [ "DATA_SENT", "ethernet_8h.html#afefb50ee2b655854c9a8a5d6b1a4e460a76104cb83d8160b264c654b08bf6c1ad", null ],
-      [ "DATA_RECEIVED", "ethernet_8h.html#afefb50ee2b655854c9a8a5d6b1a4e460a574e8d30aec6973f77c33c631bec5822", null ]
+    [ "BeforeSendEvent", "classMaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent.html", "classMaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent" ],
+    [ "DataSentEvent", "classMaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent.html", "classMaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent" ],
+    [ "DataReceivedEvent", "classMaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent.html", "classMaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent" ],
+    [ "EthernetDriverEventHandler", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler.html", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler" ],
+    [ "EthernetDriver", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver" ],
+    [ "MediaAccessControlAddress", "ethernet_8h.html#a65f54d2d9dfdb9eafd1affd62abe8d18", null ],
+    [ "EthernetDriverEvents", "ethernet_8h.html#a576d78fd01aa3b97b27424c6cb10aec4", [
+      [ "BEFORE_SEND", "ethernet_8h.html#a576d78fd01aa3b97b27424c6cb10aec4a6a5969b309233a6605c74922fd408421", null ],
+      [ "DATA_SENT", "ethernet_8h.html#a576d78fd01aa3b97b27424c6cb10aec4aa0f7c9b1e0014bbaa8f3e1464f4323a8", null ],
+      [ "DATA_RECEIVED", "ethernet_8h.html#a576d78fd01aa3b97b27424c6cb10aec4aaf1f04640035249be6aa8d1f61a6e6ec", null ]
     ] ],
-    [ "__attribute__", "ethernet_8h.html#acb9ffe2bbdcde635be6149b616974d2f", null ]
+    [ "__attribute__", "ethernet_8h.html#a675cedaba1dff08b0735353eeead9d7a", null ]
 ];

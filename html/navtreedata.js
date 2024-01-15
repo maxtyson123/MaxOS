@@ -64,15 +64,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "amd__am79c973_8cpp.html",
-"classmaxOS_1_1common_1_1Vector.html#aa75d023397a91d905281e2d825236709",
-"classmaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a6908974df0a3da2046b13a9bb91772a9",
-"classmaxOS_1_1gui_1_1Widget.html#a81cf691e5d7015855a9647de15bc709c",
-"classmaxOS_1_1net_1_1InternetControlMessageProtocol.html#a2fc52aeb261446119170f4b3f843129e",
-"fat32_8cpp.html",
-"ipv4_8h.html#ab0548e81efcf280a5ae280858e578cde",
-"msdospart_8h_source.html",
-"structmaxOS_1_1filesystem_1_1MasterBootRecord.html#a554aa4c5cc11e5bc7393fe1be861d020",
-"udp_8h.html#a1892eba2086d12ac2b09005aeb09ea3b"
+"classMaxOS_1_1common_1_1Vector.html#ac753563317978358eb995f9eea7c1558",
+"classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html",
+"classMaxOS_1_1gui_1_1Widget.html#a61b7c5d7cea82b3dc71796724b28e8b1",
+"classMaxOS_1_1net_1_1EthernetFramePayloadHandler.html#ac54f71ce7d512ba22a6f3306ad459a70",
+"ethernetframe_8h.html#aa482bc33779a87f57ab8efc2c1680c48",
+"ipv4_8cpp_source.html",
+"msdospart_8cpp_source.html",
+"structMaxOS_1_1filesystem_1_1BiosParameterBlock32.html#a33fc4b19d3a6e23dec097efded7cfdb9",
+"structmultiboot__tag__framebuffer.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

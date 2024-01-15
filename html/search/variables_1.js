@@ -1,15 +1,15 @@
 var searchData=
 [
-  ['access_2190',['access',['../structmaxOS_1_1hardwarecommunication_1_1GateDescriptor.html#aa586511aeee52aa9e2dd1213b6f5b9cd',1,'maxOS::hardwarecommunication::GateDescriptor::access()'],['../interrupts_8h.html#a8b0d6200bc639dd37ff68847a0adde5f',1,'access():&#160;interrupts.h']]],
-  ['acknowledgementnumber_2191',['acknowledgementNumber',['../structmaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#aad554310e8447332ad93db1bb4199fd7',1,'maxOS::net::TransmissionControlProtocolHeader::acknowledgementNumber()'],['../classmaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#aa2864940c530277ea7e792b148f2e682',1,'maxOS::net::TransmissionControlProtocolSocket::acknowledgementNumber()'],['../tcp_8h.html#ac41c406579d1214f4a1f0338bca28b6a',1,'acknowledgementNumber():&#160;tcp.h']]],
-  ['addr_2192',['addr',['../structmaxOS_1_1system_1_1multiboot__aout__symbol__table.html#a6e0578d14fc48b7e186d17b554f2615e',1,'maxOS::system::multiboot_aout_symbol_table::addr()'],['../structmaxOS_1_1system_1_1multiboot__elf__section__header__table.html#a466ec1c23c2e15170a646b26f665d4da',1,'maxOS::system::multiboot_elf_section_header_table::addr()'],['../structmaxOS_1_1system_1_1multiboot__mmap__entry.html#a55ab92fe6b84b195e2448c747fab17c7',1,'maxOS::system::multiboot_mmap_entry::addr()'],['../multiboot_8h.html#a8286ae6db03c34c4bb161accbfbfbbcd',1,'addr():&#160;multiboot.h']]],
-  ['address_2193',['address',['../classmaxOS_1_1hardwarecommunication_1_1BaseAddressRegister.html#a4acb381574f93f8cc59a7d56f3f6034e',1,'maxOS::hardwarecommunication::BaseAddressRegister::address()'],['../amd__am79c973_8h.html#ac0d31ca829f934cccd89f8054e02773e',1,'address():&#160;amd_am79c973.h']]],
-  ['allocated_2194',['allocated',['../structmaxOS_1_1memory_1_1MemoryChunk.html#a95db1b93201c8e7b2bcc334660a5932f',1,'maxOS::memory::MemoryChunk']]],
-  ['alpha_2195',['alpha',['../classmaxOS_1_1common_1_1Colour.html#ab9892c692a2c057757dd1044b7752779',1,'maxOS::common::Colour']]],
-  ['aout_5fsym_2196',['aout_sym',['../structmaxOS_1_1system_1_1multiboot__info.html#a3e3fde571de0122b3883fdd7aad578a5',1,'maxOS::system::multiboot_info']]],
-  ['apm_5ftable_2197',['apm_table',['../structmaxOS_1_1system_1_1multiboot__info.html#ad133d403a0f0be879ed216a40875bc15',1,'maxOS::system::multiboot_info']]],
-  ['area_5fcolour_2198',['area_colour',['../classmaxOS_1_1gui_1_1Window.html#a61ba073e2b614573ebf4c847a2bc8083',1,'maxOS::gui::Window']]],
-  ['ata_5fmessage_5fstream_2199',['ata_message_stream',['../classmaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#a7428c6d41e60b58fd51453edd46b0079',1,'maxOS::drivers::disk::AdvancedTechnologyAttachment']]],
-  ['attributes_2200',['attributes',['../structmaxOS_1_1filesystem_1_1DirectoryEntry.html#aa2e149fce7418cb3be7b0c307c59e061',1,'maxOS::filesystem::DirectoryEntry::attributes()'],['../fat32_8h.html#a983149395439fbc9ca8497076b75fd6b',1,'attributes():&#160;fat32.h']]],
-  ['avail_2201',['avail',['../amd__am79c973_8h.html#a994194f1d73a72d2f2f18457e27546ca',1,'amd_am79c973.h']]]
+  ['access_2294',['access',['../structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html#a62faf29778ec3f21f8a8a430fb50780f',1,'MaxOS::hardwarecommunication::GateDescriptor::access()'],['../interrupts_8h.html#a8b0d6200bc639dd37ff68847a0adde5f',1,'access():&#160;interrupts.h']]],
+  ['acknowledgementnumber_2295',['acknowledgementNumber',['../structMaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#afd53edb174b5080e1f5283551f0db272',1,'MaxOS::net::TransmissionControlProtocolHeader::acknowledgementNumber()'],['../classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#ab450ef19866f94dd22204724d8f3041c',1,'MaxOS::net::TransmissionControlProtocolSocket::acknowledgementNumber()'],['../tcp_8h.html#ac41c406579d1214f4a1f0338bca28b6a',1,'acknowledgementNumber():&#160;tcp.h']]],
+  ['addr_2296',['addr',['../structmultiboot__mmap__entry.html#a3f76a637264b83e30967bcd808ff403c',1,'multiboot_mmap_entry']]],
+  ['address_2297',['address',['../classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister.html#a7ef7f325d5cb5dc23f44fde767e5db24',1,'MaxOS::hardwarecommunication::BaseAddressRegister::address()'],['../amd__am79c973_8h.html#ac0d31ca829f934cccd89f8054e02773e',1,'address():&#160;amd_am79c973.h']]],
+  ['align_2298',['align',['../structmultiboot__header__tag__relocatable.html#a7b9c2a0e45cfaa3f21a5494f64a75104',1,'multiboot_header_tag_relocatable']]],
+  ['allocated_2299',['allocated',['../structMaxOS_1_1memory_1_1MemoryChunk.html#aeb2ac8030a7130c9e046c07c4cd4cfbb',1,'MaxOS::memory::MemoryChunk']]],
+  ['alpha_2300',['alpha',['../classMaxOS_1_1common_1_1Colour.html#a8e3d6b6b3d342c29a3f701d6fec4408e',1,'MaxOS::common::Colour']]],
+  ['architecture_2301',['architecture',['../structmultiboot__header.html#a116c9b57307b74f86920e14c9ec89575',1,'multiboot_header']]],
+  ['area_5fcolour_2302',['area_colour',['../classMaxOS_1_1gui_1_1Window.html#aab3baff14127d7c650e68e582613c386',1,'MaxOS::gui::Window']]],
+  ['ata_5fmessage_5fstream_2303',['ata_message_stream',['../classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#a1f22c1371ff3d9afe206831762d20318',1,'MaxOS::drivers::disk::AdvancedTechnologyAttachment']]],
+  ['attributes_2304',['attributes',['../structMaxOS_1_1filesystem_1_1DirectoryEntry.html#a588e3c5fbf5ace7b8db3330179519428',1,'MaxOS::filesystem::DirectoryEntry::attributes()'],['../fat32_8h.html#a983149395439fbc9ca8497076b75fd6b',1,'attributes():&#160;fat32.h']]],
+  ['avail_2305',['avail',['../amd__am79c973_8h.html#a994194f1d73a72d2f2f18457e27546ca',1,'amd_am79c973.h']]]
 ];

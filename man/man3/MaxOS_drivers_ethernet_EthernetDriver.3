@@ -1,0 +1,285 @@
+.TH "MaxOS::drivers::ethernet::EthernetDriver" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::ethernet::EthernetDriver \- \fBDriver\fP for the Ethernet Controller, manages the sending and receiving of data, the mac address, and the events\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ethernet\&.h>\fP
+.PP
+Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::EventManager< EthernetDriverEvents >\fP\&.
+.PP
+Inherited by \fBMaxOS::drivers::ethernet::amd_am79c973\fP, and \fBMaxOS::drivers::ethernet::intel_i217\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEthernetDriver\fP (\fBcommon::OutputStream\fP *ethernetMessageStream)"
+.br
+.RI "__ETHERNET DRIVER___ "
+.ti -1c
+.RI "\fB~EthernetDriver\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBMediaAccessControlAddress\fP \fBGetMediaAccessControlAddress\fP ()"
+.br
+.RI "Get the MAC address\&. "
+.ti -1c
+.RI "void \fBSend\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.RI "Send data to the network via the driver backend\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBMediaAccessControlAddress\fP \fBCreateMediaAccessControlAddress\fP (uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6)"
+.br
+.RI "Create a Media Access Control Address\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBDoSend\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.RI "(Device Side) Send the data "
+.ti -1c
+.RI "void \fBFireDataReceived\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.RI "Handle the recieved data\&. "
+.ti -1c
+.RI "void \fBFireDataSent\fP (uint8_t *buffer, uint32_t \fBsize\fP)"
+.br
+.RI "Send data\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+\fBDriver\fP for the Ethernet Controller, manages the sending and receiving of data, the mac address, and the events\&. 
+.PP
+Definition at line 85 of file ethernet\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "EthernetDriver::EthernetDriver (\fBcommon::OutputStream\fP * ethernetMessageStream)"
+
+.PP
+__ETHERNET DRIVER___ 
+.PP
+Definition at line 64 of file ethernet\&.cpp\&.
+.PP
+.nf
+65 : Driver(ethernetMessageStream)
+66 {
+67 }
+.fi
+.SS "EthernetDriver::~EthernetDriver ()"
+
+.PP
+Definition at line 69 of file ethernet\&.cpp\&.
+.PP
+.nf
+70 {
+71 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBMediaAccessControlAddress\fP EthernetDriver::CreateMediaAccessControlAddress (uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6)\fC [static]\fP"
+
+.PP
+Create a Media Access Control Address\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdigit1\fP The m_first_memory_chunk digit 
+.br
+\fIdigit2\fP The second digit 
+.br
+\fIdigit3\fP The third digit 
+.br
+\fIdigit4\fP The fourth digit 
+.br
+\fIdigit5\fP The fifth digit 
+.br
+\fIdigit6\fP The last digit 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The MAC address 
+.RE
+.PP
+
+.PP
+Definition at line 177 of file ethernet\&.cpp\&.
+.PP
+.nf
+178 {
+179     return // digit6 is the most significant byte
+180             (uint64_t)digit6 << 40
+181             | (uint64_t)digit5 << 32
+182             | (uint64_t)digit4 << 24
+183             | (uint64_t)digit3 << 16
+184             | (uint64_t)digit2 << 8
+185             | (uint64_t)digit1;
+186 }
+.fi
+.PP
+Referenced by MaxOS::drivers::ethernet::intel_i217::intel_i217()\&.
+.SS "void EthernetDriver::DoSend (uint8_t * buffer, uint32_t size)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+(Device Side) Send the data 
+.PP
+Reimplemented in \fBMaxOS::drivers::ethernet::intel_i217\fP, and \fBMaxOS::drivers::ethernet::amd_am79c973\fP\&.
+.PP
+Definition at line 110 of file ethernet\&.cpp\&.
+.PP
+.nf
+111 {
+112 }
+.fi
+.PP
+Referenced by Send()\&.
+.SS "void EthernetDriver::FireDataReceived (uint8_t * buffer, uint32_t size)\fC [protected]\fP"
+
+.PP
+Handle the recieved data\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to handle 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line 120 of file ethernet\&.cpp\&.
+.PP
+.nf
+121 {
+122   m_driver_message_stream-> write("Receiving: ");
+123     //size = 64;
+124     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
+125     for(uint32_t i = displayType; i < size; i++)
+126     {
+127       m_driver_message_stream->write_hex(buffer[i]);
+128       m_driver_message_stream-> write(" ");
+129     }
+130     m_driver_message_stream-> write("\n");
+131 
+132     // Raise the event
+133     Vector<Event<EthernetDriverEvents>*> values =
+134         raise_event(new DataReceivedEvent(buffer, size));
+135 
+136     // Loop through the events
+137     for(typename Vector<Event<EthernetDriverEvents>*>::iterator event = values\&.begin(); event != values\&.end(); ++event) {
+138         switch ((*event)->type) {
+139             case EthernetDriverEvents::DATA_RECEIVED:
+140                 if((*event)->return_value\&.boolValue){
+141                   m_driver_message_stream-> write("Sending back\&.\&.\&. \n");
+142                     Send(buffer, size);
+143                 }
+144                 break;
+145 
+146             default:
+147                 break;
+148         }
+149     }
+150     m_driver_message_stream-> write("DATA HANDLED\n");
+151 }
+.fi
+.PP
+References MaxOS::common::Vector< Type >::begin(), MaxOS::drivers::ethernet::DATA_RECEIVED, MaxOS::common::Vector< Type >::end(), MaxOS::drivers::peripherals::i, MaxOS::drivers::Driver::m_driver_message_stream, MaxOS::common::EventManager< EthernetDriverEvents >::raise_event(), Send(), size, and MaxOS::common::OutputStream::write_hex()\&.
+.SS "void EthernetDriver::FireDataSent (uint8_t * buffer, uint32_t size)\fC [protected]\fP"
+
+.PP
+Send data\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to send 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line 159 of file ethernet\&.cpp\&.
+.PP
+.nf
+160 {
+161   raise_event(new DataSentEvent(buffer, size));
+162 }
+.fi
+.PP
+References MaxOS::common::EventManager< EthernetDriverEvents >::raise_event(), and size\&.
+.SS "\fBMediaAccessControlAddress\fP EthernetDriver::GetMediaAccessControlAddress ()\fC [virtual]\fP"
+
+.PP
+Get the MAC address\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the MAC address 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::ethernet::intel_i217\fP, and \fBMaxOS::drivers::ethernet::amd_am79c973\fP\&.
+.PP
+Definition at line 78 of file ethernet\&.cpp\&.
+.PP
+.nf
+79 {
+80     return 0;
+81 }
+.fi
+.PP
+Referenced by MaxOS::net::EthernetFrameHandler::DataReceived()\&.
+.SS "void EthernetDriver::Send (uint8_t * buffer, uint32_t size)"
+
+.PP
+Send data to the network via the driver backend\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to send 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file ethernet\&.cpp\&.
+.PP
+.nf
+90 {
+91   m_driver_message_stream-> write("Sending: ");
+92 
+93     int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
+94     for(uint32_t i = displayType; i < size; i++)
+95     {
+96       m_driver_message_stream->write_hex(buffer[i]);
+97       m_driver_message_stream-> write(" ");
+98     }
+99     m_driver_message_stream-> write("\n");
+100 
+101     // Raise the event
+102     raise_event(new BeforeSendEvent(buffer, size));
+103 
+104     DoSend(buffer, size);
+105 }
+.fi
+.PP
+References DoSend(), MaxOS::drivers::peripherals::i, MaxOS::drivers::Driver::m_driver_message_stream, MaxOS::common::EventManager< EthernetDriverEvents >::raise_event(), size, and MaxOS::common::OutputStream::write_hex()\&.
+.PP
+Referenced by FireDataReceived()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

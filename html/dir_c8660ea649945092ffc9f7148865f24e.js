@@ -7,9 +7,9 @@ var dir_c8660ea649945092ffc9f7148865f24e =
     [ "peripherals", "dir_9f4f839fea2b95a1f743050cddb92ff6.html", "dir_9f4f839fea2b95a1f743050cddb92ff6" ],
     [ "video", "dir_1ff409a568d2b3278fc9739d2fc0d908.html", "dir_1ff409a568d2b3278fc9739d2fc0d908" ],
     [ "driver.h", "driver_8h.html", [
-      [ "Driver", "classmaxOS_1_1drivers_1_1Driver.html", "classmaxOS_1_1drivers_1_1Driver" ],
-      [ "DriverSelectorEventHandler", "classmaxOS_1_1drivers_1_1DriverSelectorEventHandler.html", "classmaxOS_1_1drivers_1_1DriverSelectorEventHandler" ],
-      [ "DriverSelector", "classmaxOS_1_1drivers_1_1DriverSelector.html", "classmaxOS_1_1drivers_1_1DriverSelector" ],
-      [ "DriverManager", "classmaxOS_1_1drivers_1_1DriverManager.html", "classmaxOS_1_1drivers_1_1DriverManager" ]
+      [ "Driver", "classMaxOS_1_1drivers_1_1Driver.html", "classMaxOS_1_1drivers_1_1Driver" ],
+      [ "DriverSelectorEventHandler", "classMaxOS_1_1drivers_1_1DriverSelectorEventHandler.html", "classMaxOS_1_1drivers_1_1DriverSelectorEventHandler" ],
+      [ "DriverSelector", "classMaxOS_1_1drivers_1_1DriverSelector.html", "classMaxOS_1_1drivers_1_1DriverSelector" ],
+      [ "DriverManager", "classMaxOS_1_1drivers_1_1DriverManager.html", "classMaxOS_1_1drivers_1_1DriverManager" ]
     ] ]
 ];

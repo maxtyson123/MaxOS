@@ -1,0 +1,117 @@
+.TH "MaxOS::hardwarecommunication::Port8Bit" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::Port8Bit \- Handles 8 bit ports\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <port\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::Port\fP\&.
+.PP
+Inherited by \fBMaxOS::hardwarecommunication::Port8BitSlow\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPort8Bit\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port8Bit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint8_t \fBdata\fP)"
+.br
+.RI "write a byte to the port "
+.ti -1c
+.RI "virtual uint8_t \fBread\fP ()"
+.br
+.RI "read a byte from the port "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Handles 8 bit ports\&. 
+.PP
+Definition at line 28 of file port\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Port8Bit::Port8Bit (uint16_t port_number)"
+
+.PP
+Definition at line 18 of file port\&.cpp\&.
+.PP
+.nf
+19 : Port(port_number)
+20 {
+21 }
+.fi
+.SS "Port8Bit::~Port8Bit ()"
+
+.PP
+Definition at line 23 of file port\&.cpp\&.
+.PP
+.nf
+23                     {
+24 
+25 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint8_t Port8Bit::read ()\fC [virtual]\fP"
+
+.PP
+read a byte from the port 
+.PP
+\fBReturns\fP
+.RS 4
+the byte read 
+.RE
+.PP
+
+.PP
+Definition at line 41 of file port\&.cpp\&.
+.PP
+.nf
+41                       {
+42     uint8_t result;
+43     __asm__ volatile("inb %1, %0" : "=a" (result) : "Nd" (m_port_number));
+44     return result;
+45 }
+.fi
+.PP
+References MaxOS::hardwarecommunication::Port::m_port_number\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::MouseDriver::activate(), MaxOS::drivers::peripherals::KeyboardDriver::activate(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::flush(), MaxOS::drivers::video::VideoGraphicsArray::get_frame_buffer_segment(), MaxOS::drivers::peripherals::KeyboardDriver::handle_interrupt(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::identify(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::read_28(), MaxOS::drivers::clock::Clock::read_hardware_clock(), MaxOS::drivers::SerialConsole::SerialConsole(), and MaxOS::drivers::video::VideoGraphicsArray::write_registers()\&.
+.SS "void Port8Bit::write (uint8_t data)\fC [virtual]\fP"
+
+.PP
+write a byte to the port 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the byte to write 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::hardwarecommunication::Port8BitSlow\fP\&.
+.PP
+Definition at line 32 of file port\&.cpp\&.
+.PP
+.nf
+32                                 {
+33     __asm__ volatile("outb %0, %1" : : "a" (data), "Nd" (m_port_number));
+34 }
+.fi
+.PP
+References data, and MaxOS::hardwarecommunication::Port::m_port_number\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::MouseDriver::activate(), MaxOS::drivers::peripherals::KeyboardDriver::activate(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::flush(), MaxOS::drivers::video::VideoGraphicsArray::get_frame_buffer_segment(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::identify(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::read_28(), MaxOS::drivers::clock::Clock::read_hardware_clock(), MaxOS::drivers::SerialConsole::SerialConsole(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::write_28(), and MaxOS::drivers::video::VideoGraphicsArray::write_registers()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

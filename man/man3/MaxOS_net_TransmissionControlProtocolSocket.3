@@ -1,0 +1,269 @@
+.TH "MaxOS::net::TransmissionControlProtocolSocket" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::TransmissionControlProtocolSocket
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tcp\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventManager< TransmissionControlProtocolPayloadHandlerEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTransmissionControlProtocolSocket\fP (\fBTransmissionControlProtocolHandler\fP *\fBtransmissionControlProtocolHandler\fP)"
+.br
+.RI "\fBSocket\fP/// "
+.ti -1c
+.RI "\fB~TransmissionControlProtocolSocket\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBSend\fP (uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.br
+.RI "Send data over the socket\&. "
+.ti -1c
+.RI "virtual void \fBDisconnect\fP ()"
+.br
+.RI "Disconnect the socket\&. "
+.ti -1c
+.RI "void \fBDisconnected\fP ()"
+.br
+.ti -1c
+.RI "void \fBConnected\fP ()"
+.br
+.ti -1c
+.RI "bool \fBhandleTransmissionControlProtocolPayload\fP (uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.br
+.RI "Handle the TCP message (socket end) "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint16_t \fBremotePort\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBremoteIP\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBlocalPort\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlocalIP\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsequenceNumber\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBacknowledgementNumber\fP"
+.br
+.ti -1c
+.RI "\fBTransmissionControlProtocolHandler\fP * \fBtransmissionControlProtocolHandler\fP"
+.br
+.ti -1c
+.RI "\fBTransmissionControlProtocolSocketState\fP \fBstate\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBTransmissionControlProtocolHandler\fP"
+.br
+.ti -1c
+.RI "class \fBTransmissionControlProtocolPortListener\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 131 of file tcp\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TransmissionControlProtocolSocket::TransmissionControlProtocolSocket (\fBTransmissionControlProtocolHandler\fP * transmissionControlProtocolHandler)"
+
+.PP
+\fBSocket\fP/// 
+.PP
+Definition at line 58 of file tcp\&.cpp\&.
+.PP
+.nf
+59 {
+60     //Set the default values
+61     this -> transmissionControlProtocolHandler = transmissionControlProtocolHandler;
+62 
+63     //Closed as default
+64     state = CLOSED;
+65 }
+.fi
+.PP
+References MaxOS::net::CLOSED\&.
+.SS "TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket ()"
+
+.PP
+Definition at line 67 of file tcp\&.cpp\&.
+.PP
+.nf
+68 {
+69 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void TransmissionControlProtocolSocket::Connected ()"
+
+.PP
+Definition at line 115 of file tcp\&.cpp\&.
+.PP
+.nf
+115                                                   {
+116     ConnectedEvent* event = new ConnectedEvent(this);
+117     raise_event(event);
+118     MemoryManager::s_active_memory_manager->free(event);
+119 
+120 }
+.fi
+.SS "void TransmissionControlProtocolSocket::Disconnect ()\fC [virtual]\fP"
+
+.PP
+Disconnect the socket\&. 
+.PP
+Definition at line 103 of file tcp\&.cpp\&.
+.PP
+.nf
+104 {
+105     transmissionControlProtocolHandler -> Disconnect(this);
+106 }
+.fi
+.SS "void TransmissionControlProtocolSocket::Disconnected ()"
+
+.PP
+Definition at line 108 of file tcp\&.cpp\&.
+.PP
+.nf
+108                                                      {
+109     DisconnectedEvent* event = new DisconnectedEvent(this);
+110     raise_event(event);
+111     MemoryManager::s_active_memory_manager->free(event);
+112 
+113 }
+.fi
+.SS "bool TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload (uint8_t * data, uint16_t size)"
+
+.PP
+Handle the TCP message (socket end) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The datah 
+.br
+\fIsize\fP The size of the data 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the connection is to be terminated after hadnling or false if not 
+.RE
+.PP
+
+.PP
+Definition at line 77 of file tcp\&.cpp\&.
+.PP
+.nf
+78 {
+79     DataReceivedEvent* event = new DataReceivedEvent(this, data, size);
+80     raise_event(event);
+81     MemoryManager::s_active_memory_manager->free(event);
+82     return true;
+83 }
+.fi
+.PP
+References data, and size\&.
+.SS "void TransmissionControlProtocolSocket::Send (uint8_t * data, uint16_t size)\fC [virtual]\fP"
+
+.PP
+Send data over the socket\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The data to send 
+.br
+\fIsize\fP The size of the data 
+.RE
+.PP
+
+.PP
+Definition at line 91 of file tcp\&.cpp\&.
+.PP
+.nf
+92 {
+93     //Wait for the socket to be connected
+94     while(state != ESTABLISHED);
+95 
+96     //Pass the data to the backend
+97     transmissionControlProtocolHandler -> sendTransmissionControlProtocolPacket(this, data, size, PSH|ACK);
+98 }
+.fi
+.PP
+References MaxOS::net::ACK, data, MaxOS::net::ESTABLISHED, MaxOS::net::PSH, and size\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBTransmissionControlProtocolHandler\fP\fC [friend]\fP"
+
+.PP
+Definition at line 133 of file tcp\&.h\&.
+.SS "friend class TransmissionControlProtocolPortListener\fC [friend]\fP"
+
+.PP
+Definition at line 134 of file tcp\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint32_t MaxOS::net::TransmissionControlProtocolSocket::acknowledgementNumber\fC [protected]\fP"
+
+.PP
+Definition at line 141 of file tcp\&.h\&.
+.PP
+Referenced by MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "uint32_t MaxOS::net::TransmissionControlProtocolSocket::localIP\fC [protected]\fP"
+
+.PP
+Definition at line 139 of file tcp\&.h\&.
+.PP
+Referenced by MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "uint16_t MaxOS::net::TransmissionControlProtocolSocket::localPort\fC [protected]\fP"
+
+.PP
+Definition at line 138 of file tcp\&.h\&.
+.PP
+Referenced by MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "uint32_t MaxOS::net::TransmissionControlProtocolSocket::remoteIP\fC [protected]\fP"
+
+.PP
+Definition at line 137 of file tcp\&.h\&.
+.PP
+Referenced by MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "uint16_t MaxOS::net::TransmissionControlProtocolSocket::remotePort\fC [protected]\fP"
+
+.PP
+Definition at line 136 of file tcp\&.h\&.
+.PP
+Referenced by MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "uint32_t MaxOS::net::TransmissionControlProtocolSocket::sequenceNumber\fC [protected]\fP"
+
+.PP
+Definition at line 140 of file tcp\&.h\&.
+.PP
+Referenced by MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "\fBTransmissionControlProtocolSocketState\fP MaxOS::net::TransmissionControlProtocolSocket::state\fC [protected]\fP"
+
+.PP
+Definition at line 144 of file tcp\&.h\&.
+.SS "\fBTransmissionControlProtocolHandler\fP* MaxOS::net::TransmissionControlProtocolSocket::transmissionControlProtocolHandler\fC [protected]\fP"
+
+.PP
+Definition at line 143 of file tcp\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,175 @@
+.TH "MaxOS::drivers::peripherals::KeyboardDriver" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::peripherals::KeyboardDriver \- \fBDriver\fP for the Keyboard Controller, manages the events and the keyboard state\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <keyboard\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::GenericInputStream< uint8_t >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKeyboardDriver\fP (\fBhardwarecommunication::InterruptManager\fP *)"
+.br
+.RI "___Driver___ "
+.ti -1c
+.RI "\fB~KeyboardDriver\fP ()"
+.br
+.ti -1c
+.RI "void \fBhandle_interrupt\fP () final"
+.br
+.RI "deactivate the keyboard driver "
+.ti -1c
+.RI "void \fBactivate\fP () final"
+.br
+.RI "activate the keyboard driver "
+.ti -1c
+.RI "\fBstring\fP \fBget_device_name\fP () final"
+.br
+.RI "Get the device name\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_data_port\fP"
+.br
+.ti -1c
+.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_command_port\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+\fBDriver\fP for the Keyboard Controller, manages the events and the keyboard state\&. 
+.PP
+Definition at line 420 of file keyboard\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "KeyboardDriver::KeyboardDriver (\fBhardwarecommunication::InterruptManager\fP * manager)"
+
+.PP
+___Driver___ 
+.PP
+Definition at line 77 of file keyboard\&.cpp\&.
+.PP
+.nf
+78 : InterruptHandler(0x21, manager),
+79   m_data_port(0x60),
+80   m_command_port(0x64)
+81 {
+82 }
+.fi
+.SS "KeyboardDriver::~KeyboardDriver ()"
+
+.PP
+Definition at line 83 of file keyboard\&.cpp\&.
+.PP
+.nf
+83                                {
+84 
+85 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void KeyboardDriver::activate ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+activate the keyboard driver 
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line 90 of file keyboard\&.cpp\&.
+.PP
+.nf
+90                               {
+91 
+92     // Wait for user to stop pressing key (this is for the start-up key eg\&.\&. hold 'F12' for boot menu or hold 'del' for bios )
+93     while (m_command_port\&.read() & 0x1)
+94       m_data_port\&.read();
+95 
+96     // Enable keyboard interrupts
+97     m_command_port\&.write(0xAE);
+98 
+99     // Get the current state of the keyboard
+100     m_command_port\&.write(0x20);
+101     uint8_t status = (m_data_port\&.read() | 1)  & ~ 0x10;
+102 
+103     // Reset the keyboard
+104     m_command_port\&.write(0x60);
+105     m_data_port\&.write(status);
+106 
+107     // activate the keyboard
+108     m_data_port\&.write(0xF4);
+109 }
+.fi
+.PP
+References m_command_port, m_data_port, MaxOS::hardwarecommunication::Port8Bit::read(), status, and MaxOS::hardwarecommunication::Port8Bit::write()\&.
+.SS "\fBstring\fP KeyboardDriver::get_device_name ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Get the device name\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The device name 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line 129 of file keyboard\&.cpp\&.
+.PP
+.nf
+129                                        {
+130     return "Keyboard";
+131 }
+.fi
+.SS "void KeyboardDriver::handle_interrupt ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+deactivate the keyboard driver 
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.PP
+Definition at line 114 of file keyboard\&.cpp\&.
+.PP
+.nf
+114                                      {
+115 
+116     // read the scancode from the keyboard
+117     uint8_t key = m_data_port\&.read();
+118 
+119     // Pass the scan code to the m_handlers
+120     for(auto& handler : this -> m_input_stream_event_handlers){
+121         handler -> on_stream_read(key);
+122     }
+123 }
+.fi
+.PP
+References m_data_port, MaxOS::common::GenericInputStream< uint8_t >::m_input_stream_event_handlers, and MaxOS::hardwarecommunication::Port8Bit::read()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::peripherals::KeyboardDriver::m_command_port\fC [protected]\fP"
+
+.PP
+Definition at line 424 of file keyboard\&.h\&.
+.PP
+Referenced by activate()\&.
+.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::peripherals::KeyboardDriver::m_data_port\fC [protected]\fP"
+
+.PP
+Definition at line 423 of file keyboard\&.h\&.
+.PP
+Referenced by activate(), and handle_interrupt()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

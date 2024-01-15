@@ -1,0 +1,118 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <drivers/console/serial\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB_kprintf\fP (const char *format,\&.\&.\&.)"
+.br
+.RI "Prints a formatted string to the serial output\&. "
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void _kprintf (const char * format,  \&.\&.\&.)"
+
+.PP
+Prints a formatted string to the serial output\&. ARGUMENTS:
+.IP "\(bu" 2
+d for decimal
+.IP "\(bu" 2
+x for hex
+.IP "\(bu" 2
+u for unsigned decimal
+.IP "\(bu" 2
+s for string
+.PP
+.PP
+\fBParameters\fP
+.RS 4
+\fIformat\fP The formatted string 
+.br
+\fI\&.\&.\&.\fP The data to pass into the string 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file kprint\&.cpp\&.
+.PP
+.nf
+99 {
+100 
+101   // Print the header
+102   pre_kprintf();
+103 
+104   // Create a pointer to the data
+105   va_list parameters;
+106   va_start (parameters, format);
+107 
+108   // Loop through the format string
+109   for (; *format != '\0'; format++)
+110   {
+111 
+112     // If it is not a %, print the character
+113     if (*format != '%')
+114     {
+115       putchar(*format);
+116       continue;
+117     }
+118 
+119     // Move to the next character
+120     format++;
+121 
+122     switch (*format)
+123     {
+124       case 'd':
+125       {
+126         // Print a decimal
+127         int number = va_arg (parameters, int);
+128         char* str = itoa(10, number);
+129         for (int i = 0; i < strlen(str); i++)
+130           putchar(str[i]);
+131         break;
+132       }
+133       case 'x':
+134       {
+135         // Print a hex
+136         int number = va_arg (parameters, int);
+137         char* str = itoa(16, number);
+138         for (int i = 0; i < strlen(str); i++)
+139           putchar(str[i]);
+140         break;
+141       }
+142       case 'u':
+143       {
+144         // Print an unsigned decimal
+145         unsigned int number = va_arg (parameters, unsigned int);
+146         char* str = itoa(10, number);
+147         for (int i = 0; i < strlen(str); i++)
+148           putchar(str[i]);
+149         break;
+150       }
+151       case 's':
+152       {
+153         // Print a string
+154         char* str = va_arg (parameters, char*);
+155         for (int i = 0; i < strlen(str); i++)
+156           putchar(str[i]);
+157         break;
+158       }
+159     }
+160   }
+161 }
+.fi
+.PP
+References pre_kprintf()\&.
+.PP
+Referenced by kernelMain()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

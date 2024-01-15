@@ -1,0 +1,227 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/kprint.cpp" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/src/common/kprint.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <common/kprint\&.h>\fP
+.br
+\fC#include <stdarg\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "char * \fBitoa\fP (int \fBbase\fP, int number)"
+.br
+.RI "Converts integer to string\&. "
+.ti -1c
+.RI "int \fBstrlen\fP (const char *str)"
+.br
+.RI "Gets the length of a string\&. "
+.ti -1c
+.RI "void \fBpre_kprintf\fP ()"
+.br
+.ti -1c
+.RI "void \fB_kprintf\fP (const char *format,\&.\&.\&.)"
+.br
+.RI "Prints a formatted string to the serial output\&. "
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void _kprintf (const char * format,  \&.\&.\&.)"
+
+.PP
+Prints a formatted string to the serial output\&. ARGUMENTS:
+.IP "\(bu" 2
+d for decimal
+.IP "\(bu" 2
+x for hex
+.IP "\(bu" 2
+u for unsigned decimal
+.IP "\(bu" 2
+s for string
+.PP
+.PP
+\fBParameters\fP
+.RS 4
+\fIformat\fP The formatted string 
+.br
+\fI\&.\&.\&.\fP The data to pass into the string 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file kprint\&.cpp\&.
+.PP
+.nf
+99 {
+100 
+101   // Print the header
+102   pre_kprintf();
+103 
+104   // Create a pointer to the data
+105   va_list parameters;
+106   va_start (parameters, format);
+107 
+108   // Loop through the format string
+109   for (; *format != '\0'; format++)
+110   {
+111 
+112     // If it is not a %, print the character
+113     if (*format != '%')
+114     {
+115       putchar(*format);
+116       continue;
+117     }
+118 
+119     // Move to the next character
+120     format++;
+121 
+122     switch (*format)
+123     {
+124       case 'd':
+125       {
+126         // Print a decimal
+127         int number = va_arg (parameters, int);
+128         char* str = itoa(10, number);
+129         for (int i = 0; i < strlen(str); i++)
+130           putchar(str[i]);
+131         break;
+132       }
+133       case 'x':
+134       {
+135         // Print a hex
+136         int number = va_arg (parameters, int);
+137         char* str = itoa(16, number);
+138         for (int i = 0; i < strlen(str); i++)
+139           putchar(str[i]);
+140         break;
+141       }
+142       case 'u':
+143       {
+144         // Print an unsigned decimal
+145         unsigned int number = va_arg (parameters, unsigned int);
+146         char* str = itoa(10, number);
+147         for (int i = 0; i < strlen(str); i++)
+148           putchar(str[i]);
+149         break;
+150       }
+151       case 's':
+152       {
+153         // Print a string
+154         char* str = va_arg (parameters, char*);
+155         for (int i = 0; i < strlen(str); i++)
+156           putchar(str[i]);
+157         break;
+158       }
+159     }
+160   }
+161 }
+.fi
+.PP
+References pre_kprintf()\&.
+.PP
+Referenced by kernelMain()\&.
+.SS "char* itoa (int base, int number)"
+
+.PP
+Converts integer to string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to store the converted string 
+.br
+\fIbase\fP The base of the number (10 for decimal, 16 for hex) 
+.br
+\fInumber\fP The number to convert 
+.RE
+.PP
+
+.PP
+Definition at line 17 of file kprint\&.cpp\&.
+.PP
+.nf
+18 {
+19     static char buffer[50] = {0};
+20     int i = 49;
+21     bool isNegative = false;
+22 
+23     if (number == 0)
+24     {
+25         buffer[i] = '0';
+26         return &buffer[i];
+27     }
+28 
+29     if (number < 0 && base == 10)
+30     {
+31         isNegative = true;
+32         number = -number;
+33     }
+34 
+35     for (; number && i; --i, number /= base)
+36         buffer[i] = "0123456789ABCDEF"[number % base];
+37 
+38     if (isNegative)
+39     {
+40         buffer[i] = '-';
+41         return &buffer[i];
+42     }
+43 
+44     return &buffer[i + 1];
+45 }
+.fi
+.PP
+References base, and MaxOS::drivers::peripherals::i\&.
+.SS "void pre_kprintf ()"
+@ brief Prints a debug prefix (in yellow) to the serial output 
+.PP
+Definition at line 77 of file kprint\&.cpp\&.
+.PP
+.nf
+78 {
+79   // Print the kernel header with yellow text
+80   char* header = "\033[1;33m[DEBUG] \033[0m";
+81   for (int i = 0; i < strlen(header); i++)
+82     putchar(header[i]);
+83 
+84 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::i, and strlen()\&.
+.PP
+Referenced by _kprintf()\&.
+.SS "int strlen (const char * str)"
+
+.PP
+Gets the length of a string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP The string to get the length of 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The length of the string 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file kprint\&.cpp\&.
+.PP
+.nf
+54 {
+55    int len = 0;
+56    for (; str[len] != '\0'; len++);
+57         return len;
+58 }
+.fi
+.PP
+Referenced by pre_kprintf()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['k_2699',['K',['../classmaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a6908974df0a3da2046b13a9bb91772a9ae951c195705a0fad41f2eeaf2ae9c740',1,'maxOS::drivers::peripherals::KeyboardInterpreterEN_US::K()'],['../namespacemaxOS_1_1drivers_1_1peripherals.html#a9854b786a692cef8357e51059ed90ab4a6e47365d7925c2d7033b34dfce8481c9',1,'maxOS::drivers::peripherals::K()'],['../namespacemaxOS_1_1drivers_1_1peripherals.html#a9854b786a692cef8357e51059ed90ab4addbe80d2b2131acdfe3140dad0cb62b5',1,'maxOS::drivers::peripherals::k()']]],
-  ['keydown_2700',['KEYDOWN',['../namespacemaxOS_1_1drivers_1_1peripherals.html#af372feaa64c398b9d4636a3cc51316cea5307e22a82b7d5203c51595e7ba45190',1,'maxOS::drivers::peripherals']]],
-  ['keyup_2701',['KEYUP',['../namespacemaxOS_1_1drivers_1_1peripherals.html#af372feaa64c398b9d4636a3cc51316cead1fb2a89452fb2025f12e5cd8f1b4aeb',1,'maxOS::drivers::peripherals']]]
+  ['k_2815',['K',['../classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a345f23d5e9acfe6791e344b9595bc12ba71539cc1ccd7cebc0e393677ca774e75',1,'MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::K()'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcac8b9b4e585c32adee5788a78eb380089',1,'MaxOS::drivers::peripherals::K()'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcac42d02271444d23857c912f9bb4c4752',1,'MaxOS::drivers::peripherals::k()']]],
+  ['keydown_2816',['KEYDOWN',['../namespaceMaxOS_1_1drivers_1_1peripherals.html#add731b6c5a9b8a0f34a4d129d9767554a2193fd2a05dd69466a012d3b6ea00b43',1,'MaxOS::drivers::peripherals']]],
+  ['keyup_2817',['KEYUP',['../namespaceMaxOS_1_1drivers_1_1peripherals.html#add731b6c5a9b8a0f34a4d129d9767554a0f3fb78dab3d8d32a1c72d3e0798536d',1,'MaxOS::drivers::peripherals']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['baseaddressregistertype_2607',['BaseAddressRegisterType',['../namespacemaxOS_1_1hardwarecommunication.html#a7e1d99ea113ddb98b2bcff65103032f7',1,'maxOS::hardwarecommunication']]],
-  ['buttonevents_2608',['ButtonEvents',['../namespacemaxOS_1_1gui_1_1widgets.html#a9428d14c7f5a2810c2b53ef65988921f',1,'maxOS::gui::widgets']]]
+  ['baseaddressregistertype_2723',['BaseAddressRegisterType',['../namespaceMaxOS_1_1hardwarecommunication.html#afc5ea080a9107e056194cc643a761608',1,'MaxOS::hardwarecommunication']]],
+  ['buttonevents_2724',['ButtonEvents',['../namespaceMaxOS_1_1gui_1_1widgets.html#a637a82b4930318869efa61a112afae5a',1,'MaxOS::gui::widgets']]]
 ];

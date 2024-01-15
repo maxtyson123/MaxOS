@@ -1,0 +1,109 @@
+.TH "MaxOS::hardwarecommunication::Port32Bit" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::Port32Bit \- Handles 32 bit ports\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <port\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::Port\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPort32Bit\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port32Bit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint32_t \fBdata\fP)"
+.br
+.RI "write a double word to the port (32Bit) "
+.ti -1c
+.RI "virtual uint32_t \fBread\fP ()"
+.br
+.RI "read a double word from the port (32Bit) "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Handles 32 bit ports\&. 
+.PP
+Definition at line 66 of file port\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Port32Bit::Port32Bit (uint16_t port_number)"
+
+.PP
+Definition at line 96 of file port\&.cpp\&.
+.PP
+.nf
+97 : Port(port_number)
+98 {
+99 }
+.fi
+.SS "Port32Bit::~Port32Bit ()"
+
+.PP
+Definition at line 101 of file port\&.cpp\&.
+.PP
+.nf
+101                       {
+102 
+103 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t Port32Bit::read ()\fC [virtual]\fP"
+
+.PP
+read a double word from the port (32Bit) 
+.PP
+\fBReturns\fP
+.RS 4
+the double word read 
+.RE
+.PP
+
+.PP
+Definition at line 119 of file port\&.cpp\&.
+.PP
+.nf
+119                         {
+120     uint32_t result;
+121     __asm__ volatile("inl %1, %0" : "=a" (result) : "Nd" (m_port_number));
+122     return result;
+123 }
+.fi
+.PP
+References MaxOS::hardwarecommunication::Port::m_port_number\&.
+.SS "void Port32Bit::write (uint32_t data)\fC [virtual]\fP"
+
+.PP
+write a double word to the port (32Bit) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the double word to write 
+.RE
+.PP
+
+.PP
+Definition at line 110 of file port\&.cpp\&.
+.PP
+.nf
+110                                   {
+111     __asm__ volatile("outl %0, %1" : : "a" (data), "Nd" (m_port_number));
+112 }
+.fi
+.PP
+References data, and MaxOS::hardwarecommunication::Port::m_port_number\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

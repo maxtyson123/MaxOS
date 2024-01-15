@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['widgetmover_2598',['WidgetMover',['../namespacemaxOS_1_1gui.html#aa6f6dc12253995e384fa99fe171c29fd',1,'maxOS::gui']]],
-  ['widgetmoverresizerbottom_2599',['WidgetMoverResizerBottom',['../namespacemaxOS_1_1gui.html#a409cd62d3e9d576f1896cc584d7ad524',1,'maxOS::gui']]],
-  ['widgetmoverresizerbottomleft_2600',['WidgetMoverResizerBottomLeft',['../namespacemaxOS_1_1gui.html#ac135efdfc8a03dd70786217945e82c4d',1,'maxOS::gui']]],
-  ['widgetmoverresizerbottomright_2601',['WidgetMoverResizerBottomRight',['../namespacemaxOS_1_1gui.html#a9376e4391bef0bab7ceeb1b71c69ff63',1,'maxOS::gui']]],
-  ['widgetmoverresizerleft_2602',['WidgetMoverResizerLeft',['../namespacemaxOS_1_1gui.html#a8f6961519354d7f6f70823b52a0d0a4a',1,'maxOS::gui']]],
-  ['widgetmoverresizerright_2603',['WidgetMoverResizerRight',['../namespacemaxOS_1_1gui.html#a75a0d6259e6098d024037678d504c230',1,'maxOS::gui']]],
-  ['widgetmoverresizertop_2604',['WidgetMoverResizerTop',['../namespacemaxOS_1_1gui.html#aa3cf22d13119e729c2336b9641a2a0fc',1,'maxOS::gui']]],
-  ['widgetmoverresizertopleft_2605',['WidgetMoverResizerTopLeft',['../namespacemaxOS_1_1gui.html#a0e25949f3df92c1b6ee3b147ff165f25',1,'maxOS::gui']]],
-  ['widgetmoverresizertopright_2606',['WidgetMoverResizerTopRight',['../namespacemaxOS_1_1gui.html#af52223a93f26d27b063320144873c4b0',1,'maxOS::gui']]]
+  ['widgetmover_2714',['WidgetMover',['../namespaceMaxOS_1_1gui.html#aecc292fc4b4e5ba249c2298879f57f67',1,'MaxOS::gui']]],
+  ['widgetmoverresizerbottom_2715',['WidgetMoverResizerBottom',['../namespaceMaxOS_1_1gui.html#a7fcaff4d058fd21da777bc5f20dce520',1,'MaxOS::gui']]],
+  ['widgetmoverresizerbottomleft_2716',['WidgetMoverResizerBottomLeft',['../namespaceMaxOS_1_1gui.html#a166d226fc7eadc43f2632888f98aed3f',1,'MaxOS::gui']]],
+  ['widgetmoverresizerbottomright_2717',['WidgetMoverResizerBottomRight',['../namespaceMaxOS_1_1gui.html#aec26431a20efe71d570c467bd6d85fe8',1,'MaxOS::gui']]],
+  ['widgetmoverresizerleft_2718',['WidgetMoverResizerLeft',['../namespaceMaxOS_1_1gui.html#aba9925de94af440a93d70eba8698b930',1,'MaxOS::gui']]],
+  ['widgetmoverresizerright_2719',['WidgetMoverResizerRight',['../namespaceMaxOS_1_1gui.html#a505c6e53558cd3c4556c9ebecec42e0e',1,'MaxOS::gui']]],
+  ['widgetmoverresizertop_2720',['WidgetMoverResizerTop',['../namespaceMaxOS_1_1gui.html#a878cdf7fed7bc2d9aa281785ab01121e',1,'MaxOS::gui']]],
+  ['widgetmoverresizertopleft_2721',['WidgetMoverResizerTopLeft',['../namespaceMaxOS_1_1gui.html#a0ec91c0dc18bdb301ddd2e428a942f3b',1,'MaxOS::gui']]],
+  ['widgetmoverresizertopright_2722',['WidgetMoverResizerTopRight',['../namespaceMaxOS_1_1gui.html#a8435c1460a5b43644ba2e71dd668c942',1,'MaxOS::gui']]]
 ];

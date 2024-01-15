@@ -1,0 +1,561 @@
+.TH "MaxOS::drivers::console::Console" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::console::Console \- Abstract class for a console, allows for the printing of characters and strings with colours\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <console\&.h>\fP
+.PP
+Inherited by \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::console::TextModeConsole\fP, and \fBMaxOS::drivers::console::VESABootConsole\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConsole\fP ()"
+.br
+.RI "____ \fBConsole\fP ____ "
+.ti -1c
+.RI "\fB~Console\fP ()"
+.br
+.ti -1c
+.RI "virtual uint16_t \fBwidth\fP ()"
+.br
+.RI "Get the width of the console in characters\&. "
+.ti -1c
+.RI "virtual uint16_t \fBheight\fP ()"
+.br
+.RI "Get the height of the console in characters\&. "
+.ti -1c
+.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c)"
+.br
+.RI "Put a character on the console\&. "
+.ti -1c
+.RI "virtual char \fBget_character\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Get the character at a given coordinate on the console\&. "
+.ti -1c
+.RI "virtual void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP foreground)"
+.br
+.RI "Set the foreground color of a character on the console\&. "
+.ti -1c
+.RI "virtual void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP background)"
+.br
+.RI "Set the background color of a character on the console\&. "
+.ti -1c
+.RI "virtual \fBConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Get the background color of a character on the console\&. "
+.ti -1c
+.RI "virtual \fBConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Get the background color of a character on the console\&. "
+.ti -1c
+.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c, \fBConsoleColour\fP foreground, \fBConsoleColour\fP background)"
+.br
+.RI "Put a character on the console with a given foreground and background color\&. "
+.ti -1c
+.RI "virtual void \fBput_string\fP (uint16_t x, uint16_t y, \fBstring\fP s, \fBConsoleColour\fP foreground=\fBLightGrey\fP, \fBConsoleColour\fP background=\fBBlack\fP)"
+.br
+.RI "Put a string on the console\&. "
+.ti -1c
+.RI "virtual void \fBscroll_up\fP ()"
+.br
+.RI "Scroll the console up by 1 line\&. "
+.ti -1c
+.RI "virtual void \fBscroll_up\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, \fBConsoleColour\fP foreground=\fBLightGrey\fP, \fBConsoleColour\fP background=\fBBlack\fP, char fill=' ')"
+.br
+.RI "Scroll an area of the console up by 1 line\&. "
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, \fBConsoleColour\fP foreground=\fBLightGrey\fP, \fBConsoleColour\fP background=\fBBlack\fP, char fill=' ')"
+.br
+.RI "Clear an area of the console\&. "
+.ti -1c
+.RI "virtual void \fBinvert_colors\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Invert the colors of a character on the console\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Abstract class for a console, allows for the printing of characters and strings with colours\&. 
+.PP
+Definition at line 41 of file console\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Console::Console ()"
+
+.PP
+____ \fBConsole\fP ____ 
+.PP
+Definition at line 14 of file console\&.cpp\&.
+.PP
+.nf
+14                  {
+15 
+16 }
+.fi
+.SS "Console::~Console ()"
+
+.PP
+Definition at line 18 of file console\&.cpp\&.
+.PP
+.nf
+18                   {
+19 
+20 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void Console::clear ()\fC [virtual]\fP"
+Clear the console 
+.PP
+Definition at line 188 of file console\&.cpp\&.
+.PP
+.nf
+188                     {
+189 
+190     // Clear the console
+191     clear(0, 0, width(), height());
+192 
+193 }
+.fi
+.PP
+Referenced by kernelMain()\&.
+.SS "void Console::clear (uint16_t left, uint16_t top, uint16_t width, uint16_t height, \fBConsoleColour\fP foreground = \fC\fBLightGrey\fP\fP, \fBConsoleColour\fP background = \fC\fBBlack\fP\fP, char fill = \fC' '\fP)\fC [virtual]\fP"
+
+.PP
+Clear an area of the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleft\fP The left coordinate of the area to clear 
+.br
+\fItop\fP The top coordinate of the area to clear 
+.br
+\fIwidth\fP The m_width of the area to clear 
+.br
+\fIheight\fP The m_height of the area to clear 
+.br
+\fIforeground\fP The foreground color of the area 
+.br
+\fIbackground\fP The background color of the area 
+.br
+\fIfill\fP The character to fill the area with 
+.RE
+.PP
+
+.PP
+Definition at line 206 of file console\&.cpp\&.
+.PP
+.nf
+206                                                                                                                                                {
+207 
+208     // Put the fill character in the areas
+209     for(uint16_t y = top; y < top+height; y++)
+210         for(uint16_t x = left; x < left+width; x++){
+211             put_character(x, y, fill, foreground, background);
+212         }
+213 
+214 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "\fBConsoleColour\fP Console::get_background_color (uint16_t x, uint16_t y)\fC [virtual]\fP"
+
+.PP
+Get the background color of a character on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The background color of the character 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::console::VESABootConsole\fP, and \fBMaxOS::drivers::console::TextModeConsole\fP\&.
+.PP
+Definition at line 102 of file console\&.cpp\&.
+.PP
+.nf
+102                                                               {
+103     return Green;
+104 }
+.fi
+.PP
+References MaxOS::drivers::console::Green\&.
+.PP
+Referenced by MaxOS::drivers::console::ConsoleArea::get_background_color()\&.
+.SS "char Console::get_character (uint16_t x, uint16_t y)\fC [virtual]\fP"
+
+.PP
+Get the character at a given coordinate on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the given coordinate 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::console::VESABootConsole\fP, and \fBMaxOS::drivers::console::TextModeConsole\fP\&.
+.PP
+Definition at line 80 of file console\&.cpp\&.
+.PP
+.nf
+80                                               {
+81     return ' ';
+82 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleArea::get_character()\&.
+.SS "\fBConsoleColour\fP Console::get_foreground_color (uint16_t x, uint16_t y)\fC [virtual]\fP"
+
+.PP
+Get the background color of a character on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The background color of the character 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::console::VESABootConsole\fP, and \fBMaxOS::drivers::console::TextModeConsole\fP\&.
+.PP
+Definition at line 91 of file console\&.cpp\&.
+.PP
+.nf
+91                                                               {
+92     return Green;
+93 }
+.fi
+.PP
+References MaxOS::drivers::console::Green\&.
+.PP
+Referenced by MaxOS::drivers::console::ConsoleArea::get_foreground_color()\&.
+.SS "uint16_t Console::height ()\fC [virtual]\fP"
+
+.PP
+Get the height of the console in characters\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The height of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::console::VESABootConsole\fP, and \fBMaxOS::drivers::console::TextModeConsole\fP\&.
+.PP
+Definition at line 36 of file console\&.cpp\&.
+.PP
+.nf
+36                          {
+37     return 0;
+38 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleStream::write_char()\&.
+.SS "void Console::invert_colors (uint16_t x, uint16_t y)\fC [virtual]\fP"
+
+.PP
+Invert the colors of a character on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+
+.PP
+Definition at line 222 of file console\&.cpp\&.
+.PP
+.nf
+222                                                   {
+223 
+224     // Get the colors of the character
+225     ConsoleColour foreground = get_foreground_color(x, y);
+226     ConsoleColour background = get_background_color(x, y);
+227 
+228     // Set the colors of the character
+229     set_foreground_color(x, y, background);
+230     set_background_color(x, y, foreground);
+231 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void Console::put_character (uint16_t x, uint16_t y, char c)\fC [virtual]\fP"
+
+.PP
+Put a character on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIc\fP The character to put on the console 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::VESABootConsole\fP, \fBMaxOS::drivers::console::ConsoleArea\fP, and \fBMaxOS::drivers::console::TextModeConsole\fP\&.
+.PP
+Definition at line 47 of file console\&.cpp\&.
+.PP
+.nf
+47                                                     {
+48 
+49 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleArea::put_character(), and MaxOS::drivers::console::ConsoleStream::write_char()\&.
+.SS "void Console::put_character (uint16_t x, uint16_t y, char c, \fBConsoleColour\fP foreground, \fBConsoleColour\fP background)\fC [virtual]\fP"
+
+.PP
+Put a character on the console with a given foreground and background color\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIc\fP The character to put on the console 
+.br
+\fIforeground\fP The foreground color of the character 
+.br
+\fIbackground\fP The background color of the character 
+.RE
+.PP
+
+.PP
+Definition at line 115 of file console\&.cpp\&.
+.PP
+.nf
+115                                                                                                               {
+116 
+117     // Set the colors of the character
+118     set_foreground_color(x, y, foreground);
+119     set_background_color(x, y, background);
+120 
+121     // Put the character on the console
+122     put_character(x, y, c);
+123 
+124 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::c, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void Console::put_string (uint16_t x, uint16_t y, \fBstring\fP string, \fBConsoleColour\fP foreground = \fC\fBLightGrey\fP\fP, \fBConsoleColour\fP background = \fC\fBBlack\fP\fP)\fC [virtual]\fP"
+
+.PP
+Put a string on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the string 
+.br
+\fIy\fP The y coordinate of the string 
+.br
+\fIs\fP The string to put on the console 
+.br
+\fIforeground\fP The foreground color of the string 
+.br
+\fIbackground\fP The background color of the string 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file console\&.cpp\&.
+.PP
+.nf
+135                                                                                                                   {
+136 
+137     // Print each character on the screen
+138     for(int i = 0; i < string\&.length(); i++)
+139             put_character(x + i, y, string[i], foreground, background);
+140 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::i, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.PP
+Referenced by kernelMain()\&.
+.SS "void Console::scroll_up ()\fC [virtual]\fP"
+
+.PP
+Scroll the console up by 1 line\&. 
+.PP
+Definition at line 145 of file console\&.cpp\&.
+.PP
+.nf
+145                         {
+146 
+147     // Scroll the console up by 1 line
+148     scroll_up(0, 0, width(), height());
+149 
+150 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleStream::write_char()\&.
+.SS "void Console::scroll_up (uint16_t left, uint16_t top, uint16_t width, uint16_t height, \fBConsoleColour\fP foreground = \fC\fBLightGrey\fP\fP, \fBConsoleColour\fP background = \fC\fBBlack\fP\fP, char fill = \fC' '\fP)\fC [virtual]\fP"
+
+.PP
+Scroll an area of the console up by 1 line\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleft\fP The left coordinate of the area to scroll 
+.br
+\fItop\fP The top coordinate of the area to scroll 
+.br
+\fIwidth\fP The m_width of the area to scroll 
+.br
+\fIheight\fP The m_height of the area to scroll 
+.br
+\fIforeground\fP The foreground color of the new line 
+.br
+\fIbackground\fP The background color of the new line 
+.br
+\fIfill\fP The character to fill the new line with 
+.RE
+.PP
+
+.PP
+Definition at line 163 of file console\&.cpp\&.
+.PP
+.nf
+163                                                                                                                                                    {
+164 
+165     // For each line in the area to scroll (except the last line)
+166     for(uint16_t y = top; y < top+height-1; y++){
+167 
+168         // For each character in the line
+169         for(uint16_t x = left; x < left+width; x++) {
+170 
+171             // Put the character from the line below
+172             put_character(x, y, get_character(x, y + 1),
+173                           get_foreground_color(x, y + 1),
+174                           get_background_color(x, y + 1));
+175 
+176         }
+177     }
+178 
+179     // Fill the last line with the fill character
+180     for(uint16_t x = left; x < left+width; x++)
+181         put_character(x, top + height - 1, fill, foreground, background);
+182 
+183 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void Console::set_background_color (uint16_t x, uint16_t y, \fBConsoleColour\fP background)\fC [virtual]\fP"
+
+.PP
+Set the background color of a character on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIbackground\fP The background color to set 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::VESABootConsole\fP, \fBMaxOS::drivers::console::TextModeConsole\fP, and \fBMaxOS::drivers::console::ConsoleArea\fP\&.
+.PP
+Definition at line 69 of file console\&.cpp\&.
+.PP
+.nf
+69                                                                     {
+70 
+71 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleArea::ConsoleArea(), and MaxOS::drivers::console::ConsoleArea::set_background_color()\&.
+.SS "void Console::set_foreground_color (uint16_t x, uint16_t y, \fBConsoleColour\fP foreground)\fC [virtual]\fP"
+
+.PP
+Set the foreground color of a character on the console\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIforeground\fP The foreground color to set 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::VESABootConsole\fP, \fBMaxOS::drivers::console::TextModeConsole\fP, and \fBMaxOS::drivers::console::ConsoleArea\fP\&.
+.PP
+Definition at line 58 of file console\&.cpp\&.
+.PP
+.nf
+58                                                                     {
+59 
+60 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleArea::ConsoleArea(), and MaxOS::drivers::console::ConsoleArea::set_foreground_color()\&.
+.SS "uint16_t Console::width ()\fC [virtual]\fP"
+
+.PP
+Get the width of the console in characters\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The width of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::console::VESABootConsole\fP, and \fBMaxOS::drivers::console::TextModeConsole\fP\&.
+.PP
+Definition at line 27 of file console\&.cpp\&.
+.PP
+.nf
+27                         {
+28     return 0;
+29 }
+.fi
+.PP
+Referenced by MaxOS::drivers::console::ConsoleStream::write_char()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -2,10 +2,12 @@
 \label{kernel_8cpp}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp}}
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$common/version.\+h$>$}\newline
+{\ttfamily \#include $<$common/kprint.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/interrupts.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/pci.\+h$>$}\newline
-{\ttfamily \#include \char`\"{}drivers/disk/ata.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$drivers/disk/ata.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/console/console.\+h$>$}\newline
+{\ttfamily \#include $<$drivers/console/serial.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/console/textmode.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/console/vesaboot.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/driver.\+h$>$}\newline
@@ -26,7 +28,6 @@
 {\ttfamily \#include $<$net/udp.\+h$>$}\newline
 {\ttfamily \#include $<$net/tcp.\+h$>$}\newline
 {\ttfamily \#include $<$system/process.\+h$>$}\newline
-{\ttfamily \#include $<$system/gdt.\+h$>$}\newline
 {\ttfamily \#include $<$system/syscalls.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
 {\ttfamily \#include $<$system/multithreading.\+h$>$}\newline
@@ -48,9 +49,9 @@ void \mbox{\hyperlink{kernel_8cpp_adb9a0feb0c70ccbff82716bf531a2e42}{call\+Const
 \item 
 bool \mbox{\hyperlink{kernel_8cpp_a6a0a3bbe44db96928d1b582d8b5b3c67}{check\+\_\+multiboot\+\_\+flag}} (uint32\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}, uint32\+\_\+t bit)
 \item 
-void \mbox{\hyperlink{kernel_8cpp_a39e7de5bf50d07f450b5d5533a6874b4}{print\+\_\+boot\+\_\+header}} (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console}{Console}} $\ast$console)
+void \mbox{\hyperlink{kernel_8cpp_a39e7de5bf50d07f450b5d5533a6874b4}{print\+\_\+boot\+\_\+header}} (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console}{Console}} $\ast$console)
 \item 
-void \mbox{\hyperlink{kernel_8cpp_ae3af917d74d06f52eedd6af782eb23f3}{kernel\+Main}} (const \mbox{\hyperlink{structmaxOS_1_1system_1_1multiboot__info}{multiboot\+\_\+info}} \&multiboot\+Header, uint32\+\_\+t multiboot\+\_\+magic)
+void \mbox{\hyperlink{kernel_8cpp_a64d1f63d75fef5a193446b997b7a9090}{kernel\+Main}} (unsigned long addr, unsigned long magic)
 \end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
@@ -79,7 +80,7 @@ void \mbox{\hyperlink{kernel_8cpp_ae3af917d74d06f52eedd6af782eb23f3}{kernel\+Mai
 
 
 
-Definition at line 65 of file kernel.\+cpp.
+Definition at line 66 of file kernel.\+cpp.
 
 
 
@@ -92,19 +93,19 @@ Definition at line 65 of file kernel.\+cpp.
 
 
 
-Definition at line 70 of file kernel.\+cpp.
+Definition at line 71 of file kernel.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{71 \{}
-\DoxyCodeLine{72     \textcolor{keywordflow}{for}(\mbox{\hyperlink{kernel_8cpp_a12d367671a45721e5f93f37959360759}{constructor}}* \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = \&\mbox{\hyperlink{kernel_8cpp_a00bc71da06b4a8e02a8587bf37dd984b}{start\_ctors}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} != \&\mbox{\hyperlink{kernel_8cpp_affa4f606954d8d9a7edcb66df47b7f1d}{end\_ctors}}; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)        \textcolor{comment}{//Iterate over all constructors}}
-\DoxyCodeLine{73         (*\mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}})();                                                     \textcolor{comment}{//Call the constructor}}
-\DoxyCodeLine{74 \}}
+\DoxyCodeLine{72 \{}
+\DoxyCodeLine{73     \textcolor{keywordflow}{for}(\mbox{\hyperlink{kernel_8cpp_a12d367671a45721e5f93f37959360759}{constructor}}* \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = \&\mbox{\hyperlink{kernel_8cpp_a00bc71da06b4a8e02a8587bf37dd984b}{start\_ctors}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} != \&\mbox{\hyperlink{kernel_8cpp_affa4f606954d8d9a7edcb66df47b7f1d}{end\_ctors}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)        \textcolor{comment}{//Iterate over all constructors}}
+\DoxyCodeLine{74         (*\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})();                                                     \textcolor{comment}{//Call the constructor}}
+\DoxyCodeLine{75 \}}
 
 \end{DoxyCode}
 
 
-References end\+\_\+ctors, max\+O\+S\+::drivers\+::peripherals\+::i, and start\+\_\+ctors.
+References end\+\_\+ctors, Max\+O\+S\+::drivers\+::peripherals\+::i, and start\+\_\+ctors.
 
 \mbox{\Hypertarget{kernel_8cpp_a6a0a3bbe44db96928d1b582d8b5b3c67}\label{kernel_8cpp_a6a0a3bbe44db96928d1b582d8b5b3c67}} 
 \index{kernel.cpp@{kernel.cpp}!check\_multiboot\_flag@{check\_multiboot\_flag}}
@@ -114,349 +115,356 @@ References end\+\_\+ctors, max\+O\+S\+::drivers\+::peripherals\+::i, and start\+
 
 
 
-Definition at line 77 of file kernel.\+cpp.
+Definition at line 78 of file kernel.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{78 \{}
-\DoxyCodeLine{79     \textcolor{keywordflow}{return} (\mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} \& (1 << bit)) > 0;}
-\DoxyCodeLine{80 \}}
+\DoxyCodeLine{79 \{}
+\DoxyCodeLine{80     \textcolor{keywordflow}{return} (\mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} \& (1 << bit)) > 0;}
+\DoxyCodeLine{81 \}}
 
 \end{DoxyCode}
 
 
 References flags.
 
-\mbox{\Hypertarget{kernel_8cpp_ae3af917d74d06f52eedd6af782eb23f3}\label{kernel_8cpp_ae3af917d74d06f52eedd6af782eb23f3}} 
+\mbox{\Hypertarget{kernel_8cpp_a64d1f63d75fef5a193446b997b7a9090}\label{kernel_8cpp_a64d1f63d75fef5a193446b997b7a9090}} 
 \index{kernel.cpp@{kernel.cpp}!kernelMain@{kernelMain}}
 \index{kernelMain@{kernelMain}!kernel.cpp@{kernel.cpp}}
 \doxysubsubsection{\texorpdfstring{kernelMain()}{kernelMain()}}
-{\footnotesize\ttfamily void kernel\+Main (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structmaxOS_1_1system_1_1multiboot__info}{multiboot\+\_\+info}} \&}]{multiboot\+Header,  }\item[{uint32\+\_\+t}]{multiboot\+\_\+magic }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void kernel\+Main (\begin{DoxyParamCaption}\item[{unsigned long}]{addr,  }\item[{unsigned long}]{magic }\end{DoxyParamCaption})}
 
 
 
-Definition at line 104 of file kernel.\+cpp.
+Definition at line 106 of file kernel.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{105 \{}
-\DoxyCodeLine{106 }
-\DoxyCodeLine{107     \textcolor{comment}{// Get the multiboot info structure}}
-\DoxyCodeLine{108     \mbox{\hyperlink{classmaxOS_1_1system_1_1Multiboot}{Multiboot}} multiboot((\mbox{\hyperlink{structmaxOS_1_1system_1_1multiboot__info}{multiboot\_info\_t}}*)\&multibootHeader, multiboot\_magic);}
-\DoxyCodeLine{109 }
-\DoxyCodeLine{110     \textcolor{comment}{// Set up the memory manager}}
-\DoxyCodeLine{111     \mbox{\hyperlink{classmaxOS_1_1memory_1_1MemoryManager}{MemoryManager}} memoryManager(multiboot.get\_boot\_info());}
-\DoxyCodeLine{112 }
-\DoxyCodeLine{113     \textcolor{comment}{// Initialise the VESA Driver}}
-\DoxyCodeLine{114     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation}{VideoElectronicsStandardsAssociation}} vesa(multiboot.get\_boot\_info());}
-\DoxyCodeLine{115     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoDriver}{VideoDriver}}* videoDriver = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoDriver}{VideoDriver}}*)\&vesa;}
-\DoxyCodeLine{116     videoDriver-\/>\mbox{\hyperlink{classmaxOS_1_1drivers_1_1video_1_1VideoDriver_ac067543429b5dc0cd408951a1d57a7f9}{set\_mode}}((\textcolor{keywordtype}{int})multiboot.get\_boot\_info() -\/> framebuffer\_width,}
-\DoxyCodeLine{117                           (int)multiboot.get\_boot\_info() -\/> framebuffer\_height,}
-\DoxyCodeLine{118                           (int)multiboot.get\_boot\_info() -\/> framebuffer\_bpp);}
+\DoxyCodeLine{107 \{}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109     \textcolor{comment}{// Initialise the serial console}}
+\DoxyCodeLine{110     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole}{SerialConsole}} serialConsole;}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"MaxOS booted\(\backslash\)n"});}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{114     \textcolor{comment}{// TODO: Now that it is in a 64bit mode in the higher half some things need to be rewritten}}
+\DoxyCodeLine{115     \textcolor{keywordflow}{while} (\textcolor{keyword}{true});}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117     \textcolor{comment}{// Make the multiboot header}}
+\DoxyCodeLine{118     \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}} multiboot(addr);}
 \DoxyCodeLine{119 }
-\DoxyCodeLine{120     \textcolor{comment}{// Initialise Console}}
-\DoxyCodeLine{121     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1VESABootConsole}{VESABootConsole}} console(\&vesa);}
-\DoxyCodeLine{122     console.clear();}
-\DoxyCodeLine{123     console.print\_logo();}
-\DoxyCodeLine{124 }
-\DoxyCodeLine{125     \textcolor{comment}{// Create a stream for the console}}
-\DoxyCodeLine{126     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} mainConsoleArea(\&console, 0, 1, console.width(), console.height(), \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa49158f8ed070e8487c5ebbbbc026326}{ConsoleColour::DarkGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{127     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} cout(\&mainConsoleArea);}
-\DoxyCodeLine{128 }
-\DoxyCodeLine{129     \textcolor{comment}{// Print the header}}
-\DoxyCodeLine{130     \mbox{\hyperlink{kernel_8cpp_a39e7de5bf50d07f450b5d5533a6874b4}{print\_boot\_header}}(\&console);}
-\DoxyCodeLine{131 }
-\DoxyCodeLine{132     \textcolor{comment}{// Print the build info}}
-\DoxyCodeLine{133     cout << \textcolor{stringliteral}{"BUILD INFO: "} << VERSION\_NAME << \textcolor{stringliteral}{" on "} << BUILD\_DATE.year << \textcolor{stringliteral}{"-\/"} << BUILD\_DATE.month << \textcolor{stringliteral}{"-\/"} << BUILD\_DATE.day << \textcolor{stringliteral}{" at "} << BUILD\_DATE.hour << \textcolor{stringliteral}{":"} << BUILD\_DATE.minute << \textcolor{stringliteral}{":"} << BUILD\_DATE.second << \textcolor{stringliteral}{" "} << \textcolor{stringliteral}{" (commit "} << GIT\_REVISION << \textcolor{stringliteral}{" on "} << GIT\_BRANCH << \textcolor{stringliteral}{" by "} << GIT\_AUTHOR << \textcolor{stringliteral}{")\(\backslash\)n"};}
+\DoxyCodeLine{120     \textcolor{comment}{// Init memory management}}
+\DoxyCodeLine{121     \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{MemoryManager}} memoryManager(multiboot.get\_mmap());}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     \textcolor{comment}{// Initialise the VESA Driver}}
+\DoxyCodeLine{124     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation}{VideoElectronicsStandardsAssociation}} vesa(multiboot.get\_framebuffer());}
+\DoxyCodeLine{125     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDriver}{VideoDriver}}* videoDriver = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDriver}{VideoDriver}}*)\&vesa;}
+\DoxyCodeLine{126     videoDriver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDriver_ac067543429b5dc0cd408951a1d57a7f9}{set\_mode}}((\textcolor{keywordtype}{int})multiboot.get\_framebuffer()-\/>common.framebuffer\_width,}
+\DoxyCodeLine{127                           (int)multiboot.get\_framebuffer()-\/>common.framebuffer\_height,}
+\DoxyCodeLine{128                           (int)multiboot.get\_framebuffer()-\/>common.framebuffer\_bpp);}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130     \textcolor{comment}{// Initialise Console}}
+\DoxyCodeLine{131     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole}{VESABootConsole}} console(\&vesa);}
+\DoxyCodeLine{132     console.clear();}
+\DoxyCodeLine{133     console.print\_logo();}
 \DoxyCodeLine{134 }
-\DoxyCodeLine{135     \textcolor{comment}{// Check the multiboot flags}}
-\DoxyCodeLine{136     cout << \textcolor{stringliteral}{"Checking Multiboot Flags"};}
-\DoxyCodeLine{137     \textcolor{keywordflow}{if}(!multiboot.check\_flags(\&cout))}
-\DoxyCodeLine{138         \textcolor{keyword}{asm}(\textcolor{stringliteral}{"hlt"});}
-\DoxyCodeLine{139     cout << \textcolor{stringliteral}{"[ DONE ]\(\backslash\)n"};}
-\DoxyCodeLine{140 }
-\DoxyCodeLine{141     \textcolor{comment}{// Where the areas should start}}
-\DoxyCodeLine{142     cout.set\_cursor(cout.m\_cursor\_x, cout.m\_cursor\_y + 1); \textcolor{comment}{//Move the cursor down one (so the header is not overwritten}}
-\DoxyCodeLine{143     uint32\_t areaStart = cout.m\_cursor\_y;}
-\DoxyCodeLine{144 }
-\DoxyCodeLine{145     \textcolor{comment}{// Make the system setup stream}}
-\DoxyCodeLine{146     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} systemSetupHeader(\&console, 0, areaStart, console.width(), 1, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{147     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} systemSetupHeaderStream(\&systemSetupHeader);}
-\DoxyCodeLine{148     systemSetupHeaderStream << \textcolor{stringliteral}{"Setting up system"};}
+\DoxyCodeLine{135     \textcolor{comment}{// Create a stream for the console}}
+\DoxyCodeLine{136     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} mainConsoleArea(\&console, 0, 1, console.width(), console.height(), \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1aedf9d37eb3f039278f7b8c58b6b3377d}{ConsoleColour::DarkGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{137     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} cout(\&mainConsoleArea);}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139     \textcolor{keywordflow}{if}(magic == \mbox{\hyperlink{multiboot_8h_a18088e9abdbc843745e5e59973481475}{MULTIBOOT2\_BOOTLOADER\_MAGIC}})}
+\DoxyCodeLine{140         cout << \textcolor{stringliteral}{"Multiboot2 Bootloader Detected\(\backslash\)n"};}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{143 }
+\DoxyCodeLine{144     \textcolor{comment}{// Print the header}}
+\DoxyCodeLine{145     \mbox{\hyperlink{kernel_8cpp_a39e7de5bf50d07f450b5d5533a6874b4}{print\_boot\_header}}(\&console);}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{147     \textcolor{comment}{// Print the build info}}
+\DoxyCodeLine{148     cout << \textcolor{stringliteral}{"BUILD INFO: "} << VERSION\_NAME << \textcolor{stringliteral}{" on "} << BUILD\_DATE.year << \textcolor{stringliteral}{"-\/"} << BUILD\_DATE.month << \textcolor{stringliteral}{"-\/"} << BUILD\_DATE.day << \textcolor{stringliteral}{" at "} << BUILD\_DATE.hour << \textcolor{stringliteral}{":"} << BUILD\_DATE.minute << \textcolor{stringliteral}{":"} << BUILD\_DATE.second << \textcolor{stringliteral}{" "} << \textcolor{stringliteral}{" (commit "} << GIT\_REVISION << \textcolor{stringliteral}{" on "} << GIT\_BRANCH << \textcolor{stringliteral}{" by "} << GIT\_AUTHOR << \textcolor{stringliteral}{")\(\backslash\)n"};}
 \DoxyCodeLine{149 }
-\DoxyCodeLine{150     \textcolor{comment}{//Setup GDT}}
-\DoxyCodeLine{151     \mbox{\hyperlink{classmaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}} gdt(multibootHeader);}
-\DoxyCodeLine{152     cout << \textcolor{stringliteral}{"-\/-\/ Set Up GDT\(\backslash\)n"};}
-\DoxyCodeLine{153     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{154 }
-\DoxyCodeLine{155     \textcolor{comment}{// Print that the memory has been set up}}
-\DoxyCodeLine{156     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Memory Management\(\backslash\)n"};}
-\DoxyCodeLine{157     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{150     \textcolor{comment}{// Where the areas should start}}
+\DoxyCodeLine{151     cout.set\_cursor(cout.m\_cursor\_x, cout.m\_cursor\_y + 1); \textcolor{comment}{//Move the cursor down one (so the header is not overwritten}}
+\DoxyCodeLine{152     uint32\_t areaStart = cout.m\_cursor\_y;}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154     \textcolor{comment}{// Make the system setup stream}}
+\DoxyCodeLine{155     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} systemSetupHeader(\&console, 0, areaStart, console.width(), 1, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{156     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} systemSetupHeaderStream(\&systemSetupHeader);}
+\DoxyCodeLine{157     systemSetupHeaderStream << \textcolor{stringliteral}{"Setting up system"};}
 \DoxyCodeLine{158 }
-\DoxyCodeLine{159     \mbox{\hyperlink{classmaxOS_1_1system_1_1ThreadManager}{ThreadManager}} threadManager;}
-\DoxyCodeLine{160     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Thread Management\(\backslash\)n"};}
-\DoxyCodeLine{161     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{162 }
-\DoxyCodeLine{163     \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}} interrupts(0x20, \&gdt, \&threadManager, \&cout);            \textcolor{comment}{//Instantiate the function}}
-\DoxyCodeLine{164     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Interrupts\(\backslash\)n"};}
-\DoxyCodeLine{165     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{166 }
-\DoxyCodeLine{167     \mbox{\hyperlink{classmaxOS_1_1system_1_1SyscallHandler}{SyscallHandler}} syscalls(\&interrupts, 0x80);                               \textcolor{comment}{//Instantiate the function}}
-\DoxyCodeLine{168     cout << \textcolor{stringliteral}{"-\/-\/ Set Up System Calls\(\backslash\)n"};}
-\DoxyCodeLine{169     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{170 }
-\DoxyCodeLine{171     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
-\DoxyCodeLine{172     systemSetupHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
-\DoxyCodeLine{173 }
-\DoxyCodeLine{174     \textcolor{comment}{// Make the device setup stream}}
-\DoxyCodeLine{175     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} deviceSetupHeader(\&console, 0, cout.m\_cursor\_y, console.width(), 1, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{176     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} deviceSetupHeaderStream(\&deviceSetupHeader);}
-\DoxyCodeLine{177     deviceSetupHeaderStream << \textcolor{stringliteral}{"Setting up devices"};}
-\DoxyCodeLine{178     }
-\DoxyCodeLine{179     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager}{DriverManager}} driverManager;}
-\DoxyCodeLine{180 }
-\DoxyCodeLine{181     \textcolor{comment}{//Keyboard}}
-\DoxyCodeLine{182     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{KeyboardDriver}} keyboard(\&interrupts);}
-\DoxyCodeLine{183     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{KeyboardInterpreterEN\_US}} keyboardInterpreter;}
-\DoxyCodeLine{184     keyboard.connect\_input\_stream\_event\_handler(\&keyboardInterpreter);}
-\DoxyCodeLine{185     driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a198666c85006f43a9c1369efc97ef2df}{add\_driver}}(\&keyboard);}
-\DoxyCodeLine{186     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Keyboard\(\backslash\)n"};}
-\DoxyCodeLine{187     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{188 }
-\DoxyCodeLine{189     \textcolor{comment}{//Mouse}}
-\DoxyCodeLine{190     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1peripherals_1_1MouseDriver}{MouseDriver}} mouse(\&interrupts);}
-\DoxyCodeLine{191     driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a198666c85006f43a9c1369efc97ef2df}{add\_driver}}(\&mouse);}
-\DoxyCodeLine{192     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Mouse\(\backslash\)n"};}
-\DoxyCodeLine{193     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{194 }
-\DoxyCodeLine{195     \textcolor{comment}{//Clock}}
-\DoxyCodeLine{196     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}} kernelClock(\&interrupts, 1);}
-\DoxyCodeLine{197     driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a198666c85006f43a9c1369efc97ef2df}{add\_driver}}(\&kernelClock);}
-\DoxyCodeLine{198     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Clock\(\backslash\)n"};}
-\DoxyCodeLine{199     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{200 }
-\DoxyCodeLine{201     \textcolor{comment}{//Driver Selectors}}
-\DoxyCodeLine{202     \mbox{\hyperlink{classmaxOS_1_1common_1_1Vector}{Vector<DriverSelector*>}} driverSelectors;}
+\DoxyCodeLine{159     \textcolor{comment}{//Setup GDT}}
+\DoxyCodeLine{160     \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}} gdt(multiboot.get\_basic\_meminfo());}
+\DoxyCodeLine{161     cout << \textcolor{stringliteral}{"-\/-\/ Set Up GDT\(\backslash\)n"};}
+\DoxyCodeLine{162     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164     \textcolor{comment}{// Print that the memory has been set up}}
+\DoxyCodeLine{165     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Memory Management\(\backslash\)n"};}
+\DoxyCodeLine{166     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168     \mbox{\hyperlink{classMaxOS_1_1system_1_1ThreadManager}{ThreadManager}} threadManager;}
+\DoxyCodeLine{169     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Thread Management\(\backslash\)n"};}
+\DoxyCodeLine{170     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}} interrupts(0x20, \&gdt, \&threadManager, \&cout);            \textcolor{comment}{//Instantiate the function}}
+\DoxyCodeLine{173     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Interrupts\(\backslash\)n"};}
+\DoxyCodeLine{174     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176     \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallHandler}{SyscallHandler}} syscalls(\&interrupts, 0x80);                               \textcolor{comment}{//Instantiate the function}}
+\DoxyCodeLine{177     cout << \textcolor{stringliteral}{"-\/-\/ Set Up System Calls\(\backslash\)n"};}
+\DoxyCodeLine{178     systemSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{181     systemSetupHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183     \textcolor{comment}{// Make the device setup stream}}
+\DoxyCodeLine{184     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} deviceSetupHeader(\&console, 0, cout.m\_cursor\_y, console.width(), 1, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{185     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} deviceSetupHeaderStream(\&deviceSetupHeader);}
+\DoxyCodeLine{186     deviceSetupHeaderStream << \textcolor{stringliteral}{"Setting up devices"};}
+\DoxyCodeLine{187     }
+\DoxyCodeLine{188     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager}{DriverManager}} driverManager;}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190     \textcolor{comment}{//Keyboard}}
+\DoxyCodeLine{191     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{KeyboardDriver}} keyboard(\&interrupts);}
+\DoxyCodeLine{192     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{KeyboardInterpreterEN\_US}} keyboardInterpreter;}
+\DoxyCodeLine{193     keyboard.connect\_input\_stream\_event\_handler(\&keyboardInterpreter);}
+\DoxyCodeLine{194     driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_a198666c85006f43a9c1369efc97ef2df}{add\_driver}}(\&keyboard);}
+\DoxyCodeLine{195     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Keyboard\(\backslash\)n"};}
+\DoxyCodeLine{196     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198     \textcolor{comment}{//Mouse}}
+\DoxyCodeLine{199     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1MouseDriver}{MouseDriver}} mouse(\&interrupts);}
+\DoxyCodeLine{200     driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_a198666c85006f43a9c1369efc97ef2df}{add\_driver}}(\&mouse);}
+\DoxyCodeLine{201     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Mouse\(\backslash\)n"};}
+\DoxyCodeLine{202     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
 \DoxyCodeLine{203 }
-\DoxyCodeLine{204     \textcolor{comment}{//Make the stream on the side for the PCI}}
-\DoxyCodeLine{205     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} pciConsoleArea(\&console, console.width() -\/ 45, areaStart+1, 45, console.height()/2, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa49158f8ed070e8487c5ebbbbc026326}{ConsoleColour::DarkGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{206     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} pciConsoleStream(\&pciConsoleArea);}
-\DoxyCodeLine{207     console.put\_string(console.width() -\/ 45, areaStart, \textcolor{stringliteral}{"                 PCI Devices                 "}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{208     }
-\DoxyCodeLine{209     \textcolor{comment}{//PCI}}
-\DoxyCodeLine{210     \mbox{\hyperlink{classmaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController}{PeripheralComponentInterconnectController}} PCIController(\&pciConsoleStream);}
-\DoxyCodeLine{211     driverSelectors.\mbox{\hyperlink{classmaxOS_1_1common_1_1Vector_a5d9205ecc8f7e335ba39e082c3046047}{push\_back}}(\&PCIController);}
-\DoxyCodeLine{212     cout << \textcolor{stringliteral}{"-\/-\/ Set Up PCI\(\backslash\)n"};}
-\DoxyCodeLine{213     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{214 }
-\DoxyCodeLine{215     \textcolor{comment}{//USB}}
-\DoxyCodeLine{216     \textcolor{comment}{//UniversalSerialBusController USBController(\&nullStream);}}
-\DoxyCodeLine{217     \textcolor{comment}{//driverSelectors.pushBack(\&USBController);}}
-\DoxyCodeLine{218     \textcolor{comment}{//cout << "-\/-\/ Set Up USB\(\backslash\)n";}}
-\DoxyCodeLine{219     \textcolor{comment}{//deviceSetupHeaderStream << ".";}}
-\DoxyCodeLine{220 }
-\DoxyCodeLine{221     \textcolor{comment}{// Find the drivers}}
-\DoxyCodeLine{222     cout << \textcolor{stringliteral}{"-\/-\/ Finding Drivers"};}
-\DoxyCodeLine{223     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Vector<DriverSelector*>::iterator}} selector = driverSelectors.\mbox{\hyperlink{classmaxOS_1_1common_1_1Vector_a18339866e1fc8558dc64e8e314526a01}{begin}}(); selector != driverSelectors.\mbox{\hyperlink{classmaxOS_1_1common_1_1Vector_aee2d753281fa4575eef209c80c3a4aba}{end}}(); selector++)}
-\DoxyCodeLine{224     \{}
-\DoxyCodeLine{225         cout << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{226         (*selector)-\/>\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverSelector_a58b9eb7f96d223fde9417d4682fa12c1}{select\_drivers}}(\&driverManager, \&interrupts);}
-\DoxyCodeLine{227     \}}
-\DoxyCodeLine{228     cout << \textcolor{stringliteral}{" Found\(\backslash\)n"};}
-\DoxyCodeLine{229     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{230 }
-\DoxyCodeLine{231     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
-\DoxyCodeLine{232     deviceSetupHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
-\DoxyCodeLine{233 }
-\DoxyCodeLine{234     \textcolor{comment}{// Make the activation stream}}
-\DoxyCodeLine{235     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} activationHeader(\&console, 0, cout.m\_cursor\_y, console.width(), 1, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{236     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} activationHeaderStream(\&activationHeader);}
-\DoxyCodeLine{237     activationHeaderStream << \textcolor{stringliteral}{"Initializing Hardware"};}
-\DoxyCodeLine{238 }
-\DoxyCodeLine{239     \textcolor{comment}{// Resetting devices}}
-\DoxyCodeLine{240     cout << \textcolor{stringliteral}{"-\/-\/ Resetting Devices"};}
-\DoxyCodeLine{241     uint32\_t resetWaitTime = 0;}
-\DoxyCodeLine{242     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Vector<Driver*>::iterator}} driver = driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}.begin(); driver != driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}.end(); driver++)}
-\DoxyCodeLine{243     \{}
-\DoxyCodeLine{244         cout << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{245         uint32\_t waitTime = (*driver)-\/>reset();}
-\DoxyCodeLine{246 }
-\DoxyCodeLine{247         \textcolor{comment}{// If the wait time is longer than the current longest wait time, set it as the new longest wait time}}
-\DoxyCodeLine{248         \textcolor{keywordflow}{if}(waitTime > resetWaitTime)}
-\DoxyCodeLine{249             resetWaitTime = waitTime;}
-\DoxyCodeLine{250     \}}
-\DoxyCodeLine{251     cout << \textcolor{stringliteral}{" Reset\(\backslash\)n"};}
-\DoxyCodeLine{252     activationHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{253 }
-\DoxyCodeLine{254     \textcolor{comment}{// Interrupts}}
-\DoxyCodeLine{255     interrupts.activate();}
-\DoxyCodeLine{256     kernelClock.delay(resetWaitTime);                                            \textcolor{comment}{//Wait for the devices to reset (has to be done after interrupts are activated otherwise the clock interrupt wont trigger)}}
-\DoxyCodeLine{257     cout << \textcolor{stringliteral}{"-\/-\/ Activated Interrupts\(\backslash\)n"};}
-\DoxyCodeLine{258     activationHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{259 }
-\DoxyCodeLine{260     \textcolor{comment}{// Initialise the drivers}}
-\DoxyCodeLine{261     cout << \textcolor{stringliteral}{"-\/-\/ Initializing Devices"};}
-\DoxyCodeLine{262     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Vector<Driver*>::iterator}} driver = driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}.begin(); driver != driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}.end(); driver++)}
-\DoxyCodeLine{263     \{}
-\DoxyCodeLine{264         cout << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{265         (*driver)-\/>initialise();}
-\DoxyCodeLine{266     \}}
-\DoxyCodeLine{267     cout << \textcolor{stringliteral}{" Initialised\(\backslash\)n"};}
-\DoxyCodeLine{268     activationHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{269 }
-\DoxyCodeLine{270     \textcolor{comment}{// activate the drivers}}
-\DoxyCodeLine{271     cout << \textcolor{stringliteral}{"-\/-\/ Activating Devices"};}
-\DoxyCodeLine{272     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classmaxOS_1_1common_1_1Rectangle}{Vector<Driver*>::iterator}} driver = driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}.begin(); driver != driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}.end(); driver++)}
-\DoxyCodeLine{273     \{}
-\DoxyCodeLine{274         cout << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{275         (*driver)-\/>activate();}
-\DoxyCodeLine{276     \}}
-\DoxyCodeLine{277     cout << \textcolor{stringliteral}{" Activated\(\backslash\)n"};}
-\DoxyCodeLine{278     activationHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{279 }
-\DoxyCodeLine{280     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
-\DoxyCodeLine{281     activationHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
-\DoxyCodeLine{282 }
-\DoxyCodeLine{283     \textcolor{comment}{// Make the network setup stream}}
-\DoxyCodeLine{284     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} networkSetupHeader(\&console, 0, cout.m\_cursor\_y, console.width(), 1, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{285     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} networkSetupHeaderStream(\&networkSetupHeader);}
-\DoxyCodeLine{286     networkSetupHeaderStream << \textcolor{stringliteral}{"Setting up network"};}
-\DoxyCodeLine{287 }
-\DoxyCodeLine{288     \textcolor{comment}{// Make the stream on the side for the network}}
-\DoxyCodeLine{289     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} networkConsoleArea(\&console, console.width() -\/ 40, 2 + console.height()/2, 45,}
-\DoxyCodeLine{290         console.height()/2, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188aa49158f8ed070e8487c5ebbbbc026326}{ConsoleColour::DarkGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{291     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} networkConsoleStream(\&networkConsoleArea);}
-\DoxyCodeLine{292     console.put\_string(console.width() -\/ 40, 1 + console.height() / 2,}
-\DoxyCodeLine{293                        \textcolor{stringliteral}{"                 Network                    "},}
-\DoxyCodeLine{294                        \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188ae225c9789f447ac9b72a085fe001e393}{ConsoleColour::Black}});}
-\DoxyCodeLine{295 }
-\DoxyCodeLine{296     \textcolor{comment}{// Get the driver}}
-\DoxyCodeLine{297     \mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver}{EthernetDriver}}* ethernetDriver = (\mbox{\hyperlink{classmaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver}{EthernetDriver}}*)driverManager.\mbox{\hyperlink{classmaxOS_1_1drivers_1_1DriverManager_a32a9a39f7b4e0ee64f188549bfdc9f49}{drivers}}[4];}
-\DoxyCodeLine{298     ethernetDriver-\/>\mbox{\hyperlink{classmaxOS_1_1drivers_1_1Driver_a154bb3cbd7d9fd21a67d082bc959089e}{m\_driver\_message\_stream}} = \&networkConsoleStream;}
-\DoxyCodeLine{299     cout << \textcolor{stringliteral}{"Got Ethernet Driver: "} << ethernetDriver-\/>\mbox{\hyperlink{classmaxOS_1_1drivers_1_1Driver_a65b06f2917f7a781e68f3748e81806b6}{get\_device\_name}}() << \textcolor{stringliteral}{"\(\backslash\)n"};}
-\DoxyCodeLine{300     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{301 }
-\DoxyCodeLine{302     \textcolor{comment}{// Ethernet Frame Handler}}
-\DoxyCodeLine{303     \mbox{\hyperlink{classmaxOS_1_1net_1_1EthernetFrameHandler}{EthernetFrameHandler}} ethernetFrameHandler(ethernetDriver, \&networkConsoleStream);}
-\DoxyCodeLine{304     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Ethernet Frame Handler\(\backslash\)n"};}
-\DoxyCodeLine{305     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{306 }
-\DoxyCodeLine{307     \textcolor{comment}{// IPv4 (using qemu's default network settings)}}
-\DoxyCodeLine{308     \mbox{\hyperlink{namespacemaxOS_1_1net_a8c823821695194f776d83809d63dc725}{SubnetMask}} subnetMask = InternetProtocolHandler::CreateSubnetMask(255, 255, 255, 0);}
-\DoxyCodeLine{309     \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}} defaultGateway = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 2);}
-\DoxyCodeLine{310     \mbox{\hyperlink{namespacemaxOS_1_1net_a6160a1724f91d5d2caafdde3185f5e32}{InternetProtocolAddress}} ipAddress = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 15);}
-\DoxyCodeLine{311     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetProtocolHandler}{InternetProtocolHandler}} internetProtocolHandler(\&ethernetFrameHandler, ipAddress, defaultGateway, subnetMask, \&networkConsoleStream);}
-\DoxyCodeLine{312     cout << \textcolor{stringliteral}{"-\/-\/ Set Up IPv4\(\backslash\)n"};}
-\DoxyCodeLine{313     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{314 }
-\DoxyCodeLine{315     \textcolor{comment}{// ARP}}
-\DoxyCodeLine{316     \mbox{\hyperlink{classmaxOS_1_1net_1_1AddressResolutionProtocol}{AddressResolutionProtocol}} arp(\&ethernetFrameHandler, \&internetProtocolHandler, \&networkConsoleStream);}
-\DoxyCodeLine{317     cout << \textcolor{stringliteral}{"-\/-\/ Set Up ARP\(\backslash\)n"};}
-\DoxyCodeLine{318     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{319 }
-\DoxyCodeLine{320     \textcolor{comment}{// ICMP}}
-\DoxyCodeLine{321     \mbox{\hyperlink{classmaxOS_1_1net_1_1InternetControlMessageProtocol}{InternetControlMessageProtocol}} icmp(\&internetProtocolHandler, \&networkConsoleStream);}
-\DoxyCodeLine{322     cout << \textcolor{stringliteral}{"-\/-\/ Set Up ICMP\(\backslash\)n"};}
-\DoxyCodeLine{323     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{324 }
-\DoxyCodeLine{325     \textcolor{comment}{// TCP}}
-\DoxyCodeLine{326     \mbox{\hyperlink{classmaxOS_1_1net_1_1TransmissionControlProtocolHandler}{TransmissionControlProtocolHandler}} tcp(\&internetProtocolHandler, \&networkConsoleStream);}
-\DoxyCodeLine{327     cout << \textcolor{stringliteral}{"-\/-\/ Set Up TCP\(\backslash\)n"};}
-\DoxyCodeLine{328     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{329 }
-\DoxyCodeLine{330     \textcolor{comment}{// UDP}}
-\DoxyCodeLine{331     \mbox{\hyperlink{classmaxOS_1_1net_1_1UserDatagramProtocolHandler}{UserDatagramProtocolHandler}} udp(\&internetProtocolHandler, \&networkConsoleStream);}
-\DoxyCodeLine{332     cout << \textcolor{stringliteral}{"-\/-\/ Set Up UDP\(\backslash\)n"};}
-\DoxyCodeLine{333     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
-\DoxyCodeLine{334     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
-\DoxyCodeLine{335     networkSetupHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
-\DoxyCodeLine{336 }
-\DoxyCodeLine{337 \textcolor{preprocessor}{\#define GUI}}
-\DoxyCodeLine{338 \textcolor{preprocessor}{\#ifdef GUI}}
-\DoxyCodeLine{339     \mbox{\hyperlink{classmaxOS_1_1gui_1_1Desktop}{Desktop}} desktop(videoDriver);}
-\DoxyCodeLine{340     mouse.connect\_event\_handler(\&desktop);}
-\DoxyCodeLine{341     keyboardInterpreter.\mbox{\hyperlink{classmaxOS_1_1common_1_1EventManager_ad92d3d8264a5fe4a0cddb58e249c7670}{connect\_event\_handler}}(\&desktop);}
-\DoxyCodeLine{342     kernelClock.connect\_event\_handler(\&desktop);}
-\DoxyCodeLine{343 }
-\DoxyCodeLine{344     \mbox{\hyperlink{classmaxOS_1_1gui_1_1Window}{Window}} testWindow(150,10, 200, 150, \textcolor{stringliteral}{"Test Window"});}
-\DoxyCodeLine{345     \mbox{\hyperlink{classmaxOS_1_1gui_1_1widgets_1_1InputBox}{widgets::InputBox}} testInputBox(10, 10, 150, 20, \textcolor{stringliteral}{"test"});}
-\DoxyCodeLine{346 }
-\DoxyCodeLine{347     \textcolor{keyword}{class }InputBoxStream : \textcolor{keyword}{public} \mbox{\hyperlink{classmaxOS_1_1gui_1_1widgets_1_1InputBoxEventHandler}{widgets::InputBoxEventHandler}}}
-\DoxyCodeLine{348     \{}
-\DoxyCodeLine{349         \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}}* stream;}
-\DoxyCodeLine{350         \textcolor{keyword}{public}:}
-\DoxyCodeLine{351         InputBoxStream(\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}}* stream)}
-\DoxyCodeLine{352         \{}
-\DoxyCodeLine{353             this-\/>stream = stream;}
-\DoxyCodeLine{354         \}}
-\DoxyCodeLine{355         \string~InputBoxStream()}
-\DoxyCodeLine{356         \{}
-\DoxyCodeLine{357             this-\/>stream = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{358         \}}
-\DoxyCodeLine{359 }
-\DoxyCodeLine{360         \textcolor{keywordtype}{void} \mbox{\hyperlink{classmaxOS_1_1gui_1_1widgets_1_1InputBoxEventHandler_a8ba8b4af76b74b4561a1e3702a75b18b}{on\_input\_box\_text\_changed}}(\textcolor{keywordtype}{string} newText)}
+\DoxyCodeLine{204     \textcolor{comment}{//Clock}}
+\DoxyCodeLine{205     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}} kernelClock(\&interrupts, 1);}
+\DoxyCodeLine{206     driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_a198666c85006f43a9c1369efc97ef2df}{add\_driver}}(\&kernelClock);}
+\DoxyCodeLine{207     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Clock\(\backslash\)n"};}
+\DoxyCodeLine{208     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210     \textcolor{comment}{//Driver Selectors}}
+\DoxyCodeLine{211     \mbox{\hyperlink{classMaxOS_1_1common_1_1Vector}{Vector<DriverSelector*>}} driverSelectors;}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213     \textcolor{comment}{//Make the stream on the side for the PCI}}
+\DoxyCodeLine{214     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} pciConsoleArea(\&console, console.width() -\/ 45, areaStart+1, 45, console.height()/2, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1aedf9d37eb3f039278f7b8c58b6b3377d}{ConsoleColour::DarkGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{215     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} pciConsoleStream(\&pciConsoleArea);}
+\DoxyCodeLine{216     console.put\_string(console.width() -\/ 45, areaStart, \textcolor{stringliteral}{"                 PCI Devices                 "}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{217     }
+\DoxyCodeLine{218     \textcolor{comment}{//PCI}}
+\DoxyCodeLine{219     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController}{PeripheralComponentInterconnectController}} PCIController(\&pciConsoleStream);}
+\DoxyCodeLine{220     driverSelectors.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_ac753563317978358eb995f9eea7c1558}{push\_back}}(\&PCIController);}
+\DoxyCodeLine{221     cout << \textcolor{stringliteral}{"-\/-\/ Set Up PCI\(\backslash\)n"};}
+\DoxyCodeLine{222     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224     \textcolor{comment}{//USB}}
+\DoxyCodeLine{225     \textcolor{comment}{//UniversalSerialBusController USBController(\&nullStream);}}
+\DoxyCodeLine{226     \textcolor{comment}{//driverSelectors.pushBack(\&USBController);}}
+\DoxyCodeLine{227     \textcolor{comment}{//cout << "-\/-\/ Set Up USB\(\backslash\)n";}}
+\DoxyCodeLine{228     \textcolor{comment}{//deviceSetupHeaderStream << ".";}}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230     \textcolor{comment}{// Find the drivers}}
+\DoxyCodeLine{231     cout << \textcolor{stringliteral}{"-\/-\/ Finding Drivers"};}
+\DoxyCodeLine{232     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<DriverSelector*>::iterator}} selector = driverSelectors.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_ad5396c800efe8cc962b22d691cb000ce}{begin}}(); selector != driverSelectors.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a0b04f529dabd1d7c51f20c2db0aea71b}{end}}(); selector++)}
+\DoxyCodeLine{233     \{}
+\DoxyCodeLine{234         cout << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{235         (*selector)-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverSelector_a58b9eb7f96d223fde9417d4682fa12c1}{select\_drivers}}(\&driverManager, \&interrupts);}
+\DoxyCodeLine{236     \}}
+\DoxyCodeLine{237     cout << \textcolor{stringliteral}{" Found\(\backslash\)n"};}
+\DoxyCodeLine{238     deviceSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{241     deviceSetupHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
+\DoxyCodeLine{242 }
+\DoxyCodeLine{243     \textcolor{comment}{// Make the activation stream}}
+\DoxyCodeLine{244     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} activationHeader(\&console, 0, cout.m\_cursor\_y, console.width(), 1, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{245     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} activationHeaderStream(\&activationHeader);}
+\DoxyCodeLine{246     activationHeaderStream << \textcolor{stringliteral}{"Initializing Hardware"};}
+\DoxyCodeLine{247 }
+\DoxyCodeLine{248     \textcolor{comment}{// Resetting devices}}
+\DoxyCodeLine{249     cout << \textcolor{stringliteral}{"-\/-\/ Resetting Devices"};}
+\DoxyCodeLine{250     uint32\_t resetWaitTime = 0;}
+\DoxyCodeLine{251     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<Driver*>::iterator}} driver = driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}.begin(); driver != driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}.end(); driver++)}
+\DoxyCodeLine{252     \{}
+\DoxyCodeLine{253         cout << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{254         uint32\_t waitTime = (*driver)-\/>reset();}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256         \textcolor{comment}{// If the wait time is longer than the current longest wait time, set it as the new longest wait time}}
+\DoxyCodeLine{257         \textcolor{keywordflow}{if}(waitTime > resetWaitTime)}
+\DoxyCodeLine{258             resetWaitTime = waitTime;}
+\DoxyCodeLine{259     \}}
+\DoxyCodeLine{260     cout << \textcolor{stringliteral}{" Reset\(\backslash\)n"};}
+\DoxyCodeLine{261     activationHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{262 }
+\DoxyCodeLine{263     \textcolor{comment}{// Interrupts}}
+\DoxyCodeLine{264     interrupts.activate();}
+\DoxyCodeLine{265     kernelClock.delay(resetWaitTime);                                            \textcolor{comment}{//Wait for the devices to reset (has to be done after interrupts are activated otherwise the clock interrupt wont trigger)}}
+\DoxyCodeLine{266     cout << \textcolor{stringliteral}{"-\/-\/ Activated Interrupts\(\backslash\)n"};}
+\DoxyCodeLine{267     activationHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269     \textcolor{comment}{// Initialise the drivers}}
+\DoxyCodeLine{270     cout << \textcolor{stringliteral}{"-\/-\/ Initializing Devices"};}
+\DoxyCodeLine{271     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<Driver*>::iterator}} driver = driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}.begin(); driver != driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}.end(); driver++)}
+\DoxyCodeLine{272     \{}
+\DoxyCodeLine{273         cout << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{274         (*driver)-\/>initialise();}
+\DoxyCodeLine{275     \}}
+\DoxyCodeLine{276     cout << \textcolor{stringliteral}{" Initialised\(\backslash\)n"};}
+\DoxyCodeLine{277     activationHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279     \textcolor{comment}{// activate the drivers}}
+\DoxyCodeLine{280     cout << \textcolor{stringliteral}{"-\/-\/ Activating Devices"};}
+\DoxyCodeLine{281     \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<Driver*>::iterator}} driver = driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}.begin(); driver != driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}.end(); driver++)}
+\DoxyCodeLine{282     \{}
+\DoxyCodeLine{283         cout << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{284         (*driver)-\/>activate();}
+\DoxyCodeLine{285     \}}
+\DoxyCodeLine{286     cout << \textcolor{stringliteral}{" Activated\(\backslash\)n"};}
+\DoxyCodeLine{287     activationHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{288 }
+\DoxyCodeLine{289     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{290     activationHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
+\DoxyCodeLine{291 }
+\DoxyCodeLine{292     \textcolor{comment}{// Make the network setup stream}}
+\DoxyCodeLine{293     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} networkSetupHeader(\&console, 0, cout.m\_cursor\_y, console.width(), 1, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{294     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} networkSetupHeaderStream(\&networkSetupHeader);}
+\DoxyCodeLine{295     networkSetupHeaderStream << \textcolor{stringliteral}{"Setting up network"};}
+\DoxyCodeLine{296 }
+\DoxyCodeLine{297     \textcolor{comment}{// Make the stream on the side for the network}}
+\DoxyCodeLine{298     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} networkConsoleArea(\&console, console.width() -\/ 40, 2 + console.height()/2, 45,}
+\DoxyCodeLine{299         console.height()/2, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1aedf9d37eb3f039278f7b8c58b6b3377d}{ConsoleColour::DarkGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{300     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} networkConsoleStream(\&networkConsoleArea);}
+\DoxyCodeLine{301     console.put\_string(console.width() -\/ 40, 1 + console.height() / 2,}
+\DoxyCodeLine{302                        \textcolor{stringliteral}{"                 Network                    "},}
+\DoxyCodeLine{303                        \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1af744246c41a49c4815fc51b57dcf63e5}{ConsoleColour::Black}});}
+\DoxyCodeLine{304 }
+\DoxyCodeLine{305     \textcolor{comment}{// Get the driver}}
+\DoxyCodeLine{306     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver}{EthernetDriver}}* ethernetDriver = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver}{EthernetDriver}}*)driverManager.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager_ae3513113c9148a5bc989bfc7500903fc}{drivers}}[4];}
+\DoxyCodeLine{307     ethernetDriver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_ac6b2604f26f9dc56c6e4cddb4e699a26}{m\_driver\_message\_stream}} = \&networkConsoleStream;}
+\DoxyCodeLine{308     cout << \textcolor{stringliteral}{"Got Ethernet Driver: "} << ethernetDriver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a65b06f2917f7a781e68f3748e81806b6}{get\_device\_name}}() << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{309     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{310 }
+\DoxyCodeLine{311     \textcolor{comment}{// Ethernet Frame Handler}}
+\DoxyCodeLine{312     \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler}{EthernetFrameHandler}} ethernetFrameHandler(ethernetDriver, \&networkConsoleStream);}
+\DoxyCodeLine{313     cout << \textcolor{stringliteral}{"-\/-\/ Set Up Ethernet Frame Handler\(\backslash\)n"};}
+\DoxyCodeLine{314     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{315 }
+\DoxyCodeLine{316     \textcolor{comment}{// IPv4 (using qemu's default network settings)}}
+\DoxyCodeLine{317     \mbox{\hyperlink{namespaceMaxOS_1_1net_a675fed9f30ec224711b40893d3f784d6}{SubnetMask}} subnetMask = InternetProtocolHandler::CreateSubnetMask(255, 255, 255, 0);}
+\DoxyCodeLine{318     \mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{InternetProtocolAddress}} defaultGateway = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 2);}
+\DoxyCodeLine{319     \mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{InternetProtocolAddress}} ipAddress = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 15);}
+\DoxyCodeLine{320     \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolHandler}{InternetProtocolHandler}} internetProtocolHandler(\&ethernetFrameHandler, ipAddress, defaultGateway, subnetMask, \&networkConsoleStream);}
+\DoxyCodeLine{321     cout << \textcolor{stringliteral}{"-\/-\/ Set Up IPv4\(\backslash\)n"};}
+\DoxyCodeLine{322     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{323 }
+\DoxyCodeLine{324     \textcolor{comment}{// ARP}}
+\DoxyCodeLine{325     \mbox{\hyperlink{classMaxOS_1_1net_1_1AddressResolutionProtocol}{AddressResolutionProtocol}} arp(\&ethernetFrameHandler, \&internetProtocolHandler, \&networkConsoleStream);}
+\DoxyCodeLine{326     cout << \textcolor{stringliteral}{"-\/-\/ Set Up ARP\(\backslash\)n"};}
+\DoxyCodeLine{327     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{328 }
+\DoxyCodeLine{329     \textcolor{comment}{// ICMP}}
+\DoxyCodeLine{330     \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetControlMessageProtocol}{InternetControlMessageProtocol}} icmp(\&internetProtocolHandler, \&networkConsoleStream);}
+\DoxyCodeLine{331     cout << \textcolor{stringliteral}{"-\/-\/ Set Up ICMP\(\backslash\)n"};}
+\DoxyCodeLine{332     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{333 }
+\DoxyCodeLine{334     \textcolor{comment}{// TCP}}
+\DoxyCodeLine{335     \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler}{TransmissionControlProtocolHandler}} tcp(\&internetProtocolHandler, \&networkConsoleStream);}
+\DoxyCodeLine{336     cout << \textcolor{stringliteral}{"-\/-\/ Set Up TCP\(\backslash\)n"};}
+\DoxyCodeLine{337     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{338 }
+\DoxyCodeLine{339     \textcolor{comment}{// UDP}}
+\DoxyCodeLine{340     \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolHandler}{UserDatagramProtocolHandler}} udp(\&internetProtocolHandler, \&networkConsoleStream);}
+\DoxyCodeLine{341     cout << \textcolor{stringliteral}{"-\/-\/ Set Up UDP\(\backslash\)n"};}
+\DoxyCodeLine{342     networkSetupHeaderStream << \textcolor{stringliteral}{"."};}
+\DoxyCodeLine{343     cout << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{344     networkSetupHeaderStream << \textcolor{stringliteral}{"[ DONE ]"};}
+\DoxyCodeLine{345 }
+\DoxyCodeLine{346 \textcolor{preprocessor}{\#define GUI}}
+\DoxyCodeLine{347 \textcolor{preprocessor}{\#ifdef GUI}}
+\DoxyCodeLine{348     \mbox{\hyperlink{classMaxOS_1_1gui_1_1Desktop}{Desktop}} desktop(videoDriver);}
+\DoxyCodeLine{349     mouse.connect\_event\_handler(\&desktop);}
+\DoxyCodeLine{350     keyboardInterpreter.\mbox{\hyperlink{classMaxOS_1_1common_1_1EventManager_ab8e353bbb4b256d394968a02cc1447ca}{connect\_event\_handler}}(\&desktop);}
+\DoxyCodeLine{351     kernelClock.connect\_event\_handler(\&desktop);}
+\DoxyCodeLine{352 }
+\DoxyCodeLine{353     \mbox{\hyperlink{classMaxOS_1_1gui_1_1Window}{Window}} testWindow(150,10, 200, 150, \textcolor{stringliteral}{"Test Window"});}
+\DoxyCodeLine{354     \mbox{\hyperlink{classMaxOS_1_1gui_1_1widgets_1_1InputBox}{widgets::InputBox}} testInputBox(10, 10, 150, 20, \textcolor{stringliteral}{"test"});}
+\DoxyCodeLine{355 }
+\DoxyCodeLine{356     \textcolor{keyword}{class }InputBoxStream : \textcolor{keyword}{public} \mbox{\hyperlink{classMaxOS_1_1gui_1_1widgets_1_1InputBoxEventHandler}{widgets::InputBoxEventHandler}}}
+\DoxyCodeLine{357     \{}
+\DoxyCodeLine{358         \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}}* stream;}
+\DoxyCodeLine{359         \textcolor{keyword}{public}:}
+\DoxyCodeLine{360         InputBoxStream(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}}* stream)}
 \DoxyCodeLine{361         \{}
-\DoxyCodeLine{362             *stream << \textcolor{stringliteral}{"Input Box Changed: "} << newText << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{362             this-\/>stream = stream;}
 \DoxyCodeLine{363         \}}
-\DoxyCodeLine{364     \};}
-\DoxyCodeLine{365     InputBoxStream inputBoxStream(\&cout);}
-\DoxyCodeLine{366     testInputBox.connect\_event\_handler(\&inputBoxStream);}
-\DoxyCodeLine{367     testWindow.add\_child(\&testInputBox);}
-\DoxyCodeLine{368     desktop.add\_child(\&testWindow);}
-\DoxyCodeLine{369 }
-\DoxyCodeLine{370     \mbox{\hyperlink{classmaxOS_1_1gui_1_1Window}{Window}} testWindow2(350,100, 200, 150, \textcolor{stringliteral}{"Test Window 2"});}
-\DoxyCodeLine{371     desktop.add\_child(\&testWindow2);}
-\DoxyCodeLine{372 }
-\DoxyCodeLine{373 \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{374 }
-\DoxyCodeLine{375     \textcolor{comment}{// Wait}}
-\DoxyCodeLine{376     \textcolor{keywordflow}{while} (\textcolor{keyword}{true});}
-\DoxyCodeLine{377 }
-\DoxyCodeLine{378 \}}
+\DoxyCodeLine{364         \string~InputBoxStream()}
+\DoxyCodeLine{365         \{}
+\DoxyCodeLine{366             this-\/>stream = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{367         \}}
+\DoxyCodeLine{368 }
+\DoxyCodeLine{369         \textcolor{keywordtype}{void} \mbox{\hyperlink{classMaxOS_1_1gui_1_1widgets_1_1InputBoxEventHandler_a8ba8b4af76b74b4561a1e3702a75b18b}{on\_input\_box\_text\_changed}}(\textcolor{keywordtype}{string} newText)}
+\DoxyCodeLine{370         \{}
+\DoxyCodeLine{371             *stream << \textcolor{stringliteral}{"Input Box Changed: "} << newText << \textcolor{stringliteral}{"\(\backslash\)n"};}
+\DoxyCodeLine{372         \}}
+\DoxyCodeLine{373     \};}
+\DoxyCodeLine{374     InputBoxStream inputBoxStream(\&cout);}
+\DoxyCodeLine{375     testInputBox.connect\_event\_handler(\&inputBoxStream);}
+\DoxyCodeLine{376     testWindow.add\_child(\&testInputBox);}
+\DoxyCodeLine{377     desktop.add\_child(\&testWindow);}
+\DoxyCodeLine{378 }
+\DoxyCodeLine{379     \mbox{\hyperlink{classMaxOS_1_1gui_1_1Window}{Window}} testWindow2(350,100, 200, 150, \textcolor{stringliteral}{"Test Window 2"});}
+\DoxyCodeLine{380     desktop.add\_child(\&testWindow2);}
+\DoxyCodeLine{381 }
+\DoxyCodeLine{382 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{383 }
+\DoxyCodeLine{384     \textcolor{comment}{// Wait}}
+\DoxyCodeLine{385     \textcolor{keywordflow}{while} (\textcolor{keyword}{true});}
+\DoxyCodeLine{386 }
+\DoxyCodeLine{387 \}}
 
 \end{DoxyCode}
 
 
-References max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::activate(), max\+O\+S\+::gui\+::\+Desktop\+::add\+\_\+child(), max\+O\+S\+::gui\+::\+Window\+::add\+\_\+child(), max\+O\+S\+::drivers\+::\+Driver\+Manager\+::add\+\_\+driver(), max\+O\+S\+::common\+::\+Vector$<$ Type $>$\+::begin(), max\+O\+S\+::drivers\+::console\+::\+Black, max\+O\+S\+::system\+::\+Multiboot\+::check\+\_\+flags(), max\+O\+S\+::drivers\+::console\+::\+Console\+::clear(), max\+O\+S\+::common\+::\+Event\+Manager$<$ Event\+Type $>$\+::connect\+\_\+event\+\_\+handler(), max\+O\+S\+::common\+::\+Generic\+Input\+Stream\+::connect\+\_\+input\+\_\+stream\+\_\+event\+\_\+handler(), max\+O\+S\+::drivers\+::console\+::\+Dark\+Grey, max\+O\+S\+::drivers\+::clock\+::\+Clock\+::delay(), max\+O\+S\+::drivers\+::\+Driver\+Manager\+::drivers, max\+O\+S\+::common\+::\+Vector$<$ Type $>$\+::end(), max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+boot\+\_\+info(), max\+O\+S\+::drivers\+::\+Driver\+::get\+\_\+device\+\_\+name(), max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::height(), max\+O\+S\+::drivers\+::console\+::\+Light\+Grey, max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+cursor\+\_\+x, max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+cursor\+\_\+y, max\+O\+S\+::drivers\+::\+Driver\+::m\+\_\+driver\+\_\+message\+\_\+stream, print\+\_\+boot\+\_\+header(), max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::print\+\_\+logo(), max\+O\+S\+::common\+::\+Vector$<$ Type $>$\+::push\+\_\+back(), max\+O\+S\+::drivers\+::console\+::\+Console\+::put\+\_\+string(), max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::set\+\_\+cursor(), max\+O\+S\+::drivers\+::video\+::\+Video\+Driver\+::set\+\_\+mode(), and max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::width().
+References \+\_\+kprintf(), Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::activate(), Max\+O\+S\+::gui\+::\+Desktop\+::add\+\_\+child(), Max\+O\+S\+::gui\+::\+Window\+::add\+\_\+child(), Max\+O\+S\+::drivers\+::\+Driver\+Manager\+::add\+\_\+driver(), Max\+O\+S\+::common\+::\+Vector$<$ Type $>$\+::begin(), Max\+O\+S\+::drivers\+::console\+::\+Black, Max\+O\+S\+::drivers\+::console\+::\+Console\+::clear(), multiboot\+\_\+tag\+\_\+framebuffer\+::common, Max\+O\+S\+::common\+::\+Event\+Manager$<$ Event\+Type $>$\+::connect\+\_\+event\+\_\+handler(), Max\+O\+S\+::common\+::\+Generic\+Input\+Stream\+::connect\+\_\+input\+\_\+stream\+\_\+event\+\_\+handler(), Max\+O\+S\+::drivers\+::console\+::\+Dark\+Grey, Max\+O\+S\+::drivers\+::clock\+::\+Clock\+::delay(), Max\+O\+S\+::drivers\+::\+Driver\+Manager\+::drivers, Max\+O\+S\+::common\+::\+Vector$<$ Type $>$\+::end(), multiboot\+\_\+tag\+\_\+framebuffer\+\_\+common\+::framebuffer\+\_\+bpp, multiboot\+\_\+tag\+\_\+framebuffer\+\_\+common\+::framebuffer\+\_\+height, multiboot\+\_\+tag\+\_\+framebuffer\+\_\+common\+::framebuffer\+\_\+width, Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+basic\+\_\+meminfo(), Max\+O\+S\+::drivers\+::\+Driver\+::get\+\_\+device\+\_\+name(), Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+framebuffer(), Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+mmap(), Max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::height(), Max\+O\+S\+::drivers\+::console\+::\+Light\+Grey, Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+cursor\+\_\+x, Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+cursor\+\_\+y, Max\+O\+S\+::drivers\+::\+Driver\+::m\+\_\+driver\+\_\+message\+\_\+stream, M\+U\+L\+T\+I\+B\+O\+O\+T2\+\_\+\+B\+O\+O\+T\+L\+O\+A\+D\+E\+R\+\_\+\+M\+A\+G\+IC, print\+\_\+boot\+\_\+header(), Max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::print\+\_\+logo(), Max\+O\+S\+::common\+::\+Vector$<$ Type $>$\+::push\+\_\+back(), Max\+O\+S\+::drivers\+::console\+::\+Console\+::put\+\_\+string(), Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::set\+\_\+cursor(), Max\+O\+S\+::drivers\+::video\+::\+Video\+Driver\+::set\+\_\+mode(), and Max\+O\+S\+::drivers\+::console\+::\+V\+E\+S\+A\+Boot\+Console\+::width().
 
 \mbox{\Hypertarget{kernel_8cpp_a39e7de5bf50d07f450b5d5533a6874b4}\label{kernel_8cpp_a39e7de5bf50d07f450b5d5533a6874b4}} 
 \index{kernel.cpp@{kernel.cpp}!print\_boot\_header@{print\_boot\_header}}
 \index{print\_boot\_header@{print\_boot\_header}!kernel.cpp@{kernel.cpp}}
 \doxysubsubsection{\texorpdfstring{print\_boot\_header()}{print\_boot\_header()}}
-{\footnotesize\ttfamily void print\+\_\+boot\+\_\+header (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1Console}{Console}} $\ast$}]{console }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void print\+\_\+boot\+\_\+header (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console}{Console}} $\ast$}]{console }\end{DoxyParamCaption})}
 
 
 
-Definition at line 82 of file kernel.\+cpp.
+Definition at line 83 of file kernel.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{82                                         \{}
-\DoxyCodeLine{83 }
-\DoxyCodeLine{84   \textcolor{comment}{// Make the header}}
-\DoxyCodeLine{85   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} consoleHeader(console, 0, 0, console -\/> width(), 1, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188afd7ee2de2c7cc9510ee09b09a6b8e0a0}{ConsoleColour::Blue}}, \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1console_ab70200b3ec8c37a5eaa422873b949188a8a3f7caaa9091ee93f5b0111442596ee}{ConsoleColour::LightGrey}});}
-\DoxyCodeLine{86   \mbox{\hyperlink{classmaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} headerStream(\&consoleHeader);}
-\DoxyCodeLine{87 }
-\DoxyCodeLine{88   \textcolor{comment}{// Calculate the header}}
-\DoxyCodeLine{89   \textcolor{keywordtype}{string} header = \mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}}(\textcolor{stringliteral}{"MaxOS v"}) + \mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}}(VERSION\_STRING) + \textcolor{stringliteral}{" [build "} + \mbox{\hyperlink{namespacemaxOS_a6a3d939df112a32e3a1655b764931088}{string}}(BUILD\_NUMBER) + \textcolor{stringliteral}{"]"};}
-\DoxyCodeLine{90   \textcolor{keywordtype}{int} headerPadding = (console -\/> width() -\/ header.\mbox{\hyperlink{classmaxOS_1_1String_a55ed320512c04ee2d0b446957148cb79}{length}}()) / 2;}
-\DoxyCodeLine{91 }
-\DoxyCodeLine{92   \textcolor{comment}{// Print the headers}}
-\DoxyCodeLine{93   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} = 0; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}} < headerPadding; \mbox{\hyperlink{namespacemaxOS_1_1drivers_1_1peripherals_a9854b786a692cef8357e51059ed90ab4a45ce6c8daf3081e4b64797e319378cb0}{i}}++)}
-\DoxyCodeLine{94         headerStream << \textcolor{stringliteral}{" "};}
-\DoxyCodeLine{95 }
-\DoxyCodeLine{96   headerStream << header;}
-\DoxyCodeLine{97 }
-\DoxyCodeLine{98   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i1 = 0; i1 < headerPadding; ++i1) \{}
-\DoxyCodeLine{99         headerStream << \textcolor{stringliteral}{" "};}
-\DoxyCodeLine{100   \}}
-\DoxyCodeLine{101 }
-\DoxyCodeLine{102 \}}
+\DoxyCodeLine{83                                         \{}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85   \textcolor{comment}{// Make the header}}
+\DoxyCodeLine{86   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}} consoleHeader(console, 0, 0, console -\/> width(), 1, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a25dd4514c0990e53366eb55d6f69d3f3}{ConsoleColour::Blue}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1a8364e4e56e4c68612a78d10b85fa1c46}{ConsoleColour::LightGrey}});}
+\DoxyCodeLine{87   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}} headerStream(\&consoleHeader);}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89   \textcolor{comment}{// Calculate the header}}
+\DoxyCodeLine{90   \textcolor{keywordtype}{string} header = \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}(\textcolor{stringliteral}{"MaxOS v"}) + \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}(VERSION\_STRING) + \textcolor{stringliteral}{" [build "} + \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}(BUILD\_NUMBER) + \textcolor{stringliteral}{"]"};}
+\DoxyCodeLine{91   \textcolor{keywordtype}{int} headerPadding = (console -\/> width() -\/ header.\mbox{\hyperlink{classMaxOS_1_1String_a79366b9ecdbde9701a9acfe0009a5ded}{length}}()) / 2;}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93   \textcolor{comment}{// Print the headers}}
+\DoxyCodeLine{94   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < headerPadding; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{95         headerStream << \textcolor{stringliteral}{" "};}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97   headerStream << header;}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i1 = 0; i1 < headerPadding; ++i1) \{}
+\DoxyCodeLine{100         headerStream << \textcolor{stringliteral}{" "};}
+\DoxyCodeLine{101   \}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103 \}}
 
 \end{DoxyCode}
 
 
-References max\+O\+S\+::drivers\+::console\+::\+Blue, max\+O\+S\+::drivers\+::peripherals\+::i, max\+O\+S\+::\+String\+::length(), and max\+O\+S\+::drivers\+::console\+::\+Light\+Grey.
+References Max\+O\+S\+::drivers\+::console\+::\+Blue, Max\+O\+S\+::drivers\+::peripherals\+::i, Max\+O\+S\+::\+String\+::length(), and Max\+O\+S\+::drivers\+::console\+::\+Light\+Grey.
 
 
 
@@ -473,7 +481,7 @@ Referenced by kernel\+Main().
 
 
 
-Definition at line 69 of file kernel.\+cpp.
+Definition at line 70 of file kernel.\+cpp.
 
 
 
@@ -487,7 +495,7 @@ Referenced by call\+Constructors().
 
 
 
-Definition at line 68 of file kernel.\+cpp.
+Definition at line 69 of file kernel.\+cpp.
 
 
 

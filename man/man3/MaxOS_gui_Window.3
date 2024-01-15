@@ -1,0 +1,456 @@
+.TH "MaxOS::gui::Window" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::gui::Window \- A window that can be moved and resized and contains a widget\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <window\&.h>\fP
+.PP
+Inherits \fBMaxOS::gui::CompositeWidget\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBWindow\fP (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP title_text)"
+.br
+.ti -1c
+.RI "\fBWindow\fP (\fBWidget\fP *containedWidget, \fBstring\fP title_text)"
+.br
+.ti -1c
+.RI "\fB~Window\fP ()"
+.br
+.ti -1c
+.RI "void \fBdraw_self\fP (\fBcommon::GraphicsContext\fP *gc, \fBcommon::Rectangle\fP< int32_t > &area)"
+.br
+.RI "Draws the window and its children\&. "
+.ti -1c
+.RI "void \fBadd_child\fP (\fBWidget\fP *child)"
+.br
+.RI "Adds a child to the window\&. "
+.ti -1c
+.RI "\fBdrivers::peripherals::MouseEventHandler\fP * \fBon_mouse_button_pressed\fP (uint32_t x, uint32_t y, uint8_t button)"
+.br
+.RI "Handles the mouse button being pressed\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBframe_thickness\fP { 5 }"
+.br
+.ti -1c
+.RI "uint8_t \fBtitle_bar_height\fP { 10 }"
+.br
+.ti -1c
+.RI "\fBcommon::Colour\fP \fBarea_colour\fP"
+.br
+.ti -1c
+.RI "\fBcommon::Colour\fP \fBframe_colour\fP"
+.br
+.ti -1c
+.RI "\fBcommon::Colour\fP \fBframe_border_colour\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBwidgets::Text\fP \fBm_title\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMover\fP \fBm_mover\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerTop\fP \fBm_resizer_top\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerBottom\fP \fBm_resizer_bottom\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerLeft\fP \fBm_resizer_left\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerRight\fP \fBm_resizer_right\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerTopLeft\fP \fBm_resizer_top_left\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerTopRight\fP \fBm_resizer_top_right\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerBottomLeft\fP \fBm_resizer_bottom_left\fP"
+.br
+.ti -1c
+.RI "\fBWidgetMoverResizerBottomRight\fP \fBm_resizer_bottom_right\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+A window that can be moved and resized and contains a widget\&. 
+.PP
+Definition at line 20 of file window\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Window::Window (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP title_text)"
+
+.PP
+Definition at line 13 of file window\&.cpp\&.
+.PP
+.nf
+14 : CompositeWidget(left, top, width, height),
+15   m_title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, title_text),
+16   m_mover(this),
+17   m_resizer_top(this),
+18   m_resizer_bottom(this),
+19   m_resizer_left(this),
+20   m_resizer_right(this),
+21   m_resizer_top_left(this),
+22   m_resizer_top_right(this),
+23   m_resizer_bottom_left(this),
+24   m_resizer_bottom_right(this)
+25 {
+26 
+27     // Set the sizing
+28     m_min_width = 2 * frame_thickness;
+29     m_min_height = 2 * frame_thickness + title_bar_height;
+30 
+31     // Set the colours
+32     area_colour = Colour(0xff, 0xff, 0xff);    // White
+33     frame_border_colour = Colour(0x00, 0x00, 0x00);    // Black
+34     frame_colour = Colour(0x57,0x57,0x57);      // Davy's Grey
+35     m_title\&.foreground_colour = Colour(0xff, 0xff, 0xff);    // White
+36     m_title\&.background_colour = frame_colour;
+37 
+38     // Add the title to the window
+39     Window::add_child(&m_title);
+40 
+41 }
+.fi
+.PP
+References add_child(), area_colour, MaxOS::gui::widgets::Text::background_colour, MaxOS::gui::widgets::Text::foreground_colour, frame_border_colour, frame_colour, frame_thickness, MaxOS::gui::Widget::m_min_height, MaxOS::gui::Widget::m_min_width, m_title, and title_bar_height\&.
+.SS "Window::Window (\fBWidget\fP * containedWidget, \fBstring\fP title_text)"
+
+.PP
+Definition at line 43 of file window\&.cpp\&.
+.PP
+.nf
+44 : CompositeWidget(0, 0, containedWidget->position()\&.width + 2 * 5 + 2, containedWidget->position()\&.height + 2 * 5 + 10 + 2),
+45   m_title(0, -(10 + 5) + 2, containedWidget->position()\&.width, 10 + 5 - 3,title_text),
+46   m_mover(this),
+47   m_resizer_top(this),
+48   m_resizer_bottom(this),
+49   m_resizer_left(this),
+50   m_resizer_right(this),
+51   m_resizer_top_left(this),
+52   m_resizer_top_right(this),
+53   m_resizer_bottom_left(this),
+54   m_resizer_bottom_right(this)
+55 {
+56     // Set the sizing
+57     m_min_width = 2 * frame_thickness;
+58     m_min_height = 2 * frame_thickness + title_bar_height;
+59 
+60     // Set the colours
+61     area_colour = Colour(0xff, 0xff, 0xff);    // White
+62     frame_border_colour = Colour(0x00, 0x00, 0x00);    // Black
+63     frame_colour = Colour(0x57,0x57,0x57);      // Davy's Grey
+64     m_title\&.foreground_colour = Colour(0xff, 0xff, 0xff);    // White
+65     m_title\&.background_colour = frame_colour;
+66 
+67     // Add the m_title to the window
+68     Window::add_child(&m_title);
+69     Window::add_child(containedWidget);
+70 
+71 }
+.fi
+.PP
+References add_child(), area_colour, MaxOS::gui::widgets::Text::background_colour, MaxOS::gui::widgets::Text::foreground_colour, frame_border_colour, frame_colour, frame_thickness, MaxOS::gui::Widget::m_min_height, MaxOS::gui::Widget::m_min_width, m_title, and title_bar_height\&.
+.SS "Window::~Window ()"
+
+.PP
+Definition at line 73 of file window\&.cpp\&.
+.PP
+.nf
+73                 {
+74 
+75 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void Window::add_child (\fBWidget\fP * child)\fC [virtual]\fP"
+
+.PP
+Adds a child to the window\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIchild\fP The child to add\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
+.PP
+Definition at line 192 of file window\&.cpp\&.
+.PP
+.nf
+192                                     {
+193 
+194     // If there is a child to add
+195     if(child != 0){
+196 
+197         // Change the position of the child to be inside the window contents
+198         Rectangle<int32_t> childPosition = child->position();
+199         child -> move(childPosition\&.left + frame_thickness + 1, childPosition\&.top + frame_thickness + title_bar_height + 1);
+200 
+201     }
+202 
+203     // Add the child to the window
+204     CompositeWidget::add_child(child);
+205 }
+.fi
+.PP
+References MaxOS::gui::CompositeWidget::add_child(), frame_thickness, MaxOS::common::Rectangle< Type >::left, MaxOS::gui::Widget::move(), MaxOS::gui::Widget::position(), title_bar_height, and MaxOS::common::Rectangle< Type >::top\&.
+.PP
+Referenced by kernelMain(), and Window()\&.
+.SS "void Window::draw_self (\fBcommon::GraphicsContext\fP * gc, \fBcommon::Rectangle\fP< int32_t > & area)\fC [virtual]\fP"
+
+.PP
+Draws the window and its children\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIgc\fP The graphics context to draw on\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
+.PP
+Definition at line 140 of file window\&.cpp\&.
+.PP
+.nf
+140                                                                                {
+141 
+142     // Get the positioning of the window
+143     Coordinates window_absolute_position = CompositeWidget::absolute_coordinates(Coordinates(0, 0));
+144     Rectangle<int32_t> windowPosition = this->position();
+145     int32_t window_x = window_absolute_position\&.first;
+146     int32_t window_y = window_absolute_position\&.second;
+147 
+148     // Create an area for the window contents
+149     Rectangle<int32_t> window_contents_area( frame_thickness, frame_thickness + title_bar_height, windowPosition\&.width - 2 * frame_thickness, windowPosition\&.height - 2 * frame_thickness - title_bar_height);
+150 
+151     // Draw the window contents if they are in the area to draw
+152     if(window_contents_area\&.intersects(area)){
+153         Rectangle<int32_t> contents_drawable = window_contents_area\&.intersection(area);
+154         gc->fill_rectangle(contents_drawable\&.left + window_x, contents_drawable\&.top + window_y, contents_drawable\&.left + contents_drawable\&.width + window_x, contents_drawable\&.top + contents_drawable\&.height + window_y,area_colour);
+155     }
+156 
+157     // Draw the frame if it is in the area to draw
+158     Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, windowPosition\&.width - 2 * frame_thickness,frame_thickness + title_bar_height);
+159     if(window_frame_top_area\&.intersects(area)){
+160         Rectangle<int32_t> frame_drawable = window_frame_top_area\&.intersection(area);
+161         gc->fill_rectangle(frame_drawable\&.left + window_x, frame_drawable\&.top + window_y, frame_drawable\&.left + frame_drawable\&.width + window_x, frame_drawable\&.top + frame_drawable\&.height + window_y, frame_colour);
+162     }
+163 
+164     // Draw the bottom of the window frame
+165     Rectangle<int32_t> window_frame_bottom_area(frame_thickness, windowPosition\&.height - frame_thickness, windowPosition\&.width - 2* frame_thickness, frame_thickness);
+166     if(window_frame_bottom_area\&.intersects(area)){
+167         Rectangle<int32_t> bottom_drawable = window_frame_bottom_area\&.intersection(area);
+168         gc->fill_rectangle(window_x + bottom_drawable\&.left, window_y + bottom_drawable\&.top, window_x + bottom_drawable\&.left + bottom_drawable\&.width, window_y + bottom_drawable\&.top + bottom_drawable\&.height, frame_colour);
+169     }
+170 
+171     // Draw the left of the window frame
+172     Rectangle<int32_t> window_frame_left_area(0,0, frame_thickness, windowPosition\&.height);
+173     if(window_frame_left_area\&.intersects(area)){
+174         Rectangle<int32_t> left_drawable = window_frame_left_area\&.intersection(area);
+175         gc->fill_rectangle(window_x + left_drawable\&.left, window_y + left_drawable\&.top, window_x + left_drawable\&.left + left_drawable\&.width, window_y + left_drawable\&.top + left_drawable\&.height,frame_colour);
+176     }
+177 
+178     // Draw the right of the window frame
+179     Rectangle<int32_t> window_frame_right_area(windowPosition\&.width - frame_thickness, 0, frame_thickness, windowPosition\&.height);
+180     if(window_frame_right_area\&.intersects(area)){
+181         Rectangle<int32_t> right_drawable = window_frame_right_area\&.intersection(area);
+182         gc->fill_rectangle(window_x + right_drawable\&.left, window_y + right_drawable\&.top, window_x + right_drawable\&.left + right_drawable\&.width, window_y + right_drawable\&.top + right_drawable\&.height, frame_colour);
+183     }
+184 }
+.fi
+.PP
+References MaxOS::gui::Widget::absolute_coordinates(), area_colour, MaxOS::common::GraphicsContext::fill_rectangle(), MaxOS::common::Pair< First, Second >::first, frame_colour, frame_thickness, MaxOS::common::Rectangle< Type >::height, MaxOS::common::Rectangle< Type >::intersection(), MaxOS::common::Rectangle< Type >::intersects(), MaxOS::common::Rectangle< Type >::left, MaxOS::gui::Widget::position(), MaxOS::common::Pair< First, Second >::second, title_bar_height, MaxOS::common::Rectangle< Type >::top, and MaxOS::common::Rectangle< Type >::width\&.
+.SS "\fBMouseEventHandler\fP * Window::on_mouse_button_pressed (uint32_t mouseX, uint32_t mouseY, uint8_t button)\fC [virtual]\fP"
+
+.PP
+Handles the mouse button being pressed\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the mouse\&. 
+.br
+\fIy\fP The y coordinate of the mouse\&. 
+.br
+\fIbutton\fP The button that is pressed\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
+.PP
+Definition at line 84 of file window\&.cpp\&.
+.PP
+.nf
+84                                                                                                   {
+85 
+86     // Pass the mouse event to the children
+87     drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouseX, mouseY, button);
+88     Rectangle<int32_t> window_position = position();
+89 
+90     // Bring the window to the front
+91     bring_to_front();
+92 
+93     // Convert the mouse coordinates to a int32_t
+94     int32_t x = (int32_t) mouseX;
+95     int32_t y = (int32_t) mouseY;
+96 
+97     if(x <= frame_thickness)
+98     {
+99         if(y <= frame_thickness)
+100             return &m_resizer_top_left;
+101 
+102         else if(y < window_position\&.height - frame_thickness)
+103             return &m_resizer_left;
+104 
+105         else
+106             return &m_resizer_bottom_left;
+107     }
+108     else if(x < window_position\&.width - frame_thickness)
+109     {
+110         if(y <= frame_thickness)
+111             return &m_resizer_top;
+112 
+113         else if(y < frame_thickness + title_bar_height)
+114             return &m_mover;
+115 
+116         else if(y >= window_position\&.height - frame_thickness)
+117             return &m_resizer_bottom;
+118     }
+119     else
+120     {
+121         if(y <= frame_thickness)
+122             return &m_resizer_top_right;
+123 
+124         else if(y < window_position\&.height-frame_thickness)
+125             return &m_resizer_right;
+126 
+127         else
+128             return &m_resizer_bottom_right;
+129     }
+130 
+131     return child_result;
+132 
+133 }
+.fi
+.PP
+References MaxOS::gui::Widget::bring_to_front(), frame_thickness, MaxOS::common::Rectangle< Type >::height, m_mover, m_resizer_bottom, m_resizer_bottom_left, m_resizer_bottom_right, m_resizer_left, m_resizer_right, m_resizer_top, m_resizer_top_left, m_resizer_top_right, MaxOS::gui::CompositeWidget::on_mouse_button_pressed(), MaxOS::gui::Widget::position(), title_bar_height, MaxOS::common::Rectangle< Type >::width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBcommon::Colour\fP MaxOS::gui::Window::area_colour"
+
+.PP
+Definition at line 42 of file window\&.h\&.
+.PP
+Referenced by draw_self(), and Window()\&.
+.SS "\fBcommon::Colour\fP MaxOS::gui::Window::frame_border_colour"
+
+.PP
+Definition at line 44 of file window\&.h\&.
+.PP
+Referenced by Window()\&.
+.SS "\fBcommon::Colour\fP MaxOS::gui::Window::frame_colour"
+
+.PP
+Definition at line 43 of file window\&.h\&.
+.PP
+Referenced by draw_self(), and Window()\&.
+.SS "uint8_t MaxOS::gui::Window::frame_thickness { 5 }"
+
+.PP
+Definition at line 39 of file window\&.h\&.
+.PP
+Referenced by add_child(), draw_self(), on_mouse_button_pressed(), and Window()\&.
+.SS "\fBWidgetMover\fP MaxOS::gui::Window::m_mover\fC [protected]\fP"
+
+.PP
+Definition at line 26 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerBottom\fP MaxOS::gui::Window::m_resizer_bottom\fC [protected]\fP"
+
+.PP
+Definition at line 28 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerBottomLeft\fP MaxOS::gui::Window::m_resizer_bottom_left\fC [protected]\fP"
+
+.PP
+Definition at line 33 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerBottomRight\fP MaxOS::gui::Window::m_resizer_bottom_right\fC [protected]\fP"
+
+.PP
+Definition at line 34 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerLeft\fP MaxOS::gui::Window::m_resizer_left\fC [protected]\fP"
+
+.PP
+Definition at line 29 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerRight\fP MaxOS::gui::Window::m_resizer_right\fC [protected]\fP"
+
+.PP
+Definition at line 30 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerTop\fP MaxOS::gui::Window::m_resizer_top\fC [protected]\fP"
+
+.PP
+Definition at line 27 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerTopLeft\fP MaxOS::gui::Window::m_resizer_top_left\fC [protected]\fP"
+
+.PP
+Definition at line 31 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBWidgetMoverResizerTopRight\fP MaxOS::gui::Window::m_resizer_top_right\fC [protected]\fP"
+
+.PP
+Definition at line 32 of file window\&.h\&.
+.PP
+Referenced by on_mouse_button_pressed()\&.
+.SS "\fBwidgets::Text\fP MaxOS::gui::Window::m_title\fC [protected]\fP"
+
+.PP
+Definition at line 23 of file window\&.h\&.
+.PP
+Referenced by Window()\&.
+.SS "uint8_t MaxOS::gui::Window::title_bar_height { 10 }"
+
+.PP
+Definition at line 40 of file window\&.h\&.
+.PP
+Referenced by add_child(), draw_self(), on_mouse_button_pressed(), and Window()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,180 @@
+.TH "MaxOS::net::UserDatagramProtocolSocket" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::UserDatagramProtocolSocket
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <udp\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUserDatagramProtocolSocket\fP ()"
+.br
+.RI "\fBSocket\fP "
+.ti -1c
+.RI "\fB~UserDatagramProtocolSocket\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBhandleUserDatagramProtocolPayload\fP (uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBSend\fP (uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBDisconnect\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBlistening\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBlocalPort\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBremotePort\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlocalIP\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBremoteIP\fP"
+.br
+.ti -1c
+.RI "\fBUserDatagramProtocolHandler\fP * \fBuserDatagramProtocolHandler\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBUserDatagramProtocolHandler\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 62 of file udp\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "UserDatagramProtocolSocket::UserDatagramProtocolSocket ()"
+
+.PP
+\fBSocket\fP 
+.PP
+Definition at line 38 of file udp\&.cpp\&.
+.PP
+.nf
+38                                                        {
+39 
+40     //Set the instance variables
+41     listening = false;
+42 
+43 }
+.fi
+.SS "UserDatagramProtocolSocket::~UserDatagramProtocolSocket ()"
+
+.PP
+Definition at line 45 of file udp\&.cpp\&.
+.PP
+.nf
+45                                                         {
+46 
+47 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void UserDatagramProtocolSocket::Disconnect ()\fC [virtual]\fP"
+
+.PP
+Definition at line 64 of file udp\&.cpp\&.
+.PP
+.nf
+64                                             {
+65 
+66     userDatagramProtocolHandler ->Disconnect(this);
+67 
+68 }
+.fi
+.SS "void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload (uint8_t * data, uint16_t size)\fC [virtual]\fP"
+
+.PP
+Definition at line 49 of file udp\&.cpp\&.
+.PP
+.nf
+49                                                                                                {
+50 
+51     // Create the event
+52     UDPDataReceivedEvent* event = new UDPDataReceivedEvent(this, data, size);
+53     raise_event(event);
+54     MemoryManager::s_active_memory_manager->free(event);
+55 
+56 }
+.fi
+.PP
+References data, and size\&.
+.PP
+Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "void UserDatagramProtocolSocket::Send (uint8_t * data, uint16_t size)\fC [virtual]\fP"
+
+.PP
+Definition at line 58 of file udp\&.cpp\&.
+.PP
+.nf
+58                                                                   {
+59 
+60     userDatagramProtocolHandler -> Send(this, data, size);
+61 
+62 }
+.fi
+.PP
+References data, and size\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBUserDatagramProtocolHandler\fP\fC [friend]\fP"
+
+.PP
+Definition at line 64 of file udp\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "bool MaxOS::net::UserDatagramProtocolSocket::listening\fC [protected]\fP"
+
+.PP
+Definition at line 66 of file udp\&.h\&.
+.PP
+Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "uint32_t MaxOS::net::UserDatagramProtocolSocket::localIP\fC [protected]\fP"
+
+.PP
+Definition at line 71 of file udp\&.h\&.
+.SS "uint16_t MaxOS::net::UserDatagramProtocolSocket::localPort\fC [protected]\fP"
+
+.PP
+Definition at line 68 of file udp\&.h\&.
+.SS "uint32_t MaxOS::net::UserDatagramProtocolSocket::remoteIP\fC [protected]\fP"
+
+.PP
+Definition at line 72 of file udp\&.h\&.
+.PP
+Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload(), and MaxOS::net::UserDatagramProtocolHandler::Send()\&.
+.SS "uint16_t MaxOS::net::UserDatagramProtocolSocket::remotePort\fC [protected]\fP"
+
+.PP
+Definition at line 69 of file udp\&.h\&.
+.PP
+Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\&.
+.SS "\fBUserDatagramProtocolHandler\fP* MaxOS::net::UserDatagramProtocolSocket::userDatagramProtocolHandler\fC [protected]\fP"
+
+.PP
+Definition at line 74 of file udp\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

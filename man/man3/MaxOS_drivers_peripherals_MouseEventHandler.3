@@ -1,0 +1,188 @@
+.TH "MaxOS::drivers::peripherals::MouseEventHandler" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::peripherals::MouseEventHandler \- Handles events that are triggered by the mouse driver\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mouse\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< MouseEvents >\fP\&.
+.PP
+Inherited by \fBMaxOS::gui::Desktop\fP, \fBMaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 0, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 1, 0 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 1, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 1, 0, \-1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 1, 1, \-1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 0, \-1, 0 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 0, \-1, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 1, \-1, \-1 >\fP, and \fBMaxOS::gui::WidgetMoverResizer< 1, 1, 0, 0 >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMouseEventHandler\fP ()"
+.br
+.RI "\fBHandler\fP "
+.ti -1c
+.RI "\fB~MouseEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBcommon::Event\fP< \fBMouseEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBMouseEvents\fP > *) override"
+.br
+.RI "Handles the triggered event and calls the appropriate function\&. "
+.ti -1c
+.RI "virtual void \fBon_mouse_down_event\fP (uint8_t button)"
+.br
+.RI "Called when the mouse is pressed\&. "
+.ti -1c
+.RI "virtual void \fBon_mouse_up_event\fP (uint8_t button)"
+.br
+.RI "Called when the mouse is released\&. "
+.ti -1c
+.RI "virtual void \fBon_mouse_move_event\fP (int8_t \fBx\fP, int8_t \fBy\fP)"
+.br
+.RI "Called when the mouse is moved\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles events that are triggered by the mouse driver\&. 
+.PP
+Definition at line 65 of file mouse\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MouseEventHandler::MouseEventHandler ()"
+
+.PP
+\fBHandler\fP 
+.PP
+Definition at line 16 of file mouse\&.cpp\&.
+.PP
+.nf
+16                                      {
+17 }
+.fi
+.SS "MouseEventHandler::~MouseEventHandler ()"
+
+.PP
+Definition at line 75 of file mouse\&.cpp\&.
+.PP
+.nf
+75                                       {
+76 
+77 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBEvent\fP< \fBMouseEvents\fP > * MouseEventHandler::on_event (\fBcommon::Event\fP< \fBMouseEvents\fP > * event)\fC [override]\fP"
+
+.PP
+Handles the triggered event and calls the appropriate function\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The event that was triggered
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The event that was triggered with the modified data 
+.RE
+.PP
+
+.PP
+Definition at line 25 of file mouse\&.cpp\&.
+.PP
+.nf
+25                                                                          {
+26     switch (event->type){
+27 
+28         case MOUSE_MOVE:
+29           this->on_mouse_move_event(((MouseMoveEvent *)event)->x,
+30                                     ((MouseMoveEvent *)event)->y);
+31             break;
+32 
+33         case MOUSE_DOWN:
+34           this->on_mouse_down_event(((MouseDownEvent *)event)->button);
+35             break;
+36 
+37         case MOUSE_UP:
+38           this->on_mouse_up_event(((MouseUpEvent *)event)->button);
+39             break;
+40 
+41     }
+42 
+43     // Return the event
+44     return event;
+45 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::MOUSE_DOWN, MaxOS::drivers::peripherals::MOUSE_MOVE, MaxOS::drivers::peripherals::MOUSE_UP, MaxOS::common::Event< EventType >::type, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void MouseEventHandler::on_mouse_down_event (uint8_t button)\fC [virtual]\fP"
+
+.PP
+Called when the mouse is pressed\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbutton\fP The button that was pressed 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
+.PP
+Definition at line 52 of file mouse\&.cpp\&.
+.PP
+.nf
+52                                                   {
+53 
+54 }
+.fi
+.SS "void MouseEventHandler::on_mouse_move_event (int8_t x, int8_t y)\fC [virtual]\fP"
+
+.PP
+Called when the mouse is moved\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP How much the mouse moved in the x direction 
+.br
+\fIy\fP How much the mouse moved in the y direction 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::gui::Desktop\fP, \fBMaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 0, \-1, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 1, 1, \-1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 1, \-1, \-1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 1, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 1, 0, 0 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 1, 0 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 0, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 0, \-1, 0 >\fP, and \fBMaxOS::gui::WidgetMoverResizer< 0, 1, 0, \-1 >\fP\&.
+.PP
+Definition at line 71 of file mouse\&.cpp\&.
+.PP
+.nf
+71                                                          {
+72 
+73 }
+.fi
+.PP
+Referenced by MaxOS::gui::Desktop::on_mouse_move_event()\&.
+.SS "void MouseEventHandler::on_mouse_up_event (uint8_t button)\fC [virtual]\fP"
+
+.PP
+Called when the mouse is released\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbutton\fP The button that was released 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
+.PP
+Definition at line 61 of file mouse\&.cpp\&.
+.PP
+.nf
+61                                                 {
+62 
+63 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

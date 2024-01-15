@@ -1,0 +1,379 @@
+.TH "MaxOS::drivers::console::TextModeConsole" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::console::TextModeConsole \- \fBDriver\fP for the text mode console, handles the printing of characters and strings to the screen using VGA\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <textmode\&.h>\fP
+.PP
+Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::drivers::console::Console\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTextModeConsole\fP ()"
+.br
+.ti -1c
+.RI "\fB~TextModeConsole\fP ()"
+.br
+.ti -1c
+.RI "uint16_t \fBwidth\fP () final"
+.br
+.RI "Gets the width of the console\&. "
+.ti -1c
+.RI "uint16_t \fBheight\fP () final"
+.br
+.RI "Gets the height of the console\&. "
+.ti -1c
+.RI "void \fBput_character\fP (uint16_t x, uint16_t y, char c) final"
+.br
+.RI "Places a character at the specified location if it is in bounds\&. "
+.ti -1c
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP) final"
+.br
+.RI "Sets the foreground color at the specified location\&. "
+.ti -1c
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP) final"
+.br
+.RI "Sets the background color at the specified location\&. "
+.ti -1c
+.RI "char \fBget_character\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the character at the specified location\&. "
+.ti -1c
+.RI "\fBConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the foreground color at the specified location\&. "
+.ti -1c
+.RI "\fBConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the background color at the specified location\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint16_t * \fBm_video_memory\fP { (uint16_t*)0xB8000 }"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+\fBDriver\fP for the text mode console, handles the printing of characters and strings to the screen using VGA\&. 
+.PP
+Definition at line 22 of file textmode\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TextModeConsole::TextModeConsole ()"
+
+.PP
+Definition at line 12 of file textmode\&.cpp\&.
+.PP
+.nf
+13 : Driver(),
+14   Console()
+15 {
+16 
+17 }
+.fi
+.SS "TextModeConsole::~TextModeConsole ()"
+
+.PP
+Definition at line 19 of file textmode\&.cpp\&.
+.PP
+.nf
+20 {
+21 
+22 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBConsoleColour\fP TextModeConsole::get_background_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the background color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The background color at the specified location or black if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 153 of file textmode\&.cpp\&.
+.PP
+.nf
+153                                                                           {
+154 
+155     // If the coordinates are out of bounds, return
+156     if(x >= width() || y >= height())
+157         return ConsoleColour::Black;
+158 
+159     // Calculate the offset 
+160     int offset = (y* width() + x);
+161 
+162     // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
+163     return (ConsoleColour)((m_video_memory[offset] & 0xF000) >> 12);
+164 }
+.fi
+.PP
+References MaxOS::drivers::console::Black, height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "char TextModeConsole::get_character (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the character at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the specified location or a space if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 113 of file textmode\&.cpp\&.
+.PP
+.nf
+113                                                           {
+114 
+115     // If the coordinates are out of bounds, return
+116     if(x >= width() || y >= height())
+117         return ' ';
+118 
+119     // Calculate the offset 
+120     int offset = (y* width() + x);
+121 
+122     // Return the character at the offset, by masking the character with the current character (last 8 bits)
+123     return (char)(m_video_memory[offset] & 0x00FF);
+124 }
+.fi
+.PP
+References height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "\fBConsoleColour\fP TextModeConsole::get_foreground_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the foreground color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The foreground color at the specified location or white if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 133 of file textmode\&.cpp\&.
+.PP
+.nf
+133                                                                           {
+134 
+135     // If the coordinates are out of bounds, return
+136     if(x >= width() || y >= height())
+137         return ConsoleColour::White;
+138 
+139     // Calculate the offset 
+140     int offset = (y* width() + x);
+141 
+142     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+143     return (ConsoleColour)((m_video_memory[offset] & 0x0F00) >> 8);
+144 }
+.fi
+.PP
+References height(), m_video_memory, MaxOS::drivers::console::White, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "uint16_t TextModeConsole::height ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the height of the console\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The height of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 39 of file textmode\&.cpp\&.
+.PP
+.nf
+40 {
+41     return 25;
+42 }
+.fi
+.PP
+Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
+.SS "void TextModeConsole::put_character (uint16_t x, uint16_t y, char c)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Places a character at the specified location if it is in bounds\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIc\fP The character to place 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 51 of file textmode\&.cpp\&.
+.PP
+.nf
+51                                                                   {
+52 
+53     // If the coordinates are out of bounds, return
+54     if(x >= width() || y >= height())
+55         return;
+56 
+57     // Calculate the offset 
+58     int offset = (y*width() + x);
+59 
+60     // Set the character at the offset, by masking the character with the current character (last 8 bits)
+61     m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
+62 
+63 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::c, height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void TextModeConsole::set_background_color (uint16_t x, uint16_t y, \fBConsoleColour\fP background)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Sets the background color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIbackground\fP The background color 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 92 of file textmode\&.cpp\&.
+.PP
+.nf
+92                                                                                            {
+93 
+94     // If the coordinates are out of bounds, return
+95     if(x >= width() || y >= height())
+96         return;
+97 
+98     // Calculate the offset 
+99     int offset = (y* width() + x);
+100 
+101     // Set the background color at the offset, by masking the background color with the current background color (bits 12-15)
+102     m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t)background << 12);
+103 
+104 }
+.fi
+.PP
+References height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void TextModeConsole::set_foreground_color (uint16_t x, uint16_t y, \fBConsoleColour\fP foreground)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Sets the foreground color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIforeground\fP The foreground color 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 72 of file textmode\&.cpp\&.
+.PP
+.nf
+72                                                                                            {
+73 
+74     // If the coordinates are out of bounds, return
+75     if(x >= width() || y >= height())
+76         return;
+77 
+78     // Calculate the offset 
+79     int offset = (y* width() + x);
+80 
+81     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+82     m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t)foreground << 8);
+83 }
+.fi
+.PP
+References height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "uint16_t TextModeConsole::width ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the width of the console\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The width of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
+.PP
+Definition at line 29 of file textmode\&.cpp\&.
+.PP
+.nf
+30 {
+31     return 80;
+32 }
+.fi
+.PP
+Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint16_t* MaxOS::drivers::console::TextModeConsole::m_video_memory { (uint16_t*)0xB8000 }\fC [protected]\fP"
+
+.PP
+Definition at line 25 of file textmode\&.h\&.
+.PP
+Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

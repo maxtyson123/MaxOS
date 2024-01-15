@@ -1,0 +1,161 @@
+.TH "MaxOS::common::InputStreamProcessor< Type, ProcessorType >" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::InputStreamProcessor< Type, ProcessorType > \- Converts one stream data type into another\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inputStream\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::InputStreamEventHandler< Type >\fP, and \fBMaxOS::common::GenericInputStream< ProcessorType >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< ProcessorType > *generic_stream_event_handler)"
+.br
+.ti -1c
+.RI "\fB~InputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBon_end_of_stream\fP (\fBGenericInputStream\fP< Type > *stream) override"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type, class ProcessorType>
+.br
+class MaxOS::common::InputStreamProcessor< Type, ProcessorType >"
+Converts one stream data type into another\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP 
+.br
+\fIProcessorType\fP 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file inputStream\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type , class ProcessorType > \fBMaxOS::common::InputStreamProcessor\fP< Type, ProcessorType >::\fBInputStreamProcessor\fP"
+@breif Creates a new \fBInputStreamProcessor\fP
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.br
+\fIProcessorType\fP The type of data to convert the data into via the processor 
+.RE
+.PP
+
+.PP
+Definition at line 188 of file inputStream\&.h\&.
+.PP
+.nf
+189         : InputStreamEventHandler<Type>(),
+190           GenericInputStream<ProcessorType>()
+191         {
+192 
+193         }
+.fi
+.SS "template<class Type , class ProcessorType > \fBMaxOS::common::InputStreamProcessor\fP< Type, ProcessorType >::\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< ProcessorType > * generic_stream_event_handler)"
+@breif Creates a new \fBInputStreamProcessor\fP
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.br
+\fIProcessorType\fP The type of data to convert the data into via the processor 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIgeneric_stream_event_handler\fP The event handler to handle the data 
+.RE
+.PP
+
+.PP
+Definition at line 202 of file inputStream\&.h\&.
+.PP
+.nf
+203         : InputStreamEventHandler<Type>(),
+204           GenericInputStream<ProcessorType>(generic_stream_event_handler)
+205         {
+206 
+207         }
+.fi
+.SS "template<class Type , class ProcessorType > \fBMaxOS::common::InputStreamProcessor\fP< Type, ProcessorType >::~\fBInputStreamProcessor\fP"
+@breif Destroys the \fBInputStreamProcessor\fP
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.br
+\fIProcessorType\fP The type of data to convert the data into via the processor 
+.RE
+.PP
+
+.PP
+Definition at line 215 of file inputStream\&.h\&.
+.PP
+.nf
+215                                                                                                                    {
+216 
+217         }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type , class ProcessorType > void \fBMaxOS::common::InputStreamProcessor\fP< Type, ProcessorType >::on_end_of_stream (\fBGenericInputStream\fP< Type > * stream)\fC [override]\fP, \fC [virtual]\fP"
+@breif Called when a stream has finished\&. Passes the event on to the handlers and then removes the stream from the array of streams
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.br
+\fIProcessorType\fP The type of data to convert the data into via the processor 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP The stream that has finished 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
+.PP
+Reimplemented in \fBMaxOS::common::InputStreamBuffer< Type >\fP, \fBMaxOS::common::GenericOutputStream< Type >\fP, and \fBMaxOS::common::GenericOutputStream< string >\fP\&.
+.PP
+Definition at line 226 of file inputStream\&.h\&.
+.PP
+.nf
+226                                                                                                                                                    {
+227 
+228             // Pass the end of stream event on to the handlers
+229             for(auto& event_handler : this -> m_input_stream_event_handlers)
+230               event_handler -> on_end_of_stream(this);
+231 
+232             // Remove the stream
+233             InputStreamEventHandler<Type>::on_end_of_stream(stream);
+234 
+235         }
+.fi
+.PP
+Referenced by MaxOS::common::GenericOutputStream< string >::on_end_of_stream(), and MaxOS::common::InputStreamBuffer< Type >::on_end_of_stream()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

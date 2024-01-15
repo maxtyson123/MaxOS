@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mouseevents_2616',['MouseEvents',['../namespacemaxOS_1_1drivers_1_1peripherals.html#a19e48300955baaff660463b5f5dee781',1,'maxOS::drivers::peripherals']]]
+  ['mouseevents_2732',['MouseEvents',['../namespaceMaxOS_1_1drivers_1_1peripherals.html#aa0874f7ba74622dc0167cd9acf0fc3d6',1,'MaxOS::drivers::peripherals']]]
 ];

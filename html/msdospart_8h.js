@@ -1,9 +1,9 @@
 var msdospart_8h =
 [
-    [ "PartitionTableEntry", "structmaxOS_1_1filesystem_1_1PartitionTableEntry.html", "structmaxOS_1_1filesystem_1_1PartitionTableEntry" ],
-    [ "MasterBootRecord", "structmaxOS_1_1filesystem_1_1MasterBootRecord.html", "structmaxOS_1_1filesystem_1_1MasterBootRecord" ],
-    [ "MSDOSPartitionTable", "classmaxOS_1_1filesystem_1_1MSDOSPartitionTable.html", null ],
-    [ "__attribute__", "msdospart_8h.html#a69ba9dbbbe34be9ecf795277eb062d5f", null ],
+    [ "PartitionTableEntry", "structMaxOS_1_1filesystem_1_1PartitionTableEntry.html", "structMaxOS_1_1filesystem_1_1PartitionTableEntry" ],
+    [ "MasterBootRecord", "structMaxOS_1_1filesystem_1_1MasterBootRecord.html", "structMaxOS_1_1filesystem_1_1MasterBootRecord" ],
+    [ "MSDOSPartitionTable", "classMaxOS_1_1filesystem_1_1MSDOSPartitionTable.html", null ],
+    [ "__attribute__", "msdospart_8h.html#a936d73aac14411c30530df61c3b6d8b8", null ],
     [ "bootable", "msdospart_8h.html#a473a1483ecee72b5fb823dd28190cef8", null ],
     [ "bootloader", "msdospart_8h.html#a09835f758bb5328b55a01068bbc4c972", null ],
     [ "diskSignature", "msdospart_8h.html#a6a40348b3b308847ba21a75829d91871", null ],

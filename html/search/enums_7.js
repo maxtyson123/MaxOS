@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['transmissioncontrolprotocolflag_2618',['TransmissionControlProtocolFlag',['../namespacemaxOS_1_1net.html#a306db96e97ff11fdb579107e0cf1288c',1,'maxOS::net']]],
-  ['transmissioncontrolprotocolpayloadhandlerevents_2619',['TransmissionControlProtocolPayloadHandlerEvents',['../namespacemaxOS_1_1net.html#a763c3d30a38a68261ebd5221b4f6d323',1,'maxOS::net']]],
-  ['transmissioncontrolprotocolsocketstate_2620',['TransmissionControlProtocolSocketState',['../namespacemaxOS_1_1net.html#af461188b92ce6b75f84da8d98c1cc3f8',1,'maxOS::net']]]
+  ['transmissioncontrolprotocolflag_2734',['TransmissionControlProtocolFlag',['../namespaceMaxOS_1_1net.html#a14f328f54b1801ae5c2130259bd55e2e',1,'MaxOS::net']]],
+  ['transmissioncontrolprotocolpayloadhandlerevents_2735',['TransmissionControlProtocolPayloadHandlerEvents',['../namespaceMaxOS_1_1net.html#a36c6c723a8bfd777e4d45c63c0d793a7',1,'MaxOS::net']]],
+  ['transmissioncontrolprotocolsocketstate_2736',['TransmissionControlProtocolSocketState',['../namespaceMaxOS_1_1net.html#a976602fd4835e70e3cecff933971c281',1,'MaxOS::net']]]
 ];

@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['name_2470',['name',['../structmaxOS_1_1filesystem_1_1DirectoryEntry.html#a68216e583fe32f113614ec2f29f6c4a3',1,'maxOS::filesystem::DirectoryEntry::name()'],['../fat32_8h.html#abfa8a0ef7b1321866a7c4099554fdfb0',1,'name():&#160;fat32.h']]],
-  ['new_5ftext_2471',['new_text',['../classmaxOS_1_1gui_1_1widgets_1_1InputBoxTextChangedEvent.html#a1a139f6edc6de83cdfe3554fed49ff1d',1,'maxOS::gui::widgets::InputBoxTextChangedEvent']]],
-  ['next_2472',['next',['../structmaxOS_1_1memory_1_1MemoryChunk.html#a3adaca9aca73de0a3553141ba35ad054',1,'maxOS::memory::MemoryChunk']]],
-  ['num_2473',['num',['../structmaxOS_1_1system_1_1multiboot__elf__section__header__table.html#aa8c2d356e455d52b6b5b02162d84f7b8',1,'maxOS::system::multiboot_elf_section_header_table']]],
-  ['number_5fpad_5flock_2474',['number_pad_lock',['../classmaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#a3b595e2938ce2d90a58fb2a23bf39b18',1,'maxOS::drivers::peripherals::KeyboardState']]],
-  ['numrecvbuffers_2475',['numRecvBuffers',['../amd__am79c973_8h.html#a36340f684c64be5544c82a3789fd506f',1,'amd_am79c973.h']]],
-  ['numsendbuffers_2476',['numSendBuffers',['../amd__am79c973_8h.html#aeab3c9d04fb59dde6ac8d99b43eced43',1,'amd_am79c973.h']]]
+  ['name_2583',['name',['../structMaxOS_1_1filesystem_1_1DirectoryEntry.html#a8d3d8b13dce106a88a497e921984bc61',1,'MaxOS::filesystem::DirectoryEntry::name()'],['../fat32_8h.html#abfa8a0ef7b1321866a7c4099554fdfb0',1,'name():&#160;fat32.h']]],
+  ['new_5ftext_2584',['new_text',['../classMaxOS_1_1gui_1_1widgets_1_1InputBoxTextChangedEvent.html#a19a08e02782e609f1ddf26654b7049f1',1,'MaxOS::gui::widgets::InputBoxTextChangedEvent']]],
+  ['next_2585',['next',['../structMaxOS_1_1memory_1_1MemoryChunk.html#a9b94dfe2f922882b76c7e592673a5a26',1,'MaxOS::memory::MemoryChunk']]],
+  ['num_2586',['num',['../structmultiboot__tag__elf__sections.html#ad31ac6e523f0a7d800c430ba4e5c40dc',1,'multiboot_tag_elf_sections']]],
+  ['number_5fpad_5flock_2587',['number_pad_lock',['../classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#a85d0597ebc3496da941adc73afe70430',1,'MaxOS::drivers::peripherals::KeyboardState']]],
+  ['numrecvbuffers_2588',['numRecvBuffers',['../amd__am79c973_8h.html#a36340f684c64be5544c82a3789fd506f',1,'amd_am79c973.h']]],
+  ['numsendbuffers_2589',['numSendBuffers',['../amd__am79c973_8h.html#aeab3c9d04fb59dde6ac8d99b43eced43',1,'amd_am79c973.h']]]
 ];

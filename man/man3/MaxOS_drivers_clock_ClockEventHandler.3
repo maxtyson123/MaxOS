@@ -1,0 +1,113 @@
+.TH "MaxOS::drivers::clock::ClockEventHandler" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::clock::ClockEventHandler \- Handles the events triggered by the clock\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <clock\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< ClockEvents >\fP\&.
+.PP
+Inherited by \fBMaxOS::gui::Desktop\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBClockEventHandler\fP ()"
+.br
+.RI "\fBHandler\fP "
+.ti -1c
+.RI "\fB~ClockEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBcommon::Event\fP< \fBClockEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBClockEvents\fP > *event) override"
+.br
+.ti -1c
+.RI "virtual void \fBon_time\fP (const \fBcommon::Time\fP &time)"
+.br
+.RI "Called when the clock ticks\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the events triggered by the clock\&. 
+.PP
+Definition at line 40 of file clock\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ClockEventHandler::ClockEventHandler ()"
+
+.PP
+\fBHandler\fP 
+.PP
+Definition at line 14 of file clock\&.cpp\&.
+.PP
+.nf
+14                                      {
+15 
+16 }
+.fi
+.SS "ClockEventHandler::~ClockEventHandler ()"
+
+.PP
+Definition at line 18 of file clock\&.cpp\&.
+.PP
+.nf
+18                                       {
+19 
+20 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBEvent\fP< \fBClockEvents\fP > * ClockEventHandler::on_event (\fBcommon::Event\fP< \fBClockEvents\fP > * event)\fC [override]\fP"
+
+.PP
+Definition at line 31 of file clock\&.cpp\&.
+.PP
+.nf
+31                                                                          {
+32 
+33     switch (event -> type) {
+34         case TIME:
+35           on_time(*((TimeEvent *)event)->time);
+36             break;
+37             
+38         default:
+39             break;
+40     }
+41 
+42     // Return the event
+43     return event;
+44 }
+.fi
+.PP
+References MaxOS::drivers::clock::TIME, and type\&.
+.SS "void ClockEventHandler::on_time (const \fBcommon::Time\fP & time)\fC [virtual]\fP"
+
+.PP
+Called when the clock ticks\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItime\fP The current time 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
+.PP
+Definition at line 27 of file clock\&.cpp\&.
+.PP
+.nf
+27                                                   {
+28 
+29 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

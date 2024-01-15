@@ -1,0 +1,127 @@
+.TH "MaxOS::drivers::peripherals::KeyboardInterpreter" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::peripherals::KeyboardInterpreter \- Interprets the scan codes from the keyboard\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <keyboard\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::InputStreamEventHandler< uint8_t >\fP, and \fBMaxOS::common::EventManager< KeyboardEvents >\fP\&.
+.PP
+Inherited by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKeyboardInterpreter\fP ()"
+.br
+.RI "___Interpreter___ "
+.ti -1c
+.RI "\fB~KeyboardInterpreter\fP ()"
+.br
+.ti -1c
+.RI "void \fBonKeyRead\fP (bool, \fBKeyboardState\fP, \fBKeyCode\fP)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBKeyboardState\fP \fBm_keyboard_state\fP"
+.br
+.ti -1c
+.RI "bool \fBm_next_is_extended_code_0\fP { false }"
+.br
+.ti -1c
+.RI "uint8_t \fBm_current_extended_code_1\fP { 0 }"
+.br
+.ti -1c
+.RI "uint16_t \fBm_extended_code_1_buffer\fP { 0 }"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Interprets the scan codes from the keyboard\&. 
+.PP
+Definition at line 267 of file keyboard\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "KeyboardInterpreter::KeyboardInterpreter ()"
+
+.PP
+___Interpreter___ 
+.PP
+Definition at line 146 of file keyboard\&.cpp\&.
+.PP
+.nf
+147 : InputStreamEventHandler<uint8_t>()
+148 {
+149 
+150 }
+.fi
+.SS "KeyboardInterpreter::~KeyboardInterpreter ()"
+
+.PP
+Definition at line 152 of file keyboard\&.cpp\&.
+.PP
+.nf
+152                                           {
+153 
+154 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void KeyboardInterpreter::onKeyRead (bool released, \fBKeyboardState\fP state, \fBKeyCode\fP key_code)"
+
+.PP
+Definition at line 156 of file keyboard\&.cpp\&.
+.PP
+.nf
+156                                                                                         {
+157 
+158     // Pass the key event to the handlers
+159     if(released)
+160       raise_event(new KeyUpEvent(key_code, state));
+161     else
+162       raise_event(new KeyDownEvent(key_code, state));
+163 
+164 }
+.fi
+.PP
+References MaxOS::common::EventManager< KeyboardEvents >::raise_event()\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint8_t MaxOS::drivers::peripherals::KeyboardInterpreter::m_current_extended_code_1 { 0 }\fC [protected]\fP"
+
+.PP
+Definition at line 273 of file keyboard\&.h\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\&.
+.SS "uint16_t MaxOS::drivers::peripherals::KeyboardInterpreter::m_extended_code_1_buffer { 0 }\fC [protected]\fP"
+
+.PP
+Definition at line 274 of file keyboard\&.h\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\&.
+.SS "\fBKeyboardState\fP MaxOS::drivers::peripherals::KeyboardInterpreter::m_keyboard_state\fC [protected]\fP"
+
+.PP
+Definition at line 270 of file keyboard\&.h\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\&.
+.SS "bool MaxOS::drivers::peripherals::KeyboardInterpreter::m_next_is_extended_code_0 { false }\fC [protected]\fP"
+
+.PP
+Definition at line 272 of file keyboard\&.h\&.
+.PP
+Referenced by MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

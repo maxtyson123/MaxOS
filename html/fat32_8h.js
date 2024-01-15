@@ -1,8 +1,8 @@
 var fat32_8h =
 [
-    [ "BiosParameterBlock32", "structmaxOS_1_1filesystem_1_1BiosParameterBlock32.html", "structmaxOS_1_1filesystem_1_1BiosParameterBlock32" ],
-    [ "DirectoryEntry", "structmaxOS_1_1filesystem_1_1DirectoryEntry.html", "structmaxOS_1_1filesystem_1_1DirectoryEntry" ],
-    [ "__attribute__", "fat32_8h.html#a69ba9dbbbe34be9ecf795277eb062d5f", null ],
+    [ "BiosParameterBlock32", "structMaxOS_1_1filesystem_1_1BiosParameterBlock32.html", "structMaxOS_1_1filesystem_1_1BiosParameterBlock32" ],
+    [ "DirectoryEntry", "structMaxOS_1_1filesystem_1_1DirectoryEntry.html", "structMaxOS_1_1filesystem_1_1DirectoryEntry" ],
+    [ "__attribute__", "fat32_8h.html#a936d73aac14411c30530df61c3b6d8b8", null ],
     [ "attributes", "fat32_8h.html#a983149395439fbc9ca8497076b75fd6b", null ],
     [ "backup_sector", "fat32_8h.html#aafa09ac103833cbbeeac1edcbf62bed6", null ],
     [ "boot_signature", "fat32_8h.html#ac1a97c4232f0271f6af44f69ae2d3efd", null ],

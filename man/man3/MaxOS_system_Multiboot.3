@@ -1,0 +1,193 @@
+.TH "MaxOS::system::Multiboot" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::system::Multiboot
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <multiboot\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMultiboot\fP (unsigned long addr)"
+.br
+.ti -1c
+.RI "\fB~Multiboot\fP ()"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_framebuffer\fP * \fBget_framebuffer\fP ()"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_basic_meminfo\fP * \fBget_basic_meminfo\fP ()"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_string\fP * \fBget_bootloader_name\fP ()"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_mmap\fP * \fBget_mmap\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBmultiboot_tag_framebuffer\fP * \fBm_framebuffer\fP"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_basic_meminfo\fP * \fBm_basic_meminfo\fP"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_string\fP * \fBm_bootloader_name\fP"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_mmap\fP * \fBm_mmap\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 420 of file multiboot\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Multiboot::Multiboot (unsigned long addr)"
+
+.PP
+Definition at line 9 of file multiboot\&.cpp\&.
+.PP
+.nf
+9                                        {
+10 
+11 
+12     // Loop through the tags and load them
+13     struct multiboot_tag *tag;
+14     for(tag=(struct multiboot_tag *)(addr + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+15 
+16       switch (tag -> type) {
+17           case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
+18               m_framebuffer = (multiboot_tag_framebuffer *)tag;
+19               break;
+20 
+21           case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+22               m_basic_meminfo = (multiboot_tag_basic_meminfo *)tag;
+23               break;
+24 
+25           case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
+26               m_bootloader_name = (multiboot_tag_string *)tag;
+27               break;
+28 
+29           case MULTIBOOT_TAG_TYPE_MMAP:
+30                 m_mmap = (multiboot_tag_mmap *)tag;
+31                 break;
+32 
+33       }
+34     }
+35 }
+.fi
+.PP
+References m_basic_meminfo, m_bootloader_name, m_framebuffer, m_mmap, MULTIBOOT_TAG_TYPE_BASIC_MEMINFO, MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME, MULTIBOOT_TAG_TYPE_END, MULTIBOOT_TAG_TYPE_FRAMEBUFFER, MULTIBOOT_TAG_TYPE_MMAP, multiboot_tag::size, type, and multiboot_tag::type\&.
+.SS "Multiboot::~Multiboot ()"
+
+.PP
+Definition at line 37 of file multiboot\&.cpp\&.
+.PP
+.nf
+37                       {
+38 
+39 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBmultiboot_tag_basic_meminfo\fP * Multiboot::get_basic_meminfo ()"
+
+.PP
+Definition at line 48 of file multiboot\&.cpp\&.
+.PP
+.nf
+48                                                           {
+49 
+50     return m_basic_meminfo;
+51 
+52 }
+.fi
+.PP
+References m_basic_meminfo\&.
+.PP
+Referenced by kernelMain()\&.
+.SS "\fBmultiboot_tag_string\fP * Multiboot::get_bootloader_name ()"
+
+.PP
+Definition at line 54 of file multiboot\&.cpp\&.
+.PP
+.nf
+54                                                      {
+55 
+56     return m_bootloader_name;
+57 
+58 }
+.fi
+.PP
+References m_bootloader_name\&.
+.SS "\fBmultiboot_tag_framebuffer\fP * Multiboot::get_framebuffer ()"
+
+.PP
+Definition at line 42 of file multiboot\&.cpp\&.
+.PP
+.nf
+42                                                       {
+43 
+44     return m_framebuffer;
+45 
+46 }
+.fi
+.PP
+References m_framebuffer\&.
+.PP
+Referenced by kernelMain()\&.
+.SS "\fBmultiboot_tag_mmap\fP * Multiboot::get_mmap ()"
+
+.PP
+Definition at line 60 of file multiboot\&.cpp\&.
+.PP
+.nf
+60                                         {
+61 
+62     return m_mmap;
+63 
+64 }
+.fi
+.PP
+References m_mmap\&.
+.PP
+Referenced by kernelMain()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBmultiboot_tag_basic_meminfo\fP* MaxOS::system::Multiboot::m_basic_meminfo\fC [protected]\fP"
+
+.PP
+Definition at line 423 of file multiboot\&.h\&.
+.PP
+Referenced by get_basic_meminfo(), and Multiboot()\&.
+.SS "\fBmultiboot_tag_string\fP* MaxOS::system::Multiboot::m_bootloader_name\fC [protected]\fP"
+
+.PP
+Definition at line 424 of file multiboot\&.h\&.
+.PP
+Referenced by get_bootloader_name(), and Multiboot()\&.
+.SS "\fBmultiboot_tag_framebuffer\fP* MaxOS::system::Multiboot::m_framebuffer\fC [protected]\fP"
+
+.PP
+Definition at line 422 of file multiboot\&.h\&.
+.PP
+Referenced by get_framebuffer(), and Multiboot()\&.
+.SS "\fBmultiboot_tag_mmap\fP* MaxOS::system::Multiboot::m_mmap\fC [protected]\fP"
+
+.PP
+Definition at line 425 of file multiboot\&.h\&.
+.PP
+Referenced by get_mmap(), and Multiboot()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

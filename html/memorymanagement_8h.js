@@ -1,7 +1,7 @@
 var memorymanagement_8h =
 [
-    [ "MemoryChunk", "structmaxOS_1_1memory_1_1MemoryChunk.html", "structmaxOS_1_1memory_1_1MemoryChunk" ],
-    [ "MemoryManager", "classmaxOS_1_1memory_1_1MemoryManager.html", "classmaxOS_1_1memory_1_1MemoryManager" ],
+    [ "MemoryChunk", "structMaxOS_1_1memory_1_1MemoryChunk.html", "structMaxOS_1_1memory_1_1MemoryChunk" ],
+    [ "MemoryManager", "classMaxOS_1_1memory_1_1MemoryManager.html", "classMaxOS_1_1memory_1_1MemoryManager" ],
     [ "operator delete", "memorymanagement_8h.html#a898fe16a35d180bf1dd4d55df6576d08", null ],
     [ "operator delete", "memorymanagement_8h.html#a104328316faddcc91b28e28f19d8b310", null ],
     [ "operator delete[]", "memorymanagement_8h.html#a68d6173eacb62f3e746a04abc2cae1d9", null ],

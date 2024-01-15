@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['width_2575',['width',['../classmaxOS_1_1common_1_1Rectangle.html#a76418ba7f0f62d5dc4d18c4c325a95f7',1,'maxOS::common::Rectangle::width()'],['../structmaxOS_1_1system_1_1multiboot__header.html#adfb8e8ac17ed6c0df9c139fdb011d1de',1,'maxOS::system::multiboot_header::width()']]],
-  ['windowsize_2576',['windowSize',['../structmaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#aa5bbbf740b4dc6204a3609f32543ce65',1,'maxOS::net::TransmissionControlProtocolHeader::windowSize()'],['../tcp_8h.html#a6b2a31b20954529dabfe0f32eda1cf11',1,'windowSize():&#160;tcp.h']]]
+  ['width_2694',['width',['../classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950',1,'MaxOS::common::Rectangle::width()'],['../structmultiboot__header__tag__framebuffer.html#a01f7fd9c4cbb8d58b155a50ff0e030d0',1,'multiboot_header_tag_framebuffer::width()']]],
+  ['windowsize_2695',['windowSize',['../structMaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#a26ad799c9f06eeee3f7329d828389234',1,'MaxOS::net::TransmissionControlProtocolHeader::windowSize()'],['../tcp_8h.html#a6b2a31b20954529dabfe0f32eda1cf11',1,'windowSize():&#160;tcp.h']]]
 ];

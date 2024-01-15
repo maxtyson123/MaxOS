@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['oem_5fname_2477',['OEM_name',['../structmaxOS_1_1filesystem_1_1BiosParameterBlock32.html#a27015a9d52940597725657a108889001',1,'maxOS::filesystem::BiosParameterBlock32::OEM_name()'],['../fat32_8h.html#ae21b477395a1441f77a079937a0900bb',1,'OEM_name():&#160;fat32.h']]],
-  ['offset_2478',['offset',['../structmaxOS_1_1system_1_1multiboot__apm__info.html#a85bd1320a1ce6c1704800913e054c166',1,'maxOS::system::multiboot_apm_info']]],
-  ['options_2479',['options',['../structmaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#aeb944df85e4ff8c5fbfc80bf49cc80c4',1,'maxOS::net::TransmissionControlProtocolHeader::options()'],['../tcp_8h.html#a2ba60f781746d31baf29e8c5a35d07e7',1,'options():&#160;tcp.h']]],
-  ['owninternetprotocoladdress_2480',['ownInternetProtocolAddress',['../classmaxOS_1_1net_1_1InternetProtocolHandler.html#a061258d1aed4df48353cd47c2e65f966',1,'maxOS::net::InternetProtocolHandler']]]
+  ['oem_5fname_2590',['OEM_name',['../structMaxOS_1_1filesystem_1_1BiosParameterBlock32.html#af410f4243dfc86c0c0cbb65474c82293',1,'MaxOS::filesystem::BiosParameterBlock32::OEM_name()'],['../fat32_8h.html#ae21b477395a1441f77a079937a0900bb',1,'OEM_name():&#160;fat32.h']]],
+  ['offset_2591',['offset',['../structmultiboot__tag__apm.html#ae9d788171dfbf0f540c37aee20c96eb3',1,'multiboot_tag_apm']]],
+  ['options_2592',['options',['../structMaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#aa9c2a7bc88155b2f274a8349bca40d1e',1,'MaxOS::net::TransmissionControlProtocolHeader::options()'],['../tcp_8h.html#a2ba60f781746d31baf29e8c5a35d07e7',1,'options():&#160;tcp.h']]],
+  ['owninternetprotocoladdress_2593',['ownInternetProtocolAddress',['../classMaxOS_1_1net_1_1InternetProtocolHandler.html#aa0f90002940b50c7ad0d433a4cf0e01e',1,'MaxOS::net::InternetProtocolHandler']]]
 ];

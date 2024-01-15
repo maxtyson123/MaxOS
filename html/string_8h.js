@@ -1,5 +1,5 @@
 var string_8h =
 [
-    [ "String", "classmaxOS_1_1String.html", "classmaxOS_1_1String" ],
-    [ "string", "string_8h.html#a6a3d939df112a32e3a1655b764931088", null ]
+    [ "String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
+    [ "string", "string_8h.html#afa22b691550d34d82dd6a5e3f77b31cb", null ]
 ];

@@ -1,11 +1,11 @@
 var button_8h =
 [
-    [ "ButtonPressedEvent", "classmaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent.html", "classmaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent" ],
-    [ "ButtonReleasedEvent", "classmaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent.html", "classmaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent" ],
-    [ "ButtonEventHandler", "classmaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler.html", "classmaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler" ],
-    [ "Button", "classmaxOS_1_1gui_1_1widgets_1_1Button.html", "classmaxOS_1_1gui_1_1widgets_1_1Button" ],
-    [ "ButtonEvents", "button_8h.html#a9428d14c7f5a2810c2b53ef65988921f", [
-      [ "BUTTON_PRESSED", "button_8h.html#a9428d14c7f5a2810c2b53ef65988921fa24819151a63c94d9ae6dd775ed2252bb", null ],
-      [ "BUTTON_RELEASED", "button_8h.html#a9428d14c7f5a2810c2b53ef65988921faa66f40a1d930ef5d723733f5a68d3ff9", null ]
+    [ "ButtonPressedEvent", "classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent" ],
+    [ "ButtonReleasedEvent", "classMaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent" ],
+    [ "ButtonEventHandler", "classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler" ],
+    [ "Button", "classMaxOS_1_1gui_1_1widgets_1_1Button.html", "classMaxOS_1_1gui_1_1widgets_1_1Button" ],
+    [ "ButtonEvents", "button_8h.html#a637a82b4930318869efa61a112afae5a", [
+      [ "BUTTON_PRESSED", "button_8h.html#a637a82b4930318869efa61a112afae5aa6077e3d6628f337340b5edd01b60b65d", null ],
+      [ "BUTTON_RELEASED", "button_8h.html#a637a82b4930318869efa61a112afae5aaa4d2edb20da7b1679132bd336e1a276e", null ]
     ] ]
 ];

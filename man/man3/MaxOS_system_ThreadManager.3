@@ -1,0 +1,200 @@
+.TH "MaxOS::system::ThreadManager" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::system::ThreadManager \- Manages the scheduling of threads\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <multithreading\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBThreadManager\fP ()"
+.br
+.ti -1c
+.RI "\fBThreadManager\fP (\fBsystem::GlobalDescriptorTable\fP *gdt)"
+.br
+.ti -1c
+.RI "\fB~ThreadManager\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBcreate_thread\fP (void entrypoint())"
+.br
+.RI "Add a thread to an empty place in the array\&. "
+.ti -1c
+.RI "\fBCPUState\fP * \fBschedule\fP (\fBCPUState\fP *cpu_state)"
+.br
+.RI "Schedules the next thread to be executed by checking its yieldsStatus\&. "
+.ti -1c
+.RI "bool \fBterminate_thread\fP (uint32_t tid)"
+.br
+.RI "Terminates a thread\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Manages the scheduling of threads\&. 
+.PP
+Definition at line 40 of file multithreading\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ThreadManager::ThreadManager ()"
+
+.PP
+Definition at line 40 of file multithreading\&.cpp\&.
+.PP
+.nf
+41 {
+42 }
+.fi
+.SS "ThreadManager::ThreadManager (\fBsystem::GlobalDescriptorTable\fP * gdt)"
+
+.PP
+Definition at line 44 of file multithreading\&.cpp\&.
+.PP
+.nf
+45 { m_gdt = gdt;
+46 }
+.fi
+.SS "ThreadManager::~ThreadManager ()"
+
+.PP
+Definition at line 48 of file multithreading\&.cpp\&.
+.PP
+.nf
+49 {
+50 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t ThreadManager::create_thread (void  entrypoint())"
+
+.PP
+Add a thread to an empty place in the array\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fI\fBThread\fP\fP thread to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true if successfully added 
+.PP
+false if error 
+.RE
+.PP
+
+.PP
+Definition at line 59 of file multithreading\&.cpp\&.
+.PP
+.nf
+60 {
+61     // Create a new thread
+62     Thread* new_thread = new Thread();
+63     new_thread -> init(entrypoint);
+64     new_thread -> m_tid = m_threads\&.size();
+65     new_thread -> m_cpu_state -> cs = m_gdt-> code_segment_selector();
+66 
+67     // Add the thread to the array
+68     m_threads\&.push_back(new_thread);
+69     return new_thread -> m_tid;
+70 }
+.fi
+.PP
+References cs\&.
+.SS "\fBCPUState\fP * ThreadManager::schedule (\fBCPUState\fP * cpu_state)"
+
+.PP
+Schedules the next thread to be executed by checking its yieldsStatus\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcpu_state\fP state 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+CPUState* The state of the next thread to be executed 
+.RE
+.PP
+
+.PP
+Definition at line 78 of file multithreading\&.cpp\&.
+.PP
+.nf
+79 {
+80 
+81     // If the eax register is 37, terminate the thread
+82     if(cpu_state-> eax == 37)
+83       terminate_thread(m_current_thread);
+84 
+85     // If there are no threads to schedule, return the current state
+86     if (m_threads\&.size() <= 0 || m_threads[m_current_thread] == nullptr)
+87         return cpu_state;
+88 
+89     // Save the current state
+90     m_threads[m_current_thread]->m_cpu_state = cpu_state;
+91 
+92     // Switch to the next thread
+93     if(++m_current_thread >= m_threads\&.size())
+94       m_current_thread %= m_threads\&.size();
+95 
+96     // If this thread is yielded then skip it
+97     if(m_threads[m_current_thread]->m_yield_status){
+98       m_threads[m_current_thread]->m_yield_status = false;
+99         return schedule(cpu_state);
+100     }
+101 
+102     // Return the next thread's state
+103     return m_threads[m_current_thread]->m_cpu_state;
+104 }
+.fi
+.PP
+References eax, and terminate_thread()\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\&.
+.SS "bool ThreadManager::terminate_thread (uint32_t tid)"
+
+.PP
+Terminates a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP thread id to terminate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true if successfully terminated thread or false if error 
+.RE
+.PP
+
+.PP
+Definition at line 112 of file multithreading\&.cpp\&.
+.PP
+.nf
+113 {
+114     // Check if the thread is actually running
+115     if (tid >= m_threads\&.size())
+116         return false;
+117 
+118     // Delete the thread
+119     delete m_threads[tid];
+120 
+121     // Erase the thread from the array
+122     m_threads\&.erase(m_threads\&.begin() + tid);
+123     // TODO: Thread ID needs to be updated
+124 
+125     return true;
+126 }
+.fi
+.PP
+Referenced by schedule()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,183 @@
+\hypertarget{classMaxOS_1_1drivers_1_1SerialConsole}{}\doxysection{Max\+OS\+::drivers\+::Serial\+Console Class Reference}
+\label{classMaxOS_1_1drivers_1_1SerialConsole}\index{MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}}
+
+
+A driver for the serial output.  
+
+
+
+
+{\ttfamily \#include $<$serial.\+h$>$}
+
+Inheritance diagram for Max\+OS\+::drivers\+::Serial\+Console\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMaxOS_1_1drivers_1_1SerialConsole}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_ae051d69af379c39150a09357780f2fd7}{Serial\+Console}} ()
+\item 
+\mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_abc10f4ba8706b3b1144fae983478e4f3}{$\sim$\+Serial\+Console}} ()
+\item 
+void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_a2b4f287ed1ca0baaf5db16a06172dcd3}{put\+\_\+character}} (char c)
+\begin{DoxyCompactList}\small\item\em Waits for the serial port to be ready, then writes a character to it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole}{Serial\+Console}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_a9436c62abb8c35e861c30d12bf3241a3}{s\+\_\+active\+\_\+serial\+\_\+console}} = 0
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+A driver for the serial output. 
+
+Definition at line 21 of file serial.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1SerialConsole_ae051d69af379c39150a09357780f2fd7}\label{classMaxOS_1_1drivers_1_1SerialConsole_ae051d69af379c39150a09357780f2fd7}} 
+\index{MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}!SerialConsole@{SerialConsole}}
+\index{SerialConsole@{SerialConsole}!MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{SerialConsole()}{SerialConsole()}}
+{\footnotesize\ttfamily Max\+O\+S\+::drivers\+::\+Serial\+Console\+::\+Serial\+Console (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 9 of file serial.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{10 : m\_data\_port(0x3F8),}
+\DoxyCodeLine{11   m\_interrupt\_enable\_port(0x3F9),}
+\DoxyCodeLine{12   m\_fifo\_control\_port(0x3FA),}
+\DoxyCodeLine{13   m\_line\_control\_port(0x3FB),}
+\DoxyCodeLine{14   m\_modem\_control\_port(0x3FC),}
+\DoxyCodeLine{15   m\_line\_status\_port(0x3FD)}
+\DoxyCodeLine{16 \{}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18   \textcolor{comment}{// Disable all interrupts}}
+\DoxyCodeLine{19   m\_interrupt\_enable\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x00);}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21   \textcolor{comment}{// Enable DLAB (set baud rate divisor)}}
+\DoxyCodeLine{22   m\_line\_control\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x80);}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24   \textcolor{comment}{// Set divisor to 3}}
+\DoxyCodeLine{25   m\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x03);}
+\DoxyCodeLine{26   m\_interrupt\_enable\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x00);}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28   \textcolor{comment}{// 8 bits, no parity, one stop bit}}
+\DoxyCodeLine{29   m\_line\_control\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x03);}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31   \textcolor{comment}{// Enable FIFO, clear them, with 14-\/byte threshold}}
+\DoxyCodeLine{32   m\_fifo\_control\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0xC7);}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34   \textcolor{comment}{// IRQs enabled, RTS/DSR set}}
+\DoxyCodeLine{35   m\_modem\_control\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x0B);}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37   \textcolor{comment}{// Test serial chip}}
+\DoxyCodeLine{38   m\_modem\_control\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x1E);}
+\DoxyCodeLine{39   m\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0xAE);}
+\DoxyCodeLine{40   \textcolor{keywordflow}{if} (m\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}() != 0xAE)}
+\DoxyCodeLine{41     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43   \textcolor{comment}{// Enable serial chip}}
+\DoxyCodeLine{44   m\_modem\_control\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x0F);}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46   \textcolor{comment}{// Set the active serial console}}
+\DoxyCodeLine{47   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_a9436c62abb8c35e861c30d12bf3241a3}{s\_active\_serial\_console}} = \textcolor{keyword}{this};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::hardwarecommunication\+::\+Port8\+Bit\+::read(), s\+\_\+active\+\_\+serial\+\_\+console, and Max\+O\+S\+::hardwarecommunication\+::\+Port8\+Bit\+::write().
+
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1SerialConsole_abc10f4ba8706b3b1144fae983478e4f3}\label{classMaxOS_1_1drivers_1_1SerialConsole_abc10f4ba8706b3b1144fae983478e4f3}} 
+\index{MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}!````~SerialConsole@{$\sim$SerialConsole}}
+\index{````~SerialConsole@{$\sim$SerialConsole}!MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{$\sim$SerialConsole()}{~SerialConsole()}}
+{\footnotesize\ttfamily Max\+O\+S\+::drivers\+::\+Serial\+Console\+::$\sim$\+Serial\+Console (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 51 of file serial.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{51                                           \{}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \textcolor{comment}{// If this is the active serial console, set it to null}}
+\DoxyCodeLine{54     \textcolor{keywordflow}{if} (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_a9436c62abb8c35e861c30d12bf3241a3}{s\_active\_serial\_console}} == \textcolor{keyword}{this})}
+\DoxyCodeLine{55             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole_a9436c62abb8c35e861c30d12bf3241a3}{s\_active\_serial\_console}} = 0;}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1SerialConsole_a2b4f287ed1ca0baaf5db16a06172dcd3}\label{classMaxOS_1_1drivers_1_1SerialConsole_a2b4f287ed1ca0baaf5db16a06172dcd3}} 
+\index{MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}!put\_character@{put\_character}}
+\index{put\_character@{put\_character}!MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{put\_character()}{put\_character()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::drivers\+::\+Serial\+Console\+::put\+\_\+character (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Waits for the serial port to be ready, then writes a character to it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The character to write \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 63 of file serial.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{63                                                     \{}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65     \textcolor{comment}{// Wait for the serial port to be ready}}
+\DoxyCodeLine{66     \textcolor{keywordflow}{while} (0 == (m\_line\_status\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}() \& 0x20));}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68     \textcolor{comment}{// Write the character}}
+\DoxyCodeLine{69     m\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}});}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::c.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1SerialConsole_a9436c62abb8c35e861c30d12bf3241a3}\label{classMaxOS_1_1drivers_1_1SerialConsole_a9436c62abb8c35e861c30d12bf3241a3}} 
+\index{MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}!s\_active\_serial\_console@{s\_active\_serial\_console}}
+\index{s\_active\_serial\_console@{s\_active\_serial\_console}!MaxOS::drivers::SerialConsole@{MaxOS::drivers::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{s\_active\_serial\_console}{s\_active\_serial\_console}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole}{Max\+O\+S\+::drivers\+::\+Serial\+Console}} $\ast$ Max\+O\+S\+::drivers\+::\+Serial\+Console\+::s\+\_\+active\+\_\+serial\+\_\+console = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 32 of file serial.\+h.
+
+
+
+Referenced by Serial\+Console().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/drivers/console/\mbox{\hyperlink{serial_8h}{serial.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/drivers/console/\mbox{\hyperlink{serial_8cpp}{serial.\+cpp}}\end{DoxyCompactItemize}

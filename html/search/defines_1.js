@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['check_5fflag_2831',['CHECK_FLAG',['../multiboot_8h.html#af9e2d06236aa8e8b6d4ed55bd94c7dc3',1,'multiboot.h']]]
+  ['gui_2947',['GUI',['../kernel_8cpp.html#a06d4b1d48749e9ebe59a895513ee6a40',1,'kernel.cpp']]]
 ];

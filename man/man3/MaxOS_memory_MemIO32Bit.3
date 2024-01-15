@@ -1,0 +1,107 @@
+.TH "MaxOS::memory::MemIO32Bit" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::memory::MemIO32Bit \- Handles 32 bit memory IO\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memoryIO\&.h>\fP
+.PP
+Inherits \fBMaxOS::memory::MemIO\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemIO32Bit\fP (uint32_t \fBaddress\fP)"
+.br
+.ti -1c
+.RI "\fB~MemIO32Bit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint32_t \fBdata\fP)"
+.br
+.RI "Writes data to the memory address\&. "
+.ti -1c
+.RI "virtual uint32_t \fBread\fP ()"
+.br
+.RI "Reads data from the memory address\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Handles 32 bit memory IO\&. 
+.PP
+Definition at line 56 of file memoryIO\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MemIO32Bit::MemIO32Bit (uint32_t address)"
+
+.PP
+Definition at line 73 of file memoryIO\&.cpp\&.
+.PP
+.nf
+74         : MemIO(address)
+75 {
+76 }
+.fi
+.SS "MemIO32Bit::~MemIO32Bit ()"
+
+.PP
+Definition at line 78 of file memoryIO\&.cpp\&.
+.PP
+.nf
+78                         {
+79 
+80 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t MemIO32Bit::read ()\fC [virtual]\fP"
+
+.PP
+Reads data from the memory address\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the data read 
+.RE
+.PP
+
+.PP
+Definition at line 96 of file memoryIO\&.cpp\&.
+.PP
+.nf
+96                          {
+97     return *((volatile uint32_t*)(m_address));
+98 }
+.fi
+.PP
+References MaxOS::memory::MemIO::m_address\&.
+.SS "void MemIO32Bit::write (uint32_t data)\fC [virtual]\fP"
+
+.PP
+Writes data to the memory address\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the data to write 
+.RE
+.PP
+
+.PP
+Definition at line 87 of file memoryIO\&.cpp\&.
+.PP
+.nf
+87                                    {
+88     (*((volatile uint32_t*)(m_address)))=(data);
+89 }
+.fi
+.PP
+References data, and MaxOS::memory::MemIO::m_address\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

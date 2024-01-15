@@ -1,0 +1,176 @@
+.TH "MaxOS::net::InternetProtocolPayloadHandler" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::InternetProtocolPayloadHandler
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ipv4\&.h>\fP
+.PP
+Inherited by \fBMaxOS::net::InternetControlMessageProtocol\fP\fC [private]\fP, \fBMaxOS::net::TransmissionControlProtocolHandler\fP\fC [private]\fP, and \fBMaxOS::net::UserDatagramProtocolHandler\fP\fC [private]\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInternetProtocolPayloadHandler\fP (\fBInternetProtocolHandler\fP *\fBinternetProtocolHandler\fP, uint8_t \fBprotocol\fP)"
+.br
+.RI "\fBPayload Handler\fP/// "
+.ti -1c
+.RI "\fB~InternetProtocolPayloadHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBhandleInternetProtocolPayload\fP (\fBInternetProtocolAddress\fP \fBsourceIP\fP, \fBInternetProtocolAddress\fP \fBdestinationIP\fP, uint8_t *payloadData, uint32_t \fBsize\fP)"
+.br
+.RI "Called when an IP packet is received\&. (Deafult, does nothing, overide for use) "
+.ti -1c
+.RI "void \fBSend\fP (\fBInternetProtocolAddress\fP \fBdestinationIP\fP, uint8_t *payloadData, uint32_t \fBsize\fP)"
+.br
+.RI "Sends an IP packet\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBInternetProtocolHandler\fP * \fBinternetProtocolHandler\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBipProtocol\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBInternetProtocolHandler\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 46 of file ipv4\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "InternetProtocolPayloadHandler::InternetProtocolPayloadHandler (\fBInternetProtocolHandler\fP * internetProtocolHandler, uint8_t protocol)"
+
+.PP
+\fBPayload Handler\fP/// 
+.PP
+Definition at line 41 of file ipv4\&.cpp\&.
+.PP
+.nf
+41                                                                                                                                  {
+42 
+43     // Store vars
+44     this -> internetProtocolHandler = internetProtocolHandler;
+45     this -> ipProtocol = protocol;
+46 
+47     //Register handler
+48     internetProtocolHandler ->connectInternetProtocolPayloadHandler(this);
+49 
+50 }
+.fi
+.PP
+References MaxOS::net::InternetProtocolHandler::connectInternetProtocolPayloadHandler(), and protocol\&.
+.SS "InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler ()"
+
+.PP
+Definition at line 52 of file ipv4\&.cpp\&.
+.PP
+.nf
+52                                                                 {
+53 
+54 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool InternetProtocolPayloadHandler::handleInternetProtocolPayload (\fBnet::InternetProtocolAddress\fP sourceIP, \fBnet::InternetProtocolAddress\fP destinationIP, uint8_t * payloadData, uint32_t size)\fC [virtual]\fP"
+
+.PP
+Called when an IP packet is received\&. (Deafult, does nothing, overide for use) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsrcIP_BE\fP The source IP address\&. 
+.br
+\fIdstIP_BE\fP The destination IP address\&. 
+.br
+\fIinternetprotocolPayload\fP The payload of the IP packet\&. 
+.br
+\fIsize\fP The size of the IP packet\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the packet was handled, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::net::TransmissionControlProtocolHandler\fP, \fBMaxOS::net::UserDatagramProtocolHandler\fP, and \fBMaxOS::net::InternetControlMessageProtocol\fP\&.
+.PP
+Definition at line 65 of file ipv4\&.cpp\&.
+.PP
+.nf
+68                                                                              {
+69     return false;
+70 }
+.fi
+.SS "void InternetProtocolPayloadHandler::Send (\fBInternetProtocolAddress\fP destinationIP, uint8_t * payloadData, uint32_t size)"
+
+.PP
+Sends an IP packet\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdstIP_BE\fP The destination IP address\&. 
+.br
+\fIinternetprotocolPayload\fP The payload of the IP packet\&. 
+.br
+\fIsize\fP The size of the IP packet\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the packet was sent, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 80 of file ipv4\&.cpp\&.
+.PP
+.nf
+80                                                                                                                     {
+81 
+82 
+83     //Pass to backend
+84     internetProtocolHandler -> sendInternetProtocolPacket(destinationIP, ipProtocol, payloadData, size);
+85 
+86 }
+.fi
+.PP
+References destinationIP, and size\&.
+.PP
+Referenced by MaxOS::net::InternetControlMessageProtocol::RequestEchoReply(), MaxOS::net::UserDatagramProtocolHandler::Send(), and MaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBInternetProtocolHandler\fP\fC [friend]\fP"
+
+.PP
+Definition at line 48 of file ipv4\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBInternetProtocolHandler\fP* MaxOS::net::InternetProtocolPayloadHandler::internetProtocolHandler\fC [protected]\fP"
+
+.PP
+Definition at line 51 of file ipv4\&.h\&.
+.PP
+Referenced by MaxOS::net::UserDatagramProtocolHandler::Connect(), MaxOS::net::TransmissionControlProtocolHandler::Connect(), MaxOS::net::UserDatagramProtocolHandler::Listen(), and MaxOS::net::TransmissionControlProtocolHandler::Listen()\&.
+.SS "uint8_t MaxOS::net::InternetProtocolPayloadHandler::ipProtocol\fC [protected]\fP"
+
+.PP
+Definition at line 52 of file ipv4\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

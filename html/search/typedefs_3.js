@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['string_2594',['string',['../namespacemaxOS.html#a6a3d939df112a32e3a1655b764931088',1,'maxOS']]],
-  ['subnetmask_2595',['SubnetMask',['../namespacemaxOS_1_1net.html#a8c823821695194f776d83809d63dc725',1,'maxOS::net']]]
+  ['string_2710',['string',['../namespaceMaxOS.html#afa22b691550d34d82dd6a5e3f77b31cb',1,'MaxOS']]],
+  ['subnetmask_2711',['SubnetMask',['../namespaceMaxOS_1_1net.html#a675fed9f30ec224711b40893d3f784d6',1,'MaxOS::net']]]
 ];

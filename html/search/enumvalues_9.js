@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['j_2698',['J',['../classmaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a6908974df0a3da2046b13a9bb91772a9aab2c5cbfffe6484583ed332f3ea0143a',1,'maxOS::drivers::peripherals::KeyboardInterpreterEN_US::J()'],['../namespacemaxOS_1_1drivers_1_1peripherals.html#a9854b786a692cef8357e51059ed90ab4a09ad3599ecc05938bbcae5cab8cf05ad',1,'maxOS::drivers::peripherals::J()'],['../namespacemaxOS_1_1drivers_1_1peripherals.html#a9854b786a692cef8357e51059ed90ab4ad27b6550859d26684b22abab758898e3',1,'maxOS::drivers::peripherals::j()']]]
+  ['j_2814',['J',['../classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a345f23d5e9acfe6791e344b9595bc12bac9915751fb554f8b1c28c015dadd54f5',1,'MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::J()'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5b2965fb012c3ade7ed41b9936bf4747',1,'MaxOS::drivers::peripherals::J()'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0',1,'MaxOS::drivers::peripherals::j()']]]
 ];
