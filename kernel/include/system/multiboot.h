@@ -413,7 +413,7 @@ struct multiboot_tag_load_base_addr
 };
 
 
-namespace maxOS {
+namespace MaxOS {
 
   namespace system {
 

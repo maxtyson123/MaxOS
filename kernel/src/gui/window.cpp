@@ -4,11 +4,11 @@
 #include <gui/window.h>
 #include <gui/widgets/text.h>
 
-using namespace maxOS;
-using namespace maxOS::gui;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::peripherals;
+using namespace MaxOS;
+using namespace MaxOS::gui;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::peripherals;
 
 Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string title_text)
 : CompositeWidget(left, top, width, height),
@@ -84,7 +84,7 @@ Window::~Window() {
 MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mouseY, uint8_t button){
 
     // Pass the mouse event to the children
-    maxOS::drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouseX, mouseY, button);
+    drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouseX, mouseY, button);
     Rectangle<int32_t> window_position = position();
 
     // Bring the window to the front

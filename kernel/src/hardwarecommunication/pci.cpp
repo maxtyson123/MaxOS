@@ -6,13 +6,13 @@
 #include <drivers/ethernet/intel_i217.h>
 
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::hardwarecommunication;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::ethernet;
-using namespace maxOS::drivers::video;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::ethernet;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::memory;
 
 ///__DESCRIPTOR___
 

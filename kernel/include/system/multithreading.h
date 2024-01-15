@@ -10,7 +10,7 @@
 #include <system/gdt.h>
 
 
-namespace maxOS{
+namespace MaxOS{
 
   namespace system{
 

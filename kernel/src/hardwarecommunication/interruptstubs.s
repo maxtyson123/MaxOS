@@ -3,18 +3,18 @@ section .data
     interruptnumber db 0
 
 section .text
-    extern _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
+    extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
 
     %macro HandleException 1
-    global _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException%1Ev
-    _ZN5maxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
+    global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev
+    _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
         mov byte [interruptnumber], %1
         jmp int_bottom
     %endmacro
 
     %macro HandleInterruptRequest 1
-    global _ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev
-    _ZN5maxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
+    global _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev
+    _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
         mov byte [interruptnumber], %1 + IRQ_BASE
         push 0
         jmp int_bottom
@@ -84,7 +84,7 @@ int_bottom:
 
     push sp
     push interruptnumber
-    call _ZN5maxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
     mov ax, sp
 
     pop ax
@@ -98,6 +98,6 @@ int_bottom:
 
     add sp, 4
 
-global _ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
-_ZN5maxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
+global _ZN5MaxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
+_ZN5MaxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
     iret

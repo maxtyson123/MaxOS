@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./maxOS.sh
+source ./MaxOS.sh
 
 # Install Dependencies if not told otherwise
 if [ "$1" != "--no-deps" ]; then

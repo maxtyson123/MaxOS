@@ -9,7 +9,7 @@
 #include <drivers/driver.h>
 #include <common/graphicsContext.h>
 
-namespace maxOS
+namespace MaxOS
 {
     namespace drivers
     {

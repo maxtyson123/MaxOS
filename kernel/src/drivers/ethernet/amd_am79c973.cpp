@@ -4,11 +4,11 @@
 
 #include <drivers/ethernet/amd_am79c973.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::ethernet;
-using namespace maxOS::hardwarecommunication;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::ethernet;
+using namespace MaxOS::hardwarecommunication;
 
 amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
         :   EthernetDriver(amdNetMessageStream),

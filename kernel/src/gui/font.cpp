@@ -4,9 +4,9 @@
 
 #include <gui/font.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::gui;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
 
 Font::Font(uint8_t* font_data)
 {

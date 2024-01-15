@@ -4,10 +4,10 @@
 
 #include <filesystem/msdospart.h>
 
-using namespace maxOS;
-using namespace maxOS::drivers::disk;
-using namespace maxOS::common;
-using namespace maxOS::filesystem;
+using namespace MaxOS;
+using namespace MaxOS::drivers::disk;
+using namespace MaxOS::common;
+using namespace MaxOS::filesystem;
 
 /**
  * @brief read the partition table of a given hard disk

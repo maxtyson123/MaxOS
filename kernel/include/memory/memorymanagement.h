@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <system/multiboot.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace memory{
 

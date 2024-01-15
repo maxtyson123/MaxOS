@@ -4,7 +4,7 @@
 
 #include <common/colour.h>
 
-using namespace maxOS::common;
+using namespace MaxOS::common;
 
 Colour::Colour() {
 

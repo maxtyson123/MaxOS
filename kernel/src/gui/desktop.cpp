@@ -4,10 +4,10 @@
 
 #include <gui/desktop.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::gui;
-using namespace maxOS::drivers::peripherals;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
+using namespace MaxOS::drivers::peripherals;
 
 /**
  * @brief Creates a new desktop with the given graphics context

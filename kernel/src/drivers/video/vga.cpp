@@ -4,10 +4,10 @@
 
 #include <drivers/video/vga.h>
 
-using namespace maxOS;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::video;
-using namespace maxOS::hardwarecommunication;
+using namespace MaxOS;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::hardwarecommunication;
 
 // http://files.osdev.org/mirrors/geezer/osd/graphics/modes.c - helpful so thanks
 

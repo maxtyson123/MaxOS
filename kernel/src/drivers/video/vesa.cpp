@@ -4,11 +4,11 @@
 
 #include <drivers/video/vesa.h>
 
-using namespace maxOS;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::video;
-using namespace maxOS::memory;
-using namespace maxOS::system;
+using namespace MaxOS;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::memory;
+using namespace MaxOS::system;
 
 VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info)
 : VideoDriver(),

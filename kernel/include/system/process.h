@@ -7,7 +7,7 @@
 
 #include <system/multithreading.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace system{
 

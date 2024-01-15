@@ -5,11 +5,11 @@
 #include <gui/widgets/button.h>
 #include <gui/font/amiga_font.h>
 
-using namespace maxOS::common;
-using namespace maxOS::gui;
-using namespace maxOS::gui::widgets;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::peripherals;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
+using namespace MaxOS::gui::widgets;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::peripherals;
 
 /// ___ Button Event Handler ___
 

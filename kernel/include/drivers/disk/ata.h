@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers{
 

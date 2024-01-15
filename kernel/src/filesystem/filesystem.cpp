@@ -4,6 +4,6 @@
 
 #include <filesystem/filesystem.h>
 
-using namespace maxOS;
-using namespace maxOS::filesystem;
+using namespace MaxOS;
+using namespace MaxOS::filesystem;
 

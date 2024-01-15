@@ -10,7 +10,7 @@
 #include <gui/font.h>
 #include <common/string.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace gui {
 

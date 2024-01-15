@@ -1,9 +1,9 @@
 #include <net/udp.h>
 
-using namespace maxOS;
-using namespace maxOS::net;
-using namespace maxOS::common;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::net;
+using namespace MaxOS::common;
+using namespace MaxOS::memory;
 
 ///__Handler__
 

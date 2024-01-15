@@ -45,20 +45,20 @@
 //FILESYSTEM
 #include <filesystem/msdospart.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::peripherals;
-using namespace maxOS::drivers::ethernet;
-using namespace maxOS::drivers::video;
-using namespace maxOS::drivers::clock;
-using namespace maxOS::drivers::console;
-using namespace maxOS::hardwarecommunication;
-using namespace maxOS::gui;
-using namespace maxOS::net;
-using namespace maxOS::system;
-using namespace maxOS::memory;
-using namespace maxOS::filesystem;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::peripherals;
+using namespace MaxOS::drivers::ethernet;
+using namespace MaxOS::drivers::video;
+using namespace MaxOS::drivers::clock;
+using namespace MaxOS::drivers::console;
+using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::gui;
+using namespace MaxOS::net;
+using namespace MaxOS::system;
+using namespace MaxOS::memory;
+using namespace MaxOS::filesystem;
 
 //Define what a constructor is
 typedef void (*constructor)();

@@ -11,7 +11,7 @@
 #include <hardwarecommunication/port.h>
 #include <drivers/video/video.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers{
 

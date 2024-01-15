@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
-source $SCRIPTDIR/maxOS.sh
+source $SCRIPTDIR/MaxOS.sh
 
 msg "Incrementing build count"
 # If the buildCount file doesn't exist, create it
@@ -41,7 +41,7 @@ fi
 # Write the version header
 cat > "${OUTPUT_FILE}" << EOF
 //
-// This file is generated automatically by the maxOS build system.
+// This file is generated automatically by the MaxOS build system.
 //
 
 #ifndef MAX_OS_COMMON_VERSION_H
@@ -52,7 +52,7 @@ cat > "${OUTPUT_FILE}" << EOF
 #include <common/string.h>
 #include <common/time.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace common
     {

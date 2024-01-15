@@ -9,7 +9,7 @@
 #include <common/inputStream.h>
 #include <common/string.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace common{
 

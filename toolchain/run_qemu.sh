@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
-source $SCRIPTDIR/maxOS.sh
+source $SCRIPTDIR/MaxOS.sh
 
 # Parse the args
 while [ "$#" -gt "0" ]; do
@@ -48,7 +48,7 @@ fi
 # Get the image path
 if [ -z "$IMAGE_PATH" ]; then
   msg "Using default image path."
-  IMAGE_PATH="../maxOS.img"
+  IMAGE_PATH="../MaxOS.img"
 else
 
   # Check if the image path is valid

@@ -4,8 +4,8 @@
 
 #include <filesystem/fat32.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::filesystem;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::filesystem;
+using namespace MaxOS::memory;

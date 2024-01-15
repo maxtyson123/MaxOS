@@ -10,7 +10,7 @@
 #include<common/rectangle.h>
 #include <common/string.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace gui{
 

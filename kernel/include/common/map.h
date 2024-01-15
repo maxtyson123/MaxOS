@@ -8,7 +8,7 @@
 #include <common/vector.h>
 #include <common/pair.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace common{
 

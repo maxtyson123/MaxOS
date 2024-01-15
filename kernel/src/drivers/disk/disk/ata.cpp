@@ -4,11 +4,11 @@
 
 #include <drivers/disk/ata.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::hardwarecommunication;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::disk;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::disk;
 
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master, OutputStream*output_stream)
 : Driver(output_stream),

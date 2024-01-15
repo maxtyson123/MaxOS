@@ -5,7 +5,7 @@
 #ifndef MAXOS_COMMON_CONSTANTS_H
 #define MAXOS_COMMON_CONSTANTS_H
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace common{
 

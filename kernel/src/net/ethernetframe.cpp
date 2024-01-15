@@ -4,12 +4,12 @@
 
 #include <net/ethernetframe.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::net;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::ethernet;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::net;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::ethernet;
+using namespace MaxOS::memory;
 
 /**
  * @param frameHandler the handler for the ethernet frame

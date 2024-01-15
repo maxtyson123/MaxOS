@@ -9,7 +9,7 @@
 #include <drivers/driver.h>
 #include <drivers/console/console.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers {
 

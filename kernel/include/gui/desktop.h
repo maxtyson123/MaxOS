@@ -11,7 +11,7 @@
 #include <gui/widget.h>
 #include <drivers/clock/clock.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace gui{
 

@@ -3,10 +3,10 @@
 //
 
 #include <drivers/driver.h>
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::drivers;
-using namespace maxOS::memory;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::drivers;
+using namespace MaxOS::memory;
 
 Driver::Driver(OutputStream* driverMessageStream)
 : m_driver_message_stream(driverMessageStream) {

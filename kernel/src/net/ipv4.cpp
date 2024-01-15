@@ -4,12 +4,12 @@
 
 #include <net/ipv4.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::net;
-using namespace maxOS::memory;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::ethernet;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::net;
+using namespace MaxOS::memory;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::ethernet;
 
 
 
@@ -62,8 +62,8 @@ InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() {
  * @param size The size of the IP packet.
  * @return True if the packet was handled, false otherwise.
  */
-bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(maxOS::net::InternetProtocolAddress,
-                                                                   maxOS::net::InternetProtocolAddress,
+bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(net::InternetProtocolAddress,
+                                                                   net::InternetProtocolAddress,
                                                                    uint8_t *,
                                                                    uint32_t) {
     return false;

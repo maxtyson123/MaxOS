@@ -5,12 +5,12 @@
 #include <drivers/console/vesaboot.h>
 #include <gui/font/amiga_font.h>
 
-using namespace maxOS;
-using namespace maxOS::common;
-using namespace maxOS::gui;
-using namespace maxOS::memory;
-using namespace maxOS::drivers;
-using namespace maxOS::drivers::console;
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::gui;
+using namespace MaxOS::memory;
+using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::console;
 
 VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 : Driver(),

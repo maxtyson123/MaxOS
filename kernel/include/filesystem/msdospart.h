@@ -9,7 +9,7 @@
 #include <filesystem/fat32.h>
 #include <stdint.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace filesystem{
 

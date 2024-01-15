@@ -4,7 +4,7 @@
 
 #include <hardwarecommunication/port.h>
 
-using namespace maxOS::hardwarecommunication;
+using namespace MaxOS::hardwarecommunication;
 
 Port::Port(uint16_t port_number)
 : m_port_number(port_number)

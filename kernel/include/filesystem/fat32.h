@@ -12,7 +12,7 @@
 #include <memory/memorymanagement.h>
 #include <stdint.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace filesystem{
 

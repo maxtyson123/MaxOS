@@ -4,7 +4,7 @@
 
 #include <common/graphicsContext.h>
 
-using namespace maxOS::common;
+using namespace MaxOS::common;
 
 GraphicsContext::GraphicsContext()
 {

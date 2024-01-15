@@ -3,7 +3,7 @@
 //
 #include <common/string.h>
 
-maxOS::String::String()
+MaxOS::String::String()
 {
 
   // String that only contains the null terminator
@@ -13,7 +13,7 @@ maxOS::String::String()
 
 }
 
-maxOS::String::String(char const *string)
+MaxOS::String::String(char const *string)
 {
 
   // Get the length of the string
@@ -33,7 +33,7 @@ maxOS::String::String(char const *string)
 }
 
 
-maxOS::String::String(int value) {
+MaxOS::String::String(int value) {
 
   // The length of the string
   m_length = 0;
@@ -60,13 +60,13 @@ maxOS::String::String(int value) {
   m_string[m_length] = '\0';
 }
 
-maxOS::String::String(maxOS::String const &other) {
+MaxOS::String::String(String const &other) {
   // Copy the other string
   copy(other);
 }
 
 
-maxOS::String::~String() {
+MaxOS::String::~String() {
 
   // Free the memory
   delete[] m_string;
@@ -78,7 +78,7 @@ maxOS::String::~String() {
  *
  * @param other The other string
  */
-void maxOS::String::copy(maxOS::String const &other) {
+void MaxOS::String::copy(String const &other) {
 
   // Get the length of the string
   m_length = other.length();
@@ -101,7 +101,7 @@ void maxOS::String::copy(maxOS::String const &other) {
  * @param string The string
  * @return The sum of the ascii values of the characters in the string
  */
-int maxOS::String::lex_value(maxOS::String const &string) const {
+int MaxOS::String::lex_value(String const &string) const {
 
     // The sum of the ascii values of the characters in the string
     int sum = 0;
@@ -123,7 +123,7 @@ int maxOS::String::lex_value(maxOS::String const &string) const {
  * @param other
  * @return String& The string
  */
-maxOS::String &maxOS::String::operator = (maxOS::String const &other) {
+String &MaxOS::String::operator = (String const &other) {
     // Copy the other string
     copy(other);
 
@@ -132,7 +132,7 @@ maxOS::String &maxOS::String::operator = (maxOS::String const &other) {
 
 }
 
-char* maxOS::String::c_str() {
+char* MaxOS::String::c_str() {
 
     // Return the string
     return m_string;
@@ -144,7 +144,7 @@ char* maxOS::String::c_str() {
  *
  * @return The string as an array of characters
  */
-const char* maxOS::String::c_str() const {
+const char* MaxOS::String::c_str() const {
 
     // Return the string
     return m_string;
@@ -156,7 +156,7 @@ const char* maxOS::String::c_str() const {
  *
  * @return The length of the string
  */
-int maxOS::String::length() const {
+int MaxOS::String::length() const {
 
     // Return the length
     return m_length;
@@ -169,7 +169,7 @@ int maxOS::String::length() const {
  * @param other The other string
  * @return True if the strings are equal, false otherwise
  */
-bool maxOS::String::operator == (maxOS::String const &other) const {
+bool MaxOS::String::operator == (String const &other) const {
 
     // Check if the lengths are equal
     if (m_length != other.length())
@@ -190,7 +190,7 @@ bool maxOS::String::operator == (maxOS::String const &other) const {
  * @param other The other string
  * @return True if the strings are not equal, false otherwise
  */
-bool maxOS::String::operator != (maxOS::String const &other) const {
+bool MaxOS::String::operator != (String const &other) const {
 
     // If the strings are equal, return false
     if (*this == other)
@@ -207,7 +207,7 @@ bool maxOS::String::operator != (maxOS::String const &other) const {
  * @param other The other string
  * @return True if the string is less than the other, false otherwise
  */
-bool maxOS::String::operator < (maxOS::String const &other) const {
+bool MaxOS::String::operator < (String const &other) const {
 
   // If the sum of this is less than the sum of the other, return true
   return lex_value(*this) < lex_value(other);
@@ -220,7 +220,7 @@ bool maxOS::String::operator < (maxOS::String const &other) const {
  * @param other The other string
  * @return True if the string is greater than the other, false otherwise
  */
-bool maxOS::String::operator > (maxOS::String const &other) const {
+bool MaxOS::String::operator > (String const &other) const {
 
   // If the sum of this is greater than the sum of the other, return true
   return lex_value(*this) > lex_value(other);
@@ -233,7 +233,7 @@ bool maxOS::String::operator > (maxOS::String const &other) const {
  * @param other The other string
  * @return True if the string is less than or equal to the other, false otherwise
  */
-bool maxOS::String::operator <= (maxOS::String const &other) const {
+bool MaxOS::String::operator <= (String const &other) const {
 
   // If the sum of this is less than or equal to the sum of the other, return true
   return lex_value(*this) <= lex_value(other);
@@ -246,7 +246,7 @@ bool maxOS::String::operator <= (maxOS::String const &other) const {
  * @param other The other string
  * @return True if the string is greater than or equal to the other, false otherwise
  */
-bool maxOS::String::operator >= (maxOS::String const &other) const {
+bool MaxOS::String::operator >= (String const &other) const {
 
     // If the sum of this is greater than or equal to the sum of the other, return true
     return lex_value(*this) >= lex_value(other);
@@ -259,7 +259,7 @@ bool maxOS::String::operator >= (maxOS::String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-maxOS::String maxOS::String::operator + (maxOS::String const &other) const {
+String MaxOS::String::operator + (String const &other) const {
 
   // The concatenated string
   String concatenated;
@@ -292,7 +292,7 @@ maxOS::String maxOS::String::operator + (maxOS::String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-maxOS::String &maxOS::String::operator += (maxOS::String const &other) {
+MaxOS::String &MaxOS::String::operator += (String const &other) {
 
     // The concatenated string
     String concatenated;
@@ -329,7 +329,7 @@ maxOS::String &maxOS::String::operator += (maxOS::String const &other) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char& maxOS::String::operator[](int index) {
+char& MaxOS::String::operator[](int index) {
   return m_string[index];
 }
 
@@ -340,6 +340,6 @@ char& maxOS::String::operator[](int index) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char& maxOS::String::operator[](int index) const {
+char& MaxOS::String::operator[](int index) const {
     return m_string[index];
 }

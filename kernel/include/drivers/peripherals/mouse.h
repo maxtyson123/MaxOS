@@ -14,7 +14,7 @@
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
 
-namespace maxOS {
+namespace MaxOS {
     namespace drivers {
         namespace peripherals {
 

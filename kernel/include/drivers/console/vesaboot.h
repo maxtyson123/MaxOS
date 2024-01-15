@@ -11,7 +11,7 @@
 #include <drivers/console/console.h>
 #include <common/logo.h>
 
-namespace maxOS{
+namespace MaxOS{
 
     namespace drivers {
 

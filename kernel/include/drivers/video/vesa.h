@@ -13,7 +13,7 @@
 #include <memory/memoryIO.h>
 
 
-namespace maxOS {
+namespace MaxOS {
 
     namespace drivers {
 
