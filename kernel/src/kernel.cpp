@@ -111,6 +111,9 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     _kprintf("MaxOS booted\n");
 
+    // TODO: Now that it is in a 64bit mode in the higher half some things need to be rewritten
+    while (true);
+
     // Make the multiboot header
     Multiboot multiboot(addr);
 
@@ -128,8 +131,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VESABootConsole console(&vesa);
     console.clear();
     console.print_logo();
-
-    while (true);
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
