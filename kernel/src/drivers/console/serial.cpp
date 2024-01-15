@@ -56,6 +56,10 @@ MaxOS::drivers::SerialConsole::~SerialConsole() {
 
 }
 
+/**
+ * @brief Waits for the serial port to be ready, then writes a character to it
+ * @param c The character to write
+ */
 void MaxOS::drivers::SerialConsole::put_character(char c) {
 
     // Wait for the serial port to be ready

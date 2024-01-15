@@ -11,7 +11,7 @@ using namespace MaxOS::drivers;
  * @brief Converts integer to string
  *
  * @param buffer The buffer to store the converted string
- * @param base The base (d for decimal, x gor hex)
+ * @param base The base of the number (10 for decimal, 16 for hex)
  * @param number The number to convert
  */
 char* itoa(int base, int number)
@@ -44,6 +44,12 @@ char* itoa(int base, int number)
     return &buffer[i + 1];
 }
 
+/**
+ * @brief Gets the length of a string
+ *
+ * @param str The string to get the length of
+ * @return The length of the string
+ */
 int strlen(const char* str)
 {
    int len = 0;
@@ -51,6 +57,10 @@ int strlen(const char* str)
         return len;
 }
 
+/**
+ * @brief Prints a character to the serial output if it is initialized
+ * @param c The character to print
+ */
 static void putchar (int c)
 {
     // Check if the active serial console is null
@@ -61,6 +71,9 @@ static void putchar (int c)
     SerialConsole::s_active_serial_console->put_character(c);
 }
 
+/**
+ * @ brief Prints a debug prefix (in yellow) to the serial output
+ */
 void pre_kprintf()
 {
   // Print the kernel header with yellow text

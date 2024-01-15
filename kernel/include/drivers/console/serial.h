@@ -13,6 +13,11 @@ namespace MaxOS {
 
   namespace drivers {
 
+
+      /**
+       * @class SerialConsole
+       * @brief A driver for the serial output
+       */
       class SerialConsole : public Driver {
 
         private:
