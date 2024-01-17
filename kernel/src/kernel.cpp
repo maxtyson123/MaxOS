@@ -111,8 +111,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     _kprintf("MaxOS booted\n");
 
-    // TODO: Now that it is in a 64bit mode in the higher half some things need to be rewritten
-    while (true);
+    GlobalDescriptorTable gdt;
+    _kprintf("GDT set up\n");
+
+    // TODO: 64 bit architecture rewrite
+    return;
 
     // Make the multiboot header
     Multiboot multiboot(addr);
@@ -157,7 +160,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     systemSetupHeaderStream << "Setting up system";
 
     //Setup GDT
-    GlobalDescriptorTable gdt(multiboot.get_basic_meminfo());
+    // TODO:  GlobalDescriptorTable gdt;
     cout << "-- Set Up GDT\n";
     systemSetupHeaderStream << ".";
 

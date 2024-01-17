@@ -28,7 +28,7 @@ Task::Task(GlobalDescriptorTable *gdt, void entrypoint()) {
 
     // Set up the function pointer
     m_cpu_state-> eip = (uint32_t)entrypoint;
-    m_cpu_state-> cs = gdt->code_segment_selector();
+    //TODO: m_cpu_state-> cs = gdt->code_segment_selector();
     m_cpu_state-> eflags = 0x202;
 }
 

@@ -62,7 +62,7 @@ uint32_t ThreadManager::create_thread(void entrypoint())
     Thread* new_thread = new Thread();
     new_thread -> init(entrypoint);
     new_thread -> m_tid = m_threads.size();
-    new_thread -> m_cpu_state -> cs = m_gdt-> code_segment_selector();
+    //TODO: new_thread -> m_cpu_state -> cs = m_gdt-> code_segment_selector();
 
     // Add the thread to the array
     m_threads.push_back(new_thread);

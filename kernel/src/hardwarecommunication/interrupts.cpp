@@ -53,7 +53,9 @@ InterruptManager::InterruptManager(uint16_t hardware_interrupt_offset, system::G
   pic_slave_data_port(0xA1)
 {
 
-    uint32_t code_segment = global_descriptor_table->code_segment_selector();
+    // TODO: Re write the IDT
+    return;
+    uint32_t code_segment = 0;
 
     // By default ignore all interrupts so any un handled interrupts wont cause a fault
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
