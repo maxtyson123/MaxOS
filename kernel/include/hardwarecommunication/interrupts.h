@@ -11,10 +11,13 @@
 #include <system/multithreading.h>
 #include <common/inputStream.h>
 #include <common/outputStream.h>
+#include <system/cpu.h>
 
 
 namespace MaxOS {
     namespace hardwarecommunication {
+
+
 
         class InterruptManager;
 
@@ -36,24 +39,22 @@ namespace MaxOS {
         };
 
         /**
-         * @struct GateDescriptor
-         * @brief Describes a gate in the Interrupt Descriptor Table
+         * @struct IDTR
+         * @brief A struct that holds the IDT register
          */
-        struct GateDescriptor {
-          uint16_t  handler_address_low_bits;
-          uint16_t  gdt_code_segment_selector;
-          uint8_t   reserved;
-          uint8_t   access;
-          uint16_t handler_address_high_bits;
+        struct IDTR {
+            uint16_t limit;
+            uint64_t base;
         } __attribute__((packed));
 
-        /**
-         * @struct InterruptDescriptorTablePointer
-         * @brief Describes the Interrupt Descriptor Table
-         */
-        struct InterruptDescriptorTablePointer {
-          uint16_t size;
-          uint32_t base;
+        struct InterruptDescriptor{
+          uint16_t address_low_bits;
+          uint16_t segment_selector;
+          uint8_t ist;
+          uint8_t flags;
+          uint16_t address_mid_bits;
+          uint32_t address_high_bits;
+          uint32_t reserved;
         } __attribute__((packed));
 
         /**
@@ -71,11 +72,14 @@ namespace MaxOS {
                 InterruptHandler* m_interrupt_handlers[256];
                 system::ThreadManager* m_thread_manager;
 
-                static GateDescriptor s_interrupt_descriptor_table[256];
+                static InterruptDescriptor s_interrupt_descriptor_table[256];
 
-                static void set_interrupt_descriptor_table_entry(uint8_t interrupt, uint16_t code_segment_selector_offset, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t descriptor_type);
+                static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (*handler)(), uint8_t descriptor_privilege_level);
 
                 static void InterruptIgnore();
+
+                // Error Codes
+                // TODO
 
                 //Various Interrupts
                 static void HandleInterruptRequest0x00();
@@ -96,7 +100,9 @@ namespace MaxOS {
                 static void HandleInterruptRequest0x80();
                 static void HandleInterruptRequest0x0F();
                 static void HandleInterruptRequest0x31();
+                static void HandleInterruptRequest0x60();
 
+                // Exceptions
                 static void HandleException0x00();
                 static void HandleException0x01();
                 static void HandleException0x02();
@@ -105,16 +111,16 @@ namespace MaxOS {
                 static void HandleException0x05();
                 static void HandleException0x06();
                 static void HandleException0x07();
-                static void HandleException0x08();
+                static void HandleInterruptError0x08();
                 static void HandleException0x09();
-                static void HandleException0x0A();
-                static void HandleException0x0B();
-                static void HandleException0x0C();
-                static void HandleException0x0D();
-                static void HandleException0x0E();
+                static void HandleInterruptError0x0A();
+                static void HandleInterruptError0x0B();
+                static void HandleInterruptError0x0C();
+                static void HandleInterruptError0x0D();
+                static void HandleInterruptError0x0E();
                 static void HandleException0x0F();
                 static void HandleException0x10();
-                static void HandleException0x11();
+                static void HandleInterruptError0x11();
                 static void HandleException0x12();
                 static void HandleException0x13();
                 static void HandleException0x14();
@@ -130,20 +136,12 @@ namespace MaxOS {
                 static void HandleException0x1E();
                 static void HandleException0x1F();
 
+                static system::cpu_status_t* HandleInterrupt(system::cpu_status_t* status);
 
-                static uint32_t HandleInterrupt(uint8_t interrupt, uint32_t esp);
-                static uint32_t HandleInterruptRequest(uint32_t esp);
-                uint32_t handle_interrupt_request(uint8_t interrupt, uint32_t esp);
-
-                //PIC Cominunication
-                Port8BitSlow pic_master_command_port;
-                Port8BitSlow pic_master_data_port;
-                Port8BitSlow pic_slave_command_port;
-                Port8BitSlow pic_slave_data_port;
-
+                system::cpu_status_t* handle_interrupt_request(system::cpu_status_t*);
 
             public:
-                InterruptManager(uint16_t hardware_interrupt_offset, system::GlobalDescriptorTable*global_descriptor_table, system::ThreadManager* thread_manager, common::OutputStream* handler);
+                InterruptManager(uint16_t hardware_interrupt_offset, common::OutputStream* handler);
                 ~InterruptManager();
 
                 uint16_t hardware_interrupt_offset();

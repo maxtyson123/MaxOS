@@ -1,25 +1,90 @@
-section .data
-    IRQ_BASE equ 0x20
-    interruptnumber db 0
+; Credit https://github.com/dreamos82/Dreamos64
 
-section .text
-    extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
+[bits  64]
+[extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE]
 
-    %macro HandleException 1
-    global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev
-    _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
-        mov byte [interruptnumber], %1
-        jmp int_bottom
-    %endmacro
+%macro HandleException 1
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev]
+_ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
+    ; When this macro is called the status registers are already on the stack
+    push 0	; since we have no error code, to keep things consistent we push a default EC of 0
+    push %1 ; pushing the interrupt number for easier identification by the handler
+    save_context ; Now we can save the general purpose registers
+    mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
+    cld ; Clear the direction flag
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE ; Now we call the interrupt handler
+    mov rsp, rax    ; use the returned context
+    restore_context ; We served the interrupt let's restore the previous context
+    add rsp, 16 ; We can discard the interrupt number and the error code
+    iretq ; Now we can return from the interrupt
+%endmacro
 
-    %macro HandleInterruptRequest 1
-    global _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev
-    _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
-        mov byte [interruptnumber], %1 + IRQ_BASE
-        push 0
-        jmp int_bottom
-    %endmacro
+%macro HandleInterruptRequest 1
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev]
+_ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
+    ; When this macro is called the status registers are already on the stack
+    push 0	; since we have no error code, to keep things consistent we push a default EC of 0
+    push (%1 + 0x20) ; pushing the interrupt number for easier identification by the handler
+    save_context ; Now we can save the general purpose registers
+    mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
+    cld ; Clear the direction flag
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE ; Now we call the interrupt handler
+    mov rsp, rax    ; use the returned context
+    restore_context ; We served the interrupt let's restore the previous context
+    add rsp, 16 ; We can discard the interrupt number and the error code
+    iretq ; Now we can return from the interrupt
+%endmacro
 
+%macro HandleInterruptError 1
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev]
+_ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
+    push %1 ; In this case the error code is already present on the stack
+    save_context
+    mov rdi, rsp
+    cld
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE
+    restore_context
+    add rsp, 16
+    iretq
+%endmacro
+
+%macro save_context 0
+    push rax
+    push rbx
+    push rcx
+    push rdx
+    push rbp
+    push rsi
+    push rdi
+    push r8
+    push r9
+    push r10
+    push r11
+    push r12
+    push r13
+    push r14
+    push r15
+%endmacro
+
+%macro restore_context 0
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop r11
+    pop r10
+    pop r9
+    pop r8
+    pop rdi
+    pop rsi
+    pop rbp
+    pop rdx
+    pop rcx
+    pop rbx
+    pop rax
+%endmacro
+
+; Exception handlers
 HandleException 0x00
 HandleException 0x01
 HandleException 0x02
@@ -28,16 +93,16 @@ HandleException 0x04
 HandleException 0x05
 HandleException 0x06
 HandleException 0x07
-HandleException 0x08
+HandleInterruptError 0x08
 HandleException 0x09
-HandleException 0x0A
-HandleException 0x0B
-HandleException 0x0C
-HandleException 0x0D
-HandleException 0x0E
+HandleInterruptError 0x0A
+HandleInterruptError 0x0B
+HandleInterruptError 0x0C
+HandleInterruptError 0x0D
+HandleInterruptError 0x0E
 HandleException 0x0F
 HandleException 0x10
-HandleException 0x11
+HandleInterruptError 0x11
 HandleException 0x12
 HandleException 0x13
 HandleException 0x14
@@ -53,6 +118,7 @@ HandleException 0x1D
 HandleException 0x1E
 HandleException 0x1F
 
+; Hardware interrupt handlers
 HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01
 HandleInterruptRequest 0x02
@@ -70,34 +136,4 @@ HandleInterruptRequest 0x0D
 HandleInterruptRequest 0x0E
 HandleInterruptRequest 0x0F
 HandleInterruptRequest 0x31
-HandleInterruptRequest 0x80
-
-int_bottom:
-    push bp
-    push di
-    push si
-
-    push dx
-    push cx
-    push bx
-    push ax
-
-    push sp
-    push interruptnumber
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEhj
-    mov ax, sp
-
-    pop ax
-    pop bx
-    pop cx
-    pop dx
-
-    pop si
-    pop di
-    pop bp
-
-    add sp, 4
-
-global _ZN5MaxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv
-_ZN5MaxOS21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
-    iret
+HandleInterruptRequest 0x60

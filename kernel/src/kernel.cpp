@@ -114,8 +114,19 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     GlobalDescriptorTable gdt;
     _kprintf("GDT set up\n");
 
+    InterruptManager interrupts(0x20, 0);
+    _kprintf("IDT set up\n");
+
+    interrupts.activate();
+    _kprintf("IDT activated\n");
+
+    asm("int $0x80");
+    _kprintf("IDT test completed\n");
+
     // TODO: 64 bit architecture rewrite
-    return;
+    while (true) {
+        asm("hlt"); //TODO: This causes a Double Fault and then infinte General Protection Faults
+    }
 
     // Make the multiboot header
     Multiboot multiboot(addr);
@@ -172,7 +183,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "-- Set Up Thread Management\n";
     systemSetupHeaderStream << ".";
 
-    InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
+    //TODO: InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
     cout << "-- Set Up Interrupts\n";
     systemSetupHeaderStream << ".";
 

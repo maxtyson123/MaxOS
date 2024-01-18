@@ -12,6 +12,10 @@ namespace MaxOS {
     namespace system {
 
 
+        /**
+         * @struct GDTR
+         * @brief A struct used to store information for the GDT Register
+         */
         struct GDTR {
             uint16_t limit;
             uint64_t address;

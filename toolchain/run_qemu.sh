@@ -139,6 +139,7 @@ QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"       # Add a network devi
 QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                     # Add port forwarding
 QEMU_ARGS="$QEMU_ARGS -drive file=$IMAGE_PATH,format=raw"   # Add the image as a drive
 QEMU_ARGS="$QEMU_ARGS,if=ide,cache=directsync,id=disk0"     # Configure the drive to be an ide drive with direct sync caching
+QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"              # Don't reboot or shutdown on exit
 
 # Run qemu
 msg "Running qemu with args: $QEMU_ARGS"
