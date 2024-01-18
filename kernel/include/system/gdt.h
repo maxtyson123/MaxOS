@@ -27,7 +27,7 @@ namespace MaxOS {
          */
         class GlobalDescriptorTable {
 
-          uint64_t m_gdt[4];
+          uint64_t m_gdt[5];
 
           public:
               GlobalDescriptorTable();

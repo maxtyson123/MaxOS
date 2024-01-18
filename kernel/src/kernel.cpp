@@ -39,6 +39,7 @@
 
 //SYSTEM
 #include <system/process.h>
+#include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
 #include <system/multithreading.h>
@@ -128,13 +129,20 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     _kprintf("ACPI set up\n");
 
+    AdvancedProgrammableInterruptController apic(&acpi);
+    _kprintf("APIC set up\n");
+
+
     // TODO: 64 bit architecture rewrite
     while (true) {
-        asm("hlt"); //TODO: This causes a Double Fault and then infinte General Protection Faults
+         //TODO: This causes a Double Fault and then infinte General Protection Faults
+         system::CPU::halt();
     }
 
     // Init memory management
     MemoryManager memoryManager(multiboot.get_mmap());
+    // TODO: Alot needs to be page mapped and higher halfed
+
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());

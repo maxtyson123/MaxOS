@@ -147,19 +147,7 @@ p3_table_hh:
     resb 4096
 p2_table:
     resb 4096
-%ifdef SMALL_PAGES
-; if SMALL_PAGES is defined it means we are using 4k pages
-; For now the first 8mb will be mapped for the kernel.
-; This part is not implemented yet
-pt1_table:
-    resb 4096
-pt2_table:
-    resb 4096
-pt3_table:
-    resb 4096
-pt4_table:
-    resb 4096
-%endif
+
 ; This section is temporary to test the framebuffer
 align 4096
 fbb_p3_table:

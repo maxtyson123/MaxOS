@@ -44,7 +44,7 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 
     // Store the GDT in the GDTR
     GDTR gdtr = {
-        .limit = 4 * sizeof(uint64_t) - 1,
+        .limit = 5 * sizeof(uint64_t) - 1,
         .address = (uint64_t)m_gdt
     };
 

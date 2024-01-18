@@ -267,6 +267,40 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
   else
     _kprintf("Unhandled Interrupt: 0x%x\n", status->interrupt_number);
 
+  // Debug the General Protection Fault
+  if(status->interrupt_number == 0x0D) {
+
+    // Define masks for each field
+    uint32_t E_MASK = 0b10000000000000000000000000000000;
+    uint32_t Tbl_MASK = 0b01100000000000000000000000000000;
+    uint32_t Index_MASK = 0b00011111111111110000000000000000;
+
+    // Use bit shifting and masking to extract values
+    int E = (status -> error_code & E_MASK) >> 31;
+    int Tbl = (status -> error_code & Tbl_MASK) >> 29;
+    int Index = (status -> error_code & Index_MASK) >> 16;
+
+    // If bit 0 is set, the exception was caused by external event
+    _kprintf("General Protection Fault: External Event: %s\n", (E) ? "Yes" : "No");
+
+    switch(Tbl) {
+      case 0b00: _kprintf("General Protection Fault: Table: GDT\n"); break;
+      case 0b01: _kprintf("General Protection Fault: Table: IDT\n"); break;
+      case 0b10: _kprintf("General Protection Fault: Table: LDT\n"); break;
+      case 0b11: _kprintf("General Protection Fault: Table: IDT\n"); break;
+    }
+
+    // Find the selector index (next 13 bits)
+    _kprintf("General Protection Fault: Selector Index: 0x%x\n", Index);
+
+    // Hang
+    while(true);
+  }
+
+
+  //TODO: Send SMP interrupt
+  //todo: send eoi
+
   // Return the status
   return status;
 }
