@@ -5,8 +5,9 @@
 #ifndef MAXOS_SYSTEM_CPU_H
 #define MAXOS_SYSTEM_CPU_H
 
-#include <stdint.h>
 #include <cpuid.h>
+#include <stddef.h>
+#include <stdint.h>
 
 namespace MaxOS{
 
@@ -39,6 +40,11 @@ namespace MaxOS{
       uint64_t ss;
     } __attribute__((__packed__)) cpu_status_t ;
 
+    struct StackFrame{
+      StackFrame* next;
+      uintptr_t rip;
+    };
+
     class CPU {
       public:
         static void halt();
@@ -47,6 +53,7 @@ namespace MaxOS{
         static uint64_t read_msr(uint32_t msr);
         static void write_msr(uint32_t msr, uint64_t value);
         static void cpuid(uint32_t leaf, uint32_t& eax, uint32_t& ebx, uint32_t& ecx, uint32_t& edx);
+        static void stack_trace(size_t);
     };
 
   }

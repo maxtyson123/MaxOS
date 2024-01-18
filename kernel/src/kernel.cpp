@@ -132,7 +132,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     AdvancedProgrammableInterruptController apic(&acpi);
     _kprintf("APIC set up\n");
 
-
     // TODO: 64 bit architecture rewrite
     while (true) {
          //TODO: This causes a Double Fault and then infinte General Protection Faults

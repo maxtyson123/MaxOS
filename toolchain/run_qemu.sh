@@ -120,10 +120,15 @@ if [ -n "$PORT_FORWARDING_HOST" ] && [ -n "$PORT_FORWARDING_GUEST" ]; then
 fi
 
 # Check if we are debugging
-DEBUG="-s S"
-if [ -z "$USE_DEBUG" ] || [ "$ACCELERATOR" == "-accel whpx,kernel-irqchip=off -accel tcg" ]; then
-  msg "Disabling debugging."
-  DEBUG=""
+DEBUG=""
+if [  "$USE_DEBUG" -ne "0" ]; then
+    DEBUG="-s -S"
+
+    # WSL  needs to be disabled
+    if [ "$IN_WSL" -ne "0" ]; then
+      msg "WSL disabled."
+      ACCELERATOR=""
+    fi
 fi
 
 # Create the args

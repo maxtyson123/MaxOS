@@ -2,6 +2,7 @@
 // Created by 98max on 18/01/2024.
 //
 #include <system/cpu.h>
+#include <common/kprint.h>
 
 void MaxOS::system::CPU::halt() {
   asm volatile("hlt");
@@ -71,4 +72,22 @@ void MaxOS::system::CPU::cpuid(uint32_t leaf, uint32_t &eax, uint32_t &ebx,uint3
 
   // Call the cpuid instruction
   __get_cpuid(leaf, &eax, &ebx, &ecx, &edx);
+}
+void MaxOS::system::CPU::stack_trace(size_t level) {
+
+    // Get the first stack frame
+    StackFrame* frame = __builtin_frame_address(0);
+    size_t current_level = 0;
+
+    // Loop through the frames logging
+    while (current_level < level && frame != nullptr){
+
+        // Print the frame
+        _kprintf("(%d);\t at 0x%x\n", current_level, frame->rip);
+
+        // Next frame
+        frame = frame -> next;
+        current_level++;
+
+    }
 }

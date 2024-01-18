@@ -261,8 +261,11 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
   if(m_interrupt_handlers[status -> interrupt_number] != 0)
       m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
 
-  else if(status->interrupt_number < m_hardware_interrupt_offset)
-    _kprintf("Exception: %s\n", exceptions[status->interrupt_number]);
+  else if(status->interrupt_number < m_hardware_interrupt_offset){
+    _kprintf("Exception: %s, Error Code: 0x%x\n", exceptions[status->interrupt_number], status->error_code);
+    CPU::stack_trace(10);
+  }
+
 
   else
     _kprintf("Unhandled Interrupt: 0x%x\n", status->interrupt_number);
