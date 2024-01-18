@@ -49,7 +49,18 @@ namespace MaxOS {
     };
 
     typedef String              string;
-
 }
+
+// Compare functions
+bool strcmp(char const *str1, char const *str2);
+bool strcmp(char const *str1, MaxOS::String const &str2);
+bool strcmp(MaxOS::String const &str1, char const *str2);
+bool strcmp(MaxOS::String const &str1, MaxOS::String const &str2);
+
+// Compare limited functions
+bool strncmp(char const *str1, char const *str2, int length);
+bool strncmp(char const *str1, MaxOS::String const &str2, int length);
+bool strncmp(MaxOS::String const &str1, char const *str2, int length);
+bool strncmp(MaxOS::String const &str1, MaxOS::String const &str2, int length);
 
 #endif //MAXOS_STRING_H

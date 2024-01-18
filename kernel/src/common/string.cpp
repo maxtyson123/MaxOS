@@ -345,3 +345,83 @@ char& String::operator[](int index) {
 char& String::operator[](int index) const {
     return m_string[index];
 }
+
+
+/**
+ * @brief Checks if one string is equal to another
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
+bool strcmp(char const *str1, char const *str2) {
+
+    // Check if the strings are equal
+    for (int i = 0; str1[i] != '\0' || str2[i] != '\0'; i++)
+      if (str1[i] != str2[i])
+            return false;
+
+    // The strings are equal
+        return true;
+
+}
+
+bool strcmp(char const *str1, String const &str2) {
+
+  // Use the other strcmp function
+  return strcmp(str1, str2.c_str());
+
+}
+
+bool strcmp(String const &str1, char const *str2) {
+
+    // Use the other strcmp function
+    return strcmp(str1.c_str(), str2);
+}
+
+bool strcmp(String const &str1, String const &str2) {
+
+  // Use the other strcmp function
+  return strcmp(str1.c_str(), str2.c_str());
+
+}
+
+/**
+ * @brief Checks if one string is equal to another
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the strings
+ * @return True if the strings are equal, false otherwise
+ */
+bool strncmp(char const *str1, char const *str2, int length) {
+
+  // Check if the strings are equal
+  for (int i = 0; i < length; i++)
+    if (str1[i] != str2[i])
+        return false;
+
+  // Strings are equal
+  return true;
+
+}
+
+bool strncmp(char const *str1, String const &str2, int length) {
+
+  // Use the other strncmp function
+  return strncmp(str1, str2.c_str(), length);
+
+}
+
+bool strncmp(String const &str1, char const *str2, int length) {
+
+  // Use the other strncmp function
+  return strncmp(str1.c_str(), str2, length);
+
+}
+
+bool strncmp(String const &str1, String const &str2, int length) {
+
+  // Use the other strncmp function
+  return strncmp(str1.c_str(), str2.c_str(), length);
+}

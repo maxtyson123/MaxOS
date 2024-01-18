@@ -6,6 +6,8 @@
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
+#include <hardwarecommunication/acpi.h>
+#include <hardwarecommunication/apic.h>
 
 //Drivers
 #include <drivers/disk/ata.h>
@@ -106,6 +108,9 @@ void print_boot_header(Console* console){
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
+    // Make the multiboot header
+    Multiboot multiboot(addr);
+
     // Initialise the serial console
     SerialConsole serialConsole;
 
@@ -120,16 +125,13 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     interrupts.activate();
     _kprintf("IDT activated\n");
 
-    asm("int $0x80");
-    _kprintf("IDT test completed\n");
+    AdvancedConfigurationAndPowerInterface acpi(&multiboot);
+    _kprintf("ACPI set up\n");
 
     // TODO: 64 bit architecture rewrite
     while (true) {
         asm("hlt"); //TODO: This causes a Double Fault and then infinte General Protection Faults
     }
-
-    // Make the multiboot header
-    Multiboot multiboot(addr);
 
     // Init memory management
     MemoryManager memoryManager(multiboot.get_mmap());

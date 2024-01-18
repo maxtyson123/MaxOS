@@ -423,6 +423,8 @@ namespace MaxOS {
           multiboot_tag_basic_meminfo* m_basic_meminfo;
           multiboot_tag_string* m_bootloader_name;
           multiboot_tag_mmap* m_mmap;
+          multiboot_tag_old_acpi* m_old_acpi;
+          multiboot_tag_new_acpi* m_new_acpi;
 
         public:
           Multiboot(unsigned long addr);
@@ -432,6 +434,9 @@ namespace MaxOS {
           multiboot_tag_basic_meminfo* get_basic_meminfo();
           multiboot_tag_string* get_bootloader_name();
           multiboot_tag_mmap* get_mmap();
+          multiboot_tag_old_acpi* get_old_acpi();
+          multiboot_tag_new_acpi* get_new_acpi();
+
     };
   }
 }
