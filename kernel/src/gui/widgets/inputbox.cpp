@@ -190,7 +190,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
                 }
 
                 // Check if we need to make space for the new character
-                if (length >= m_widget_text.length()) {
+                if (length >= (uint32_t)m_widget_text.length()) {
                   m_widget_text += " ";
                 }
 

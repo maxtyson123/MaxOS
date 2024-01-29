@@ -11,27 +11,15 @@
 namespace MaxOS {
     namespace system {
 
+
         /**
-         * @class SegmentDescriptor
-         * @brief Stores data for the segment descriptors in the GDT
+         * @struct GDTR
+         * @brief A struct used to store information for the GDT Register
          */
-        class SegmentDescriptor {
-            private:
-              uint16_t m_limit_lo;
-              uint16_t m_base_lo;
-              uint8_t m_base_hi;
-              uint8_t m_type;
-              uint8_t m_flags_limit_hi;
-              uint8_t m_base_vhi;
-
-            public:
-              SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type);
-
-              uint32_t base();
-              uint32_t limit();
-
+        struct GDTR {
+            uint16_t limit;
+            uint64_t address;
         } __attribute__((packed));
-
 
         /**
          * @class GlobalDescriptorTable
@@ -39,21 +27,11 @@ namespace MaxOS {
          */
         class GlobalDescriptorTable {
 
-          private:
-              SegmentDescriptor m_null_segment_selector;
-              SegmentDescriptor m_unused_segment_selector;
-              SegmentDescriptor m_code_segment_selector;
-              SegmentDescriptor m_data_segment_selector;
-              SegmentDescriptor m_task_state_segment_selector;
+          uint64_t m_gdt[5];
 
           public:
-
-              GlobalDescriptorTable(multiboot_tag_basic_meminfo* meminfo);
+              GlobalDescriptorTable();
               ~GlobalDescriptorTable();
-
-              uint16_t code_segment_selector();
-              uint16_t data_segment_selector();
-              uint16_t task_state_segment_selector();
           };
     }
 }

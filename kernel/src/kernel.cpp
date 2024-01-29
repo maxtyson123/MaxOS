@@ -6,6 +6,8 @@
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
+#include <hardwarecommunication/acpi.h>
+#include <hardwarecommunication/apic.h>
 
 //Drivers
 #include <drivers/disk/ata.h>
@@ -37,6 +39,7 @@
 
 //SYSTEM
 #include <system/process.h>
+#include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
 #include <system/multithreading.h>
@@ -106,19 +109,41 @@ void print_boot_header(Console* console){
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
+    // Make the multiboot header
+    Multiboot multiboot(addr);
+
     // Initialise the serial console
     SerialConsole serialConsole;
 
     _kprintf("MaxOS booted\n");
 
-    // TODO: Now that it is in a 64bit mode in the higher half some things need to be rewritten
-    while (true);
+    //GlobalDescriptorTable gdt;
+    //_kprintf("GDT set up\n");
 
-    // Make the multiboot header
-    Multiboot multiboot(addr);
+    InterruptManager interrupts(0x20, 0);
+    _kprintf("IDT set up\n");
+
+    // TODO Memory map set up so MEMIO can be used without triggering a page fault
+
+    AdvancedConfigurationAndPowerInterface acpi(&multiboot);
+    _kprintf("ACPI set up\n");
+
+    AdvancedProgrammableInterruptController apic(&acpi);
+    _kprintf("APIC set up\n");
+
+    interrupts.activate();
+    _kprintf("IDT activated\n");
+
+    // TODO: 64 bit architecture rewrite
+    while (true) {
+         //TODO: This causes a Double Fault and then infinte General Protection Faults
+         system::CPU::halt();
+    }
 
     // Init memory management
     MemoryManager memoryManager(multiboot.get_mmap());
+    // TODO: Alot needs to be page mapped and higher halfed
+
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
@@ -157,7 +182,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     systemSetupHeaderStream << "Setting up system";
 
     //Setup GDT
-    GlobalDescriptorTable gdt(multiboot.get_basic_meminfo());
+    // TODO:  GlobalDescriptorTable gdt;
     cout << "-- Set Up GDT\n";
     systemSetupHeaderStream << ".";
 
@@ -169,7 +194,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "-- Set Up Thread Management\n";
     systemSetupHeaderStream << ".";
 
-    InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
+    //TODO: InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
     cout << "-- Set Up Interrupts\n";
     systemSetupHeaderStream << ".";
 

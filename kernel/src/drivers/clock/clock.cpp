@@ -57,7 +57,7 @@ Clock::Clock(InterruptManager *interrupt_manager, uint16_t time_between_events)
   m_data_port(0x71), m_command_port(0x70),
   m_ticks_between_events(time_between_events)
 {
-
+  //TODO: Configure APIC Clock
 }
 
 Clock::~Clock() {
@@ -81,6 +81,9 @@ void Clock::handle_interrupt() {
     // Otherwise, reset the number of ticks until the next event
     m_ticks_until_next_event = m_ticks_between_events;
 
+    // Wait for the clock to be ready
+    while((read_hardware_clock(0xA) & 0x80) != 0);
+
     // Create a time object
     Time time;
 
@@ -91,6 +94,14 @@ void Clock::handle_interrupt() {
     time.hour = binary_representation(read_hardware_clock(0x4));                     // Register 4 is the hour
     time.minute = binary_representation(read_hardware_clock(0x2));                   // Register 2 is the minute
     time.second = binary_representation(read_hardware_clock(0x0));                   // Register 0 is the second
+
+    // If the clock is using 12hr format and PM is set then add 12 to the hour
+    if(!m_24_hour_clock && (time.hour & 0x80) != 0) {
+
+       // Convert the time to 24hr format
+       time.hour = ((time.hour & 0x7F) + 12) % 24;
+
+    }
 
     //Raise the clock event
     raise_event(new TimeEvent(&time));
@@ -105,16 +116,6 @@ void Clock::handle_interrupt() {
  */
 uint8_t Clock::read_hardware_clock(uint8_t address)
 {
-    // If the address is a time or date register, disable updates
-    if(address < 10)
-    {
-      m_command_port.write(0xa);
-
-        // Wait until any updates are finished
-        while((m_data_port.read() & (1 << 7)) != 0)
-            asm volatile("nop"); // execute the "nop" assembly instruction, which does nothing, but prevents the compiler from optimizing away the loop
-    }
-
     // Send the address to the hardware clock
     m_command_port.write(address);
 
@@ -131,11 +132,11 @@ uint8_t Clock::read_hardware_clock(uint8_t address)
 uint8_t Clock::binary_representation(uint8_t number) {
 
     // If the binary coded decimal representation is not used, return the number
-    if(!m_binary_coded_decimal_representation)
+    if(m_binary)
         return number;
 
     // Otherwise, return the binary representation
-    return (number & 0xf) + ((number >> 4) & 0xf) * 10;
+    return ((number / 16) * 10) + (number & 0x0f);
 
 }
 
@@ -145,16 +146,11 @@ uint8_t Clock::binary_representation(uint8_t number) {
 void Clock::activate() {
 
     // read the status register
-    uint8_t status = read_hardware_clock(0xb);
+    uint8_t status = read_hardware_clock(0xB);
 
-    // If the fourth bit is 0 the binary coded decimal representation is used
-    m_binary_coded_decimal_representation = (status & 4) == 0;
-
-    // Convert status to binary
-    // 00001011 = 0x0B (status as an example)
-    // 00000100 = 0x04 (binary mask used to extract fourth bit)
-    // 00000000 = 0x00 (result of bitwise AND operation with binary mask)
-    // 00000000 == 0 (check if fourth bit is 0 to determine if BCD is used)
+    // Set the clock information
+    m_24_hour_clock = status & 0x02;
+    m_binary = status & 0x04;
 }
 
 

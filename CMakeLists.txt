@@ -49,3 +49,22 @@ ADD_CUSTOM_TARGET(run
         # Ensure it runs in the terminal
         USES_TERMINAL
 )
+
+ADD_CUSTOM_TARGET(debug
+        # Run qemu
+        COMMENT "Running qemu"
+        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_qemu.sh --debug
+
+        # Ensure it runs in the terminal
+        USES_TERMINAL
+)
+
+ADD_CUSTOM_TARGET(gdb
+        # Run GDB
+        COMMENT "Running GDB"
+        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_gdb.sh
+        BYPRODUCTS ${CMAKE_SOURCE_DIR}/MaxOS.sym
+
+        # Ensure it runs in the terminal
+        USES_TERMINAL
+)

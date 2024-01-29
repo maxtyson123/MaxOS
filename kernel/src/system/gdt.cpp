@@ -3,140 +3,74 @@
 //
 
 #include <system/gdt.h>
+#include <common/kprint.h>
+
 using namespace MaxOS;
 using namespace MaxOS::system;
 
-
-/**
- * @brief Constructor for Segment Selector
- *
- *
- * @param base base address
- * @param limit limit
- * @param flags Flags
- */
-SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type)
-{
-  uint8_t* target = (uint8_t*)this;       //segment entry in GDT.
-
-  if (limit <= 65536)
-  {
-    // 16-bit address space
-    target[6] = 0x40;
-  }
-  else
-  {
-    // 32-bit address space
-    if((limit & 0xFFF) != 0xFFF)
-      limit = (limit >> 12)-1;
-    else
-      limit = limit >> 12;
-
-    target[6] = 0xC0;
-  }
-
-  // Encode the limit
-  target[0] = limit & 0xFF;
-  target[1] = (limit >> 8) & 0xFF;
-  target[6] |= (limit >> 16) & 0xF;
-
-  // Encode the base
-  target[2] = base & 0xFF;
-  target[3] = (base >> 8) & 0xFF;
-  target[4] = (base >> 16) & 0xFF;
-  target[7] = (base >> 24) & 0xFF;
-
-  // Type / Access Rights
-  target[5] = type;
-}
-/**
- * @brief Look up the pointer
- *
- * @return The pointer
- */
-uint32_t SegmentDescriptor::base()
-{
-  uint8_t* target = (uint8_t*)this;
-
-  uint32_t result = target[7];
-  result = (result << 8) + target[4];
-  result = (result << 8) + target[3];
-  result = (result << 8) + target[2];
-
-  return result;
-}
-
-/**
- * @brief Look up the limit
- *
- * @return The limit
- */
-uint32_t SegmentDescriptor::limit()
-{
-  uint8_t* target = (uint8_t*)this;
-
-  uint32_t result = target[6] & 0xF;
-  result = (result << 8) + target[1];
-  result = (result << 8) + target[0];
-
-  if((target[6] & 0xC0) == 0xC0)
-    result = (result << 12) | 0xFFF;
-
-  return result;
-}
-
-/**
- * @brief Global Descriptor Table
- */
-GlobalDescriptorTable::GlobalDescriptorTable(multiboot_tag_basic_meminfo* meminfo)
-: m_null_segment_selector(0, 0, 0), m_unused_segment_selector(0, 0, 0),
-  m_code_segment_selector(0, 1024* meminfo -> mem_upper, 0x9A),
-  m_data_segment_selector(0, 1024* meminfo -> mem_upper, 0x92),
-  m_task_state_segment_selector(0, 1024* meminfo -> mem_upper, 0)
-
+GlobalDescriptorTable::GlobalDescriptorTable()
 {
 
-    // Create GDT
-    uint32_t gdt_t[2];
-    gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;
-    gdt_t[1] = (uint32_t)this;
+   // Null descriptor
+    m_gdt[0] = 0;
 
-    // Tell processor to use this table
-    asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));
+    // Kernel code segment descriptor
+    uint64_t kernel_code_segment_descriptor = 0;
+    kernel_code_segment_descriptor |= 0b1011 << 8; // Type of selector
+    kernel_code_segment_descriptor |= 1 << 12;     // Not a system descriptor
+    kernel_code_segment_descriptor |= 0 << 13;     // Privilege level 0
+    kernel_code_segment_descriptor |= 1 << 15;     // Present
+    kernel_code_segment_descriptor |= 1 << 21;     // Long mode
+    m_gdt[1] = kernel_code_segment_descriptor << 32;
+
+    // Kernel data segment descriptor
+    uint64_t kernel_data_segment_descriptor = 0;
+    kernel_data_segment_descriptor |= 0b0011 << 8; // Type of selector
+    kernel_data_segment_descriptor |= 1 << 12;     // Not a system descriptor
+    kernel_data_segment_descriptor |= 0 << 13;     // Privilege level 0
+    kernel_data_segment_descriptor |= 1 << 15;     // Present
+    kernel_data_segment_descriptor |= 1 << 21;     // Long mode
+    m_gdt[2] = kernel_data_segment_descriptor << 32;
+
+    // User code segment descriptor (Change the privilege level to 3)
+    uint64_t user_code_segment_descriptor = kernel_code_segment_descriptor | (3 << 13);
+    m_gdt[3] = user_code_segment_descriptor;
+
+    // User data segment descriptor (Change the privilege level to 3)
+    uint64_t user_data_segment_descriptor = kernel_data_segment_descriptor | (3 << 13);
+    m_gdt[4] = user_data_segment_descriptor;
+
+    _kprintf("Created GDT entries\n");
+
+    // Store the GDT in the GDTR
+    GDTR gdtr = {
+        .limit = 5 * sizeof(uint64_t) - 1,
+        .address = (uint64_t)m_gdt
+    };
+
+    // Load the GDTR
+    asm volatile("lgdt %0" : : "m" (gdtr));
+
+    _kprintf("Loaded GDT\n");
+
+    // Reload the segment registers
+    asm volatile("\
+        mov $0x10, %ax \n\
+        mov %ax, %ds \n\
+        mov %ax, %es \n\
+        mov %ax, %fs \n\
+        mov %ax, %gs \n\
+        mov %ax, %ss \n\
+        \n\
+        pop %rdi \n\
+        push $0x8 \n\
+        push %rdi \n\
+    ");
+
+    _kprintf("Reloaded segment registers\n");
 
 }
 
 GlobalDescriptorTable::~GlobalDescriptorTable()
 {
-}
-
-
-/**
- * @brief Data Segment Selector
- *
- * @return The data segment selector offset
- */
-uint16_t GlobalDescriptorTable::data_segment_selector()
-{
-    return (uint8_t*)&m_data_segment_selector - (uint8_t*)this;
-}
-
-/**
- * @brief Code Segment Selector
- *
- * @return The code segment selector offset
- */
-uint16_t GlobalDescriptorTable::code_segment_selector()
-{
-    return (uint8_t*)&m_code_segment_selector - (uint8_t*)this;
-}
-
-/**
- * @brief Task State Segment Selector
- *
- * @return The task state segment selector offset
- */
-uint16_t GlobalDescriptorTable::task_state_segment_selector()
-{
-    return (uint8_t*)&m_task_state_segment_selector - (uint8_t*)this;
 }

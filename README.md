@@ -23,6 +23,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![Build][built-shield]][built-url]
+[![Lines of Code][loc-shield]][loc-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -240,3 +241,5 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 [issues-url]: https://github.com/maxtyson123/MaxOS/issues
 [built-shield]: https://img.shields.io/github/actions/workflow/status/maxtyson123/MaxOS/max-os.yml?style=for-the-badge
 [built-url]: https://github.com/maxtyson123/MaxOS/actions/workflows/max-os.yml
+[loc-shield]: https://img.shields.io/tokei/lines/github/maxtyson123/MaxOS?style=for-the-badge
+[loc-url]: https://github.com/maxtyson123/MaxOS

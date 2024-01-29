@@ -157,8 +157,15 @@ int MemoryManager::memory_used() {
 
         return result;
 }
+uint64_t MemoryManager::map_to_higher_half(uint64_t physical_address) {
 
+  // Check if the address is already mapped
+  if(physical_address >= s_higher_half_offset)
+      return physical_address;
 
+  // Map the address to the higher half
+  return physical_address + s_higher_half_offset;
+}
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
