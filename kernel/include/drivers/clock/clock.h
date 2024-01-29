@@ -60,7 +60,8 @@ namespace MaxOS {
 
                 protected:
                   
-                    bool m_binary_coded_decimal_representation;
+                    bool m_binary;
+                    bool m_24_hour_clock;
 
                     // Ports
                     hardwarecommunication::Port8Bit m_data_port;

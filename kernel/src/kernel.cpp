@@ -123,6 +123,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     InterruptManager interrupts(0x20, 0);
     _kprintf("IDT set up\n");
 
+    // TODO Memory map set up so MEMIO can be used without triggering a page fault
+
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     _kprintf("ACPI set up\n");
 
