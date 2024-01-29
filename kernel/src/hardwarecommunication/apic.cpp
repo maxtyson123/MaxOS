@@ -26,7 +26,7 @@ void LocalAPIC::init() {
 
   // Read if the APIC supports x2APIC
   uint32_t ignored, xleaf, x2leaf;
-  CPU::cpuid(0x0B, ignored, xleaf, x2leaf, ignored);
+  CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
 
   if(x2leaf & (1 << 21)) {
 
@@ -45,16 +45,18 @@ void LocalAPIC::init() {
     _kprintf("ERROR: CPU does not support APIC (BAD!!)\n");
   }
 
-  // Get the vector table & version
+  // Get the vector table
   uint32_t spurious_vector = read(0xF0);
-  uint32_t version = read(0x30);
+  _kprintf("APIC Spurious Vector: 0x%x\n", spurious_vector & 0xFF);
 
   // Enable the APIC
   write(0xF0, (1 << 8) | 0x100);
+  _kprintf("APIC Enabled\n");
 
-  // Log the APIC information
+  // Read the APIC version
+  uint32_t version = read(0x30);
   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
-  _kprintf("APIC Spurious Vector: 0x%x\n", spurious_vector & 0xFF);
+
 
 }
 
@@ -62,9 +64,9 @@ uint32_t LocalAPIC::read(uint32_t reg) {
 
   // If x2APIC is enabled, use the x2APIC MSR
   if(m_x2apic) {
-      return CPU::read_msr(0x800 + reg);
+      return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
   } else {
-      return (*(volatile uint32_t*)(m_apic_base + reg));
+      return (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg));
   }
 
 }
@@ -73,9 +75,9 @@ void LocalAPIC::write(uint32_t reg, uint32_t value) {
 
   // If x2APIC is enabled, use the x2APIC MSR
   if(m_x2apic) {
-      CPU::write_msr(0x800 + reg, value);
+      CPU::write_msr((reg >> 4) + 0x800, value);
   } else {
-      (*(volatile uint32_t*)(m_apic_base + reg)) = value;
+      (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg)) = value;
     }
 }
 

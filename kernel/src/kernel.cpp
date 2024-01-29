@@ -117,20 +117,20 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     _kprintf("MaxOS booted\n");
 
-    GlobalDescriptorTable gdt;
-    _kprintf("GDT set up\n");
+    //GlobalDescriptorTable gdt;
+    //_kprintf("GDT set up\n");
 
     InterruptManager interrupts(0x20, 0);
     _kprintf("IDT set up\n");
-
-    interrupts.activate();
-    _kprintf("IDT activated\n");
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     _kprintf("ACPI set up\n");
 
     AdvancedProgrammableInterruptController apic(&acpi);
     _kprintf("APIC set up\n");
+
+    interrupts.activate();
+    _kprintf("IDT activated\n");
 
     // TODO: 64 bit architecture rewrite
     while (true) {

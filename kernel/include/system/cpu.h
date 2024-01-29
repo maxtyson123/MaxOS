@@ -52,7 +52,7 @@ namespace MaxOS{
         static void set_status(cpu_status_t* status);
         static uint64_t read_msr(uint32_t msr);
         static void write_msr(uint32_t msr, uint64_t value);
-        static void cpuid(uint32_t leaf, uint32_t& eax, uint32_t& ebx, uint32_t& ecx, uint32_t& edx);
+        static void cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx);
         static void stack_trace(size_t);
     };
 

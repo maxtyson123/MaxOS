@@ -51,7 +51,7 @@ ADD_CUSTOM_TARGET(run
 )
 
 ADD_CUSTOM_TARGET(debug
-    # Run qemu
+        # Run qemu
         COMMENT "Running qemu"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_qemu.sh --debug
 

@@ -68,11 +68,12 @@ void MaxOS::system::CPU::write_msr(uint32_t msr, uint64_t value) {
   asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
 
 }
-void MaxOS::system::CPU::cpuid(uint32_t leaf, uint32_t &eax, uint32_t &ebx,uint32_t &ecx, uint32_t &edx) {
+void MaxOS::system::CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx) {
 
   // Call the cpuid instruction
-  __get_cpuid(leaf, &eax, &ebx, &ecx, &edx);
+  __get_cpuid(leaf, eax, ebx, ecx, edx);
 }
+
 void MaxOS::system::CPU::stack_trace(size_t level) {
 
     // Get the first stack frame

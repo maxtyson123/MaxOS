@@ -38,6 +38,7 @@ namespace MaxOS{
 
           public:
               static MemoryManager* s_active_memory_manager;
+              static const uint64_t s_higher_half_offset { 0xFFFFFFFF80000000 };
 
               MemoryManager(multiboot_tag_mmap* memory_map);
               ~MemoryManager();
@@ -45,6 +46,8 @@ namespace MaxOS{
               void* malloc(size_t size);
               void free(void* pointer);
               int memory_used();
+
+              static uint64_t map_to_higher_half(uint64_t physical_address);
         };
     }
 }

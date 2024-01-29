@@ -2,19 +2,44 @@
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/MaxOS.sh
 
-# Generate the debug symbols
-objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
-msg "Generated debug symbols"
+IP=localhost
+IN_WSL=0
+if command -v wslpath >/dev/null; then
+  msg "WSL detected."
+
+  # Get the ip from ipconfig.exe
+  LOCAL_IP=${LOCAL_IP:-`ipconfig.exe | grep -im1 'IPv4 Address' | cut -d ':' -f2`}
+
+  echo "WSL IP is: ${LOCAL_IP}"
+  IP=${LOCAL_IP}
+
+  # Strip the carriage return
+  IP=${IP%$'\r'}
+fi
+
 
 # Make the GDB .init file
 cat > ~/.gdbinit <<EOF
 
-# Defaults
+# Load the OS
 symbol-file ../MaxOS.sym
-target remote 172.29.16.1:1234
-set print pretty on
+target remote $IP:1234
 
-# Current debugging
+# Pretty printing
+set pagination off
+set print pretty on
+set print address on
+set print symbol-filename on
+
+# Split  screen
+layout split
+
+# Dont ask to confirm quit
+define hook-quit
+    set confirm off
+end
+
+#### Current debugging ###
 b kernelMain
 continue
 EOF
@@ -23,4 +48,4 @@ EOF
 gdb
 
 # Delete the GDB .init file
-rm ~/.gdbinit
+#rm ~/.gdbinit

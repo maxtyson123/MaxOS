@@ -7,35 +7,52 @@
 using namespace MaxOS;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
+using namespace MaxOS::memory;
 AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot) {
 
   if(multiboot->get_old_acpi() != 0){
 
     // Get the RSDP & RSDT
-    RSDPDescriptor* rsdp = (RSDPDescriptor*) multiboot->get_old_acpi();
+    RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
     m_rsdt = (RSDT*) rsdp->rsdt_address;
 
     // Load the header
     m_header = &m_rsdt->header;
 
+    // Calculate the checksum
+    uint8_t sum = 0;
+    for(uint32_t i = 0; i < sizeof(RSDPDescriptor); i++)
+              sum += ((char*)rsdp)[i];
+
     // Check if the checksum is valid
-    if(!validate((char*) m_rsdt, m_header->length))
+    if(sum != 0)
       _kprintf("ACPI: Invalid checksum!\n");
 
   }else{
+
+    // If the new ACPI is not supported, panic
+    if(multiboot->get_new_acpi() == 0){
+      _kprintf("ACPI: No ACPI found! (BAD)\n");
+      return;
+    }
 
     // Its the new ACPI
     m_type = 1;
 
     // Get the RSDP & XSDT
-    RSDPDescriptor2* rsdp = (RSDPDescriptor2*) multiboot->get_new_acpi();
-    m_xsdt = (XSDT*) rsdp->xsdt_address;
+    RSDPDescriptor2* rsdp2 = (RSDPDescriptor2*)(multiboot->get_new_acpi() + 1);
+    m_xsdt = (XSDT*) rsdp2->xsdt_address;
 
     // Load the header
     m_header = &m_xsdt->header;
 
+    // Calculate the checksum
+    uint8_t sum = 0;
+    for(uint32_t i = 0; i < sizeof(RSDPDescriptor2); i++)
+        sum += ((char*)rsdp2)[i];
+
     // Check if the checksum is valid
-    if(!validate((char*) m_xsdt, m_header->length))
+    if(sum != 0)
       _kprintf("ACPI: Invalid checksum!\n");
 
   }
@@ -45,8 +62,7 @@ AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface(
 
 }
 
-bool AdvancedConfigurationAndPowerInterface::validate(char *discriptor, size_t length) {
-
+bool AdvancedConfigurationAndPowerInterface::validate(const char* discriptor, size_t length) {
   // Checksum
   uint32_t sum = 0;
 

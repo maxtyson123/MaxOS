@@ -30,8 +30,13 @@ Multiboot::Multiboot(unsigned long addr) {
                 m_mmap = (multiboot_tag_mmap *)tag;
                 break;
 
+          case MULTIBOOT_TAG_TYPE_ACPI_OLD:
+                m_old_acpi = (multiboot_tag_old_acpi *)tag;
+                break;
 
-
+          case MULTIBOOT_TAG_TYPE_ACPI_NEW:
+                m_new_acpi = (multiboot_tag_new_acpi *)tag;
+                break;
       }
     }
 }

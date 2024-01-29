@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <system/multiboot.h>
 #include <common/string.h>
+#include <memory/memorymanagement.h>
 
 namespace MaxOS {
     namespace hardwarecommunication {
@@ -59,7 +60,7 @@ namespace MaxOS {
           XSDT* m_xsdt;
           RSDT* m_rsdt;
 
-          bool validate(char* discriptor, size_t length);
+          static bool validate(const char* discriptor, size_t length);
 
         public:
             AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);

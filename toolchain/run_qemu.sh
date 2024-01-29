@@ -129,6 +129,9 @@ if [  "$USE_DEBUG" -ne "0" ]; then
       msg "WSL disabled."
       ACCELERATOR=""
     fi
+
+    objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
+    msg "Generated debug symbols"
 fi
 
 # Create the args
@@ -136,7 +139,9 @@ QEMU_ARGS=""
 QEMU_ARGS="$QEMU_ARGS -m 512"                               # 512 MB of RAM
 QEMU_ARGS="$QEMU_ARGS -smp cores=4"                         # 4 cores
 QEMU_ARGS="$QEMU_ARGS -serial stdio"                        # Use stdio for serial
+if [  ! "$USE_DEBUG" -ne "0" ]; then
 QEMU_ARGS="$QEMU_ARGS -d int"                               # Debug interrupts
+fi
 QEMU_ARGS="$QEMU_ARGS $DEBUG"                               # Enable debugging
 QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                         # Enable acceleration
 QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                        # Enable display
