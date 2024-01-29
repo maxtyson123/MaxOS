@@ -63,16 +63,17 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"amd__am79c973_8cpp.html",
-"classMaxOS_1_1common_1_1Vector.html#ac753563317978358eb995f9eea7c1558",
-"classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html",
-"classMaxOS_1_1gui_1_1Widget.html#a61b7c5d7cea82b3dc71796724b28e8b1",
-"classMaxOS_1_1net_1_1EthernetFramePayloadHandler.html#ac54f71ce7d512ba22a6f3306ad459a70",
-"ethernetframe_8h.html#aa482bc33779a87f57ab8efc2c1680c48",
-"ipv4_8cpp_source.html",
-"msdospart_8cpp_source.html",
-"structMaxOS_1_1filesystem_1_1BiosParameterBlock32.html#a33fc4b19d3a6e23dec097efded7cfdb9",
-"structmultiboot__tag__framebuffer.html"
+"acpi_8cpp.html",
+"classMaxOS_1_1common_1_1OutputStream.html#a1951086b7676bf52ed9a4412a4b05559",
+"classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973.html#aacbc48386a4b5f36a63dc53b2f1bae2f",
+"classMaxOS_1_1gui_1_1Desktop.html#a0ef21909cc5084a72f7b8fd478b3b292",
+"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a53461bfc898446e31cead8262a08b8d6",
+"console_8h.html#a32880d01ca5ebf3d4417101a1dfa55b1a61c8ef4dc797d4a4d263f194b8a2ca50",
+"globals_m.html",
+"keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f",
+"namespacemembers_g.html",
+"structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader.html#a1e72343e89c12f2f3fbb211f22843096",
+"tcp_8h.html#a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,4 +1,4 @@
-.TH "MaxOS::system::Multiboot" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::Multiboot" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,6 +29,12 @@ MaxOS::system::Multiboot
 .ti -1c
 .RI "\fBmultiboot_tag_mmap\fP * \fBget_mmap\fP ()"
 .br
+.ti -1c
+.RI "\fBmultiboot_tag_old_acpi\fP * \fBget_old_acpi\fP ()"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_new_acpi\fP * \fBget_new_acpi\fP ()"
+.br
 .in -1c
 .SS "Protected Attributes"
 
@@ -44,6 +50,12 @@ MaxOS::system::Multiboot
 .br
 .ti -1c
 .RI "\fBmultiboot_tag_mmap\fP * \fBm_mmap\fP"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_old_acpi\fP * \fBm_old_acpi\fP"
+.br
+.ti -1c
+.RI "\fBmultiboot_tag_new_acpi\fP * \fBm_new_acpi\fP"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -81,65 +93,70 @@ Definition at line 9 of file multiboot\&.cpp\&.
 30                 m_mmap = (multiboot_tag_mmap *)tag;
 31                 break;
 32 
-33       }
-34     }
-35 }
+33           case MULTIBOOT_TAG_TYPE_ACPI_OLD:
+34                 m_old_acpi = (multiboot_tag_old_acpi *)tag;
+35                 break;
+36 
+37           case MULTIBOOT_TAG_TYPE_ACPI_NEW:
+38                 m_new_acpi = (multiboot_tag_new_acpi *)tag;
+39                 break;
+40       }
+41     }
+42 }
 .fi
 .PP
-References m_basic_meminfo, m_bootloader_name, m_framebuffer, m_mmap, MULTIBOOT_TAG_TYPE_BASIC_MEMINFO, MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME, MULTIBOOT_TAG_TYPE_END, MULTIBOOT_TAG_TYPE_FRAMEBUFFER, MULTIBOOT_TAG_TYPE_MMAP, multiboot_tag::size, type, and multiboot_tag::type\&.
+References m_basic_meminfo, m_bootloader_name, m_framebuffer, m_mmap, m_new_acpi, m_old_acpi, MULTIBOOT_TAG_TYPE_ACPI_NEW, MULTIBOOT_TAG_TYPE_ACPI_OLD, MULTIBOOT_TAG_TYPE_BASIC_MEMINFO, MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME, MULTIBOOT_TAG_TYPE_END, MULTIBOOT_TAG_TYPE_FRAMEBUFFER, MULTIBOOT_TAG_TYPE_MMAP, multiboot_tag::size, type, and multiboot_tag::type\&.
 .SS "Multiboot::~Multiboot ()"
 
 .PP
-Definition at line 37 of file multiboot\&.cpp\&.
+Definition at line 44 of file multiboot\&.cpp\&.
 .PP
 .nf
-37                       {
-38 
-39 }
+44                       {
+45 
+46 }
 .fi
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBmultiboot_tag_basic_meminfo\fP * Multiboot::get_basic_meminfo ()"
 
 .PP
-Definition at line 48 of file multiboot\&.cpp\&.
+Definition at line 55 of file multiboot\&.cpp\&.
 .PP
 .nf
-48                                                           {
-49 
-50     return m_basic_meminfo;
-51 
-52 }
+55                                                           {
+56 
+57     return m_basic_meminfo;
+58 
+59 }
 .fi
 .PP
 References m_basic_meminfo\&.
-.PP
-Referenced by kernelMain()\&.
 .SS "\fBmultiboot_tag_string\fP * Multiboot::get_bootloader_name ()"
 
 .PP
-Definition at line 54 of file multiboot\&.cpp\&.
+Definition at line 61 of file multiboot\&.cpp\&.
 .PP
 .nf
-54                                                      {
-55 
-56     return m_bootloader_name;
-57 
-58 }
+61                                                      {
+62 
+63     return m_bootloader_name;
+64 
+65 }
 .fi
 .PP
 References m_bootloader_name\&.
 .SS "\fBmultiboot_tag_framebuffer\fP * Multiboot::get_framebuffer ()"
 
 .PP
-Definition at line 42 of file multiboot\&.cpp\&.
+Definition at line 49 of file multiboot\&.cpp\&.
 .PP
 .nf
-42                                                       {
-43 
-44     return m_framebuffer;
-45 
-46 }
+49                                                       {
+50 
+51     return m_framebuffer;
+52 
+53 }
 .fi
 .PP
 References m_framebuffer\&.
@@ -148,19 +165,49 @@ Referenced by kernelMain()\&.
 .SS "\fBmultiboot_tag_mmap\fP * Multiboot::get_mmap ()"
 
 .PP
-Definition at line 60 of file multiboot\&.cpp\&.
+Definition at line 67 of file multiboot\&.cpp\&.
 .PP
 .nf
-60                                         {
-61 
-62     return m_mmap;
-63 
-64 }
+67                                         {
+68 
+69     return m_mmap;
+70 
+71 }
 .fi
 .PP
 References m_mmap\&.
 .PP
 Referenced by kernelMain()\&.
+.SS "\fBmultiboot_tag_new_acpi\fP * Multiboot::get_new_acpi ()"
+
+.PP
+Definition at line 79 of file multiboot\&.cpp\&.
+.PP
+.nf
+79                                                 {
+80 
+81   return m_new_acpi;
+82 }
+.fi
+.PP
+References m_new_acpi\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\&.
+.SS "\fBmultiboot_tag_old_acpi\fP * Multiboot::get_old_acpi ()"
+
+.PP
+Definition at line 73 of file multiboot\&.cpp\&.
+.PP
+.nf
+73                                                 {
+74 
+75   return m_old_acpi;
+76 }
+.fi
+.PP
+References m_old_acpi\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBmultiboot_tag_basic_meminfo\fP* MaxOS::system::Multiboot::m_basic_meminfo\fC [protected]\fP"
@@ -187,6 +234,18 @@ Referenced by get_framebuffer(), and Multiboot()\&.
 Definition at line 425 of file multiboot\&.h\&.
 .PP
 Referenced by get_mmap(), and Multiboot()\&.
+.SS "\fBmultiboot_tag_new_acpi\fP* MaxOS::system::Multiboot::m_new_acpi\fC [protected]\fP"
+
+.PP
+Definition at line 427 of file multiboot\&.h\&.
+.PP
+Referenced by get_new_acpi(), and Multiboot()\&.
+.SS "\fBmultiboot_tag_old_acpi\fP* MaxOS::system::Multiboot::m_old_acpi\fC [protected]\fP"
+
+.PP
+Definition at line 426 of file multiboot\&.h\&.
+.PP
+Referenced by get_old_acpi(), and Multiboot()\&.
 
 .SH "Author"
 .PP 

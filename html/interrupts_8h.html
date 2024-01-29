@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('interrupts_8h.html',''); initResizable
 <code>#include &lt;<a class="el" href="multithreading_8h_source.html">system/multithreading.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="inputStream_8h_source.html">common/inputStream.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="outputStream_8h_source.html">common/outputStream.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="cpu_8h_source.html">system/cpu.h</a>&gt;</code><br />
 </div>
 <p><a href="interrupts_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -116,11 +117,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html">MaxOS::hardwarecommunication::InterruptHandler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a certain interrupt number.  <a href="classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html">MaxOS::hardwarecommunication::GateDescriptor</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes a gate in the Interrupt Descriptor Table.  <a href="structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1hardwarecommunication_1_1IDTR.html">MaxOS::hardwarecommunication::IDTR</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A struct that holds the IDT register.  <a href="structMaxOS_1_1hardwarecommunication_1_1IDTR.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer.html">MaxOS::hardwarecommunication::InterruptDescriptorTablePointer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the Interrupt Descriptor Table.  <a href="structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html">MaxOS::hardwarecommunication::InterruptDescriptor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html">MaxOS::hardwarecommunication::InterruptManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles all interrupts and passes them to the correct handler.  <a href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#details">More...</a><br /></td></tr>
@@ -135,53 +135,87 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afa4874630b2183a87642db708a8e4819"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html">MaxOS::hardwarecommunication::GateDescriptor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1hardwarecommunication.html#afa4874630b2183a87642db708a8e4819">MaxOS::hardwarecommunication::__attribute__</a> ((packed))</td></tr>
-<tr class="separator:afa4874630b2183a87642db708a8e4819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe45fccdf160be55b8dc7bd5417235ac"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html">MaxOS::hardwarecommunication::RSDPDescriptor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1hardwarecommunication.html#abe45fccdf160be55b8dc7bd5417235ac">MaxOS::hardwarecommunication::__attribute__</a> ((packed))</td></tr>
+<tr class="separator:abe45fccdf160be55b8dc7bd5417235ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a182e5737450e9dc6d8614213cb0661a7"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a182e5737450e9dc6d8614213cb0661a7">handler_address_low_bits</a></td></tr>
-<tr class="separator:a182e5737450e9dc6d8614213cb0661a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae84a4b22878380160d64b542973bbd9b"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#ae84a4b22878380160d64b542973bbd9b">gdt_code_segment_selector</a></td></tr>
-<tr class="separator:ae84a4b22878380160d64b542973bbd9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb7bc06bed6f6408d719334fc41698c7"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#acb7bc06bed6f6408d719334fc41698c7">reserved</a></td></tr>
-<tr class="separator:acb7bc06bed6f6408d719334fc41698c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b0d6200bc639dd37ff68847a0adde5f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a8b0d6200bc639dd37ff68847a0adde5f">access</a></td></tr>
-<tr class="separator:a8b0d6200bc639dd37ff68847a0adde5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c0a126d1cc108615862e2e322095a66"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a2c0a126d1cc108615862e2e322095a66">handler_address_high_bits</a></td></tr>
-<tr class="separator:a2c0a126d1cc108615862e2e322095a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaba88b24a21a6c70c895c0d55f4a69a0"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#aaba88b24a21a6c70c895c0d55f4a69a0">size</a></td></tr>
-<tr class="separator:aaba88b24a21a6c70c895c0d55f4a69a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0523cedff47e2441fc198b7770ec5d3f"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a0523cedff47e2441fc198b7770ec5d3f">base</a></td></tr>
-<tr class="separator:a0523cedff47e2441fc198b7770ec5d3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dc5e299db65c4d571e18b8d97972c58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html">MaxOS::hardwarecommunication::InterruptManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1hardwarecommunication.html#a5dc5e299db65c4d571e18b8d97972c58">MaxOS::hardwarecommunication::__attribute__</a></td></tr>
-<tr class="separator:a5dc5e299db65c4d571e18b8d97972c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab28e82ae69032cb4ad3ec3a0be3d7129"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#ab28e82ae69032cb4ad3ec3a0be3d7129">limit</a></td></tr>
+<tr class="separator:ab28e82ae69032cb4ad3ec3a0be3d7129"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeca790c0426654358d031f8180e84aca"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a></td></tr>
+<tr class="separator:aeca790c0426654358d031f8180e84aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5e05ff0f00929c5e92891ae639afd68"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#aa5e05ff0f00929c5e92891ae639afd68">address_low_bits</a></td></tr>
+<tr class="separator:aa5e05ff0f00929c5e92891ae639afd68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a563b8f33f9e079c734090d746d1b74"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a9a563b8f33f9e079c734090d746d1b74">segment_selector</a></td></tr>
+<tr class="separator:a9a563b8f33f9e079c734090d746d1b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a254d5bd1552992f9c17e038f363987ec"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a254d5bd1552992f9c17e038f363987ec">ist</a></td></tr>
+<tr class="separator:a254d5bd1552992f9c17e038f363987ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2585d779da0ab21273a8d92de9a0ebe"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#aa2585d779da0ab21273a8d92de9a0ebe">flags</a></td></tr>
+<tr class="separator:aa2585d779da0ab21273a8d92de9a0ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a710ed0fcadd36b325b4e5345bc0724af"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a710ed0fcadd36b325b4e5345bc0724af">address_mid_bits</a></td></tr>
+<tr class="separator:a710ed0fcadd36b325b4e5345bc0724af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a881797a814e5d4e40f36e556939ebb11"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a881797a814e5d4e40f36e556939ebb11">address_high_bits</a></td></tr>
+<tr class="separator:a881797a814e5d4e40f36e556939ebb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa43c4c21b173ada1b6b7568956f0d650"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#aa43c4c21b173ada1b6b7568956f0d650">reserved</a></td></tr>
+<tr class="separator:aa43c4c21b173ada1b6b7568956f0d650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="a8b0d6200bc639dd37ff68847a0adde5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b0d6200bc639dd37ff68847a0adde5f">&#9670;&nbsp;</a></span>access</h2>
+<a id="a881797a814e5d4e40f36e556939ebb11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a881797a814e5d4e40f36e556939ebb11">&#9670;&nbsp;</a></span>address_high_bits</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t access</td>
+          <td class="memname">uint32_t address_high_bits</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00005">5</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00007">7</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>
-<a id="a0523cedff47e2441fc198b7770ec5d3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0523cedff47e2441fc198b7770ec5d3f">&#9670;&nbsp;</a></span>base</h2>
+<a id="aa5e05ff0f00929c5e92891ae639afd68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5e05ff0f00929c5e92891ae639afd68">&#9670;&nbsp;</a></span>address_low_bits</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t base</td>
+          <td class="memname">uint16_t address_low_bits</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00002">2</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+
+</div>
+</div>
+<a id="a710ed0fcadd36b325b4e5345bc0724af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a710ed0fcadd36b325b4e5345bc0724af">&#9670;&nbsp;</a></span>address_mid_bits</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t address_mid_bits</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00006">6</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+
+</div>
+</div>
+<a id="aeca790c0426654358d031f8180e84aca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeca790c0426654358d031f8180e84aca">&#9670;&nbsp;</a></span>base</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t base</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -192,62 +226,30 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ae84a4b22878380160d64b542973bbd9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae84a4b22878380160d64b542973bbd9b">&#9670;&nbsp;</a></span>gdt_code_segment_selector</h2>
+<a id="aa2585d779da0ab21273a8d92de9a0ebe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2585d779da0ab21273a8d92de9a0ebe">&#9670;&nbsp;</a></span>flags</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t gdt_code_segment_selector</td>
+          <td class="memname">uint8_t flags</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00003">3</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00005">5</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>
-<a id="a2c0a126d1cc108615862e2e322095a66"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c0a126d1cc108615862e2e322095a66">&#9670;&nbsp;</a></span>handler_address_high_bits</h2>
+<a id="a254d5bd1552992f9c17e038f363987ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a254d5bd1552992f9c17e038f363987ec">&#9670;&nbsp;</a></span>ist</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t handler_address_high_bits</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00006">6</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
-
-</div>
-</div>
-<a id="a182e5737450e9dc6d8614213cb0661a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a182e5737450e9dc6d8614213cb0661a7">&#9670;&nbsp;</a></span>handler_address_low_bits</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint16_t handler_address_low_bits</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00002">2</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
-
-</div>
-</div>
-<a id="acb7bc06bed6f6408d719334fc41698c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb7bc06bed6f6408d719334fc41698c7">&#9670;&nbsp;</a></span>reserved</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t reserved</td>
+          <td class="memname">uint8_t ist</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -256,19 +258,51 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aaba88b24a21a6c70c895c0d55f4a69a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaba88b24a21a6c70c895c0d55f4a69a0">&#9670;&nbsp;</a></span>size</h2>
+<a id="ab28e82ae69032cb4ad3ec3a0be3d7129"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab28e82ae69032cb4ad3ec3a0be3d7129">&#9670;&nbsp;</a></span>limit</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t size</td>
+          <td class="memname">uint16_t limit</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00002">2</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+
+</div>
+</div>
+<a id="aa43c4c21b173ada1b6b7568956f0d650"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa43c4c21b173ada1b6b7568956f0d650">&#9670;&nbsp;</a></span>reserved</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t reserved</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00008">8</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+
+</div>
+</div>
+<a id="a9a563b8f33f9e079c734090d746d1b74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a563b8f33f9e079c734090d746d1b74">&#9670;&nbsp;</a></span>segment_selector</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t segment_selector</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00003">3</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::clock::Clock" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::clock::Clock" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -58,7 +58,10 @@ Inherits \fBMaxOS::drivers::Driver\fP, \fBMaxOS::hardwarecommunication::Interrup
 
 .in +1c
 .ti -1c
-.RI "bool \fBm_binary_coded_decimal_representation\fP"
+.RI "bool \fBm_binary\fP"
+.br
+.ti -1c
+.RI "bool \fBm_24_hour_clock\fP"
 .br
 .ti -1c
 .RI "\fBhardwarecommunication::Port8Bit\fP \fBm_data_port\fP"
@@ -103,7 +106,7 @@ Definition at line 54 of file clock\&.cpp\&.
 57   m_data_port(0x71), m_command_port(0x70),
 58   m_ticks_between_events(time_between_events)
 59 {
-60 
+60   //TODO: Configure APIC Clock
 61 }
 .fi
 .SS "Clock::~Clock ()"
@@ -125,26 +128,21 @@ Activates the clock, setting the binary coded decimal representation flag\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 145 of file clock\&.cpp\&.
+Definition at line 146 of file clock\&.cpp\&.
 .PP
 .nf
-145                      {
-146 
-147     // read the status register
-148     uint8_t status = read_hardware_clock(0xb);
-149 
-150     // If the fourth bit is 0 the binary coded decimal representation is used
-151     m_binary_coded_decimal_representation = (status & 4) == 0;
-152 
-153     // Convert status to binary
-154     // 00001011 = 0x0B (status as an example)
-155     // 00000100 = 0x04 (binary mask used to extract fourth bit)
-156     // 00000000 = 0x00 (result of bitwise AND operation with binary mask)
-157     // 00000000 == 0 (check if fourth bit is 0 to determine if BCD is used)
-158 }
+146                      {
+147 
+148     // read the status register
+149     uint8_t status = read_hardware_clock(0xB);
+150 
+151     // Set the clock information
+152     m_24_hour_clock = status & 0x02;
+153     m_binary = status & 0x04;
+154 }
 .fi
 .PP
-References m_binary_coded_decimal_representation, read_hardware_clock(), and status\&.
+References m_24_hour_clock, m_binary, read_hardware_clock(), and status\&.
 .SS "uint8_t Clock::binary_representation (uint8_t number)\fC [protected]\fP"
 
 .PP
@@ -162,22 +160,22 @@ The binary representation of the number if the binary coded decimal representati
 .PP
 
 .PP
-Definition at line 131 of file clock\&.cpp\&.
+Definition at line 132 of file clock\&.cpp\&.
 .PP
 .nf
-131                                                    {
-132 
-133     // If the binary coded decimal representation is not used, return the number
-134     if(!m_binary_coded_decimal_representation)
-135         return number;
-136 
-137     // Otherwise, return the binary representation
-138     return (number & 0xf) + ((number >> 4) & 0xf) * 10;
-139 
-140 }
+132                                                    {
+133 
+134     // If the binary coded decimal representation is not used, return the number
+135     if(m_binary)
+136         return number;
+137 
+138     // Otherwise, return the binary representation
+139     return ((number / 16) * 10) + (number & 0x0f);
+140 
+141 }
 .fi
 .PP
-References m_binary_coded_decimal_representation\&.
+References m_binary\&.
 .PP
 Referenced by handle_interrupt()\&.
 .SS "void Clock::delay (uint32_t milliseconds)"
@@ -192,21 +190,21 @@ Delays the program for a specified number of milliseconds (rounded to the neares
 .PP
 
 .PP
-Definition at line 166 of file clock\&.cpp\&.
+Definition at line 162 of file clock\&.cpp\&.
 .PP
 .nf
-166                                        {
-167 
-168         // Round the number of milliseconds to the nearest 100
-169         uint64_t rounded_milliseconds =  ((milliseconds+99)/100);
-170 
-171         // Calculate the number of ticks until the delay is over
-172         uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
-173 
-174         // Wait until the number of ticks is equal to the number of ticks until the delay is over
-175         while(m_ticks < ticks_until_delay_is_over)
-176             asm volatile("nop"); // execute the "nop" assembly instruction, which does nothing, but prevents the compiler from optimizing away the loop
-177 }
+162                                        {
+163 
+164         // Round the number of milliseconds to the nearest 100
+165         uint64_t rounded_milliseconds =  ((milliseconds+99)/100);
+166 
+167         // Calculate the number of ticks until the delay is over
+168         uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
+169 
+170         // Wait until the number of ticks is equal to the number of ticks until the delay is over
+171         while(m_ticks < ticks_until_delay_is_over)
+172             asm volatile("nop"); // execute the "nop" assembly instruction, which does nothing, but prevents the compiler from optimizing away the loop
+173 }
 .fi
 .PP
 Referenced by kernelMain()\&.
@@ -224,12 +222,12 @@ The name of the device
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 191 of file clock\&.cpp\&.
+Definition at line 187 of file clock\&.cpp\&.
 .PP
 .nf
-191                               {
-192     return "Clock";
-193 }
+187                               {
+188     return "Clock";
+189 }
 .fi
 .SS "\fBstring\fP Clock::get_vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
 
@@ -245,12 +243,12 @@ The name of the vendor
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 183 of file clock\&.cpp\&.
+Definition at line 179 of file clock\&.cpp\&.
 .PP
 .nf
-183                               {
-184     return "Generic";
-185 }
+179                               {
+180     return "Generic";
+181 }
 .fi
 .SS "void Clock::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
@@ -275,23 +273,34 @@ Definition at line 71 of file clock\&.cpp\&.
 81     // Otherwise, reset the number of ticks until the next event
 82     m_ticks_until_next_event = m_ticks_between_events;
 83 
-84     // Create a time object
-85     Time time;
+84     // Wait for the clock to be ready
+85     while((read_hardware_clock(0xA) & 0x80) != 0);
 86 
-87     // read the time from the hardware clock
-88     time\&.year = binary_representation(read_hardware_clock(0x9)) + 2000;              // Register 9 is the year
-89     time\&.month = binary_representation(read_hardware_clock(0x8));                    // Register 8 is the month
-90     time\&.day = binary_representation(read_hardware_clock(0x7));                      // Register 7 is the day
-91     time\&.hour = binary_representation(read_hardware_clock(0x4));                     // Register 4 is the hour
-92     time\&.minute = binary_representation(read_hardware_clock(0x2));                   // Register 2 is the minute
-93     time\&.second = binary_representation(read_hardware_clock(0x0));                   // Register 0 is the second
-94 
-95     //Raise the clock event
-96     raise_event(new TimeEvent(&time));
-97 }
+87     // Create a time object
+88     Time time;
+89 
+90     // read the time from the hardware clock
+91     time\&.year = binary_representation(read_hardware_clock(0x9)) + 2000;              // Register 9 is the year
+92     time\&.month = binary_representation(read_hardware_clock(0x8));                    // Register 8 is the month
+93     time\&.day = binary_representation(read_hardware_clock(0x7));                      // Register 7 is the day
+94     time\&.hour = binary_representation(read_hardware_clock(0x4));                     // Register 4 is the hour
+95     time\&.minute = binary_representation(read_hardware_clock(0x2));                   // Register 2 is the minute
+96     time\&.second = binary_representation(read_hardware_clock(0x0));                   // Register 0 is the second
+97 
+98     // If the clock is using 12hr format and PM is set then add 12 to the hour
+99     if(!m_24_hour_clock && (time\&.hour & 0x80) != 0) {
+100 
+101        // Convert the time to 24hr format
+102        time\&.hour = ((time\&.hour & 0x7F) + 12) % 24;
+103 
+104     }
+105 
+106     //Raise the clock event
+107     raise_event(new TimeEvent(&time));
+108 }
 .fi
 .PP
-References binary_representation(), MaxOS::common::Time::day, MaxOS::common::Time::hour, m_ticks_between_events, m_ticks_until_next_event, MaxOS::common::Time::minute, MaxOS::common::Time::month, MaxOS::common::EventManager< ClockEvents >::raise_event(), read_hardware_clock(), MaxOS::common::Time::second, and MaxOS::common::Time::year\&.
+References binary_representation(), MaxOS::common::Time::day, MaxOS::common::Time::hour, m_24_hour_clock, m_ticks_between_events, m_ticks_until_next_event, MaxOS::common::Time::minute, MaxOS::common::Time::month, MaxOS::common::EventManager< ClockEvents >::raise_event(), read_hardware_clock(), MaxOS::common::Time::second, and MaxOS::common::Time::year\&.
 .SS "uint8_t Clock::read_hardware_clock (uint8_t address)\fC [protected]\fP"
 
 .PP
@@ -309,26 +318,16 @@ The value of the register
 .PP
 
 .PP
-Definition at line 106 of file clock\&.cpp\&.
+Definition at line 117 of file clock\&.cpp\&.
 .PP
 .nf
-107 {
-108     // If the address is a time or date register, disable updates
-109     if(address < 10)
-110     {
-111       m_command_port\&.write(0xa);
-112 
-113         // Wait until any updates are finished
-114         while((m_data_port\&.read() & (1 << 7)) != 0)
-115             asm volatile("nop"); // execute the "nop" assembly instruction, which does nothing, but prevents the compiler from optimizing away the loop
-116     }
-117 
-118     // Send the address to the hardware clock
-119     m_command_port\&.write(address);
-120 
-121     // read the value from the hardware clock
-122     return m_data_port\&.read();
-123 }
+118 {
+119     // Send the address to the hardware clock
+120     m_command_port\&.write(address);
+121 
+122     // read the value from the hardware clock
+123     return m_data_port\&.read();
+124 }
 .fi
 .PP
 References address, m_command_port, m_data_port, MaxOS::hardwarecommunication::Port8Bit::read(), and MaxOS::hardwarecommunication::Port8Bit::write()\&.
@@ -336,7 +335,13 @@ References address, m_command_port, m_data_port, MaxOS::hardwarecommunication::P
 Referenced by activate(), and handle_interrupt()\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "bool MaxOS::drivers::clock::Clock::m_binary_coded_decimal_representation\fC [protected]\fP"
+.SS "bool MaxOS::drivers::clock::Clock::m_24_hour_clock\fC [protected]\fP"
+
+.PP
+Definition at line 64 of file clock\&.h\&.
+.PP
+Referenced by activate(), and handle_interrupt()\&.
+.SS "bool MaxOS::drivers::clock::Clock::m_binary\fC [protected]\fP"
 
 .PP
 Definition at line 63 of file clock\&.h\&.
@@ -345,25 +350,25 @@ Referenced by activate(), and binary_representation()\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::Clock::m_command_port\fC [protected]\fP"
 
 .PP
-Definition at line 67 of file clock\&.h\&.
+Definition at line 68 of file clock\&.h\&.
 .PP
 Referenced by read_hardware_clock()\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::Clock::m_data_port\fC [protected]\fP"
 
 .PP
-Definition at line 66 of file clock\&.h\&.
+Definition at line 67 of file clock\&.h\&.
 .PP
 Referenced by read_hardware_clock()\&.
 .SS "uint16_t MaxOS::drivers::clock::Clock::m_ticks_between_events { 0 }\fC [protected]\fP"
 
 .PP
-Definition at line 70 of file clock\&.h\&.
+Definition at line 71 of file clock\&.h\&.
 .PP
 Referenced by handle_interrupt()\&.
 .SS "uint16_t MaxOS::drivers::clock::Clock::m_ticks_until_next_event { 1 }\fC [protected]\fP"
 
 .PP
-Definition at line 71 of file clock\&.h\&.
+Definition at line 72 of file clock\&.h\&.
 .PP
 Referenced by handle_interrupt()\&.
 

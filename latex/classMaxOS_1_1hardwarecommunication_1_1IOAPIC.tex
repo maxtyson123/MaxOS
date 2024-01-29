@@ -1,0 +1,152 @@
+\hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{}\doxysection{Max\+OS\+::hardwarecommunication\+::I\+O\+A\+P\+IC Class Reference}
+\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}\index{MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}}
+
+
+{\ttfamily \#include $<$apic.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_af96fb9be587b8753b64904faf955da41}{I\+O\+A\+P\+IC}} (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{Advanced\+Configuration\+And\+Power\+Interface}} $\ast$acpi)
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a85f4b21b3ad51fe70b4641dc3fc26a2b}{$\sim$\+I\+O\+A\+P\+IC}} ()
+\item 
+void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a63a122b3b718559d55c7a6f366c8de03}{init}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 78 of file apic.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_af96fb9be587b8753b64904faf955da41}\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_af96fb9be587b8753b64904faf955da41}} 
+\index{MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}!IOAPIC@{IOAPIC}}
+\index{IOAPIC@{IOAPIC}!MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}}
+\doxysubsubsection{\texorpdfstring{IOAPIC()}{IOAPIC()}}
+{\footnotesize\ttfamily I\+O\+A\+P\+I\+C\+::\+I\+O\+A\+P\+IC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{Advanced\+Configuration\+And\+Power\+Interface}} $\ast$}]{acpi }\end{DoxyParamCaption})}
+
+
+
+Definition at line 94 of file apic.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{95 : m\_acpi(acpi),}
+\DoxyCodeLine{96   m\_madt(\textcolor{keyword}{nullptr})}
+\DoxyCodeLine{97 \{}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a85f4b21b3ad51fe70b4641dc3fc26a2b}\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a85f4b21b3ad51fe70b4641dc3fc26a2b}} 
+\index{MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}!````~IOAPIC@{$\sim$IOAPIC}}
+\index{````~IOAPIC@{$\sim$IOAPIC}!MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}}
+\doxysubsubsection{\texorpdfstring{$\sim$IOAPIC()}{~IOAPIC()}}
+{\footnotesize\ttfamily I\+O\+A\+P\+I\+C\+::$\sim$\+I\+O\+A\+P\+IC (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 101 of file apic.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{101                 \{}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a63a122b3b718559d55c7a6f366c8de03}\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a63a122b3b718559d55c7a6f366c8de03}} 
+\index{MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}!init@{init}}
+\index{init@{init}!MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void I\+O\+A\+P\+I\+C\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 105 of file apic.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{105                   \{}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107   \textcolor{comment}{// Get the information about the IO APIC}}
+\DoxyCodeLine{108   m\_madt = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}}*)m\_acpi-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}{find}}(\textcolor{stringliteral}{"APIC"});}
+\DoxyCodeLine{109   \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__Item}{MADT\_Item}}* io\_apic\_item = get\_madt\_item(1, 0);}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111   \textcolor{comment}{// Check if the IO APIC was found}}
+\DoxyCodeLine{112   \textcolor{keywordflow}{if}(io\_apic\_item == \textcolor{keyword}{nullptr}) \{}
+\DoxyCodeLine{113         \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"ERROR: IO APIC not found\(\backslash\)n"});}
+\DoxyCodeLine{114         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{115   \}}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117   \textcolor{comment}{// Get the IO APIC address}}
+\DoxyCodeLine{118   \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC}{MADT\_IOAPIC}}* io\_apic = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC}{MADT\_IOAPIC}}*)io\_apic\_item;}
+\DoxyCodeLine{119   m\_address = io\_apic-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC_a77da25ca47ce9c16c3a01388264d1df3}{io\_apic\_address}};}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121   \textcolor{comment}{// Get the IO APIC version and max redirection entry}}
+\DoxyCodeLine{122   m\_version = read(0x01);}
+\DoxyCodeLine{123   m\_max\_redirect\_entry = (uint8\_t)(m\_version >> 16);}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125   \textcolor{comment}{// Log the IO APIC information}}
+\DoxyCodeLine{126   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"IO APIC Version: 0x\%x\(\backslash\)n"}, m\_version);}
+\DoxyCodeLine{127   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"IO APIC Max Redirection Entry: 0x\%x\(\backslash\)n"}, m\_max\_redirect\_entry);}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129   \textcolor{comment}{// Get the source override item}}
+\DoxyCodeLine{130   \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__Item}{MADT\_Item}}* source\_override\_item = get\_madt\_item(2, m\_override\_array\_size);}
+\DoxyCodeLine{131 }
+\DoxyCodeLine{132   \textcolor{comment}{// Loop through the source override items}}
+\DoxyCodeLine{133   uint32\_t total\_length = 0;}
+\DoxyCodeLine{134   \textcolor{keywordflow}{while} (total\_length < m\_madt-\/>\mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}}.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a9b8a6a7e086a520cf52a4ea1cdc87670}{length}} \&\& m\_override\_array\_size < 0x10)\{ \textcolor{comment}{// 0x10 is the max items}}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136       \textcolor{comment}{// Increment the total length}}
+\DoxyCodeLine{137       total\_length += source\_override\_item-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__Item_a8ae742e1634bb48ad45c89c138860ab0}{length}};}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139       \textcolor{comment}{// If there is an override, populate the array}}
+\DoxyCodeLine{140       \textcolor{keywordflow}{if}(source\_override\_item != \textcolor{keyword}{nullptr} \&\& source\_override\_item-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__Item_a5cf5df5cd6dfc74c87ef49bd9f7cf73e}{type}} == 2) \{}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142           \textcolor{comment}{// Get the override and populate the array}}
+\DoxyCodeLine{143           \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override}{Override}} *\textcolor{keyword}{override} = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override}{Override}} *)(source\_override\_item + 1);}
+\DoxyCodeLine{144           m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7a966c37b284b11470c63189098a9b7f}{bus}} = \textcolor{keyword}{override}-\/>bus;}
+\DoxyCodeLine{145           m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a392523c46f36a7a67186bfbd29529fd5}{source}} = \textcolor{keyword}{override}-\/>source;}
+\DoxyCodeLine{146           m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a52096e997dedf8c3f6d928cb6b69f0c0}{global\_system\_interrupt}} =}
+\DoxyCodeLine{147               \textcolor{keyword}{override}-\/>global\_system\_interrupt;}
+\DoxyCodeLine{148           m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}} = \textcolor{keyword}{override}-\/>flags;}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150           \textcolor{comment}{// Increment the override array size}}
+\DoxyCodeLine{151           m\_override\_array\_size++;}
+\DoxyCodeLine{152       \}}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154       \textcolor{comment}{// Get the next item}}
+\DoxyCodeLine{155       source\_override\_item = get\_madt\_item(2, m\_override\_array\_size);}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157       \textcolor{comment}{// If there is no next item then break}}
+\DoxyCodeLine{158       \textcolor{keywordflow}{if}(source\_override\_item == \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{159           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{160   \}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162   \textcolor{comment}{// Log how many overrides were found}}
+\DoxyCodeLine{163   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"IO APIC Source Overrides: 0x\%x\(\backslash\)n"}, m\_override\_array\_size);}
+\DoxyCodeLine{164 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kprintf(), Max\+O\+S\+::hardwarecommunication\+::\+Override\+::bus, Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find(), Max\+O\+S\+::hardwarecommunication\+::\+Override\+::flags, Max\+O\+S\+::hardwarecommunication\+::\+Override\+::global\+\_\+system\+\_\+interrupt, header, Max\+O\+S\+::hardwarecommunication\+::\+M\+A\+D\+T\+\_\+\+I\+O\+A\+P\+I\+C\+::io\+\_\+apic\+\_\+address, Max\+O\+S\+::hardwarecommunication\+::\+A\+C\+P\+I\+S\+D\+T\+Header\+::length, Max\+O\+S\+::hardwarecommunication\+::\+M\+A\+D\+T\+\_\+\+Item\+::length, Max\+O\+S\+::hardwarecommunication\+::\+Override\+::source, and Max\+O\+S\+::hardwarecommunication\+::\+M\+A\+D\+T\+\_\+\+Item\+::type.
+
+
+
+Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Programmable\+Interrupt\+Controller\+::\+Advanced\+Programmable\+Interrupt\+Controller().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/hardwarecommunication/\mbox{\hyperlink{apic_8h}{apic.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/hardwarecommunication/\mbox{\hyperlink{apic_8cpp}{apic.\+cpp}}\end{DoxyCompactItemize}

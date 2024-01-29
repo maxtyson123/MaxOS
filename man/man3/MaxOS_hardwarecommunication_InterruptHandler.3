@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::InterruptHandler" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::InterruptHandler" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -43,7 +43,7 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::ethernet::am
 .PP 
 Handles a certain interrupt number\&. 
 .PP
-Definition at line 25 of file interrupts\&.h\&.
+Definition at line 28 of file interrupts\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "InterruptHandler::InterruptHandler (uint8_t interrupt_number, \fBInterruptManager\fP * interrupt_manager = \fC0\fP)\fC [protected]\fP"
@@ -51,31 +51,31 @@ Definition at line 25 of file interrupts\&.h\&.
 .PP
 \fBHandler\fP 
 .PP
-Definition at line 20 of file interrupts\&.cpp\&.
+Definition at line 21 of file interrupts\&.cpp\&.
 .PP
 .nf
-21 : m_interrupt_number(interrupt_number),
-22   m_interrupt_manager(interrupt_manager)
-23 {
-24     // Set the handler in the array
-25     m_interrupt_manager->set_interrupt_handler(interrupt_number, this);
-26 }
+22 : m_interrupt_number(interrupt_number),
+23   m_interrupt_manager(interrupt_manager)
+24 {
+25     // Set the handler in the array
+26     m_interrupt_manager->set_interrupt_handler(interrupt_number, this);
+27 }
 .fi
 .PP
 References m_interrupt_manager, and MaxOS::hardwarecommunication::InterruptManager::set_interrupt_handler()\&.
 .SS "InterruptHandler::~InterruptHandler ()\fC [protected]\fP"
 
 .PP
-Definition at line 28 of file interrupts\&.cpp\&.
+Definition at line 29 of file interrupts\&.cpp\&.
 .PP
 .nf
-28                                    {
-29 
-30     // Unset the handler in the array
-31     if(this->m_interrupt_manager != 0)
-32       this->m_interrupt_manager->remove_interrupt_handler(m_interrupt_number);
-33 
-34 }
+29                                    {
+30 
+31     // Unset the handler in the array
+32     if(this->m_interrupt_manager != 0)
+33       this->m_interrupt_manager->remove_interrupt_handler(m_interrupt_number);
+34 
+35 }
 .fi
 .PP
 References m_interrupt_manager, m_interrupt_number, and MaxOS::hardwarecommunication::InterruptManager::remove_interrupt_handler()\&.
@@ -86,12 +86,12 @@ References m_interrupt_manager, m_interrupt_number, and MaxOS::hardwarecommunica
 .PP
 Reimplemented in \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, \fBMaxOS::drivers::ethernet::amd_am79c973\fP, and \fBMaxOS::system::SyscallHandler\fP\&.
 .PP
-Definition at line 36 of file interrupts\&.cpp\&.
+Definition at line 37 of file interrupts\&.cpp\&.
 .PP
 .nf
-36                                         {
-37 
-38 }
+37                                         {
+38 
+39 }
 .fi
 .PP
 Referenced by MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\&.
@@ -100,13 +100,13 @@ Referenced by MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_r
 .SS "\fBInterruptManager\fP* MaxOS::hardwarecommunication::InterruptHandler::m_interrupt_manager\fC [protected]\fP"
 
 .PP
-Definition at line 28 of file interrupts\&.h\&.
+Definition at line 31 of file interrupts\&.h\&.
 .PP
 Referenced by InterruptHandler(), and ~InterruptHandler()\&.
 .SS "uint8_t MaxOS::hardwarecommunication::InterruptHandler::m_interrupt_number\fC [protected]\fP"
 
 .PP
-Definition at line 27 of file interrupts\&.h\&.
+Definition at line 30 of file interrupts\&.h\&.
 .PP
 Referenced by ~InterruptHandler()\&.
 

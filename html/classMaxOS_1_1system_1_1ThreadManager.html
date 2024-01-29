@@ -227,15 +227,13 @@ false if error </dd></dl>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <a class="code" href="classMaxOS_1_1system_1_1Thread.html">Thread</a>* new_thread = <span class="keyword">new</span> <a class="code" href="classMaxOS_1_1system_1_1Thread.html">Thread</a>();</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    new_thread -&gt; init(entrypoint);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    new_thread -&gt; m_tid = m_threads.size();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    new_thread -&gt; m_cpu_state -&gt; <a class="code" href="multitasking_8h.html#a8519dc239502dfcbac171b3128dc7054">cs</a> = m_gdt-&gt; code_segment_selector();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">//TODO: new_thread -&gt; m_cpu_state -&gt; cs = m_gdt-&gt; code_segment_selector();</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Add the thread to the array</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    m_threads.push_back(new_thread);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> new_thread -&gt; m_tid;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multitasking_8h_source.html#l00016">cs</a>.</p>
-
 </div>
 </div>
 <a id="adb9a4c54a2bb144b4d50cae4ca6a6066"></a>
@@ -293,8 +291,6 @@ false if error </dd></dl>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="multitasking_8h_source.html#l00004">eax</a>, and <a class="el" href="multithreading_8cpp_source.html#l00112">terminate_thread()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="interrupts_8cpp_source.html#l00235">MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()</a>.</p>
-
 </div>
 </div>
 <a id="a5c25c5bb8333ce799a89568f9b6dc879"></a>
@@ -350,7 +346,6 @@ false if error </dd></dl>
 </div><!-- doc-content -->
 <div class="ttc" id="aclassMaxOS_1_1system_1_1Thread_html"><div class="ttname"><a href="classMaxOS_1_1system_1_1Thread.html">MaxOS::system::Thread</a></div><div class="ttdoc">A execution thread that can be scheduled by the ThreadManager.</div><div class="ttdef"><b>Definition:</b> <a href="multithreading_8h_source.html#l00021">multithreading.h:21</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1ThreadManager_html_a5c25c5bb8333ce799a89568f9b6dc879"><div class="ttname"><a href="classMaxOS_1_1system_1_1ThreadManager.html#a5c25c5bb8333ce799a89568f9b6dc879">MaxOS::system::ThreadManager::terminate_thread</a></div><div class="ttdeci">bool terminate_thread(uint32_t tid)</div><div class="ttdoc">Terminates a thread.</div><div class="ttdef"><b>Definition:</b> <a href="multithreading_8cpp_source.html#l00112">multithreading.cpp:112</a></div></div>
-<div class="ttc" id="amultitasking_8h_html_a8519dc239502dfcbac171b3128dc7054"><div class="ttname"><a href="multitasking_8h.html#a8519dc239502dfcbac171b3128dc7054">cs</a></div><div class="ttdeci">uint32_t cs</div><div class="ttdef"><b>Definition:</b> <a href="multitasking_8h_source.html#l00016">multitasking.h:16</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1ThreadManager_html_adb9a4c54a2bb144b4d50cae4ca6a6066"><div class="ttname"><a href="classMaxOS_1_1system_1_1ThreadManager.html#adb9a4c54a2bb144b4d50cae4ca6a6066">MaxOS::system::ThreadManager::schedule</a></div><div class="ttdeci">CPUState * schedule(CPUState *cpu_state)</div><div class="ttdoc">Schedules the next thread to be executed by checking its yieldsStatus.</div><div class="ttdef"><b>Definition:</b> <a href="multithreading_8cpp_source.html#l00078">multithreading.cpp:78</a></div></div>
 <div class="ttc" id="amultitasking_8h_html_a93d929ad1fc57af9d4f1793c361fb4f2"><div class="ttname"><a href="multitasking_8h.html#a93d929ad1fc57af9d4f1793c361fb4f2">eax</a></div><div class="ttdeci">uint32_t eax</div><div class="ttdef"><b>Definition:</b> <a href="multitasking_8h_source.html#l00004">multitasking.h:4</a></div></div>
 <!-- start footer part -->

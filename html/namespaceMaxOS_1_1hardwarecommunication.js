@@ -1,15 +1,29 @@
 var namespaceMaxOS_1_1hardwarecommunication =
 [
+    [ "ACPISDTHeader", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader" ],
+    [ "AdvancedConfigurationAndPowerInterface", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface" ],
+    [ "AdvancedProgrammableInterruptController", "classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html", "classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController" ],
     [ "BaseAddressRegister", "classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister.html", "classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister" ],
-    [ "GateDescriptor", "structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1GateDescriptor" ],
-    [ "InterruptDescriptorTablePointer", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer.html", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer" ],
+    [ "IDTR", "structMaxOS_1_1hardwarecommunication_1_1IDTR.html", "structMaxOS_1_1hardwarecommunication_1_1IDTR" ],
+    [ "InterruptDescriptor", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor" ],
     [ "InterruptHandler", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler" ],
     [ "InterruptManager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager" ],
+    [ "IOAPIC", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC" ],
+    [ "LocalAPIC", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC" ],
+    [ "MADT", "structMaxOS_1_1hardwarecommunication_1_1MADT.html", "structMaxOS_1_1hardwarecommunication_1_1MADT" ],
+    [ "MADT_IOAPIC", "structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC.html", "structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC" ],
+    [ "MADT_Item", "structMaxOS_1_1hardwarecommunication_1_1MADT__Item.html", "structMaxOS_1_1hardwarecommunication_1_1MADT__Item" ],
+    [ "Override", "structMaxOS_1_1hardwarecommunication_1_1Override.html", "structMaxOS_1_1hardwarecommunication_1_1Override" ],
     [ "PeripheralComponentInterconnectController", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController.html", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController" ],
     [ "PeripheralComponentInterconnectDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor" ],
     [ "Port", "classMaxOS_1_1hardwarecommunication_1_1Port.html", "classMaxOS_1_1hardwarecommunication_1_1Port" ],
     [ "Port16Bit", "classMaxOS_1_1hardwarecommunication_1_1Port16Bit.html", "classMaxOS_1_1hardwarecommunication_1_1Port16Bit" ],
     [ "Port32Bit", "classMaxOS_1_1hardwarecommunication_1_1Port32Bit.html", "classMaxOS_1_1hardwarecommunication_1_1Port32Bit" ],
     [ "Port8Bit", "classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html", "classMaxOS_1_1hardwarecommunication_1_1Port8Bit" ],
-    [ "Port8BitSlow", "classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow.html", "classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow" ]
+    [ "Port8BitSlow", "classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow.html", "classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow" ],
+    [ "RedirectionEntry", "unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry.html", "unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry" ],
+    [ "RSDPDescriptor", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor" ],
+    [ "RSDPDescriptor2", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2" ],
+    [ "RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", "structMaxOS_1_1hardwarecommunication_1_1RSDT" ],
+    [ "XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ]
 ];

@@ -3,7 +3,7 @@ var multitasking_8h =
     [ "CPUState", "structMaxOS_1_1system_1_1CPUState.html", "structMaxOS_1_1system_1_1CPUState" ],
     [ "Task", "classMaxOS_1_1system_1_1Task.html", "classMaxOS_1_1system_1_1Task" ],
     [ "TaskManager", "classMaxOS_1_1system_1_1TaskManager.html", "classMaxOS_1_1system_1_1TaskManager" ],
-    [ "__attribute__", "multitasking_8h.html#a5cda3daa7f5792dda3ae9de64ea2f387", null ],
+    [ "__attribute__", "multitasking_8h.html#a8f6c22c0cb0083e96a102983072ae4c8", null ],
     [ "cs", "multitasking_8h.html#a8519dc239502dfcbac171b3128dc7054", null ],
     [ "eax", "multitasking_8h.html#a93d929ad1fc57af9d4f1793c361fb4f2", null ],
     [ "ebp", "multitasking_8h.html#aaba2ad0ff8ba480934feabfdab02b1e7", null ],

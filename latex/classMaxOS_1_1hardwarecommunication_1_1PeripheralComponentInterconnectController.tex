@@ -373,22 +373,22 @@ Definition at line 159 of file pci.\+cpp.
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{160 \{}
-\DoxyCodeLine{161     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} bus = 0; bus < 8; ++bus) \{}
+\DoxyCodeLine{161     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}} = 0; \mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}} < 8; ++\mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}}) \{}
 \DoxyCodeLine{162         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} device = 0; device < 32; ++device) \{}
 \DoxyCodeLine{163 }
-\DoxyCodeLine{164             \textcolor{keywordtype}{int} numFunctions = (device\_has\_functions(bus, device)) ? 8 : 1;}
+\DoxyCodeLine{164             \textcolor{keywordtype}{int} numFunctions = (device\_has\_functions(\mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}}, device)) ? 8 : 1;}
 \DoxyCodeLine{165 }
 \DoxyCodeLine{166             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \textcolor{keyword}{function} = 0; \textcolor{keyword}{function} < numFunctions; ++\textcolor{keyword}{function}) \{}
 \DoxyCodeLine{167 }
 \DoxyCodeLine{168                 \textcolor{comment}{// Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready}}
-\DoxyCodeLine{169                 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor}{PeripheralComponentInterconnectDeviceDescriptor}} deviceDescriptor = get\_device\_descriptor(bus, device, \textcolor{keyword}{function});}
+\DoxyCodeLine{169                 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor}{PeripheralComponentInterconnectDeviceDescriptor}} deviceDescriptor = get\_device\_descriptor(\mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}}, device, \textcolor{keyword}{function});}
 \DoxyCodeLine{170                 \textcolor{keywordflow}{if}(deviceDescriptor.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a449730b72e7af8c4fc588ae2b5306a2a}{vendor\_id}} == 0x0000 || deviceDescriptor.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a449730b72e7af8c4fc588ae2b5306a2a}{vendor\_id}} == 0x0001 || deviceDescriptor.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a449730b72e7af8c4fc588ae2b5306a2a}{vendor\_id}} == 0xFFFF)}
 \DoxyCodeLine{171                     \textcolor{keywordflow}{continue};}
 \DoxyCodeLine{172 }
 \DoxyCodeLine{173 }
 \DoxyCodeLine{174                 \textcolor{comment}{// Get port number}}
 \DoxyCodeLine{175                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} barNum = 5; barNum >= 0; barNum-\/-\/)\{}
-\DoxyCodeLine{176                     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister}{BaseAddressRegister}} bar = get\_base\_address\_register(bus, device, \textcolor{keyword}{function}, barNum);}
+\DoxyCodeLine{176                     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister}{BaseAddressRegister}} bar = get\_base\_address\_register(\mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}}, device, \textcolor{keyword}{function}, barNum);}
 \DoxyCodeLine{177                     \textcolor{keywordflow}{if}(bar.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister_a7ef7f325d5cb5dc23f44fde767e5db24}{address}} \&\& (bar.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister_aa170a347420c72b96c5f94904fdc513d}{type}} == \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication_afc5ea080a9107e056194cc643a761608a082719ea5b78564a46291526ff4f3b2c}{InputOutput}}))}
 \DoxyCodeLine{178                         deviceDescriptor.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_af9db8d9903071f7cf8611efa3c7a1333}{port\_base}} = (uint32\_t)bar.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister_a7ef7f325d5cb5dc23f44fde767e5db24}{address}};}
 \DoxyCodeLine{179                 \}}
@@ -418,7 +418,7 @@ Definition at line 159 of file pci.\+cpp.
 \end{DoxyCode}
 
 
-References Max\+O\+S\+::hardwarecommunication\+::\+Base\+Address\+Register\+::address, Max\+O\+S\+::drivers\+::\+Driver\+::get\+\_\+device\+\_\+name(), get\+\_\+driver(), Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Device\+Descriptor\+::get\+\_\+type(), Max\+O\+S\+::drivers\+::\+Driver\+::get\+\_\+vendor\+\_\+name(), Max\+O\+S\+::hardwarecommunication\+::\+Input\+Output, list\+\_\+known\+\_\+deivce(), Max\+O\+S\+::drivers\+::\+Driver\+Selector\+Event\+Handler\+::on\+\_\+driver\+\_\+selected(), Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Device\+Descriptor\+::port\+\_\+base, Max\+O\+S\+::hardwarecommunication\+::\+Base\+Address\+Register\+::type, Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Device\+Descriptor\+::vendor\+\_\+id, and Max\+O\+S\+::common\+::\+Output\+Stream\+::write().
+References Max\+O\+S\+::hardwarecommunication\+::\+Base\+Address\+Register\+::address, bus, Max\+O\+S\+::drivers\+::\+Driver\+::get\+\_\+device\+\_\+name(), get\+\_\+driver(), Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Device\+Descriptor\+::get\+\_\+type(), Max\+O\+S\+::drivers\+::\+Driver\+::get\+\_\+vendor\+\_\+name(), Max\+O\+S\+::hardwarecommunication\+::\+Input\+Output, list\+\_\+known\+\_\+deivce(), Max\+O\+S\+::drivers\+::\+Driver\+Selector\+Event\+Handler\+::on\+\_\+driver\+\_\+selected(), Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Device\+Descriptor\+::port\+\_\+base, Max\+O\+S\+::hardwarecommunication\+::\+Base\+Address\+Register\+::type, Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Device\+Descriptor\+::vendor\+\_\+id, and Max\+O\+S\+::common\+::\+Output\+Stream\+::write().
 
 
 

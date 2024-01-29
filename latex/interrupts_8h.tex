@@ -6,15 +6,16 @@
 {\ttfamily \#include $<$system/multithreading.\+h$>$}\newline
 {\ttfamily \#include $<$common/input\+Stream.\+h$>$}\newline
 {\ttfamily \#include $<$common/output\+Stream.\+h$>$}\newline
+{\ttfamily \#include $<$system/cpu.\+h$>$}\newline
 \doxysubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Handler}}
 \begin{DoxyCompactList}\small\item\em Handles a certain interrupt number. \end{DoxyCompactList}\item 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor}{Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor}}
-\begin{DoxyCompactList}\small\item\em Describes a gate in the Interrupt Descriptor Table. \end{DoxyCompactList}\item 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer}{Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+Table\+Pointer}}
-\begin{DoxyCompactList}\small\item\em Describes the Interrupt Descriptor Table. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1IDTR}{Max\+O\+S\+::hardwarecommunication\+::\+I\+D\+TR}}
+\begin{DoxyCompactList}\small\item\em A struct that holds the I\+DT register. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor}}
+\item 
 class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager}}
 \begin{DoxyCompactList}\small\item\em Handles all interrupts and passes them to the correct handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
@@ -27,45 +28,67 @@ class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor}{Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor}} \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication_afa4874630b2183a87642db708a8e4819}{Max\+O\+S\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed))
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{Max\+O\+S\+::hardwarecommunication\+::\+R\+S\+D\+P\+Descriptor}} \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication_abe45fccdf160be55b8dc7bd5417235ac}{Max\+O\+S\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed))
 \end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a182e5737450e9dc6d8614213cb0661a7}{handler\+\_\+address\+\_\+low\+\_\+bits}}
+uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_ab28e82ae69032cb4ad3ec3a0be3d7129}{limit}}
 \item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_ae84a4b22878380160d64b542973bbd9b}{gdt\+\_\+code\+\_\+segment\+\_\+selector}}
+uint64\+\_\+t \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}
 \item 
-uint8\+\_\+t \mbox{\hyperlink{interrupts_8h_acb7bc06bed6f6408d719334fc41698c7}{reserved}}
+uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_aa5e05ff0f00929c5e92891ae639afd68}{address\+\_\+low\+\_\+bits}}
 \item 
-uint8\+\_\+t \mbox{\hyperlink{interrupts_8h_a8b0d6200bc639dd37ff68847a0adde5f}{access}}
+uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a9a563b8f33f9e079c734090d746d1b74}{segment\+\_\+selector}}
 \item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a2c0a126d1cc108615862e2e322095a66}{handler\+\_\+address\+\_\+high\+\_\+bits}}
+uint8\+\_\+t \mbox{\hyperlink{interrupts_8h_a254d5bd1552992f9c17e038f363987ec}{ist}}
 \item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}
+uint8\+\_\+t \mbox{\hyperlink{interrupts_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}
 \item 
-uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_a0523cedff47e2441fc198b7770ec5d3f}{base}}
+uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a710ed0fcadd36b325b4e5345bc0724af}{address\+\_\+mid\+\_\+bits}}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager}} \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication_a5dc5e299db65c4d571e18b8d97972c58}{Max\+O\+S\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_a881797a814e5d4e40f36e556939ebb11}{address\+\_\+high\+\_\+bits}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_aa43c4c21b173ada1b6b7568956f0d650}{reserved}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Variable Documentation}
-\mbox{\Hypertarget{interrupts_8h_a8b0d6200bc639dd37ff68847a0adde5f}\label{interrupts_8h_a8b0d6200bc639dd37ff68847a0adde5f}} 
-\index{interrupts.h@{interrupts.h}!access@{access}}
-\index{access@{access}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{access}{access}}
-{\footnotesize\ttfamily uint8\+\_\+t access}
+\mbox{\Hypertarget{interrupts_8h_a881797a814e5d4e40f36e556939ebb11}\label{interrupts_8h_a881797a814e5d4e40f36e556939ebb11}} 
+\index{interrupts.h@{interrupts.h}!address\_high\_bits@{address\_high\_bits}}
+\index{address\_high\_bits@{address\_high\_bits}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{address\_high\_bits}{address\_high\_bits}}
+{\footnotesize\ttfamily uint32\+\_\+t address\+\_\+high\+\_\+bits}
 
 
 
-Definition at line 5 of file interrupts.\+h.
+Definition at line 7 of file interrupts.\+h.
 
-\mbox{\Hypertarget{interrupts_8h_a0523cedff47e2441fc198b7770ec5d3f}\label{interrupts_8h_a0523cedff47e2441fc198b7770ec5d3f}} 
+\mbox{\Hypertarget{interrupts_8h_aa5e05ff0f00929c5e92891ae639afd68}\label{interrupts_8h_aa5e05ff0f00929c5e92891ae639afd68}} 
+\index{interrupts.h@{interrupts.h}!address\_low\_bits@{address\_low\_bits}}
+\index{address\_low\_bits@{address\_low\_bits}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{address\_low\_bits}{address\_low\_bits}}
+{\footnotesize\ttfamily uint16\+\_\+t address\+\_\+low\+\_\+bits}
+
+
+
+Definition at line 2 of file interrupts.\+h.
+
+\mbox{\Hypertarget{interrupts_8h_a710ed0fcadd36b325b4e5345bc0724af}\label{interrupts_8h_a710ed0fcadd36b325b4e5345bc0724af}} 
+\index{interrupts.h@{interrupts.h}!address\_mid\_bits@{address\_mid\_bits}}
+\index{address\_mid\_bits@{address\_mid\_bits}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{address\_mid\_bits}{address\_mid\_bits}}
+{\footnotesize\ttfamily uint16\+\_\+t address\+\_\+mid\+\_\+bits}
+
+
+
+Definition at line 6 of file interrupts.\+h.
+
+\mbox{\Hypertarget{interrupts_8h_aeca790c0426654358d031f8180e84aca}\label{interrupts_8h_aeca790c0426654358d031f8180e84aca}} 
 \index{interrupts.h@{interrupts.h}!base@{base}}
 \index{base@{base}!interrupts.h@{interrupts.h}}
 \doxysubsubsection{\texorpdfstring{base}{base}}
-{\footnotesize\ttfamily uint32\+\_\+t base}
+{\footnotesize\ttfamily uint64\+\_\+t base}
 
 
 
@@ -75,53 +98,53 @@ Definition at line 3 of file interrupts.\+h.
 
 Referenced by itoa().
 
-\mbox{\Hypertarget{interrupts_8h_ae84a4b22878380160d64b542973bbd9b}\label{interrupts_8h_ae84a4b22878380160d64b542973bbd9b}} 
-\index{interrupts.h@{interrupts.h}!gdt\_code\_segment\_selector@{gdt\_code\_segment\_selector}}
-\index{gdt\_code\_segment\_selector@{gdt\_code\_segment\_selector}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{gdt\_code\_segment\_selector}{gdt\_code\_segment\_selector}}
-{\footnotesize\ttfamily uint16\+\_\+t gdt\+\_\+code\+\_\+segment\+\_\+selector}
+\mbox{\Hypertarget{interrupts_8h_aa2585d779da0ab21273a8d92de9a0ebe}\label{interrupts_8h_aa2585d779da0ab21273a8d92de9a0ebe}} 
+\index{interrupts.h@{interrupts.h}!flags@{flags}}
+\index{flags@{flags}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{flags}{flags}}
+{\footnotesize\ttfamily uint8\+\_\+t flags}
 
 
 
-Definition at line 3 of file interrupts.\+h.
+Definition at line 5 of file interrupts.\+h.
 
-\mbox{\Hypertarget{interrupts_8h_a2c0a126d1cc108615862e2e322095a66}\label{interrupts_8h_a2c0a126d1cc108615862e2e322095a66}} 
-\index{interrupts.h@{interrupts.h}!handler\_address\_high\_bits@{handler\_address\_high\_bits}}
-\index{handler\_address\_high\_bits@{handler\_address\_high\_bits}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{handler\_address\_high\_bits}{handler\_address\_high\_bits}}
-{\footnotesize\ttfamily uint16\+\_\+t handler\+\_\+address\+\_\+high\+\_\+bits}
-
-
-
-Definition at line 6 of file interrupts.\+h.
-
-\mbox{\Hypertarget{interrupts_8h_a182e5737450e9dc6d8614213cb0661a7}\label{interrupts_8h_a182e5737450e9dc6d8614213cb0661a7}} 
-\index{interrupts.h@{interrupts.h}!handler\_address\_low\_bits@{handler\_address\_low\_bits}}
-\index{handler\_address\_low\_bits@{handler\_address\_low\_bits}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{handler\_address\_low\_bits}{handler\_address\_low\_bits}}
-{\footnotesize\ttfamily uint16\+\_\+t handler\+\_\+address\+\_\+low\+\_\+bits}
-
-
-
-Definition at line 2 of file interrupts.\+h.
-
-\mbox{\Hypertarget{interrupts_8h_acb7bc06bed6f6408d719334fc41698c7}\label{interrupts_8h_acb7bc06bed6f6408d719334fc41698c7}} 
-\index{interrupts.h@{interrupts.h}!reserved@{reserved}}
-\index{reserved@{reserved}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{reserved}{reserved}}
-{\footnotesize\ttfamily uint8\+\_\+t reserved}
+\mbox{\Hypertarget{interrupts_8h_a254d5bd1552992f9c17e038f363987ec}\label{interrupts_8h_a254d5bd1552992f9c17e038f363987ec}} 
+\index{interrupts.h@{interrupts.h}!ist@{ist}}
+\index{ist@{ist}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{ist}{ist}}
+{\footnotesize\ttfamily uint8\+\_\+t ist}
 
 
 
 Definition at line 4 of file interrupts.\+h.
 
-\mbox{\Hypertarget{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}\label{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}} 
-\index{interrupts.h@{interrupts.h}!size@{size}}
-\index{size@{size}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{size}{size}}
-{\footnotesize\ttfamily uint16\+\_\+t size}
+\mbox{\Hypertarget{interrupts_8h_ab28e82ae69032cb4ad3ec3a0be3d7129}\label{interrupts_8h_ab28e82ae69032cb4ad3ec3a0be3d7129}} 
+\index{interrupts.h@{interrupts.h}!limit@{limit}}
+\index{limit@{limit}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{limit}{limit}}
+{\footnotesize\ttfamily uint16\+\_\+t limit}
 
 
 
 Definition at line 2 of file interrupts.\+h.
+
+\mbox{\Hypertarget{interrupts_8h_aa43c4c21b173ada1b6b7568956f0d650}\label{interrupts_8h_aa43c4c21b173ada1b6b7568956f0d650}} 
+\index{interrupts.h@{interrupts.h}!reserved@{reserved}}
+\index{reserved@{reserved}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{reserved}{reserved}}
+{\footnotesize\ttfamily uint32\+\_\+t reserved}
+
+
+
+Definition at line 8 of file interrupts.\+h.
+
+\mbox{\Hypertarget{interrupts_8h_a9a563b8f33f9e079c734090d746d1b74}\label{interrupts_8h_a9a563b8f33f9e079c734090d746d1b74}} 
+\index{interrupts.h@{interrupts.h}!segment\_selector@{segment\_selector}}
+\index{segment\_selector@{segment\_selector}!interrupts.h@{interrupts.h}}
+\doxysubsubsection{\texorpdfstring{segment\_selector}{segment\_selector}}
+{\footnotesize\ttfamily uint16\+\_\+t segment\+\_\+selector}
+
+
+
+Definition at line 3 of file interrupts.\+h.
 

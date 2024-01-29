@@ -1,0 +1,127 @@
+.TH "MaxOS::hardwarecommunication::IOAPIC" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::IOAPIC
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <apic\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIOAPIC\fP (\fBAdvancedConfigurationAndPowerInterface\fP *acpi)"
+.br
+.ti -1c
+.RI "\fB~IOAPIC\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 78 of file apic\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "IOAPIC::IOAPIC (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)"
+
+.PP
+Definition at line 94 of file apic\&.cpp\&.
+.PP
+.nf
+95 : m_acpi(acpi),
+96   m_madt(nullptr)
+97 {
+98 
+99 }
+.fi
+.SS "IOAPIC::~IOAPIC ()"
+
+.PP
+Definition at line 101 of file apic\&.cpp\&.
+.PP
+.nf
+101                 {
+102 
+103 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void IOAPIC::init ()"
+
+.PP
+Definition at line 105 of file apic\&.cpp\&.
+.PP
+.nf
+105                   {
+106 
+107   // Get the information about the IO APIC
+108   m_madt = (MADT*)m_acpi->find("APIC");
+109   MADT_Item* io_apic_item = get_madt_item(1, 0);
+110 
+111   // Check if the IO APIC was found
+112   if(io_apic_item == nullptr) {
+113         _kprintf("ERROR: IO APIC not found\n");
+114         return;
+115   }
+116 
+117   // Get the IO APIC address
+118   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;
+119   m_address = io_apic->io_apic_address;
+120 
+121   // Get the IO APIC version and max redirection entry
+122   m_version = read(0x01);
+123   m_max_redirect_entry = (uint8_t)(m_version >> 16);
+124 
+125   // Log the IO APIC information
+126   _kprintf("IO APIC Version: 0x%x\n", m_version);
+127   _kprintf("IO APIC Max Redirection Entry: 0x%x\n", m_max_redirect_entry);
+128 
+129   // Get the source override item
+130   MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
+131 
+132   // Loop through the source override items
+133   uint32_t total_length = 0;
+134   while (total_length < m_madt->header\&.length && m_override_array_size < 0x10){ // 0x10 is the max items
+135 
+136       // Increment the total length
+137       total_length += source_override_item->length;
+138 
+139       // If there is an override, populate the array
+140       if(source_override_item != nullptr && source_override_item->type == 2) {
+141 
+142           // Get the override and populate the array
+143           Override *override = (Override *)(source_override_item + 1);
+144           m_override_array[m_override_array_size]\&.bus = override->bus;
+145           m_override_array[m_override_array_size]\&.source = override->source;
+146           m_override_array[m_override_array_size]\&.global_system_interrupt =
+147               override->global_system_interrupt;
+148           m_override_array[m_override_array_size]\&.flags = override->flags;
+149 
+150           // Increment the override array size
+151           m_override_array_size++;
+152       }
+153 
+154       // Get the next item
+155       source_override_item = get_madt_item(2, m_override_array_size);
+156 
+157       // If there is no next item then break
+158       if(source_override_item == nullptr)
+159           break;
+160   }
+161 
+162   // Log how many overrides were found
+163   _kprintf("IO APIC Source Overrides: 0x%x\n", m_override_array_size);
+164 }
+.fi
+.PP
+References _kprintf(), MaxOS::hardwarecommunication::Override::bus, MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find(), MaxOS::hardwarecommunication::Override::flags, MaxOS::hardwarecommunication::Override::global_system_interrupt, header, MaxOS::hardwarecommunication::MADT_IOAPIC::io_apic_address, MaxOS::hardwarecommunication::ACPISDTHeader::length, MaxOS::hardwarecommunication::MADT_Item::length, MaxOS::hardwarecommunication::Override::source, and MaxOS::hardwarecommunication::MADT_Item::type\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

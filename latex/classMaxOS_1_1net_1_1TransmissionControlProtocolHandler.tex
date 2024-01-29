@@ -17,7 +17,7 @@ Inheritance diagram for Max\+OS\+::net\+::Transmission\+Control\+Protocol\+Handl
 \item 
 \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler_ae7db4243489b515c400b514f26a2e469}{$\sim$\+Transmission\+Control\+Protocol\+Handler}} ()
 \item 
-bool \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler_abedc3bf545352a95defe6c8b3ad848cb}{handle\+Internet\+Protocol\+Payload}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_aed74aa5789cabec794d6961455e80db3}{source\+IP}}, \mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destination\+IP}}, uint8\+\_\+t $\ast$payload\+Data, uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})
+bool \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler_abedc3bf545352a95defe6c8b3ad848cb}{handle\+Internet\+Protocol\+Payload}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_aed74aa5789cabec794d6961455e80db3}{source\+IP}}, \mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destination\+IP}}, uint8\+\_\+t $\ast$payload\+Data, uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
 \begin{DoxyCompactList}\small\item\em Handle the T\+CP message (provider end) \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler_a17ee7c16c6b71cd8087694a5bbbdbfc2}{Connect}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} ip, \mbox{\hyperlink{namespaceMaxOS_1_1net_a8e668c17241c6c0ed8e9f6df338b2307}{Transmission\+Control\+Protocol\+Port}} port)
 \begin{DoxyCompactList}\small\item\em Connect to a remote host through the T\+CP protocol. \end{DoxyCompactList}\item 
@@ -32,7 +32,7 @@ virtual void \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHa
 \doxysubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{send\+Transmission\+Control\+Protocol\+Packet}} (\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$socket, uint8\+\_\+t $\ast$\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}, uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}, uint16\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}=0)
+void \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler_ada592497c45a1f0fe5d79acf9860dcd5}{send\+Transmission\+Control\+Protocol\+Packet}} (\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{Transmission\+Control\+Protocol\+Socket}} $\ast$socket, uint8\+\_\+t $\ast$\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}, uint16\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}, uint16\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}=0)
 \begin{DoxyCompactList}\small\item\em Send a packet (Throught the provider) \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
@@ -318,7 +318,7 @@ Definition at line 162 of file tcp.\+cpp.
 \DoxyCodeLine{191         \textcolor{keywordflow}{if}( (*currentSocket) -\/> localPort == localPort                               \textcolor{comment}{//Check if the local port is the same as the destination port}}
 \DoxyCodeLine{192         \&\&  (*currentSocket) -\/> localIP == \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destinationIP}}                                  \textcolor{comment}{//Check if the local IP is the same as the destination IP}}
 \DoxyCodeLine{193         \&\&  (*currentSocket) -\/> state == \mbox{\hyperlink{namespaceMaxOS_1_1net_a976602fd4835e70e3cecff933971c281a2434572306c3f1089b0d641bddc5dfef}{LISTEN}}                                           \textcolor{comment}{//Check if the socket is in the LISTEN state}}
-\DoxyCodeLine{194         \&\& (((msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}}) \& (\mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}} | \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954}{ACK}})) == \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}}))                                       \textcolor{comment}{//Check if the SYN flag is set (allow for acknoweldgement)}}
+\DoxyCodeLine{194         \&\& (((msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}) \& (\mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}} | \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954}{ACK}})) == \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}}))                                       \textcolor{comment}{//Check if the SYN flag is set (allow for acknoweldgement)}}
 \DoxyCodeLine{195         \{}
 \DoxyCodeLine{196             socket = *currentSocket;}
 \DoxyCodeLine{197         \}}
@@ -335,7 +335,7 @@ Definition at line 162 of file tcp.\+cpp.
 \DoxyCodeLine{208     \textcolor{keywordtype}{bool} reset = \textcolor{keyword}{false};}
 \DoxyCodeLine{209 }
 \DoxyCodeLine{210     \textcolor{comment}{//Check if the socket is found and if the socket wants to reset}}
-\DoxyCodeLine{211     \textcolor{keywordflow}{if}(socket != 0 \&\& msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea7edbb6838b2b9d48b096e2ab36063f82}{RST}})}
+\DoxyCodeLine{211     \textcolor{keywordflow}{if}(socket != 0 \&\& msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea7edbb6838b2b9d48b096e2ab36063f82}{RST}})}
 \DoxyCodeLine{212     \{}
 \DoxyCodeLine{213         socket -\/> state = \mbox{\hyperlink{namespaceMaxOS_1_1net_a976602fd4835e70e3cecff933971c281a78b31661187acfd416570b95ce8ff51c}{CLOSED}};}
 \DoxyCodeLine{214         socket -\/> Disconnected();}
@@ -344,7 +344,7 @@ Definition at line 162 of file tcp.\+cpp.
 \DoxyCodeLine{217     \textcolor{comment}{//Check if the socket is found and if the socket is not closed}}
 \DoxyCodeLine{218     \textcolor{keywordflow}{if}(socket != 0 \&\& socket -\/> state != \mbox{\hyperlink{namespaceMaxOS_1_1net_a976602fd4835e70e3cecff933971c281a78b31661187acfd416570b95ce8ff51c}{CLOSED}})}
 \DoxyCodeLine{219     \{}
-\DoxyCodeLine{220         \textcolor{keywordflow}{switch}((msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}}) \& (\mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}} | \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954}{ACK}} | \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2eae83dc8854cb127298c9254acb19390af}{FIN}}))}
+\DoxyCodeLine{220         \textcolor{keywordflow}{switch}((msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}) \& (\mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}} | \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954}{ACK}} | \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2eae83dc8854cb127298c9254acb19390af}{FIN}}))}
 \DoxyCodeLine{221         \{}
 \DoxyCodeLine{222             \textcolor{comment}{/*}}
 \DoxyCodeLine{223 \textcolor{comment}{             * Example for explanation:}}
@@ -437,7 +437,7 @@ Definition at line 162 of file tcp.\+cpp.
 \DoxyCodeLine{310                     \textcolor{keywordflow}{break};}
 \DoxyCodeLine{311                 \}}
 \DoxyCodeLine{312 }
-\DoxyCodeLine{313                 \textcolor{keywordflow}{if}(msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} == \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954}{ACK}})}
+\DoxyCodeLine{313                 \textcolor{keywordflow}{if}(msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} == \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954}{ACK}})}
 \DoxyCodeLine{314                     \textcolor{keywordflow}{break};}
 \DoxyCodeLine{315 }
 \DoxyCodeLine{316                 \textcolor{comment}{// no break, because of piggybacking}}
@@ -612,13 +612,13 @@ Definition at line 389 of file tcp.\+cpp.
 \DoxyCodeLine{410     \textcolor{comment}{//Set TCP related data}}
 \DoxyCodeLine{411     msg -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}( socket -\/> \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgementNumber}} );}
 \DoxyCodeLine{412     msg -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} = \mbox{\hyperlink{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}{bigEndian32}}( socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} );}
-\DoxyCodeLine{413     msg -\/> \mbox{\hyperlink{fat32_8h_acb7bc06bed6f6408d719334fc41698c7}{reserved}} = 0;}
-\DoxyCodeLine{414     msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} = \mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}};}
+\DoxyCodeLine{413     msg -\/> \mbox{\hyperlink{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}{reserved}} = 0;}
+\DoxyCodeLine{414     msg -\/> \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} = \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
 \DoxyCodeLine{415     msg -\/> \mbox{\hyperlink{tcp_8h_a6b2a31b20954529dabfe0f32eda1cf11}{windowSize}} = 0xFFFF;}
 \DoxyCodeLine{416     msg -\/> \mbox{\hyperlink{tcp_8h_aca974d34b50135a7d9b524a8fc2f5d00}{urgentPtr}} = 0;}
 \DoxyCodeLine{417 }
 \DoxyCodeLine{418     \textcolor{comment}{//Through the options allow for the MSS to be set}}
-\DoxyCodeLine{419     msg -\/> \mbox{\hyperlink{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7}{options}} = ((\mbox{\hyperlink{amd__am79c973_8h_a773b39d480759f67926cb18ae2219281}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}}) != 0) ? 0xB4050402 : 0;}
+\DoxyCodeLine{419     msg -\/> \mbox{\hyperlink{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7}{options}} = ((\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1net_a14f328f54b1801ae5c2130259bd55e2ea253c7d89179d186b52da1ffd1198fcd6}{SYN}}) != 0) ? 0xB4050402 : 0;}
 \DoxyCodeLine{420 }
 \DoxyCodeLine{421     \textcolor{comment}{//Increase the sequence number}}
 \DoxyCodeLine{422     socket -\/> \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequenceNumber}} += \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
@@ -638,8 +638,8 @@ Definition at line 389 of file tcp.\+cpp.
 \DoxyCodeLine{436     phdr -\/> \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} = ((\mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} \& 0x00FF) << 8) | ((\mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} \& 0xFF00) >> 8);}
 \DoxyCodeLine{437 }
 \DoxyCodeLine{438     \textcolor{comment}{//Calculate the checksum}}
-\DoxyCodeLine{439     msg -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = 0;}
-\DoxyCodeLine{440     msg -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{InternetProtocolHandler::Checksum}}((uint16\_t*)buffer, lengthInclPHdr);}
+\DoxyCodeLine{439     msg -\/> \mbox{\hyperlink{intel__i217_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}{checksum}} = 0;}
+\DoxyCodeLine{440     msg -\/> \mbox{\hyperlink{intel__i217_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}{checksum}} = \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{InternetProtocolHandler::Checksum}}((uint16\_t*)buffer, lengthInclPHdr);}
 \DoxyCodeLine{441 }
 \DoxyCodeLine{442 }
 \DoxyCodeLine{443     \textcolor{comment}{//Send and then free the data}}

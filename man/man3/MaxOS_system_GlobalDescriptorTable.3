@@ -1,8 +1,8 @@
-.TH "MaxOS::system::GlobalDescriptorTable" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::GlobalDescriptorTable" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-MaxOS::system::GlobalDescriptorTable \- Sets up the GDT in the CPU\&.  
+MaxOS::system::GlobalDescriptorTable \- Sets up the GDT in the \fBCPU\fP\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,126 +13,97 @@ MaxOS::system::GlobalDescriptorTable \- Sets up the GDT in the CPU\&.
 
 .in +1c
 .ti -1c
-.RI "\fBGlobalDescriptorTable\fP (\fBmultiboot_tag_basic_meminfo\fP *meminfo)"
+.RI "\fBGlobalDescriptorTable\fP ()"
 .br
-.RI "Global Descriptor Table\&. "
 .ti -1c
 .RI "\fB~GlobalDescriptorTable\fP ()"
 .br
-.ti -1c
-.RI "uint16_t \fBcode_segment_selector\fP ()"
-.br
-.RI "Code Segment Selector\&. "
-.ti -1c
-.RI "uint16_t \fBdata_segment_selector\fP ()"
-.br
-.RI "Data Segment Selector\&. "
-.ti -1c
-.RI "uint16_t \fBtask_state_segment_selector\fP ()"
-.br
-.RI "\fBTask\fP State Segment Selector\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Sets up the GDT in the CPU\&. 
+Sets up the GDT in the \fBCPU\fP\&. 
 .PP
-Definition at line 40 of file gdt\&.h\&.
+Definition at line 28 of file gdt\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "GlobalDescriptorTable::GlobalDescriptorTable (\fBmultiboot_tag_basic_meminfo\fP * meminfo)"
+.SS "GlobalDescriptorTable::GlobalDescriptorTable ()"
 
 .PP
-Global Descriptor Table\&. 
-.PP
-Definition at line 91 of file gdt\&.cpp\&.
+Definition at line 11 of file gdt\&.cpp\&.
 .PP
 .nf
-92 : m_null_segment_selector(0, 0, 0), m_unused_segment_selector(0, 0, 0),
-93   m_code_segment_selector(0, 1024* meminfo -> mem_upper, 0x9A),
-94   m_data_segment_selector(0, 1024* meminfo -> mem_upper, 0x92),
-95   m_task_state_segment_selector(0, 1024* meminfo -> mem_upper, 0)
-96 
-97 {
-98 
-99     // Create GDT
-100     uint32_t gdt_t[2];
-101     gdt_t[0] = sizeof(GlobalDescriptorTable) << 16;
-102     gdt_t[1] = (uint32_t)this;
-103 
-104     // Tell processor to use this table
-105     asm volatile("lgdt (%0)": :"p" (((uint8_t *) gdt_t)+2));
-106 
-107 }
+12 {
+13 
+14    // Null descriptor
+15     m_gdt[0] = 0;
+16 
+17     // Kernel code segment descriptor
+18     uint64_t kernel_code_segment_descriptor = 0;
+19     kernel_code_segment_descriptor |= 0b1011 << 8; // Type of selector
+20     kernel_code_segment_descriptor |= 1 << 12;     // Not a system descriptor
+21     kernel_code_segment_descriptor |= 0 << 13;     // Privilege level 0
+22     kernel_code_segment_descriptor |= 1 << 15;     // Present
+23     kernel_code_segment_descriptor |= 1 << 21;     // Long mode
+24     m_gdt[1] = kernel_code_segment_descriptor << 32;
+25 
+26     // Kernel data segment descriptor
+27     uint64_t kernel_data_segment_descriptor = 0;
+28     kernel_data_segment_descriptor |= 0b0011 << 8; // Type of selector
+29     kernel_data_segment_descriptor |= 1 << 12;     // Not a system descriptor
+30     kernel_data_segment_descriptor |= 0 << 13;     // Privilege level 0
+31     kernel_data_segment_descriptor |= 1 << 15;     // Present
+32     kernel_data_segment_descriptor |= 1 << 21;     // Long mode
+33     m_gdt[2] = kernel_data_segment_descriptor << 32;
+34 
+35     // User code segment descriptor (Change the privilege level to 3)
+36     uint64_t user_code_segment_descriptor = kernel_code_segment_descriptor | (3 << 13);
+37     m_gdt[3] = user_code_segment_descriptor;
+38 
+39     // User data segment descriptor (Change the privilege level to 3)
+40     uint64_t user_data_segment_descriptor = kernel_data_segment_descriptor | (3 << 13);
+41     m_gdt[4] = user_data_segment_descriptor;
+42 
+43     _kprintf("Created GDT entries\n");
+44 
+45     // Store the GDT in the GDTR
+46     GDTR gdtr = {
+47         \&.limit = 5 * sizeof(uint64_t) - 1,
+48         \&.address = (uint64_t)m_gdt
+49     };
+50 
+51     // Load the GDTR
+52     asm volatile("lgdt %0" : : "m" (gdtr));
+53 
+54     _kprintf("Loaded GDT\n");
+55 
+56     // Reload the segment registers
+57     asm volatile("\
+58         mov $0x10, %ax \n\
+59         mov %ax, %ds \n\
+60         mov %ax, %es \n\
+61         mov %ax, %fs \n\
+62         mov %ax, %gs \n\
+63         mov %ax, %ss \n\
+64         \n\
+65         pop %rdi \n\
+66         push $0x8 \n\
+67         push %rdi \n\
+68     ");
+69 
+70     _kprintf("Reloaded segment registers\n");
+71 
+72 }
 .fi
+.PP
+References _kprintf(), address, and MaxOS::system::GDTR::limit\&.
 .SS "GlobalDescriptorTable::~GlobalDescriptorTable ()"
 
 .PP
-Definition at line 109 of file gdt\&.cpp\&.
+Definition at line 74 of file gdt\&.cpp\&.
 .PP
 .nf
-110 {
-111 }
-.fi
-.SH "Member Function Documentation"
-.PP 
-.SS "uint16_t GlobalDescriptorTable::code_segment_selector ()"
-
-.PP
-Code Segment Selector\&. 
-.PP
-\fBReturns\fP
-.RS 4
-The code segment selector offset 
-.RE
-.PP
-
-.PP
-Definition at line 129 of file gdt\&.cpp\&.
-.PP
-.nf
-130 {
-131     return (uint8_t*)&m_code_segment_selector - (uint8_t*)this;
-132 }
-.fi
-.PP
-Referenced by MaxOS::hardwarecommunication::InterruptManager::InterruptManager(), and MaxOS::system::Task::Task()\&.
-.SS "uint16_t GlobalDescriptorTable::data_segment_selector ()"
-
-.PP
-Data Segment Selector\&. 
-.PP
-\fBReturns\fP
-.RS 4
-The data segment selector offset 
-.RE
-.PP
-
-.PP
-Definition at line 119 of file gdt\&.cpp\&.
-.PP
-.nf
-120 {
-121     return (uint8_t*)&m_data_segment_selector - (uint8_t*)this;
-122 }
-.fi
-.SS "uint16_t GlobalDescriptorTable::task_state_segment_selector ()"
-
-.PP
-\fBTask\fP State Segment Selector\&. 
-.PP
-\fBReturns\fP
-.RS 4
-The task state segment selector offset 
-.RE
-.PP
-
-.PP
-Definition at line 139 of file gdt\&.cpp\&.
-.PP
-.nf
-140 {
-141     return (uint8_t*)&m_task_state_segment_selector - (uint8_t*)this;
-142 }
+75 {
+76 }
 .fi
 
 

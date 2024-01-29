@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/multitasking.h" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/multitasking.h" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,7 +19,7 @@
 .ti -1c
 .RI "struct \fBMaxOS::system::CPUState\fP"
 .br
-.RI "Stores the state of the CPU registers\&. "
+.RI "Stores the state of the \fBCPU\fP registers\&. "
 .ti -1c
 .RI "class \fBMaxOS::system::Task\fP"
 .br
@@ -43,7 +43,7 @@
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::system::SegmentDescriptor\fP \fBMaxOS::system::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::system::GDTR\fP \fBMaxOS::system::__attribute__\fP ((packed))"
 .br
 .in -1c
 .SS "Variables"
@@ -95,14 +95,12 @@
 
 .PP
 Definition at line 16 of file multitasking\&.h\&.
-.PP
-Referenced by MaxOS::system::ThreadManager::create_thread(), and MaxOS::system::Task::Task()\&.
 .SS "uint32_t eax"
 
 .PP
 Definition at line 4 of file multitasking\&.h\&.
 .PP
-Referenced by MaxOS::system::ThreadManager::schedule(), and MaxOS::system::Task::Task()\&.
+Referenced by MaxOS::system::CPU::cpuid(), MaxOS::system::ThreadManager::schedule(), and MaxOS::system::Task::Task()\&.
 .SS "uint32_t ebp"
 
 .PP
@@ -114,13 +112,13 @@ Referenced by MaxOS::system::Task::Task()\&.
 .PP
 Definition at line 5 of file multitasking\&.h\&.
 .PP
-Referenced by MaxOS::system::Task::Task()\&.
+Referenced by MaxOS::system::CPU::cpuid(), and MaxOS::system::Task::Task()\&.
 .SS "uint32_t ecx"
 
 .PP
 Definition at line 6 of file multitasking\&.h\&.
 .PP
-Referenced by MaxOS::system::Task::Task()\&.
+Referenced by MaxOS::system::CPU::cpuid(), and MaxOS::system::Task::Task()\&.
 .SS "uint32_t edi"
 
 .PP
@@ -132,7 +130,7 @@ Referenced by MaxOS::system::Task::Task()\&.
 .PP
 Definition at line 7 of file multitasking\&.h\&.
 .PP
-Referenced by MaxOS::system::Task::Task()\&.
+Referenced by MaxOS::system::CPU::cpuid(), and MaxOS::system::Task::Task()\&.
 .SS "uint32_t eflags"
 
 .PP
@@ -159,8 +157,6 @@ Referenced by MaxOS::system::Task::Task()\&.
 
 .PP
 Definition at line 18 of file multitasking\&.h\&.
-.PP
-Referenced by MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request(), and MaxOS::hardwarecommunication::InterruptManager::HandleInterrupt()\&.
 .SS "uint32_t ss"
 
 .PP

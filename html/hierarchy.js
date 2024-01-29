@@ -1,6 +1,10 @@
 var hierarchy =
 [
+    [ "MaxOS::system::__attribute__", "structMaxOS_1_1system_1_1____attribute____.html", null ],
+    [ "MaxOS::hardwarecommunication::ACPISDTHeader", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html", null ],
     [ "MaxOS::net::AddressResolutionProtocolMessage", "structMaxOS_1_1net_1_1AddressResolutionProtocolMessage.html", null ],
+    [ "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html", null ],
+    [ "MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController", "classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html", null ],
     [ "AMD", "classAMD.html", null ],
     [ "MaxOS::hardwarecommunication::BaseAddressRegister", "classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister.html", null ],
     [ "BiosParameterBlock", "structBiosParameterBlock.html", null ],
@@ -11,6 +15,7 @@ var hierarchy =
       [ "MaxOS::drivers::console::TextModeConsole", "classMaxOS_1_1drivers_1_1console_1_1TextModeConsole.html", null ],
       [ "MaxOS::drivers::console::VESABootConsole", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html", null ]
     ] ],
+    [ "MaxOS::system::CPU", "classMaxOS_1_1system_1_1CPU.html", null ],
     [ "MaxOS::system::CPUState", "structMaxOS_1_1system_1_1CPUState.html", null ],
     [ "MaxOS::filesystem::DirectoryEntry", "structMaxOS_1_1filesystem_1_1DirectoryEntry.html", null ],
     [ "MaxOS::drivers::Driver", "classMaxOS_1_1drivers_1_1Driver.html", [
@@ -154,7 +159,7 @@ var hierarchy =
       [ "MaxOS::net::UserDatagramProtocolSocket", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket.html", null ]
     ] ],
     [ "MaxOS::gui::Font", "classMaxOS_1_1gui_1_1Font.html", null ],
-    [ "MaxOS::hardwarecommunication::GateDescriptor", "structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html", null ],
+    [ "MaxOS::system::GDTR", "structMaxOS_1_1system_1_1GDTR.html", null ],
     [ "MaxOS::common::GenericInputStream", "classMaxOS_1_1common_1_1GenericInputStream.html", null ],
     [ "MaxOS::common::GenericInputStream< ProcessorType >", "classMaxOS_1_1common_1_1GenericInputStream.html", [
       [ "MaxOS::common::InputStreamProcessor< Type, ProcessorType >", "classMaxOS_1_1common_1_1InputStreamProcessor.html", null ]
@@ -189,6 +194,7 @@ var hierarchy =
     [ "MaxOS::common::GraphicsContext", "classMaxOS_1_1common_1_1GraphicsContext.html", [
       [ "MaxOS::drivers::video::VideoDriver", "classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html", null ]
     ] ],
+    [ "MaxOS::hardwarecommunication::IDTR", "structMaxOS_1_1hardwarecommunication_1_1IDTR.html", null ],
     [ "MaxOS::common::InputStreamEventHandler< Type >", "classMaxOS_1_1common_1_1InputStreamEventHandler.html", [
       [ "MaxOS::common::InputStreamProcessor< Type, Type * >", "classMaxOS_1_1common_1_1InputStreamProcessor.html", null ],
       [ "MaxOS::common::InputStreamProcessor< Type, Type >", "classMaxOS_1_1common_1_1InputStreamProcessor.html", null ],
@@ -211,7 +217,7 @@ var hierarchy =
       [ "MaxOS::net::UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html", null ]
     ] ],
     [ "MaxOS::net::InternetProtocolV4Header", "structMaxOS_1_1net_1_1InternetProtocolV4Header.html", null ],
-    [ "MaxOS::hardwarecommunication::InterruptDescriptorTablePointer", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer.html", null ],
+    [ "MaxOS::hardwarecommunication::InterruptDescriptor", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html", null ],
     [ "MaxOS::hardwarecommunication::InterruptHandler", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html", [
       [ "MaxOS::drivers::clock::Clock", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html", null ],
       [ "MaxOS::drivers::ethernet::amd_am79c973", "classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973.html", null ],
@@ -220,7 +226,12 @@ var hierarchy =
       [ "MaxOS::drivers::peripherals::MouseDriver", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseDriver.html", null ],
       [ "MaxOS::system::SyscallHandler", "classMaxOS_1_1system_1_1SyscallHandler.html", null ]
     ] ],
+    [ "MaxOS::hardwarecommunication::IOAPIC", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html", null ],
     [ "MaxOS::drivers::peripherals::KeyboardState", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html", null ],
+    [ "MaxOS::hardwarecommunication::LocalAPIC", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html", null ],
+    [ "MaxOS::hardwarecommunication::MADT", "structMaxOS_1_1hardwarecommunication_1_1MADT.html", null ],
+    [ "MaxOS::hardwarecommunication::MADT_IOAPIC", "structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC.html", null ],
+    [ "MaxOS::hardwarecommunication::MADT_Item", "structMaxOS_1_1hardwarecommunication_1_1MADT__Item.html", null ],
     [ "MaxOS::common::Map< Key, Value >", "classMaxOS_1_1common_1_1Map.html", null ],
     [ "MaxOS::common::Map< InternetProtocolAddress, drivers::ethernet::MediaAccessControlAddress >", "classMaxOS_1_1common_1_1Map.html", null ],
     [ "MaxOS::common::Map< uint16_t, MaxOS::net::EthernetFramePayloadHandler * >", "classMaxOS_1_1common_1_1Map.html", null ],
@@ -271,6 +282,7 @@ var hierarchy =
     [ "multiboot_tag_vbe", "structmultiboot__tag__vbe.html", null ],
     [ "multiboot_vbe_info_block", "structmultiboot__vbe__info__block.html", null ],
     [ "multiboot_vbe_mode_info_block", "structmultiboot__vbe__mode__info__block.html", null ],
+    [ "MaxOS::hardwarecommunication::Override", "structMaxOS_1_1hardwarecommunication_1_1Override.html", null ],
     [ "MaxOS::common::Pair< First, Second >", "classMaxOS_1_1common_1_1Pair.html", null ],
     [ "MaxOS::common::Pair< InternetProtocolAddress, drivers::ethernet::MediaAccessControlAddress >", "classMaxOS_1_1common_1_1Pair.html", null ],
     [ "MaxOS::common::Pair< Key, Value >", "classMaxOS_1_1common_1_1Pair.html", null ],
@@ -289,7 +301,11 @@ var hierarchy =
     [ "MaxOS::drivers::ethernet::RawDataHandler", "classMaxOS_1_1drivers_1_1ethernet_1_1RawDataHandler.html", null ],
     [ "MaxOS::common::Rectangle< Type >", "classMaxOS_1_1common_1_1Rectangle.html", null ],
     [ "MaxOS::common::Rectangle< int32_t >", "classMaxOS_1_1common_1_1Rectangle.html", null ],
-    [ "MaxOS::system::SegmentDescriptor", "classMaxOS_1_1system_1_1SegmentDescriptor.html", null ],
+    [ "MaxOS::hardwarecommunication::RedirectionEntry", "unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry.html", null ],
+    [ "MaxOS::hardwarecommunication::RSDPDescriptor", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html", null ],
+    [ "MaxOS::hardwarecommunication::RSDPDescriptor2", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html", null ],
+    [ "MaxOS::hardwarecommunication::RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", null ],
+    [ "MaxOS::system::StackFrame", "structMaxOS_1_1system_1_1StackFrame.html", null ],
     [ "MaxOS::String", "classMaxOS_1_1String.html", null ],
     [ "MaxOS::system::Task", "classMaxOS_1_1system_1_1Task.html", null ],
     [ "MaxOS::system::TaskManager", "classMaxOS_1_1system_1_1TaskManager.html", null ],
@@ -324,5 +340,6 @@ var hierarchy =
     [ "MaxOS::common::Vector< MaxOS::net::UserDatagramProtocolSocket * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< MaxOS::system::Task * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< MaxOS::system::Thread * >", "classMaxOS_1_1common_1_1Vector.html", null ],
-    [ "MaxOS::common::VectorIterationHandler< Type >", "classMaxOS_1_1common_1_1VectorIterationHandler.html", null ]
+    [ "MaxOS::common::VectorIterationHandler< Type >", "classMaxOS_1_1common_1_1VectorIterationHandler.html", null ],
+    [ "MaxOS::hardwarecommunication::XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", null ]
 ];

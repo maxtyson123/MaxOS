@@ -18,7 +18,7 @@ Inheritance diagram for Max\+OS\+::hardwarecommunication\+::Interrupt\+Manager\+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a258cc5ea59bd75ceb8169a8fbbf54df4}{Interrupt\+Manager}} (uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\+\_\+interrupt\+\_\+offset}}, \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{system\+::\+Global\+Descriptor\+Table}} $\ast$global\+\_\+descriptor\+\_\+table, \mbox{\hyperlink{classMaxOS_1_1system_1_1ThreadManager}{system\+::\+Thread\+Manager}} $\ast$thread\+\_\+manager, \mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$handler)
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab096e2b753c05b890ad752b365bee5a3}{Interrupt\+Manager}} (uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\+\_\+interrupt\+\_\+offset}}, \mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$handler)
 \begin{DoxyCompactList}\small\item\em {\bfseries{Manger}} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a91bd23784e8ca1fa3d4123051c107319}{$\sim$\+Interrupt\+Manager}} ()
 \item 
@@ -35,12 +35,12 @@ void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a1
 \doxysubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab17b2692f8100bfd6da7b0b3499d7826}{handle\+\_\+interrupt\+\_\+request}} (uint8\+\_\+t interrupt, uint32\+\_\+t \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}})
-\begin{DoxyCompactList}\small\item\em Handles the interrupt request and runs the interrupt handler if there is one. \end{DoxyCompactList}\end{DoxyCompactItemize}
+system\+::cpu\+\_\+status\+\_\+t $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6b8bd08a2588ed79b480d73dcf2cfd82}{handle\+\_\+interrupt\+\_\+request}} (system\+::cpu\+\_\+status\+\_\+t $\ast$)
+\end{DoxyCompactItemize}
 \doxysubsection*{Static Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\+\_\+interrupt\+\_\+descriptor\+\_\+table\+\_\+entry}} (uint8\+\_\+t interrupt, uint16\+\_\+t code\+\_\+segment\+\_\+selector\+\_\+offset, void($\ast$handler)(), uint8\+\_\+t Descriptor\+Privilege\+Level, uint8\+\_\+t descriptor\+\_\+type)
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\+\_\+interrupt\+\_\+descriptor\+\_\+table\+\_\+entry}} (uint8\+\_\+t interrupt, void($\ast$handler)(), uint8\+\_\+t descriptor\+\_\+privilege\+\_\+level)
 \begin{DoxyCompactList}\small\item\em Sets an entry in the Interrupt Descriptor Table. \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0159035ff9691f86eaa719ca621cdd1b}{Interrupt\+Ignore}} ()
 \item 
@@ -80,6 +80,8 @@ static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptMan
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a15a90e83303b573741d70507e1c70091}{Handle\+Interrupt\+Request0x31}} ()
 \item 
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a65f8eee984ce3b638978a45132a94f6c}{Handle\+Interrupt\+Request0x60}} ()
+\item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2d7cee98bf60b5cc5ef1199f6f0861b1}{Handle\+Exception0x00}} ()
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a965dbf9c2758a1a76ac15be816b7749a}{Handle\+Exception0x01}} ()
@@ -96,25 +98,25 @@ static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptMan
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a33eb2e25ef973d6a54b657a2bf53cd9f}{Handle\+Exception0x07}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae00bc702621d4dcedef9b4427dc5b15e}{Handle\+Exception0x08}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3cd7596497bcc1eaf17c7fcbbfcfe989}{Handle\+Interrupt\+Error0x08}} ()
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae166c7660e3d2e9b92aeab1ee2956e2d}{Handle\+Exception0x09}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a9265221b375d437961f7bb715d9f0126}{Handle\+Exception0x0A}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a129918df812cf91e830db455ea0fc338}{Handle\+Interrupt\+Error0x0A}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acdad1a5b02061a551ecf3b0bc870213c}{Handle\+Exception0x0B}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a742699e061c572ffa30a5b370bc33d5a}{Handle\+Interrupt\+Error0x0B}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ad0539f72bbddfefe3b6d44f3e45db3df}{Handle\+Exception0x0C}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a40e578ec56fca5b708fc9a7ecf5e0cae}{Handle\+Interrupt\+Error0x0C}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abca341f047b0930b09251ed430a12b87}{Handle\+Exception0x0D}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a36ad7a314c1848625d33725a435421c4}{Handle\+Interrupt\+Error0x0D}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6a947200e9ff19aaa9a9ae56d4c93d92}{Handle\+Exception0x0E}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aeab78691ae08ea3d8ddc5e3795083d96}{Handle\+Interrupt\+Error0x0E}} ()
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af2aab506a0aa0de59034c299e18c10af}{Handle\+Exception0x0F}} ()
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4f48ee9992737e7cc42b381edfc3de35}{Handle\+Exception0x10}} ()
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a27371204a5c93a6a0c3a396f414164d3}{Handle\+Exception0x11}} ()
+static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5b054d84b915c93db486f39eee71574f}{Handle\+Interrupt\+Error0x11}} ()
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acb5c0469eef039a11c71db956f5891bd}{Handle\+Exception0x12}} ()
 \item 
@@ -144,10 +146,8 @@ static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptMan
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6cf171dcc2d6ee6573c05edc4980ee76}{Handle\+Exception0x1F}} ()
 \item 
-static uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a858db74cc3f6da3254b71bf2b742d13b}{Handle\+Interrupt}} (uint8\+\_\+t interrupt, uint32\+\_\+t \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}})
-\begin{DoxyCompactList}\small\item\em Handles the interrupt request by passing it to the interrupt manager. \end{DoxyCompactList}\item 
-static uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a260705a529848c43d161e2ecd2d33c2f}{Handle\+Interrupt\+Request}} (uint32\+\_\+t \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}})
-\end{DoxyCompactItemize}
+static system\+::cpu\+\_\+status\+\_\+t $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a8d3163a2947c421e49b49dbe580bed3c}{Handle\+Interrupt}} (system\+::cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
+\begin{DoxyCompactList}\small\item\em Handles the interrupt request by passing it to the interrupt manager. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -156,14 +156,6 @@ uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptM
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Interrupt\+Handler}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\+\_\+interrupt\+\_\+handlers}} \mbox{[}256\mbox{]}
 \item 
 \mbox{\hyperlink{classMaxOS_1_1system_1_1ThreadManager}{system\+::\+Thread\+Manager}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac5412eb3decc01b9cf9c4fb763ddae42}{m\+\_\+thread\+\_\+manager}}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab9ccda96b24e85a560dc2173aa30a134}{pic\+\_\+master\+\_\+command\+\_\+port}}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}{pic\+\_\+master\+\_\+data\+\_\+port}}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acc77cd381753d0236d3eff12ad402321}{pic\+\_\+slave\+\_\+command\+\_\+port}}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}{pic\+\_\+slave\+\_\+data\+\_\+port}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Protected Attributes}
 \begin{DoxyCompactItemize}
@@ -172,7 +164,7 @@ static \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}
 \item 
 static \mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\+\_\+error\+\_\+messages}} = 0
 \item 
-static \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor}{Gate\+Descriptor}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\+\_\+interrupt\+\_\+descriptor\+\_\+table}} \mbox{[}256\mbox{]}
+static \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{Interrupt\+Descriptor}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\+\_\+interrupt\+\_\+descriptor\+\_\+table}} \mbox{[}256\mbox{]}
 \end{DoxyCompactItemize}
 \doxysubsection*{Friends}
 \begin{DoxyCompactItemize}
@@ -184,16 +176,16 @@ class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a
 \doxysubsection{Detailed Description}
 Handles all interrupts and passes them to the correct handler. 
 
-Definition at line 63 of file interrupts.\+h.
+Definition at line 64 of file interrupts.\+h.
 
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a258cc5ea59bd75ceb8169a8fbbf54df4}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a258cc5ea59bd75ceb8169a8fbbf54df4}} 
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab096e2b753c05b890ad752b365bee5a3}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab096e2b753c05b890ad752b365bee5a3}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!InterruptManager@{InterruptManager}}
 \index{InterruptManager@{InterruptManager}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{InterruptManager()}{InterruptManager()}}
-{\footnotesize\ttfamily Interrupt\+Manager\+::\+Interrupt\+Manager (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{hardware\+\_\+interrupt\+\_\+offset,  }\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{system\+::\+Global\+Descriptor\+Table}} $\ast$}]{global\+\_\+descriptor\+\_\+table,  }\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1ThreadManager}{system\+::\+Thread\+Manager}} $\ast$}]{thread\+\_\+manager,  }\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$}]{handler }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Interrupt\+Manager\+::\+Interrupt\+Manager (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{hardware\+\_\+interrupt\+\_\+offset,  }\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream}{common\+::\+Output\+Stream}} $\ast$}]{handler }\end{DoxyParamCaption})}
 
 
 
@@ -201,120 +193,78 @@ Definition at line 63 of file interrupts.\+h.
 
 
 
-Definition at line 46 of file interrupts.\+cpp.
+Definition at line 47 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{47 : \mbox{\hyperlink{classMaxOS_1_1common_1_1InputStream}{common::InputStream}}(handler),}
-\DoxyCodeLine{48   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}}),}
-\DoxyCodeLine{49   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac5412eb3decc01b9cf9c4fb763ddae42}{m\_thread\_manager}}(thread\_manager),}
-\DoxyCodeLine{50   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab9ccda96b24e85a560dc2173aa30a134}{pic\_master\_command\_port}}(0x20),}
-\DoxyCodeLine{51   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}{pic\_master\_data\_port}}(0x21),}
-\DoxyCodeLine{52   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acc77cd381753d0236d3eff12ad402321}{pic\_slave\_command\_port}}(0xA0),}
-\DoxyCodeLine{53   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}{pic\_slave\_data\_port}}(0xA1)}
-\DoxyCodeLine{54 \{}
-\DoxyCodeLine{55 }
-\DoxyCodeLine{56     uint32\_t code\_segment = global\_descriptor\_table-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a650bfeee75da086944d8d1a9ff7727e9}{code\_segment\_selector}}();}
-\DoxyCodeLine{57 }
-\DoxyCodeLine{58     \textcolor{comment}{// By default ignore all interrupts so any un handled interrupts wont cause a fault}}
-\DoxyCodeLine{59     \textcolor{keyword}{const} uint8\_t IDT\_INTERRUPT\_GATE = 0xE;}
-\DoxyCodeLine{60     \textcolor{keywordflow}{for}(uint8\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 255; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} > 0; -\/-\/\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
-\DoxyCodeLine{61     \{}
-\DoxyCodeLine{62       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0159035ff9691f86eaa719ca621cdd1b}{InterruptIgnore}}, 0, IDT\_INTERRUPT\_GATE);}
-\DoxyCodeLine{63       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = 0;}
-\DoxyCodeLine{64     \}}
-\DoxyCodeLine{65 }
-\DoxyCodeLine{66     \textcolor{comment}{// First is also clear}}
-\DoxyCodeLine{67     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0159035ff9691f86eaa719ca621cdd1b}{InterruptIgnore}}, 0,IDT\_INTERRUPT\_GATE);}
-\DoxyCodeLine{68     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[0] = 0;}
-\DoxyCodeLine{69 }
-\DoxyCodeLine{70 }
-\DoxyCodeLine{71 }
-\DoxyCodeLine{72     \textcolor{comment}{//Set Up the base interrupts}}
-\DoxyCodeLine{73     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x00, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2d7cee98bf60b5cc5ef1199f6f0861b1}{HandleException0x00}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Division by zero}}
-\DoxyCodeLine{74     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x01, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a965dbf9c2758a1a76ac15be816b7749a}{HandleException0x01}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Single-\/step interrupt (see trap flag)}}
-\DoxyCodeLine{75     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x02, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4ad00fcf48d0afc017e593bb12fc0c88}{HandleException0x02}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//NMI}}
-\DoxyCodeLine{76     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x03, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af1fb8414c6d12ce585dfd0cae64a3c51}{HandleException0x03}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Breakpoint (which benefits from the shorter 0xCC encoding of INT 3)}}
-\DoxyCodeLine{77     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x04, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a48507eb6a851f604984f39e1946211b1}{HandleException0x04}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Overflow}}
-\DoxyCodeLine{78     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x05, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a7325d212fd4edd7f6dfcea07b3daf4fe}{HandleException0x05}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Bound Range Exceeded}}
-\DoxyCodeLine{79     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x06, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af0513a4c9023d517fe4718396c42cc6c}{HandleException0x06}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Invalid Opcode}}
-\DoxyCodeLine{80     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x07, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a33eb2e25ef973d6a54b657a2bf53cd9f}{HandleException0x07}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Coprocessor not available}}
-\DoxyCodeLine{81     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x08, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae00bc702621d4dcedef9b4427dc5b15e}{HandleException0x08}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Double Fault}}
-\DoxyCodeLine{82     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x09, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae166c7660e3d2e9b92aeab1ee2956e2d}{HandleException0x09}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Coprocessor Segment Overrun (386 or earlier only)}}
-\DoxyCodeLine{83     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x0A, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a9265221b375d437961f7bb715d9f0126}{HandleException0x0A}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Invalid Task State Segment}}
-\DoxyCodeLine{84     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x0B, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acdad1a5b02061a551ecf3b0bc870213c}{HandleException0x0B}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Segment not present}}
-\DoxyCodeLine{85     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x0C, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ad0539f72bbddfefe3b6d44f3e45db3df}{HandleException0x0C}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Stack Segment Fault}}
-\DoxyCodeLine{86     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x0D, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abca341f047b0930b09251ed430a12b87}{HandleException0x0D}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//General Protection Fault}}
-\DoxyCodeLine{87     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x0E, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6a947200e9ff19aaa9a9ae56d4c93d92}{HandleException0x0E}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Page Fault}}
-\DoxyCodeLine{88     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x0F, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af2aab506a0aa0de59034c299e18c10af}{HandleException0x0F}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{89     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x10, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4f48ee9992737e7cc42b381edfc3de35}{HandleException0x10}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//x87 Floating Point Exception}}
-\DoxyCodeLine{90     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x11, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a27371204a5c93a6a0c3a396f414164d3}{HandleException0x11}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Alignment Check}}
-\DoxyCodeLine{91     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x12, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acb5c0469eef039a11c71db956f5891bd}{HandleException0x12}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Machine Check}}
-\DoxyCodeLine{92     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x13, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3d0a91eaf8473d3e1c48fa9679b842e3}{HandleException0x13}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//SIMD Floating-\/Point Exception}}
-\DoxyCodeLine{93     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x14, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a1874bba36394f96943d1576e36a0ca2a}{HandleException0x14}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Virtualization Exception}}
-\DoxyCodeLine{94     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x15, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a10938a194caea2516f7021b1c00057c4}{HandleException0x15}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//Control Protection Exception}}
-\DoxyCodeLine{95     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x16, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae55decb7cccd8e5773333897a2693146}{HandleException0x16}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{96     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x17, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4c51e7b53b8a15858e9f440a51c86364}{HandleException0x17}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{97     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x18, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a9e3504f8fe5837625a0ffef9aef79a7a}{HandleException0x18}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{98     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x19, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a813a456fa8bcf5e26e46a1a325d8d91d}{HandleException0x19}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{99     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x1A, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a92a399f5684e2b6e3069f5151056a19a}{HandleException0x1A}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{100     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x1B, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aa661bd274dcc69071c925d99c6b8ccc8}{HandleException0x1B}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{101     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x1C, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af7afd7a04399f4a7ab3d54e4d172a57b}{HandleException0x1C}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{102     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x1D, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_afb4f318b83eccdb678cb960904bf5155}{HandleException0x1D}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{103     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x1E, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a65d1183dcab9c0e0c230e5d26a13496d}{HandleException0x1E}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{104     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(0x1F, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6cf171dcc2d6ee6573c05edc4980ee76}{HandleException0x1F}}, 0, IDT\_INTERRUPT\_GATE);   \textcolor{comment}{//reserved}}
-\DoxyCodeLine{105 }
-\DoxyCodeLine{106 }
-\DoxyCodeLine{107     \textcolor{comment}{//Set up the hardware interrupts (offset by 0x20) //Ranges 0x20 -\/ 0x30}}
-\DoxyCodeLine{108     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x00, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aceb8fda97b3f764844181881ecb465a6}{HandleInterruptRequest0x00}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x20 -\/ Default PIC interval   / Timer}}
-\DoxyCodeLine{109     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x01, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4fb02af9f715d33efd8e8fbb3464380d}{HandleInterruptRequest0x01}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x21 -\/ Keyboard}}
-\DoxyCodeLine{110     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x02, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af8f71305e68051478519dceba56715fc}{HandleInterruptRequest0x02}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x22 -\/ Cascade (used internally by the two PICs. never raised)}}
-\DoxyCodeLine{111     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x03, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af4f94562969b4873f3951a71f6f7448c}{HandleInterruptRequest0x03}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x23 -\/ COM2, COM4}}
-\DoxyCodeLine{112     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x04, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af4b6ea1470bbabde053ed4f0eb3fb4e5}{HandleInterruptRequest0x04}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x24 -\/ COM1, COM3}}
-\DoxyCodeLine{113     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x05, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a138e6442c7da4709c33945be0e4f07a6}{HandleInterruptRequest0x05}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x25 -\/ LPT2, LPT4}}
-\DoxyCodeLine{114     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x06, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0f8bedc4510ade7bef41d2d4c108f5dc}{HandleInterruptRequest0x06}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x26 -\/ LPT1}}
-\DoxyCodeLine{115     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x07, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a318f2dd70c9c36a949cefe619e33bb8e}{HandleInterruptRequest0x07}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x27 -\/ Floppy Disk}}
-\DoxyCodeLine{116     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x08, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_adc24998971af761d28eab2b20c87c907}{HandleInterruptRequest0x08}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x28 -\/ CMOS Real Time Clock}}
-\DoxyCodeLine{117     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x09, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5056f77662e4d3a7e860bd9fc336b512}{HandleInterruptRequest0x09}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x29 -\/ Free for peripherals / legacy SCSI / NIC}}
-\DoxyCodeLine{118     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0A, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a214221e85ea7115728cee0a4a2837fed}{HandleInterruptRequest0x0A}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x2A -\/ Free for peripherals / SCSI / NIC}}
-\DoxyCodeLine{119     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0B, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a684daa5c4b49d00e157d8c7e8b8cfb1f}{HandleInterruptRequest0x0B}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x2B -\/ Free for peripherals / SCSI / NIC}}
-\DoxyCodeLine{120     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0C, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a313033ea5fbb8dc434c20817d93f3373}{HandleInterruptRequest0x0C}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x0C -\/ Mouse}}
-\DoxyCodeLine{121     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0D, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae8a22aed2aee77ae5646e79aa157c3a5}{HandleInterruptRequest0x0D}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x2D -\/ FPU / Coprocessor / Inter-\/processor}}
-\DoxyCodeLine{122     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0E, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a494d9f319aadac568e5621b5c52434e3}{HandleInterruptRequest0x0E}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x2E -\/ Primary ATA Hard Disk}}
-\DoxyCodeLine{123     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0F, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a317214e3824316249c01deaf09ef10ae}{HandleInterruptRequest0x0F}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x2F -\/ Secondary ATA Hard Disk}}
-\DoxyCodeLine{124     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x60, code\_segment, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abd20f1f23fda89fd601c091eca9ab7c0}{HandleInterruptRequest0x80}}, 0, IDT\_INTERRUPT\_GATE);  \textcolor{comment}{//0x80 -\/ Sys calls}}
-\DoxyCodeLine{125 }
-\DoxyCodeLine{126     \textcolor{comment}{//Send Initialization Control Words}}
-\DoxyCodeLine{127     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab9ccda96b24e85a560dc2173aa30a134}{pic\_master\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x11);}
-\DoxyCodeLine{128     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acc77cd381753d0236d3eff12ad402321}{pic\_slave\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x11);}
-\DoxyCodeLine{129 }
-\DoxyCodeLine{130     \textcolor{comment}{// Remap the PIC to use the hardware interrupt offset}}
-\DoxyCodeLine{131     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}{pic\_master\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}});}
-\DoxyCodeLine{132     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}{pic\_slave\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 8);}
-\DoxyCodeLine{133 }
-\DoxyCodeLine{134     \textcolor{comment}{//Tell PICs their roles}}
-\DoxyCodeLine{135     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}{pic\_master\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x04);  \textcolor{comment}{//Master}}
-\DoxyCodeLine{136     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}{pic\_slave\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x02);   \textcolor{comment}{//Slave}}
-\DoxyCodeLine{137 }
-\DoxyCodeLine{138     \textcolor{comment}{//Tell PICS that they are in 8086 mode}}
-\DoxyCodeLine{139     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}{pic\_master\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x01);}
-\DoxyCodeLine{140     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}{pic\_slave\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x01);}
-\DoxyCodeLine{141 }
-\DoxyCodeLine{142     \textcolor{comment}{// Clear the interrupt mask to enable all interrupts}}
-\DoxyCodeLine{143     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}{pic\_master\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x00);}
-\DoxyCodeLine{144     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}{pic\_slave\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x00);}
-\DoxyCodeLine{145 }
-\DoxyCodeLine{146     \textcolor{comment}{//Tell the processor to use the IDT}}
-\DoxyCodeLine{147     \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer}{InterruptDescriptorTablePointer}} idt\_pointer;}
-\DoxyCodeLine{148     idt\_pointer.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer_a3ddbbfdebf56e0bb9053ca30fea08994}{size}}  = 256*\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor}{GateDescriptor}}) -\/ 1;}
-\DoxyCodeLine{149     idt\_pointer.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptorTablePointer_aafc021a062d1cefd7be12ccf3bd7589b}{base}}  = (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\_interrupt\_descriptor\_table}};}
-\DoxyCodeLine{150     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"lidt \%0"} : : \textcolor{stringliteral}{"m"} (idt\_pointer));}
-\DoxyCodeLine{151 \};}
+\DoxyCodeLine{48 : \mbox{\hyperlink{classMaxOS_1_1common_1_1InputStream}{common::InputStream}}(handler),}
+\DoxyCodeLine{49   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}})}
+\DoxyCodeLine{50 \{}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52      \textcolor{comment}{// Full the table of interrupts with 0}}
+\DoxyCodeLine{53      \textcolor{keywordflow}{for}(uint16\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < 256; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++) \{}
+\DoxyCodeLine{54         \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_acf2296b3182c494bf9e1add0fe25dd7a}{address\_low\_bits}} = 0;}
+\DoxyCodeLine{55         \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_aa3521ab617141100fc14dba26866eccd}{address\_mid\_bits}} = 0;}
+\DoxyCodeLine{56         \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_a6870620a091da1dabb18a23df7df9f54}{address\_high\_bits}} = 0;}
+\DoxyCodeLine{57         \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_a2338770cd3c48423abdbcf0ddd2a528b}{segment\_selector}} = 0;}
+\DoxyCodeLine{58         \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_a95ad5c5436414a4caf8ce8e8d7577802}{ist}} = 0;}
+\DoxyCodeLine{59         \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_ae0d3e0ce9197a429c9a2a8e3eb8350ea}{flags}} = 0;}
+\DoxyCodeLine{60      \}}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62      \textcolor{comment}{//Set Up the base interrupts}}
+\DoxyCodeLine{63     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x00, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2d7cee98bf60b5cc5ef1199f6f0861b1}{HandleException0x00}}, 0);   \textcolor{comment}{// Division by zero}}
+\DoxyCodeLine{64     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x01, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a965dbf9c2758a1a76ac15be816b7749a}{HandleException0x01}}, 0);   \textcolor{comment}{// Debug}}
+\DoxyCodeLine{65     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x02, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4ad00fcf48d0afc017e593bb12fc0c88}{HandleException0x02}}, 0);   \textcolor{comment}{// Non-\/maskable interrupt}}
+\DoxyCodeLine{66     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x03, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af1fb8414c6d12ce585dfd0cae64a3c51}{HandleException0x03}}, 0);   \textcolor{comment}{// Breakpoint}}
+\DoxyCodeLine{67     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x04, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a48507eb6a851f604984f39e1946211b1}{HandleException0x04}}, 0);   \textcolor{comment}{// Overflow}}
+\DoxyCodeLine{68     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x05, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a7325d212fd4edd7f6dfcea07b3daf4fe}{HandleException0x05}}, 0);   \textcolor{comment}{// Bound Range Exceeded}}
+\DoxyCodeLine{69     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x06, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af0513a4c9023d517fe4718396c42cc6c}{HandleException0x06}}, 0);   \textcolor{comment}{// Invalid Opcode}}
+\DoxyCodeLine{70     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x06, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a33eb2e25ef973d6a54b657a2bf53cd9f}{HandleException0x07}}, 0);   \textcolor{comment}{// Device Not Available}}
+\DoxyCodeLine{71     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x08, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3cd7596497bcc1eaf17c7fcbbfcfe989}{HandleInterruptError0x08}}, 0);   \textcolor{comment}{// Double Fault}}
+\DoxyCodeLine{72     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x09, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae166c7660e3d2e9b92aeab1ee2956e2d}{HandleException0x09}}, 0);   \textcolor{comment}{// Coprocessor Segment Overrun}}
+\DoxyCodeLine{73     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x0A, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a129918df812cf91e830db455ea0fc338}{HandleInterruptError0x0A}}, 0);   \textcolor{comment}{// Invalid TSS}}
+\DoxyCodeLine{74     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x0B, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a742699e061c572ffa30a5b370bc33d5a}{HandleInterruptError0x0B}}, 0);   \textcolor{comment}{// Segment Not Present}}
+\DoxyCodeLine{75     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x0C, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a40e578ec56fca5b708fc9a7ecf5e0cae}{HandleInterruptError0x0C}}, 0);   \textcolor{comment}{// Stack-\/Segment Fault}}
+\DoxyCodeLine{76     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x0D, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a36ad7a314c1848625d33725a435421c4}{HandleInterruptError0x0D}}, 0);   \textcolor{comment}{// General Protection Fault}}
+\DoxyCodeLine{77     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x0E, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aeab78691ae08ea3d8ddc5e3795083d96}{HandleInterruptError0x0E}}, 0);   \textcolor{comment}{// Page Fault}}
+\DoxyCodeLine{78     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x0F, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af2aab506a0aa0de59034c299e18c10af}{HandleException0x0F}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{79     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x10, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4f48ee9992737e7cc42b381edfc3de35}{HandleException0x10}}, 0);   \textcolor{comment}{// x87 Floating-\/Point Exception}}
+\DoxyCodeLine{80     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x11, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5b054d84b915c93db486f39eee71574f}{HandleInterruptError0x11}}, 0);   \textcolor{comment}{// Alignment Check}}
+\DoxyCodeLine{81     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x12, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acb5c0469eef039a11c71db956f5891bd}{HandleException0x12}}, 0);   \textcolor{comment}{// Machine Check}}
+\DoxyCodeLine{82     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x13, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3d0a91eaf8473d3e1c48fa9679b842e3}{HandleException0x13}}, 0);   \textcolor{comment}{// SIMD Floating-\/Point Exception}}
+\DoxyCodeLine{83     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x14, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a1874bba36394f96943d1576e36a0ca2a}{HandleException0x14}}, 0);   \textcolor{comment}{// Reserved: Virtualization Exception}}
+\DoxyCodeLine{84     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x15, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a10938a194caea2516f7021b1c00057c4}{HandleException0x15}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{85     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x16, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae55decb7cccd8e5773333897a2693146}{HandleException0x16}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{86     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x17, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4c51e7b53b8a15858e9f440a51c86364}{HandleException0x17}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{87     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x18, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a9e3504f8fe5837625a0ffef9aef79a7a}{HandleException0x18}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{88     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x19, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a813a456fa8bcf5e26e46a1a325d8d91d}{HandleException0x19}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{89     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x1A, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a92a399f5684e2b6e3069f5151056a19a}{HandleException0x1A}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{90     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x1B, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aa661bd274dcc69071c925d99c6b8ccc8}{HandleException0x1B}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{91     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x1C, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af7afd7a04399f4a7ab3d54e4d172a57b}{HandleException0x1C}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{92     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x1D, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_afb4f318b83eccdb678cb960904bf5155}{HandleException0x1D}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{93     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x1E, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a65d1183dcab9c0e0c230e5d26a13496d}{HandleException0x1E}}, 0);   \textcolor{comment}{// Security Exception}}
+\DoxyCodeLine{94     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(0x1F, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6cf171dcc2d6ee6573c05edc4980ee76}{HandleException0x1F}}, 0);   \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{96     \textcolor{comment}{// Set up the hardware interrupts}}
+\DoxyCodeLine{97     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x00, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aceb8fda97b3f764844181881ecb465a6}{HandleInterruptRequest0x00}}, 0);   \textcolor{comment}{// Advanced Programmable Interrupt Controller (APIC) Timer Interrupt}}
+\DoxyCodeLine{98     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x01, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a4fb02af9f715d33efd8e8fbb3464380d}{HandleInterruptRequest0x01}}, 0);   \textcolor{comment}{// Keyboard Interrupt}}
+\DoxyCodeLine{99     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x02, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af8f71305e68051478519dceba56715fc}{HandleInterruptRequest0x02}}, 0);   \textcolor{comment}{// Cascade (used internally by the two PICs. never raised)}}
+\DoxyCodeLine{100     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x0C, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a313033ea5fbb8dc434c20817d93f3373}{HandleInterruptRequest0x0C}}, 0);   \textcolor{comment}{// Mouse Interrupt}}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102     \textcolor{comment}{// Set up the system call interrupt}}
+\DoxyCodeLine{103     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}{set\_interrupt\_descriptor\_table\_entry}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}{hardware\_interrupt\_offset}} + 0x60, \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a65f8eee984ce3b638978a45132a94f6c}{HandleInterruptRequest0x60}}, 0);   \textcolor{comment}{// System Call Interrupt}}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105     \textcolor{comment}{//Tell the processor to use the IDT}}
+\DoxyCodeLine{106     \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1IDTR}{IDTR}} idt;}
+\DoxyCodeLine{107     idt.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1IDTR_a6bbd70ca23333472705b698fe814b51a}{limit}} = 256 * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{InterruptDescriptor}}) -\/ 1;}
+\DoxyCodeLine{108     idt.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1IDTR_a88e525ddc48ae13204f4cebfca2df9e0}{base}} = (uint64\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}};}
+\DoxyCodeLine{109     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"lidt \%0"} : : \textcolor{stringliteral}{"m"} (idt));}
+\DoxyCodeLine{110 \};}
 
 \end{DoxyCode}
 
 
-References Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+Table\+Pointer\+::base, Max\+O\+S\+::system\+::\+Global\+Descriptor\+Table\+::code\+\_\+segment\+\_\+selector(), Handle\+Exception0x00(), Handle\+Exception0x01(), Handle\+Exception0x02(), Handle\+Exception0x03(), Handle\+Exception0x04(), Handle\+Exception0x05(), Handle\+Exception0x06(), Handle\+Exception0x07(), Handle\+Exception0x08(), Handle\+Exception0x09(), Handle\+Exception0x0\+A(), Handle\+Exception0x0\+B(), Handle\+Exception0x0\+C(), Handle\+Exception0x0\+D(), Handle\+Exception0x0\+E(), Handle\+Exception0x0\+F(), Handle\+Exception0x10(), Handle\+Exception0x11(), Handle\+Exception0x12(), Handle\+Exception0x13(), Handle\+Exception0x14(), Handle\+Exception0x15(), Handle\+Exception0x16(), Handle\+Exception0x17(), Handle\+Exception0x18(), Handle\+Exception0x19(), Handle\+Exception0x1\+A(), Handle\+Exception0x1\+B(), Handle\+Exception0x1\+C(), Handle\+Exception0x1\+D(), Handle\+Exception0x1\+E(), Handle\+Exception0x1\+F(), Handle\+Interrupt\+Request0x00(), Handle\+Interrupt\+Request0x01(), Handle\+Interrupt\+Request0x02(), Handle\+Interrupt\+Request0x03(), Handle\+Interrupt\+Request0x04(), Handle\+Interrupt\+Request0x05(), Handle\+Interrupt\+Request0x06(), Handle\+Interrupt\+Request0x07(), Handle\+Interrupt\+Request0x08(), Handle\+Interrupt\+Request0x09(), Handle\+Interrupt\+Request0x0\+A(), Handle\+Interrupt\+Request0x0\+B(), Handle\+Interrupt\+Request0x0\+C(), Handle\+Interrupt\+Request0x0\+D(), Handle\+Interrupt\+Request0x0\+E(), Handle\+Interrupt\+Request0x0\+F(), Handle\+Interrupt\+Request0x80(), hardware\+\_\+interrupt\+\_\+offset(), Max\+O\+S\+::drivers\+::peripherals\+::i, Interrupt\+Ignore(), m\+\_\+interrupt\+\_\+handlers, pic\+\_\+master\+\_\+command\+\_\+port, pic\+\_\+master\+\_\+data\+\_\+port, pic\+\_\+slave\+\_\+command\+\_\+port, pic\+\_\+slave\+\_\+data\+\_\+port, s\+\_\+interrupt\+\_\+descriptor\+\_\+table, set\+\_\+interrupt\+\_\+descriptor\+\_\+table\+\_\+entry(), Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+Table\+Pointer\+::size, and Max\+O\+S\+::hardwarecommunication\+::\+Port8\+Bit\+Slow\+::write().
+References Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::address\+\_\+high\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::address\+\_\+low\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::address\+\_\+mid\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+I\+D\+T\+R\+::base, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::flags, Handle\+Exception0x00(), Handle\+Exception0x01(), Handle\+Exception0x02(), Handle\+Exception0x03(), Handle\+Exception0x04(), Handle\+Exception0x05(), Handle\+Exception0x06(), Handle\+Exception0x07(), Handle\+Exception0x09(), Handle\+Exception0x0\+F(), Handle\+Exception0x10(), Handle\+Exception0x12(), Handle\+Exception0x13(), Handle\+Exception0x14(), Handle\+Exception0x15(), Handle\+Exception0x16(), Handle\+Exception0x17(), Handle\+Exception0x18(), Handle\+Exception0x19(), Handle\+Exception0x1\+A(), Handle\+Exception0x1\+B(), Handle\+Exception0x1\+C(), Handle\+Exception0x1\+D(), Handle\+Exception0x1\+E(), Handle\+Exception0x1\+F(), Handle\+Interrupt\+Error0x08(), Handle\+Interrupt\+Error0x0\+A(), Handle\+Interrupt\+Error0x0\+B(), Handle\+Interrupt\+Error0x0\+C(), Handle\+Interrupt\+Error0x0\+D(), Handle\+Interrupt\+Error0x0\+E(), Handle\+Interrupt\+Error0x11(), Handle\+Interrupt\+Request0x00(), Handle\+Interrupt\+Request0x01(), Handle\+Interrupt\+Request0x02(), Handle\+Interrupt\+Request0x0\+C(), Handle\+Interrupt\+Request0x60(), hardware\+\_\+interrupt\+\_\+offset(), Max\+O\+S\+::drivers\+::peripherals\+::i, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::ist, Max\+O\+S\+::hardwarecommunication\+::\+I\+D\+T\+R\+::limit, s\+\_\+interrupt\+\_\+descriptor\+\_\+table, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::segment\+\_\+selector, and set\+\_\+interrupt\+\_\+descriptor\+\_\+table\+\_\+entry().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a91bd23784e8ca1fa3d4123051c107319}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a91bd23784e8ca1fa3d4123051c107319}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!````~InterruptManager@{$\sim$InterruptManager}}
@@ -324,13 +274,13 @@ References Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+Table\
 
 
 
-Definition at line 153 of file interrupts.\+cpp.
+Definition at line 112 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{154 \{}
-\DoxyCodeLine{155   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a16abb95327d677ebbe5a9c1ce21db6d2}{deactivate}}();}
-\DoxyCodeLine{156 \}}
+\DoxyCodeLine{113 \{}
+\DoxyCodeLine{114   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a16abb95327d677ebbe5a9c1ce21db6d2}{deactivate}}();}
+\DoxyCodeLine{115 \}}
 
 \end{DoxyCode}
 
@@ -352,21 +302,20 @@ Activates the interrupt manager and starts interrupts (also deactivates the curr
 
 
 
-Definition at line 185 of file interrupts.\+cpp.
+Definition at line 153 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{185                                 \{}
-\DoxyCodeLine{186 }
-\DoxyCodeLine{187     \textcolor{comment}{// Deactivate the current interrupt manager}}
-\DoxyCodeLine{188     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} != 0)}
-\DoxyCodeLine{189       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a16abb95327d677ebbe5a9c1ce21db6d2}{deactivate}}();}
-\DoxyCodeLine{190 }
-\DoxyCodeLine{191     \textcolor{comment}{// Set the current interrupt manager and start interrupts}}
-\DoxyCodeLine{192     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} = \textcolor{keyword}{this};}
-\DoxyCodeLine{193     \textcolor{keyword}{asm}(\textcolor{stringliteral}{"sti"});}
-\DoxyCodeLine{194 }
-\DoxyCodeLine{195 \}}
+\DoxyCodeLine{153                                 \{}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{155     \textcolor{comment}{// Deactivate the current interrupt manager}}
+\DoxyCodeLine{156     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} != 0)}
+\DoxyCodeLine{157       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a16abb95327d677ebbe5a9c1ce21db6d2}{deactivate}}();}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159     \textcolor{comment}{// Set the current interrupt manager and start interrupts}}
+\DoxyCodeLine{160     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} = \textcolor{keyword}{this};}
+\DoxyCodeLine{161     \textcolor{keyword}{asm}(\textcolor{stringliteral}{"sti"});}
+\DoxyCodeLine{162 \}}
 
 \end{DoxyCode}
 
@@ -389,18 +338,18 @@ Deactivates the interrupt manager and stops interrupts.
 
 
 
-Definition at line 200 of file interrupts.\+cpp.
+Definition at line 167 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{201 \{}
-\DoxyCodeLine{202 }
-\DoxyCodeLine{203     \textcolor{comment}{// If this is the active interrupt manager, deactivate it and stop interrupts}}
-\DoxyCodeLine{204     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} == \textcolor{keyword}{this})\{}
-\DoxyCodeLine{205       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} = 0;}
-\DoxyCodeLine{206       \textcolor{keyword}{asm}(\textcolor{stringliteral}{"cli"});}
-\DoxyCodeLine{207     \}}
-\DoxyCodeLine{208 \}}
+\DoxyCodeLine{168 \{}
+\DoxyCodeLine{169 }
+\DoxyCodeLine{170     \textcolor{comment}{// If this is the active interrupt manager, deactivate it and stop interrupts}}
+\DoxyCodeLine{171     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} == \textcolor{keyword}{this})\{}
+\DoxyCodeLine{172       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} = 0;}
+\DoxyCodeLine{173       \textcolor{keyword}{asm}(\textcolor{stringliteral}{"cli"});}
+\DoxyCodeLine{174     \}}
+\DoxyCodeLine{175 \}}
 
 \end{DoxyCode}
 
@@ -411,107 +360,77 @@ References s\+\_\+active\+\_\+interrupt\+\_\+manager.
 
 Referenced by activate(), and $\sim$\+Interrupt\+Manager().
 
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab17b2692f8100bfd6da7b0b3499d7826}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab17b2692f8100bfd6da7b0b3499d7826}} 
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6b8bd08a2588ed79b480d73dcf2cfd82}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6b8bd08a2588ed79b480d73dcf2cfd82}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!handle\_interrupt\_request@{handle\_interrupt\_request}}
 \index{handle\_interrupt\_request@{handle\_interrupt\_request}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{handle\_interrupt\_request()}{handle\_interrupt\_request()}}
-{\footnotesize\ttfamily uint32\+\_\+t Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{interrupt,  }\item[{uint32\+\_\+t}]{esp }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+{\footnotesize\ttfamily cpu\+\_\+status\+\_\+t $\ast$ Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request (\begin{DoxyParamCaption}\item[{system\+::cpu\+\_\+status\+\_\+t $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
 
 
-Handles the interrupt request and runs the interrupt handler if there is one. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em interrupt\+Number} & The interrupt number \\
-\hline
-{\em esp} & The stack pointer \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-The stack pointer 
-\end{DoxyReturn}
-
-
-Definition at line 235 of file interrupts.\+cpp.
+Definition at line 256 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{236 \{}
-\DoxyCodeLine{237 }
-\DoxyCodeLine{238     \textcolor{comment}{// If there is an interrupt handler, run it}}
-\DoxyCodeLine{239     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[interrupt] != 0)\{}
-\DoxyCodeLine{240       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[interrupt]-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\_interrupt}}();}
-\DoxyCodeLine{241     \}}
-\DoxyCodeLine{242     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(interrupt != 0x20)\{}
-\DoxyCodeLine{243 }
-\DoxyCodeLine{244         \textcolor{keywordflow}{switch} (interrupt) \{}
-\DoxyCodeLine{245 }
-\DoxyCodeLine{246             \textcolor{keywordflow}{case} 0x00: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Divide by zero  (int 0x00)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{247             \textcolor{keywordflow}{case} 0x01: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Single-\/step interrupt (int 0x01)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{248             \textcolor{keywordflow}{case} 0x02: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Non maskable interrupt (int 0x02)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{249             \textcolor{keywordflow}{case} 0x03: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Breakpoint (int 0x03)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{250             \textcolor{keywordflow}{case} 0x04: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Overflow (int 0x04)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{251             \textcolor{keywordflow}{case} 0x05: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Bounds check  (int 0x05)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{252             \textcolor{keywordflow}{case} 0x06: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Invalid opcode  (int 0x06)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{253             \textcolor{keywordflow}{case} 0x07: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Coprocessor not available  (int 0x07)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{254             \textcolor{keywordflow}{case} 0x08: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Double fault (int 0x08)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{255             \textcolor{keywordflow}{case} 0x09: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Coprocessor segment overrun (int 0x09)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{256             \textcolor{keywordflow}{case} 0x0A: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Invalid TSS (int 0x0A)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{257             \textcolor{keywordflow}{case} 0x0B: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Segment not present (int 0x0B)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{258             \textcolor{keywordflow}{case} 0x0C: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Stack segment fault (int 0x0C)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{259             \textcolor{keywordflow}{case} 0x0D: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] General protection fault (int 0x0D)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{260             \textcolor{keywordflow}{case} 0x0E: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Page fault (int 0x0E)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{261             \textcolor{keywordflow}{case} 0x0F: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x0F)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{262             \textcolor{keywordflow}{case} 0x10: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] x87 FPU floating point error (int 0x10)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{263             \textcolor{keywordflow}{case} 0x11: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Alignment check (int 0x11)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{264             \textcolor{keywordflow}{case} 0x12: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Machine check (int 0x12)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{265             \textcolor{keywordflow}{case} 0x13: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] SIMD floating point exception (int 0x13)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{266             \textcolor{keywordflow}{case} 0x14: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[ERROR] Virtualization exception (int 0x14)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{267             \textcolor{keywordflow}{case} 0x15: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x15)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{268             \textcolor{keywordflow}{case} 0x16: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x16)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{269             \textcolor{keywordflow}{case} 0x17: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x17)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{270             \textcolor{keywordflow}{case} 0x18: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x18)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{271             \textcolor{keywordflow}{case} 0x19: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x19)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{272             \textcolor{keywordflow}{case} 0x1A: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x1A)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{273             \textcolor{keywordflow}{case} 0x1B: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x1B)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{274             \textcolor{keywordflow}{case} 0x1C: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x1C)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{275             \textcolor{keywordflow}{case} 0x1D: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x1D)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{276             \textcolor{keywordflow}{case} 0x1E: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x1E)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{277             \textcolor{keywordflow}{case} 0x1F: \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"[INFO] Reserved (int 0x1F)"}); \textcolor{keywordflow}{break};}
-\DoxyCodeLine{278 }
-\DoxyCodeLine{279             \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{280               \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{"UNHANDLED INTERRUPT 0x"});}
-\DoxyCodeLine{281               \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_a810813a72bc51936c4926e182d74b739}{write\_hex}}(interrupt);}
-\DoxyCodeLine{282               \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5d8a8c048984286377b8ae27054b32ca}{s\_error\_messages}}-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1OutputStream_acd9ebbe1729dded0d4156f32ae77da95}{write}}(\textcolor{stringliteral}{" "});}
-\DoxyCodeLine{283                 \textcolor{keywordflow}{break};}
-\DoxyCodeLine{284 }
-\DoxyCodeLine{285         \}}
-\DoxyCodeLine{286     \}}
-\DoxyCodeLine{287 }
-\DoxyCodeLine{288     \textcolor{comment}{//Timer interrupt for m\_tasks}}
-\DoxyCodeLine{289     \textcolor{keywordflow}{if}(interrupt == \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}})}
-\DoxyCodeLine{290     \{}
-\DoxyCodeLine{291         \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}} = (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac5412eb3decc01b9cf9c4fb763ddae42}{m\_thread\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1ThreadManager_adb9a4c54a2bb144b4d50cae4ca6a6066}{schedule}}((\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUState}{CPUState}}*)\mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}});}
-\DoxyCodeLine{292     \}}
-\DoxyCodeLine{293 }
-\DoxyCodeLine{294     \textcolor{comment}{// Acknowledge the interrupt (if it is a hardware interrupt)}}
-\DoxyCodeLine{295     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}} <= interrupt \&\& interrupt < \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}} +16)}
-\DoxyCodeLine{296     \{}
-\DoxyCodeLine{297       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab9ccda96b24e85a560dc2173aa30a134}{pic\_master\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x20);}
+\DoxyCodeLine{256                                                                              \{}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"Interrupt: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number);}
+\DoxyCodeLine{259 }
+\DoxyCodeLine{260   \textcolor{comment}{// If there is an interrupt manager, handle the interrupt}}
+\DoxyCodeLine{261   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} -\/> interrupt\_number] != 0)}
+\DoxyCodeLine{262       \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} -\/> interrupt\_number]-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\_interrupt}}();}
+\DoxyCodeLine{263 }
+\DoxyCodeLine{264   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number < \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}})\{}
+\DoxyCodeLine{265     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"Exception: \%s, Error Code: 0x\%x\(\backslash\)n"}, exceptions[\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number], \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>error\_code);}
+\DoxyCodeLine{266     CPU::stack\_trace(10);}
+\DoxyCodeLine{267   \}}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270   \textcolor{keywordflow}{else}}
+\DoxyCodeLine{271     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"Unhandled Interrupt: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number);}
+\DoxyCodeLine{272 }
+\DoxyCodeLine{273   \textcolor{comment}{// Debug the General Protection Fault}}
+\DoxyCodeLine{274   \textcolor{keywordflow}{if}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number == 0x0D) \{}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276     \textcolor{comment}{// Define masks for each field}}
+\DoxyCodeLine{277     uint32\_t E\_MASK = 0b10000000000000000000000000000000;}
+\DoxyCodeLine{278     uint32\_t Tbl\_MASK = 0b01100000000000000000000000000000;}
+\DoxyCodeLine{279     uint32\_t Index\_MASK = 0b00011111111111110000000000000000;}
+\DoxyCodeLine{280 }
+\DoxyCodeLine{281     \textcolor{comment}{// Use bit shifting and masking to extract values}}
+\DoxyCodeLine{282     \textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca20e242f1d2e3961996b0e514522460cf}{E}} = (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} -\/> error\_code \& E\_MASK) >> 31;}
+\DoxyCodeLine{283     \textcolor{keywordtype}{int} Tbl = (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} -\/> error\_code \& Tbl\_MASK) >> 29;}
+\DoxyCodeLine{284     \textcolor{keywordtype}{int} Index = (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} -\/> error\_code \& Index\_MASK) >> 16;}
+\DoxyCodeLine{285 }
+\DoxyCodeLine{286     \textcolor{comment}{// If bit 0 is set, the exception was caused by external event}}
+\DoxyCodeLine{287     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"General Protection Fault: External Event: \%s\(\backslash\)n"}, (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca20e242f1d2e3961996b0e514522460cf}{E}}) ? \textcolor{stringliteral}{"Yes"} : \textcolor{stringliteral}{"No"});}
+\DoxyCodeLine{288 }
+\DoxyCodeLine{289     \textcolor{keywordflow}{switch}(Tbl) \{}
+\DoxyCodeLine{290       \textcolor{keywordflow}{case} 0b00: \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"General Protection Fault: Table: GDT\(\backslash\)n"}); \textcolor{keywordflow}{break};}
+\DoxyCodeLine{291       \textcolor{keywordflow}{case} 0b01: \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"General Protection Fault: Table: IDT\(\backslash\)n"}); \textcolor{keywordflow}{break};}
+\DoxyCodeLine{292       \textcolor{keywordflow}{case} 0b10: \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"General Protection Fault: Table: LDT\(\backslash\)n"}); \textcolor{keywordflow}{break};}
+\DoxyCodeLine{293       \textcolor{keywordflow}{case} 0b11: \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"General Protection Fault: Table: IDT\(\backslash\)n"}); \textcolor{keywordflow}{break};}
+\DoxyCodeLine{294     \}}
+\DoxyCodeLine{295 }
+\DoxyCodeLine{296     \textcolor{comment}{// Find the selector index (next 13 bits)}}
+\DoxyCodeLine{297     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"General Protection Fault: Selector Index: 0x\%x\(\backslash\)n"}, Index);}
 \DoxyCodeLine{298 }
-\DoxyCodeLine{299         \textcolor{comment}{// Answer the slave PIC if it was the one that sent the interrupt}}
-\DoxyCodeLine{300         \textcolor{keywordflow}{if}(0x28 <= interrupt)}
-\DoxyCodeLine{301           \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acc77cd381753d0236d3eff12ad402321}{pic\_slave\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{write}}(0x20);}
-\DoxyCodeLine{302     \}}
+\DoxyCodeLine{299     \textcolor{comment}{// Hang}}
+\DoxyCodeLine{300     \textcolor{keywordflow}{while}(\textcolor{keyword}{true});}
+\DoxyCodeLine{301   \}}
+\DoxyCodeLine{302 }
 \DoxyCodeLine{303 }
-\DoxyCodeLine{304     \textcolor{keywordflow}{return} \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}};}
-\DoxyCodeLine{305 \}}
+\DoxyCodeLine{304   \textcolor{comment}{//TODO: Send SMP interrupt}}
+\DoxyCodeLine{305   \textcolor{comment}{//todo: send eoi}}
+\DoxyCodeLine{306 }
+\DoxyCodeLine{307   \textcolor{comment}{// Return the status}}
+\DoxyCodeLine{308   \textcolor{keywordflow}{return} \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}};}
+\DoxyCodeLine{309 \}}
 
 \end{DoxyCode}
 
 
-References esp, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Handler\+::handle\+\_\+interrupt(), m\+\_\+hardware\+\_\+interrupt\+\_\+offset, m\+\_\+interrupt\+\_\+handlers, m\+\_\+thread\+\_\+manager, pic\+\_\+master\+\_\+command\+\_\+port, pic\+\_\+slave\+\_\+command\+\_\+port, s\+\_\+error\+\_\+messages, Max\+O\+S\+::system\+::\+Thread\+Manager\+::schedule(), Max\+O\+S\+::hardwarecommunication\+::\+Port8\+Bit\+Slow\+::write(), Max\+O\+S\+::common\+::\+Output\+Stream\+::write(), and Max\+O\+S\+::common\+::\+Output\+Stream\+::write\+\_\+hex().
+References \+\_\+kprintf(), Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Handler\+::handle\+\_\+interrupt(), m\+\_\+hardware\+\_\+interrupt\+\_\+offset, m\+\_\+interrupt\+\_\+handlers, and status.
 
 
 
@@ -597,71 +516,11 @@ Referenced by Interrupt\+Manager().
 
 Referenced by Interrupt\+Manager().
 
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae00bc702621d4dcedef9b4427dc5b15e}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae00bc702621d4dcedef9b4427dc5b15e}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x08@{HandleException0x08}}
-\index{HandleException0x08@{HandleException0x08}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x08()}{HandleException0x08()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x08 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae166c7660e3d2e9b92aeab1ee2956e2d}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ae166c7660e3d2e9b92aeab1ee2956e2d}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x09@{HandleException0x09}}
 \index{HandleException0x09@{HandleException0x09}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleException0x09()}{HandleException0x09()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x09 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a9265221b375d437961f7bb715d9f0126}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a9265221b375d437961f7bb715d9f0126}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x0A@{HandleException0x0A}}
-\index{HandleException0x0A@{HandleException0x0A}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x0A()}{HandleException0x0A()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x0A (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acdad1a5b02061a551ecf3b0bc870213c}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acdad1a5b02061a551ecf3b0bc870213c}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x0B@{HandleException0x0B}}
-\index{HandleException0x0B@{HandleException0x0B}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x0B()}{HandleException0x0B()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x0B (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ad0539f72bbddfefe3b6d44f3e45db3df}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ad0539f72bbddfefe3b6d44f3e45db3df}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x0C@{HandleException0x0C}}
-\index{HandleException0x0C@{HandleException0x0C}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x0C()}{HandleException0x0C()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x0C (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abca341f047b0930b09251ed430a12b87}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abca341f047b0930b09251ed430a12b87}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x0D@{HandleException0x0D}}
-\index{HandleException0x0D@{HandleException0x0D}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x0D()}{HandleException0x0D()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x0D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6a947200e9ff19aaa9a9ae56d4c93d92}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6a947200e9ff19aaa9a9ae56d4c93d92}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x0E@{HandleException0x0E}}
-\index{HandleException0x0E@{HandleException0x0E}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x0E()}{HandleException0x0E()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x0E (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
 
 
@@ -682,16 +541,6 @@ Referenced by Interrupt\+Manager().
 \index{HandleException0x10@{HandleException0x10}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleException0x10()}{HandleException0x10()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x10 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a27371204a5c93a6a0c3a396f414164d3}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a27371204a5c93a6a0c3a396f414164d3}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleException0x11@{HandleException0x11}}
-\index{HandleException0x11@{HandleException0x11}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleException0x11()}{HandleException0x11()}}
-{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Exception0x11 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
 
 
@@ -837,11 +686,11 @@ Referenced by Interrupt\+Manager().
 
 Referenced by Interrupt\+Manager().
 
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a858db74cc3f6da3254b71bf2b742d13b}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a858db74cc3f6da3254b71bf2b742d13b}} 
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a8d3163a2947c421e49b49dbe580bed3c}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a8d3163a2947c421e49b49dbe580bed3c}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterrupt@{HandleInterrupt}}
 \index{HandleInterrupt@{HandleInterrupt}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterrupt()}{HandleInterrupt()}}
-{\footnotesize\ttfamily uint32\+\_\+t Interrupt\+Manager\+::\+Handle\+Interrupt (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{interrupt,  }\item[{uint32\+\_\+t}]{esp }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+{\footnotesize\ttfamily system\+::cpu\+\_\+status\+\_\+t $\ast$ Interrupt\+Manager\+::\+Handle\+Interrupt (\begin{DoxyParamCaption}\item[{system\+::cpu\+\_\+status\+\_\+t $\ast$}]{status }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
 
 
@@ -849,9 +698,7 @@ Handles the interrupt request by passing it to the interrupt manager.
 
 
 \begin{DoxyParams}{Parameters}
-{\em interrupt\+Number} & The interrupt number \\
-\hline
-{\em esp} & The stack pointer \\
+{\em status} & The current stack pointer \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -859,30 +706,94 @@ The stack pointer
 \end{DoxyReturn}
 
 
-Definition at line 217 of file interrupts.\+cpp.
+Definition at line 183 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{218 \{}
-\DoxyCodeLine{219 }
-\DoxyCodeLine{220     \textcolor{comment}{// If there is an active interrupt manager, handle the interrupt}}
-\DoxyCodeLine{221     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} != 0)}
-\DoxyCodeLine{222         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab17b2692f8100bfd6da7b0b3499d7826}{handle\_interrupt\_request}}(interrupt, \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}});}
-\DoxyCodeLine{223 }
-\DoxyCodeLine{224     \textcolor{comment}{// CPU can continue}}
-\DoxyCodeLine{225     \textcolor{keywordflow}{return} \mbox{\hyperlink{multitasking_8h_a7534a179bc9cc0ef26f0468e0959ee5c}{esp}};}
-\DoxyCodeLine{226 \}}
+\DoxyCodeLine{183                                                                                 \{}
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185   \textcolor{comment}{// If there is an interrupt manager handle interrupt}}
+\DoxyCodeLine{186   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}} != 0)}
+\DoxyCodeLine{187     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}{s\_active\_interrupt\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6b8bd08a2588ed79b480d73dcf2cfd82}{handle\_interrupt\_request}}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}});}
+\DoxyCodeLine{188 }
+\DoxyCodeLine{189   \textcolor{comment}{// CPU Can continue}}
+\DoxyCodeLine{190   \textcolor{keywordflow}{return} \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}};}
+\DoxyCodeLine{191 \}}
 
 \end{DoxyCode}
 
 
-References esp, handle\+\_\+interrupt\+\_\+request(), and s\+\_\+active\+\_\+interrupt\+\_\+manager.
+References handle\+\_\+interrupt\+\_\+request(), s\+\_\+active\+\_\+interrupt\+\_\+manager, and status.
 
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a260705a529848c43d161e2ecd2d33c2f}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a260705a529848c43d161e2ecd2d33c2f}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest@{HandleInterruptRequest}}
-\index{HandleInterruptRequest@{HandleInterruptRequest}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{HandleInterruptRequest()}{HandleInterruptRequest()}}
-{\footnotesize\ttfamily static uint32\+\_\+t Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{esp }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3cd7596497bcc1eaf17c7fcbbfcfe989}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3cd7596497bcc1eaf17c7fcbbfcfe989}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x08@{HandleInterruptError0x08}}
+\index{HandleInterruptError0x08@{HandleInterruptError0x08}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x08()}{HandleInterruptError0x08()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x08 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a129918df812cf91e830db455ea0fc338}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a129918df812cf91e830db455ea0fc338}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x0A@{HandleInterruptError0x0A}}
+\index{HandleInterruptError0x0A@{HandleInterruptError0x0A}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x0A()}{HandleInterruptError0x0A()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x0A (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a742699e061c572ffa30a5b370bc33d5a}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a742699e061c572ffa30a5b370bc33d5a}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x0B@{HandleInterruptError0x0B}}
+\index{HandleInterruptError0x0B@{HandleInterruptError0x0B}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x0B()}{HandleInterruptError0x0B()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x0B (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a40e578ec56fca5b708fc9a7ecf5e0cae}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a40e578ec56fca5b708fc9a7ecf5e0cae}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x0C@{HandleInterruptError0x0C}}
+\index{HandleInterruptError0x0C@{HandleInterruptError0x0C}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x0C()}{HandleInterruptError0x0C()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x0C (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a36ad7a314c1848625d33725a435421c4}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a36ad7a314c1848625d33725a435421c4}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x0D@{HandleInterruptError0x0D}}
+\index{HandleInterruptError0x0D@{HandleInterruptError0x0D}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x0D()}{HandleInterruptError0x0D()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x0D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aeab78691ae08ea3d8ddc5e3795083d96}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aeab78691ae08ea3d8ddc5e3795083d96}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x0E@{HandleInterruptError0x0E}}
+\index{HandleInterruptError0x0E@{HandleInterruptError0x0E}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x0E()}{HandleInterruptError0x0E()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x0E (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5b054d84b915c93db486f39eee71574f}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5b054d84b915c93db486f39eee71574f}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptError0x11@{HandleInterruptError0x11}}
+\index{HandleInterruptError0x11@{HandleInterruptError0x11}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptError0x11()}{HandleInterruptError0x11()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Error0x11 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aceb8fda97b3f764844181881ecb465a6}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aceb8fda97b3f764844181881ecb465a6}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x00@{HandleInterruptRequest0x00}}
@@ -920,19 +831,11 @@ Referenced by Interrupt\+Manager().
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x03()}{HandleInterruptRequest0x03()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x03 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af4b6ea1470bbabde053ed4f0eb3fb4e5}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_af4b6ea1470bbabde053ed4f0eb3fb4e5}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x04@{HandleInterruptRequest0x04}}
 \index{HandleInterruptRequest0x04@{HandleInterruptRequest0x04}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x04()}{HandleInterruptRequest0x04()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x04 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a138e6442c7da4709c33945be0e4f07a6}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a138e6442c7da4709c33945be0e4f07a6}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x05@{HandleInterruptRequest0x05}}
@@ -940,19 +843,11 @@ Referenced by Interrupt\+Manager().
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x05()}{HandleInterruptRequest0x05()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x05 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0f8bedc4510ade7bef41d2d4c108f5dc}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0f8bedc4510ade7bef41d2d4c108f5dc}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x06@{HandleInterruptRequest0x06}}
 \index{HandleInterruptRequest0x06@{HandleInterruptRequest0x06}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x06()}{HandleInterruptRequest0x06()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x06 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a318f2dd70c9c36a949cefe619e33bb8e}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a318f2dd70c9c36a949cefe619e33bb8e}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x07@{HandleInterruptRequest0x07}}
@@ -960,19 +855,11 @@ Referenced by Interrupt\+Manager().
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x07()}{HandleInterruptRequest0x07()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x07 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_adc24998971af761d28eab2b20c87c907}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_adc24998971af761d28eab2b20c87c907}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x08@{HandleInterruptRequest0x08}}
 \index{HandleInterruptRequest0x08@{HandleInterruptRequest0x08}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x08()}{HandleInterruptRequest0x08()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x08 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5056f77662e4d3a7e860bd9fc336b512}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5056f77662e4d3a7e860bd9fc336b512}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x09@{HandleInterruptRequest0x09}}
@@ -980,29 +867,17 @@ Referenced by Interrupt\+Manager().
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x09()}{HandleInterruptRequest0x09()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x09 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a214221e85ea7115728cee0a4a2837fed}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a214221e85ea7115728cee0a4a2837fed}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x0A@{HandleInterruptRequest0x0A}}
 \index{HandleInterruptRequest0x0A@{HandleInterruptRequest0x0A}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x0A()}{HandleInterruptRequest0x0A()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x0A (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a684daa5c4b49d00e157d8c7e8b8cfb1f}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a684daa5c4b49d00e157d8c7e8b8cfb1f}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x0B@{HandleInterruptRequest0x0B}}
 \index{HandleInterruptRequest0x0B@{HandleInterruptRequest0x0B}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x0B()}{HandleInterruptRequest0x0B()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x0B (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a313033ea5fbb8dc434c20817d93f3373}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a313033ea5fbb8dc434c20817d93f3373}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x0C@{HandleInterruptRequest0x0C}}
@@ -1020,19 +895,11 @@ Referenced by Interrupt\+Manager().
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x0D()}{HandleInterruptRequest0x0D()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x0D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a494d9f319aadac568e5621b5c52434e3}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a494d9f319aadac568e5621b5c52434e3}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x0E@{HandleInterruptRequest0x0E}}
 \index{HandleInterruptRequest0x0E@{HandleInterruptRequest0x0E}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x0E()}{HandleInterruptRequest0x0E()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x0E (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a317214e3824316249c01deaf09ef10ae}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a317214e3824316249c01deaf09ef10ae}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x0F@{HandleInterruptRequest0x0F}}
@@ -1040,25 +907,27 @@ Referenced by Interrupt\+Manager().
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x0F()}{HandleInterruptRequest0x0F()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x0F (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
-
-
-Referenced by Interrupt\+Manager().
-
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a15a90e83303b573741d70507e1c70091}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a15a90e83303b573741d70507e1c70091}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x31@{HandleInterruptRequest0x31}}
 \index{HandleInterruptRequest0x31@{HandleInterruptRequest0x31}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x31()}{HandleInterruptRequest0x31()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x31 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a65f8eee984ce3b638978a45132a94f6c}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a65f8eee984ce3b638978a45132a94f6c}} 
+\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x60@{HandleInterruptRequest0x60}}
+\index{HandleInterruptRequest0x60@{HandleInterruptRequest0x60}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
+\doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x60()}{HandleInterruptRequest0x60()}}
+{\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x60 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Referenced by Interrupt\+Manager().
+
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abd20f1f23fda89fd601c091eca9ab7c0}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abd20f1f23fda89fd601c091eca9ab7c0}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!HandleInterruptRequest0x80@{HandleInterruptRequest0x80}}
 \index{HandleInterruptRequest0x80@{HandleInterruptRequest0x80}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{HandleInterruptRequest0x80()}{HandleInterruptRequest0x80()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Handle\+Interrupt\+Request0x80 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a722d6c304662665c41bd52558baddf59}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!hardware\_interrupt\_offset@{hardware\_interrupt\_offset}}
@@ -1075,13 +944,13 @@ The offset of the hardware interrupt
 \end{DoxyReturn}
 
 
-Definition at line 312 of file interrupts.\+cpp.
+Definition at line 198 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{312                                                      \{}
-\DoxyCodeLine{313     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}};}
-\DoxyCodeLine{314 \}}
+\DoxyCodeLine{198                                                      \{}
+\DoxyCodeLine{199     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a22679b112e8f5408d0a82821ee2c90f9}{m\_hardware\_interrupt\_offset}};}
+\DoxyCodeLine{200 \}}
 
 \end{DoxyCode}
 
@@ -1097,10 +966,6 @@ Referenced by Interrupt\+Manager().
 \index{InterruptIgnore@{InterruptIgnore}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{InterruptIgnore()}{InterruptIgnore()}}
 {\footnotesize\ttfamily static void Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Interrupt\+Ignore (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
-
-
-
-Referenced by Interrupt\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6e272ce7a13f92fead10afe681b84f29}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6e272ce7a13f92fead10afe681b84f29}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!remove\_interrupt\_handler@{remove\_interrupt\_handler}}
@@ -1119,13 +984,13 @@ Removes the interrupt handler for the interrupt.
 \end{DoxyParams}
 
 
-Definition at line 331 of file interrupts.\+cpp.
+Definition at line 217 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{331                                                                  \{}
-\DoxyCodeLine{332   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[interrupt] = 0;}
-\DoxyCodeLine{333 \}}
+\DoxyCodeLine{217                                                                  \{}
+\DoxyCodeLine{218   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[interrupt] = 0;}
+\DoxyCodeLine{219 \}}
 
 \end{DoxyCode}
 
@@ -1136,11 +1001,11 @@ References m\+\_\+interrupt\+\_\+handlers.
 
 Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Handler\+::$\sim$\+Interrupt\+Handler().
 
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a6285b53e30f5d66158cd682a0adcc261}} 
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab8b65c943b5d48e821360d24c4e6a0c9}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!set\_interrupt\_descriptor\_table\_entry@{set\_interrupt\_descriptor\_table\_entry}}
 \index{set\_interrupt\_descriptor\_table\_entry@{set\_interrupt\_descriptor\_table\_entry}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{set\_interrupt\_descriptor\_table\_entry()}{set\_interrupt\_descriptor\_table\_entry()}}
-{\footnotesize\ttfamily void Interrupt\+Manager\+::set\+\_\+interrupt\+\_\+descriptor\+\_\+table\+\_\+entry (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{interrupt,  }\item[{uint16\+\_\+t}]{code\+\_\+segment\+\_\+selector\+\_\+offset,  }\item[{void($\ast$)()}]{handler,  }\item[{uint8\+\_\+t}]{Descriptor\+Privilege\+Level,  }\item[{uint8\+\_\+t}]{descriptor\+\_\+type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+{\footnotesize\ttfamily void Interrupt\+Manager\+::set\+\_\+interrupt\+\_\+descriptor\+\_\+table\+\_\+entry (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{interrupt,  }\item[{void($\ast$)()}]{handler,  }\item[{uint8\+\_\+t}]{descriptor\+\_\+privilege\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
 
 
@@ -1154,33 +1019,42 @@ Sets an entry in the Interrupt Descriptor Table.
 \hline
 {\em handler} & Interrupt Handler \\
 \hline
-{\em Descriptor\+Privilege\+Level} & Descriptor Privilege Level \\
+{\em descriptor\+\_\+privilege\+\_\+level} & Descriptor Privilege Level \\
 \hline
 {\em descriptor\+\_\+type} & Descriptor Type \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line 168 of file interrupts.\+cpp.
+Definition at line 127 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{169 \{}
-\DoxyCodeLine{170   \textcolor{comment}{// Store the handler function in the IDT}}
-\DoxyCodeLine{171   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\_interrupt\_descriptor\_table}}[interrupt].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor_a476de1744333f41a838b6de13038c879}{handler\_address\_low\_bits}} = ((uint32\_t) handler) \& 0xFFFF;}
-\DoxyCodeLine{172   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\_interrupt\_descriptor\_table}}[interrupt].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor_ae320222866aea76bd95e5d0bfc611dd4}{handler\_address\_high\_bits}} = (((uint32\_t) handler) >> 16) \& 0xFFFF;}
-\DoxyCodeLine{173   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\_interrupt\_descriptor\_table}}[interrupt].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor_aeb02804b1de746b9868706bfe999dbf8}{gdt\_code\_segment\_selector}} = code\_segment\_selector\_offset;}
-\DoxyCodeLine{174 }
-\DoxyCodeLine{175   \textcolor{comment}{// Set the access}}
-\DoxyCodeLine{176   \textcolor{keyword}{const} uint8\_t IDT\_DESC\_PRESENT = 0x80;}
-\DoxyCodeLine{177   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\_interrupt\_descriptor\_table}}[interrupt].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor_a62faf29778ec3f21f8a8a430fb50780f}{access}} = IDT\_DESC\_PRESENT | ((DescriptorPrivilegeLevel \& 3) << 5) | descriptor\_type;}
-\DoxyCodeLine{178   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}{s\_interrupt\_descriptor\_table}}[interrupt].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor_afc790023a3d11bf2a55b5d1e85a26234}{reserved}} = 0;}
-\DoxyCodeLine{179 \}}
+\DoxyCodeLine{128 \{}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130   \textcolor{comment}{// Get the address of the handler and the entry in the IDT}}
+\DoxyCodeLine{131   uint64\_t handler\_address = (uint64\_t)handler;}
+\DoxyCodeLine{132   \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{InterruptDescriptor}}* interrupt\_descriptor = \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}{s\_interrupt\_descriptor\_table}}[interrupt];}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134   \textcolor{comment}{// Set the handler address}}
+\DoxyCodeLine{135   interrupt\_descriptor-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_acf2296b3182c494bf9e1add0fe25dd7a}{address\_low\_bits}} = handler\_address \& 0xFFFF;}
+\DoxyCodeLine{136   interrupt\_descriptor-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_aa3521ab617141100fc14dba26866eccd}{address\_mid\_bits}} = (handler\_address >> 16) \& 0xFFFF;}
+\DoxyCodeLine{137   interrupt\_descriptor-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_a6870620a091da1dabb18a23df7df9f54}{address\_high\_bits}} = (handler\_address >> 32) \& 0xFFFFFFFF;}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139   \textcolor{comment}{// Set the kernel code segment offset}}
+\DoxyCodeLine{140   interrupt\_descriptor-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_a2338770cd3c48423abdbcf0ddd2a528b}{segment\_selector}} = 0x08;}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142   \textcolor{comment}{// Disable IST}}
+\DoxyCodeLine{143   interrupt\_descriptor-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_a95ad5c5436414a4caf8ce8e8d7577802}{ist}} = 0;}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145   \textcolor{comment}{// Set the flags (Trap Gate, Present and the Descriptor Privilege Level)}}
+\DoxyCodeLine{146   interrupt\_descriptor-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor_ae0d3e0ce9197a429c9a2a8e3eb8350ea}{flags}} = 0b1110 | ((descriptor\_privilege\_level \& 0b11) << 5) | (1 << 7);}
+\DoxyCodeLine{147 \}}
 
 \end{DoxyCode}
 
 
-References Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor\+::access, Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor\+::gdt\+\_\+code\+\_\+segment\+\_\+selector, Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor\+::handler\+\_\+address\+\_\+high\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor\+::handler\+\_\+address\+\_\+low\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Gate\+Descriptor\+::reserved, and s\+\_\+interrupt\+\_\+descriptor\+\_\+table.
+References Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::address\+\_\+high\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::address\+\_\+low\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::address\+\_\+mid\+\_\+bits, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::flags, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::ist, s\+\_\+interrupt\+\_\+descriptor\+\_\+table, and Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Descriptor\+::segment\+\_\+selector.
 
 
 
@@ -1205,13 +1079,13 @@ Sets the interrupt handler for the interrupt.
 \end{DoxyParams}
 
 
-Definition at line 322 of file interrupts.\+cpp.
+Definition at line 208 of file interrupts.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{322                                                                                          \{}
-\DoxyCodeLine{323   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[interrupt] = handler;}
-\DoxyCodeLine{324 \}}
+\DoxyCodeLine{208                                                                                          \{}
+\DoxyCodeLine{209   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac2ca2eee404d5f5171bb4d216b650cc1}{m\_interrupt\_handlers}}[interrupt] = handler;}
+\DoxyCodeLine{210 \}}
 
 \end{DoxyCode}
 
@@ -1233,7 +1107,7 @@ Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Handler\+::\+In
 
 
 
-Definition at line 64 of file interrupts.\+h.
+Definition at line 65 of file interrupts.\+h.
 
 
 
@@ -1246,7 +1120,7 @@ Definition at line 64 of file interrupts.\+h.
 
 
 
-Definition at line 70 of file interrupts.\+h.
+Definition at line 71 of file interrupts.\+h.
 
 
 
@@ -1260,11 +1134,11 @@ Referenced by handle\+\_\+interrupt\+\_\+request(), and hardware\+\_\+interrupt\
 
 
 
-Definition at line 71 of file interrupts.\+h.
+Definition at line 72 of file interrupts.\+h.
 
 
 
-Referenced by handle\+\_\+interrupt\+\_\+request(), Interrupt\+Manager(), remove\+\_\+interrupt\+\_\+handler(), and set\+\_\+interrupt\+\_\+handler().
+Referenced by handle\+\_\+interrupt\+\_\+request(), remove\+\_\+interrupt\+\_\+handler(), and set\+\_\+interrupt\+\_\+handler().
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac5412eb3decc01b9cf9c4fb763ddae42}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ac5412eb3decc01b9cf9c4fb763ddae42}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!m\_thread\_manager@{m\_thread\_manager}}
@@ -1274,67 +1148,7 @@ Referenced by handle\+\_\+interrupt\+\_\+request(), Interrupt\+Manager(), remove
 
 
 
-Definition at line 72 of file interrupts.\+h.
-
-
-
-Referenced by handle\+\_\+interrupt\+\_\+request().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab9ccda96b24e85a560dc2173aa30a134}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab9ccda96b24e85a560dc2173aa30a134}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!pic\_master\_command\_port@{pic\_master\_command\_port}}
-\index{pic\_master\_command\_port@{pic\_master\_command\_port}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{pic\_master\_command\_port}{pic\_master\_command\_port}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::pic\+\_\+master\+\_\+command\+\_\+port\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line 139 of file interrupts.\+h.
-
-
-
-Referenced by handle\+\_\+interrupt\+\_\+request(), and Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a63ed3edda5e4ed2a63daa26bfdb1f376}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!pic\_master\_data\_port@{pic\_master\_data\_port}}
-\index{pic\_master\_data\_port@{pic\_master\_data\_port}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{pic\_master\_data\_port}{pic\_master\_data\_port}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::pic\+\_\+master\+\_\+data\+\_\+port\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line 140 of file interrupts.\+h.
-
-
-
-Referenced by Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acc77cd381753d0236d3eff12ad402321}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_acc77cd381753d0236d3eff12ad402321}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!pic\_slave\_command\_port@{pic\_slave\_command\_port}}
-\index{pic\_slave\_command\_port@{pic\_slave\_command\_port}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{pic\_slave\_command\_port}{pic\_slave\_command\_port}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::pic\+\_\+slave\+\_\+command\+\_\+port\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line 141 of file interrupts.\+h.
-
-
-
-Referenced by handle\+\_\+interrupt\+\_\+request(), and Interrupt\+Manager().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a528d79518962860c91c9c64139e93f59}} 
-\index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!pic\_slave\_data\_port@{pic\_slave\_data\_port}}
-\index{pic\_slave\_data\_port@{pic\_slave\_data\_port}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
-\doxysubsubsection{\texorpdfstring{pic\_slave\_data\_port}{pic\_slave\_data\_port}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow}{Port8\+Bit\+Slow}} Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Manager\+::pic\+\_\+slave\+\_\+data\+\_\+port\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line 142 of file interrupts.\+h.
-
-
-
-Referenced by Interrupt\+Manager().
+Definition at line 73 of file interrupts.\+h.
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_abe6913e2329d12594c3107fa0102b41e}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!s\_active\_interrupt\_manager@{s\_active\_interrupt\_manager}}
@@ -1344,7 +1158,7 @@ Referenced by Interrupt\+Manager().
 
 
 
-Definition at line 68 of file interrupts.\+h.
+Definition at line 69 of file interrupts.\+h.
 
 
 
@@ -1358,21 +1172,17 @@ Referenced by activate(), deactivate(), and Handle\+Interrupt().
 
 
 
-Definition at line 69 of file interrupts.\+h.
+Definition at line 70 of file interrupts.\+h.
 
-
-
-Referenced by handle\+\_\+interrupt\+\_\+request().
-
-\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a2f720367ec1450f8c1760c7238342c6d}} 
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_aba8d1c84c8684e37c945f7e9f611c47b}} 
 \index{MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}!s\_interrupt\_descriptor\_table@{s\_interrupt\_descriptor\_table}}
 \index{s\_interrupt\_descriptor\_table@{s\_interrupt\_descriptor\_table}!MaxOS::hardwarecommunication::InterruptManager@{MaxOS::hardwarecommunication::InterruptManager}}
 \doxysubsubsection{\texorpdfstring{s\_interrupt\_descriptor\_table}{s\_interrupt\_descriptor\_table}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1GateDescriptor}{Gate\+Descriptor}} Interrupt\+Manager\+::s\+\_\+interrupt\+\_\+descriptor\+\_\+table\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{Interrupt\+Descriptor}} Interrupt\+Manager\+::s\+\_\+interrupt\+\_\+descriptor\+\_\+table\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
 
 
 
-Definition at line 74 of file interrupts.\+h.
+Definition at line 75 of file interrupts.\+h.
 
 
 

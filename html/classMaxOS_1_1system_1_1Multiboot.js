@@ -6,8 +6,12 @@ var classMaxOS_1_1system_1_1Multiboot =
     [ "get_bootloader_name", "classMaxOS_1_1system_1_1Multiboot.html#ab07750ad7af17832bcf1d365364c96f6", null ],
     [ "get_framebuffer", "classMaxOS_1_1system_1_1Multiboot.html#a762db5ddb4857d6c2705c97b9f4d23a7", null ],
     [ "get_mmap", "classMaxOS_1_1system_1_1Multiboot.html#adab0945a9a6b46d34f1f4fa1757cdd34", null ],
+    [ "get_new_acpi", "classMaxOS_1_1system_1_1Multiboot.html#ae4e89fb581fcfe7803408dd30dc4f261", null ],
+    [ "get_old_acpi", "classMaxOS_1_1system_1_1Multiboot.html#a6049d9468501da444e0e567f2cc02b64", null ],
     [ "m_basic_meminfo", "classMaxOS_1_1system_1_1Multiboot.html#a8018de72b296600f6090f9dfc90dce11", null ],
     [ "m_bootloader_name", "classMaxOS_1_1system_1_1Multiboot.html#a7c9cdd56bd6e58a13af896226e98541b", null ],
     [ "m_framebuffer", "classMaxOS_1_1system_1_1Multiboot.html#a48388fa09d529db631bf6f80d5ab3091", null ],
-    [ "m_mmap", "classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2", null ]
+    [ "m_mmap", "classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2", null ],
+    [ "m_new_acpi", "classMaxOS_1_1system_1_1Multiboot.html#af9d4c45cd7c5bc9fb7fefe0d30e930d3", null ],
+    [ "m_old_acpi", "classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271", null ]
 ];

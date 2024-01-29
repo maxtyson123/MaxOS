@@ -1,4 +1,4 @@
-.TH "MaxOS::memory::MemoryManager" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::memory::MemoryManager" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -31,11 +31,21 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .br
 .RI "Returns the amount of memory used\&. "
 .in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static uint64_t \fBmap_to_higher_half\fP (uint64_t physical_address)"
+.br
+.in -1c
 .SS "Static Public Attributes"
 
 .in +1c
 .ti -1c
 .RI "static \fBMemoryManager\fP * \fBs_active_memory_manager\fP = 0"
+.br
+.ti -1c
+.RI "static const uint64_t \fBs_higher_half_offset\fP { 0xFFFFFFFF80000000 }"
 .br
 .in -1c
 .SS "Protected Attributes"
@@ -229,6 +239,24 @@ Definition at line 60 of file memorymanagement\&.cpp\&.
 .fi
 .PP
 References MaxOS::memory::MemoryChunk::allocated, m_first_memory_chunk, MaxOS::memory::MemoryChunk::next, size, and MaxOS::memory::MemoryChunk::size\&.
+.SS "uint64_t MemoryManager::map_to_higher_half (uint64_t physical_address)\fC [static]\fP"
+
+.PP
+Definition at line 160 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+160                                                                     {
+161 
+162   // Check if the address is already mapped
+163   if(physical_address >= s_higher_half_offset)
+164       return physical_address;
+165 
+166   // Map the address to the higher half
+167   return physical_address + s_higher_half_offset;
+168 }
+.fi
+.PP
+References s_higher_half_offset\&.
 .SS "int MemoryManager::memory_used ()"
 
 .PP
@@ -272,6 +300,12 @@ Referenced by malloc(), memory_used(), and MemoryManager()\&.
 Definition at line 40 of file memorymanagement\&.h\&.
 .PP
 Referenced by MemoryManager(), operator delete(), operator delete[](), operator new(), operator new[](), and ~MemoryManager()\&.
+.SS "const uint64_t MaxOS::memory::MemoryManager::s_higher_half_offset { 0xFFFFFFFF80000000 }\fC [static]\fP"
+
+.PP
+Definition at line 41 of file memorymanagement\&.h\&.
+.PP
+Referenced by map_to_higher_half()\&.
 
 .SH "Author"
 .PP 

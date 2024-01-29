@@ -1,0 +1,196 @@
+.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <acpi\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAdvancedConfigurationAndPowerInterface\fP (\fBsystem::Multiboot\fP *multiboot)"
+.br
+.ti -1c
+.RI "\fB~AdvancedConfigurationAndPowerInterface\fP ()"
+.br
+.ti -1c
+.RI "\fBACPISDTHeader\fP * \fBfind\fP (const char *\fBsignature\fP)"
+.br
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBvalidate\fP (const char *discriptor, size_t \fBlength\fP)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_type\fP"
+.br
+.ti -1c
+.RI "\fBACPISDTHeader\fP * \fBm_header\fP"
+.br
+.ti -1c
+.RI "\fBXSDT\fP * \fBm_xsdt\fP"
+.br
+.ti -1c
+.RI "\fBRSDT\fP * \fBm_rsdt\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 55 of file acpi\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface (\fBsystem::Multiboot\fP * multiboot)"
+
+.PP
+Definition at line 11 of file acpi\&.cpp\&.
+.PP
+.nf
+11                                                                                                          {
+12 
+13   if(multiboot->get_old_acpi() != 0){
+14 
+15     // Get the RSDP & RSDT
+16     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
+17     m_rsdt = (RSDT*) rsdp->rsdt_address;
+18 
+19     // Load the header
+20     m_header = &m_rsdt->header;
+21 
+22     // Calculate the checksum
+23     uint8_t sum = 0;
+24     for(uint32_t i = 0; i < sizeof(RSDPDescriptor); i++)
+25               sum += ((char*)rsdp)[i];
+26 
+27     // Check if the checksum is valid
+28     if(sum != 0)
+29       _kprintf("ACPI: Invalid checksum!\n");
+30 
+31   }else{
+32 
+33     // If the new ACPI is not supported, panic
+34     if(multiboot->get_new_acpi() == 0){
+35       _kprintf("ACPI: No ACPI found! (BAD)\n");
+36       return;
+37     }
+38 
+39     // Its the new ACPI
+40     m_type = 1;
+41 
+42     // Get the RSDP & XSDT
+43     RSDPDescriptor2* rsdp2 = (RSDPDescriptor2*)(multiboot->get_new_acpi() + 1);
+44     m_xsdt = (XSDT*) rsdp2->xsdt_address;
+45 
+46     // Load the header
+47     m_header = &m_xsdt->header;
+48 
+49     // Calculate the checksum
+50     uint8_t sum = 0;
+51     for(uint32_t i = 0; i < sizeof(RSDPDescriptor2); i++)
+52         sum += ((char*)rsdp2)[i];
+53 
+54     // Check if the checksum is valid
+55     if(sum != 0)
+56       _kprintf("ACPI: Invalid checksum!\n");
+57 
+58   }
+59 }
+.fi
+.PP
+References _kprintf(), MaxOS::system::Multiboot::get_new_acpi(), MaxOS::system::Multiboot::get_old_acpi(), MaxOS::drivers::peripherals::i, MaxOS::hardwarecommunication::RSDPDescriptor::rsdt_address, and MaxOS::hardwarecommunication::RSDPDescriptor2::xsdt_address\&.
+.SS "AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface ()"
+
+.PP
+Definition at line 61 of file acpi\&.cpp\&.
+.PP
+.nf
+61                                                                                 {
+62 
+63 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBACPISDTHeader\fP * AdvancedConfigurationAndPowerInterface::find (const char * signature)"
+
+.PP
+Definition at line 80 of file acpi\&.cpp\&.
+.PP
+.nf
+80                                                                                  {
+81 
+82 
+83   // Get the number of entries
+84   size_t entries = (m_header->length - sizeof(ACPISDTHeader)) / 4;
+85   if(m_type) entries = (m_header->length - sizeof(ACPISDTHeader)) / 8;
+86 
+87   // Loop through all the entries
+88   for (size_t i = 0; i < entries; ++i) {
+89 
+90       // Get the entry
+91       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
+92 
+93       // Check if the signature matches
+94       if(strncmp(header->signature, signature, 4) == 0)
+95          return header;
+96   }
+97 
+98   // Return null if no entry was found
+99   return nullptr;
+100 }
+.fi
+.PP
+References header, MaxOS::drivers::peripherals::i, signature, MaxOS::hardwarecommunication::ACPISDTHeader::signature, and strncmp()\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::IOAPIC::init()\&.
+.SS "bool AdvancedConfigurationAndPowerInterface::validate (const char * discriptor, size_t length)\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Definition at line 65 of file acpi\&.cpp\&.
+.PP
+.nf
+65                                                                                            {
+66   // Checksum
+67   uint32_t sum = 0;
+68 
+69   // Calculate the checksum
+70   for(uint32_t i = 0; i < length; i++)
+71         sum += ((char*) discriptor)[i];
+72 
+73   // Check if the checksum is valid
+74   return ((sum & 0xFF) == 0);
+75 
+76 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::i, and length\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBACPISDTHeader\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_header\fC [protected]\fP"
+
+.PP
+Definition at line 58 of file acpi\&.h\&.
+.SS "\fBRSDT\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_rsdt\fC [protected]\fP"
+
+.PP
+Definition at line 61 of file acpi\&.h\&.
+.SS "uint8_t MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_type\fC [protected]\fP"
+
+.PP
+Definition at line 57 of file acpi\&.h\&.
+.SS "\fBXSDT\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_xsdt\fC [protected]\fP"
+
+.PP
+Definition at line 60 of file acpi\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

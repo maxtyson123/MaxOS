@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/interrupts.h" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/interrupts.h" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,6 +18,8 @@
 .br
 \fC#include <common/outputStream\&.h>\fP
 .br
+\fC#include <system/cpu\&.h>\fP
+.br
 
 .SS "Classes"
 
@@ -27,13 +29,12 @@
 .br
 .RI "Handles a certain interrupt number\&. "
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::GateDescriptor\fP"
+.RI "struct \fBMaxOS::hardwarecommunication::IDTR\fP"
 .br
-.RI "Describes a gate in the Interrupt Descriptor Table\&. "
+.RI "A struct that holds the IDT register\&. "
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::InterruptDescriptorTablePointer\fP"
+.RI "struct \fBMaxOS::hardwarecommunication::InterruptDescriptor\fP"
 .br
-.RI "Describes the Interrupt Descriptor Table\&. "
 .ti -1c
 .RI "class \fBMaxOS::hardwarecommunication::InterruptManager\fP"
 .br
@@ -53,69 +54,80 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::GateDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed))"
 .br
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "uint16_t \fBhandler_address_low_bits\fP"
+.RI "uint16_t \fBlimit\fP"
 .br
 .ti -1c
-.RI "uint16_t \fBgdt_code_segment_selector\fP"
+.RI "uint64_t \fBbase\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBreserved\fP"
+.RI "uint16_t \fBaddress_low_bits\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBaccess\fP"
+.RI "uint16_t \fBsegment_selector\fP"
 .br
 .ti -1c
-.RI "uint16_t \fBhandler_address_high_bits\fP"
+.RI "uint8_t \fBist\fP"
 .br
 .ti -1c
-.RI "uint16_t \fBsize\fP"
+.RI "uint8_t \fBflags\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBbase\fP"
+.RI "uint16_t \fBaddress_mid_bits\fP"
 .br
 .ti -1c
-.RI "\fBMaxOS::hardwarecommunication::InterruptManager\fP \fBMaxOS::hardwarecommunication::__attribute__\fP"
+.RI "uint32_t \fBaddress_high_bits\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBreserved\fP"
 .br
 .in -1c
 .SH "Variable Documentation"
 .PP 
-.SS "uint8_t access"
+.SS "uint32_t address_high_bits"
 
 .PP
-Definition at line 5 of file interrupts\&.h\&.
-.SS "uint32_t base"
+Definition at line 7 of file interrupts\&.h\&.
+.SS "uint16_t address_low_bits"
+
+.PP
+Definition at line 2 of file interrupts\&.h\&.
+.SS "uint16_t address_mid_bits"
+
+.PP
+Definition at line 6 of file interrupts\&.h\&.
+.SS "uint64_t base"
 
 .PP
 Definition at line 3 of file interrupts\&.h\&.
 .PP
 Referenced by itoa()\&.
-.SS "uint16_t gdt_code_segment_selector"
+.SS "uint8_t flags"
 
 .PP
-Definition at line 3 of file interrupts\&.h\&.
-.SS "uint16_t handler_address_high_bits"
-
-.PP
-Definition at line 6 of file interrupts\&.h\&.
-.SS "uint16_t handler_address_low_bits"
-
-.PP
-Definition at line 2 of file interrupts\&.h\&.
-.SS "uint8_t reserved"
+Definition at line 5 of file interrupts\&.h\&.
+.SS "uint8_t ist"
 
 .PP
 Definition at line 4 of file interrupts\&.h\&.
-.SS "uint16_t size"
+.SS "uint16_t limit"
 
 .PP
 Definition at line 2 of file interrupts\&.h\&.
+.SS "uint32_t reserved"
+
+.PP
+Definition at line 8 of file interrupts\&.h\&.
+.SS "uint16_t segment_selector"
+
+.PP
+Definition at line 3 of file interrupts\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

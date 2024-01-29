@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['gdt_5fcode_5fsegment_5fselector_2426',['gdt_code_segment_selector',['../structMaxOS_1_1hardwarecommunication_1_1GateDescriptor.html#aeb02804b1de746b9868706bfe999dbf8',1,'MaxOS::hardwarecommunication::GateDescriptor::gdt_code_segment_selector()'],['../interrupts_8h.html#ae84a4b22878380160d64b542973bbd9b',1,'gdt_code_segment_selector():&#160;interrupts.h']]],
-  ['green_2427',['green',['../classMaxOS_1_1common_1_1Colour.html#ab2fb61538041fd29ad85f439a06a7638',1,'MaxOS::common::Colour::green()'],['../structmultiboot__color.html#a08e1c8bc977b39015c9043645e79713d',1,'multiboot_color::green()']]]
+  ['global_5fsystem_5finterrupt_2576',['global_system_interrupt',['../structMaxOS_1_1hardwarecommunication_1_1Override.html#a52096e997dedf8c3f6d928cb6b69f0c0',1,'MaxOS::hardwarecommunication::Override::global_system_interrupt()'],['../apic_8h.html#a30e59b950511dd5de9fc8592dbd3777f',1,'global_system_interrupt():&#160;apic.h']]],
+  ['global_5fsystem_5finterrupt_5fbase_2577',['global_system_interrupt_base',['../structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC.html#af22eb2ba1e011feba5efcf3310a3d7ce',1,'MaxOS::hardwarecommunication::MADT_IOAPIC::global_system_interrupt_base()'],['../apic_8h.html#ac4cda92a6b75e496401a94055081caf5',1,'global_system_interrupt_base():&#160;apic.h']]],
+  ['green_2578',['green',['../classMaxOS_1_1common_1_1Colour.html#ab2fb61538041fd29ad85f439a06a7638',1,'MaxOS::common::Colour::green()'],['../structmultiboot__color.html#a08e1c8bc977b39015c9043645e79713d',1,'multiboot_color::green()']]]
 ];

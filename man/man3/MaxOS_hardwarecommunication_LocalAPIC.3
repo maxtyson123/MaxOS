@@ -1,0 +1,197 @@
+.TH "MaxOS::hardwarecommunication::LocalAPIC" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::LocalAPIC
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <apic\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLocalAPIC\fP ()"
+.br
+.ti -1c
+.RI "\fB~LocalAPIC\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBid\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBread\fP (uint32_t reg)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (uint32_t reg, uint32_t value)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBm_apic_base\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBm_id\fP"
+.br
+.ti -1c
+.RI "bool \fBm_x2apic\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 16 of file apic\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "LocalAPIC::LocalAPIC ()"
+
+.PP
+Definition at line 11 of file apic\&.cpp\&.
+.PP
+.nf
+11                      {
+12 
+13 }
+.fi
+.SS "LocalAPIC::~LocalAPIC ()"
+
+.PP
+Definition at line 15 of file apic\&.cpp\&.
+.PP
+.nf
+15                       {
+16 
+17 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t LocalAPIC::id ()"
+
+.PP
+Definition at line 84 of file apic\&.cpp\&.
+.PP
+.nf
+84                        {
+85 
+86   // Read the id
+87   uint32_t id = read(0x20);
+88 
+89   // Return the id
+90   return m_x2apic ? id : (id >> 24);
+91 
+92 }
+.fi
+.SS "void LocalAPIC::init ()"
+
+.PP
+Definition at line 19 of file apic\&.cpp\&.
+.PP
+.nf
+19                      {
+20 
+21   // Read information about the local APIC
+22   uint64_t msr_info = CPU::read_msr(0x1B);
+23 
+24   // Get the APIC base address
+25   m_apic_base = msr_info & 0xFFFFF000;
+26 
+27   // Read if the APIC supports x2APIC
+28   uint32_t ignored, xleaf, x2leaf;
+29   CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
+30 
+31   if(x2leaf & (1 << 21)) {
+32 
+33     // Enable x2APIC
+34     m_x2apic = true;
+35     msr_info |= (1 << 10);
+36     CPU::write_msr(0x1B, msr_info);
+37     _kprintf("CPU supports x2APIC\n");
+38 
+39   } else if (xleaf & (1 << 9)) {
+40 
+41     m_x2apic = false;
+42     _kprintf("CPU supports xAPIC\n");
+43 
+44   } else {
+45     _kprintf("ERROR: CPU does not support APIC (BAD!!)\n");
+46   }
+47 
+48   // Get the vector table
+49   uint32_t spurious_vector = read(0xF0);
+50   _kprintf("APIC Spurious Vector: 0x%x\n", spurious_vector & 0xFF);
+51 
+52   // Enable the APIC
+53   write(0xF0, (1 << 8) | 0x100);
+54   _kprintf("APIC Enabled\n");
+55 
+56   // Read the APIC version
+57   uint32_t version = read(0x30);
+58   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
+59 
+60 
+61 }
+.fi
+.PP
+References _kprintf(), and version\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\&.
+.SS "uint32_t LocalAPIC::read (uint32_t reg)\fC [protected]\fP"
+
+.PP
+Definition at line 63 of file apic\&.cpp\&.
+.PP
+.nf
+63                                      {
+64 
+65   // If x2APIC is enabled, use the x2APIC MSR
+66   if(m_x2apic) {
+67       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
+68   } else {
+69       return (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg));
+70   }
+71 
+72 }
+.fi
+.SS "void LocalAPIC::write (uint32_t reg, uint32_t value)\fC [protected]\fP"
+
+.PP
+Definition at line 74 of file apic\&.cpp\&.
+.PP
+.nf
+74                                                   {
+75 
+76   // If x2APIC is enabled, use the x2APIC MSR
+77   if(m_x2apic) {
+78       CPU::write_msr((reg >> 4) + 0x800, value);
+79   } else {
+80       (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg)) = value;
+81     }
+82 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "uint64_t MaxOS::hardwarecommunication::LocalAPIC::m_apic_base\fC [protected]\fP"
+
+.PP
+Definition at line 19 of file apic\&.h\&.
+.SS "uint32_t MaxOS::hardwarecommunication::LocalAPIC::m_id\fC [protected]\fP"
+
+.PP
+Definition at line 20 of file apic\&.h\&.
+.SS "bool MaxOS::hardwarecommunication::LocalAPIC::m_x2apic\fC [protected]\fP"
+
+.PP
+Definition at line 21 of file apic\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

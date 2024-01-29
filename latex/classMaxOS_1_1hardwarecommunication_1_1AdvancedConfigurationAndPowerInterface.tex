@@ -1,0 +1,250 @@
+\hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{}\doxysection{Max\+OS\+::hardwarecommunication\+::Advanced\+Configuration\+And\+Power\+Interface Class Reference}
+\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+
+
+{\ttfamily \#include $<$acpi.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_ab0d645dc0379eb65dd58b97ef13d7af8}{Advanced\+Configuration\+And\+Power\+Interface}} (\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} $\ast$multiboot)
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a7d7343ac6a1f64ffb464791beafa6529}{$\sim$\+Advanced\+Configuration\+And\+Power\+Interface}} ()
+\item 
+\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{A\+C\+P\+I\+S\+D\+T\+Header}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}{find}} (const char $\ast$\mbox{\hyperlink{acpi_8h_ad062e372a0f0dce043b8411fdce3e0cb}{signature}})
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a206d5910d2b05ae83b88b410f0fa85ea}{validate}} (const char $\ast$discriptor, size\+\_\+t \mbox{\hyperlink{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}})
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a02c80d1e3f2a215c0e380164ae6e84f7}{m\+\_\+type}}
+\item 
+\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{A\+C\+P\+I\+S\+D\+T\+Header}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}{m\+\_\+header}}
+\item 
+\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT}{X\+S\+DT}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_af68ccbfc75010716abf7d6619d267a9b}{m\+\_\+xsdt}}
+\item 
+\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT}{R\+S\+DT}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a6a3ef688f9a065977ad0e81875fea84d}{m\+\_\+rsdt}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 55 of file acpi.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_ab0d645dc0379eb65dd58b97ef13d7af8}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_ab0d645dc0379eb65dd58b97ef13d7af8}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!AdvancedConfigurationAndPowerInterface@{AdvancedConfigurationAndPowerInterface}}
+\index{AdvancedConfigurationAndPowerInterface@{AdvancedConfigurationAndPowerInterface}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{AdvancedConfigurationAndPowerInterface()}{AdvancedConfigurationAndPowerInterface()}}
+{\footnotesize\ttfamily Advanced\+Configuration\+And\+Power\+Interface\+::\+Advanced\+Configuration\+And\+Power\+Interface (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} $\ast$}]{multiboot }\end{DoxyParamCaption})}
+
+
+
+Definition at line 11 of file acpi.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{11                                                                                                          \{}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13   \textcolor{keywordflow}{if}(multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a6049d9468501da444e0e567f2cc02b64}{get\_old\_acpi}}() != 0)\{}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15     \textcolor{comment}{// Get the RSDP \& RSDT}}
+\DoxyCodeLine{16     \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{RSDPDescriptor}}* rsdp = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{RSDPDescriptor}}*)(multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a6049d9468501da444e0e567f2cc02b64}{get\_old\_acpi}}() + 1);}
+\DoxyCodeLine{17     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a6a3ef688f9a065977ad0e81875fea84d}{m\_rsdt}} = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT}{RSDT}}*) rsdp-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor_a87e099e292cc468b8d28a2e6e43e3f14}{rsdt\_address}};}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19     \textcolor{comment}{// Load the header}}
+\DoxyCodeLine{20     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}{m\_header}} = \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a6a3ef688f9a065977ad0e81875fea84d}{m\_rsdt}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT_a056913937efd757296c986a337b5fa01}{header}};}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22     \textcolor{comment}{// Calculate the checksum}}
+\DoxyCodeLine{23     uint8\_t sum = 0;}
+\DoxyCodeLine{24     \textcolor{keywordflow}{for}(uint32\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{RSDPDescriptor}}); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{25               sum += ((\textcolor{keywordtype}{char}*)rsdp)[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \textcolor{comment}{// Check if the checksum is valid}}
+\DoxyCodeLine{28     \textcolor{keywordflow}{if}(sum != 0)}
+\DoxyCodeLine{29       \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"ACPI: Invalid checksum!\(\backslash\)n"});}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31   \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     \textcolor{comment}{// If the new ACPI is not supported, panic}}
+\DoxyCodeLine{34     \textcolor{keywordflow}{if}(multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ae4e89fb581fcfe7803408dd30dc4f261}{get\_new\_acpi}}() == 0)\{}
+\DoxyCodeLine{35       \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"ACPI: No ACPI found! (BAD)\(\backslash\)n"});}
+\DoxyCodeLine{36       \textcolor{keywordflow}{return};}
+\DoxyCodeLine{37     \}}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39     \textcolor{comment}{// Its the new ACPI}}
+\DoxyCodeLine{40     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a02c80d1e3f2a215c0e380164ae6e84f7}{m\_type}} = 1;}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \textcolor{comment}{// Get the RSDP \& XSDT}}
+\DoxyCodeLine{43     \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2}{RSDPDescriptor2}}* rsdp2 = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2}{RSDPDescriptor2}}*)(multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ae4e89fb581fcfe7803408dd30dc4f261}{get\_new\_acpi}}() + 1);}
+\DoxyCodeLine{44     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_af68ccbfc75010716abf7d6619d267a9b}{m\_xsdt}} = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT}{XSDT}}*) rsdp2-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2_a4e5baaf2bea49f02c2c077ab024e18bb}{xsdt\_address}};}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     \textcolor{comment}{// Load the header}}
+\DoxyCodeLine{47     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}{m\_header}} = \&\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_af68ccbfc75010716abf7d6619d267a9b}{m\_xsdt}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT_a7ff49781c19e86ab2b699457af5d0829}{header}};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \textcolor{comment}{// Calculate the checksum}}
+\DoxyCodeLine{50     uint8\_t sum = 0;}
+\DoxyCodeLine{51     \textcolor{keywordflow}{for}(uint32\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2}{RSDPDescriptor2}}); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{52         sum += ((\textcolor{keywordtype}{char}*)rsdp2)[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54     \textcolor{comment}{// Check if the checksum is valid}}
+\DoxyCodeLine{55     \textcolor{keywordflow}{if}(sum != 0)}
+\DoxyCodeLine{56       \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"ACPI: Invalid checksum!\(\backslash\)n"});}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58   \}}
+\DoxyCodeLine{59 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kprintf(), Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+new\+\_\+acpi(), Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+old\+\_\+acpi(), Max\+O\+S\+::drivers\+::peripherals\+::i, Max\+O\+S\+::hardwarecommunication\+::\+R\+S\+D\+P\+Descriptor\+::rsdt\+\_\+address, and Max\+O\+S\+::hardwarecommunication\+::\+R\+S\+D\+P\+Descriptor2\+::xsdt\+\_\+address.
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a7d7343ac6a1f64ffb464791beafa6529}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a7d7343ac6a1f64ffb464791beafa6529}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!````~AdvancedConfigurationAndPowerInterface@{$\sim$AdvancedConfigurationAndPowerInterface}}
+\index{````~AdvancedConfigurationAndPowerInterface@{$\sim$AdvancedConfigurationAndPowerInterface}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{$\sim$AdvancedConfigurationAndPowerInterface()}{~AdvancedConfigurationAndPowerInterface()}}
+{\footnotesize\ttfamily Advanced\+Configuration\+And\+Power\+Interface\+::$\sim$\+Advanced\+Configuration\+And\+Power\+Interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 61 of file acpi.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{61                                                                                 \{}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!find@{find}}
+\index{find@{find}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{find()}{find()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{A\+C\+P\+I\+S\+D\+T\+Header}} $\ast$ Advanced\+Configuration\+And\+Power\+Interface\+::find (\begin{DoxyParamCaption}\item[{const char $\ast$}]{signature }\end{DoxyParamCaption})}
+
+
+
+Definition at line 80 of file acpi.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{80                                                                                  \{}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83   \textcolor{comment}{// Get the number of entries}}
+\DoxyCodeLine{84   \textcolor{keywordtype}{size\_t} entries = (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}{m\_header}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a9b8a6a7e086a520cf52a4ea1cdc87670}{length}} -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}})) / 4;}
+\DoxyCodeLine{85   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a02c80d1e3f2a215c0e380164ae6e84f7}{m\_type}}) entries = (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}{m\_header}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a9b8a6a7e086a520cf52a4ea1cdc87670}{length}} -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}})) / 8;}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87   \textcolor{comment}{// Loop through all the entries}}
+\DoxyCodeLine{88   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < entries; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}) \{}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90       \textcolor{comment}{// Get the entry}}
+\DoxyCodeLine{91       \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}* \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}} = (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}*) (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a02c80d1e3f2a215c0e380164ae6e84f7}{m\_type}} ? \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_af68ccbfc75010716abf7d6619d267a9b}{m\_xsdt}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT_a014b986aaf9a0eb72742a00f1c2474d9}{pointers}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] : \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a6a3ef688f9a065977ad0e81875fea84d}{m\_rsdt}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT_a2d2f079c90d0c7592f19c37fe99bed34}{pointers}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]);}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93       \textcolor{comment}{// Check if the signature matches}}
+\DoxyCodeLine{94       \textcolor{keywordflow}{if}(\mbox{\hyperlink{string_8h_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(\mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a2bb6b416f4a277e32ecb683a70a726a3}{signature}}, \mbox{\hyperlink{acpi_8h_ad062e372a0f0dce043b8411fdce3e0cb}{signature}}, 4) == 0)}
+\DoxyCodeLine{95          \textcolor{keywordflow}{return} \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}};}
+\DoxyCodeLine{96   \}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98   \textcolor{comment}{// Return null if no entry was found}}
+\DoxyCodeLine{99   \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{100 \}}
+
+\end{DoxyCode}
+
+
+References header, Max\+O\+S\+::drivers\+::peripherals\+::i, signature, Max\+O\+S\+::hardwarecommunication\+::\+A\+C\+P\+I\+S\+D\+T\+Header\+::signature, and strncmp().
+
+
+
+Referenced by Max\+O\+S\+::hardwarecommunication\+::\+I\+O\+A\+P\+I\+C\+::init().
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a206d5910d2b05ae83b88b410f0fa85ea}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a206d5910d2b05ae83b88b410f0fa85ea}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!validate@{validate}}
+\index{validate@{validate}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{validate()}{validate()}}
+{\footnotesize\ttfamily bool Advanced\+Configuration\+And\+Power\+Interface\+::validate (\begin{DoxyParamCaption}\item[{const char $\ast$}]{discriptor,  }\item[{size\+\_\+t}]{length }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 65 of file acpi.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{65                                                                                            \{}
+\DoxyCodeLine{66   \textcolor{comment}{// Checksum}}
+\DoxyCodeLine{67   uint32\_t sum = 0;}
+\DoxyCodeLine{68 }
+\DoxyCodeLine{69   \textcolor{comment}{// Calculate the checksum}}
+\DoxyCodeLine{70   \textcolor{keywordflow}{for}(uint32\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{71         sum += ((\textcolor{keywordtype}{char}*) discriptor)[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73   \textcolor{comment}{// Check if the checksum is valid}}
+\DoxyCodeLine{74   \textcolor{keywordflow}{return} ((sum \& 0xFF) == 0);}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::i, and length.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a4dd1c612567d417870e75c0ee784c225}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!m\_header@{m\_header}}
+\index{m\_header@{m\_header}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{m\_header}{m\_header}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{A\+C\+P\+I\+S\+D\+T\+Header}}$\ast$ Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::m\+\_\+header\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 58 of file acpi.\+h.
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a6a3ef688f9a065977ad0e81875fea84d}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a6a3ef688f9a065977ad0e81875fea84d}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!m\_rsdt@{m\_rsdt}}
+\index{m\_rsdt@{m\_rsdt}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{m\_rsdt}{m\_rsdt}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT}{R\+S\+DT}}$\ast$ Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::m\+\_\+rsdt\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 61 of file acpi.\+h.
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a02c80d1e3f2a215c0e380164ae6e84f7}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a02c80d1e3f2a215c0e380164ae6e84f7}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!m\_type@{m\_type}}
+\index{m\_type@{m\_type}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{m\_type}{m\_type}}
+{\footnotesize\ttfamily uint8\+\_\+t Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::m\+\_\+type\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 57 of file acpi.\+h.
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_af68ccbfc75010716abf7d6619d267a9b}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_af68ccbfc75010716abf7d6619d267a9b}} 
+\index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!m\_xsdt@{m\_xsdt}}
+\index{m\_xsdt@{m\_xsdt}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
+\doxysubsubsection{\texorpdfstring{m\_xsdt}{m\_xsdt}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT}{X\+S\+DT}}$\ast$ Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::m\+\_\+xsdt\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 60 of file acpi.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/hardwarecommunication/\mbox{\hyperlink{acpi_8h}{acpi.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/hardwarecommunication/\mbox{\hyperlink{acpi_8cpp}{acpi.\+cpp}}\end{DoxyCompactItemize}

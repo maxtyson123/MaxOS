@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/string.cpp" 3 "Mon Jan 15 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/string.cpp" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,204 @@
 \fC#include <common/string\&.h>\fP
 .br
 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBstrcmp\fP (char const *str1, char const *str2)"
+.br
+.RI "Checks if one string is equal to another\&. "
+.ti -1c
+.RI "bool \fBstrcmp\fP (char const *str1, \fBString\fP const &str2)"
+.br
+.ti -1c
+.RI "bool \fBstrcmp\fP (\fBString\fP const &str1, char const *str2)"
+.br
+.ti -1c
+.RI "bool \fBstrcmp\fP (\fBString\fP const &str1, \fBString\fP const &str2)"
+.br
+.ti -1c
+.RI "bool \fBstrncmp\fP (char const *str1, char const *str2, int \fBlength\fP)"
+.br
+.RI "Checks if one string is equal to another\&. "
+.ti -1c
+.RI "bool \fBstrncmp\fP (char const *str1, \fBString\fP const &str2, int \fBlength\fP)"
+.br
+.ti -1c
+.RI "bool \fBstrncmp\fP (\fBString\fP const &str1, char const *str2, int \fBlength\fP)"
+.br
+.ti -1c
+.RI "bool \fBstrncmp\fP (\fBString\fP const &str1, \fBString\fP const &str2, int \fBlength\fP)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "bool strcmp (char const * str1, char const * str2)"
+
+.PP
+Checks if one string is equal to another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 357 of file string\&.cpp\&.
+.PP
+.nf
+357                                                 {
+358 
+359     // Check if the strings are equal
+360     for (int i = 0; str1[i] != '\0' || str2[i] != '\0'; i++)
+361       if (str1[i] != str2[i])
+362             return false;
+363 
+364     // The strings are equal
+365         return true;
+366 
+367 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::i\&.
+.PP
+Referenced by strcmp()\&.
+.SS "bool strcmp (char const * str1, \fBString\fP const & str2)"
+
+.PP
+Definition at line 369 of file string\&.cpp\&.
+.PP
+.nf
+369                                                   {
+370 
+371   // Use the other strcmp function
+372   return strcmp(str1, str2\&.c_str());
+373 
+374 }
+.fi
+.PP
+References MaxOS::String::c_str(), and strcmp()\&.
+.SS "bool strcmp (\fBString\fP const & str1, char const * str2)"
+
+.PP
+Definition at line 376 of file string\&.cpp\&.
+.PP
+.nf
+376                                                   {
+377 
+378     // Use the other strcmp function
+379     return strcmp(str1\&.c_str(), str2);
+380 }
+.fi
+.PP
+References MaxOS::String::c_str(), and strcmp()\&.
+.SS "bool strcmp (\fBString\fP const & str1, \fBString\fP const & str2)"
+
+.PP
+Definition at line 382 of file string\&.cpp\&.
+.PP
+.nf
+382                                                     {
+383 
+384   // Use the other strcmp function
+385   return strcmp(str1\&.c_str(), str2\&.c_str());
+386 
+387 }
+.fi
+.PP
+References MaxOS::String::c_str(), and strcmp()\&.
+.SS "bool strncmp (char const * str1, char const * str2, int length)"
+
+.PP
+Checks if one string is equal to another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.br
+\fIlength\fP The length of the strings 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 397 of file string\&.cpp\&.
+.PP
+.nf
+397                                                              {
+398 
+399   // Check if the strings are equal
+400   for (int i = 0; i < length; i++)
+401     if (str1[i] != str2[i])
+402         return false;
+403 
+404   // Strings are equal
+405   return true;
+406 
+407 }
+.fi
+.PP
+References MaxOS::drivers::peripherals::i, and length\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find(), and strncmp()\&.
+.SS "bool strncmp (char const * str1, \fBString\fP const & str2, int length)"
+
+.PP
+Definition at line 409 of file string\&.cpp\&.
+.PP
+.nf
+409                                                                {
+410 
+411   // Use the other strncmp function
+412   return strncmp(str1, str2\&.c_str(), length);
+413 
+414 }
+.fi
+.PP
+References MaxOS::String::c_str(), length, and strncmp()\&.
+.SS "bool strncmp (\fBString\fP const & str1, char const * str2, int length)"
+
+.PP
+Definition at line 416 of file string\&.cpp\&.
+.PP
+.nf
+416                                                                {
+417 
+418   // Use the other strncmp function
+419   return strncmp(str1\&.c_str(), str2, length);
+420 
+421 }
+.fi
+.PP
+References MaxOS::String::c_str(), length, and strncmp()\&.
+.SS "bool strncmp (\fBString\fP const & str1, \fBString\fP const & str2, int length)"
+
+.PP
+Definition at line 423 of file string\&.cpp\&.
+.PP
+.nf
+423                                                                  {
+424 
+425   // Use the other strncmp function
+426   return strncmp(str1\&.c_str(), str2\&.c_str(), length);
+427 }
+.fi
+.PP
+References MaxOS::String::c_str(), length, and strncmp()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

@@ -19,11 +19,11 @@ Inheritance diagram for Max\+OS\+::net\+::Ethernet\+Frame\+Handler\+:\begin{figu
 \item 
 \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1ethernet_a65f54d2d9dfdb9eafd1affd62abe8d18}{drivers\+::ethernet\+::\+Media\+Access\+Control\+Address}} \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_a0d1aa430d0a7139ebe0a47785b0b0b80}{get\+M\+AC}} ()
 \item 
-bool \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_aff9546783590a27aae5836155b018671}{Data\+Received}} (uint8\+\_\+t $\ast$\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}, uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})
+bool \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_aff9546783590a27aae5836155b018671}{Data\+Received}} (uint8\+\_\+t $\ast$\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}, uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
 \begin{DoxyCompactList}\small\item\em Handle the received packet. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_a79992d7ad67f8dbbae237246ad733ae3}{connect\+Handler}} (\mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFramePayloadHandler}{Ethernet\+Frame\+Payload\+Handler}} $\ast$handler)
 \item 
-void \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_ae773f48341030a7afe7587ae73cb057f}{send\+Ethernet\+Frame}} (uint64\+\_\+t \mbox{\hyperlink{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e}{destination\+M\+AC}}, uint16\+\_\+t frame\+Type, uint8\+\_\+t $\ast$\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}, uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})
+void \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_ae773f48341030a7afe7587ae73cb057f}{send\+Ethernet\+Frame}} (uint64\+\_\+t \mbox{\hyperlink{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e}{destination\+M\+AC}}, uint16\+\_\+t frame\+Type, uint8\+\_\+t $\ast$\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}, uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
 \begin{DoxyCompactList}\small\item\em Send an packet via the backend driver. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
@@ -270,7 +270,7 @@ Definition at line 156 of file ethernetframe.\+cpp.
 \DoxyCodeLine{164     \textcolor{comment}{//Put data in the header}}
 \DoxyCodeLine{165     frame -\/> \mbox{\hyperlink{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e}{destinationMAC}} = \mbox{\hyperlink{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e}{destinationMAC}};}
 \DoxyCodeLine{166     frame -\/> \mbox{\hyperlink{ethernetframe_8h_adfc6a7d732611f222f5ffb5bb2bde281}{sourceMAC}} = \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler_a9c1e930b5c13c381ceec263b64967cfc}{ethernetDriver}} -\/> GetMediaAccessControlAddress();}
-\DoxyCodeLine{167     frame -\/> \mbox{\hyperlink{ethernetframe_8h_acb5cfd209ba75c853d03f701e7f91679}{type}} = (frameType >> 8) | (frameType << 8);                        \textcolor{comment}{//Convert to big endian}}
+\DoxyCodeLine{167     frame -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} = (frameType >> 8) | (frameType << 8);                        \textcolor{comment}{//Convert to big endian}}
 \DoxyCodeLine{168 }
 \DoxyCodeLine{169     \textcolor{comment}{//Copy the data}}
 \DoxyCodeLine{170     \textcolor{keywordflow}{for}(uint8\_t *src = \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}} + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/ 1, *dst = buffer+\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1EthernetFrameHeader}{EthernetFrameHeader}})+\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}-\/1; src >= \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}; -\/-\/src, -\/-\/dst)}

@@ -28,7 +28,7 @@ var fat32_8h =
     [ "media_type", "fat32_8h.html#a4b184d5976feb6927aa2a1bd3bc157cc", null ],
     [ "name", "fat32_8h.html#abfa8a0ef7b1321866a7c4099554fdfb0", null ],
     [ "OEM_name", "fat32_8h.html#ae21b477395a1441f77a079937a0900bb", null ],
-    [ "reserved", "fat32_8h.html#acb7bc06bed6f6408d719334fc41698c7", null ],
+    [ "reserved", "fat32_8h.html#ac35c1fbebe2017fc1ca10f5803668dfd", null ],
     [ "reserved0", "fat32_8h.html#ad1a89a7890b52216a93b64d30c131c4b", null ],
     [ "reserved_1", "fat32_8h.html#ab43cbe584bc4765d2e54d9026a1f7c04", null ],
     [ "reserved_sectors", "fat32_8h.html#ab9d9cece402bcfc967b895cd556985ef", null ],

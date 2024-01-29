@@ -1,0 +1,241 @@
+\hypertarget{classMaxOS_1_1system_1_1CPU}{}\doxysection{Max\+OS\+::system\+::C\+PU Class Reference}
+\label{classMaxOS_1_1system_1_1CPU}\index{MaxOS::system::CPU@{MaxOS::system::CPU}}
+
+
+{\ttfamily \#include $<$cpu.\+h$>$}
+
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a909a42438fc2d898fe6481afc1820953}{halt}} ()
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acb0b7700e76257cdc662d810eb72370d}{get\+\_\+status}} (cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a871f7042508bba8a30fd873fda27537e}{set\+\_\+status}} (cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
+\item 
+static uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a246b315770dd459df5f694a921aa748f}{read\+\_\+msr}} (uint32\+\_\+t msr)
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a851b7d57fd87474a9ec3c24c3eb984d3}{write\+\_\+msr}} (uint32\+\_\+t msr, uint64\+\_\+t value)
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a6281ba9da06e945476c62ac72e15f882}{cpuid}} (uint32\+\_\+t leaf, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_a93d929ad1fc57af9d4f1793c361fb4f2}{eax}}, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_ae7c1e3339e4dead200cab41010e9127c}{ebx}}, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_af2b16bef95c844028dd145264d1d3875}{ecx}}, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_ae6db045cebe7b4cf979120dccdee0d01}{edx}})
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a910bc3e6fae3fd071ca653c7fb9d5ed6}{stack\+\_\+trace}} (size\+\_\+t)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 48 of file cpu.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a6281ba9da06e945476c62ac72e15f882}\label{classMaxOS_1_1system_1_1CPU_a6281ba9da06e945476c62ac72e15f882}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!cpuid@{cpuid}}
+\index{cpuid@{cpuid}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{cpuid()}{cpuid()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::system\+::\+C\+P\+U\+::cpuid (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{leaf,  }\item[{uint32\+\_\+t $\ast$}]{eax,  }\item[{uint32\+\_\+t $\ast$}]{ebx,  }\item[{uint32\+\_\+t $\ast$}]{ecx,  }\item[{uint32\+\_\+t $\ast$}]{edx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 71 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{71                                                                                                     \{}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73   \textcolor{comment}{// Call the cpuid instruction}}
+\DoxyCodeLine{74   \_\_get\_cpuid(leaf, \mbox{\hyperlink{multitasking_8h_a93d929ad1fc57af9d4f1793c361fb4f2}{eax}}, \mbox{\hyperlink{multitasking_8h_ae7c1e3339e4dead200cab41010e9127c}{ebx}}, \mbox{\hyperlink{multitasking_8h_af2b16bef95c844028dd145264d1d3875}{ecx}}, \mbox{\hyperlink{multitasking_8h_ae6db045cebe7b4cf979120dccdee0d01}{edx}});}
+\DoxyCodeLine{75 \}}
+
+\end{DoxyCode}
+
+
+References eax, ebx, ecx, and edx.
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_acb0b7700e76257cdc662d810eb72370d}\label{classMaxOS_1_1system_1_1CPU_acb0b7700e76257cdc662d810eb72370d}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!get\_status@{get\_status}}
+\index{get\_status@{get\_status}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{get\_status()}{get\_status()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::system\+::\+C\+P\+U\+::get\+\_\+status (\begin{DoxyParamCaption}\item[{cpu\+\_\+status\+\_\+t $\ast$}]{status }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 11 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{11                                                                \{}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13     \textcolor{comment}{// Get the registers}}
+\DoxyCodeLine{14     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r15, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15));}
+\DoxyCodeLine{15     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r14, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14));}
+\DoxyCodeLine{16     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r13, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13));}
+\DoxyCodeLine{17     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r12, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12));}
+\DoxyCodeLine{18     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r11, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11));}
+\DoxyCodeLine{19     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r10, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10));}
+\DoxyCodeLine{20     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r9, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9));}
+\DoxyCodeLine{21     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r8, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8));}
+\DoxyCodeLine{22     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rdi, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi));}
+\DoxyCodeLine{23     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rsi, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi));}
+\DoxyCodeLine{24     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rbp, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp));}
+\DoxyCodeLine{25     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rdx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx));}
+\DoxyCodeLine{26     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rcx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx));}
+\DoxyCodeLine{27     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rbx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx));}
+\DoxyCodeLine{28     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rax, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax));}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \}}
+
+\end{DoxyCode}
+
+
+References status.
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a909a42438fc2d898fe6481afc1820953}\label{classMaxOS_1_1system_1_1CPU_a909a42438fc2d898fe6481afc1820953}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!halt@{halt}}
+\index{halt@{halt}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{halt()}{halt()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::system\+::\+C\+P\+U\+::halt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 7 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{7                           \{}
+\DoxyCodeLine{8   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"hlt"});}
+\DoxyCodeLine{9 \}}
+
+\end{DoxyCode}
+
+
+Referenced by kernel\+Main().
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a246b315770dd459df5f694a921aa748f}\label{classMaxOS_1_1system_1_1CPU_a246b315770dd459df5f694a921aa748f}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!read\_msr@{read\_msr}}
+\index{read\_msr@{read\_msr}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{read\_msr()}{read\_msr()}}
+{\footnotesize\ttfamily uint64\+\_\+t Max\+O\+S\+::system\+::\+C\+P\+U\+::read\+\_\+msr (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{msr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 52 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{52                                               \{}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54   \textcolor{comment}{// Low and high parts of the MSR}}
+\DoxyCodeLine{55   uint32\_t low, high;}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57   \textcolor{comment}{// Read the MSR}}
+\DoxyCodeLine{58   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"rdmsr"} : \textcolor{stringliteral}{"=a"} (low), \textcolor{stringliteral}{"=d"} (high) : \textcolor{stringliteral}{"c"} (msr));}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60   \textcolor{comment}{// Return the value}}
+\DoxyCodeLine{61   \textcolor{keywordflow}{return} (uint64\_t) low | ((uint64\_t) high << 32);}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a871f7042508bba8a30fd873fda27537e}\label{classMaxOS_1_1system_1_1CPU_a871f7042508bba8a30fd873fda27537e}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!set\_status@{set\_status}}
+\index{set\_status@{set\_status}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{set\_status()}{set\_status()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::system\+::\+C\+P\+U\+::set\+\_\+status (\begin{DoxyParamCaption}\item[{cpu\+\_\+status\+\_\+t $\ast$}]{status }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 31 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{31                                                                \{}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33   \textcolor{comment}{// Set the registers}}
+\DoxyCodeLine{34   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r15"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15));}
+\DoxyCodeLine{35   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r14"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14));}
+\DoxyCodeLine{36   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r13"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13));}
+\DoxyCodeLine{37   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r12"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12));}
+\DoxyCodeLine{38   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r11"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11));}
+\DoxyCodeLine{39   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r10"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10));}
+\DoxyCodeLine{40   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r9"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9));}
+\DoxyCodeLine{41   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r8"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8));}
+\DoxyCodeLine{42   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rdi"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi));}
+\DoxyCodeLine{43   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rsi"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi));}
+\DoxyCodeLine{44   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rbp"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp));}
+\DoxyCodeLine{45   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rdx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx));}
+\DoxyCodeLine{46   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rcx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx));}
+\DoxyCodeLine{47   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rbx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx));}
+\DoxyCodeLine{48   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rax"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax));}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50 \}}
+
+\end{DoxyCode}
+
+
+References status.
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a910bc3e6fae3fd071ca653c7fb9d5ed6}\label{classMaxOS_1_1system_1_1CPU_a910bc3e6fae3fd071ca653c7fb9d5ed6}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!stack\_trace@{stack\_trace}}
+\index{stack\_trace@{stack\_trace}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{stack\_trace()}{stack\_trace()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::system\+::\+C\+P\+U\+::stack\+\_\+trace (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 77 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{77                                              \{}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79     \textcolor{comment}{// Get the first stack frame}}
+\DoxyCodeLine{80     StackFrame* frame = \_\_builtin\_frame\_address(0);}
+\DoxyCodeLine{81     \textcolor{keywordtype}{size\_t} current\_level = 0;}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83     \textcolor{comment}{// Loop through the frames logging}}
+\DoxyCodeLine{84     \textcolor{keywordflow}{while} (current\_level < level \&\& frame != \textcolor{keyword}{nullptr})\{}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86         \textcolor{comment}{// Print the frame}}
+\DoxyCodeLine{87         \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"(\%d);\(\backslash\)t at 0x\%x\(\backslash\)n"}, current\_level, frame-\/>rip);}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89         \textcolor{comment}{// Next frame}}
+\DoxyCodeLine{90         frame = frame -\/> next;}
+\DoxyCodeLine{91         current\_level++;}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93     \}}
+\DoxyCodeLine{94 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kprintf(), and Max\+O\+S\+::system\+::\+Stack\+Frame\+::rip.
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a851b7d57fd87474a9ec3c24c3eb984d3}\label{classMaxOS_1_1system_1_1CPU_a851b7d57fd87474a9ec3c24c3eb984d3}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!write\_msr@{write\_msr}}
+\index{write\_msr@{write\_msr}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{write\_msr()}{write\_msr()}}
+{\footnotesize\ttfamily void Max\+O\+S\+::system\+::\+C\+P\+U\+::write\+\_\+msr (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{msr,  }\item[{uint64\+\_\+t}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 65 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{65                                                            \{}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67   \textcolor{comment}{// Write the MSR}}
+\DoxyCodeLine{68   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"wrmsr"} : : \textcolor{stringliteral}{"a"} ((uint32\_t) value), \textcolor{stringliteral}{"d"} ((uint32\_t) (value >> 32)), \textcolor{stringliteral}{"c"} (msr));}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/system/\mbox{\hyperlink{cpu_8h}{cpu.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/system/\mbox{\hyperlink{cpu_8cpp}{cpu.\+cpp}}\end{DoxyCompactItemize}

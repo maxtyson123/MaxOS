@@ -17,9 +17,9 @@ Inheritance diagram for Max\+OS\+::net\+::Internet\+Control\+Message\+Protocol\+
 \item 
 \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetControlMessageProtocol_a4621375163ebabb97e2723a06b6347c6}{$\sim$\+Internet\+Control\+Message\+Protocol}} ()
 \item 
-bool \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetControlMessageProtocol_a327e8e7f66254666a10e5b2b01440292}{handle\+Internet\+Protocol\+Payload}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_aed74aa5789cabec794d6961455e80db3}{source\+IP}}, \mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destination\+IP}}, uint8\+\_\+t $\ast$payload\+Data, uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})
+bool \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetControlMessageProtocol_a327e8e7f66254666a10e5b2b01440292}{handle\+Internet\+Protocol\+Payload}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_aed74aa5789cabec794d6961455e80db3}{source\+IP}}, \mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{ipv4_8h_afcc7048c1d9643cebaf1806fa4de390e}{destination\+IP}}, uint8\+\_\+t $\ast$payload\+Data, uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
 \begin{DoxyCompactList}\small\item\em Called by the Internet\+Protocol\+Provider when a new packet has arrived. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetControlMessageProtocol_a2fc52aeb261446119170f4b3f843129e}{Request\+Echo\+Reply}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}})
+void \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetControlMessageProtocol_a2fc52aeb261446119170f4b3f843129e}{Request\+Echo\+Reply}} (\mbox{\hyperlink{namespaceMaxOS_1_1net_af037c025feb88b952b167f4dfa2709a0}{Internet\+Protocol\+Address}} \mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}})
 \begin{DoxyCompactList}\small\item\em Sends an I\+C\+MP echo request to the specified IP address. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -115,7 +115,7 @@ Definition at line 33 of file icmp.\+cpp.
 \DoxyCodeLine{46     \textcolor{comment}{// Cast the payload to the ICMP header}}
 \DoxyCodeLine{47     \mbox{\hyperlink{structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader}{InternetControlMessageProtocolHeader}}* icmp = (\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader}{InternetControlMessageProtocolHeader}}*)payloadData;}
 \DoxyCodeLine{48 }
-\DoxyCodeLine{49     \textcolor{keywordflow}{switch} (icmp -\/> \mbox{\hyperlink{ethernetframe_8h_acb5cfd209ba75c853d03f701e7f91679}{type}}) \{}
+\DoxyCodeLine{49     \textcolor{keywordflow}{switch} (icmp -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}) \{}
 \DoxyCodeLine{50 }
 \DoxyCodeLine{51         \textcolor{keywordflow}{case} 0: \textcolor{comment}{// Echo reply}}
 \DoxyCodeLine{52             \textcolor{comment}{// TODO: reply to the ping}}
@@ -124,9 +124,9 @@ Definition at line 33 of file icmp.\+cpp.
 \DoxyCodeLine{55         \textcolor{keywordflow}{case} 8: \textcolor{comment}{// Echo request}}
 \DoxyCodeLine{56 }
 \DoxyCodeLine{57             \textcolor{comment}{// Create a response}}
-\DoxyCodeLine{58             icmp -\/> \mbox{\hyperlink{ethernetframe_8h_acb5cfd209ba75c853d03f701e7f91679}{type}} = 0;                                                                                                                    \textcolor{comment}{// Echo reply}}
-\DoxyCodeLine{59             icmp -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = 0;                                                                                                                \textcolor{comment}{// Reset the checksum}}
-\DoxyCodeLine{60             icmp -\/> \mbox{\hyperlink{intel__i217_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}} = \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{InternetProtocolHandler::Checksum}}((uint16\_t *)\&icmp, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader}{InternetControlMessageProtocolHeader}}));             \textcolor{comment}{// Calculate the checksum}}
+\DoxyCodeLine{58             icmp -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} = 0;                                                                                                                    \textcolor{comment}{// Echo reply}}
+\DoxyCodeLine{59             icmp -\/> \mbox{\hyperlink{intel__i217_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}{checksum}} = 0;                                                                                                                \textcolor{comment}{// Reset the checksum}}
+\DoxyCodeLine{60             icmp -\/> \mbox{\hyperlink{intel__i217_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}{checksum}} = \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolHandler_af21ed9d77b68f0c51f1d80524d327ded}{InternetProtocolHandler::Checksum}}((uint16\_t *)\&icmp, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader}{InternetControlMessageProtocolHeader}}));             \textcolor{comment}{// Calculate the checksum}}
 \DoxyCodeLine{61 }
 \DoxyCodeLine{62             \textcolor{keywordflow}{return} \textcolor{keyword}{true};    \textcolor{comment}{//Send data back}}
 \DoxyCodeLine{63 }
