@@ -37,7 +37,7 @@ bool VideoElectronicsStandardsAssociation::init() {
  * @param color_depth Color depth of the screen
  * @return True if the mode was set successfully, false otherwise
  */
-bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
+bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t, uint32_t, uint32_t) {
 
     // Best mode is set by the bootloader
     return true;

@@ -54,7 +54,7 @@ int strlen(const char* str)
 {
    int len = 0;
    for (; str[len] != '\0'; len++);
-        return len;
+   return len;
 }
 
 /**
@@ -77,7 +77,7 @@ static void putchar (int c)
 void pre_kprintf()
 {
   // Print the kernel header with yellow text
-  char* header = "\033[1;33m[DEBUG] \033[0m";
+  const char* header = "\033[1;33m[DEBUG] \033[0m";
   for (int i = 0; i < strlen(header); i++)
     putchar(header[i]);
 
@@ -103,7 +103,7 @@ void _kprintf (const char *format, ...)
 
   // Create a pointer to the data
   va_list parameters;
-  va_start (parameters, format);
+  va_start(parameters, format);
 
   // Loop through the format string
   for (; *format != '\0'; format++)

@@ -85,7 +85,7 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const *signatur
   if(m_type) entries = (m_header->length - sizeof(ACPISDTHeader)) / 8;
 
   // Loop through all the entries
-  for (int i = 0; i < entries; ++i) {
+  for (size_t i = 0; i < entries; ++i) {
 
       // Get the entry
       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
@@ -94,4 +94,7 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const *signatur
       if(strncmp(header->signature, signature, 4) == 0)
          return header;
   }
+
+  // Return null if no entry was found
+  return nullptr;
 }
