@@ -51,29 +51,6 @@ start:
 
         jne .map_p2_table   ; if ecx < 512 then loop
 
-    ; This section is temporary, is here only to test the framebuffer features!
-    ; Will be removed once the the memory management will be implemented
-    mov eax, fbb_p2_table - KERNEL_VIRTUAL_ADDR
-    or eax, 0b11
-    mov dword [(p3_table - KERNEL_VIRTUAL_ADDR)+ 8 * 3], eax
-
-    mov eax, 0xFD000000
-    or eax, 0b10000011
-    mov dword [(fbb_p2_table - KERNEL_VIRTUAL_ADDR) + 8 * 488], eax
-
-    ; Now time to map the kernel in the higher half
-    ; mov eax, hhk_p2_table
-    ; or eax, 0b11
-    ; mov dword [fbb_p2_table + 0], eax
-
-    mov eax, 0x000000 ; This is the base address of the kernel
-    or eax, 0b10000011
-    mov dword [(fbb_p2_table - KERNEL_VIRTUAL_ADDR) + 0], eax
-
-    mov eax, 0x200000
-    or eax, 0b10000011
-    mov dword [(fbb_p2_table - KERNEL_VIRTUAL_ADDR) + 8 * 1], eax ;  Multiply by 1 just to highlight the entry number
-
     ; All set... now we are nearly ready to enter into 64 bit
     ; Is possible to move into cr3 only from another register
     ; So let's move p4_table address into eax first
@@ -146,13 +123,6 @@ p3_table:
 p3_table_hh:
     resb 4096
 p2_table:
-    resb 4096
-
-; This section is temporary to test the framebuffer
-align 4096
-fbb_p3_table:
-    resb 4096
-fbb_p2_table:
     resb 4096
 
 stack:

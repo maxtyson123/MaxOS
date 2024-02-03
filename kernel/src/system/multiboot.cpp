@@ -3,11 +3,13 @@
 //
 
 #include <system/multiboot.h>
+#include <common/kprint.h>
 using namespace MaxOS;
 using namespace MaxOS::system;
 
 Multiboot::Multiboot(unsigned long addr) {
 
+  _kprintf("MUltiboot\n");
 
     // Loop through the tags and load them
     struct multiboot_tag *tag;
@@ -28,6 +30,13 @@ Multiboot::Multiboot(unsigned long addr) {
 
           case MULTIBOOT_TAG_TYPE_MMAP:
                 m_mmap = (multiboot_tag_mmap *)tag;
+
+                // Print some debug about the m_mmap information
+                for (multiboot_mmap_entry *entry = m_mmap->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap + m_mmap->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap->entry_size)) {
+                    if(entry->type == MULTIBOOT_MEMORY_AVAILABLE)
+                    _kprintf("Base Address: 0x%x%x Length: 0x%x%x Type: %d\n", (unsigned)(entry->addr >> 32), (unsigned)(entry->addr & 0xFFFFFFFF), (unsigned)(entry->len >> 32), (unsigned)(entry->len & 0xFFFFFFFF), entry->type);
+                }
+
                 break;
 
           case MULTIBOOT_TAG_TYPE_ACPI_OLD:

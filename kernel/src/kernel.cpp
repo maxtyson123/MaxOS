@@ -45,7 +45,7 @@
 #include <system/multithreading.h>
 
 //MEMORY
-#include <memory/memorymanagement.h>
+#include <memory/pmm.h>
 
 //FILESYSTEM
 #include <filesystem/msdospart.h>
@@ -105,15 +105,15 @@ void print_boot_header(Console* console){
 
 }
 
-
+extern uint32_t kernel_end;
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
-    // Make the multiboot header
-    Multiboot multiboot(addr);
-
     // Initialise the serial console
     SerialConsole serialConsole;
+
+    // Make the multiboot header
+    Multiboot multiboot(addr);
 
     _kprintf("MaxOS booted\n");
 
@@ -123,7 +123,9 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     InterruptManager interrupts(0x20, 0);
     _kprintf("IDT set up\n");
 
-    // TODO Memory map set up so MEMIO can be used without triggering a page fault
+    uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_offset);
+    PhysicalMemoryManager pmm(addr + mbi_size, multiboot.get_basic_meminfo());
+    _kprintf("Physical Memory Manager set up \n");
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     _kprintf("ACPI set up\n");
