@@ -24,16 +24,23 @@ namespace MaxOS {
           uint32_t m_bitmap_size;
           uint32_t m_used_frames;
 
+          multiboot_mmap_entry* m_mmap;
+
         public:
 
-          PhysicalMemoryManager(unsigned long reserved, multiboot_tag_basic_meminfo* meminfo);
+          PhysicalMemoryManager(unsigned long reserved, system::Multiboot* multiboot);
           ~PhysicalMemoryManager();
 
-          void allocate_frame(size_t size);
+          void* allocate_frame();
           void free_frame(void* address);
 
-          void allocate_area(uint64_t start_address, size_t size);
+          void* allocate_area(uint64_t start_address, size_t size);
           void free_area(uint64_t start_address, size_t size);
+
+          // Tools
+          size_t size_to_frames(size_t size) const;
+          size_t align_to_page(size_t size) const;
+          bool check_aligned(size_t size) const;
       };
   }
 

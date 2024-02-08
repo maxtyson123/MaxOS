@@ -136,7 +136,7 @@ fi
 
 # Create the args
 QEMU_ARGS=""
-QEMU_ARGS="$QEMU_ARGS -m 512"                               # 512 MB of RAM
+QEMU_ARGS="$QEMU_ARGS -m 2G"                               # 512 MB of RAM
 QEMU_ARGS="$QEMU_ARGS -smp cores=4"                         # 4 cores
 QEMU_ARGS="$QEMU_ARGS -serial stdio"                        # Use stdio for serial
 if [  ! "$USE_DEBUG" -ne "0" ]; then

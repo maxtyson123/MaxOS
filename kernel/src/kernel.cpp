@@ -124,7 +124,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     _kprintf("IDT set up\n");
 
     uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_offset);
-    PhysicalMemoryManager pmm(addr + mbi_size, multiboot.get_basic_meminfo());
+    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot);
     _kprintf("Physical Memory Manager set up \n");
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
