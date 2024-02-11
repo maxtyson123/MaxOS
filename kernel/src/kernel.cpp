@@ -45,7 +45,7 @@
 #include <system/multithreading.h>
 
 //MEMORY
-#include <memory/pmm.h>
+#include <memory/physical.h>
 
 //FILESYSTEM
 #include <filesystem/msdospart.h>

@@ -3,7 +3,7 @@
 //
 
 #include <common/kprint.h>
-#include <stdarg.h>
+
 
 using namespace MaxOS::drivers;
 
@@ -74,12 +74,47 @@ static void putchar (int c)
 /**
  * @ brief Prints a debug prefix (in yellow) to the serial output
  */
-void pre_kprintf()
+void pre_kprintf(const char* file, int line, const char* func)
 {
   // Print the kernel header with yellow text
-  const char* header = "\033[1;33m[DEBUG] \033[0m";
+  const char* header = "\033[1;33m[";
   for (int i = 0; i < strlen(header); i++)
     putchar(header[i]);
+
+  // Print the file (but not the path)
+  const char* file_str = file;
+  for (int i = strlen(file) - 1; i >= 0; i--)
+  {
+    if (file[i] == '/')
+    {
+      file_str = &file[i + 1];
+      break;
+    }
+  }\
+  for (int j = 0; j < strlen(file_str); j++)
+    putchar(file_str[j]);
+  putchar(':');
+
+
+  // Print the line
+  const char* line_str = itoa(10, line);
+  for (int i = 0; i < strlen(line_str); i++)
+    putchar(line_str[i]);
+
+  /* Print the spacer
+  putchar(' ');
+  putchar('-');
+  putchar(' ');
+
+  // Print the function
+  for (int i = 0; i < strlen(func); i++)
+    putchar(func[i]);
+  */
+
+  // Print the kernel footer
+  const char* footer = "] \033[0m";
+  for (int i = 0; i < strlen(footer); i++)
+    putchar(footer[i]);
 
 }
 
@@ -95,11 +130,11 @@ void pre_kprintf()
  * @param format The formatted string
  * @param ... The data to pass into the string
  */
-void _kprintf (const char *format, ...)
+void _kprintf_internal(const char* file, int line, const char* func, const char* format, ...)
 {
 
   // Print the header
-  pre_kprintf();
+  pre_kprintf(file, line,func);
 
   // Create a pointer to the data
   va_list parameters;

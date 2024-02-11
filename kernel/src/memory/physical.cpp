@@ -2,8 +2,8 @@
 // Created by 98max on 1/30/2024.
 //
 
-#include <memory/pmm.h>
 #include <common/kprint.h>
+#include <memory/physical.h>
 
 using namespace MaxOS::memory;
 using namespace MaxOS::system;

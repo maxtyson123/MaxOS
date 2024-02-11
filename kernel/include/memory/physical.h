@@ -2,8 +2,8 @@
 // Created by 98max on 1/30/2024.
 //
 
-#ifndef MAXOS_MEMORY_PMM_H
-#define MAXOS_MEMORY_PMM_H
+#ifndef MAXOS_MEMORY_PHYSICAL_H
+#define MAXOS_MEMORY_PHYSICAL_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -46,4 +46,4 @@ namespace MaxOS {
 
 }
 
-#endif // MAXOS_MEMORY_PMM_H
+#endif // MAXOS_MEMORY_PHYSICAL_H
