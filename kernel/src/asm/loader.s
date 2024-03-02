@@ -3,85 +3,114 @@
 %define KERNEL_VIRTUAL_ADDR 0xFFFFFFFF80000000
 section .multiboot.text
 global start
+global p4_table
 extern callConstructors
 extern kernelMain
 
 [bits 32]
 
 start:
-    mov edi, ebx ; Address of multiboot structure
-    mov esi, eax ; Magic number
 
+    ; Put the multiboot header and magic number into the parameters of the kernelMain
+    mov edi, ebx
+    mov esi, eax
+
+    ; Move the stack to the higher half
     mov esp, stack.top - KERNEL_VIRTUAL_ADDR
 
-    ; For now we are goin to use 2Mib pages
-    ; We need only 3 table levels instead of 4
-    mov eax, p3_table - KERNEL_VIRTUAL_ADDR; Copy p3_table address in eax
-    or eax, 0b11        ; set writable and present bits to 1
-    mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 0], eax   ; Copy eax content into the entry 0 of p4 table
+    ; pm4l -> pdp -> pd -> page
 
+    ; = Configure the first entry in the P4 table to point the the P3 table =
+    ; * p4_table =  pm4l, p3_table = pdp *
+    ; First we change the address to the higher half
+    ; Then we set the writable and present bits
+    ; Then we copy the address into the first entry of the p4_table
+    mov eax, p3_table - KERNEL_VIRTUAL_ADDR;
+    or eax, 0b11
+    mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 0], eax
+
+    ; =  Configure the the last entry in the P4 table to point the the P3 table =
+    ; * p4_table =  pm4l, p3_table = pdp *
+    ; First we change the address to the higher half
+    ; Then we set the writable and present bits
+    ; Then we copy the address into the last entry of the p4_table
     mov eax, p3_table_hh - KERNEL_VIRTUAL_ADDR
     or eax, 0b11
     mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 511 * 8], eax
 
-    mov eax, p2_table - KERNEL_VIRTUAL_ADDR  ; Let's do it again, with p2_table
-    or eax, 0b11       ; Set the writable and present bits
-    mov dword [(p3_table - KERNEL_VIRTUAL_ADDR) + 0], eax   ; Copy eax content in the 0th entry of p3
+    ; =  Configure the first entry in the P3 table to point the the P2 table =
+    ; * p3_table = pdp, p2_table = pd *
+    ; First we change the address to the higher half
+    ; Then we set the writable and present bits
+    ; Then we copy the address into the first entry of the p3_table
+    mov eax, p2_table - KERNEL_VIRTUAL_ADDR
+    or eax, 0b11
+    mov dword [(p3_table - KERNEL_VIRTUAL_ADDR) + 0], eax
 
+    ; =  Configure the last entry in the P3 table to point the the P2 table =
+    ; * p3_table = pdp, p2_table = pd *
+    ; First we change the address to the higher half
+    ; Then we set the writable and present bits
+    ; Then we copy the address into the last entry of the p3_table
     mov eax, p2_table - KERNEL_VIRTUAL_ADDR
     or eax, 0b11
     mov dword[(p3_table_hh - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
 
-    ; Now let's prepare a loop...
-    mov ecx, 0  ; Loop counter
-
+    ; = Loop through all the entries in the P2 table and set them to point to a 2MB page =
+    ; * p2_table = pd *
+    ; First we set a counter for the loop
+    ; Then we set the size of the page to 2MB
+    ; Then we multiply the size of the page by the counter
+    ; Then we set the huge page bit, writable and present
+    ; Then we copy the address into the entry in the p2_table
+    ; After that we increment the counter and check if we have reached the end of the table
+    mov ecx, 0
     .map_p2_table:
-        mov eax, 0x200000   ; Size of the page
-        mul ecx             ; Multiply by counter
-        or eax, 0b10000011 ; We set: huge page bit, writable and present
-
-        ; Moving the computed value into p2_table entry defined by ecx * 8
-        ; ecx is the counter, 8 is the size of a single entry
+        mov eax, 0x200000
+        mul ecx
+        or eax, 0b10000011
         mov [(p2_table - KERNEL_VIRTUAL_ADDR) + ecx * 8], eax
 
-        inc ecx             ; Let's increase ecx
-        cmp ecx, 512        ; have we reached 512 ?
-                            ; each table is 4k size. Each entry is 8bytes
-                            ; that is 512 entries in a table
+        inc ecx
+        cmp ecx, 512
+        jne .map_p2_table
 
-        jne .map_p2_table   ; if ecx < 512 then loop
-
-    ; All set... now we are nearly ready to enter into 64 bit
-    ; Is possible to move into cr3 only from another register
-    ; So let's move p4_table address into eax first
-    ; then into cr3
+    ; = Load the P4 table into the cr3 register =
+    ; CR3 is the control register 3, it contains the address of the P4 table, however it can't be loaded directly
+    ; So we need to load it into eax and then copy it into cr3
     mov eax, (p4_table - KERNEL_VIRTUAL_ADDR)
     mov cr3, eax
 
-    ; Now we can enable PAE
-    ; To do it we need to modify cr4, so first let's copy it into eax
-    ; we can't modify cr registers directly
+    ; = Enable PAE (Physical Address Extension) =
+    ; First we copy the value of cr4 into eax so we can change it
+    ; Then we set the Physical Address Extension bit
+    ; Then we copy the value back into cr4
     mov eax, cr4
-    or eax, 1 << 5  ; Physical address extension bit
+    or eax, 1 << 5
     mov cr4, eax
 
-    ; Now set up the long mode bit
+    ; = Enable Long Mode =
+    ; First we use the rdmsr instruction to read the value of the msr 0xC0000080 into eax
+    ; Then we set the Long Mode Enable bit
+    ; Then we use the wrmsr instruction to write the value of eax into the msr 0xC0000080
     mov ecx, 0xC0000080
-    ; rdmsr is to read a a model specific register (msr)
-    ; it copy the values of msr into eax
     rdmsr
     or eax, 1 << 8
-    ; write back the value
     wrmsr
 
-    ; Now is tiem to enable paging
-    mov eax, cr0    ;cr0 contains the values we want to change
-    or eax, 1 << 31 ; Paging bit
-    or eax, 1 << 16 ; Write protect, cpu  can't write to read-only pages when
-                    ; privilege level is 0
-    mov cr0, eax    ; write back cr0
+    ; = Enable paging =
+    ; First we copy the value of cr0 into eax so we can change it
+    ; Then we set the Paging bit
+    ; Then we set the Write Protect bit this is to prevent the kernel from writing to read only pages
+    mov eax, cr0
+    or eax, 1 << 31
+    or eax, 1 << 16
+    mov cr0, eax
 
-    ; load gdt
+    ; = Jump to the higher half =
+    ; First we load the address of the gdt into the gdtr
+    ; Then we set the code segment to 0x8
+    ; Then we jump to the higher half
     lgdt [gdt64.pointer_low - KERNEL_VIRTUAL_ADDR]
     jmp (0x8):(kernel_jumper - KERNEL_VIRTUAL_ADDR)
     bits 64
@@ -124,7 +153,6 @@ p3_table_hh:
     resb 4096
 p2_table:
     resb 4096
-
 stack:
     resb 16384
     .top:

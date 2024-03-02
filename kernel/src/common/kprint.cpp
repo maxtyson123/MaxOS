@@ -14,7 +14,7 @@ using namespace MaxOS::drivers;
  * @param base The base of the number (10 for decimal, 16 for hex)
  * @param number The number to convert
  */
-char* itoa(int base, int number)
+char* itoa(int base, uint64_t  number)
 {
     static char buffer[50] = {0};
     int i = 49;
@@ -168,17 +168,8 @@ void _kprintf_internal(const char* file, int line, const char* func, const char*
       case 'x':
       {
         // Print a hex
-        int number = va_arg (parameters, int);
+        uint64_t  number = va_arg (parameters, uint64_t );
         char* str = itoa(16, number);
-        for (int i = 0; i < strlen(str); i++)
-          putchar(str[i]);
-        break;
-      }
-      case 'u':
-      {
-        // Print an unsigned decimal
-        unsigned int number = va_arg (parameters, unsigned int);
-        char* str = itoa(10, number);
         for (int i = 0; i < strlen(str); i++)
           putchar(str[i]);
         break;

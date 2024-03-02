@@ -46,6 +46,7 @@
 
 //MEMORY
 #include <memory/physical.h>
+#include <memory/virtual.h>
 
 //FILESYSTEM
 #include <filesystem/msdospart.h>

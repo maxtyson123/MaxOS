@@ -9,7 +9,7 @@ using namespace MaxOS::system;
 
 Multiboot::Multiboot(unsigned long addr) {
 
-  _kprintf("MUltiboot\n");
+  _kprintf("Multiboot\n");
 
     // Loop through the tags and load them
     struct multiboot_tag *tag;
@@ -26,11 +26,23 @@ Multiboot::Multiboot(unsigned long addr) {
 
           case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
               m_bootloader_name = (multiboot_tag_string *)tag;
+              _kprintf("Bootloader: %s\n", m_bootloader_name->string);
               break;
 
+          case MULTIBOOT_TAG_TYPE_BOOTDEV:
+            multiboot_tag_bootdev *bootdev;
+            bootdev = (multiboot_tag_bootdev *)tag;
+            _kprintf("Boot device: 0x%x, 0x%x, 0x%x of type 0x%x\n",
+                    (unsigned) bootdev->biosdev, (unsigned) bootdev->slice,
+                    (unsigned) bootdev->part, (unsigned) bootdev->type);
+
           case MULTIBOOT_TAG_TYPE_MMAP:
+
+            // If there is not already a mmap tag, set it
+            if (m_mmap == nullptr)
                 m_mmap = (multiboot_tag_mmap *)tag;
-                break;
+
+            break;
 
           case MULTIBOOT_TAG_TYPE_ACPI_OLD:
                 m_old_acpi = (multiboot_tag_old_acpi *)tag;

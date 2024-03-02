@@ -7,21 +7,22 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <memory/physical.h>
 
 namespace MaxOS {
   namespace memory {
 
-    // Useful for readability
-    typedef void virtual_address_t;
-    typedef void physical_address_t;
 
     class VirtualMemoryManager{
 
       private:
         uint64_t * m_pml4_root_address;
+        PhysicalMemoryManager* m_physical_memory_manager;
+
+
 
       public:
-        VirtualMemoryManager();
+        VirtualMemoryManager(PhysicalMemoryManager* physical_memory_manager);
         ~VirtualMemoryManager();
 
     };
