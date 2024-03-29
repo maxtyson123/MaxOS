@@ -106,7 +106,7 @@ void print_boot_header(Console* console){
 
 }
 
-extern uint32_t kernel_end;
+extern uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
@@ -125,8 +125,9 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     _kprintf("IDT set up\n");
 
     uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_offset);
-    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot);
+    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, p4_table);
     _kprintf("Physical Memory Manager set up \n");
+    _kprintf("Verify Page Root Address: 0x%x\n", &p4_table);
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     _kprintf("ACPI set up\n");

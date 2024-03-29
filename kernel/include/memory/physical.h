@@ -13,6 +13,7 @@ namespace MaxOS {
 
   namespace memory {
 
+    #define VirtualPointer(addr) (void*)((uint64_t)(addr))
 
     #define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))
 
@@ -76,7 +77,8 @@ namespace MaxOS {
 
           multiboot_mmap_entry* m_mmap;
 
-          uint64_t * m_pml4_root_address;
+          uint64_t* m_pml4_root_address;
+          pte_t* m_pml4_root;
 
           uint16_t get_pml4_index(uintptr_t virtual_address);
           uint16_t get_page_directory_index(uintptr_t virtual_address);
@@ -92,7 +94,7 @@ namespace MaxOS {
 
         public:
 
-          PhysicalMemoryManager(unsigned long reserved, system::Multiboot* multiboot);
+          PhysicalMemoryManager(unsigned long reserved, system::Multiboot* multiboot, uint64_t pml4_root[512]);
           ~PhysicalMemoryManager();
 
           // Frame Management
@@ -116,6 +118,8 @@ namespace MaxOS {
           static size_t align_to_page(size_t size);
           static bool check_aligned(size_t size);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address);
+
+          static PhysicalMemoryManager* current_manager;
       };
   }
 

@@ -7,6 +7,7 @@
 using namespace MaxOS;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
+using namespace MaxOS::memory;
 
 LocalAPIC::LocalAPIC() {
 
@@ -40,6 +41,12 @@ void LocalAPIC::init() {
 
     m_x2apic = false;
     _kprintf("CPU supports xAPIC\n");
+
+    // Map the APIC base address to the higher half
+    m_apic_base_high = MemoryManager::s_higher_half_offset + 0x12000;
+    PhysicalMemoryManager::current_manager->map(VirtualPointer(m_apic_base), VirtualPointer(m_apic_base_high), Present | Write);
+    _kprintf("APIC Base:        0x%x\n", m_apic_base);
+    _kprintf("APIC Higher Half: 0x%x\n", m_apic_base_high);
 
   } else {
     _kprintf("ERROR: CPU does not support APIC (BAD!!)\n");

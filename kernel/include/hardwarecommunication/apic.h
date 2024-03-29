@@ -8,6 +8,7 @@
 #include <hardwarecommunication/port.h>
 #include <system/cpu.h>
 #include <hardwarecommunication/acpi.h>
+#include <memory/physical.h>
 
 namespace MaxOS {
     namespace hardwarecommunication {
@@ -17,6 +18,7 @@ namespace MaxOS {
 
         protected:
           uint64_t m_apic_base;
+          uint64_t m_apic_base_high;
           uint32_t m_id;
           bool m_x2apic;
 

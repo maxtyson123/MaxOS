@@ -9,9 +9,16 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 extern uint64_t p4_table[];
 
-MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot){
+PhysicalMemoryManager* PhysicalMemoryManager::current_manager = nullptr;
+
+MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot, uint64_t pml4_root[512]){
 
   // SEE boot.s FOR SETUP OF PAGING
+  m_pml4_root = (pte_t*)pml4_root;
+  m_pml4_root_address = pml4_root;
+
+  // Set the current manager
+  current_manager = this;
 
   // Store the information about the bitmap
   uint64_t memory_size = (multiboot->get_basic_meminfo() -> mem_upper + 1024) * 1024;
@@ -71,8 +78,6 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   _kprintf("Bitmap end: 0x%x\n", m_bit_map + m_bitmap_size / 8);
   _kprintf("Free memory: %dmb/%dmb (from 0x%x to 0x%x)\n", m_mmap->len / 1024 / 1024, memory_size / 1024 / 1024, m_mmap->addr, m_mmap->addr + m_mmap->len);
 
-  // Set up the PML4
-  m_pml4_root_address = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510,510,510,510));
 
   // Mapping information
   uintptr_t base_map_address = (uint64_t)MemoryManager::s_higher_half_offset + PAGE_SIZE; //TODO: Maybe PAGE_SIZE should be multiplied by kernel_entries to get the correct padding?
@@ -84,17 +89,8 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   if((p4_table[base_page_entry] & 1) == 0)
     _kprintf("ERROR: Page Table not set up");
 
-  // Map all the physical memory into the virtual address space
-  while(physical_address < memory_size){
-    //_kprintf("Mapping: 0x%x to 0x%x\n", physical_address, virtual_address);
-    map((physical_address_t *)physical_address, (virtual_address_t *)virtual_address, Present | Write);
-
-    // Move to the next page
-    physical_address += PAGE_SIZE;
-    virtual_address += PAGE_SIZE;
-  }
-
   //TODO: Note when the kernel VMM is set up paging should start at base_map_address + memory_size
+  _kprintf("_Test Page Root Address: 0x%x\n", m_pml4_root_address);
 }
 
 PhysicalMemoryManager::~PhysicalMemoryManager() {
