@@ -13,6 +13,13 @@ namespace MaxOS {
 
   namespace memory {
 
+
+    #define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))
+
+    #define PML4_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 3)
+    #define PML3_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 2)
+    #define PML2_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 1)
+
       // Useful for readability
       typedef void virtual_address_t;
       typedef void physical_address_t;
@@ -31,6 +38,26 @@ namespace MaxOS {
         WriteBit = 0b10,
         HugePageBit = 0b10000000,
       } page_bits_t;
+
+      // Struct for a page table entry
+        typedef struct PageTableEntry {
+          uint64_t present : 1;
+          uint64_t write : 1;
+          uint64_t user : 1;
+          uint64_t write_through : 1;
+          uint64_t cache_disabled : 1;
+          uint64_t accessed : 1;
+          uint64_t dirty : 1;
+          uint64_t huge_page : 1;
+          uint64_t global : 1;
+          uint64_t available : 3;
+          uint64_t physical_address : 40;
+        } __attribute__((packed)) pte_t;
+
+      // Struct for a page map level
+      typedef struct PageMapLevel {
+        pte_t entries[512];
+      } __attribute__((packed)) pml_t;
 
 
       // Make a 4KiB Memory Manager?
@@ -56,6 +83,12 @@ namespace MaxOS {
           uint16_t get_page_table_index(uintptr_t virtual_address);
           uint16_t get_page_index(uintptr_t virtual_address);
           uint64_t get_table_address(uint16_t pml4_index, uint16_t page_directory_index, uint16_t page_table_index, uint16_t page_index);
+
+
+          void clean_page_table(uint64_t* table);
+
+          pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
+          pte_t create_page_table_entry(uintptr_t address, size_t flags);
 
         public:
 

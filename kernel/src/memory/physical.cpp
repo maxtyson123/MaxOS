@@ -242,48 +242,58 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
 }
 
-void clean_new_table( uint64_t *table_to_clean ) {
-  for(int i = 0; i < 512; i++){
-    table_to_clean[i] = 0x00l;
-  }
+pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, size_t flags) {
+
+    // Get the entry from the table
+    pte_t entry = table->entries[index];
+
+    // Check if the entry is present
+    if(entry.present) {
+
+      // Get the address of the table
+      return (pml_t*)(entry.physical_address << 12);
+
+    }
+
+    _kprintf("Creating new table at index: %d\n", index);
+
+    // Need to create a new table
+    pml_t* new_table = (pml_t*)allocate_frame();
+
+    // Clean the table
+    clean_page_table((uint64_t*)new_table);
+
+    // Set the entry
+    table->entries[index] = create_page_table_entry((uintptr_t)new_table, flags);
+
+    return new_table;
+
+
 }
+
 
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virtual_address_t *virtual_address, size_t flags) {
 
-  // Get the indexes of the address
-  uint16_t pml4_index = get_pml4_index((uintptr_t)virtual_address);
-  uint16_t pdp_index = get_page_directory_index((uintptr_t)virtual_address);
-  uint16_t pd_index = get_page_table_index((uintptr_t)virtual_address);
+  // Get the page directory pointer m_pml4_root_address
+  pml_t* pml3 = get_or_create_table((pml_t*)m_pml4_root_address, PML4_GET_INDEX(virtual_address), (flags | WriteBit));
 
-  // Get or create PML4 entry
-  if ((m_pml4_root_address[pml4_index] & 1) == 0) {
-    uint64_t* pdp = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, pdp_index, 0));
-    m_pml4_root_address[pml4_index] = (uint64_t)pdp | flags;
-    clean_new_table(pdp); // Clears new page directory pointer table
-    _kprintf("Created new PML4 entry at index: %d\n", pml4_index);
-  }
+  // Get the page directory
+  pml_t* pml2 = get_or_create_table(pml3, PML3_GET_INDEX(virtual_address), (flags | WriteBit));
 
-  // Get or create page directory pointer entry
-  uint64_t* pdp = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, pdp_index, 0));
-  if ((pdp[pdp_index] & 1) == 0) {
-    uint64_t* pd = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, pdp_index, pd_index, 0));
-    pdp[pdp_index] = (uint64_t)pd | flags;
-    clean_new_table(pd); // Clears new page directory table
-    _kprintf("Created new page directory pointer entry at index: %d\n", pdp_index);
-  }
+  // Get the entry
+  pte_t* pte = &pml2->entries[PML2_GET_INDEX(virtual_address)];
 
-  // Map the physical address to the virtual address
-  uint64_t* pd = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, pdp_index, pd_index, 0));
-  pd[pd_index] = ((uint64_t)physical & ~(PAGE_SIZE - 1)) | flags;
+  // Check if already mapped
+  if(pte->present)
+    return virtual_address;
 
-  // Invalidate TLB
-  asm volatile("invlpg (%0)" ::"r" ((uint64_t)virtual_address) : "memory");
+  // Set the entry
+  *pte = create_page_table_entry((uintptr_t)physical, flags);
 
-  _kprintf("Mapped physical address 0x%x to virtual address 0x%x\n", physical, virtual_address);
-
-  return virtual_address;
+  _kprintf("Mapped: 0x%x to 0x%x\n", physical, virtual_address);
 
 }
+
 virtual_address_t* PhysicalMemoryManager::map(virtual_address_t *virtual_address, size_t flags) {
 
   // Create a new physical address for the frame
@@ -368,4 +378,27 @@ bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virt
 
   // Check if the physical address is the same as the one in the page table
   return align_to_page((size_t)physical_address) == align_to_page(pd_address[page_table_index]);
+}
+
+
+void PhysicalMemoryManager::clean_page_table(uint64_t *table) {
+  for(int i = 0; i < 512; i++){
+        table[i] = 0x00l;
+  }
+}
+pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) {
+
+  return (pte_t){
+    .present = 1,
+    .write = flags & Write,
+    .user = flags & User,
+    .write_through = (flags & (1 << 7)) != 0,
+    .accessed = 0,
+    .dirty = 0,
+    .huge_page = 0,
+    .global = 0,
+    .available = 0,
+    .physical_address = (uint64_t)address >> 12
+  };
+
 }
