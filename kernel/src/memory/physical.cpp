@@ -86,7 +86,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   // Map all the physical memory into the virtual address space
   while(physical_address < memory_size){
-    _kprintf("Mapping: 0x%x to 0x%x\n", physical_address, virtual_address);
+    //_kprintf("Mapping: 0x%x to 0x%x\n", physical_address, virtual_address);
     map((physical_address_t *)physical_address, (virtual_address_t *)virtual_address, Present | Write);
 
     // Move to the next page
@@ -250,47 +250,37 @@ void clean_new_table( uint64_t *table_to_clean ) {
 
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virtual_address_t *virtual_address, size_t flags) {
 
-  // Check if the address is already mapped
-  if(is_mapped((uintptr_t)physical, (uintptr_t)virtual_address))
-      return virtual_address;
-
   // Get the indexes of the address
   uint16_t pml4_index = get_pml4_index((uintptr_t)virtual_address);
-  uint16_t page_directory_index = get_page_directory_index((uintptr_t)virtual_address);
-  uint16_t page_table_index = get_page_table_index((uintptr_t)virtual_address);
+  uint16_t pdp_index = get_page_directory_index((uintptr_t)virtual_address);
+  uint16_t pd_index = get_page_table_index((uintptr_t)virtual_address);
 
-  // Get the table address
-  uint64_t* page_directory_pointer = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, 510 , pml4_index));
-  uint64_t* page_directory = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, (uint16_t)pml4_index, (uint16_t)page_directory_index));
-
-  // Check if the page directory for this address is present
-  if(!(m_pml4_root_address[pml4_index] & 1)){
-    // Allocate a new page directory
-    uint64_t* new_table = (uint64_t*)allocate_frame();
-    m_pml4_root_address[pml4_index] = (uint64_t) new_table | WriteBit | PresentBit;
-
-    // Clear this new address
-    clean_new_table(page_directory_pointer);
-
-    _kprintf("Allocated new page directory pointer (%d) at: 0x%x, ", pml4_index, &m_pml4_root_address[pml4_index]);
+  // Get or create PML4 entry
+  if ((m_pml4_root_address[pml4_index] & 1) == 0) {
+    uint64_t* pdp = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, pdp_index, 0));
+    m_pml4_root_address[pml4_index] = (uint64_t)pdp | flags;
+    clean_new_table(pdp); // Clears new page directory pointer table
+    _kprintf("Created new PML4 entry at index: %d\n", pml4_index);
   }
 
-  // Check if the page directory for this address is present
-  if(!(page_directory_pointer[page_directory_index] & 1)){
-
-    // Allocate a new page table
-    uint64_t* new_table = (uint64_t*)allocate_frame();
-    page_directory_pointer[page_directory_index] = (uint64_t) new_table | WriteBit | PresentBit;
-
-    // The page directory is not present, so we need to clear it
-    clean_new_table(page_directory);
-
-    _kprintf("Allocated new page directory (%s)  at: 0x%x, ", page_directory_index, &page_directory_pointer[page_directory_index]);
+  // Get or create page directory pointer entry
+  uint64_t* pdp = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, pdp_index, 0));
+  if ((pdp[pdp_index] & 1) == 0) {
+    uint64_t* pd = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, pdp_index, pd_index, 0));
+    pdp[pdp_index] = (uint64_t)pd | flags;
+    clean_new_table(pd); // Clears new page directory table
+    _kprintf("Created new page directory pointer entry at index: %d\n", pdp_index);
   }
 
-  // Set the page entry in the page table
-  page_directory[page_table_index] = (uint64_t) (physical) | HugePageBit | flags;
-  _kprintf("Mapped: 0x%x to 0x%x\n", (uint64_t)physical, (uint64_t)virtual_address);
+  // Map the physical address to the virtual address
+  uint64_t* pd = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, pdp_index, pd_index, 0));
+  pd[pd_index] = ((uint64_t)physical & ~(PAGE_SIZE - 1)) | flags;
+
+  // Invalidate TLB
+  asm volatile("invlpg (%0)" ::"r" ((uint64_t)virtual_address) : "memory");
+
+  _kprintf("Mapped physical address 0x%x to virtual address 0x%x\n", physical, virtual_address);
+
   return virtual_address;
 
 }
