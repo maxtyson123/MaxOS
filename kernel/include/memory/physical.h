@@ -35,9 +35,8 @@ namespace MaxOS {
       } page_flags_t;
 
       typedef enum PageBits {
-        PresentBit = 0b1,
-        WriteBit = 0b10,
-        HugePageBit = 0b10000000,
+        WriteBit = (1 << 1),
+        UserBit = (1 << 3),
       } page_bits_t;
 
       // Struct for a page table entry
@@ -59,9 +58,6 @@ namespace MaxOS {
       typedef struct PageMapLevel {
         pte_t entries[512];
       } __attribute__((packed)) pml_t;
-
-
-      // Make a 4KiB Memory Manager?
 
       class PhysicalMemoryManager{
 

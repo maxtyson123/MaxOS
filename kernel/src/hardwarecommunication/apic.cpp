@@ -43,7 +43,7 @@ void LocalAPIC::init() {
     _kprintf("CPU supports xAPIC\n");
 
     // Map the APIC base address to the higher half
-    m_apic_base_high = MemoryManager::s_higher_half_offset + 0x12000;
+    m_apic_base_high = MemoryManager::to_io_region(m_apic_base);
     PhysicalMemoryManager::current_manager->map(VirtualPointer(m_apic_base), VirtualPointer(m_apic_base_high), Present | Write);
     _kprintf("APIC Base:        0x%x\n", m_apic_base);
     _kprintf("APIC Higher Half: 0x%x\n", m_apic_base_high);
@@ -73,7 +73,7 @@ uint32_t LocalAPIC::read(uint32_t reg) {
   if(m_x2apic) {
       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
   } else {
-      return (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg));
+      return (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg));
   }
 
 }
@@ -84,7 +84,7 @@ void LocalAPIC::write(uint32_t reg, uint32_t value) {
   if(m_x2apic) {
       CPU::write_msr((reg >> 4) + 0x800, value);
   } else {
-      (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg)) = value;
+      (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg)) = value;
     }
 }
 

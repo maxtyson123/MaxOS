@@ -82,16 +82,14 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   // Mapping information
   uintptr_t base_map_address = (uint64_t)MemoryManager::s_higher_half_offset + PAGE_SIZE; //TODO: Maybe PAGE_SIZE should be multiplied by kernel_entries to get the correct padding?
   uint64_t physical_address = 0;
-  uint64_t virtual_address = base_map_address;
 
   // Check if the paging is working
   size_t base_page_entry = get_pml4_index(base_map_address);
   if((p4_table[base_page_entry] & 1) == 0)
     _kprintf("ERROR: Page Table not set up");
 
-  //TODO: Note when the kernel VMM is set up paging should start at base_map_address + memory_size
-  _kprintf("_Test Page Root Address: 0x%x\n", m_pml4_root_address);
 }
+
 
 PhysicalMemoryManager::~PhysicalMemoryManager() {
 
@@ -286,6 +284,9 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
   // Set the entry
   *pte = create_page_table_entry((uintptr_t)physical, flags);
 
+  // Invalidate the TLB
+  asm volatile("invlpg (%0)" ::"r" ((uint64_t)virtual_address) : "memory");
+
   _kprintf("Mapped: 0x%x to 0x%x\n", physical, virtual_address);
 
 }
@@ -386,8 +387,8 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
 
   return (pte_t){
     .present = 1,
-    .write = flags & Write,
-    .user = flags & User,
+    .write = (flags & WriteBit) != 0,
+    .user = (flags & UserBit) != 0,
     .write_through = (flags & (1 << 7)) != 0,
     .accessed = 0,
     .dirty = 0,

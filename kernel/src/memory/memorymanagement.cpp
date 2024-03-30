@@ -157,7 +157,7 @@ int MemoryManager::memory_used() {
 
         return result;
 }
-uint64_t MemoryManager::map_to_higher_half(uint64_t physical_address) {
+uint64_t MemoryManager::to_higher_region(uint64_t physical_address) {
 
   // Check if the address is already mapped
   if(physical_address >= s_higher_half_offset)
@@ -165,6 +165,20 @@ uint64_t MemoryManager::map_to_higher_half(uint64_t physical_address) {
 
   // Map the address to the higher half
   return physical_address + s_higher_half_offset;
+}
+
+uint64_t MemoryManager::to_io_region(uint64_t physical_address) {
+
+  // Check if the address is already mapped
+  if(physical_address >= s_mem_io_offset)
+      return physical_address;
+
+  // Check if the address is past 4GB
+  if(physical_address >= 0xFFFFFFFF)
+      return physical_address;
+
+  // Map the address to the higher half
+  return physical_address + s_mem_io_offset;
 }
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)

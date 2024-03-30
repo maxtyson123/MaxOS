@@ -106,7 +106,7 @@ void print_boot_header(Console* console){
 
 }
 
-extern uint64_t p4_table[512];
+extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
