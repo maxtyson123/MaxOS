@@ -49,7 +49,7 @@ void LocalAPIC::init() {
     _kprintf("APIC Higher Half: 0x%x\n", m_apic_base_high);
 
   } else {
-    _kprintf("ERROR: CPU does not support APIC (BAD!!)\n");
+    ASSERT(false, "CPU does not support xAPIC")
   }
 
   // Get the vector table
@@ -116,10 +116,7 @@ void IOAPIC::init() {
   MADT_Item* io_apic_item = get_madt_item(1, 0);
 
   // Check if the IO APIC was found
-  if(io_apic_item == nullptr) {
-        _kprintf("ERROR: IO APIC not found\n");
-        return;
-  }
+  ASSERT(io_apic_item == nullptr, "IO APIC not found")
 
   // Get the IO APIC address
   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;

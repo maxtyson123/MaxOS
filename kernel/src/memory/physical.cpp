@@ -85,8 +85,8 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   // Check if the paging is working
   size_t base_page_entry = get_pml4_index(base_map_address);
-  if((p4_table[base_page_entry] & 1) == 0)
-    _kprintf("ERROR: Page Table not set up");
+
+  ASSERT(((p4_table[base_page_entry] & 1) != 0), "Page Table not set up");
 
 }
 
@@ -392,7 +392,7 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
     .write_through = (flags & (1 << 7)) != 0,
     .accessed = 0,
     .dirty = 0,
-    .huge_page = 0,
+    .huge_page = 1,
     .global = 0,
     .available = 0,
     .physical_address = (uint64_t)address >> 12

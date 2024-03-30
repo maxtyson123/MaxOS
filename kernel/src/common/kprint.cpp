@@ -74,42 +74,64 @@ static void putchar (int c)
 /**
  * @ brief Prints a debug prefix (in yellow) to the serial output
  */
-void pre_kprintf(const char* file, int line, const char* func)
+void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 {
-  // Print the kernel header with yellow text
-  const char* header = "\033[1;33m[";
-  for (int i = 0; i < strlen(header); i++)
-    putchar(header[i]);
 
-  // Print the file (but not the path)
-  const char* file_str = file;
-  for (int i = strlen(file) - 1; i >= 0; i--)
-  {
-    if (file[i] == '/')
-    {
-      file_str = &file[i + 1];
+  // Print the  colour
+  char* colour = "---------";
+  switch (type) {
+
+    // Log (yellow)
+    case 0:
+      colour = "\033[1;33m";
       break;
-    }
-  }\
-  for (int j = 0; j < strlen(file_str); j++)
-    putchar(file_str[j]);
-  putchar(':');
 
+    // Assert (red)
+    case 3:
+      colour = "\033[1;31m";
+      break;
+  }
 
-  // Print the line
-  const char* line_str = itoa(10, line);
-  for (int i = 0; i < strlen(line_str); i++)
-    putchar(line_str[i]);
+  for (int i = 0; i < strlen(colour); i++)
+    putchar(colour[i]);
 
-  /* Print the spacer
-  putchar(' ');
-  putchar('-');
-  putchar(' ');
+  putchar('[');
 
-  // Print the function
-  for (int i = 0; i < strlen(func); i++)
-    putchar(func[i]);
-  */
+  // File Output
+  if(type == 0){
+
+    // Print the file (but not the path)
+    const char* file_str = file;
+    for (int i = strlen(file) - 1; i >= 0; i--)
+    {
+      if (file[i] == '/')
+      {
+        file_str = &file[i + 1];
+        break;
+      }
+    }\
+    for (int j = 0; j < strlen(file_str); j++)
+      putchar(file_str[j]);
+    putchar(':');
+
+    // Print the line
+    const char* line_str = itoa(10, line);
+    for (int i = 0; i < strlen(line_str); i++)
+      putchar(line_str[i]);
+  }else{
+
+    // Print the text
+    const char* text = "FATAL ERROR IN {";
+    for (int i = 0; i < strlen(text); i++)
+      putchar(text[i]);
+
+    // Print the function
+    for (int i = 0; i < strlen(func); i++)
+      putchar(func[i]);
+
+    putchar('}');
+  }
+
 
   // Print the kernel footer
   const char* footer = "] \033[0m";
@@ -130,11 +152,11 @@ void pre_kprintf(const char* file, int line, const char* func)
  * @param format The formatted string
  * @param ... The data to pass into the string
  */
-void _kprintf_internal(const char* file, int line, const char* func, const char* format, ...)
+void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...)
 {
 
   // Print the header
-  pre_kprintf(file, line,func);
+  pre_kprintf(file, line,func, type);
 
   // Create a pointer to the data
   va_list parameters;

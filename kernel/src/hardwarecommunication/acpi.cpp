@@ -25,18 +25,14 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
               sum += ((char*)rsdp)[i];
 
     // Check if the checksum is valid
-    if(sum != 0)
-      _kprintf("ACPI: Invalid checksum!\n");
+    ASSERT(sum == 0, "Invalid checksum!")
 
   }else{
 
     // If the new ACPI is not supported, panic
-    if(multiboot->get_new_acpi() == 0){
-      _kprintf("ACPI: No ACPI found! (BAD)\n");
-      return;
-    }
+    ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
 
-    // Its the new ACPI
+    // It's the new ACPI
     m_type = 1;
 
     // Get the RSDP & XSDT
@@ -52,8 +48,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
         sum += ((char*)rsdp2)[i];
 
     // Check if the checksum is valid
-    if(sum != 0)
-      _kprintf("ACPI: Invalid checksum!\n");
+    ASSERT(sum == 0, "Invalid checksum!")
 
   }
 }

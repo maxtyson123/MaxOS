@@ -10,9 +10,14 @@
 
 
 #define _kprintf(format, ...) \
-    _kprintf_internal(__FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)
+    _kprintf_internal(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)
 
+#define ASSERT(condition, format, ...) \
+    if(!(condition)) { \
+        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__); \
+        while(1); \
+    }
 
-void _kprintf_internal(const char* file, int line, const char* func, const char* format, ...);
+void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...);
 
 #endif // MAXOS_KPRINT_H
