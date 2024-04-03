@@ -26,17 +26,23 @@ namespace MaxOS {
       typedef void physical_address_t;
 
       typedef enum PageFlags {
-        None = 0,
-        Present = (1 << 0),
-        Write = (1 << 1),
-        User = (1 << 2),
-        Address = (1 << 7),
-        Stack = (1 << 8)
+        None          = 0,
+        Present       = (1 << 0),
+        Write         = (1 << 1),
+        User          = (1 << 2),
+        WriteThrough  = (1 << 3),
+        CacheDisabled = (1 << 4),
+        Accessed      = (1 << 5),
+        Dirty         = (1 << 6),
+        HugePage      = (1 << 7),
+        Global        = (1 << 8)
+
       } page_flags_t;
 
       typedef enum PageBits {
         WriteBit = (1 << 1),
         UserBit = (1 << 3),
+        HugePageBit = (1 << 7),
       } page_bits_t;
 
       // Struct for a page table entry
@@ -51,7 +57,7 @@ namespace MaxOS {
           uint64_t huge_page : 1;
           uint64_t global : 1;
           uint64_t available : 3;
-          uint64_t physical_address : 40;
+          uint64_t physical_address : 52;
         } __attribute__((packed)) pte_t;
 
       // Struct for a page map level
@@ -62,8 +68,6 @@ namespace MaxOS {
       class PhysicalMemoryManager{
 
         private:
-          static const uint32_t PAGE_SIZE = { 0x200000 };    // 2MB
-          static const uint64_t PAGE_TABLE_OFFSET = { 0xFFFF000000000000 }; // The offset for the page table (before the kernel hihg half)
           const uint8_t ROW_BITS = { 64 };
 
           uint64_t* m_bit_map;
@@ -93,6 +97,11 @@ namespace MaxOS {
           PhysicalMemoryManager(unsigned long reserved, system::Multiboot* multiboot, uint64_t pml4_root[512]);
           ~PhysicalMemoryManager();
 
+
+          // Vars
+          static const uint32_t PAGE_SIZE = { 0x200000 };    // 2MB
+          static const uint64_t PAGE_TABLE_OFFSET = { 0xFFFF000000000000 }; // The offset for the page table (before the kernel hihg half)
+
           // Frame Management
           void* allocate_frame();
           void free_frame(void* address);
@@ -101,9 +110,10 @@ namespace MaxOS {
           void free_area(uint64_t start_address, size_t size);
 
           // Map
-          virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags);
           virtual_address_t* map(virtual_address_t* virtual_address, size_t flags);
+          virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags);
           void map_area(virtual_address_t* virtual_address_start, size_t length, size_t flags);
+          void map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags);
           void identity_map(physical_address_t* physical_address, size_t flags);
 
           void unmap(virtual_address_t* virtual_address);

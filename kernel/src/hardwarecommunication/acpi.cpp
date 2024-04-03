@@ -16,8 +16,13 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
     m_rsdt = (RSDT*) rsdp->rsdt_address;
 
+    // Map the RSDT
+    PhysicalMemoryManager::current_manager->map(VirtualPointer(m_rsdt), VirtualPointer(MemoryManager::to_higher_region((uint64_t)m_rsdt)), PageFlags::Write);
+    m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)m_rsdt);
+
     // Load the header
     m_header = &m_rsdt->header;
+    ASSERT(m_header->length > PhysicalMemoryManager::PAGE_SIZE, "RSDT needs more pages!")
 
     // Calculate the checksum
     uint8_t sum = 0;

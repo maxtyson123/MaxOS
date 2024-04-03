@@ -82,6 +82,7 @@ namespace MaxOS {
             AdvancedConfigurationAndPowerInterface* m_acpi;
             MADT* m_madt;
             uint32_t m_address;
+            uint64_t m_address_high;
             uint32_t m_version;
             uint8_t m_max_redirect_entry;
 

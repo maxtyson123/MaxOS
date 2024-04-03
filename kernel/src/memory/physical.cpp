@@ -78,15 +78,35 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   _kprintf("Bitmap end: 0x%x\n", m_bit_map + m_bitmap_size / 8);
   _kprintf("Free memory: %dmb/%dmb (from 0x%x to 0x%x)\n", m_mmap->len / 1024 / 1024, memory_size / 1024 / 1024, m_mmap->addr, m_mmap->addr + m_mmap->len);
 
+  return;
 
-  // Mapping information
-  uintptr_t base_map_address = (uint64_t)MemoryManager::s_higher_half_offset + PAGE_SIZE; //TODO: Maybe PAGE_SIZE should be multiplied by kernel_entries to get the correct padding?
-  uint64_t physical_address = 0;
+  // Allocate a new PML4 root
+  m_pml4_root_address = (uint64_t*)allocate_frame();
+  m_pml4_root = (pte_t*)m_pml4_root_address;
 
-  // Check if the paging is working
-  size_t base_page_entry = get_pml4_index(base_map_address);
+  // Map the first two pages for the kernel
+  map_area((physical_address_t*)0, (virtual_address_t*)MemoryManager::s_higher_half_offset, PAGE_SIZE * 2, Present);
 
-  ASSERT(((p4_table[base_page_entry] & 1) != 0), "Page Table not set up");
+  // Map 4 GB of physical memory
+  _kprintf("Mapping 4Gb Of io region...\n");
+  map_area((physical_address_t*)0, (virtual_address_t*)MemoryManager::s_active_memory_manager -> to_io_region(0), 0xFFFFFFFF, Write);
+
+  // Re-map the mmap
+  for (multiboot_mmap_entry *entry = mmap->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)mmap + mmap->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + mmap->entry_size)) {
+
+      // Check this
+
+      // 4GB Already mapped
+      if(entry->addr >= 0xFFFFFFFF)
+        continue;
+
+      _kprintf("Mapping (io) mmap 0x%x - 0x%x\n", entry->addr, entry -> addr + entry->len);
+      map_area((physical_address_t*)entry->addr, (virtual_address_t *)MemoryManager::s_active_memory_manager -> to_io_region(entry->addr), entry -> len, Write);
+  }
+
+
+  // Load the new PML4
+  asm volatile("mov %0, %%cr3" :: "r"(m_pml4_root_address));
 
 }
 
@@ -275,6 +295,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
   pml_t* pml2 = get_or_create_table(pml3, PML3_GET_INDEX(virtual_address), (flags | WriteBit));
 
   // Get the entry
+  uint64_t index = PML2_GET_INDEX(virtual_address);
   pte_t* pte = &pml2->entries[PML2_GET_INDEX(virtual_address)];
 
   // Check if already mapped
@@ -282,10 +303,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
     return virtual_address;
 
   // Set the entry
-  *pte = create_page_table_entry((uintptr_t)physical, flags);
-
-  // Invalidate the TLB
-  asm volatile("invlpg (%0)" ::"r" ((uint64_t)virtual_address) : "memory");
+  *pte = create_page_table_entry((uintptr_t)physical, flags | HugePageBit);
 
   _kprintf("Mapped: 0x%x to 0x%x\n", physical, virtual_address);
 
@@ -312,6 +330,17 @@ void PhysicalMemoryManager::map_area(virtual_address_t* virtual_address_start, s
 
 }
 
+void PhysicalMemoryManager::map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags) {
+
+  // Get the size of the area
+  size_t size = size_to_frames(length);
+
+  // Map the required frames
+  for (size_t i = 0; i < size; ++i)
+    map(physical_address_start + (i * PAGE_SIZE), virtual_address_start + (i * PAGE_SIZE), flags);
+
+}
+
 void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, size_t flags) {
 
   // Map the physical address to its virtual address counter-part
@@ -320,8 +349,6 @@ void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, s
 }
 
 void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
-
-  //TODO: TEST WORKS
 
   // Check if the address is mapped
   if(!is_mapped(0, (uintptr_t)virtual_address))
@@ -383,19 +410,30 @@ void PhysicalMemoryManager::clean_page_table(uint64_t *table) {
         table[i] = 0x00l;
   }
 }
+
+void clearBits(uint64_t *num, int start, int end) {
+  // Create a mask with 1s from start to end and 0s elsewhere
+  uint64_t mask = (~0ULL << start) ^ (~0ULL << (end + 1));
+
+  // Apply the mask to the number to clear the desired bits
+  *num &= ~mask;
+}
+
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) {
 
-  return (pte_t){
+  pte_t page =  (pte_t){
     .present = 1,
     .write = (flags & WriteBit) != 0,
     .user = (flags & UserBit) != 0,
     .write_through = (flags & (1 << 7)) != 0,
+    .cache_disabled = 0,
     .accessed = 0,
     .dirty = 0,
-    .huge_page = 1,
+    .huge_page = (flags & HugePageBit) != 0,
     .global = 0,
     .available = 0,
     .physical_address = (uint64_t)address >> 12
   };
 
+  return page;
 }

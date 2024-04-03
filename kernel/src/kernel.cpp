@@ -139,6 +139,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     _kprintf("IDT activated\n");
 
     // TODO: 64 bit architecture rewrite
+    //  - Fix Paging
+    //  - Finish ACPI
+    //  - Memory Allocation
+    //  - Convert old codebase
+    _kprintf("KERNEL DONE\n");
     while (true) {
          //TODO: This causes a Double Fault and then infinte General Protection Faults
          system::CPU::halt();

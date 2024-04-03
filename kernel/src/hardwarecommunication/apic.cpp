@@ -44,7 +44,7 @@ void LocalAPIC::init() {
 
     // Map the APIC base address to the higher half
     m_apic_base_high = MemoryManager::to_io_region(m_apic_base);
-    PhysicalMemoryManager::current_manager->map(VirtualPointer(m_apic_base), VirtualPointer(m_apic_base_high), Present | Write);
+    PhysicalMemoryManager::current_manager->map(VirtualPointer(m_apic_base), VirtualPointer(m_apic_base_high), Write);
     _kprintf("APIC Base:        0x%x\n", m_apic_base);
     _kprintf("APIC Higher Half: 0x%x\n", m_apic_base_high);
 
@@ -63,7 +63,6 @@ void LocalAPIC::init() {
   // Read the APIC version
   uint32_t version = read(0x30);
   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
-
 
 }
 
@@ -121,6 +120,13 @@ void IOAPIC::init() {
   // Get the IO APIC address
   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;
   m_address = io_apic->io_apic_address;
+
+  // Map the IO APIC address to the higher half
+  m_address_high = MemoryManager::to_io_region(m_address);
+  PhysicalMemoryManager::current_manager->map(VirtualPointer(m_address), VirtualPointer(m_address_high), Write);
+
+  _kprintf("IO APIC Address:     0x%x\n", m_address);
+  _kprintf("IO APIC Higher Half: 0x%x\n", m_address_high);
 
   // Get the IO APIC version and max redirection entry
   m_version = read(0x01);
@@ -203,10 +209,10 @@ MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 uint32_t IOAPIC::read(uint32_t reg) {
 
   // Write the register
-  *(volatile uint32_t*)(m_address + 0x00) = reg;
+  *(volatile uint32_t*)(m_address_high + 0x00) = reg;
 
   // Return the value
-  return *(volatile uint32_t*)(m_address + 0x10);
+  return *(volatile uint32_t*)(m_address_high + 0x10);
 
 
 }
@@ -214,10 +220,10 @@ uint32_t IOAPIC::read(uint32_t reg) {
 void IOAPIC::write(uint32_t reg, uint32_t value) {
 
     // Write the register
-    *(volatile uint32_t*)(m_address + 0x00) = reg;
+    *(volatile uint32_t*)(m_address_high + 0x00) = reg;
 
     // Write the value
-    *(volatile uint32_t*)(m_address + 0x10) = value;
+    *(volatile uint32_t*)(m_address_high + 0x10) = value;
 }
 
 void IOAPIC::read_redirect(uint8_t index, RedirectionEntry *entry) {

@@ -10,6 +10,7 @@
 #include <system/multiboot.h>
 #include <common/string.h>
 #include <memory/memorymanagement.h>
+#include <memory/physical.h>
 
 namespace MaxOS {
     namespace hardwarecommunication {

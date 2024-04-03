@@ -182,6 +182,8 @@ void InterruptManager::deactivate()
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
 
+  ASSERT(false, "Interupt number 0x%x, Code: 0x%x", status->interrupt_number, status->error_code);
+
   // If there is an interrupt manager handle interrupt
   if(s_active_interrupt_manager != 0)
     return s_active_interrupt_manager->handle_interrupt_request(status);
