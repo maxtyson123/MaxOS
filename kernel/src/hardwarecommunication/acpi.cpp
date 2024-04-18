@@ -22,7 +22,6 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
     // Load the header
     m_header = &m_rsdt->header;
-    ASSERT(m_header->length > PhysicalMemoryManager::PAGE_SIZE, "RSDT needs more pages!")
 
     // Calculate the checksum
     uint8_t sum = 0;

@@ -115,29 +115,6 @@ PhysicalMemoryManager::~PhysicalMemoryManager() {
 
 }
 
-uint16_t PhysicalMemoryManager::get_pml4_index(uintptr_t virtual_address) {
-  // The PML4 index is the last byte
-  return (uint16_t)((uint64_t)virtual_address >> 39 & 0x1FF);
-}
-
-uint16_t PhysicalMemoryManager::get_page_directory_index(uintptr_t virtual_address) {
-  // The PDP index is the 3rd byte
-  return (uint16_t)((uint64_t)virtual_address >> 30 & 0x1FF);
-}
-uint16_t PhysicalMemoryManager::get_page_table_index(uintptr_t virtual_address) {
-  // The PD index is the 2nd byte
-  return (uint16_t)((uint64_t)virtual_address >> 21 & 0x1FF);
-}
-uint16_t PhysicalMemoryManager::get_page_index(uintptr_t virtual_address) {
-  // The PT index is the 1st byte (starting from 12)
-  return (uint16_t)((uint64_t)virtual_address >> 12 & 0x1FF);
-}
-
-uint64_t PhysicalMemoryManager::get_table_address(uint16_t pml4_index, uint16_t pdp_index, uint16_t page_table_index, uint16_t page_index) {
-    return (pml4_index << 39) | (pdp_index << 30) | (page_table_index << 21) | (page_index << 12);
-}
-
-
 size_t PhysicalMemoryManager::size_to_frames(size_t size) {
     return align_to_page(size) / PAGE_SIZE;
 }
@@ -294,16 +271,21 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
   // Get the page directory
   pml_t* pml2 = get_or_create_table(pml3, PML3_GET_INDEX(virtual_address), (flags | WriteBit));
 
+  // Get the page table
+  pml_t* pml1 = get_or_create_table(pml2, PML2_GET_INDEX(virtual_address), (flags | WriteBit));
+
   // Get the entry
-  uint64_t index = PML2_GET_INDEX(virtual_address);
-  pte_t* pte = &pml2->entries[PML2_GET_INDEX(virtual_address)];
+  pte_t* pte = &pml1->entries[PML1_GET_INDEX(virtual_address)];
 
   // Check if already mapped
-  if(pte->present)
+  if(pte->present){
+    _kprintf("ADDRESS ALREADY PRESENT - FUCK");
     return virtual_address;
+  }
+
 
   // Set the entry
-  *pte = create_page_table_entry((uintptr_t)physical, flags | HugePageBit);
+  *pte = create_page_table_entry((uintptr_t)physical, flags);
 
   _kprintf("Mapped: 0x%x to 0x%x\n", physical, virtual_address);
 
@@ -350,21 +332,7 @@ void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, s
 
 void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
 
-  // Check if the address is mapped
-  if(!is_mapped(0, (uintptr_t)virtual_address))
-    return;
-
-  // Get the indexes of the address
-  uint16_t page_directory_pointer = get_pml4_index((uintptr_t)virtual_address);
-  uint16_t page_directory_index = get_page_directory_index((uintptr_t)virtual_address);
-  uint16_t page_table_index = get_page_table_index((uintptr_t)virtual_address);
-
-  // Set the page entry in the page directory to 0
-  uint64_t* page_directory = (uint64_t*)(PAGE_TABLE_OFFSET | get_table_address(510l, 510, (uint64_t) page_directory_pointer, (uint64_t) page_directory_index));
-  page_directory[page_table_index] = 0;
-
-  // Invalidate the TLB
-  asm volatile("invlpg (%0)" ::"r" ((uint64_t)virtual_address) : "memory");
+  // TODO: Implement
 }
 
 /**
@@ -375,33 +343,7 @@ void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
  */
 bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address) {
 
-  //TODO: Test works
-
-  // Get the indexes of the address
-  uint16_t pml4_index = get_pml4_index(virtual_address);
-  uint16_t pdp_index = get_page_directory_index(virtual_address);
-  uint16_t page_table_index = get_page_table_index(virtual_address);
-
-  // Check if there is a correct entry in the PML4
-  if((m_pml4_root_address[pml4_index] & 1) == 0)
-      return false;
-
-  // Get the address of the pointer to the page directory and check if it is valid
-  uint64_t* pdp_address = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, 510 , pdp_index));
-  if((pdp_address[pdp_index] & 1) == 0)
-      return false;
-
-  // Get the address to the page table and check if it is valid
-  uint64_t* pd_address = (uint64_t *)(PAGE_TABLE_OFFSET | get_table_address(510, 510, pdp_index, page_table_index));
-  if((pd_address[page_table_index] & 1) == 0)
-     return false;
-
-  // If the physical address is a nullpointer then don't bother checking if it is correct
-  if(physical_address == 0)
-    return true;
-
-  // Check if the physical address is the same as the one in the page table
-  return align_to_page((size_t)physical_address) == align_to_page(pd_address[page_table_index]);
+  // TODO: Implement
 }
 
 

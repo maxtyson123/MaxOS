@@ -20,6 +20,7 @@ namespace MaxOS {
     #define PML4_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 3)
     #define PML3_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 2)
     #define PML2_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 1)
+    #define PML1_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 0)
 
       // Useful for readability
       typedef void virtual_address_t;
@@ -80,13 +81,6 @@ namespace MaxOS {
           uint64_t* m_pml4_root_address;
           pte_t* m_pml4_root;
 
-          uint16_t get_pml4_index(uintptr_t virtual_address);
-          uint16_t get_page_directory_index(uintptr_t virtual_address);
-          uint16_t get_page_table_index(uintptr_t virtual_address);
-          uint16_t get_page_index(uintptr_t virtual_address);
-          uint64_t get_table_address(uint16_t pml4_index, uint16_t page_directory_index, uint16_t page_table_index, uint16_t page_index);
-
-
           void clean_page_table(uint64_t* table);
 
           pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
@@ -99,7 +93,7 @@ namespace MaxOS {
 
 
           // Vars
-          static const uint32_t PAGE_SIZE = { 0x200000 };    // 2MB
+          static const uint32_t PAGE_SIZE = { 0x1000 };    // 4096 bytes
           static const uint64_t PAGE_TABLE_OFFSET = { 0xFFFF000000000000 }; // The offset for the page table (before the kernel hihg half)
 
           // Frame Management
