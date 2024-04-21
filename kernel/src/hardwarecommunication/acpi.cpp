@@ -33,6 +33,8 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
   }else{
 
+    // TODO: MAP THE MF
+
     // If the new ACPI is not supported, panic
     ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
 
@@ -88,6 +90,9 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const *signatur
 
       // Get the entry
       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
+
+      // Move the header to the higher half
+      header = (ACPISDTHeader*) MemoryManager::to_higher_region((uint64_t)header);
 
       // Check if the signature matches
       if(strncmp(header->signature, signature, 4) == 0)

@@ -1,6 +1,13 @@
 ; Credit: https://github.com/dreamos82/Dreamos64/
 
+; DEFINES
 %define KERNEL_VIRTUAL_ADDR 0xFFFFFFFF80000000
+%define KERNEL_TABLES 2
+%define PRESENT_BIT 1
+%define WRITE_BIT 0b10
+%define PAGE_SIZE 0x1000
+
+; VARS
 section .multiboot.text
 global start
 global p4_table
@@ -18,15 +25,15 @@ start:
     ; Move the stack to the higher half
     mov esp, stack.top - KERNEL_VIRTUAL_ADDR
 
-    ; pm4l -> pdp -> pd -> page
+    ; pm4l -> pdp -> pd -> pt -> page
 
     ; = Configure the first entry in the P4 table to point the the P3 table =
     ; * p4_table =  pm4l, p3_table = pdp *
     ; First we change the address to the higher half
     ; Then we set the writable and present bits
     ; Then we copy the address into the first entry of the p4_table
-    mov eax, p3_table - KERNEL_VIRTUAL_ADDR;
-    or eax, 0b11
+    mov eax, p3_table - KERNEL_VIRTUAL_ADDR
+    or eax, PRESENT_BIT | WRITE_BIT
     mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 0], eax
 
     ; =  Configure the the last entry in the P4 table to point the the P3 table =
@@ -35,8 +42,17 @@ start:
     ; Then we set the writable and present bits
     ; Then we copy the address into the last entry of the p4_table
     mov eax, p3_table_hh - KERNEL_VIRTUAL_ADDR
-    or eax, 0b11
+    or eax, PRESENT_BIT | WRITE_BIT
     mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 511 * 8], eax
+
+    ; = Configure p4 table to point to map itself =
+    ; * p4_table =  pm4l *
+    ; First we change the address to the higher half
+    ; Then we set the writable and present bits
+    ; Then we copy the address into the last entry of the p4_table
+    mov eax, p4_table - KERNEL_VIRTUAL_ADDR
+    or eax, PRESENT_BIT | WRITE_BIT
+    mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
 
     ; =  Configure the first entry in the P3 table to point the the P2 table =
     ; * p3_table = pdp, p2_table = pd *
@@ -44,7 +60,7 @@ start:
     ; Then we set the writable and present bits
     ; Then we copy the address into the first entry of the p3_table
     mov eax, p2_table - KERNEL_VIRTUAL_ADDR
-    or eax, 0b11
+    or eax, PRESENT_BIT | WRITE_BIT
     mov dword [(p3_table - KERNEL_VIRTUAL_ADDR) + 0], eax
 
     ; =  Configure the last entry in the P3 table to point the the P2 table =
@@ -53,26 +69,41 @@ start:
     ; Then we set the writable and present bits
     ; Then we copy the address into the last entry of the p3_table
     mov eax, p2_table - KERNEL_VIRTUAL_ADDR
-    or eax, 0b11
+    or eax, PRESENT_BIT | WRITE_BIT
     mov dword[(p3_table_hh - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
 
-    ; = Loop through all the entries in the P2 table and set them to point to a 2MB page =
-    ; * p2_table = pd *
+
+    ; = Loop through 2 page tables and map them =
+    mov ebx, 0
+    mov eax, pt_tables - KERNEL_VIRTUAL_ADDR
+    .map_pd_table:
+        or eax, PRESENT_BIT | WRITE_BIT
+        mov dword[(p2_table - KERNEL_VIRTUAL_ADDR) + ebx * 8], eax
+        add eax, 0x1000
+        inc ebx
+        cmp ebx, KERNEL_TABLES
+        jne .map_pd_table
+
+    ; Now let's prepare a loop...
+    mov ecx, 0  ; Loop counter
+
+    ; = Loop through all the entries in the P2 table and set them to point to a 4KiB page =
     ; First we set a counter for the loop
     ; Then we set the size of the page to 2MB
     ; Then we multiply the size of the page by the counter
     ; Then we set the huge page bit, writable and present
     ; Then we copy the address into the entry in the p2_table
     ; After that we increment the counter and check if we have reached the end of the table
-    mov ecx, 0
     .map_p2_table:
-        mov eax, 0x200000
+        mov eax, PAGE_SIZE
         mul ecx
-        or eax, 0b10000011
-        mov [(p2_table - KERNEL_VIRTUAL_ADDR) + ecx * 8], eax
+        or eax, PRESENT_BIT | WRITE_BIT
+
+        mov [(pt_tables - KERNEL_VIRTUAL_ADDR) + ecx * 8], eax
 
         inc ecx
-        cmp ecx, 512
+        cmp ecx, 1024
+
         jne .map_p2_table
 
     ; = Load the P4 table into the cr3 register =
@@ -153,6 +184,8 @@ p3_table_hh:
     resb 4096
 p2_table:
     resb 4096
+pt_tables:
+    resb 8192   ; 2 tables for the kernel
 stack:
     resb 16384
     .top:
