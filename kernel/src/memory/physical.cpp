@@ -266,15 +266,13 @@ pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, si
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virtual_address_t *virtual_address, size_t flags) {
 
   // Get the page directory pointer m_pml4_root_address
-  _kprintf("l3: \n");
+
   pml_t* pml3 = get_or_create_table((pml_t*)m_pml4_root_address, PML4_GET_INDEX(virtual_address), (flags | WriteBit));
 
   // Get the page directory
-  _kprintf("l2: \n");
   pml_t* pml2 = get_or_create_table(pml3, PML3_GET_INDEX(virtual_address), (flags | WriteBit));
 
   // Get the page table
-  _kprintf("l1: \n");
   pml_t* pml1 = get_or_create_table(pml2, PML2_GET_INDEX(virtual_address), (flags | WriteBit));
 
   // Get the entry
@@ -282,7 +280,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
 
   // Check if already mapped
   if(pte->present){
-    _kprintf("ADDRESS ALREADY PRESENT - FUCK");
+    _kprintf("ADDRESS ALREADY PRESENT");
     return virtual_address;
   }
 
@@ -290,7 +288,12 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
   // Set the entry
   *pte = create_page_table_entry((uintptr_t)physical, flags);
 
-   _kprintf("Mapped: 0x%x to 0x%x\n", physical, virtual_address);
+  // Flush the TLB
+  asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
+
+//   _kprintf("Mapped: 0x%x to 0x%x\n", physical, virtual_address);
+
+
 
 }
 

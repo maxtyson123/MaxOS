@@ -187,7 +187,7 @@ p2_table:
 pt_tables:
     resb 8192   ; 2 tables for the kernel
 stack:
-    resb 16384
+    resb 32768 ; 16 KiB stack
     .top:
 
 section .rodata
