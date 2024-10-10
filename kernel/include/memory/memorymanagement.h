@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <system/multiboot.h>
+#include <memory/physical.h>
 
 namespace MaxOS{
 
@@ -38,8 +39,12 @@ namespace MaxOS{
 
           public:
               static MemoryManager* s_active_memory_manager;
-              static const uint64_t s_higher_half_offset {  0xFFFFFFFF80000000 };
-              static const uint64_t s_mem_io_offset { s_higher_half_offset - 0x100000000};
+
+              static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };
+              static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };
+              static const uint64_t s_higher_half_mem_reserved  {  0x280000000 };
+              static const uint64_t s_higher_half_offset        { s_higher_half_mem_offset + s_higher_half_mem_reserved};
+              static const uint64_t s_hh_direct_map_offset      { s_higher_half_offset + PhysicalMemoryManager::PAGE_SIZE };
 
               MemoryManager(multiboot_tag_mmap* memory_map);
               ~MemoryManager();
@@ -48,8 +53,10 @@ namespace MaxOS{
               void free(void* pointer);
               int memory_used();
 
-              static uint64_t to_higher_region(uint64_t physical_address);
-              static uint64_t to_io_region(uint64_t physical_address);
+              static void* to_higher_region(uintptr_t physical_address);
+              static void* to_lower_region(uintptr_t virtual_address);
+              static void* to_io_region(uintptr_t physical_address);
+              static void* to_dm_region(uintptr_t physical_address);
         };
     }
 }

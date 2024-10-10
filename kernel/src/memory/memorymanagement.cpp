@@ -157,32 +157,46 @@ int MemoryManager::memory_used() {
 
         return result;
 }
-uint64_t MemoryManager::to_higher_region(uint64_t physical_address) {
+void* MemoryManager::to_higher_region(uintptr_t physical_address) {
 
-  // Check if the address is already mapped
-  if(physical_address >= s_higher_half_offset)
-      return physical_address;
+  // If it's in the lower half then add the offset
+  if(physical_address < s_higher_half_kernel_offset)
+    return (void*)(physical_address + s_higher_half_kernel_offset);
 
-  // Map the address to the higher half
-  return physical_address + s_higher_half_offset;
+  // Must be in the higher half
+  return (void*)physical_address;
+
 }
 
-uint64_t MemoryManager::to_io_region(uint64_t physical_address) {
+void *MemoryManager::to_lower_region(uintptr_t virtual_address) {
+  // If it's in the lower half then add the offset
+  if(virtual_address > s_higher_half_kernel_offset)
+    return (void*)(virtual_address - s_higher_half_kernel_offset);
 
-  // Check if the address is already mapped
-  if(physical_address >= s_mem_io_offset)
-      return physical_address;
+  // Must be in the lower half
+  return (void*)virtual_address;
+}
 
-  // Check if the address is past 4GB
-  if(physical_address >= 0xFFFFFFFF)
-      return physical_address;
+void *MemoryManager::to_io_region(uintptr_t physical_address) {
 
-  // Map the address to the higher half
-  return physical_address + s_mem_io_offset;
+  if(physical_address < s_higher_half_mem_offset)
+    return (void*)(physical_address + s_higher_half_mem_offset);
+
+  // Must be in the higher half
+  return (void*)physical_address;
+
+}
+void *MemoryManager::to_dm_region(uintptr_t physical_address) {
+
+  if(physical_address < s_higher_half_offset)
+    return (void*)(physical_address + s_hh_direct_map_offset);
+
+  // Must be in the higher half
+  return (void*)physical_address;
+
 }
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
-
 
 void* operator new(size_t size) throw(){
 

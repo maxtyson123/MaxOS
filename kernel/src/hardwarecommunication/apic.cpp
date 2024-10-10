@@ -43,10 +43,9 @@ void LocalAPIC::init() {
     _kprintf("CPU supports xAPIC\n");
 
     // Map the APIC base address to the higher half
-    m_apic_base_high = MemoryManager::to_io_region(m_apic_base);
-    PhysicalMemoryManager::current_manager->map(VirtualPointer(m_apic_base), VirtualPointer(m_apic_base_high), Write);
-    _kprintf("APIC Base:        0x%x\n", m_apic_base);
-    _kprintf("APIC Higher Half: 0x%x\n", m_apic_base_high);
+    m_apic_base_high = (uint64_t)MemoryManager::to_io_region(m_apic_base);
+    PhysicalMemoryManager::current_manager->map(m_apic_base, m_apic_base_high, Write);
+    _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
 
   } else {
     ASSERT(false, "CPU does not support xAPIC")
@@ -122,11 +121,9 @@ void IOAPIC::init() {
   m_address = io_apic->io_apic_address;
 
   // Map the IO APIC address to the higher half
-  m_address_high = MemoryManager::to_io_region(m_address);
-  PhysicalMemoryManager::current_manager->map(VirtualPointer(m_address), VirtualPointer(m_address_high), Write);
-
-  _kprintf("IO APIC Address:     0x%x\n", m_address);
-  _kprintf("IO APIC Higher Half: 0x%x\n", m_address_high);
+  m_address_high = (uint64_t)MemoryManager::to_higher_region(m_address);
+  _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
+  PhysicalMemoryManager::current_manager->map(VirtualPointer(m_address), VirtualPointer(m_address_high), Write);;
 
   // Get the IO APIC version and max redirection entry
   m_version = read(0x01);

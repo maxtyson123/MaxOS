@@ -136,20 +136,21 @@ fi
 
 # Create the args
 QEMU_ARGS=""
-QEMU_ARGS="$QEMU_ARGS -m 2G"                                # 2 GB of RAM
-QEMU_ARGS="$QEMU_ARGS -smp cores=4"                         # 4 cores
-QEMU_ARGS="$QEMU_ARGS -serial stdio"                        # Use stdio for serial
+QEMU_ARGS="$QEMU_ARGS -m 1G"                                            # 2 GB of RAM
+QEMU_ARGS="$QEMU_ARGS -smp cores=4"                                     # 4 cores
+QEMU_ARGS="$QEMU_ARGS -serial stdio"                                    # Use stdio for serial
+QEMU_ARGS="$QEMU_ARGS -monitor telnet::45454,server,nowait"             # Use telnet for monitor
 if [  ! "$USE_DEBUG" -ne "0" ]; then
-QEMU_ARGS="$QEMU_ARGS -d int"                               # Debug interrupts
+QEMU_ARGS="$QEMU_ARGS -d int"                                           # Debug interrupts
 fi
-QEMU_ARGS="$QEMU_ARGS $DEBUG"                               # Enable debugging
-QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                         # Enable acceleration
-QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                        # Enable display
-QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"       # Add a network device
-QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                     # Add port forwarding
-QEMU_ARGS="$QEMU_ARGS -drive file=$IMAGE_PATH,format=raw"   # Add the image as a drive
-QEMU_ARGS="$QEMU_ARGS,if=ide,cache=directsync,id=disk0"     # Configure the drive to be an ide drive with direct sync caching
-QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"              # Don't reboot or shutdown on exit
+QEMU_ARGS="$QEMU_ARGS $DEBUG"                                           # Enable debugging
+QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                                     # Enable acceleration
+QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                                    # Enable display
+QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"                   # Add a network device
+QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                                 # Add port forwarding
+QEMU_ARGS="$QEMU_ARGS -drive file=$IMAGE_PATH,format=raw"               # Add the image as a drive
+QEMU_ARGS="$QEMU_ARGS,if=ide,cache=directsync,id=disk0"                 # Configure the drive to be an ide drive with direct sync caching
+QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"                          # Don't reboot or shutdown on exit
 
 # Run qemu
 msg "Running qemu with args: $QEMU_ARGS"

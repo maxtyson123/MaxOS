@@ -4,8 +4,11 @@
 
 #include <system/multiboot.h>
 #include <common/kprint.h>
+#include <memory/memorymanagement.h>
+
 using namespace MaxOS;
 using namespace MaxOS::system;
+using namespace MaxOS::memory;
 
 Multiboot::Multiboot(unsigned long addr) {
 
@@ -13,7 +16,7 @@ Multiboot::Multiboot(unsigned long addr) {
 
     // Loop through the tags and load them
     struct multiboot_tag *tag;
-    for(tag=(struct multiboot_tag *)(addr + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+    for(tag=(struct multiboot_tag *)(addr + MemoryManager::s_higher_half_kernel_offset + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
       switch (tag -> type) {
           case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:

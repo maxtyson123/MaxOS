@@ -116,34 +116,35 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     // Make the multiboot header
     Multiboot multiboot(addr);
 
-    _kprintf("MaxOS booted\n");
+    _kprintf("-= MaxOS booted =-\n");
 
     //GlobalDescriptorTable gdt;
     //_kprintf("GDT set up\n");
 
     InterruptManager interrupts(0x20, 0);
-    _kprintf("IDT set up\n");
+    _kprintf("-= IDT set up =-\n");
 
-    uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_offset);
+    uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
     PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, p4_table);
-    _kprintf("Physical Memory Manager set up \n");
-    _kprintf("Verify Page Root Address: 0x%x\n", &p4_table);
+    _kprintf("-= Physical Memory Manager set up =-\n");
+
+    // TODO: VMM
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
-    _kprintf("ACPI set up\n");
+    _kprintf("-= ACPI set up =-\n");
 
     AdvancedProgrammableInterruptController apic(&acpi);
-    _kprintf("APIC set up\n");
+    _kprintf("-= APIC set up =-\n");
 
     interrupts.activate();
-    _kprintf("IDT activated\n");
+    _kprintf("-= IDT activated =-\n");
 
     // TODO: 64 bit architecture rewrite
     //  - Fix Paging
     //  - Finish ACPI
     //  - Memory Allocation
     //  - Convert old codebase
-    _kprintf("KERNEL DONE\n");
+    _kprintf("-= KERNEL DONE =-\n");
     while (true) {
          //TODO: This causes a Double Fault and then infinte General Protection Faults
          system::CPU::halt();

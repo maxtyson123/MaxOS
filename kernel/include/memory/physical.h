@@ -75,16 +75,24 @@ namespace MaxOS {
           uint32_t m_total_entries;
           uint32_t m_bitmap_size;
           uint32_t m_used_frames;
+          uint64_t m_memory_size;
+
+          uint64_t m_anonymous_memory_physical_address;
+          uint64_t m_anonymous_memory_virtual_address;
 
           multiboot_mmap_entry* m_mmap;
+          multiboot_tag_mmap*   m_mmap_tag;
 
           uint64_t* m_pml4_root_address;
           pte_t* m_pml4_root;
 
+          bool m_initialized;
+
           void clean_page_table(uint64_t* table);
 
-          pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
+          uint64_t* get_or_create_table(uint64_t* table, size_t index, size_t flags);
           pte_t create_page_table_entry(uintptr_t address, size_t flags);
+          uint64_t* get_bitmap_address();
 
         public:
 
@@ -116,8 +124,11 @@ namespace MaxOS {
           // Tools
           static size_t size_to_frames(size_t size);
           static size_t align_to_page(size_t size);
+          static size_t align_up_to_page(size_t size, size_t page_size);
           static bool check_aligned(size_t size);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address);
+          bool is_anonymous_available(size_t size);
+          bool is_multiboot_reserved(uint64_t address);
 
           static PhysicalMemoryManager* current_manager;
       };
