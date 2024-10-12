@@ -99,7 +99,7 @@ namespace MaxOS {
 
 
           // Vars
-          static const uint32_t PAGE_SIZE = { 0x1000 };    // 4096 bytes
+          static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes
           uint64_t get_memory_size();
 
           // Pml4
@@ -127,7 +127,7 @@ namespace MaxOS {
           // Tools
           static size_t size_to_frames(size_t size);
           static size_t align_to_page(size_t size);
-          static size_t align_up_to_page(size_t size, size_t page_size);
+          static size_t align_up_to_page(size_t size, size_t s_page_size);
           static bool check_aligned(size_t size);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address);
           bool is_anonymous_available(size_t size);

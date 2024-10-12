@@ -31,12 +31,12 @@ endstruc
 %define HUGEPAGE_BIT 0b10000000
 
 %if SMALL_PAGES == 1
-%define PAGE_SIZE 0x1000 ; PAGE_SIZE is 4k
+%define s_page_size 0x1000 ; s_page_size is 4k
 %define PAGE_TABLE_ENTRY WRITE_BIT | PRESENT_BIT ;PAGE_TABLE_ENTRY for 4k pages, huge page bit is left to 0
 %define LOOP_LIMIT 1024
 %define PD_LOOP_LIMIT 2
 %elif SMALL_PAGES == 0
-%define PAGE_SIZE 0x200000
+%define s_page_size 0x200000
 %define PAGE_TABLE_ENTRY HUGEPAGE_BIT | WRITE_BIT | PRESENT_BIT ;PAGE_TABLE (pd table) entry for 2M pages, huge page bit is set.
 %define LOOP_LIMIT 512
 %endif
@@ -108,7 +108,7 @@ start:
     mov ecx, 0  ; Loop counter
 
     .map_p2_table:
-        mov eax, PAGE_SIZE  ; Size of the page
+        mov eax, s_page_size  ; Size of the page
         mul ecx             ; Multiply by counter
         or eax, PAGE_TABLE_ENTRY ; We set: huge page bit (if on 2M pages), writable and present
 
@@ -210,7 +210,7 @@ read_multiboot:
         mov rbx, [(rax + multiboot_tag_framebuffer.framebuffer_addr)]
         or rbx, PAGE_TABLE_ENTRY
         mov qword [(p2_table - KERNEL_VIRTUAL_ADDR) + 8 * 488], rbx
-        add rbx, PAGE_SIZE
+        add rbx, s_page_size
         or rbx, PAGE_TABLE_ENTRY
         mov qword [(p2_table - KERNEL_VIRTUAL_ADDR) + 8 * 489], rbx
     %else
@@ -222,7 +222,7 @@ read_multiboot:
         .map_fb:
             or  rbx, PAGE_TABLE_ENTRY
             mov qword [(fbb_pt_tables) + 8 * rcx], rbx
-            add rbx, PAGE_SIZE
+            add rbx, s_page_size
             inc rcx
             cmp rcx, 512
             jne .map_fb

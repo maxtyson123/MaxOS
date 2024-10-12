@@ -45,7 +45,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     };
 
     // Space to store VMM chunks
-    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + m_physical_memory_manager->get_memory_size() + PhysicalMemoryManager::PAGE_SIZE);
+    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + m_physical_memory_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
     m_first_region = (virtual_memory_region_t*)vmm_space;
     m_current_region = m_first_region;
 
@@ -57,7 +57,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
 
     // Calculate the next available address
-    m_next_available_address = PhysicalMemoryManager::PAGE_SIZE;
+    m_next_available_address = PhysicalMemoryManager::s_page_size;
     if(m_is_kernel){
 
       // Kernel needs to start at the higher half
@@ -74,15 +74,25 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 }
 
 
-
+/**
+ * @brief Allocate a new chunk of virtual memory
+ * @param size The size of the memory to allocate
+ * @param flags The flags to set on the memory
+ * @return The address of the allocated memory
+ */
 void* VirtualMemoryManager::allocate(size_t size, size_t flags) {
   return allocate(0, size, flags);
 }
 
 
-
+/**
+ * @brief Allocate a new chunk of virtual memory at a specific address (ie for mmap io devices)
+ * @param address The address to allocate at
+ * @param size The size of the memory to allocate
+ * @param flags The flags to set on the memory
+ * @return The address of the allocated memory or nullptr if failed
+ */
 void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags) {
-  /// This is used when we need to allocate at a specific address (ie reserving for mmap io devices)
 
   // Make sure allocating something
   if(size == 0)
@@ -102,7 +112,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   }
 
   // Make sure the size is aligned
-  size = PhysicalMemoryManager::align_up_to_page(size, PhysicalMemoryManager::PAGE_SIZE);
+  size = PhysicalMemoryManager::align_up_to_page(size, PhysicalMemoryManager::s_page_size);
 
   // Is there space in the current region
   if(m_current_chunk >= s_chunks_per_page)
@@ -136,7 +146,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
     ASSERT(frame != nullptr, "Failed to allocate frame");
 
     // Map the frame
-    m_physical_memory_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::PAGE_SIZE), Present | Write, m_pml4_root_address);
+    m_physical_memory_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
 
   }
 
@@ -144,7 +154,9 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   return (void*)chunk->start_address;
 }
 
-
+/**
+ * @brief Create a mew region in the VMM to use for allocation of more chunks
+ */
 void VirtualMemoryManager::new_region() {
 
   // Space for the new region
@@ -152,7 +164,7 @@ void VirtualMemoryManager::new_region() {
   ASSERT(new_region_physical != nullptr, "Failed to allocate new VMM region");
 
   // Align the new region
-  virtual_memory_region_t* new_region = (virtual_memory_region_t*)PhysicalMemoryManager::align_to_page((uint64_t)m_current_region + PhysicalMemoryManager::PAGE_SIZE);
+  virtual_memory_region_t* new_region = (virtual_memory_region_t*)PhysicalMemoryManager::align_to_page((uint64_t)m_current_region + PhysicalMemoryManager::s_page_size);
 
   // Map the new region
   m_physical_memory_manager->map(new_region_physical, (virtual_address_t*)new_region, Present | Write, m_pml4_root_address);
@@ -164,6 +176,11 @@ void VirtualMemoryManager::new_region() {
   m_current_region = new_region;
 
 }
+
+/**
+ * @brief Free a chunk of virtual memory
+ * @param address The address of the memory to free
+ */
 void VirtualMemoryManager::free(void *address) {
 
   // Make sure freeing something
@@ -202,7 +219,7 @@ void VirtualMemoryManager::free(void *address) {
   for (size_t i = 0; i < pages; i++){
 
         // Unmap the frame
-        m_physical_memory_manager->unmap((virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::PAGE_SIZE), m_pml4_root_address);
+        m_physical_memory_manager->unmap((virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
 
   }
 
@@ -213,6 +230,11 @@ void VirtualMemoryManager::free(void *address) {
 
   // TODO: Some logic to use this space again
 }
+
+/**
+ * @brief Returns the amount of memory used
+ * @return The amount of memory used
+ */
 size_t VirtualMemoryManager::memory_used() {
 
   // Loop through all the regions and add up the size of the allocated chunks

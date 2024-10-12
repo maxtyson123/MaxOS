@@ -135,16 +135,18 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     _kprintf("-= Memory Manager set up =-\n");
 
-    // TODO: 64 bit architecture rewrite
-    //  - APIC and ACPI
-    //  - Convert old codebase to higher half
-    _kprintf("-= KERNEL DONE =-\n");
-    while (true) {
-         system::CPU::halt();
-    }
-
     // Now entered the gui space
     _kprintf("__ Basic System Setup [DONE] __\n");
+
+    while (true) {
+      system::CPU::halt();
+    }
+
+
+    // TODO: 64 bit architecture rewrite
+    //  - Convert old codebase to higher half
+    //  - APIC and ACPI
+    //  - Rewrite read me
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
@@ -157,6 +159,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VESABootConsole console(&vesa);
     console.clear();
     console.print_logo();
+
+
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);

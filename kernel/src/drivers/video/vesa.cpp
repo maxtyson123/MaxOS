@@ -3,26 +3,41 @@
 //
 
 #include <drivers/video/vesa.h>
+#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::memory;
 using namespace MaxOS::system;
+using namespace MaxOS::common;
 
 VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info)
-: VideoDriver(),
-  m_framebuffer_info(framebuffer_info),
-  m_framebuffer_address((uint64_t *)framebuffer_info->common.framebuffer_addr),
-  m_bpp(framebuffer_info->common.framebuffer_bpp),
-  m_pitch(framebuffer_info->common.framebuffer_pitch)
+: VideoDriver()
 {
+  // Get the framebuffer info
+  m_framebuffer_info = (multiboot_tag_framebuffer*)MemoryManager::to_dm_region((uint64_t)framebuffer_info);
+  _kprintf("Framebuffer info: physical = 0x%x, virtual = 0x%x\n", framebuffer_info, m_framebuffer_info);
+
+  // Set the framebuffer address, bpp and pitch
+  m_bpp = m_framebuffer_info->common.framebuffer_bpp;
+  m_pitch = m_framebuffer_info->common.framebuffer_pitch;
+
+  // Get the framebuffer address
+  m_framebuffer_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_framebuffer_info->common.framebuffer_addr);
+  _kprintf("Framebuffer address: physical = 0x%x, virtual = 0x%x\n", m_framebuffer_info->common.framebuffer_addr, m_framebuffer_address);
+
 }
 
 VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation(){
 
 }
 
+/**
+ * @brief Initializes the VESA driver
+ *
+ * @return True if the driver was initialized successfully, false otherwise
+ */
 bool VideoElectronicsStandardsAssociation::init() {
 
     //Multiboot inits this for us

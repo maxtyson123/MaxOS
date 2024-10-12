@@ -26,7 +26,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
     // Load the header
     m_header = &m_rsdt->header;
-    if((m_header->length / PhysicalMemoryManager::PAGE_SIZE + 1) > 1) {
+    if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
       ASSERT(false, "RSDT is too big, need to map more pages!")
     }
 

@@ -49,7 +49,7 @@ namespace MaxOS{
               static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };
               static const uint64_t s_higher_half_mem_reserved  {  0x280000000 };
               static const uint64_t s_higher_half_offset        { s_higher_half_mem_offset + s_higher_half_mem_reserved};
-              static const uint64_t s_hh_direct_map_offset      { s_higher_half_offset + PhysicalMemoryManager::PAGE_SIZE };
+              static const uint64_t s_hh_direct_map_offset      { s_higher_half_offset + PhysicalMemoryManager::s_page_size };
 
               // Each chunk is aligned to 16 bytes
               static const size_t s_chunk_alignment { 0x10 };

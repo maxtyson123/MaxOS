@@ -243,7 +243,7 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 [issues-url]: https://github.com/maxtyson123/MaxOS/issues
 [built-shield]: https://img.shields.io/github/actions/workflow/status/maxtyson123/MaxOS/max-os.yml?style=for-the-badge
 [built-url]: https://github.com/maxtyson123/MaxOS/actions/workflows/max-os.yml
-[loc-shield]: https://img.shields.io/tokei/lines/github/maxtyson123/MaxOS?style=for-the-badge
+[loc-shield]: https://tokei.rs/b1/github/maxtyson123/MaxOS?style=for-the-badge
 [loc-url]: https://github.com/maxtyson123/MaxOS
 [wakatime-shield]: https://wakatime.com/badge/github/maxtyson123/MaxOS.svg?style=for-the-badge
 [wakatime-url]: https://wakatime.com/badge/github/maxtyson123/MaxOS

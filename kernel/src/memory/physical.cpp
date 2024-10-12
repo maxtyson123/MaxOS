@@ -27,9 +27,9 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   // Store the information about the bitmap
   m_memory_size = (multiboot->get_basic_meminfo()->mem_upper + 1024) * 1000;
-  m_bitmap_size = m_memory_size / PAGE_SIZE + 1;
+  m_bitmap_size = m_memory_size / s_page_size + 1;
   m_total_entries = m_bitmap_size / ROW_BITS + 1;
-  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", ((m_memory_size / 1000) * 1024) / 1024 / 1024, m_bitmap_size, m_total_entries, PAGE_SIZE);
+  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", ((m_memory_size / 1000) * 1024) / 1024 / 1024, m_bitmap_size, m_total_entries, s_page_size);
 
   // Get the mmap that stores the memory to use
   m_mmap_tag = multiboot->get_mmap();
@@ -46,8 +46,8 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   // Kernel Memory (anonymous memory to the next page)
   _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
-  m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)(&_kernel_physical_end + PAGE_SIZE), PAGE_SIZE);
-  m_anonymous_memory_virtual_address = (uint64_t)align_up_to_page((size_t)(&_kernel_end + PAGE_SIZE), PAGE_SIZE);
+  m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)(&_kernel_physical_end + s_page_size), s_page_size);
+  m_anonymous_memory_virtual_address = (uint64_t)align_up_to_page((size_t)(&_kernel_end + s_page_size), s_page_size);
   _kprintf("Anonymous Memory: physical = 0x%x, virtual = 0x%x\n", m_anonymous_memory_physical_address, m_anonymous_memory_virtual_address);
 
   // Map the physical memory into the virtual memory
@@ -57,13 +57,13 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   while (physical_address < mem_end) {
     map((physical_address_t *)physical_address, (virtual_address_t *)virtual_address, Present | Write);
-    physical_address += PAGE_SIZE;
-    virtual_address += PAGE_SIZE;
+    physical_address += s_page_size;
+    virtual_address += s_page_size;
   }
   _kprintf("Mapped: physical = 0x%x-0x%x, virtual = 0x%x-0x%x\n", 0, physical_address, MemoryManager::s_hh_direct_map_offset, virtual_address); // TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem
 
   // Get the bitmap & clear it
-  m_anonymous_memory_physical_address += PAGE_SIZE;
+  m_anonymous_memory_physical_address += s_page_size;
   m_bit_map = get_bitmap_address();
 
   for (uint32_t i = 0; i < m_total_entries; ++i)
@@ -71,8 +71,8 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   _kprintf("Bitmap: location = 0x%x - 0x%x\n", m_bit_map, m_bit_map + m_bitmap_size / 8);
 
   // Calculate how much space the kernel takes up
-  uint32_t kernel_entries = (m_anonymous_memory_physical_address / PAGE_SIZE) + 1;
-  if ((((uint32_t)(m_anonymous_memory_physical_address)) % PAGE_SIZE) != 0) {
+  uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
+  if ((((uint32_t)(m_anonymous_memory_physical_address)) % s_page_size) != 0) {
     // If the kernel takes up more then a whole page(s)
     kernel_entries += 1;
   }
@@ -115,24 +115,47 @@ PhysicalMemoryManager::~PhysicalMemoryManager() {
 
 }
 
+/**
+ * @brief Converts a size to the number of frames
+ * @param size The size to convert
+ * @return The number of frames
+ */
 size_t PhysicalMemoryManager::size_to_frames(size_t size) {
-    return align_to_page(size) / PAGE_SIZE;
+    return align_to_page(size) / s_page_size;
 }
 
-
+/**
+ * @brief Aligns a size to the page size
+ * @param size The size to align
+ * @return  The aligned size
+ */
 size_t PhysicalMemoryManager::align_to_page(size_t size) {
-  return ((size + PAGE_SIZE - 1) /PAGE_SIZE) * PAGE_SIZE;
+  return ((size + s_page_size - 1) /s_page_size) * s_page_size;
 }
 
+/**
+ * @brief Aligns a size up to the page size
+ * @param size  The size to align
+ * @param page_size The page size to align to
+ * @return The aligned size
+ */
 size_t PhysicalMemoryManager::align_up_to_page(size_t size, size_t page_size) {
   return (size + page_size - 1) & ~(page_size - 1);
 }
 
-
+/**
+ * @brief Checks if an address is aligned
+ * @param size The address to check
+ * @return True if the address is aligned
+ */
 bool PhysicalMemoryManager::check_aligned(size_t size){
-    return (size % PAGE_SIZE) == 0;
+    return (size % s_page_size) == 0;
 }
 
+/**
+ * @brief Allocates a physical page of memory, if the PMM is not initalise it will use the anon memory instead of the bitmap
+ * @return The physical address of the page
+ */
 void* PhysicalMemoryManager::allocate_frame() {
 
   // Check if the pmm is initialized
@@ -140,16 +163,16 @@ void* PhysicalMemoryManager::allocate_frame() {
 
     // Find the first free frame
     while ((!is_anonymous_available(m_anonymous_memory_physical_address)) && (m_anonymous_memory_physical_address < m_memory_size)) {
-      m_anonymous_memory_physical_address += PAGE_SIZE;
-      m_anonymous_memory_virtual_address += PAGE_SIZE;
+      m_anonymous_memory_physical_address += s_page_size;
+      m_anonymous_memory_virtual_address += s_page_size;
     }
 
     // Mark frame as used
-    m_anonymous_memory_physical_address += PAGE_SIZE;
-    m_anonymous_memory_virtual_address += PAGE_SIZE;
+    m_anonymous_memory_physical_address += s_page_size;
+    m_anonymous_memory_virtual_address += s_page_size;
 
     // Return the address
-    return (void*)(m_anonymous_memory_physical_address - PAGE_SIZE);
+    return (void*)(m_anonymous_memory_physical_address - s_page_size);
 
   }
 
@@ -170,7 +193,7 @@ void* PhysicalMemoryManager::allocate_frame() {
 
         // Return the address
         uint64_t frame_address = (row * ROW_BITS) + column;
-        return (void*)(frame_address * PAGE_SIZE);
+        return (void*)(frame_address * s_page_size);
     }
   }
 
@@ -179,18 +202,26 @@ void* PhysicalMemoryManager::allocate_frame() {
 
 }
 
-
+/**
+ * @brief Frees a frame in the bit map
+ * @param address The address to free
+ */
 void PhysicalMemoryManager::free_frame(void *address) {
 
     // Mark the frame as not used
     m_used_frames--;
 
     // Set the bit to 0
-    uint64_t frame_address = (uint64_t)address / PAGE_SIZE;
+    uint64_t frame_address = (uint64_t)address / s_page_size;
     m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
 }
 
-
+/**
+ * @brief Allocate an area of physical memory
+ * @param start_address The start of the block
+ * @param size The size to allocate
+ * @return A pointer to the start of the block (physical address)
+ */
 void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) {
 
   // Check how many frames are needed
@@ -229,7 +260,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
           m_bit_map[start_row + (start_column + i) / ROW_BITS] |= (1 << ((start_column + i) % ROW_BITS));
 
         // Return the address
-        return (void*)(start_address + (start_row * ROW_BITS + start_column) * PAGE_SIZE);
+        return (void*)(start_address + (start_row * ROW_BITS + start_column) * s_page_size);
       }
     }
   }
@@ -238,11 +269,16 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
   return nullptr;
 }
 
+/**
+ * @brief Frees an area of physical memory
+ * @param start_address The start of the block
+ * @param size The size to free
+ */
 void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
     // Check how many frames are needed
     size_t frame_count = size_to_frames(size);
-    uint64_t frame_address = start_address / PAGE_SIZE;
+    uint64_t frame_address = start_address / s_page_size;
 
     // Check if the address is valid
     if(frame_address >= m_bitmap_size)
@@ -255,6 +291,12 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
 }
 
+/**
+ * @brief Checks if a sub table is available a table, if not it is created
+ * @param table The table to check
+ * @param next_table The table to create
+ * @param index The index of the table to create
+ */
 void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t index) {
 
   // If the table is already created return
@@ -272,6 +314,13 @@ void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t
 
 }
 
+/**
+ * @brief Gets or creates a table in a table
+ * @param table The table to check
+ * @param index The index of the table to get or create
+ * @param flags The flags to set the table to
+ * @return The created table
+ */
 uint64_t* PhysicalMemoryManager::get_or_create_table(uint64_t *table, size_t index, size_t flags) {
 
   // Address mask
@@ -295,6 +344,12 @@ uint64_t* PhysicalMemoryManager::get_or_create_table(uint64_t *table, size_t ind
   return new_table;
 }
 
+/**
+ * @brief Checks if a table has an entry
+ * @param table The table to check
+ * @param index The index of the table to check
+ * @return True if the table has an entry
+ */
 bool PhysicalMemoryManager::table_has_entry(pml_t *table, size_t index) {
   // Get the entry
   pte_t* entry = &table -> entries[index];
@@ -304,6 +359,12 @@ bool PhysicalMemoryManager::table_has_entry(pml_t *table, size_t index) {
 
 }
 
+/**
+ * @brief Gets a table if it exists
+ * @param table  The table to check
+ * @param index The index of the table to get
+ * @return  The table if it exists, nullptr otherwise
+ */
 uint64_t *PhysicalMemoryManager::get_table_if_exists(uint64_t *table, size_t index) {
 
   // Address mask
@@ -320,6 +381,13 @@ uint64_t *PhysicalMemoryManager::get_table_if_exists(uint64_t *table, size_t ind
 }
 
 #define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))
+/**
+ * @brief Maps a physical address to a virtual address, using the kernel's pml4 table
+ * @param physical_address The physical address to map
+ * @param address The virtual address to map to
+ * @param flags The flags to set the mapping to
+ * @return The virtual address
+ */
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_address, virtual_address_t* address, size_t flags) {
 
   // Base information
@@ -359,6 +427,14 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_addre
   return address;
 }
 
+/**
+ * @brief Maps a physical address to a virtual address
+ * @param physical The physical address
+ * @param virtual_address The virtual address
+ * @param flags The flags to set the mapping to
+ * @param pml4_table The pml4 table to use
+ * @return The virtual address
+ */
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virtual_address_t *virtual_address, size_t flags, uint64_t *pml4_table) {
 
     // Get the indexes
@@ -395,7 +471,12 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
     return virtual_address;
 }
 
-
+/**
+ * @brief Allocates a physical address to a virtual address
+ * @param virtual_address The virtual address
+ * @param flags The flags to set the mapping to
+ * @return The virtual address
+ */
 virtual_address_t* PhysicalMemoryManager::map(virtual_address_t *virtual_address, size_t flags) {
 
   // Create a new physical address for the frame
@@ -406,6 +487,12 @@ virtual_address_t* PhysicalMemoryManager::map(virtual_address_t *virtual_address
 
 }
 
+/**
+ * @brief Allocates a new area physical memory to a area virtual address
+ * @param virtual_address_start The start of the virtual address
+ * @param length The length of the area
+ * @param flags The flags to set the mapping to
+ */
 void PhysicalMemoryManager::map_area(virtual_address_t* virtual_address_start, size_t length, size_t flags) {
 
     // Get the size of the area
@@ -413,10 +500,17 @@ void PhysicalMemoryManager::map_area(virtual_address_t* virtual_address_start, s
 
     // Map the required frames
     for (size_t i = 0; i < size; ++i)
-        map(virtual_address_start + (i * PAGE_SIZE), flags);
+        map(virtual_address_start + (i * s_page_size), flags);
 
 }
 
+/**
+ * @brief Maps an area of physical memory to a virtual address
+ * @param physical_address_start The start of the physical address
+ * @param virtual_address_start The start of the virtual address
+ * @param length  The length of the area
+ * @param flags The flags to set the mapping to
+ */
 void PhysicalMemoryManager::map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags) {
 
   // Get the size of the area
@@ -424,10 +518,15 @@ void PhysicalMemoryManager::map_area(physical_address_t* physical_address_start,
 
   // Map the required frames
   for (size_t i = 0; i < size; ++i)
-    map(physical_address_start + (i * PAGE_SIZE), virtual_address_start + (i * PAGE_SIZE), flags);
+    map(physical_address_start + (i * s_page_size), virtual_address_start + (i * s_page_size), flags);
 
 }
 
+/**
+ * @brief Maps a physical address to its virtual address counter-part
+ * @param physical_address The physical address to map
+ * @param flags The flags to set the mapping to
+ */
 void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, size_t flags) {
 
   // Map the physical address to its virtual address counter-part
@@ -435,6 +534,10 @@ void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, s
 
 }
 
+/**
+ * @brief Unmaps a virtual address using the kernel's pml4 table
+ * @param virtual_address The virtual address to unmap
+ */
 void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
 
   // Base information
@@ -467,6 +570,11 @@ void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
   asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
 }
 
+/**
+ * @brief Unmaps a virtual address
+ * @param virtual_address The virtual address to unmap
+ * @param pml4_root The pml4 table to use
+ */
 void PhysicalMemoryManager::unmap(virtual_address_t *virtual_address, uint64_t *pml4_root) {
 
     // Get the indexes
@@ -497,6 +605,11 @@ void PhysicalMemoryManager::unmap(virtual_address_t *virtual_address, uint64_t *
 
 }
 
+/**
+ * @brief Unmaps an area of virtual memory
+ * @param virtual_address_start The start of the area
+ * @param length The length of the area
+ */
 void PhysicalMemoryManager::unmap_area(virtual_address_t *virtual_address_start, size_t length) {
 
     // Get the size of the area
@@ -504,7 +617,7 @@ void PhysicalMemoryManager::unmap_area(virtual_address_t *virtual_address_start,
 
     // Unmap the required frames
     for (size_t i = 0; i < size; ++i)
-      unmap(virtual_address_start + (i * PAGE_SIZE));
+      unmap(virtual_address_start + (i * s_page_size));
 }
 
 /**
@@ -518,13 +631,22 @@ bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virt
   // TODO: Implement
 }
 
-
+/**
+ * @brief Cleans a page table (fills it with 0 or null entries)
+ * @param table The table to clean
+ */
 void PhysicalMemoryManager::clean_page_table(uint64_t *table) {
   for(int i = 0; i < 512; i++){
         table[i] = 0x00l;
   }
 }
 
+/**
+ * @brief Creates a page table entry
+ * @param address The address to create the entry for
+ * @param flags The flags to set the entry to
+ * @return The created page table entry
+ */
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) {
 
   pte_t page =  (pte_t){
@@ -544,10 +666,15 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
   return page;
 }
 
+/**
+ * @brief Checks if a physical address is reserved by multiboot mmap
+ * @param address The address to check
+ * @return True if the address is reserved
+ */
 bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
 
   // Return false if the address range is entirely within or overlaps with the multiboot reserved region
-  if ((address > multiboot_tag_start && address + PAGE_SIZE < multiboot_tag_end) || (address + PAGE_SIZE > multiboot_tag_start && address < multiboot_tag_end)) {
+  if ((address > multiboot_tag_start && address + s_page_size < multiboot_tag_end) || (address + s_page_size > multiboot_tag_start && address < multiboot_tag_end)) {
     return false;
   }
 
@@ -555,7 +682,7 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
 
     // If it doesn't overlap with the mmap entry
-    if ((entry -> addr + entry -> len) < (address + PAGE_SIZE))
+    if ((entry -> addr + entry -> len) < (address + s_page_size))
       continue;
 
     // If it is not available
@@ -575,6 +702,11 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
   return false;
 }
 
+/**
+ * @brief Checks if an address is reserved by a multiboot module
+ * @param address The address to check
+ * @return True if the address is reserved
+ */
 bool PhysicalMemoryManager::is_multiboot_reserved(uint64_t address) {
   //ASSERT(false, "Not implemented!")
   // TODO: Check if address is reserve by multiboot module
@@ -582,6 +714,10 @@ bool PhysicalMemoryManager::is_multiboot_reserved(uint64_t address) {
   return false;
 }
 
+/**
+ * @brief Gets the address of the bitmap
+ * @return The address of the bitmap
+ */
 uint64_t *PhysicalMemoryManager::get_bitmap_address() {
 
 
@@ -616,10 +752,18 @@ uint64_t *PhysicalMemoryManager::get_bitmap_address() {
   ASSERT(false, "No space for the bitmap");
 }
 
+/**
+ * @brief Gets the pml4 root address for the kernel
+ * @return The pml4 root address
+ */
 uint64_t *PhysicalMemoryManager::get_pml4_root_address() {
     return m_pml4_root_address;
 }
 
+/**
+ * @brief Gets total the memory size available for use (allocated or not)
+ * @return The memory size
+ */
 uint64_t PhysicalMemoryManager::get_memory_size() {
   return m_memory_size;
 }
