@@ -19,7 +19,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     m_rsdt = (RSDT*) rsdp->rsdt_address;
 
     // Map the RSDT
-    PhysicalMemoryManager::current_manager->map(m_rsdt, MemoryManager::to_io_region((uint64_t)m_rsdt), Present | Write);
+    PhysicalMemoryManager::s_current_manager->map(m_rsdt, MemoryManager::to_io_region((uint64_t)m_rsdt), Present | Write);
     m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)m_rsdt);
     _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
 

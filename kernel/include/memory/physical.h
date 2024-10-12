@@ -13,7 +13,6 @@ namespace MaxOS {
 
   namespace memory {
 
-    #define VirtualPointer(addr) (void*)((uint64_t)(addr))
 
     #define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))
 
@@ -134,7 +133,7 @@ namespace MaxOS {
           bool is_anonymous_available(size_t size);
           bool is_multiboot_reserved(uint64_t address);
 
-          static PhysicalMemoryManager* current_manager;
+          static PhysicalMemoryManager* s_current_manager;
           void clean_page_table(uint64_t* table);
       };
   }

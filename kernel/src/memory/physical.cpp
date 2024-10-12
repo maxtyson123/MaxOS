@@ -9,7 +9,7 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 extern uint64_t p4_table[];
 
-PhysicalMemoryManager* PhysicalMemoryManager::current_manager = nullptr;
+PhysicalMemoryManager* PhysicalMemoryManager::s_current_manager = nullptr;
 extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
@@ -18,12 +18,12 @@ extern uint64_t multiboot_tag_start;
 
 MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot, uint64_t pml4_root[512]) {
 
+  // Set the current manager
+  s_current_manager = this;
+
   // SEE boot.s FOR SETUP OF PAGING
   m_pml4_root = (pte_t *)pml4_root;
   m_pml4_root_address = pml4_root;
-
-  // Set the current manager
-  current_manager = this;
 
   // Store the information about the bitmap
   m_memory_size = (multiboot->get_basic_meminfo()->mem_upper + 1024) * 1000;

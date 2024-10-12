@@ -3,47 +3,31 @@
 //
 
 #include <memory/memorymanagement.h>
+#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::memory;
+using namespace MaxOS::common;
 
 MemoryManager* MemoryManager::s_active_memory_manager = 0;
 
-MemoryManager::MemoryManager(multiboot_tag_mmap* memory_map)
+MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
+: m_virtual_memory_manager(vmm)
 {
-
-     size_t heap = 0;
-     size_t size = 0;
-
-    // Find the available memory
-    for (multiboot_memory_map_t* mmap = memory_map->entries; (unsigned long)mmap < (unsigned long)memory_map + memory_map->size;
-         mmap = (multiboot_memory_map_t*)((unsigned long)mmap + memory_map->entry_size)) {
-
-        // If the memory is available then use it
-        if(mmap -> type == MULTIBOOT_MEMORY_AVAILABLE){
-            heap = mmap -> addr;
-            size = mmap -> len;
-        }
-    }
-
-    // Add a 10MB offset to the heap
-        heap += 0x1000000;
-
+    // This is the memory managers
     s_active_memory_manager = this;
 
-    //Prevent wiring outside the area that is allowed to write
-    if(size < sizeof(MemoryChunk)){
+    // Get the first chunk of memory
+    this -> m_first_memory_chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(PhysicalMemoryManager::PAGE_SIZE + sizeof(MemoryChunk), 0);
+    m_first_memory_chunk-> allocated = false;
+    m_first_memory_chunk-> prev = 0;
+    m_first_memory_chunk-> next = 0;
+    m_first_memory_chunk-> size = PhysicalMemoryManager::PAGE_SIZE - sizeof(MemoryChunk);
 
-        this ->m_first_memory_chunk = 0;
+    // Set the last chunk to the first chunk
+    m_last_memory_chunk = m_first_memory_chunk;
 
-    }else{
-
-        this ->m_first_memory_chunk = (MemoryChunk*)heap;
-        m_first_memory_chunk-> allocated = false;
-        m_first_memory_chunk-> prev = 0;
-        m_first_memory_chunk-> next = 0;
-        m_first_memory_chunk-> size = size - sizeof(MemoryChunk);
-    }
+    _kprintf("First memory chunk: 0x%x\n", m_first_memory_chunk);
 }
 
 MemoryManager::~MemoryManager() {
@@ -61,22 +45,28 @@ void* MemoryManager::malloc(size_t size) {
 
     MemoryChunk* result = 0;
 
+    // Don't allocate a block of size 0
+    if(size == 0)
+        return 0;
+
+    // Size must include the size of the chunk and be aligned
+    size = align(size + sizeof(MemoryChunk));
+
     // Find the next free chunk that is big enough
     for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0 && result == 0; chunk = chunk->next) {
         if(chunk -> size > size && !chunk -> allocated)
             result = chunk;
     }
 
-    // If there is no free chunk then return 0
+    // If there is no free chunk then expand the heap
     if(result == 0)
-        return 0;
+      result = expand_heap(size);
 
-    // If there is space to split the chunk
+    // If there is not enough space to create a new chunk then just allocate the current chunk
     if(result -> size < size + sizeof(MemoryChunk) + 1) {
         result->allocated = true;
         return (void *)(((size_t)result) + sizeof(MemoryChunk));
     }
-
 
     // Create a new chunk after the current one
     MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
@@ -96,6 +86,10 @@ void* MemoryManager::malloc(size_t size) {
     result -> allocated = true;
     result->next = temp;
 
+    // Update the last memory chunk if necessary
+    if(result == m_last_memory_chunk)
+      m_last_memory_chunk = temp;
+
     return (void*)(((size_t)result) + sizeof(MemoryChunk));
 }
 
@@ -107,6 +101,14 @@ void* MemoryManager::malloc(size_t size) {
  */
 void MemoryManager::free(void *pointer) {
 
+
+    // If nothing to free then return
+    if(pointer == 0)
+          return;
+
+    // If block is not in the memory manager's range then return
+    if((uint64_t ) pointer < (uint64_t ) m_first_memory_chunk || (uint64_t ) pointer > (uint64_t ) m_last_memory_chunk)
+        return;
 
     // Create a new free chunk
     MemoryChunk* chunk = (MemoryChunk*)((size_t)pointer - sizeof(MemoryChunk));
@@ -142,6 +144,33 @@ void MemoryManager::free(void *pointer) {
     }
 }
 
+MemoryChunk *MemoryManager::expand_heap(size_t size) {
+
+  // Create a new chunk of memory
+  MemoryChunk* chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(size, Present | Write);
+
+  // If the chunk is null then there is no more memory
+  ASSERT(chunk != 0, "Out of memory - kernel cannot allocate any more memory");
+
+  // Set the chunk's properties
+  chunk -> allocated = false;
+  chunk -> size = size;
+  chunk -> next = 0;
+
+  // Insert the chunk into the linked list
+  m_last_memory_chunk -> next = chunk;
+  chunk -> prev = m_last_memory_chunk;
+  m_last_memory_chunk = chunk;
+
+  // If it is possible to move to merge the new chunk with the previous chunk then do so (note: this happens if the previous chunk is free but cant contain the size required)
+  if(!chunk -> prev -> allocated)
+    free((void*)((size_t)chunk + sizeof(MemoryChunk)));
+
+  return chunk;
+
+}
+
+
 /**
  * @brief Returns the amount of memory used
  * @return The amount of memory used
@@ -157,6 +186,13 @@ int MemoryManager::memory_used() {
 
         return result;
 }
+
+
+size_t MemoryManager::align(size_t size) {
+  return (size / s_chunk_alignment + 1) * s_chunk_alignment;
+}
+
+
 void* MemoryManager::to_higher_region(uintptr_t physical_address) {
 
   // If it's in the lower half then add the offset
@@ -199,6 +235,7 @@ void *MemoryManager::to_dm_region(uintptr_t physical_address) {
 bool MemoryManager::in_higher_region(uintptr_t virtual_address) {
   return virtual_address & (1l << 62);
 }
+
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 

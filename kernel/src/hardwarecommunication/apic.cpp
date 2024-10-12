@@ -44,7 +44,7 @@ void LocalAPIC::init() {
 
     // Map the APIC base address to the higher half
     m_apic_base_high = (uint64_t)MemoryManager::to_io_region(m_apic_base);
-    PhysicalMemoryManager::current_manager->map(m_apic_base, m_apic_base_high, Write);
+    PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_apic_base, (virtual_address_t*)m_apic_base_high, Write | Present);
     _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
 
   } else {
@@ -123,7 +123,7 @@ void IOAPIC::init() {
   // Map the IO APIC address to the higher half
   m_address_high = (uint64_t)MemoryManager::to_higher_region(m_address);
   _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
-  PhysicalMemoryManager::current_manager->map(VirtualPointer(m_address), VirtualPointer(m_address_high), Write);;
+  PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
 
   // Get the IO APIC version and max redirection entry
   m_version = read(0x01);

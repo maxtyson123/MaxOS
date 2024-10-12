@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <memory/physical.h>
-#include <memory/memorymanagement.h>
 
 namespace MaxOS {
   namespace memory {
@@ -52,7 +51,7 @@ namespace MaxOS {
         void new_region();
 
       public:
-        VirtualMemoryManager(PhysicalMemoryManager* physical_memory_manager, bool is_kernel);
+        VirtualMemoryManager(bool is_kernel);
         ~VirtualMemoryManager();
 
         void* allocate(size_t size, size_t flags);

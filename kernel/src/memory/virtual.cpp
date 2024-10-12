@@ -8,8 +8,8 @@
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 
-VirtualMemoryManager::VirtualMemoryManager(PhysicalMemoryManager* physical_memory_manager, bool is_kernel)
-: m_physical_memory_manager(physical_memory_manager),
+VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
+: m_physical_memory_manager(PhysicalMemoryManager::s_current_manager),
   m_is_kernel(is_kernel)
 {
 
