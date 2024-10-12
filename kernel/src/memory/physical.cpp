@@ -26,10 +26,10 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   current_manager = this;
 
   // Store the information about the bitmap
-  m_memory_size = multiboot->get_basic_meminfo()->mem_upper + 1024;
+  m_memory_size = (multiboot->get_basic_meminfo()->mem_upper + 1024) * 1000;
   m_bitmap_size = m_memory_size / PAGE_SIZE + 1;
   m_total_entries = m_bitmap_size / ROW_BITS + 1;
-  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", (m_memory_size * 1024) / 1024 / 1024, m_bitmap_size, m_total_entries, PAGE_SIZE);
+  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", ((m_memory_size / 1000) * 1024) / 1024 / 1024, m_bitmap_size, m_total_entries, PAGE_SIZE);
 
   // Get the mmap that stores the memory to use
   m_mmap_tag = multiboot->get_mmap();
@@ -121,7 +121,7 @@ size_t PhysicalMemoryManager::size_to_frames(size_t size) {
 
 
 size_t PhysicalMemoryManager::align_to_page(size_t size) {
-  return (size + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
+  return ((size + PAGE_SIZE - 1) /PAGE_SIZE) * PAGE_SIZE;
 }
 
 size_t PhysicalMemoryManager::align_up_to_page(size_t size, size_t page_size) {
@@ -154,8 +154,7 @@ void* PhysicalMemoryManager::allocate_frame() {
   }
 
   // Check if there are enough frames
-  if(m_used_frames >= m_bitmap_size)
-    return nullptr;
+  ASSERT(m_used_frames < m_bitmap_size, "No more frames available")
 
   // Loop through the bitmap
   for (uint16_t row = 0; row < m_total_entries; ++row) {
@@ -256,51 +255,146 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
 }
 
+void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t index) {
 
+  // If the table is already created return
+  if(table_has_entry(table, index))
+    return;
 
-virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_address, virtual_address_t* address, size_t flags) {
-#define SIGN_EXTENSION 0xFFFF000000000000
+  // Create the table
+  uint64_t *new_table = (uint64_t *)allocate_frame();
+
+  // Set the table to the next table
+  table -> entries[index] = create_page_table_entry((uint64_t)new_table, Present | Write);
+
+  // Clear the table
+  clean_page_table((uint64_t*)next_table);
+
+}
+
+uint64_t* PhysicalMemoryManager::get_or_create_table(uint64_t *table, size_t index, size_t flags) {
+
+  // Address mask
+  uint64_t mask = 0xFFFFFFF000;
+
+  // If the table is already created return it
+  if(table[index] & 0b1)
+      return (uint64_t *) MemoryManager::to_dm_region((uintptr_t) table[index] & mask);
+
+  // Need to create the table
+  uint64_t *new_table = (uint64_t*)allocate_frame();
+  table[index] = (uint64_t) new_table | flags;
+
+  // Move the table to the higher half
+  new_table = (uint64_t*)MemoryManager::to_dm_region((uintptr_t) new_table);
+
+  // Clear the table
+  clean_page_table(new_table);
+
+  // All done
+  return new_table;
+}
+
+bool PhysicalMemoryManager::table_has_entry(pml_t *table, size_t index) {
+  // Get the entry
+  pte_t* entry = &table -> entries[index];
+
+  // If the table is already created return it
+  return (entry -> present);
+
+}
+
+uint64_t *PhysicalMemoryManager::get_table_if_exists(uint64_t *table, size_t index) {
+
+  // Address mask
+  uint64_t mask = 0xFFFFFFF000;
+
+  // If the table is null return null
+  if(table == nullptr)
+    return nullptr;
+
+  // Check if the table is present
+  if(table[index] & 0b1)
+      return (uint64_t *) MemoryManager::to_dm_region((uintptr_t) table[index] & mask);
+
+}
+
 #define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))
+virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_address, virtual_address_t* address, size_t flags) {
 
-  uint64_t* pml4_table = m_pml4_root_address;
+  // Base information
+  pml_t* pml4_table = (pml_t *)m_pml4_root_address;
+  size_t base_addr = 0xFFFF000000000000;
 
-  uint16_t pml4_e = PML4_GET_INDEX((uint64_t) address);
-  uint16_t pdpr_e = PML3_GET_INDEX((uint64_t) address);
-  uint16_t pd_e   = PML2_GET_INDEX((uint64_t) address);
-  uint16_t pt_e   = PML1_GET_INDEX((uint64_t) address);
+  // Get the indexes
+  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) address);
+  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) address);
+  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) address);
+  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) address);
 
-  uint64_t *pdpr_table =(uint64_t *) (SIGN_EXTENSION | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_e));
-  uint64_t *pd_table = (uint64_t *) (SIGN_EXTENSION | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_e, (uint64_t) pdpr_e));
-  uint64_t *pt_table = (uint64_t *) (SIGN_EXTENSION | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_e, (uint64_t) pdpr_e, (uint64_t) pd_e));
+  // Get the tables
+  pml_t *pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
+  pml_t *pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
+  pml_t *pt_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
 
+  // Create the tables
+  create_table(pml4_table, pdpr_table, pml4_index);
+  create_table(pdpr_table, pd_table, pdpr_index);
+  create_table(pd_table, pt_table, pd_index);
 
- if( !(pml4_table[pml4_e] & 0b1) ) {
-    uint64_t *new_table = (uint64_t *)allocate_frame();
-    pml4_table[pml4_e] = (uint64_t) new_table | Present | Write;
-    clean_page_table(pdpr_table);
-  }
+  // Get the entry
+  pte_t* pte = &pt_table -> entries[pt_index];
 
-  if( !(pdpr_table[pdpr_e] & 0b1) ) {
-    uint64_t *new_table = (uint64_t *)allocate_frame();
-    pdpr_table[pdpr_e] = (uint64_t) new_table | Present | Write;
-    clean_page_table(pd_table);
-  }
+  // If it already exists return the address
+  if(pte -> present)
+    return address;
 
-  if( !(pd_table[pd_e] & 0b01) ) {
-    uint64_t *new_table = (uint64_t *)allocate_frame();
-    pd_table[pd_e] = (uint64_t) new_table | Present | Write;
-    clean_page_table(pt_table);
-  }
+  // Map the physical address to the virtual address
+ *pte = create_page_table_entry((uint64_t)physical_address, flags);
 
-   if( !(pt_table[pt_e] & 0b1)) {
-    pt_table[pt_e] = (uint64_t) physical_address | flags;
-  }
 
   // Flush the TLB
   asm volatile("invlpg (%0)" ::"r" (address) : "memory");
 
   return address;
 }
+
+virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virtual_address_t *virtual_address, size_t flags, uint64_t *pml4_table) {
+
+    // Get the indexes
+    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+
+    // If it is in a lower region then assume it is the user space
+    uint8_t is_user = MemoryManager::in_higher_region((uint64_t)virtual_address);
+    if(is_user) {
+
+      // Change the flags to user
+      flags |= User;
+      is_user = User;
+
+    }
+
+    // Store the tables
+    uint64_t* pdpr_table = get_or_create_table(pml4_table, pml4_index, Present | Write | is_user);
+    uint64_t* pd_table = get_or_create_table(pdpr_table, pdpr_index, Present | Write | is_user);
+    uint64_t* pt_table = get_or_create_table(pd_table, pd_index, Present | Write | is_user);
+
+    // If the page is already mapped return the address
+    if(pt_table[pt_index] & 0b1)
+      return virtual_address;
+
+    // Map the physical address to the virtual address
+    pt_table[pt_index] = (uint64_t) physical | flags;
+
+    // Flush the TLB
+    asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
+
+    return virtual_address;
+}
+
 
 virtual_address_t* PhysicalMemoryManager::map(virtual_address_t *virtual_address, size_t flags) {
 
@@ -342,8 +436,75 @@ void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, s
 }
 
 void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
-  ASSERT(false, "Not implemented!")
-  // TODO: Implement
+
+  // Base information
+  pml_t* pml4_table = (pml_t *)m_pml4_root_address;
+  size_t base_addr = 0xFFFF000000000000;
+
+  // Get the indexes
+  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+
+  // Get the tables
+  pml_t *pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
+  pml_t *pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
+  uint64_t* pt_table = (uint64_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
+
+  // Check if the entry is present
+  if(table_has_entry(pml4_table, pml4_index) && table_has_entry(pdpr_table, pdpr_index) && table_has_entry(pd_table, pd_index))
+    return;
+
+  // Check if the entry isn't present
+  if(!(pt_table[pt_index] & 0b1))
+    return;
+
+  // Unmap the entry
+  pt_table[pt_index] = 0x00l;
+
+  // Flush the TLB
+  asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
+}
+
+void PhysicalMemoryManager::unmap(virtual_address_t *virtual_address, uint64_t *pml4_root) {
+
+    // Get the indexes
+    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+
+    // Get the tables
+    uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
+    uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
+    uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
+
+    // Check if the tables are present (if any are not then a pt entry will not be present)
+    if(pt_table == nullptr)
+      return;
+
+
+    // Check if the entry is present
+    if(!(pt_table[pt_index] & 0b1))
+      return;
+
+    // Unmap the entry
+    pt_table[pt_index] = 0x00l;
+
+    // Flush the TLB
+    asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
+
+}
+
+void PhysicalMemoryManager::unmap_area(virtual_address_t *virtual_address_start, size_t length) {
+
+    // Get the size of the area
+    size_t size = size_to_frames(length);
+
+    // Unmap the required frames
+    for (size_t i = 0; i < size; ++i)
+      unmap(virtual_address_start + (i * PAGE_SIZE));
 }
 
 /**
@@ -364,25 +525,17 @@ void PhysicalMemoryManager::clean_page_table(uint64_t *table) {
   }
 }
 
-void clearBits(uint64_t *num, int start, int end) {
-  // Create a mask with 1s from start to end and 0s elsewhere
-  uint64_t mask = (~0ULL << start) ^ (~0ULL << (end + 1));
-
-  // Apply the mask to the number to clear the desired bits
-  *num &= ~mask;
-}
-
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) {
 
   pte_t page =  (pte_t){
     .present = 1,
-    .write = (flags & WriteBit) != 0,
-    .user = (flags & UserBit) != 0,
+    .write = (flags & Write) != 0,
+    .user = (flags & User) != 0,
     .write_through = (flags & (1 << 7)) != 0,
     .cache_disabled = 0,
     .accessed = 0,
     .dirty = 0,
-    .huge_page = (flags & HugePageBit) != 0,
+    .huge_page = (flags & HugePage) != 0,
     .global = 0,
     .available = 0,
     .physical_address = (uint64_t)address >> 12
@@ -421,12 +574,14 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
   // Memory is not available
   return false;
 }
+
 bool PhysicalMemoryManager::is_multiboot_reserved(uint64_t address) {
   //ASSERT(false, "Not implemented!")
   // TODO: Check if address is reserve by multiboot module
 
   return false;
 }
+
 uint64_t *PhysicalMemoryManager::get_bitmap_address() {
 
 
@@ -460,3 +615,12 @@ uint64_t *PhysicalMemoryManager::get_bitmap_address() {
   // Error no space for the bitmap
   ASSERT(false, "No space for the bitmap");
 }
+
+uint64_t *PhysicalMemoryManager::get_pml4_root_address() {
+    return m_pml4_root_address;
+}
+
+uint64_t PhysicalMemoryManager::get_memory_size() {
+  return m_memory_size;
+}
+

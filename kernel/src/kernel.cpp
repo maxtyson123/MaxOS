@@ -128,7 +128,12 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, p4_table);
     _kprintf("-= Physical Memory Manager set up =-\n");
 
-    // TODO: VMM
+    VirtualMemoryManager k_vmm(&pmm, true);
+    _kprintf("Freed test memory, vmm_used: %d\n", k_vmm.memory_used());
+
+    _kprintf("-= Virtual Memory Manager set up =-\n");
+
+    //TODO: Once this is all working a bit of clean up please
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     _kprintf("-= ACPI set up =-\n");

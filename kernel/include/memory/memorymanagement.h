@@ -57,6 +57,8 @@ namespace MaxOS{
               static void* to_lower_region(uintptr_t virtual_address);
               static void* to_io_region(uintptr_t physical_address);
               static void* to_dm_region(uintptr_t physical_address);
+
+              static bool in_higher_region(uintptr_t virtual_address);
         };
     }
 }

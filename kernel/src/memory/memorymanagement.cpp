@@ -196,6 +196,10 @@ void *MemoryManager::to_dm_region(uintptr_t physical_address) {
 
 }
 
+bool MemoryManager::in_higher_region(uintptr_t virtual_address) {
+  return virtual_address & (1l << 62);
+}
+
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
 void* operator new(size_t size) throw(){

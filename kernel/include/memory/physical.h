@@ -40,11 +40,6 @@ namespace MaxOS {
 
       } page_flags_t;
 
-      typedef enum PageBits {
-        WriteBit = (1 << 1),
-        UserBit = (1 << 3),
-        HugePageBit = (1 << 7),
-      } page_bits_t;
 
       // Struct for a page table entry
         typedef struct PageTableEntry {
@@ -88,10 +83,14 @@ namespace MaxOS {
 
           bool m_initialized;
 
-          void clean_page_table(uint64_t* table);
-
-          uint64_t* get_or_create_table(uint64_t* table, size_t index, size_t flags);
+          // Table Management
+          void create_table(pml_t* table, pml_t* next_table, size_t index);
           pte_t create_page_table_entry(uintptr_t address, size_t flags);
+          bool table_has_entry(pml_t* table, size_t index);
+          uint64_t* get_or_create_table(uint64_t* table, size_t index, size_t flags);
+          uint64_t* get_table_if_exists(uint64_t* table, size_t index);
+
+
           uint64_t* get_bitmap_address();
 
         public:
@@ -102,7 +101,10 @@ namespace MaxOS {
 
           // Vars
           static const uint32_t PAGE_SIZE = { 0x1000 };    // 4096 bytes
-          static const uint64_t PAGE_TABLE_OFFSET = { 0xFFFF000000000000 }; // The offset for the page table (before the kernel hihg half)
+          uint64_t get_memory_size();
+
+          // Pml4
+          uint64_t* get_pml4_root_address();
 
           // Frame Management
           void* allocate_frame();
@@ -114,12 +116,14 @@ namespace MaxOS {
           // Map
           virtual_address_t* map(virtual_address_t* virtual_address, size_t flags);
           virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags);
+          virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root);
           void map_area(virtual_address_t* virtual_address_start, size_t length, size_t flags);
           void map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags);
           void identity_map(physical_address_t* physical_address, size_t flags);
 
           void unmap(virtual_address_t* virtual_address);
-
+          void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
+          void unmap_area(virtual_address_t* virtual_address_start, size_t length);
 
           // Tools
           static size_t size_to_frames(size_t size);
@@ -131,6 +135,7 @@ namespace MaxOS {
           bool is_multiboot_reserved(uint64_t address);
 
           static PhysicalMemoryManager* current_manager;
+          void clean_page_table(uint64_t* table);
       };
   }
 
