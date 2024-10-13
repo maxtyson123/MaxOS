@@ -45,7 +45,8 @@
 #include <system/multithreading.h>
 
 //MEMORY
-#include <memory/memorymanagement.h>
+#include <memory/physical.h>
+#include <memory/virtual.h>
 
 //FILESYSTEM
 #include <filesystem/msdospart.h>
@@ -105,45 +106,45 @@ void print_boot_header(Console* console){
 
 }
 
-
+extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
-
-    // Make the multiboot header
-    Multiboot multiboot(addr);
 
     // Initialise the serial console
     SerialConsole serialConsole;
 
-    _kprintf("MaxOS booted\n");
+    // Make the multiboot header
+    Multiboot multiboot(addr);
 
-    //GlobalDescriptorTable gdt;
-    //_kprintf("GDT set up\n");
+    _kprintf("-= MaxOS booted =-\n");
 
     InterruptManager interrupts(0x20, 0);
-    _kprintf("IDT set up\n");
+    _kprintf("-= IDT set up =-\n");
 
-    // TODO Memory map set up so MEMIO can be used without triggering a page fault
+    uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
+    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, p4_table);
+    _kprintf("-= Physical Memory Manager set up =-\n");
 
-    AdvancedConfigurationAndPowerInterface acpi(&multiboot);
-    _kprintf("ACPI set up\n");
+    VirtualMemoryManager vmm(true);
+    _kprintf("-= Virtual Memory Manager set up =-\n");
 
-    AdvancedProgrammableInterruptController apic(&acpi);
-    _kprintf("APIC set up\n");
 
-    interrupts.activate();
-    _kprintf("IDT activated\n");
+    // Initialise the memory manager
+    MemoryManager memoryManager(&vmm);
+    _kprintf("-= Memory Manager set up =-\n");
 
-    // TODO: 64 bit architecture rewrite
+    // Now entered the gui space
+    _kprintf("__ Basic System Setup [DONE] __\n");
+
     while (true) {
-         //TODO: This causes a Double Fault and then infinte General Protection Faults
-         system::CPU::halt();
+      system::CPU::halt();
     }
 
-    // Init memory management
-    MemoryManager memoryManager(multiboot.get_mmap());
-    // TODO: Alot needs to be page mapped and higher halfed
 
+    // TODO: 64 bit architecture rewrite
+    //  - Convert old codebase to higher half
+    //  - APIC and ACPI
+    //  - Rewrite read me
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
@@ -156,6 +157,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VESABootConsole console(&vesa);
     console.clear();
     console.print_logo();
+
+
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
@@ -181,21 +184,17 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     ConsoleStream systemSetupHeaderStream(&systemSetupHeader);
     systemSetupHeaderStream << "Setting up system";
 
-    //Setup GDT
-    // TODO:  GlobalDescriptorTable gdt;
-    cout << "-- Set Up GDT\n";
-    systemSetupHeaderStream << ".";
-
-    // Print that the memory has been set up
-    cout << "-- Set Up Memory Management\n";
-    systemSetupHeaderStream << ".";
+    // Stuff done earlier
+    cout << "-- Set Up Paging\n";
+    cout << "-- Set Up Interrupt Manager\n";
+    cout << "-- Set Up Physical Memory Management\n";
+    cout << "-- Set Up Virtual Memory Management\n";
+    cout << "-- Set Up Memory Management (Kernel)\n";
+    cout << "-- Set Up VESA Driver\n";
+    systemSetupHeaderStream << "......";
 
     ThreadManager threadManager;
     cout << "-- Set Up Thread Management\n";
-    systemSetupHeaderStream << ".";
-
-    //TODO: InterruptManager interrupts(0x20, &gdt, &threadManager, &cout);            //Instantiate the function
-    cout << "-- Set Up Interrupts\n";
     systemSetupHeaderStream << ".";
 
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
@@ -212,7 +211,17 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     
     DriverManager driverManager;
 
-    //Keyboard
+    //TODO: ACPI
+    AdvancedConfigurationAndPowerInterface acpi(&multiboot);
+    cout << "-- Set Up ACPI\n";
+    deviceSetupHeaderStream << ".";
+
+    //TODO: APIC
+    AdvancedProgrammableInterruptController apic(&acpi);
+    cout << "-- Set Up APIC\n";
+    deviceSetupHeaderStream << ".";
+
+    // Keyboard
     KeyboardDriver keyboard(&interrupts);
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
@@ -220,22 +229,22 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "-- Set Up Keyboard\n";
     deviceSetupHeaderStream << ".";
 
-    //Mouse
+    // Mouse
     MouseDriver mouse(&interrupts);
     driverManager.add_driver(&mouse);
     cout << "-- Set Up Mouse\n";
     deviceSetupHeaderStream << ".";
 
-    //Clock
+    // Clock
     Clock kernelClock(&interrupts, 1);
     driverManager.add_driver(&kernelClock);
     cout << "-- Set Up Clock\n";
     deviceSetupHeaderStream << ".";
 
-    //Driver Selectors
+    // Driver Selectors
     Vector<DriverSelector*> driverSelectors;
 
-    //Make the stream on the side for the PCI
+    // Make the stream on the side for the PCI
     ConsoleArea pciConsoleArea(&console, console.width() - 45, areaStart+1, 45, console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream pciConsoleStream(&pciConsoleArea);
     console.put_string(console.width() - 45, areaStart, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
@@ -314,7 +323,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "\n";
     activationHeaderStream << "[ DONE ]";
 
-    // Make the network setup stream
+    // Make the network setup stream (TODO: Move to user space)
     ConsoleArea networkSetupHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream networkSetupHeaderStream(&networkSetupHeader);
     networkSetupHeaderStream << "Setting up network";

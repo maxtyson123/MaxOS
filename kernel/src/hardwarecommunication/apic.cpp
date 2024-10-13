@@ -7,6 +7,7 @@
 using namespace MaxOS;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
+using namespace MaxOS::memory;
 
 LocalAPIC::LocalAPIC() {
 
@@ -41,8 +42,13 @@ void LocalAPIC::init() {
     m_x2apic = false;
     _kprintf("CPU supports xAPIC\n");
 
+    // Map the APIC base address to the higher half
+    m_apic_base_high = (uint64_t)MemoryManager::to_io_region(m_apic_base);
+    PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_apic_base, (virtual_address_t*)m_apic_base_high, Write | Present);
+    _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
+
   } else {
-    _kprintf("ERROR: CPU does not support APIC (BAD!!)\n");
+    ASSERT(false, "CPU does not support xAPIC")
   }
 
   // Get the vector table
@@ -57,7 +63,6 @@ void LocalAPIC::init() {
   uint32_t version = read(0x30);
   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
 
-
 }
 
 uint32_t LocalAPIC::read(uint32_t reg) {
@@ -66,7 +71,8 @@ uint32_t LocalAPIC::read(uint32_t reg) {
   if(m_x2apic) {
       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
   } else {
-      return (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg));
+      return (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg));
+
   }
 
 }
@@ -77,7 +83,7 @@ void LocalAPIC::write(uint32_t reg, uint32_t value) {
   if(m_x2apic) {
       CPU::write_msr((reg >> 4) + 0x800, value);
   } else {
-      (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg)) = value;
+      (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg)) = value;
     }
 }
 
@@ -109,14 +115,17 @@ void IOAPIC::init() {
   MADT_Item* io_apic_item = get_madt_item(1, 0);
 
   // Check if the IO APIC was found
-  if(io_apic_item == nullptr) {
-        _kprintf("ERROR: IO APIC not found\n");
-        return;
-  }
+  ASSERT(io_apic_item == nullptr, "IO APIC not found")
+
 
   // Get the IO APIC address
   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;
   m_address = io_apic->io_apic_address;
+
+  // Map the IO APIC address to the higher half
+  m_address_high = (uint64_t)MemoryManager::to_higher_region(m_address);
+  _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
+  PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
 
   // Get the IO APIC version and max redirection entry
   m_version = read(0x01);
@@ -199,10 +208,11 @@ MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 uint32_t IOAPIC::read(uint32_t reg) {
 
   // Write the register
-  *(volatile uint32_t*)(m_address + 0x00) = reg;
+  *(volatile uint32_t*)(m_address_high + 0x00) = reg;
 
   // Return the value
-  return *(volatile uint32_t*)(m_address + 0x10);
+  return *(volatile uint32_t*)(m_address_high + 0x10);
+
 
 
 }
@@ -210,10 +220,10 @@ uint32_t IOAPIC::read(uint32_t reg) {
 void IOAPIC::write(uint32_t reg, uint32_t value) {
 
     // Write the register
-    *(volatile uint32_t*)(m_address + 0x00) = reg;
+    *(volatile uint32_t*)(m_address_high + 0x00) = reg;
 
     // Write the value
-    *(volatile uint32_t*)(m_address + 0x10) = value;
+    *(volatile uint32_t*)(m_address_high + 0x10) = value;
 }
 
 void IOAPIC::read_redirect(uint8_t index, RedirectionEntry *entry) {

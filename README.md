@@ -18,12 +18,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
 [![Build][built-shield]][built-url]
 [![Lines of Code][loc-shield]][loc-url]
+[![wakatime][wakatime-shield]][wakatime-url]
+
 
 <!-- PROJECT LOGO -->
 <br />
@@ -35,7 +35,7 @@
 <h3 align="center">Max OS</h3>
 
   <p align="center">
-    A 32bit hobby operating system written in C++
+    A 64bit hobby operating system written in C++
     <br />
     <a href="https://maxtyson123.github.io/MaxOS/html/"><strong>Explore the docs »</strong></a>
     <br />
@@ -79,7 +79,9 @@
 
 [![MaxOS][product-screenshot]](#)
 
-Max OS is a hobby operating system developed for the 32bit platform using C++ and Assembly. The project is currently in the early stages of development and is not yet ready for use. The project is being developed as a learning experience and is not intended to be used as a production operating system.
+!-- CURRENTLY IMPLEMENTING 64BIT SUPPORT, OS IS IN A BROKEN STATE --!
+
+Max OS is a hobby operating system developed for the 64bit platform using C++ and Assembly. The project is currently in the early stages of development and is not yet ready for use. The project is being developed as a learning experience and is not intended to be used as a production operating system.
 
 Max OS supports device drivers, memory management, multitasking, a GUI, and more. The project is being developed with the goal of being able to run on real hardware, however, it is currently only able to run on a virtual machine.
 
@@ -224,6 +226,7 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 * [OSDev Notes](https://github.com/dreamportdev/Osdev-Notes/)
 * [OSDev Subreddit](https://www.reddit.com/r/osdev/)
 * [Duck OS](https://github.com/byteduck/duckOS)
+* [Dream OS](https://github.com/dreamos82/Dreamos64)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -241,5 +244,8 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 [issues-url]: https://github.com/maxtyson123/MaxOS/issues
 [built-shield]: https://img.shields.io/github/actions/workflow/status/maxtyson123/MaxOS/max-os.yml?style=for-the-badge
 [built-url]: https://github.com/maxtyson123/MaxOS/actions/workflows/max-os.yml
-[loc-shield]: https://img.shields.io/tokei/lines/github/maxtyson123/MaxOS?style=for-the-badge
+[loc-shield]: https://tokei.rs/b1/github/maxtyson123/MaxOS?style=for-the-badge
 [loc-url]: https://github.com/maxtyson123/MaxOS
+[wakatime-shield]: https://wakatime.com/badge/github/maxtyson123/MaxOS.svg?style=for-the-badge
+[wakatime-url]: https://wakatime.com/badge/github/maxtyson123/MaxOS
+

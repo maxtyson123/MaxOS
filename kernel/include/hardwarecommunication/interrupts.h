@@ -61,7 +61,7 @@ namespace MaxOS {
          * @class InterruptManager
          * @brief Handles all interrupts and passes them to the correct handler
          */
-        class InterruptManager : public common::InputStream {
+        class InterruptManager {
             friend class InterruptHandler;
 
             protected:

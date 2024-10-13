@@ -12,12 +12,26 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
   if(multiboot->get_old_acpi() != 0){
 
+
+    _kprintf("Using old ACPI\n");
+
+
     // Get the RSDP & RSDT
     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
     m_rsdt = (RSDT*) rsdp->rsdt_address;
 
+    // Map the RSDT
+    PhysicalMemoryManager::s_current_manager->map(m_rsdt, MemoryManager::to_io_region((uint64_t)m_rsdt), Present | Write);
+    m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)m_rsdt);
+    _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
+
+
     // Load the header
     m_header = &m_rsdt->header;
+    if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
+      ASSERT(false, "RSDT is too big, need to map more pages!")
+    }
+
 
     // Calculate the checksum
     uint8_t sum = 0;
@@ -25,18 +39,17 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
               sum += ((char*)rsdp)[i];
 
     // Check if the checksum is valid
-    if(sum != 0)
-      _kprintf("ACPI: Invalid checksum!\n");
+    ASSERT(sum == 0, "Invalid checksum!")
 
   }else{
 
-    // If the new ACPI is not supported, panic
-    if(multiboot->get_new_acpi() == 0){
-      _kprintf("ACPI: No ACPI found! (BAD)\n");
-      return;
-    }
+    // TODO: MAP THE MF
+    ASSERT(false, "Not implemented!")
 
-    // Its the new ACPI
+    // If the new ACPI is not supported, panic
+    ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
+
+    // It's the new ACPI
     m_type = 1;
 
     // Get the RSDP & XSDT
@@ -52,9 +65,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
         sum += ((char*)rsdp2)[i];
 
     // Check if the checksum is valid
-    if(sum != 0)
-      _kprintf("ACPI: Invalid checksum!\n");
-
+    ASSERT(sum == 0, "Invalid checksum!")
   }
 }
 
@@ -89,6 +100,9 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const *signatur
 
       // Get the entry
       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
+
+      // Move the header to the higher half
+      header = (ACPISDTHeader*) MemoryManager::to_higher_region((uint64_t)header);
 
       // Check if the signature matches
       if(strncmp(header->signature, signature, 4) == 0)

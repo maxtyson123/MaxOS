@@ -3,7 +3,7 @@
 //
 
 #include <common/kprint.h>
-#include <stdarg.h>
+
 
 using namespace MaxOS::drivers;
 
@@ -14,7 +14,7 @@ using namespace MaxOS::drivers;
  * @param base The base of the number (10 for decimal, 16 for hex)
  * @param number The number to convert
  */
-char* itoa(int base, int number)
+char* itoa(int base, uint64_t  number)
 {
     static char buffer[50] = {0};
     int i = 49;
@@ -74,12 +74,69 @@ static void putchar (int c)
 /**
  * @ brief Prints a debug prefix (in yellow) to the serial output
  */
-void pre_kprintf()
+void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 {
-  // Print the kernel header with yellow text
-  const char* header = "\033[1;33m[DEBUG] \033[0m";
-  for (int i = 0; i < strlen(header); i++)
-    putchar(header[i]);
+
+  // Print the  colour
+  char* colour = "---------";
+  switch (type) {
+
+    // Log (yellow)
+    case 0:
+      colour = "\033[1;33m";
+      break;
+
+    // Assert (red)
+    case 3:
+      colour = "\033[1;31m";
+      break;
+  }
+
+  for (int i = 0; i < strlen(colour); i++)
+    putchar(colour[i]);
+
+  putchar('[');
+
+  // File Output
+  if(type == 0){
+
+    // Print the file (but not the path)
+    const char* file_str = file;
+    for (int i = strlen(file) - 1; i >= 0; i--)
+    {
+      if (file[i] == '/')
+      {
+        file_str = &file[i + 1];
+        break;
+      }
+    }\
+    for (int j = 0; j < strlen(file_str); j++)
+      putchar(file_str[j]);
+    putchar(':');
+
+    // Print the line
+    const char* line_str = itoa(10, line);
+    for (int i = 0; i < strlen(line_str); i++)
+      putchar(line_str[i]);
+  }else{
+
+    // Print the text
+    const char* text = "FATAL ERROR IN {";
+    for (int i = 0; i < strlen(text); i++)
+      putchar(text[i]);
+
+    // Print the function
+    for (int i = 0; i < strlen(func); i++)
+      putchar(func[i]);
+
+    putchar('}');
+  }
+
+
+  // Print the kernel footer
+  const char* footer = "] \033[0m";
+  for (int i = 0; i < strlen(footer); i++)
+    putchar(footer[i]);
 
 }
 
@@ -95,11 +152,11 @@ void pre_kprintf()
  * @param format The formatted string
  * @param ... The data to pass into the string
  */
-void _kprintf (const char *format, ...)
+void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...)
 {
 
   // Print the header
-  pre_kprintf();
+  pre_kprintf(file, line,func, type);
 
   // Create a pointer to the data
   va_list parameters;
@@ -133,17 +190,8 @@ void _kprintf (const char *format, ...)
       case 'x':
       {
         // Print a hex
-        int number = va_arg (parameters, int);
+        uint64_t  number = va_arg (parameters, uint64_t );
         char* str = itoa(16, number);
-        for (int i = 0; i < strlen(str); i++)
-          putchar(str[i]);
-        break;
-      }
-      case 'u':
-      {
-        // Print an unsigned decimal
-        unsigned int number = va_arg (parameters, unsigned int);
-        char* str = itoa(10, number);
         for (int i = 0; i < strlen(str); i++)
           putchar(str[i]);
         break;

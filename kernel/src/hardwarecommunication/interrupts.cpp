@@ -45,7 +45,7 @@ void InterruptHandler::handle_interrupt() {
 
 
 InterruptManager::InterruptManager(uint16_t hardware_interrupt_offset, OutputStream* handler)
-: common::InputStream(handler),
+:
   m_hardware_interrupt_offset(hardware_interrupt_offset)
 {
 
@@ -181,6 +181,20 @@ void InterruptManager::deactivate()
  * @return The stack pointer
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
+
+  if(status -> interrupt_number == 0xE)
+  {
+    bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
+    bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
+    bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
+    bool reserved_write = (status ->error_code & 0x8) != 0;  // Bit 3: Reserved bit write flag
+    bool instruction_fetch = (status ->error_code & 0x10) != 0; // Bit 4: Instruction fetch flag (on some CPUs)
+
+    ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
+             status->error_code, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+  }
+
+  ASSERT(false, "Interupt number 0x%x, Code: 0x%x", status->interrupt_number, status->error_code);
 
   // If there is an interrupt manager handle interrupt
   if(s_active_interrupt_manager != 0)

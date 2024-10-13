@@ -21,19 +21,22 @@ SECTIONS {
 	.text ALIGN (4K) : AT (ADDR (.text) - _kern_virtual_offset)
 	{
 		*(.text)
+		*(.text.*)
 	}
 	.rodata ALIGN (4K) : AT (ADDR (.rodata) - _kern_virtual_offset)
 	{
 		*(.rodata)
+		*(.rodata.*)
 	}
 	.data ALIGN (4K) : AT (ADDR (.data) - _kern_virtual_offset)
 	{
-		 start_ctors = .;
+		  start_ctors = .;
           KEEP(*( .init_array ));
           KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
           end_ctors = .;
 
           *(.data)
+         *(.data.*)
 	}
 	.bss ALIGN (4K) : AT (ADDR (.bss) - _kern_virtual_offset)
 	{
@@ -41,4 +44,6 @@ SECTIONS {
 	}
 
     _kernel_end = .;
+    _kernel_size = _kernel_end - _kernel_start - _kern_virtual_offset;
+    _kernel_physical_end = . - _kern_virtual_offset;
 }
