@@ -72,6 +72,7 @@ uint32_t LocalAPIC::read(uint32_t reg) {
       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
   } else {
       return (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg));
+
   }
 
 }
@@ -115,6 +116,7 @@ void IOAPIC::init() {
 
   // Check if the IO APIC was found
   ASSERT(io_apic_item == nullptr, "IO APIC not found")
+
 
   // Get the IO APIC address
   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;
@@ -210,6 +212,7 @@ uint32_t IOAPIC::read(uint32_t reg) {
 
   // Return the value
   return *(volatile uint32_t*)(m_address_high + 0x10);
+
 
 
 }

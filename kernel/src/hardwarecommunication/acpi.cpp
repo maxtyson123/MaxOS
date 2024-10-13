@@ -12,7 +12,9 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
   if(multiboot->get_old_acpi() != 0){
 
+
     _kprintf("Using old ACPI\n");
+
 
     // Get the RSDP & RSDT
     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
@@ -29,6 +31,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
       ASSERT(false, "RSDT is too big, need to map more pages!")
     }
+
 
     // Calculate the checksum
     uint8_t sum = 0;
@@ -63,7 +66,6 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
     // Check if the checksum is valid
     ASSERT(sum == 0, "Invalid checksum!")
-
   }
 }
 

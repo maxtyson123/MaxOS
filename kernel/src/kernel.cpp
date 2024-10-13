@@ -110,6 +110,9 @@ extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
 
+    // Make the multiboot header
+    Multiboot multiboot(addr);
+
     // Initialise the serial console
     SerialConsole serialConsole;
 
@@ -128,7 +131,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VirtualMemoryManager vmm(true);
     _kprintf("-= Virtual Memory Manager set up =-\n");
 
-    // Init memory management
+
     MemoryManager memoryManager(&vmm);
     void* test = memoryManager.malloc(100);
     memoryManager.free(test);

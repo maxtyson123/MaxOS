@@ -294,6 +294,7 @@ fbb_pt_tables:
     resb 8192
 %endif
 
+
 ; This section will be used to get the multiboot info
 align 4096
 end_of_mapped_memory:

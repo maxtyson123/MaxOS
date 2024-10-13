@@ -24,6 +24,7 @@
 [![Lines of Code][loc-shield]][loc-url]
 [![wakatime][wakatime-shield]][wakatime-url]
 
+
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -247,3 +248,4 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 [loc-url]: https://github.com/maxtyson123/MaxOS
 [wakatime-shield]: https://wakatime.com/badge/github/maxtyson123/MaxOS.svg?style=for-the-badge
 [wakatime-url]: https://wakatime.com/badge/github/maxtyson123/MaxOS
+

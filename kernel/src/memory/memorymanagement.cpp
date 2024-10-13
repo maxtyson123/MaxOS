@@ -191,6 +191,8 @@ int MemoryManager::memory_used() {
 
         return result;
 }
+uint64_t MemoryManager::map_to_higher_half(uint64_t physical_address) {
+
 
 /**
  * @brief Aligns the size to the chunk alignment

@@ -69,6 +69,7 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 //        push %rdi \n\
 //    ");
 
+
     _kprintf("Reloaded segment registers\n");
 
 }
