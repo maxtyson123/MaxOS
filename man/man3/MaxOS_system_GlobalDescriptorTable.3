@@ -1,4 +1,4 @@
-.TH "MaxOS::system::GlobalDescriptorTable" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::GlobalDescriptorTable" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -71,39 +71,42 @@ Definition at line 11 of file gdt\&.cpp\&.
 48         \&.address = (uint64_t)m_gdt
 49     };
 50 
-51     // Load the GDTR
-52     asm volatile("lgdt %0" : : "m" (gdtr));
-53 
-54     _kprintf("Loaded GDT\n");
-55 
-56     // Reload the segment registers
-57     asm volatile("\
-58         mov $0x10, %ax \n\
-59         mov %ax, %ds \n\
-60         mov %ax, %es \n\
-61         mov %ax, %fs \n\
-62         mov %ax, %gs \n\
-63         mov %ax, %ss \n\
-64         \n\
-65         pop %rdi \n\
-66         push $0x8 \n\
-67         push %rdi \n\
-68     ");
-69 
-70     _kprintf("Reloaded segment registers\n");
+51 
+52     // TODO: This is done in assembly but would be nice to do here
+53 //    // Load the GDTR
+54 //    asm volatile("lgdt %0" : : "m" (gdtr));
+55 //
+56 //    _kprintf("Loaded GDT\n");
+57 //
+58 //    // Reload the segment registers
+59 //    asm volatile("\
+60 //        mov $0x10, %ax \n\
+61 //        mov %ax, %ds \n\
+62 //        mov %ax, %es \n\
+63 //        mov %ax, %fs \n\
+64 //        mov %ax, %gs \n\
+65 //        mov %ax, %ss \n\
+66 //        \n\
+67 //        pop %rdi \n\
+68 //        push $0x8 \n\
+69 //        push %rdi \n\
+70 //    ");
 71 
-72 }
+72 
+73     _kprintf("Reloaded segment registers\n");
+74 
+75 }
 .fi
 .PP
-References _kprintf(), address, and MaxOS::system::GDTR::limit\&.
+References _kprintf, address, and MaxOS::system::GDTR::limit\&.
 .SS "GlobalDescriptorTable::~GlobalDescriptorTable ()"
 
 .PP
-Definition at line 74 of file gdt\&.cpp\&.
+Definition at line 77 of file gdt\&.cpp\&.
 .PP
 .nf
-75 {
-76 }
+78 {
+79 }
 .fi
 
 

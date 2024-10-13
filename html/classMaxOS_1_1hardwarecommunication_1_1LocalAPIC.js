@@ -7,6 +7,7 @@ var classMaxOS_1_1hardwarecommunication_1_1LocalAPIC =
     [ "read", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a9ccb9dce047006c21d4d62e719ea0de2", null ],
     [ "write", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#abe619fbf5c49415635d3e84d34a46289", null ],
     [ "m_apic_base", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a745e7ee6cc83206664fbf157b01fd082", null ],
+    [ "m_apic_base_high", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a334dd5e1bfd0ad7825a01765e4ec0139", null ],
     [ "m_id", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a732229d18e57d83bb36444cc6eed0c69", null ],
     [ "m_x2apic", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a655174d55ab5579b3c8b0bdbbcfae57a", null ]
 ];

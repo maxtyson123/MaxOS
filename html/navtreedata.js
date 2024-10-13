@@ -53,7 +53,7 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", null ],
+        [ "Variables", "globals_vars.html", "globals_vars" ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
@@ -67,13 +67,13 @@ var NAVTREEINDEX =
 "classMaxOS_1_1common_1_1OutputStream.html#a1951086b7676bf52ed9a4412a4b05559",
 "classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973.html#aacbc48386a4b5f36a63dc53b2f1bae2f",
 "classMaxOS_1_1gui_1_1Desktop.html#a0ef21909cc5084a72f7b8fd478b3b292",
-"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a53461bfc898446e31cead8262a08b8d6",
-"console_8h.html#a32880d01ca5ebf3d4417101a1dfa55b1a61c8ef4dc797d4a4d263f194b8a2ca50",
-"globals_m.html",
-"keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f",
-"namespacemembers_g.html",
-"structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader.html#a1e72343e89c12f2f3fbb211f22843096",
-"tcp_8h.html#a14f328f54b1801ae5c2130259bd55e2ea27c7253ede8f20b48355f0eade354954"
+"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3",
+"classMaxOS_1_1system_1_1Thread.html#a37d9edd3a1a776cbc27dedff949c9726",
+"functions_vars_z.html",
+"keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca94e9171f7e93a1064ee3f2aae2eee55f",
+"namespaceMaxOS_1_1drivers_1_1ethernet.html",
+"structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#a9b8a6a7e086a520cf52a4ea1cdc87670",
+"structmultiboot__tag__basic__meminfo.html#a86060b6871a2c0036465aab04b4c7edf"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

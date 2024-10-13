@@ -158,43 +158,57 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00009">9</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                                       {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="comment">// Loop through the tags and load them</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">struct </span><a class="code" href="structmultiboot__tag.html">multiboot_tag</a> *tag;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordflow">for</span>(tag=(<span class="keyword">struct</span> <a class="code" href="structmultiboot__tag.html">multiboot_tag</a> *)(addr + 8); tag-&gt;<a class="code" href="structmultiboot__tag.html#ac2a46af85d217c774d2a618291539334">type</a> != <a class="code" href="multiboot_8h.html#a9ba1adbd7639e20f723e51dd9668a981">MULTIBOOT_TAG_TYPE_END</a>; tag = (<span class="keyword">struct </span><a class="code" href="structmultiboot__tag.html">multiboot_tag</a> *) ((<a class="code" href="multiboot_8h.html#a037f602538fccf97e90021c19fdfc047">multiboot_uint8_t</a> *) tag + ((tag-&gt;<a class="code" href="structmultiboot__tag.html#a877e6f09bf575aa775a81897a54337f4">size</a> + 7) &amp; ~7))) {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;      <span class="keywordflow">switch</span> (tag -&gt; <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>) {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#ad173069cc56a0b2734d796577a1bd857">MULTIBOOT_TAG_TYPE_FRAMEBUFFER</a>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;              <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a48388fa09d529db631bf6f80d5ab3091">m_framebuffer</a> = (<a class="code" href="structmultiboot__tag__framebuffer.html">multiboot_tag_framebuffer</a> *)tag;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;              <span class="keywordflow">break</span>;</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00013">13</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                                       {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Multiboot\n&quot;</span>);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="comment">// Loop through the tags and load them</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">struct </span><a class="code" href="structmultiboot__tag.html">multiboot_tag</a> *tag;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordflow">for</span>(tag=(<span class="keyword">struct</span> <a class="code" href="structmultiboot__tag.html">multiboot_tag</a> *)(addr + MemoryManager::s_higher_half_kernel_offset + 8); tag-&gt;<a class="code" href="structmultiboot__tag.html#ac2a46af85d217c774d2a618291539334">type</a> != <a class="code" href="multiboot_8h.html#a9ba1adbd7639e20f723e51dd9668a981">MULTIBOOT_TAG_TYPE_END</a>; tag = (<span class="keyword">struct </span><a class="code" href="structmultiboot__tag.html">multiboot_tag</a> *) ((<a class="code" href="multiboot_8h.html#a037f602538fccf97e90021c19fdfc047">multiboot_uint8_t</a> *) tag + ((tag-&gt;<a class="code" href="structmultiboot__tag.html#a877e6f09bf575aa775a81897a54337f4">size</a> + 7) &amp; ~7))) {</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#ae64c134a04cf27a23a036c3330ef827a">MULTIBOOT_TAG_TYPE_BASIC_MEMINFO</a>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;              <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a8018de72b296600f6090f9dfc90dce11">m_basic_meminfo</a> = (<a class="code" href="structmultiboot__tag__basic__meminfo.html">multiboot_tag_basic_meminfo</a> *)tag;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;              <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#afe69dc4711fc7f5dc9604977b2393218">MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME</a>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;              <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a7c9cdd56bd6e58a13af896226e98541b">m_bootloader_name</a> = (<a class="code" href="structmultiboot__tag__string.html">multiboot_tag_string</a> *)tag;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;              <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#ad5e7a09f39f1f37e50be39000af2af4e">MULTIBOOT_TAG_TYPE_MMAP</a>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2">m_mmap</a> = (<a class="code" href="structmultiboot__tag__mmap.html">multiboot_tag_mmap</a> *)tag;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#acc29d9aee9a932ee12628ba57fdfb3a4">MULTIBOOT_TAG_TYPE_ACPI_OLD</a>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271">m_old_acpi</a> = (<a class="code" href="structmultiboot__tag__old__acpi.html">multiboot_tag_old_acpi</a> *)tag;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#afa32c43ce21ca35f6b0062bddbedf37d">MULTIBOOT_TAG_TYPE_ACPI_NEW</a>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#af9d4c45cd7c5bc9fb7fefe0d30e930d3">m_new_acpi</a> = (<a class="code" href="structmultiboot__tag__new__acpi.html">multiboot_tag_new_acpi</a> *)tag;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;      }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;      <span class="keywordflow">switch</span> (tag -&gt; <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>) {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#ad173069cc56a0b2734d796577a1bd857">MULTIBOOT_TAG_TYPE_FRAMEBUFFER</a>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;              <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a48388fa09d529db631bf6f80d5ab3091">m_framebuffer</a> = (<a class="code" href="structmultiboot__tag__framebuffer.html">multiboot_tag_framebuffer</a> *)tag;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;              <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#ae64c134a04cf27a23a036c3330ef827a">MULTIBOOT_TAG_TYPE_BASIC_MEMINFO</a>:</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;              <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a8018de72b296600f6090f9dfc90dce11">m_basic_meminfo</a> = (<a class="code" href="structmultiboot__tag__basic__meminfo.html">multiboot_tag_basic_meminfo</a> *)tag;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;              <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#afe69dc4711fc7f5dc9604977b2393218">MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME</a>:</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;              <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a7c9cdd56bd6e58a13af896226e98541b">m_bootloader_name</a> = (<a class="code" href="structmultiboot__tag__string.html">multiboot_tag_string</a> *)tag;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;              <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Bootloader: %s\n&quot;</span>, <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a7c9cdd56bd6e58a13af896226e98541b">m_bootloader_name</a>-&gt;<a class="code" href="structmultiboot__tag__string.html#a50125b332242abd0051cd348fd2d9b68">string</a>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;              <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#a92170b084bd536b0e30e2373263f6685">MULTIBOOT_TAG_TYPE_BOOTDEV</a>:</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="structmultiboot__tag__bootdev.html">multiboot_tag_bootdev</a> *bootdev;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            bootdev = (<a class="code" href="structmultiboot__tag__bootdev.html">multiboot_tag_bootdev</a> *)tag;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Boot device: 0x%x, 0x%x, 0x%x of type 0x%x\n&quot;</span>,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                    (<span class="keywordtype">unsigned</span>) bootdev-&gt;<a class="code" href="structmultiboot__tag__bootdev.html#a2bcf5d32579dc281148607d937ca099b">biosdev</a>, (<span class="keywordtype">unsigned</span>) bootdev-&gt;<a class="code" href="structmultiboot__tag__bootdev.html#a50f53a5f93c66c721734cd44f6ea56b0">slice</a>,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                    (<span class="keywordtype">unsigned</span>) bootdev-&gt;<a class="code" href="structmultiboot__tag__bootdev.html#ac34809553805874feb470308a2baa1e1">part</a>, (<span class="keywordtype">unsigned</span>) bootdev-&gt;<a class="code" href="structmultiboot__tag__bootdev.html#a80f58414b4caf448202e9cf5fa6a471e">type</a>);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#ad5e7a09f39f1f37e50be39000af2af4e">MULTIBOOT_TAG_TYPE_MMAP</a>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="comment">// If there is not already a mmap tag, set it</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2">m_mmap</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2">m_mmap</a> = (<a class="code" href="structmultiboot__tag__mmap.html">multiboot_tag_mmap</a> *)tag;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#acc29d9aee9a932ee12628ba57fdfb3a4">MULTIBOOT_TAG_TYPE_ACPI_OLD</a>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271">m_old_acpi</a> = (<a class="code" href="structmultiboot__tag__old__acpi.html">multiboot_tag_old_acpi</a> *)tag;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;          <span class="keywordflow">case</span> <a class="code" href="multiboot_8h.html#afa32c43ce21ca35f6b0062bddbedf37d">MULTIBOOT_TAG_TYPE_ACPI_NEW</a>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#af9d4c45cd7c5bc9fb7fefe0d30e930d3">m_new_acpi</a> = (<a class="code" href="structmultiboot__tag__new__acpi.html">multiboot_tag_new_acpi</a> *)tag;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00423">m_basic_meminfo</a>, <a class="el" href="multiboot_8h_source.html#l00424">m_bootloader_name</a>, <a class="el" href="multiboot_8h_source.html#l00422">m_framebuffer</a>, <a class="el" href="multiboot_8h_source.html#l00425">m_mmap</a>, <a class="el" href="multiboot_8h_source.html#l00427">m_new_acpi</a>, <a class="el" href="multiboot_8h_source.html#l00426">m_old_acpi</a>, <a class="el" href="multiboot_8h_source.html#l00059">MULTIBOOT_TAG_TYPE_ACPI_NEW</a>, <a class="el" href="multiboot_8h_source.html#l00058">MULTIBOOT_TAG_TYPE_ACPI_OLD</a>, <a class="el" href="multiboot_8h_source.html#l00048">MULTIBOOT_TAG_TYPE_BASIC_MEMINFO</a>, <a class="el" href="multiboot_8h_source.html#l00046">MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME</a>, <a class="el" href="multiboot_8h_source.html#l00044">MULTIBOOT_TAG_TYPE_END</a>, <a class="el" href="multiboot_8h_source.html#l00052">MULTIBOOT_TAG_TYPE_FRAMEBUFFER</a>, <a class="el" href="multiboot_8h_source.html#l00050">MULTIBOOT_TAG_TYPE_MMAP</a>, <a class="el" href="multiboot_8h_source.html#l00206">multiboot_tag::size</a>, <a class="el" href="apic_8h_source.html#l00002">type</a>, and <a class="el" href="multiboot_8h_source.html#l00205">multiboot_tag::type</a>.</p>
+<p class="reference">References <a class="el" href="kprint_8h_source.html#l00012">_kprintf</a>, <a class="el" href="multiboot_8h_source.html#l00237">multiboot_tag_bootdev::biosdev</a>, <a class="el" href="multiboot_8h_source.html#l00059">MULTIBOOT_TAG_TYPE_ACPI_NEW</a>, <a class="el" href="multiboot_8h_source.html#l00058">MULTIBOOT_TAG_TYPE_ACPI_OLD</a>, <a class="el" href="multiboot_8h_source.html#l00048">MULTIBOOT_TAG_TYPE_BASIC_MEMINFO</a>, <a class="el" href="multiboot_8h_source.html#l00046">MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME</a>, <a class="el" href="multiboot_8h_source.html#l00049">MULTIBOOT_TAG_TYPE_BOOTDEV</a>, <a class="el" href="multiboot_8h_source.html#l00044">MULTIBOOT_TAG_TYPE_END</a>, <a class="el" href="multiboot_8h_source.html#l00052">MULTIBOOT_TAG_TYPE_FRAMEBUFFER</a>, <a class="el" href="multiboot_8h_source.html#l00050">MULTIBOOT_TAG_TYPE_MMAP</a>, <a class="el" href="multiboot_8h_source.html#l00239">multiboot_tag_bootdev::part</a>, <a class="el" href="multiboot_8h_source.html#l00206">multiboot_tag::size</a>, <a class="el" href="multiboot_8h_source.html#l00238">multiboot_tag_bootdev::slice</a>, <a class="el" href="apic_8h_source.html#l00002">type</a>, <a class="el" href="multiboot_8h_source.html#l00205">multiboot_tag::type</a>, and <a class="el" href="multiboot_8h_source.html#l00235">multiboot_tag_bootdev::type</a>.</p>
 
 </div>
 </div>
@@ -213,10 +227,10 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00044">44</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                      {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00062">62</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                      {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -236,14 +250,14 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00055">55</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                                          {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a8018de72b296600f6090f9dfc90dce11">m_basic_meminfo</a>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00073">73</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                                          {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a8018de72b296600f6090f9dfc90dce11">m_basic_meminfo</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00423">m_basic_meminfo</a>.</p>
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00019">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>.</p>
 
 </div>
 </div>
@@ -262,15 +276,13 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00061">61</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                                                     {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a7c9cdd56bd6e58a13af896226e98541b">m_bootloader_name</a>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00079">79</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                                     {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a7c9cdd56bd6e58a13af896226e98541b">m_bootloader_name</a>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00424">m_bootloader_name</a>.</p>
-
 </div>
 </div>
 <a id="a762db5ddb4857d6c2705c97b9f4d23a7"></a>
@@ -288,16 +300,14 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00049">49</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                                      {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a48388fa09d529db631bf6f80d5ab3091">m_framebuffer</a>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00067">67</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                                      {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a48388fa09d529db631bf6f80d5ab3091">m_framebuffer</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00422">m_framebuffer</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="kernel_8cpp_source.html#l00109">kernelMain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="kernel_8cpp_source.html#l00110">kernelMain()</a>.</p>
 
 </div>
 </div>
@@ -316,16 +326,14 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00067">67</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                        {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2">m_mmap</a>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00085">85</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                        {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2">m_mmap</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00425">m_mmap</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="kernel_8cpp_source.html#l00109">kernelMain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00019">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>.</p>
 
 </div>
 </div>
@@ -344,14 +352,12 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00079">79</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                                {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#af9d4c45cd7c5bc9fb7fefe0d30e930d3">m_new_acpi</a>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00097">97</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                                                {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#af9d4c45cd7c5bc9fb7fefe0d30e930d3">m_new_acpi</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00427">m_new_acpi</a>.</p>
-
 <p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00011">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()</a>.</p>
 
 </div>
@@ -371,14 +377,12 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00073">73</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                                {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271">m_old_acpi</a>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="multiboot_8cpp_source.html#l00091">91</a> of file <a class="el" href="multiboot_8cpp_source.html">multiboot.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                                                {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271">m_old_acpi</a>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00426">m_old_acpi</a>.</p>
-
 <p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00011">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()</a>.</p>
 
 </div>
@@ -406,8 +410,6 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="multiboot_8h_source.html#l00423">423</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00055">get_basic_meminfo()</a>, and <a class="el" href="multiboot_8cpp_source.html#l00009">Multiboot()</a>.</p>
-
 </div>
 </div>
 <a id="a7c9cdd56bd6e58a13af896226e98541b"></a>
@@ -431,8 +433,6 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="multiboot_8h_source.html#l00424">424</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00061">get_bootloader_name()</a>, and <a class="el" href="multiboot_8cpp_source.html#l00009">Multiboot()</a>.</p>
 
 </div>
 </div>
@@ -458,8 +458,6 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="multiboot_8h_source.html#l00422">422</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00049">get_framebuffer()</a>, and <a class="el" href="multiboot_8cpp_source.html#l00009">Multiboot()</a>.</p>
-
 </div>
 </div>
 <a id="a439c0ec6b7446d338bdf1faeba52eef2"></a>
@@ -483,8 +481,6 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="multiboot_8h_source.html#l00425">425</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00067">get_mmap()</a>, and <a class="el" href="multiboot_8cpp_source.html#l00009">Multiboot()</a>.</p>
 
 </div>
 </div>
@@ -510,8 +506,6 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="multiboot_8h_source.html#l00427">427</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00079">get_new_acpi()</a>, and <a class="el" href="multiboot_8cpp_source.html#l00009">Multiboot()</a>.</p>
-
 </div>
 </div>
 <a id="a572b5590c47b1128f43c458de10a9271"></a>
@@ -536,8 +530,6 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="multiboot_8h_source.html#l00426">426</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00073">get_old_acpi()</a>, and <a class="el" href="multiboot_8cpp_source.html#l00009">Multiboot()</a>.</p>
-
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -555,17 +547,25 @@ Protected Attributes</h2></td></tr>
 <div class="ttc" id="astructmultiboot__tag_html_ac2a46af85d217c774d2a618291539334"><div class="ttname"><a href="structmultiboot__tag.html#ac2a46af85d217c774d2a618291539334">multiboot_tag::type</a></div><div class="ttdeci">multiboot_uint32_t type</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00205">multiboot.h:205</a></div></div>
 <div class="ttc" id="amultiboot_8h_html_a9ba1adbd7639e20f723e51dd9668a981"><div class="ttname"><a href="multiboot_8h.html#a9ba1adbd7639e20f723e51dd9668a981">MULTIBOOT_TAG_TYPE_END</a></div><div class="ttdeci">#define MULTIBOOT_TAG_TYPE_END</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00044">multiboot.h:44</a></div></div>
 <div class="ttc" id="amultiboot_8h_html_afe69dc4711fc7f5dc9604977b2393218"><div class="ttname"><a href="multiboot_8h.html#afe69dc4711fc7f5dc9604977b2393218">MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME</a></div><div class="ttdeci">#define MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00046">multiboot.h:46</a></div></div>
+<div class="ttc" id="akprint_8h_html_ad0dbdc0814f8a967875ad592df02a663"><div class="ttname"><a href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a></div><div class="ttdeci">#define _kprintf(format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8h_source.html#l00012">kprint.h:12</a></div></div>
+<div class="ttc" id="astructmultiboot__tag__bootdev_html_a2bcf5d32579dc281148607d937ca099b"><div class="ttname"><a href="structmultiboot__tag__bootdev.html#a2bcf5d32579dc281148607d937ca099b">multiboot_tag_bootdev::biosdev</a></div><div class="ttdeci">multiboot_uint32_t biosdev</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00237">multiboot.h:237</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__new__acpi_html"><div class="ttname"><a href="structmultiboot__tag__new__acpi.html">multiboot_tag_new_acpi</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00371">multiboot.h:371</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__old__acpi_html"><div class="ttname"><a href="structmultiboot__tag__old__acpi.html">multiboot_tag_old_acpi</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00364">multiboot.h:364</a></div></div>
 <div class="ttc" id="astructmultiboot__tag_html_a877e6f09bf575aa775a81897a54337f4"><div class="ttname"><a href="structmultiboot__tag.html#a877e6f09bf575aa775a81897a54337f4">multiboot_tag::size</a></div><div class="ttdeci">multiboot_uint32_t size</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00206">multiboot.h:206</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__string_html"><div class="ttname"><a href="structmultiboot__tag__string.html">multiboot_tag_string</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00209">multiboot.h:209</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__mmap_html"><div class="ttname"><a href="structmultiboot__tag__mmap.html">multiboot_tag_mmap</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00242">multiboot.h:242</a></div></div>
+<div class="ttc" id="astructmultiboot__tag__bootdev_html_a80f58414b4caf448202e9cf5fa6a471e"><div class="ttname"><a href="structmultiboot__tag__bootdev.html#a80f58414b4caf448202e9cf5fa6a471e">multiboot_tag_bootdev::type</a></div><div class="ttdeci">multiboot_uint32_t type</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00235">multiboot.h:235</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_af9d4c45cd7c5bc9fb7fefe0d30e930d3"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#af9d4c45cd7c5bc9fb7fefe0d30e930d3">MaxOS::system::Multiboot::m_new_acpi</a></div><div class="ttdeci">multiboot_tag_new_acpi * m_new_acpi</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00427">multiboot.h:427</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_a8018de72b296600f6090f9dfc90dce11"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#a8018de72b296600f6090f9dfc90dce11">MaxOS::system::Multiboot::m_basic_meminfo</a></div><div class="ttdeci">multiboot_tag_basic_meminfo * m_basic_meminfo</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00423">multiboot.h:423</a></div></div>
+<div class="ttc" id="astructmultiboot__tag__bootdev_html_a50f53a5f93c66c721734cd44f6ea56b0"><div class="ttname"><a href="structmultiboot__tag__bootdev.html#a50f53a5f93c66c721734cd44f6ea56b0">multiboot_tag_bootdev::slice</a></div><div class="ttdeci">multiboot_uint32_t slice</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00238">multiboot.h:238</a></div></div>
 <div class="ttc" id="amultiboot_8h_html_acc29d9aee9a932ee12628ba57fdfb3a4"><div class="ttname"><a href="multiboot_8h.html#acc29d9aee9a932ee12628ba57fdfb3a4">MULTIBOOT_TAG_TYPE_ACPI_OLD</a></div><div class="ttdeci">#define MULTIBOOT_TAG_TYPE_ACPI_OLD</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00058">multiboot.h:58</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_a48388fa09d529db631bf6f80d5ab3091"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#a48388fa09d529db631bf6f80d5ab3091">MaxOS::system::Multiboot::m_framebuffer</a></div><div class="ttdeci">multiboot_tag_framebuffer * m_framebuffer</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00422">multiboot.h:422</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_a572b5590c47b1128f43c458de10a9271"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271">MaxOS::system::Multiboot::m_old_acpi</a></div><div class="ttdeci">multiboot_tag_old_acpi * m_old_acpi</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00426">multiboot.h:426</a></div></div>
+<div class="ttc" id="astructmultiboot__tag__bootdev_html"><div class="ttname"><a href="structmultiboot__tag__bootdev.html">multiboot_tag_bootdev</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00233">multiboot.h:233</a></div></div>
+<div class="ttc" id="astructmultiboot__tag__bootdev_html_ac34809553805874feb470308a2baa1e1"><div class="ttname"><a href="structmultiboot__tag__bootdev.html#ac34809553805874feb470308a2baa1e1">multiboot_tag_bootdev::part</a></div><div class="ttdeci">multiboot_uint32_t part</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00239">multiboot.h:239</a></div></div>
+<div class="ttc" id="astructmultiboot__tag__string_html_a50125b332242abd0051cd348fd2d9b68"><div class="ttname"><a href="structmultiboot__tag__string.html#a50125b332242abd0051cd348fd2d9b68">multiboot_tag_string::string</a></div><div class="ttdeci">char string[0]</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00213">multiboot.h:213</a></div></div>
 <div class="ttc" id="amultiboot_8h_html_ad5e7a09f39f1f37e50be39000af2af4e"><div class="ttname"><a href="multiboot_8h.html#ad5e7a09f39f1f37e50be39000af2af4e">MULTIBOOT_TAG_TYPE_MMAP</a></div><div class="ttdeci">#define MULTIBOOT_TAG_TYPE_MMAP</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00050">multiboot.h:50</a></div></div>
+<div class="ttc" id="amultiboot_8h_html_a92170b084bd536b0e30e2373263f6685"><div class="ttname"><a href="multiboot_8h.html#a92170b084bd536b0e30e2373263f6685">MULTIBOOT_TAG_TYPE_BOOTDEV</a></div><div class="ttdeci">#define MULTIBOOT_TAG_TYPE_BOOTDEV</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00049">multiboot.h:49</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__basic__meminfo_html"><div class="ttname"><a href="structmultiboot__tag__basic__meminfo.html">multiboot_tag_basic_meminfo</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00225">multiboot.h:225</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_a439c0ec6b7446d338bdf1faeba52eef2"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#a439c0ec6b7446d338bdf1faeba52eef2">MaxOS::system::Multiboot::m_mmap</a></div><div class="ttdeci">multiboot_tag_mmap * m_mmap</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00425">multiboot.h:425</a></div></div>
 <div class="ttc" id="aapic_8h_html_a1d127017fb298b889f4ba24752d08b8e"><div class="ttname"><a href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a></div><div class="ttdeci">uint8_t type</div><div class="ttdef"><b>Definition:</b> <a href="apic_8h_source.html#l00002">apic.h:2</a></div></div>

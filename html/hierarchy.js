@@ -172,9 +172,7 @@ var hierarchy =
           ] ]
         ] ]
       ] ],
-      [ "MaxOS::common::InputStream", "classMaxOS_1_1common_1_1InputStream.html", [
-        [ "MaxOS::hardwarecommunication::InterruptManager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html", null ]
-      ] ]
+      [ "MaxOS::common::InputStream", "classMaxOS_1_1common_1_1InputStream.html", null ]
     ] ],
     [ "MaxOS::common::GenericInputStream< Type * >", "classMaxOS_1_1common_1_1GenericInputStream.html", [
       [ "MaxOS::common::InputStreamProcessor< Type, Type * >", "classMaxOS_1_1common_1_1InputStreamProcessor.html", [
@@ -226,6 +224,7 @@ var hierarchy =
       [ "MaxOS::drivers::peripherals::MouseDriver", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseDriver.html", null ],
       [ "MaxOS::system::SyscallHandler", "classMaxOS_1_1system_1_1SyscallHandler.html", null ]
     ] ],
+    [ "MaxOS::hardwarecommunication::InterruptManager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html", null ],
     [ "MaxOS::hardwarecommunication::IOAPIC", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html", null ],
     [ "MaxOS::drivers::peripherals::KeyboardState", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html", null ],
     [ "MaxOS::hardwarecommunication::LocalAPIC", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html", null ],
@@ -283,6 +282,8 @@ var hierarchy =
     [ "multiboot_vbe_info_block", "structmultiboot__vbe__info__block.html", null ],
     [ "multiboot_vbe_mode_info_block", "structmultiboot__vbe__mode__info__block.html", null ],
     [ "MaxOS::hardwarecommunication::Override", "structMaxOS_1_1hardwarecommunication_1_1Override.html", null ],
+    [ "MaxOS::memory::PageMapLevel", "structMaxOS_1_1memory_1_1PageMapLevel.html", null ],
+    [ "MaxOS::memory::PageTableEntry", "structMaxOS_1_1memory_1_1PageTableEntry.html", null ],
     [ "MaxOS::common::Pair< First, Second >", "classMaxOS_1_1common_1_1Pair.html", null ],
     [ "MaxOS::common::Pair< InternetProtocolAddress, drivers::ethernet::MediaAccessControlAddress >", "classMaxOS_1_1common_1_1Pair.html", null ],
     [ "MaxOS::common::Pair< Key, Value >", "classMaxOS_1_1common_1_1Pair.html", null ],
@@ -290,6 +291,7 @@ var hierarchy =
     [ "MaxOS::common::Pair< uint8_t, MaxOS::net::InternetProtocolPayloadHandler * >", "classMaxOS_1_1common_1_1Pair.html", null ],
     [ "MaxOS::filesystem::PartitionTableEntry", "structMaxOS_1_1filesystem_1_1PartitionTableEntry.html", null ],
     [ "MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html", null ],
+    [ "MaxOS::memory::PhysicalMemoryManager", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html", null ],
     [ "MaxOS::hardwarecommunication::Port", "classMaxOS_1_1hardwarecommunication_1_1Port.html", [
       [ "MaxOS::hardwarecommunication::Port16Bit", "classMaxOS_1_1hardwarecommunication_1_1Port16Bit.html", null ],
       [ "MaxOS::hardwarecommunication::Port32Bit", "classMaxOS_1_1hardwarecommunication_1_1Port32Bit.html", null ],
@@ -341,5 +343,8 @@ var hierarchy =
     [ "MaxOS::common::Vector< MaxOS::system::Task * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< MaxOS::system::Thread * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::VectorIterationHandler< Type >", "classMaxOS_1_1common_1_1VectorIterationHandler.html", null ],
+    [ "MaxOS::memory::VirtualMemoryChunk", "structMaxOS_1_1memory_1_1VirtualMemoryChunk.html", null ],
+    [ "MaxOS::memory::VirtualMemoryManager", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html", null ],
+    [ "MaxOS::memory::VirtualMemoryRegion", "structMaxOS_1_1memory_1_1VirtualMemoryRegion.html", null ],
     [ "MaxOS::hardwarecommunication::XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", null ]
 ];

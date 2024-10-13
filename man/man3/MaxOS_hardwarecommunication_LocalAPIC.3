@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::LocalAPIC" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::LocalAPIC" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -41,6 +41,9 @@ MaxOS::hardwarecommunication::LocalAPIC
 .RI "uint64_t \fBm_apic_base\fP"
 .br
 .ti -1c
+.RI "uint64_t \fBm_apic_base_high\fP"
+.br
+.ti -1c
 .RI "uint32_t \fBm_id\fP"
 .br
 .ti -1c
@@ -49,148 +52,157 @@ MaxOS::hardwarecommunication::LocalAPIC
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 16 of file apic\&.h\&.
+Definition at line 17 of file apic\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "LocalAPIC::LocalAPIC ()"
 
 .PP
-Definition at line 11 of file apic\&.cpp\&.
+Definition at line 12 of file apic\&.cpp\&.
 .PP
 .nf
-11                      {
-12 
-13 }
+12                      {
+13 
+14 }
 .fi
 .SS "LocalAPIC::~LocalAPIC ()"
 
 .PP
-Definition at line 15 of file apic\&.cpp\&.
+Definition at line 16 of file apic\&.cpp\&.
 .PP
 .nf
-15                       {
-16 
-17 }
+16                       {
+17 
+18 }
 .fi
 .SH "Member Function Documentation"
 .PP 
 .SS "uint32_t LocalAPIC::id ()"
 
 .PP
-Definition at line 84 of file apic\&.cpp\&.
+Definition at line 90 of file apic\&.cpp\&.
 .PP
 .nf
-84                        {
-85 
-86   // Read the id
-87   uint32_t id = read(0x20);
-88 
-89   // Return the id
-90   return m_x2apic ? id : (id >> 24);
+90                        {
 91 
-92 }
+92   // Read the id
+93   uint32_t id = read(0x20);
+94 
+95   // Return the id
+96   return m_x2apic ? id : (id >> 24);
+97 
+98 }
 .fi
 .SS "void LocalAPIC::init ()"
 
 .PP
-Definition at line 19 of file apic\&.cpp\&.
+Definition at line 20 of file apic\&.cpp\&.
 .PP
 .nf
-19                      {
-20 
-21   // Read information about the local APIC
-22   uint64_t msr_info = CPU::read_msr(0x1B);
-23 
-24   // Get the APIC base address
-25   m_apic_base = msr_info & 0xFFFFF000;
-26 
-27   // Read if the APIC supports x2APIC
-28   uint32_t ignored, xleaf, x2leaf;
-29   CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
-30 
-31   if(x2leaf & (1 << 21)) {
-32 
-33     // Enable x2APIC
-34     m_x2apic = true;
-35     msr_info |= (1 << 10);
-36     CPU::write_msr(0x1B, msr_info);
-37     _kprintf("CPU supports x2APIC\n");
-38 
-39   } else if (xleaf & (1 << 9)) {
-40 
-41     m_x2apic = false;
-42     _kprintf("CPU supports xAPIC\n");
-43 
-44   } else {
-45     _kprintf("ERROR: CPU does not support APIC (BAD!!)\n");
-46   }
-47 
-48   // Get the vector table
-49   uint32_t spurious_vector = read(0xF0);
-50   _kprintf("APIC Spurious Vector: 0x%x\n", spurious_vector & 0xFF);
-51 
-52   // Enable the APIC
-53   write(0xF0, (1 << 8) | 0x100);
-54   _kprintf("APIC Enabled\n");
-55 
-56   // Read the APIC version
-57   uint32_t version = read(0x30);
-58   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
-59 
-60 
-61 }
+20                      {
+21 
+22   // Read information about the local APIC
+23   uint64_t msr_info = CPU::read_msr(0x1B);
+24 
+25   // Get the APIC base address
+26   m_apic_base = msr_info & 0xFFFFF000;
+27 
+28   // Read if the APIC supports x2APIC
+29   uint32_t ignored, xleaf, x2leaf;
+30   CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
+31 
+32   if(x2leaf & (1 << 21)) {
+33 
+34     // Enable x2APIC
+35     m_x2apic = true;
+36     msr_info |= (1 << 10);
+37     CPU::write_msr(0x1B, msr_info);
+38     _kprintf("CPU supports x2APIC\n");
+39 
+40   } else if (xleaf & (1 << 9)) {
+41 
+42     m_x2apic = false;
+43     _kprintf("CPU supports xAPIC\n");
+44 
+45     // Map the APIC base address to the higher half
+46     m_apic_base_high = (uint64_t)MemoryManager::to_io_region(m_apic_base);
+47     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_apic_base, (virtual_address_t*)m_apic_base_high, Write | Present);
+48     _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
+49 
+50   } else {
+51     ASSERT(false, "CPU does not support xAPIC")
+52   }
+53 
+54   // Get the vector table
+55   uint32_t spurious_vector = read(0xF0);
+56   _kprintf("APIC Spurious Vector: 0x%x\n", spurious_vector & 0xFF);
+57 
+58   // Enable the APIC
+59   write(0xF0, (1 << 8) | 0x100);
+60   _kprintf("APIC Enabled\n");
+61 
+62   // Read the APIC version
+63   uint32_t version = read(0x30);
+64   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
+65 
+66 }
 .fi
 .PP
-References _kprintf(), and version\&.
+References _kprintf, ASSERT, MaxOS::memory::Present, version, write, and MaxOS::memory::Write\&.
 .PP
 Referenced by MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\&.
 .SS "uint32_t LocalAPIC::read (uint32_t reg)\fC [protected]\fP"
 
 .PP
-Definition at line 63 of file apic\&.cpp\&.
+Definition at line 68 of file apic\&.cpp\&.
 .PP
 .nf
-63                                      {
-64 
-65   // If x2APIC is enabled, use the x2APIC MSR
-66   if(m_x2apic) {
-67       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
-68   } else {
-69       return (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg));
-70   }
-71 
-72 }
+68                                      {
+69 
+70   // If x2APIC is enabled, use the x2APIC MSR
+71   if(m_x2apic) {
+72       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
+73   } else {
+74       return (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg));
+75 
+76   }
+77 
+78 }
 .fi
 .SS "void LocalAPIC::write (uint32_t reg, uint32_t value)\fC [protected]\fP"
 
 .PP
-Definition at line 74 of file apic\&.cpp\&.
+Definition at line 80 of file apic\&.cpp\&.
 .PP
 .nf
-74                                                   {
-75 
-76   // If x2APIC is enabled, use the x2APIC MSR
-77   if(m_x2apic) {
-78       CPU::write_msr((reg >> 4) + 0x800, value);
-79   } else {
-80       (*(volatile uint32_t*)((uintptr_t)m_apic_base + reg)) = value;
-81     }
-82 }
+80                                                   {
+81 
+82   // If x2APIC is enabled, use the x2APIC MSR
+83   if(m_x2apic) {
+84       CPU::write_msr((reg >> 4) + 0x800, value);
+85   } else {
+86       (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg)) = value;
+87     }
+88 }
 .fi
 .SH "Member Data Documentation"
 .PP 
 .SS "uint64_t MaxOS::hardwarecommunication::LocalAPIC::m_apic_base\fC [protected]\fP"
 
 .PP
-Definition at line 19 of file apic\&.h\&.
-.SS "uint32_t MaxOS::hardwarecommunication::LocalAPIC::m_id\fC [protected]\fP"
-
-.PP
 Definition at line 20 of file apic\&.h\&.
-.SS "bool MaxOS::hardwarecommunication::LocalAPIC::m_x2apic\fC [protected]\fP"
+.SS "uint64_t MaxOS::hardwarecommunication::LocalAPIC::m_apic_base_high\fC [protected]\fP"
 
 .PP
 Definition at line 21 of file apic\&.h\&.
+.SS "uint32_t MaxOS::hardwarecommunication::LocalAPIC::m_id\fC [protected]\fP"
+
+.PP
+Definition at line 22 of file apic\&.h\&.
+.SS "bool MaxOS::hardwarecommunication::LocalAPIC::m_x2apic\fC [protected]\fP"
+
+.PP
+Definition at line 23 of file apic\&.h\&.
 
 .SH "Author"
 .PP 

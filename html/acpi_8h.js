@@ -7,7 +7,7 @@ var acpi_8h =
     [ "XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ],
     [ "AdvancedConfigurationAndPowerInterface", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface" ],
     [ "__attribute__", "acpi_8h.html#abe45fccdf160be55b8dc7bd5417235ac", null ],
-    [ "__attribute__", "acpi_8h.html#a2df113194cf7bff36ea644f49754c5a8", null ],
+    [ "__attribute__", "acpi_8h.html#a246df0da2f83d4427aeff9b62cb78b01", null ],
     [ "checksum", "acpi_8h.html#a59eac9627282a484fbaf0aa7aa3b8a9a", null ],
     [ "creator_id", "acpi_8h.html#ab38918ce2820bbdf42112e514c767817", null ],
     [ "creator_revision", "acpi_8h.html#a88d54492f1cf62a366b9dacdfd9fbe9a", null ],

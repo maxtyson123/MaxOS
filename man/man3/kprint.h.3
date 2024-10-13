@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,18 +8,47 @@
 .PP
 \fC#include <drivers/console/serial\&.h>\fP
 .br
+\fC#include <stdarg\&.h>\fP
+.br
 
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fB_kprintf\fP(format, \&.\&.\&.)   \fB_kprintf_internal\fP(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)"
+.br
+.ti -1c
+.RI "#define \fBASSERT\fP(condition,  format, \&.\&.\&.)"
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "void \fB_kprintf\fP (const char *format,\&.\&.\&.)"
+.RI "void \fB_kprintf_internal\fP (uint8_t \fBtype\fP, const char *file, int line, const char *func, const char *format,\&.\&.\&.)"
 .br
 .RI "Prints a formatted string to the serial output\&. "
 .in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define _kprintf(format,  \&.\&.\&.)   \fB_kprintf_internal\fP(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)"
+
+.PP
+Definition at line 12 of file kprint\&.h\&.
+.SS "#define ASSERT(condition, format,  \&.\&.\&.)"
+\fBValue:\fP
+.PP
+.nf
+    if(!(condition)) { \
+        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__); \
+        while(1); \
+    }
+.fi
+.PP
+Definition at line 15 of file kprint\&.h\&.
 .SH "Function Documentation"
 .PP 
-.SS "void _kprintf (const char * format,  \&.\&.\&.)"
+.SS "void _kprintf_internal (uint8_t type, const char * file, int line, const char * func, const char * format,  \&.\&.\&.)"
 
 .PP
 Prints a formatted string to the serial output\&. ARGUMENTS:
@@ -42,77 +71,66 @@ s for string
 .PP
 
 .PP
-Definition at line 98 of file kprint\&.cpp\&.
+Definition at line 155 of file kprint\&.cpp\&.
 .PP
 .nf
-99 {
-100 
-101   // Print the header
-102   pre_kprintf();
-103 
-104   // Create a pointer to the data
-105   va_list parameters;
-106   va_start(parameters, format);
-107 
-108   // Loop through the format string
-109   for (; *format != '\0'; format++)
-110   {
-111 
-112     // If it is not a %, print the character
-113     if (*format != '%')
-114     {
-115       putchar(*format);
-116       continue;
-117     }
-118 
-119     // Move to the next character
-120     format++;
-121 
-122     switch (*format)
-123     {
-124       case 'd':
-125       {
-126         // Print a decimal
-127         int number = va_arg (parameters, int);
-128         char* str = itoa(10, number);
-129         for (int i = 0; i < strlen(str); i++)
-130           putchar(str[i]);
-131         break;
-132       }
-133       case 'x':
-134       {
-135         // Print a hex
-136         int number = va_arg (parameters, int);
-137         char* str = itoa(16, number);
-138         for (int i = 0; i < strlen(str); i++)
-139           putchar(str[i]);
-140         break;
-141       }
-142       case 'u':
-143       {
-144         // Print an unsigned decimal
-145         unsigned int number = va_arg (parameters, unsigned int);
-146         char* str = itoa(10, number);
-147         for (int i = 0; i < strlen(str); i++)
-148           putchar(str[i]);
-149         break;
-150       }
-151       case 's':
-152       {
-153         // Print a string
-154         char* str = va_arg (parameters, char*);
-155         for (int i = 0; i < strlen(str); i++)
-156           putchar(str[i]);
-157         break;
-158       }
-159     }
-160   }
-161 }
+156 {
+157 
+158   // Print the header
+159   pre_kprintf(file, line,func, type);
+160 
+161   // Create a pointer to the data
+162   va_list parameters;
+163   va_start(parameters, format);
+164 
+165   // Loop through the format string
+166   for (; *format != '\0'; format++)
+167   {
+168 
+169     // If it is not a %, print the character
+170     if (*format != '%')
+171     {
+172       putchar(*format);
+173       continue;
+174     }
+175 
+176     // Move to the next character
+177     format++;
+178 
+179     switch (*format)
+180     {
+181       case 'd':
+182       {
+183         // Print a decimal
+184         int number = va_arg (parameters, int);
+185         char* str = itoa(10, number);
+186         for (int i = 0; i < strlen(str); i++)
+187           putchar(str[i]);
+188         break;
+189       }
+190       case 'x':
+191       {
+192         // Print a hex
+193         uint64_t  number = va_arg (parameters, uint64_t );
+194         char* str = itoa(16, number);
+195         for (int i = 0; i < strlen(str); i++)
+196           putchar(str[i]);
+197         break;
+198       }
+199       case 's':
+200       {
+201         // Print a string
+202         char* str = va_arg (parameters, char*);
+203         for (int i = 0; i < strlen(str); i++)
+204           putchar(str[i]);
+205         break;
+206       }
+207     }
+208   }
+209 }
 .fi
 .PP
-References pre_kprintf()\&.
-.PP
-Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(), MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController(), MaxOS::system::GlobalDescriptorTable::GlobalDescriptorTable(), MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request(), MaxOS::hardwarecommunication::LocalAPIC::init(), MaxOS::hardwarecommunication::IOAPIC::init(), kernelMain(), and MaxOS::system::CPU::stack_trace()\&.
+References pre_kprintf(), and type\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

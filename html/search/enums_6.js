@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['seektype_2935',['SeekType',['../namespaceMaxOS_1_1filesystem.html#a1db0018290f4bb8f71b2641d71c492d2',1,'MaxOS::filesystem']]]
+  ['pageflags_3084',['PageFlags',['../namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb',1,'MaxOS::memory']]]
 ];

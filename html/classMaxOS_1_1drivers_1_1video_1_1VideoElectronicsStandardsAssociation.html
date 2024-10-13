@@ -317,15 +317,25 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00013">13</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;: <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html#a1aa081ed8e5de1aaf30442f10497e36b">VideoDriver</a>(),</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>(framebuffer_info),</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a>((uint64_t *)framebuffer_info-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a82d2ddfc7184652095c8359a60dc1b31">framebuffer_addr</a>),</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9">m_bpp</a>(framebuffer_info-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a4564d1a0382ddb2d369d477e8d606bdc">framebuffer_bpp</a>),</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5">m_pitch</a>(framebuffer_info-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a86adb2da5c20f527ed4fbb0a2a6423bc">framebuffer_pitch</a>)</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00015">15</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;: <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html#a1aa081ed8e5de1aaf30442f10497e36b">VideoDriver</a>()</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;{</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="comment">// Get the framebuffer info</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a> = (<a class="code" href="structmultiboot__tag__framebuffer.html">multiboot_tag_framebuffer</a>*)MemoryManager::to_dm_region((uint64_t)framebuffer_info);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Framebuffer info: physical = 0x%x, virtual = 0x%x\n&quot;</span>, framebuffer_info, <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="comment">// Set the framebuffer address, bpp and pitch</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9">m_bpp</a> = <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a4564d1a0382ddb2d369d477e8d606bdc">framebuffer_bpp</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5">m_pitch</a> = <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a86adb2da5c20f527ed4fbb0a2a6423bc">framebuffer_pitch</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="comment">// Get the framebuffer address</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a> = (uint64_t*)MemoryManager::to_dm_region((uint64_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a82d2ddfc7184652095c8359a60dc1b31">framebuffer_addr</a>);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Framebuffer address: physical = 0x%x, virtual = 0x%x\n&quot;</span>, <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a82d2ddfc7184652095c8359a60dc1b31">framebuffer_addr</a>, <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a>);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
 </div><!-- fragment -->
+<p class="reference">References <a class="el" href="kprint_8h_source.html#l00012">_kprintf</a>, <a class="el" href="multiboot_8h_source.html#l00294">multiboot_tag_framebuffer::common</a>, <a class="el" href="multiboot_8h_source.html#l00280">multiboot_tag_framebuffer_common::framebuffer_addr</a>, <a class="el" href="multiboot_8h_source.html#l00284">multiboot_tag_framebuffer_common::framebuffer_bpp</a>, <a class="el" href="multiboot_8h_source.html#l00281">multiboot_tag_framebuffer_common::framebuffer_pitch</a>, <a class="el" href="vesa_8h_source.html#l00040">m_bpp</a>, <a class="el" href="vesa_8h_source.html#l00039">m_framebuffer_address</a>, <a class="el" href="vesa_8h_source.html#l00037">m_framebuffer_info</a>, and <a class="el" href="vesa_8h_source.html#l00041">m_pitch</a>.</p>
+
 </div>
 </div>
 <a id="ab4570204f3df91305753b32825a69be9"></a>
@@ -343,10 +353,10 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00022">22</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                                                                           {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00032">32</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                                                                           {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -386,10 +396,10 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classMaxOS_1_1drivers_1_1Driver.html#a65b06f2917f7a781e68f3748e81806b6">MaxOS::drivers::Driver</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00116">116</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                                             {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;VESA compatible graphics card&quot;</span>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00131">131</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                                                             {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;VESA compatible graphics card&quot;</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -439,15 +449,15 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classMaxOS_1_1common_1_1GraphicsContext.html#adf766d99533491a7471017cf64e65593">MaxOS::common::GraphicsContext</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00089">89</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                                                                                               {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">// Get the address of the pixel</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    uint32_t*pixel_address = (uint32_t*)((uint8_t *)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a> + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5">m_pitch</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a>) + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9">m_bpp</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a>) / 8);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">// Return the pixel</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">return</span> *pixel_address;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00104">104</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                                                                                               {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">// Get the address of the pixel</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    uint32_t*pixel_address = (uint32_t*)((uint8_t *)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a> + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5">m_pitch</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a>) + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9">m_bpp</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a>) / 8);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">// Return the pixel</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">return</span> *pixel_address;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;}</div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="vesa_8h_source.html#l00040">m_bpp</a>, <a class="el" href="vesa_8h_source.html#l00039">m_framebuffer_address</a>, <a class="el" href="vesa_8h_source.html#l00041">m_pitch</a>, <a class="el" href="keyboard_8h_source.html#l00050">MaxOS::drivers::peripherals::x</a>, and <a class="el" href="keyboard_8h_source.html#l00051">MaxOS::drivers::peripherals::y</a>.</p>
 
@@ -488,10 +498,10 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classMaxOS_1_1drivers_1_1Driver.html#a7ad761c929a49cfebd8c443f5af788f6">MaxOS::drivers::Driver</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00105">105</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                                             {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;NEC Home Electronics&quot;</span>;  <span class="comment">// Creator of the VESA standard</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00120">120</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                                                             {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;NEC Home Electronics&quot;</span>;  <span class="comment">// Creator of the VESA standard</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -548,14 +558,14 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html#a0ff0cab0dbcdd7a4a246250fd429e05d">MaxOS::drivers::video::VideoDriver</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00040">40</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                                                                                         {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// Best mode is set by the bootloader</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00055">55</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                                                                         {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// Best mode is set by the bootloader</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -611,16 +621,16 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classMaxOS_1_1common_1_1GraphicsContext.html#acff19ddd77b6bf8dccaf5cff35ea4009">MaxOS::common::GraphicsContext</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00072">72</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                                                                                                      {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// Get the address of the pixel</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    uint32_t*pixel_address = (uint32_t*)((uint8_t *)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a> + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5">m_pitch</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a>) + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9">m_bpp</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a>) / 8);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// Set the pixel</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    *pixel_address = colour;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00087">87</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                                                                                      {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">// Get the address of the pixel</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    uint32_t*pixel_address = (uint32_t*)((uint8_t *)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e">m_framebuffer_address</a> + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5">m_pitch</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a>) + <a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9">m_bpp</a> * (<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a>) / 8);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// Set the pixel</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    *pixel_address = colour;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;}</div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="vesa_8h_source.html#l00040">m_bpp</a>, <a class="el" href="vesa_8h_source.html#l00039">m_framebuffer_address</a>, <a class="el" href="vesa_8h_source.html#l00041">m_pitch</a>, <a class="el" href="keyboard_8h_source.html#l00050">MaxOS::drivers::peripherals::x</a>, and <a class="el" href="keyboard_8h_source.html#l00051">MaxOS::drivers::peripherals::y</a>.</p>
 
@@ -679,15 +689,15 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html#aeab30a675a21896e0d4d8d290807882f">MaxOS::drivers::video::VideoDriver</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00056">56</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                                                                                                              {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// Check if the mode is supported</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span>(width == (uint32_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a3cfc65ce6112c0b7676341353a82e7d1">framebuffer_width</a> &amp;&amp; height == (uint32_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a543fb87729a64b16b113854d88063f2d">framebuffer_height</a> &amp;&amp; color_depth == (uint32_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a4564d1a0382ddb2d369d477e8d606bdc">framebuffer_bpp</a>) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="vesa_8cpp_source.html#l00071">71</a> of file <a class="el" href="vesa_8cpp_source.html">vesa.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                                                                                                              {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">// Check if the mode is supported</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">if</span>(width == (uint32_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a3cfc65ce6112c0b7676341353a82e7d1">framebuffer_width</a> &amp;&amp; height == (uint32_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a543fb87729a64b16b113854d88063f2d">framebuffer_height</a> &amp;&amp; color_depth == (uint32_t)<a class="code" href="classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9">m_framebuffer_info</a>-&gt;<a class="code" href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">common</a>.<a class="code" href="structmultiboot__tag__framebuffer__common.html#a4564d1a0382ddb2d369d477e8d606bdc">framebuffer_bpp</a>) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="multiboot_8h_source.html#l00294">multiboot_tag_framebuffer::common</a>, <a class="el" href="multiboot_8h_source.html#l00284">multiboot_tag_framebuffer_common::framebuffer_bpp</a>, <a class="el" href="multiboot_8h_source.html#l00283">multiboot_tag_framebuffer_common::framebuffer_height</a>, <a class="el" href="multiboot_8h_source.html#l00282">multiboot_tag_framebuffer_common::framebuffer_width</a>, and <a class="el" href="vesa_8h_source.html#l00037">m_framebuffer_info</a>.</p>
 
@@ -716,7 +726,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="vesa_8h_source.html#l00040">40</a> of file <a class="el" href="vesa_8h_source.html">vesa.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00089">get_rendered_pixel_32_bit()</a>, and <a class="el" href="vesa_8cpp_source.html#l00072">render_pixel_32_bit()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00104">get_rendered_pixel_32_bit()</a>, <a class="el" href="vesa_8cpp_source.html#l00087">render_pixel_32_bit()</a>, and <a class="el" href="vesa_8cpp_source.html#l00015">VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -742,7 +752,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="vesa_8h_source.html#l00039">39</a> of file <a class="el" href="vesa_8h_source.html">vesa.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00089">get_rendered_pixel_32_bit()</a>, and <a class="el" href="vesa_8cpp_source.html#l00072">render_pixel_32_bit()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00104">get_rendered_pixel_32_bit()</a>, <a class="el" href="vesa_8cpp_source.html#l00087">render_pixel_32_bit()</a>, and <a class="el" href="vesa_8cpp_source.html#l00015">VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -768,7 +778,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="vesa_8h_source.html#l00037">37</a> of file <a class="el" href="vesa_8h_source.html">vesa.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00056">supports_mode()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00071">supports_mode()</a>, and <a class="el" href="vesa_8cpp_source.html#l00015">VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -794,7 +804,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="vesa_8h_source.html#l00041">41</a> of file <a class="el" href="vesa_8h_source.html">vesa.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00089">get_rendered_pixel_32_bit()</a>, and <a class="el" href="vesa_8cpp_source.html#l00072">render_pixel_32_bit()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vesa_8cpp_source.html#l00104">get_rendered_pixel_32_bit()</a>, <a class="el" href="vesa_8cpp_source.html#l00087">render_pixel_32_bit()</a>, and <a class="el" href="vesa_8cpp_source.html#l00015">VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -804,8 +814,10 @@ Additional Inherited Members</h2></td></tr>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="astructmultiboot__tag__framebuffer_html"><div class="ttname"><a href="structmultiboot__tag__framebuffer.html">multiboot_tag_framebuffer</a></div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00292">multiboot.h:292</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__framebuffer__common_html_a86adb2da5c20f527ed4fbb0a2a6423bc"><div class="ttname"><a href="structmultiboot__tag__framebuffer__common.html#a86adb2da5c20f527ed4fbb0a2a6423bc">multiboot_tag_framebuffer_common::framebuffer_pitch</a></div><div class="ttdeci">multiboot_uint32_t framebuffer_pitch</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00281">multiboot.h:281</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">MaxOS::drivers::peripherals::y</a></div><div class="ttdeci">@ y</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00051">keyboard.h:51</a></div></div>
+<div class="ttc" id="akprint_8h_html_ad0dbdc0814f8a967875ad592df02a663"><div class="ttname"><a href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a></div><div class="ttdeci">#define _kprintf(format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8h_source.html#l00012">kprint.h:12</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__framebuffer_html_aa08ac999e6f190bc67387683f2d1ff76"><div class="ttname"><a href="structmultiboot__tag__framebuffer.html#aa08ac999e6f190bc67387683f2d1ff76">multiboot_tag_framebuffer::common</a></div><div class="ttdeci">struct multiboot_tag_framebuffer_common common</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00294">multiboot.h:294</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__framebuffer__common_html_a543fb87729a64b16b113854d88063f2d"><div class="ttname"><a href="structmultiboot__tag__framebuffer__common.html#a543fb87729a64b16b113854d88063f2d">multiboot_tag_framebuffer_common::framebuffer_height</a></div><div class="ttdeci">multiboot_uint32_t framebuffer_height</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00283">multiboot.h:283</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__framebuffer__common_html_a3cfc65ce6112c0b7676341353a82e7d1"><div class="ttname"><a href="structmultiboot__tag__framebuffer__common.html#a3cfc65ce6112c0b7676341353a82e7d1">multiboot_tag_framebuffer_common::framebuffer_width</a></div><div class="ttdeci">multiboot_uint32_t framebuffer_width</div><div class="ttdef"><b>Definition:</b> <a href="multiboot_8h_source.html#l00282">multiboot.h:282</a></div></div>

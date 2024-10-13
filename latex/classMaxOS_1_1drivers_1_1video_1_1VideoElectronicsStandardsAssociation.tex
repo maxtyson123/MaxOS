@@ -67,19 +67,31 @@ Definition at line 26 of file vesa.\+h.
 
 
 
-Definition at line 13 of file vesa.\+cpp.
+Definition at line 15 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{14 : \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDriver_a1aa081ed8e5de1aaf30442f10497e36b}{VideoDriver}}(),}
-\DoxyCodeLine{15   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}(framebuffer\_info),}
-\DoxyCodeLine{16   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}}((uint64\_t *)framebuffer\_info-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a82d2ddfc7184652095c8359a60dc1b31}{framebuffer\_addr}}),}
-\DoxyCodeLine{17   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a0ec40e16861cf661af6e290bf171c5e9}{m\_bpp}}(framebuffer\_info-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a4564d1a0382ddb2d369d477e8d606bdc}{framebuffer\_bpp}}),}
-\DoxyCodeLine{18   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}{m\_pitch}}(framebuffer\_info-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a86adb2da5c20f527ed4fbb0a2a6423bc}{framebuffer\_pitch}})}
-\DoxyCodeLine{19 \{}
-\DoxyCodeLine{20 \}}
+\DoxyCodeLine{16 : \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDriver_a1aa081ed8e5de1aaf30442f10497e36b}{VideoDriver}}()}
+\DoxyCodeLine{17 \{}
+\DoxyCodeLine{18   \textcolor{comment}{// Get the framebuffer info}}
+\DoxyCodeLine{19   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}} = (\mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}}*)MemoryManager::to\_dm\_region((uint64\_t)framebuffer\_info);}
+\DoxyCodeLine{20   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Framebuffer info: physical = 0x\%x, virtual = 0x\%x\(\backslash\)n"}, framebuffer\_info, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}});}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22   \textcolor{comment}{// Set the framebuffer address, bpp and pitch}}
+\DoxyCodeLine{23   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a0ec40e16861cf661af6e290bf171c5e9}{m\_bpp}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a4564d1a0382ddb2d369d477e8d606bdc}{framebuffer\_bpp}};}
+\DoxyCodeLine{24   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}{m\_pitch}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a86adb2da5c20f527ed4fbb0a2a6423bc}{framebuffer\_pitch}};}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26   \textcolor{comment}{// Get the framebuffer address}}
+\DoxyCodeLine{27   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}} = (uint64\_t*)MemoryManager::to\_dm\_region((uint64\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a82d2ddfc7184652095c8359a60dc1b31}{framebuffer\_addr}});}
+\DoxyCodeLine{28   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Framebuffer address: physical = 0x\%x, virtual = 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a82d2ddfc7184652095c8359a60dc1b31}{framebuffer\_addr}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}});}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \}}
 
 \end{DoxyCode}
+
+
+References \+\_\+kprintf, multiboot\+\_\+tag\+\_\+framebuffer\+::common, multiboot\+\_\+tag\+\_\+framebuffer\+\_\+common\+::framebuffer\+\_\+addr, multiboot\+\_\+tag\+\_\+framebuffer\+\_\+common\+::framebuffer\+\_\+bpp, multiboot\+\_\+tag\+\_\+framebuffer\+\_\+common\+::framebuffer\+\_\+pitch, m\+\_\+bpp, m\+\_\+framebuffer\+\_\+address, m\+\_\+framebuffer\+\_\+info, and m\+\_\+pitch.
+
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_ab4570204f3df91305753b32825a69be9}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_ab4570204f3df91305753b32825a69be9}} 
 \index{MaxOS::drivers::video::VideoElectronicsStandardsAssociation@{MaxOS::drivers::video::VideoElectronicsStandardsAssociation}!````~VideoElectronicsStandardsAssociation@{$\sim$VideoElectronicsStandardsAssociation}}
 \index{````~VideoElectronicsStandardsAssociation@{$\sim$VideoElectronicsStandardsAssociation}!MaxOS::drivers::video::VideoElectronicsStandardsAssociation@{MaxOS::drivers::video::VideoElectronicsStandardsAssociation}}
@@ -88,13 +100,13 @@ Definition at line 13 of file vesa.\+cpp.
 
 
 
-Definition at line 22 of file vesa.\+cpp.
+Definition at line 32 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{22                                                                            \{}
-\DoxyCodeLine{23 }
-\DoxyCodeLine{24 \}}
+\DoxyCodeLine{32                                                                            \{}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \}}
 
 \end{DoxyCode}
 
@@ -126,13 +138,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a65b06f2917f
 
 
 
-Definition at line 116 of file vesa.\+cpp.
+Definition at line 131 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{116                                                              \{}
-\DoxyCodeLine{117     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"VESA compatible graphics card"};}
-\DoxyCodeLine{118 \}}
+\DoxyCodeLine{131                                                              \{}
+\DoxyCodeLine{132     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"VESA compatible graphics card"};}
+\DoxyCodeLine{133 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a2864654b3491aeb04eea07b01af7427d}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a2864654b3491aeb04eea07b01af7427d}} 
@@ -161,18 +173,18 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_adf7
 
 
 
-Definition at line 89 of file vesa.\+cpp.
+Definition at line 104 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{89                                                                                                \{}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91     \textcolor{comment}{// Get the address of the pixel}}
-\DoxyCodeLine{92     uint32\_t*pixel\_address = (uint32\_t*)((uint8\_t *)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}} + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}{m\_pitch}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}) + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a0ec40e16861cf661af6e290bf171c5e9}{m\_bpp}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}) / 8);}
-\DoxyCodeLine{93 }
-\DoxyCodeLine{94     \textcolor{comment}{// Return the pixel}}
-\DoxyCodeLine{95     \textcolor{keywordflow}{return} *pixel\_address;}
-\DoxyCodeLine{96 \}}
+\DoxyCodeLine{104                                                                                                \{}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106     \textcolor{comment}{// Get the address of the pixel}}
+\DoxyCodeLine{107     uint32\_t*pixel\_address = (uint32\_t*)((uint8\_t *)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}} + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}{m\_pitch}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}) + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a0ec40e16861cf661af6e290bf171c5e9}{m\_bpp}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}) / 8);}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109     \textcolor{comment}{// Return the pixel}}
+\DoxyCodeLine{110     \textcolor{keywordflow}{return} *pixel\_address;}
+\DoxyCodeLine{111 \}}
 
 \end{DoxyCode}
 
@@ -204,13 +216,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a7ad761c929a
 
 
 
-Definition at line 105 of file vesa.\+cpp.
+Definition at line 120 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{105                                                              \{}
-\DoxyCodeLine{106     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"NEC Home Electronics"};  \textcolor{comment}{// Creator of the VESA standard}}
-\DoxyCodeLine{107 \}}
+\DoxyCodeLine{120                                                              \{}
+\DoxyCodeLine{121     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"NEC Home Electronics"};  \textcolor{comment}{// Creator of the VESA standard}}
+\DoxyCodeLine{122 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_ae4cbc3dfb72b2401df2c2fa21f8c39cc}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_ae4cbc3dfb72b2401df2c2fa21f8c39cc}} 
@@ -241,17 +253,17 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDrive
 
 
 
-Definition at line 40 of file vesa.\+cpp.
+Definition at line 55 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{40                                                                                          \{}
-\DoxyCodeLine{41 }
-\DoxyCodeLine{42     \textcolor{comment}{// Best mode is set by the bootloader}}
-\DoxyCodeLine{43     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{44 }
-\DoxyCodeLine{45 }
-\DoxyCodeLine{46 \}}
+\DoxyCodeLine{55                                                                                          \{}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57     \textcolor{comment}{// Best mode is set by the bootloader}}
+\DoxyCodeLine{58     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_abbf5baeb2ff3923e53e7a72852df8936}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_abbf5baeb2ff3923e53e7a72852df8936}} 
@@ -279,19 +291,19 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_acff
 
 
 
-Definition at line 72 of file vesa.\+cpp.
+Definition at line 87 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{72                                                                                                       \{}
-\DoxyCodeLine{73 }
-\DoxyCodeLine{74     \textcolor{comment}{// Get the address of the pixel}}
-\DoxyCodeLine{75     uint32\_t*pixel\_address = (uint32\_t*)((uint8\_t *)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}} + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}{m\_pitch}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}) + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a0ec40e16861cf661af6e290bf171c5e9}{m\_bpp}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}) / 8);}
-\DoxyCodeLine{76 }
-\DoxyCodeLine{77     \textcolor{comment}{// Set the pixel}}
-\DoxyCodeLine{78     *pixel\_address = colour;}
-\DoxyCodeLine{79 }
-\DoxyCodeLine{80 \}}
+\DoxyCodeLine{87                                                                                                       \{}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89     \textcolor{comment}{// Get the address of the pixel}}
+\DoxyCodeLine{90     uint32\_t*pixel\_address = (uint32\_t*)((uint8\_t *)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}{m\_framebuffer\_address}} + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}{m\_pitch}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}) + \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a0ec40e16861cf661af6e290bf171c5e9}{m\_bpp}} * (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}) / 8);}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92     \textcolor{comment}{// Set the pixel}}
+\DoxyCodeLine{93     *pixel\_address = colour;}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95 \}}
 
 \end{DoxyCode}
 
@@ -326,18 +338,18 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoDrive
 
 
 
-Definition at line 56 of file vesa.\+cpp.
+Definition at line 71 of file vesa.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{56                                                                                                               \{}
-\DoxyCodeLine{57 }
-\DoxyCodeLine{58     \textcolor{comment}{// Check if the mode is supported}}
-\DoxyCodeLine{59     \textcolor{keywordflow}{if}(width == (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a3cfc65ce6112c0b7676341353a82e7d1}{framebuffer\_width}} \&\& height == (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a543fb87729a64b16b113854d88063f2d}{framebuffer\_height}} \&\& color\_depth == (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a4564d1a0382ddb2d369d477e8d606bdc}{framebuffer\_bpp}}) \{}
-\DoxyCodeLine{60         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{61     \}}
-\DoxyCodeLine{62     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{63 \}}
+\DoxyCodeLine{71                                                                                                               \{}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73     \textcolor{comment}{// Check if the mode is supported}}
+\DoxyCodeLine{74     \textcolor{keywordflow}{if}(width == (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a3cfc65ce6112c0b7676341353a82e7d1}{framebuffer\_width}} \&\& height == (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a543fb87729a64b16b113854d88063f2d}{framebuffer\_height}} \&\& color\_depth == (uint32\_t)\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}{m\_framebuffer\_info}}-\/>\mbox{\hyperlink{structmultiboot__tag__framebuffer_aa08ac999e6f190bc67387683f2d1ff76}{common}}.\mbox{\hyperlink{structmultiboot__tag__framebuffer__common_a4564d1a0382ddb2d369d477e8d606bdc}{framebuffer\_bpp}}) \{}
+\DoxyCodeLine{75         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{76     \}}
+\DoxyCodeLine{77     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{78 \}}
 
 \end{DoxyCode}
 
@@ -359,7 +371,7 @@ Definition at line 40 of file vesa.\+h.
 
 
 
-Referenced by get\+\_\+rendered\+\_\+pixel\+\_\+32\+\_\+bit(), and render\+\_\+pixel\+\_\+32\+\_\+bit().
+Referenced by get\+\_\+rendered\+\_\+pixel\+\_\+32\+\_\+bit(), render\+\_\+pixel\+\_\+32\+\_\+bit(), and Video\+Electronics\+Standards\+Association().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_a9ccdc42ab1611cb2022468e7b2fb1e5e}} 
 \index{MaxOS::drivers::video::VideoElectronicsStandardsAssociation@{MaxOS::drivers::video::VideoElectronicsStandardsAssociation}!m\_framebuffer\_address@{m\_framebuffer\_address}}
@@ -373,7 +385,7 @@ Definition at line 39 of file vesa.\+h.
 
 
 
-Referenced by get\+\_\+rendered\+\_\+pixel\+\_\+32\+\_\+bit(), and render\+\_\+pixel\+\_\+32\+\_\+bit().
+Referenced by get\+\_\+rendered\+\_\+pixel\+\_\+32\+\_\+bit(), render\+\_\+pixel\+\_\+32\+\_\+bit(), and Video\+Electronics\+Standards\+Association().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aa8da0c76b7ea1571e511c78ac0a7d8a9}} 
 \index{MaxOS::drivers::video::VideoElectronicsStandardsAssociation@{MaxOS::drivers::video::VideoElectronicsStandardsAssociation}!m\_framebuffer\_info@{m\_framebuffer\_info}}
@@ -387,7 +399,7 @@ Definition at line 37 of file vesa.\+h.
 
 
 
-Referenced by supports\+\_\+mode().
+Referenced by supports\+\_\+mode(), and Video\+Electronics\+Standards\+Association().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}\label{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation_aae59fdbf1816558d9665195a911352a5}} 
 \index{MaxOS::drivers::video::VideoElectronicsStandardsAssociation@{MaxOS::drivers::video::VideoElectronicsStandardsAssociation}!m\_pitch@{m\_pitch}}
@@ -401,7 +413,7 @@ Definition at line 41 of file vesa.\+h.
 
 
 
-Referenced by get\+\_\+rendered\+\_\+pixel\+\_\+32\+\_\+bit(), and render\+\_\+pixel\+\_\+32\+\_\+bit().
+Referenced by get\+\_\+rendered\+\_\+pixel\+\_\+32\+\_\+bit(), render\+\_\+pixel\+\_\+32\+\_\+bit(), and Video\+Electronics\+Standards\+Association().
 
 
 

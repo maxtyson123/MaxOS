@@ -4,7 +4,7 @@ var NAVTREEINDEX0 =
 "acpi_8cpp_source.html":[2,0,0,1,4,0],
 "acpi_8h.html":[2,0,0,0,4,0],
 "acpi_8h.html#a1664604ce1e7885a2c4474ab8320bc2c":[2,0,0,0,4,0,11],
-"acpi_8h.html#a2df113194cf7bff36ea644f49754c5a8":[2,0,0,0,4,0,7],
+"acpi_8h.html#a246df0da2f83d4427aeff9b62cb78b01":[2,0,0,0,4,0,7],
 "acpi_8h.html#a502a3436fb16ff00a5de98a6ae50c8c8":[2,0,0,0,4,0,20],
 "acpi_8h.html#a59eac9627282a484fbaf0aa7aa3b8a9a":[2,0,0,0,4,0,8],
 "acpi_8h.html#a5b8c7b5fcea38f6ae062e175e89a7bd1":[2,0,0,0,4,0,16],

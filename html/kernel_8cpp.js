@@ -7,5 +7,6 @@ var kernel_8cpp =
     [ "kernelMain", "kernel_8cpp.html#a64d1f63d75fef5a193446b997b7a9090", null ],
     [ "print_boot_header", "kernel_8cpp.html#a39e7de5bf50d07f450b5d5533a6874b4", null ],
     [ "end_ctors", "kernel_8cpp.html#affa4f606954d8d9a7edcb66df47b7f1d", null ],
+    [ "p4_table", "kernel_8cpp.html#a19f262860236e9c10064948f12f89636", null ],
     [ "start_ctors", "kernel_8cpp.html#a00bc71da06b4a8e02a8587bf37dd984b", null ]
 ];

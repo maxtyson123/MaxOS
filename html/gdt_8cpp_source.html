@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('gdt_8cpp_source.html',''); initResizab
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    uint64_t user_data_segment_descriptor = kernel_data_segment_descriptor | (3 &lt;&lt; 13);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    m_gdt[4] = user_data_segment_descriptor;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="kprint_8h.html#a21d6766fe400d57e508480323c71a148">_kprintf</a>(<span class="stringliteral">&quot;Created GDT entries\n&quot;</span>);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Created GDT entries\n&quot;</span>);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// Store the GDT in the GDTR</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="structMaxOS_1_1system_1_1GDTR.html">GDTR</a> gdtr = {</div>
@@ -147,37 +147,40 @@ $(document).ready(function(){initNavTree('gdt_8cpp_source.html',''); initResizab
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        .<a class="code" href="amd__am79c973_8h.html#ac0d31ca829f934cccd89f8054e02773e">address</a> = (uint64_t)m_gdt</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    };</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// Load the GDTR</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">asm</span> <span class="keyword">volatile</span>(<span class="stringliteral">&quot;lgdt %0&quot;</span> : : <span class="stringliteral">&quot;m&quot;</span> (gdtr));</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="kprint_8h.html#a21d6766fe400d57e508480323c71a148">_kprintf</a>(<span class="stringliteral">&quot;Loaded GDT\n&quot;</span>);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// Reload the segment registers</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">asm</span> <span class="keyword">volatile</span>(<span class="stringliteral">&quot;\</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">        mov $0x10, %ax \n\</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">        mov %ax, %ds \n\</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">        mov %ax, %es \n\</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">        mov %ax, %fs \n\</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">        mov %ax, %gs \n\</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">        mov %ax, %ss \n\</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">        \n\</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">        pop %rdi \n\</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">        push $0x8 \n\</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">        push %rdi \n\</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">    &quot;</span>);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="kprint_8h.html#a21d6766fe400d57e508480323c71a148">_kprintf</a>(<span class="stringliteral">&quot;Reloaded segment registers\n&quot;</span>);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// TODO: This is done in assembly but would be nice to do here</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">//    // Load the GDTR</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//    asm volatile(&quot;lgdt %0&quot; : : &quot;m&quot; (gdtr));</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">//    _kprintf(&quot;Loaded GDT\n&quot;);</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">//    // Reload the segment registers</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">//    asm volatile(&quot;\</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">//        mov $0x10, %ax \n\</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">//        mov %ax, %ds \n\</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">//        mov %ax, %es \n\</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">//        mov %ax, %fs \n\</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">//        mov %ax, %gs \n\</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//        mov %ax, %ss \n\</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">//        \n\</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">//        pop %rdi \n\</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">//        push $0x8 \n\</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">//        push %rdi \n\</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">//    &quot;);</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#acf17048eaac95750ebc0043a1f07576a">   74</a></span>&#160;<a class="code" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#acf17048eaac95750ebc0043a1f07576a">GlobalDescriptorTable::~GlobalDescriptorTable</a>()</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a>(<span class="stringliteral">&quot;Reloaded segment registers\n&quot;</span>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#acf17048eaac95750ebc0043a1f07576a">   77</a></span>&#160;<a class="code" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#acf17048eaac95750ebc0043a1f07576a">GlobalDescriptorTable::~GlobalDescriptorTable</a>()</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;{</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agdt_8h_html"><div class="ttname"><a href="gdt_8h.html">gdt.h</a></div></div>
-<div class="ttc" id="akprint_8h_html_a21d6766fe400d57e508480323c71a148"><div class="ttname"><a href="kprint_8h.html#a21d6766fe400d57e508480323c71a148">_kprintf</a></div><div class="ttdeci">void _kprintf(const char *format,...)</div><div class="ttdoc">Prints a formatted string to the serial output.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00098">kprint.cpp:98</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_acf17048eaac95750ebc0043a1f07576a"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#acf17048eaac95750ebc0043a1f07576a">MaxOS::system::GlobalDescriptorTable::~GlobalDescriptorTable</a></div><div class="ttdeci">~GlobalDescriptorTable()</div><div class="ttdef"><b>Definition:</b> <a href="gdt_8cpp_source.html#l00074">gdt.cpp:74</a></div></div>
+<div class="ttc" id="akprint_8h_html_ad0dbdc0814f8a967875ad592df02a663"><div class="ttname"><a href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">_kprintf</a></div><div class="ttdeci">#define _kprintf(format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8h_source.html#l00012">kprint.h:12</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_acf17048eaac95750ebc0043a1f07576a"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#acf17048eaac95750ebc0043a1f07576a">MaxOS::system::GlobalDescriptorTable::~GlobalDescriptorTable</a></div><div class="ttdeci">~GlobalDescriptorTable()</div><div class="ttdef"><b>Definition:</b> <a href="gdt_8cpp_source.html#l00077">gdt.cpp:77</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1system_1_1GDTR_html"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTR.html">MaxOS::system::GDTR</a></div><div class="ttdoc">A struct used to store information for the GDT Register.</div><div class="ttdef"><b>Definition:</b> <a href="gdt_8h_source.html#l00019">gdt.h:19</a></div></div>
 <div class="ttc" id="aamd__am79c973_8h_html_ac0d31ca829f934cccd89f8054e02773e"><div class="ttname"><a href="amd__am79c973_8h.html#ac0d31ca829f934cccd89f8054e02773e">address</a></div><div class="ttdeci">uint32_t address</div><div class="ttdef"><b>Definition:</b> <a href="amd__am79c973_8h_source.html#l00003">amd_am79c973.h:3</a></div></div>
 <div class="ttc" id="akprint_8h_html"><div class="ttname"><a href="kprint_8h.html">kprint.h</a></div></div>

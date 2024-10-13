@@ -1,0 +1,210 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include <system/multiboot\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::memory::PageTableEntry\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::memory::PageMapLevel\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::memory::PhysicalMemoryManager\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI " \fBMaxOS\fP"
+.br
+.ti -1c
+.RI " \fBMaxOS::memory\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBPMLX_GET_INDEX\fP(ADDR,  LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
+.br
+.ti -1c
+.RI "#define \fBPML4_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 3)"
+.br
+.ti -1c
+.RI "#define \fBPML3_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 2)"
+.br
+.ti -1c
+.RI "#define \fBPML2_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 1)"
+.br
+.ti -1c
+.RI "#define \fBPML1_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 0)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef void \fBMaxOS::memory::virtual_address_t\fP"
+.br
+.ti -1c
+.RI "typedef void \fBMaxOS::memory::physical_address_t\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBMaxOS::memory::PageFlags\fP \fBMaxOS::memory::page_flags_t\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBMaxOS::memory::PageFlags\fP { \fBMaxOS::memory::None\fP = 0, \fBMaxOS::memory::Present\fP = (1 << 0), \fBMaxOS::memory::Write\fP = (1 << 1), \fBMaxOS::memory::User\fP = (1 << 2), \fBMaxOS::memory::WriteThrough\fP = (1 << 3), \fBMaxOS::memory::CacheDisabled\fP = (1 << 4), \fBMaxOS::memory::Accessed\fP = (1 << 5), \fBMaxOS::memory::Dirty\fP = (1 << 6), \fBMaxOS::memory::HugePage\fP = (1 << 7), \fBMaxOS::memory::Global\fP = (1 << 8) }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::memory::PageTableEntry\fP \fBMaxOS::memory::__attribute__\fP ((packed)) pte_t"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBpresent\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBwrite\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBuser\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBwrite_through\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBcache_disabled\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBaccessed\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBdirty\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBhuge_page\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBglobal\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBavailable\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBphysical_address\fP"
+.br
+.ti -1c
+.RI "pte_t \fBentries\fP [512]"
+.br
+.ti -1c
+.RI "class \fBMaxOS::memory::PhysicalMemoryManager\fP \fBMaxOS::memory::__attribute__\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define PML1_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 0)"
+
+.PP
+Definition at line 22 of file physical\&.h\&.
+.SS "#define PML2_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 1)"
+
+.PP
+Definition at line 21 of file physical\&.h\&.
+.SS "#define PML3_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 2)"
+
+.PP
+Definition at line 20 of file physical\&.h\&.
+.SS "#define PML4_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 3)"
+
+.PP
+Definition at line 19 of file physical\&.h\&.
+.SS "#define PMLX_GET_INDEX(ADDR, LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
+
+.PP
+Definition at line 17 of file physical\&.h\&.
+.SH "Variable Documentation"
+.PP 
+.SS "uint64_t accessed"
+
+.PP
+Definition at line 32 of file physical\&.h\&.
+.SS "uint64_t available"
+
+.PP
+Definition at line 36 of file physical\&.h\&.
+.SS "uint64_t cache_disabled"
+
+.PP
+Definition at line 31 of file physical\&.h\&.
+.SS "uint64_t dirty"
+
+.PP
+Definition at line 33 of file physical\&.h\&.
+.SS "pte_t entries[512]"
+
+.PP
+Definition at line 27 of file physical\&.h\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find(), and MaxOS::memory::PhysicalMemoryManager::map()\&.
+.SS "uint64_t global"
+
+.PP
+Definition at line 35 of file physical\&.h\&.
+.SS "uint64_t huge_page"
+
+.PP
+Definition at line 34 of file physical\&.h\&.
+.SS "uint64_t physical_address"
+
+.PP
+Definition at line 37 of file physical\&.h\&.
+.PP
+Referenced by MaxOS::memory::PhysicalMemoryManager::identity_map(), MaxOS::memory::PhysicalMemoryManager::map(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), MaxOS::memory::MemoryManager::to_dm_region(), MaxOS::memory::MemoryManager::to_higher_region(), and MaxOS::memory::MemoryManager::to_io_region()\&.
+.SS "uint64_t present"
+
+.PP
+Definition at line 27 of file physical\&.h\&.
+.PP
+Referenced by MaxOS::hardwarecommunication::InterruptManager::HandleInterrupt(), and MaxOS::memory::PhysicalMemoryManager::map()\&.
+.SS "uint64_t user"
+
+.PP
+Definition at line 29 of file physical\&.h\&.
+.SS "uint64_t write"
+
+.PP
+Definition at line 28 of file physical\&.h\&.
+.PP
+Referenced by MaxOS::drivers::ethernet::intel_i217::activate(), MaxOS::net::EthernetFrameHandler::DataReceived(), MaxOS::drivers::ethernet::intel_i217::DoSend(), MaxOS::drivers::Driver::error_message(), MaxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), MaxOS::drivers::ethernet::intel_i217::GetMediaAccessControlAddress(), MaxOS::drivers::ethernet::intel_i217::handle_interrupt(), MaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload(), MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), MaxOS::hardwarecommunication::InterruptManager::HandleInterrupt(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::identify(), MaxOS::hardwarecommunication::LocalAPIC::init(), MaxOS::common::GenericOutputStream< string >::on_stream_read(), MaxOS::common::GenericOutputStream< string >::operator<<(), MaxOS::net::InternetControlMessageProtocol::RequestEchoReply(), and MaxOS::drivers::ethernet::EthernetDriver::Send()\&.
+.SS "uint64_t write_through"
+
+.PP
+Definition at line 30 of file physical\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

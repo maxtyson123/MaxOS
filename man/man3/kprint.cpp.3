@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/kprint.cpp" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/kprint.cpp" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,14 +8,12 @@
 .PP
 \fC#include <common/kprint\&.h>\fP
 .br
-\fC#include <stdarg\&.h>\fP
-.br
 
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "char * \fBitoa\fP (int \fBbase\fP, int number)"
+.RI "char * \fBitoa\fP (int \fBbase\fP, uint64_t number)"
 .br
 .RI "Converts integer to string\&. "
 .ti -1c
@@ -23,16 +21,16 @@
 .br
 .RI "Gets the length of a string\&. "
 .ti -1c
-.RI "void \fBpre_kprintf\fP ()"
+.RI "void \fBpre_kprintf\fP (const char *file, int line, const char *func, uint8_t \fBtype\fP)"
 .br
 .ti -1c
-.RI "void \fB_kprintf\fP (const char *format,\&.\&.\&.)"
+.RI "void \fB_kprintf_internal\fP (uint8_t \fBtype\fP, const char *file, int line, const char *func, const char *format,\&.\&.\&.)"
 .br
 .RI "Prints a formatted string to the serial output\&. "
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void _kprintf (const char * format,  \&.\&.\&.)"
+.SS "void _kprintf_internal (uint8_t type, const char * file, int line, const char * func, const char * format,  \&.\&.\&.)"
 
 .PP
 Prints a formatted string to the serial output\&. ARGUMENTS:
@@ -55,78 +53,67 @@ s for string
 .PP
 
 .PP
-Definition at line 98 of file kprint\&.cpp\&.
+Definition at line 155 of file kprint\&.cpp\&.
 .PP
 .nf
-99 {
-100 
-101   // Print the header
-102   pre_kprintf();
-103 
-104   // Create a pointer to the data
-105   va_list parameters;
-106   va_start(parameters, format);
-107 
-108   // Loop through the format string
-109   for (; *format != '\0'; format++)
-110   {
-111 
-112     // If it is not a %, print the character
-113     if (*format != '%')
-114     {
-115       putchar(*format);
-116       continue;
-117     }
-118 
-119     // Move to the next character
-120     format++;
-121 
-122     switch (*format)
-123     {
-124       case 'd':
-125       {
-126         // Print a decimal
-127         int number = va_arg (parameters, int);
-128         char* str = itoa(10, number);
-129         for (int i = 0; i < strlen(str); i++)
-130           putchar(str[i]);
-131         break;
-132       }
-133       case 'x':
-134       {
-135         // Print a hex
-136         int number = va_arg (parameters, int);
-137         char* str = itoa(16, number);
-138         for (int i = 0; i < strlen(str); i++)
-139           putchar(str[i]);
-140         break;
-141       }
-142       case 'u':
-143       {
-144         // Print an unsigned decimal
-145         unsigned int number = va_arg (parameters, unsigned int);
-146         char* str = itoa(10, number);
-147         for (int i = 0; i < strlen(str); i++)
-148           putchar(str[i]);
-149         break;
-150       }
-151       case 's':
-152       {
-153         // Print a string
-154         char* str = va_arg (parameters, char*);
-155         for (int i = 0; i < strlen(str); i++)
-156           putchar(str[i]);
-157         break;
-158       }
-159     }
-160   }
-161 }
+156 {
+157 
+158   // Print the header
+159   pre_kprintf(file, line,func, type);
+160 
+161   // Create a pointer to the data
+162   va_list parameters;
+163   va_start(parameters, format);
+164 
+165   // Loop through the format string
+166   for (; *format != '\0'; format++)
+167   {
+168 
+169     // If it is not a %, print the character
+170     if (*format != '%')
+171     {
+172       putchar(*format);
+173       continue;
+174     }
+175 
+176     // Move to the next character
+177     format++;
+178 
+179     switch (*format)
+180     {
+181       case 'd':
+182       {
+183         // Print a decimal
+184         int number = va_arg (parameters, int);
+185         char* str = itoa(10, number);
+186         for (int i = 0; i < strlen(str); i++)
+187           putchar(str[i]);
+188         break;
+189       }
+190       case 'x':
+191       {
+192         // Print a hex
+193         uint64_t  number = va_arg (parameters, uint64_t );
+194         char* str = itoa(16, number);
+195         for (int i = 0; i < strlen(str); i++)
+196           putchar(str[i]);
+197         break;
+198       }
+199       case 's':
+200       {
+201         // Print a string
+202         char* str = va_arg (parameters, char*);
+203         for (int i = 0; i < strlen(str); i++)
+204           putchar(str[i]);
+205         break;
+206       }
+207     }
+208   }
+209 }
 .fi
 .PP
-References pre_kprintf()\&.
-.PP
-Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(), MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController(), MaxOS::system::GlobalDescriptorTable::GlobalDescriptorTable(), MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request(), MaxOS::hardwarecommunication::LocalAPIC::init(), MaxOS::hardwarecommunication::IOAPIC::init(), kernelMain(), and MaxOS::system::CPU::stack_trace()\&.
-.SS "char* itoa (int base, int number)"
+References pre_kprintf(), and type\&.
+.SS "char* itoa (int base, uint64_t number)"
 
 .PP
 Converts integer to string\&. 
@@ -176,24 +163,81 @@ Definition at line 17 of file kprint\&.cpp\&.
 .fi
 .PP
 References base, and MaxOS::drivers::peripherals::i\&.
-.SS "void pre_kprintf ()"
+.SS "void pre_kprintf (const char * file, int line, const char * func, uint8_t type)"
 @ brief Prints a debug prefix (in yellow) to the serial output 
 .PP
 Definition at line 77 of file kprint\&.cpp\&.
 .PP
 .nf
 78 {
-79   // Print the kernel header with yellow text
-80   const char* header = "\033[1;33m[DEBUG] \033[0m";
-81   for (int i = 0; i < strlen(header); i++)
-82     putchar(header[i]);
+79 
+80   // Print the  colour
+81   char* colour = "---------";
+82   switch (type) {
 83 
-84 }
+84     // Log (yellow)
+85     case 0:
+86       colour = "\033[1;33m";
+87       break;
+88 
+89     // Assert (red)
+90     case 3:
+91       colour = "\033[1;31m";
+92       break;
+93   }
+94 
+95   for (int i = 0; i < strlen(colour); i++)
+96     putchar(colour[i]);
+97 
+98   putchar('[');
+99 
+100   // File Output
+101   if(type == 0){
+102 
+103     // Print the file (but not the path)
+104     const char* file_str = file;
+105     for (int i = strlen(file) - 1; i >= 0; i--)
+106     {
+107       if (file[i] == '/')
+108       {
+109         file_str = &file[i + 1];
+110         break;
+111       }
+112     }\
+113     for (int j = 0; j < strlen(file_str); j++)
+114       putchar(file_str[j]);
+115     putchar(':');
+116 
+117     // Print the line
+118     const char* line_str = itoa(10, line);
+119     for (int i = 0; i < strlen(line_str); i++)
+120       putchar(line_str[i]);
+121   }else{
+122 
+123     // Print the text
+124     const char* text = "FATAL ERROR IN {";
+125     for (int i = 0; i < strlen(text); i++)
+126       putchar(text[i]);
+127 
+128     // Print the function
+129     for (int i = 0; i < strlen(func); i++)
+130       putchar(func[i]);
+131 
+132     putchar('}');
+133   }
+134 
+135 
+136   // Print the kernel footer
+137   const char* footer = "] \033[0m";
+138   for (int i = 0; i < strlen(footer); i++)
+139     putchar(footer[i]);
+140 
+141 }
 .fi
 .PP
-References header, MaxOS::drivers::peripherals::i, and strlen()\&.
+References MaxOS::drivers::peripherals::i, strlen(), and type\&.
 .PP
-Referenced by _kprintf()\&.
+Referenced by _kprintf_internal()\&.
 .SS "int strlen (const char * str)"
 
 .PP

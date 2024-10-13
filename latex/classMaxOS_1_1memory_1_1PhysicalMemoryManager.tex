@@ -1,0 +1,1308 @@
+\hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{}\doxysection{Max\+OS\+::memory\+::Physical\+Memory\+Manager Class Reference}
+\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager}\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+
+
+{\ttfamily \#include $<$physical.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab99d6d13a57780003adf4f81c5882fa5}{Physical\+Memory\+Manager}} (unsigned long \mbox{\hyperlink{tcp_8h_acb7bc06bed6f6408d719334fc41698c7}{reserved}}, \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} $\ast$multiboot, uint64\+\_\+t pml4\+\_\+root\mbox{[}512\mbox{]})
+\item 
+\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a8cf728268a7e9fb72d0903a49a301b0a}{$\sim$\+Physical\+Memory\+Manager}} ()
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0bd4c0766bc4c3930920814f2f7de1c5}{get\+\_\+memory\+\_\+size}} ()
+\begin{DoxyCompactList}\small\item\em Gets total the memory size available for use (allocated or not) \end{DoxyCompactList}\item 
+uint64\+\_\+t $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ac54f576d801ed62713b84ae64d83fb64}{get\+\_\+pml4\+\_\+root\+\_\+address}} ()
+\begin{DoxyCompactList}\small\item\em Gets the pml4 root address for the kernel. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}{allocate\+\_\+frame}} ()
+\begin{DoxyCompactList}\small\item\em Allocates a physical page of memory, if the P\+MM is not initalise it will use the anon memory instead of the bitmap. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af0b6a43f9b559575ece938d3918fc3a1}{free\+\_\+frame}} (void $\ast$\mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}})
+\begin{DoxyCompactList}\small\item\em Frees a frame in the bit map. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af68e198da5c85cc1443f28ecd0f92bd2}{allocate\+\_\+area}} (uint64\+\_\+t start\+\_\+address, size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
+\begin{DoxyCompactList}\small\item\em Allocate an area of physical memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad0aaa5f1fb32a28d1d91cc5630d56dad}{free\+\_\+area}} (uint64\+\_\+t start\+\_\+address, size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
+\begin{DoxyCompactList}\small\item\em Frees an area of physical memory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address, size\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}})
+\begin{DoxyCompactList}\small\item\em Allocates a physical address to a virtual address. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a981b3d0afa8d5b41eda2d30a4478974c}{map}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$physical, \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address, size\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}})
+\begin{DoxyCompactList}\small\item\em Maps a physical address to a virtual address, using the kernel\textquotesingle{}s pml4 table. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_acadc6bfafbd83d6a73b92cd60e9cd927}{map}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$physical, \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address, size\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}, uint64\+\_\+t $\ast$pml4\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Maps a physical address to a virtual address. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a39a03a4a5c211c9af2ad07f8f4bd3028}{map\+\_\+area}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address\+\_\+start, size\+\_\+t \mbox{\hyperlink{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}}, size\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}})
+\begin{DoxyCompactList}\small\item\em Allocates a new area physical memory to a area virtual address. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a155276cb4df27f12ce3cbd011dd93a79}{map\+\_\+area}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$physical\+\_\+address\+\_\+start, \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address\+\_\+start, size\+\_\+t \mbox{\hyperlink{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}}, size\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}})
+\begin{DoxyCompactList}\small\item\em Maps an area of physical memory to a virtual address. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ace56d1f37c7be25425fe92c994a5cedd}{identity\+\_\+map}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\+\_\+address}}, size\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}})
+\begin{DoxyCompactList}\small\item\em Maps a physical address to its virtual address counter-\/part. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a47cc8d6c823f3c323f88e21437ba88ea}{unmap}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address)
+\begin{DoxyCompactList}\small\item\em Unmaps a virtual address using the kernel\textquotesingle{}s pml4 table. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0f453dd61a29a033887b3a531cf3910f}{unmap}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address, uint64\+\_\+t $\ast$pml4\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Unmaps a virtual address. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0cc0fb25a8d67e16410a847c4fd59ea3}{unmap\+\_\+area}} (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$virtual\+\_\+address\+\_\+start, size\+\_\+t \mbox{\hyperlink{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}})
+\begin{DoxyCompactList}\small\item\em Unmaps an area of virtual memory. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a14f4ff20cc6dda201bb5a4ef6a7654f6}{is\+\_\+mapped}} (uintptr\+\_\+t \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\+\_\+address}}, uintptr\+\_\+t virtual\+\_\+address)
+\begin{DoxyCompactList}\small\item\em Checks if a virtual address is mapped and whether it points to the correct physical address. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a344d9602dcf5a77e672a1859fa05e67f}{is\+\_\+anonymous\+\_\+available}} (size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
+\begin{DoxyCompactList}\small\item\em Checks if a physical address is reserved by multiboot mmap. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a86cdae579a7819fb086f2fbfabeb8752}{is\+\_\+multiboot\+\_\+reserved}} (uint64\+\_\+t \mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}})
+\begin{DoxyCompactList}\small\item\em Checks if an address is reserved by a multiboot module. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a66d5d1a4c7c019d77fcee0aa3c128d07}{clean\+\_\+page\+\_\+table}} (uint64\+\_\+t $\ast$table)
+\begin{DoxyCompactList}\small\item\em Cleans a page table (fills it with 0 or null entries) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static size\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{size\+\_\+to\+\_\+frames}} (size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
+\begin{DoxyCompactList}\small\item\em Converts a size to the number of frames. \end{DoxyCompactList}\item 
+static size\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{align\+\_\+to\+\_\+page}} (size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
+\begin{DoxyCompactList}\small\item\em Aligns a size to the page size. \end{DoxyCompactList}\item 
+static size\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{align\+\_\+up\+\_\+to\+\_\+page}} (size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}, size\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\+\_\+page\+\_\+size}})
+\begin{DoxyCompactList}\small\item\em Aligns a size up to the page size. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}{check\+\_\+aligned}} (size\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}})
+\begin{DoxyCompactList}\small\item\em Checks if an address is aligned. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\+\_\+page\+\_\+size}} = \{ 0x1000 \}
+\item 
+static \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Physical\+Memory\+Manager}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1d6ffacb7290c01505c3dec9f9cfd3f1}{s\+\_\+current\+\_\+manager}} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 63 of file physical.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab99d6d13a57780003adf4f81c5882fa5}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab99d6d13a57780003adf4f81c5882fa5}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!PhysicalMemoryManager@{PhysicalMemoryManager}}
+\index{PhysicalMemoryManager@{PhysicalMemoryManager}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{PhysicalMemoryManager()}{PhysicalMemoryManager()}}
+{\footnotesize\ttfamily Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager (\begin{DoxyParamCaption}\item[{unsigned long}]{reserved,  }\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} $\ast$}]{multiboot,  }\item[{uint64\+\_\+t}]{pml4\+\_\+root\mbox{[}512\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 19 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{19                                                                                                                              \{}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21   \textcolor{comment}{// Set the current manager}}
+\DoxyCodeLine{22   \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1d6ffacb7290c01505c3dec9f9cfd3f1}{s\_current\_manager}} = \textcolor{keyword}{this};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24   \textcolor{comment}{// SEE boot.s FOR SETUP OF PAGING}}
+\DoxyCodeLine{25   m\_pml4\_root = (pte\_t *)pml4\_root;}
+\DoxyCodeLine{26   m\_pml4\_root\_address = pml4\_root;}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28   \textcolor{comment}{// Store the information about the bitmap}}
+\DoxyCodeLine{29   m\_memory\_size = (multiboot-\/>get\_basic\_meminfo()-\/>mem\_upper + 1024) * 1000;}
+\DoxyCodeLine{30   m\_bitmap\_size = m\_memory\_size / \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}} + 1;}
+\DoxyCodeLine{31   m\_total\_entries = m\_bitmap\_size / ROW\_BITS + 1;}
+\DoxyCodeLine{32   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Mem Info: size = \%dmb, bitmap size = \%d, total entries = \%d, page size = \%db\(\backslash\)n"}, ((m\_memory\_size / 1000) * 1024) / 1024 / 1024, m\_bitmap\_size, m\_total\_entries, \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}});}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34   \textcolor{comment}{// Get the mmap that stores the memory to use}}
+\DoxyCodeLine{35   m\_mmap\_tag = multiboot-\/>get\_mmap();}
+\DoxyCodeLine{36   \textcolor{keywordflow}{for} (\mbox{\hyperlink{structmultiboot__mmap__entry}{multiboot\_mmap\_entry}} *entry = m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_a20c4427afce786340b01ded5ed0532a2}{entries}}; (\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *)entry < (\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *)m\_mmap\_tag + m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_a0663e47406ed5799d5bd55ccf2d4fa95}{size}}; entry = (\mbox{\hyperlink{structmultiboot__mmap__entry}{multiboot\_mmap\_entry}} *)((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})entry + m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_aa5532c68672471f9da8ba18a8a16857d}{entry\_size}})) \{}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38     \textcolor{comment}{// Skip if the region is not free or there is not enough space}}
+\DoxyCodeLine{39     \textcolor{keywordflow}{if} (entry-\/>type != \mbox{\hyperlink{multiboot_8h_a7fe141351ebcde0acbd6118ad0ea1a21}{MULTIBOOT\_MEMORY\_AVAILABLE}} || (entry-\/>addr + entry-\/>len) < \mbox{\hyperlink{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}{reserved}})}
+\DoxyCodeLine{40       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \textcolor{comment}{// We want the last entry}}
+\DoxyCodeLine{43     m\_mmap = entry;}
+\DoxyCodeLine{44   \}}
+\DoxyCodeLine{45   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Mmap in use: 0x\%x -\/ 0x\%x\(\backslash\)n"}, m\_mmap-\/>\mbox{\hyperlink{structmultiboot__mmap__entry_a3f76a637264b83e30967bcd808ff403c}{addr}}, m\_mmap-\/>\mbox{\hyperlink{structmultiboot__mmap__entry_a3f76a637264b83e30967bcd808ff403c}{addr}} + m\_mmap-\/>\mbox{\hyperlink{structmultiboot__mmap__entry_a6bfa44919a328492fa4e3d6239a23352}{len}});}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47   \textcolor{comment}{// Kernel Memory (anonymous memory to the next page)}}
+\DoxyCodeLine{48   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Kernel Memory: kernel\_end = 0x\%x, kernel\_size = 0x\%x, kernel\_physical\_end = 0x\%x\(\backslash\)n"}, \&\mbox{\hyperlink{physical_8cpp_a963a9b86d21e2b5cfdeb947f25826c13}{\_kernel\_end}}, \&\mbox{\hyperlink{physical_8cpp_aea8f7989c93a7869e750d1bbf6c3cf10}{\_kernel\_size}}, \&\mbox{\hyperlink{physical_8cpp_a5d533ddf4ea36ed94c6a20a7281cb89f}{\_kernel\_physical\_end}});}
+\DoxyCodeLine{49   m\_anonymous\_memory\_physical\_address = (uint64\_t)\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{align\_up\_to\_page}}((\textcolor{keywordtype}{size\_t})(\&\mbox{\hyperlink{physical_8cpp_a5d533ddf4ea36ed94c6a20a7281cb89f}{\_kernel\_physical\_end}} + \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}), \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}});}
+\DoxyCodeLine{50   m\_anonymous\_memory\_virtual\_address = (uint64\_t)\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{align\_up\_to\_page}}((\textcolor{keywordtype}{size\_t})(\&\mbox{\hyperlink{physical_8cpp_a963a9b86d21e2b5cfdeb947f25826c13}{\_kernel\_end}} + \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}), \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}});}
+\DoxyCodeLine{51   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Anonymous Memory: physical = 0x\%x, virtual = 0x\%x\(\backslash\)n"}, m\_anonymous\_memory\_physical\_address, m\_anonymous\_memory\_virtual\_address);}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53   \textcolor{comment}{// Map the physical memory into the virtual memory}}
+\DoxyCodeLine{54   uint64\_t \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}} = 0;}
+\DoxyCodeLine{55   uint64\_t virtual\_address = \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a25fe2fa3e01b0a9593cede08126095bf}{MemoryManager::s\_hh\_direct\_map\_offset}};}
+\DoxyCodeLine{56   uint64\_t mem\_end = m\_mmap-\/>\mbox{\hyperlink{structmultiboot__mmap__entry_a3f76a637264b83e30967bcd808ff403c}{addr}} + m\_mmap-\/>\mbox{\hyperlink{structmultiboot__mmap__entry_a6bfa44919a328492fa4e3d6239a23352}{len}};}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58   \textcolor{keywordflow}{while} (\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}} < mem\_end) \{}
+\DoxyCodeLine{59     \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}} *)\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}, (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}} *)virtual\_address, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}});}
+\DoxyCodeLine{60     \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}} += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{61     virtual\_address += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{62   \}}
+\DoxyCodeLine{63   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Mapped: physical = 0x\%x-\/0x\%x, virtual = 0x\%x-\/0x\%x\(\backslash\)n"}, 0, \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}, \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a25fe2fa3e01b0a9593cede08126095bf}{MemoryManager::s\_hh\_direct\_map\_offset}}, virtual\_address); \textcolor{comment}{// TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65   \textcolor{comment}{// Get the bitmap \& clear it}}
+\DoxyCodeLine{66   m\_anonymous\_memory\_physical\_address += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{67   m\_bit\_map = get\_bitmap\_address();}
+\DoxyCodeLine{68 }
+\DoxyCodeLine{69   \textcolor{keywordflow}{for} (uint32\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_total\_entries; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{70     m\_bit\_map[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = 0;}
+\DoxyCodeLine{71   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Bitmap: location = 0x\%x -\/ 0x\%x\(\backslash\)n"}, m\_bit\_map, m\_bit\_map + m\_bitmap\_size / 8);}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73   \textcolor{comment}{// Calculate how much space the kernel takes up}}
+\DoxyCodeLine{74   uint32\_t kernel\_entries = (m\_anonymous\_memory\_physical\_address / \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}) + 1;}
+\DoxyCodeLine{75   \textcolor{keywordflow}{if} ((((uint32\_t)(m\_anonymous\_memory\_physical\_address)) \% \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}) != 0) \{}
+\DoxyCodeLine{76     \textcolor{comment}{// If the kernel takes up more then a whole page(s)}}
+\DoxyCodeLine{77     kernel\_entries += 1;}
+\DoxyCodeLine{78   \}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80   \textcolor{comment}{// Reserve the kernel in the bitmap}}
+\DoxyCodeLine{81   uint32\_t kernel\_rows = kernel\_entries / ROW\_BITS;}
+\DoxyCodeLine{82   \textcolor{keywordflow}{for} (uint32\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < kernel\_rows; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{83       m\_bit\_map[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = 0xFFFFFFFF;}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85   \textcolor{comment}{// Change the final row to account for the remaining bits}}
+\DoxyCodeLine{86   m\_bit\_map[kernel\_rows] = \string~(0ul) << (kernel\_entries -\/ (kernel\_rows * 64));}
+\DoxyCodeLine{87   m\_used\_frames = kernel\_entries;}
+\DoxyCodeLine{88   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Kernel: entries = \%d, rows = \%d, used = \%d\(\backslash\)n"}, kernel\_entries, kernel\_rows, m\_used\_frames);}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90   \textcolor{comment}{// Reserve the area for the bitmap}}
+\DoxyCodeLine{91   \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af68e198da5c85cc1443f28ecd0f92bd2}{allocate\_area}}((uint64\_t)\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a3cd0e4168f302070311c1896f22d08f8}{MemoryManager::to\_lower\_region}}((uint64\_t)m\_bit\_map), m\_bitmap\_size / 8 + 1);}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93   \textcolor{comment}{// Reserve the area for the mmap}}
+\DoxyCodeLine{94   \textcolor{keywordflow}{for} (\mbox{\hyperlink{structmultiboot__mmap__entry}{multiboot\_mmap\_entry}} *entry = m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_a20c4427afce786340b01ded5ed0532a2}{entries}}; (\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *)entry < (\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *)m\_mmap\_tag + m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_a0663e47406ed5799d5bd55ccf2d4fa95}{size}}; entry = (\mbox{\hyperlink{structmultiboot__mmap__entry}{multiboot\_mmap\_entry}} *)((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})entry + m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_aa5532c68672471f9da8ba18a8a16857d}{entry\_size}})) \{}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{96     \textcolor{comment}{// Check if the entry is to be mapped}}
+\DoxyCodeLine{97     \textcolor{keywordflow}{if} (entry-\/>type <= 1)}
+\DoxyCodeLine{98       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{99 }
+\DoxyCodeLine{100     \textcolor{comment}{// Where our free mem starts}}
+\DoxyCodeLine{101     \textcolor{keywordflow}{if}(entry-\/>addr >= mem\_end)}
+\DoxyCodeLine{102       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104     \textcolor{comment}{// Reserve the area}}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106     \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af68e198da5c85cc1443f28ecd0f92bd2}{allocate\_area}}(entry-\/>addr, entry-\/>len);}
+\DoxyCodeLine{107     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Mmap Reserved: 0x\%x -\/ 0x\%x\(\backslash\)n"}, entry-\/>addr, entry-\/>addr + entry-\/>len);}
+\DoxyCodeLine{108   \}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110   \textcolor{comment}{// Initialisation Done}}
+\DoxyCodeLine{111   m\_initialized = \textcolor{keyword}{true};}
+\DoxyCodeLine{112 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kernel\+\_\+end, \+\_\+kernel\+\_\+physical\+\_\+end, \+\_\+kernel\+\_\+size, \+\_\+kprintf, Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+basic\+\_\+meminfo(), Max\+O\+S\+::system\+::\+Multiboot\+::get\+\_\+mmap(), Max\+O\+S\+::drivers\+::peripherals\+::i, multiboot\+\_\+tag\+\_\+basic\+\_\+meminfo\+::mem\+\_\+upper, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+M\+E\+M\+O\+R\+Y\+\_\+\+A\+V\+A\+I\+L\+A\+B\+LE, physical\+\_\+address, Max\+O\+S\+::memory\+::\+Present, reserved, Max\+O\+S\+::memory\+::\+Memory\+Manager\+::s\+\_\+hh\+\_\+direct\+\_\+map\+\_\+offset, Max\+O\+S\+::memory\+::\+Memory\+Manager\+::to\+\_\+lower\+\_\+region(), and Max\+O\+S\+::memory\+::\+Write.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a8cf728268a7e9fb72d0903a49a301b0a}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a8cf728268a7e9fb72d0903a49a301b0a}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!````~PhysicalMemoryManager@{$\sim$PhysicalMemoryManager}}
+\index{````~PhysicalMemoryManager@{$\sim$PhysicalMemoryManager}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{$\sim$PhysicalMemoryManager()}{~PhysicalMemoryManager()}}
+{\footnotesize\ttfamily Physical\+Memory\+Manager\+::$\sim$\+Physical\+Memory\+Manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 114 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{114                                               \{}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!align\_to\_page@{align\_to\_page}}
+\index{align\_to\_page@{align\_to\_page}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{align\_to\_page()}{align\_to\_page()}}
+{\footnotesize\ttfamily size\+\_\+t Physical\+Memory\+Manager\+::align\+\_\+to\+\_\+page (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Aligns a size to the page size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size to align \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The aligned size 
+\end{DoxyReturn}
+
+
+Definition at line 132 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{132                                                        \{}
+\DoxyCodeLine{133   \textcolor{keywordflow}{return} ((\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}} -\/ 1) /\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}) * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{134 \}}
+
+\end{DoxyCode}
+
+
+References size.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!align\_up\_to\_page@{align\_up\_to\_page}}
+\index{align\_up\_to\_page@{align\_up\_to\_page}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{align\_up\_to\_page()}{align\_up\_to\_page()}}
+{\footnotesize\ttfamily size\+\_\+t Physical\+Memory\+Manager\+::align\+\_\+up\+\_\+to\+\_\+page (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size,  }\item[{size\+\_\+t}]{page\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Aligns a size up to the page size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size to align \\
+\hline
+{\em page\+\_\+size} & The page size to align to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The aligned size 
+\end{DoxyReturn}
+
+
+Definition at line 142 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{142                                                                             \{}
+\DoxyCodeLine{143   \textcolor{keywordflow}{return} (\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + page\_size -\/ 1) \& \string~(page\_size -\/ 1);}
+\DoxyCodeLine{144 \}}
+
+\end{DoxyCode}
+
+
+References size.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af68e198da5c85cc1443f28ecd0f92bd2}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af68e198da5c85cc1443f28ecd0f92bd2}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!allocate\_area@{allocate\_area}}
+\index{allocate\_area@{allocate\_area}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{allocate\_area()}{allocate\_area()}}
+{\footnotesize\ttfamily void $\ast$ Physical\+Memory\+Manager\+::allocate\+\_\+area (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{start\+\_\+address,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Allocate an area of physical memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+address} & The start of the block \\
+\hline
+{\em size} & The size to allocate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the start of the block (physical address) 
+\end{DoxyReturn}
+
+
+Definition at line 225 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{225                                                                               \{}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{227   \textcolor{comment}{// Check how many frames are needed}}
+\DoxyCodeLine{228   \textcolor{keywordtype}{size\_t} frame\_count = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{size\_to\_frames}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230   \textcolor{comment}{// Store the information about the frames needed to be allocated for this size}}
+\DoxyCodeLine{231   uint16\_t start\_row = 0;}
+\DoxyCodeLine{232   uint16\_t start\_column = 0;}
+\DoxyCodeLine{233   \textcolor{keywordtype}{size\_t} adjacent\_frames = 0;}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235   \textcolor{comment}{// Loop through the bitmap}}
+\DoxyCodeLine{236   \textcolor{keywordflow}{for} (uint16\_t row = 0; row < m\_total\_entries; ++row) \{}
+\DoxyCodeLine{237     \textcolor{keywordflow}{for} (uint16\_t column = 0; column < ROW\_BITS; ++column) \{}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239       \textcolor{comment}{// If this bit is not free reset the adjacent frames}}
+\DoxyCodeLine{240       \textcolor{keywordflow}{if}((m\_bit\_map[row] \& (1 << column)))\{}
+\DoxyCodeLine{241         adjacent\_frames = 0;}
+\DoxyCodeLine{242         \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{243       \}}
+\DoxyCodeLine{244 }
+\DoxyCodeLine{245       \textcolor{comment}{// Store the start of the area if it is not already stored}}
+\DoxyCodeLine{246       \textcolor{keywordflow}{if}(adjacent\_frames == 0)\{}
+\DoxyCodeLine{247         start\_row = row;}
+\DoxyCodeLine{248         start\_column = column;}
+\DoxyCodeLine{249       \}}
+\DoxyCodeLine{250 }
+\DoxyCodeLine{251       \textcolor{comment}{// Increment the adjacent frames}}
+\DoxyCodeLine{252       adjacent\_frames++;}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254       \textcolor{comment}{// If enough frames are found we can allocate the area}}
+\DoxyCodeLine{255       \textcolor{keywordflow}{if}(adjacent\_frames == frame\_count)\{}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257         \textcolor{comment}{// Mark the frames as used}}
+\DoxyCodeLine{258         m\_used\_frames += frame\_count;}
+\DoxyCodeLine{259         \textcolor{keywordflow}{for} (uint16\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < frame\_count; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{260           m\_bit\_map[start\_row + (start\_column + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}) / ROW\_BITS] |= (1 << ((start\_column + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}) \% ROW\_BITS));}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262         \textcolor{comment}{// Return the address}}
+\DoxyCodeLine{263         \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)(start\_address + (start\_row * ROW\_BITS + start\_column) * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}});}
+\DoxyCodeLine{264       \}}
+\DoxyCodeLine{265     \}}
+\DoxyCodeLine{266   \}}
+\DoxyCodeLine{267 }
+\DoxyCodeLine{268   \textcolor{comment}{// Error cant allocate that much}}
+\DoxyCodeLine{269   \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{270 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::i, and size.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!allocate\_frame@{allocate\_frame}}
+\index{allocate\_frame@{allocate\_frame}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{allocate\_frame()}{allocate\_frame()}}
+{\footnotesize\ttfamily void $\ast$ Physical\+Memory\+Manager\+::allocate\+\_\+frame (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Allocates a physical page of memory, if the P\+MM is not initalise it will use the anon memory instead of the bitmap. 
+
+\begin{DoxyReturn}{Returns}
+The physical address of the page 
+\end{DoxyReturn}
+
+
+Definition at line 159 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{159                                             \{}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161   \textcolor{comment}{// Check if the pmm is initialized}}
+\DoxyCodeLine{162   \textcolor{keywordflow}{if}(!m\_initialized)\{}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164     \textcolor{comment}{// Find the first free frame}}
+\DoxyCodeLine{165     \textcolor{keywordflow}{while} ((!\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a344d9602dcf5a77e672a1859fa05e67f}{is\_anonymous\_available}}(m\_anonymous\_memory\_physical\_address)) \&\& (m\_anonymous\_memory\_physical\_address < m\_memory\_size)) \{}
+\DoxyCodeLine{166       m\_anonymous\_memory\_physical\_address += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{167       m\_anonymous\_memory\_virtual\_address += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{168     \}}
+\DoxyCodeLine{169 }
+\DoxyCodeLine{170     \textcolor{comment}{// Mark frame as used}}
+\DoxyCodeLine{171     m\_anonymous\_memory\_physical\_address += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{172     m\_anonymous\_memory\_virtual\_address += \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{173 }
+\DoxyCodeLine{174     \textcolor{comment}{// Return the address}}
+\DoxyCodeLine{175     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)(m\_anonymous\_memory\_physical\_address -\/ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}});}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177   \}}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179   \textcolor{comment}{// Check if there are enough frames}}
+\DoxyCodeLine{180   \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_used\_frames < m\_bitmap\_size, \textcolor{stringliteral}{"No more frames available"})}
+\DoxyCodeLine{181 }
+\DoxyCodeLine{182   \textcolor{comment}{// Loop through the bitmap}}
+\DoxyCodeLine{183   for (uint16\_t row = 0; row < m\_total\_entries; ++row) \{}
+\DoxyCodeLine{184     \textcolor{keywordflow}{for} (uint16\_t column = 0; column < ROW\_BITS; ++column) \{}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186         \textcolor{comment}{// Check if this frame is free}}
+\DoxyCodeLine{187         \textcolor{keywordflow}{if}((m\_bit\_map[row] \& (1 << column)))}
+\DoxyCodeLine{188           \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190         \textcolor{comment}{// Mark the frame as used}}
+\DoxyCodeLine{191         m\_bit\_map[row] |= (1 << column);}
+\DoxyCodeLine{192         m\_used\_frames++;}
+\DoxyCodeLine{193 }
+\DoxyCodeLine{194         \textcolor{comment}{// Return the address}}
+\DoxyCodeLine{195         uint64\_t frame\_address = (row * ROW\_BITS) + column;}
+\DoxyCodeLine{196         \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)(frame\_address * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}});}
+\DoxyCodeLine{197     \}}
+\DoxyCodeLine{198   \}}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200   \textcolor{comment}{// Error frame not found}}
+\DoxyCodeLine{201   \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203 \}}
+
+\end{DoxyCode}
+
+
+References A\+S\+S\+E\+RT.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate(), and Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!check\_aligned@{check\_aligned}}
+\index{check\_aligned@{check\_aligned}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{check\_aligned()}{check\_aligned()}}
+{\footnotesize\ttfamily bool Physical\+Memory\+Manager\+::check\+\_\+aligned (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if an address is aligned. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The address to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the address is aligned 
+\end{DoxyReturn}
+
+
+Definition at line 151 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{151                                                     \{}
+\DoxyCodeLine{152     \textcolor{keywordflow}{return} (\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} \% \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}) == 0;}
+\DoxyCodeLine{153 \}}
+
+\end{DoxyCode}
+
+
+References size.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a66d5d1a4c7c019d77fcee0aa3c128d07}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a66d5d1a4c7c019d77fcee0aa3c128d07}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!clean\_page\_table@{clean\_page\_table}}
+\index{clean\_page\_table@{clean\_page\_table}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{clean\_page\_table()}{clean\_page\_table()}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::clean\+\_\+page\+\_\+table (\begin{DoxyParamCaption}\item[{uint64\+\_\+t $\ast$}]{table }\end{DoxyParamCaption})}
+
+
+
+Cleans a page table (fills it with 0 or null entries) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em table} & The table to clean \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 638 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{638                                                             \{}
+\DoxyCodeLine{639   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < 512; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
+\DoxyCodeLine{640         table[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = 0x00\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}};}
+\DoxyCodeLine{641   \}}
+\DoxyCodeLine{642 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::i, and Max\+O\+S\+::drivers\+::peripherals\+::l.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad0aaa5f1fb32a28d1d91cc5630d56dad}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad0aaa5f1fb32a28d1d91cc5630d56dad}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!free\_area@{free\_area}}
+\index{free\_area@{free\_area}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{free\_area()}{free\_area()}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::free\+\_\+area (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{start\+\_\+address,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Frees an area of physical memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+address} & The start of the block \\
+\hline
+{\em size} & The size to free \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 277 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{277                                                                          \{}
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279     \textcolor{comment}{// Check how many frames are needed}}
+\DoxyCodeLine{280     \textcolor{keywordtype}{size\_t} frame\_count = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{size\_to\_frames}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{281     uint64\_t frame\_address = start\_address / \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{282 }
+\DoxyCodeLine{283     \textcolor{comment}{// Check if the address is valid}}
+\DoxyCodeLine{284     \textcolor{keywordflow}{if}(frame\_address >= m\_bitmap\_size)}
+\DoxyCodeLine{285       \textcolor{keywordflow}{return};}
+\DoxyCodeLine{286 }
+\DoxyCodeLine{287     \textcolor{comment}{// Mark the frames as not used}}
+\DoxyCodeLine{288     m\_used\_frames -\/= frame\_count;}
+\DoxyCodeLine{289     \textcolor{keywordflow}{for} (uint16\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < frame\_count; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{290       m\_bit\_map[(frame\_address + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}) / ROW\_BITS] \&= \string~(1 << ((frame\_address + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}) \% ROW\_BITS));}
+\DoxyCodeLine{291 }
+\DoxyCodeLine{292 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::i, and size.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af0b6a43f9b559575ece938d3918fc3a1}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_af0b6a43f9b559575ece938d3918fc3a1}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!free\_frame@{free\_frame}}
+\index{free\_frame@{free\_frame}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{free\_frame()}{free\_frame()}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::free\+\_\+frame (\begin{DoxyParamCaption}\item[{void $\ast$}]{address }\end{DoxyParamCaption})}
+
+
+
+Frees a frame in the bit map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The address to free \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 209 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{209                                                     \{}
+\DoxyCodeLine{210 }
+\DoxyCodeLine{211     \textcolor{comment}{// Mark the frame as not used}}
+\DoxyCodeLine{212     m\_used\_frames-\/-\/;}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214     \textcolor{comment}{// Set the bit to 0}}
+\DoxyCodeLine{215     uint64\_t frame\_address = (uint64\_t)\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} / \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{216     m\_bit\_map[frame\_address / ROW\_BITS] \&= \string~(1 << (frame\_address \% ROW\_BITS));}
+\DoxyCodeLine{217 \}}
+
+\end{DoxyCode}
+
+
+References address.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0bd4c0766bc4c3930920814f2f7de1c5}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0bd4c0766bc4c3930920814f2f7de1c5}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!get\_memory\_size@{get\_memory\_size}}
+\index{get\_memory\_size@{get\_memory\_size}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{get\_memory\_size()}{get\_memory\_size()}}
+{\footnotesize\ttfamily uint64\+\_\+t Physical\+Memory\+Manager\+::get\+\_\+memory\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets total the memory size available for use (allocated or not) 
+
+\begin{DoxyReturn}{Returns}
+The memory size 
+\end{DoxyReturn}
+
+
+Definition at line 767 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{767                                                 \{}
+\DoxyCodeLine{768   \textcolor{keywordflow}{return} m\_memory\_size;}
+\DoxyCodeLine{769 \}}
+
+\end{DoxyCode}
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ac54f576d801ed62713b84ae64d83fb64}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ac54f576d801ed62713b84ae64d83fb64}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!get\_pml4\_root\_address@{get\_pml4\_root\_address}}
+\index{get\_pml4\_root\_address@{get\_pml4\_root\_address}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{get\_pml4\_root\_address()}{get\_pml4\_root\_address()}}
+{\footnotesize\ttfamily uint64\+\_\+t $\ast$ Physical\+Memory\+Manager\+::get\+\_\+pml4\+\_\+root\+\_\+address (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the pml4 root address for the kernel. 
+
+\begin{DoxyReturn}{Returns}
+The pml4 root address 
+\end{DoxyReturn}
+
+
+Definition at line 759 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{759                                                        \{}
+\DoxyCodeLine{760     \textcolor{keywordflow}{return} m\_pml4\_root\_address;}
+\DoxyCodeLine{761 \}}
+
+\end{DoxyCode}
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ace56d1f37c7be25425fe92c994a5cedd}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ace56d1f37c7be25425fe92c994a5cedd}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!identity\_map@{identity\_map}}
+\index{identity\_map@{identity\_map}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{identity\_map()}{identity\_map()}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::identity\+\_\+map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$}]{physical\+\_\+address,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
+
+
+
+Maps a physical address to its virtual address counter-\/part. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em physical\+\_\+address} & The physical address to map \\
+\hline
+{\em flags} & The flags to set the mapping to \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 530 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{530                                                                                            \{}
+\DoxyCodeLine{531 }
+\DoxyCodeLine{532   \textcolor{comment}{// Map the physical address to its virtual address counter-\/part}}
+\DoxyCodeLine{533   \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}, \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}, \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
+\DoxyCodeLine{534 }
+\DoxyCodeLine{535 \}}
+
+\end{DoxyCode}
+
+
+References flags, and physical\+\_\+address.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a344d9602dcf5a77e672a1859fa05e67f}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a344d9602dcf5a77e672a1859fa05e67f}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!is\_anonymous\_available@{is\_anonymous\_available}}
+\index{is\_anonymous\_available@{is\_anonymous\_available}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{is\_anonymous\_available()}{is\_anonymous\_available()}}
+{\footnotesize\ttfamily bool Physical\+Memory\+Manager\+::is\+\_\+anonymous\+\_\+available (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Checks if a physical address is reserved by multiboot mmap. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The address to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the address is reserved 
+\end{DoxyReturn}
+
+
+Definition at line 674 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{674                                                                  \{}
+\DoxyCodeLine{675 }
+\DoxyCodeLine{676   \textcolor{comment}{// Return false if the address range is entirely within or overlaps with the multiboot reserved region}}
+\DoxyCodeLine{677   \textcolor{keywordflow}{if} ((\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} > \mbox{\hyperlink{physical_8cpp_a112857fab0ddec3e5d84827e1bf2ff43}{multiboot\_tag\_start}} \&\& \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} + \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}} < \mbox{\hyperlink{physical_8cpp_a233e74c4ba81dc1941dddf05bc87ecf1}{multiboot\_tag\_end}}) || (\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} + \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}} > \mbox{\hyperlink{physical_8cpp_a112857fab0ddec3e5d84827e1bf2ff43}{multiboot\_tag\_start}} \&\& \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} < \mbox{\hyperlink{physical_8cpp_a233e74c4ba81dc1941dddf05bc87ecf1}{multiboot\_tag\_end}})) \{}
+\DoxyCodeLine{678     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{679   \}}
+\DoxyCodeLine{680 }
+\DoxyCodeLine{681   \textcolor{comment}{// Loop through the mmmap entries}}
+\DoxyCodeLine{682   \textcolor{keywordflow}{for} (\mbox{\hyperlink{structmultiboot__mmap__entry}{multiboot\_mmap\_entry}} *entry = m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_a20c4427afce786340b01ded5ed0532a2}{entries}}; (\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *)entry < (\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *)m\_mmap\_tag + m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_a0663e47406ed5799d5bd55ccf2d4fa95}{size}}; entry = (\mbox{\hyperlink{structmultiboot__mmap__entry}{multiboot\_mmap\_entry}} *)((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})entry + m\_mmap\_tag-\/>\mbox{\hyperlink{structmultiboot__tag__mmap_aa5532c68672471f9da8ba18a8a16857d}{entry\_size}})) \{}
+\DoxyCodeLine{683 }
+\DoxyCodeLine{684     \textcolor{comment}{// If it doesn't overlap with the mmap entry}}
+\DoxyCodeLine{685     \textcolor{keywordflow}{if} ((entry -\/> addr + entry -\/> len) < (\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} + \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}))}
+\DoxyCodeLine{686       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{687 }
+\DoxyCodeLine{688     \textcolor{comment}{// If it is not available}}
+\DoxyCodeLine{689     \textcolor{keywordflow}{if}(entry -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} != \mbox{\hyperlink{multiboot_8h_a7fe141351ebcde0acbd6118ad0ea1a21}{MULTIBOOT\_MEMORY\_AVAILABLE}})}
+\DoxyCodeLine{690       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{691 }
+\DoxyCodeLine{692     \textcolor{comment}{// Check if the address is reserved by the multiboot module}}
+\DoxyCodeLine{693     \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a86cdae579a7819fb086f2fbfabeb8752}{is\_multiboot\_reserved}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}))}
+\DoxyCodeLine{694         \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{695 }
+\DoxyCodeLine{696     \textcolor{comment}{// Memory is available}}
+\DoxyCodeLine{697     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{698 }
+\DoxyCodeLine{699   \}}
+\DoxyCodeLine{700 }
+\DoxyCodeLine{701   \textcolor{comment}{// Memory is not available}}
+\DoxyCodeLine{702   \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{703 \}}
+
+\end{DoxyCode}
+
+
+References address, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+M\+E\+M\+O\+R\+Y\+\_\+\+A\+V\+A\+I\+L\+A\+B\+LE, multiboot\+\_\+tag\+\_\+end, multiboot\+\_\+tag\+\_\+start, and type.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a14f4ff20cc6dda201bb5a4ef6a7654f6}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a14f4ff20cc6dda201bb5a4ef6a7654f6}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!is\_mapped@{is\_mapped}}
+\index{is\_mapped@{is\_mapped}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{is\_mapped()}{is\_mapped()}}
+{\footnotesize\ttfamily bool Physical\+Memory\+Manager\+::is\+\_\+mapped (\begin{DoxyParamCaption}\item[{uintptr\+\_\+t}]{physical\+\_\+address,  }\item[{uintptr\+\_\+t}]{virtual\+\_\+address }\end{DoxyParamCaption})}
+
+
+
+Checks if a virtual address is mapped and whether it points to the correct physical address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em physical\+\_\+address} & The physical address to check (if 0 then wont check if correct entry) \\
+\hline
+{\em virtual\+\_\+address} & The address to check if it is mapped to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the physical address is mapped to the virtual address 
+\end{DoxyReturn}
+
+
+Definition at line 629 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{629                                                                                            \{}
+\DoxyCodeLine{630   \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false}, \textcolor{stringliteral}{"Not implemented!"})}
+\DoxyCodeLine{631   \textcolor{comment}{// TODO: Implement}}
+\DoxyCodeLine{632 \}}
+
+\end{DoxyCode}
+
+
+References A\+S\+S\+E\+RT.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a86cdae579a7819fb086f2fbfabeb8752}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a86cdae579a7819fb086f2fbfabeb8752}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!is\_multiboot\_reserved@{is\_multiboot\_reserved}}
+\index{is\_multiboot\_reserved@{is\_multiboot\_reserved}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{is\_multiboot\_reserved()}{is\_multiboot\_reserved()}}
+{\footnotesize\ttfamily bool Physical\+Memory\+Manager\+::is\+\_\+multiboot\+\_\+reserved (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Checks if an address is reserved by a multiboot module. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The address to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the address is reserved 
+\end{DoxyReturn}
+
+
+Definition at line 710 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{710                                                                   \{}
+\DoxyCodeLine{711   \textcolor{comment}{//ASSERT(false, "Not implemented!")}}
+\DoxyCodeLine{712   \textcolor{comment}{// TODO: Check if address is reserve by multiboot module}}
+\DoxyCodeLine{713 }
+\DoxyCodeLine{714   \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{715 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a981b3d0afa8d5b41eda2d30a4478974c}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a981b3d0afa8d5b41eda2d30a4478974c}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!map@{map}}
+\index{map@{map}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{map()}{map()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$ Physical\+Memory\+Manager\+::map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$}]{physical\+\_\+address,  }\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{address,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
+
+
+
+Maps a physical address to a virtual address, using the kernel\textquotesingle{}s pml4 table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em physical\+\_\+address} & The physical address to map \\
+\hline
+{\em address} & The virtual address to map to \\
+\hline
+{\em flags} & The flags to set the mapping to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The virtual address 
+\end{DoxyReturn}
+
+
+Definition at line 391 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{391                                                                                                                             \{}
+\DoxyCodeLine{392 }
+\DoxyCodeLine{393   \textcolor{comment}{// Base information}}
+\DoxyCodeLine{394   pml\_t* pml4\_table = (pml\_t *)m\_pml4\_root\_address;}
+\DoxyCodeLine{395   \textcolor{keywordtype}{size\_t} base\_addr = 0xFFFF000000000000;}
+\DoxyCodeLine{396 }
+\DoxyCodeLine{397   \textcolor{comment}{// Get the indexes}}
+\DoxyCodeLine{398   uint16\_t pml4\_index = \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\_GET\_INDEX}}((uint64\_t) \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
+\DoxyCodeLine{399   uint16\_t pdpr\_index = \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\_GET\_INDEX}}((uint64\_t) \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
+\DoxyCodeLine{400   uint16\_t pd\_index   = \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\_GET\_INDEX}}((uint64\_t) \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
+\DoxyCodeLine{401   uint16\_t pt\_index   = \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\_GET\_INDEX}}((uint64\_t) \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}});}
+\DoxyCodeLine{402 }
+\DoxyCodeLine{403   \textcolor{comment}{// Get the tables}}
+\DoxyCodeLine{404   pml\_t *pdpr\_table =(pml\_t *) (base\_addr | \mbox{\hyperlink{physical_8cpp_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\_TO\_ADDRESS}}(510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}},510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}},510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}}, (uint64\_t) pml4\_index));}
+\DoxyCodeLine{405   pml\_t *pd\_table = (pml\_t *) (base\_addr | \mbox{\hyperlink{physical_8cpp_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\_TO\_ADDRESS}}(510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}},510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}}, (uint64\_t) pml4\_index, (uint64\_t) pdpr\_index));}
+\DoxyCodeLine{406   pml\_t *pt\_table = (pml\_t *) (base\_addr | \mbox{\hyperlink{physical_8cpp_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\_TO\_ADDRESS}}(510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}}, (uint64\_t) pml4\_index, (uint64\_t) pdpr\_index, (uint64\_t) pd\_index));}
+\DoxyCodeLine{407 }
+\DoxyCodeLine{408   \textcolor{comment}{// Create the tables}}
+\DoxyCodeLine{409   create\_table(pml4\_table, pdpr\_table, pml4\_index);}
+\DoxyCodeLine{410   create\_table(pdpr\_table, pd\_table, pdpr\_index);}
+\DoxyCodeLine{411   create\_table(pd\_table, pt\_table, pd\_index);}
+\DoxyCodeLine{412 }
+\DoxyCodeLine{413   \textcolor{comment}{// Get the entry}}
+\DoxyCodeLine{414   pte\_t* pte = \&pt\_table -\/> \mbox{\hyperlink{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}{entries}}[pt\_index];}
+\DoxyCodeLine{415 }
+\DoxyCodeLine{416   \textcolor{comment}{// If it already exists return the address}}
+\DoxyCodeLine{417   \textcolor{keywordflow}{if}(pte -\/> \mbox{\hyperlink{physical_8h_a85692f5f8e411b5cb7164a7ab671ddd4}{present}})}
+\DoxyCodeLine{418     \textcolor{keywordflow}{return} \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}};}
+\DoxyCodeLine{419 }
+\DoxyCodeLine{420   \textcolor{comment}{// Map the physical address to the virtual address}}
+\DoxyCodeLine{421  *pte = create\_page\_table\_entry((uint64\_t)\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}, \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
+\DoxyCodeLine{422 }
+\DoxyCodeLine{423 }
+\DoxyCodeLine{424   \textcolor{comment}{// Flush the TLB}}
+\DoxyCodeLine{425   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"invlpg (\%0)"} ::\textcolor{stringliteral}{"r"} (\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}) : \textcolor{stringliteral}{"memory"});}
+\DoxyCodeLine{426 }
+\DoxyCodeLine{427   \textcolor{keywordflow}{return} \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}};}
+\DoxyCodeLine{428 \}}
+
+\end{DoxyCode}
+
+
+References address, entries, E\+N\+T\+R\+I\+E\+S\+\_\+\+T\+O\+\_\+\+A\+D\+D\+R\+E\+SS, flags, Max\+O\+S\+::drivers\+::peripherals\+::l, physical\+\_\+address, P\+M\+L1\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L2\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L3\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L4\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, and present.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_acadc6bfafbd83d6a73b92cd60e9cd927}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_acadc6bfafbd83d6a73b92cd60e9cd927}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!map@{map}}
+\index{map@{map}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{map()}{map()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$ Physical\+Memory\+Manager\+::map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$}]{physical,  }\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address,  }\item[{size\+\_\+t}]{flags,  }\item[{uint64\+\_\+t $\ast$}]{pml4\+\_\+table }\end{DoxyParamCaption})}
+
+
+
+Maps a physical address to a virtual address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em physical} & The physical address \\
+\hline
+{\em virtual\+\_\+address} & The virtual address \\
+\hline
+{\em flags} & The flags to set the mapping to \\
+\hline
+{\em pml4\+\_\+table} & The pml4 table to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The virtual address 
+\end{DoxyReturn}
+
+
+Definition at line 438 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{438                                                                                                                                                   \{}
+\DoxyCodeLine{439 }
+\DoxyCodeLine{440     \textcolor{comment}{// Get the indexes}}
+\DoxyCodeLine{441     uint16\_t pml4\_index = \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{442     uint16\_t pdpr\_index = \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{443     uint16\_t pd\_index   = \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{444     uint16\_t pt\_index   = \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{445 }
+\DoxyCodeLine{446     \textcolor{comment}{// If it is in a lower region then assume it is the user space}}
+\DoxyCodeLine{447     uint8\_t is\_user = \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a7d412394ef0b7e29bbe278406751761b}{MemoryManager::in\_higher\_region}}((uint64\_t)virtual\_address);}
+\DoxyCodeLine{448     \textcolor{keywordflow}{if}(is\_user) \{}
+\DoxyCodeLine{449 }
+\DoxyCodeLine{450       \textcolor{comment}{// Change the flags to user}}
+\DoxyCodeLine{451       \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} |= \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebae45ca5ccdd807182c984942dde55ebaa}{User}};}
+\DoxyCodeLine{452       is\_user = \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebae45ca5ccdd807182c984942dde55ebaa}{User}};}
+\DoxyCodeLine{453 }
+\DoxyCodeLine{454     \}}
+\DoxyCodeLine{455 }
+\DoxyCodeLine{456     \textcolor{comment}{// Store the tables}}
+\DoxyCodeLine{457     uint64\_t* pdpr\_table = get\_or\_create\_table(pml4\_table, pml4\_index, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}} | is\_user);}
+\DoxyCodeLine{458     uint64\_t* pd\_table = get\_or\_create\_table(pdpr\_table, pdpr\_index, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}} | is\_user);}
+\DoxyCodeLine{459     uint64\_t* pt\_table = get\_or\_create\_table(pd\_table, pd\_index, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}} | is\_user);}
+\DoxyCodeLine{460 }
+\DoxyCodeLine{461     \textcolor{comment}{// If the page is already mapped return the address}}
+\DoxyCodeLine{462     \textcolor{keywordflow}{if}(pt\_table[pt\_index] \& 0b1)}
+\DoxyCodeLine{463       \textcolor{keywordflow}{return} virtual\_address;}
+\DoxyCodeLine{464 }
+\DoxyCodeLine{465     \textcolor{comment}{// Map the physical address to the virtual address}}
+\DoxyCodeLine{466     pt\_table[pt\_index] = (uint64\_t) physical | \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
+\DoxyCodeLine{467 }
+\DoxyCodeLine{468     \textcolor{comment}{// Flush the TLB}}
+\DoxyCodeLine{469     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"invlpg (\%0)"} ::\textcolor{stringliteral}{"r"} (virtual\_address) : \textcolor{stringliteral}{"memory"});}
+\DoxyCodeLine{470 }
+\DoxyCodeLine{471     \textcolor{keywordflow}{return} virtual\_address;}
+\DoxyCodeLine{472 \}}
+
+\end{DoxyCode}
+
+
+References flags, Max\+O\+S\+::memory\+::\+Memory\+Manager\+::in\+\_\+higher\+\_\+region(), P\+M\+L1\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L2\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L3\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L4\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, Max\+O\+S\+::memory\+::\+Present, Max\+O\+S\+::memory\+::\+User, and Max\+O\+S\+::memory\+::\+Write.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!map@{map}}
+\index{map@{map}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{map()}{map()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$ Physical\+Memory\+Manager\+::map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
+
+
+
+Allocates a physical address to a virtual address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em virtual\+\_\+address} & The virtual address \\
+\hline
+{\em flags} & The flags to set the mapping to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The virtual address 
+\end{DoxyReturn}
+
+
+Definition at line 480 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{480                                                                                               \{}
+\DoxyCodeLine{481 }
+\DoxyCodeLine{482   \textcolor{comment}{// Create a new physical address for the frame}}
+\DoxyCodeLine{483   \mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}* \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}} = (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}} *)\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}{allocate\_frame}}();}
+\DoxyCodeLine{484 }
+\DoxyCodeLine{485   \textcolor{comment}{// Map the physical address to the virtual address}}
+\DoxyCodeLine{486   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}, virtual\_address, \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
+\DoxyCodeLine{487 }
+\DoxyCodeLine{488 \}}
+
+\end{DoxyCode}
+
+
+References flags, and physical\+\_\+address.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate(), and Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a155276cb4df27f12ce3cbd011dd93a79}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a155276cb4df27f12ce3cbd011dd93a79}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!map\_area@{map\_area}}
+\index{map\_area@{map\_area}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{map\_area()}{map\_area()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::map\+\_\+area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\+\_\+address\+\_\+t}} $\ast$}]{physical\+\_\+address\+\_\+start,  }\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address\+\_\+start,  }\item[{size\+\_\+t}]{length,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
+
+
+
+Maps an area of physical memory to a virtual address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em physical\+\_\+address\+\_\+start} & The start of the physical address \\
+\hline
+{\em virtual\+\_\+address\+\_\+start} & The start of the virtual address \\
+\hline
+{\em length} & The length of the area \\
+\hline
+{\em flags} & The flags to set the mapping to \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 514 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{514                                                                                                                                                       \{}
+\DoxyCodeLine{515 }
+\DoxyCodeLine{516   \textcolor{comment}{// Get the size of the area}}
+\DoxyCodeLine{517   \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{size\_to\_frames}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{518 }
+\DoxyCodeLine{519   \textcolor{comment}{// Map the required frames}}
+\DoxyCodeLine{520   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{521     \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(physical\_address\_start + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}), virtual\_address\_start + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}), \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
+\DoxyCodeLine{522 }
+\DoxyCodeLine{523 \}}
+
+\end{DoxyCode}
+
+
+References flags, Max\+O\+S\+::drivers\+::peripherals\+::i, length, and size.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a39a03a4a5c211c9af2ad07f8f4bd3028}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a39a03a4a5c211c9af2ad07f8f4bd3028}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!map\_area@{map\_area}}
+\index{map\_area@{map\_area}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{map\_area()}{map\_area()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::map\+\_\+area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address\+\_\+start,  }\item[{size\+\_\+t}]{length,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
+
+
+
+Allocates a new area physical memory to a area virtual address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em virtual\+\_\+address\+\_\+start} & The start of the virtual address \\
+\hline
+{\em length} & The length of the area \\
+\hline
+{\em flags} & The flags to set the mapping to \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 496 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{496                                                                                                           \{}
+\DoxyCodeLine{497 }
+\DoxyCodeLine{498     \textcolor{comment}{// Get the size of the area}}
+\DoxyCodeLine{499     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{size\_to\_frames}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{500 }
+\DoxyCodeLine{501     \textcolor{comment}{// Map the required frames}}
+\DoxyCodeLine{502     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{503         \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(virtual\_address\_start + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}), \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
+\DoxyCodeLine{504 }
+\DoxyCodeLine{505 \}}
+
+\end{DoxyCode}
+
+
+References flags, Max\+O\+S\+::drivers\+::peripherals\+::i, length, and size.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!size\_to\_frames@{size\_to\_frames}}
+\index{size\_to\_frames@{size\_to\_frames}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{size\_to\_frames()}{size\_to\_frames()}}
+{\footnotesize\ttfamily size\+\_\+t Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Converts a size to the number of frames. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size to convert \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of frames 
+\end{DoxyReturn}
+
+
+Definition at line 123 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{123                                                         \{}
+\DoxyCodeLine{124     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{align\_to\_page}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}) / \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}};}
+\DoxyCodeLine{125 \}}
+
+\end{DoxyCode}
+
+
+References size.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate(), and Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::free().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a47cc8d6c823f3c323f88e21437ba88ea}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a47cc8d6c823f3c323f88e21437ba88ea}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!unmap@{unmap}}
+\index{unmap@{unmap}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{unmap()}{unmap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::unmap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address }\end{DoxyParamCaption})}
+
+
+
+Unmaps a virtual address using the kernel\textquotesingle{}s pml4 table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em virtual\+\_\+address} & The virtual address to unmap \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 541 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{541                                                                     \{}
+\DoxyCodeLine{542 }
+\DoxyCodeLine{543   \textcolor{comment}{// Base information}}
+\DoxyCodeLine{544   pml\_t* pml4\_table = (pml\_t *)m\_pml4\_root\_address;}
+\DoxyCodeLine{545   \textcolor{keywordtype}{size\_t} base\_addr = 0xFFFF000000000000;}
+\DoxyCodeLine{546 }
+\DoxyCodeLine{547   \textcolor{comment}{// Get the indexes}}
+\DoxyCodeLine{548   uint16\_t pml4\_index = \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{549   uint16\_t pdpr\_index = \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{550   uint16\_t pd\_index   = \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{551   uint16\_t pt\_index   = \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{552 }
+\DoxyCodeLine{553   \textcolor{comment}{// Get the tables}}
+\DoxyCodeLine{554   pml\_t *pdpr\_table =(pml\_t *) (base\_addr | \mbox{\hyperlink{physical_8cpp_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\_TO\_ADDRESS}}(510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}},510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}},510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}}, (uint64\_t) pml4\_index));}
+\DoxyCodeLine{555   pml\_t *pd\_table = (pml\_t *) (base\_addr | \mbox{\hyperlink{physical_8cpp_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\_TO\_ADDRESS}}(510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}},510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}}, (uint64\_t) pml4\_index, (uint64\_t) pdpr\_index));}
+\DoxyCodeLine{556   uint64\_t* pt\_table = (uint64\_t *) (base\_addr | \mbox{\hyperlink{physical_8cpp_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\_TO\_ADDRESS}}(510\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}}, (uint64\_t) pml4\_index, (uint64\_t) pdpr\_index, (uint64\_t) pd\_index));}
+\DoxyCodeLine{557 }
+\DoxyCodeLine{558   \textcolor{comment}{// Check if the entry is present}}
+\DoxyCodeLine{559   \textcolor{keywordflow}{if}(table\_has\_entry(pml4\_table, pml4\_index) \&\& table\_has\_entry(pdpr\_table, pdpr\_index) \&\& table\_has\_entry(pd\_table, pd\_index))}
+\DoxyCodeLine{560     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{561 }
+\DoxyCodeLine{562   \textcolor{comment}{// Check if the entry isn't present}}
+\DoxyCodeLine{563   \textcolor{keywordflow}{if}(!(pt\_table[pt\_index] \& 0b1))}
+\DoxyCodeLine{564     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{565 }
+\DoxyCodeLine{566   \textcolor{comment}{// Unmap the entry}}
+\DoxyCodeLine{567   pt\_table[pt\_index] = 0x00\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}};}
+\DoxyCodeLine{568 }
+\DoxyCodeLine{569   \textcolor{comment}{// Flush the TLB}}
+\DoxyCodeLine{570   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"invlpg (\%0)"} ::\textcolor{stringliteral}{"r"} (virtual\_address) : \textcolor{stringliteral}{"memory"});}
+\DoxyCodeLine{571 \}}
+
+\end{DoxyCode}
+
+
+References E\+N\+T\+R\+I\+E\+S\+\_\+\+T\+O\+\_\+\+A\+D\+D\+R\+E\+SS, Max\+O\+S\+::drivers\+::peripherals\+::l, P\+M\+L1\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L2\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L3\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, and P\+M\+L4\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::free().
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0f453dd61a29a033887b3a531cf3910f}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0f453dd61a29a033887b3a531cf3910f}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!unmap@{unmap}}
+\index{unmap@{unmap}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{unmap()}{unmap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::unmap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address,  }\item[{uint64\+\_\+t $\ast$}]{pml4\+\_\+root }\end{DoxyParamCaption})}
+
+
+
+Unmaps a virtual address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em virtual\+\_\+address} & The virtual address to unmap \\
+\hline
+{\em pml4\+\_\+root} & The pml4 table to use \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 578 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{578                                                                                          \{}
+\DoxyCodeLine{579 }
+\DoxyCodeLine{580     \textcolor{comment}{// Get the indexes}}
+\DoxyCodeLine{581     uint16\_t pml4\_index = \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{582     uint16\_t pdpr\_index = \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{583     uint16\_t pd\_index   = \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{584     uint16\_t pt\_index   = \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\_GET\_INDEX}}((uint64\_t) virtual\_address);}
+\DoxyCodeLine{585 }
+\DoxyCodeLine{586     \textcolor{comment}{// Get the tables}}
+\DoxyCodeLine{587     uint64\_t* pdpr\_table = get\_table\_if\_exists(pml4\_root, pml4\_index);}
+\DoxyCodeLine{588     uint64\_t* pd\_table = get\_table\_if\_exists(pdpr\_table, pdpr\_index);}
+\DoxyCodeLine{589     uint64\_t* pt\_table = get\_table\_if\_exists(pd\_table, pd\_index);}
+\DoxyCodeLine{590 }
+\DoxyCodeLine{591     \textcolor{comment}{// Check if the tables are present (if any are not then a pt entry will not be present)}}
+\DoxyCodeLine{592     \textcolor{keywordflow}{if}(pt\_table == \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{593       \textcolor{keywordflow}{return};}
+\DoxyCodeLine{594 }
+\DoxyCodeLine{595 }
+\DoxyCodeLine{596     \textcolor{comment}{// Check if the entry is present}}
+\DoxyCodeLine{597     \textcolor{keywordflow}{if}(!(pt\_table[pt\_index] \& 0b1))}
+\DoxyCodeLine{598       \textcolor{keywordflow}{return};}
+\DoxyCodeLine{599 }
+\DoxyCodeLine{600     \textcolor{comment}{// Unmap the entry}}
+\DoxyCodeLine{601     pt\_table[pt\_index] = 0x00\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}};}
+\DoxyCodeLine{602 }
+\DoxyCodeLine{603     \textcolor{comment}{// Flush the TLB}}
+\DoxyCodeLine{604     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"invlpg (\%0)"} ::\textcolor{stringliteral}{"r"} (virtual\_address) : \textcolor{stringliteral}{"memory"});}
+\DoxyCodeLine{605 }
+\DoxyCodeLine{606 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::l, P\+M\+L1\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L2\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, P\+M\+L3\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX, and P\+M\+L4\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0cc0fb25a8d67e16410a847c4fd59ea3}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a0cc0fb25a8d67e16410a847c4fd59ea3}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!unmap\_area@{unmap\_area}}
+\index{unmap\_area@{unmap\_area}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{unmap\_area()}{unmap\_area()}}
+{\footnotesize\ttfamily void Physical\+Memory\+Manager\+::unmap\+\_\+area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\+\_\+address\+\_\+t}} $\ast$}]{virtual\+\_\+address\+\_\+start,  }\item[{size\+\_\+t}]{length }\end{DoxyParamCaption})}
+
+
+
+Unmaps an area of virtual memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em virtual\+\_\+address\+\_\+start} & The start of the area \\
+\hline
+{\em length} & The length of the area \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 613 of file physical.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{613                                                                                               \{}
+\DoxyCodeLine{614 }
+\DoxyCodeLine{615     \textcolor{comment}{// Get the size of the area}}
+\DoxyCodeLine{616     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{size\_to\_frames}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{617 }
+\DoxyCodeLine{618     \textcolor{comment}{// Unmap the required frames}}
+\DoxyCodeLine{619     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}; ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}})}
+\DoxyCodeLine{620       \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a47cc8d6c823f3c323f88e21437ba88ea}{unmap}}(virtual\_address\_start + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{s\_page\_size}}));}
+\DoxyCodeLine{621 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::i, length, and size.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1d6ffacb7290c01505c3dec9f9cfd3f1}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1d6ffacb7290c01505c3dec9f9cfd3f1}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!s\_current\_manager@{s\_current\_manager}}
+\index{s\_current\_manager@{s\_current\_manager}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{s\_current\_manager}{s\_current\_manager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Physical\+Memory\+Manager}} $\ast$ Physical\+Memory\+Manager\+::s\+\_\+current\+\_\+manager = nullptr\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 136 of file physical.\+h.
+
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}\label{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}} 
+\index{MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}!s\_page\_size@{s\_page\_size}}
+\index{s\_page\_size@{s\_page\_size}!MaxOS::memory::PhysicalMemoryManager@{MaxOS::memory::PhysicalMemoryManager}}
+\doxysubsubsection{\texorpdfstring{s\_page\_size}{s\_page\_size}}
+{\footnotesize\ttfamily const uint32\+\_\+t Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+page\+\_\+size = \{ 0x1000 \}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 102 of file physical.\+h.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::free(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::\+Memory\+Manager(), and Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/memory/\mbox{\hyperlink{physical_8h}{physical.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/memory/\mbox{\hyperlink{physical_8cpp}{physical.\+cpp}}\end{DoxyCompactItemize}

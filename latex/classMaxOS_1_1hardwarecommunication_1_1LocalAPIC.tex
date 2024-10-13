@@ -27,6 +27,8 @@ void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_abe619fbf
 \item 
 uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\+\_\+apic\+\_\+base}}
 \item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\+\_\+apic\+\_\+base\+\_\+high}}
+\item 
 uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a732229d18e57d83bb36444cc6eed0c69}{m\+\_\+id}}
 \item 
 bool \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\+\_\+x2apic}}
@@ -36,7 +38,7 @@ bool \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d5
 \doxysubsection{Detailed Description}
 
 
-Definition at line 16 of file apic.\+h.
+Definition at line 17 of file apic.\+h.
 
 
 
@@ -49,13 +51,13 @@ Definition at line 16 of file apic.\+h.
 
 
 
-Definition at line 11 of file apic.\+cpp.
+Definition at line 12 of file apic.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{11                      \{}
-\DoxyCodeLine{12 }
-\DoxyCodeLine{13 \}}
+\DoxyCodeLine{12                      \{}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a84eafc2ea20a276e8dc52b6f6f46b73b}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a84eafc2ea20a276e8dc52b6f6f46b73b}} 
@@ -66,13 +68,13 @@ Definition at line 11 of file apic.\+cpp.
 
 
 
-Definition at line 15 of file apic.\+cpp.
+Definition at line 16 of file apic.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{15                       \{}
-\DoxyCodeLine{16 }
-\DoxyCodeLine{17 \}}
+\DoxyCodeLine{16                       \{}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \}}
 
 \end{DoxyCode}
 
@@ -86,19 +88,19 @@ Definition at line 15 of file apic.\+cpp.
 
 
 
-Definition at line 84 of file apic.\+cpp.
+Definition at line 90 of file apic.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{84                        \{}
-\DoxyCodeLine{85 }
-\DoxyCodeLine{86   \textcolor{comment}{// Read the id}}
-\DoxyCodeLine{87   uint32\_t \textcolor{keywordtype}{id} = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a9ccb9dce047006c21d4d62e719ea0de2}{read}}(0x20);}
-\DoxyCodeLine{88 }
-\DoxyCodeLine{89   \textcolor{comment}{// Return the id}}
-\DoxyCodeLine{90   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}} ? \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_addf8f8c80993f47622329a360596993d}{id}} : (\textcolor{keywordtype}{id} >> 24);}
+\DoxyCodeLine{90                        \{}
 \DoxyCodeLine{91 }
-\DoxyCodeLine{92 \}}
+\DoxyCodeLine{92   \textcolor{comment}{// Read the id}}
+\DoxyCodeLine{93   uint32\_t \textcolor{keywordtype}{id} = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a9ccb9dce047006c21d4d62e719ea0de2}{read}}(0x20);}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95   \textcolor{comment}{// Return the id}}
+\DoxyCodeLine{96   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}} ? \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_addf8f8c80993f47622329a360596993d}{id}} : (\textcolor{keywordtype}{id} >> 24);}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a85adace2840a5d65abc84c6133e44721}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a85adace2840a5d65abc84c6133e44721}} 
@@ -109,58 +111,62 @@ Definition at line 84 of file apic.\+cpp.
 
 
 
-Definition at line 19 of file apic.\+cpp.
+Definition at line 20 of file apic.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{19                      \{}
-\DoxyCodeLine{20 }
-\DoxyCodeLine{21   \textcolor{comment}{// Read information about the local APIC}}
-\DoxyCodeLine{22   uint64\_t msr\_info = CPU::read\_msr(0x1B);}
-\DoxyCodeLine{23 }
-\DoxyCodeLine{24   \textcolor{comment}{// Get the APIC base address}}
-\DoxyCodeLine{25   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}} = msr\_info \& 0xFFFFF000;}
-\DoxyCodeLine{26 }
-\DoxyCodeLine{27   \textcolor{comment}{// Read if the APIC supports x2APIC}}
-\DoxyCodeLine{28   uint32\_t ignored, xleaf, x2leaf;}
-\DoxyCodeLine{29   CPU::cpuid(0x01, \&ignored, \&ignored, \&x2leaf, \&xleaf);}
-\DoxyCodeLine{30 }
-\DoxyCodeLine{31   \textcolor{keywordflow}{if}(x2leaf \& (1 << 21)) \{}
-\DoxyCodeLine{32 }
-\DoxyCodeLine{33     \textcolor{comment}{// Enable x2APIC}}
-\DoxyCodeLine{34     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}} = \textcolor{keyword}{true};}
-\DoxyCodeLine{35     msr\_info |= (1 << 10);}
-\DoxyCodeLine{36     CPU::write\_msr(0x1B, msr\_info);}
-\DoxyCodeLine{37     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"CPU supports x2APIC\(\backslash\)n"});}
-\DoxyCodeLine{38 }
-\DoxyCodeLine{39   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (xleaf \& (1 << 9)) \{}
-\DoxyCodeLine{40 }
-\DoxyCodeLine{41     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}} = \textcolor{keyword}{false};}
-\DoxyCodeLine{42     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"CPU supports xAPIC\(\backslash\)n"});}
-\DoxyCodeLine{43 }
-\DoxyCodeLine{44   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{45     \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"ERROR: CPU does not support APIC (BAD!!)\(\backslash\)n"});}
-\DoxyCodeLine{46   \}}
-\DoxyCodeLine{47 }
-\DoxyCodeLine{48   \textcolor{comment}{// Get the vector table}}
-\DoxyCodeLine{49   uint32\_t spurious\_vector = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a9ccb9dce047006c21d4d62e719ea0de2}{read}}(0xF0);}
-\DoxyCodeLine{50   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"APIC Spurious Vector: 0x\%x\(\backslash\)n"}, spurious\_vector \& 0xFF);}
-\DoxyCodeLine{51 }
-\DoxyCodeLine{52   \textcolor{comment}{// Enable the APIC}}
-\DoxyCodeLine{53   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_abe619fbf5c49415635d3e84d34a46289}{write}}(0xF0, (1 << 8) | 0x100);}
-\DoxyCodeLine{54   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"APIC Enabled\(\backslash\)n"});}
-\DoxyCodeLine{55 }
-\DoxyCodeLine{56   \textcolor{comment}{// Read the APIC version}}
-\DoxyCodeLine{57   uint32\_t \mbox{\hyperlink{ipv4_8h_ab22abc2906422da61885ac6c8e6a1a59}{version}} = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a9ccb9dce047006c21d4d62e719ea0de2}{read}}(0x30);}
-\DoxyCodeLine{58   \mbox{\hyperlink{kprint_8h_a21d6766fe400d57e508480323c71a148}{\_kprintf}}(\textcolor{stringliteral}{"APIC Version: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{ipv4_8h_ab22abc2906422da61885ac6c8e6a1a59}{version}} \& 0xFF);}
-\DoxyCodeLine{59 }
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61 \}}
+\DoxyCodeLine{20                      \{}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22   \textcolor{comment}{// Read information about the local APIC}}
+\DoxyCodeLine{23   uint64\_t msr\_info = CPU::read\_msr(0x1B);}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25   \textcolor{comment}{// Get the APIC base address}}
+\DoxyCodeLine{26   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}} = msr\_info \& 0xFFFFF000;}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28   \textcolor{comment}{// Read if the APIC supports x2APIC}}
+\DoxyCodeLine{29   uint32\_t ignored, xleaf, x2leaf;}
+\DoxyCodeLine{30   CPU::cpuid(0x01, \&ignored, \&ignored, \&x2leaf, \&xleaf);}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32   \textcolor{keywordflow}{if}(x2leaf \& (1 << 21)) \{}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34     \textcolor{comment}{// Enable x2APIC}}
+\DoxyCodeLine{35     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}} = \textcolor{keyword}{true};}
+\DoxyCodeLine{36     msr\_info |= (1 << 10);}
+\DoxyCodeLine{37     CPU::write\_msr(0x1B, msr\_info);}
+\DoxyCodeLine{38     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"CPU supports x2APIC\(\backslash\)n"});}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (xleaf \& (1 << 9)) \{}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{43     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"CPU supports xAPIC\(\backslash\)n"});}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45     \textcolor{comment}{// Map the APIC base address to the higher half}}
+\DoxyCodeLine{46     \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}} = (uint64\_t)MemoryManager::to\_io\_region(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}});}
+\DoxyCodeLine{47     PhysicalMemoryManager::s\_current\_manager-\/>map((\mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}*)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}}, (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}}, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}});}
+\DoxyCodeLine{48     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"APIC Base: phy=0x\%x, virt=0x\%x\(\backslash\)n"}, \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}}, \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}});}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{51     \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false}, \textcolor{stringliteral}{"CPU does not support xAPIC"})}
+\DoxyCodeLine{52   \}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54   \textcolor{comment}{// Get the vector table}}
+\DoxyCodeLine{55   uint32\_t spurious\_vector = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a9ccb9dce047006c21d4d62e719ea0de2}{read}}(0xF0);}
+\DoxyCodeLine{56   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"APIC Spurious Vector: 0x\%x\(\backslash\)n"}, spurious\_vector \& 0xFF);}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58   \textcolor{comment}{// Enable the APIC}}
+\DoxyCodeLine{59   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_abe619fbf5c49415635d3e84d34a46289}{write}}(0xF0, (1 << 8) | 0x100);}
+\DoxyCodeLine{60   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"APIC Enabled\(\backslash\)n"});}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62   \textcolor{comment}{// Read the APIC version}}
+\DoxyCodeLine{63   uint32\_t \mbox{\hyperlink{ipv4_8h_ab22abc2906422da61885ac6c8e6a1a59}{version}} = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a9ccb9dce047006c21d4d62e719ea0de2}{read}}(0x30);}
+\DoxyCodeLine{64   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"APIC Version: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{ipv4_8h_ab22abc2906422da61885ac6c8e6a1a59}{version}} \& 0xFF);}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \}}
 
 \end{DoxyCode}
 
 
-References \+\_\+kprintf(), and version.
+References \+\_\+kprintf, A\+S\+S\+E\+RT, Max\+O\+S\+::memory\+::\+Present, version, write, and Max\+O\+S\+::memory\+::\+Write.
 
 
 
@@ -174,20 +180,21 @@ Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Programmable\+In
 
 
 
-Definition at line 63 of file apic.\+cpp.
+Definition at line 68 of file apic.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{63                                      \{}
-\DoxyCodeLine{64 }
-\DoxyCodeLine{65   \textcolor{comment}{// If x2APIC is enabled, use the x2APIC MSR}}
-\DoxyCodeLine{66   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}) \{}
-\DoxyCodeLine{67       \textcolor{keywordflow}{return} (uint32\_t)CPU::read\_msr((reg >> 4) + 0x800);}
-\DoxyCodeLine{68   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{69       \textcolor{keywordflow}{return} (*(\textcolor{keyword}{volatile} uint32\_t*)((uintptr\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}} + reg));}
-\DoxyCodeLine{70   \}}
-\DoxyCodeLine{71 }
-\DoxyCodeLine{72 \}}
+\DoxyCodeLine{68                                      \{}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70   \textcolor{comment}{// If x2APIC is enabled, use the x2APIC MSR}}
+\DoxyCodeLine{71   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}) \{}
+\DoxyCodeLine{72       \textcolor{keywordflow}{return} (uint32\_t)CPU::read\_msr((reg >> 4) + 0x800);}
+\DoxyCodeLine{73   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{74       \textcolor{keywordflow}{return} (*(\textcolor{keyword}{volatile} uint32\_t*)((uintptr\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}} + reg));}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76   \}}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_abe619fbf5c49415635d3e84d34a46289}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_abe619fbf5c49415635d3e84d34a46289}} 
@@ -198,19 +205,19 @@ Definition at line 63 of file apic.\+cpp.
 
 
 
-Definition at line 74 of file apic.\+cpp.
+Definition at line 80 of file apic.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{74                                                   \{}
-\DoxyCodeLine{75 }
-\DoxyCodeLine{76   \textcolor{comment}{// If x2APIC is enabled, use the x2APIC MSR}}
-\DoxyCodeLine{77   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}) \{}
-\DoxyCodeLine{78       CPU::write\_msr((reg >> 4) + 0x800, value);}
-\DoxyCodeLine{79   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{80       (*(\textcolor{keyword}{volatile} uint32\_t*)((uintptr\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}} + reg)) = value;}
-\DoxyCodeLine{81     \}}
-\DoxyCodeLine{82 \}}
+\DoxyCodeLine{80                                                   \{}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82   \textcolor{comment}{// If x2APIC is enabled, use the x2APIC MSR}}
+\DoxyCodeLine{83   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}) \{}
+\DoxyCodeLine{84       CPU::write\_msr((reg >> 4) + 0x800, value);}
+\DoxyCodeLine{85   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{86       (*(\textcolor{keyword}{volatile} uint32\_t*)((uintptr\_t)\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}} + reg)) = value;}
+\DoxyCodeLine{87     \}}
+\DoxyCodeLine{88 \}}
 
 \end{DoxyCode}
 
@@ -224,7 +231,17 @@ Definition at line 74 of file apic.\+cpp.
 
 
 
-Definition at line 19 of file apic.\+h.
+Definition at line 20 of file apic.\+h.
+
+\mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}} 
+\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_apic\_base\_high@{m\_apic\_base\_high}}
+\index{m\_apic\_base\_high@{m\_apic\_base\_high}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
+\doxysubsubsection{\texorpdfstring{m\_apic\_base\_high}{m\_apic\_base\_high}}
+{\footnotesize\ttfamily uint64\+\_\+t Max\+O\+S\+::hardwarecommunication\+::\+Local\+A\+P\+I\+C\+::m\+\_\+apic\+\_\+base\+\_\+high\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 21 of file apic.\+h.
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a732229d18e57d83bb36444cc6eed0c69}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a732229d18e57d83bb36444cc6eed0c69}} 
 \index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_id@{m\_id}}
@@ -234,7 +251,7 @@ Definition at line 19 of file apic.\+h.
 
 
 
-Definition at line 20 of file apic.\+h.
+Definition at line 22 of file apic.\+h.
 
 \mbox{\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}} 
 \index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_x2apic@{m\_x2apic}}
@@ -244,7 +261,7 @@ Definition at line 20 of file apic.\+h.
 
 
 
-Definition at line 21 of file apic.\+h.
+Definition at line 23 of file apic.\+h.
 
 
 

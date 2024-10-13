@@ -1,7 +1,7 @@
 var kprint_8cpp =
 [
-    [ "_kprintf", "kprint_8cpp.html#a21d6766fe400d57e508480323c71a148", null ],
-    [ "itoa", "kprint_8cpp.html#a78b8e1a7c99ffccdb6a598e2cd3bce3d", null ],
-    [ "pre_kprintf", "kprint_8cpp.html#a90ef38f05717b0352b5116759602b7b8", null ],
+    [ "_kprintf_internal", "kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350", null ],
+    [ "itoa", "kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b", null ],
+    [ "pre_kprintf", "kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24", null ],
     [ "strlen", "kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e", null ]
 ];

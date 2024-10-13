@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::InterruptManager" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::InterruptManager" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,8 +9,6 @@ MaxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and pas
 .PP
 .PP
 \fC#include <interrupts\&.h>\fP
-.PP
-Inherits \fBMaxOS::common::InputStream\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -265,7 +263,7 @@ Definition at line 64 of file interrupts\&.h\&.
 Definition at line 47 of file interrupts\&.cpp\&.
 .PP
 .nf
-48 : common::InputStream(handler),
+48 :
 49   m_hardware_interrupt_offset(hardware_interrupt_offset)
 50 {
 51 
@@ -392,66 +390,66 @@ Referenced by activate(), and ~InterruptManager()\&.
 .SS "cpu_status_t * InterruptManager::handle_interrupt_request (system::cpu_status_t *)\fC [protected]\fP"
 
 .PP
-Definition at line 256 of file interrupts\&.cpp\&.
+Definition at line 270 of file interrupts\&.cpp\&.
 .PP
 .nf
-256                                                                              {
-257 
-258   _kprintf("Interrupt: 0x%x\n", status->interrupt_number);
-259 
-260   // If there is an interrupt manager, handle the interrupt
-261   if(m_interrupt_handlers[status -> interrupt_number] != 0)
-262       m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
-263 
-264   else if(status->interrupt_number < m_hardware_interrupt_offset){
-265     _kprintf("Exception: %s, Error Code: 0x%x\n", exceptions[status->interrupt_number], status->error_code);
-266     CPU::stack_trace(10);
-267   }
-268 
-269 
-270   else
-271     _kprintf("Unhandled Interrupt: 0x%x\n", status->interrupt_number);
-272 
-273   // Debug the General Protection Fault
-274   if(status->interrupt_number == 0x0D) {
-275 
-276     // Define masks for each field
-277     uint32_t E_MASK = 0b10000000000000000000000000000000;
-278     uint32_t Tbl_MASK = 0b01100000000000000000000000000000;
-279     uint32_t Index_MASK = 0b00011111111111110000000000000000;
-280 
-281     // Use bit shifting and masking to extract values
-282     int E = (status -> error_code & E_MASK) >> 31;
-283     int Tbl = (status -> error_code & Tbl_MASK) >> 29;
-284     int Index = (status -> error_code & Index_MASK) >> 16;
-285 
-286     // If bit 0 is set, the exception was caused by external event
-287     _kprintf("General Protection Fault: External Event: %s\n", (E) ? "Yes" : "No");
-288 
-289     switch(Tbl) {
-290       case 0b00: _kprintf("General Protection Fault: Table: GDT\n"); break;
-291       case 0b01: _kprintf("General Protection Fault: Table: IDT\n"); break;
-292       case 0b10: _kprintf("General Protection Fault: Table: LDT\n"); break;
-293       case 0b11: _kprintf("General Protection Fault: Table: IDT\n"); break;
-294     }
-295 
-296     // Find the selector index (next 13 bits)
-297     _kprintf("General Protection Fault: Selector Index: 0x%x\n", Index);
-298 
-299     // Hang
-300     while(true);
-301   }
+270                                                                              {
+271 
+272   _kprintf("Interrupt: 0x%x\n", status->interrupt_number);
+273 
+274   // If there is an interrupt manager, handle the interrupt
+275   if(m_interrupt_handlers[status -> interrupt_number] != 0)
+276       m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
+277 
+278   else if(status->interrupt_number < m_hardware_interrupt_offset){
+279     _kprintf("Exception: %s, Error Code: 0x%x\n", exceptions[status->interrupt_number], status->error_code);
+280     CPU::stack_trace(10);
+281   }
+282 
+283 
+284   else
+285     _kprintf("Unhandled Interrupt: 0x%x\n", status->interrupt_number);
+286 
+287   // Debug the General Protection Fault
+288   if(status->interrupt_number == 0x0D) {
+289 
+290     // Define masks for each field
+291     uint32_t E_MASK = 0b10000000000000000000000000000000;
+292     uint32_t Tbl_MASK = 0b01100000000000000000000000000000;
+293     uint32_t Index_MASK = 0b00011111111111110000000000000000;
+294 
+295     // Use bit shifting and masking to extract values
+296     int E = (status -> error_code & E_MASK) >> 31;
+297     int Tbl = (status -> error_code & Tbl_MASK) >> 29;
+298     int Index = (status -> error_code & Index_MASK) >> 16;
+299 
+300     // If bit 0 is set, the exception was caused by external event
+301     _kprintf("General Protection Fault: External Event: %s\n", (E) ? "Yes" : "No");
 302 
-303 
-304   //TODO: Send SMP interrupt
-305   //todo: send eoi
-306 
-307   // Return the status
-308   return status;
-309 }
+303     switch(Tbl) {
+304       case 0b00: _kprintf("General Protection Fault: Table: GDT\n"); break;
+305       case 0b01: _kprintf("General Protection Fault: Table: IDT\n"); break;
+306       case 0b10: _kprintf("General Protection Fault: Table: LDT\n"); break;
+307       case 0b11: _kprintf("General Protection Fault: Table: IDT\n"); break;
+308     }
+309 
+310     // Find the selector index (next 13 bits)
+311     _kprintf("General Protection Fault: Selector Index: 0x%x\n", Index);
+312 
+313     // Hang
+314     while(true);
+315   }
+316 
+317 
+318   //TODO: Send SMP interrupt
+319   //todo: send eoi
+320 
+321   // Return the status
+322   return status;
+323 }
 .fi
 .PP
-References _kprintf(), MaxOS::hardwarecommunication::InterruptHandler::handle_interrupt(), m_hardware_interrupt_offset, m_interrupt_handlers, and status\&.
+References _kprintf, MaxOS::hardwarecommunication::InterruptHandler::handle_interrupt(), m_hardware_interrupt_offset, m_interrupt_handlers, and status\&.
 .PP
 Referenced by HandleInterrupt()\&.
 .SS "static void MaxOS::hardwarecommunication::InterruptManager::HandleException0x00 ()\fC [static]\fP, \fC [protected]\fP"
@@ -576,16 +574,30 @@ Definition at line 183 of file interrupts\&.cpp\&.
 .nf
 183                                                                                 {
 184 
-185   // If there is an interrupt manager handle interrupt
-186   if(s_active_interrupt_manager != 0)
-187     return s_active_interrupt_manager->handle_interrupt_request(status);
-188 
-189   // CPU Can continue
-190   return status;
-191 }
+185   if(status -> interrupt_number == 0xE)
+186   {
+187     bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
+188     bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
+189     bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
+190     bool reserved_write = (status ->error_code & 0x8) != 0;  // Bit 3: Reserved bit write flag
+191     bool instruction_fetch = (status ->error_code & 0x10) != 0; // Bit 4: Instruction fetch flag (on some CPUs)
+192 
+193     ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
+194              status->error_code, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+195   }
+196 
+197   ASSERT(false, "Interupt number 0x%x, Code: 0x%x", status->interrupt_number, status->error_code);
+198 
+199   // If there is an interrupt manager handle interrupt
+200   if(s_active_interrupt_manager != 0)
+201     return s_active_interrupt_manager->handle_interrupt_request(status);
+202 
+203   // CPU Can continue
+204   return status;
+205 }
 .fi
 .PP
-References handle_interrupt_request(), s_active_interrupt_manager, and status\&.
+References ASSERT, handle_interrupt_request(), present, s_active_interrupt_manager, status, and write\&.
 .SS "static void MaxOS::hardwarecommunication::InterruptManager::HandleInterruptError0x08 ()\fC [static]\fP, \fC [protected]\fP"
 
 .PP
@@ -674,12 +686,12 @@ The offset of the hardware interrupt
 .PP
 
 .PP
-Definition at line 198 of file interrupts\&.cpp\&.
+Definition at line 212 of file interrupts\&.cpp\&.
 .PP
 .nf
-198                                                      {
-199     return m_hardware_interrupt_offset;
-200 }
+212                                                      {
+213     return m_hardware_interrupt_offset;
+214 }
 .fi
 .PP
 References m_hardware_interrupt_offset\&.
@@ -699,12 +711,12 @@ Removes the interrupt handler for the interrupt\&.
 .PP
 
 .PP
-Definition at line 217 of file interrupts\&.cpp\&.
+Definition at line 231 of file interrupts\&.cpp\&.
 .PP
 .nf
-217                                                                  {
-218   m_interrupt_handlers[interrupt] = 0;
-219 }
+231                                                                  {
+232   m_interrupt_handlers[interrupt] = 0;
+233 }
 .fi
 .PP
 References m_interrupt_handlers\&.
@@ -772,12 +784,12 @@ Sets the interrupt handler for the interrupt\&.
 .PP
 
 .PP
-Definition at line 208 of file interrupts\&.cpp\&.
+Definition at line 222 of file interrupts\&.cpp\&.
 .PP
 .nf
-208                                                                                          {
-209   m_interrupt_handlers[interrupt] = handler;
-210 }
+222                                                                                          {
+223   m_interrupt_handlers[interrupt] = handler;
+224 }
 .fi
 .PP
 References m_interrupt_handlers\&.

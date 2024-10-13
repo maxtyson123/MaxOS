@@ -201,8 +201,9 @@ var NAVTREEINDEX3 =
 "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#ac2ca2eee404d5f5171bb4d216b650cc1":[1,0,0,4,7,10],
 "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#ac5412eb3decc01b9cf9c4fb763ddae42":[1,0,0,4,7,11],
 "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html":[1,0,0,4,9],
-"classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a655174d55ab5579b3c8b0bdbbcfae57a":[1,0,0,4,9,8],
-"classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a732229d18e57d83bb36444cc6eed0c69":[1,0,0,4,9,7],
+"classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a334dd5e1bfd0ad7825a01765e4ec0139":[1,0,0,4,9,7],
+"classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a655174d55ab5579b3c8b0bdbbcfae57a":[1,0,0,4,9,9],
+"classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a732229d18e57d83bb36444cc6eed0c69":[1,0,0,4,9,8],
 "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a745e7ee6cc83206664fbf157b01fd082":[1,0,0,4,9,6],
 "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a84eafc2ea20a276e8dc52b6f6f46b73b":[1,0,0,4,9,1],
 "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a85adace2840a5d65abc84c6133e44721":[1,0,0,4,9,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classMaxOS_1_1hardwarecommunication_1_1Port32Bit.html#a742b40049c70bfda79a3031b85297948":[1,0,0,4,18,2],
 "classMaxOS_1_1hardwarecommunication_1_1Port32Bit.html#a86ba53892a339c063a50f004173cf68d":[1,0,0,4,18,0],
 "classMaxOS_1_1hardwarecommunication_1_1Port32Bit.html#ad13c0ec90a83f05b61c023dd8a1f53e8":[1,0,0,4,18,3],
-"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html":[1,0,0,4,19],
-"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3":[1,0,0,4,19,2]
+"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html":[1,0,0,4,19]
 };

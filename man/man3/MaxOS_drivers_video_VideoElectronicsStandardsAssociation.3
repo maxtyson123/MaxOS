@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -76,26 +76,36 @@ Definition at line 26 of file vesa\&.h\&.
 .SS "VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation (\fBmultiboot_tag_framebuffer\fP * framebuffer_info)"
 
 .PP
-Definition at line 13 of file vesa\&.cpp\&.
+Definition at line 15 of file vesa\&.cpp\&.
 .PP
 .nf
-14 : VideoDriver(),
-15   m_framebuffer_info(framebuffer_info),
-16   m_framebuffer_address((uint64_t *)framebuffer_info->common\&.framebuffer_addr),
-17   m_bpp(framebuffer_info->common\&.framebuffer_bpp),
-18   m_pitch(framebuffer_info->common\&.framebuffer_pitch)
-19 {
-20 }
+16 : VideoDriver()
+17 {
+18   // Get the framebuffer info
+19   m_framebuffer_info = (multiboot_tag_framebuffer*)MemoryManager::to_dm_region((uint64_t)framebuffer_info);
+20   _kprintf("Framebuffer info: physical = 0x%x, virtual = 0x%x\n", framebuffer_info, m_framebuffer_info);
+21 
+22   // Set the framebuffer address, bpp and pitch
+23   m_bpp = m_framebuffer_info->common\&.framebuffer_bpp;
+24   m_pitch = m_framebuffer_info->common\&.framebuffer_pitch;
+25 
+26   // Get the framebuffer address
+27   m_framebuffer_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_framebuffer_info->common\&.framebuffer_addr);
+28   _kprintf("Framebuffer address: physical = 0x%x, virtual = 0x%x\n", m_framebuffer_info->common\&.framebuffer_addr, m_framebuffer_address);
+29 
+30 }
 .fi
+.PP
+References _kprintf, multiboot_tag_framebuffer::common, multiboot_tag_framebuffer_common::framebuffer_addr, multiboot_tag_framebuffer_common::framebuffer_bpp, multiboot_tag_framebuffer_common::framebuffer_pitch, m_bpp, m_framebuffer_address, m_framebuffer_info, and m_pitch\&.
 .SS "VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation ()"
 
 .PP
-Definition at line 22 of file vesa\&.cpp\&.
+Definition at line 32 of file vesa\&.cpp\&.
 .PP
 .nf
-22                                                                            {
-23 
-24 }
+32                                                                            {
+33 
+34 }
 .fi
 .SH "Member Function Documentation"
 .PP 
@@ -120,12 +130,12 @@ The 16bit colour of the pixel
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 116 of file vesa\&.cpp\&.
+Definition at line 131 of file vesa\&.cpp\&.
 .PP
 .nf
-116                                                              {
-117     return "VESA compatible graphics card";
-118 }
+131                                                              {
+132     return "VESA compatible graphics card";
+133 }
 .fi
 .SS "uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit (uint32_t x, uint32_t y)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
@@ -148,17 +158,17 @@ The 32bit colour of the pixel
 .PP
 Reimplemented from \fBMaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 89 of file vesa\&.cpp\&.
+Definition at line 104 of file vesa\&.cpp\&.
 .PP
 .nf
-89                                                                                                {
-90 
-91     // Get the address of the pixel
-92     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-93 
-94     // Return the pixel
-95     return *pixel_address;
-96 }
+104                                                                                                {
+105 
+106     // Get the address of the pixel
+107     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+108 
+109     // Return the pixel
+110     return *pixel_address;
+111 }
 .fi
 .PP
 References m_bpp, m_framebuffer_address, m_pitch, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -180,12 +190,12 @@ Renders a pixel on the screen in 16 bit mode\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 105 of file vesa\&.cpp\&.
+Definition at line 120 of file vesa\&.cpp\&.
 .PP
 .nf
-105                                                              {
-106     return "NEC Home Electronics";  // Creator of the VESA standard
-107 }
+120                                                              {
+121     return "NEC Home Electronics";  // Creator of the VESA standard
+122 }
 .fi
 .SS "bool VideoElectronicsStandardsAssociation::internal_set_mode (uint32_t width, uint32_t height, uint32_t)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
@@ -210,16 +220,16 @@ True if the mode was set successfully, false otherwise
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 40 of file vesa\&.cpp\&.
+Definition at line 55 of file vesa\&.cpp\&.
 .PP
 .nf
-40                                                                                          {
-41 
-42     // Best mode is set by the bootloader
-43     return true;
-44 
-45 
-46 }
+55                                                                                          {
+56 
+57     // Best mode is set by the bootloader
+58     return true;
+59 
+60 
+61 }
 .fi
 .SS "void VideoElectronicsStandardsAssociation::render_pixel_32_bit (uint32_t x, uint32_t y, uint32_t colour)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
@@ -239,18 +249,18 @@ Renders a pixel on the screen in 32 bit mode\&.
 .PP
 Reimplemented from \fBMaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 72 of file vesa\&.cpp\&.
+Definition at line 87 of file vesa\&.cpp\&.
 .PP
 .nf
-72                                                                                                       {
-73 
-74     // Get the address of the pixel
-75     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-76 
-77     // Set the pixel
-78     *pixel_address = colour;
-79 
-80 }
+87                                                                                                       {
+88 
+89     // Get the address of the pixel
+90     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+91 
+92     // Set the pixel
+93     *pixel_address = colour;
+94 
+95 }
 .fi
 .PP
 References m_bpp, m_framebuffer_address, m_pitch, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -276,17 +286,17 @@ Checks if the VESA driver supports the given mode\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 56 of file vesa\&.cpp\&.
+Definition at line 71 of file vesa\&.cpp\&.
 .PP
 .nf
-56                                                                                                               {
-57 
-58     // Check if the mode is supported
-59     if(width == (uint32_t)m_framebuffer_info->common\&.framebuffer_width && height == (uint32_t)m_framebuffer_info->common\&.framebuffer_height && color_depth == (uint32_t)m_framebuffer_info->common\&.framebuffer_bpp) {
-60         return true;
-61     }
-62     return false;
-63 }
+71                                                                                                               {
+72 
+73     // Check if the mode is supported
+74     if(width == (uint32_t)m_framebuffer_info->common\&.framebuffer_width && height == (uint32_t)m_framebuffer_info->common\&.framebuffer_height && color_depth == (uint32_t)m_framebuffer_info->common\&.framebuffer_bpp) {
+75         return true;
+76     }
+77     return false;
+78 }
 .fi
 .PP
 References multiboot_tag_framebuffer::common, multiboot_tag_framebuffer_common::framebuffer_bpp, multiboot_tag_framebuffer_common::framebuffer_height, multiboot_tag_framebuffer_common::framebuffer_width, and m_framebuffer_info\&.
@@ -297,25 +307,25 @@ References multiboot_tag_framebuffer::common, multiboot_tag_framebuffer_common::
 .PP
 Definition at line 40 of file vesa\&.h\&.
 .PP
-Referenced by get_rendered_pixel_32_bit(), and render_pixel_32_bit()\&.
+Referenced by get_rendered_pixel_32_bit(), render_pixel_32_bit(), and VideoElectronicsStandardsAssociation()\&.
 .SS "uint64_t* MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_framebuffer_address\fC [protected]\fP"
 
 .PP
 Definition at line 39 of file vesa\&.h\&.
 .PP
-Referenced by get_rendered_pixel_32_bit(), and render_pixel_32_bit()\&.
+Referenced by get_rendered_pixel_32_bit(), render_pixel_32_bit(), and VideoElectronicsStandardsAssociation()\&.
 .SS "\fBmultiboot_tag_framebuffer\fP* MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_framebuffer_info\fC [protected]\fP"
 
 .PP
 Definition at line 37 of file vesa\&.h\&.
 .PP
-Referenced by supports_mode()\&.
+Referenced by supports_mode(), and VideoElectronicsStandardsAssociation()\&.
 .SS "uint16_t MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_pitch\fC [protected]\fP"
 
 .PP
 Definition at line 41 of file vesa\&.h\&.
 .PP
-Referenced by get_rendered_pixel_32_bit(), and render_pixel_32_bit()\&.
+Referenced by get_rendered_pixel_32_bit(), render_pixel_32_bit(), and VideoElectronicsStandardsAssociation()\&.
 
 .SH "Author"
 .PP 

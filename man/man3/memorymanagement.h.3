@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memorymanagement.h" 3 "Mon Jan 29 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memorymanagement.h" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,8 @@
 \fC#include <stdint\&.h>\fP
 .br
 \fC#include <system/multiboot\&.h>\fP
+.br
+\fC#include <memory/virtual\&.h>\fP
 .br
 
 .SS "Classes"
@@ -68,126 +70,126 @@
 .SS "void operator delete (void * pointer)"
 
 .PP
-Definition at line 204 of file memorymanagement\&.cpp\&.
+Definition at line 307 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-204                                    {
-205 
-206     // Use the memory manager to free the memory
-207     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-208         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
-209 
-210 }
+307                                    {
+308 
+309     // Use the memory manager to free the memory
+310     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+311         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+312 
+313 }
 .fi
 .PP
 References MaxOS::memory::MemoryManager::s_active_memory_manager\&.
 .SS "void operator delete (void * pointer, size_t size)"
 
 .PP
-Definition at line 221 of file memorymanagement\&.cpp\&.
+Definition at line 324 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-221                                            {
-222 
-223     // Use the memory manager to free the memory
-224     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-225         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
-226 
-227 }
+324                                            {
+325 
+326     // Use the memory manager to free the memory
+327     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+328         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+329 
+330 }
 .fi
 .PP
 References MaxOS::memory::MemoryManager::s_active_memory_manager\&.
 .SS "void operator delete[] (void * pointer)"
 
 .PP
-Definition at line 212 of file memorymanagement\&.cpp\&.
+Definition at line 315 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-212                                      {
-213 
-214     // Use the memory manager to free the memory
-215     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-216         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
-217 
-218 }
+315                                      {
+316 
+317     // Use the memory manager to free the memory
+318     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+319         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+320 
+321 }
 .fi
 .PP
 References MaxOS::memory::MemoryManager::s_active_memory_manager\&.
 .SS "void operator delete[] (void * pointer, size_t size)"
 
 .PP
-Definition at line 229 of file memorymanagement\&.cpp\&.
+Definition at line 332 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-229                                              {
-230 
-231     // Use the memory manager to free the memory
-232     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-233         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
-234 
-235 }
+332                                              {
+333 
+334     // Use the memory manager to free the memory
+335     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+336         return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+337 
+338 }
 .fi
 .PP
 References MaxOS::memory::MemoryManager::s_active_memory_manager\&.
 .SS "void* operator new (size_t size)"
 
 .PP
-Definition at line 173 of file memorymanagement\&.cpp\&.
+Definition at line 276 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-173                                        {
-174 
-175     // Use the memory manager to allocate the memory
-176     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-177         return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
-178 
-179     return 0;
-180 
-181 }
+276                                        {
+277 
+278     // Use the memory manager to allocate the memory
+279     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+280         return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
+281 
+282     return 0;
+283 
+284 }
 .fi
 .PP
 References MaxOS::memory::MemoryManager::s_active_memory_manager, and size\&.
 .SS "void* operator new (size_t size, void * pointer)"
 
 .PP
-Definition at line 193 of file memorymanagement\&.cpp\&.
+Definition at line 296 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-193                                          {
-194 
-195     return pointer;
-196 
-197 }
+296                                          {
+297 
+298     return pointer;
+299 
+300 }
 .fi
 .SS "void* operator new[] (size_t size)"
 
 .PP
-Definition at line 183 of file memorymanagement\&.cpp\&.
+Definition at line 286 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-183                                          {
-184 
-185     // Use the memory manager to allocate the memory
-186     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-187         return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
-188 
-189     return 0;
-190 
-191 }
+286                                          {
+287 
+288     // Use the memory manager to allocate the memory
+289     if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
+290         return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
+291 
+292     return 0;
+293 
+294 }
 .fi
 .PP
 References MaxOS::memory::MemoryManager::s_active_memory_manager, and size\&.
 .SS "void* operator new[] (size_t size, void * pointer)"
 
 .PP
-Definition at line 198 of file memorymanagement\&.cpp\&.
+Definition at line 301 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-198                                            {
-199 
-200     return pointer;
-201 
-202 }
+301                                            {
+302 
+303     return pointer;
+304 
+305 }
 .fi
 .SH "Author"
 .PP 
