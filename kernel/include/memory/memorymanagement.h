@@ -44,7 +44,6 @@ namespace MaxOS{
 
           public:
               static MemoryManager* s_active_memory_manager;
-              static const uint64_t s_higher_half_offset { 0xFFFFFFFF80000000 };
 
               static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };
               static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };
