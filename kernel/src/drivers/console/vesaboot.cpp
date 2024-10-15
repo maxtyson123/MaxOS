@@ -74,7 +74,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     Colour background = console_colour_to_vesa(get_background_color(x, y));
 
     // Use the m_font to draw the character
-    m_font.draw_text(x * 8, y * 9, foreground, background, m_graphics_context, s);
+    m_font.draw_text(x * 8, y * 9, Colour(255, 255, 255), Colour(0, 0, 0), m_graphics_context, s);
 
 
 }

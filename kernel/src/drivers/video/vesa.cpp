@@ -13,20 +13,32 @@ using namespace MaxOS::system;
 using namespace MaxOS::common;
 
 VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info)
-: VideoDriver()
+: VideoDriver(),
+  m_framebuffer_info(framebuffer_info)
 {
   // Get the framebuffer info
-  m_framebuffer_info = (multiboot_tag_framebuffer*)MemoryManager::to_dm_region((uint64_t)framebuffer_info);
-  _kprintf("Framebuffer info: physical = 0x%x, virtual = 0x%x\n", framebuffer_info, m_framebuffer_info);
+  _kprintf("Framebuffer info: 0x%x\n", m_framebuffer_info);
 
   // Set the framebuffer address, bpp and pitch
   m_bpp = m_framebuffer_info->common.framebuffer_bpp;
   m_pitch = m_framebuffer_info->common.framebuffer_pitch;
+  m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
 
   // Get the framebuffer address
-  m_framebuffer_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_framebuffer_info->common.framebuffer_addr);
-  _kprintf("Framebuffer address: physical = 0x%x, virtual = 0x%x\n", m_framebuffer_info->common.framebuffer_addr, m_framebuffer_address);
+  uint64_t physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
+  uint64_t virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);
+  uint64_t end = physical_address + m_framebuffer_size;
+  m_framebuffer_address = (uint64_t*)virtual_address;
+  _kprintf("Framebuffer address: physical=0x%x, virtual=0x%x\n", physical_address, virtual_address);
 
+  // Map the framebuffer
+  while (physical_address < end) {
+
+    PhysicalMemoryManager::s_current_manager->map((physical_address_t*)physical_address, (virtual_address_t*)virtual_address, Write | Present);
+    physical_address += PhysicalMemoryManager::s_page_size;
+    virtual_address += PhysicalMemoryManager::s_page_size;
+  }
+  _kprintf("Framebuffer mapped: 0x%x - 0x%x (pages: %d)\n", m_framebuffer_address, virtual_address, PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address));
 }
 
 VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation(){

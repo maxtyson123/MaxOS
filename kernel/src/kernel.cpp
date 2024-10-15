@@ -136,10 +136,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     // Now entered the gui space
     _kprintf("__ Basic System Setup [DONE] __\n");
 
-    while (true) {
-      system::CPU::halt();
-    }
-
 
     // TODO: 64 bit architecture rewrite
     //  - Convert old codebase to higher half
@@ -147,6 +143,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     //  - Rewrite read me
 
     // Initialise the VESA Driver
+
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
     videoDriver->set_mode((int)multiboot.get_framebuffer()->common.framebuffer_width,
@@ -158,7 +155,9 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     console.clear();
     console.print_logo();
 
-
+    while (true) {
+      system::CPU::halt();
+    }
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
