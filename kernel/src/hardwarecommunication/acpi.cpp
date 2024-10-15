@@ -18,13 +18,15 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
     // Get the RSDP & RSDT
     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
-    m_rsdt = (RSDT*) rsdp->rsdt_address;
+    uint64_t rsdt_address = (uint64_t) rsdp->rsdt_address;
+    m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)rsdt_address);
 
     // Map the RSDT
-    PhysicalMemoryManager::s_current_manager->map(m_rsdt, MemoryManager::to_io_region((uint64_t)m_rsdt), Present | Write);
-    m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)m_rsdt);
+    rsdt_address = PhysicalMemoryManager::align_direct_to_page((size_t)rsdt_address);
+    PhysicalMemoryManager::s_current_manager->map((physical_address_t*)rsdt_address, m_rsdt, Present | Write);
     _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
 
+    // TODO: does this need to be reserved in bitmap?
 
     // Load the header
     m_header = &m_rsdt->header;
@@ -32,6 +34,12 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
       ASSERT(false, "RSDT is too big, need to map more pages!")
     }
 
+    // Map the RSDT Tables
+    for(uint32_t i = 0; i < (m_header->length - sizeof(ACPISDTHeader)) / 4; i++) {
+        uint64_t address = (uint64_t) m_rsdt->pointers[i];
+        address = PhysicalMemoryManager::align_direct_to_page((size_t)address);
+        PhysicalMemoryManager::s_current_manager->map((physical_address_t*)address, (void*)MemoryManager::to_io_region(address), Present | Write);
+    }
 
     // Calculate the checksum
     uint8_t sum = 0;
@@ -102,10 +110,10 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const *signatur
       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
 
       // Move the header to the higher half
-      header = (ACPISDTHeader*) MemoryManager::to_higher_region((uint64_t)header);
+      header = (ACPISDTHeader*) MemoryManager::to_io_region((uint64_t)header);
 
       // Check if the signature matches
-      if(strncmp(header->signature, signature, 4) == 0)
+      if(strncmp(header->signature, signature, 4) != 0)
          return header;
   }
 

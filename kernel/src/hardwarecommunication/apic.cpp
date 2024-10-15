@@ -59,6 +59,8 @@ void LocalAPIC::init() {
   write(0xF0, (1 << 8) | 0x100);
   _kprintf("APIC Enabled\n");
 
+  //TODO: Mark as used in bitmap
+
   // Read the APIC version
   uint32_t version = read(0x30);
   _kprintf("APIC Version: 0x%x\n", version & 0xFF);
@@ -114,10 +116,6 @@ void IOAPIC::init() {
   m_madt = (MADT*)m_acpi->find("APIC");
   MADT_Item* io_apic_item = get_madt_item(1, 0);
 
-  // Check if the IO APIC was found
-  ASSERT(io_apic_item == nullptr, "IO APIC not found")
-
-
   // Get the IO APIC address
   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;
   m_address = io_apic->io_apic_address;
@@ -126,6 +124,7 @@ void IOAPIC::init() {
   m_address_high = (uint64_t)MemoryManager::to_higher_region(m_address);
   _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
+  //TODO: reserve in bitmap
 
   // Get the IO APIC version and max redirection entry
   m_version = read(0x01);
@@ -139,7 +138,7 @@ void IOAPIC::init() {
   MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
 
   // Loop through the source override items
-  uint32_t total_length = 0;
+  uint32_t total_length = sizeof(MADT);
   while (total_length < m_madt->header.length && m_override_array_size < 0x10){ // 0x10 is the max items
 
       // Increment the total length
@@ -152,8 +151,7 @@ void IOAPIC::init() {
           Override *override = (Override *)(source_override_item + 1);
           m_override_array[m_override_array_size].bus = override->bus;
           m_override_array[m_override_array_size].source = override->source;
-          m_override_array[m_override_array_size].global_system_interrupt =
-              override->global_system_interrupt;
+          m_override_array[m_override_array_size].global_system_interrupt = override->global_system_interrupt;
           m_override_array[m_override_array_size].flags = override->flags;
 
           // Increment the override array size
@@ -180,7 +178,7 @@ MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
     uint8_t current_index = 0;
 
     // Loop through the items
-    while (total_length+ sizeof(MADT) < m_madt->header.length && current_index <= index) {
+    while (total_length + sizeof(MADT) < m_madt->header.length && current_index <= index) {
 
         // Check if the item is the correct type
         if(item->type == type) {

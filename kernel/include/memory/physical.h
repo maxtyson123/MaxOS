@@ -127,6 +127,7 @@ namespace MaxOS {
           // Tools
           static size_t size_to_frames(size_t size);
           static size_t align_to_page(size_t size);
+          static size_t align_direct_to_page(size_t size);
           static size_t align_up_to_page(size_t size, size_t s_page_size);
           static bool check_aligned(size_t size);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address);

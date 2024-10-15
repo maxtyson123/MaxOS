@@ -768,3 +768,6 @@ uint64_t PhysicalMemoryManager::get_memory_size() {
   return m_memory_size;
 }
 
+size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
+  return (size & (~(s_page_size - 1)));
+}

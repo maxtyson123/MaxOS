@@ -141,6 +141,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     //  - Convert old codebase to higher half
     //  - APIC and ACPI
     //  - Rewrite read me
+    //  - Rewrite boot text again
 
     // Initialise the VESA Driver
 
@@ -155,18 +156,12 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     console.clear();
     console.print_logo();
 
-    while (true) {
-      system::CPU::halt();
-    }
-
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
     if(magic == MULTIBOOT2_BOOTLOADER_MAGIC)
         cout << "Multiboot2 Bootloader Detected\n";
-
-    return;
 
     // Print the header
     print_boot_header(&console);
@@ -189,7 +184,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "-- Set Up Physical Memory Management\n";
     cout << "-- Set Up Virtual Memory Management\n";
     cout << "-- Set Up Memory Management (Kernel)\n";
-    cout << "-- Set Up VESA Driver\n";
     systemSetupHeaderStream << "......";
 
     ThreadManager threadManager;
@@ -207,15 +201,14 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     ConsoleArea deviceSetupHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream deviceSetupHeaderStream(&deviceSetupHeader);
     deviceSetupHeaderStream << "Setting up devices";
+    cout << "-- Set Up Video Driver\n";
     
     DriverManager driverManager;
 
-    //TODO: ACPI
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     cout << "-- Set Up ACPI\n";
     deviceSetupHeaderStream << ".";
 
-    //TODO: APIC
     AdvancedProgrammableInterruptController apic(&acpi);
     cout << "-- Set Up APIC\n";
     deviceSetupHeaderStream << ".";
@@ -239,6 +232,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     driverManager.add_driver(&kernelClock);
     cout << "-- Set Up Clock\n";
     deviceSetupHeaderStream << ".";
+
 
     // Driver Selectors
     Vector<DriverSelector*> driverSelectors;
@@ -272,6 +266,10 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     cout << "\n";
     deviceSetupHeaderStream << "[ DONE ]";
+
+    while (true) {
+      system::CPU::halt();
+    }
 
     // Make the activation stream
     ConsoleArea activationHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);

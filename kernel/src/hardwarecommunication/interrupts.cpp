@@ -316,7 +316,7 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
 
   //TODO: Send SMP interrupt
-  //todo: send eoi
+  //Todo: send eoi
 
   // Return the status
   return status;
