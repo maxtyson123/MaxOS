@@ -139,7 +139,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     // TODO: 64 bit architecture rewrite
     //  - Convert old codebase to higher half
-    //  - APIC and ACPI
     //  - Rewrite read me
     //  - Rewrite boot text again
 
@@ -154,7 +153,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     // Initialise Console
     VESABootConsole console(&vesa);
     console.clear();
-    console.print_logo();
+//    console.print_logo();
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
@@ -213,26 +212,25 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "-- Set Up APIC\n";
     deviceSetupHeaderStream << ".";
 
-    // Keyboard
-    KeyboardDriver keyboard(&interrupts);
-    KeyboardInterpreterEN_US keyboardInterpreter;
-    keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
-    driverManager.add_driver(&keyboard);
-    cout << "-- Set Up Keyboard\n";
-    deviceSetupHeaderStream << ".";
-
-    // Mouse
-    MouseDriver mouse(&interrupts);
-    driverManager.add_driver(&mouse);
-    cout << "-- Set Up Mouse\n";
-    deviceSetupHeaderStream << ".";
+//    // Keyboard
+//    KeyboardDriver keyboard(&interrupts);
+//    KeyboardInterpreterEN_US keyboardInterpreter;
+//    keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
+//    driverManager.add_driver(&keyboard);
+//    cout << "-- Set Up Keyboard\n";
+//    deviceSetupHeaderStream << ".";
+//
+//    // Mouse
+//    MouseDriver mouse(&interrupts);
+//    driverManager.add_driver(&mouse);
+//    cout << "-- Set Up Mouse\n";
+//    deviceSetupHeaderStream << ".";
 
     // Clock
-    Clock kernelClock(&interrupts, 1);
+    Clock kernelClock(&interrupts, &apic, 1);
     driverManager.add_driver(&kernelClock);
     cout << "-- Set Up Clock\n";
     deviceSetupHeaderStream << ".";
-
 
     // Driver Selectors
     Vector<DriverSelector*> driverSelectors;
@@ -377,8 +375,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 #define GUI
 #ifdef GUI
     Desktop desktop(videoDriver);
-    mouse.connect_event_handler(&desktop);
-    keyboardInterpreter.connect_event_handler(&desktop);
+//    mouse.connect_event_handler(&desktop);
+//    keyboardInterpreter.connect_event_handler(&desktop);
     kernelClock.connect_event_handler(&desktop);
 
     Window testWindow(150,10, 200, 150, "Test Window");

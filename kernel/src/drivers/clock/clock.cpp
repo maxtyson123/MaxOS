@@ -2,6 +2,7 @@
 // Created by 98max on 10/04/2023.
 //
 #include <drivers/clock/clock.h>
+#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -51,13 +52,73 @@ Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
  * @param interrupt_manager The interrupt manager
  * @param time_between_events The time between events in 10ths of a second
  */
-Clock::Clock(InterruptManager *interrupt_manager, uint16_t time_between_events)
+Clock::Clock(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
 : Driver(),
-  InterruptHandler(interrupt_manager->hardware_interrupt_offset(), interrupt_manager),
-  m_data_port(0x71), m_command_port(0x70),
+  InterruptHandler(0x22, interrupt_manager),
+  m_data_port(0x40),
+  m_command_port(0x43),
+  m_local_apic(apic -> get_local_apic()),
+  m_io_apic(apic -> get_io_apic()),
   m_ticks_between_events(time_between_events)
 {
-  //TODO: Configure APIC Clock
+
+  // Set the redirect for the timer interrupt
+  interrupt_redirect_t redirect = {
+      .type = 0x2,
+      .index = 0x14,
+      .interrupt = 0x22,
+      .destination = 0x00,
+      .flags = 0x00,
+      .mask = true,
+  };
+  m_io_apic -> set_redirect(&redirect);
+
+  // Configure the PIT clock
+  PITCommand command = {
+      .bcd_mode = BINARY,
+      .operating_mode = MODE_2,
+      .access_mode = LOW_HIGH_BYTE,
+      .channel = CHANNEL_0,
+  };
+  m_command_port.write(*(uint8_t *)&command);
+
+  // Set the clock rate to 1 ms;
+  uint16_t rate = 1193182 / 1000;
+  m_data_port.write(rate & 0xFF);
+  m_data_port.write(rate >> 8);
+
+  // Stop the clock (write 0 as the initial count)
+  m_local_apic -> write(0x380, 0x00);
+
+  // Set the divisor to 2
+  m_local_apic -> write(0x3E0, 0x0);
+
+  // Unmask the PIT interrupt
+  m_io_apic ->set_redirect_mask(redirect.index, false);
+  apic -> enable_pic_pit();
+
+  // Calculate the number of ticks in 1 ms
+  uint32_t max = (uint32_t) - 1;
+  m_local_apic -> write(0x380, max);
+
+  while (m_ticks < 10)
+    asm volatile("nop");
+
+  uint32_t elapsed = max - (m_local_apic -> read(0x390));
+  uint32_t ticks_per_ms = elapsed / 10;
+
+  _kprintf("Ticks per ms: %d\n", ticks_per_ms);
+
+  // Disable the PIT interrupt again
+  m_local_apic -> write(0x380, 0x00);
+  m_io_apic -> set_redirect_mask(redirect.index, true);
+
+  // Set the initial count
+  m_local_apic -> write(0x380, 100);
+
+  // Enable the APIC timer interrupt
+  m_local_apic -> write(0x320, 0x20000 | 0x20);
+
 }
 
 Clock::~Clock() {

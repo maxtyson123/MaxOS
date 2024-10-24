@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <drivers/ethernet/ethernet.h>
 #include <hardwarecommunication/pci.h>
+#include <memory/memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 
@@ -69,12 +70,10 @@ namespace MaxOS{
 
 
                 BufferDescriptor* sendBufferDescr;               //Descriptor entry
-                uint8_t sendBufferDescrMemory[2048+15];  //RAM for the send buffer, also 16 byte aligned
                 uint8_t sendBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
                 uint8_t currentSendBuffer;               //Which buffers are active
 
                 BufferDescriptor* recvBufferDescr;               //Descriptor entry
-                uint8_t recvBufferDescrMemory[2048+15];  //RAM for the recive buffer, also 16 byte aligned
                 uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
                 uint8_t currentRecvBuffer;               //Which buffers are active
 

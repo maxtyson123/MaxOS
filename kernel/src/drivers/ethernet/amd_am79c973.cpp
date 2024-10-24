@@ -6,6 +6,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::common;
+using namespace MaxOS::memory;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
@@ -63,11 +64,14 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     initBlock.reserved3 = 0;                         // Reserverd
     initBlock.logicalAddress = 0;                    // None for now
 
+
+    //TODO: Use malloc?
+
     // Set Buffer descriptors memory
-    sendBufferDescr = (BufferDescriptor*)((((uint32_t)&sendBufferDescrMemory[0]) + 15) & ~((uint32_t)0xF));
+    sendBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.sendBufferDescrAddress = (uint32_t)sendBufferDescr;
 
-    recvBufferDescr = (BufferDescriptor*)((((uint32_t)&recvBufferDescrMemory[0]) + 15) & ~((uint32_t)0xF));
+    recvBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.recvBufferDescrAddress = (uint32_t)recvBufferDescr;
 
     for(uint8_t i = 0; i < 8; i++)

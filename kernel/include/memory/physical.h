@@ -136,6 +136,7 @@ namespace MaxOS {
 
           static PhysicalMemoryManager* s_current_manager;
           void clean_page_table(uint64_t* table);
+          void reserve(uint64_t address);
       };
   }
 

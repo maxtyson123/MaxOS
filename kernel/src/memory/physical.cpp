@@ -768,6 +768,31 @@ uint64_t PhysicalMemoryManager::get_memory_size() {
   return m_memory_size;
 }
 
+/**
+ * @brief Aligns a address to the page size
+ * @param size The address to align
+ * @return The aligned address
+ */
 size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
   return (size & (~(s_page_size - 1)));
+}
+
+/**
+ * @brief Reserves a physical address
+ * @param address The address to reserve
+ */
+void PhysicalMemoryManager::reserve(uint64_t address) {
+
+  // If the address is not part of physical memory then return
+  if(address >= m_memory_size)
+    return;
+
+  // Get the address to a page
+  address = align_direct_to_page(address);
+
+  // Set the bit to 1 in the bitmap
+  m_bit_map[address / ROW_BITS] |= (1 << (address % ROW_BITS));
+
+
+
 }

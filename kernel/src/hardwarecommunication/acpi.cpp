@@ -26,7 +26,8 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)rsdt_address, m_rsdt, Present | Write);
     _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
 
-    // TODO: does this need to be reserved in bitmap?
+    // Reserve the RSDT
+    PhysicalMemoryManager::s_current_manager->reserve((uint64_t)rsdp->rsdt_address);
 
     // Load the header
     m_header = &m_rsdt->header;
@@ -36,9 +37,16 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
     // Map the RSDT Tables
     for(uint32_t i = 0; i < (m_header->length - sizeof(ACPISDTHeader)) / 4; i++) {
+
+        // Get the address (aligned to page)
         uint64_t address = (uint64_t) m_rsdt->pointers[i];
         address = PhysicalMemoryManager::align_direct_to_page((size_t)address);
+
+        // Map to the higher half
         PhysicalMemoryManager::s_current_manager->map((physical_address_t*)address, (void*)MemoryManager::to_io_region(address), Present | Write);
+
+        // Reserve the memory
+        PhysicalMemoryManager::s_current_manager->reserve(address);
     }
 
     // Calculate the checksum
