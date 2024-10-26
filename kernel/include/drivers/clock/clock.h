@@ -86,9 +86,38 @@ namespace MaxOS {
             } PITCommand;
 
 
+            class Clock;
+            class PIT: public hardwarecommunication::InterruptHandler{
+              friend Clock;
+
+              private:
+
+                uint64_t m_ticks { 0 };
+                static const uint16_t s_calibrate_ticks = 10;
+
+              protected:
+
+                // Ports
+                hardwarecommunication::Port8Bit m_data_port;
+                hardwarecommunication::Port8Bit m_command_port;
+
+                // APIC
+                hardwarecommunication::LocalAPIC* m_local_apic;
+                hardwarecommunication::IOAPIC* m_io_apic;
+
+                // Funcs
+                void handle_interrupt() final;
+                uint32_t ticks_per_ms();
+
+              public:
+                PIT(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic);
+                ~PIT();
+
+            };
+
             /**
              * @class Clock
-             * @brief Driver for the CMOS Real Time Clock
+             * @brief Driver for the APIC clock
              */
             class Clock: public Driver, public hardwarecommunication::InterruptHandler, public common::EventManager<ClockEvents>{
                 private:
@@ -105,8 +134,7 @@ namespace MaxOS {
                     hardwarecommunication::Port8Bit m_command_port;
 
                     // APIC
-                    hardwarecommunication::LocalAPIC* m_local_apic;
-                    hardwarecommunication::IOAPIC* m_io_apic;
+                    hardwarecommunication::AdvancedProgrammableInterruptController* m_apic;
 
                     // Time between events
                     uint16_t m_ticks_between_events { 0 };
@@ -118,11 +146,14 @@ namespace MaxOS {
                     uint8_t binary_representation(uint8_t number);
 
                 public:
-                  [[noreturn]] Clock(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
+                    Clock(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
                     ~Clock();
 
                     void activate() override;
                     void delay(uint32_t milliseconds);
+
+                    void calibrate();
+                    common::Time get_time();
 
                     string get_vendor_name() final;
                     string get_device_name() final;

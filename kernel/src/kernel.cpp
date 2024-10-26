@@ -79,11 +79,6 @@ extern "C" void callConstructors()
 }
 
 
-bool check_multiboot_flag(uint32_t flags, uint32_t bit)
-{
-    return (flags & (1 << bit)) > 0;
-}
-
 void print_boot_header(Console* console){
 
   // Make the header
@@ -118,7 +113,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     _kprintf("-= MaxOS booted =-\n");
 
-    InterruptManager interrupts(0x20, 0);
+    InterruptManager interrupts;
     _kprintf("-= IDT set up =-\n");
 
     uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
@@ -128,10 +123,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VirtualMemoryManager vmm(true);
     _kprintf("-= Virtual Memory Manager set up =-\n");
 
-
-    // Initialise the memory manager
-    MemoryManager memoryManager(&vmm);
-    _kprintf("-= Memory Manager set up =-\n");
 
     // Now entered the gui space
     _kprintf("__ Basic System Setup [DONE] __\n");
@@ -150,10 +141,15 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
                           (int)multiboot.get_framebuffer()->common.framebuffer_height,
                           (int)multiboot.get_framebuffer()->common.framebuffer_bpp);
 
+
+    // Initialise the memory manager
+    MemoryManager memoryManager(&vmm);
+    _kprintf("-= Memory Manager set up =-\n");
+
     // Initialise Console
     VESABootConsole console(&vesa);
     console.clear();
-//    console.print_logo();
+    console.print_logo();
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
@@ -209,6 +205,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     deviceSetupHeaderStream << ".";
 
     AdvancedProgrammableInterruptController apic(&acpi);
+    interrupts.set_apic(apic.get_local_apic());
     cout << "-- Set Up APIC\n";
     deviceSetupHeaderStream << ".";
 
@@ -265,10 +262,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "\n";
     deviceSetupHeaderStream << "[ DONE ]";
 
-    while (true) {
-      system::CPU::halt();
-    }
-
     // Make the activation stream
     ConsoleArea activationHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
     ConsoleStream activationHeaderStream(&activationHeader);
@@ -291,9 +284,14 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     // Interrupts
     interrupts.activate();
-    kernelClock.delay(resetWaitTime);                                            //Wait for the devices to reset (has to be done after interrupts are activated otherwise the clock interrupt wont trigger)
     cout << "-- Activated Interrupts\n";
     activationHeaderStream << ".";
+
+    // Post interupt activation
+    kernelClock.calibrate();
+    kernelClock.delay(resetWaitTime);
+    Time now = kernelClock.get_time();
+    cout << "-- TIME: " << now.hour << ":" << now.minute << ":" << now.second << "\n";
 
     // Initialise the drivers
     cout << "-- Initializing Devices";
@@ -377,7 +375,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     Desktop desktop(videoDriver);
 //    mouse.connect_event_handler(&desktop);
 //    keyboardInterpreter.connect_event_handler(&desktop);
-    kernelClock.connect_event_handler(&desktop);
+//    kernelClock.connect_event_handler(&desktop);
 
     Window testWindow(150,10, 200, 150, "Test Window");
     widgets::InputBox testInputBox(10, 10, 150, 20, "test");

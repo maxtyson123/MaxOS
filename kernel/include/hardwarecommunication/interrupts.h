@@ -12,6 +12,7 @@
 #include <common/inputStream.h>
 #include <common/outputStream.h>
 #include <system/cpu.h>
+#include <hardwarecommunication/apic.h>
 
 
 namespace MaxOS {
@@ -64,11 +65,16 @@ namespace MaxOS {
         class InterruptManager {
             friend class InterruptHandler;
 
+            private:
+              LocalAPIC* m_local_apic;
+
+              void page_fault(system::cpu_status_t* status);
+
             protected:
 
                 static InterruptManager* s_active_interrupt_manager;
                 static common::OutputStream* s_error_messages;
-                uint16_t m_hardware_interrupt_offset;
+                const static uint16_t s_hardware_interrupt_offset {0x20};
                 InterruptHandler* m_interrupt_handlers[256];
                 system::ThreadManager* m_thread_manager;
 
@@ -141,13 +147,15 @@ namespace MaxOS {
                 system::cpu_status_t* handle_interrupt_request(system::cpu_status_t*);
 
             public:
-                InterruptManager(uint16_t hardware_interrupt_offset, common::OutputStream* handler);
+                InterruptManager();
                 ~InterruptManager();
 
                 uint16_t hardware_interrupt_offset();
 
                 void set_interrupt_handler(uint8_t interrupt, InterruptHandler *handler);
                 void remove_interrupt_handler(uint8_t interrupt);
+
+                void set_apic(LocalAPIC* apic);
 
                 void activate();
                 void deactivate();

@@ -107,6 +107,12 @@ uint32_t LocalAPIC::id() {
 
 }
 
+void LocalAPIC::send_eoi() {
+
+    // Send the EOI
+    write(0xB0, 0);
+}
+
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi),
   m_madt(nullptr)
@@ -357,16 +363,4 @@ LocalAPIC *AdvancedProgrammableInterruptController::get_local_apic() {
 }
 IOAPIC *AdvancedProgrammableInterruptController::get_io_apic() {
     return &m_io_apic;
-}
-
-void AdvancedProgrammableInterruptController::enable_pic_pit() {
-
-  // Current mask
-  uint8_t mask = m_pic_master_data_port.read();
-
-  // Unmask the PIT
-  mask &= ~(1 << 0);
-
-  // Write the mask
-  m_pic_master_data_port.write(mask);
 }

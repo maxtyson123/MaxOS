@@ -63,6 +63,7 @@ global stack
 
 ; extern kernel_tss
 extern kernelMain
+extern callConstructors
 
 [bits 32]
 
@@ -270,6 +271,7 @@ higher_half:
 
     mov rax, cr3
     mov cr3, rax
+    call callConstructors
     call kernelMain
 
 section .bss

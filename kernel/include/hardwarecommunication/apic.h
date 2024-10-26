@@ -32,6 +32,7 @@ namespace MaxOS {
             void write(uint32_t reg, uint32_t value);
 
             uint32_t id();
+            void send_eoi();
 
         };
 

@@ -44,9 +44,8 @@ void InterruptHandler::handle_interrupt() {
 
 
 
-InterruptManager::InterruptManager(uint16_t hardware_interrupt_offset, OutputStream* handler)
-:
-  m_hardware_interrupt_offset(hardware_interrupt_offset)
+InterruptManager::InterruptManager()
+: m_local_apic(nullptr)
 {
 
      // Full the table of interrupts with 0
@@ -94,13 +93,13 @@ InterruptManager::InterruptManager(uint16_t hardware_interrupt_offset, OutputStr
     set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 0);   // Reserved
 
     // Set up the hardware interrupts
-    set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x00, &HandleInterruptRequest0x00, 0);   // Advanced Programmable Interrupt Controller (APIC) Timer Interrupt
-    set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
-    set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x02, &HandleInterruptRequest0x02, 0);   // Cascade (used internally by the two PICs. never raised)
-    set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x00, &HandleInterruptRequest0x00, 0);   // APIC Timer Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
 
     // Set up the system call interrupt
-    set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 0);   // System Call Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 0);   // System Call Interrupt
 
     //Tell the processor to use the IDT
     IDTR idt;
@@ -182,23 +181,10 @@ void InterruptManager::deactivate()
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
 
-  if(status -> interrupt_number == 0xE)
-  {
-    bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
-    bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
-    bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
-    bool reserved_write = (status ->error_code & 0x8) != 0;  // Bit 3: Reserved bit write flag
-    bool instruction_fetch = (status ->error_code & 0x10) != 0; // Bit 4: Instruction fetch flag (on some CPUs)
-
-    ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
-             status->error_code, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
-  }
-
-  ASSERT(false, "Interupt number 0x%x, Code: 0x%x", status->interrupt_number, status->error_code);
-
   // If there is an interrupt manager handle interrupt
   if(s_active_interrupt_manager != 0)
     return s_active_interrupt_manager->handle_interrupt_request(status);
+
 
   // CPU Can continue
   return status;
@@ -210,7 +196,7 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *st
  * @return The offset of the hardware interrupt
  */
 uint16_t InterruptManager::hardware_interrupt_offset() {
-    return m_hardware_interrupt_offset;
+    return s_hardware_interrupt_offset;
 }
 
 /**
@@ -232,92 +218,43 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
   m_interrupt_handlers[interrupt] = 0;
 }
 
-static const char* exceptions[] = {
-    "Division By Zero",
-    "Debug",
-    "Non Maskable Interrupt",
-    "Breakpoint",
-    "Into Detected Overflow",
-    "Out of Bounds",
-    "Invalid Opcode",
-    "No Coprocessor",
-    "Double Fault",
-    "Coprocessor Segment Overrun",
-    "Bad TSS",
-    "Segment Not Present",
-    "Stack Fault",
-    "General Protection Fault",
-    "Page Fault",
-    "Unknown Interrupt",
-    "Coprocessor Fault",
-    "Alignment Check",
-    "Machine Check",
-    "SIMD Floating Point Exception",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "RESERVED",
-    "Security Exception",
-    "RESERVED"
-};
-
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
-  _kprintf("Interrupt: 0x%x\n", status->interrupt_number);
+  // System Handlers
+  switch (status->interrupt_number) {
+    case 0x0E:
+      page_fault(status);
+      break;
+
+  }
 
   // If there is an interrupt manager, handle the interrupt
   if(m_interrupt_handlers[status -> interrupt_number] != 0)
       m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
-
-  else if(status->interrupt_number < m_hardware_interrupt_offset){
-    _kprintf("Exception: %s, Error Code: 0x%x\n", exceptions[status->interrupt_number], status->error_code);
-    CPU::stack_trace(10);
-  }
-
-
   else
-    _kprintf("Unhandled Interrupt: 0x%x\n", status->interrupt_number);
+    _kprintf("Unhandled Interrupt 0x%x\n", status->interrupt_number);
 
-  // Debug the General Protection Fault
-  if(status->interrupt_number == 0x0D) {
-
-    // Define masks for each field
-    uint32_t E_MASK = 0b10000000000000000000000000000000;
-    uint32_t Tbl_MASK = 0b01100000000000000000000000000000;
-    uint32_t Index_MASK = 0b00011111111111110000000000000000;
-
-    // Use bit shifting and masking to extract values
-    int E = (status -> error_code & E_MASK) >> 31;
-    int Tbl = (status -> error_code & Tbl_MASK) >> 29;
-    int Index = (status -> error_code & Index_MASK) >> 16;
-
-    // If bit 0 is set, the exception was caused by external event
-    _kprintf("General Protection Fault: External Event: %s\n", (E) ? "Yes" : "No");
-
-    switch(Tbl) {
-      case 0b00: _kprintf("General Protection Fault: Table: GDT\n"); break;
-      case 0b01: _kprintf("General Protection Fault: Table: IDT\n"); break;
-      case 0b10: _kprintf("General Protection Fault: Table: LDT\n"); break;
-      case 0b11: _kprintf("General Protection Fault: Table: IDT\n"); break;
-    }
-
-    // Find the selector index (next 13 bits)
-    _kprintf("General Protection Fault: Selector Index: 0x%x\n", Index);
-
-    // Hang
-    while(true);
-  }
-
-
-  //TODO: Send SMP interrupt
-  //Todo: send eoi
+  // Send the EOI to the APIC
+  if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
+      m_local_apic->send_eoi();
 
   // Return the status
   return status;
+}
+
+void InterruptManager::set_apic(LocalAPIC *apic) {
+    m_local_apic = apic;
+}
+
+void InterruptManager::page_fault(system::cpu_status_t *status) {
+  bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
+  bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
+  bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
+  bool reserved_write = (status ->error_code & 0x8) != 0;  // Bit 3: Reserved bit write flag
+  bool instruction_fetch = (status ->error_code & 0x10) != 0; // Bit 4: Instruction fetch flag (on some CPUs)
+  uint64_t faulting_address;
+  asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
+
+  ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
+         faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
 }
