@@ -68,7 +68,7 @@ Clock::~Clock() {
 }
 
 /**
- * @brief Handle the RTC interrupt, raising the clock event if enough time has passed
+ * @brief Handle the clock interrupt, raising the clock event if enough time has passed
  *
  */
 void Clock::handle_interrupt() {
@@ -83,6 +83,10 @@ void Clock::handle_interrupt() {
 
     // Otherwise, reset the number of ticks until the next event
     m_ticks_until_next_event = m_ticks_between_events;
+
+    // Raise the time event
+    Time time = get_time();
+    raise_event(new TimeEvent(&time));
 }
 
 

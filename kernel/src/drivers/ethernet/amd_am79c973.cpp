@@ -115,6 +115,9 @@ amd_am79c973::~amd_am79c973()
 void amd_am79c973::activate()
 {
 
+    // TODO: Have a look at re - implementing this again someday
+    return;
+
     initDone = false;                                            // Set initDone to false
     registerAddressPort.write(0);                           // Tell device to write to register 0
     registerDataPort.write(0x41);                           // Enable Interrupts and start the device
@@ -124,13 +127,10 @@ void amd_am79c973::activate()
     uint32_t temp = registerDataPort.read();                     // Get current data
 
     registerAddressPort.write(4);                           // Tell device to write to register 4
-    registerDataPort.write(
-        temp |
-        0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
+    registerDataPort.write(temp | 0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
 
     registerAddressPort.write(0);                           // Tell device to write to register 0
-    registerDataPort.write(
-        0x42);                           // Tell device that it is initialised and can begin operating
+    registerDataPort.write(0x42);                           // Tell device that it is initialised and can begin operating
 
     active = true;                                               // Set active to true
 }
@@ -143,8 +143,8 @@ void amd_am79c973::activate()
 uint32_t amd_am79c973::reset() {
 
   resetPort.read();
-    resetPort.write(0);
-    return 10;                      // 10 means wait for 10ms
+  resetPort.write(0);
+  return 10;                      // 10 means wait for 10ms
 
 }
 
@@ -156,6 +156,8 @@ uint32_t amd_am79c973::reset() {
  * @param esp The stack pointer (where to return to)
 */
 void amd_am79c973::handle_interrupt() {
+
+
 
 
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
