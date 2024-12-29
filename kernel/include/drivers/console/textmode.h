@@ -32,12 +32,12 @@ namespace MaxOS{
                     uint16_t height() final;
 
                     void put_character(uint16_t x, uint16_t y, char c) final;
-                    void set_foreground_color(uint16_t x, uint16_t y, ConsoleColour) final;
-                    void set_background_color(uint16_t x, uint16_t y, ConsoleColour) final;
+                    void set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour) final;
+                    void set_background_color(uint16_t x, uint16_t y, common::ConsoleColour) final;
 
                     char get_character(uint16_t x, uint16_t y) final;
-                    ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
-                    ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
+                    common::ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
+                    common::ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
             };
 
         }

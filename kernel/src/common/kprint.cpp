@@ -154,13 +154,16 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
  */
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...)
 {
-
-  // Print the header
-  pre_kprintf(file, line,func, type);
-
   // Create a pointer to the data
   va_list parameters;
   va_start(parameters, format);
+
+  // Print the header
+  if(*format != '\h')
+    pre_kprintf(file, line,func, type);
+  else
+    format++;
+
 
   // Loop through the format string
   for (; *format != '\0'; format++)

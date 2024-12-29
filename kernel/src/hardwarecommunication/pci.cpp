@@ -4,6 +4,7 @@
 #include <hardwarecommunication/pci.h>
 #include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/ethernet/intel_i217.h>
+#include <common/kprint.h>
 
 
 using namespace MaxOS;
@@ -77,10 +78,9 @@ string PeripheralComponentInterconnectDeviceDescriptor::get_type() {
 
 ///__CONTROLLER___
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(OutputStream*stream)
+PeripheralComponentInterconnectController::PeripheralComponentInterconnectController()
 : m_data_port(0xCFC),
-  m_command_port(0xCF8),
-  m_debug_messages_stream(stream)
+  m_command_port(0xCF8)
 {
 
 }
@@ -179,22 +179,19 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 }
 
                 // write to the debug stream
-                m_debug_messages_stream->write(deviceDescriptor.get_type());
-                m_debug_messages_stream->write(": ");
+                _kprintf("DEVICE FOUND: %s - ", deviceDescriptor.get_type().c_str());
 
                 // Select the driver and print information about the device
                 Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
-                if(driver != 0){
+                if(driver != nullptr){
                   handler->on_driver_selected(driver);
-                  m_debug_messages_stream->write(driver->get_vendor_name());
-                  m_debug_messages_stream->write(" ");
-                  m_debug_messages_stream->write(driver->get_device_name());
+                  _kprintf("\h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
                 }else{
                   list_known_deivce(deviceDescriptor);
                 }
 
                 // New line
-                m_debug_messages_stream->write("\n");
+                _kprintf("\h\n");
             }
         }
     }
@@ -264,8 +261,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    intel_i217* result = (intel_i217*)MemoryManager::s_active_memory_manager
-                          ->malloc(sizeof(intel_i217));
+                    intel_i217* result = (intel_i217*)MemoryManager::s_active_memory_manager->malloc(sizeof(intel_i217));
                     new (result) intel_i217(&dev, interrupt_manager);
                     return result;
                 }
@@ -305,13 +301,13 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x1022:
         {
             // The vendor is AMD
-            m_debug_messages_stream->write("AMD ");
+            _kprintf("\hAMD ");
 
             // List the device
             switch (dev.device_id)
             {
                 default:
-                  m_debug_messages_stream->write_hex(dev.device_id);
+                  _kprintf("\h0x%x", dev.device_id);
                   break;
             }
             break;
@@ -320,20 +316,20 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x106B:
         {
             // The vendor is Apple
-            m_debug_messages_stream->write("Apple ");
+            _kprintf("\hApple ");
 
             // List the device
             switch (dev.device_id)
             {
                 case 0x003F:
                 {
-                  m_debug_messages_stream->write("KeyLargo/Intrepid USB");
+                  _kprintf("\hKeyLargo/Intrepid USB");
                   break;
                 }
 
                 default:
-                  m_debug_messages_stream->write_hex(dev.device_id);
-                    break;
+                  _kprintf("\h0x%x", dev.device_id);
+                  break;
             }
             break;
         }
@@ -341,7 +337,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 1234:
         {
             // The vendor is QEMU
-            m_debug_messages_stream->write("QEMU ");
+          _kprintf("\hQEMU ");
 
             // List the device
             switch (dev.device_id)
@@ -349,8 +345,8 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
 
                 case 0x1111:
                 {
-                  m_debug_messages_stream->write("Virtual Video Controller");
-                    break;
+                  _kprintf("\hVirtual Video Controller");
+                  break;
                 }
             }
             break;
@@ -359,7 +355,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x8086:
         {
             // The vendor is Intel
-            m_debug_messages_stream->write("Intel ");
+            _kprintf("\hIntel ");
 
             // List the device
             switch (dev.device_id)
@@ -367,43 +363,44 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
 
                 case 0x1237:
                 {
-                  m_debug_messages_stream->write("440FX");
-                    break;
+                  _kprintf("\h440FX");
+                  break;
                 }
 
                 case 0x2415:
                 {
-                  m_debug_messages_stream->write("AC'97");
-                    break;
+                  _kprintf("\hAC'97");
+                  break;
                 }
 
                 case 0x7000:
                 {
-                  m_debug_messages_stream->write("PIIX3");
-                    break;
+                  _kprintf("\hPIIX3");
+                  break;
 
                 }
 
                 case 0x7010:
                 {
-                  m_debug_messages_stream->write("PIIX4");
-                    break;
+                  _kprintf("\hPIIX4");
+                  break;
 
                 }
 
                 case 0x7111:
                 {
-                  m_debug_messages_stream->write("PIIX3");
-                    break;
+                  _kprintf("\hPIIX3 ACPI");
+                  break;
                 }
 
                 case 0x7113:
                 {
-                  m_debug_messages_stream->write("PIIX4 ACPI");
-                    break;
+                  _kprintf("\hPIIX4 ACPI");
+                  break;
                 }
 
                 default:
+                    _kprintf("\h0x%x", dev.device_id);
                     break;
 
             }
@@ -413,28 +410,26 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x80EE: {
 
             // The vendor is VirtualBox
-            m_debug_messages_stream->write("VirtualBox ");
+            _kprintf("\hVirtualBox ");
 
             // List the device
             switch (dev.device_id) {
 
                 case 0xBEEF: {
-                  m_debug_messages_stream->write("Graphics Adapter");
-                    break;
+                  _kprintf("\hGraphics Adapter");
+                  break;
                 }
 
                 case 0xCAFE: {
-                  m_debug_messages_stream->write("Guest Service");
-                    break;
+                  _kprintf("\hGuest Service");
+                  break;
                 }
             }
             break;
         }
 
         default:    // Unknown
-          m_debug_messages_stream->write_hex(dev.vendor_id);
-          m_debug_messages_stream->write(" ");
-          m_debug_messages_stream->write_hex(dev.device_id);
+          _kprintf("\hUnknown (0x%x:0x%x)", dev.vendor_id, dev.device_id);
           break;
 
     }

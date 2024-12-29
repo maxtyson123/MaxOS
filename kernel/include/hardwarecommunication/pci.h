@@ -81,9 +81,6 @@ namespace MaxOS
                   Port32Bit m_data_port;
                   Port32Bit m_command_port;
 
-                  // Debug
-                  common::OutputStream* m_debug_messages_stream;
-
                   // I/O
                   uint32_t read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset);
                   void write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
@@ -94,7 +91,7 @@ namespace MaxOS
                   bool device_has_functions(uint16_t bus, uint16_t device);
 
           public:
-                  PeripheralComponentInterconnectController(common::OutputStream*);
+                  PeripheralComponentInterconnectController();
                   ~PeripheralComponentInterconnectController();
 
                   void select_drivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager* interrupt_manager) override;

@@ -10,6 +10,7 @@
 #include <drivers/driver.h>
 #include <drivers/console/console.h>
 #include <common/logo.h>
+#include <common/colour.h>
 
 namespace MaxOS{
 
@@ -24,10 +25,15 @@ namespace MaxOS{
             class VESABootConsole : public Driver, public Console
             {
 
-                protected:
+                private:
                     uint16_t* m_video_memory;
                     common::GraphicsContext* m_graphics_context;
                     gui::Font m_font;
+
+                    uint8_t ansi_code_length = -1;
+                    char ansi_code[8] = "0000000";
+                    common::ConsoleColour m_foreground_color = (common::ConsoleColour)-1;
+                    common::ConsoleColour m_background_color = (common::ConsoleColour)-1;
 
                 public:
                     VESABootConsole(common::GraphicsContext*);
@@ -37,14 +43,12 @@ namespace MaxOS{
                     uint16_t height() final;
 
                     void put_character(uint16_t x, uint16_t y, char) final;
-                    void set_foreground_color(uint16_t x, uint16_t y, ConsoleColour) final;
-                    void set_background_color(uint16_t x, uint16_t y, ConsoleColour) final;
+                    void set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour) final;
+                    void set_background_color(uint16_t x, uint16_t y, common::ConsoleColour) final;
 
                     char get_character(uint16_t x, uint16_t y) final;
-                    ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
-                    ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
-
-                    common::Colour console_colour_to_vesa(ConsoleColour);
+                    common::ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
+                    common::ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
 
                     void print_logo();
             };

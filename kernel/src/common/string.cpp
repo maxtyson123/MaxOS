@@ -156,11 +156,12 @@ const char* String::c_str() const {
 /**
  * @brief Returns the length of the string
  *
+ * @param count_ansi Whether to count the ansi characters (TODO: Implement - might be bad for performance)
  * @return The length of the string
  */
-int String::length() const {
+int String::length(bool count_ansi) const {
 
-    // Return the length
+    // Return the length of the string
     return m_length;
 
 }
@@ -346,6 +347,79 @@ char& String::operator[](int index) const {
     return m_string[index];
 }
 
+/**
+ * @brief Returns the string repeated a number of times
+ *
+ * @param times The number of times to repeat the string
+ * @return The string repeated a number of times
+ */
+String String::operator*(int times) const {
+
+    // The repeated string
+    String repeated;
+
+    // The length of the repeated string
+    int length = m_length * times;
+    repeated.m_length = length;
+
+    // Allocate memory for the repeated string (and null terminator)
+    repeated.m_string = new char[length + 1];
+
+    // Copy the string
+    for (int i = 0; i < times; i++)
+      for (int j = 0; j < m_length; j++)
+        repeated.m_string[i * m_length + j] = m_string[j];
+
+    // Write the null terminator
+    repeated.m_string[length] = '\0';
+
+    // Return the repeated string
+    return repeated;
+
+}
+
+/**
+ * @brief Centers the string in a specified width
+ * @param width The width of the string
+ * @param fill The character to fill the string with
+ * @return  The centered string
+ */
+String String::center(int width, char fill) const {
+
+    // The centered string
+    String centered;
+
+    // The length of the string
+    int length = m_length;
+
+    // The number of characters to add
+    int add = (width - length) / 2;
+
+    // The length of the centered string
+    centered.m_length = width;
+
+    // Allocate memory for the centered string (and null terminator)
+    centered.m_string = new char[width + 1];
+
+    // Fill the string with the fill character
+    for (int i = 0; i < add; i++)
+        centered.m_string[i] = fill;
+
+    // Copy the string
+    for (int i = 0; i < length; i++)
+        centered.m_string[add + i] = m_string[i];
+
+    // Fill the string with the fill character
+    for (int i = add + length; i < width; i++)
+        centered.m_string[i] = fill;
+
+    // Write the null terminator
+    centered.m_string[width] = '\0';
+
+    // Return the centered string
+    return centered;
+
+}
 
 /**
  * @brief Checks if one string is equal to another

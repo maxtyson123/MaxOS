@@ -133,6 +133,8 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 3. Generate makefiles
    ```sh
    cd cmake-build
+   
+   # Add -DDEBUG=ON to enable debug mode
    cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
    ```
 
