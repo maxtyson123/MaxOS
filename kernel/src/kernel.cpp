@@ -66,6 +66,9 @@ using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
+
+//TODO: Rework cmake to have debug and prod targets
+
 //Define what a constructor is
 typedef void (*constructor)();
 
@@ -77,8 +80,6 @@ extern "C" void callConstructors()
     for(constructor* i = &start_ctors; i != &end_ctors; i++)        //Iterate over all constructors
         (*i)();                                                     //Call the constructor
 }
-
-
 
 extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
@@ -121,13 +122,13 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     console.print_logo();
 
     // Create a stream for the console
-    ConsoleArea mainConsoleArea(&console, 0, 2, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea mainConsoleArea(&console, 0, 0, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
     // Header constants
     const string tick = (string)"[ " + ANSI_COLOURS[FG_Green] + "OK" + ANSI_COLOURS[Reset] + " ]";
     const string boot_title = string("Kernel Boot Sequence - MaxOS v") + string(VERSION_STRING) + " [build " + string(BUILD_NUMBER) + "]";
-    const int boot_width = boot_title.length() + 18;
+    const int boot_width = boot_title.length() + 20;
     const int sub_boot_width = boot_width;
 
     // Print helpers

@@ -20,7 +20,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 {
 
     // Malloc the video memory
-    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(graphics_context->get_width() * graphics_context->get_height() * sizeof(uint16_t));
+    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(width() * height() * sizeof(uint16_t));
 }
 
 VESABootConsole::~VESABootConsole()
@@ -78,8 +78,8 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
         ansi_code_length = -1;
 
         if(strcmp("\033[0m", ansi_code)) {
-          m_foreground_color = (common::ConsoleColour)-1;
-          m_background_color = (common::ConsoleColour)-1;
+          m_foreground_color = ConsoleColour::Unititialised;
+          m_background_color = ConsoleColour::Unititialised;
           return;
         }
 
@@ -117,8 +117,8 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     s[0] = c;
 
 
-    Colour foreground = m_foreground_color == (common::ConsoleColour)-1 ? get_foreground_color(x, y) : Colour(m_foreground_color);
-    Colour background = m_background_color == (common::ConsoleColour)-1 ? get_background_color(x, y) : Colour(m_background_color);
+    Colour foreground = m_foreground_color == ConsoleColour::Unititialised ? get_foreground_color(x, y) : Colour(m_foreground_color);
+    Colour background = m_background_color == ConsoleColour::Unititialised ? get_background_color(x, y) : Colour(m_background_color);
 
     // Use the m_font to draw the character
     m_font.draw_text(x * 8, y * 9, foreground, background, m_graphics_context, s);

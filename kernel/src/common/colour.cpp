@@ -127,7 +127,8 @@ void Colour::parse_ansi_string(string ansi_string) {
 void Colour::parse_console_colour(ConsoleColour colour) {
   switch (colour) {
 
-    case Black:
+  case Unititialised:
+  case Black:
       red = 0;
       green = 0;
       blue = 0;

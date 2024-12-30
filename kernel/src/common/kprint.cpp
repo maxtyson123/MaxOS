@@ -6,6 +6,7 @@
 
 
 using namespace MaxOS::drivers;
+using namespace MaxOS::system;
 
 /**
  * @brief Converts integer to string
@@ -86,7 +87,8 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
       colour = "\033[1;33m";
       break;
 
-    // Assert (red)
+    // Assert, Panic (red)
+    case 2:
     case 3:
       colour = "\033[1;31m";
       break;
@@ -118,7 +120,7 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
     const char* line_str = itoa(10, line);
     for (int i = 0; i < strlen(line_str); i++)
       putchar(line_str[i]);
-  }else{
+  }else if(type == 3){
 
     // Print the text
     const char* text = "FATAL ERROR IN {";
@@ -209,4 +211,10 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
       }
     }
   }
+
+
+  // If it is type 3 panic
+  if(type == 3)
+     CPU::PANIC("Check the serial output for more information");
+
 }

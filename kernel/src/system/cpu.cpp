@@ -4,11 +4,18 @@
 #include <system/cpu.h>
 #include <common/kprint.h>
 
-void MaxOS::system::CPU::halt() {
+using namespace MaxOS;
+using namespace MaxOS::system;
+using namespace MaxOS::drivers;
+
+CPU* CPU::s_instance = nullptr;
+
+
+void CPU::halt() {
   asm volatile("hlt");
 }
 
-void MaxOS::system::CPU::get_status(MaxOS::system::cpu_status_t *status) {
+void CPU::get_status(cpu_status_t *status) {
 
     // Get the registers
     asm volatile("mov %%r15, %0" : "=r" (status->r15));
@@ -28,7 +35,7 @@ void MaxOS::system::CPU::get_status(MaxOS::system::cpu_status_t *status) {
     asm volatile("mov %%rax, %0" : "=r" (status->rax));
 
 }
-void MaxOS::system::CPU::set_status(MaxOS::system::cpu_status_t *status) {
+void CPU::set_status(cpu_status_t *status) {
 
   // Set the registers
   asm volatile("mov %0, %%r15" : : "r" (status->r15));
@@ -49,7 +56,36 @@ void MaxOS::system::CPU::set_status(MaxOS::system::cpu_status_t *status) {
 
 }
 
-uint64_t MaxOS::system::CPU::read_msr(uint32_t msr) {
+void CPU::print_registers(cpu_status_t *status) {
+
+    // Print the registers
+    _kprintf("R15: 0x%x\n", status->r15);
+    _kprintf("R14: 0x%x\n", status->r14);
+    _kprintf("R13: 0x%x\n", status->r13);
+    _kprintf("R12: 0x%x\n", status->r12);
+    _kprintf("R11: 0x%x\n", status->r11);
+    _kprintf("R10: 0x%x\n", status->r10);
+    _kprintf("R9: 0x%x\n", status->r9);
+    _kprintf("R8: 0x%x\n", status->r8);
+    _kprintf("RDI: 0x%x\n", status->rdi);
+    _kprintf("RSI: 0x%x\n", status->rsi);
+    _kprintf("RBP: 0x%x\n", status->rbp);
+    _kprintf("RDX: 0x%x\n", status->rdx);
+    _kprintf("RCX: 0x%x\n", status->rcx);
+    _kprintf("RBX: 0x%x\n", status->rbx);
+    _kprintf("RAX: 0x%x\n", status->rax);
+    _kprintf("INTERRUPT NUMBER: 0x%x\n", status->interrupt_number);
+    _kprintf("ERROR CODE: 0x%x\n", status->error_code);
+    _kprintf("RIP: 0x%x\n", status->rip);
+    _kprintf("CS: 0x%x\n", status->cs);
+    _kprintf("RFLAGS: 0x%x\n", status->rflags);
+    _kprintf("RSP: 0x%x\n", status->rsp);
+    _kprintf("SS: 0x%x\n", status->ss);
+
+}
+
+
+uint64_t CPU::read_msr(uint32_t msr) {
 
   // Low and high parts of the MSR
   uint32_t low, high;
@@ -62,22 +98,22 @@ uint64_t MaxOS::system::CPU::read_msr(uint32_t msr) {
 
 }
 
-void MaxOS::system::CPU::write_msr(uint32_t msr, uint64_t value) {
+void CPU::write_msr(uint32_t msr, uint64_t value) {
 
   // Write the MSR
   asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
 
 }
-void MaxOS::system::CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx) {
+void CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx) {
 
   // Call the cpuid instruction
   __get_cpuid(leaf, eax, ebx, ecx, edx);
 }
 
-void MaxOS::system::CPU::stack_trace(size_t level) {
+void CPU::stack_trace(size_t level) {
 
     // Get the first stack frame
-    StackFrame* frame = __builtin_frame_address(0);
+    stack_frame_t* frame = (stack_frame_t*)__builtin_frame_address(0);
     size_t current_level = 0;
 
     // Loop through the frames logging
@@ -92,3 +128,29 @@ void MaxOS::system::CPU::stack_trace(size_t level) {
 
     }
 }
+
+
+void CPU::PANIC(char const *message) {
+
+  // Print using the backend
+  _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+  _kpanicf("Kernel Panic: %s\n", message);
+
+  // Stack trace
+  _kpanicf("----------------------------\n");
+  _kpanicf("Stack Trace:\n");
+  stack_trace(10);
+
+  // Register dump
+  _kpanicf("----------------------------\n");
+  _kpanicf("Register Dump:\n");
+  cpu_status_t status;
+  get_status(&status);
+  print_registers(&status);
+
+  // Halt
+  _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+  halt();
+
+}
+

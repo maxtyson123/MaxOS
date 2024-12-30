@@ -26,6 +26,12 @@ namespace MaxOS {
 
     } virtual_memory_chunk_t;
 
+    typedef struct FreeChunk{
+      uintptr_t start_address;
+      struct FreeChunk* next;
+      size_t size;
+    } free_chunk_t;
+
     typedef struct VirtualMemoryRegion{
       virtual_memory_chunk_t chunks[(PhysicalMemoryManager::s_page_size / sizeof(virtual_memory_chunk_t) - 1)];
       struct VirtualMemoryRegion* next;
@@ -47,6 +53,10 @@ namespace MaxOS {
 
         static const size_t s_chunks_per_page = (PhysicalMemoryManager::s_page_size / sizeof(virtual_memory_chunk_t) - 1);
         static const size_t s_reserved_space = 0x138000000;
+
+        free_chunk_t* m_free_chunks;
+        void add_free_chunk(uintptr_t start_address, size_t size);
+        free_chunk_t* find_and_remove_free_chunk(size_t size);
 
         void new_region();
 

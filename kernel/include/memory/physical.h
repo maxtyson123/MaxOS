@@ -101,6 +101,7 @@ namespace MaxOS {
           // Vars
           static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes
           uint64_t get_memory_size();
+          uint64_t get_memory_used();
 
           // Pml4
           uint64_t* get_pml4_root_address();

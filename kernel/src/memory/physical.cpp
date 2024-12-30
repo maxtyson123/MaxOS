@@ -177,23 +177,33 @@ void* PhysicalMemoryManager::allocate_frame() {
   }
 
   // Check if there are enough frames
-  ASSERT(m_used_frames < m_bitmap_size, "No more frames available")
+  ASSERT(m_used_frames < m_bitmap_size, "No more frames available\n")
 
   // Loop through the bitmap
   for (uint16_t row = 0; row < m_total_entries; ++row) {
+
+    // If the row is full continue
+    if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+      continue;
+
     for (uint16_t column = 0; column < ROW_BITS; ++column) {
 
-        // Check if this frame is free
-        if((m_bit_map[row] & (1 << column)))
-          continue;
+      // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
+      if (column >= ROW_BITS)
+        break;
 
-        // Mark the frame as used
-        m_bit_map[row] |= (1 << column);
-        m_used_frames++;
+      // Check if the bitmap is free
+      if (m_bit_map[row] & (1ULL << column))
+        continue;
 
-        // Return the address
-        uint64_t frame_address = (row * ROW_BITS) + column;
-        return (void*)(frame_address * s_page_size);
+
+      // Mark the frame as used
+      m_bit_map[row] |= (1ULL << column);
+      m_used_frames++;
+
+      // Return the address
+      uint64_t frame_address = (row * ROW_BITS) + column;
+      return (void*)(frame_address * s_page_size);
     }
   }
 
@@ -234,10 +244,19 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
   // Loop through the bitmap
   for (uint16_t row = 0; row < m_total_entries; ++row) {
+
+    // If the row is full continue
+    if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+      continue;
+
     for (uint16_t column = 0; column < ROW_BITS; ++column) {
 
-      // If this bit is not free reset the adjacent frames
-      if((m_bit_map[row] & (1 << column))){
+      // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
+      if (column >= ROW_BITS)
+        break;
+
+      // If this bit is not free, reset the adjacent frames
+      if (m_bit_map[row] & (1ULL << column)) {
         adjacent_frames = 0;
         continue;
       }
@@ -256,8 +275,20 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
         // Mark the frames as used
         m_used_frames += frame_count;
-        for (uint16_t i = 0; i < frame_count; ++i)
-          m_bit_map[start_row + (start_column + i) / ROW_BITS] |= (1 << ((start_column + i) % ROW_BITS));
+        for (uint16_t i = 0; i < frame_count; ++i) {
+
+          // Get the location of the bit
+          uint16_t index = start_row + (start_column + i) / ROW_BITS;
+          uint16_t bit = (start_column + i) % ROW_BITS;
+
+          // Skip if index exceeds bounds
+          if (index >= m_total_entries || bit >= ROW_BITS) {
+            ASSERT(false, "Index out of bounds\n")
+          }
+
+          m_bit_map[index] |= (1ULL << bit); // Mark the bit as used
+        }
+
 
         // Return the address
         return (void*)(start_address + (start_row * ROW_BITS + start_column) * s_page_size);
@@ -378,6 +409,8 @@ uint64_t *PhysicalMemoryManager::get_table_if_exists(uint64_t *table, size_t ind
   if(table[index] & 0b1)
       return (uint64_t *) MemoryManager::to_dm_region((uintptr_t) table[index] & mask);
 
+  // Not found
+  return nullptr;
 }
 
 #define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))
@@ -627,8 +660,9 @@ void PhysicalMemoryManager::unmap_area(virtual_address_t *virtual_address_start,
  * @return True if the physical address is mapped to the virtual address
  */
 bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address) {
-  ASSERT(false, "Not implemented!")
+  ASSERT(false, "Not implemented! Check if physical address is mapped to virtual address 0x%x -> 0x%x\n", physical_address, virtual_address)
   // TODO: Implement
+  return false;
 }
 
 /**
@@ -708,8 +742,22 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
  * @return True if the address is reserved
  */
 bool PhysicalMemoryManager::is_multiboot_reserved(uint64_t address) {
-  //ASSERT(false, "Not implemented!")
-  // TODO: Check if address is reserve by multiboot module
+
+  // Loop through the multiboot tags
+  for (struct multiboot_tag* tag = (multiboot_tag*)multiboot_tag_start; tag -> type != MULTIBOOT_TAG_TYPE_END; tag = (multiboot_tag*)((multiboot_uint8_t*)tag + ((tag -> size + 7) & ~7))) {
+
+    // Check if the tag is a module
+    if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
+      continue;
+
+    // Get the module tag
+    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+
+    // Check if the address is within the module
+    if(address >= module -> mod_start && address < module -> mod_end)
+      return true;
+
+  }
 
   return false;
 }
@@ -742,14 +790,15 @@ uint64_t *PhysicalMemoryManager::get_bitmap_address() {
 
 
         // Make sure there is enough space
-        ASSERT(space >= (m_bitmap_size / 8 + 1), "Not enough space for the bitmap");
+        ASSERT(space >= (m_bitmap_size / 8 + 1), "Not enough space for the bitmap\n");
 
         // Return the address
         return (uint64_t*)MemoryManager::to_dm_region(entry -> addr + offset);
     }
 
   // Error no space for the bitmap
-  ASSERT(false, "No space for the bitmap");
+  ASSERT(false, "No space for the bitmap\n");
+  return nullptr;
 }
 
 /**
@@ -762,10 +811,18 @@ uint64_t *PhysicalMemoryManager::get_pml4_root_address() {
 
 /**
  * @brief Gets total the memory size available for use (allocated or not)
- * @return The memory size
+ * @return The memory size in bytes
  */
 uint64_t PhysicalMemoryManager::get_memory_size() {
   return m_memory_size;
+}
+
+/**
+ * @brief Gets the memory currently used
+ * @return The memory size in bytes
+ */
+uint64_t PhysicalMemoryManager::get_memory_used() {
+    return m_used_frames * s_page_size;
 }
 
 /**
