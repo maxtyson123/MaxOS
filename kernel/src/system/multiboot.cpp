@@ -10,13 +10,15 @@ using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
-Multiboot::Multiboot(unsigned long addr) {
+Multiboot::Multiboot(unsigned long address)
+: m_base_address(address)
+{
 
-  _kprintf("Multiboot\n");
+    _kprintf("Multiboot\n");
 
     // Loop through the tags and load them
     struct multiboot_tag *tag;
-    for(tag=(struct multiboot_tag *)(addr + MemoryManager::s_higher_half_kernel_offset + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+    for(tag=(struct multiboot_tag *)(m_base_address + MemoryManager::s_higher_half_kernel_offset + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
       switch (tag -> type) {
           case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
@@ -97,4 +99,33 @@ multiboot_tag_old_acpi *Multiboot::get_old_acpi() {
 multiboot_tag_new_acpi *Multiboot::get_new_acpi() {
 
   return m_new_acpi;
+}
+
+/**
+ * @brief Check if an address is reserved
+ * @param address The address to check
+ * @return True if the address is reserved
+ */
+bool Multiboot::is_reserved(multiboot_uint64_t address) {
+
+  // Loop through the tags checking if the address is reserved
+  struct multiboot_tag *tag;
+  for(tag=(struct multiboot_tag *)(m_base_address + MemoryManager::s_higher_half_kernel_offset + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+
+      // Check if the tag is a module
+      if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
+        continue;
+
+      // Get the module tag
+      struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+
+      // Check if the address is within the module
+      if(address >= module -> mod_start && address < module -> mod_end)
+        return true;
+  }
+
+
+  // Not part of multiboot
+  return false;
+
 }

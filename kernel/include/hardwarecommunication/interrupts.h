@@ -68,7 +68,7 @@ namespace MaxOS {
             private:
               LocalAPIC* m_local_apic;
 
-              void page_fault(system::cpu_status_t* status);
+              static void page_fault(system::cpu_status_t* status);
 
             protected:
 

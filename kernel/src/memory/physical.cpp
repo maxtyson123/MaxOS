@@ -16,7 +16,11 @@ extern uint64_t _kernel_physical_end;
 extern uint64_t multiboot_tag_end;
 extern uint64_t multiboot_tag_start;
 
-MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot, uint64_t pml4_root[512]) {
+MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot, uint64_t pml4_root[512])
+: m_multiboot(multiboot),
+  m_pml4_root_address(pml4_root),
+  m_pml4_root((pte_t *)pml4_root)
+{
 
   // Set the current manager
   s_current_manager = this;
@@ -26,13 +30,13 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   m_pml4_root_address = pml4_root;
 
   // Store the information about the bitmap
-  m_memory_size = (multiboot->get_basic_meminfo()->mem_upper + 1024) * 1000;
+  m_memory_size = (m_multiboot->get_basic_meminfo()->mem_upper + 1024) * 1024;
   m_bitmap_size = m_memory_size / s_page_size + 1;
   m_total_entries = m_bitmap_size / ROW_BITS + 1;
   _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", ((m_memory_size / 1000) * 1024) / 1024 / 1024, m_bitmap_size, m_total_entries, s_page_size);
 
   // Get the mmap that stores the memory to use
-  m_mmap_tag = multiboot->get_mmap();
+  m_mmap_tag = m_multiboot->get_mmap();
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
 
     // Skip if the region is not free or there is not enough space
@@ -94,15 +98,14 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
 
     // Check if the entry is to be mapped
-    if (entry->type <= 1)
+    if (entry->type <= MULTIBOOT_MEMORY_AVAILABLE)
       continue;
 
-    // Where our free mem starts
+    // Where the free mem starts
     if(entry->addr >= mem_end)
       continue;
 
     // Reserve the area
-
     allocate_area(entry->addr, entry->len);
     _kprintf("Mmap Reserved: 0x%x - 0x%x\n", entry->addr, entry->addr + entry->len);
   }
@@ -203,7 +206,13 @@ void* PhysicalMemoryManager::allocate_frame() {
 
       // Return the address
       uint64_t frame_address = (row * ROW_BITS) + column;
-      return (void*)(frame_address * s_page_size);
+      frame_address *= s_page_size;
+
+      // Make sure we are using the mem mapped region
+      if(frame_address < m_mmap->addr)
+        continue;
+
+      return (void*)(frame_address);
     }
   }
 
@@ -227,7 +236,7 @@ void PhysicalMemoryManager::free_frame(void *address) {
 }
 
 /**
- * @brief Allocate an area of physical memory
+ * @brief Allocate an area of physical memory (ie reserve it)
  * @param start_address The start of the block
  * @param size The size to allocate
  * @return A pointer to the start of the block (physical address)
@@ -723,9 +732,9 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
     if(entry -> type != MULTIBOOT_MEMORY_AVAILABLE)
       continue;
 
-    // Check if the address is reserved by the multiboot module
-    if(is_multiboot_reserved(address))
-        continue;
+    // Check if the address is overwriting with some reserved memory
+    if(m_multiboot -> is_reserved(address))
+       return false;
 
     // Memory is available
     return true;
@@ -736,31 +745,6 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
   return false;
 }
 
-/**
- * @brief Checks if an address is reserved by a multiboot module
- * @param address The address to check
- * @return True if the address is reserved
- */
-bool PhysicalMemoryManager::is_multiboot_reserved(uint64_t address) {
-
-  // Loop through the multiboot tags
-  for (struct multiboot_tag* tag = (multiboot_tag*)multiboot_tag_start; tag -> type != MULTIBOOT_TAG_TYPE_END; tag = (multiboot_tag*)((multiboot_uint8_t*)tag + ((tag -> size + 7) & ~7))) {
-
-    // Check if the tag is a module
-    if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
-      continue;
-
-    // Get the module tag
-    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
-
-    // Check if the address is within the module
-    if(address >= module -> mod_start && address < module -> mod_end)
-      return true;
-
-  }
-
-  return false;
-}
 
 /**
  * @brief Gets the address of the bitmap
@@ -849,7 +833,5 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
 
   // Set the bit to 1 in the bitmap
   m_bit_map[address / ROW_BITS] |= (1 << (address % ROW_BITS));
-
-
 
 }

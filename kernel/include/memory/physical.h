@@ -74,6 +74,7 @@ namespace MaxOS {
           uint64_t m_anonymous_memory_physical_address;
           uint64_t m_anonymous_memory_virtual_address;
 
+          system::Multiboot* m_multiboot;
           multiboot_mmap_entry* m_mmap;
           multiboot_tag_mmap*   m_mmap_tag;
 
@@ -133,7 +134,6 @@ namespace MaxOS {
           static bool check_aligned(size_t size);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address);
           bool is_anonymous_available(size_t size);
-          bool is_multiboot_reserved(uint64_t address);
 
           static PhysicalMemoryManager* s_current_manager;
           void clean_page_table(uint64_t* table);

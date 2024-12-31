@@ -426,8 +426,10 @@ namespace MaxOS {
           multiboot_tag_old_acpi* m_old_acpi;
           multiboot_tag_new_acpi* m_new_acpi;
 
+          unsigned long m_base_address;
+
         public:
-          Multiboot(unsigned long addr);
+          Multiboot(unsigned long address);
           ~Multiboot();
 
           multiboot_tag_framebuffer* get_framebuffer();
@@ -436,6 +438,8 @@ namespace MaxOS {
           multiboot_tag_mmap* get_mmap();
           multiboot_tag_old_acpi* get_old_acpi();
           multiboot_tag_new_acpi* get_new_acpi();
+
+          bool is_reserved(multiboot_uint64_t address);
 
     };
   }

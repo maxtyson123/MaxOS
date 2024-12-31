@@ -181,10 +181,17 @@ void InterruptManager::deactivate()
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
 
+  // System Handlers
+  switch (status->interrupt_number) {
+    case 0x0E:
+      page_fault(status);
+      break;
+
+  }
+
   // If there is an interrupt manager handle interrupt
   if(s_active_interrupt_manager != 0)
     return s_active_interrupt_manager->handle_interrupt_request(status);
-
 
   // CPU Can continue
   return status;
@@ -219,14 +226,6 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
 }
 
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
-
-  // System Handlers
-  switch (status->interrupt_number) {
-    case 0x0E:
-      page_fault(status);
-      break;
-
-  }
 
   // If there is an interrupt manager, handle the interrupt
   if(m_interrupt_handlers[status -> interrupt_number] != 0)
