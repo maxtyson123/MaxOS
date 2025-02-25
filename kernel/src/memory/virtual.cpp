@@ -128,7 +128,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
         // Allocate a new frame
         physical_address_t* frame = m_physical_memory_manager->allocate_frame();
-        ASSERT(frame != nullptr, "Failed to allocate frame\n");
+        ASSERT(frame != nullptr, "Failed to allocate frame (from free chunk list)\n");
 
         // Map the frame
         m_physical_memory_manager->map(frame, (virtual_address_t*)reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
@@ -172,7 +172,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
     // Allocate a new frame
     physical_address_t* frame = m_physical_memory_manager->allocate_frame();
-    ASSERT(frame != nullptr, "Failed to allocate frame\n");
+    ASSERT(frame != nullptr, "Failed to allocate frame (from current region)\n");
 
     // Map the frame
     m_physical_memory_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);

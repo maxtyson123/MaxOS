@@ -70,6 +70,7 @@ namespace MaxOS {
           uint32_t m_bitmap_size;
           uint32_t m_used_frames;
           uint64_t m_memory_size;
+          uint64_t m_kernel_end;
 
           uint64_t m_anonymous_memory_physical_address;
           uint64_t m_anonymous_memory_virtual_address;
@@ -137,7 +138,10 @@ namespace MaxOS {
 
           static PhysicalMemoryManager* s_current_manager;
           void clean_page_table(uint64_t* table);
+
           void reserve(uint64_t address);
+          void reserve(uint64_t address, size_t size);
+
       };
   }
 

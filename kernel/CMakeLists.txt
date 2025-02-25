@@ -1,6 +1,6 @@
 # Set the standard and flags
 SET(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -Wno-address-of-packed-member -Wno-trigraphs -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -Wno-unknown-escape-sequence -fsanitize=undefined")
+SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -Wno-address-of-packed-member -Wno-trigraphs -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -Wno-unknown-escape-sequence")
 
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "-f elf64")

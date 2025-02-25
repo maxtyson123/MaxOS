@@ -287,6 +287,9 @@ void IOAPIC::set_redirect(interrupt_redirect_t *redirect) {
         entry.pin_polarity = (m_override_array[i].flags & 0b11 == 2) ? 0b1 : 0b0;
         entry.pin_polarity = ((m_override_array[i].flags >> 2) & 0b11 == 2) ? 0b1 : 0b0;
 
+        // Set the trigger mode
+        entry.trigger_mode = (((m_override_array[i].flags >> 2) & 0b11) == 2);
+
         break;
 
     }

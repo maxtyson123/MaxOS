@@ -126,6 +126,10 @@ int String::lex_value(String const &string) const {
  * @return String& The string
  */
 String &String::operator = (String const &other) {
+
+    // Free the old memory
+    delete[] m_string;
+
     // Copy the other string
     copy(other);
 
@@ -317,6 +321,9 @@ String &String::operator += (String const &other) {
 
     // Write the null terminator
     concatenated.m_string[length] = '\0';
+
+    // Free the old memory
+    delete[] m_string;
 
     // Copy the concatenated string
     copy(concatenated);

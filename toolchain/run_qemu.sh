@@ -142,7 +142,6 @@ QEMU_ARGS="$QEMU_ARGS -serial stdio"                                    # Use st
 QEMU_ARGS="$QEMU_ARGS -monitor telnet::45454,server,nowait"             # Use telnet for monitor
 #QEMU_ARGS="$QEMU_ARGS -d int"                                           # Debug interrupts
 QEMU_ARGS="$QEMU_ARGS $DEBUG"                                           # Enable debugging
-#QEMU_ARGS="$QEMU_ARGS -D qemu.log"                                      # Enable debugging
 QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                                     # Enable acceleration
 QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                                    # Enable display
 QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"                   # Add a network device
