@@ -5,12 +5,22 @@ var namespaceMaxOS_1_1system =
     [ "CPUState", "structMaxOS_1_1system_1_1CPUState.html", "structMaxOS_1_1system_1_1CPUState" ],
     [ "GDTR", "structMaxOS_1_1system_1_1GDTR.html", "structMaxOS_1_1system_1_1GDTR" ],
     [ "GlobalDescriptorTable", "classMaxOS_1_1system_1_1GlobalDescriptorTable.html", "classMaxOS_1_1system_1_1GlobalDescriptorTable" ],
+    [ "invalid_value_info", "structMaxOS_1_1system_1_1invalid__value__info.html", "structMaxOS_1_1system_1_1invalid__value__info" ],
+    [ "location_only_info", "structMaxOS_1_1system_1_1location__only__info.html", "structMaxOS_1_1system_1_1location__only__info" ],
     [ "Multiboot", "classMaxOS_1_1system_1_1Multiboot.html", "classMaxOS_1_1system_1_1Multiboot" ],
+    [ "out_of_bounds_info", "structMaxOS_1_1system_1_1out__of__bounds__info.html", "structMaxOS_1_1system_1_1out__of__bounds__info" ],
+    [ "overflow_info", "structMaxOS_1_1system_1_1overflow__info.html", "structMaxOS_1_1system_1_1overflow__info" ],
     [ "Process", "classMaxOS_1_1system_1_1Process.html", null ],
+    [ "shift_out_of_bounds_info", "structMaxOS_1_1system_1_1shift__out__of__bounds__info.html", "structMaxOS_1_1system_1_1shift__out__of__bounds__info" ],
+    [ "source_location", "structMaxOS_1_1system_1_1source__location.html", "structMaxOS_1_1system_1_1source__location" ],
     [ "StackFrame", "structMaxOS_1_1system_1_1StackFrame.html", "structMaxOS_1_1system_1_1StackFrame" ],
     [ "SyscallHandler", "classMaxOS_1_1system_1_1SyscallHandler.html", "classMaxOS_1_1system_1_1SyscallHandler" ],
     [ "Task", "classMaxOS_1_1system_1_1Task.html", "classMaxOS_1_1system_1_1Task" ],
     [ "TaskManager", "classMaxOS_1_1system_1_1TaskManager.html", "classMaxOS_1_1system_1_1TaskManager" ],
     [ "Thread", "classMaxOS_1_1system_1_1Thread.html", "classMaxOS_1_1system_1_1Thread" ],
-    [ "ThreadManager", "classMaxOS_1_1system_1_1ThreadManager.html", "classMaxOS_1_1system_1_1ThreadManager" ]
+    [ "ThreadManager", "classMaxOS_1_1system_1_1ThreadManager.html", "classMaxOS_1_1system_1_1ThreadManager" ],
+    [ "type_descriptor", "structMaxOS_1_1system_1_1type__descriptor.html", "structMaxOS_1_1system_1_1type__descriptor" ],
+    [ "type_mismatch_info", "structMaxOS_1_1system_1_1type__mismatch__info.html", "structMaxOS_1_1system_1_1type__mismatch__info" ],
+    [ "type_mismatch_info_v1", "structMaxOS_1_1system_1_1type__mismatch__info__v1.html", "structMaxOS_1_1system_1_1type__mismatch__info__v1" ],
+    [ "UBSanHandler", "classMaxOS_1_1system_1_1UBSanHandler.html", "classMaxOS_1_1system_1_1UBSanHandler" ]
 ];

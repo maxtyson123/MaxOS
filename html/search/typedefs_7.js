@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['virtual_5faddress_5ft_3062',['virtual_address_t',['../namespaceMaxOS_1_1memory.html#a1a4a2cf740017bbb681bbe110a18fdcb',1,'MaxOS::memory']]],
-  ['virtual_5fflags_5ft_3063',['virtual_flags_t',['../namespaceMaxOS_1_1memory.html#acbe86056d3908b8ea8e8ab683e5b9bed',1,'MaxOS::memory']]],
-  ['virtual_5fmemory_5fchunk_5ft_3064',['virtual_memory_chunk_t',['../namespaceMaxOS_1_1memory.html#a06a90417819b0b7aae0e98de1620529a',1,'MaxOS::memory']]]
+  ['shift_5fout_5fof_5fbounds_5finfo_5ft_3264',['shift_out_of_bounds_info_t',['../namespaceMaxOS_1_1system.html#aa983a4b47db31230d031912c00051212',1,'MaxOS::system']]],
+  ['source_5flocation_5ft_3265',['source_location_t',['../namespaceMaxOS_1_1system.html#a2d2de829680262d7b47800008fda0437',1,'MaxOS::system']]],
+  ['string_3266',['string',['../namespaceMaxOS.html#afa22b691550d34d82dd6a5e3f77b31cb',1,'MaxOS']]],
+  ['subnetmask_3267',['SubnetMask',['../namespaceMaxOS_1_1net.html#a675fed9f30ec224711b40893d3f784d6',1,'MaxOS::net']]]
 ];

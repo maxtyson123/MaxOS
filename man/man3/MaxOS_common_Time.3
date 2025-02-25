@@ -1,4 +1,4 @@
-.TH "MaxOS::common::Time" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::Time" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,13 @@ MaxOS::common::Time \- Stores the year, month, day, hour, minute and second of a
 .PP
 .PP
 \fC#include <time\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBis_leap_year\fP () const"
+.br
+.in -1c
 .SS "Public Attributes"
 
 .in +1c
@@ -36,44 +43,54 @@ MaxOS::common::Time \- Stores the year, month, day, hour, minute and second of a
 Stores the year, month, day, hour, minute and second of a time\&. 
 .PP
 Definition at line 18 of file time\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool MaxOS::common::Time::is_leap_year () const\fC [inline]\fP"
+
+.PP
+Definition at line 28 of file time\&.h\&.
+.PP
+.nf
+28                                       {
+29                 return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+30             }
+.fi
+.PP
+References year\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t MaxOS::common::Time::day"
 
 .PP
 Definition at line 22 of file time\&.h\&.
-.PP
-Referenced by MaxOS::drivers::clock::Clock::handle_interrupt()\&.
 .SS "uint8_t MaxOS::common::Time::hour"
 
 .PP
 Definition at line 24 of file time\&.h\&.
 .PP
-Referenced by MaxOS::drivers::clock::Clock::handle_interrupt()\&.
+Referenced by kernelMain()\&.
 .SS "uint8_t MaxOS::common::Time::minute"
 
 .PP
 Definition at line 25 of file time\&.h\&.
 .PP
-Referenced by MaxOS::drivers::clock::Clock::handle_interrupt()\&.
+Referenced by kernelMain()\&.
 .SS "uint8_t MaxOS::common::Time::month"
 
 .PP
 Definition at line 21 of file time\&.h\&.
-.PP
-Referenced by MaxOS::drivers::clock::Clock::handle_interrupt()\&.
 .SS "uint8_t MaxOS::common::Time::second"
 
 .PP
 Definition at line 26 of file time\&.h\&.
 .PP
-Referenced by MaxOS::drivers::clock::Clock::handle_interrupt()\&.
+Referenced by kernelMain()\&.
 .SS "uint16_t MaxOS::common::Time::year"
 
 .PP
 Definition at line 20 of file time\&.h\&.
 .PP
-Referenced by MaxOS::drivers::clock::Clock::handle_interrupt()\&.
+Referenced by MaxOS::drivers::clock::Clock::get_time(), and is_leap_year()\&.
 
 .SH "Author"
 .PP 

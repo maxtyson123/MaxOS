@@ -35,6 +35,8 @@ static void $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a41a82
 \begin{DoxyCompactList}\small\item\em Converts a physical address to an IO region address if it is in the lower region using the higher half memory offset. \end{DoxyCompactList}\item 
 static void $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ab093d27663b4911c7995f36945ccd1e9}{to\+\_\+dm\+\_\+region}} (uintptr\+\_\+t \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\+\_\+address}})
 \begin{DoxyCompactList}\small\item\em Converts a physical address to a direct map region address if it is in the lower region using the higher half direct map offset. \end{DoxyCompactList}\item 
+static void $\ast$ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ab0647fd9b0c504382c6b52117c883fe0}{from\+\_\+dm\+\_\+region}} (uintptr\+\_\+t \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\+\_\+address}})
+\begin{DoxyCompactList}\small\item\em Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset. \end{DoxyCompactList}\item 
 static bool \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a7d412394ef0b7e29bbe278406751761b}{in\+\_\+higher\+\_\+region}} (uintptr\+\_\+t virtual\+\_\+address)
 \begin{DoxyCompactList}\small\item\em Checks if a virtual address is in the higher region. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Static Public Attributes}
@@ -232,6 +234,49 @@ Definition at line 102 of file memorymanagement.\+cpp.
 
 References next, Max\+O\+S\+::memory\+::\+Memory\+Chunk\+::prev, size, and Max\+O\+S\+::memory\+::\+Memory\+Chunk\+::size.
 
+\mbox{\Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_ab0647fd9b0c504382c6b52117c883fe0}\label{classMaxOS_1_1memory_1_1MemoryManager_ab0647fd9b0c504382c6b52117c883fe0}} 
+\index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!from\_dm\_region@{from\_dm\_region}}
+\index{from\_dm\_region@{from\_dm\_region}!MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}}
+\doxysubsubsection{\texorpdfstring{from\_dm\_region()}{from\_dm\_region()}}
+{\footnotesize\ttfamily void $\ast$ Memory\+Manager\+::from\+\_\+dm\+\_\+region (\begin{DoxyParamCaption}\item[{uintptr\+\_\+t}]{physical\+\_\+address }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em physical\+\_\+address} & The physical address in the direct map region \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The physical address 
+\end{DoxyReturn}
+
+
+Definition at line 269 of file memorymanagement.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{269                                                               \{}
+\DoxyCodeLine{270 }
+\DoxyCodeLine{271   \textcolor{keywordflow}{if}(\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}} > \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a25fe2fa3e01b0a9593cede08126095bf}{s\_hh\_direct\_map\_offset}})}
+\DoxyCodeLine{272     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)(\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}} -\/ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a25fe2fa3e01b0a9593cede08126095bf}{s\_hh\_direct\_map\_offset}});}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274   \textcolor{comment}{// Must be in the lower half}}
+\DoxyCodeLine{275   \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}};}
+\DoxyCodeLine{276 }
+\DoxyCodeLine{277 \}}
+
+\end{DoxyCode}
+
+
+References physical\+\_\+address, and s\+\_\+hh\+\_\+direct\+\_\+map\+\_\+offset.
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager().
+
 \mbox{\Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a7d412394ef0b7e29bbe278406751761b}\label{classMaxOS_1_1memory_1_1MemoryManager_a7d412394ef0b7e29bbe278406751761b}} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!in\_higher\_region@{in\_higher\_region}}
 \index{in\_higher\_region@{in\_higher\_region}!MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}}
@@ -252,13 +297,13 @@ True if the address is in the higher region, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 269 of file memorymanagement.\+cpp.
+Definition at line 285 of file memorymanagement.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{269                                                               \{}
-\DoxyCodeLine{270   \textcolor{keywordflow}{return} virtual\_address \& (1\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}} << 62);}
-\DoxyCodeLine{271 \}}
+\DoxyCodeLine{285                                                               \{}
+\DoxyCodeLine{286   \textcolor{keywordflow}{return} virtual\_address \& (1\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9a4f202c896c19c7829a34eef07920c0}{l}} << 62);}
+\DoxyCodeLine{287 \}}
 
 \end{DoxyCode}
 
@@ -548,10 +593,6 @@ References s\+\_\+higher\+\_\+half\+\_\+kernel\+\_\+offset.
 
 
 
-Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager().
-
-
-
 \doxysubsection{Member Data Documentation}
 \mbox{\Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}\label{classMaxOS_1_1memory_1_1MemoryManager_ac72c7219ae81f7abd58d5f4d7ce29291}} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!s\_active\_memory\_manager@{s\_active\_memory\_manager}}
@@ -593,7 +634,7 @@ Definition at line 52 of file memorymanagement.\+h.
 
 
 
-Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager(), to\+\_\+dm\+\_\+region(), and Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
+Referenced by from\+\_\+dm\+\_\+region(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager(), to\+\_\+dm\+\_\+region(), and Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager().
 
 \mbox{\Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a92f699a8b8210d56b3c5afa8e5d01e17}\label{classMaxOS_1_1memory_1_1MemoryManager_a92f699a8b8210d56b3c5afa8e5d01e17}} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!s\_higher\_half\_kernel\_offset@{s\_higher\_half\_kernel\_offset}}

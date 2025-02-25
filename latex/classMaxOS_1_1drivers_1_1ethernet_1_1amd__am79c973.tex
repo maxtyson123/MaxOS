@@ -39,7 +39,7 @@ uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c97
 \doxysubsection{Detailed Description}
 
 
-Definition at line 27 of file amd\+\_\+am79c973.\+h.
+Definition at line 28 of file amd\+\_\+am79c973.\+h.
 
 
 
@@ -52,97 +52,100 @@ Definition at line 27 of file amd\+\_\+am79c973.\+h.
 
 
 
-Definition at line 13 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 14 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{14         :   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver_a2085e867decce4d6346ff21cb8215f31}{EthernetDriver}}(amdNetMessageStream),}
-\DoxyCodeLine{15             \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a23513de3e722d6f7183a9b51b1d86c48}{InterruptHandler}}(dev -\/> interrupt + interrupts-\/>hardware\_interrupt\_offset(), interrupts),}
-\DoxyCodeLine{16             MACAddress0Port(dev -\/>port\_base),}
-\DoxyCodeLine{17             MACAddress2Port(dev -\/>port\_base + 0x02),}
-\DoxyCodeLine{18             MACAddress4Port(dev -\/>port\_base + 0x04),}
-\DoxyCodeLine{19             registerDataPort(dev -\/>port\_base + 0x10),}
-\DoxyCodeLine{20             registerAddressPort(dev -\/>port\_base + 0x12),}
-\DoxyCodeLine{21             busControlRegisterDataPort(dev -\/>port\_base + 0x16),}
-\DoxyCodeLine{22             resetPort(dev -\/>port\_base + 0x14)}
-\DoxyCodeLine{23 \{}
-\DoxyCodeLine{24     \textcolor{comment}{// No active buffer at the start}}
-\DoxyCodeLine{25     currentSendBuffer = 0;}
-\DoxyCodeLine{26     currentRecvBuffer = 0;}
-\DoxyCodeLine{27 }
-\DoxyCodeLine{28     \textcolor{comment}{//Not active or intialized}}
-\DoxyCodeLine{29     active = \textcolor{keyword}{false};}
-\DoxyCodeLine{30     initDone = \textcolor{keyword}{false};}
-\DoxyCodeLine{31 }
-\DoxyCodeLine{32     \textcolor{comment}{// Get the MAC adresses (split up in little endian order)}}
-\DoxyCodeLine{33     uint64\_t MAC0 = MACAddress0Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() \% 256;}
-\DoxyCodeLine{34     uint64\_t MAC1 = MACAddress0Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() / 256;}
-\DoxyCodeLine{35     uint64\_t MAC2 = MACAddress2Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() \% 256;}
-\DoxyCodeLine{36     uint64\_t MAC3 = MACAddress2Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() / 256;}
-\DoxyCodeLine{37     uint64\_t MAC4 = MACAddress4Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() \% 256;}
-\DoxyCodeLine{38     uint64\_t MAC5 = MACAddress4Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() / 256;}
-\DoxyCodeLine{39 }
-\DoxyCodeLine{40     \textcolor{comment}{// Combine MAC addresses into one 48 bit number}}
-\DoxyCodeLine{41     ownMAC = MAC5 << 40}
-\DoxyCodeLine{42              | MAC4 << 32}
-\DoxyCodeLine{43              | MAC3 << 24}
-\DoxyCodeLine{44              | MAC2 << 16}
-\DoxyCodeLine{45              | MAC1 << 8}
-\DoxyCodeLine{46              | MAC0;}
-\DoxyCodeLine{47 }
-\DoxyCodeLine{48     \textcolor{comment}{// Set the device to 32 bit mode}}
-\DoxyCodeLine{49     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(20);              \textcolor{comment}{// Tell device to write to register 20}}
-\DoxyCodeLine{50     busControlRegisterDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x102);    \textcolor{comment}{// write desired data}}
-\DoxyCodeLine{51 }
-\DoxyCodeLine{52     \textcolor{comment}{// Reset the stop bit (tell device it's not supposed to be reset now)}}
-\DoxyCodeLine{53     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);               \textcolor{comment}{// Tell device to write to register 0}}
-\DoxyCodeLine{54     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x04);               \textcolor{comment}{// write desired data}}
-\DoxyCodeLine{55 }
-\DoxyCodeLine{56     \textcolor{comment}{// Set the initialization block}}
-\DoxyCodeLine{57     initBlock.mode = 0x0000;                         \textcolor{comment}{// Promiscuous mode = false   ( promiscuous mode tells it to receive all packets, not just broadcasts and those for its own MAC address)}}
-\DoxyCodeLine{58     initBlock.reserved1 = 0;                         \textcolor{comment}{// Reserved}}
-\DoxyCodeLine{59     initBlock.numSendBuffers = 3;                    \textcolor{comment}{// Means 8 because 2\string^8 (number of bits used)}}
-\DoxyCodeLine{60     initBlock.reserved2 = 0;                         \textcolor{comment}{// Reserved}}
-\DoxyCodeLine{61     initBlock.numRecvBuffers = 3;                    \textcolor{comment}{// Means 8 because 2\string^8 (number of bits used)}}
-\DoxyCodeLine{62     initBlock.physicalAddress = ownMAC;              \textcolor{comment}{// Set the physical address to the MAC address}}
-\DoxyCodeLine{63     initBlock.reserved3 = 0;                         \textcolor{comment}{// Reserverd}}
-\DoxyCodeLine{64     initBlock.logicalAddress = 0;                    \textcolor{comment}{// None for now}}
-\DoxyCodeLine{65 }
-\DoxyCodeLine{66     \textcolor{comment}{// Set Buffer descriptors memory}}
-\DoxyCodeLine{67     sendBufferDescr = (BufferDescriptor*)((((uint32\_t)\&sendBufferDescrMemory[0]) + 15) \& \string~((uint32\_t)0xF));}
-\DoxyCodeLine{68     initBlock.sendBufferDescrAddress = (uint32\_t)sendBufferDescr;}
+\DoxyCodeLine{15         :   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver_a2085e867decce4d6346ff21cb8215f31}{EthernetDriver}}(amdNetMessageStream),}
+\DoxyCodeLine{16             \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a23513de3e722d6f7183a9b51b1d86c48}{InterruptHandler}}(dev -\/> interrupt + interrupts-\/>hardware\_interrupt\_offset(), interrupts),}
+\DoxyCodeLine{17             MACAddress0Port(dev -\/>port\_base),}
+\DoxyCodeLine{18             MACAddress2Port(dev -\/>port\_base + 0x02),}
+\DoxyCodeLine{19             MACAddress4Port(dev -\/>port\_base + 0x04),}
+\DoxyCodeLine{20             registerDataPort(dev -\/>port\_base + 0x10),}
+\DoxyCodeLine{21             registerAddressPort(dev -\/>port\_base + 0x12),}
+\DoxyCodeLine{22             busControlRegisterDataPort(dev -\/>port\_base + 0x16),}
+\DoxyCodeLine{23             resetPort(dev -\/>port\_base + 0x14)}
+\DoxyCodeLine{24 \{}
+\DoxyCodeLine{25     \textcolor{comment}{// No active buffer at the start}}
+\DoxyCodeLine{26     currentSendBuffer = 0;}
+\DoxyCodeLine{27     currentRecvBuffer = 0;}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29     \textcolor{comment}{//Not active or intialized}}
+\DoxyCodeLine{30     active = \textcolor{keyword}{false};}
+\DoxyCodeLine{31     initDone = \textcolor{keyword}{false};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     \textcolor{comment}{// Get the MAC adresses (split up in little endian order)}}
+\DoxyCodeLine{34     uint64\_t MAC0 = MACAddress0Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() \% 256;}
+\DoxyCodeLine{35     uint64\_t MAC1 = MACAddress0Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() / 256;}
+\DoxyCodeLine{36     uint64\_t MAC2 = MACAddress2Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() \% 256;}
+\DoxyCodeLine{37     uint64\_t MAC3 = MACAddress2Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() / 256;}
+\DoxyCodeLine{38     uint64\_t MAC4 = MACAddress4Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() \% 256;}
+\DoxyCodeLine{39     uint64\_t MAC5 = MACAddress4Port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}() / 256;}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \textcolor{comment}{// Combine MAC addresses into one 48 bit number}}
+\DoxyCodeLine{42     ownMAC = MAC5 << 40}
+\DoxyCodeLine{43              | MAC4 << 32}
+\DoxyCodeLine{44              | MAC3 << 24}
+\DoxyCodeLine{45              | MAC2 << 16}
+\DoxyCodeLine{46              | MAC1 << 8}
+\DoxyCodeLine{47              | MAC0;}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \textcolor{comment}{// Set the device to 32 bit mode}}
+\DoxyCodeLine{50     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(20);              \textcolor{comment}{// Tell device to write to register 20}}
+\DoxyCodeLine{51     busControlRegisterDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x102);    \textcolor{comment}{// write desired data}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \textcolor{comment}{// Reset the stop bit (tell device it's not supposed to be reset now)}}
+\DoxyCodeLine{54     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);               \textcolor{comment}{// Tell device to write to register 0}}
+\DoxyCodeLine{55     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x04);               \textcolor{comment}{// write desired data}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57     \textcolor{comment}{// Set the initialization block}}
+\DoxyCodeLine{58     initBlock.mode = 0x0000;                         \textcolor{comment}{// Promiscuous mode = false   ( promiscuous mode tells it to receive all packets, not just broadcasts and those for its own MAC address)}}
+\DoxyCodeLine{59     initBlock.reserved1 = 0;                         \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{60     initBlock.numSendBuffers = 3;                    \textcolor{comment}{// Means 8 because 2\string^8 (number of bits used)}}
+\DoxyCodeLine{61     initBlock.reserved2 = 0;                         \textcolor{comment}{// Reserved}}
+\DoxyCodeLine{62     initBlock.numRecvBuffers = 3;                    \textcolor{comment}{// Means 8 because 2\string^8 (number of bits used)}}
+\DoxyCodeLine{63     initBlock.physicalAddress = ownMAC;              \textcolor{comment}{// Set the physical address to the MAC address}}
+\DoxyCodeLine{64     initBlock.reserved3 = 0;                         \textcolor{comment}{// Reserverd}}
+\DoxyCodeLine{65     initBlock.logicalAddress = 0;                    \textcolor{comment}{// None for now}}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68     \textcolor{comment}{//TODO: Use malloc?}}
 \DoxyCodeLine{69 }
-\DoxyCodeLine{70     recvBufferDescr = (BufferDescriptor*)((((uint32\_t)\&recvBufferDescrMemory[0]) + 15) \& \string~((uint32\_t)0xF));}
-\DoxyCodeLine{71     initBlock.recvBufferDescrAddress = (uint32\_t)recvBufferDescr;}
-\DoxyCodeLine{72 }
-\DoxyCodeLine{73     \textcolor{keywordflow}{for}(uint8\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < 8; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{74     \{}
-\DoxyCodeLine{75 }
-\DoxyCodeLine{76         \textcolor{comment}{// Send buffer descriptors}}
-\DoxyCodeLine{77         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].address = (((uint32\_t)\&sendBuffers[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]) + 15 ) \& \string~(uint32\_t)0xF;       \textcolor{comment}{// Same as above}}
-\DoxyCodeLine{78         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags = 0x7FF                                                         \textcolor{comment}{// Legnth of descriptor}}
-\DoxyCodeLine{79                                    | 0xF000;                                                     \textcolor{comment}{// Set it to send buffer}}
-\DoxyCodeLine{80         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags2 = 0;                                                           \textcolor{comment}{// "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive}}
-\DoxyCodeLine{81         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].avail = 0;                                                            \textcolor{comment}{// IF it is in use}}
-\DoxyCodeLine{82 }
-\DoxyCodeLine{83         \textcolor{comment}{// Receive}}
-\DoxyCodeLine{84         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].address = (((uint32\_t)\&recvBuffers[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]) + 15 ) \& \string~(uint32\_t)0xF;   \textcolor{comment}{// Same as above}}
-\DoxyCodeLine{85         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags = 0xF7FF                                                        \textcolor{comment}{// Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)}}
-\DoxyCodeLine{86                                    | 0x80000000;                                                 \textcolor{comment}{// Set it to receive buffer}}
-\DoxyCodeLine{87         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags2 = 0;                                                           \textcolor{comment}{// "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive}}
-\DoxyCodeLine{88         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].avail = 0;                                                            \textcolor{comment}{// IF it is in use}}
-\DoxyCodeLine{89     \}}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91     \textcolor{comment}{// Move initialization block into device}}
-\DoxyCodeLine{92     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(1);                                     \textcolor{comment}{// Tell device to write to register 1}}
-\DoxyCodeLine{93     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}((uint32\_t)(\&initBlock) \&}
-\DoxyCodeLine{94                            0xFFFF);             \textcolor{comment}{// write address data}}
-\DoxyCodeLine{95     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(2);                                     \textcolor{comment}{// Tell device to write to register 2}}
-\DoxyCodeLine{96     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(((uint32\_t)(\&initBlock) >> 16) \&}
-\DoxyCodeLine{97                            0xFFFF);     \textcolor{comment}{// write shifted address data}}
-\DoxyCodeLine{98 }
-\DoxyCodeLine{99 }
-\DoxyCodeLine{100 \}}
+\DoxyCodeLine{70     \textcolor{comment}{// Set Buffer descriptors memory}}
+\DoxyCodeLine{71     sendBufferDescr = (BufferDescriptor*)(MemoryManager::s\_active\_memory\_manager-\/>malloc((\textcolor{keyword}{sizeof}(BufferDescriptor) * 8) + 15));  \textcolor{comment}{// Allocate memory for 8 buffer descriptors}}
+\DoxyCodeLine{72     initBlock.sendBufferDescrAddress = (uint32\_t)sendBufferDescr;}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     recvBufferDescr = (BufferDescriptor*)(MemoryManager::s\_active\_memory\_manager-\/>malloc((\textcolor{keyword}{sizeof}(BufferDescriptor) * 8) + 15));  \textcolor{comment}{// Allocate memory for 8 buffer descriptors}}
+\DoxyCodeLine{75     initBlock.recvBufferDescrAddress = (uint32\_t)recvBufferDescr;}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{keywordflow}{for}(uint8\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < 8; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{78     \{}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80         \textcolor{comment}{// Send buffer descriptors}}
+\DoxyCodeLine{81         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].address = (((uint32\_t)\&sendBuffers[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]) + 15 ) \& \string~(uint32\_t)0xF;       \textcolor{comment}{// Same as above}}
+\DoxyCodeLine{82         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags = 0x7FF                                                         \textcolor{comment}{// Legnth of descriptor}}
+\DoxyCodeLine{83                                    | 0xF000;                                                     \textcolor{comment}{// Set it to send buffer}}
+\DoxyCodeLine{84         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags2 = 0;                                                           \textcolor{comment}{// "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive}}
+\DoxyCodeLine{85         sendBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].avail = 0;                                                            \textcolor{comment}{// IF it is in use}}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87         \textcolor{comment}{// Receive}}
+\DoxyCodeLine{88         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].address = (((uint32\_t)\&recvBuffers[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]) + 15 ) \& \string~(uint32\_t)0xF;   \textcolor{comment}{// Same as above}}
+\DoxyCodeLine{89         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags = 0xF7FF                                                        \textcolor{comment}{// Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)}}
+\DoxyCodeLine{90                                    | 0x80000000;                                                 \textcolor{comment}{// Set it to receive buffer}}
+\DoxyCodeLine{91         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].flags2 = 0;                                                           \textcolor{comment}{// "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive}}
+\DoxyCodeLine{92         recvBufferDescr[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].avail = 0;                                                            \textcolor{comment}{// IF it is in use}}
+\DoxyCodeLine{93     \}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95     \textcolor{comment}{// Move initialization block into device}}
+\DoxyCodeLine{96     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(1);                                     \textcolor{comment}{// Tell device to write to register 1}}
+\DoxyCodeLine{97     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}((uint32\_t)(\&initBlock) \&}
+\DoxyCodeLine{98                            0xFFFF);             \textcolor{comment}{// write address data}}
+\DoxyCodeLine{99     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(2);                                     \textcolor{comment}{// Tell device to write to register 2}}
+\DoxyCodeLine{100     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(((uint32\_t)(\&initBlock) >> 16) \&}
+\DoxyCodeLine{101                            0xFFFF);     \textcolor{comment}{// write shifted address data}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104 \}}
 
 \end{DoxyCode}
 
@@ -157,12 +160,12 @@ References Max\+O\+S\+::drivers\+::peripherals\+::i, Max\+O\+S\+::hardwarecommun
 
 
 
-Definition at line 102 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 106 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{103 \{}
-\DoxyCodeLine{104 \}}
+\DoxyCodeLine{107 \{}
+\DoxyCodeLine{108 \}}
 
 \end{DoxyCode}
 
@@ -184,31 +187,31 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a92276c08d77
 
 
 
-Definition at line 111 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 115 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{112 \{}
-\DoxyCodeLine{113 }
-\DoxyCodeLine{114     initDone = \textcolor{keyword}{false};                                            \textcolor{comment}{// Set initDone to false}}
-\DoxyCodeLine{115     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
-\DoxyCodeLine{116     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x41);                           \textcolor{comment}{// Enable Interrupts and start the device}}
-\DoxyCodeLine{117     \textcolor{keywordflow}{while}(!initDone);                                            \textcolor{comment}{// Wait for initDone to be set to true}}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(4);                           \textcolor{comment}{// Tell device to read from register 4}}
-\DoxyCodeLine{120     uint32\_t temp = registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();                     \textcolor{comment}{// Get current data}}
-\DoxyCodeLine{121 }
-\DoxyCodeLine{122     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(4);                           \textcolor{comment}{// Tell device to write to register 4}}
-\DoxyCodeLine{123     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(}
-\DoxyCodeLine{124         temp |}
-\DoxyCodeLine{125         0xC00);                   \textcolor{comment}{// Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)}}
-\DoxyCodeLine{126 }
-\DoxyCodeLine{127     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
-\DoxyCodeLine{128     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(}
-\DoxyCodeLine{129         0x42);                           \textcolor{comment}{// Tell device that it is initialised and can begin operating}}
-\DoxyCodeLine{130 }
-\DoxyCodeLine{131     active = \textcolor{keyword}{true};                                               \textcolor{comment}{// Set active to true}}
-\DoxyCodeLine{132 \}}
+\DoxyCodeLine{116 \{}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118     \textcolor{comment}{// TODO: Have a look at re -\/ implementing this again someday}}
+\DoxyCodeLine{119     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121     initDone = \textcolor{keyword}{false};                                            \textcolor{comment}{// Set initDone to false}}
+\DoxyCodeLine{122     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
+\DoxyCodeLine{123     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x41);                           \textcolor{comment}{// Enable Interrupts and start the device}}
+\DoxyCodeLine{124     \textcolor{keywordflow}{while}(!initDone);                                            \textcolor{comment}{// Wait for initDone to be set to true}}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(4);                           \textcolor{comment}{// Tell device to read from register 4}}
+\DoxyCodeLine{127     uint32\_t temp = registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();                     \textcolor{comment}{// Get current data}}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(4);                           \textcolor{comment}{// Tell device to write to register 4}}
+\DoxyCodeLine{130     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(temp | 0xC00);                   \textcolor{comment}{// Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)}}
+\DoxyCodeLine{131 }
+\DoxyCodeLine{132     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
+\DoxyCodeLine{133     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x42);                           \textcolor{comment}{// Tell device that it is initialised and can begin operating}}
+\DoxyCodeLine{134 }
+\DoxyCodeLine{135     active = \textcolor{keyword}{true};                                               \textcolor{comment}{// Set active to true}}
+\DoxyCodeLine{136 \}}
 
 \end{DoxyCode}
 
@@ -231,13 +234,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aa8d91fd4406
 
 
 
-Definition at line 286 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 292 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{286                               \{}
-\DoxyCodeLine{287 }
-\DoxyCodeLine{288 \}}
+\DoxyCodeLine{292                               \{}
+\DoxyCodeLine{293 }
+\DoxyCodeLine{294 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_a47ce3c94382939df1c248c3a2ba206b6}\label{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_a47ce3c94382939df1c248c3a2ba206b6}} 
@@ -263,42 +266,42 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1Etherne
 
 
 
-Definition at line 197 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 203 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{197                                                         \{}
-\DoxyCodeLine{198 }
-\DoxyCodeLine{199     \textcolor{keywordflow}{while}(!active);}
-\DoxyCodeLine{200 }
-\DoxyCodeLine{201     \textcolor{keywordtype}{int} sendDescriptor = currentSendBuffer;              \textcolor{comment}{// Get where data has been written to}}
-\DoxyCodeLine{202     currentSendBuffer = (currentSendBuffer + 1) \% 8;    \textcolor{comment}{// Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different m\_tasks in parallel)}}
-\DoxyCodeLine{203 }
-\DoxyCodeLine{204     \textcolor{keywordflow}{if}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} > 1518)\{                                    \textcolor{comment}{// If attempt to send more than 1518 bytes at once it will be too large}}
-\DoxyCodeLine{205         \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = 1518;                                    \textcolor{comment}{// Discard all data after that  (Generally if data is bigger than that at driver level then a higher up network layer must have made a mistake)}}
+\DoxyCodeLine{203                                                         \{}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205     \textcolor{keywordflow}{while}(!active);}
 \DoxyCodeLine{206 }
-\DoxyCodeLine{207     \}}
-\DoxyCodeLine{208 }
-\DoxyCodeLine{209     \textcolor{comment}{// What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data}}
-\DoxyCodeLine{210     \textcolor{keywordflow}{for} (uint8\_t *src = buffer + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/1,                                                   \textcolor{comment}{// Set src pointer to the end of the data that is being sent}}
-\DoxyCodeLine{211          *dst = (uint8\_t*)(sendBufferDescr[sendDescriptor].address + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/1);       \textcolor{comment}{// Take the buffer that has been slected}}
-\DoxyCodeLine{212          src >= buffer;                                                             \textcolor{comment}{// While there is still information in the buffer that hasnt been written to src}}
-\DoxyCodeLine{213          src-\/-\/,dst-\/-\/                                                                \textcolor{comment}{// Move 2 pointers to the end of the buffers}}
-\DoxyCodeLine{214             )}
-\DoxyCodeLine{215     \{}
-\DoxyCodeLine{216         *dst = *src;                                                                        \textcolor{comment}{// Copy data from source buffer to destiantion buffer}}
-\DoxyCodeLine{217     \}}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219 }
-\DoxyCodeLine{220     sendBufferDescr[sendDescriptor].avail = 0;                               \textcolor{comment}{// Set that this buffer is in use}}
-\DoxyCodeLine{221     sendBufferDescr[sendDescriptor].flags2 = 0;                              \textcolor{comment}{// Clear any previous error messages}}
-\DoxyCodeLine{222     sendBufferDescr[sendDescriptor].flags = 0x8300F000                       \textcolor{comment}{// Encode the size of what is being sent}}
-\DoxyCodeLine{223                                             | ((uint16\_t)((-\/\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}) \& 0xFFF));;}
+\DoxyCodeLine{207     \textcolor{keywordtype}{int} sendDescriptor = currentSendBuffer;              \textcolor{comment}{// Get where data has been written to}}
+\DoxyCodeLine{208     currentSendBuffer = (currentSendBuffer + 1) \% 8;    \textcolor{comment}{// Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different m\_tasks in parallel)}}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210     \textcolor{keywordflow}{if}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} > 1518)\{                                    \textcolor{comment}{// If attempt to send more than 1518 bytes at once it will be too large}}
+\DoxyCodeLine{211         \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = 1518;                                    \textcolor{comment}{// Discard all data after that  (Generally if data is bigger than that at driver level then a higher up network layer must have made a mistake)}}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213     \}}
+\DoxyCodeLine{214 }
+\DoxyCodeLine{215     \textcolor{comment}{// What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data}}
+\DoxyCodeLine{216     \textcolor{keywordflow}{for} (uint8\_t *src = buffer + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/1,                                                   \textcolor{comment}{// Set src pointer to the end of the data that is being sent}}
+\DoxyCodeLine{217          *dst = (uint8\_t*)(sendBufferDescr[sendDescriptor].address + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} -\/1);       \textcolor{comment}{// Take the buffer that has been slected}}
+\DoxyCodeLine{218          src >= buffer;                                                             \textcolor{comment}{// While there is still information in the buffer that hasnt been written to src}}
+\DoxyCodeLine{219          src-\/-\/,dst-\/-\/                                                                \textcolor{comment}{// Move 2 pointers to the end of the buffers}}
+\DoxyCodeLine{220             )}
+\DoxyCodeLine{221     \{}
+\DoxyCodeLine{222         *dst = *src;                                                                        \textcolor{comment}{// Copy data from source buffer to destiantion buffer}}
+\DoxyCodeLine{223     \}}
 \DoxyCodeLine{224 }
-\DoxyCodeLine{225     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
-\DoxyCodeLine{226     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(}
-\DoxyCodeLine{227         0x48);                           \textcolor{comment}{// Tell device to send the data currently in the buffer}}
-\DoxyCodeLine{228 \}}
+\DoxyCodeLine{225 }
+\DoxyCodeLine{226     sendBufferDescr[sendDescriptor].avail = 0;                               \textcolor{comment}{// Set that this buffer is in use}}
+\DoxyCodeLine{227     sendBufferDescr[sendDescriptor].flags2 = 0;                              \textcolor{comment}{// Clear any previous error messages}}
+\DoxyCodeLine{228     sendBufferDescr[sendDescriptor].flags = 0x8300F000                       \textcolor{comment}{// Encode the size of what is being sent}}
+\DoxyCodeLine{229                                             | ((uint16\_t)((-\/\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}) \& 0xFFF));;}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
+\DoxyCodeLine{232     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(}
+\DoxyCodeLine{233         0x48);                           \textcolor{comment}{// Tell device to send the data currently in the buffer}}
+\DoxyCodeLine{234 \}}
 
 \end{DoxyCode}
 
@@ -324,13 +327,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a65b06f2917f
 
 
 
-Definition at line 294 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 300 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{294                                      \{}
-\DoxyCodeLine{295     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"PCnet-\/Fast III (Am79C973)"};}
-\DoxyCodeLine{296 \}}
+\DoxyCodeLine{300                                      \{}
+\DoxyCodeLine{301     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"PCnet-\/Fast III (Am79C973)"};}
+\DoxyCodeLine{302 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_a013e544525f4aef5a4dc3aa7b0a682c2}\label{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_a013e544525f4aef5a4dc3aa7b0a682c2}} 
@@ -352,13 +355,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a7ad761c929a
 
 
 
-Definition at line 290 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 296 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{290                                      \{}
-\DoxyCodeLine{291     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"AMD"};}
-\DoxyCodeLine{292 \}}
+\DoxyCodeLine{296                                      \{}
+\DoxyCodeLine{297     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"AMD"};}
+\DoxyCodeLine{298 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_acd69d1f0897713631d40cf073926fed7}\label{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_acd69d1f0897713631d40cf073926fed7}} 
@@ -380,14 +383,14 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1Etherne
 
 
 
-Definition at line 281 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 287 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{281                                                     \{}
-\DoxyCodeLine{282     \textcolor{keywordflow}{while}(ownMAC == 0);}
-\DoxyCodeLine{283     \textcolor{keywordflow}{return} ownMAC;}
-\DoxyCodeLine{284 \}}
+\DoxyCodeLine{287                                                     \{}
+\DoxyCodeLine{288     \textcolor{keywordflow}{while}(ownMAC == 0);}
+\DoxyCodeLine{289     \textcolor{keywordflow}{return} ownMAC;}
+\DoxyCodeLine{290 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_ac925036cea408af2cd3d120c639985d2}\label{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973_ac925036cea408af2cd3d120c639985d2}} 
@@ -411,39 +414,41 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Inter
 
 
 
-Definition at line 154 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 158 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{154                                     \{}
-\DoxyCodeLine{155 }
-\DoxyCodeLine{156 }
-\DoxyCodeLine{157     \textcolor{comment}{// Similar to PIC, data needs to be read when a interrupt is sent, or it hangs}}
-\DoxyCodeLine{158     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to read from register 0}}
-\DoxyCodeLine{159     uint32\_t temp = registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();                     \textcolor{comment}{// Get current data}}
+\DoxyCodeLine{158                                     \{}
+\DoxyCodeLine{159 }
 \DoxyCodeLine{160 }
-\DoxyCodeLine{161     \textcolor{comment}{// Note: Cant be switch case as multiple errors can occur at the same time}}
+\DoxyCodeLine{161 }
 \DoxyCodeLine{162 }
-\DoxyCodeLine{163     \textcolor{comment}{// Errors}}
-\DoxyCodeLine{164     \textcolor{keywordflow}{if}((temp \& 0x8000) == 0x8000)}
-\DoxyCodeLine{165       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"AMD am79c973 ERROR: "});}
-\DoxyCodeLine{166     \textcolor{keywordflow}{if}((temp \& 0x2000) == 0x2000)}
-\DoxyCodeLine{167       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"COLLISION ERROR\(\backslash\)n"});}
-\DoxyCodeLine{168     \textcolor{keywordflow}{if}((temp \& 0x1000) == 0x1000)}
-\DoxyCodeLine{169       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"MISSED FRAME\(\backslash\)n"});}
-\DoxyCodeLine{170     \textcolor{keywordflow}{if}((temp \& 0x0800) == 0x0800)}
-\DoxyCodeLine{171       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"MEMORY ERROR\(\backslash\)n"});}
-\DoxyCodeLine{172 }
-\DoxyCodeLine{173 }
-\DoxyCodeLine{174     \textcolor{comment}{// Responses}}
-\DoxyCodeLine{175     \textcolor{keywordflow}{if}((temp \& 0x0400) == 0x0400) FetchDataReceived();}
-\DoxyCodeLine{176     \textcolor{keywordflow}{if}((temp \& 0x0200) == 0x0200) FetchDataSent();}
-\DoxyCodeLine{177     \textcolor{keywordflow}{if}((temp \& 0x0100) == 0x0100) initDone = \textcolor{keyword}{true};\textcolor{comment}{//}}
+\DoxyCodeLine{163     \textcolor{comment}{// Similar to PIC, data needs to be read when a interrupt is sent, or it hangs}}
+\DoxyCodeLine{164     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to read from register 0}}
+\DoxyCodeLine{165     uint32\_t temp = registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();                     \textcolor{comment}{// Get current data}}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167     \textcolor{comment}{// Note: Cant be switch case as multiple errors can occur at the same time}}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169     \textcolor{comment}{// Errors}}
+\DoxyCodeLine{170     \textcolor{keywordflow}{if}((temp \& 0x8000) == 0x8000)}
+\DoxyCodeLine{171       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"AMD am79c973 ERROR: "});}
+\DoxyCodeLine{172     \textcolor{keywordflow}{if}((temp \& 0x2000) == 0x2000)}
+\DoxyCodeLine{173       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"COLLISION ERROR\(\backslash\)n"});}
+\DoxyCodeLine{174     \textcolor{keywordflow}{if}((temp \& 0x1000) == 0x1000)}
+\DoxyCodeLine{175       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"MISSED FRAME\(\backslash\)n"});}
+\DoxyCodeLine{176     \textcolor{keywordflow}{if}((temp \& 0x0800) == 0x0800)}
+\DoxyCodeLine{177       \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_aceaadfd977efff51ee4e851e362b993a}{error\_message}}(\textcolor{stringliteral}{"MEMORY ERROR\(\backslash\)n"});}
 \DoxyCodeLine{178 }
-\DoxyCodeLine{179     \textcolor{comment}{// Reply that it was received}}
-\DoxyCodeLine{180     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
-\DoxyCodeLine{181     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(temp);                           \textcolor{comment}{// Tell device that the interrupt was received}}
-\DoxyCodeLine{182 \}}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180     \textcolor{comment}{// Responses}}
+\DoxyCodeLine{181     \textcolor{keywordflow}{if}((temp \& 0x0400) == 0x0400) FetchDataReceived();}
+\DoxyCodeLine{182     \textcolor{keywordflow}{if}((temp \& 0x0200) == 0x0200) FetchDataSent();}
+\DoxyCodeLine{183     \textcolor{keywordflow}{if}((temp \& 0x0100) == 0x0100) initDone = \textcolor{keyword}{true};\textcolor{comment}{//}}
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185     \textcolor{comment}{// Reply that it was received}}
+\DoxyCodeLine{186     registerAddressPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);                           \textcolor{comment}{// Tell device to write to register 0}}
+\DoxyCodeLine{187     registerDataPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(temp);                           \textcolor{comment}{// Tell device that the interrupt was received}}
+\DoxyCodeLine{188 \}}
 
 \end{DoxyCode}
 
@@ -469,17 +474,17 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a2371d6b69c1
 
 
 
-Definition at line 139 of file amd\+\_\+am79c973.\+cpp.
+Definition at line 143 of file amd\+\_\+am79c973.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{139                              \{}
-\DoxyCodeLine{140 }
-\DoxyCodeLine{141   resetPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();}
-\DoxyCodeLine{142     resetPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);}
-\DoxyCodeLine{143     \textcolor{keywordflow}{return} 10;                      \textcolor{comment}{// 10 means wait for 10ms}}
+\DoxyCodeLine{143                              \{}
 \DoxyCodeLine{144 }
-\DoxyCodeLine{145 \}}
+\DoxyCodeLine{145   resetPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();}
+\DoxyCodeLine{146   resetPort.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0);}
+\DoxyCodeLine{147   \textcolor{keywordflow}{return} 10;                      \textcolor{comment}{// 10 means wait for 10ms}}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149 \}}
 
 \end{DoxyCode}
 

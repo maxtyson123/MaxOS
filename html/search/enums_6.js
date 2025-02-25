@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pageflags_3084',['PageFlags',['../namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb',1,'MaxOS::memory']]]
+  ['mouseevents_3298',['MouseEvents',['../namespaceMaxOS_1_1drivers_1_1peripherals.html#aa0874f7ba74622dc0167cd9acf0fc3d6',1,'MaxOS::drivers::peripherals']]]
 ];

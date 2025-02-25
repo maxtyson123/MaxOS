@@ -105,188 +105,200 @@ $(document).ready(function(){initNavTree('kprint_8cpp_source.html',''); initResi
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespaceMaxOS_1_1drivers.html">MaxOS::drivers</a>;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">   17</a></span>&#160;<span class="keywordtype">char</span>* <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(<span class="keywordtype">int</span> <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>, uint64_t  number)</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50] = {0};</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 49;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">bool</span> isNegative = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordflow">if</span> (number == 0)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] = <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">return</span> &amp;buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>];</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordflow">if</span> (number &lt; 0 &amp;&amp; <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a> == 10)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        isNegative = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        number = -number;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">for</span> (; number &amp;&amp; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>; --<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>, number /= <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] = <span class="stringliteral">&quot;0123456789ABCDEF&quot;</span>[number % <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>];</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">if</span> (isNegative)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] = <span class="charliteral">&#39;-&#39;</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">return</span> &amp;buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>];</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> &amp;buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> + 1];</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">   53</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* str)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;{</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;   <span class="keywordtype">int</span> len = 0;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;   <span class="keywordflow">for</span> (; str[len] != <span class="charliteral">&#39;\0&#39;</span>; len++);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;   <span class="keywordflow">return</span> len;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> putchar (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f">c</a>)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">// Check if the active serial console is null</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a9436c62abb8c35e861c30d12bf3241a3">SerialConsole::s_active_serial_console</a> == 0)</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">// Put the character</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a9436c62abb8c35e861c30d12bf3241a3">SerialConsole::s_active_serial_console</a>-&gt;<a class="code" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a2b4f287ed1ca0baaf5db16a06172dcd3">put_character</a>(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f">c</a>);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">   77</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">pre_kprintf</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* func, uint8_t <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;{</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="comment">// Print the  colour</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordtype">char</span>* colour = <span class="stringliteral">&quot;---------&quot;</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordflow">switch</span> (<a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="comment">// Log (yellow)</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">case</span> 0:</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      colour = <span class="stringliteral">&quot;\033[1;33m&quot;</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">// Assert (red)</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      colour = <span class="stringliteral">&quot;\033[1;31m&quot;</span>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  }</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(colour); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    putchar(colour[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  putchar(<span class="charliteral">&#39;[&#39;</span>);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespaceMaxOS_1_1system.html">MaxOS::system</a>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">   18</a></span>&#160;<span class="keywordtype">char</span>* <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(<span class="keywordtype">int</span> <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>, uint64_t  number)</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50] = {0};</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 49;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordtype">bool</span> isNegative = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordflow">if</span> (number == 0)</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] = <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">return</span> &amp;buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>];</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    }</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">if</span> (number &lt; 0 &amp;&amp; <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a> == 10)</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        isNegative = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        number = -number;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">for</span> (; number &amp;&amp; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>; --<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>, number /= <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>)</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] = <span class="stringliteral">&quot;0123456789ABCDEF&quot;</span>[number % <a class="code" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>];</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (isNegative)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] = <span class="charliteral">&#39;-&#39;</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">return</span> &amp;buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>];</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> &amp;buffer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> + 1];</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">   54</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* str)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;{</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;   <span class="keywordtype">int</span> len = 0;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;   <span class="keywordflow">for</span> (; str[len] != <span class="charliteral">&#39;\0&#39;</span>; len++);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;   <span class="keywordflow">return</span> len;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> putchar (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f">c</a>)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;{</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Check if the active serial console is null</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a9436c62abb8c35e861c30d12bf3241a3">SerialConsole::s_active_serial_console</a> == 0)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">// Put the character</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a9436c62abb8c35e861c30d12bf3241a3">SerialConsole::s_active_serial_console</a>-&gt;<a class="code" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a2b4f287ed1ca0baaf5db16a06172dcd3">put_character</a>(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f">c</a>);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">   78</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">pre_kprintf</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* func, uint8_t <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="comment">// Print the  colour</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordtype">char</span>* colour = <span class="stringliteral">&quot;---------&quot;</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="keywordflow">switch</span> (<a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="comment">// Log (yellow)</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">case</span> 0:</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      colour = <span class="stringliteral">&quot;\033[1;33m&quot;</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="comment">// Assert, Panic (red)</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">case</span> 2:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">case</span> 3:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      colour = <span class="stringliteral">&quot;\033[1;31m&quot;</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(colour); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    putchar(colour[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="comment">// File Output</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keywordflow">if</span>(<a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a> == 0){</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment">// Print the file (but not the path)</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* file_str = file;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(file) - 1; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &gt;= 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>--)</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    {</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordflow">if</span> (file[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] == <span class="charliteral">&#39;/&#39;</span>)</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        file_str = &amp;file[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> + 1];</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      }</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }\</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    for (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(file_str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a>++)</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      putchar(file_str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a>]);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    putchar(<span class="charliteral">&#39;:&#39;</span>);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="comment">// Print the line</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* line_str = <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(10, line);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(line_str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      putchar(line_str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  }<span class="keywordflow">else</span>{</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="comment">// Print the text</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* text = <span class="stringliteral">&quot;FATAL ERROR IN {&quot;</span>;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(text); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      putchar(text[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="comment">// Print the function</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(func); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      putchar(func[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    putchar(<span class="charliteral">&#39;}&#39;</span>);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  }</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="comment">// Print the kernel footer</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">char</span>* footer = <span class="stringliteral">&quot;] \033[0m&quot;</span>;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(footer); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    putchar(footer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;}</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  putchar(<span class="charliteral">&#39;[&#39;</span>);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="comment">// File Output</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keywordflow">if</span>(<a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a> == 0){</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="comment">// Print the file (but not the path)</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* file_str = file;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(file) - 1; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &gt;= 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>--)</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keywordflow">if</span> (file[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>] == <span class="charliteral">&#39;/&#39;</span>)</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        file_str = &amp;file[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> + 1];</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }\</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    for (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(file_str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a>++)</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      putchar(file_str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">j</a>]);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    putchar(<span class="charliteral">&#39;:&#39;</span>);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="comment">// Print the line</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* line_str = <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(10, line);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(line_str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      putchar(line_str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  }<span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a> == 3){</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="comment">// Print the text</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* text = <span class="stringliteral">&quot;FATAL ERROR IN {&quot;</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(text); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      putchar(text[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="comment">// Print the function</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(func); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      putchar(func[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    putchar(<span class="charliteral">&#39;}&#39;</span>);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;  }</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  <span class="comment">// Print the kernel footer</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">char</span>* footer = <span class="stringliteral">&quot;] \033[0m&quot;</span>;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(footer); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    putchar(footer[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350">  155</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a>(uint8_t <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* func, <span class="keyword">const</span> <span class="keywordtype">char</span>* format, ...)</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;{</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  <span class="comment">// Print the header</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <a class="code" href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">pre_kprintf</a>(file, line,func, <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>);</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  <span class="comment">// Create a pointer to the data</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;  va_list parameters;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  va_start(parameters, format);</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <span class="comment">// Loop through the format string</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <span class="keywordflow">for</span> (; *format != <span class="charliteral">&#39;\0&#39;</span>; format++)</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;}</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350">  157</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a>(uint8_t <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* func, <span class="keyword">const</span> <span class="keywordtype">char</span>* format, ...)</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;{</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <span class="comment">// Create a pointer to the data</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  va_list parameters;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  va_start(parameters, format);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  <span class="comment">// Print the header</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keywordflow">if</span>(*format != <span class="charliteral">&#39;\h&#39;</span>)</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <a class="code" href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">pre_kprintf</a>(file, line,func, <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    format++;</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="comment">// If it is not a %, print the character</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordflow">if</span> (*format != <span class="charliteral">&#39;%&#39;</span>)</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    {</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      putchar(*format);</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">// Move to the next character</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    format++;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordflow">switch</span> (*format)</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    {</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keywordflow">case</span> <span class="charliteral">&#39;d&#39;</span>:</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="comment">// Print a decimal</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordtype">int</span> number = va_arg (parameters, <span class="keywordtype">int</span>);</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keywordtype">char</span>* str = <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(10, number);</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;          putchar(str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keywordflow">case</span> <span class="charliteral">&#39;x&#39;</span>:</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="comment">// Print a hex</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        uint64_t  number = va_arg (parameters, uint64_t );</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordtype">char</span>* str = <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(16, number);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;          putchar(str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      }</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>:</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      {</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="comment">// Print a string</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordtype">char</span>* str = va_arg (parameters, <span class="keywordtype">char</span>*);</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;          putchar(str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  }</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  <span class="comment">// Loop through the format string</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <span class="keywordflow">for</span> (; *format != <span class="charliteral">&#39;\0&#39;</span>; format++)</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="comment">// If it is not a %, print the character</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="keywordflow">if</span> (*format != <span class="charliteral">&#39;%&#39;</span>)</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    {</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      putchar(*format);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    }</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="comment">// Move to the next character</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    format++;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">switch</span> (*format)</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      <span class="keywordflow">case</span> <span class="charliteral">&#39;d&#39;</span>:</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      {</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="comment">// Print a decimal</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordtype">int</span> number = va_arg (parameters, <span class="keywordtype">int</span>);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">char</span>* str = <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(10, number);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;          putchar(str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      }</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      <span class="keywordflow">case</span> <span class="charliteral">&#39;x&#39;</span>:</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      {</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="comment">// Print a hex</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        uint64_t  number = va_arg (parameters, uint64_t );</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordtype">char</span>* str = <a class="code" href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a>(16, number);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;          putchar(str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      }</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>:</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      {</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="comment">// Print a string</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordtype">char</span>* str = va_arg (parameters, <span class="keywordtype">char</span>*);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> = 0; <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a> &lt; <a class="code" href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a>(str); <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>++)</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;          putchar(str[<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">i</a>]);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;  }</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  <span class="comment">// If it is type 3 panic</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  <span class="keywordflow">if</span>(<a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a> == 3)</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;     CPU::PANIC(<span class="stringliteral">&quot;Check the serial output for more information&quot;</span>);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="akprint_8cpp_html_ae6c8de953239811a34eeeab09458e55e"><div class="ttname"><a href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a></div><div class="ttdeci">int strlen(const char *str)</div><div class="ttdoc">Gets the length of a string.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00053">kprint.cpp:53</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1drivers_html"><div class="ttname"><a href="namespaceMaxOS_1_1drivers.html">MaxOS::drivers</a></div><div class="ttdef"><b>Definition:</b> <a href="clock_8h_source.html#l00017">clock.h:17</a></div></div>
+<div class="ttc" id="akprint_8cpp_html_ae6c8de953239811a34eeeab09458e55e"><div class="ttname"><a href="kprint_8cpp.html#ae6c8de953239811a34eeeab09458e55e">strlen</a></div><div class="ttdeci">int strlen(const char *str)</div><div class="ttdoc">Gets the length of a string.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00054">kprint.cpp:54</a></div></div>
+<div class="ttc" id="anamespaceMaxOS_1_1drivers_html"><div class="ttname"><a href="namespaceMaxOS_1_1drivers.html">MaxOS::drivers</a></div><div class="ttdef"><b>Definition:</b> <a href="clock_8h_source.html#l00018">clock.h:18</a></div></div>
 <div class="ttc" id="ainterrupts_8h_html_aeca790c0426654358d031f8180e84aca"><div class="ttname"><a href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a></div><div class="ttdeci">uint64_t base</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00003">interrupts.h:3</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">MaxOS::drivers::peripherals::i</a></div><div class="ttdeci">@ i</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00035">keyboard.h:35</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_a2b4f287ed1ca0baaf5db16a06172dcd3"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#a2b4f287ed1ca0baaf5db16a06172dcd3">MaxOS::drivers::SerialConsole::put_character</a></div><div class="ttdeci">void put_character(char c)</div><div class="ttdoc">Waits for the serial port to be ready, then writes a character to it.</div><div class="ttdef"><b>Definition:</b> <a href="serial_8cpp_source.html#l00063">serial.cpp:63</a></div></div>
-<div class="ttc" id="akprint_8cpp_html_a1eac1ff253b261e89fa89e29c6bd6c24"><div class="ttname"><a href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">pre_kprintf</a></div><div class="ttdeci">void pre_kprintf(const char *file, int line, const char *func, uint8_t type)</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00077">kprint.cpp:77</a></div></div>
-<div class="ttc" id="akprint_8cpp_html_a14f76df54d232b9ef72faeed9b247350"><div class="ttname"><a href="kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a></div><div class="ttdeci">void _kprintf_internal(uint8_t type, const char *file, int line, const char *func, const char *format,...)</div><div class="ttdoc">Prints a formatted string to the serial output.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00155">kprint.cpp:155</a></div></div>
+<div class="ttc" id="akprint_8cpp_html_a1eac1ff253b261e89fa89e29c6bd6c24"><div class="ttname"><a href="kprint_8cpp.html#a1eac1ff253b261e89fa89e29c6bd6c24">pre_kprintf</a></div><div class="ttdeci">void pre_kprintf(const char *file, int line, const char *func, uint8_t type)</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00078">kprint.cpp:78</a></div></div>
+<div class="ttc" id="akprint_8cpp_html_a14f76df54d232b9ef72faeed9b247350"><div class="ttname"><a href="kprint_8cpp.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a></div><div class="ttdeci">void _kprintf_internal(uint8_t type, const char *file, int line, const char *func, const char *format,...)</div><div class="ttdoc">Prints a formatted string to the serial output.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00157">kprint.cpp:157</a></div></div>
 <div class="ttc" id="akprint_8h_html"><div class="ttname"><a href="kprint_8h.html">kprint.h</a></div></div>
+<div class="ttc" id="anamespaceMaxOS_1_1system_html"><div class="ttname"><a href="namespaceMaxOS_1_1system.html">MaxOS::system</a></div><div class="ttdef"><b>Definition:</b> <a href="cpu_8h_source.html#l00014">cpu.h:14</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_a9436c62abb8c35e861c30d12bf3241a3"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#a9436c62abb8c35e861c30d12bf3241a3">MaxOS::drivers::SerialConsole::s_active_serial_console</a></div><div class="ttdeci">static SerialConsole * s_active_serial_console</div><div class="ttdef"><b>Definition:</b> <a href="serial_8h_source.html#l00032">serial.h:32</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0">MaxOS::drivers::peripherals::j</a></div><div class="ttdeci">@ j</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00036">keyboard.h:36</a></div></div>
-<div class="ttc" id="akprint_8cpp_html_a61162f966722da75c036049e8ca8bf8b"><div class="ttname"><a href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a></div><div class="ttdeci">char * itoa(int base, uint64_t number)</div><div class="ttdoc">Converts integer to string.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00017">kprint.cpp:17</a></div></div>
+<div class="ttc" id="akprint_8cpp_html_a61162f966722da75c036049e8ca8bf8b"><div class="ttname"><a href="kprint_8cpp.html#a61162f966722da75c036049e8ca8bf8b">itoa</a></div><div class="ttdeci">char * itoa(int base, uint64_t number)</div><div class="ttdoc">Converts integer to string.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00018">kprint.cpp:18</a></div></div>
 <div class="ttc" id="aapic_8h_html_a1d127017fb298b889f4ba24752d08b8e"><div class="ttname"><a href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a></div><div class="ttdeci">uint8_t type</div><div class="ttdef"><b>Definition:</b> <a href="apic_8h_source.html#l00002">apic.h:2</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f">MaxOS::drivers::peripherals::c</a></div><div class="ttdeci">@ c</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00029">keyboard.h:29</a></div></div>
 <!-- start footer part -->

@@ -112,7 +112,7 @@ Definition at line 25 of file intel\+\_\+i217.\+cpp.
 \DoxyCodeLine{75     \}}
 \DoxyCodeLine{76 }
 \DoxyCodeLine{77     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < 0x80; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)               \textcolor{comment}{//Loop through all the registers}}
-\DoxyCodeLine{78         Write(0x5200 + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}*4, 0);     \textcolor{comment}{//Clear the receive descriptor array}}
+\DoxyCodeLine{78         \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}(0x5200 + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}*4, 0);     \textcolor{comment}{//Clear the receive descriptor array}}
 \DoxyCodeLine{79 }
 \DoxyCodeLine{80 }
 \DoxyCodeLine{81 }
@@ -169,8 +169,8 @@ Definition at line 292 of file intel\+\_\+i217.\+cpp.
 \DoxyCodeLine{294   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_ac6b2604f26f9dc56c6e4cddb4e699a26}{m\_driver\_message\_stream}}-\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(\textcolor{stringliteral}{"Activating Intel i217\(\backslash\)n"});}
 \DoxyCodeLine{295 }
 \DoxyCodeLine{296     \textcolor{comment}{//Enable interrupts}}
-\DoxyCodeLine{297     Write(interruptMaskRegister ,0x1F6DC);                     \textcolor{comment}{//Enable all interrupts}}
-\DoxyCodeLine{298     Write(interruptMaskRegister ,0xff \& \string~4);                   \textcolor{comment}{//Enable all interrupts except link status change}}
+\DoxyCodeLine{297     \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}(interruptMaskRegister ,0x1F6DC);                     \textcolor{comment}{//Enable all interrupts}}
+\DoxyCodeLine{298     \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}(interruptMaskRegister ,0xff \& \string~4);                   \textcolor{comment}{//Enable all interrupts except link status change}}
 \DoxyCodeLine{299     Read(0xc0);                                                     \textcolor{comment}{//Clear all interrupts}}
 \DoxyCodeLine{300 }
 \DoxyCodeLine{301     \textcolor{comment}{//while (!initDone);                                           //Wait for the init to be done}}
@@ -257,7 +257,7 @@ Definition at line 354 of file intel\+\_\+i217.\+cpp.
 \DoxyCodeLine{370 }
 \DoxyCodeLine{371     uint8\_t old\_cur = currentSendBuffer;                                    \textcolor{comment}{//Save the current send buffer}}
 \DoxyCodeLine{372     currentSendBuffer = (currentSendBuffer + 1) \% 8;                        \textcolor{comment}{//Increment the current send buffer}}
-\DoxyCodeLine{373     Write(sendDescriptorTailRegister, currentSendBuffer);       \textcolor{comment}{//write the current send buffer to the tail register}}
+\DoxyCodeLine{373     \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}(sendDescriptorTailRegister, currentSendBuffer);       \textcolor{comment}{//write the current send buffer to the tail register}}
 \DoxyCodeLine{374 }
 \DoxyCodeLine{375     \textcolor{comment}{//Wait for the packet to be sent}}
 \DoxyCodeLine{376     \textcolor{keywordflow}{while}(!(sendDsrctrs[old\_cur]-\/>\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} \& 0xff));}
@@ -379,7 +379,7 @@ Definition at line 312 of file intel\+\_\+i217.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{312                                   \{}
 \DoxyCodeLine{313 }
-\DoxyCodeLine{314     Write(interruptMaskRegister, 0x1);      \textcolor{comment}{//Clear the interrupt or it will hang}}
+\DoxyCodeLine{314     \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}(interruptMaskRegister, 0x1);      \textcolor{comment}{//Clear the interrupt or it will hang}}
 \DoxyCodeLine{315     uint32\_t temp = Read(0xc0);                \textcolor{comment}{//read the interrupt status register}}
 \DoxyCodeLine{316 }
 \DoxyCodeLine{317     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_ac6b2604f26f9dc56c6e4cddb4e699a26}{m\_driver\_message\_stream}}-\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(\textcolor{stringliteral}{"Interrupt from INTEL i217"});}

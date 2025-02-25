@@ -1,4 +1,4 @@
-.TH "MaxOS::memory::MemoryManager" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::memory::MemoryManager" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -54,6 +54,10 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .RI "static void * \fBto_dm_region\fP (uintptr_t \fBphysical_address\fP)"
 .br
 .RI "Converts a physical address to a direct map region address if it is in the lower region using the higher half direct map offset\&. "
+.ti -1c
+.RI "static void * \fBfrom_dm_region\fP (uintptr_t \fBphysical_address\fP)"
+.br
+.RI "Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset\&. "
 .ti -1c
 .RI "static bool \fBin_higher_region\fP (uintptr_t virtual_address)"
 .br
@@ -222,6 +226,40 @@ Definition at line 102 of file memorymanagement\&.cpp\&.
 .fi
 .PP
 References next, MaxOS::memory::MemoryChunk::prev, size, and MaxOS::memory::MemoryChunk::size\&.
+.SS "void * MemoryManager::from_dm_region (uintptr_t physical_address)\fC [static]\fP"
+
+.PP
+Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIphysical_address\fP The physical address in the direct map region 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The physical address 
+.RE
+.PP
+
+.PP
+Definition at line 269 of file memorymanagement\&.cpp\&.
+.PP
+.nf
+269                                                               {
+270 
+271   if(physical_address > s_hh_direct_map_offset)
+272     return (void*)(physical_address - s_hh_direct_map_offset);
+273 
+274   // Must be in the lower half
+275   return (void*)physical_address;
+276 
+277 }
+.fi
+.PP
+References physical_address, and s_hh_direct_map_offset\&.
+.PP
+Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\&.
 .SS "bool MemoryManager::in_higher_region (uintptr_t virtual_address)\fC [static]\fP"
 
 .PP
@@ -239,12 +277,12 @@ True if the address is in the higher region, false otherwise
 .PP
 
 .PP
-Definition at line 269 of file memorymanagement\&.cpp\&.
+Definition at line 285 of file memorymanagement\&.cpp\&.
 .PP
 .nf
-269                                                               {
-270   return virtual_address & (1l << 62);
-271 }
+285                                                               {
+286   return virtual_address & (1l << 62);
+287 }
 .fi
 .PP
 References MaxOS::drivers::peripherals::l\&.
@@ -483,8 +521,6 @@ Definition at line 225 of file memorymanagement\&.cpp\&.
 .fi
 .PP
 References s_higher_half_kernel_offset\&.
-.PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBMemoryManager\fP * MemoryManager::s_active_memory_manager = 0\fC [static]\fP"
@@ -504,7 +540,7 @@ Referenced by align()\&.
 .PP
 Definition at line 52 of file memorymanagement\&.h\&.
 .PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), to_dm_region(), and MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\&.
+Referenced by from_dm_region(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), to_dm_region(), and MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\&.
 .SS "const uint64_t MaxOS::memory::MemoryManager::s_higher_half_kernel_offset { 0xFFFFFFFF80000000 }\fC [static]\fP"
 
 .PP

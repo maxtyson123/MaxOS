@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::clock" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::clock" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,11 +12,17 @@ MaxOS::drivers::clock
 .ti -1c
 .RI "class \fBClock\fP"
 .br
-.RI "\fBDriver\fP for the CMOS Real Time \fBClock\fP\&. "
+.RI "\fBDriver\fP for the APIC clock\&. "
 .ti -1c
 .RI "class \fBClockEventHandler\fP"
 .br
 .RI "Handles the events triggered by the clock\&. "
+.ti -1c
+.RI "class \fBPIT\fP"
+.br
+.ti -1c
+.RI "struct \fBPITCommand\fP"
+.br
 .ti -1c
 .RI "class \fBTimeEvent\fP"
 .br
@@ -28,9 +34,84 @@ MaxOS::drivers::clock
 .ti -1c
 .RI "enum \fBClockEvents\fP { \fBTIME\fP }"
 .br
+.ti -1c
+.RI "enum \fBChannel\fP { \fBCHANNEL_0\fP = 0, \fBCHANNEL_1\fP = 1, \fBCHANNEL_2\fP = 2 }"
+.br
+.ti -1c
+.RI "enum \fBAccessMode\fP { \fBLATCH_COUNT\fP = 0, \fBLOW_BYTE\fP = 1, \fBHIGH_BYTE\fP = 2, \fBLOW_HIGH_BYTE\fP = 3 }"
+.br
+.ti -1c
+.RI "enum \fBOperatingMode\fP { \fBMODE_0\fP = 0, \fBMODE_1\fP = 1, \fBMODE_2\fP = 2, \fBMODE_3\fP = 3, \fBMODE_4\fP = 4, \fBMODE_5\fP = 5 }"
+.br
+.ti -1c
+.RI "enum \fBBCDMode\fP { \fBBINARY\fP = 0, \fBBCD\fP = 1 }"
+.br
 .in -1c
 .SH "Enumeration Type Documentation"
 .PP 
+.SS "enum \fBMaxOS::drivers::clock::AccessMode\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fILATCH_COUNT \fP\fP
+.TP
+\fB\fILOW_BYTE \fP\fP
+.TP
+\fB\fIHIGH_BYTE \fP\fP
+.TP
+\fB\fILOW_HIGH_BYTE \fP\fP
+.PP
+Definition at line 60 of file clock\&.h\&.
+.PP
+.nf
+60                             {
+61               LATCH_COUNT = 0,
+62               LOW_BYTE = 1,
+63               HIGH_BYTE = 2,
+64               LOW_HIGH_BYTE = 3,
+65             };
+.fi
+.SS "enum \fBMaxOS::drivers::clock::BCDMode\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIBINARY \fP\fP
+.TP
+\fB\fIBCD \fP\fP
+.PP
+Definition at line 76 of file clock\&.h\&.
+.PP
+.nf
+76                          {
+77               BINARY = 0,
+78               BCD = 1,
+79             };
+.fi
+.SS "enum \fBMaxOS::drivers::clock::Channel\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICHANNEL_0 \fP\fP
+.TP
+\fB\fICHANNEL_1 \fP\fP
+.TP
+\fB\fICHANNEL_2 \fP\fP
+.PP
+Definition at line 54 of file clock\&.h\&.
+.PP
+.nf
+54                          {
+55               CHANNEL_0 = 0,
+56               CHANNEL_1 = 1,
+57               CHANNEL_2 = 2,
+58             };
+.fi
 .SS "enum \fBMaxOS::drivers::clock::ClockEvents\fP"
 
 .PP
@@ -39,12 +120,42 @@ MaxOS::drivers::clock
 .TP
 \fB\fITIME \fP\fP
 .PP
-Definition at line 21 of file clock\&.h\&.
+Definition at line 22 of file clock\&.h\&.
 .PP
 .nf
-21                             {
-22                 TIME
-23             };
+22                             {
+23                 TIME
+24             };
+.fi
+.SS "enum \fBMaxOS::drivers::clock::OperatingMode\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIMODE_0 \fP\fP
+.TP
+\fB\fIMODE_1 \fP\fP
+.TP
+\fB\fIMODE_2 \fP\fP
+.TP
+\fB\fIMODE_3 \fP\fP
+.TP
+\fB\fIMODE_4 \fP\fP
+.TP
+\fB\fIMODE_5 \fP\fP
+.PP
+Definition at line 67 of file clock\&.h\&.
+.PP
+.nf
+67                                {
+68               MODE_0 = 0, // Interrupt on Terminal Count
+69               MODE_1 = 1, // Hardware Retriggerable One-Shot
+70               MODE_2 = 2, // Rate Generator
+71               MODE_3 = 3, // Square Wave Generator
+72               MODE_4 = 4, // Software Triggered Strobe
+73               MODE_5 = 5, // Hardware Triggered Strobe
+74             };
 .fi
 .SH "Author"
 .PP 

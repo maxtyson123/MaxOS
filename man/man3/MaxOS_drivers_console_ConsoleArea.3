@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::console::ConsoleArea" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::console::ConsoleArea" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,7 +19,7 @@ Inherits \fBMaxOS::drivers::console::Console\fP\&.
 .br
 .RI "____ \fBConsole\fP Area ____/// "
 .ti -1c
-.RI "\fBConsoleArea\fP (\fBConsole\fP *console, uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, \fBConsoleColour\fP foreground, \fBConsoleColour\fP background)"
+.RI "\fBConsoleArea\fP (\fBConsole\fP *console, uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, \fBcommon::ConsoleColour\fP foreground, \fBcommon::ConsoleColour\fP background)"
 .br
 .ti -1c
 .RI "\fB~ConsoleArea\fP ()"
@@ -37,11 +37,11 @@ Inherits \fBMaxOS::drivers::console::Console\fP\&.
 .br
 .RI "Place a character on the console area if the coordinates are within the area\&. "
 .ti -1c
-.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP foreground) override"
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP foreground) override"
 .br
 .RI "Change the foreground color of a character on the console area if the coordinates are within the area\&. "
 .ti -1c
-.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP background) override"
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP background) override"
 .br
 .RI "Change the background color of a character on the console area if the coordinates are within the area\&. "
 .ti -1c
@@ -49,11 +49,11 @@ Inherits \fBMaxOS::drivers::console::Console\fP\&.
 .br
 .RI "Return the character at the given coordinates if the coordinates are within the console area\&. "
 .ti -1c
-.RI "\fBConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y) override"
+.RI "\fBcommon::ConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y) override"
 .br
 .RI "Return the foreground color of the character at the given coordinates if the coordinates are within the console area\&. "
 .ti -1c
-.RI "\fBConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y) override"
+.RI "\fBcommon::ConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y) override"
 .br
 .RI "Return the background color of the character at the given coordinates if the coordinates are within the console area\&. "
 .in -1c
@@ -80,7 +80,7 @@ Inherits \fBMaxOS::drivers::console::Console\fP\&.
 .PP 
 A console that is a subsection of another console, limited by a width and height\&. 
 .PP
-Definition at line 77 of file console\&.h\&.
+Definition at line 60 of file console\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "ConsoleArea::ConsoleArea (\fBConsole\fP * console, uint16_t left, uint16_t top, uint16_t width, uint16_t height)"
@@ -100,7 +100,7 @@ Definition at line 237 of file console\&.cpp\&.
 244 
 245 }
 .fi
-.SS "ConsoleArea::ConsoleArea (\fBConsole\fP * console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, \fBConsoleColour\fP foreground, \fBConsoleColour\fP background)"
+.SS "ConsoleArea::ConsoleArea (\fBConsole\fP * console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, \fBcommon::ConsoleColour\fP foreground, \fBcommon::ConsoleColour\fP background)"
 
 .PP
 Definition at line 247 of file console\&.cpp\&.
@@ -171,7 +171,7 @@ Definition at line 383 of file console\&.cpp\&.
 391 }
 .fi
 .PP
-References MaxOS::drivers::console::Black, MaxOS::drivers::console::Console::get_background_color(), m_console, m_height, m_left, m_top, m_width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References MaxOS::common::Black, MaxOS::drivers::console::Console::get_background_color(), m_console, m_height, m_left, m_top, m_width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .SS "char ConsoleArea::get_character (uint16_t x, uint16_t y)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
@@ -244,7 +244,7 @@ Definition at line 365 of file console\&.cpp\&.
 374 }
 .fi
 .PP
-References MaxOS::drivers::console::Console::get_foreground_color(), MaxOS::drivers::console::LightGrey, m_console, m_height, m_left, m_top, m_width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References MaxOS::drivers::console::Console::get_foreground_color(), MaxOS::common::LightGrey, m_console, m_height, m_left, m_top, m_width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .SS "uint16_t ConsoleArea::height ()\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
@@ -304,7 +304,7 @@ Definition at line 294 of file console\&.cpp\&.
 .fi
 .PP
 References MaxOS::drivers::peripherals::c, m_console, m_height, m_left, m_top, m_width, MaxOS::drivers::console::Console::put_character(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "void ConsoleArea::set_background_color (uint16_t x, uint16_t y, \fBConsoleColour\fP background)\fC [override]\fP, \fC [virtual]\fP"
+.SS "void ConsoleArea::set_background_color (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP background)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Change the background color of a character on the console area if the coordinates are within the area\&. 
@@ -338,7 +338,7 @@ Definition at line 330 of file console\&.cpp\&.
 .fi
 .PP
 References m_console, m_height, m_left, m_top, m_width, MaxOS::drivers::console::Console::set_background_color(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "void ConsoleArea::set_foreground_color (uint16_t x, uint16_t y, \fBConsoleColour\fP foreground)\fC [override]\fP, \fC [virtual]\fP"
+.SS "void ConsoleArea::set_foreground_color (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP foreground)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Change the foreground color of a character on the console area if the coordinates are within the area\&. 
@@ -402,31 +402,31 @@ Referenced by ConsoleArea()\&.
 .SS "\fBConsole\fP* MaxOS::drivers::console::ConsoleArea::m_console\fC [protected]\fP"
 
 .PP
-Definition at line 80 of file console\&.h\&.
+Definition at line 63 of file console\&.h\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
 .SS "uint16_t MaxOS::drivers::console::ConsoleArea::m_height\fC [protected]\fP"
 
 .PP
-Definition at line 84 of file console\&.h\&.
+Definition at line 67 of file console\&.h\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), height(), put_character(), set_background_color(), and set_foreground_color()\&.
 .SS "uint16_t MaxOS::drivers::console::ConsoleArea::m_left\fC [protected]\fP"
 
 .PP
-Definition at line 81 of file console\&.h\&.
+Definition at line 64 of file console\&.h\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
 .SS "uint16_t MaxOS::drivers::console::ConsoleArea::m_top\fC [protected]\fP"
 
 .PP
-Definition at line 82 of file console\&.h\&.
+Definition at line 65 of file console\&.h\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
 .SS "uint16_t MaxOS::drivers::console::ConsoleArea::m_width\fC [protected]\fP"
 
 .PP
-Definition at line 83 of file console\&.h\&.
+Definition at line 66 of file console\&.h\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), set_foreground_color(), and width()\&.
 

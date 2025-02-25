@@ -38,16 +38,18 @@ uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream
 \item 
 \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console}{Console}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\+\_\+console}}
 \item 
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1}{Console\+Colour}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a04dd0f8e4deb75bf7d7151eee57dd2eb}{m\+\_\+foreground}}
+\mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ab1e0e1f60f45c7f3cc29b32a11a2248a}{m\+\_\+foreground}}
 \item 
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1}{Console\+Colour}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a52e87f8e557e9cde9926600b701ea5b7}{m\+\_\+background}}
+\mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_aa64db588e6b36396a9efc23ce6a82888}{m\+\_\+background}}
+\item 
+bool \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a77026febf6cb7ef46f64b0c9b30cb394}{is\+\_\+ansi}} = false
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 A stream that can be used to write to a console. 
 
-Definition at line 106 of file console.\+h.
+Definition at line 90 of file console.\+h.
 
 
 
@@ -113,25 +115,21 @@ Set the m\+\_\+position of the cursor.
 \end{DoxyParams}
 
 
-Definition at line 480 of file console.\+cpp.
+Definition at line 488 of file console.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{480                                                      \{}
-\DoxyCodeLine{481 }
-\DoxyCodeLine{482     \textcolor{comment}{// Set the x and y coordinates}}
-\DoxyCodeLine{483     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}} = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}};}
-\DoxyCodeLine{484     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}} = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}};}
-\DoxyCodeLine{485 \}}
+\DoxyCodeLine{488                                                      \{}
+\DoxyCodeLine{489 }
+\DoxyCodeLine{490     \textcolor{comment}{// Set the x and y coordinates}}
+\DoxyCodeLine{491     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}} = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}};}
+\DoxyCodeLine{492     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}} = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}};}
+\DoxyCodeLine{493 \}}
 
 \end{DoxyCode}
 
 
 References m\+\_\+cursor\+\_\+x, m\+\_\+cursor\+\_\+y, Max\+O\+S\+::drivers\+::peripherals\+::x, and Max\+O\+S\+::drivers\+::peripherals\+::y.
-
-
-
-Referenced by kernel\+Main().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a89e22eba45d0b26ef4f875c0dfff229f}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a89e22eba45d0b26ef4f875c0dfff229f}} 
 \index{MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}!write\_char@{write\_char}}
@@ -177,68 +175,90 @@ Definition at line 410 of file console.\+cpp.
 \DoxyCodeLine{426         \}}
 \DoxyCodeLine{427     \}}
 \DoxyCodeLine{428 }
-\DoxyCodeLine{429     \textcolor{comment}{// Handle the character}}
-\DoxyCodeLine{430     \textcolor{keywordflow}{switch} (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}}) \{}
-\DoxyCodeLine{431         \textcolor{comment}{// New line}}
-\DoxyCodeLine{432         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)n'}:}
-\DoxyCodeLine{433             \textcolor{comment}{// Increment the y coordinate but if it is more than the height of the console scroll the console}}
-\DoxyCodeLine{434             \textcolor{keywordflow}{if}(++\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a865ddc455be40064a05c09486a9df7f2}{height}}())\{}
-\DoxyCodeLine{435 }
-\DoxyCodeLine{436                 \textcolor{comment}{// Scroll the console}}
-\DoxyCodeLine{437                 \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{scroll\_up}}();}
+\DoxyCodeLine{429     \textcolor{comment}{// Check if the character is an ANSI escape code}}
+\DoxyCodeLine{430     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}} == \textcolor{charliteral}{'\(\backslash\)033'}) \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a77026febf6cb7ef46f64b0c9b30cb394}{is\_ansi}} = \textcolor{keyword}{true};}
+\DoxyCodeLine{431 }
+\DoxyCodeLine{432     \textcolor{comment}{// Handle the character}}
+\DoxyCodeLine{433     \textcolor{keywordflow}{switch} (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}}) \{}
+\DoxyCodeLine{434         \textcolor{comment}{// New line}}
+\DoxyCodeLine{435         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)n'}:}
+\DoxyCodeLine{436             \textcolor{comment}{// Increment the y coordinate but if it is more than the height of the console scroll the console}}
+\DoxyCodeLine{437             \textcolor{keywordflow}{if}(++\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a865ddc455be40064a05c09486a9df7f2}{height}}())\{}
 \DoxyCodeLine{438 }
-\DoxyCodeLine{439                 \textcolor{comment}{// Decrement the y coordinate}}
-\DoxyCodeLine{440                 \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a865ddc455be40064a05c09486a9df7f2}{height}}()-\/1;}
-\DoxyCodeLine{441             \}}
-\DoxyCodeLine{442 }
-\DoxyCodeLine{443             \textcolor{comment}{// don't break here, we want to go to the next case because of the \(\backslash\)r}}
-\DoxyCodeLine{444             [[fallthrough]];}
+\DoxyCodeLine{439                 \textcolor{comment}{// Scroll the console}}
+\DoxyCodeLine{440                 \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{scroll\_up}}();}
+\DoxyCodeLine{441 }
+\DoxyCodeLine{442                 \textcolor{comment}{// Decrement the y coordinate}}
+\DoxyCodeLine{443                 \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a865ddc455be40064a05c09486a9df7f2}{height}}()-\/1;}
+\DoxyCodeLine{444             \}}
 \DoxyCodeLine{445 }
-\DoxyCodeLine{446         \textcolor{comment}{// Carriage return}}
-\DoxyCodeLine{447         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)r'}:}
-\DoxyCodeLine{448             \textcolor{comment}{// Go to the start of the next line}}
-\DoxyCodeLine{449             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}} = 0;}
-\DoxyCodeLine{450             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{451 }
-\DoxyCodeLine{452         \textcolor{comment}{// Null Terminator}}
-\DoxyCodeLine{453         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)0'}:}
-\DoxyCodeLine{454             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{455 }
-\DoxyCodeLine{456         \textcolor{comment}{// Backspace}}
-\DoxyCodeLine{457         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)b'}:}
-\DoxyCodeLine{458             \textcolor{comment}{// Decrement the x coordinate}}
-\DoxyCodeLine{459             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}}-\/-\/;}
-\DoxyCodeLine{460             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{461 }
-\DoxyCodeLine{462         \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{463             \textcolor{comment}{// Put the character on the console}}
-\DoxyCodeLine{464             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a9d4be9d9e8fc9391523c5e5aa52adced}{put\_character}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}});}
-\DoxyCodeLine{465 }
-\DoxyCodeLine{466             \textcolor{comment}{// Increment the x coordinate}}
-\DoxyCodeLine{467             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}}++;}
-\DoxyCodeLine{468             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{469 }
-\DoxyCodeLine{470     \}}
-\DoxyCodeLine{471 }
-\DoxyCodeLine{472 \}}
+\DoxyCodeLine{446             \textcolor{comment}{// don't break here, we want to go to the next case because of the \(\backslash\)r}}
+\DoxyCodeLine{447             [[fallthrough]];}
+\DoxyCodeLine{448 }
+\DoxyCodeLine{449         \textcolor{comment}{// Carriage return}}
+\DoxyCodeLine{450         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)r'}:}
+\DoxyCodeLine{451             \textcolor{comment}{// Go to the start of the next line}}
+\DoxyCodeLine{452             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}} = 0;}
+\DoxyCodeLine{453             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{454 }
+\DoxyCodeLine{455         \textcolor{comment}{// Null Terminator}}
+\DoxyCodeLine{456         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)0'}:}
+\DoxyCodeLine{457             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{458 }
+\DoxyCodeLine{459         \textcolor{comment}{// Backspace}}
+\DoxyCodeLine{460         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)b'}:}
+\DoxyCodeLine{461             \textcolor{comment}{// Decrement the x coordinate}}
+\DoxyCodeLine{462             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}}-\/-\/;}
+\DoxyCodeLine{463             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{464 }
+\DoxyCodeLine{465         \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{466             \textcolor{comment}{// Put the character on the console}}
+\DoxyCodeLine{467             \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a9d4be9d9e8fc9391523c5e5aa52adced}{put\_character}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}{m\_cursor\_y}}, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}});}
+\DoxyCodeLine{468 }
+\DoxyCodeLine{469             \textcolor{comment}{// Increment the x coordinate}}
+\DoxyCodeLine{470             \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a77026febf6cb7ef46f64b0c9b30cb394}{is\_ansi}})}
+\DoxyCodeLine{471               \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a8bf436736aa74998a389391c0a9cabb8}{m\_cursor\_x}}++;}
+\DoxyCodeLine{472 }
+\DoxyCodeLine{473             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{474 }
+\DoxyCodeLine{475     \}}
+\DoxyCodeLine{476 }
+\DoxyCodeLine{477     \textcolor{comment}{// Check if the ANSI code is complete}}
+\DoxyCodeLine{478     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaed953c458d2795918c86f025ee3fb62f}{c}} == \textcolor{charliteral}{'m'}) \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a77026febf6cb7ef46f64b0c9b30cb394}{is\_ansi}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{479 }
+\DoxyCodeLine{480 \}}
 
 \end{DoxyCode}
 
 
-References Max\+O\+S\+::drivers\+::peripherals\+::c, Max\+O\+S\+::drivers\+::console\+::\+Console\+::height(), m\+\_\+console, m\+\_\+cursor\+\_\+x, m\+\_\+cursor\+\_\+y, Max\+O\+S\+::drivers\+::console\+::\+Console\+::put\+\_\+character(), Max\+O\+S\+::drivers\+::console\+::\+Console\+::scroll\+\_\+up(), and Max\+O\+S\+::drivers\+::console\+::\+Console\+::width().
+References Max\+O\+S\+::drivers\+::peripherals\+::c, Max\+O\+S\+::drivers\+::console\+::\+Console\+::height(), is\+\_\+ansi, m\+\_\+console, m\+\_\+cursor\+\_\+x, m\+\_\+cursor\+\_\+y, Max\+O\+S\+::drivers\+::console\+::\+Console\+::put\+\_\+character(), Max\+O\+S\+::drivers\+::console\+::\+Console\+::scroll\+\_\+up(), and Max\+O\+S\+::drivers\+::console\+::\+Console\+::width().
 
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a52e87f8e557e9cde9926600b701ea5b7}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a52e87f8e557e9cde9926600b701ea5b7}} 
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a77026febf6cb7ef46f64b0c9b30cb394}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a77026febf6cb7ef46f64b0c9b30cb394}} 
+\index{MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}!is\_ansi@{is\_ansi}}
+\index{is\_ansi@{is\_ansi}!MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}}
+\doxysubsubsection{\texorpdfstring{is\_ansi}{is\_ansi}}
+{\footnotesize\ttfamily bool Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::is\+\_\+ansi = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 97 of file console.\+h.
+
+
+
+Referenced by write\+\_\+char().
+
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_aa64db588e6b36396a9efc23ce6a82888}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_aa64db588e6b36396a9efc23ce6a82888}} 
 \index{MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}!m\_background@{m\_background}}
 \index{m\_background@{m\_background}!MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}}
 \doxysubsubsection{\texorpdfstring{m\_background}{m\_background}}
-{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1}{Console\+Colour}} Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+background\hspace{0.3cm}{\ttfamily [protected]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+background\hspace{0.3cm}{\ttfamily [protected]}}
 
 
 
-Definition at line 112 of file console.\+h.
+Definition at line 96 of file console.\+h.
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ac93f2f4a69436d6f90a48ac234045e52}} 
 \index{MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}!m\_console@{m\_console}}
@@ -248,7 +268,7 @@ Definition at line 112 of file console.\+h.
 
 
 
-Definition at line 109 of file console.\+h.
+Definition at line 93 of file console.\+h.
 
 
 
@@ -262,11 +282,11 @@ Referenced by write\+\_\+char().
 
 
 
-Definition at line 115 of file console.\+h.
+Definition at line 100 of file console.\+h.
 
 
 
-Referenced by kernel\+Main(), set\+\_\+cursor(), and write\+\_\+char().
+Referenced by set\+\_\+cursor(), and write\+\_\+char().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a13b291cb8b90fc13beec8396d3f4aa3b}} 
 \index{MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}!m\_cursor\_y@{m\_cursor\_y}}
@@ -276,21 +296,21 @@ Referenced by kernel\+Main(), set\+\_\+cursor(), and write\+\_\+char().
 
 
 
-Definition at line 116 of file console.\+h.
+Definition at line 101 of file console.\+h.
 
 
 
-Referenced by kernel\+Main(), set\+\_\+cursor(), and write\+\_\+char().
+Referenced by set\+\_\+cursor(), and write\+\_\+char().
 
-\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a04dd0f8e4deb75bf7d7151eee57dd2eb}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_a04dd0f8e4deb75bf7d7151eee57dd2eb}} 
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ab1e0e1f60f45c7f3cc29b32a11a2248a}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_ab1e0e1f60f45c7f3cc29b32a11a2248a}} 
 \index{MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}!m\_foreground@{m\_foreground}}
 \index{m\_foreground@{m\_foreground}!MaxOS::drivers::console::ConsoleStream@{MaxOS::drivers::console::ConsoleStream}}
 \doxysubsubsection{\texorpdfstring{m\_foreground}{m\_foreground}}
-{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console_a32880d01ca5ebf3d4417101a1dfa55b1}{Console\+Colour}} Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+foreground\hspace{0.3cm}{\ttfamily [protected]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} Max\+O\+S\+::drivers\+::console\+::\+Console\+Stream\+::m\+\_\+foreground\hspace{0.3cm}{\ttfamily [protected]}}
 
 
 
-Definition at line 111 of file console.\+h.
+Definition at line 95 of file console.\+h.
 
 
 

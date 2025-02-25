@@ -1,8 +1,10 @@
 var virtual_8h =
 [
     [ "VirtualMemoryChunk", "structMaxOS_1_1memory_1_1VirtualMemoryChunk.html", "structMaxOS_1_1memory_1_1VirtualMemoryChunk" ],
+    [ "FreeChunk", "structMaxOS_1_1memory_1_1FreeChunk.html", "structMaxOS_1_1memory_1_1FreeChunk" ],
     [ "VirtualMemoryRegion", "structMaxOS_1_1memory_1_1VirtualMemoryRegion.html", "structMaxOS_1_1memory_1_1VirtualMemoryRegion" ],
     [ "VirtualMemoryManager", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html", "classMaxOS_1_1memory_1_1VirtualMemoryManager" ],
+    [ "free_chunk_t", "virtual_8h.html#ad2c621af2c33cce5de47830ee4f1c063", null ],
     [ "virtual_flags_t", "virtual_8h.html#acbe86056d3908b8ea8e8ab683e5b9bed", null ],
     [ "virtual_memory_chunk_t", "virtual_8h.html#a06a90417819b0b7aae0e98de1620529a", null ],
     [ "VirtualFlags", "virtual_8h.html#a12ca8e10f17e52d8375319daaaf6f380", [

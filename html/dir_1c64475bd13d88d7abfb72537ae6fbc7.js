@@ -1,8 +1,6 @@
 var dir_1c64475bd13d88d7abfb72537ae6fbc7 =
 [
-    [ "colour.h", "colour_8h.html", [
-      [ "Colour", "classMaxOS_1_1common_1_1Colour.html", "classMaxOS_1_1common_1_1Colour" ]
-    ] ],
+    [ "colour.h", "colour_8h.html", "colour_8h" ],
     [ "constants.h", "constants_8h.html", null ],
     [ "coordinates.h", "coordinates_8h.html", "coordinates_8h" ],
     [ "eventHandler.h", "eventHandler_8h.html", [
@@ -31,9 +29,7 @@ var dir_1c64475bd13d88d7abfb72537ae6fbc7 =
       [ "Rectangle", "classMaxOS_1_1common_1_1Rectangle.html", "classMaxOS_1_1common_1_1Rectangle" ]
     ] ],
     [ "string.h", "string_8h.html", "string_8h" ],
-    [ "time.h", "time_8h.html", [
-      [ "Time", "structMaxOS_1_1common_1_1Time.html", "structMaxOS_1_1common_1_1Time" ]
-    ] ],
+    [ "time.h", "time_8h.html", "time_8h" ],
     [ "vector.h", "vector_8h.html", [
       [ "VectorIterationHandler", "classMaxOS_1_1common_1_1VectorIterationHandler.html", "classMaxOS_1_1common_1_1VectorIterationHandler" ],
       [ "Vector", "classMaxOS_1_1common_1_1Vector.html", "classMaxOS_1_1common_1_1Vector" ]

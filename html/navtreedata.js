@@ -64,16 +64,17 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "acpi_8cpp.html",
-"classMaxOS_1_1common_1_1OutputStream.html#a1951086b7676bf52ed9a4412a4b05559",
-"classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973.html#aacbc48386a4b5f36a63dc53b2f1bae2f",
-"classMaxOS_1_1gui_1_1Desktop.html#a0ef21909cc5084a72f7b8fd478b3b292",
-"classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3",
-"classMaxOS_1_1system_1_1Thread.html#a37d9edd3a1a776cbc27dedff949c9726",
-"functions_vars_z.html",
-"keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca94e9171f7e93a1064ee3f2aae2eee55f",
-"namespaceMaxOS_1_1drivers_1_1ethernet.html",
-"structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#a9b8a6a7e086a520cf52a4ea1cdc87670",
-"structmultiboot__tag__basic__meminfo.html#a86060b6871a2c0036465aab04b4c7edf"
+"classMaxOS_1_1common_1_1MapIterationHandler.html#ab9a6d3001addb4a3ba4407add9987fd2",
+"classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler.html#a96de6572d115658e486fbefa352b2213",
+"classMaxOS_1_1filesystem_1_1MSDOSPartitionTable.html",
+"classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#a9355ec4832975165808fe4cc5460e4a1",
+"classMaxOS_1_1system_1_1Multiboot.html#a572b5590c47b1128f43c458de10a9271",
+"functions_a.html",
+"keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca2195f88fa72051c08ff65d5abedcd013",
+"multiboot_8h.html#a6ebc069917f2924e1fd3dd794a90d048",
+"structMaxOS_1_1common_1_1Time.html",
+"structMaxOS_1_1system_1_1____attribute____.html#a7097a37ece7170bc19877a8c858aa593",
+"tcp_8h.html#a14f328f54b1801ae5c2130259bd55e2ead3ca1179a01a5238fca074829e80bcf4"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

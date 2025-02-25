@@ -1,0 +1,188 @@
+.TH "MaxOS::drivers::clock::PIT" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::clock::PIT
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <clock\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPIT\fP (\fBhardwarecommunication::InterruptManager\fP *interrupt_manager, \fBhardwarecommunication::AdvancedProgrammableInterruptController\fP *apic)"
+.br
+.ti -1c
+.RI "\fB~PIT\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBhandle_interrupt\fP () final"
+.br
+.ti -1c
+.RI "uint32_t \fBticks_per_ms\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_data_port\fP"
+.br
+.ti -1c
+.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_command_port\fP"
+.br
+.ti -1c
+.RI "\fBhardwarecommunication::LocalAPIC\fP * \fBm_local_apic\fP"
+.br
+.ti -1c
+.RI "\fBhardwarecommunication::IOAPIC\fP * \fBm_io_apic\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 90 of file clock\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "PIT::PIT (\fBhardwarecommunication::InterruptManager\fP * interrupt_manager, \fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic)"
+
+.PP
+Definition at line 231 of file clock\&.cpp\&.
+.PP
+.nf
+232 : InterruptHandler(0x22, interrupt_manager),
+233   m_data_port(0x40),
+234   m_command_port(0x43),
+235   m_local_apic(apic -> get_local_apic()),
+236   m_io_apic(apic -> get_io_apic())
+237 {
+238 
+239 }
+.fi
+.SS "PIT::~PIT ()"
+
+.PP
+Definition at line 241 of file clock\&.cpp\&.
+.PP
+.nf
+241           {
+242 
+243 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void PIT::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.PP
+Definition at line 245 of file clock\&.cpp\&.
+.PP
+.nf
+245                            {
+246   m_ticks++;
+247 }
+.fi
+.SS "uint32_t PIT::ticks_per_ms ()\fC [protected]\fP"
+
+.PP
+Definition at line 249 of file clock\&.cpp\&.
+.PP
+.nf
+249                            {
+250 
+251   // Set the redirect for the timer interrupt
+252   interrupt_redirect_t redirect = {
+253       \&.type = 0x2,
+254       \&.index = 0x14,
+255       \&.interrupt = 0x22,
+256       \&.destination = 0x00,
+257       \&.flags = 0x00,
+258       \&.mask = true,
+259   };
+260   m_io_apic -> set_redirect(&redirect);
+261 
+262   // Configure the PIT clock
+263   PITCommand command = {
+264       \&.bcd_mode = BINARY,
+265       \&.operating_mode = MODE_2,
+266       \&.access_mode = LOW_HIGH_BYTE,
+267       \&.channel = CHANNEL_0,
+268   };
+269   m_command_port\&.write(*(uint8_t *)&command);
+270 
+271   // Set the clock rate to 1 ms;
+272   uint16_t rate = 1193182 / 1000;
+273   m_data_port\&.write(rate & 0xFF);
+274   m_data_port\&.write(rate >> 8);
+275 
+276   // Stop the clock (write 0 as the initial count)
+277   m_local_apic -> write(0x380, 0x00);
+278 
+279   // Set the divisor to 2
+280   m_local_apic -> write(0x3E0, 0x0);
+281 
+282   // Unmask the PIT interrupt
+283   m_io_apic ->set_redirect_mask(redirect\&.index, false);
+284 
+285   // Calculate the number of ticks in 1 ms
+286   uint32_t max = (uint32_t) - 1;
+287   m_local_apic -> write(0x380, max);
+288 
+289   while (m_ticks < s_calibrate_ticks)
+290     asm volatile("nop");
+291 
+292   uint32_t elapsed = max - (m_local_apic -> read(0x390));
+293   uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
+294 
+295   _kprintf("Ticks per ms: %d\n", ticks_per_ms);
+296 
+297   // Disable the PIT interrupt again
+298   m_local_apic -> write(0x380, 0x00);
+299   m_io_apic -> set_redirect_mask(redirect\&.index, true);
+300 
+301   return ticks_per_ms;
+302 
+303 }
+.fi
+.PP
+References _kprintf, MaxOS::drivers::clock::BINARY, MaxOS::drivers::clock::CHANNEL_0, command, MaxOS::hardwarecommunication::InterruptRedirect::index, MaxOS::drivers::clock::LOW_HIGH_BYTE, m_command_port, m_data_port, m_io_apic, m_local_apic, MaxOS::drivers::clock::MODE_2, MaxOS::hardwarecommunication::IOAPIC::set_redirect_mask(), MaxOS::hardwarecommunication::InterruptRedirect::type, write, and MaxOS::hardwarecommunication::Port8Bit::write()\&.
+.PP
+Referenced by MaxOS::drivers::clock::Clock::calibrate()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::PIT::m_command_port\fC [protected]\fP"
+
+.PP
+Definition at line 102 of file clock\&.h\&.
+.PP
+Referenced by ticks_per_ms()\&.
+.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::PIT::m_data_port\fC [protected]\fP"
+
+.PP
+Definition at line 101 of file clock\&.h\&.
+.PP
+Referenced by ticks_per_ms()\&.
+.SS "\fBhardwarecommunication::IOAPIC\fP* MaxOS::drivers::clock::PIT::m_io_apic\fC [protected]\fP"
+
+.PP
+Definition at line 106 of file clock\&.h\&.
+.PP
+Referenced by ticks_per_ms()\&.
+.SS "\fBhardwarecommunication::LocalAPIC\fP* MaxOS::drivers::clock::PIT::m_local_apic\fC [protected]\fP"
+
+.PP
+Definition at line 105 of file clock\&.h\&.
+.PP
+Referenced by ticks_per_ms()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

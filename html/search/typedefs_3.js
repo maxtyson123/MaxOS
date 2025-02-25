@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['page_5fflags_5ft_3056',['page_flags_t',['../namespaceMaxOS_1_1memory.html#afff8f9259424b04221cedf42a6a6be65',1,'MaxOS::memory']]],
-  ['physical_5faddress_5ft_3057',['physical_address_t',['../namespaceMaxOS_1_1memory.html#a86d1744b2aea4590cf02ef32ff8acc63',1,'MaxOS::memory']]]
+  ['location_5fonly_5finfo_5ft_3253',['location_only_info_t',['../namespaceMaxOS_1_1system.html#a2b5c47c09f51fe407531fa1de5f04ff7',1,'MaxOS::system']]]
 ];

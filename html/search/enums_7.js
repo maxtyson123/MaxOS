@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['seektype_3085',['SeekType',['../namespaceMaxOS_1_1filesystem.html#a1db0018290f4bb8f71b2641d71c492d2',1,'MaxOS::filesystem']]]
+  ['operatingmode_3299',['OperatingMode',['../namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7',1,'MaxOS::drivers::clock']]]
 ];

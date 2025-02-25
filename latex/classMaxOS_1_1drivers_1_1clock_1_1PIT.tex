@@ -1,0 +1,252 @@
+\hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT}{}\doxysection{Max\+OS\+::drivers\+::clock\+::P\+IT Class Reference}
+\label{classMaxOS_1_1drivers_1_1clock_1_1PIT}\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+
+
+{\ttfamily \#include $<$clock.\+h$>$}
+
+Inheritance diagram for Max\+OS\+::drivers\+::clock\+::P\+IT\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMaxOS_1_1drivers_1_1clock_1_1PIT}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aa7943f2dacab7fa18aed7a045d58cdcf}{P\+IT}} (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{hardwarecommunication\+::\+Interrupt\+Manager}} $\ast$interrupt\+\_\+manager, \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication\+::\+Advanced\+Programmable\+Interrupt\+Controller}} $\ast$apic)
+\item 
+\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a4d9c324e8e6f22583899e496b4bb3471}{$\sim$\+P\+IT}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a986401ff44e3c9ef81e50778cf56a5ac}{handle\+\_\+interrupt}} () final
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aedde96002f9c62875dd502f5265f0314}{ticks\+\_\+per\+\_\+ms}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication\+::\+Port8\+Bit}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aef7dc8f712b8a35905493187916478c3}{m\+\_\+data\+\_\+port}}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication\+::\+Port8\+Bit}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_abc47e347e4512f570d7ee4f72aaa5080}{m\+\_\+command\+\_\+port}}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication\+::\+Local\+A\+P\+IC}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\+\_\+local\+\_\+apic}}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{hardwarecommunication\+::\+I\+O\+A\+P\+IC}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}{m\+\_\+io\+\_\+apic}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 90 of file clock.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_aa7943f2dacab7fa18aed7a045d58cdcf}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_aa7943f2dacab7fa18aed7a045d58cdcf}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!PIT@{PIT}}
+\index{PIT@{PIT}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{PIT()}{PIT()}}
+{\footnotesize\ttfamily P\+I\+T\+::\+P\+IT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{hardwarecommunication\+::\+Interrupt\+Manager}} $\ast$}]{interrupt\+\_\+manager,  }\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication\+::\+Advanced\+Programmable\+Interrupt\+Controller}} $\ast$}]{apic }\end{DoxyParamCaption})}
+
+
+
+Definition at line 231 of file clock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{232 : \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a23513de3e722d6f7183a9b51b1d86c48}{InterruptHandler}}(0x22, interrupt\_manager),}
+\DoxyCodeLine{233   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aef7dc8f712b8a35905493187916478c3}{m\_data\_port}}(0x40),}
+\DoxyCodeLine{234   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_abc47e347e4512f570d7ee4f72aaa5080}{m\_command\_port}}(0x43),}
+\DoxyCodeLine{235   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\_local\_apic}}(apic -\/> get\_local\_apic()),}
+\DoxyCodeLine{236   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}{m\_io\_apic}}(apic -\/> get\_io\_apic())}
+\DoxyCodeLine{237 \{}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_a4d9c324e8e6f22583899e496b4bb3471}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_a4d9c324e8e6f22583899e496b4bb3471}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!````~PIT@{$\sim$PIT}}
+\index{````~PIT@{$\sim$PIT}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{$\sim$PIT()}{~PIT()}}
+{\footnotesize\ttfamily P\+I\+T\+::$\sim$\+P\+IT (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 241 of file clock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{241           \{}
+\DoxyCodeLine{242 }
+\DoxyCodeLine{243 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_a986401ff44e3c9ef81e50778cf56a5ac}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_a986401ff44e3c9ef81e50778cf56a5ac}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!handle\_interrupt@{handle\_interrupt}}
+\index{handle\_interrupt@{handle\_interrupt}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{handle\_interrupt()}{handle\_interrupt()}}
+{\footnotesize\ttfamily void P\+I\+T\+::handle\+\_\+interrupt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Handler}}.
+
+
+
+Definition at line 245 of file clock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{245                            \{}
+\DoxyCodeLine{246   m\_ticks++;}
+\DoxyCodeLine{247 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_aedde96002f9c62875dd502f5265f0314}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_aedde96002f9c62875dd502f5265f0314}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!ticks\_per\_ms@{ticks\_per\_ms}}
+\index{ticks\_per\_ms@{ticks\_per\_ms}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{ticks\_per\_ms()}{ticks\_per\_ms()}}
+{\footnotesize\ttfamily uint32\+\_\+t P\+I\+T\+::ticks\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 249 of file clock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{249                            \{}
+\DoxyCodeLine{250 }
+\DoxyCodeLine{251   \textcolor{comment}{// Set the redirect for the timer interrupt}}
+\DoxyCodeLine{252   \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect}{interrupt\_redirect\_t}} redirect = \{}
+\DoxyCodeLine{253       .\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a76765f5aa84e5fb559be5ec37eb8d5d8}{type}} = 0x2,}
+\DoxyCodeLine{254       .index = 0x14,}
+\DoxyCodeLine{255       .interrupt = 0x22,}
+\DoxyCodeLine{256       .destination = 0x00,}
+\DoxyCodeLine{257       .flags = 0x00,}
+\DoxyCodeLine{258       .mask = \textcolor{keyword}{true},}
+\DoxyCodeLine{259   \};}
+\DoxyCodeLine{260   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}{m\_io\_apic}} -\/> set\_redirect(\&redirect);}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262   \textcolor{comment}{// Configure the PIT clock}}
+\DoxyCodeLine{263   \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{PITCommand}} \mbox{\hyperlink{arp_8h_a4635796d5c7e7a2639b11dfe83718acc}{command}} = \{}
+\DoxyCodeLine{264       .bcd\_mode = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4ca1cbd4efc56960b7ba69f64310220c5c5}{BINARY}},}
+\DoxyCodeLine{265       .operating\_mode = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7affb4c2c721ab2cc61f102e054e31c612}{MODE\_2}},}
+\DoxyCodeLine{266       .access\_mode = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844adb84e1a999b8ebc29d274d0bbea03069}{LOW\_HIGH\_BYTE}},}
+\DoxyCodeLine{267       .channel = \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3ac9249438b2f29afea1a3fe1a76e504d3}{CHANNEL\_0}},}
+\DoxyCodeLine{268   \};}
+\DoxyCodeLine{269   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_abc47e347e4512f570d7ee4f72aaa5080}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(uint8\_t *)\&\mbox{\hyperlink{arp_8h_a4635796d5c7e7a2639b11dfe83718acc}{command}});}
+\DoxyCodeLine{270 }
+\DoxyCodeLine{271   \textcolor{comment}{// Set the clock rate to 1 ms;}}
+\DoxyCodeLine{272   uint16\_t rate = 1193182 / 1000;}
+\DoxyCodeLine{273   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aef7dc8f712b8a35905493187916478c3}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(rate \& 0xFF);}
+\DoxyCodeLine{274   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aef7dc8f712b8a35905493187916478c3}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(rate >> 8);}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276   \textcolor{comment}{// Stop the clock (write 0 as the initial count)}}
+\DoxyCodeLine{277   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\_local\_apic}} -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, 0x00);}
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279   \textcolor{comment}{// Set the divisor to 2}}
+\DoxyCodeLine{280   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\_local\_apic}} -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x3E0, 0x0);}
+\DoxyCodeLine{281 }
+\DoxyCodeLine{282   \textcolor{comment}{// Unmask the PIT interrupt}}
+\DoxyCodeLine{283   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}{m\_io\_apic}} -\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_ad082ec1b5e7905789976e043b67902ac}{set\_redirect\_mask}}(redirect.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a2053b8d74b7cd332244eab0ea86aa656}{index}}, \textcolor{keyword}{false});}
+\DoxyCodeLine{284 }
+\DoxyCodeLine{285   \textcolor{comment}{// Calculate the number of ticks in 1 ms}}
+\DoxyCodeLine{286   uint32\_t max = (uint32\_t) -\/ 1;}
+\DoxyCodeLine{287   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\_local\_apic}} -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, max);}
+\DoxyCodeLine{288 }
+\DoxyCodeLine{289   \textcolor{keywordflow}{while} (m\_ticks < s\_calibrate\_ticks)}
+\DoxyCodeLine{290     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"nop"});}
+\DoxyCodeLine{291 }
+\DoxyCodeLine{292   uint32\_t elapsed = max -\/ (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\_local\_apic}} -\/> read(0x390));}
+\DoxyCodeLine{293   uint32\_t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aedde96002f9c62875dd502f5265f0314}{ticks\_per\_ms}} = elapsed / s\_calibrate\_ticks;}
+\DoxyCodeLine{294 }
+\DoxyCodeLine{295   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Ticks per ms: \%d\(\backslash\)n"}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aedde96002f9c62875dd502f5265f0314}{ticks\_per\_ms}});}
+\DoxyCodeLine{296 }
+\DoxyCodeLine{297   \textcolor{comment}{// Disable the PIT interrupt again}}
+\DoxyCodeLine{298   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}{m\_local\_apic}} -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, 0x00);}
+\DoxyCodeLine{299   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}{m\_io\_apic}} -\/> set\_redirect\_mask(redirect.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a2053b8d74b7cd332244eab0ea86aa656}{index}}, \textcolor{keyword}{true});}
+\DoxyCodeLine{300 }
+\DoxyCodeLine{301   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_aedde96002f9c62875dd502f5265f0314}{ticks\_per\_ms}};}
+\DoxyCodeLine{302 }
+\DoxyCodeLine{303 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kprintf, Max\+O\+S\+::drivers\+::clock\+::\+B\+I\+N\+A\+RY, Max\+O\+S\+::drivers\+::clock\+::\+C\+H\+A\+N\+N\+E\+L\+\_\+0, command, Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::index, Max\+O\+S\+::drivers\+::clock\+::\+L\+O\+W\+\_\+\+H\+I\+G\+H\+\_\+\+B\+Y\+TE, m\+\_\+command\+\_\+port, m\+\_\+data\+\_\+port, m\+\_\+io\+\_\+apic, m\+\_\+local\+\_\+apic, Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+2, Max\+O\+S\+::hardwarecommunication\+::\+I\+O\+A\+P\+I\+C\+::set\+\_\+redirect\+\_\+mask(), Max\+O\+S\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::type, write, and Max\+O\+S\+::hardwarecommunication\+::\+Port8\+Bit\+::write().
+
+
+
+Referenced by Max\+O\+S\+::drivers\+::clock\+::\+Clock\+::calibrate().
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_abc47e347e4512f570d7ee4f72aaa5080}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_abc47e347e4512f570d7ee4f72aaa5080}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!m\_command\_port@{m\_command\_port}}
+\index{m\_command\_port@{m\_command\_port}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{m\_command\_port}{m\_command\_port}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication\+::\+Port8\+Bit}} Max\+O\+S\+::drivers\+::clock\+::\+P\+I\+T\+::m\+\_\+command\+\_\+port\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 102 of file clock.\+h.
+
+
+
+Referenced by ticks\+\_\+per\+\_\+ms().
+
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_aef7dc8f712b8a35905493187916478c3}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_aef7dc8f712b8a35905493187916478c3}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!m\_data\_port@{m\_data\_port}}
+\index{m\_data\_port@{m\_data\_port}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{m\_data\_port}{m\_data\_port}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication\+::\+Port8\+Bit}} Max\+O\+S\+::drivers\+::clock\+::\+P\+I\+T\+::m\+\_\+data\+\_\+port\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 101 of file clock.\+h.
+
+
+
+Referenced by ticks\+\_\+per\+\_\+ms().
+
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_a748b2a35eee6a2bb67eb73f4bfa20a33}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!m\_io\_apic@{m\_io\_apic}}
+\index{m\_io\_apic@{m\_io\_apic}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{m\_io\_apic}{m\_io\_apic}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{hardwarecommunication\+::\+I\+O\+A\+P\+IC}}$\ast$ Max\+O\+S\+::drivers\+::clock\+::\+P\+I\+T\+::m\+\_\+io\+\_\+apic\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 106 of file clock.\+h.
+
+
+
+Referenced by ticks\+\_\+per\+\_\+ms().
+
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}\label{classMaxOS_1_1drivers_1_1clock_1_1PIT_a286c0c1d34a7e2c16a541cc18e2ec0ee}} 
+\index{MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}!m\_local\_apic@{m\_local\_apic}}
+\index{m\_local\_apic@{m\_local\_apic}!MaxOS::drivers::clock::PIT@{MaxOS::drivers::clock::PIT}}
+\doxysubsubsection{\texorpdfstring{m\_local\_apic}{m\_local\_apic}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication\+::\+Local\+A\+P\+IC}}$\ast$ Max\+O\+S\+::drivers\+::clock\+::\+P\+I\+T\+::m\+\_\+local\+\_\+apic\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 105 of file clock.\+h.
+
+
+
+Referenced by ticks\+\_\+per\+\_\+ms().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/drivers/clock/\mbox{\hyperlink{clock_8h}{clock.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/drivers/clock/\mbox{\hyperlink{clock_8cpp}{clock.\+cpp}}\end{DoxyCompactItemize}

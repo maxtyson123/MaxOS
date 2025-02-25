@@ -4,6 +4,7 @@
 {\ttfamily \#include $<$common/time.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/driver.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/interrupts.\+h$>$}\newline
+{\ttfamily \#include $<$hardwarecommunication/apic.\+h$>$}\newline
 {\ttfamily \#include $<$common/vector.\+h$>$}\newline
 {\ttfamily \#include $<$common/event\+Handler.\+h$>$}\newline
 \doxysubsection*{Classes}
@@ -13,8 +14,12 @@ class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1TimeEvent}{Max\+O\+S\+:
 \begin{DoxyCompactList}\small\item\em Event that is triggered when the clock ticks, holds the current time. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler}{Max\+O\+S\+::drivers\+::clock\+::\+Clock\+Event\+Handler}}
 \begin{DoxyCompactList}\small\item\em Handles the events triggered by the clock. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{Max\+O\+S\+::drivers\+::clock\+::\+P\+I\+T\+Command}}
+\item 
+class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{Max\+O\+S\+::drivers\+::clock\+::\+P\+IT}}
+\item 
 class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Max\+O\+S\+::drivers\+::clock\+::\+Clock}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}} for the C\+M\+OS Real Time \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}} for the A\+P\+IC clock. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -28,5 +33,30 @@ class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Max\+O\+S\+::dri
 \begin{DoxyCompactItemize}
 \item 
 enum \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a17687f96357a81b18a16cc4afcdb29a0}{Max\+O\+S\+::drivers\+::clock\+::\+Clock\+Events}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a17687f96357a81b18a16cc4afcdb29a0a66c428703c3c6a056080b057a2135822}{Max\+O\+S\+::drivers\+::clock\+::\+T\+I\+ME}}
+ \}
+\item 
+enum \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3}{Max\+O\+S\+::drivers\+::clock\+::\+Channel}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3ac9249438b2f29afea1a3fe1a76e504d3}{Max\+O\+S\+::drivers\+::clock\+::\+C\+H\+A\+N\+N\+E\+L\+\_\+0}} = 0, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3a337ddb730fc1f2b4588ae69d0eb0e39e}{Max\+O\+S\+::drivers\+::clock\+::\+C\+H\+A\+N\+N\+E\+L\+\_\+1}} = 1, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3af691dc1deba5bad6bf08bf3c070a08d6}{Max\+O\+S\+::drivers\+::clock\+::\+C\+H\+A\+N\+N\+E\+L\+\_\+2}} = 2
+ \}
+\item 
+enum \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844}{Max\+O\+S\+::drivers\+::clock\+::\+Access\+Mode}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844a227bf944e7056fb5ae90d6e8869cfe41}{Max\+O\+S\+::drivers\+::clock\+::\+L\+A\+T\+C\+H\+\_\+\+C\+O\+U\+NT}} = 0, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844accbf287ba9fab98fb1662900443e1f3e}{Max\+O\+S\+::drivers\+::clock\+::\+L\+O\+W\+\_\+\+B\+Y\+TE}} = 1, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844a3b86b65b34bc582344a0631582308bf0}{Max\+O\+S\+::drivers\+::clock\+::\+H\+I\+G\+H\+\_\+\+B\+Y\+TE}} = 2, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844adb84e1a999b8ebc29d274d0bbea03069}{Max\+O\+S\+::drivers\+::clock\+::\+L\+O\+W\+\_\+\+H\+I\+G\+H\+\_\+\+B\+Y\+TE}} = 3
+ \}
+\item 
+enum \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7}{Max\+O\+S\+::drivers\+::clock\+::\+Operating\+Mode}} \{ \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a6fc08498cb54f573042b436217707b06}{Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+0}} = 0, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a28058e28f22373baefd549b7a3005609}{Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+1}} = 1, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7affb4c2c721ab2cc61f102e054e31c612}{Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+2}} = 2, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a97ede363ac75e9f3115c37191c77b732}{Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+3}} = 3, 
+\newline
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a9d7356b39a5b01bda28bd9360722b409}{Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+4}} = 4, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7adbe74fd6dd254bc102804e548b8c485f}{Max\+O\+S\+::drivers\+::clock\+::\+M\+O\+D\+E\+\_\+5}} = 5
+ \}
+\item 
+enum \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4c}{Max\+O\+S\+::drivers\+::clock\+::\+B\+C\+D\+Mode}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4ca1cbd4efc56960b7ba69f64310220c5c5}{Max\+O\+S\+::drivers\+::clock\+::\+B\+I\+N\+A\+RY}} = 0, 
+\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4caadb3f31d36219995143dfdfc63aff715}{Max\+O\+S\+::drivers\+::clock\+::\+B\+CD}} = 1
  \}
 \end{DoxyCompactItemize}

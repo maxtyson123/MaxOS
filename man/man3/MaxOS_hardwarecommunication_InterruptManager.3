@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::InterruptManager" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::InterruptManager" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ MaxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and pas
 
 .in +1c
 .ti -1c
-.RI "\fBInterruptManager\fP (uint16_t \fBhardware_interrupt_offset\fP, \fBcommon::OutputStream\fP *handler)"
+.RI "\fBInterruptManager\fP ()"
 .br
 .RI "\fBManger\fP "
 .ti -1c
@@ -31,6 +31,9 @@ MaxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and pas
 .RI "void \fBremove_interrupt_handler\fP (uint8_t interrupt)"
 .br
 .RI "Removes the interrupt handler for the interrupt\&. "
+.ti -1c
+.RI "void \fBset_apic\fP (\fBLocalAPIC\fP *apic)"
+.br
 .ti -1c
 .RI "void \fBactivate\fP ()"
 .br
@@ -219,9 +222,6 @@ MaxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and pas
 
 .in +1c
 .ti -1c
-.RI "uint16_t \fBm_hardware_interrupt_offset\fP"
-.br
-.ti -1c
 .RI "\fBInterruptHandler\fP * \fBm_interrupt_handlers\fP [256]"
 .br
 .ti -1c
@@ -238,6 +238,9 @@ MaxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and pas
 .RI "static \fBcommon::OutputStream\fP * \fBs_error_messages\fP = 0"
 .br
 .ti -1c
+.RI "const static uint16_t \fBs_hardware_interrupt_offset\fP {0x20}"
+.br
+.ti -1c
 .RI "static \fBInterruptDescriptor\fP \fBs_interrupt_descriptor_table\fP [256]"
 .br
 .in -1c
@@ -252,10 +255,10 @@ MaxOS::hardwarecommunication::InterruptManager \- Handles all interrupts and pas
 .PP 
 Handles all interrupts and passes them to the correct handler\&. 
 .PP
-Definition at line 64 of file interrupts\&.h\&.
+Definition at line 65 of file interrupts\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "InterruptManager::InterruptManager (uint16_t hardware_interrupt_offset, \fBcommon::OutputStream\fP * handler)"
+.SS "InterruptManager::InterruptManager ()"
 
 .PP
 \fBManger\fP 
@@ -263,81 +266,80 @@ Definition at line 64 of file interrupts\&.h\&.
 Definition at line 47 of file interrupts\&.cpp\&.
 .PP
 .nf
-48 :
-49   m_hardware_interrupt_offset(hardware_interrupt_offset)
-50 {
-51 
-52      // Full the table of interrupts with 0
-53      for(uint16_t i = 0; i < 256; i++) {
-54         s_interrupt_descriptor_table[i]\&.address_low_bits = 0;
-55         s_interrupt_descriptor_table[i]\&.address_mid_bits = 0;
-56         s_interrupt_descriptor_table[i]\&.address_high_bits = 0;
-57         s_interrupt_descriptor_table[i]\&.segment_selector = 0;
-58         s_interrupt_descriptor_table[i]\&.ist = 0;
-59         s_interrupt_descriptor_table[i]\&.flags = 0;
-60      }
-61 
-62      //Set Up the base interrupts
-63     set_interrupt_descriptor_table_entry(0x00, &HandleException0x00, 0);   // Division by zero
-64     set_interrupt_descriptor_table_entry(0x01, &HandleException0x01, 0);   // Debug
-65     set_interrupt_descriptor_table_entry(0x02, &HandleException0x02, 0);   // Non-maskable interrupt
-66     set_interrupt_descriptor_table_entry(0x03, &HandleException0x03, 0);   // Breakpoint
-67     set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 0);   // Overflow
-68     set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 0);   // Bound Range Exceeded
-69     set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 0);   // Invalid Opcode
-70     set_interrupt_descriptor_table_entry(0x06, &HandleException0x07, 0);   // Device Not Available
-71     set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08, 0);   // Double Fault
-72     set_interrupt_descriptor_table_entry(0x09, &HandleException0x09, 0);   // Coprocessor Segment Overrun
-73     set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 0);   // Invalid TSS
-74     set_interrupt_descriptor_table_entry(0x0B, &HandleInterruptError0x0B, 0);   // Segment Not Present
-75     set_interrupt_descriptor_table_entry(0x0C, &HandleInterruptError0x0C, 0);   // Stack-Segment Fault
-76     set_interrupt_descriptor_table_entry(0x0D, &HandleInterruptError0x0D, 0);   // General Protection Fault
-77     set_interrupt_descriptor_table_entry(0x0E, &HandleInterruptError0x0E, 0);   // Page Fault
-78     set_interrupt_descriptor_table_entry(0x0F, &HandleException0x0F, 0);   // Reserved
-79     set_interrupt_descriptor_table_entry(0x10, &HandleException0x10, 0);   // x87 Floating-Point Exception
-80     set_interrupt_descriptor_table_entry(0x11, &HandleInterruptError0x11, 0);   // Alignment Check
-81     set_interrupt_descriptor_table_entry(0x12, &HandleException0x12, 0);   // Machine Check
-82     set_interrupt_descriptor_table_entry(0x13, &HandleException0x13, 0);   // SIMD Floating-Point Exception
-83     set_interrupt_descriptor_table_entry(0x14, &HandleException0x14, 0);   // Reserved: Virtualization Exception
-84     set_interrupt_descriptor_table_entry(0x15, &HandleException0x15, 0);   // Reserved
-85     set_interrupt_descriptor_table_entry(0x16, &HandleException0x16, 0);   // Reserved
-86     set_interrupt_descriptor_table_entry(0x17, &HandleException0x17, 0);   // Reserved
-87     set_interrupt_descriptor_table_entry(0x18, &HandleException0x18, 0);   // Reserved
-88     set_interrupt_descriptor_table_entry(0x19, &HandleException0x19, 0);   // Reserved
-89     set_interrupt_descriptor_table_entry(0x1A, &HandleException0x1A, 0);   // Reserved
-90     set_interrupt_descriptor_table_entry(0x1B, &HandleException0x1B, 0);   // Reserved
-91     set_interrupt_descriptor_table_entry(0x1C, &HandleException0x1C, 0);   // Reserved
-92     set_interrupt_descriptor_table_entry(0x1D, &HandleException0x1D, 0);   // Reserved
-93     set_interrupt_descriptor_table_entry(0x1E, &HandleException0x1E, 0);   // Security Exception
-94     set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 0);   // Reserved
-95 
-96     // Set up the hardware interrupts
-97     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x00, &HandleInterruptRequest0x00, 0);   // Advanced Programmable Interrupt Controller (APIC) Timer Interrupt
-98     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
-99     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x02, &HandleInterruptRequest0x02, 0);   // Cascade (used internally by the two PICs\&. never raised)
-100     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
-101 
-102     // Set up the system call interrupt
-103     set_interrupt_descriptor_table_entry(hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 0);   // System Call Interrupt
-104 
-105     //Tell the processor to use the IDT
-106     IDTR idt;
-107     idt\&.limit = 256 * sizeof(InterruptDescriptor) - 1;
-108     idt\&.base = (uint64_t)s_interrupt_descriptor_table;
-109     asm volatile("lidt %0" : : "m" (idt));
-110 };
+48 : m_local_apic(nullptr)
+49 {
+50 
+51      // Full the table of interrupts with 0
+52      for(uint16_t i = 0; i < 256; i++) {
+53         s_interrupt_descriptor_table[i]\&.address_low_bits = 0;
+54         s_interrupt_descriptor_table[i]\&.address_mid_bits = 0;
+55         s_interrupt_descriptor_table[i]\&.address_high_bits = 0;
+56         s_interrupt_descriptor_table[i]\&.segment_selector = 0;
+57         s_interrupt_descriptor_table[i]\&.ist = 0;
+58         s_interrupt_descriptor_table[i]\&.flags = 0;
+59      }
+60 
+61      //Set Up the base interrupts
+62     set_interrupt_descriptor_table_entry(0x00, &HandleException0x00, 0);   // Division by zero
+63     set_interrupt_descriptor_table_entry(0x01, &HandleException0x01, 0);   // Debug
+64     set_interrupt_descriptor_table_entry(0x02, &HandleException0x02, 0);   // Non-maskable interrupt
+65     set_interrupt_descriptor_table_entry(0x03, &HandleException0x03, 0);   // Breakpoint
+66     set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 0);   // Overflow
+67     set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 0);   // Bound Range Exceeded
+68     set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 0);   // Invalid Opcode
+69     set_interrupt_descriptor_table_entry(0x06, &HandleException0x07, 0);   // Device Not Available
+70     set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08, 0);   // Double Fault
+71     set_interrupt_descriptor_table_entry(0x09, &HandleException0x09, 0);   // Coprocessor Segment Overrun
+72     set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 0);   // Invalid TSS
+73     set_interrupt_descriptor_table_entry(0x0B, &HandleInterruptError0x0B, 0);   // Segment Not Present
+74     set_interrupt_descriptor_table_entry(0x0C, &HandleInterruptError0x0C, 0);   // Stack-Segment Fault
+75     set_interrupt_descriptor_table_entry(0x0D, &HandleInterruptError0x0D, 0);   // General Protection Fault
+76     set_interrupt_descriptor_table_entry(0x0E, &HandleInterruptError0x0E, 0);   // Page Fault
+77     set_interrupt_descriptor_table_entry(0x0F, &HandleException0x0F, 0);   // Reserved
+78     set_interrupt_descriptor_table_entry(0x10, &HandleException0x10, 0);   // x87 Floating-Point Exception
+79     set_interrupt_descriptor_table_entry(0x11, &HandleInterruptError0x11, 0);   // Alignment Check
+80     set_interrupt_descriptor_table_entry(0x12, &HandleException0x12, 0);   // Machine Check
+81     set_interrupt_descriptor_table_entry(0x13, &HandleException0x13, 0);   // SIMD Floating-Point Exception
+82     set_interrupt_descriptor_table_entry(0x14, &HandleException0x14, 0);   // Reserved: Virtualization Exception
+83     set_interrupt_descriptor_table_entry(0x15, &HandleException0x15, 0);   // Reserved
+84     set_interrupt_descriptor_table_entry(0x16, &HandleException0x16, 0);   // Reserved
+85     set_interrupt_descriptor_table_entry(0x17, &HandleException0x17, 0);   // Reserved
+86     set_interrupt_descriptor_table_entry(0x18, &HandleException0x18, 0);   // Reserved
+87     set_interrupt_descriptor_table_entry(0x19, &HandleException0x19, 0);   // Reserved
+88     set_interrupt_descriptor_table_entry(0x1A, &HandleException0x1A, 0);   // Reserved
+89     set_interrupt_descriptor_table_entry(0x1B, &HandleException0x1B, 0);   // Reserved
+90     set_interrupt_descriptor_table_entry(0x1C, &HandleException0x1C, 0);   // Reserved
+91     set_interrupt_descriptor_table_entry(0x1D, &HandleException0x1D, 0);   // Reserved
+92     set_interrupt_descriptor_table_entry(0x1E, &HandleException0x1E, 0);   // Security Exception
+93     set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 0);   // Reserved
+94 
+95     // Set up the hardware interrupts
+96     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x00, &HandleInterruptRequest0x00, 0);   // APIC Timer Interrupt
+97     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
+98     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
+99     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
+100 
+101     // Set up the system call interrupt
+102     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 0);   // System Call Interrupt
+103 
+104     //Tell the processor to use the IDT
+105     IDTR idt;
+106     idt\&.limit = 256 * sizeof(InterruptDescriptor) - 1;
+107     idt\&.base = (uint64_t)s_interrupt_descriptor_table;
+108     asm volatile("lidt %0" : : "m" (idt));
+109 };
 .fi
 .PP
-References MaxOS::hardwarecommunication::InterruptDescriptor::address_high_bits, MaxOS::hardwarecommunication::InterruptDescriptor::address_low_bits, MaxOS::hardwarecommunication::InterruptDescriptor::address_mid_bits, MaxOS::hardwarecommunication::IDTR::base, MaxOS::hardwarecommunication::InterruptDescriptor::flags, HandleException0x00(), HandleException0x01(), HandleException0x02(), HandleException0x03(), HandleException0x04(), HandleException0x05(), HandleException0x06(), HandleException0x07(), HandleException0x09(), HandleException0x0F(), HandleException0x10(), HandleException0x12(), HandleException0x13(), HandleException0x14(), HandleException0x15(), HandleException0x16(), HandleException0x17(), HandleException0x18(), HandleException0x19(), HandleException0x1A(), HandleException0x1B(), HandleException0x1C(), HandleException0x1D(), HandleException0x1E(), HandleException0x1F(), HandleInterruptError0x08(), HandleInterruptError0x0A(), HandleInterruptError0x0B(), HandleInterruptError0x0C(), HandleInterruptError0x0D(), HandleInterruptError0x0E(), HandleInterruptError0x11(), HandleInterruptRequest0x00(), HandleInterruptRequest0x01(), HandleInterruptRequest0x02(), HandleInterruptRequest0x0C(), HandleInterruptRequest0x60(), hardware_interrupt_offset(), MaxOS::drivers::peripherals::i, MaxOS::hardwarecommunication::InterruptDescriptor::ist, MaxOS::hardwarecommunication::IDTR::limit, s_interrupt_descriptor_table, MaxOS::hardwarecommunication::InterruptDescriptor::segment_selector, and set_interrupt_descriptor_table_entry()\&.
+References MaxOS::hardwarecommunication::InterruptDescriptor::address_high_bits, MaxOS::hardwarecommunication::InterruptDescriptor::address_low_bits, MaxOS::hardwarecommunication::InterruptDescriptor::address_mid_bits, MaxOS::hardwarecommunication::IDTR::base, MaxOS::hardwarecommunication::InterruptDescriptor::flags, HandleException0x00(), HandleException0x01(), HandleException0x02(), HandleException0x03(), HandleException0x04(), HandleException0x05(), HandleException0x06(), HandleException0x07(), HandleException0x09(), HandleException0x0F(), HandleException0x10(), HandleException0x12(), HandleException0x13(), HandleException0x14(), HandleException0x15(), HandleException0x16(), HandleException0x17(), HandleException0x18(), HandleException0x19(), HandleException0x1A(), HandleException0x1B(), HandleException0x1C(), HandleException0x1D(), HandleException0x1E(), HandleException0x1F(), HandleInterruptError0x08(), HandleInterruptError0x0A(), HandleInterruptError0x0B(), HandleInterruptError0x0C(), HandleInterruptError0x0D(), HandleInterruptError0x0E(), HandleInterruptError0x11(), HandleInterruptRequest0x00(), HandleInterruptRequest0x01(), HandleInterruptRequest0x02(), HandleInterruptRequest0x0C(), HandleInterruptRequest0x60(), MaxOS::drivers::peripherals::i, MaxOS::hardwarecommunication::InterruptDescriptor::ist, MaxOS::hardwarecommunication::IDTR::limit, s_hardware_interrupt_offset, s_interrupt_descriptor_table, MaxOS::hardwarecommunication::InterruptDescriptor::segment_selector, and set_interrupt_descriptor_table_entry()\&.
 .SS "InterruptManager::~InterruptManager ()"
 
 .PP
-Definition at line 112 of file interrupts\&.cpp\&.
+Definition at line 111 of file interrupts\&.cpp\&.
 .PP
 .nf
-113 {
-114   deactivate();
-115 }
+112 {
+113   deactivate();
+114 }
 .fi
 .PP
 References deactivate()\&.
@@ -348,19 +350,19 @@ References deactivate()\&.
 .PP
 Activates the interrupt manager and starts interrupts (also deactivates the current interrupt manager) 
 .PP
-Definition at line 153 of file interrupts\&.cpp\&.
+Definition at line 152 of file interrupts\&.cpp\&.
 .PP
 .nf
-153                                 {
-154 
-155     // Deactivate the current interrupt manager
-156     if(s_active_interrupt_manager != 0)
-157       s_active_interrupt_manager->deactivate();
-158 
-159     // Set the current interrupt manager and start interrupts
-160     s_active_interrupt_manager = this;
-161     asm("sti");
-162 }
+152                                 {
+153 
+154     // Deactivate the current interrupt manager
+155     if(s_active_interrupt_manager != 0)
+156       s_active_interrupt_manager->deactivate();
+157 
+158     // Set the current interrupt manager and start interrupts
+159     s_active_interrupt_manager = this;
+160     asm("sti");
+161 }
 .fi
 .PP
 References deactivate(), and s_active_interrupt_manager\&.
@@ -371,17 +373,17 @@ Referenced by kernelMain()\&.
 .PP
 Deactivates the interrupt manager and stops interrupts\&. 
 .PP
-Definition at line 167 of file interrupts\&.cpp\&.
+Definition at line 166 of file interrupts\&.cpp\&.
 .PP
 .nf
-168 {
-169 
-170     // If this is the active interrupt manager, deactivate it and stop interrupts
-171     if(s_active_interrupt_manager == this){
-172       s_active_interrupt_manager = 0;
-173       asm("cli");
-174     }
-175 }
+167 {
+168 
+169     // If this is the active interrupt manager, deactivate it and stop interrupts
+170     if(s_active_interrupt_manager == this){
+171       s_active_interrupt_manager = 0;
+172       asm("cli");
+173     }
+174 }
 .fi
 .PP
 References s_active_interrupt_manager\&.
@@ -390,66 +392,27 @@ Referenced by activate(), and ~InterruptManager()\&.
 .SS "cpu_status_t * InterruptManager::handle_interrupt_request (system::cpu_status_t *)\fC [protected]\fP"
 
 .PP
-Definition at line 270 of file interrupts\&.cpp\&.
+Definition at line 228 of file interrupts\&.cpp\&.
 .PP
 .nf
-270                                                                              {
-271 
-272   _kprintf("Interrupt: 0x%x\n", status->interrupt_number);
-273 
-274   // If there is an interrupt manager, handle the interrupt
-275   if(m_interrupt_handlers[status -> interrupt_number] != 0)
-276       m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
-277 
-278   else if(status->interrupt_number < m_hardware_interrupt_offset){
-279     _kprintf("Exception: %s, Error Code: 0x%x\n", exceptions[status->interrupt_number], status->error_code);
-280     CPU::stack_trace(10);
-281   }
-282 
-283 
-284   else
-285     _kprintf("Unhandled Interrupt: 0x%x\n", status->interrupt_number);
-286 
-287   // Debug the General Protection Fault
-288   if(status->interrupt_number == 0x0D) {
-289 
-290     // Define masks for each field
-291     uint32_t E_MASK = 0b10000000000000000000000000000000;
-292     uint32_t Tbl_MASK = 0b01100000000000000000000000000000;
-293     uint32_t Index_MASK = 0b00011111111111110000000000000000;
-294 
-295     // Use bit shifting and masking to extract values
-296     int E = (status -> error_code & E_MASK) >> 31;
-297     int Tbl = (status -> error_code & Tbl_MASK) >> 29;
-298     int Index = (status -> error_code & Index_MASK) >> 16;
-299 
-300     // If bit 0 is set, the exception was caused by external event
-301     _kprintf("General Protection Fault: External Event: %s\n", (E) ? "Yes" : "No");
-302 
-303     switch(Tbl) {
-304       case 0b00: _kprintf("General Protection Fault: Table: GDT\n"); break;
-305       case 0b01: _kprintf("General Protection Fault: Table: IDT\n"); break;
-306       case 0b10: _kprintf("General Protection Fault: Table: LDT\n"); break;
-307       case 0b11: _kprintf("General Protection Fault: Table: IDT\n"); break;
-308     }
-309 
-310     // Find the selector index (next 13 bits)
-311     _kprintf("General Protection Fault: Selector Index: 0x%x\n", Index);
-312 
-313     // Hang
-314     while(true);
-315   }
-316 
-317 
-318   //TODO: Send SMP interrupt
-319   //todo: send eoi
-320 
-321   // Return the status
-322   return status;
-323 }
+228                                                                              {
+229 
+230   // If there is an interrupt manager, handle the interrupt
+231   if(m_interrupt_handlers[status -> interrupt_number] != 0)
+232       m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
+233   else
+234     _kprintf("Unhandled Interrupt 0x%x\n", status->interrupt_number);
+235 
+236   // Send the EOI to the APIC
+237   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
+238       m_local_apic->send_eoi();
+239 
+240   // Return the status
+241   return status;
+242 }
 .fi
 .PP
-References _kprintf, MaxOS::hardwarecommunication::InterruptHandler::handle_interrupt(), m_hardware_interrupt_offset, m_interrupt_handlers, and status\&.
+References _kprintf, MaxOS::hardwarecommunication::InterruptHandler::handle_interrupt(), m_interrupt_handlers, s_hardware_interrupt_offset, MaxOS::hardwarecommunication::LocalAPIC::send_eoi(), and status\&.
 .PP
 Referenced by HandleInterrupt()\&.
 .SS "static void MaxOS::hardwarecommunication::InterruptManager::HandleException0x00 ()\fC [static]\fP, \fC [protected]\fP"
@@ -569,35 +532,29 @@ The stack pointer
 .PP
 
 .PP
-Definition at line 183 of file interrupts\&.cpp\&.
+Definition at line 182 of file interrupts\&.cpp\&.
 .PP
 .nf
-183                                                                                 {
-184 
-185   if(status -> interrupt_number == 0xE)
-186   {
-187     bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
-188     bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
-189     bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
-190     bool reserved_write = (status ->error_code & 0x8) != 0;  // Bit 3: Reserved bit write flag
-191     bool instruction_fetch = (status ->error_code & 0x10) != 0; // Bit 4: Instruction fetch flag (on some CPUs)
-192 
-193     ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
-194              status->error_code, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
-195   }
-196 
-197   ASSERT(false, "Interupt number 0x%x, Code: 0x%x", status->interrupt_number, status->error_code);
-198 
-199   // If there is an interrupt manager handle interrupt
-200   if(s_active_interrupt_manager != 0)
-201     return s_active_interrupt_manager->handle_interrupt_request(status);
-202 
-203   // CPU Can continue
-204   return status;
-205 }
+182                                                                                 {
+183 
+184   // System Handlers
+185   switch (status->interrupt_number) {
+186     case 0x0E:
+187       page_fault(status);
+188       break;
+189 
+190   }
+191 
+192   // If there is an interrupt manager handle interrupt
+193   if(s_active_interrupt_manager != 0)
+194     return s_active_interrupt_manager->handle_interrupt_request(status);
+195 
+196   // CPU Can continue
+197   return status;
+198 }
 .fi
 .PP
-References ASSERT, handle_interrupt_request(), present, s_active_interrupt_manager, status, and write\&.
+References handle_interrupt_request(), s_active_interrupt_manager, and status\&.
 .SS "static void MaxOS::hardwarecommunication::InterruptManager::HandleInterruptError0x08 ()\fC [static]\fP, \fC [protected]\fP"
 
 .PP
@@ -686,17 +643,15 @@ The offset of the hardware interrupt
 .PP
 
 .PP
-Definition at line 212 of file interrupts\&.cpp\&.
+Definition at line 205 of file interrupts\&.cpp\&.
 .PP
 .nf
-212                                                      {
-213     return m_hardware_interrupt_offset;
-214 }
+205                                                      {
+206     return s_hardware_interrupt_offset;
+207 }
 .fi
 .PP
-References m_hardware_interrupt_offset\&.
-.PP
-Referenced by InterruptManager()\&.
+References s_hardware_interrupt_offset\&.
 .SS "static void MaxOS::hardwarecommunication::InterruptManager::InterruptIgnore ()\fC [static]\fP, \fC [protected]\fP"
 
 .SS "void InterruptManager::remove_interrupt_handler (uint8_t interrupt)"
@@ -711,17 +666,29 @@ Removes the interrupt handler for the interrupt\&.
 .PP
 
 .PP
-Definition at line 231 of file interrupts\&.cpp\&.
+Definition at line 224 of file interrupts\&.cpp\&.
 .PP
 .nf
-231                                                                  {
-232   m_interrupt_handlers[interrupt] = 0;
-233 }
+224                                                                  {
+225   m_interrupt_handlers[interrupt] = 0;
+226 }
 .fi
 .PP
 References m_interrupt_handlers\&.
 .PP
 Referenced by MaxOS::hardwarecommunication::InterruptHandler::~InterruptHandler()\&.
+.SS "void InterruptManager::set_apic (\fBLocalAPIC\fP * apic)"
+
+.PP
+Definition at line 244 of file interrupts\&.cpp\&.
+.PP
+.nf
+244                                                {
+245     m_local_apic = apic;
+246 }
+.fi
+.PP
+Referenced by kernelMain()\&.
 .SS "void InterruptManager::set_interrupt_descriptor_table_entry (uint8_t interrupt, void(*)() handler, uint8_t descriptor_privilege_level)\fC [static]\fP, \fC [protected]\fP"
 
 .PP
@@ -742,29 +709,29 @@ Sets an entry in the Interrupt Descriptor Table\&.
 .PP
 
 .PP
-Definition at line 127 of file interrupts\&.cpp\&.
+Definition at line 126 of file interrupts\&.cpp\&.
 .PP
 .nf
-128 {
-129 
-130   // Get the address of the handler and the entry in the IDT
-131   uint64_t handler_address = (uint64_t)handler;
-132   InterruptDescriptor* interrupt_descriptor = &s_interrupt_descriptor_table[interrupt];
-133 
-134   // Set the handler address
-135   interrupt_descriptor->address_low_bits = handler_address & 0xFFFF;
-136   interrupt_descriptor->address_mid_bits = (handler_address >> 16) & 0xFFFF;
-137   interrupt_descriptor->address_high_bits = (handler_address >> 32) & 0xFFFFFFFF;
-138 
-139   // Set the kernel code segment offset
-140   interrupt_descriptor->segment_selector = 0x08;
-141 
-142   // Disable IST
-143   interrupt_descriptor->ist = 0;
-144 
-145   // Set the flags (Trap Gate, Present and the Descriptor Privilege Level)
-146   interrupt_descriptor->flags = 0b1110 | ((descriptor_privilege_level & 0b11) << 5) | (1 << 7);
-147 }
+127 {
+128 
+129   // Get the address of the handler and the entry in the IDT
+130   uint64_t handler_address = (uint64_t)handler;
+131   InterruptDescriptor* interrupt_descriptor = &s_interrupt_descriptor_table[interrupt];
+132 
+133   // Set the handler address
+134   interrupt_descriptor->address_low_bits = handler_address & 0xFFFF;
+135   interrupt_descriptor->address_mid_bits = (handler_address >> 16) & 0xFFFF;
+136   interrupt_descriptor->address_high_bits = (handler_address >> 32) & 0xFFFFFFFF;
+137 
+138   // Set the kernel code segment offset
+139   interrupt_descriptor->segment_selector = 0x08;
+140 
+141   // Disable IST
+142   interrupt_descriptor->ist = 0;
+143 
+144   // Set the flags (Trap Gate, Present and the Descriptor Privilege Level)
+145   interrupt_descriptor->flags = 0b1110 | ((descriptor_privilege_level & 0b11) << 5) | (1 << 7);
+146 }
 .fi
 .PP
 References MaxOS::hardwarecommunication::InterruptDescriptor::address_high_bits, MaxOS::hardwarecommunication::InterruptDescriptor::address_low_bits, MaxOS::hardwarecommunication::InterruptDescriptor::address_mid_bits, MaxOS::hardwarecommunication::InterruptDescriptor::flags, MaxOS::hardwarecommunication::InterruptDescriptor::ist, s_interrupt_descriptor_table, and MaxOS::hardwarecommunication::InterruptDescriptor::segment_selector\&.
@@ -784,12 +751,12 @@ Sets the interrupt handler for the interrupt\&.
 .PP
 
 .PP
-Definition at line 222 of file interrupts\&.cpp\&.
+Definition at line 215 of file interrupts\&.cpp\&.
 .PP
 .nf
-222                                                                                          {
-223   m_interrupt_handlers[interrupt] = handler;
-224 }
+215                                                                                          {
+216   m_interrupt_handlers[interrupt] = handler;
+217 }
 .fi
 .PP
 References m_interrupt_handlers\&.
@@ -800,39 +767,39 @@ Referenced by MaxOS::hardwarecommunication::InterruptHandler::InterruptHandler()
 .SS "friend class \fBInterruptHandler\fP\fC [friend]\fP"
 
 .PP
-Definition at line 65 of file interrupts\&.h\&.
+Definition at line 66 of file interrupts\&.h\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "uint16_t MaxOS::hardwarecommunication::InterruptManager::m_hardware_interrupt_offset\fC [protected]\fP"
-
-.PP
-Definition at line 71 of file interrupts\&.h\&.
-.PP
-Referenced by handle_interrupt_request(), and hardware_interrupt_offset()\&.
 .SS "\fBInterruptHandler\fP* MaxOS::hardwarecommunication::InterruptManager::m_interrupt_handlers[256]\fC [protected]\fP"
 
 .PP
-Definition at line 72 of file interrupts\&.h\&.
+Definition at line 78 of file interrupts\&.h\&.
 .PP
 Referenced by handle_interrupt_request(), remove_interrupt_handler(), and set_interrupt_handler()\&.
 .SS "\fBsystem::ThreadManager\fP* MaxOS::hardwarecommunication::InterruptManager::m_thread_manager\fC [protected]\fP"
 
 .PP
-Definition at line 73 of file interrupts\&.h\&.
+Definition at line 79 of file interrupts\&.h\&.
 .SS "\fBInterruptManager\fP * InterruptManager::s_active_interrupt_manager = 0\fC [static]\fP, \fC [protected]\fP"
 
 .PP
-Definition at line 69 of file interrupts\&.h\&.
+Definition at line 75 of file interrupts\&.h\&.
 .PP
 Referenced by activate(), deactivate(), and HandleInterrupt()\&.
 .SS "OutputStream * InterruptManager::s_error_messages = 0\fC [static]\fP, \fC [protected]\fP"
 
 .PP
-Definition at line 70 of file interrupts\&.h\&.
+Definition at line 76 of file interrupts\&.h\&.
+.SS "const static uint16_t MaxOS::hardwarecommunication::InterruptManager::s_hardware_interrupt_offset {0x20}\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Definition at line 77 of file interrupts\&.h\&.
+.PP
+Referenced by handle_interrupt_request(), hardware_interrupt_offset(), and InterruptManager()\&.
 .SS "\fBInterruptDescriptor\fP InterruptManager::s_interrupt_descriptor_table\fC [static]\fP, \fC [protected]\fP"
 
 .PP
-Definition at line 75 of file interrupts\&.h\&.
+Definition at line 81 of file interrupts\&.h\&.
 .PP
 Referenced by InterruptManager(), and set_interrupt_descriptor_table_entry()\&.
 

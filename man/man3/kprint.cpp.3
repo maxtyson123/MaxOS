@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/kprint.cpp" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/kprint.cpp" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -53,63 +53,72 @@ s for string
 .PP
 
 .PP
-Definition at line 155 of file kprint\&.cpp\&.
+Definition at line 157 of file kprint\&.cpp\&.
 .PP
 .nf
-156 {
-157 
-158   // Print the header
-159   pre_kprintf(file, line,func, type);
-160 
-161   // Create a pointer to the data
-162   va_list parameters;
-163   va_start(parameters, format);
-164 
-165   // Loop through the format string
-166   for (; *format != '\0'; format++)
-167   {
+158 {
+159   // Create a pointer to the data
+160   va_list parameters;
+161   va_start(parameters, format);
+162 
+163   // Print the header
+164   if(*format != '\h')
+165     pre_kprintf(file, line,func, type);
+166   else
+167     format++;
 168 
-169     // If it is not a %, print the character
-170     if (*format != '%')
-171     {
-172       putchar(*format);
-173       continue;
-174     }
-175 
-176     // Move to the next character
-177     format++;
-178 
-179     switch (*format)
-180     {
-181       case 'd':
-182       {
-183         // Print a decimal
-184         int number = va_arg (parameters, int);
-185         char* str = itoa(10, number);
-186         for (int i = 0; i < strlen(str); i++)
-187           putchar(str[i]);
-188         break;
-189       }
-190       case 'x':
-191       {
-192         // Print a hex
-193         uint64_t  number = va_arg (parameters, uint64_t );
-194         char* str = itoa(16, number);
-195         for (int i = 0; i < strlen(str); i++)
-196           putchar(str[i]);
-197         break;
-198       }
-199       case 's':
-200       {
-201         // Print a string
-202         char* str = va_arg (parameters, char*);
-203         for (int i = 0; i < strlen(str); i++)
-204           putchar(str[i]);
-205         break;
-206       }
-207     }
-208   }
-209 }
+169 
+170   // Loop through the format string
+171   for (; *format != '\0'; format++)
+172   {
+173 
+174     // If it is not a %, print the character
+175     if (*format != '%')
+176     {
+177       putchar(*format);
+178       continue;
+179     }
+180 
+181     // Move to the next character
+182     format++;
+183 
+184     switch (*format)
+185     {
+186       case 'd':
+187       {
+188         // Print a decimal
+189         int number = va_arg (parameters, int);
+190         char* str = itoa(10, number);
+191         for (int i = 0; i < strlen(str); i++)
+192           putchar(str[i]);
+193         break;
+194       }
+195       case 'x':
+196       {
+197         // Print a hex
+198         uint64_t  number = va_arg (parameters, uint64_t );
+199         char* str = itoa(16, number);
+200         for (int i = 0; i < strlen(str); i++)
+201           putchar(str[i]);
+202         break;
+203       }
+204       case 's':
+205       {
+206         // Print a string
+207         char* str = va_arg (parameters, char*);
+208         for (int i = 0; i < strlen(str); i++)
+209           putchar(str[i]);
+210         break;
+211       }
+212     }
+213   }
+214 
+215 
+216   // If it is type 3 panic
+217   if(type == 3)
+218      CPU::PANIC("Check the serial output for more information");
+219 
+220 }
 .fi
 .PP
 References pre_kprintf(), and type\&.
@@ -129,110 +138,111 @@ Converts integer to string\&.
 .PP
 
 .PP
-Definition at line 17 of file kprint\&.cpp\&.
+Definition at line 18 of file kprint\&.cpp\&.
 .PP
 .nf
-18 {
-19     static char buffer[50] = {0};
-20     int i = 49;
-21     bool isNegative = false;
-22 
-23     if (number == 0)
-24     {
-25         buffer[i] = '0';
-26         return &buffer[i];
-27     }
-28 
-29     if (number < 0 && base == 10)
-30     {
-31         isNegative = true;
-32         number = -number;
-33     }
-34 
-35     for (; number && i; --i, number /= base)
-36         buffer[i] = "0123456789ABCDEF"[number % base];
-37 
-38     if (isNegative)
-39     {
-40         buffer[i] = '-';
-41         return &buffer[i];
-42     }
-43 
-44     return &buffer[i + 1];
-45 }
+19 {
+20     static char buffer[50] = {0};
+21     int i = 49;
+22     bool isNegative = false;
+23 
+24     if (number == 0)
+25     {
+26         buffer[i] = '0';
+27         return &buffer[i];
+28     }
+29 
+30     if (number < 0 && base == 10)
+31     {
+32         isNegative = true;
+33         number = -number;
+34     }
+35 
+36     for (; number && i; --i, number /= base)
+37         buffer[i] = "0123456789ABCDEF"[number % base];
+38 
+39     if (isNegative)
+40     {
+41         buffer[i] = '-';
+42         return &buffer[i];
+43     }
+44 
+45     return &buffer[i + 1];
+46 }
 .fi
 .PP
 References base, and MaxOS::drivers::peripherals::i\&.
 .SS "void pre_kprintf (const char * file, int line, const char * func, uint8_t type)"
 @ brief Prints a debug prefix (in yellow) to the serial output 
 .PP
-Definition at line 77 of file kprint\&.cpp\&.
+Definition at line 78 of file kprint\&.cpp\&.
 .PP
 .nf
-78 {
-79 
-80   // Print the  colour
-81   char* colour = "---------";
-82   switch (type) {
-83 
-84     // Log (yellow)
-85     case 0:
-86       colour = "\033[1;33m";
-87       break;
-88 
-89     // Assert (red)
-90     case 3:
-91       colour = "\033[1;31m";
-92       break;
-93   }
-94 
-95   for (int i = 0; i < strlen(colour); i++)
-96     putchar(colour[i]);
-97 
-98   putchar('[');
+79 {
+80 
+81   // Print the  colour
+82   char* colour = "---------";
+83   switch (type) {
+84 
+85     // Log (yellow)
+86     case 0:
+87       colour = "\033[1;33m";
+88       break;
+89 
+90     // Assert, Panic (red)
+91     case 2:
+92     case 3:
+93       colour = "\033[1;31m";
+94       break;
+95   }
+96 
+97   for (int i = 0; i < strlen(colour); i++)
+98     putchar(colour[i]);
 99 
-100   // File Output
-101   if(type == 0){
-102 
-103     // Print the file (but not the path)
-104     const char* file_str = file;
-105     for (int i = strlen(file) - 1; i >= 0; i--)
-106     {
-107       if (file[i] == '/')
-108       {
-109         file_str = &file[i + 1];
-110         break;
-111       }
-112     }\
-113     for (int j = 0; j < strlen(file_str); j++)
-114       putchar(file_str[j]);
-115     putchar(':');
-116 
-117     // Print the line
-118     const char* line_str = itoa(10, line);
-119     for (int i = 0; i < strlen(line_str); i++)
-120       putchar(line_str[i]);
-121   }else{
-122 
-123     // Print the text
-124     const char* text = "FATAL ERROR IN {";
-125     for (int i = 0; i < strlen(text); i++)
-126       putchar(text[i]);
-127 
-128     // Print the function
-129     for (int i = 0; i < strlen(func); i++)
-130       putchar(func[i]);
-131 
-132     putchar('}');
-133   }
-134 
-135 
-136   // Print the kernel footer
-137   const char* footer = "] \033[0m";
-138   for (int i = 0; i < strlen(footer); i++)
-139     putchar(footer[i]);
-140 
-141 }
+100   putchar('[');
+101 
+102   // File Output
+103   if(type == 0){
+104 
+105     // Print the file (but not the path)
+106     const char* file_str = file;
+107     for (int i = strlen(file) - 1; i >= 0; i--)
+108     {
+109       if (file[i] == '/')
+110       {
+111         file_str = &file[i + 1];
+112         break;
+113       }
+114     }\
+115     for (int j = 0; j < strlen(file_str); j++)
+116       putchar(file_str[j]);
+117     putchar(':');
+118 
+119     // Print the line
+120     const char* line_str = itoa(10, line);
+121     for (int i = 0; i < strlen(line_str); i++)
+122       putchar(line_str[i]);
+123   }else if(type == 3){
+124 
+125     // Print the text
+126     const char* text = "FATAL ERROR IN {";
+127     for (int i = 0; i < strlen(text); i++)
+128       putchar(text[i]);
+129 
+130     // Print the function
+131     for (int i = 0; i < strlen(func); i++)
+132       putchar(func[i]);
+133 
+134     putchar('}');
+135   }
+136 
+137 
+138   // Print the kernel footer
+139   const char* footer = "] \033[0m";
+140   for (int i = 0; i < strlen(footer); i++)
+141     putchar(footer[i]);
+142 
+143 }
 .fi
 .PP
 References MaxOS::drivers::peripherals::i, strlen(), and type\&.
@@ -255,14 +265,14 @@ The length of the string
 .PP
 
 .PP
-Definition at line 53 of file kprint\&.cpp\&.
+Definition at line 54 of file kprint\&.cpp\&.
 .PP
 .nf
-54 {
-55    int len = 0;
-56    for (; str[len] != '\0'; len++);
-57    return len;
-58 }
+55 {
+56    int len = 0;
+57    for (; str[len] != '\0'; len++);
+58    return len;
+59 }
 .fi
 .PP
 Referenced by pre_kprintf()\&.

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['transmissioncontrolprotocolport_3060',['TransmissionControlProtocolPort',['../namespaceMaxOS_1_1net.html#a8e668c17241c6c0ed8e9f6df338b2307',1,'MaxOS::net']]]
+  ['out_5fof_5fbounds_5finfo_5ft_3260',['out_of_bounds_info_t',['../namespaceMaxOS_1_1system.html#af305e6b7d808f2f9713c455c9ad2cc72',1,'MaxOS::system']]],
+  ['overflow_5finfo_5ft_3261',['overflow_info_t',['../namespaceMaxOS_1_1system.html#a7fc98f575c586b9bc27d4048d3377d7a',1,'MaxOS::system']]]
 ];

@@ -8,6 +8,7 @@ var namespaceMaxOS_1_1hardwarecommunication =
     [ "InterruptDescriptor", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor" ],
     [ "InterruptHandler", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler" ],
     [ "InterruptManager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager" ],
+    [ "InterruptRedirect", "structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect.html", "structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect" ],
     [ "IOAPIC", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC" ],
     [ "LocalAPIC", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC" ],
     [ "MADT", "structMaxOS_1_1hardwarecommunication_1_1MADT.html", "structMaxOS_1_1hardwarecommunication_1_1MADT" ],

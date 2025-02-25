@@ -105,6 +105,7 @@ $(document).ready(function(){initNavTree('clock_8h.html',''); initResizable(); }
 <code>#include &lt;<a class="el" href="time_8h_source.html">common/time.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="driver_8h_source.html">drivers/driver.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="interrupts_8h_source.html">hardwarecommunication/interrupts.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="apic_8h_source.html">hardwarecommunication/apic.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="vector_8h_source.html">common/vector.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="eventHandler_8h_source.html">common/eventHandler.h</a>&gt;</code><br />
 </div>
@@ -118,8 +119,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler.html">MaxOS::drivers::clock::ClockEventHandler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles the events triggered by the clock.  <a href="classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html">MaxOS::drivers::clock::PITCommand</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1drivers_1_1clock_1_1PIT.html">MaxOS::drivers::clock::PIT</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1drivers_1_1clock_1_1Clock.html">MaxOS::drivers::clock::Clock</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classMaxOS_1_1drivers_1_1Driver.html" title="base class for all drivers, handles the activation, deactivation, initialisation and reset of the dri...">Driver</a> for the CMOS Real Time <a class="el" href="classMaxOS_1_1drivers_1_1clock_1_1Clock.html" title="Driver for the CMOS Real Time Clock.">Clock</a>.  <a href="classMaxOS_1_1drivers_1_1clock_1_1Clock.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classMaxOS_1_1drivers_1_1Driver.html" title="base class for all drivers, handles the activation, deactivation, initialisation and reset of the dri...">Driver</a> for the APIC clock.  <a href="classMaxOS_1_1drivers_1_1clock_1_1Clock.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -136,6 +141,32 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a17687f96357a81b18a16cc4afcdb29a0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a17687f96357a81b18a16cc4afcdb29a0">MaxOS::drivers::clock::ClockEvents</a> { <a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a17687f96357a81b18a16cc4afcdb29a0a66c428703c3c6a056080b057a2135822">MaxOS::drivers::clock::TIME</a>
  }</td></tr>
 <tr class="separator:a17687f96357a81b18a16cc4afcdb29a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcf21589b606dd6e2b8a617cda1b0ac3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#abcf21589b606dd6e2b8a617cda1b0ac3">MaxOS::drivers::clock::Channel</a> { <a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#abcf21589b606dd6e2b8a617cda1b0ac3ac9249438b2f29afea1a3fe1a76e504d3">MaxOS::drivers::clock::CHANNEL_0</a> = 0, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#abcf21589b606dd6e2b8a617cda1b0ac3a337ddb730fc1f2b4588ae69d0eb0e39e">MaxOS::drivers::clock::CHANNEL_1</a> = 1, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#abcf21589b606dd6e2b8a617cda1b0ac3af691dc1deba5bad6bf08bf3c070a08d6">MaxOS::drivers::clock::CHANNEL_2</a> = 2
+ }</td></tr>
+<tr class="separator:abcf21589b606dd6e2b8a617cda1b0ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec467a8b28cb0b1b17948364e6710844"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#aec467a8b28cb0b1b17948364e6710844">MaxOS::drivers::clock::AccessMode</a> { <a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#aec467a8b28cb0b1b17948364e6710844a227bf944e7056fb5ae90d6e8869cfe41">MaxOS::drivers::clock::LATCH_COUNT</a> = 0, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#aec467a8b28cb0b1b17948364e6710844accbf287ba9fab98fb1662900443e1f3e">MaxOS::drivers::clock::LOW_BYTE</a> = 1, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#aec467a8b28cb0b1b17948364e6710844a3b86b65b34bc582344a0631582308bf0">MaxOS::drivers::clock::HIGH_BYTE</a> = 2, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#aec467a8b28cb0b1b17948364e6710844adb84e1a999b8ebc29d274d0bbea03069">MaxOS::drivers::clock::LOW_HIGH_BYTE</a> = 3
+ }</td></tr>
+<tr class="separator:aec467a8b28cb0b1b17948364e6710844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e1786fd3419e0a129f79ffdf56154f7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7">MaxOS::drivers::clock::OperatingMode</a> { <br />
+&#160;&#160;<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7a6fc08498cb54f573042b436217707b06">MaxOS::drivers::clock::MODE_0</a> = 0, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7a28058e28f22373baefd549b7a3005609">MaxOS::drivers::clock::MODE_1</a> = 1, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7affb4c2c721ab2cc61f102e054e31c612">MaxOS::drivers::clock::MODE_2</a> = 2, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7a97ede363ac75e9f3115c37191c77b732">MaxOS::drivers::clock::MODE_3</a> = 3, 
+<br />
+&#160;&#160;<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7a9d7356b39a5b01bda28bd9360722b409">MaxOS::drivers::clock::MODE_4</a> = 4, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a9e1786fd3419e0a129f79ffdf56154f7adbe74fd6dd254bc102804e548b8c485f">MaxOS::drivers::clock::MODE_5</a> = 5
+<br />
+ }</td></tr>
+<tr class="separator:a9e1786fd3419e0a129f79ffdf56154f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a138a8792ceb3e2bd560c677d54724b4c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a138a8792ceb3e2bd560c677d54724b4c">MaxOS::drivers::clock::BCDMode</a> { <a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a138a8792ceb3e2bd560c677d54724b4ca1cbd4efc56960b7ba69f64310220c5c5">MaxOS::drivers::clock::BINARY</a> = 0, 
+<a class="el" href="namespaceMaxOS_1_1drivers_1_1clock.html#a138a8792ceb3e2bd560c677d54724b4caadb3f31d36219995143dfdfc63aff715">MaxOS::drivers::clock::BCD</a> = 1
+ }</td></tr>
+<tr class="separator:a138a8792ceb3e2bd560c677d54724b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

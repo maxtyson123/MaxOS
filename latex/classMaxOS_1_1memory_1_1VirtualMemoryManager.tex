@@ -24,7 +24,7 @@ size\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4ae32
 \doxysubsection{Detailed Description}
 
 
-Definition at line 35 of file virtual.\+h.
+Definition at line 41 of file virtual.\+h.
 
 
 
@@ -83,7 +83,7 @@ Definition at line 11 of file virtual.\+cpp.
 \DoxyCodeLine{51 }
 \DoxyCodeLine{52     \textcolor{comment}{// Allocate space for the vmm}}
 \DoxyCodeLine{53     \textcolor{keywordtype}{void}* vmm\_space\_physical = m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}{allocate\_frame}}();}
-\DoxyCodeLine{54     \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(vmm\_space\_physical != \textcolor{keyword}{nullptr}, \textcolor{stringliteral}{"Failed to allocate VMM space"});}
+\DoxyCodeLine{54     \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(vmm\_space\_physical != \textcolor{keyword}{nullptr}, \textcolor{stringliteral}{"Failed to allocate VMM space\(\backslash\)n"});}
 \DoxyCodeLine{55     m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(vmm\_space\_physical, (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)vmm\_space, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}, m\_pml4\_root\_address);}
 \DoxyCodeLine{56     m\_first\_region-\/>next = \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{57     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Allocated VMM: physical: 0x\%x, virtual: 0x\%x\(\backslash\)n"}, vmm\_space\_physical, vmm\_space);}
@@ -153,8 +153,9 @@ Definition at line 83 of file virtual.\+cpp.
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{83                                                               \{}
-\DoxyCodeLine{84   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(0, \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}, \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
-\DoxyCodeLine{85 \}}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(0, \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}, \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
+\DoxyCodeLine{86 \}}
 
 \end{DoxyCode}
 
@@ -189,76 +190,104 @@ The address of the allocated memory or nullptr if failed
 \end{DoxyReturn}
 
 
-Definition at line 95 of file virtual.\+cpp.
+Definition at line 96 of file virtual.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{95                                                                                 \{}
-\DoxyCodeLine{96 }
-\DoxyCodeLine{97   \textcolor{comment}{// Make sure allocating something}}
-\DoxyCodeLine{98   \textcolor{keywordflow}{if}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} == 0)}
-\DoxyCodeLine{99     \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{100 }
-\DoxyCodeLine{101   \textcolor{comment}{// If specific address is given}}
-\DoxyCodeLine{102   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} != 0)\{}
-\DoxyCodeLine{103 }
-\DoxyCodeLine{104       \textcolor{comment}{// Make sure isnt already allocated}}
-\DoxyCodeLine{105       \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} < m\_next\_available\_address)}
-\DoxyCodeLine{106         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{107 }
-\DoxyCodeLine{108       \textcolor{comment}{// Make sure its aligned}}
-\DoxyCodeLine{109       \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}{PhysicalMemoryManager::check\_aligned}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}))}
-\DoxyCodeLine{110         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{111 }
-\DoxyCodeLine{112   \}}
-\DoxyCodeLine{113 }
-\DoxyCodeLine{114   \textcolor{comment}{// Make sure the size is aligned}}
-\DoxyCodeLine{115   \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{PhysicalMemoryManager::align\_up\_to\_page}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}, \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}});}
-\DoxyCodeLine{116 }
-\DoxyCodeLine{117   \textcolor{comment}{// Is there space in the current region}}
-\DoxyCodeLine{118   \textcolor{keywordflow}{if}(m\_current\_chunk >= s\_chunks\_per\_page)}
-\DoxyCodeLine{119     new\_region();}
-\DoxyCodeLine{120 }
-\DoxyCodeLine{121   \textcolor{comment}{// If we need to allocate at a specific address}}
-\DoxyCodeLine{122   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} != 0)\{}
-\DoxyCodeLine{123     m\_next\_available\_address = \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}};    \textcolor{comment}{//TODO: Creates mem fragmentation -\/ fix}}
-\DoxyCodeLine{124   \}}
-\DoxyCodeLine{125 }
-\DoxyCodeLine{126   \textcolor{comment}{// Allocate the memory}}
-\DoxyCodeLine{127   \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}* chunk = \&m\_current\_region-\/>chunks[m\_current\_chunk];}
-\DoxyCodeLine{128   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
-\DoxyCodeLine{129   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_a3197fff13af0c0c20e83ad26c4e5d6f6}{flags}} = \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
-\DoxyCodeLine{130   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} = m\_next\_available\_address;}
-\DoxyCodeLine{131 }
-\DoxyCodeLine{132   \textcolor{comment}{// Update the next available address}}
-\DoxyCodeLine{133   m\_next\_available\_address += \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
-\DoxyCodeLine{134   m\_current\_chunk++;}
+\DoxyCodeLine{96                                                                                 \{}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98   \textcolor{comment}{// Make sure allocating something}}
+\DoxyCodeLine{99   \textcolor{keywordflow}{if}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} == 0)}
+\DoxyCodeLine{100     \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102   \textcolor{comment}{// If specific address is given}}
+\DoxyCodeLine{103   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} != 0)\{}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105       \textcolor{comment}{// Make sure isnt already allocated}}
+\DoxyCodeLine{106       \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} < m\_next\_available\_address)}
+\DoxyCodeLine{107         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109       \textcolor{comment}{// Make sure its aligned}}
+\DoxyCodeLine{110       \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}{PhysicalMemoryManager::check\_aligned}}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}}))}
+\DoxyCodeLine{111         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113   \}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115   \textcolor{comment}{// Make sure the size is aligned}}
+\DoxyCodeLine{116   \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{PhysicalMemoryManager::align\_up\_to\_page}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}, \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}});}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118   \textcolor{comment}{// Check the free list for a chunk}}
+\DoxyCodeLine{119   \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}* reusable\_chunk = find\_and\_remove\_free\_chunk(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{120   \textcolor{keywordflow}{if}(reusable\_chunk != \textcolor{keyword}{nullptr})\{}
+\DoxyCodeLine{121 }
+\DoxyCodeLine{122     \textcolor{comment}{// If the chunk is not being reserved}}
+\DoxyCodeLine{123     \textcolor{keywordflow}{if}(!(\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1memory_a12ca8e10f17e52d8375319daaaf6f380a5379a330d2ed6de35d3e88ff46a14731}{Reserve}}))\{}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125       \textcolor{comment}{// Map the memory}}
+\DoxyCodeLine{126       \textcolor{keywordtype}{size\_t} pages = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{127       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < pages; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129         \textcolor{comment}{// Allocate a new frame}}
+\DoxyCodeLine{130         \mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}* frame = m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}{allocate\_frame}}();}
+\DoxyCodeLine{131         \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(frame != \textcolor{keyword}{nullptr}, \textcolor{stringliteral}{"Failed to allocate frame (from free chunk list)\(\backslash\)n"});}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133         \textcolor{comment}{// Map the frame}}
+\DoxyCodeLine{134         m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(frame, (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)reusable\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk_af4ea572cd555fa81cc1331663a88481f}{start\_address}} + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}), \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}, m\_pml4\_root\_address);}
 \DoxyCodeLine{135 }
-\DoxyCodeLine{136   \textcolor{comment}{// If just reserving the space don't map it}}
-\DoxyCodeLine{137   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1memory_a12ca8e10f17e52d8375319daaaf6f380a5379a330d2ed6de35d3e88ff46a14731}{Reserve}})}
-\DoxyCodeLine{138     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}};}
+\DoxyCodeLine{136       \}}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138     \}}
 \DoxyCodeLine{139 }
-\DoxyCodeLine{140   \textcolor{comment}{// Map the memory}}
-\DoxyCodeLine{141   \textcolor{keywordtype}{size\_t} pages = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
-\DoxyCodeLine{142   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < pages; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
-\DoxyCodeLine{143 }
-\DoxyCodeLine{144     \textcolor{comment}{// Allocate a new frame}}
-\DoxyCodeLine{145     \mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}* frame = m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}{allocate\_frame}}();}
-\DoxyCodeLine{146     \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(frame != \textcolor{keyword}{nullptr}, \textcolor{stringliteral}{"Failed to allocate frame"});}
-\DoxyCodeLine{147 }
-\DoxyCodeLine{148     \textcolor{comment}{// Map the frame}}
-\DoxyCodeLine{149     m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(frame, (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}), \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}, m\_pml4\_root\_address);}
-\DoxyCodeLine{150 }
-\DoxyCodeLine{151   \}}
-\DoxyCodeLine{152 }
-\DoxyCodeLine{153   \textcolor{comment}{// Return the address}}
-\DoxyCodeLine{154   \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}};}
-\DoxyCodeLine{155 \}}
+\DoxyCodeLine{140     \textcolor{comment}{// Return the address}}
+\DoxyCodeLine{141     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)reusable\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk_af4ea572cd555fa81cc1331663a88481f}{start\_address}};}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143   \}}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145 }
+\DoxyCodeLine{146   \textcolor{comment}{// Is there space in the current region}}
+\DoxyCodeLine{147   \textcolor{keywordflow}{if}(m\_current\_chunk >= s\_chunks\_per\_page)}
+\DoxyCodeLine{148     new\_region();}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150   \textcolor{comment}{// If we need to allocate at a specific address}}
+\DoxyCodeLine{151   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} != 0)\{}
+\DoxyCodeLine{152     m\_next\_available\_address = \mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}};    \textcolor{comment}{//TODO: Creates mem fragmentation -\/ fix}}
+\DoxyCodeLine{153   \}}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{155   \textcolor{comment}{// Allocate the memory}}
+\DoxyCodeLine{156   \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}* chunk = \&m\_current\_region-\/>chunks[m\_current\_chunk];}
+\DoxyCodeLine{157   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}} = \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
+\DoxyCodeLine{158   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_a3197fff13af0c0c20e83ad26c4e5d6f6}{flags}} = \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
+\DoxyCodeLine{159   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} = m\_next\_available\_address;}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161   \textcolor{comment}{// Update the next available address}}
+\DoxyCodeLine{162   m\_next\_available\_address += \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};}
+\DoxyCodeLine{163   m\_current\_chunk++;}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165   \textcolor{comment}{// If just reserving the space don't map it}}
+\DoxyCodeLine{166   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}} \& \mbox{\hyperlink{namespaceMaxOS_1_1memory_a12ca8e10f17e52d8375319daaaf6f380a5379a330d2ed6de35d3e88ff46a14731}{Reserve}})}
+\DoxyCodeLine{167     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}};}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169   \textcolor{comment}{// Map the memory}}
+\DoxyCodeLine{170   \textcolor{keywordtype}{size\_t} pages = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});}
+\DoxyCodeLine{171   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < pages; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173     \textcolor{comment}{// Allocate a new frame}}
+\DoxyCodeLine{174     \mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}* frame = m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afbe57cbd6b31ef26b53176f0fd0fc8fe}{allocate\_frame}}();}
+\DoxyCodeLine{175     \mbox{\hyperlink{kprint_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(frame != \textcolor{keyword}{nullptr}, \textcolor{stringliteral}{"Failed to allocate frame (from current region)\(\backslash\)n"});}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177     \textcolor{comment}{// Map the frame}}
+\DoxyCodeLine{178     m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}(frame, (\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}), \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}} | \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}, m\_pml4\_root\_address);}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180   \}}
+\DoxyCodeLine{181 }
+\DoxyCodeLine{182   \textcolor{comment}{// Return the address}}
+\DoxyCodeLine{183   \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}};}
+\DoxyCodeLine{184 \}}
 
 \end{DoxyCode}
 
 
-References address, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+up\+\_\+to\+\_\+page(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame(), A\+S\+S\+E\+RT, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned(), flags, Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Chunk\+::flags, Max\+O\+S\+::drivers\+::peripherals\+::i, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::map(), Max\+O\+S\+::memory\+::\+Present, Max\+O\+S\+::memory\+::\+Reserve, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+page\+\_\+size, size, Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Chunk\+::size, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Chunk\+::start\+\_\+address, and Max\+O\+S\+::memory\+::\+Write.
+References address, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+up\+\_\+to\+\_\+page(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame(), A\+S\+S\+E\+RT, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned(), flags, Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Chunk\+::flags, Max\+O\+S\+::drivers\+::peripherals\+::i, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::map(), Max\+O\+S\+::memory\+::\+Present, Max\+O\+S\+::memory\+::\+Reserve, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+page\+\_\+size, size, Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Chunk\+::size, Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Chunk\+::start\+\_\+address, Max\+O\+S\+::memory\+::\+Free\+Chunk\+::start\+\_\+address, and Max\+O\+S\+::memory\+::\+Write.
 
 \mbox{\Hypertarget{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}\label{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}} 
 \index{MaxOS::memory::VirtualMemoryManager@{MaxOS::memory::VirtualMemoryManager}!free@{free}}
@@ -277,59 +306,60 @@ Free a chunk of virtual memory.
 \end{DoxyParams}
 
 
-Definition at line 184 of file virtual.\+cpp.
+Definition at line 213 of file virtual.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{184                                              \{}
-\DoxyCodeLine{185 }
-\DoxyCodeLine{186   \textcolor{comment}{// Make sure freeing something}}
-\DoxyCodeLine{187   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} == \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{188     \textcolor{keywordflow}{return};}
-\DoxyCodeLine{189 }
-\DoxyCodeLine{190   \textcolor{comment}{// Find the chunk}}
-\DoxyCodeLine{191   virtual\_memory\_region\_t* region = m\_first\_region;}
-\DoxyCodeLine{192   \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}* chunk = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{193   \textcolor{keywordflow}{while}(region != \textcolor{keyword}{nullptr})\{}
-\DoxyCodeLine{194 }
-\DoxyCodeLine{195       \textcolor{comment}{// Loop through the chunks}}
-\DoxyCodeLine{196       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < s\_chunks\_per\_page; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
-\DoxyCodeLine{197 }
-\DoxyCodeLine{198         \textcolor{comment}{// Check if the address is in the chunk}}
-\DoxyCodeLine{199         \textcolor{keywordflow}{if}(region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].start\_address == (uintptr\_t)\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}})\{}
-\DoxyCodeLine{200               chunk = \&region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{201               \textcolor{keywordflow}{break};}
-\DoxyCodeLine{202         \}}
-\DoxyCodeLine{203       \}}
-\DoxyCodeLine{204 }
-\DoxyCodeLine{205       \textcolor{comment}{// If the chunk was found}}
-\DoxyCodeLine{206       \textcolor{keywordflow}{if}(chunk != \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{207         \textcolor{keywordflow}{break};}
-\DoxyCodeLine{208 }
-\DoxyCodeLine{209       \textcolor{comment}{// Move to the next region}}
-\DoxyCodeLine{210       region = region-\/>next;}
-\DoxyCodeLine{211   \}}
-\DoxyCodeLine{212 }
-\DoxyCodeLine{213   \textcolor{comment}{// Make sure the chunk was found}}
-\DoxyCodeLine{214   \textcolor{keywordflow}{if}(chunk == \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{215     \textcolor{keywordflow}{return};}
-\DoxyCodeLine{216 }
-\DoxyCodeLine{217   \textcolor{comment}{// Unmap the memory}}
-\DoxyCodeLine{218   \textcolor{keywordtype}{size\_t} pages = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}});}
-\DoxyCodeLine{219   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < pages; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
-\DoxyCodeLine{220 }
-\DoxyCodeLine{221         \textcolor{comment}{// Unmap the frame}}
-\DoxyCodeLine{222         m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a47cc8d6c823f3c323f88e21437ba88ea}{unmap}}((\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}), m\_pml4\_root\_address);}
+\DoxyCodeLine{213                                              \{}
+\DoxyCodeLine{214 }
+\DoxyCodeLine{215   \textcolor{comment}{// Make sure freeing something}}
+\DoxyCodeLine{216   \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} == \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{217     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{218 }
+\DoxyCodeLine{219   \textcolor{comment}{// Find the chunk}}
+\DoxyCodeLine{220   virtual\_memory\_region\_t* region = m\_first\_region;}
+\DoxyCodeLine{221   \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}* chunk = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{222   \textcolor{keywordflow}{while}(region != \textcolor{keyword}{nullptr})\{}
 \DoxyCodeLine{223 }
-\DoxyCodeLine{224   \}}
-\DoxyCodeLine{225 }
-\DoxyCodeLine{226   \textcolor{comment}{// Clear the chunk}}
-\DoxyCodeLine{227   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}} = 0;}
-\DoxyCodeLine{228   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_a3197fff13af0c0c20e83ad26c4e5d6f6}{flags}} = 0;}
-\DoxyCodeLine{229   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} = 0;}
-\DoxyCodeLine{230 }
-\DoxyCodeLine{231   \textcolor{comment}{// TODO: Some logic to use this space again}}
-\DoxyCodeLine{232 \}}
+\DoxyCodeLine{224       \textcolor{comment}{// Loop through the chunks}}
+\DoxyCodeLine{225       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < s\_chunks\_per\_page; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{227         \textcolor{comment}{// Check if the address is in the chunk}}
+\DoxyCodeLine{228         \textcolor{keywordflow}{if}(region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].start\_address == (uintptr\_t)\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}})\{}
+\DoxyCodeLine{229               chunk = \&region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{230               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{231         \}}
+\DoxyCodeLine{232       \}}
+\DoxyCodeLine{233 }
+\DoxyCodeLine{234       \textcolor{comment}{// If the chunk was found}}
+\DoxyCodeLine{235       \textcolor{keywordflow}{if}(chunk != \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{236         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{237 }
+\DoxyCodeLine{238       \textcolor{comment}{// Move to the next region}}
+\DoxyCodeLine{239       region = region-\/>next;}
+\DoxyCodeLine{240   \}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242   \textcolor{comment}{// Make sure the chunk was found}}
+\DoxyCodeLine{243   \textcolor{keywordflow}{if}(chunk == \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{244     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{245 }
+\DoxyCodeLine{246   \textcolor{comment}{// Unmap the memory}}
+\DoxyCodeLine{247   \textcolor{keywordtype}{size\_t} pages = \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}});}
+\DoxyCodeLine{248   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < pages; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)\{}
+\DoxyCodeLine{249 }
+\DoxyCodeLine{250         \textcolor{comment}{// Unmap the frame}}
+\DoxyCodeLine{251         m\_physical\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a47cc8d6c823f3c323f88e21437ba88ea}{unmap}}((\mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} + (\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}), m\_pml4\_root\_address);}
+\DoxyCodeLine{252 }
+\DoxyCodeLine{253   \}}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255   \textcolor{comment}{// Add the chunk to the free list}}
+\DoxyCodeLine{256   add\_free\_chunk(chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}}, chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}});}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258   \textcolor{comment}{// Clear the chunk}}
+\DoxyCodeLine{259   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa801ec740419740a3d9576bcdf821930}{size}} = 0;}
+\DoxyCodeLine{260   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_a3197fff13af0c0c20e83ad26c4e5d6f6}{flags}} = 0;}
+\DoxyCodeLine{261   chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk_aa470b01af19e3aaeb7505cdd0b5ad647}{start\_address}} = 0;}
+\DoxyCodeLine{262 \}}
 
 \end{DoxyCode}
 
@@ -351,33 +381,33 @@ The amount of memory used
 \end{DoxyReturn}
 
 
-Definition at line 238 of file virtual.\+cpp.
+Definition at line 268 of file virtual.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{238                                          \{}
-\DoxyCodeLine{239 }
-\DoxyCodeLine{240   \textcolor{comment}{// Loop through all the regions and add up the size of the allocated chunks}}
-\DoxyCodeLine{241   \textcolor{keywordtype}{size\_t} result = 0;}
-\DoxyCodeLine{242 }
-\DoxyCodeLine{243   \textcolor{comment}{// Iterate through the regions}}
-\DoxyCodeLine{244   virtual\_memory\_region\_t *region = m\_first\_region;}
-\DoxyCodeLine{245   \textcolor{keywordflow}{while} (region != \textcolor{keyword}{nullptr}) \{}
-\DoxyCodeLine{246 }
-\DoxyCodeLine{247     \textcolor{comment}{// Loop through the chunks}}
-\DoxyCodeLine{248     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < s\_chunks\_per\_page; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++) \{}
-\DoxyCodeLine{249 }
-\DoxyCodeLine{250       \textcolor{comment}{// Check if the address is in the chunk}}
-\DoxyCodeLine{251       \textcolor{keywordflow}{if} (region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].size != 0)}
-\DoxyCodeLine{252         result += region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].size;}
-\DoxyCodeLine{253     \}}
-\DoxyCodeLine{254 }
-\DoxyCodeLine{255     \textcolor{comment}{// Move to the next region}}
-\DoxyCodeLine{256     region = region-\/>next;}
-\DoxyCodeLine{257   \}}
-\DoxyCodeLine{258 }
-\DoxyCodeLine{259   \textcolor{keywordflow}{return} result;}
-\DoxyCodeLine{260 \}}
+\DoxyCodeLine{268                                          \{}
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270   \textcolor{comment}{// Loop through all the regions and add up the size of the allocated chunks}}
+\DoxyCodeLine{271   \textcolor{keywordtype}{size\_t} result = 0;}
+\DoxyCodeLine{272 }
+\DoxyCodeLine{273   \textcolor{comment}{// Iterate through the regions}}
+\DoxyCodeLine{274   virtual\_memory\_region\_t *region = m\_first\_region;}
+\DoxyCodeLine{275   \textcolor{keywordflow}{while} (region != \textcolor{keyword}{nullptr}) \{}
+\DoxyCodeLine{276 }
+\DoxyCodeLine{277     \textcolor{comment}{// Loop through the chunks}}
+\DoxyCodeLine{278     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < s\_chunks\_per\_page; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++) \{}
+\DoxyCodeLine{279 }
+\DoxyCodeLine{280       \textcolor{comment}{// Check if the address is in the chunk}}
+\DoxyCodeLine{281       \textcolor{keywordflow}{if} (region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].size != 0)}
+\DoxyCodeLine{282         result += region-\/>chunks[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}].size;}
+\DoxyCodeLine{283     \}}
+\DoxyCodeLine{284 }
+\DoxyCodeLine{285     \textcolor{comment}{// Move to the next region}}
+\DoxyCodeLine{286     region = region-\/>next;}
+\DoxyCodeLine{287   \}}
+\DoxyCodeLine{288 }
+\DoxyCodeLine{289   \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{290 \}}
 
 \end{DoxyCode}
 

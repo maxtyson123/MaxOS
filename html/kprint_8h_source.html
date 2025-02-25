@@ -105,25 +105,30 @@ $(document).ready(function(){initNavTree('kprint_8h_source.html',''); initResiza
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define MAXOS_KPRINT_H</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="serial_8h.html">drivers/console/serial.h</a>&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;stdarg.h&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="cpu_8h.html">system/cpu.h</a>&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;stdarg.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">   12</a></span>&#160;<span class="preprocessor">#define _kprintf(format, ...) \</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">    _kprintf_internal(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="kprint_8h.html#adf7b5d69e4c25995b3211b91b27f33b6">   15</a></span>&#160;<span class="preprocessor">#define ASSERT(condition, format, ...) \</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">    if(!(condition)) { \</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__); \</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">        while(1); \</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">    }</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kprint_8h.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a>(uint8_t <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* func, <span class="keyword">const</span> <span class="keywordtype">char</span>* format, ...);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif // MAXOS_KPRINT_H</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="kprint_8h.html#ad0dbdc0814f8a967875ad592df02a663">   14</a></span>&#160;<span class="preprocessor">#define _kprintf(format, ...) \</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">    _kprintf_internal(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="kprint_8h.html#ad17f4069242d16af16fc559e667f26e1">   17</a></span>&#160;<span class="preprocessor">#define _kpanicf(format, ...) \</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">    _kprintf_internal(2, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="kprint_8h.html#adf7b5d69e4c25995b3211b91b27f33b6">   20</a></span>&#160;<span class="preprocessor">#define ASSERT(condition, format, ...) \</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">    if(!(condition)) \</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kprint_8h.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a>(uint8_t <a class="code" href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* func, <span class="keyword">const</span> <span class="keywordtype">char</span>* format, ...);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#endif // MAXOS_KPRINT_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="acpu_8h_html"><div class="ttname"><a href="cpu_8h.html">cpu.h</a></div></div>
 <div class="ttc" id="aserial_8h_html"><div class="ttname"><a href="serial_8h.html">serial.h</a></div></div>
-<div class="ttc" id="akprint_8h_html_a14f76df54d232b9ef72faeed9b247350"><div class="ttname"><a href="kprint_8h.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a></div><div class="ttdeci">void _kprintf_internal(uint8_t type, const char *file, int line, const char *func, const char *format,...)</div><div class="ttdoc">Prints a formatted string to the serial output.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00155">kprint.cpp:155</a></div></div>
+<div class="ttc" id="akprint_8h_html_a14f76df54d232b9ef72faeed9b247350"><div class="ttname"><a href="kprint_8h.html#a14f76df54d232b9ef72faeed9b247350">_kprintf_internal</a></div><div class="ttdeci">void _kprintf_internal(uint8_t type, const char *file, int line, const char *func, const char *format,...)</div><div class="ttdoc">Prints a formatted string to the serial output.</div><div class="ttdef"><b>Definition:</b> <a href="kprint_8cpp_source.html#l00157">kprint.cpp:157</a></div></div>
 <div class="ttc" id="aapic_8h_html_a1d127017fb298b889f4ba24752d08b8e"><div class="ttname"><a href="apic_8h.html#a1d127017fb298b889f4ba24752d08b8e">type</a></div><div class="ttdeci">uint8_t type</div><div class="ttdef"><b>Definition:</b> <a href="apic_8h_source.html#l00002">apic.h:2</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

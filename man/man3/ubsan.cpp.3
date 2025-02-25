@@ -1,0 +1,239 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/system/ubsan.cpp" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/src/system/ubsan.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <system/ubsan\&.h>\fP
+.br
+\fC#include <common/kprint\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB__ubsan_handle_type_mismatch\fP (\fBtype_mismatch_info_t\fP *info, uintptr_t ptr)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_type_mismatch_v1\fP (\fBtype_mismatch_info_v1_t\fP *info, uintptr_t ptr)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_pointer_overflow\fP (\fBoverflow_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_sub_overflow\fP (\fBoverflow_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_shift_out_of_bounds\fP (\fBshift_out_of_bounds_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_out_of_bounds\fP (\fBout_of_bounds_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_add_overflow\fP (\fBoverflow_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_divrem_overflow\fP (\fBoverflow_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_negate_overflow\fP (\fBoverflow_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_builtin_unreachable\fP (\fBlocation_only_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_mul_overflow\fP (\fBoverflow_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_load_invalid_value\fP (\fBinvalid_value_info_t\fP *info)"
+.br
+.ti -1c
+.RI "void \fB__ubsan_handle_missing_return\fP (\fBlocation_only_info_t\fP *info)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void __ubsan_handle_add_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line 100 of file ubsan\&.cpp\&.
+.PP
+.nf
+100                                                                    {
+101   _kprintf("UBSan: Addition overflow\n");
+102   UBSanHandler::handle(info -> location);
+103 
+104 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_builtin_unreachable (\fBlocation_only_info_t\fP * info)"
+
+.PP
+Definition at line 118 of file ubsan\&.cpp\&.
+.PP
+.nf
+118                                                                                {
+119   _kprintf("UBSan: Unreachable code\n");
+120   UBSanHandler::handle(info -> location);
+121 
+122 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_divrem_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line 106 of file ubsan\&.cpp\&.
+.PP
+.nf
+106                                                                       {
+107   _kprintf("UBSan: Division overflow\n");
+108   UBSanHandler::handle(info -> location);
+109 
+110 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_load_invalid_value (\fBinvalid_value_info_t\fP * info)"
+
+.PP
+Definition at line 130 of file ubsan\&.cpp\&.
+.PP
+.nf
+130                                                                               {
+131   _kprintf("UBSan: Load of invalid value\n");
+132   UBSanHandler::handle(info -> location);
+133 
+134 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_missing_return (\fBlocation_only_info_t\fP * info)"
+
+.PP
+Definition at line 136 of file ubsan\&.cpp\&.
+.PP
+.nf
+136                                                                           {
+137   _kprintf("UBSan: Missing return\n");
+138   UBSanHandler::handle(info -> location);
+139 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_mul_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line 124 of file ubsan\&.cpp\&.
+.PP
+.nf
+124                                                                    {
+125   _kprintf("UBSan: Multiplication overflow\n");
+126   UBSanHandler::handle(info -> location);
+127 
+128 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_negate_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line 112 of file ubsan\&.cpp\&.
+.PP
+.nf
+112                                                                       {
+113   _kprintf("UBSan: Negation overflow\n");
+114   UBSanHandler::handle(info -> location);
+115 
+116 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_out_of_bounds (\fBout_of_bounds_info_t\fP * info)"
+
+.PP
+Definition at line 94 of file ubsan\&.cpp\&.
+.PP
+.nf
+94                                                                          {
+95   _kprintf("UBSan: Array out of bounds\n");
+96   UBSanHandler::handle(info -> location);
+97 
+98 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_pointer_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line 77 of file ubsan\&.cpp\&.
+.PP
+.nf
+77                                                                        {
+78   _kprintf("UBSan: Pointer overflow\n");
+79   UBSanHandler::handle(info -> location);
+80 
+81 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_shift_out_of_bounds (\fBshift_out_of_bounds_info_t\fP * info)"
+
+.PP
+Definition at line 89 of file ubsan\&.cpp\&.
+.PP
+.nf
+89                                                                                      {
+90   _kprintf("UBSan: Shift out of bounds\n");
+91   UBSanHandler::handle(info -> location);
+92 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_sub_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line 83 of file ubsan\&.cpp\&.
+.PP
+.nf
+83                                                                    {
+84   _kprintf("UBSan: Subtraction overflow\n");
+85   UBSanHandler::handle(info -> location);
+86 
+87 }
+.fi
+.PP
+References _kprintf, and MaxOS::system::UBSanHandler::handle()\&.
+.SS "void __ubsan_handle_type_mismatch (\fBtype_mismatch_info_t\fP * info, uintptr_t ptr)"
+
+.PP
+Definition at line 67 of file ubsan\&.cpp\&.
+.PP
+.nf
+67                                                                                         {
+68   UBSanHandler::print_type_mismatch(info, ptr);
+69   UBSanHandler::handle(info -> location);
+70 }
+.fi
+.PP
+References MaxOS::system::UBSanHandler::handle(), and MaxOS::system::UBSanHandler::print_type_mismatch()\&.
+.SS "void __ubsan_handle_type_mismatch_v1 (\fBtype_mismatch_info_v1_t\fP * info, uintptr_t ptr)"
+
+.PP
+Definition at line 72 of file ubsan\&.cpp\&.
+.PP
+.nf
+72                                                                                               {
+73   UBSanHandler::print_type_mismatch_v1(info, ptr);
+74   UBSanHandler::handle(info -> location);
+75 }
+.fi
+.PP
+References MaxOS::system::UBSanHandler::handle(), and MaxOS::system::UBSanHandler::print_type_mismatch_v1()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

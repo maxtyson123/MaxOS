@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,6 +8,8 @@
 .PP
 \fC#include <drivers/console/serial\&.h>\fP
 .br
+\fC#include <system/cpu\&.h>\fP
+.br
 \fC#include <stdarg\&.h>\fP
 .br
 
@@ -16,6 +18,9 @@
 .in +1c
 .ti -1c
 .RI "#define \fB_kprintf\fP(format, \&.\&.\&.)   \fB_kprintf_internal\fP(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)"
+.br
+.ti -1c
+.RI "#define \fB_kpanicf\fP(format, \&.\&.\&.)   \fB_kprintf_internal\fP(2, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)"
 .br
 .ti -1c
 .RI "#define \fBASSERT\fP(condition,  format, \&.\&.\&.)"
@@ -31,21 +36,23 @@
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
+.SS "#define _kpanicf(format,  \&.\&.\&.)   \fB_kprintf_internal\fP(2, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)"
+
+.PP
+Definition at line 17 of file kprint\&.h\&.
 .SS "#define _kprintf(format,  \&.\&.\&.)   \fB_kprintf_internal\fP(0, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)"
 
 .PP
-Definition at line 12 of file kprint\&.h\&.
+Definition at line 14 of file kprint\&.h\&.
 .SS "#define ASSERT(condition, format,  \&.\&.\&.)"
 \fBValue:\fP
 .PP
 .nf
-    if(!(condition)) { \
-        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__); \
-        while(1); \
-    }
+    if(!(condition)) \
+        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);
 .fi
 .PP
-Definition at line 15 of file kprint\&.h\&.
+Definition at line 20 of file kprint\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "void _kprintf_internal (uint8_t type, const char * file, int line, const char * func, const char * format,  \&.\&.\&.)"
@@ -71,63 +78,72 @@ s for string
 .PP
 
 .PP
-Definition at line 155 of file kprint\&.cpp\&.
+Definition at line 157 of file kprint\&.cpp\&.
 .PP
 .nf
-156 {
-157 
-158   // Print the header
-159   pre_kprintf(file, line,func, type);
-160 
-161   // Create a pointer to the data
-162   va_list parameters;
-163   va_start(parameters, format);
-164 
-165   // Loop through the format string
-166   for (; *format != '\0'; format++)
-167   {
+158 {
+159   // Create a pointer to the data
+160   va_list parameters;
+161   va_start(parameters, format);
+162 
+163   // Print the header
+164   if(*format != '\h')
+165     pre_kprintf(file, line,func, type);
+166   else
+167     format++;
 168 
-169     // If it is not a %, print the character
-170     if (*format != '%')
-171     {
-172       putchar(*format);
-173       continue;
-174     }
-175 
-176     // Move to the next character
-177     format++;
-178 
-179     switch (*format)
-180     {
-181       case 'd':
-182       {
-183         // Print a decimal
-184         int number = va_arg (parameters, int);
-185         char* str = itoa(10, number);
-186         for (int i = 0; i < strlen(str); i++)
-187           putchar(str[i]);
-188         break;
-189       }
-190       case 'x':
-191       {
-192         // Print a hex
-193         uint64_t  number = va_arg (parameters, uint64_t );
-194         char* str = itoa(16, number);
-195         for (int i = 0; i < strlen(str); i++)
-196           putchar(str[i]);
-197         break;
-198       }
-199       case 's':
-200       {
-201         // Print a string
-202         char* str = va_arg (parameters, char*);
-203         for (int i = 0; i < strlen(str); i++)
-204           putchar(str[i]);
-205         break;
-206       }
-207     }
-208   }
-209 }
+169 
+170   // Loop through the format string
+171   for (; *format != '\0'; format++)
+172   {
+173 
+174     // If it is not a %, print the character
+175     if (*format != '%')
+176     {
+177       putchar(*format);
+178       continue;
+179     }
+180 
+181     // Move to the next character
+182     format++;
+183 
+184     switch (*format)
+185     {
+186       case 'd':
+187       {
+188         // Print a decimal
+189         int number = va_arg (parameters, int);
+190         char* str = itoa(10, number);
+191         for (int i = 0; i < strlen(str); i++)
+192           putchar(str[i]);
+193         break;
+194       }
+195       case 'x':
+196       {
+197         // Print a hex
+198         uint64_t  number = va_arg (parameters, uint64_t );
+199         char* str = itoa(16, number);
+200         for (int i = 0; i < strlen(str); i++)
+201           putchar(str[i]);
+202         break;
+203       }
+204       case 's':
+205       {
+206         // Print a string
+207         char* str = va_arg (parameters, char*);
+208         for (int i = 0; i < strlen(str); i++)
+209           putchar(str[i]);
+210         break;
+211       }
+212     }
+213   }
+214 
+215 
+216   // If it is type 3 panic
+217   if(type == 3)
+218      CPU::PANIC("Check the serial output for more information");
+219 
+220 }
 .fi
 .PP
 References pre_kprintf(), and type\&.

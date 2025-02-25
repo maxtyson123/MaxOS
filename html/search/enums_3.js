@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['inputboxevents_3079',['InputBoxEvents',['../namespaceMaxOS_1_1gui_1_1widgets.html#a6aec828dab5daa5b8324e47113f82f2f',1,'MaxOS::gui::widgets']]]
+  ['ethernetdriverevents_3293',['EthernetDriverEvents',['../namespaceMaxOS_1_1drivers_1_1ethernet.html#a576d78fd01aa3b97b27424c6cb10aec4',1,'MaxOS::drivers::ethernet']]]
 ];

@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::peripherals::MouseDriver" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::peripherals::MouseDriver" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -77,24 +77,28 @@ Definition at line 95 of file mouse\&.cpp\&.
 .nf
 95                            {
 96 
-97   // Tell the PIC to start listening to the mouse
-98   command_port\&.write(0xAB);
-99 
-100   //  Get the current state of the mouse
-101   command_port\&.write(0x20);
-102   uint8_t status = (data_port\&.read() | 2);
-103 
-104   // write the new state
-105   command_port\&.write(0x60);
-106   data_port\&.write(status);
-107 
-108   // activate the mouse
-109   command_port\&.write(0xD4);
-110   data_port\&.write(0xF4);
-111   data_port\&.read();
-112 
-113 
-114 }
+97 
+98 
+99   //  Get the current state of the mouse
+100   command_port\&.write(0x20);
+101   uint8_t status = (data_port\&.read() | 2);
+102 
+103   // write the new state
+104   command_port\&.write(0x60);
+105   data_port\&.write(status);
+106 
+107   // Tell the PIC to start listening to the mouse
+108   command_port\&.write(0xAB);
+109 
+110   // activate the mouse
+111   command_port\&.write(0xD4);
+112   data_port\&.write(0xF4);
+113   data_port\&.read();
+114 
+115 
+116 
+117 
+118 }
 .fi
 .PP
 References MaxOS::hardwarecommunication::Port8Bit::read(), status, and MaxOS::hardwarecommunication::Port8Bit::write()\&.
@@ -112,12 +116,12 @@ The name of the device
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 162 of file mouse\&.cpp\&.
+Definition at line 166 of file mouse\&.cpp\&.
 .PP
 .nf
-162                                     {
-163     return "Mouse";
-164 }
+166                                     {
+167     return "Mouse";
+168 }
 .fi
 
 

@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -65,101 +65,117 @@ Definition at line 11 of file acpi\&.cpp\&.
 18 
 19     // Get the RSDP & RSDT
 20     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
-21     m_rsdt = (RSDT*) rsdp->rsdt_address;
-22 
-23     // Map the RSDT
-24     PhysicalMemoryManager::s_current_manager->map(m_rsdt, MemoryManager::to_io_region((uint64_t)m_rsdt), Present | Write);
-25     m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)m_rsdt);
-26     _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
-27 
+21     uint64_t rsdt_address = (uint64_t) rsdp->rsdt_address;
+22     m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)rsdt_address);
+23 
+24     // Map the RSDT
+25     rsdt_address = PhysicalMemoryManager::align_direct_to_page((size_t)rsdt_address);
+26     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)rsdt_address, m_rsdt, Present | Write);
+27     _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
 28 
-29     // Load the header
-30     m_header = &m_rsdt->header;
-31     if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
-32       ASSERT(false, "RSDT is too big, need to map more pages!")
-33     }
-34 
-35 
-36     // Calculate the checksum
-37     uint8_t sum = 0;
-38     for(uint32_t i = 0; i < sizeof(RSDPDescriptor); i++)
-39               sum += ((char*)rsdp)[i];
+29     // Reserve the RSDT
+30     PhysicalMemoryManager::s_current_manager->reserve((uint64_t)rsdp->rsdt_address);
+31 
+32     // Load the header
+33     m_header = &m_rsdt->header;
+34     if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
+35       ASSERT(false, "RSDT is too big, need to map more pages!")
+36     }
+37 
+38     // Map the RSDT Tables
+39     for(uint32_t i = 0; i < (m_header->length - sizeof(ACPISDTHeader)) / 4; i++) {
 40 
-41     // Check if the checksum is valid
-42     ASSERT(sum == 0, "Invalid checksum!")
-43 
-44   }else{
-45 
-46     // TODO: MAP THE MF
-47     ASSERT(false, "Not implemented!")
-48 
-49     // If the new ACPI is not supported, panic
-50     ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
+41         // Get the address (aligned to page)
+42         uint64_t address = (uint64_t) m_rsdt->pointers[i];
+43         address = PhysicalMemoryManager::align_direct_to_page((size_t)address);
+44 
+45         // Map to the higher half
+46         PhysicalMemoryManager::s_current_manager->map((physical_address_t*)address, (void*)MemoryManager::to_io_region(address), Present | Write);
+47 
+48         // Reserve the memory
+49         PhysicalMemoryManager::s_current_manager->reserve(address);
+50     }
 51 
-52     // It's the new ACPI
-53     m_type = 1;
-54 
-55     // Get the RSDP & XSDT
-56     RSDPDescriptor2* rsdp2 = (RSDPDescriptor2*)(multiboot->get_new_acpi() + 1);
-57     m_xsdt = (XSDT*) rsdp2->xsdt_address;
-58 
-59     // Load the header
-60     m_header = &m_xsdt->header;
+52     // Calculate the checksum
+53     uint8_t sum = 0;
+54     for(uint32_t i = 0; i < sizeof(RSDPDescriptor); i++)
+55               sum += ((char*)rsdp)[i];
+56 
+57     // Check if the checksum is valid
+58     ASSERT(sum == 0, "Invalid checksum!")
+59 
+60   }else{
 61 
-62     // Calculate the checksum
-63     uint8_t sum = 0;
-64     for(uint32_t i = 0; i < sizeof(RSDPDescriptor2); i++)
-65         sum += ((char*)rsdp2)[i];
-66 
-67     // Check if the checksum is valid
-68     ASSERT(sum == 0, "Invalid checksum!")
-69   }
-70 }
+62     // TODO: MAP THE MF
+63     ASSERT(false, "Not implemented!")
+64 
+65     // If the new ACPI is not supported, panic
+66     ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
+67 
+68     // It's the new ACPI
+69     m_type = 1;
+70 
+71     // Get the RSDP & XSDT
+72     RSDPDescriptor2* rsdp2 = (RSDPDescriptor2*)(multiboot->get_new_acpi() + 1);
+73     m_xsdt = (XSDT*) rsdp2->xsdt_address;
+74 
+75     // Load the header
+76     m_header = &m_xsdt->header;
+77 
+78     // Calculate the checksum
+79     uint8_t sum = 0;
+80     for(uint32_t i = 0; i < sizeof(RSDPDescriptor2); i++)
+81         sum += ((char*)rsdp2)[i];
+82 
+83     // Check if the checksum is valid
+84     ASSERT(sum == 0, "Invalid checksum!")
+85   }
+86 }
 .fi
 .PP
-References _kprintf, ASSERT, MaxOS::system::Multiboot::get_new_acpi(), MaxOS::system::Multiboot::get_old_acpi(), MaxOS::drivers::peripherals::i, MaxOS::memory::Present, MaxOS::hardwarecommunication::RSDPDescriptor::rsdt_address, MaxOS::memory::Write, and MaxOS::hardwarecommunication::RSDPDescriptor2::xsdt_address\&.
+References _kprintf, address, ASSERT, MaxOS::system::Multiboot::get_new_acpi(), MaxOS::system::Multiboot::get_old_acpi(), MaxOS::drivers::peripherals::i, MaxOS::memory::Present, rsdt_address, MaxOS::hardwarecommunication::RSDPDescriptor::rsdt_address, MaxOS::memory::Write, and MaxOS::hardwarecommunication::RSDPDescriptor2::xsdt_address\&.
 .SS "AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface ()"
 
 .PP
-Definition at line 72 of file acpi\&.cpp\&.
+Definition at line 88 of file acpi\&.cpp\&.
 .PP
 .nf
-72                                                                                 {
-73 
-74 }
+88                                                                                 {
+89 
+90 }
 .fi
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBACPISDTHeader\fP * AdvancedConfigurationAndPowerInterface::find (const char * signature)"
 
 .PP
-Definition at line 91 of file acpi\&.cpp\&.
+Definition at line 107 of file acpi\&.cpp\&.
 .PP
 .nf
-91                                                                                  {
-92 
-93 
-94   // Get the number of entries
-95   size_t entries = (m_header->length - sizeof(ACPISDTHeader)) / 4;
-96   if(m_type) entries = (m_header->length - sizeof(ACPISDTHeader)) / 8;
-97 
-98   // Loop through all the entries
-99   for (size_t i = 0; i < entries; ++i) {
-100 
-101       // Get the entry
-102       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
-103 
-104       // Move the header to the higher half
-105       header = (ACPISDTHeader*) MemoryManager::to_higher_region((uint64_t)header);
-106 
-107       // Check if the signature matches
-108       if(strncmp(header->signature, signature, 4) == 0)
-109          return header;
-110   }
-111 
-112   // Return null if no entry was found
-113   return nullptr;
-114 }
+107                                                                                  {
+108 
+109 
+110   // Get the number of entries
+111   size_t entries = (m_header->length - sizeof(ACPISDTHeader)) / 4;
+112   if(m_type) entries = (m_header->length - sizeof(ACPISDTHeader)) / 8;
+113 
+114   // Loop through all the entries
+115   for (size_t i = 0; i < entries; ++i) {
+116 
+117       // Get the entry
+118       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
+119 
+120       // Move the header to the higher half
+121       header = (ACPISDTHeader*) MemoryManager::to_io_region((uint64_t)header);
+122 
+123       // Check if the signature matches
+124       if(strncmp(header->signature, signature, 4) != 0)
+125          return header;
+126   }
+127 
+128   // Return null if no entry was found
+129   return nullptr;
+130 }
 .fi
 .PP
 References entries, header, MaxOS::drivers::peripherals::i, signature, MaxOS::hardwarecommunication::ACPISDTHeader::signature, and strncmp()\&.
@@ -168,21 +184,21 @@ Referenced by MaxOS::hardwarecommunication::IOAPIC::init()\&.
 .SS "bool AdvancedConfigurationAndPowerInterface::validate (const char * discriptor, size_t length)\fC [static]\fP, \fC [protected]\fP"
 
 .PP
-Definition at line 76 of file acpi\&.cpp\&.
+Definition at line 92 of file acpi\&.cpp\&.
 .PP
 .nf
-76                                                                                            {
-77   // Checksum
-78   uint32_t sum = 0;
-79 
-80   // Calculate the checksum
-81   for(uint32_t i = 0; i < length; i++)
-82         sum += ((char*) discriptor)[i];
-83 
-84   // Check if the checksum is valid
-85   return ((sum & 0xFF) == 0);
-86 
-87 }
+92                                                                                            {
+93   // Checksum
+94   uint32_t sum = 0;
+95 
+96   // Calculate the checksum
+97   for(uint32_t i = 0; i < length; i++)
+98         sum += ((char*) discriptor)[i];
+99 
+100   // Check if the checksum is valid
+101   return ((sum & 0xFF) == 0);
+102 
+103 }
 .fi
 .PP
 References MaxOS::drivers::peripherals::i, and length\&.

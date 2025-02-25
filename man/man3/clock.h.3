@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/clock/clock.h" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/clock/clock.h" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,6 +13,8 @@
 \fC#include <drivers/driver\&.h>\fP
 .br
 \fC#include <hardwarecommunication/interrupts\&.h>\fP
+.br
+\fC#include <hardwarecommunication/apic\&.h>\fP
 .br
 \fC#include <common/vector\&.h>\fP
 .br
@@ -31,9 +33,15 @@
 .br
 .RI "Handles the events triggered by the clock\&. "
 .ti -1c
+.RI "struct \fBMaxOS::drivers::clock::PITCommand\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::drivers::clock::PIT\fP"
+.br
+.ti -1c
 .RI "class \fBMaxOS::drivers::clock::Clock\fP"
 .br
-.RI "\fBDriver\fP for the CMOS Real Time \fBClock\fP\&. "
+.RI "\fBDriver\fP for the APIC clock\&. "
 .in -1c
 .SS "Namespaces"
 
@@ -53,6 +61,18 @@
 .in +1c
 .ti -1c
 .RI "enum \fBMaxOS::drivers::clock::ClockEvents\fP { \fBMaxOS::drivers::clock::TIME\fP }"
+.br
+.ti -1c
+.RI "enum \fBMaxOS::drivers::clock::Channel\fP { \fBMaxOS::drivers::clock::CHANNEL_0\fP = 0, \fBMaxOS::drivers::clock::CHANNEL_1\fP = 1, \fBMaxOS::drivers::clock::CHANNEL_2\fP = 2 }"
+.br
+.ti -1c
+.RI "enum \fBMaxOS::drivers::clock::AccessMode\fP { \fBMaxOS::drivers::clock::LATCH_COUNT\fP = 0, \fBMaxOS::drivers::clock::LOW_BYTE\fP = 1, \fBMaxOS::drivers::clock::HIGH_BYTE\fP = 2, \fBMaxOS::drivers::clock::LOW_HIGH_BYTE\fP = 3 }"
+.br
+.ti -1c
+.RI "enum \fBMaxOS::drivers::clock::OperatingMode\fP { \fBMaxOS::drivers::clock::MODE_0\fP = 0, \fBMaxOS::drivers::clock::MODE_1\fP = 1, \fBMaxOS::drivers::clock::MODE_2\fP = 2, \fBMaxOS::drivers::clock::MODE_3\fP = 3, \fBMaxOS::drivers::clock::MODE_4\fP = 4, \fBMaxOS::drivers::clock::MODE_5\fP = 5 }"
+.br
+.ti -1c
+.RI "enum \fBMaxOS::drivers::clock::BCDMode\fP { \fBMaxOS::drivers::clock::BINARY\fP = 0, \fBMaxOS::drivers::clock::BCD\fP = 1 }"
 .br
 .in -1c
 .SH "Author"

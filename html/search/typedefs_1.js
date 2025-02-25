@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['internetprotocoladdress_3048',['InternetProtocolAddress',['../namespaceMaxOS_1_1net.html#af037c025feb88b952b167f4dfa2709a0',1,'MaxOS::net']]],
-  ['iterator_3049',['iterator',['../classMaxOS_1_1common_1_1Map.html#a42ac2918f5102e70c4f24b927348c19a',1,'MaxOS::common::Map::iterator()'],['../classMaxOS_1_1common_1_1Vector.html#a9b828c8e59ee5d8c8af3ec2dd892cf01',1,'MaxOS::common::Vector::iterator()']]]
+  ['free_5fchunk_5ft_3248',['free_chunk_t',['../namespaceMaxOS_1_1memory.html#ad2c621af2c33cce5de47830ee4f1c063',1,'MaxOS::memory']]]
 ];

@@ -1,4 +1,4 @@
-.TH "MaxOS::system::CPU" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::CPU" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,6 +12,9 @@ MaxOS::system::CPU
 
 .in +1c
 .ti -1c
+.RI "static void \fBPANIC\fP (const char *message)"
+.br
+.ti -1c
 .RI "static void \fBhalt\fP ()"
 .br
 .ti -1c
@@ -19,6 +22,9 @@ MaxOS::system::CPU
 .br
 .ti -1c
 .RI "static void \fBset_status\fP (cpu_status_t *\fBstatus\fP)"
+.br
+.ti -1c
+.RI "static void \fBprint_registers\fP (cpu_status_t *\fBstatus\fP)"
 .br
 .ti -1c
 .RI "static uint64_t \fBread_msr\fP (uint32_t msr)"
@@ -38,148 +44,214 @@ MaxOS::system::CPU
 Definition at line 48 of file cpu\&.h\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "void MaxOS::system::CPU::cpuid (uint32_t leaf, uint32_t * eax, uint32_t * ebx, uint32_t * ecx, uint32_t * edx)\fC [static]\fP"
+.SS "void CPU::cpuid (uint32_t leaf, uint32_t * eax, uint32_t * ebx, uint32_t * ecx, uint32_t * edx)\fC [static]\fP"
 
 .PP
-Definition at line 71 of file cpu\&.cpp\&.
+Definition at line 107 of file cpu\&.cpp\&.
 .PP
 .nf
-71                                                                                                     {
-72 
-73   // Call the cpuid instruction
-74   __get_cpuid(leaf, eax, ebx, ecx, edx);
-75 }
+107                                                                                          {
+108 
+109   // Call the cpuid instruction
+110   __get_cpuid(leaf, eax, ebx, ecx, edx);
+111 }
 .fi
 .PP
 References eax, ebx, ecx, and edx\&.
-.SS "void MaxOS::system::CPU::get_status (cpu_status_t * status)\fC [static]\fP"
+.SS "void CPU::get_status (cpu_status_t * status)\fC [static]\fP"
 
 .PP
-Definition at line 11 of file cpu\&.cpp\&.
+Definition at line 18 of file cpu\&.cpp\&.
 .PP
 .nf
-11                                                                {
-12 
-13     // Get the registers
-14     asm volatile("mov %%r15, %0" : "=r" (status->r15));
-15     asm volatile("mov %%r14, %0" : "=r" (status->r14));
-16     asm volatile("mov %%r13, %0" : "=r" (status->r13));
-17     asm volatile("mov %%r12, %0" : "=r" (status->r12));
-18     asm volatile("mov %%r11, %0" : "=r" (status->r11));
-19     asm volatile("mov %%r10, %0" : "=r" (status->r10));
-20     asm volatile("mov %%r9, %0" : "=r" (status->r9));
-21     asm volatile("mov %%r8, %0" : "=r" (status->r8));
-22     asm volatile("mov %%rdi, %0" : "=r" (status->rdi));
-23     asm volatile("mov %%rsi, %0" : "=r" (status->rsi));
-24     asm volatile("mov %%rbp, %0" : "=r" (status->rbp));
-25     asm volatile("mov %%rdx, %0" : "=r" (status->rdx));
-26     asm volatile("mov %%rcx, %0" : "=r" (status->rcx));
-27     asm volatile("mov %%rbx, %0" : "=r" (status->rbx));
-28     asm volatile("mov %%rax, %0" : "=r" (status->rax));
-29 
-30 }
+18                                          {
+19 
+20     // Get the registers
+21     asm volatile("mov %%r15, %0" : "=r" (status->r15));
+22     asm volatile("mov %%r14, %0" : "=r" (status->r14));
+23     asm volatile("mov %%r13, %0" : "=r" (status->r13));
+24     asm volatile("mov %%r12, %0" : "=r" (status->r12));
+25     asm volatile("mov %%r11, %0" : "=r" (status->r11));
+26     asm volatile("mov %%r10, %0" : "=r" (status->r10));
+27     asm volatile("mov %%r9, %0" : "=r" (status->r9));
+28     asm volatile("mov %%r8, %0" : "=r" (status->r8));
+29     asm volatile("mov %%rdi, %0" : "=r" (status->rdi));
+30     asm volatile("mov %%rsi, %0" : "=r" (status->rsi));
+31     asm volatile("mov %%rbp, %0" : "=r" (status->rbp));
+32     asm volatile("mov %%rdx, %0" : "=r" (status->rdx));
+33     asm volatile("mov %%rcx, %0" : "=r" (status->rcx));
+34     asm volatile("mov %%rbx, %0" : "=r" (status->rbx));
+35     asm volatile("mov %%rax, %0" : "=r" (status->rax));
+36 
+37 }
 .fi
 .PP
 References status\&.
-.SS "void MaxOS::system::CPU::halt ()\fC [static]\fP"
+.SS "void CPU::halt ()\fC [static]\fP"
 
 .PP
-Definition at line 7 of file cpu\&.cpp\&.
+Definition at line 14 of file cpu\&.cpp\&.
 .PP
 .nf
-7                           {
-8   asm volatile("hlt");
-9 }
+14                {
+15   asm volatile("hlt");
+16 }
+.fi
+.SS "void CPU::PANIC (const char * message)\fC [static]\fP"
+
+.PP
+Definition at line 133 of file cpu\&.cpp\&.
+.PP
+.nf
+133                                    {
+134 
+135   // Print using the backend
+136   _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+137   _kpanicf("Kernel Panic: %s\n", message);
+138 
+139   // Stack trace
+140   _kpanicf("----------------------------\n");
+141   _kpanicf("Stack Trace:\n");
+142   stack_trace(10);
+143 
+144   // Register dump
+145   _kpanicf("----------------------------\n");
+146   _kpanicf("Register Dump:\n");
+147   cpu_status_t status;
+148   get_status(&status);
+149   print_registers(&status);
+150 
+151   // Halt
+152   _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+153   halt();
+154 
+155 }
 .fi
 .PP
-Referenced by kernelMain()\&.
-.SS "uint64_t MaxOS::system::CPU::read_msr (uint32_t msr)\fC [static]\fP"
+References _kpanicf, and status\&.
+.SS "void CPU::print_registers (cpu_status_t * status)\fC [static]\fP"
 
 .PP
-Definition at line 52 of file cpu\&.cpp\&.
+Definition at line 59 of file cpu\&.cpp\&.
 .PP
 .nf
-52                                               {
-53 
-54   // Low and high parts of the MSR
-55   uint32_t low, high;
-56 
-57   // Read the MSR
-58   asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
-59 
-60   // Return the value
-61   return (uint64_t) low | ((uint64_t) high << 32);
-62 
-63 }
-.fi
-.SS "void MaxOS::system::CPU::set_status (cpu_status_t * status)\fC [static]\fP"
-
-.PP
-Definition at line 31 of file cpu\&.cpp\&.
-.PP
-.nf
-31                                                                {
-32 
-33   // Set the registers
-34   asm volatile("mov %0, %%r15" : : "r" (status->r15));
-35   asm volatile("mov %0, %%r14" : : "r" (status->r14));
-36   asm volatile("mov %0, %%r13" : : "r" (status->r13));
-37   asm volatile("mov %0, %%r12" : : "r" (status->r12));
-38   asm volatile("mov %0, %%r11" : : "r" (status->r11));
-39   asm volatile("mov %0, %%r10" : : "r" (status->r10));
-40   asm volatile("mov %0, %%r9" : : "r" (status->r9));
-41   asm volatile("mov %0, %%r8" : : "r" (status->r8));
-42   asm volatile("mov %0, %%rdi" : : "r" (status->rdi));
-43   asm volatile("mov %0, %%rsi" : : "r" (status->rsi));
-44   asm volatile("mov %0, %%rbp" : : "r" (status->rbp));
-45   asm volatile("mov %0, %%rdx" : : "r" (status->rdx));
-46   asm volatile("mov %0, %%rcx" : : "r" (status->rcx));
-47   asm volatile("mov %0, %%rbx" : : "r" (status->rbx));
-48   asm volatile("mov %0, %%rax" : : "r" (status->rax));
-49 
-50 }
+59                                               {
+60 
+61     // Print the registers
+62     _kprintf("R15: 0x%x\n", status->r15);
+63     _kprintf("R14: 0x%x\n", status->r14);
+64     _kprintf("R13: 0x%x\n", status->r13);
+65     _kprintf("R12: 0x%x\n", status->r12);
+66     _kprintf("R11: 0x%x\n", status->r11);
+67     _kprintf("R10: 0x%x\n", status->r10);
+68     _kprintf("R9: 0x%x\n", status->r9);
+69     _kprintf("R8: 0x%x\n", status->r8);
+70     _kprintf("RDI: 0x%x\n", status->rdi);
+71     _kprintf("RSI: 0x%x\n", status->rsi);
+72     _kprintf("RBP: 0x%x\n", status->rbp);
+73     _kprintf("RDX: 0x%x\n", status->rdx);
+74     _kprintf("RCX: 0x%x\n", status->rcx);
+75     _kprintf("RBX: 0x%x\n", status->rbx);
+76     _kprintf("RAX: 0x%x\n", status->rax);
+77     _kprintf("INTERRUPT NUMBER: 0x%x\n", status->interrupt_number);
+78     _kprintf("ERROR CODE: 0x%x\n", status->error_code);
+79     _kprintf("RIP: 0x%x\n", status->rip);
+80     _kprintf("CS: 0x%x\n", status->cs);
+81     _kprintf("RFLAGS: 0x%x\n", status->rflags);
+82     _kprintf("RSP: 0x%x\n", status->rsp);
+83     _kprintf("SS: 0x%x\n", status->ss);
+84 
+85 }
 .fi
 .PP
-References status\&.
-.SS "void MaxOS::system::CPU::stack_trace (size_t level)\fC [static]\fP"
+References _kprintf, and status\&.
+.SS "uint64_t CPU::read_msr (uint32_t msr)\fC [static]\fP"
 
 .PP
-Definition at line 77 of file cpu\&.cpp\&.
+Definition at line 88 of file cpu\&.cpp\&.
 .PP
 .nf
-77                                              {
-78 
-79     // Get the first stack frame
-80     StackFrame* frame = __builtin_frame_address(0);
-81     size_t current_level = 0;
-82 
-83     // Loop through the frames logging
-84     while (current_level < level && frame != nullptr){
-85 
-86         // Print the frame
-87         _kprintf("(%d);\t at 0x%x\n", current_level, frame->rip);
-88 
-89         // Next frame
-90         frame = frame -> next;
-91         current_level++;
+88                                    {
+89 
+90   // Low and high parts of the MSR
+91   uint32_t low, high;
 92 
-93     }
-94 }
+93   // Read the MSR
+94   asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
+95 
+96   // Return the value
+97   return (uint64_t) low | ((uint64_t) high << 32);
+98 
+99 }
 .fi
-.PP
-References _kprintf, next, and MaxOS::system::StackFrame::rip\&.
-.SS "void MaxOS::system::CPU::write_msr (uint32_t msr, uint64_t value)\fC [static]\fP"
+.SS "void CPU::set_status (cpu_status_t * status)\fC [static]\fP"
 
 .PP
-Definition at line 65 of file cpu\&.cpp\&.
+Definition at line 38 of file cpu\&.cpp\&.
 .PP
 .nf
-65                                                            {
-66 
-67   // Write the MSR
-68   asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
-69 
-70 }
+38                                          {
+39 
+40   // Set the registers
+41   asm volatile("mov %0, %%r15" : : "r" (status->r15));
+42   asm volatile("mov %0, %%r14" : : "r" (status->r14));
+43   asm volatile("mov %0, %%r13" : : "r" (status->r13));
+44   asm volatile("mov %0, %%r12" : : "r" (status->r12));
+45   asm volatile("mov %0, %%r11" : : "r" (status->r11));
+46   asm volatile("mov %0, %%r10" : : "r" (status->r10));
+47   asm volatile("mov %0, %%r9" : : "r" (status->r9));
+48   asm volatile("mov %0, %%r8" : : "r" (status->r8));
+49   asm volatile("mov %0, %%rdi" : : "r" (status->rdi));
+50   asm volatile("mov %0, %%rsi" : : "r" (status->rsi));
+51   asm volatile("mov %0, %%rbp" : : "r" (status->rbp));
+52   asm volatile("mov %0, %%rdx" : : "r" (status->rdx));
+53   asm volatile("mov %0, %%rcx" : : "r" (status->rcx));
+54   asm volatile("mov %0, %%rbx" : : "r" (status->rbx));
+55   asm volatile("mov %0, %%rax" : : "r" (status->rax));
+56 
+57 }
+.fi
+.PP
+References status\&.
+.SS "void CPU::stack_trace (size_t level)\fC [static]\fP"
+
+.PP
+Definition at line 113 of file cpu\&.cpp\&.
+.PP
+.nf
+113                                   {
+114 
+115     // Get the first stack frame
+116     stack_frame_t* frame = (stack_frame_t*)__builtin_frame_address(0);
+117     size_t current_level = 0;
+118 
+119     // Loop through the frames logging
+120     while (current_level < level && frame != nullptr){
+121 
+122         // Print the frame
+123         _kprintf("(%d);\t at 0x%x\n", current_level, frame->rip);
+124 
+125         // Next frame
+126         frame = frame -> next;
+127         current_level++;
+128 
+129     }
+130 }
+.fi
+.PP
+References _kprintf, and next\&.
+.SS "void CPU::write_msr (uint32_t msr, uint64_t value)\fC [static]\fP"
+
+.PP
+Definition at line 101 of file cpu\&.cpp\&.
+.PP
+.nf
+101                                                 {
+102 
+103   // Write the MSR
+104   asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
+105 
+106 }
 .fi
 
 

@@ -1,4 +1,4 @@
-.TH "MaxOS::common::Colour" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::Colour" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,6 +16,12 @@ MaxOS::common::Colour \- Stores the red, green, blue and alpha values of a colou
 .RI "\fBColour\fP ()"
 .br
 .ti -1c
+.RI "\fBColour\fP (\fBConsoleColour\fP colour)"
+.br
+.ti -1c
+.RI "\fBColour\fP (\fBstring\fP \fBstring\fP)"
+.br
+.ti -1c
 .RI "\fBColour\fP (uint8_t \fBred\fP, uint8_t \fBgreen\fP, uint8_t \fBblue\fP)"
 .br
 .ti -1c
@@ -24,6 +30,10 @@ MaxOS::common::Colour \- Stores the red, green, blue and alpha values of a colou
 .ti -1c
 .RI "\fB~Colour\fP ()"
 .br
+.ti -1c
+.RI "\fBConsoleColour\fP \fBto_console_colour\fP () const"
+.br
+.RI "Converts the colour to a console colour\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -45,82 +55,183 @@ MaxOS::common::Colour \- Stores the red, green, blue and alpha values of a colou
 .PP 
 Stores the red, green, blue and alpha values of a colour\&. 
 .PP
-Definition at line 19 of file colour\&.h\&.
+Definition at line 82 of file colour\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Colour::Colour ()"
 
 .PP
-Definition at line 9 of file colour\&.cpp\&.
+Definition at line 10 of file colour\&.cpp\&.
 .PP
 .nf
-9                {
-10 
-11 }
+10                {
+11 
+12 }
+.fi
+.SS "Colour::Colour (\fBConsoleColour\fP colour)"
+
+.PP
+Definition at line 34 of file colour\&.cpp\&.
+.PP
+.nf
+34                                    {
+35     parse_console_colour(colour);
+36 }
+.fi
+.SS "Colour::Colour (\fBMaxOS::string\fP string)"
+
+.PP
+Definition at line 38 of file colour\&.cpp\&.
+.PP
+.nf
+38                                  {
+39 
+40     if(string[0] == '#')
+41         parse_hex_string(string);
+42     else
+43         parse_ansi_string(string);
+44 
+45 }
 .fi
 .SS "Colour::Colour (uint8_t red, uint8_t green, uint8_t blue)"
 
 .PP
-Definition at line 13 of file colour\&.cpp\&.
+Definition at line 14 of file colour\&.cpp\&.
 .PP
 .nf
-14 : red(red),
-15   green(green),
-16   blue(blue)
-17 {
-18 
-19 }
+15 : red(red),
+16   green(green),
+17   blue(blue)
+18 {
+19 
+20 }
 .fi
 .SS "Colour::Colour (uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)"
 
 .PP
-Definition at line 21 of file colour\&.cpp\&.
+Definition at line 22 of file colour\&.cpp\&.
 .PP
 .nf
-22 : red(red),
-23   green(green),
-24   blue(blue),
-25   alpha(alpha)
-26 {
-27 
-28 }
+23 : red(red),
+24   green(green),
+25   blue(blue),
+26   alpha(alpha)
+27 {
+28 
+29 }
 .fi
 .SS "Colour::~Colour ()"
 
 .PP
-Definition at line 30 of file colour\&.cpp\&.
+Definition at line 31 of file colour\&.cpp\&.
 .PP
 .nf
-30                 {
-31 
-32 }
+31                 {
+32 
+33 }
 .fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBConsoleColour\fP Colour::to_console_colour () const"
+
+.PP
+Converts the colour to a console colour\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The console colour 
+.RE
+.PP
+
+.PP
+Definition at line 233 of file colour\&.cpp\&.
+.PP
+.nf
+233                                               {
+234 
+235 
+236   if (red == 0 && green == 0 && blue == 0)
+237     return Black;
+238 
+239   if (red == 0 && green == 0 && blue == 170)
+240     return Blue;
+241 
+242   if (red == 0 && green == 170 && blue == 0)
+243     return Green;
+244 
+245   if (red == 0 && green == 170 && blue == 170)
+246     return Cyan;
+247 
+248   if (red == 170 && green == 0 && blue == 0)
+249     return Red;
+250 
+251   if (red == 170 && green == 0 && blue == 170)
+252     return Magenta;
+253 
+254   if (red == 170 && green == 85 && blue == 0)
+255     return Brown;
+256 
+257   if (red == 170 && green == 170 && blue == 170)
+258     return LightGrey;
+259 
+260   if (red == 85 && green == 85 && blue == 85)
+261     return DarkGrey;
+262 
+263   if (red == 85 && green == 85 && blue == 255)
+264     return LightBlue;
+265 
+266   if (red == 85 && green == 255 && blue == 85)
+267     return LightGreen;
+268 
+269   if (red == 85 && green == 255 && blue == 255)
+270     return LightCyan;
+271 
+272   if (red == 255 && green == 85 && blue == 85)
+273     return LightRed;
+274 
+275   if (red == 255 && green == 85 && blue == 255)
+276     return LightMagenta;
+277 
+278   if (red == 255 && green == 255 && blue == 85)
+279     return Yellow;
+280 
+281   if (red == 255 && green == 255 && blue == 255)
+282     return White;
+283 
+284   // Return a default value in case no match is found
+285   return Black;
+286 }
+.fi
+.PP
+References MaxOS::common::Black, MaxOS::common::Blue, blue, MaxOS::common::Brown, MaxOS::common::Cyan, MaxOS::common::DarkGrey, MaxOS::common::Green, green, MaxOS::common::LightBlue, MaxOS::common::LightCyan, MaxOS::common::LightGreen, MaxOS::common::LightGrey, MaxOS::common::LightMagenta, MaxOS::common::LightRed, MaxOS::common::Magenta, MaxOS::common::Red, red, MaxOS::common::White, and MaxOS::common::Yellow\&.
+.PP
+Referenced by MaxOS::drivers::console::VESABootConsole::put_character()\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t MaxOS::common::Colour::alpha { 0 }"
 
 .PP
-Definition at line 25 of file colour\&.h\&.
+Definition at line 94 of file colour\&.h\&.
 .PP
 Referenced by MaxOS::common::GraphicsContext::colour_to_int(), and MaxOS::common::GraphicsContext::int_to_colour()\&.
 .SS "uint8_t MaxOS::common::Colour::blue { 0 }"
 
 .PP
-Definition at line 24 of file colour\&.h\&.
+Definition at line 93 of file colour\&.h\&.
 .PP
-Referenced by MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::GraphicsContext::int_to_colour(), and MaxOS::common::GraphicsContext::invert_pixel()\&.
+Referenced by MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::GraphicsContext::int_to_colour(), MaxOS::common::GraphicsContext::invert_pixel(), and to_console_colour()\&.
 .SS "uint8_t MaxOS::common::Colour::green { 0 }"
 
 .PP
-Definition at line 23 of file colour\&.h\&.
+Definition at line 92 of file colour\&.h\&.
 .PP
-Referenced by MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::GraphicsContext::int_to_colour(), and MaxOS::common::GraphicsContext::invert_pixel()\&.
+Referenced by MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::GraphicsContext::int_to_colour(), MaxOS::common::GraphicsContext::invert_pixel(), and to_console_colour()\&.
 .SS "uint8_t MaxOS::common::Colour::red { 0 }"
 
 .PP
-Definition at line 22 of file colour\&.h\&.
+Definition at line 91 of file colour\&.h\&.
 .PP
-Referenced by MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::GraphicsContext::int_to_colour(), and MaxOS::common::GraphicsContext::invert_pixel()\&.
+Referenced by MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::GraphicsContext::int_to_colour(), MaxOS::common::GraphicsContext::invert_pixel(), and to_console_colour()\&.
 
 .SH "Author"
 .PP 

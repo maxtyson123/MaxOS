@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::console::VESABootConsole" 3 "Sun Oct 13 2024" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::console::VESABootConsole" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -33,11 +33,11 @@ Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::drivers::console::Console\f
 .br
 .RI "Places a character at the specified location\&. "
 .ti -1c
-.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP) final"
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP) final"
 .br
 .RI "Sets the foreground color at the specified location\&. "
 .ti -1c
-.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBConsoleColour\fP) final"
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP) final"
 .br
 .RI "Sets the background color at the specified location\&. "
 .ti -1c
@@ -45,41 +45,24 @@ Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::drivers::console::Console\f
 .br
 .RI "Gets the character at the specified location\&. "
 .ti -1c
-.RI "\fBConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
+.RI "\fBcommon::ConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
 .br
 .RI "Gets the foreground color at the specified location\&. "
 .ti -1c
-.RI "\fBConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y) final"
+.RI "\fBcommon::ConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y) final"
 .br
 .RI "Gets the background color at the specified location\&. "
-.ti -1c
-.RI "\fBcommon::Colour\fP \fBconsole_colour_to_vesa\fP (\fBConsoleColour\fP)"
-.br
-.RI "Converts a ConsoleColour to a Colour\&. "
 .ti -1c
 .RI "void \fBprint_logo\fP ()"
 .br
 .RI "Prints the logo to the center of the screen\&. "
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "uint16_t * \fBm_video_memory\fP"
-.br
-.ti -1c
-.RI "\fBcommon::GraphicsContext\fP * \fBm_graphics_context\fP"
-.br
-.ti -1c
-.RI "\fBgui::Font\fP \fBm_font\fP"
-.br
 .in -1c
 .SS "Additional Inherited Members"
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the VESA \fBConsole\fP during boot, handles the printing of characters and strings to the screen using VESA\&. 
 .PP
-Definition at line 24 of file vesaboot\&.h\&.
+Definition at line 25 of file vesaboot\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "VESABootConsole::VESABootConsole (\fBcommon::GraphicsContext\fP * graphics_context)"
@@ -95,7 +78,7 @@ Definition at line 15 of file vesaboot\&.cpp\&.
 20 {
 21 
 22     // Malloc the video memory
-23     m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(graphics_context->get_width() * graphics_context->get_height() * sizeof(uint16_t));
+23     m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(width() * height() * sizeof(uint16_t));
 24 }
 .fi
 .SS "VESABootConsole::~VESABootConsole ()"
@@ -110,85 +93,6 @@ Definition at line 26 of file vesaboot\&.cpp\&.
 .fi
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBColour\fP VESABootConsole::console_colour_to_vesa (\fBConsoleColour\fP colour)"
-
-.PP
-Converts a ConsoleColour to a Colour\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIcolour\fP The ConsoleColour to convert 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The Colour or black if the ConsoleColour is invalid 
-.RE
-.PP
-
-.PP
-Definition at line 189 of file vesaboot\&.cpp\&.
-.PP
-.nf
-189                                                                    {
-190     switch (colour) {
-191 
-192         case Black:
-193             return Colour(0, 0, 0);
-194 
-195         case Blue:
-196             return Colour(0, 0, 255);
-197 
-198         case Green:
-199             return Colour(0, 255, 0);
-200 
-201         case Cyan:
-202             return Colour(0, 170, 170);
-203 
-204         case Red:
-205             return Colour(170, 0, 0);
-206 
-207         case Magenta:
-208             return Colour(170, 0, 170);
-209 
-210         case Brown:
-211             return Colour(170, 85, 0);
-212 
-213         case LightGrey:
-214             return Colour(170, 170, 170);
-215 
-216         case DarkGrey:
-217             return Colour(85, 85, 85);
-218 
-219         case LightBlue:
-220             return Colour(85, 85, 255);
-221 
-222         case LightGreen:
-223             return Colour(85, 255, 85);
-224 
-225         case LightCyan:
-226             return Colour(85, 255, 255);
-227 
-228         case LightRed:
-229             return Colour(255, 85, 85);
-230 
-231         case LightMagenta:
-232             return Colour(255, 85, 255);
-233 
-234         case Yellow:
-235             return Colour(255, 255, 85);
-236 
-237         case White:
-238             return Colour(255, 255, 255);
-239     }
-240 
-241     return Colour(0, 0, 0);
-242 }
-.fi
-.PP
-References MaxOS::drivers::console::Black, MaxOS::drivers::console::Blue, MaxOS::drivers::console::Brown, MaxOS::drivers::console::Cyan, MaxOS::drivers::console::DarkGrey, MaxOS::drivers::console::Green, MaxOS::drivers::console::LightBlue, MaxOS::drivers::console::LightCyan, MaxOS::drivers::console::LightGreen, MaxOS::drivers::console::LightGrey, MaxOS::drivers::console::LightMagenta, MaxOS::drivers::console::LightRed, MaxOS::drivers::console::Magenta, MaxOS::drivers::console::Red, MaxOS::drivers::console::White, and MaxOS::drivers::console::Yellow\&.
-.PP
-Referenced by put_character()\&.
 .SS "\fBConsoleColour\fP VESABootConsole::get_background_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -210,24 +114,24 @@ The background color at the specified location or black if the coordinates are o
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line 170 of file vesaboot\&.cpp\&.
+Definition at line 216 of file vesaboot\&.cpp\&.
 .PP
 .nf
-170                                                                           {
-171 
-172     // If the coordinates are out of bounds, return
-173     if(x >= width() || y >= height())
-174         return ConsoleColour::Black;
-175 
-176     // Calculate the offset
-177     int offset = (y* width() + x);
-178 
-179     // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
-180     return (ConsoleColour)((m_video_memory[offset] & 0xF000) >> 12);
-181 }
+216                                                                           {
+217 
+218     // If the coordinates are out of bounds, return
+219     if(x >= width() || y >= height())
+220         return ConsoleColour::Black;
+221 
+222     // Calculate the offset
+223     int offset = (y* width() + x);
+224 
+225     // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
+226     return (ConsoleColour)((m_video_memory[offset] & 0xF000) >> 12);
+227 }
 .fi
 .PP
-References MaxOS::drivers::console::Black, height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References MaxOS::common::Black, height(), width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .PP
 Referenced by put_character()\&.
 .SS "char VESABootConsole::get_character (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
@@ -251,24 +155,24 @@ The character at the specified location or a space if the coordinates are out of
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line 130 of file vesaboot\&.cpp\&.
+Definition at line 176 of file vesaboot\&.cpp\&.
 .PP
 .nf
-130                                                           {
-131 
-132     // If the coordinates are out of bounds, return
-133     if(x >= width() || y >= height())
-134         return ' ';
-135 
-136     // Calculate the offset
-137     int offset = (y* width() + x);
-138 
-139     // Return the character at the offset, by masking the character with the current character (last 8 bits)
-140     return (char)(m_video_memory[offset] & 0x00FF);
-141 }
+176                                                           {
+177 
+178     // If the coordinates are out of bounds, return
+179     if(x >= width() || y >= height())
+180         return ' ';
+181 
+182     // Calculate the offset
+183     int offset = (y* width() + x);
+184 
+185     // Return the character at the offset, by masking the character with the current character (last 8 bits)
+186     return (char)(m_video_memory[offset] & 0x00FF);
+187 }
 .fi
 .PP
-References height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References height(), width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .SS "\fBConsoleColour\fP VESABootConsole::get_foreground_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -290,24 +194,24 @@ The foreground color at the specified location or white if the coordinates are o
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line 150 of file vesaboot\&.cpp\&.
+Definition at line 196 of file vesaboot\&.cpp\&.
 .PP
 .nf
-150                                                                           {
-151 
-152     // If the coordinates are out of bounds, return
-153     if(x >= width() || y >= height())
-154         return ConsoleColour::White;
-155 
-156     // Calculate the offset
-157     int offset = (y* width() + x);
-158 
-159     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-160     return (ConsoleColour)((m_video_memory[offset] & 0x0F00) >> 8);
-161 }
+196                                                                           {
+197 
+198     // If the coordinates are out of bounds, return
+199     if(x >= width() || y >= height())
+200         return ConsoleColour::White;
+201 
+202     // Calculate the offset
+203     int offset = (y* width() + x);
+204 
+205     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+206     return (ConsoleColour)((m_video_memory[offset] & 0x0F00) >> 8);
+207 }
 .fi
 .PP
-References height(), m_video_memory, MaxOS::drivers::console::White, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References height(), MaxOS::common::White, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .PP
 Referenced by put_character()\&.
 .SS "uint16_t VESABootConsole::height ()\fC [final]\fP, \fC [virtual]\fP"
@@ -332,7 +236,7 @@ Definition at line 46 of file vesaboot\&.cpp\&.
 49 }
 .fi
 .PP
-References MaxOS::common::GraphicsContext::get_height(), and m_graphics_context\&.
+References MaxOS::common::GraphicsContext::get_height()\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), kernelMain(), put_character(), set_background_color(), and set_foreground_color()\&.
 .SS "void VESABootConsole::print_logo ()"
@@ -340,35 +244,35 @@ Referenced by get_background_color(), get_character(), get_foreground_color(), k
 .PP
 Prints the logo to the center of the screen\&. 
 .PP
-Definition at line 247 of file vesaboot\&.cpp\&.
+Definition at line 232 of file vesaboot\&.cpp\&.
 .PP
 .nf
-247                                  {
-248 
-249       // Load the logo
-250       const char* logo = header_data;
-251 
-252       // Find the center of the screen
-253       uint32_t center_x = m_graphics_context->get_width()/2;
-254       uint32_t center_y = m_graphics_context->get_height()/2;
-255 
-256       // Draw the logo
-257       for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
-258         for (uint32_t logoX = 0; logoX < logo_width; ++logoX) {
-259 
-260           // Store the pixel in the logo
-261           uint8_t pixel[3] = {0};
-262 
-263           // Get the pixel from the logo
-264           LOGO_HEADER_PIXEL(logo, pixel);
-265 
-266           // Draw the pixel
-267           m_graphics_context->put_pixel(center_x - logo_width / 2 + logoX,
-268                                         center_y - logo_height / 2 + logoY,
-269                                     common::Colour(pixel[0], pixel[1], pixel[2]));
-270         }
-271       }
-272 }
+232                                  {
+233 
+234       // Load the logo
+235       const char* logo = header_data;
+236 
+237       // Find the center of the screen
+238       uint32_t center_x = m_graphics_context->get_width()/2;
+239       uint32_t center_y = m_graphics_context->get_height()/2 + 20;
+240 
+241       // Draw the logo
+242       for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
+243         for (uint32_t logoX = 0; logoX < logo_width; ++logoX) {
+244 
+245           // Store the pixel in the logo
+246           uint8_t pixel[3] = {0};
+247 
+248           // Get the pixel from the logo
+249           LOGO_HEADER_PIXEL(logo, pixel);
+250 
+251           // Draw the pixel
+252           m_graphics_context->put_pixel(center_x - logo_width / 2 + logoX,
+253                                         center_y - logo_height / 2 + logoY,
+254                                     common::Colour(pixel[0], pixel[1], pixel[2]));
+255         }
+256       }
+257 }
 .fi
 .PP
 Referenced by kernelMain()\&.
@@ -395,32 +299,78 @@ Definition at line 57 of file vesaboot\&.cpp\&.
 .nf
 57                                                                   {
 58 
-59     // If the coordinates are out of bounds, return
-60     if(x >= width() || y >= height())
-61         return;
+59 
+60     // Parse any ansi codes
+61     if (c == '\033') {
 62 
-63     // Calculate the offset
-64     int offset = (y* width() + x);
-65 
-66     // Set the character at the offset, by masking the character with the current character (last 8 bits)
-67     m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
-68 
-69     // Convert the char into a string
-70     char s[] = " ";
-71     s[0] = c;
-72 
-73     Colour foreground = console_colour_to_vesa(get_foreground_color(x, y));
-74     Colour background = console_colour_to_vesa(get_background_color(x, y));
-75 
-76     // Use the m_font to draw the character
-77     m_font\&.draw_text(x * 8, y * 9, foreground, background, m_graphics_context, s);
-78 
+63       // Store the character
+64       ansi_code_length = 0;
+65       ansi_code[ansi_code_length++] = c;
+66 
+67       // Do not draw the escape character
+68       return;
+69 
+70     } else if (ansi_code_length != -1 && ansi_code_length < 8) {
+71 
+72       // Add the character to the ANSI code
+73       ansi_code[ansi_code_length++] = c;
+74 
+75       // If the ANSI code is complete
+76       if (c == 'm') {
+77         ansi_code[ansi_code_length] = '\0';
+78         ansi_code_length = -1;
 79 
-80 }
+80         if(strcmp("\033[0m", ansi_code)) {
+81           m_foreground_color = ConsoleColour::Unititialised;
+82           m_background_color = ConsoleColour::Unititialised;
+83           return;
+84         }
+85 
+86         // Get the colour from the ANSI code
+87         Colour* colour = new Colour(ansi_code);
+88 
+89         // Set the colour
+90         bool foreground = ansi_code[4] == '3';
+91         if (foreground)
+92           m_foreground_color = colour->to_console_colour();
+93         else
+94           m_background_color = colour->to_console_colour();
+95 
+96         // Delete the colour
+97         delete colour;
+98 
+99       }
+100 
+101       // Do not draw the escape character
+102       return;
+103     }
+104 
+105     // If the coordinates are out of bounds, return
+106     if(x >= width() || y >= height())
+107         return;
+108 
+109     // Calculate the offset
+110     int offset = (y* width() + x);
+111 
+112     // Set the character at the offset, by masking the character with the current character (last 8 bits)
+113     m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
+114 
+115     // Convert the char into a string
+116     char s[] = " ";
+117     s[0] = c;
+118 
+119 
+120     Colour foreground = m_foreground_color == ConsoleColour::Unititialised ? get_foreground_color(x, y) : Colour(m_foreground_color);
+121     Colour background = m_background_color == ConsoleColour::Unititialised ? get_background_color(x, y) : Colour(m_background_color);
+122 
+123     // Use the m_font to draw the character
+124     m_font\&.draw_text(x * 8, y * 9, foreground, background, m_graphics_context, s);
+125 
+126 }
 .fi
 .PP
-References MaxOS::drivers::peripherals::c, console_colour_to_vesa(), MaxOS::gui::Font::draw_text(), get_background_color(), get_foreground_color(), height(), m_font, m_graphics_context, m_video_memory, MaxOS::drivers::peripherals::s, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "void VESABootConsole::set_background_color (uint16_t x, uint16_t y, \fBConsoleColour\fP background)\fC [final]\fP, \fC [virtual]\fP"
+References MaxOS::drivers::peripherals::c, MaxOS::gui::Font::draw_text(), get_background_color(), get_foreground_color(), height(), MaxOS::drivers::peripherals::s, strcmp(), MaxOS::common::Colour::to_console_colour(), MaxOS::common::Unititialised, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void VESABootConsole::set_background_color (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP background)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Sets the background color at the specified location\&. 
@@ -438,26 +388,26 @@ Sets the background color at the specified location\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line 109 of file vesaboot\&.cpp\&.
+Definition at line 155 of file vesaboot\&.cpp\&.
 .PP
 .nf
-109                                                                                            {
-110 
-111     // If the coordinates are out of bounds, return
-112     if(x >= width() || y >= height())
-113         return;
-114 
-115     // Calculate the offset
-116     int offset = (y* width() + x);
-117 
-118     // Set the background color at the offset, by masking the background color with the current background color (bits 12-15)
-119     m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t)background << 12);
-120 
-121 }
+155                                                                                            {
+156 
+157     // If the coordinates are out of bounds, return
+158     if(x >= width() || y >= height())
+159         return;
+160 
+161     // Calculate the offset
+162     int offset = (y* width() + x);
+163 
+164     // Set the background color at the offset, by masking the background color with the current background color (bits 12-15)
+165     m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t)background << 12);
+166 
+167 }
 .fi
 .PP
-References height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "void VESABootConsole::set_foreground_color (uint16_t x, uint16_t y, \fBConsoleColour\fP foreground)\fC [final]\fP, \fC [virtual]\fP"
+References height(), width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.SS "void VESABootConsole::set_foreground_color (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP foreground)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Sets the foreground color at the specified location\&. 
@@ -475,24 +425,24 @@ Sets the foreground color at the specified location\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line 89 of file vesaboot\&.cpp\&.
+Definition at line 135 of file vesaboot\&.cpp\&.
 .PP
 .nf
-89                                                                                            {
-90 
-91     // If the coordinates are out of bounds, return
-92     if(x >= width() || y >= height())
-93         return;
-94 
-95     // Calculate the offset
-96     int offset = (y* width() + x);
-97 
-98     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-99     m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t)foreground << 8);
-100 }
+135                                                                                            {
+136 
+137     // If the coordinates are out of bounds, return
+138     if(x >= width() || y >= height())
+139         return;
+140 
+141     // Calculate the offset
+142     int offset = (y* width() + x);
+143 
+144     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+145     m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t)foreground << 8);
+146 }
 .fi
 .PP
-References height(), m_video_memory, width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References height(), width(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .SS "uint16_t VESABootConsole::width ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -515,29 +465,9 @@ Definition at line 36 of file vesaboot\&.cpp\&.
 39 }
 .fi
 .PP
-References MaxOS::common::GraphicsContext::get_width(), and m_graphics_context\&.
+References MaxOS::common::GraphicsContext::get_width()\&.
 .PP
 Referenced by get_background_color(), get_character(), get_foreground_color(), kernelMain(), put_character(), set_background_color(), and set_foreground_color()\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBgui::Font\fP MaxOS::drivers::console::VESABootConsole::m_font\fC [protected]\fP"
-
-.PP
-Definition at line 30 of file vesaboot\&.h\&.
-.PP
-Referenced by put_character()\&.
-.SS "\fBcommon::GraphicsContext\fP* MaxOS::drivers::console::VESABootConsole::m_graphics_context\fC [protected]\fP"
-
-.PP
-Definition at line 29 of file vesaboot\&.h\&.
-.PP
-Referenced by height(), put_character(), and width()\&.
-.SS "uint16_t* MaxOS::drivers::console::VESABootConsole::m_video_memory\fC [protected]\fP"
-
-.PP
-Definition at line 28 of file vesaboot\&.h\&.
-.PP
-Referenced by get_background_color(), get_character(), get_foreground_color(), put_character(), set_background_color(), and set_foreground_color()\&.
 
 .SH "Author"
 .PP 

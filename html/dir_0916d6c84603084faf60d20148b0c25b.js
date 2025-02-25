@@ -1,10 +1,6 @@
 var dir_0916d6c84603084faf60d20148b0c25b =
 [
-    [ "cpu.h", "cpu_8h.html", [
-      [ "__attribute__", "structMaxOS_1_1system_1_1____attribute____.html", "structMaxOS_1_1system_1_1____attribute____" ],
-      [ "StackFrame", "structMaxOS_1_1system_1_1StackFrame.html", "structMaxOS_1_1system_1_1StackFrame" ],
-      [ "CPU", "classMaxOS_1_1system_1_1CPU.html", null ]
-    ] ],
+    [ "cpu.h", "cpu_8h.html", "cpu_8h" ],
     [ "gdt.h", "gdt_8h.html", "gdt_8h" ],
     [ "multiboot.h", "multiboot_8h.html", "multiboot_8h" ],
     [ "multitasking.h", "multitasking_8h.html", "multitasking_8h" ],
@@ -17,5 +13,6 @@ var dir_0916d6c84603084faf60d20148b0c25b =
     ] ],
     [ "syscalls.h", "syscalls_8h.html", [
       [ "SyscallHandler", "classMaxOS_1_1system_1_1SyscallHandler.html", "classMaxOS_1_1system_1_1SyscallHandler" ]
-    ] ]
+    ] ],
+    [ "ubsan.h", "ubsan_8h.html", "ubsan_8h" ]
 ];
