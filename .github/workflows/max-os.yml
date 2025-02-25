@@ -2,7 +2,7 @@ name: MaxOS
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
   pull_request:
@@ -51,7 +51,7 @@ jobs:
           make install
 
       - name: Upload binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Kernel Binary
           path: filesystem/boot/MaxOSk64
@@ -60,7 +60,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
-    # Dont generate docs on dev branch
+    # Don't generate docs on dev branch
     if: github.ref == 'refs/heads/main'
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
