@@ -20,7 +20,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 {
 
     // Malloc the video memory
-    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(graphics_context->get_width() * graphics_context->get_height() * sizeof(uint16_t));
+    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(width() * height() * sizeof(uint16_t));
 }
 
 VESABootConsole::~VESABootConsole()
@@ -56,6 +56,52 @@ uint16_t VESABootConsole::height()
  */
 void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
 
+
+    // Parse any ansi codes
+    if (c == '\033') {
+
+      // Store the character
+      ansi_code_length = 0;
+      ansi_code[ansi_code_length++] = c;
+
+      // Do not draw the escape character
+      return;
+
+    } else if (ansi_code_length != -1 && ansi_code_length < 8) {
+
+      // Add the character to the ANSI code
+      ansi_code[ansi_code_length++] = c;
+
+      // If the ANSI code is complete
+      if (c == 'm') {
+        ansi_code[ansi_code_length] = '\0';
+        ansi_code_length = -1;
+
+        if(strcmp("\033[0m", ansi_code)) {
+          m_foreground_color = ConsoleColour::Unititialised;
+          m_background_color = ConsoleColour::Unititialised;
+          return;
+        }
+
+        // Get the colour from the ANSI code
+        Colour* colour = new Colour(ansi_code);
+
+        // Set the colour
+        bool foreground = ansi_code[4] == '3';
+        if (foreground)
+          m_foreground_color = colour->to_console_colour();
+        else
+          m_background_color = colour->to_console_colour();
+
+        // Delete the colour
+        delete colour;
+
+      }
+
+      // Do not draw the escape character
+      return;
+    }
+
     // If the coordinates are out of bounds, return
     if(x >= width() || y >= height())
         return;
@@ -70,12 +116,12 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     char s[] = " ";
     s[0] = c;
 
-    Colour foreground = console_colour_to_vesa(get_foreground_color(x, y));
-    Colour background = console_colour_to_vesa(get_background_color(x, y));
+
+    Colour foreground = m_foreground_color == ConsoleColour::Unititialised ? get_foreground_color(x, y) : Colour(m_foreground_color);
+    Colour background = m_background_color == ConsoleColour::Unititialised ? get_background_color(x, y) : Colour(m_background_color);
 
     // Use the m_font to draw the character
     m_font.draw_text(x * 8, y * 9, foreground, background, m_graphics_context, s);
-
 
 }
 
@@ -181,67 +227,6 @@ ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
 }
 
 /**
- * @brief Converts a ConsoleColour to a Colour
- *
- * @param colour The ConsoleColour to convert
- * @return The Colour or black if the ConsoleColour is invalid
- */
-Colour VESABootConsole::console_colour_to_vesa(ConsoleColour colour) {
-    switch (colour) {
-
-        case Black:
-            return Colour(0, 0, 0);
-
-        case Blue:
-            return Colour(0, 0, 255);
-
-        case Green:
-            return Colour(0, 255, 0);
-
-        case Cyan:
-            return Colour(0, 170, 170);
-
-        case Red:
-            return Colour(170, 0, 0);
-
-        case Magenta:
-            return Colour(170, 0, 170);
-
-        case Brown:
-            return Colour(170, 85, 0);
-
-        case LightGrey:
-            return Colour(170, 170, 170);
-
-        case DarkGrey:
-            return Colour(85, 85, 85);
-
-        case LightBlue:
-            return Colour(85, 85, 255);
-
-        case LightGreen:
-            return Colour(85, 255, 85);
-
-        case LightCyan:
-            return Colour(85, 255, 255);
-
-        case LightRed:
-            return Colour(255, 85, 85);
-
-        case LightMagenta:
-            return Colour(255, 85, 255);
-
-        case Yellow:
-            return Colour(255, 255, 85);
-
-        case White:
-            return Colour(255, 255, 255);
-    }
-
-    return Colour(0, 0, 0);
-}
-
-/**
  * @brief Prints the logo to the center of the screen
  */
 void VESABootConsole::print_logo() {
@@ -251,7 +236,7 @@ void VESABootConsole::print_logo() {
 
       // Find the center of the screen
       uint32_t center_x = m_graphics_context->get_width()/2;
-      uint32_t center_y = m_graphics_context->get_height()/2;
+      uint32_t center_y = m_graphics_context->get_height()/2 + 20;
 
       // Draw the logo
       for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {

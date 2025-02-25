@@ -262,6 +262,22 @@ void *MemoryManager::to_dm_region(uintptr_t physical_address) {
 }
 
 /**
+ * @brief Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset
+ * @param physical_address The physical address in the direct map region
+ * @return The physical address
+ */
+void *MemoryManager::from_dm_region(uintptr_t physical_address) {
+
+  if(physical_address > s_hh_direct_map_offset)
+    return (void*)(physical_address - s_hh_direct_map_offset);
+
+  // Must be in the lower half
+  return (void*)physical_address;
+
+}
+
+
+/**
  * @brief Checks if a virtual address is in the higher region
  * @param virtual_address The virtual address
  * @return True if the address is in the higher region, false otherwise
@@ -269,7 +285,6 @@ void *MemoryManager::to_dm_region(uintptr_t physical_address) {
 bool MemoryManager::in_higher_region(uintptr_t virtual_address) {
   return virtual_address & (1l << 62);
 }
-
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 

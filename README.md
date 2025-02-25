@@ -133,6 +133,8 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 3. Generate makefiles
    ```sh
    cd cmake-build
+   
+   # Add -DDEBUG=ON to enable debug mode
    cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
    ```
 
@@ -233,7 +235,7 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[product-screenshot]: docs/Screenshots/Boot/Console_v2.png
+[product-screenshot]: docs/Screenshots/Boot/Console_v3.png
 [contributors-shield]: https://img.shields.io/github/contributors/maxtyson123/MaxOS.svg?style=for-the-badge
 [contributors-url]: https://github.com/maxtyson123/MaxOS/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/maxtyson123/MaxOS.svg?style=for-the-badge

@@ -6,6 +6,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::common;
+using namespace MaxOS::memory;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
@@ -63,11 +64,14 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     initBlock.reserved3 = 0;                         // Reserverd
     initBlock.logicalAddress = 0;                    // None for now
 
+
+    //TODO: Use malloc?
+
     // Set Buffer descriptors memory
-    sendBufferDescr = (BufferDescriptor*)((((uint32_t)&sendBufferDescrMemory[0]) + 15) & ~((uint32_t)0xF));
+    sendBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.sendBufferDescrAddress = (uint32_t)sendBufferDescr;
 
-    recvBufferDescr = (BufferDescriptor*)((((uint32_t)&recvBufferDescrMemory[0]) + 15) & ~((uint32_t)0xF));
+    recvBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.recvBufferDescrAddress = (uint32_t)recvBufferDescr;
 
     for(uint8_t i = 0; i < 8; i++)
@@ -111,6 +115,9 @@ amd_am79c973::~amd_am79c973()
 void amd_am79c973::activate()
 {
 
+    // TODO: Have a look at re - implementing this again someday
+    return;
+
     initDone = false;                                            // Set initDone to false
     registerAddressPort.write(0);                           // Tell device to write to register 0
     registerDataPort.write(0x41);                           // Enable Interrupts and start the device
@@ -120,13 +127,10 @@ void amd_am79c973::activate()
     uint32_t temp = registerDataPort.read();                     // Get current data
 
     registerAddressPort.write(4);                           // Tell device to write to register 4
-    registerDataPort.write(
-        temp |
-        0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
+    registerDataPort.write(temp | 0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets.)
 
     registerAddressPort.write(0);                           // Tell device to write to register 0
-    registerDataPort.write(
-        0x42);                           // Tell device that it is initialised and can begin operating
+    registerDataPort.write(0x42);                           // Tell device that it is initialised and can begin operating
 
     active = true;                                               // Set active to true
 }
@@ -139,8 +143,8 @@ void amd_am79c973::activate()
 uint32_t amd_am79c973::reset() {
 
   resetPort.read();
-    resetPort.write(0);
-    return 10;                      // 10 means wait for 10ms
+  resetPort.write(0);
+  return 10;                      // 10 means wait for 10ms
 
 }
 
@@ -152,6 +156,8 @@ uint32_t amd_am79c973::reset() {
  * @param esp The stack pointer (where to return to)
 */
 void amd_am79c973::handle_interrupt() {
+
+
 
 
     // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs

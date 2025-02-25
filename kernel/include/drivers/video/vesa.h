@@ -34,9 +34,12 @@ namespace MaxOS {
                     void render_pixel_32_bit( uint32_t x,  uint32_t y,  uint32_t colour) final;
                     uint32_t get_rendered_pixel_32_bit(uint32_t x, uint32_t y) final;
 
-                    multiboot_tag_framebuffer* m_framebuffer_info;
-
+                    // Memory
                     uint64_t* m_framebuffer_address;
+                    size_t m_framebuffer_size;
+
+                    // Info
+                    multiboot_tag_framebuffer* m_framebuffer_info;
                     uint8_t m_bpp;
                     uint16_t m_pitch;
 

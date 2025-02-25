@@ -51,13 +51,23 @@ void LocalAPIC::init() {
     ASSERT(false, "CPU does not support xAPIC")
   }
 
-  // Get the vector table
+  // Get information about the APIC
   uint32_t spurious_vector = read(0xF0);
-  _kprintf("APIC Spurious Vector: 0x%x\n", spurious_vector & 0xFF);
+  bool is_enabled = msr_info & (1 << 11);
+  bool is_bsp = msr_info & (1 << 8);
+  _kprintf("APIC: boot processor: %d, enabled (globally): %d, spurious vector: 0x%x\n", is_bsp, is_enabled, spurious_vector);
+
+  if(!is_enabled) {
+    _kprintf("APIC is not enabled\n");
+    return;
+  }
 
   // Enable the APIC
   write(0xF0, (1 << 8) | 0x100);
   _kprintf("APIC Enabled\n");
+
+  // Reserve the APIC base
+  PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
 
   // Read the APIC version
   uint32_t version = read(0x30);
@@ -97,6 +107,12 @@ uint32_t LocalAPIC::id() {
 
 }
 
+void LocalAPIC::send_eoi() {
+
+    // Send the EOI
+    write(0xB0, 0);
+}
+
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi),
   m_madt(nullptr)
@@ -114,21 +130,19 @@ void IOAPIC::init() {
   m_madt = (MADT*)m_acpi->find("APIC");
   MADT_Item* io_apic_item = get_madt_item(1, 0);
 
-  // Check if the IO APIC was found
-  ASSERT(io_apic_item == nullptr, "IO APIC not found")
+  // Get the IO APIC
+  MADT_IOAPIC* io_apic = (MADT_IOAPIC*)MemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
+  PhysicalMemoryManager::s_current_manager->map((physical_address_t*)io_apic_item, (virtual_address_t*)(io_apic - sizeof(MADT_Item)), Present | Write);
 
-
-  // Get the IO APIC address
-  MADT_IOAPIC* io_apic = (MADT_IOAPIC*)io_apic_item;
-  m_address = io_apic->io_apic_address;
 
   // Map the IO APIC address to the higher half
-  m_address_high = (uint64_t)MemoryManager::to_higher_region(m_address);
-  _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
+  m_address = io_apic->io_apic_address;
+  m_address_high = (uint64_t)MemoryManager::to_io_region(m_address);
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
+  _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
 
   // Get the IO APIC version and max redirection entry
-  m_version = read(0x01);
+  m_version = read(0x1);
   m_max_redirect_entry = (uint8_t)(m_version >> 16);
 
   // Log the IO APIC information
@@ -139,7 +153,7 @@ void IOAPIC::init() {
   MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
 
   // Loop through the source override items
-  uint32_t total_length = 0;
+  uint32_t total_length = sizeof(MADT);
   while (total_length < m_madt->header.length && m_override_array_size < 0x10){ // 0x10 is the max items
 
       // Increment the total length
@@ -152,8 +166,7 @@ void IOAPIC::init() {
           Override *override = (Override *)(source_override_item + 1);
           m_override_array[m_override_array_size].bus = override->bus;
           m_override_array[m_override_array_size].source = override->source;
-          m_override_array[m_override_array_size].global_system_interrupt =
-              override->global_system_interrupt;
+          m_override_array[m_override_array_size].global_system_interrupt = override->global_system_interrupt;
           m_override_array[m_override_array_size].flags = override->flags;
 
           // Increment the override array size
@@ -180,7 +193,7 @@ MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
     uint8_t current_index = 0;
 
     // Loop through the items
-    while (total_length+ sizeof(MADT) < m_madt->header.length && current_index <= index) {
+    while (total_length + sizeof(MADT) < m_madt->header.length && current_index <= index) {
 
         // Check if the item is the correct type
         if(item->type == type) {
@@ -256,6 +269,48 @@ void IOAPIC::write_redirect(uint8_t index, RedirectionEntry *entry) {
   write(index + 1, high);
 }
 
+void IOAPIC::set_redirect(interrupt_redirect_t *redirect) {
+
+    // Create the redirection entry
+    RedirectionEntry entry;
+    entry.raw = redirect->flags | (redirect -> interrupt & 0xFF);
+    entry.destination = redirect->destination;
+    entry.mask = redirect->mask;
+
+    // Check if a global system interrupt is used
+    for (uint8_t i = 0; i < m_override_array_size; i++) {
+
+        if (m_override_array[i].source != redirect->type)
+          continue;
+
+        // Set the lower 4 bits of the pin
+        entry.pin_polarity = (m_override_array[i].flags & 0b11 == 2) ? 0b1 : 0b0;
+        entry.pin_polarity = ((m_override_array[i].flags >> 2) & 0b11 == 2) ? 0b1 : 0b0;
+
+        // Set the trigger mode
+        entry.trigger_mode = (((m_override_array[i].flags >> 2) & 0b11) == 2);
+
+        break;
+
+    }
+
+    // Write the redirect
+    write_redirect(redirect->index, &entry);
+
+}
+void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
+
+    // Read the current entry
+    RedirectionEntry entry;
+    read_redirect(index, &entry);
+
+    // Set the mask
+    entry.mask = mask;
+
+    // Write the entry
+    write_redirect(index, &entry);
+}
+
 AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi)
 : m_local_apic(),
   m_io_apic(acpi),
@@ -305,4 +360,10 @@ void AdvancedProgrammableInterruptController::disable_pic() {
   m_pic_master_data_port.write(0xFF);
   m_pic_slave_data_port.write(0xFF);
 
+}
+LocalAPIC *AdvancedProgrammableInterruptController::get_local_apic() {
+  return &m_local_apic;
+}
+IOAPIC *AdvancedProgrammableInterruptController::get_io_apic() {
+    return &m_io_apic;
 }

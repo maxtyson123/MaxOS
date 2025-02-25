@@ -26,13 +26,17 @@ namespace MaxOS {
 
           void copy(String const &other);
 
-          int length() const;
+          int length(bool count_ansi = false) const;
           char* c_str();
           const char* c_str() const;
+
+          String center(int width, char fill = ' ') const;
 
           String &operator = (String const &other);
           String operator + (String const &other) const;
           String &operator += (String const &other);
+
+          String operator * (int times) const;
 
           bool operator == (String const &other) const;
           bool operator != (String const &other) const;

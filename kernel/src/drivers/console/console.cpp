@@ -3,6 +3,7 @@
 //
 
 #include <drivers/console/console.h>
+#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -44,8 +45,7 @@ uint16_t Console::height() {
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  */
-void Console::put_character(uint16_t, uint16_t, char) {
-
+void Console::put_character(uint16_t x, uint16_t y, char c) {
 }
 
 /**
@@ -426,6 +426,9 @@ void ConsoleStream::write_char(char c) {
         }
     }
 
+    // Check if the character is an ANSI escape code
+    if(c == '\033') is_ansi = true;
+
     // Handle the character
     switch (c) {
         // New line
@@ -464,10 +467,15 @@ void ConsoleStream::write_char(char c) {
             m_console->put_character(m_cursor_x, m_cursor_y, c);
 
             // Increment the x coordinate
-            m_cursor_x++;
+            if(!is_ansi)
+              m_cursor_x++;
+
             break;
 
     }
+
+    // Check if the ANSI code is complete
+    if(c == 'm') is_ansi = false;
 
 }
 

@@ -40,19 +40,30 @@ namespace MaxOS{
       uint64_t ss;
     } __attribute__((__packed__)) cpu_status_t ;
 
-    struct StackFrame{
+    typedef struct StackFrame{
       StackFrame* next;
       uintptr_t rip;
-    };
+    } __attribute__((__packed__)) stack_frame_t;
 
     class CPU {
+      private:
+        static CPU* s_instance;
+
+
       public:
+
+        static void PANIC(const char* message);
         static void halt();
+
         static void get_status(cpu_status_t* status);
         static void set_status(cpu_status_t* status);
+        static void print_registers(cpu_status_t* status);
+
         static uint64_t read_msr(uint32_t msr);
         static void write_msr(uint32_t msr, uint64_t value);
+
         static void cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx);
+
         static void stack_trace(size_t);
     };
 

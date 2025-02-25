@@ -42,32 +42,8 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 
     _kprintf("Created GDT entries\n");
 
-    // Store the GDT in the GDTR
-    GDTR gdtr = {
-        .limit = 5 * sizeof(uint64_t) - 1,
-        .address = (uint64_t)m_gdt
-    };
-
 
     // TODO: This is done in assembly but would be nice to do here
-//    // Load the GDTR
-//    asm volatile("lgdt %0" : : "m" (gdtr));
-//
-//    _kprintf("Loaded GDT\n");
-//
-//    // Reload the segment registers
-//    asm volatile("\
-//        mov $0x10, %ax \n\
-//        mov %ax, %ds \n\
-//        mov %ax, %es \n\
-//        mov %ax, %fs \n\
-//        mov %ax, %gs \n\
-//        mov %ax, %ss \n\
-//        \n\
-//        pop %rdi \n\
-//        push $0x8 \n\
-//        push %rdi \n\
-//    ");
 
 
     _kprintf("Reloaded segment registers\n");

@@ -51,7 +51,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
 
     // Allocate space for the vmm
     void* vmm_space_physical = m_physical_memory_manager->allocate_frame();
-    ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space");
+    ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space\n");
     m_physical_memory_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
     _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
@@ -81,6 +81,7 @@ VirtualMemoryManager::~VirtualMemoryManager() {
  * @return The address of the allocated memory
  */
 void* VirtualMemoryManager::allocate(size_t size, size_t flags) {
+
   return allocate(0, size, flags);
 }
 
@@ -114,6 +115,34 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   // Make sure the size is aligned
   size = PhysicalMemoryManager::align_up_to_page(size, PhysicalMemoryManager::s_page_size);
 
+  // Check the free list for a chunk
+  free_chunk_t* reusable_chunk = find_and_remove_free_chunk(size);
+  if(reusable_chunk != nullptr){
+
+    // If the chunk is not being reserved
+    if(!(flags & Reserve)){
+
+      // Map the memory
+      size_t pages = PhysicalMemoryManager::size_to_frames(size);
+      for (size_t i = 0; i < pages; i++){
+
+        // Allocate a new frame
+        physical_address_t* frame = m_physical_memory_manager->allocate_frame();
+        ASSERT(frame != nullptr, "Failed to allocate frame (from free chunk list)\n");
+
+        // Map the frame
+        m_physical_memory_manager->map(frame, (virtual_address_t*)reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+
+      }
+
+    }
+
+    // Return the address
+    return (void*)reusable_chunk->start_address;
+
+  }
+
+
   // Is there space in the current region
   if(m_current_chunk >= s_chunks_per_page)
     new_region();
@@ -143,7 +172,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
     // Allocate a new frame
     physical_address_t* frame = m_physical_memory_manager->allocate_frame();
-    ASSERT(frame != nullptr, "Failed to allocate frame");
+    ASSERT(frame != nullptr, "Failed to allocate frame (from current region)\n");
 
     // Map the frame
     m_physical_memory_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
@@ -161,7 +190,7 @@ void VirtualMemoryManager::new_region() {
 
   // Space for the new region
   physical_address_t* new_region_physical = m_physical_memory_manager->allocate_frame();
-  ASSERT(new_region_physical != nullptr, "Failed to allocate new VMM region");
+  ASSERT(new_region_physical != nullptr, "Failed to allocate new VMM region\n");
 
   // Align the new region
   virtual_memory_region_t* new_region = (virtual_memory_region_t*)PhysicalMemoryManager::align_to_page((uint64_t)m_current_region + PhysicalMemoryManager::s_page_size);
@@ -223,12 +252,13 @@ void VirtualMemoryManager::free(void *address) {
 
   }
 
+  // Add the chunk to the free list
+  add_free_chunk(chunk->start_address, chunk->size);
+
   // Clear the chunk
   chunk->size = 0;
   chunk->flags = 0;
   chunk->start_address = 0;
-
-  // TODO: Some logic to use this space again
 }
 
 /**
@@ -257,4 +287,59 @@ size_t VirtualMemoryManager::memory_used() {
   }
 
   return result;
+}
+
+/**
+ * @brief Add a free chunk to the free list
+ * @param start_address The start address of the chunk
+ * @param size The size of the chunk
+ */
+void VirtualMemoryManager::add_free_chunk(uintptr_t start_address, size_t size) {
+
+
+  // Create the new chunk
+  free_chunk_t* new_chunk = (free_chunk_t*)start_address;
+  new_chunk->start_address = start_address;
+  new_chunk->size = size;
+  new_chunk->next = m_free_chunks;
+
+  // Set the new chunk
+  m_free_chunks = new_chunk;
+}
+
+/**
+ * @brief Find and remove a free chunk from the free list to use
+ * @param size The size of the chunk to find
+ * @return The free chunk or nullptr if not found
+ */
+free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
+
+    // Find the chunk
+    free_chunk_t* current = m_free_chunks;
+    free_chunk_t* previous = nullptr;
+    while(current != nullptr){
+
+      // Check if the chunk is big enough
+      if(current->size >= size){
+
+          // Remove the chunk
+          if(previous != nullptr){
+                  previous->next = current->next;
+          }else{
+                  m_free_chunks = current->next;
+          }
+
+          // Return the chunk
+          return current;
+
+      }
+
+      // Move to the next chunk
+      previous = current;
+      current = current->next;
+    }
+
+    // No chunk found
+    return nullptr;
+
 }

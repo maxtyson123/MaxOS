@@ -66,6 +66,9 @@ using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
+
+//TODO: Rework cmake to have debug and prod targets
+
 //Define what a constructor is
 typedef void (*constructor)();
 
@@ -78,47 +81,20 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
-
-bool check_multiboot_flag(uint32_t flags, uint32_t bit)
-{
-    return (flags & (1 << bit)) > 0;
-}
-
-void print_boot_header(Console* console){
-
-  // Make the header
-  ConsoleArea consoleHeader(console, 0, 0, console -> width(), 1, ConsoleColour::Blue, ConsoleColour::LightGrey);
-  ConsoleStream headerStream(&consoleHeader);
-
-  // Calculate the header
-  string header = string("MaxOS v") + string(VERSION_STRING) + " [build " + string(BUILD_NUMBER) + "]";
-  int headerPadding = (console -> width() - header.length()) / 2;
-
-  // Print the headers
-  for(int i = 0; i < headerPadding; i++)
-        headerStream << " ";
-
-  headerStream << header;
-
-  for (int i1 = 0; i1 < headerPadding; ++i1) {
-        headerStream << " ";
-  }
-
-}
-
 extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
-
     // Initialise the serial console
     SerialConsole serialConsole;
 
+    // Confirm the bootloader
+    ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
+
     // Make the multiboot header
     Multiboot multiboot(addr);
-
     _kprintf("-= MaxOS booted =-\n");
 
-    InterruptManager interrupts(0x20, 0);
+    InterruptManager interrupts;
     _kprintf("-= IDT set up =-\n");
 
     uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
@@ -128,24 +104,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     VirtualMemoryManager vmm(true);
     _kprintf("-= Virtual Memory Manager set up =-\n");
 
-
-    // Initialise the memory manager
-    MemoryManager memoryManager(&vmm);
-    _kprintf("-= Memory Manager set up =-\n");
-
-    // Now entered the gui space
-    _kprintf("__ Basic System Setup [DONE] __\n");
-
-    while (true) {
-      system::CPU::halt();
-    }
-
-
-    // TODO: 64 bit architecture rewrite
-    //  - Convert old codebase to higher half
-    //  - APIC and ACPI
-    //  - Rewrite read me
-
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
     VideoDriver* videoDriver = (VideoDriver*)&vesa;
@@ -153,267 +111,172 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
                           (int)multiboot.get_framebuffer()->common.framebuffer_height,
                           (int)multiboot.get_framebuffer()->common.framebuffer_bpp);
 
+
+    // Initialise the memory manager
+    MemoryManager memoryManager(&vmm);
+    _kprintf("-= Memory Manager set up =-\n");
+
     // Initialise Console
     VESABootConsole console(&vesa);
     console.clear();
     console.print_logo();
 
-
-
     // Create a stream for the console
-    ConsoleArea mainConsoleArea(&console, 0, 1, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    ConsoleArea mainConsoleArea(&console, 0, 0, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
 
-    if(magic == MULTIBOOT2_BOOTLOADER_MAGIC)
-        cout << "Multiboot2 Bootloader Detected\n";
+    // Header constants
+    const string tick = (string)"[ " + ANSI_COLOURS[FG_Green] + "OK" + ANSI_COLOURS[Reset] + " ]";
+    const string boot_title = string("Kernel Boot Sequence - MaxOS v") + string(VERSION_STRING) + " [build " + string(BUILD_NUMBER) + "]";
+    const int boot_width = boot_title.length() + 20;
+    const int sub_boot_width = boot_width;
 
-    return;
+    // Print helpers
+    string out = "";
+    #define log(x) out = x; cout << out; cout << (string)" " * (sub_boot_width - out.length() - 6) << tick << "\n";
+    #define header(x) cout << "\n\n" << ANSI_COLOURS[FG_White] << "[" << string(x).center(sub_boot_width - 2) << "]\n" << ANSI_COLOURS[Reset];
 
     // Print the header
-    print_boot_header(&console);
-
-    // Print the build info
-    cout << "BUILD INFO: " << VERSION_NAME << " on " << BUILD_DATE.year << "-" << BUILD_DATE.month << "-" << BUILD_DATE.day << " at " << BUILD_DATE.hour << ":" << BUILD_DATE.minute << ":" << BUILD_DATE.second << " " << " (commit " << GIT_REVISION << " on " << GIT_BRANCH << " by " << GIT_AUTHOR << ")\n";
-
-    // Where the areas should start
-    cout.set_cursor(cout.m_cursor_x, cout.m_cursor_y + 1); //Move the cursor down one (so the header is not overwritten
-    uint32_t areaStart = cout.m_cursor_y;
-
-    // Make the system setup stream
-    ConsoleArea systemSetupHeader(&console, 0, areaStart, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
-    ConsoleStream systemSetupHeaderStream(&systemSetupHeader);
-    systemSetupHeaderStream << "Setting up system";
+    cout << ANSI_COLOURS[FG_Blue] << (string)"=" * boot_width << "\n";
+    cout << ANSI_COLOURS[FG_Cyan] << boot_title.center(boot_width) << "\n";
+    cout << ANSI_COLOURS[FG_Blue] << (string)"=" * boot_width << "\n";
 
     // Stuff done earlier
-    cout << "-- Set Up Paging\n";
-    cout << "-- Set Up Interrupt Manager\n";
-    cout << "-- Set Up Physical Memory Management\n";
-    cout << "-- Set Up Virtual Memory Management\n";
-    cout << "-- Set Up Memory Management (Kernel)\n";
-    cout << "-- Set Up VESA Driver\n";
-    systemSetupHeaderStream << "......";
+    header("Initialising System Components")
+    log("Set Up Serial Console");
+    log("Parsed Multiboot");
+    log("Set Up Paging");
+    log("Set Up Interrupt Manager");
+    log("Set Up Physical Memory Manager");
+    log("Set Up Virtual Memory Manager");
+    log("Set Up Memory Manager (Kernel)");
+    log("Set Up Video Driver");
 
     ThreadManager threadManager;
-    cout << "-- Set Up Thread Management\n";
-    systemSetupHeaderStream << ".";
+    log("Set Up Thread Manager");
 
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
-    cout << "-- Set Up System Calls\n";
-    systemSetupHeaderStream << ".";
+    log("Set Up Syscalls");
 
-    cout << "\n";
-    systemSetupHeaderStream << "[ DONE ]";
-
-    // Make the device setup stream
-    ConsoleArea deviceSetupHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
-    ConsoleStream deviceSetupHeaderStream(&deviceSetupHeader);
-    deviceSetupHeaderStream << "Setting up devices";
-    
     DriverManager driverManager;
+    header("Initialising Hardware")
 
-    //TODO: ACPI
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
-    cout << "-- Set Up ACPI\n";
-    deviceSetupHeaderStream << ".";
+    log("Set Up ACPI");
 
-    //TODO: APIC
     AdvancedProgrammableInterruptController apic(&acpi);
-    cout << "-- Set Up APIC\n";
-    deviceSetupHeaderStream << ".";
+    interrupts.set_apic(apic.get_local_apic());
+    log("Set Up APIC");
+
 
     // Keyboard
     KeyboardDriver keyboard(&interrupts);
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
     driverManager.add_driver(&keyboard);
-    cout << "-- Set Up Keyboard\n";
-    deviceSetupHeaderStream << ".";
+    interrupt_redirect_t keyboardRedirect = {
+        .type = 0x1,
+        .index = 0x12,
+        .interrupt = 0x21,
+        .destination = 0x00,
+        .flags = 0x00,
+        .mask = false,
+    };
+    apic.get_io_apic() -> set_redirect(&keyboardRedirect);
+    log("Set Up Keyboard");
 
     // Mouse
     MouseDriver mouse(&interrupts);
     driverManager.add_driver(&mouse);
-    cout << "-- Set Up Mouse\n";
-    deviceSetupHeaderStream << ".";
+    interrupt_redirect_t mouseRedirect = {
+        .type = 0xC,
+        .index = 0x28,
+        .interrupt = 0x2C,
+        .destination = 0x00,
+        .flags = 0x00,
+        .mask = false,
+    };
+    apic.get_io_apic() -> set_redirect(&mouseRedirect);
+    log("Set Up Mouse");
+
 
     // Clock
-    Clock kernelClock(&interrupts, 1);
+    Clock kernelClock(&interrupts, &apic, 1);
     driverManager.add_driver(&kernelClock);
-    cout << "-- Set Up Clock\n";
-    deviceSetupHeaderStream << ".";
+    log("Set Up Clock");
 
     // Driver Selectors
     Vector<DriverSelector*> driverSelectors;
 
-    // Make the stream on the side for the PCI
-    ConsoleArea pciConsoleArea(&console, console.width() - 45, areaStart+1, 45, console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
-    ConsoleStream pciConsoleStream(&pciConsoleArea);
-    console.put_string(console.width() - 45, areaStart, "                 PCI Devices                 ", ConsoleColour::LightGrey, ConsoleColour::Black);
-    
     //PCI
-    PeripheralComponentInterconnectController PCIController(&pciConsoleStream);
+    PeripheralComponentInterconnectController PCIController;
     driverSelectors.push_back(&PCIController);
-    cout << "-- Set Up PCI\n";
-    deviceSetupHeaderStream << ".";
+    log("Set Up PCI");
 
-    //USB
-    //UniversalSerialBusController USBController(&nullStream);
-    //driverSelectors.pushBack(&USBController);
-    //cout << "-- Set Up USB\n";
-    //deviceSetupHeaderStream << ".";
+    header("Device Management")
 
     // Find the drivers
-    cout << "-- Finding Drivers";
+    cout << "Finding Drivers" << ANSI_COLOURS[FG_White];
     for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
     {
-        cout << ".";
-        (*selector)->select_drivers(&driverManager, &interrupts);
+      cout << ".";
+      (*selector)->select_drivers(&driverManager, &interrupts);
     }
-    cout << " Found\n";
-    deviceSetupHeaderStream << ".";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
-    cout << "\n";
-    deviceSetupHeaderStream << "[ DONE ]";
-
-    // Make the activation stream
-    ConsoleArea activationHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
-    ConsoleStream activationHeaderStream(&activationHeader);
-    activationHeaderStream << "Initializing Hardware";
 
     // Resetting devices
-    cout << "-- Resetting Devices";
+    cout << "Resetting Devices" << ANSI_COLOURS[FG_White];
     uint32_t resetWaitTime = 0;
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
-        cout << ".";
-        uint32_t waitTime = (*driver)->reset();
+      cout << ".";
+      uint32_t waitTime = (*driver)->reset();
 
-        // If the wait time is longer than the current longest wait time, set it as the new longest wait time
-        if(waitTime > resetWaitTime)
-            resetWaitTime = waitTime;
+      // If the wait time is longer than the current longest wait time, set it as the new longest wait time
+      if(waitTime > resetWaitTime)
+        resetWaitTime = waitTime;
     }
-    cout << " Reset\n";
-    activationHeaderStream << ".";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 17 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "RESET" + ANSI_COLOURS[Reset] + " ]" << "\n";
+
 
     // Interrupts
     interrupts.activate();
-    kernelClock.delay(resetWaitTime);                                            //Wait for the devices to reset (has to be done after interrupts are activated otherwise the clock interrupt wont trigger)
-    cout << "-- Activated Interrupts\n";
-    activationHeaderStream << ".";
+    log("Activating Interrupts");
+
+    // Post interupt activation
+    kernelClock.calibrate();
+    kernelClock.delay(resetWaitTime);
+    Time now = kernelClock.get_time();
+    cout << "TIME: " << now.hour << ":" << now.minute << ":" << now.second << "\n";
+
+    header("Finalisation")
 
     // Initialise the drivers
-    cout << "-- Initializing Devices";
+    cout <<  "Initialising Devices" << ANSI_COLOURS[FG_White];
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
-        cout << ".";
-        (*driver)->initialise();
+      cout << ".";
+      (*driver)->initialise();
     }
-    cout << " Initialised\n";
-    activationHeaderStream << ".";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 20 - 15) << (string)"[ " + ANSI_COLOURS[FG_Green] + "INITIALISED" + ANSI_COLOURS[Reset] + " ]" << "\n";
+
 
     // activate the drivers
-    cout << "-- Activating Devices";
+    cout << "Activating Devices" << ANSI_COLOURS[FG_White];
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
-        cout << ".";
-        (*driver)->activate();
+      cout << ".";
+      (*driver)->activate();
     }
-    cout << " Activated\n";
-    activationHeaderStream << ".";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 18 - 13) << (string)"[ " + ANSI_COLOURS[FG_Green] + "ACTIVATED" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
-    cout << "\n";
-    activationHeaderStream << "[ DONE ]";
 
-    // Make the network setup stream (TODO: Move to user space)
-    ConsoleArea networkSetupHeader(&console, 0, cout.m_cursor_y, console.width(), 1, ConsoleColour::LightGrey, ConsoleColour::Black);
-    ConsoleStream networkSetupHeaderStream(&networkSetupHeader);
-    networkSetupHeaderStream << "Setting up network";
-
-    // Make the stream on the side for the network
-    ConsoleArea networkConsoleArea(&console, console.width() - 40, 2 + console.height()/2, 45,
-        console.height()/2, ConsoleColour::DarkGrey, ConsoleColour::Black);
-    ConsoleStream networkConsoleStream(&networkConsoleArea);
-    console.put_string(console.width() - 40, 1 + console.height() / 2,
-                       "                 Network                    ",
-                       ConsoleColour::LightGrey, ConsoleColour::Black);
-
-    // Get the driver
-    EthernetDriver* ethernetDriver = (EthernetDriver*)driverManager.drivers[4];
-    ethernetDriver->m_driver_message_stream = &networkConsoleStream;
-    cout << "Got Ethernet Driver: " << ethernetDriver->get_device_name() << "\n";
-    networkSetupHeaderStream << ".";
-
-    // Ethernet Frame Handler
-    EthernetFrameHandler ethernetFrameHandler(ethernetDriver, &networkConsoleStream);
-    cout << "-- Set Up Ethernet Frame Handler\n";
-    networkSetupHeaderStream << ".";
-
-    // IPv4 (using qemu's default network settings)
-    SubnetMask subnetMask = InternetProtocolHandler::CreateSubnetMask(255, 255, 255, 0);
-    InternetProtocolAddress defaultGateway = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 2);
-    InternetProtocolAddress ipAddress = InternetProtocolHandler::CreateInternetProtocolAddress(10, 0, 2, 15);
-    InternetProtocolHandler internetProtocolHandler(&ethernetFrameHandler, ipAddress, defaultGateway, subnetMask, &networkConsoleStream);
-    cout << "-- Set Up IPv4\n";
-    networkSetupHeaderStream << ".";
-
-    // ARP
-    AddressResolutionProtocol arp(&ethernetFrameHandler, &internetProtocolHandler, &networkConsoleStream);
-    cout << "-- Set Up ARP\n";
-    networkSetupHeaderStream << ".";
-
-    // ICMP
-    InternetControlMessageProtocol icmp(&internetProtocolHandler, &networkConsoleStream);
-    cout << "-- Set Up ICMP\n";
-    networkSetupHeaderStream << ".";
-
-    // TCP
-    TransmissionControlProtocolHandler tcp(&internetProtocolHandler, &networkConsoleStream);
-    cout << "-- Set Up TCP\n";
-    networkSetupHeaderStream << ".";
-
-    // UDP
-    UserDatagramProtocolHandler udp(&internetProtocolHandler, &networkConsoleStream);
-    cout << "-- Set Up UDP\n";
-    networkSetupHeaderStream << ".";
-    cout << "\n";
-    networkSetupHeaderStream << "[ DONE ]";
-
-#define GUI
-#ifdef GUI
-    Desktop desktop(videoDriver);
-    mouse.connect_event_handler(&desktop);
-    keyboardInterpreter.connect_event_handler(&desktop);
-    kernelClock.connect_event_handler(&desktop);
-
-    Window testWindow(150,10, 200, 150, "Test Window");
-    widgets::InputBox testInputBox(10, 10, 150, 20, "test");
-
-    class InputBoxStream : public widgets::InputBoxEventHandler
-    {
-        ConsoleStream* stream;
-        public:
-        InputBoxStream(ConsoleStream* stream)
-        {
-            this->stream = stream;
-        }
-        ~InputBoxStream()
-        {
-            this->stream = nullptr;
-        }
-
-        void on_input_box_text_changed(string newText)
-        {
-            *stream << "Input Box Changed: " << newText << "\n";
-        }
-    };
-    InputBoxStream inputBoxStream(&cout);
-    testInputBox.connect_event_handler(&inputBoxStream);
-    testWindow.add_child(&testInputBox);
-    desktop.add_child(&testWindow);
-
-    Window testWindow2(350,100, 200, 150, "Test Window 2");
-    desktop.add_child(&testWindow2);
-
-#endif
+    // Print the footer
+    cout << "\n\n";
+    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
+    cout << ANSI_COLOURS[FG_Cyan] << string(" -- Kernel Ready --").center(boot_width) << "\n";
+    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
 
     // Wait
     while (true);

@@ -22,16 +22,17 @@ namespace MaxOS {
           uint32_t m_id;
           bool m_x2apic;
 
-          uint32_t read(uint32_t reg);
-          void write(uint32_t reg, uint32_t value);
-
         public:
             LocalAPIC();
             ~LocalAPIC();
 
             void init();
 
+            uint32_t read(uint32_t reg);
+            void write(uint32_t reg, uint32_t value);
+
             uint32_t id();
+            void send_eoi();
 
         };
 
@@ -70,6 +71,16 @@ namespace MaxOS {
           uint64_t raw;
         };
 
+        typedef struct InterruptRedirect{
+          uint8_t type;
+          uint8_t index;
+          uint8_t interrupt;
+          uint8_t destination;
+          uint32_t flags;
+          bool mask;
+
+        } interrupt_redirect_t;
+
         struct Override {
           uint8_t bus;
           uint8_t source;
@@ -91,15 +102,18 @@ namespace MaxOS {
 
             MADT_Item* get_madt_item(uint8_t type, uint8_t index);
 
-            uint32_t read(uint32_t reg);
-            void write(uint32_t reg, uint32_t value);
-
             void read_redirect(uint8_t index, RedirectionEntry* entry);
             void write_redirect(uint8_t index, RedirectionEntry* entry);
 
           public:
               IOAPIC(AdvancedConfigurationAndPowerInterface* acpi);
               ~IOAPIC();
+
+              uint32_t read(uint32_t reg);
+              void write(uint32_t reg, uint32_t value);
+
+              void set_redirect(interrupt_redirect_t* redirect);
+              void set_redirect_mask(uint8_t index, bool mask);
 
               void init();
         };
@@ -117,10 +131,17 @@ namespace MaxOS {
 
             void disable_pic();
 
+
         public:
             AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
             ~AdvancedProgrammableInterruptController();
-        };
+
+            LocalAPIC* get_local_apic();
+            IOAPIC* get_io_apic();
+
+            void enable_pic_pit();
+
+      };
 
     }
 }

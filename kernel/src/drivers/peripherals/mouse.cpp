@@ -94,8 +94,7 @@ MouseDriver::~MouseDriver(){
  */
 void MouseDriver::activate() {
 
-  // Tell the PIC to start listening to the mouse
-  command_port.write(0xAB);
+
 
   //  Get the current state of the mouse
   command_port.write(0x20);
@@ -105,10 +104,15 @@ void MouseDriver::activate() {
   command_port.write(0x60);
   data_port.write(status);
 
+  // Tell the PIC to start listening to the mouse
+  command_port.write(0xAB);
+
   // activate the mouse
   command_port.write(0xD4);
   data_port.write(0xF4);
   data_port.read();
+
+
 
 
 }
