@@ -216,16 +216,17 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     header("Device Management")
 
     // Find the drivers
-    cout << "Finding Drivers";
+    cout << "Finding Drivers" << ANSI_COLOURS[FG_White];
     for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
     {
       cout << ".";
       (*selector)->select_drivers(&driverManager, &interrupts);
     }
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
 
     // Resetting devices
-    cout << " Resetting Devices";
+    cout << "Resetting Devices" << ANSI_COLOURS[FG_White];
     uint32_t resetWaitTime = 0;
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
@@ -236,7 +237,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
       if(waitTime > resetWaitTime)
         resetWaitTime = waitTime;
     }
-    cout << " Reset\n";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 17 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "RESET" + ANSI_COLOURS[Reset] + " ]" << "\n";
+
 
     // Interrupts
     interrupts.activate();
@@ -250,30 +252,31 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     header("Finalisation")
 
-        // Initialise the drivers
-        cout << tick << " Initializing Devices";
+    // Initialise the drivers
+    cout <<  "Initialising Devices" << ANSI_COLOURS[FG_White];
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
       cout << ".";
       (*driver)->initialise();
     }
-    cout << " DONE\n";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 20 - 15) << (string)"[ " + ANSI_COLOURS[FG_Green] + "INITIALISED" + ANSI_COLOURS[Reset] + " ]" << "\n";
+
 
     // activate the drivers
-    cout << tick << " Activating Devices";
+    cout << "Activating Devices" << ANSI_COLOURS[FG_White];
     for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
     {
       cout << ".";
       (*driver)->activate();
     }
-    cout << " DONE\n";
+    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 18 - 13) << (string)"[ " + ANSI_COLOURS[FG_Green] + "ACTIVATED" + ANSI_COLOURS[Reset] + " ]" << "\n";
+
 
     // Print the footer
     cout << "\n\n";
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
     cout << ANSI_COLOURS[FG_Cyan] << string(" -- Kernel Ready --").center(boot_width) << "\n";
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
-
 
     // Wait
     while (true);

@@ -236,7 +236,7 @@ void VESABootConsole::print_logo() {
 
       // Find the center of the screen
       uint32_t center_x = m_graphics_context->get_width()/2;
-      uint32_t center_y = m_graphics_context->get_height()/2;
+      uint32_t center_y = m_graphics_context->get_height()/2 + 20;
 
       // Draw the logo
       for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {

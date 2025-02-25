@@ -29,6 +29,7 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   uint64_t virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);
   uint64_t end = physical_address + m_framebuffer_size;
   m_framebuffer_address = (uint64_t*)virtual_address;
+
   _kprintf("Framebuffer address: physical=0x%x, virtual=0x%x\n", physical_address, virtual_address);
 
   // Map the framebuffer
@@ -38,7 +39,12 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
     physical_address += PhysicalMemoryManager::s_page_size;
     virtual_address += PhysicalMemoryManager::s_page_size;
   }
-  _kprintf("Framebuffer mapped: 0x%x - 0x%x (pages: %d)\n", m_framebuffer_address, virtual_address, PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address));
+
+  size_t pages = PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address);
+  _kprintf("Framebuffer mapped: 0x%x - 0x%x (pages: %d)\n", m_framebuffer_address, virtual_address, pages);
+
+  // Reserve the physical memory
+  PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
 }
 
 VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation(){

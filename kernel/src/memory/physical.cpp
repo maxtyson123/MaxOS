@@ -53,8 +53,8 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   // Kernel Memory (anonymous memory to the next page)
   _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
-  m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)(&_kernel_physical_end + s_page_size), s_page_size);
-  m_anonymous_memory_virtual_address = (uint64_t)align_up_to_page((size_t)(&_kernel_end + s_page_size), s_page_size);
+  m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)&_kernel_physical_end + s_page_size, s_page_size);
+  m_anonymous_memory_virtual_address  = (uint64_t)align_up_to_page((size_t)&_kernel_end + s_page_size, s_page_size);
   _kprintf("Anonymous Memory: physical = 0x%x, virtual = 0x%x\n", m_anonymous_memory_physical_address, m_anonymous_memory_virtual_address);
 
   // Map the physical memory into the virtual memory
@@ -214,15 +214,13 @@ void* PhysicalMemoryManager::allocate_frame() {
       frame_address *= s_page_size;
 
 
-      if(frame_address == 0x3D7000){
-        _kprintf("PRE");
+      if(frame_address == 0x543000){
+        _kprintf("Working: 0x%x\n", frame_address);
       }
 
       // Make sure we are using the mem mapped region (TODO: This should be handled by being reserved)
       if(frame_address < m_kernel_end)
         continue;
-
-      _kprintf("Allocated Frame: 0x%x (%d/%d)\n", frame_address, m_used_frames, m_bitmap_size);
 
       return (void*)(frame_address);
     }
