@@ -37,12 +37,14 @@
 #include <net/udp.h>
 #include <net/tcp.h>
 
+//PROCESS
+#include <processes/process.h>
+#include <processes/scheduler.h>
+
 //SYSTEM
-#include <system/process.h>
 #include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
-#include <system/multithreading.h>
 
 //MEMORY
 #include <memory/physical.h>
@@ -62,12 +64,17 @@ using namespace MaxOS::drivers::console;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::gui;
 using namespace MaxOS::net;
+using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
 
 //TODO: Rework cmake to have debug and prod targets
+
+// Define static constructors
+extern "C" void* __dso_handle = nullptr;
+
 
 //Define what a constructor is
 typedef void (*constructor)();
@@ -79,6 +86,22 @@ extern "C" void callConstructors()
 {
     for(constructor* i = &start_ctors; i != &end_ctors; i++)        //Iterate over all constructors
         (*i)();                                                     //Call the constructor
+}
+
+void test_a_proc(void* args)
+{
+    while(true)
+    {
+        _kprintf("%hA\n");
+    }
+}
+
+void test_b_proc(void* args)
+{
+    while(true)
+    {
+        _kprintf("%hB\n");
+    }
 }
 
 extern volatile uint64_t p4_table[512];
@@ -152,8 +175,8 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up Memory Manager (Kernel)");
     log("Set Up Video Driver");
 
-    ThreadManager threadManager;
-    log("Set Up Thread Manager");
+    Scheduler scheduler;
+    log("Set Up Scheduler");
 
     SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
     log("Set Up Syscalls");
@@ -277,6 +300,13 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
     cout << ANSI_COLOURS[FG_Cyan] << string(" -- Kernel Ready --").center(boot_width) << "\n";
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
+
+
+    // Start the scheduler
+    Process* p1 = new Process("Test Process 1", test_a_proc, nullptr);
+    Process* p2 = new Process("Test Process 2", test_b_proc, nullptr);
+
+    scheduler.activate();
 
     // Wait
     while (true);

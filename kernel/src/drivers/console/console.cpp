@@ -45,7 +45,7 @@ uint16_t Console::height() {
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  */
-void Console::put_character(uint16_t x, uint16_t y, char c) {
+void Console::put_character(uint16_t, uint16_t, char) {
 }
 
 /**

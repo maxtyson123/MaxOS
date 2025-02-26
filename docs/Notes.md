@@ -321,7 +321,7 @@ See also: [Thread](https://wiki.osdev.org/Thread)
 - The main difference between a thread and a process is that threads share the same address space, while processes have separate address spaces. This means that threads can share data and code, while processes cannot. This also means that threads are faster than processes, because they do not need to be loaded into memory.
 - To implement threads in the OS, the kernel will have to implement a thread class. This class will have a function to create a thread, and a function to execute the thread. The thread class will also have a function to get the current thread.
 - The thread class will also have a function to get the current thread. This function will be used to get the current thread, and then the thread will be able to access its own stack.
-- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yeild function on the thread class.
+- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yield function on the thread class.
 - Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. m_threads are often used to implement concurrency within a process. m_threads are also used to implement parallelism, where multiple processes can run simultaneously on a multi-core processor.
 <!-- TOC --><a name="dynamic-memory-management-heap"></a>
 ### Dynamic Memory Management / Heap

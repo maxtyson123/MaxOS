@@ -19,7 +19,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
       // Get a new pml4 table
       m_pml4_root_physical_address = (uint64_t*)m_physical_memory_manager->allocate_frame();
       m_pml4_root_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
-      _kprintf("Allocated new PML4 table at: 0x%x\n", m_pml4_root_address);
+//      _kprintf("Allocated new PML4 table at: 0x%x\n", m_pml4_root_address);
 
       // Clear the table
       m_physical_memory_manager -> clean_page_table(m_pml4_root_address);
@@ -37,7 +37,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
         m_pml4_root_address[i] = m_physical_memory_manager->get_pml4_root_address()[i];
 
       }
-      _kprintf("Mapped higher half of kernel\n");
+//      _kprintf("Mapped higher half of kernel\n");
 
 
     }else{
@@ -54,7 +54,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space\n");
     m_physical_memory_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
-    _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
+//    _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
 
     // Calculate the next available address
     m_next_available_address = PhysicalMemoryManager::s_page_size;
@@ -64,7 +64,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
       m_next_available_address += vmm_space + s_reserved_space;
 
     }
-    _kprintf("Next available address: 0x%x\n", m_next_available_address);
+//    _kprintf("Next available address: 0x%x\n", m_next_available_address);
 
 
 }
@@ -342,4 +342,12 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
     // No chunk found
     return nullptr;
 
+}
+
+/**
+ * @brief Get the physical address of the PML4 root
+ * @return The physical address of the PML4 root
+ */
+uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
+    return m_pml4_root_physical_address;
 }

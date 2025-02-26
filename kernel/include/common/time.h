@@ -25,7 +25,7 @@ namespace MaxOS{
             uint8_t minute;
             uint8_t second;
 
-            bool is_leap_year() const {
+            [[nodiscard]] bool is_leap_year() const {
                 return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
             }
 
@@ -75,7 +75,7 @@ namespace MaxOS{
 
         static const uint16_t DaysInLeapYear = 366;
 
-        static const uint64_t time_to_epoch(Time time){
+        static  uint64_t time_to_epoch(Time time){
                 uint64_t epoch = 0;
 
                 // Add the number of years

@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
-#include <system/multithreading.h>
+#include <processes/scheduler.h>
 #include <common/inputStream.h>
 #include <common/outputStream.h>
 #include <system/cpu.h>
@@ -76,7 +76,6 @@ namespace MaxOS {
                 static common::OutputStream* s_error_messages;
                 const static uint16_t s_hardware_interrupt_offset {0x20};
                 InterruptHandler* m_interrupt_handlers[256];
-                system::ThreadManager* m_thread_manager;
 
                 static InterruptDescriptor s_interrupt_descriptor_table[256];
 

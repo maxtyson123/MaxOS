@@ -163,7 +163,7 @@ const char* String::c_str() const {
  * @param count_ansi Whether to count the ansi characters (TODO: Implement - might be bad for performance)
  * @return The length of the string
  */
-int String::length(bool count_ansi) const {
+int String::length(bool ) const {
 
     // Return the length of the string
     return m_length;

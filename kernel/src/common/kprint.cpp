@@ -7,6 +7,7 @@
 
 using namespace MaxOS::drivers;
 using namespace MaxOS::system;
+using namespace MaxOS::common;
 
 /**
  * @brief Converts integer to string
@@ -79,7 +80,7 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 {
 
   // Print the  colour
-  char* colour = "---------";
+  const char* colour = "---------";
   switch (type) {
 
     // Log (yellow)
@@ -91,6 +92,9 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
     case 2:
     case 3:
       colour = "\033[1;31m";
+      break;
+
+    default:
       break;
   }
 
@@ -142,6 +146,7 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 
 }
 
+
 /**
  * @brief Prints a formatted string to the serial output
  *
@@ -156,15 +161,15 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
  */
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...)
 {
+
+
   // Create a pointer to the data
   va_list parameters;
   va_start(parameters, format);
 
-  // Print the header
-  if(*format != '\h')
+  // Print the header if the first two are not %h
+  if(*format != '%' && *(format + 1) != 'h')
     pre_kprintf(file, line,func, type);
-  else
-    format++;
 
 
   // Loop through the format string
@@ -216,5 +221,4 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
   // If it is type 3 panic
   if(type == 3)
      CPU::PANIC("Check the serial output for more information");
-
 }

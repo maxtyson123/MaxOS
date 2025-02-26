@@ -40,6 +40,7 @@ Multiboot::Multiboot(unsigned long address)
             _kprintf("Boot device: 0x%x, 0x%x, 0x%x of type 0x%x\n",
                     (unsigned) bootdev->biosdev, (unsigned) bootdev->slice,
                     (unsigned) bootdev->part, (unsigned) bootdev->type);
+            break;
 
           case MULTIBOOT_TAG_TYPE_MMAP:
 

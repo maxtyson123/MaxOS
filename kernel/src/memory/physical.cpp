@@ -214,10 +214,6 @@ void* PhysicalMemoryManager::allocate_frame() {
       frame_address *= s_page_size;
 
 
-      if(frame_address == 0x543000){
-        _kprintf("Working: 0x%x\n", frame_address);
-      }
-
       // Make sure we are using the mem mapped region (TODO: This should be handled by being reserved)
       if(frame_address < m_kernel_end)
         continue;

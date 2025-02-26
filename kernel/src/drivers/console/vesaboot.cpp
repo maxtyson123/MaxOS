@@ -67,7 +67,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
       // Do not draw the escape character
       return;
 
-    } else if (ansi_code_length != -1 && ansi_code_length < 8) {
+    } else if (ansi_code_length < 8) {
 
       // Add the character to the ANSI code
       ansi_code[ansi_code_length++] = c;

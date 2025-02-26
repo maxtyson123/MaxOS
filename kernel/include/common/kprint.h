@@ -8,7 +8,7 @@
 #include <drivers/console/serial.h>
 #include <system/cpu.h>
 #include <stdarg.h>
-
+#include <common/spinlock.h>
 
 
 #define _kprintf(format, ...) \

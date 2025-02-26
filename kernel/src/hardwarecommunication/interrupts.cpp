@@ -9,6 +9,7 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
+using namespace MaxOS::processes;
 
 // Define the static variables
 
@@ -183,11 +184,10 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *st
 
   // System Handlers
   switch (status->interrupt_number) {
-    case 0x0E:
-      page_fault(status);
-      break;
-
-  }
+      case 0x0E:
+        page_fault(status);
+        break;
+    }
 
   // If there is an interrupt manager handle interrupt
   if(s_active_interrupt_manager != 0)
@@ -236,6 +236,16 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
   // Send the EOI to the APIC
   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
       m_local_apic->send_eoi();
+
+  // System Handlers (post initialisation)
+  switch (status->interrupt_number) {
+      case 0x20:
+        return Scheduler::get_system_scheduler() -> schedule(status);
+
+//      case 0x80:
+//        return SyscallHandler::get_syscall_handler() -> handle_syscall(status);
+
+  }
 
   // Return the status
   return status;

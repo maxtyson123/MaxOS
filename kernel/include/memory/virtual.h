@@ -68,6 +68,8 @@ namespace MaxOS {
         void* allocate(uint64_t address, size_t size, size_t flags);
         void free(void* address);
 
+        uint64_t* get_pml4_root_address_physical();
+
         size_t memory_used();
 
     };
