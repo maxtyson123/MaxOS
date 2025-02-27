@@ -64,6 +64,7 @@ namespace MaxOS{
               // Utility Functions
               int memory_used();
               size_t align(size_t size);
+              static void switch_active_memory_manager(MemoryManager* manager);
 
 
               // Higher Half Memory Management

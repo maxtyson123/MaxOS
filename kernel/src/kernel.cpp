@@ -88,19 +88,15 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
-void test_a_proc(void* args)
+void writing_proc(void* args)
 {
-    while(true)
-    {
-        _kprintf("%hA\n");
-    }
-}
 
-void test_b_proc(void* args)
-{
+    // Get the string from the args list
+    string* str = (string*)args;
+
     while(true)
     {
-        _kprintf("%hB\n");
+        _kprintf("%s\n", str->c_str());
     }
 }
 
@@ -303,10 +299,16 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // Start the scheduler
-    Process* p1 = new Process("Test Process 1", test_a_proc, nullptr);
-    Process* p2 = new Process("Test Process 2", test_b_proc, nullptr);
+    Process* p1 = new Process("Test Process 1", writing_proc, (void*)new string("Hello from Process 1"));
+    Process* p2 = new Process("Test Process 2", writing_proc, (void*)new string("Hello from Process 2"));
+    Process* p3 = new Process("Test Process 3", writing_proc, (void*)new string("Hello from Process 3"));
 
     scheduler.activate();
+
+    // TODO (TEST AFTER FIXING UBSAN AND GDB ERRORS):
+    // - Fix debugging
+    // - Fix GPE
+    // - Test clean up used frames when Process dies
 
     // Wait
     while (true);

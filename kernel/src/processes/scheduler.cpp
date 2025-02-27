@@ -6,6 +6,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
+using namespace MaxOS::memory;
 
 
 Scheduler* Scheduler::s_instance = nullptr;
@@ -106,8 +107,9 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
   // Prepare the next thread to run
   current_thread -> thread_state = ThreadState::RUNNING;
 
-  // Load the thread's page table
-  asm volatile("mov %0, %%cr3" :: "r"((uint64_t)current_process->get_page_directory()) : "memory");
+  // Load the threads memory manager
+  MemoryManager::switch_active_memory_manager(current_process->memory_manager);
+
 
   // Return the next thread's state
   return current_thread->execution_state;
@@ -118,7 +120,7 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
  * @param process The process to add
  * @return The process ID
  */
-uint16_t Scheduler::add_process(Process *process) {
+uint64_t Scheduler::add_process(Process *process) {
 
   // Get the next process ID
   m_next_pid++;
@@ -137,7 +139,7 @@ uint16_t Scheduler::add_process(Process *process) {
  * @param thread The thread to add
  * @return The thread ID
  */
-uint16_t Scheduler::add_thread(Thread *thread) {
+uint64_t Scheduler::add_thread(Thread *thread) {
 
     // Get the next thread ID
     m_next_tid++;
@@ -185,4 +187,35 @@ void Scheduler::yield() {
  */
 void Scheduler::activate() {
     m_active = true;
+}
+
+/**
+ * @brief Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped)
+ * @param process The process to remove
+ * @return -1 if the process has threads, 0 otherwise
+ */
+uint64_t Scheduler::remove_process(Process *process) {
+
+  // Check if the process has no threads
+  if (!process->get_threads().empty()) {
+
+    // Set the threads to stopped
+    for (auto thread : process->get_threads())
+      thread->thread_state = ThreadState::STOPPED;
+
+    // Return as we can't remove the process
+    return -1;
+  }
+
+  // Remove the process
+  for (uint16_t i = 0; i < m_processes.size(); i++) {
+    if (m_processes[i] == process) {
+        m_processes.erase(m_processes.begin() + i);
+        return 0;
+    }
+  }
+
+  // Process not found
+  return -1;
+
 }

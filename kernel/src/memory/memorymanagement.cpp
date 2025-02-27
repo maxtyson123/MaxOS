@@ -14,11 +14,20 @@ MemoryManager* MemoryManager::s_active_memory_manager = 0;
 MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 : m_virtual_memory_manager(vmm)
 {
-    // This is the memory managers
-    s_active_memory_manager = this;
+
+    // Use this memory manager for setups
+    MemoryManager* previous = nullptr;
+    if(s_active_memory_manager != 0){
+      previous = s_active_memory_manager;
+      switch_active_memory_manager(this);
+    }else{
+      s_active_memory_manager = this;
+    }
 
     // Get the first chunk of memory
     this -> m_first_memory_chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
+
+    // Set the first chunk's properties
     m_first_memory_chunk-> allocated = false;
     m_first_memory_chunk-> prev = 0;
     m_first_memory_chunk-> next = 0;
@@ -27,7 +36,13 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
     // Set the last chunk to the first chunk
     m_last_memory_chunk = m_first_memory_chunk;
 
+    // The first chunk is the last chunk
     _kprintf("First memory chunk: 0x%x\n", m_first_memory_chunk);
+
+    // Reset the active memory manager
+    if(s_active_memory_manager != 0)
+      switch_active_memory_manager(previous);
+
 }
 
 MemoryManager::~MemoryManager() {
@@ -284,6 +299,33 @@ void *MemoryManager::from_dm_region(uintptr_t physical_address) {
  */
 bool MemoryManager::in_higher_region(uintptr_t virtual_address) {
   return virtual_address & (1l << 62);
+}
+
+
+/**
+ * @brief Switches the active memory manager
+ * @param manager The new memory manager
+ */
+void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
+
+  // Stop interrupts
+  asm volatile("cli");
+
+  _kprintf("Switching memory manager to 0x%x\n", manager);
+
+  // Make sure there is a manager
+  if(manager == nullptr)
+    return;
+
+  // Switch the address space
+  asm volatile("mov %0, %%cr3" :: "r"((uint64_t)manager->m_virtual_memory_manager->get_pml4_root_address_physical()) : "memory");
+
+  // Set the active memory manager
+  s_active_memory_manager = manager;
+
+  // Resume interrupts
+  asm volatile("sti");
+
 }
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)

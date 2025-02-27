@@ -3,6 +3,7 @@
 //
 
 #include <common/spinlock.h>
+#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -55,11 +56,9 @@ bool Spinlock::is_locked() {
  * @brief Acquire the spinlock
  */
 void Spinlock::acquire() {
-      while (__sync_lock_test_and_set(&m_locked, 1)) {
-            while (m_locked) {
-                // spin
-                asm("hlt");
-            }
+      while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
+        // Wait for the lock to be available
+        asm("nop");
       }
 }
 
@@ -67,5 +66,5 @@ void Spinlock::acquire() {
  * @brief Release the spinlock
  */
 void Spinlock::release() {
-    __sync_lock_release(&m_locked);
+  __atomic_clear(&m_locked, __ATOMIC_RELEASE);
 }

@@ -7,6 +7,7 @@
 
 using namespace MaxOS::memory;
 using namespace MaxOS::system;
+using namespace MaxOS::common;
 extern uint64_t p4_table[];
 
 PhysicalMemoryManager* PhysicalMemoryManager::s_current_manager = nullptr;
@@ -24,6 +25,9 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   m_pml4_root((pte_t *)pml4_root)
 {
 
+  // Clear the spinlock
+  m_lock = Spinlock();
+  m_lock.unlock();
 
   // Set the current manager
   s_current_manager = this;
@@ -166,6 +170,9 @@ bool PhysicalMemoryManager::check_aligned(size_t size){
  */
 void* PhysicalMemoryManager::allocate_frame() {
 
+  // Wait for the lock
+  m_lock.lock();
+
   // Check if the pmm is initialized
   if(!m_initialized){
 
@@ -178,6 +185,9 @@ void* PhysicalMemoryManager::allocate_frame() {
     // Mark frame as used
     m_anonymous_memory_physical_address += s_page_size;
     m_anonymous_memory_virtual_address += s_page_size;
+
+    // Clear the lock
+    m_lock.unlock();
 
     // Return the address
     return (void*)(m_anonymous_memory_physical_address - s_page_size);
@@ -218,12 +228,17 @@ void* PhysicalMemoryManager::allocate_frame() {
       if(frame_address < m_kernel_end)
         continue;
 
+      // Clear the lock
+      m_lock.unlock();
+
+      // Return the address
       return (void*)(frame_address);
     }
   }
 
   // Error frame not found
   ASSERT(false, "Frame not found\n")
+  m_lock.unlock();
   return nullptr;
 
 }
@@ -234,12 +249,18 @@ void* PhysicalMemoryManager::allocate_frame() {
  */
 void PhysicalMemoryManager::free_frame(void *address) {
 
+    // Wait for the lock
+    m_lock.lock();
+
     // Mark the frame as not used
     m_used_frames--;
 
     // Set the bit to 0
     uint64_t frame_address = (uint64_t)address / s_page_size;
     m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
+
+    // Clear the lock
+    m_lock.unlock();
 }
 
 /**
@@ -249,6 +270,9 @@ void PhysicalMemoryManager::free_frame(void *address) {
  * @return A pointer to the start of the block (physical address)
  */
 void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) {
+
+  // Wait to be able to allocate
+  m_lock.lock();
 
   // Check how many frames are needed
   size_t frame_count = size_to_frames(size);
@@ -305,6 +329,8 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
           m_bit_map[index] |= (1ULL << bit); // Mark the bit as used
         }
 
+        // Clear the lock
+        m_lock.unlock();
 
         // Return the address
         return (void*)(start_address + (start_row * ROW_BITS + start_column) * s_page_size);
@@ -313,6 +339,8 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
   }
 
   // Error cant allocate that much
+  m_lock.unlock();
+  ASSERT(false, "Cannot allocate that much memory\n")
   return nullptr;
 }
 
@@ -331,11 +359,17 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
     if(frame_address >= m_bitmap_size)
       return;
 
+    // Wait to be able to free
+    m_lock.lock();
+
     // Mark the frames as not used
     m_used_frames -= frame_count;
     for (uint16_t i = 0; i < frame_count; ++i)
       m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
 
+
+    // Clear the lock
+    m_lock.unlock();
 }
 
 /**
@@ -355,6 +389,9 @@ void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t
 
   // Set the table to the next table
   table -> entries[index] = create_page_table_entry((uint64_t)new_table, Present | Write);
+
+  // Invalidate the TLB entry for the recursive mapping.
+  asm volatile("invlpg (%0)" ::"r" (next_table) : "memory");
 
   // Clear the table
   clean_page_table((uint64_t*)next_table);
@@ -831,6 +868,7 @@ size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
  */
 void PhysicalMemoryManager::reserve(uint64_t address) {
 
+
   // If the address is not part of physical memory then return
   if(address >= m_memory_size)
     return;
@@ -841,6 +879,7 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
   // Set the bit to 1 in the bitmap
   m_bit_map[address / ROW_BITS] |= (1 << (address % ROW_BITS));
 
+
 }
 
 /**
@@ -849,8 +888,12 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
  * @param size The size of the area
  */
 void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
+
   if(address >= m_memory_size)
     return;
+
+  // Wait to be able to reserve
+  m_lock.lock();
 
   // Align address and size to page boundaries
   address = align_direct_to_page(address);
@@ -865,5 +908,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
     m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
   }
 
+  // Clear the lock
+  m_lock.unlock();
   _kprintf("Reserved Address: 0x%x - 0x%x\n", address, address + size);
 }

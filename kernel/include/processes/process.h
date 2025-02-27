@@ -69,10 +69,11 @@ namespace MaxOS
               common::Vector<uint16_t> m_resource_ids;
               common::Vector<Thread*> m_threads;
 
-              memory::VirtualMemoryManager* m_memory_manager;
+              memory::VirtualMemoryManager* m_virtual_memory_manager;
               uint64_t m_pid;
 
             public:
+              //TODO: Propper args
                 Process(string name, void (*_entry_point)(void *), void *args);
                 //Process(string name, void *args, ELF STUFF);  // Task from ELF
                 ~Process();
@@ -84,9 +85,9 @@ namespace MaxOS
 
                 void set_pid(uint64_t pid);
                 uint64_t get_pid();
-                uint64_t* get_page_directory();
 
                 string name;
+                memory::MemoryManager* memory_manager;
 
 
         };

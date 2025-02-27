@@ -78,7 +78,8 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args) {
   // Basic setup
   name = p_name;
   m_pid = Scheduler::get_system_scheduler() ->add_process(this);
-  m_memory_manager = new VirtualMemoryManager(false);
+  m_virtual_memory_manager = new VirtualMemoryManager(false);
+  memory_manager = new MemoryManager(m_virtual_memory_manager);
 
   // Create the main thread
   Thread* main_thread = new Thread(_entry_point, args, this);
@@ -96,12 +97,15 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args) {
  */
 Process::~Process() {
 
+  _kprintf("Cleaning up process %s\n", name.c_str());
+
   // Free the threads
   for (auto thread : m_threads)
       delete thread;
 
   // Free the memory manager
-  delete m_memory_manager;
+  delete m_virtual_memory_manager;
+  delete memory_manager;
 
 }
 
@@ -111,13 +115,17 @@ Process::~Process() {
  */
 void Process::add_thread(Thread *thread) {
 
-  //TODO: STI & CLI ?
+  // Pause interrupts while adding the thread
+  asm("cli");
 
   // Store the thread
   m_threads.push_back(thread);
 
   // Set the pid
   thread->parent_pid = m_pid;
+
+  // Can now resume interrupts
+  asm("sti");
 
 }
 
@@ -131,8 +139,22 @@ void Process::remove_thread(uint64_t tid) {
   for (uint16_t i = 0; i < m_threads.size(); i++) {
       if (m_threads[i]->tid == tid) {
 
-        // Remove the thread
+        // Get the thread
+        Thread* thread = m_threads[i];
+
+        // Delete the thread
+        delete thread;
+
+        // Remove the thread from the list
         m_threads.erase(m_threads.begin() + i);
+
+
+        // If there are no more threads then delete the process
+        if (m_threads.empty()) {
+          Scheduler::get_system_scheduler() -> remove_process(this);
+          delete this;
+        }
+
         return;
     }
   }
@@ -165,16 +187,6 @@ Vector<Thread*> Process::get_threads() {
 
   // Return the threads
   return m_threads;
-
-}
-
-/**
- * @brief Gets the page address of the process
- * @return The page address of the process
- */
-uint64_t *Process::get_page_directory() {
-
-  return m_memory_manager->get_pml4_root_address_physical();
 
 }
 

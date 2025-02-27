@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <system/multiboot.h>
+#include <common/spinlock.h>
 
 namespace MaxOS {
 
@@ -83,6 +84,8 @@ namespace MaxOS {
           pte_t* m_pml4_root;
 
           bool m_initialized;
+
+          common::Spinlock m_lock;
 
           // Table Management
           void create_table(pml_t* table, pml_t* next_table, size_t index);

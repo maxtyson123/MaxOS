@@ -13,13 +13,15 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
   m_is_kernel(is_kernel)
 {
 
+
+
     // If not the kernel, we need to allocate a new PML4 table
     if(!m_is_kernel){
 
       // Get a new pml4 table
       m_pml4_root_physical_address = (uint64_t*)m_physical_memory_manager->allocate_frame();
       m_pml4_root_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
-//      _kprintf("Allocated new PML4 table at: 0x%x\n", m_pml4_root_address);
+      _kprintf("Allocated new PML4 table at: 0x%x\n", m_pml4_root_address);
 
       // Clear the table
       m_physical_memory_manager -> clean_page_table(m_pml4_root_address);
@@ -37,11 +39,12 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
         m_pml4_root_address[i] = m_physical_memory_manager->get_pml4_root_address()[i];
 
       }
-//      _kprintf("Mapped higher half of kernel\n");
+      _kprintf("Mapped higher half of kernel\n");
 
 
     }else{
       m_pml4_root_address = m_physical_memory_manager->get_pml4_root_address();
+      m_pml4_root_physical_address = (uint64_t*)MemoryManager::from_dm_region((uint64_t)m_pml4_root_address);
     };
 
     // Space to store VMM chunks
@@ -54,7 +57,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space\n");
     m_physical_memory_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
-//    _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
+    _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
 
     // Calculate the next available address
     m_next_available_address = PhysicalMemoryManager::s_page_size;
@@ -64,12 +67,40 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
       m_next_available_address += vmm_space + s_reserved_space;
 
     }
-//    _kprintf("Next available address: 0x%x\n", m_next_available_address);
+    _kprintf("Next available address: 0x%x\n", m_next_available_address);
 
 
 }
 
 VirtualMemoryManager::~VirtualMemoryManager() {
+
+  // Free all the frames used by the VMM
+  virtual_memory_region_t* region = m_first_region;
+
+  // Loop through the regions
+  while(region != nullptr){
+
+    // Loop through the chunks
+    for (size_t i = 0; i < s_chunks_per_page; i++){
+
+        // Loop through the pages
+        size_t pages = PhysicalMemoryManager::size_to_frames(region->chunks[i].size);
+        for (size_t j = 0; j < pages; j++){
+
+              // Get the frame
+              physical_address_t* frame = (physical_address_t*)region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size);
+
+              // Free the frame
+              m_physical_memory_manager->free_frame(frame);
+
+        }
+
+    }
+
+    // Move to the next region
+    region = region->next;
+
+  }
 
 }
 

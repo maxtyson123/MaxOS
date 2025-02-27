@@ -184,6 +184,11 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *st
 
   // System Handlers
   switch (status->interrupt_number) {
+
+      case 0x0D:
+        general_protection_fault(status);
+        break;
+
       case 0x0E:
         page_fault(status);
         break;
@@ -266,4 +271,18 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
 
   ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
          faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+}
+
+/**
+ * @brief Handles a general protection fault
+ * @param status The cpu status
+ */
+void InterruptManager::general_protection_fault(system::cpu_status_t *status) {
+    uint64_t error_code = status->error_code;
+    uint64_t faulting_address;
+    asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
+
+    ASSERT(false, "General Protection Fault (0x%x): %s\n", faulting_address, (error_code & 0x1) ? "Protection-Exception" : "Non-Protection Exception");
+
+
 }

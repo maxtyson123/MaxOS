@@ -131,6 +131,7 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 
 3. Generate makefiles
    ```sh
+   # If you edit the CMakeLists.txt file you will need to delete the build directory contents (not the folder) and regenerate the makefiles
    cd cmake-build
    
    # Add -DDEBUG=ON to enable debug mode
@@ -177,7 +178,7 @@ No user usage so far (userland will be added in the future)
 - [x] Multitasking
 - [x] GUI
 - [x] Window Manager
-- [ ] Paging
+- [x] Paging
 - [ ] Userspace
 - [ ] IPC
 - [ ] VFS

@@ -8,6 +8,7 @@
 #include <common/vector.h>
 #include <system/cpu.h>
 #include <processes/process.h>
+#include <memory/memorymanagement.h>
 
 namespace MaxOS{
 
@@ -39,8 +40,9 @@ namespace MaxOS{
 
         system::cpu_status_t* schedule(system::cpu_status_t* status);
 
-        uint16_t add_process(Process* process);
-        uint16_t add_thread(Thread* thread);
+        uint64_t add_process(Process* process);
+        uint64_t remove_process(Process* process);
+        uint64_t add_thread(Thread* thread);
 
         static Scheduler* get_system_scheduler();
 
