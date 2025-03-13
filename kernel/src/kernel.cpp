@@ -90,15 +90,13 @@ extern "C" void callConstructors()
 
 void writing_proc(void* args)
 {
+  // Just write shit for now
+  while (true){
+    _kprintf("ASD\n");
+  }
 
-    // Get the string from the args list
-    string* str = (string*)args;
-
-    while(true)
-    {
-        _kprintf("%s\n", str->c_str());
-    }
 }
+
 
 extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
@@ -298,19 +296,28 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
 
 
-    // Start the scheduler
-    Process* p1 = new Process("Test Process 1", writing_proc, (void*)new string("Hello from Process 1"));
-    Process* p2 = new Process("Test Process 2", writing_proc, (void*)new string("Hello from Process 2"));
-    Process* p3 = new Process("Test Process 3", writing_proc, (void*)new string("Hello from Process 3"));
+    // Idle Process
+    Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0);
+    idle->memory_manager = &memoryManager;
 
+    Process* p1 = new Process("Test Process 1", writing_proc, (void*)(new string("Hello from Process 1"))->c_str(),1);
+    Process* p2 = new Process("Test Process 2", writing_proc, (void*)(new string("Hello from Process 2"))->c_str(),1);
+    Process* p3 = new Process("Test Process 3", writing_proc, (void*)(new string("Hello from Process 3"))->c_str(),1);
+
+    // Start the Scheduler
     scheduler.activate();
 
-    // TODO (TEST AFTER FIXING UBSAN AND GDB ERRORS):
-    // - Fix debugging
-    // - Fix GPE
-    // - Test clean up used frames when Process dies
+    /// Boot Done ///
+    _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
+    while (true){
+      asm("hlt");
+    }
 
-    // Wait
-    while (true);
-
+    /// How this idle works:
+    ///  I was debugging along and released that on the first ever schedule it will
+    ///  set current_thread->execution_state = cpu_state; where it is assumed cpu_state
+    ///  is the previous thread state and thus saves it in that thread. However,
+    ///  as no threads have been scheduled yet that is the cpu state of the kernel.
+    ///  Now I could either fix that or leave it in as a cool way of never fully
+    ///  leaving kernelMain and  also having a idle_proc
 }

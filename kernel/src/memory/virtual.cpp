@@ -13,8 +13,6 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
   m_is_kernel(is_kernel)
 {
 
-
-
     // If not the kernel, we need to allocate a new PML4 table
     if(!m_is_kernel){
 
@@ -44,7 +42,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
 
     }else{
       m_pml4_root_address = m_physical_memory_manager->get_pml4_root_address();
-      m_pml4_root_physical_address = (uint64_t*)MemoryManager::from_dm_region((uint64_t)m_pml4_root_address);
+      m_pml4_root_physical_address = (uint64_t*)MemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     };
 
     // Space to store VMM chunks

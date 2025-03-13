@@ -32,19 +32,18 @@ Scheduler::~Scheduler() {
 #include <common/kprint.h>
 system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
 
-  // Ticked
-  m_ticks++;
-
   // If there are no threads to schedule or not active, return the current state
   if (m_threads.empty() || !m_active)
       return cpu_state;
 
+  // Ticked
+  m_ticks++;
 
   // Thread that we are dealing with
   Thread* current_thread = m_threads[m_current_thread_index];
 
   // If there are no threads to schedule, return the current state
-  if (m_threads.empty() || current_thread == nullptr)
+  if (current_thread == nullptr)
     return cpu_state;
 
   // Save the current state
@@ -109,7 +108,6 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
 
   // Load the threads memory manager
   MemoryManager::switch_active_memory_manager(current_process->memory_manager);
-
 
   // Return the next thread's state
   return current_thread->execution_state;

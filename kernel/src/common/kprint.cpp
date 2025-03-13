@@ -146,6 +146,7 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 
 }
 
+Spinlock kprintf_lock;
 
 /**
  * @brief Prints a formatted string to the serial output
@@ -162,6 +163,8 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...)
 {
 
+  // wait for the lock
+  kprintf_lock.lock();
 
   // Create a pointer to the data
   va_list parameters;
@@ -217,6 +220,7 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
     }
   }
 
+  kprintf_lock.unlock();
 
   // If it is type 3 panic
   if(type == 3)

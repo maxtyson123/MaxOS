@@ -85,8 +85,8 @@ void Clock::handle_interrupt() {
     m_ticks_until_next_event = m_ticks_between_events;
 
     // Raise the time event
-    Time time = get_time();
-    raise_event(new TimeEvent(&time));
+//    Time time = get_time();
+//    raise_event(new TimeEvent(&time));
 }
 
 
@@ -143,6 +143,9 @@ void Clock::activate() {
  * @param milliseconds How many milliseconds to delay the program for
  */
 void Clock::delay(uint32_t milliseconds) {
+
+
+    //TODO Create a const for accurcy of clock and use that for calibration and rounding
 
     // Round the number of milliseconds to the nearest 100
     uint64_t rounded_milliseconds =  ((milliseconds+99)/100);

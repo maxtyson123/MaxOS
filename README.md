@@ -183,6 +183,7 @@ No user usage so far (userland will be added in the future)
 - [ ] IPC
 - [ ] VFS
 - [ ] Loading ELF
+- [ ] Multiple Cores Support (SMP & Scheduler)
 - [ ] CLI
 - [ ] Porting Libc
 - [ ] Userland GUI

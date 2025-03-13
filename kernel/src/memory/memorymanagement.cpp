@@ -311,8 +311,6 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
   // Stop interrupts
   asm volatile("cli");
 
-  _kprintf("Switching memory manager to 0x%x\n", manager);
-
   // Make sure there is a manager
   if(manager == nullptr)
     return;

@@ -40,7 +40,7 @@ namespace MaxOS
               static const uint64_t s_stack_size = 0x10000;
 
             public:
-              Thread(void (*_entry_point)(void *) , void* args, Process* parent);
+              Thread(void (*_entry_point)(void *) , void* args, int arg_amount, Process* parent);
               ~Thread();
 
               void sleep(size_t milliseconds);
@@ -73,8 +73,7 @@ namespace MaxOS
               uint64_t m_pid;
 
             public:
-              //TODO: Propper args
-                Process(string name, void (*_entry_point)(void *), void *args);
+                Process(string name, void (*_entry_point)(void *), void *args, int arg_amount);
                 //Process(string name, void *args, ELF STUFF);  // Task from ELF
                 ~Process();
 

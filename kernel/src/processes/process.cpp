@@ -14,7 +14,7 @@ using namespace MaxOS::common;
 /**
  * @brief Constructor for the Thread class
  */
-Thread::Thread(void (*_entry_point)(void *), void *args, Process* parent) {
+Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process* parent) {
 
     // Basic setup
     thread_state = ThreadState::NEW;
@@ -28,14 +28,19 @@ Thread::Thread(void (*_entry_point)(void *), void *args, Process* parent) {
     // Setup the execution state
     execution_state = new cpu_status_t();
     execution_state->rip = (uint64_t)_entry_point;
-    execution_state->rsp = (uint64_t)args;
-    execution_state->ss = 0x10;     // TEMP KERNEL 0x23
-    execution_state->cs = 0x08;     // TEMP KERNEL 0x1B
+    execution_state->ss = 0x10;     // TEMP KERNEL SHOULD BE 0x23
+    execution_state->cs = 0x08;     // TEMP KERNEL SHOULD BE 0x1B
     execution_state->rflags = 0x202;
     execution_state->interrupt_number = 0;
     execution_state->error_code = 0;
     execution_state->rsp = (uint64_t)m_stack_pointer;
     execution_state->rbp = 0;
+
+    // Arguments TODO: Map args into this mem? process path here or when setup thru syscall?
+    execution_state->rdi = (uint64_t)arg_amount;
+    execution_state->rsi = (uint64_t)args;
+    //execution_state->rdx = (uint64_t)env_args;
+
 
     // Begin scheduling this thread
     parent_pid = parent->get_pid();
@@ -70,7 +75,7 @@ void Thread::sleep(size_t milliseconds) {
  * @param _entry_point The entry point of the process
  * @param args The arguments to pass to the process
  */
-Process::Process(string p_name, void (*_entry_point)(void *), void *args) {
+Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount) {
 
   // Pause interrupts while creating the process
   asm("cli");
@@ -82,7 +87,7 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args) {
   memory_manager = new MemoryManager(m_virtual_memory_manager);
 
   // Create the main thread
-  Thread* main_thread = new Thread(_entry_point, args, this);
+  Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
 
   // Add the thread
   add_thread(main_thread);
