@@ -216,6 +216,9 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     apic.get_io_apic() -> set_redirect(&mouseRedirect);
     log("Set Up Mouse");
 
+    // CPU
+    CPU cpu;
+    log("Set Up CPU");
 
     // Clock
     Clock kernelClock(&interrupts, &apic, 1);
@@ -256,6 +259,9 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 17 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "RESET" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
+    // Enable TSS
+    cpu.init_tss();
+    log("Initialised TSS");
 
     // Interrupts
     interrupts.activate();
@@ -297,7 +303,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // Idle Process
-    Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0);
+    Process* idle = new Process("kernelMain Idle", nullptr, (void*)(new string("H"))->c_str(),0, true); //TODO figure out why the
     idle->memory_manager = &memoryManager;
 
     Process* p1 = new Process("Test Process 1", writing_proc, (void*)(new string("Hello from Process 1"))->c_str(),1);
@@ -310,6 +316,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     /// Boot Done ///
     _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
     while (true){
+      _kprintf("KERNEL LOOP\n");
       asm("hlt");
     }
 

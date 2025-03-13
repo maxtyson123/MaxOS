@@ -58,14 +58,7 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
   current_thread = m_threads[m_current_thread_index];
 
   // If the current thread is in the process then we can get the process
-  Process* current_process = nullptr;
-  for (auto process : m_processes) {
-    if (process->get_pid() == current_thread->parent_pid) {
-      current_process = process;
-      break;
-    }
-  }
-
+  Process* current_process = get_current_process();
 
   // Handle state changes
   switch (current_thread->thread_state) {
@@ -216,4 +209,23 @@ uint64_t Scheduler::remove_process(Process *process) {
   // Process not found
   return -1;
 
+}
+
+/**
+ * @brief Gets the current process
+ * @return The current process, or nullptr if not found
+ */
+Process *Scheduler::get_current_process() {
+
+  Process* current_process = nullptr;
+
+  // Find the process that has the thread being executed
+  for (auto process : s_instance -> m_processes) {
+    if (process->get_pid() == s_instance -> m_threads[s_instance -> m_current_thread_index]->parent_pid) {
+      current_process = process;
+      break;
+    }
+  }
+
+  return current_process;
 }

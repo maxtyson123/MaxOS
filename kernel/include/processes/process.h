@@ -73,7 +73,7 @@ namespace MaxOS
               uint64_t m_pid;
 
             public:
-                Process(string name, void (*_entry_point)(void *), void *args, int arg_amount);
+                Process(string name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
                 //Process(string name, void *args, ELF STUFF);  // Task from ELF
                 ~Process();
 
@@ -84,6 +84,8 @@ namespace MaxOS
 
                 void set_pid(uint64_t pid);
                 uint64_t get_pid();
+
+                bool is_kernel;
 
                 string name;
                 memory::MemoryManager* memory_manager;

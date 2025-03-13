@@ -100,7 +100,7 @@ InterruptManager::InterruptManager()
     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
 
     // Set up the system call interrupt
-    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 0);   // System Call Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
 
     //Tell the processor to use the IDT
     IDTR idt;

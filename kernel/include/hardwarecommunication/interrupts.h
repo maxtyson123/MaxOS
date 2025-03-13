@@ -106,7 +106,7 @@ namespace MaxOS {
                 static void HandleInterruptRequest0x80();
                 static void HandleInterruptRequest0x0F();
                 static void HandleInterruptRequest0x31();
-                static void HandleInterruptRequest0x60();
+                static void HandleInterruptRequest0x60(); // System Call
 
                 // Exceptions
                 static void HandleException0x00();

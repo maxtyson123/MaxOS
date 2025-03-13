@@ -25,11 +25,11 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     m_stack_pointer = (uintptr_t)MemoryManager::s_active_memory_manager ->malloc(s_stack_size);
     ASSERT(m_stack_pointer != 0, "Failed to allocate stack for thread\n");
 
-    // Setup the execution state
+    // Set up the execution state
     execution_state = new cpu_status_t();
     execution_state->rip = (uint64_t)_entry_point;
-    execution_state->ss = 0x10;     // TEMP KERNEL SHOULD BE 0x23
-    execution_state->cs = 0x08;     // TEMP KERNEL SHOULD BE 0x1B
+    execution_state->ss = parent -> is_kernel ? 0x10 : 0x23;
+    execution_state->cs = parent -> is_kernel ? 0x8  : 0x1B;
     execution_state->rflags = 0x202;
     execution_state->interrupt_number = 0;
     execution_state->error_code = 0;
@@ -75,7 +75,9 @@ void Thread::sleep(size_t milliseconds) {
  * @param _entry_point The entry point of the process
  * @param args The arguments to pass to the process
  */
-Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount) {
+Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
+: is_kernel(is_kernel)
+{
 
   // Pause interrupts while creating the process
   asm("cli");

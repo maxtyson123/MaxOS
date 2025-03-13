@@ -8,6 +8,9 @@ using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::drivers;
 
+extern uint64_t gdt64[];
+extern uint64_t stack[];
+
 CPU* CPU::s_instance = nullptr;
 
 
@@ -59,28 +62,28 @@ void CPU::set_status(cpu_status_t *status) {
 void CPU::print_registers(cpu_status_t *status) {
 
     // Print the registers
-    _kprintf("R15: 0x%x\n", status->r15);
-    _kprintf("R14: 0x%x\n", status->r14);
-    _kprintf("R13: 0x%x\n", status->r13);
-    _kprintf("R12: 0x%x\n", status->r12);
-    _kprintf("R11: 0x%x\n", status->r11);
-    _kprintf("R10: 0x%x\n", status->r10);
-    _kprintf("R9: 0x%x\n", status->r9);
-    _kprintf("R8: 0x%x\n", status->r8);
-    _kprintf("RDI: 0x%x\n", status->rdi);
-    _kprintf("RSI: 0x%x\n", status->rsi);
-    _kprintf("RBP: 0x%x\n", status->rbp);
-    _kprintf("RDX: 0x%x\n", status->rdx);
-    _kprintf("RCX: 0x%x\n", status->rcx);
-    _kprintf("RBX: 0x%x\n", status->rbx);
-    _kprintf("RAX: 0x%x\n", status->rax);
-    _kprintf("INTERRUPT NUMBER: 0x%x\n", status->interrupt_number);
-    _kprintf("ERROR CODE: 0x%x\n", status->error_code);
-    _kprintf("RIP: 0x%x\n", status->rip);
-    _kprintf("CS: 0x%x\n", status->cs);
-    _kprintf("RFLAGS: 0x%x\n", status->rflags);
-    _kprintf("RSP: 0x%x\n", status->rsp);
-    _kprintf("SS: 0x%x\n", status->ss);
+    _kprintf("%hR15: 0x%x\n", status->r15);
+    _kprintf("%hR14: 0x%x\n", status->r14);
+    _kprintf("%hR13: 0x%x\n", status->r13);
+    _kprintf("%hR12: 0x%x\n", status->r12);
+    _kprintf("%hR11: 0x%x\n", status->r11);
+    _kprintf("%hR10: 0x%x\n", status->r10);
+    _kprintf("%hR9: 0x%x\n", status->r9);
+    _kprintf("%hR8: 0x%x\n", status->r8);
+    _kprintf("%hRDI: 0x%x\n", status->rdi);
+    _kprintf("%hRSI: 0x%x\n", status->rsi);
+    _kprintf("%hRBP: 0x%x\n", status->rbp);
+    _kprintf("%hRDX: 0x%x\n", status->rdx);
+    _kprintf("%hRCX: 0x%x\n", status->rcx);
+    _kprintf("%hRBX: 0x%x\n", status->rbx);
+    _kprintf("%hRAX: 0x%x\n", status->rax);
+    _kprintf("%hINTERRUPT NUMBER: 0x%x\n", status->interrupt_number);
+    _kprintf("%hERROR CODE: 0x%x\n", status->error_code);
+    _kprintf("%hRIP: 0x%x\n", status->rip);
+    _kprintf("%hCS: 0x%x\n", status->cs);
+    _kprintf("%hRFLAGS: 0x%x\n", status->rflags);
+    _kprintf("%hRSP: 0x%x\n", status->rsp);
+    _kprintf("%hSS: 0x%x\n", status->ss);
 
 }
 
@@ -120,7 +123,7 @@ void CPU::stack_trace(size_t level) {
     while (current_level < level && frame != nullptr){
 
         // Print the frame
-        _kprintf("(%d);\t at 0x%x\n", current_level, frame->rip);
+        _kprintf("%h(%d);\t at 0x%x\n", current_level, frame->rip);
 
         // Next frame
         frame = frame -> next;
@@ -154,3 +157,85 @@ void CPU::PANIC(char const *message) {
 
 }
 
+/**
+ * @brief Initialises the TSS for interrupt handling
+ */
+void CPU::init_tss() {
+
+  // The reserved have to be 0
+  m_tss.reserved0 = 0;
+  m_tss.reserved1 = 0;
+  m_tss.reserved2 = 0;
+  m_tss.reserved3 = 0;
+  m_tss.reserved4 = 0;
+
+  // The stacks
+  m_tss.rsp0 = (uint64_t)stack + 16384;       // Kernel stack (scheduler will set the threads stack)
+  m_tss.rsp1 = 0;
+  m_tss.rsp2 = 0;
+
+  // Interrupt stacks can all be 0
+  m_tss.ist1 = 0;
+  m_tss.ist2 = 0;
+  m_tss.ist3 = 0;
+  m_tss.ist4 = 0;
+  m_tss.ist5 = 0;
+  m_tss.ist6 = 0;
+  m_tss.ist7 = 0;
+
+  // Ports TODO when setting up userspace drivers come back to this
+  m_tss.io_bitmap_offset = 0;
+
+  // Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
+  uint64_t base = (uint64_t)&m_tss;
+  uint16_t base_1 = base & 0xFFFF;
+  uint8_t base_2 = (base >> 16) & 0xFF;
+  uint8_t base_3 = (base >> 24) & 0xFF;
+  uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
+
+  uint16_t limit_low = sizeof(m_tss);
+
+  // Flags: 1 - Type = 0x9, Descriptor Privilege Level = 0, Present = 1
+  //        2 - Available = 0, Granularity = 0
+  uint8_t flags_1 = 0x89;
+  uint8_t flags_2 = 0;
+
+
+  // Create the TSS descriptors
+  uint64_t tss_descriptor_low = (uint64_t) base_3 << 56 | (uint64_t) flags_2 << 48 | (uint64_t) flags_1 << 40 | (uint64_t) base_2 << 32 | (uint64_t) base_1 << 16 | (uint64_t) limit_low;
+  uint64_t tss_descriptor_high = base_4;
+
+  // Store in the GDT
+  gdt64[5] = tss_descriptor_low;
+  gdt64[6] = tss_descriptor_high;
+
+  // Load the TSS
+  _kprintf("Loading TSS: 0x0%x 0x0%x at 0x%x\n", tss_descriptor_low, tss_descriptor_high, &m_tss);
+  asm volatile("ltr %%ax" : : "a" (0x28));
+
+  //TODO: For smp - load the TSS for each core or find a better way to do this
+
+
+}
+
+/**
+ * @brief Constructor for the CPU class
+ */
+CPU::CPU() {
+
+  // Set the instance
+  s_instance = this;
+
+  // TODO = Multicore support
+
+}
+
+/**
+ * @brief Destructor for the CPU class
+ */
+CPU::~CPU() {
+
+  // Clear the instance
+  s_instance = nullptr;
+
+}
