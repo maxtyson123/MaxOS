@@ -20,7 +20,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 {
 
     // Malloc the video memory
-    m_video_memory = (uint16_t*)MemoryManager::s_active_memory_manager->malloc(width() * height() * sizeof(uint16_t));
+    m_video_memory = (uint16_t*)MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
 }
 
 VESABootConsole::~VESABootConsole()

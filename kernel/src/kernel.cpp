@@ -88,16 +88,6 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
-void writing_proc(void* args)
-{
-  // Just write shit for now
-  while (true){
-    _kprintf("ASD\n");
-  }
-
-}
-
-
 extern volatile uint64_t p4_table[512];
 extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 {
@@ -131,6 +121,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     // Initialise the memory manager
     MemoryManager memoryManager(&vmm);
+    MemoryManager::s_kernel_memory_manager = &memoryManager;
     _kprintf("-= Memory Manager set up =-\n");
 
     // Initialise Console
@@ -303,22 +294,21 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // Idle Process
-    Process* idle = new Process("kernelMain Idle", nullptr, (void*)(new string("H"))->c_str(),0, true); //TODO figure out why the
+    Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
     idle->memory_manager = &memoryManager;
 
-    Process* p1 = new Process("Test Process 1", writing_proc, (void*)(new string("Hello from Process 1"))->c_str(),1);
-    Process* p2 = new Process("Test Process 2", writing_proc, (void*)(new string("Hello from Process 2"))->c_str(),1);
-    Process* p3 = new Process("Test Process 3", writing_proc, (void*)(new string("Hello from Process 3"))->c_str(),1);
+    // TODO: Make a binary userspace proc that halts and see if it works
+    unsigned char halter[] = {
+        0xeb, 0xfe  // jmp $
+    };
+    Process* writing = new Process("Halting From USER SPACE", (void (*)(void *))halter, nullptr, 0);
 
     // Start the Scheduler
     scheduler.activate();
 
     /// Boot Done ///
     _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
-    while (true){
-      _kprintf("KERNEL LOOP\n");
-      asm("hlt");
-    }
+
 
     /// How this idle works:
     ///  I was debugging along and released that on the first ever schedule it will
@@ -327,4 +317,10 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     ///  as no threads have been scheduled yet that is the cpu state of the kernel.
     ///  Now I could either fix that or leave it in as a cool way of never fully
     ///  leaving kernelMain and  also having a idle_proc
+    while (true){
+
+      // Print the ticks
+      _kprintf("%h\r%s%d%s", ANSI_COLOURS[FG_Green], scheduler.get_ticks(), ANSI_COLOURS[Reset]);
+      asm("hlt");
+    }
 }

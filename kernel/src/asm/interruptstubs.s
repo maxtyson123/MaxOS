@@ -24,7 +24,7 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
 _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
     ; When this macro is called the status registers are already on the stack
     push 0	; since we have no error code, to keep things consistent we push a default EC of 0
-    push (%1 + 0x20) ; pushing the interrupt number for easier identification by the handler
+    push (%1 + 0x20) ; pushing the interrupt number for easier identification by the handler (TODO: this might not work, can math be done here?)
     save_context ; Now we can save the general purpose registers
     mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
     cld ; Clear the direction flag

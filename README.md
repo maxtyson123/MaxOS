@@ -184,11 +184,20 @@ No user usage so far (userland will be added in the future)
 - [ ] VFS
 - [ ] Loading ELF
 - [ ] Multiple Cores Support (SMP & Scheduler)
-- [ ] CLI
-- [ ] Porting Libc
 - [ ] Userland GUI
-- [ ] DOOM Port?
-
+- [ ] CLI
+- [ ] Porting & Dynamically Linking Libc
+- [ ] Self-hosted os
+- [ ] DOOM Port
+- [ ] UserSpace Drivers
+- [ ] Userspace Networking
+- [ ] Auto Updater & Image Builder
+- [ ] Store
+- [ ] User Switching
+- [ ] Real Hardware Support
+- [ ] Port 2048
+- [ ] Compatibility Layer(s)
+ 
 See the [open issues](https://github.com/maxtyson123/MaxOS/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

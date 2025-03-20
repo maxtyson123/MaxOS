@@ -43,7 +43,8 @@ namespace MaxOS{
             MemoryChunk* expand_heap(size_t size);
 
           public:
-              static MemoryManager* s_active_memory_manager;
+              static MemoryManager* s_current_memory_manager;
+              static MemoryManager* s_kernel_memory_manager;
 
               static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };
               static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };
@@ -54,12 +55,22 @@ namespace MaxOS{
               // Each chunk is aligned to 16 bytes
               static const size_t s_chunk_alignment { 0x10 };
 
+              MemoryManager* previous_memory_manager;
+
               MemoryManager(VirtualMemoryManager* virtual_memory_manager);
               ~MemoryManager();
 
-              // Memory Management
-              void* malloc(size_t size);
-              void free(void* pointer);
+              // Public Memory Management
+              static void* malloc(size_t size);
+              static void free(void* pointer);
+
+              // Kernel Memory Management
+              static void* kmalloc(size_t size);
+              static void kfree(void* pointer);
+
+              // Internal Memory Management
+              void* handle_malloc(size_t size);
+              void handle_free(void* pointer);
 
               // Utility Functions
               int memory_used();

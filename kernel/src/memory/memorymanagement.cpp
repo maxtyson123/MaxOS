@@ -9,20 +9,15 @@ using namespace MaxOS;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 
-MemoryManager* MemoryManager::s_active_memory_manager = 0;
+MemoryManager* MemoryManager::s_kernel_memory_manager = 0;
+MemoryManager* MemoryManager::s_current_memory_manager = 0;
 
 MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 : m_virtual_memory_manager(vmm)
 {
 
-    // Use this memory manager for setups
-    MemoryManager* previous = nullptr;
-    if(s_active_memory_manager != 0){
-      previous = s_active_memory_manager;
-      switch_active_memory_manager(this);
-    }else{
-      s_active_memory_manager = this;
-    }
+    // Enable the memory manager
+    switch_active_memory_manager(this);
 
     // Get the first chunk of memory
     this -> m_first_memory_chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
@@ -39,82 +34,146 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
     // The first chunk is the last chunk
     _kprintf("First memory chunk: 0x%x\n", m_first_memory_chunk);
 
-    // Reset the active memory manager
-    if(s_active_memory_manager != 0)
-      switch_active_memory_manager(previous);
-
 }
 
 MemoryManager::~MemoryManager() {
-    if(s_active_memory_manager == this)
-      s_active_memory_manager = 0;
+
+    // Check if the current memory manager is this one
+    if(s_kernel_memory_manager == this)
+      s_kernel_memory_manager = 0;
+
+    // Check if the current memory manager is this one
+    if(s_current_memory_manager == this)
+       s_current_memory_manager = 0;
+
+
+}
+
+/**
+ * @brief Allocates a block of memory using the current memory manager
+ *
+ * @param size size of the block
+ * @return a pointer to the block, 0 if no block is available or no memory manager is set
+ */
+void* MemoryManager::malloc(size_t size) {
+
+    // Make sure there is somthing to do the allocation
+    if(s_current_memory_manager == 0)
+            return 0;
+
+    return s_current_memory_manager->handle_malloc(size);
+
+}
+
+/**
+ * @brief Allocates a block of memory using the kernel memory manager
+ *
+ * @param size The size of the block
+ * @return The pointer to the block, or nullptr if no block is available
+ */
+void *MemoryManager::kmalloc(size_t size) {
+
+  // Make sure there is a kernel memory manager
+  if(s_kernel_memory_manager == 0)
+    return 0;
+
+  return s_kernel_memory_manager->handle_malloc(size);
+
 }
 
 /**
  * @brief Allocates a block of memory
  *
- * @param size size of the block
- * @return a pointer to the block, 0 if no block is available
+ * @param size The size of the block to allocate
+ * @return A pointer to the block, or nullptr if no block is available
  */
-void* MemoryManager::malloc(size_t size) {
+void *MemoryManager::handle_malloc(size_t size) {
+  MemoryChunk* result = 0;
 
-    MemoryChunk* result = 0;
+  // Don't allocate a block of size 0
+  if(size == 0)
+    return 0;
 
-    // Don't allocate a block of size 0
-    if(size == 0)
-        return 0;
+  // Size must include the size of the chunk and be aligned
+  size = align(size + sizeof(MemoryChunk));
 
-    // Size must include the size of the chunk and be aligned
-    size = align(size + sizeof(MemoryChunk));
+  // Find the next free chunk that is big enough
+  for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0 && result == 0; chunk = chunk->next) {
+    if(chunk -> size > size && !chunk -> allocated)
+      result = chunk;
+  }
 
-    // Find the next free chunk that is big enough
-    for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0 && result == 0; chunk = chunk->next) {
-        if(chunk -> size > size && !chunk -> allocated)
-            result = chunk;
-    }
+  // If there is no free chunk then expand the heap
+  if(result == 0)
+    result = expand_heap(size);
 
-    // If there is no free chunk then expand the heap
-    if(result == 0)
-      result = expand_heap(size);
+  // If there is not enough space to create a new chunk then just allocate the current chunk
+  if(result -> size < size + sizeof(MemoryChunk) + 1) {
+    result->allocated = true;
+    return (void *)(((size_t)result) + sizeof(MemoryChunk));
+  }
 
-    // If there is not enough space to create a new chunk then just allocate the current chunk
-    if(result -> size < size + sizeof(MemoryChunk) + 1) {
-        result->allocated = true;
-        return (void *)(((size_t)result) + sizeof(MemoryChunk));
-    }
+  // Create a new chunk after the current one
+  MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
 
-    // Create a new chunk after the current one
-    MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
+  // Set the new chunk's properties and insert it into the linked list
+  temp -> allocated = false;
+  temp -> size =  result->size - size - sizeof(MemoryChunk);
+  temp -> prev = result;
+  temp -> next = result -> next;
 
-    // Set the new chunk's properties and insert it into the linked list
-    temp -> allocated = false;
-    temp -> size =  result->size - size - sizeof(MemoryChunk);
-    temp -> prev = result;
-    temp -> next = result -> next;
+  // If there is a chunk after the current one then set its previous to the new chunk
+  if(temp -> next != 0)
+    temp -> next -> prev = temp;
 
-    // If there is a chunk after the current one then set its previous to the new chunk
-    if(temp -> next != 0)
-       temp -> next -> prev = temp;
+  // Current chunk is now allocated and is pointing to the new chunk
+  result->size = size;
+  result -> allocated = true;
+  result->next = temp;
 
-    // Current chunk is now allocated and is pointing to the new chunk
-    result->size = size;
-    result -> allocated = true;
-    result->next = temp;
+  // Update the last memory chunk if necessary
+  if(result == m_last_memory_chunk)
+    m_last_memory_chunk = temp;
 
-    // Update the last memory chunk if necessary
-    if(result == m_last_memory_chunk)
-      m_last_memory_chunk = temp;
-
-    return (void*)(((size_t)result) + sizeof(MemoryChunk));
+  return (void*)(((size_t)result) + sizeof(MemoryChunk));
 }
 
+/**
+ * @brief Frees a block of memory using the current memory manager
+ *
+ * @param pointer The pointer to the block
+ */
+void MemoryManager::free(void *pointer) {
+
+    // Make sure there is a memory manager
+    if(s_current_memory_manager == 0)
+        return;
+
+    s_current_memory_manager->handle_free(pointer);
+
+}
+
+/**
+ * @brief Frees a block of memory using the kernel memory manager
+ *
+ * @param pointer The pointer to the block
+ */
+void MemoryManager::kfree(void *pointer) {
+
+    // Make sure there is a kernel memory manager
+    if(s_kernel_memory_manager == 0)
+        return;
+
+    s_kernel_memory_manager->handle_free(pointer);
+
+}
 
 /**
  * @brief Frees a block of memory
  *
  * @param pointer A pointer to the block
  */
-void MemoryManager::free(void *pointer) {
+void MemoryManager::handle_free(void *pointer) {
 
 
     // If nothing to free then return
@@ -308,9 +367,6 @@ bool MemoryManager::in_higher_region(uintptr_t virtual_address) {
  */
 void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
 
-  // Stop interrupts
-  asm volatile("cli");
-
   // Make sure there is a manager
   if(manager == nullptr)
     return;
@@ -319,75 +375,111 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
   asm volatile("mov %0, %%cr3" :: "r"((uint64_t)manager->m_virtual_memory_manager->get_pml4_root_address_physical()) : "memory");
 
   // Set the active memory manager
-  s_active_memory_manager = manager;
-
-  // Resume interrupts
-  asm volatile("sti");
+  s_current_memory_manager = manager;
 
 }
+
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
+
+/**
+ * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
+ *
+ * @param size The size of the memory to allocate
+ * @return The pointer to the allocated memory
+ */
 void* operator new(size_t size) throw(){
 
-    // Use the memory manager to allocate the memory
-    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
-
-    return 0;
+    // Handle the memory allocation
+    return MaxOS::memory::MemoryManager::kmalloc(size);
 
 }
 
+/**
+ * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
+ *
+ * @param size The size of the memory to allocate
+ * @return The pointer to the allocated memory
+ */
 void* operator new[](size_t size) throw(){
 
-    // Use the memory manager to allocate the memory
-    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return MaxOS::memory::MemoryManager::s_active_memory_manager-> malloc(size);
-
-    return 0;
+  // Handle the memory allocation
+  return MaxOS::memory::MemoryManager::kmalloc(size);
 
 }
 
+/**
+ * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
+ *
+ * @param pointer The pointer to the memory to allocate
+ * @return The pointer to the memory
+ */
 void* operator new(size_t, void* pointer){
 
     return pointer;
 
 }
+
+/**
+ * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
+ *
+ * @param pointer The pointer to the memory to allocate
+ * @return The pointer to the memory
+ */
 void* operator new[](size_t, void* pointer){
+
 
     return pointer;
 
 }
 
+/**
+ * @brief Overloaded delete operator, frees memory using the KERNEL memory manager
+ *
+ * @param pointer The pointer to the memory to free
+ */
 void operator delete(void* pointer){
 
-    // Use the memory manager to free the memory
-    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+  // Handle the memory freeing
+  return MaxOS::memory::MemoryManager::kfree(pointer);
 
 }
 
+/**
+ * @brief Overloaded delete operator, frees memory using the KERNEL memory manager
+ *
+ * @param pointer The pointer to the memory to free
+ */
 void operator delete[](void* pointer){
 
-    // Use the memory manager to free the memory
-    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+  // Handle the memory freeing
+  return MaxOS::memory::MemoryManager::kfree(pointer);
 
 }
 
-// NOTE: The size_t parameter is ignored, compiler was just complaining
+
+/**
+ * @brief Overloaded delete operator, frees memory using the KERNEL memory manager
+ *
+ * @param pointer The pointer to the memory to free
+ * @param size The size of the memory to free - ignored in this implementation
+ */
 void operator delete(void* pointer, size_t){
 
-    // Use the memory manager to free the memory
-    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+  // Handle the memory freeing
+  return MaxOS::memory::MemoryManager::kfree(pointer);
 
 }
 
+/**
+ * @brief Overloaded delete operator, frees memory using the KERNEL memory manager
+ *
+ * @param pointer The pointer to the memory to free
+ */
 void operator delete[](void* pointer, size_t){
 
-    // Use the memory manager to free the memory
-    if(MaxOS::memory::MemoryManager::s_active_memory_manager != 0)
-        return MaxOS::memory::MemoryManager::s_active_memory_manager-> free(pointer);
+  // Handle the memory freeing
+  return MaxOS::memory::MemoryManager::kfree(pointer);
 
 }

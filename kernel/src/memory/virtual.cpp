@@ -19,7 +19,6 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
       // Get a new pml4 table
       m_pml4_root_physical_address = (uint64_t*)m_physical_memory_manager->allocate_frame();
       m_pml4_root_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
-      _kprintf("Allocated new PML4 table at: 0x%x\n", m_pml4_root_address);
 
       // Clear the table
       m_physical_memory_manager -> clean_page_table(m_pml4_root_address);
@@ -44,6 +43,9 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
       m_pml4_root_address = m_physical_memory_manager->get_pml4_root_address();
       m_pml4_root_physical_address = (uint64_t*)MemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     };
+
+    // Log the VMM's PML4 address
+    _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
 
     // Space to store VMM chunks
     uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + m_physical_memory_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
@@ -131,7 +133,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   // If specific address is given
   if(address != 0){
 
-      // Make sure isnt already allocated
+      // Make sure isn't already allocated
       if(address < m_next_available_address)
         return nullptr;
 

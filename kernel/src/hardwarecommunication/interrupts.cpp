@@ -279,10 +279,8 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
  */
 void InterruptManager::general_protection_fault(system::cpu_status_t *status) {
     uint64_t error_code = status->error_code;
-    uint64_t faulting_address;
-    asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 
-    ASSERT(false, "General Protection Fault (0x%x): %s\n", faulting_address, (error_code & 0x1) ? "Protection-Exception" : "Non-Protection Exception");
+    ASSERT(false, "General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Non-Protection Exception");
 
 
 }

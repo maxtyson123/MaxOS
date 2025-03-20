@@ -70,8 +70,6 @@ namespace MaxOS{
       private:
         static CPU* s_instance;
 
-        tss_t m_tss;
-
 
       public:
 
@@ -82,6 +80,9 @@ namespace MaxOS{
         static void halt();
 
         void init_tss();
+        tss_t tss;
+
+        static CPU* get_instance();
 
         static void get_status(cpu_status_t* status);
         static void set_status(cpu_status_t* status);

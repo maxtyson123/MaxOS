@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <memory/virtual.h>
 #include <memory/memorymanagement.h>
+#include <memory/memoryIO.h>
 
 
 namespace MaxOS
@@ -36,6 +37,7 @@ namespace MaxOS
             private:
 
               uintptr_t m_stack_pointer;
+              uintptr_t m_tss_stack_pointer;
 
               static const uint64_t s_stack_size = 0x10000;
 
@@ -53,6 +55,8 @@ namespace MaxOS
 
               size_t ticks;
               size_t wakeup_time;
+
+              uintptr_t get_tss_pointer() const { return m_tss_stack_pointer; }
 
 
         };
@@ -77,6 +81,7 @@ namespace MaxOS
                 //Process(string name, void *args, ELF STUFF);  // Task from ELF
                 ~Process();
 
+                void set_up();
 
                 common::Vector<Thread*> get_threads();
                 void add_thread(Thread* thread);

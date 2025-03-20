@@ -348,7 +348,7 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 - However, if there is no free memory then the function will return 0 which would work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exception like c++ normally would as currently there is no exception handler
 <!-- TOC --><a name="system-calls"></a>
 ### System Calls
-See also [List of syscalls](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
+See also [List of syscalls](https://x64.syscall.sh/)
 - The kernel can load a binary executable from the hard drive and then store it in memory and then attach the memory pointer to task management
 - When the operating system is unsecure from executables, they will be able to use assembly and such to talk to the hard drive and other devices, this can lead to malicious programs.
 - To get around this the kernel has to be put in userspace once fully initiated. Userspace tells the device to ignore "outb" commands and other low level operations.

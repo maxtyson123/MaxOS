@@ -49,8 +49,9 @@ namespace MaxOS{
 
         uint64_t get_ticks();
         void yield();
-        void activate();
 
+        void activate();
+        void deactivate();
     };
 
   }

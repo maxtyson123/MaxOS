@@ -7,6 +7,7 @@
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::drivers;
+using namespace MaxOS::processes;
 
 extern uint64_t gdt64[];
 extern uint64_t stack[];
@@ -132,12 +133,20 @@ void CPU::stack_trace(size_t level) {
     }
 }
 
-
+#include <processes/scheduler.h>
 void CPU::PANIC(char const *message) {
+
+  // Stop interrupts
+  asm volatile("cli");
 
   // Print using the backend
   _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
   _kpanicf("Kernel Panic: %s\n", message);
+
+  // Get the running process
+  Process* process = Scheduler::get_current_process();
+  _kpanicf("Process: %s\n", process ? process->name.c_str() : "Kernel");
+  _kpanicf("After running for %d ticks\n", Scheduler::get_system_scheduler()->get_ticks());
 
   // Stack trace
   _kpanicf("----------------------------\n");
@@ -163,37 +172,37 @@ void CPU::PANIC(char const *message) {
 void CPU::init_tss() {
 
   // The reserved have to be 0
-  m_tss.reserved0 = 0;
-  m_tss.reserved1 = 0;
-  m_tss.reserved2 = 0;
-  m_tss.reserved3 = 0;
-  m_tss.reserved4 = 0;
+  tss.reserved0 = 0;
+  tss.reserved1 = 0;
+  tss.reserved2 = 0;
+  tss.reserved3 = 0;
+  tss.reserved4 = 0;
 
   // The stacks
-  m_tss.rsp0 = (uint64_t)stack + 16384;       // Kernel stack (scheduler will set the threads stack)
-  m_tss.rsp1 = 0;
-  m_tss.rsp2 = 0;
+  tss.rsp0 = (uint64_t)stack + 16384;       // Kernel stack (scheduler will set the threads stack)
+  tss.rsp1 = 0;
+  tss.rsp2 = 0;
 
   // Interrupt stacks can all be 0
-  m_tss.ist1 = 0;
-  m_tss.ist2 = 0;
-  m_tss.ist3 = 0;
-  m_tss.ist4 = 0;
-  m_tss.ist5 = 0;
-  m_tss.ist6 = 0;
-  m_tss.ist7 = 0;
+  tss.ist1 = 0;
+  tss.ist2 = 0;
+  tss.ist3 = 0;
+  tss.ist4 = 0;
+  tss.ist5 = 0;
+  tss.ist6 = 0;
+  tss.ist7 = 0;
 
   // Ports TODO when setting up userspace drivers come back to this
-  m_tss.io_bitmap_offset = 0;
+  tss.io_bitmap_offset = 0;
 
   // Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
-  uint64_t base = (uint64_t)&m_tss;
+  uint64_t base = (uint64_t)&tss;
   uint16_t base_1 = base & 0xFFFF;
   uint8_t base_2 = (base >> 16) & 0xFF;
   uint8_t base_3 = (base >> 24) & 0xFF;
   uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
 
-  uint16_t limit_low = sizeof(m_tss);
+  uint16_t limit_low = sizeof(tss);
 
   // Flags: 1 - Type = 0x9, Descriptor Privilege Level = 0, Present = 1
   //        2 - Available = 0, Granularity = 0
@@ -210,7 +219,7 @@ void CPU::init_tss() {
   gdt64[6] = tss_descriptor_high;
 
   // Load the TSS
-  _kprintf("Loading TSS: 0x0%x 0x0%x at 0x%x\n", tss_descriptor_low, tss_descriptor_high, &m_tss);
+  _kprintf("Loading TSS: 0x0%x 0x0%x at 0x%x\n", tss_descriptor_low, tss_descriptor_high, &tss);
   asm volatile("ltr %%ax" : : "a" (0x28));
 
   //TODO: For smp - load the TSS for each core or find a better way to do this
@@ -237,5 +246,18 @@ CPU::~CPU() {
 
   // Clear the instance
   s_instance = nullptr;
+
+}
+
+/**
+ * @brief Gets the CPU instance
+ * @return The CPU instance
+ */
+CPU *CPU::get_instance() {
+
+  if(s_instance)
+    return s_instance;
+
+  return new CPU();
 
 }

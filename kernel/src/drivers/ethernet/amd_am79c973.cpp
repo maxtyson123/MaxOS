@@ -68,10 +68,10 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     //TODO: Use malloc?
 
     // Set Buffer descriptors memory
-    sendBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
+    sendBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.sendBufferDescrAddress = (uint32_t)sendBufferDescr;
 
-    recvBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
+    recvBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.recvBufferDescrAddress = (uint32_t)recvBufferDescr;
 
     for(uint8_t i = 0; i < 8; i++)

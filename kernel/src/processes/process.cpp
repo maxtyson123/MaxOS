@@ -16,18 +16,39 @@ using namespace MaxOS::common;
  */
 Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process* parent) {
 
+    //TODO: When implmenting elf move this to a generic setup function
+
     // Basic setup
     thread_state = ThreadState::NEW;
     wakeup_time = 0;
     ticks = 0;
 
     // Create the stack
-    m_stack_pointer = (uintptr_t)MemoryManager::s_active_memory_manager ->malloc(s_stack_size);
-    ASSERT(m_stack_pointer != 0, "Failed to allocate stack for thread\n");
+    m_stack_pointer = (uintptr_t)MemoryManager::malloc(s_stack_size);
+
+    // Create the TSS stack
+    if(parent -> is_kernel) {
+
+        // Use the kernel stack
+        m_tss_stack_pointer = CPU::get_instance() -> tss.rsp0;
+
+    } else{
+        m_tss_stack_pointer = (uintptr_t)MemoryManager::kmalloc(s_stack_size) + s_stack_size;
+    }
+
+    // Mak sure there is a stack
+    ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
+
+    // Map the entry point into the memory if it is not in the kernel
+    void* entry_point = (void*)_entry_point;
+    if(!parent -> is_kernel) {
+      entry_point = MemoryManager::malloc(sizeof(_entry_point));
+      memcpy(entry_point, (void*)_entry_point, sizeof(_entry_point));
+    }
 
     // Set up the execution state
     execution_state = new cpu_status_t();
-    execution_state->rip = (uint64_t)_entry_point;
+    execution_state->rip = (uint64_t)entry_point;
     execution_state->ss = parent -> is_kernel ? 0x10 : 0x23;
     execution_state->cs = parent -> is_kernel ? 0x8  : 0x1B;
     execution_state->rflags = 0x202;
@@ -41,11 +62,9 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     execution_state->rsi = (uint64_t)args;
     //execution_state->rdx = (uint64_t)env_args;
 
-
     // Begin scheduling this thread
     parent_pid = parent->get_pid();
     tid = Scheduler::get_system_scheduler() -> add_thread(this);
-
 
 }
 
@@ -76,26 +95,18 @@ void Thread::sleep(size_t milliseconds) {
  * @param args The arguments to pass to the process
  */
 Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
-: is_kernel(is_kernel)
+: is_kernel(is_kernel),
+  name(p_name)
 {
 
-  // Pause interrupts while creating the process
-  asm("cli");
-
   // Basic setup
-  name = p_name;
-  m_pid = Scheduler::get_system_scheduler() ->add_process(this);
-  m_virtual_memory_manager = new VirtualMemoryManager(false);
-  memory_manager = new MemoryManager(m_virtual_memory_manager);
+  set_up();
 
   // Create the main thread
   Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
 
   // Add the thread
   add_thread(main_thread);
-
-  // Can now resume interrupts
-  asm("sti");
 
 }
 
@@ -110,9 +121,11 @@ Process::~Process() {
   for (auto thread : m_threads)
       delete thread;
 
-  // Free the memory manager
-  delete m_virtual_memory_manager;
-  delete memory_manager;
+  // Free the memory manager (only if it was created)
+  if(!is_kernel){
+      delete memory_manager;
+      delete m_virtual_memory_manager;
+  }
 
 }
 
@@ -203,4 +216,25 @@ Vector<Thread*> Process::get_threads() {
  */
 uint64_t Process::get_pid() {
   return m_pid;
+}
+
+/**
+ * @brief Generic setup function for the process
+ */
+void Process::set_up() {
+
+  // Pause interrupts while creating the process
+  asm("cli");
+
+  // Basic setup
+  m_pid = Scheduler::get_system_scheduler() ->add_process(this);
+
+  // If it is a kernel process then don't need a new memory manager
+  if(!is_kernel){
+    m_virtual_memory_manager = new VirtualMemoryManager(false);
+    memory_manager = new MemoryManager(m_virtual_memory_manager);
+  }else{
+    memory_manager = MemoryManager::s_kernel_memory_manager;
+  }
+
 }

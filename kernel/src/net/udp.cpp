@@ -51,7 +51,7 @@ void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data
     // Create the event
     UDPDataReceivedEvent* event = new UDPDataReceivedEvent(this, data, size);
     raise_event(event);
-    MemoryManager::s_active_memory_manager->free(event);
+    MemoryManager::kfree(event);
 
 }
 
@@ -143,7 +143,7 @@ bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocol
 UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, uint16_t port) {
 
 
-    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 
     if(socket != 0) //If the socket was created
     {
@@ -177,7 +177,7 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(string) {
  */
 UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
 
-    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+    UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 
     if(socket != 0) //If the socket was created
     {
@@ -208,7 +208,7 @@ void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket)
         if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
         {
             sockets.erase(currentSocket);                            //Remove the socket from the list of sockets
-            MemoryManager::s_active_memory_manager-> free(socket);      //Free the socket
+            MemoryManager::kfree(socket);      //Free the socket
             break;                                                   //Break out of the loop
         }
     }
@@ -225,7 +225,7 @@ void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket)
 void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size) {
 
     uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
-    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager->malloc(totalSize);          //Allocate memory for the packet
+    uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(totalSize);          //Allocate memory for the packet
     uint8_t* buffer2 = buffer + sizeof(UserDatagramProtocolHeader);                                 //Get the buffer that will be used to store the data
 
     UserDatagramProtocolHeader* header = (UserDatagramProtocolHeader*)buffer;                       //Create the header of the packet
@@ -251,7 +251,7 @@ void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, uint8
     InternetProtocolPayloadHandler::Send(socket->remoteIP, buffer, totalSize);
 
     //Free the buffer
-    MemoryManager::s_active_memory_manager->free(buffer);
+    MemoryManager::kfree(buffer);
 
 }
 

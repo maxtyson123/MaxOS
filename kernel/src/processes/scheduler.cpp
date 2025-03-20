@@ -39,12 +39,16 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
   // Ticked
   m_ticks++;
 
+  // Wait for ticks to be div by 10 so it switches every 10 ticks
+  if (m_ticks % 10 != 0) return cpu_state; //TODO: Make this automatic for debug builds maybe so that its easier to see errors with out them being overwritten
+
   // Thread that we are dealing with
   Thread* current_thread = m_threads[m_current_thread_index];
 
   // If there are no threads to schedule, return the current state
   if (current_thread == nullptr)
     return cpu_state;
+
 
   // Save the current state
   current_thread->execution_state = cpu_state;
@@ -101,6 +105,9 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
 
   // Load the threads memory manager
   MemoryManager::switch_active_memory_manager(current_process->memory_manager);
+
+  // Load the TSS for the thread
+  system::CPU::get_instance() -> tss.rsp0 = current_thread->get_tss_pointer();
 
   // Return the next thread's state
   return current_thread->execution_state;
@@ -228,4 +235,12 @@ Process *Scheduler::get_current_process() {
   }
 
   return current_process;
+}
+
+/**
+ * @brief Deactivates the scheduler
+ */
+void Scheduler::deactivate() {
+    m_active = false;
+
 }

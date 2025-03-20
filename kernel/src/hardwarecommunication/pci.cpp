@@ -245,7 +245,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x2000:    //am79c971
                 {
-                    amd_am79c973* result = (amd_am79c973*)MemoryManager::s_active_memory_manager ->malloc(sizeof(amd_am79c973));
+                    amd_am79c973* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
                     new (result) amd_am79c973(&dev, interrupt_manager);
                     return result;
 
@@ -261,7 +261,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    intel_i217* result = (intel_i217*)MemoryManager::s_active_memory_manager->malloc(sizeof(intel_i217));
+                    intel_i217* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
                     new (result) intel_i217(&dev, interrupt_manager);
                     return result;
                 }
@@ -282,7 +282,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x00:  //VGA
                 {
-                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::s_active_memory_manager->malloc(sizeof(VideoGraphicsArray));
+                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
                     new (result) VideoGraphicsArray();
                     return result;
                 }
