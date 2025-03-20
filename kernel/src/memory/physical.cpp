@@ -531,9 +531,8 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
     uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
 
     // If it is in a lower region then assume it is the user space
-    uint8_t is_user = MemoryManager::in_higher_region((uint64_t)virtual_address);
+    uint8_t is_user = !(MemoryManager::in_higher_region((uint64_t)virtual_address));
     if(is_user) {
-
       // Change the flags to user
       flags |= User;
       is_user = User;

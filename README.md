@@ -188,6 +188,7 @@ No user usage so far (userland will be added in the future)
 - [ ] CLI
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Self-hosted os
+- [ ] App Framework & System Apps
 - [ ] DOOM Port
 - [ ] UserSpace Drivers
 - [ ] Userspace Networking
