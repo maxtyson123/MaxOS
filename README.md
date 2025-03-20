@@ -84,12 +84,16 @@ Max OS is a hobby operating system developed for the 64bit platform using C++ an
 
 Max OS supports device drivers, memory management, multitasking, a GUI, and more. The project is being developed with the goal of being able to run on real hardware, however, it is currently only able to run on a virtual machine.
 
+This GitHub repository contains the source code for the operating system, as well as the build scripts required to build the operating system from source. The repository also contains the latest built kernel, which can be downloaded from the workflow artifacts. To ensure a cleaner git history, each feature/change is done in a separate branch and then merged into the main branch once working. To see the history of each feature press on the pull request number. If you are intrested in the active developement find the latest branch <a href="https://github.com/maxtyson123/MaxOS/branches">Here</a>.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
 This is how to build the Max OS operating system from source. (Alternatively, you can download the latest built kernel from the workflow artifacts)
+
+Currently Max OS can only be built on a linux machine, but does support WSL. In the future I do plan to port the build system to Mac. 
 
 ### Prerequisites
 
