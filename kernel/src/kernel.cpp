@@ -297,14 +297,15 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
     idle->memory_manager = &memoryManager;
 
-    // TODO: Make a binary userspace proc that halts and see if it works
-    unsigned char halter[] = {
-        0xeb, 0xfe  // jmp $
-    };
-    Process* writing = new Process("Halting From USER SPACE", (void (*)(void *))halter, nullptr, 0);
-
     // Start the Scheduler
     scheduler.activate();
+
+
+    // TODO:
+    //       - Load Elfs
+    //       - IPC
+    //       - Doxygen for classes & structs
+
 
     /// Boot Done ///
     _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
@@ -317,10 +318,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     ///  as no threads have been scheduled yet that is the cpu state of the kernel.
     ///  Now I could either fix that or leave it in as a cool way of never fully
     ///  leaving kernelMain and  also having a idle_proc
-    while (true){
-
-      // Print the ticks
-      _kprintf("%h\r%s%d%s", ANSI_COLOURS[FG_Green], scheduler.get_ticks(), ANSI_COLOURS[Reset]);
+    while (true)
       asm("hlt");
-    }
+
 }

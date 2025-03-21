@@ -16,8 +16,6 @@ using namespace MaxOS::common;
  */
 Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process* parent) {
 
-    //TODO: When implmenting elf move this to a generic setup function
-
     // Basic setup
     thread_state = ThreadState::NEW;
     wakeup_time = 0;
@@ -39,16 +37,9 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     // Mak sure there is a stack
     ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
 
-    // Map the entry point into the memory if it is not in the kernel
-    void* entry_point = (void*)_entry_point;
-    if(!parent -> is_kernel) {
-      entry_point = MemoryManager::malloc(sizeof(_entry_point));
-      memcpy(entry_point, (void*)_entry_point, sizeof(_entry_point));
-    }
-
     // Set up the execution state
     execution_state = new cpu_status_t();
-    execution_state->rip = (uint64_t)entry_point;
+    execution_state->rip = (uint64_t)_entry_point;
     execution_state->ss = parent -> is_kernel ? 0x10 : 0x23;
     execution_state->cs = parent -> is_kernel ? 0x8  : 0x1B;
     execution_state->rflags = 0x202;
@@ -99,8 +90,6 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args, int ar
   name(p_name)
 {
 
-  // Basic setup
-  set_up();
 
   // Create the main thread
   Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
@@ -109,6 +98,35 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args, int ar
   add_thread(main_thread);
 
 }
+
+/**
+ * @brief Constructor for the Process class (from an elf)
+ *
+ * @param name  The name of the process
+ * @param args  The arguments to pass to the process
+ * @param elf  The elf file to load the process from
+ */
+Process::Process(string p_name, void *args, Elf64 *elf)
+: is_kernel(is_kernel),
+  name(p_name)
+{
+
+  // Basic setup
+  set_up();
+
+  // Load the elf
+  elf -> load();
+
+  // Get the entry point
+  void (*entry_point)(void *) = (void (*)(void *))elf -> get_header() -> entry;
+
+  // Create the main thread
+  Thread* main_thread = new Thread(entry_point, args, 0, this);
+
+  // Add the thread
+  add_thread(main_thread);
+}
+
 
 /**
  * @brief Destructor for the Process class
@@ -238,3 +256,4 @@ void Process::set_up() {
   }
 
 }
+

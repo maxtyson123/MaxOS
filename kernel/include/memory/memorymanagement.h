@@ -71,12 +71,12 @@ namespace MaxOS{
               // Internal Memory Management
               void* handle_malloc(size_t size);
               void handle_free(void* pointer);
+              VirtualMemoryManager* get_vmm();
 
               // Utility Functions
               int memory_used();
               size_t align(size_t size);
               static void switch_active_memory_manager(MemoryManager* manager);
-
 
               // Higher Half Memory Management
               static void* to_higher_region(uintptr_t physical_address);

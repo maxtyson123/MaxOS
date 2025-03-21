@@ -12,6 +12,7 @@
 #include <memory/virtual.h>
 #include <memory/memorymanagement.h>
 #include <memory/memoryIO.h>
+#include <processes/elf.h>
 
 
 namespace MaxOS
@@ -78,7 +79,7 @@ namespace MaxOS
 
             public:
                 Process(string name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
-                //Process(string name, void *args, ELF STUFF);  // Task from ELF
+                Process(string name, void *args, Elf64* elf);
                 ~Process();
 
                 void set_up();

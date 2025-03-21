@@ -379,6 +379,16 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
 
 }
 
+/**
+ * Gets the active virtual memory manager
+ * @return The active virtual memory manager
+ */
+VirtualMemoryManager *MemoryManager::get_vmm() {
+
+  // Return the virtual memory manager
+  return m_virtual_memory_manager;
+
+}
 
 //Redefine the default object functions with memory orientated ones (defaults disabled in makefile)
 
