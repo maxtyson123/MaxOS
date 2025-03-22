@@ -269,8 +269,9 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
   uint64_t faulting_address;
   asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 
-  ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
-         faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+  CPU::prepare_for_panic();
+  _kpanicf("Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n", faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+  CPU::PANIC("See above message for more information", status);
 }
 
 /**
@@ -280,7 +281,8 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
 void InterruptManager::general_protection_fault(system::cpu_status_t *status) {
     uint64_t error_code = status->error_code;
 
-    ASSERT(false, "General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Non-Protection Exception");
-
+    CPU::prepare_for_panic();
+    _kpanicf("General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Not a Protection Exception");
+    CPU::PANIC("See above message for more information", status);
 
 }

@@ -10,7 +10,9 @@
 #include <drivers/driver.h>
 #include <drivers/console/console.h>
 #include <common/logo.h>
+#include <common/logo_kp.h>
 #include <common/colour.h>
+#include <system/cpu.h>
 
 namespace MaxOS{
 
@@ -46,11 +48,14 @@ namespace MaxOS{
                     void set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour) final;
                     void set_background_color(uint16_t x, uint16_t y, common::ConsoleColour) final;
 
+                    void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background, char fill) final;
+
                     char get_character(uint16_t x, uint16_t y) final;
                     common::ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
                     common::ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
 
                     void print_logo();
+                    void print_logo_kernel_panic();
             };
 
         }

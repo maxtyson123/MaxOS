@@ -11,6 +11,7 @@ using namespace MaxOS::common;
 extern uint64_t p4_table[];
 
 PhysicalMemoryManager* PhysicalMemoryManager::s_current_manager = nullptr;
+extern uint64_t _kernel_start;
 extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
@@ -74,16 +75,18 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   }
   _kprintf("Mapped: physical = 0x%x-0x%x, virtual = 0x%x-0x%x\n", 0, physical_address, MemoryManager::s_hh_direct_map_offset, virtual_address); // TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem
 
-  // Get the bitmap & clear it
+  // Calculate the bitmap address
   m_anonymous_memory_physical_address += s_page_size;
   m_bit_map = get_bitmap_address();
 
+  // Clear the bitmap
   for (uint32_t i = 0; i < m_total_entries; ++i)
     m_bit_map[i] = 0;
-  _kprintf("Bitmap: location = 0x%x - 0x%x\n", m_bit_map, m_bit_map + m_bitmap_size / 8);
 
+  // Reserve the area for the bitmap
+  _kprintf("Bitmap: location = 0x%x - 0x%x (range of 0x%x)\n", m_bit_map, m_bit_map + m_bitmap_size / 8, m_bitmap_size / 8);
+  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
 
-  //end_of_reserved_area = m_anonymous_memory_physical_address + page size
 
   // Calculate how much space the kernel takes up
   uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
@@ -93,17 +96,9 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   }
 
   // Reserve the kernel in the bitmap
-  uint32_t kernel_rows = kernel_entries / ROW_BITS;
-  for (uint32_t i = 0; i < kernel_rows; ++i)
-      m_bit_map[i] = 0xFFFFFFFF;
+  _kprintf("Kernel: location = 0x%x - 0x%x (range of 0x%x)\n", 0, m_anonymous_memory_physical_address, kernel_entries * s_page_size);
+  reserve(0, kernel_entries * s_page_size);
 
-  // Change the final row to account for the remaining bits
-  m_bit_map[kernel_rows] = ~(0ul) << (kernel_entries - (kernel_rows * 64));
-  m_used_frames = kernel_entries;
-  _kprintf("Kernel: entries = %d, rows = %d, used = %d\n", kernel_entries, kernel_rows, m_used_frames);
-
-  // Reserve the area for the bitmap
-  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 + 1);
 
   // Reserve the area for the mmap
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
@@ -118,6 +113,20 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
     // Reserve the area
     reserve(entry->addr, entry->len);
+  }
+
+  // Reserve the area for each multiboot module
+  for(multiboot_tag* tag = multiboot -> get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+
+    // Check if the tag is a module
+    if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
+      continue;
+
+    // Get the module tag
+    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+
+    // Reserve the address
+    reserve(module->mod_start, module->mod_end - module->mod_start);
   }
 
   // Initialisation Done
@@ -224,10 +233,6 @@ void* PhysicalMemoryManager::allocate_frame() {
       uint64_t frame_address = (row * ROW_BITS) + column;
       frame_address *= s_page_size;
 
-
-      // Make sure we are using the mem mapped region (TODO: This should be handled by being reserved)
-      if(frame_address < m_kernel_end)
-        continue;
 
       // Clear the lock
       m_lock.unlock();
@@ -880,6 +885,8 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
   m_bit_map[address / ROW_BITS] |= (1 << (address % ROW_BITS));
 
 
+  _kprintf("Reserved Address: 0x%x\n", address);
+
 }
 
 /**
@@ -897,7 +904,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
 
   // Align address and size to page boundaries
   address = align_direct_to_page(address);
-  size = align_to_page(size);
+  size = align_up_to_page(size, s_page_size);
 
   // Calculate how many pages need to be reserved
   size_t page_count = size / s_page_size;
@@ -908,7 +915,10 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
     m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
   }
 
+  // Update the used frames
+  m_used_frames += page_count;
+
   // Clear the lock
   m_lock.unlock();
-  _kprintf("Reserved Address: 0x%x - 0x%x\n", address, address + size);
+  _kprintf("Reserved Address: 0x%x - 0x%x (length of 0x%x)\n", address, address + size, size);
 }

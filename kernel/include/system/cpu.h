@@ -70,13 +70,14 @@ namespace MaxOS{
       private:
         static CPU* s_instance;
 
-
       public:
 
         CPU();
         ~CPU();
 
-        static void PANIC(const char* message);
+        static bool is_panicking;
+        static void prepare_for_panic();
+        static void PANIC(const char* message, cpu_status_t* status = nullptr);
         static void halt();
 
         void init_tss();

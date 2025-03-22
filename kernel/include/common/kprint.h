@@ -24,4 +24,5 @@
 
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...);
 
+
 #endif // MAXOS_KPRINT_H

@@ -63,28 +63,28 @@ void CPU::set_status(cpu_status_t *status) {
 void CPU::print_registers(cpu_status_t *status) {
 
     // Print the registers
-    _kprintf("%hR15: 0x%x\n", status->r15);
-    _kprintf("%hR14: 0x%x\n", status->r14);
-    _kprintf("%hR13: 0x%x\n", status->r13);
-    _kprintf("%hR12: 0x%x\n", status->r12);
-    _kprintf("%hR11: 0x%x\n", status->r11);
-    _kprintf("%hR10: 0x%x\n", status->r10);
-    _kprintf("%hR9: 0x%x\n", status->r9);
-    _kprintf("%hR8: 0x%x\n", status->r8);
-    _kprintf("%hRDI: 0x%x\n", status->rdi);
-    _kprintf("%hRSI: 0x%x\n", status->rsi);
-    _kprintf("%hRBP: 0x%x\n", status->rbp);
-    _kprintf("%hRDX: 0x%x\n", status->rdx);
-    _kprintf("%hRCX: 0x%x\n", status->rcx);
-    _kprintf("%hRBX: 0x%x\n", status->rbx);
-    _kprintf("%hRAX: 0x%x\n", status->rax);
-    _kprintf("%hINTERRUPT NUMBER: 0x%x\n", status->interrupt_number);
-    _kprintf("%hERROR CODE: 0x%x\n", status->error_code);
-    _kprintf("%hRIP: 0x%x\n", status->rip);
-    _kprintf("%hCS: 0x%x\n", status->cs);
-    _kprintf("%hRFLAGS: 0x%x\n", status->rflags);
-    _kprintf("%hRSP: 0x%x\n", status->rsp);
-    _kprintf("%hSS: 0x%x\n", status->ss);
+    _kpanicf("%hR15: \t0x%x\n", status->r15);
+    _kpanicf("%hR14: \t0x%x\n", status->r14);
+    _kpanicf("%hR13: \t0x%x\n", status->r13);
+    _kpanicf("%hR12: \t0x%x\n", status->r12);
+    _kpanicf("%hR11: \t0x%x\n", status->r11);
+    _kpanicf("%hR10: \t0x%x\n", status->r10);
+    _kpanicf("%hR9: \t0x%x\n", status->r9);
+    _kpanicf("%hR8: \t0x%x\n", status->r8);
+    _kpanicf("%hRDI: \t0x%x\n", status->rdi);
+    _kpanicf("%hRSI: \t0x%x\n", status->rsi);
+    _kpanicf("%hRBP: \t0x%x\n", status->rbp);
+    _kpanicf("%hRDX: \t0x%x\n", status->rdx);
+    _kpanicf("%hRCX: \t0x%x\n", status->rcx);
+    _kpanicf("%hRBX: \t0x%x\n", status->rbx);
+    _kpanicf("%hRAX: \t0x%x\n", status->rax);
+    _kpanicf("%hINT: \t0x%x\n", status->interrupt_number);
+    _kpanicf("%hERRCD: \t0x%x\n", status->error_code);
+    _kpanicf("%hRIP: \t0x%x\n", status->rip);
+    _kpanicf("%hCS: \t0x%x\n", status->cs);
+    _kpanicf("%hRFlGS: \t0x%x\n", status->rflags);
+    _kpanicf("%hRSP: \t0x%x\n", status->rsp);
+    _kpanicf("%hSS: \t0x%x\n", status->ss);
 
 }
 
@@ -124,7 +124,7 @@ void CPU::stack_trace(size_t level) {
     while (current_level < level && frame != nullptr){
 
         // Print the frame
-        _kprintf("%h(%d);\t at 0x%x\n", current_level, frame->rip);
+        _kpanicf("%h(%d):\t at 0x%x\n", current_level, frame->rip);
 
         // Next frame
         frame = frame -> next;
@@ -134,10 +134,17 @@ void CPU::stack_trace(size_t level) {
 }
 
 #include <processes/scheduler.h>
-void CPU::PANIC(char const *message) {
+bool CPU::is_panicking = false;
+void CPU::PANIC(char const *message, cpu_status_t* status) {
+
+  //TODO: Depending on what happened we could just kill the active process and continue, remember to enable interrupts
 
   // Stop interrupts
   asm volatile("cli");
+
+  // Ensure ready to panic
+  if(!is_panicking)
+    prepare_for_panic();
 
   // Print using the backend
   _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
@@ -146,7 +153,7 @@ void CPU::PANIC(char const *message) {
   // Get the running process
   Process* process = Scheduler::get_current_process();
   _kpanicf("Process: %s\n", process ? process->name.c_str() : "Kernel");
-  _kpanicf("After running for %d ticks\n", Scheduler::get_system_scheduler()->get_ticks());
+  _kpanicf("After running for %d ticks (system uptime: %d ticks)\n", process -> get_total_ticks(), Scheduler::get_system_scheduler()->get_ticks());
 
   // Stack trace
   _kpanicf("----------------------------\n");
@@ -156,12 +163,25 @@ void CPU::PANIC(char const *message) {
   // Register dump
   _kpanicf("----------------------------\n");
   _kpanicf("Register Dump:\n");
-  cpu_status_t status;
-  get_status(&status);
-  print_registers(&status);
+
+  if(!status){
+    cpu_status_t* new_status = new cpu_status_t();                              // Who cares about freeing we're fucked anyway at this point
+    get_status(new_status);
+    status = new_status;
+  }
+  print_registers(status);
+
+  // Print some text to the user
+  _kpanicf("----------------------------\n");
+  _kpanicf("%hThere has been a fatal error in MaxOS and the system has been halted.\n");
+  _kpanicf("%hPlease restart the system. \n");
+
+
+  // Print the logo
+  _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+  _kpanicf("print_logo_kernel_panic();\n\067");
 
   // Halt
-  _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
   halt();
 
 }
@@ -259,5 +279,18 @@ CPU *CPU::get_instance() {
     return s_instance;
 
   return new CPU();
+
+}
+
+/**
+ * @brief Final preparation for a panic, currently just sets the panicking flag
+ */
+void CPU::prepare_for_panic() {
+
+  // We are panicking
+  is_panicking = true;
+
+  // Clear the first line
+  _kpanicf("%h\n\n\n");
 
 }

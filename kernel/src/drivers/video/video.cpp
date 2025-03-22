@@ -7,6 +7,7 @@
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::common;
 
+
 VideoDriver::VideoDriver()
 : Driver(),
   GraphicsContext()

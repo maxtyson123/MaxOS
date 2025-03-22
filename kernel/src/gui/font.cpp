@@ -60,8 +60,6 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
                      common::GraphicsContext *context, string text,
                      common::Rectangle<int32_t> limitArea)
 {
-
-
     // Convert the colours
     uint32_t foreground = context->colour_to_int(foreground_colour);
     uint32_t background = context->colour_to_int(background_colour);
@@ -122,6 +120,14 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
 
         }
     }
+
+    // Draw the bottom 2  "spacing lines"
+    for (int yBitMapOffset = yLimit; yBitMapOffset < yLimit + 2; yBitMapOffset++) {
+        for (int xBitMapOffset = limitArea.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
+            context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, background);
+        }
+    }
+
 }
 
 /**

@@ -16,7 +16,6 @@ namespace MaxOS {
         namespace console {
 
 
-
             /**
              * @class Console
              * @brief Abstract class for a console, allows for the printing of characters and strings with colours
@@ -77,6 +76,9 @@ namespace MaxOS {
                   void put_character(uint16_t x, uint16_t y, char c) override;
                   void set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour foreground) override;
                   void set_background_color(uint16_t x, uint16_t y, common::ConsoleColour background) override;
+
+                  void scroll_up() override;
+                  void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::LightGrey, common::ConsoleColour background = common::Black, char fill= ' ') override;
 
                   char get_character(uint16_t x, uint16_t y) override;
                   common::ConsoleColour get_foreground_color(uint16_t x, uint16_t y) override;
