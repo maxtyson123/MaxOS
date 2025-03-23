@@ -40,7 +40,7 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
   m_ticks++;
 
   // Wait for ticks to be div by 10 so it switches every 10 ticks
-  if (m_ticks % 10 != 0) return cpu_state; //TODO: Make this automatic for debug builds maybe so that its easier to see errors with out them being overwritten
+//  if (m_ticks % 10 != 0) return cpu_state; //TODO: Make this automatic for debug builds maybe so that its easier to see errors with out them being overwritten
 
   // Thread that we are dealing with
   Thread* current_thread = m_threads[m_current_thread_index];
@@ -48,7 +48,6 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
   // If there are no threads to schedule, return the current state
   if (current_thread == nullptr)
     return cpu_state;
-
 
   // Save the current state
   current_thread->execution_state = cpu_state;
@@ -73,9 +72,9 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
 
       case ThreadState::SLEEPING:
 
-        // If the wake-up time hasn't occurred yet, return
+        // If the wake-up time hasn't occurred yet, run the next thread
         if (current_thread->wakeup_time > m_ticks)
-          return cpu_state;
+          return schedule(cpu_state);
 
         // Wake up the thread
         current_thread->thread_state = ThreadState::RUNNING;
@@ -94,7 +93,8 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
         // Remove the thread
         m_threads.erase(m_threads.begin() + m_current_thread_index);
 
-        break;
+        // Run the next thread
+        return schedule(cpu_state);
 
       default:
         break;
@@ -176,7 +176,11 @@ uint64_t Scheduler::get_ticks() {
  */
 void Scheduler::yield() {
 
-  // Interrupt
+  // If this is the only thread, can't yield
+  if (m_threads.size() == 1)
+      return;
+
+  // Schedule the next thread
   asm("int $0x20");
 }
 
@@ -190,25 +194,34 @@ void Scheduler::activate() {
 /**
  * @brief Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped)
  * @param process The process to remove
+ * @param force If true, the process will be removed and so will all threads
  * @return -1 if the process has threads, 0 otherwise
  */
-uint64_t Scheduler::remove_process(Process *process) {
+uint64_t Scheduler::remove_process(Process *process, bool force) {
 
   // Check if the process has no threads
   if (!process->get_threads().empty()) {
 
-    // Set the threads to stopped
+    // Set the threads to stopped or remove them if forced
     for (auto thread : process->get_threads())
-      thread->thread_state = ThreadState::STOPPED;
+      if (force)
+        process->remove_thread(thread->tid);
+      else
+        thread->thread_state = ThreadState::STOPPED;
 
     // Return as we can't remove the process
-    return -1;
+    if(!force)
+      return -1;
   }
 
   // Remove the process
   for (uint16_t i = 0; i < m_processes.size(); i++) {
     if (m_processes[i] == process) {
         m_processes.erase(m_processes.begin() + i);
+
+        // Delete the process mem
+        delete process;
+
         return 0;
     }
   }
@@ -242,5 +255,34 @@ Process *Scheduler::get_current_process() {
  */
 void Scheduler::deactivate() {
     m_active = false;
+
+}
+
+/**
+ * @brief Loads any valid ELF files from the multiboot structure
+ *
+ * @param multiboot The multiboot structure
+ */
+void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
+
+  for(multiboot_tag* tag = multiboot -> get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+    if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
+      continue;
+
+    // Get the module tag
+    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+
+    // Create the elf
+    Elf64* elf = new Elf64((uintptr_t)MemoryManager::to_dm_region((uintptr_t )module->mod_start));
+    if(!elf->is_valid())
+      continue;
+
+    _kprintf("Creating process from multiboot module for %s (at 0x%x)\n", module->cmdline, module->mod_start);
+
+    // Create the process
+    Process* process = new Process(module->cmdline, nullptr, 0, elf);
+
+    _kprintf("Elf loaded to pid %d\n", process->get_pid());
+  }
 
 }

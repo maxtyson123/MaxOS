@@ -88,8 +88,10 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
+ConsoleStream* active_stream = nullptr;
+
 extern volatile uint64_t p4_table[512];
-extern "C" void kernelMain(unsigned long addr, unsigned long magic)
+extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 {
     // Initialise the serial console
     SerialConsole serialConsole;
@@ -105,7 +107,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     _kprintf("-= IDT set up =-\n");
 
     uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
-    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, p4_table);
+    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, (uint64_t*)p4_table);
     _kprintf("-= Physical Memory Manager set up =-\n");
 
     VirtualMemoryManager vmm(true);
@@ -132,6 +134,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 0, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
+    active_stream = &cout;
 
     // Header constants
     const string tick = (string)"[ " + ANSI_COLOURS[FG_Green] + "OK" + ANSI_COLOURS[Reset] + " ]";
@@ -163,7 +166,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     Scheduler scheduler;
     log("Set Up Scheduler");
 
-    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
+    SyscallHandler syscalls(&interrupts, 0x80);
     log("Set Up Syscalls");
 
     DriverManager driverManager;
@@ -209,6 +212,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     // CPU
     CPU cpu;
+    cpu.init_tss();
     log("Set Up CPU");
 
     // Clock
@@ -224,6 +228,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     driverSelectors.push_back(&PCIController);
     log("Set Up PCI");
 
+    //USB
+//    UniversalSerialBusController USBController;
+//    driverSelectors.push_back(&USBController);
+//    log("Set Up USB");
+
     header("Device Management")
 
     // Find the drivers
@@ -234,7 +243,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
       (*selector)->select_drivers(&driverManager, &interrupts);
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
-
 
     // Resetting devices
     cout << "Resetting Devices" << ANSI_COLOURS[FG_White];
@@ -250,15 +258,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 17 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "RESET" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
-    // Enable TSS
-    cpu.init_tss();
-    log("Initialised TSS");
-
     // Interrupts
     interrupts.activate();
     log("Activating Interrupts");
 
-    // Post interupt activation
+    // Post interrupt activation
     kernelClock.calibrate();
     kernelClock.delay(resetWaitTime);
     Time now = kernelClock.get_time();
@@ -290,21 +294,23 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "\n\n";
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
     cout << ANSI_COLOURS[FG_Cyan] << string(" -- Kernel Ready --").center(boot_width) << "\n";
-    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
-
+    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << ANSI_COLOURS[Reset] << "\n";
+    cout.set_cursor(0, console.height() - 1);
 
     // Idle Process
     Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
     idle->memory_manager = &memoryManager;
+
+    // Load executables
+    scheduler.load_multiboot_elfs(&multiboot);
 
     // Start the Scheduler
     scheduler.activate();
 
 
     // TODO:
-    //       - Load Elfs
-    //       - IPC
-    //       - Doxygen for classes & structs
+    //       - Syscalls test, IPC
+    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main
 
 
     /// Boot Done ///
@@ -314,11 +320,18 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     /// How this idle works:
     ///  I was debugging along and released that on the first ever schedule it will
     ///  set current_thread->execution_state = cpu_state; where it is assumed cpu_state
-    ///  is the previous thread state and thus saves it in that thread. However,
-    ///  as no threads have been scheduled yet that is the cpu state of the kernel.
+    ///  is the current thread state (ie what we have just been scheduling) and
+    ///  thus saves it in that thread. However, as the first thread has not had a
+    ///  chance to be scheduled yet, the current state is not the expected first
+    ///  thread's state and instead is the cpu state of the kernel.
     ///  Now I could either fix that or leave it in as a cool way of never fully
     ///  leaving kernelMain and  also having a idle_proc
-    while (true)
-      asm("hlt");
+    while (true){
 
+      // yeild ? wait until figured out the task manager cpu %
+
+      // Make sure the compiler doesn't optimise the loop away
+      asm("nop");
+
+    }
 }

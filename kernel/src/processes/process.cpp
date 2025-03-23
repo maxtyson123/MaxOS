@@ -84,12 +84,16 @@ void Thread::sleep(size_t milliseconds) {
  * @param name The name of the process
  * @param _entry_point The entry point of the process
  * @param args The arguments to pass to the process
+ * @param arg_amount The amount of arguments
+ * @param is_kernel If the process is a kernel process
  */
 Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
 : is_kernel(is_kernel),
   name(p_name)
 {
 
+  // Basic setup
+  set_up();
 
   // Create the main thread
   Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
@@ -100,13 +104,15 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args, int ar
 }
 
 /**
- * @brief Constructor for the Process class (from an elf)
+ * @brief Constructor for the Process class (from an elf, will free the elf memory after loading)
  *
  * @param name  The name of the process
  * @param args  The arguments to pass to the process
+ * @param arg_amount  The amount of arguments
  * @param elf  The elf file to load the process from
+ * @param is_kernel  If the process is a kernel process
  */
-Process::Process(string p_name, void *args, Elf64 *elf)
+Process::Process(string p_name, void *args, int arg_amount, Elf64* elf, bool is_kernel)
 : is_kernel(is_kernel),
   name(p_name)
 {
@@ -121,10 +127,13 @@ Process::Process(string p_name, void *args, Elf64 *elf)
   void (*entry_point)(void *) = (void (*)(void *))elf -> get_header() -> entry;
 
   // Create the main thread
-  Thread* main_thread = new Thread(entry_point, args, 0, this);
+  Thread* main_thread = new Thread(entry_point, args, arg_amount, this);
 
   // Add the thread
   add_thread(main_thread);
+
+  // Free the elf
+  delete elf;
 }
 
 
@@ -257,3 +266,15 @@ void Process::set_up() {
 
 }
 
+/**
+ * @brief Gets the total ticks of the threads in the process (not this does not include any past killed threads)
+ * @return The total ticks of the threads in the process
+ */
+uint64_t Process::get_total_ticks() {
+
+  uint64_t total_ticks = 0;
+  for (auto thread : m_threads)
+    total_ticks += thread->ticks;
+
+  return total_ticks;
+}

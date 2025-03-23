@@ -1,9 +1,8 @@
-# Set the standard and flags
-SET(CMAKE_CXX_STANDARD 20)
+# Set the flags
 SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra  -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -fno-use-cxa-atexit")
 
 # Disable certain warnings
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function")
 
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "-f elf64")

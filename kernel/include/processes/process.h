@@ -79,7 +79,7 @@ namespace MaxOS
 
             public:
                 Process(string name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
-                Process(string name, void *args, Elf64* elf);
+                Process(string name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
                 ~Process();
 
                 void set_up();
@@ -90,6 +90,7 @@ namespace MaxOS
 
                 void set_pid(uint64_t pid);
                 uint64_t get_pid();
+                uint64_t get_total_ticks();
 
                 bool is_kernel;
 

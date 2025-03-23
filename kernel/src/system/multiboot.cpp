@@ -17,8 +17,7 @@ Multiboot::Multiboot(unsigned long address)
     _kprintf("Multiboot\n");
 
     // Loop through the tags and load them
-    struct multiboot_tag *tag;
-    for(tag=(struct multiboot_tag *)(m_base_address + MemoryManager::s_higher_half_kernel_offset + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+    for(multiboot_tag* tag = get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
       switch (tag -> type) {
           case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
@@ -58,7 +57,17 @@ Multiboot::Multiboot(unsigned long address)
           case MULTIBOOT_TAG_TYPE_ACPI_NEW:
                 m_new_acpi = (multiboot_tag_new_acpi *)tag;
                 break;
-      }
+
+          case MULTIBOOT_TAG_TYPE_MODULE:
+              multiboot_tag_module *module;
+              module = (multiboot_tag_module *)tag;
+              _kprintf("Module: start=0x%x, end=0x%x, cmdline=%s\n",
+                        (unsigned) module->mod_start,
+                        (unsigned) module->mod_end,
+                        module->cmdline);
+              m_module = module;
+              break;
+          }
     }
 }
 
@@ -103,15 +112,14 @@ multiboot_tag_new_acpi *Multiboot::get_new_acpi() {
 }
 
 /**
- * @brief Check if an address is reserved
+ * @brief Check if an address is reserved by a multiboot module
  * @param address The address to check
  * @return True if the address is reserved
  */
 bool Multiboot::is_reserved(multiboot_uint64_t address) {
 
   // Loop through the tags checking if the address is reserved
-  struct multiboot_tag *tag;
-  for(tag=(struct multiboot_tag *)(m_base_address + MemoryManager::s_higher_half_kernel_offset + 8); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+  for(multiboot_tag* tag = get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
       // Check if the tag is a module
       if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
@@ -129,4 +137,14 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
   // Not part of multiboot
   return false;
 
+}
+
+/**
+ * Get the start tag of the multiboot information (useful for iterating through the tags)
+ *
+ * @return The start tag
+ */
+multiboot_tag *Multiboot::get_start_tag() {
+
+  return (multiboot_tag*)(m_base_address + MemoryManager::s_higher_half_kernel_offset + 8);
 }

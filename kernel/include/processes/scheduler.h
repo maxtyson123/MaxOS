@@ -41,7 +41,7 @@ namespace MaxOS{
         system::cpu_status_t* schedule(system::cpu_status_t* status);
 
         uint64_t add_process(Process* process);
-        uint64_t remove_process(Process* process);
+        uint64_t remove_process(Process* process, bool forced = false);
         uint64_t add_thread(Thread* thread);
 
         static Scheduler* get_system_scheduler();
@@ -49,6 +49,8 @@ namespace MaxOS{
 
         uint64_t get_ticks();
         void yield();
+
+        void load_multiboot_elfs(system::Multiboot* multiboot);
 
         void activate();
         void deactivate();
