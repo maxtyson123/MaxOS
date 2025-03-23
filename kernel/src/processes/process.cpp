@@ -3,6 +3,7 @@
 //
 #include <processes/process.h>
 #include <common/kprint.h>
+#include <processes/scheduler.h>    //TODO: This is a circular dependency, need to fix, make the scheduler handle that sorta stuff
 
 using namespace MaxOS;
 using namespace MaxOS::system;

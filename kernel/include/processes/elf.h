@@ -9,6 +9,7 @@
 #include <stddef.h>
 
 #include <memory/memorymanagement.h>
+#include <memory/memoryIO.h>
 
 namespace MaxOS
 {

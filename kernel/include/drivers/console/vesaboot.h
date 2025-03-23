@@ -13,6 +13,7 @@
 #include <common/logo_kp.h>
 #include <common/colour.h>
 #include <system/cpu.h>
+#include <memory/memoryIO.h>
 
 namespace MaxOS{
 

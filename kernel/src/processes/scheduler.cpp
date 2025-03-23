@@ -3,16 +3,20 @@
 //
 
 #include <processes/scheduler.h>
+#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
+using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::system;
 
 
 Scheduler* Scheduler::s_instance = nullptr;
 
-Scheduler::Scheduler()
-: m_current_thread_index(0),
+Scheduler::Scheduler(InterruptManager* interrupt_manager)
+: InterruptHandler(0x20, interrupt_manager),
+  m_current_thread_index(0),
   m_active(false),
   m_ticks(0),
   m_next_pid(-1),
@@ -29,8 +33,27 @@ Scheduler::~Scheduler() {
 
 }
 
-#include <common/kprint.h>
-system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
+/**
+ * @brief Handles the interrupt 0x20
+ * @param status The current CPU status
+ * @return The new CPU status
+ */
+cpu_status_t* Scheduler::handle_interrupt(cpu_status_t *status) {
+
+    // Schedule the next thread
+    return schedule(status);
+
+    /// Note: Could have set scheduler to just be the handle interrupt function,
+    ////      but in the future there may be a need to schedule at other times
+}
+
+
+/**
+ * @brief Schedules the next thread to run
+ * @param cpu_state The current CPU state
+ * @return The next CPU state
+ */
+cpu_status_t *Scheduler::schedule(cpu_status_t* cpu_state) {
 
   // If there are no threads to schedule or not active, return the current state
   if (m_threads.empty() || !m_active)
@@ -39,8 +62,10 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
   // Ticked
   m_ticks++;
 
-  // Wait for ticks to be div by 10 so it switches every 10 ticks
-//  if (m_ticks % 10 != 0) return cpu_state; //TODO: Make this automatic for debug builds maybe so that its easier to see errors with out them being overwritten
+
+  // Switch every 10 ticks (this is so that the panic handler can have a chance to run)
+  if (m_ticks % 10 != 0) return cpu_state;
+
 
   // Thread that we are dealing with
   Thread* current_thread = m_threads[m_current_thread_index];
@@ -56,8 +81,8 @@ system::cpu_status_t *Scheduler::schedule(system::cpu_status_t* cpu_state) {
 
   // Switch to the next thread
   m_current_thread_index++;
-  if (m_current_thread_index >= m_threads.size())
-      m_current_thread_index = 0;
+  m_current_thread_index %= m_threads.size();
+
   current_thread = m_threads[m_current_thread_index];
 
   // If the current thread is in the process then we can get the process
@@ -153,14 +178,14 @@ uint64_t Scheduler::add_thread(Thread *thread) {
 
 /**
  * @brief Gets the system scheduler
- * @return The system scheduler
+ * @return The system scheduler or nullptr if not found
  */
 Scheduler *Scheduler::get_system_scheduler() {
 
   if(s_instance)
     return s_instance;
 
-  return new Scheduler();
+  return nullptr;
 }
 
 /**
@@ -240,14 +265,24 @@ Process *Scheduler::get_current_process() {
   Process* current_process = nullptr;
 
   // Find the process that has the thread being executed
-  for (auto process : s_instance -> m_processes) {
-    if (process->get_pid() == s_instance -> m_threads[s_instance -> m_current_thread_index]->parent_pid) {
+  for (auto process : s_instance -> m_processes)
+    if (process->get_pid() == get_current_thread() -> parent_pid) {
       current_process = process;
       break;
     }
-  }
 
   return current_process;
+}
+
+
+/**
+ * @brief Gets the currently executing thread
+ * @return The currently executing thread
+ */
+Thread *Scheduler::get_current_thread() {
+
+  return s_instance -> m_threads[s_instance -> m_current_thread_index];
+
 }
 
 /**

@@ -7,6 +7,7 @@
 
 #include <common/vector.h>
 #include <system/cpu.h>
+#include <hardwarecommunication/interrupts.h>
 #include <processes/process.h>
 #include <memory/memorymanagement.h>
 
@@ -18,7 +19,7 @@ namespace MaxOS{
      * @class Scheduler
      * @brief Schedules processes to run on the CPU
      */
-    class Scheduler{
+     class Scheduler : public hardwarecommunication::InterruptHandler {
 
       private:
         common::Vector<Process*> m_processes;
@@ -35,9 +36,11 @@ namespace MaxOS{
 
 
       public:
-        Scheduler();
+        Scheduler(hardwarecommunication::InterruptManager* interrupt_manager);
         ~Scheduler();
 
+
+        system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
         system::cpu_status_t* schedule(system::cpu_status_t* status);
 
         uint64_t add_process(Process* process);
@@ -46,6 +49,7 @@ namespace MaxOS{
 
         static Scheduler* get_system_scheduler();
         static Process*   get_current_process();
+        static Thread*    get_current_thread();
 
         uint64_t get_ticks();
         void yield();

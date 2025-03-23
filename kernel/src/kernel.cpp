@@ -163,10 +163,10 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up Memory Manager (Kernel)");
     log("Set Up Video Driver");
 
-    Scheduler scheduler;
+    Scheduler scheduler(&interrupts);
     log("Set Up Scheduler");
 
-    SyscallHandler syscalls(&interrupts, 0x80);
+    SyscallManager syscalls(&interrupts);
     log("Set Up Syscalls");
 
     DriverManager driverManager;
@@ -229,9 +229,9 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up PCI");
 
     //USB
-//    UniversalSerialBusController USBController;
-//    driverSelectors.push_back(&USBController);
-//    log("Set Up USB");
+    //UniversalSerialBusController USBController;
+    //driverSelectors.push_back(&USBController);
+    //log("Set Up USB");
 
     header("Device Management")
 
@@ -300,11 +300,14 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     // Idle Process
     Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
     idle->memory_manager = &memoryManager;
+    scheduler.add_process(idle);
+    idle->set_pid(0);
 
     // Load executables
     scheduler.load_multiboot_elfs(&multiboot);
 
-    // Start the Scheduler
+    // Start the Scheduler & updates the clock handler
+    interrupts.set_interrupt_handler(0x20, &scheduler);
     scheduler.activate();
 
 
@@ -327,6 +330,9 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     ///  Now I could either fix that or leave it in as a cool way of never fully
     ///  leaving kernelMain and  also having a idle_proc
     while (true){
+
+      // Print the ticks (debuging)
+      //_kprintf("%hTick: %d\r", scheduler.get_ticks());
 
       // yeild ? wait until figured out the task manager cpu %
 

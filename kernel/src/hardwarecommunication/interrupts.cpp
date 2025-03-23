@@ -9,7 +9,6 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
-using namespace MaxOS::processes;
 
 // Define the static variables
 
@@ -19,7 +18,7 @@ InterruptDescriptor InterruptManager::s_interrupt_descriptor_table[256];
 
 ///__Handler__
 
-InterruptHandler::InterruptHandler(uint8_t interrupt_number, InterruptManager* interrupt_manager)
+InterruptHandler::InterruptHandler(uint8_t interrupt_number, InterruptManager* interrupt_manager)   //TODO: Make static so that it can be called without an instance
 : m_interrupt_number(interrupt_number),
   m_interrupt_manager(interrupt_manager)
 {
@@ -35,11 +34,25 @@ InterruptHandler::~InterruptHandler(){
 
 }
 
+
 void InterruptHandler::handle_interrupt() {
 
 }
 
+/**
+ * @brief Handles an interrupt and returns the status
+ * @param status The status of the CPU
+ * @return  The status of the CPU
+ */
+system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t *status) {
 
+  // For handlers that dont care about the status
+  handle_interrupt();
+
+  // Return the status
+  return status;
+
+}
 
 ///__Manger__
 
@@ -232,28 +245,21 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
 
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
+  // Where to go afterwards
+  cpu_status_t* new_status = status;
+
   // If there is an interrupt manager, handle the interrupt
   if(m_interrupt_handlers[status -> interrupt_number] != 0)
-      m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
+    new_status = m_interrupt_handlers[status -> interrupt_number]->handle_interrupt(status);
   else
     _kprintf("Unhandled Interrupt 0x%x\n", status->interrupt_number);
 
   // Send the EOI to the APIC
   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
-      m_local_apic->send_eoi();
-
-  // System Handlers (post initialisation)
-  switch (status->interrupt_number) {
-      case 0x20:
-        return Scheduler::get_system_scheduler() -> schedule(status);
-
-//      case 0x80:
-//        return SyscallHandler::get_syscall_handler() -> handle_syscall(status);
-
-  }
+    m_local_apic->send_eoi();
 
   // Return the status
-  return status;
+  return new_status;
 }
 
 void InterruptManager::set_apic(LocalAPIC *apic) {

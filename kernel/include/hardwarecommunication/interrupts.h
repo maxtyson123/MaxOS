@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
-#include <processes/scheduler.h>
 #include <common/inputStream.h>
 #include <common/outputStream.h>
 #include <system/cpu.h>
@@ -36,6 +35,7 @@ namespace MaxOS {
 
             public:
                 virtual void handle_interrupt();
+                virtual system::cpu_status_t* handle_interrupt(system::cpu_status_t* status);
 
         };
 

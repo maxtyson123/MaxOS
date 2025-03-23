@@ -3,6 +3,7 @@
 //
 #include <system/cpu.h>
 #include <common/kprint.h>
+#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
