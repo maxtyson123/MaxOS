@@ -312,8 +312,8 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - Syscalls test, IPC
-    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main
+    //       - lockfree ipc, args for progams
+    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use name::, update notes
 
 
     /// Boot Done ///

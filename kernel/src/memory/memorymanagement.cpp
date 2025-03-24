@@ -9,6 +9,8 @@ using namespace MaxOS;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 
+using namespace MaxOS::system;
+
 MemoryManager* MemoryManager::s_kernel_memory_manager = 0;
 MemoryManager* MemoryManager::s_current_memory_manager = 0;
 
@@ -383,7 +385,7 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
  * Gets the active virtual memory manager
  * @return The active virtual memory manager
  */
-VirtualMemoryManager *MemoryManager::get_vmm() {
+VirtualMemoryManager* MemoryManager::get_vmm() {
 
   // Return the virtual memory manager
   return m_virtual_memory_manager;

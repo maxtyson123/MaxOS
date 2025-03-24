@@ -32,6 +32,10 @@ namespace MaxOS {
 
           String center(int width, char fill = ' ') const;
 
+          // Operators (as functions, todo do the rest)
+          bool equals(String const &other) const;
+
+          // Operators
           String &operator = (String const &other);
           String operator + (String const &other) const;
           String &operator += (String const &other);

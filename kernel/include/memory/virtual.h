@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <memory/physical.h>
+#include <common/string.h>
+
 
 namespace MaxOS {
   namespace memory {
@@ -16,6 +18,7 @@ namespace MaxOS {
    typedef enum VirtualFlags {
     // 0 - (1 << 8) are reserved for the page flags
     Reserve = (1 << 9),
+    Shared = (1 << 10),
 
   } virtual_flags_t;
 
@@ -60,6 +63,7 @@ namespace MaxOS {
 
         void new_region();
 
+
       public:
         VirtualMemoryManager(bool is_kernel);
         ~VirtualMemoryManager();
@@ -67,6 +71,10 @@ namespace MaxOS {
         void* allocate(size_t size, size_t flags);
         void* allocate(uint64_t address, size_t size, size_t flags);
         void free(void* address);
+
+
+        void* load_shared_memory(string name);
+        void* load_shared_memory(uintptr_t physical_address, size_t size);
 
         uint64_t* get_pml4_root_address_physical();
 

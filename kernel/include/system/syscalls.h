@@ -9,8 +9,10 @@
 #include <stddef.h>
 #include <hardwarecommunication/interrupts.h>
 #include <common/vector.h>
-#include <processes/scheduler.h>
 #include <common/colour.h>
+#include <memory/memorymanagement.h>
+#include <common/kprint.h>
+#include <processes/scheduler.h>
 
 
 namespace MaxOS{
@@ -19,6 +21,15 @@ namespace MaxOS{
         // Forward declaration
         class SyscallManager;
 
+        /// DO NOT REARRANGE ONLY APPEND TO
+        enum SyscallType{
+            CLOSE_PROCESS,
+            KLOG,
+            CREATE_SHARED_MEMORY,
+            OPEN_SHARED_MEMORY,
+            ALLOCATE_MEMORY,
+            FREE_MEMORY,
+        };
 
         typedef struct SyscallArguments{
             uint64_t arg0;
@@ -27,6 +38,7 @@ namespace MaxOS{
             uint64_t arg3;
             uint64_t arg4;
             uint64_t arg5;
+            uint64_t return_value;
         } syscall_args_t;
 
         // Could use a class based response but a single class might want multiple handlers eg fs
@@ -52,8 +64,14 @@ namespace MaxOS{
               void set_syscall_handler(uint8_t syscall, syscall_func_t handler);
               void remove_syscall_handler(uint8_t syscall);
 
-              // General Syscalls
-              static syscall_args_t* syscall_write(syscall_args_t* args);
+
+              // Syscalls
+              static system::syscall_args_t* syscall_klog(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_create_shared_memory(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_open_shared_memory(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_allocate_memory(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_free_memory(system::syscall_args_t* args);
+
 
           };
 

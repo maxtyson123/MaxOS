@@ -25,11 +25,16 @@ Scheduler::Scheduler(InterruptManager* interrupt_manager)
 {
   s_instance = this;
 
+  // Create the IPC handler
+  m_ipc = new IPC();
 }
 
 Scheduler::~Scheduler() {
   s_instance = nullptr;
   m_active = false;
+
+  // Delete the IPC handler
+  delete m_ipc;
 
 }
 
@@ -319,5 +324,15 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
 
     _kprintf("Elf loaded to pid %d\n", process->get_pid());
   }
+
+}
+
+/**
+ * @brief Gets the IPC handler
+ * @return The IPC handler or nullptr if not found
+ */
+IPC *Scheduler::get_ipc() {
+
+  return s_instance -> m_ipc;
 
 }

@@ -10,6 +10,7 @@
 #include <hardwarecommunication/interrupts.h>
 #include <processes/process.h>
 #include <memory/memorymanagement.h>
+#include <processes/ipc.h>
 
 namespace MaxOS{
 
@@ -34,6 +35,7 @@ namespace MaxOS{
 
         static Scheduler* s_instance;
 
+        IPC* m_ipc;
 
       public:
         Scheduler(hardwarecommunication::InterruptManager* interrupt_manager);
@@ -50,6 +52,7 @@ namespace MaxOS{
         static Scheduler* get_system_scheduler();
         static Process*   get_current_process();
         static Thread*    get_current_thread();
+        static IPC*       get_ipc();
 
         uint64_t get_ticks();
         void yield();

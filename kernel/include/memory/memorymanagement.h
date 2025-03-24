@@ -46,7 +46,7 @@ namespace MaxOS{
               static MemoryManager* s_current_memory_manager;
               static MemoryManager* s_kernel_memory_manager;
 
-              static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };
+              static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };        //TODO: Move these constants to the pmm as the new structure means this isnt the core class and is instead just an abstract
               static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };
               static const uint64_t s_higher_half_mem_reserved  {  0x280000000 };
               static const uint64_t s_higher_half_offset        { s_higher_half_mem_offset + s_higher_half_mem_reserved};

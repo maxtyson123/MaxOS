@@ -18,10 +18,11 @@ String::String()
 String::String(char const *string)
 {
 
-  // Get the length of the string
+  // Get the length of the string, prevent longer than 10000 because this should mean somthings gone wrong
   m_length = 0;
-  while (string[m_length] != '\0')
+  while (string[m_length] != '\0' && m_length <= 10000)
           m_length++;
+
 
   // Allocate memory for the string (and null terminator)
   m_string = new char[m_length + 1];
@@ -29,6 +30,13 @@ String::String(char const *string)
   // Copy the string
   for (int i = 0; i < m_length; i++)
           m_string[i] = string[i];
+
+  // If the length is more than 10,000 Replace the end with a warning incase future use actually requires that
+  const char* warning = "MAXOS: String length exceeded 10000 - might be a bug";
+  if(m_length > 10000)
+    for (int i = 0; i < 52; i++)
+      m_string[m_length - 52 + i] = warning[i];
+
 
   // Write the null terminator
   m_string[m_length] = '\0';
@@ -176,19 +184,32 @@ int String::length(bool ) const {
  * @param other The other string
  * @return True if the strings are equal, false otherwise
  */
-bool String::operator == (String const &other) const {
+bool String::equals(String const &other) const {
 
-    // Check if the lengths are equal
-    if (m_length != other.length())
+  // Check if the lengths are equal
+  if (m_length != other.length())
+    return false;
+
+  // Check if the characters are equal
+  for (int i = 0; i < m_length; i++)
+    if (m_string[i] != other[i])
       return false;
 
-    // Check if the characters are equal
-    for (int i = 0; i < m_length; i++)
-      if (m_string[i] != other[i])
-        return false;
+  // The strings are equal
+  return true;
 
-    // The strings are equal
-    return true;
+}
+
+/**
+ * @brief Checks if one string is equal to another
+ *
+ * @param other The other string
+ * @return True if the strings are equal, false otherwise
+ */
+bool String::operator == (String const &other) const {
+
+    // Check if the strings are equal
+    return equals(other);
 
 }
 
@@ -427,6 +448,7 @@ String String::center(int width, char fill) const {
     return centered;
 
 }
+
 
 /**
  * @brief Checks if one string is equal to another

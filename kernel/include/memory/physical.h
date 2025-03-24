@@ -104,7 +104,7 @@ namespace MaxOS {
 
 
           // Vars
-          static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes
+          static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes  //TODO: combination of large and small pages
           uint64_t get_memory_size();
           uint64_t get_memory_used();
 
