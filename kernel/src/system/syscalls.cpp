@@ -26,6 +26,8 @@ SyscallManager::SyscallManager(InterruptManager*interrupt_manager)
   set_syscall_handler(SyscallType::OPEN_SHARED_MEMORY, syscall_open_shared_memory);
   set_syscall_handler(SyscallType::ALLOCATE_MEMORY, syscall_allocate_memory);
   set_syscall_handler(SyscallType::FREE_MEMORY, syscall_free_memory);
+  set_syscall_handler(SyscallType::CREATE_IPC_ENDPOINT, syscall_create_ipc_endpoint);
+  set_syscall_handler(SyscallType::SEND_IPC_MESSAGE, syscall_send_ipc_message);
 
 }
 
@@ -177,4 +179,50 @@ syscall_args_t* SyscallManager::syscall_free_memory(syscall_args_t *args) {
   // Done
   return args;
 
+}
+
+/**
+ * @brief System call to create an IPC endpoint
+ *
+ * @param args Arg0 = name
+ * @return The IPC endpoint buffer linked list address
+ */
+system::syscall_args_t* SyscallManager::syscall_create_ipc_endpoint(system::syscall_args_t *args) {
+
+  // Get the name
+  char* name = (char*)args -> arg0;
+  if(name == 0)
+    return nullptr;
+
+  // Create the endpoint
+  ipc_message_endpoint_t* endpoint = Scheduler::get_ipc() -> create_message_endpoint(name);
+
+  // Return the endpoint
+  args -> return_value = (uint64_t)endpoint -> queue;
+  return args;
+
+}
+
+/**
+ * @brief System call to send an IPC message
+ *
+ * @param args Arg0 = endpoint name, Arg1 = message, Arg2 = size
+ * @return Nothing
+ */
+system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall_args_t *args) {
+
+  // Get the args
+  char* endpoint = (char*)args -> arg0;
+  void* message = (void*)args -> arg1;
+  size_t size = args -> arg2;
+
+  // Validate the args
+  if(endpoint == 0 || message == 0 || size == 0)
+    return nullptr;
+
+  // Send the message
+  Scheduler::get_ipc() -> send_message(endpoint, message, size);
+
+  // All done
+  return args;
 }

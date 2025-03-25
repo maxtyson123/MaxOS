@@ -51,6 +51,7 @@ namespace MaxOS{
 
         static Scheduler* get_system_scheduler();
         static Process*   get_current_process();
+        static Process*   get_process(uint64_t pid);
         static Thread*    get_current_thread();
         static IPC*       get_ipc();
 

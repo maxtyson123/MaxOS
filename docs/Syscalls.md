@@ -14,11 +14,13 @@ This is helpful for updating syscall table (idk if that will even happen or it w
 | rax     | rdi  | rsi  | rdx  | r10  | r8   | r9   |
 
 ## Syscall Table (v1)
-| Number | Name                  | Description                                                                                                | Arg0          | Arg1       | Arg2 | Arg3 | Arg4 | Arg5 | Return                          |
-|--------|-----------------------|------------------------------------------------------------------------------------------------------------|---------------|------------|------|------|------|------|---------------------------------|
-| 0      | close_process         | Exit the current process  (NOT IMPLEMENTED)                                                                | int status    |            |      |      |      |      |                                 |
-| 1      | klog                  | Log a message to the kernel log                                                                            | char* msg     |            |      |      |      |      |                                 |
-| 2      | created_shared_memory | Create a shared memory region                                                                              | size_t size   | char* name |      |      |      |      | void*  address (null if failed) |
-| 3      | open_shared_memory    | Open a shared memory region                                                                                | char* name    |            |      |      |      |      | void*  address (null if failed) |
-| 4      | allocate_memory       | Allocate memory                                                                                            | size_t size   |            |      |      |      |      | void*  address (null if failed) |
-| 5      | free_memory           | Free memory                                                                                                | void* address |            |      |      |      |      |                                 |
+| Number | Name                  | Description                                 | Arg0          | Arg1       | Arg2        | Arg3 | Arg4 | Arg5 | Return                                         |
+|--------|-----------------------|---------------------------------------------|---------------|------------|-------------|------|------|------|------------------------------------------------|
+| 0      | close_process         | Exit the current process  (NOT IMPLEMENTED) | int status    |            |             |      |      |      |                                                |
+| 1      | klog                  | Log a message to the kernel log             | char* msg     |            |             |      |      |      |                                                |
+| 2      | created_shared_memory | Create a shared memory region               | size_t size   | char* name |             |      |      |      | void*  address (null if failed)                |
+| 3      | open_shared_memory    | Open a shared memory region                 | char* name    |            |             |      |      |      | void*  address (null if failed)                |
+| 4      | allocate_memory       | Allocate memory                             | size_t size   |            |             |      |      |      | void*  address (null if failed)                |
+| 5      | free_memory           | Free memory                                 | void* address |            |             |      |      |      |                                                |
+| 6      | create_ipc_endpoint   | Create an IPC endpoint                      | char* name    |            |             |      |      |      | void*  message buffer address (null if failed) |
+| 7      | send_ipc_message      | Send an IPC message                         | char* name    | void* data | size_t size |      |      |      |                                                |

@@ -200,6 +200,7 @@ No user usage so far (userland will be added in the future)
 - [ ] Store
 - [ ] User Switching
 - [ ] Real Hardware Support
+- [ ] Pretty GUI
 - [ ] Port 2048
 - [ ] Compatibility Layer(s)
  

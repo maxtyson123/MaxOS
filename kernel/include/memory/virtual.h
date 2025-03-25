@@ -72,6 +72,7 @@ namespace MaxOS {
         void* allocate(uint64_t address, size_t size, size_t flags);
         void free(void* address);
 
+        void* load_physical_into_address_space(uintptr_t physical_address, size_t size, size_t flags);
 
         void* load_shared_memory(string name);
         void* load_shared_memory(uintptr_t physical_address, size_t size);

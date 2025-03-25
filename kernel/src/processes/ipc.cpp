@@ -8,6 +8,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::memory;
 
 #include <common/kprint.h>
+#include <processes/scheduler.h>      //TODO: Cicrular dependency, need to fix
 
 /**
  * @brief Creates a new IPC handler
@@ -42,11 +43,20 @@ ipc_shared_memory_t *IPC::alloc_shared_memory(size_t size, string name) {
   // Wait for the lock
   m_lock.lock();
 
+  // Make sure the name is unique
+  for(auto endpoint : m_message_endpoints){
+    if(endpoint -> name -> equals(name)){
+      m_lock.unlock();
+      return nullptr;
+    }
+  }
+
   // Create the shared memory block
   ipc_shared_memory_t* block = new ipc_shared_memory_t;
   block -> physical_address  = (uintptr_t)PhysicalMemoryManager::s_current_manager -> allocate_area(0, size);
   block -> size              = size;
   block -> use_count         = 1;
+  block -> owner_pid         = Scheduler::get_current_process()->get_pid();
   block -> name              = new String(name);
 
   // Add the block to the list
@@ -153,5 +163,170 @@ void IPC::free_shared_memory(ipc_shared_memory_t *block) {
 
   // Clear the lock
   m_lock.unlock();
+
+}
+
+/**
+ * @brief Creates a endpoint for message passing
+ *
+ * @param name The name of the endpoint
+ * @return The endpoint
+ */
+ipc_message_endpoint_t* IPC::create_message_endpoint(string name) {
+
+  // Wait for the lock
+  m_lock.lock();
+
+  // Make sure the name is unique
+  ipc_message_endpoint_t* existing = get_message_endpoint(name);
+  if(existing != nullptr){
+      m_lock.unlock();
+      return nullptr;
+  }
+
+  // Create the endpoint (With the queue on in the user's memory space)
+  ipc_message_endpoint_t* endpoint = new ipc_message_endpoint_t;
+  endpoint -> queue = (ipc_message_queue_t*)MemoryManager::malloc(sizeof(ipc_message_queue_t));
+  endpoint -> queue -> messages = nullptr;
+  endpoint -> owner_pid = Scheduler::get_current_process() -> get_pid();
+  endpoint -> name = new String(name);
+
+  // Add the endpoint to the list
+  m_message_endpoints.push_back(endpoint);
+
+  // Free the lock
+  m_lock.unlock();
+
+  // Return the endpoint
+  return endpoint;
+}
+
+/**
+ * @brief Gets a message endpoint by name
+ *
+ * @param name The name of the endpoint
+ * @return The endpoint or nullptr if not found
+ */
+ipc_message_endpoint_t *IPC::get_message_endpoint(string name) {
+
+  // Try to find the endpoint
+  for(auto endpoint : m_message_endpoints){
+      if(endpoint -> name -> equals(name))
+        return endpoint;
+  }
+
+  // Not found
+  return nullptr;
+
+}
+
+/**
+ * @brief Deletes a message endpoint by name, all messages will be lost
+ * @param name The name of the endpoint
+ */
+void IPC::free_message_endpoint(string name) {
+
+  // Find the endpoint
+  ipc_message_endpoint_t* endpoint = get_message_endpoint(name);
+
+  // Free the endpoint
+  free_message_endpoint(endpoint);
+
+}
+
+/**
+ * @brief Deletes a message endpoint, all messages will be lost
+ * @param endpoint
+ */
+void IPC::free_message_endpoint(ipc_message_endpoint_t *endpoint) {
+
+  // Make sure the endpoint exists
+  if(endpoint == nullptr)
+     return;
+
+  // Make sure the endpoint is owned by the current process
+  if(endpoint -> owner_pid != Scheduler::get_current_process() -> get_pid())
+      return;
+
+  // Wait for the lock
+  endpoint -> message_lock.lock();
+
+  // Delete the messages
+  ipc_message_t* message = endpoint -> queue -> messages;
+  while(message != nullptr){
+      ipc_message_t* next = (ipc_message_t*)message -> next_message;
+      delete message;
+      message = next;
+  }
+  delete endpoint -> name;
+
+  // Free the lock (nothing can be done to it now that the name isn't there)
+  endpoint -> message_lock.unlock();
+
+  // Delete the endpoint
+  delete endpoint;
+
+}
+
+/**
+ * @brief Finds the endpoint by name and adds a message to it's queue
+ * @param name The name of the endpoint
+ * @param message The message to send
+ * @param size The size of the message
+ */
+void IPC::send_message(string name, void* message, size_t size) {
+
+
+  // Find the endpoint
+  ipc_message_endpoint_t* endpoint = get_message_endpoint(name);
+  if(endpoint == nullptr)
+      return;
+
+
+  // Send the message
+  send_message(endpoint, message, size);
+
+
+}
+void IPC::send_message(ipc_message_endpoint_t *endpoint, void *message, size_t size) {
+
+  // Wait for the endpoint lock
+  endpoint -> message_lock.lock();
+
+  // Copy the buffer into the kernel so that the endpoint can access it
+  void* kernel_copy = new char[size];
+  memcpy(kernel_copy, message, size);
+
+  //Switch to endpoint's memory space
+  MemoryManager::switch_active_memory_manager(Scheduler::get_process(endpoint -> owner_pid) -> memory_manager);
+
+  // Create the message & copy it into the endpoint's memory space
+  ipc_message_t* new_message = (ipc_message_t*)MemoryManager::malloc(sizeof(ipc_message_t));
+  void* new_buffer = MemoryManager::malloc(size);
+  new_message -> message_buffer = memcpy(new_buffer, kernel_copy, size);
+  new_message -> message_size = size;
+  new_message -> next_message = 0;
+  _kprintf("Message at 0x%x, buffer at 0x%x\n", new_message, new_buffer);
+
+  // Add the message to the end of the queue
+  ipc_message_t* current = endpoint -> queue -> messages;
+  while(current != nullptr){
+    if(current -> next_message == 0){
+      current -> next_message = (uintptr_t)new_message;
+      break;
+    }
+    current = (ipc_message_t*)current -> next_message;
+  }
+
+  // If it was the first message
+  if (current == nullptr)
+    endpoint->queue->messages = new_message;
+
+  //Switch back from endpoint's memory space
+  MemoryManager::switch_active_memory_manager(Scheduler::get_current_process() -> memory_manager);
+
+  // Free the lock & kernel copy
+  delete kernel_copy;
+  endpoint -> message_lock.unlock();
 
 }

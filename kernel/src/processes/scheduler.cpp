@@ -279,6 +279,22 @@ Process *Scheduler::get_current_process() {
   return current_process;
 }
 
+/**
+ * @brief Gets a process by its PID
+ * @param pid The process ID
+ * @return The process or nullptr if not found
+ */
+Process *Scheduler::get_process(uint64_t pid) {
+
+  // Try to find the process
+  for (auto process : s_instance->m_processes)
+    if (process->get_pid() == pid)
+      return process;
+
+  // Not found
+  return nullptr;
+}
+
 
 /**
  * @brief Gets the currently executing thread

@@ -2,6 +2,7 @@
 // Created by 98max on 21/03/2025.
 //
 #include <stdint.h>
+#include <stddef.h>
 
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
 void write(const char* data, uint64_t length = 0)
@@ -64,28 +65,52 @@ bool strequal(const char* str1, const char* str2)
   return *str1 == *str2;
 }
 
+typedef struct IPCMessage{
+  void* message_buffer;
+  size_t message_size;
+  uintptr_t next_message;
+} ipc_message_t;
+
+typedef struct IPCMessageQueue{
+  ipc_message_t* messages;
+} ipc_message_queue_t;
+
+void* make_message_queue(char* name)
+{
+  void* result = nullptr;
+  asm volatile("int $0x80" : "=a" (result) : "a" (0x06), "b" (name));
+  return result;
+}
+
 extern "C" void _start(void)
 {
 
   // Write to the console
   write("MaxOS Test Program v3\n");
 
-  // Create a shared memory block
-  TestSharedMemoryBlock* shared_memory = (TestSharedMemoryBlock*)create_shared_memory(sizeof(TestSharedMemoryBlock), "TestBlock");
-  setstring(shared_memory->message, "Hello from shared memory!\n");
+  // Create a message endpoint
+  ipc_message_queue_t* message_queue = (ipc_message_queue_t *)make_message_queue("TestQueue");
+  write("Message queue created: \n");
+  write_hex((uint64_t)message_queue);
 
-  write("Shared memory block created: \n");
-  write_hex((uint64_t)shared_memory);
-
-  while (strequal(shared_memory->message, "Hello from shared memory!\n"))
-    asm("nop");
-
-  write("Shared memory block message changed: \n");
-  write(shared_memory->message);
-
-
-
-  // For now loop forever
+  // Process events for ever:
   while(true)
-    asm("nop");
+    if(message_queue->messages == nullptr)
+        asm("nop");
+    else{
+
+      //TODO: Should:
+      //      Copy message into a buffer
+      //      Delete orginal message
+
+      // Store the message
+      ipc_message_t* message = message_queue->messages;
+      write("Message received: \n");
+      write_hex((uint64_t)message);
+      write((char*)message->message_buffer);
+
+      // Move to the next message
+      message_queue->messages = (ipc_message_t*)message->next_message;
+
+    }
 }

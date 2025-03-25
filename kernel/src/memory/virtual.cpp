@@ -423,8 +423,22 @@ void *VirtualMemoryManager::load_shared_memory(uintptr_t physical_address, size_
   if(size == 0 || physical_address == 0)
     return nullptr;
 
+  // Load it into physical memory
+  return load_physical_into_address_space(physical_address, size, Shared);
+}
+
+/**
+ * @brief Load physical memory into the VMM's address space
+ *
+ * @param physical_address The physical address of the memory
+ * @param size The size of the memory
+ * @param flags The flags to set on the memory
+ * @return The address of the memory in the VMM's address space
+ */
+void *VirtualMemoryManager::load_physical_into_address_space(uintptr_t physical_address, size_t size, size_t flags){
+
   // Reserve some space
-  void* address = allocate(size, Reserve | Shared);
+  void* address = allocate(size, flags | Reserve);
 
   // Map the shared memory
   size_t pages = PhysicalMemoryManager::size_to_frames(size);
@@ -435,10 +449,6 @@ void *VirtualMemoryManager::load_shared_memory(uintptr_t physical_address, size_
 
   }
 
-  _kprintf("Loaded shared memory at 0x%x\n", address);
-
   // All done
   return address;
-
 }
-

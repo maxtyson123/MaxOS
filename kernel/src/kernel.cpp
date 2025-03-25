@@ -312,7 +312,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - lockfree ipc, args for progams
+    //       - locks should block the proc and move to next, proc killing, args for progams
     //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use name::, update notes
 
 
