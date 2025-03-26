@@ -82,6 +82,34 @@ void send_message(const char* endpoint, void* message, size_t size)
   );
 }
 
+void close()
+{
+  // syscall 0, arg0 = pid (0 for current process), arg1 = exit code
+  asm volatile(
+      "mov $0, %%rdi\n\t"
+      "mov $0, %%rsi\n\t"
+      "mov $0x00, %%rax\n\t"
+      "int $0x80\n\t"
+      :
+      :
+      : "rax", "rdi", "rsi"
+        );
+}
+
+
+void wait(uint64_t ms)
+{
+  // syscall 0x010, arg0 = milliseconds
+  asm volatile(
+      "mov %[ms], %%rdi\n\t"
+      "mov $0x0A, %%rax\n\t"
+      "int $0x80\n\t"
+      :
+      : [ms] "r"(ms)
+      : "rax", "rdi"
+  );
+}
+
 extern "C" void _start(void)
 {
 
@@ -92,10 +120,20 @@ extern "C" void _start(void)
   const char* message = "Message from process 2\n";
   const char* endpoint = "TestQueue";
 
-  // Send a message via IPC
-  send_message(endpoint, (void*)message, 24);
+  // Wait 4seconds
+//  wait(4000);
+//  write("Waited 4 seconds\n");
 
-  // For now loop forever
+  // Send a message via IPC
+//  send_message(endpoint, (void*)message, 24);
+
+  // Close the process
+  close();
+
+
+  //TODO: Sleep and close dont work
+
+  // Loop
   while(true)
-    asm("nop");
+    asm ("nop");
 }

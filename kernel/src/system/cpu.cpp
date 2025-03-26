@@ -142,12 +142,12 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   // Get the current process
   Process* process = Scheduler::get_current_process();
 
-  // If the faulting address is in lower half just kill the process and move on, TODO: needs to return the next process state to jump to
-//  if(status && !memory::MemoryManager::in_higher_region(status->rip)){
-//      _kprintf("Faulting address is in lower half, killing process\n");
-//      Scheduler::get_system_scheduler()->remove_process(process);
-//      return;
-//  }
+  // If the faulting address is in lower half just kill the process and move on (NOTE: Potential memory leak)
+  if(status && !memory::MemoryManager::in_higher_region(status->rip)){
+      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
+      Scheduler::get_system_scheduler()->force_remove_process(process);
+      return;
+  }
 
 
   // Ensure ready to panic

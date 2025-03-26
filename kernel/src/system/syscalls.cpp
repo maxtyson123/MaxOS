@@ -21,6 +21,7 @@ SyscallManager::SyscallManager(InterruptManager*interrupt_manager)
   m_current_args = new syscall_args_t;
 
   // Register the handlers
+  set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
   set_syscall_handler(SyscallType::KLOG, syscall_klog);
   set_syscall_handler(SyscallType::CREATE_SHARED_MEMORY, syscall_create_shared_memory);
   set_syscall_handler(SyscallType::OPEN_SHARED_MEMORY, syscall_open_shared_memory);
@@ -28,6 +29,9 @@ SyscallManager::SyscallManager(InterruptManager*interrupt_manager)
   set_syscall_handler(SyscallType::FREE_MEMORY, syscall_free_memory);
   set_syscall_handler(SyscallType::CREATE_IPC_ENDPOINT, syscall_create_ipc_endpoint);
   set_syscall_handler(SyscallType::SEND_IPC_MESSAGE, syscall_send_ipc_message);
+  set_syscall_handler(SyscallType::REMOVE_IPC_ENDPOINT, syscall_remove_ipc_endpoint);
+  set_syscall_handler(SyscallType::PROCESS_YIELD, syscall_process_yield);
+  set_syscall_handler(SyscallType::PROCESS_SLEEP, syscall_process_sleep);
 
 }
 
@@ -224,5 +228,76 @@ system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall
   Scheduler::get_ipc() -> send_message(endpoint, message, size);
 
   // All done
+  return args;
+}
+
+/**
+ * @brief System call to remove an IPC endpoint
+ *
+ * @param args Arg0 = endpoint name
+ * @return Nothing
+ */
+system::syscall_args_t * SyscallManager::syscall_remove_ipc_endpoint(system::syscall_args_t *args) {
+
+  // Remove the endpoint
+  Scheduler::get_ipc() -> free_message_endpoint((char*)args -> arg0);
+
+  // Done
+  return args;
+
+}
+
+
+/**
+ * @brief System call to yield the current process
+ *
+ * @param args Nothing
+ * @return Nothing
+ */
+system::syscall_args_t* SyscallManager::syscall_process_yield(system::syscall_args_t *args) {
+
+  // Yield
+  Scheduler::get_system_scheduler() -> yield();
+  return args;
+}
+
+/**
+ * @brief System call to sleep the current process
+ *
+ * @param args Arg0 = milliseconds
+ * @return Nothing
+ */
+system::syscall_args_t* SyscallManager::syscall_process_sleep(system::syscall_args_t *args) {
+
+  // Get the milliseconds
+  size_t milliseconds = args -> arg0;
+
+  // Sleep the thread
+  Scheduler::get_current_thread() -> sleep(milliseconds);
+
+  // Done
+  return args;
+
+}
+
+/**
+ * @brief System call to close a process
+ *
+ * @param args Arg0 = pid Arg1 = exit code
+ * @return
+ */
+system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t *args) {
+
+  // Get the args
+  uint64_t pid = args -> arg0;
+  int exit_code = (int)args -> arg1;
+
+  // Get the process if it is 0 then it is the current process
+  Process* process = pid == 0 ? Scheduler::get_current_process() : Scheduler::get_process(pid);
+
+  // Close the process
+  Scheduler::get_system_scheduler() -> remove_process(process);
+
+  // Done
   return args;
 }

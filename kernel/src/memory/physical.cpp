@@ -712,18 +712,6 @@ void PhysicalMemoryManager::unmap_area(virtual_address_t *virtual_address_start,
 }
 
 /**
- * @brief Checks if a virtual address is mapped and whether it points to the correct physical address
- * @param physical_address The physical address to check (if 0 then wont check if correct entry)
- * @param virtual_address The address to check if it is mapped to
- * @return True if the physical address is mapped to the virtual address
- */
-bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address) {
-  ASSERT(false, "Not implemented! Check if physical address is mapped to virtual address 0x%x -> 0x%x\n", physical_address, virtual_address)
-  // TODO: Implement
-  return false;
-}
-
-/**
  * @brief Cleans a page table (fills it with 0 or null entries)
  * @param table The table to clean
  */
@@ -921,4 +909,51 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
   // Clear the lock
   m_lock.unlock();
   _kprintf("Reserved Address: 0x%x - 0x%x (length of 0x%x)\n", address, address + size, size);
+}
+
+/**
+ * @brief Gets the physical address from a virtual address (if it exists)
+ *
+ * @param virtual_address The virtual address to get the physical address from
+ * @return  The physical address or nullptr if it does not exist
+ */
+physical_address_t *PhysicalMemoryManager::get_physical_address(virtual_address_t *virtual_address, uint64_t *pml4_root) {
+
+
+    // Get the indexes
+    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+
+    // Get the tables
+    uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
+    uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
+    uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
+
+    // Check if the tables are present (if any are not then a pt entry will not be present)
+    if(pt_table == nullptr)
+      return nullptr;
+
+
+    // Check if the entry is present
+    if(!(pt_table[pt_index] & 0b1))
+      return nullptr;
+
+    // Return the physical address
+    return (physical_address_t *)(pt_table[pt_index] & 0xFFFFFFFFFFFFF000);
+}
+
+/**
+ * @brief Checks if a physical address is mapped to a virtual address
+ *
+ * @param physical_address The physical address to check
+ * @param virtual_address The virtual address to check
+ * @param pml4_root The pml4 table to use
+ * @return True if the physical address is mapped to the virtual address
+ */
+bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t *pml4_root) {
+
+  return get_physical_address((virtual_address_t*)virtual_address, pml4_root) == (physical_address_t*)physical_address;
+
 }

@@ -74,7 +74,6 @@ void Thread::sleep(size_t milliseconds) {
   thread_state = ThreadState::SLEEPING;
   wakeup_time = Scheduler::get_system_scheduler() -> get_ticks() + milliseconds;
 
-
   // Yield
   Scheduler::get_system_scheduler() -> yield();
 
@@ -197,11 +196,9 @@ void Process::remove_thread(uint64_t tid) {
         m_threads.erase(m_threads.begin() + i);
 
 
-        // If there are no more threads then delete the process
-        if (m_threads.empty()) {
+        // If there are no more threads then delete the process (done on the scheduler side)
+        if (m_threads.empty())
           Scheduler::get_system_scheduler() -> remove_process(this);
-          delete this;
-        }
 
         return;
     }

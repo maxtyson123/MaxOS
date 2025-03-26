@@ -14,7 +14,6 @@
 namespace MaxOS {
   namespace memory {
 
-
    typedef enum VirtualFlags {
     // 0 - (1 << 8) are reserved for the page flags
     Reserve = (1 << 9),
@@ -40,6 +39,8 @@ namespace MaxOS {
       struct VirtualMemoryRegion* next;
 
     } __attribute__((packed)) virtual_memory_region_t;
+
+    // NOTE: Have to use a linked list as the VMM is not fully setup and thus cannot use the vector class
 
     class VirtualMemoryManager{
 

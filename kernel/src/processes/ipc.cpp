@@ -306,7 +306,6 @@ void IPC::send_message(ipc_message_endpoint_t *endpoint, void *message, size_t s
   new_message -> message_buffer = memcpy(new_buffer, kernel_copy, size);
   new_message -> message_size = size;
   new_message -> next_message = 0;
-  _kprintf("Message at 0x%x, buffer at 0x%x\n", new_message, new_buffer);
 
   // Add the message to the end of the queue
   ipc_message_t* current = endpoint -> queue -> messages;

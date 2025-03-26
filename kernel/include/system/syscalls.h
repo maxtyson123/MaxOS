@@ -31,6 +31,9 @@ namespace MaxOS{
             FREE_MEMORY,
             CREATE_IPC_ENDPOINT,
             SEND_IPC_MESSAGE,
+            REMOVE_IPC_ENDPOINT,
+            PROCESS_YIELD,
+            PROCESS_SLEEP
         };
 
         typedef struct SyscallArguments{
@@ -68,6 +71,7 @@ namespace MaxOS{
 
 
               // Syscalls
+              static system::syscall_args_t* syscall_close_process(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_klog(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_create_shared_memory(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_open_shared_memory(system::syscall_args_t* args);
@@ -75,6 +79,9 @@ namespace MaxOS{
               static system::syscall_args_t* syscall_free_memory(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_create_ipc_endpoint(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_send_ipc_message(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_remove_ipc_endpoint(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_process_yield(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_process_sleep(system::syscall_args_t* args);
 
 
           };

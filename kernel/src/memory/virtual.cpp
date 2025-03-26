@@ -61,6 +61,8 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     m_physical_memory_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
     _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
+    if(!m_is_kernel)
+      ASSERT(vmm_space_physical != m_physical_memory_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, m_physical_memory_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
 
     // Calculate the next available address
     m_next_available_address = PhysicalMemoryManager::s_page_size;
@@ -91,7 +93,7 @@ VirtualMemoryManager::~VirtualMemoryManager() {
         for (size_t j = 0; j < pages; j++){
 
               // Get the frame
-              physical_address_t* frame = (physical_address_t*)region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size);
+              physical_address_t* frame = m_physical_memory_manager -> get_physical_address((virtual_address_t*)region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
 
               // Free the frame
               m_physical_memory_manager->free_frame(frame);

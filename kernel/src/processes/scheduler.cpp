@@ -64,25 +64,21 @@ cpu_status_t *Scheduler::schedule(cpu_status_t* cpu_state) {
   if (m_threads.empty() || !m_active)
       return cpu_state;
 
-  // Ticked
-  m_ticks++;
-
-
-  // Switch every 10 ticks (this is so that the panic handler can have a chance to run)
-  if (m_ticks % 10 != 0) return cpu_state;
-
 
   // Thread that we are dealing with
   Thread* current_thread = m_threads[m_current_thread_index];
 
-  // If there are no threads to schedule, return the current state
-  if (current_thread == nullptr)
-    return cpu_state;
+  // Ticked
+  m_ticks++;
+  current_thread->ticks++;
+
+   // Wait for a bit so that the scheduler doesn't run too fast
+   if (m_ticks % 2 != 0) return cpu_state;
 
   // Save the current state
   current_thread->execution_state = cpu_state;
-  current_thread->thread_state = ThreadState::READY;
-  current_thread->ticks++;
+  if(current_thread->thread_state == ThreadState::RUNNING)
+    current_thread->thread_state = ThreadState::WAITING;
 
   // Switch to the next thread
   m_current_thread_index++;
@@ -207,8 +203,14 @@ uint64_t Scheduler::get_ticks() {
 void Scheduler::yield() {
 
   // If this is the only thread, can't yield
-  if (m_threads.size() == 1)
+  if (m_threads.size() <= 1)
       return;
+
+  // Set the current thread to waiting if running
+  if (m_threads[m_current_thread_index]->thread_state == ThreadState::RUNNING)
+      m_threads[m_current_thread_index]->thread_state = ThreadState::WAITING;
+
+  _kprintf("Yielding thread %d\n", m_current_thread_index);
 
   // Schedule the next thread
   asm("int $0x20");
@@ -227,21 +229,18 @@ void Scheduler::activate() {
  * @param force If true, the process will be removed and so will all threads
  * @return -1 if the process has threads, 0 otherwise
  */
-uint64_t Scheduler::remove_process(Process *process, bool force) {
+uint64_t Scheduler::remove_process(Process *process) {
 
   // Check if the process has no threads
   if (!process->get_threads().empty()) {
 
     // Set the threads to stopped or remove them if forced
     for (auto thread : process->get_threads())
-      if (force)
-        process->remove_thread(thread->tid);
-      else
         thread->thread_state = ThreadState::STOPPED;
 
-    // Return as we can't remove the process
-    if(!force)
-      return -1;
+    // Need to wait until the threads are stopped before removing the process (this will be called again when all threads are stopped)
+    return -1;
+
   }
 
   // Remove the process
@@ -251,7 +250,6 @@ uint64_t Scheduler::remove_process(Process *process, bool force) {
 
         // Delete the process mem
         delete process;
-
         return 0;
     }
   }
@@ -259,6 +257,22 @@ uint64_t Scheduler::remove_process(Process *process, bool force) {
   // Process not found
   return -1;
 
+}
+
+/**
+ * @brief Removes a process from the scheduler and deletes all threads, begins running the next process
+ *
+ * @param process The process to remove
+ * @return -1 if failed, 0 otherwise
+ */
+uint64_t Scheduler::force_remove_process(Process *process) {
+
+  // Remove all the threads
+  for (auto thread : process->get_threads())
+      process->remove_thread(thread->tid);
+
+  // Process will be dead now so run the next process
+  asm("int $0x20");
 }
 
 /**
@@ -352,3 +366,4 @@ IPC *Scheduler::get_ipc() {
   return s_instance -> m_ipc;
 
 }
+

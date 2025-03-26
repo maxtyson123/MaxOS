@@ -17,9 +17,10 @@ namespace MaxOS{
     {
       private:
         bool m_locked;
+        bool m_should_yield;
 
       public:
-        Spinlock();
+        Spinlock(bool should_yield = false);
         ~Spinlock();
 
         void lock();

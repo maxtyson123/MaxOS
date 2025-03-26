@@ -183,10 +183,10 @@ No user usage so far (userland will be added in the future)
 - [x] GUI
 - [x] Window Manager
 - [x] Paging
-- [ ] Userspace
-- [ ] IPC
+- [x] Userspace
+- [x] IPC
 - [ ] VFS
-- [ ] Loading ELF
+- [x] Loading ELF
 - [ ] Multiple Cores Support (SMP & Scheduler)
 - [ ] Userland GUI
 - [ ] CLI
@@ -201,7 +201,8 @@ No user usage so far (userland will be added in the future)
 - [ ] User Switching
 - [ ] Real Hardware Support
 - [ ] Pretty GUI
-- [ ] Port 2048
+- [ ] Port NeoVim, Wakatime & Some hot reloader
+- [ ] Create port of my 2048
 - [ ] Compatibility Layer(s)
  
 See the [open issues](https://github.com/maxtyson123/MaxOS/issues) for a full list of proposed features (and known issues).

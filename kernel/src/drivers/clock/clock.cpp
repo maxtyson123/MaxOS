@@ -174,7 +174,7 @@ string Clock::get_device_name() {
     return "Clock";
 }
 
-void Clock::calibrate() {
+void Clock::calibrate(uint64_t ms_per_tick) {
 
   // Get the ticks per ms
   PIT pit(m_interrupt_manager, m_apic);
@@ -185,7 +185,7 @@ void Clock::calibrate() {
   m_apic -> get_local_apic() -> write(0x320, lvt);
 
   // Set the intial count
-  m_apic -> get_local_apic() -> write(0x380, ticks_per_ms);
+  m_apic -> get_local_apic() -> write(0x380, ms_per_tick * ticks_per_ms);
 
   // Clear the mask bit
   lvt &= ~(1 << 16);
@@ -220,6 +220,7 @@ common::Time Clock::get_time() {
   //Raise the clock event
   return time;
 }
+
 
 TimeEvent::TimeEvent(Time* time)
 :Event(ClockEvents::TIME),

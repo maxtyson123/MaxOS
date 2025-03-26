@@ -4,11 +4,14 @@
 
 #include <common/spinlock.h>
 #include <common/kprint.h>
+#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
+using namespace MaxOS::processes;
 
-Spinlock::Spinlock(){
+Spinlock::Spinlock(bool should_yield)
+: m_should_yield(should_yield) {
 
 }
 
@@ -17,7 +20,7 @@ Spinlock::~Spinlock() {
 }
 
 /**
- * @brief Lock the spinlock
+ * @brief Lock the spinlock once it is available
  */
 void Spinlock::lock() {
 
@@ -56,10 +59,15 @@ bool Spinlock::is_locked() {
  * @brief Acquire the spinlock
  */
 void Spinlock::acquire() {
-      while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
-        // Wait for the lock to be available
-        asm("nop");
-      }
+  while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
+
+      // Wait for the lock to be available
+      if(m_should_yield)
+        Scheduler::get_system_scheduler()->yield();
+
+      // Dont optimise this loop
+      asm("nop");
+  }
 }
 
 /**

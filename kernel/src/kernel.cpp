@@ -312,8 +312,9 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - locks should block the proc and move to next, proc killing, args for progams
-    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use name::, update notes
+    //       - fix current bugs, args for progams
+    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types
+    //       - PCI to drivers page in osdev book, ubsan section maybe
 
 
     /// Boot Done ///
@@ -334,10 +335,12 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
       // Print the ticks (debuging)
       //_kprintf("%hTick: %d\r", scheduler.get_ticks());
 
-      // yeild ? wait until figured out the task manager cpu %
+      // yield ? wait until figured out the task manager cpu %
 
       // Make sure the compiler doesn't optimise the loop away
       asm("nop");
 
     }
 }
+
+// BDC YAY!!!
