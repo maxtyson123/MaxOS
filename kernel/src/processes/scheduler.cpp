@@ -224,7 +224,6 @@ cpu_status_t* Scheduler::yield() {
   if (m_threads[m_current_thread_index]->thread_state == ThreadState::RUNNING)
       m_threads[m_current_thread_index]->thread_state = ThreadState::WAITING;
 
-  _kprintf("Yielding thread %d\n", m_current_thread_index);
 
   // Schedule the next thread
   return schedule_next(get_current_thread()->execution_state);

@@ -82,6 +82,11 @@ void* make_message_queue(char* name)
   return result;
 }
 
+void  yield()
+{
+    asm volatile("int $0x80" : : "a" (0x09));
+}
+
 extern "C" void _start(void)
 {
 
@@ -97,7 +102,7 @@ extern "C" void _start(void)
   write("Waiting for messages\n");
   while(true)
     if(message_queue->messages == nullptr)
-        asm("nop");
+      yield();
     else{
 
       //TODO: Should:

@@ -136,7 +136,7 @@ fi
 
 # Create the args
 QEMU_ARGS=""
-QEMU_ARGS="$QEMU_ARGS -m 1G"                                            # 2 GB of RAM
+QEMU_ARGS="$QEMU_ARGS -m 3G"                                            # 3 GB of RAM (TODO: Fails more than 3GB)
 QEMU_ARGS="$QEMU_ARGS -smp cores=4"                                     # 4 cores
 QEMU_ARGS="$QEMU_ARGS -serial stdio"                                    # Use stdio for serial
 QEMU_ARGS="$QEMU_ARGS -monitor telnet::45454,server,nowait"             # Use telnet for monitor

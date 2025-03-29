@@ -16,7 +16,7 @@ echo "$new_value" > .buildCount
 msg "Writing version header"
 # Version data
 MAJOR_VERSION="0"
-MINOR_VERSION="2"
+MINOR_VERSION="3"
 VERSION_NAME="Development Version"
 BUILD_NUMBER=$(cat .buildCount)
 BUILD_YEAR="$(date +'%-Y')"
