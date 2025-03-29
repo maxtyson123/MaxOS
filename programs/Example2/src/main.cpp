@@ -110,9 +110,19 @@ void wait(uint64_t ms)
   );
 }
 
-extern "C" void _start(void)
+extern "C" int _start(int argc, char** argv)
 {
 
+  // Print the args
+  write("Args:\n");
+  for(int i = 0; i < argc; i++)
+  {
+
+    // Write the arg
+    write(argv[i]);
+
+  }
+  write("\n");
 
   // Write to the console
   write("MaxOS Test Program v3.1\n");

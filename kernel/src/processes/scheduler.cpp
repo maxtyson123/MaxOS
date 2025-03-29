@@ -377,8 +377,11 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
 
     _kprintf("Creating process from multiboot module for %s (at 0x%x)\n", module->cmdline, module->mod_start);
 
+    // Create an array of args for the process
+    char* args[1] = {module->cmdline};
+
     // Create the process
-    Process* process = new Process(module->cmdline, nullptr, 0, elf);
+    Process* process = new Process(module->cmdline, args, 1, elf);
 
     _kprintf("Elf loaded to pid %d\n", process->get_pid());
   }

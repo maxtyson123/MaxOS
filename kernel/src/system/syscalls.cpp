@@ -116,7 +116,15 @@ system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_ar
 }
 
 syscall_args_t *SyscallManager::syscall_klog(syscall_args_t *args) {
-  _kprintf("%h%s[%s:%d]%s %s", ANSI_COLOURS[FG_Blue], Scheduler::get_current_process() -> name.c_str(), Scheduler::get_current_thread() -> tid,  ANSI_COLOURS[Reset], (char*)args -> arg0);
+
+  char* message = (char*)args -> arg0;
+
+  // If the first two characters are %h then no header
+  if(message[0] == '%' && message[1] == 'h')
+    _kprintf("%s", message);
+  else
+    _kprintf("%h%s[%s:%d]%s %s", ANSI_COLOURS[FG_Blue], Scheduler::get_current_process() -> name.c_str(), Scheduler::get_current_thread() -> tid,  ANSI_COLOURS[Reset], message);
+
   return args;
 }
 

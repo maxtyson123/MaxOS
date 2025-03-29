@@ -312,8 +312,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - fix current bugs, args for progams
-    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing
+    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
     //       - PCI to drivers page in osdev book, ubsan section maybe
 
 

@@ -49,9 +49,14 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     execution_state->rsp = (uint64_t)m_stack_pointer;
     execution_state->rbp = 0;
 
-    // Arguments TODO: Map args into this mem? process path here or when setup thru syscall?
-    execution_state->rdi = (uint64_t)arg_amount;
-    execution_state->rsi = (uint64_t)args;
+    // Copy the args into user space using memcopy
+    uint64_t  argc = arg_amount;
+    void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
+    memcpy(argv, args, arg_amount * sizeof(void*));
+
+
+    execution_state->rdi = argc;
+    execution_state->rsi = (uint64_t)argv;
     //execution_state->rdx = (uint64_t)env_args;
 
     // Begin scheduling this thread
