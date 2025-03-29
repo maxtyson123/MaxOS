@@ -176,7 +176,7 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
 
     message -> version = 4;                                                                                                                           //Set version
     message -> headerLength = sizeof(InternetProtocolV4Header)/4;                                                                                     //Set header length
-    message -> typeOfService = 0;                                                                                                                     //Set type of service (not priv)
+    message -> typeOfService = 0;                                                                                                                     //Set type of service (not private)
 
     message -> totalLength = size + sizeof(InternetProtocolV4Header);                                                                                 //Set total length
     message -> totalLength = ((message -> totalLength & 0xFF00) >> 8)                                                                                 // Convert to big endian (Swap bytes)

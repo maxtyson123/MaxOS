@@ -151,7 +151,7 @@ namespace MaxOS
                 capsLock,
                 leftShift,
                 leftControl,
-                leftOS,                 //weird ass windows key or command on mac
+                leftOS,                 //weird ass Windows key or command on Mac
                 leftAlt,
 
                 // Right Side
@@ -179,7 +179,7 @@ namespace MaxOS
                 numberPadNine,
                 numberPadFullStop,
 
-                // Numper Pad (Non Number Lock)
+                // Number Pad (Non Number Lock)
                 numberPadHome,
                 numberPadPageDown,
                 numberPadPageUp,

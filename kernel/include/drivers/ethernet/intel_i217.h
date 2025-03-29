@@ -92,15 +92,15 @@ namespace MaxOS{
                 uint32_t Read(uint16_t address);
 
                 //EPROM (Device Memory)
-                bool epromPresent;                                   // Whether or not the EPROM is present
-                bool detectEEProm();                                 // Return true if EEProm exist, else it returns false and set the eerprom_existsdata member
+                bool epromPresent;                                   // Whether the EPROM is present
+                bool detectEEProm();                                 // Return true if EEProm exist, else it returns false and set the error_exists data member
                 uint32_t eepromRead( uint8_t addr);  // read 4 bytes from a specific EEProm Address
 
 
                 bool readMACAddress();       // read MAC Address
 
-                void receiveInit();          // Initialise receive descriptors an buffers
-                void sendInit();             // Initialise transmit descriptors an buffers
+                void receiveInit();          // Initialise receive descriptors buffers
+                void sendInit();             // Initialise transmit descriptors buffers
 
                 //Ethernet Driver functions
                 MediaAccessControlAddress ownMAC;                //MAC address of the device

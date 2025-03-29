@@ -189,7 +189,7 @@ syscall_args_t * SyscallManager::syscall_open_shared_memory(syscall_args_t *args
   if(name == 0)
     return nullptr;
 
-  // Get the block (dont care if null as that is caught in the load_shared_memory function)
+  // Get the block (don't care if null as that is caught in the load_shared_memory function)
   ipc_shared_memory_t* block = Scheduler::get_ipc() -> get_shared_memory((char*)name);
 
   // Load the block

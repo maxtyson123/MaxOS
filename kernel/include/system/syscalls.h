@@ -48,7 +48,7 @@ namespace MaxOS{
             system::cpu_status_t* return_state;
         } syscall_args_t;
 
-        // Could use a class based response but a single class might want multiple handlers eg fs
+        // Could use a class based response but a single class might want multiple handlers e.g. fs
         typedef syscall_args_t* (*syscall_func_t)(syscall_args_t* args);
 
         /**

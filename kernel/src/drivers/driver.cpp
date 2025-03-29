@@ -11,11 +11,11 @@ using namespace MaxOS::memory;
 Driver::Driver(OutputStream* driverMessageStream)
 : m_driver_message_stream(driverMessageStream) {
 
-};
+}
 
 Driver::~Driver(){
-    this ->m_driver_message_stream = 0;
-};
+    this ->m_driver_message_stream = nullptr;
+}
 
 /**
  * @brief activate the driver

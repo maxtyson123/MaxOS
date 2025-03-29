@@ -49,7 +49,7 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     execution_state->rsp = (uint64_t)m_stack_pointer;
     execution_state->rbp = 0;
 
-    // Copy the args into user space using memcopy
+    // Copy the args into userspace
     uint64_t  argc = arg_amount;
     void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
     memcpy(argv, args, arg_amount * sizeof(void*));

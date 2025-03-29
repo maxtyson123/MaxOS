@@ -151,7 +151,7 @@ void Clock::activate() {
 void Clock::delay(uint32_t milliseconds) {
 
 
-    //TODO Create a const for accurcy of clock and use that for calibration and rounding
+    //TODO Create a const for accuracy of clock and use that for calibration and rounding
 
     // Round the number of milliseconds to the nearest 100
     uint64_t rounded_milliseconds =  ((milliseconds+99)/100);
@@ -197,7 +197,7 @@ void Clock::calibrate(uint64_t ms_per_tick) {
   uint32_t lvt = 0x20 | (1 << 17);
   m_apic -> get_local_apic() -> write(0x320, lvt);
 
-  // Set the intial count
+  // Set the initial count
   m_apic -> get_local_apic() -> write(0x380, ms_per_tick * ticks_per_ms);
 
   // Clear the mask bit

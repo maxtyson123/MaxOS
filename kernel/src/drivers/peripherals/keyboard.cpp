@@ -21,7 +21,7 @@ KeyboardEventHandler::KeyboardEventHandler(){
 
 KeyboardEventHandler::~KeyboardEventHandler() {
 
-};
+}
 
 /**
  * @brief Handle the key down event
@@ -90,7 +90,7 @@ KeyboardDriver::~KeyboardDriver(){
  */
 void KeyboardDriver::activate() {
 
-    // Wait for user to stop pressing key (this is for the start-up key eg.. hold 'F12' for boot menu or hold 'del' for bios )
+    // Wait for user to stop pressing key (this is for the start-up key e.g. hold 'F12' for boot menu or hold 'del' for bios )
     while (m_command_port.read() & 0x1)
       m_data_port.read();
 
@@ -238,7 +238,7 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
     bool should_be_upper_case = is_shifting != this ->m_keyboard_state.caps_lock;
 
 
-    // TODO: Probabbly a better way to do this (investigate when adding more keyboard layouts)
+    // TODO: Probably a better way to do this (investigate when adding more keyboard layouts)
     if(keyType == 0)
     switch ((KeyCodeEN_US)scan_code) {
 

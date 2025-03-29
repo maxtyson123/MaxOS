@@ -66,7 +66,7 @@ namespace MaxOS {
 
             enum OperatingMode {
               MODE_0 = 0, // Interrupt on Terminal Count
-              MODE_1 = 1, // Hardware Retriggerable One-Shot
+              MODE_1 = 1, // Hardware Re-triggerable One-Shot
               MODE_2 = 2, // Rate Generator
               MODE_3 = 3, // Square Wave Generator
               MODE_4 = 4, // Software Triggered Strobe

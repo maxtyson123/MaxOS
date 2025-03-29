@@ -61,7 +61,7 @@ uint16_t VESABootConsole::height()
  */
 void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
 
-    // If the escaped code is \l and we are panicking, print the kernel panic logo
+    // If the escaped code is magic, and we are panicking, print the kernel panic logo
     if (c == '\067' && CPU::is_panicking) {
       print_logo_kernel_panic();
       return;
@@ -88,8 +88,8 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
         ansi_code_length = -1;
 
         if(strcmp("\033[0m", ansi_code)) {
-          m_foreground_color = ConsoleColour::Unititialised;
-          m_background_color = ConsoleColour::Unititialised;
+          m_foreground_color = ConsoleColour::Uninitialised;
+          m_background_color = ConsoleColour::Uninitialised;
           return;
         }
 
@@ -126,8 +126,10 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     char s[] = " ";
     s[0] = c;
 
-    Colour foreground = m_foreground_color == ConsoleColour::Unititialised ? get_foreground_color(x, y) : Colour(m_foreground_color);
-    Colour background = m_background_color == ConsoleColour::Unititialised ? get_background_color(x, y) : Colour(m_background_color);
+    Colour foreground = m_foreground_color == ConsoleColour::Uninitialised
+                            ? get_foreground_color(x, y) : Colour(m_foreground_color);
+    Colour background = m_background_color == ConsoleColour::Uninitialised
+                            ? get_background_color(x, y) : Colour(m_background_color);
 
     // Use the m_font to draw the character
     m_font.draw_text(x * 8, y * CHAR_HEIGHT, foreground, background, m_graphics_context, s);
@@ -255,7 +257,7 @@ void VESABootConsole::print_logo() {
           uint8_t pixel[3] = {0};
 
           // Get the pixel from the logo
-          LOGO_HEADER_PIXEL(logo, pixel);
+          LOGO_HEADER_PIXEL(logo, pixel)
 
           // Draw the pixel
           m_graphics_context->put_pixel(center_x - logo_width / 2 + logoX,
@@ -268,14 +270,22 @@ void VESABootConsole::print_logo() {
 
 /**
  * @brief Scrolls the console up by 1 line
+ *
+ * @param left The left coordinate of the area to scroll (not used)
+ * @param top The top coordinate of the area to scroll (not used)
+ * @param width The width of the area to scroll (not used)
+ * @param height The height of the area to scroll (not used)
+ * @param foreground The foreground color of the new line (not used)
+ * @param background The background color of the new line (not used)
+ * @param fill The character to fill the new line with (not used)
  */
 void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
                                 uint16_t height,
                                 common::ConsoleColour foreground,
-                                common::ConsoleColour background, char fill) {
+                                common::ConsoleColour background, char) {
 
 
-  // Get the frambuffer info
+  // Get the framebuffer info
   uint64_t* framebuffer_address = (uint64_t*)m_graphics_context->get_framebuffer_address();
   uint64_t  framebuffer_width   = m_graphics_context->get_width();
   uint64_t  framebuffer_height  = m_graphics_context->get_height();
@@ -313,7 +323,7 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
   uint8_t* start = (uint8_t*)(framebuffer_address + (CHAR_HEIGHT * (this->height() - 1) * framebuffer_pitch) / 8);
   size_t num_elements = (8 * amount_to_scroll) / sizeof(uint32_t);
 
-  // Cast the start pointer to a uint32_t pointer.
+  // Cast the start pointer to an uint32_t pointer.
   uint32_t* dest = (uint32_t*)(start);
 
   // Fill the range with the color
@@ -344,7 +354,7 @@ void VESABootConsole::print_logo_kernel_panic() {
       uint8_t pixel[3] = {0};
 
       // Get the pixel from the logo
-      LOGO_HEADER_PIXEL(logo, pixel);
+      LOGO_HEADER_PIXEL(logo, pixel)
 
       // Draw the pixel
       m_graphics_context->put_pixel(right_x + logoX, bottom_y + logoY, common::Colour(pixel[0], pixel[1], pixel[2]));

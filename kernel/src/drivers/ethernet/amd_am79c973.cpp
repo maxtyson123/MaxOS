@@ -26,11 +26,11 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     currentSendBuffer = 0;
     currentRecvBuffer = 0;
 
-    //Not active or intialized
+    //Not active or initialized
     active = false;
     initDone = false;
 
-    // Get the MAC adresses (split up in little endian order)
+    // Get the MAC addresses (split up in little endian order)
     uint64_t MAC0 = MACAddress0Port.read() % 256;
     uint64_t MAC1 = MACAddress0Port.read() / 256;
     uint64_t MAC2 = MACAddress2Port.read() % 256;
@@ -61,7 +61,7 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
     initBlock.reserved2 = 0;                         // Reserved
     initBlock.numRecvBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
     initBlock.physicalAddress = ownMAC;              // Set the physical address to the MAC address
-    initBlock.reserved3 = 0;                         // Reserverd
+    initBlock.reserved3 = 0;                         // Reserved
     initBlock.logicalAddress = 0;                    // None for now
 
 
@@ -69,23 +69,23 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
 
     // Set Buffer descriptors memory
     sendBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
-    initBlock.sendBufferDescrAddress = (uint32_t)sendBufferDescr;
+    initBlock.sendBufferDescrAddress = (uint64_t)sendBufferDescr;
 
     recvBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
-    initBlock.recvBufferDescrAddress = (uint32_t)recvBufferDescr;
+    initBlock.recvBufferDescrAddress = (uint64_t)recvBufferDescr;
 
     for(uint8_t i = 0; i < 8; i++)
     {
 
         // Send buffer descriptors
-        sendBufferDescr[i].address = (((uint32_t)&sendBuffers[i]) + 15 ) & ~(uint32_t)0xF;       // Same as above
-        sendBufferDescr[i].flags = 0x7FF                                                         // Legnth of descriptor
+        sendBufferDescr[i].address = (((uint64_t)&sendBuffers[i]) + 15 ) & ~(uint32_t)0xF;       // Same as above
+        sendBufferDescr[i].flags = 0x7FF                                                         // Length of descriptor
                                    | 0xF000;                                                     // Set it to send buffer
         sendBufferDescr[i].flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
         sendBufferDescr[i].avail = 0;                                                            // IF it is in use
 
         // Receive
-        recvBufferDescr[i].address = (((uint32_t)&recvBuffers[i]) + 15 ) & ~(uint32_t)0xF;   // Same as above
+        recvBufferDescr[i].address = (((uint64_t)&recvBuffers[i]) + 15 ) & ~(uint32_t)0xF;   // Same as above
         recvBufferDescr[i].flags = 0xF7FF                                                        // Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)
                                    | 0x80000000;                                                 // Set it to receive buffer
         recvBufferDescr[i].flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
@@ -94,10 +94,10 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
 
     // Move initialization block into device
     registerAddressPort.write(1);                                     // Tell device to write to register 1
-    registerDataPort.write((uint32_t)(&initBlock) &
+    registerDataPort.write((uint64_t)(&initBlock) &
                            0xFFFF);             // write address data
     registerAddressPort.write(2);                                     // Tell device to write to register 2
-    registerDataPort.write(((uint32_t)(&initBlock) >> 16) &
+    registerDataPort.write(((uint64_t)(&initBlock) >> 16) &
                            0xFFFF);     // write shifted address data
 
 
@@ -160,7 +160,7 @@ void amd_am79c973::handle_interrupt() {
 
 
 
-    // Similar to PIC, data needs to be read when a interrupt is sent, or it hangs
+    // Similar to PIC, data needs to be read when an interrupt is sent, or it hangs
     registerAddressPort.write(0);                           // Tell device to read from register 0
     uint32_t temp = registerDataPort.read();                     // Get current data
 
@@ -214,19 +214,19 @@ void amd_am79c973::DoSend(uint8_t *buffer, uint32_t size) {
 
     // What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
     for (uint8_t *src = buffer + size -1,                                                   // Set src pointer to the end of the data that is being sent
-         *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].address + size -1);       // Take the buffer that has been slected
-         src >= buffer;                                                             // While there is still information in the buffer that hasnt been written to src
+         *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].address + size -1);       // Take the buffer that has been selected
+         src >= buffer;                                                             // While there is still information in the buffer that hasn't been written to src
          src--,dst--                                                                // Move 2 pointers to the end of the buffers
             )
     {
-        *dst = *src;                                                                        // Copy data from source buffer to destiantion buffer
+        *dst = *src;                                                                        // Copy data from source buffer to destination buffer
     }
 
 
     sendBufferDescr[sendDescriptor].avail = 0;                               // Set that this buffer is in use
     sendBufferDescr[sendDescriptor].flags2 = 0;                              // Clear any previous error messages
     sendBufferDescr[sendDescriptor].flags = 0x8300F000                       // Encode the size of what is being sent
-                                            | ((uint16_t)((-size) & 0xFFF));;
+                                            | ((uint16_t)((-size) & 0xFFF));
 
     registerAddressPort.write(0);                           // Tell device to write to register 0
     registerDataPort.write(

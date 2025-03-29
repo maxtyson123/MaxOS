@@ -32,7 +32,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     // Load the header
     m_header = &m_rsdt->header;
     if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
-      ASSERT(false, "RSDT is too big, need to map more pages!")
+      ASSERT(false, "RSDT is too big, need to map more pages!");
     }
 
     // Map the RSDT Tables
@@ -55,15 +55,15 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
               sum += ((char*)rsdp)[i];
 
     // Check if the checksum is valid
-    ASSERT(sum == 0, "Invalid checksum!")
+    ASSERT(sum == 0, "Invalid checksum!");
 
   }else{
 
     // TODO: MAP THE MF
-    ASSERT(false, "Not implemented!")
+    ASSERT(false, "Not implemented!");
 
     // If the new ACPI is not supported, panic
-    ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
+    ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!");
 
     // It's the new ACPI
     m_type = 1;
@@ -81,7 +81,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
         sum += ((char*)rsdp2)[i];
 
     // Check if the checksum is valid
-    ASSERT(sum == 0, "Invalid checksum!")
+    ASSERT(sum == 0, "Invalid checksum!");
   }
 }
 

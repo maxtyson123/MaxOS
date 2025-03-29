@@ -92,7 +92,7 @@ namespace MaxOS {
           private:
             AdvancedConfigurationAndPowerInterface* m_acpi;
             MADT* m_madt;
-            uint32_t m_address;
+            uint64_t m_address;
             uint64_t m_address_high;
             uint32_t m_version;
             uint8_t m_max_redirect_entry;
@@ -138,8 +138,6 @@ namespace MaxOS {
 
             LocalAPIC* get_local_apic();
             IOAPIC* get_io_apic();
-
-            void enable_pic_pit();
 
       };
 

@@ -96,9 +96,9 @@ namespace MaxOS
 
                   void select_drivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager* interrupt_manager) override;
                   drivers::Driver* get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interrupt_manager);
-                  void list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev);
+                  void list_known_device(PeripheralComponentInterconnectDeviceDescriptor dev);
         };
     }
 }
 
-#endif //MAX_HARDWARECOMMUNICATION_OS_PCI_H
+#endif //MAX_OS_HARDWARECOMMUNICATION_PCI_H

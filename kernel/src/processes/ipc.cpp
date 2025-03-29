@@ -8,7 +8,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::memory;
 
 #include <common/kprint.h>
-#include <processes/scheduler.h>      //TODO: Cicrular dependency, need to fix
+#include <processes/scheduler.h>      //TODO: Circular dependency, need to fix
 
 /**
  * @brief Creates a new IPC handler
@@ -310,7 +310,7 @@ void IPC::send_message(ipc_message_endpoint_t *endpoint, void *message, size_t s
   endpoint -> message_lock.lock();
 
   // Copy the buffer into the kernel so that the endpoint can access it
-  void* kernel_copy = new char[size];
+  uintptr_t* kernel_copy = (uintptr_t*)new char[size];
   memcpy(kernel_copy, message, size);
 
   //Switch to endpoint's memory space
@@ -341,7 +341,7 @@ void IPC::send_message(ipc_message_endpoint_t *endpoint, void *message, size_t s
   MemoryManager::switch_active_memory_manager(Scheduler::get_current_process() -> memory_manager);
 
   // Free the lock & kernel copy
-  delete kernel_copy;
+  delete[] kernel_copy;
   endpoint -> message_lock.unlock();
 
 }

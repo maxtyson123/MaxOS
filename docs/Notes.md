@@ -215,7 +215,7 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - Next 4 bytes: Volume ID
 - - Next 11 bytes: Volume label
 - - Next 8 bytes: File system type (FAT32)
-- In the filesystem a directory is a cluster (e.g 4kb) and every sector in that cluster containers 16 directory entries
+- In the filesystem a directory is a cluster (e.g. 4kb) and every sector in that cluster containers 16 directory entries
 - The structure of a directory entry is as follows:
 - - First 8 bytes: File name (8.3 format)
 - - Next 3 bytes: File extension
@@ -226,13 +226,13 @@ See also [FAT32](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#FAT
 - - Next 4 bytes: write time e.t.c
 - - Next 2 bytes: Cluster low
 - - Next 4 bytes: File size
-- The cluster low and high are basicly pointers to where the directory entry is located on the hard drive or where the file is located on the hard drive
+- The cluster low and high are basically pointers to where the directory entry is located on the hard drive or where the file is located on the hard drive
 - To read a file you need to read the cluster low and high and then read the cluster from the hard drive
 - The FAT32 table is a table that contains pointers to where the next cluster is located on the hard drive
-- When an hard drive is fragmented files larger then a cluster are split up and stored in multiple places on the hard drive
+- When a hard drive is fragmented files larger than a cluster are split up and stored in multiple places on the hard drive
 - The FAT32 table is used to find the next cluster of a file, when a file is fragmented
 - To expand a file the File Allocation Table has to be edited to point to a new empty cluster, this is done by looping through all the clusters in the FAT and finding one with the value 0x000000 which means it is unused. Then the FAT is edited so that the end of the file is this new cluster, the cluster is marked as used and the finnaly the file is set to use this cluster.
-- A cluster can only belong to one file at a time. This is useful as that means that when a file is being read or expand the operating system doesnt need to split the cluster up.
+- A cluster can only belong to one file at a time. This is useful as that means that when a file is being read or expand the operating system doesn't need to split the cluster up.
 <!-- TOC --><a name="graphics"></a>
 # Graphics
 Here are the notes on graphics for the operating system. (May need to read hardware communication m_first_memory_chunk)
@@ -283,9 +283,9 @@ Here are the notes on graphics for the operating system. (May need to read hardw
 <!-- TOC --><a name="gui-framework"></a>
 ### GUI - Framework
 See also: Bresenham line algorithm (use for later)
-- The GUI framework will have a base class called Widget, which should have a draw function. This draw function would get a m_graphics_context and draw itself onto of it using the graphicContext's draw methods.
+- The GUI framework will have a base class called Widget, which should have a draw function. This draw function would get an m_graphics_context and draw itself onto of it using the graphicContext's draw methods.
 - Thees widgets will have parents and such, therefore their draw positions will be relative, meaning there has to be a function to get the absolute m_position.
-- Widgets will also have a m_width and m_height, and a function to check if a co-ordinate is inside itself (used for mouse handling and such)
+- Widgets will also have an m_width and m_height, and a function to check if a co-ordinate is inside itself (used for mouse handling and such)
 - To handle mouse input, the widget will use a mouse event handler and handle the events onMouseDown, on_mouse_move_widget, on_mouse_up_event. However, the mouse handler won't be on the widget itself, rather it would be on the desktop.
 - This is because the mouse movement is reported in relative-ness not absolute m_position (desktop would store mouse m_position and update it based on the movement, the object can just query the x,y pos from the desktop).
 - A subclass of the widget would be a composite class, which would contain an array of child widgets, and it would pass methods on to the m_children (e.g. the child gets drawn last so its on m_top)
@@ -322,7 +322,7 @@ See also: [Thread](https://wiki.osdev.org/Thread)
 - To implement threads in the OS, the kernel will have to implement a thread class. This class will have a function to create a thread, and a function to execute the thread. The thread class will also have a function to get the current thread.
 - The thread class will also have a function to get the current thread. This function will be used to get the current thread, and then the thread will be able to access its own stack.
 - Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yield function on the thread class.
-- Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. m_threads are often used to implement concurrency within a process. m_threads are also used to implement parallelism, where multiple processes can run simultaneously on a multi-core processor.
+- Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. m_threads are often used to implement concurrency within a process. m_threads are also used to implement parallelism, where multiple processes can run simultaneously on a multicore processor.
 <!-- TOC --><a name="dynamic-memory-management-heap"></a>
 ### Dynamic Memory Management / Heap
 See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list)
@@ -354,7 +354,7 @@ See also [List of syscalls](https://x64.syscall.sh/)
 - To get around this the kernel has to be put in userspace once fully initiated. Userspace tells the device to ignore "outb" commands and other low level operations.
 - However, programs do have to communicate with the hard drive and other devices so there has to be some, managed , way of doing so.
 - So instead system calls are used. Basically the program will call a software interrupt (0x80) and then the kernel will read infomation from the AX and BX registers (AX and BX were set before the interrupt, AX is the system call number and BX is parameters)
-- There for the implementation for this just involves setting up an interrupt handler that handles the interrupt 0x80, reads the AX  and BX registers and then runs the relative function
+- Therefore the implementation for this just involves setting up an interrupt handler that handles the interrupt 0x80, reads the AX  and BX registers and then runs the relative function
 <!-- TOC --><a name="networking"></a>
 # Networking
 <!-- TOC --><a name="driver-am79c971"></a>
@@ -378,7 +378,7 @@ See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_fra
 - - Next 2 bytes: EtherType (Indicate the protocol)
 - - Next 46 - 1000 bytes: Data (Payload)
 - - Last 4 bytes: Checksum (CRC)
-- From this data the handler can then interpret the data e.g. discard if the MAC adress isnt for this device or pass the data to the ARP handler if the EtherType is 0x0806 etc.
+- From this data the handler can then interpret the data e.g. discard if the MAC address isn't for this device or pass the data to the ARP handler if the EtherType is 0x0806 etc.
 <!-- TOC --><a name="address-resolution-protocol"></a>
 ### Address Resolution Protocol
 See also [Wikipedia - ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol)
@@ -527,11 +527,11 @@ See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 - - Physical Layer  (am79c971)
 - It is important to network because it allows for the different layers to be implemented in different ways. For example, the physical layer can be implemented using a wireless connection or a wired connection. The network layer can be implemented using a router or a switch. The transport layer can be implemented using TCP or UDP. The application layer can be implemented using HTTP or FTP.
 - The operating system will implement the layers above the network layer (Application, Presentation, Session, Transport) and the network device will implement the layers below the network layer (Data Link, Physical)
-- The reason for this is because the network device is the only thing that can communicate with the physical layer and the network layer. The operating system can only communicate with the application layer and the transport layer.
+- The reason for this is that the network device is the only thing that can communicate with the physical layer and the network layer. The operating system can only communicate with the application layer and the transport layer.
 
 <!-- TOC --><a name="index"></a>
 # Index
-Here is an index of files in the os, and what notes they  relate to. This is useful for finding the implmentation of code for a specific part of the notes.
+Here is an index of files in the os, and what notes they  relate to. This is useful for finding the implementation of code for a specific part of the notes.
 <!-- TOC --><a name="kernel"></a>
 
 ### Kernel

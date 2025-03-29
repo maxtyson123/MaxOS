@@ -19,7 +19,7 @@ namespace MaxOS{
          * @class Desktop
          * @brief The desktop that contains all the windows, handles the drawing of the screen and the mouse on every tick
          */
-        class Desktop : public CompositeWidget, public drivers::peripherals::MouseEventHandler, public drivers::clock::ClockEventHandler{     //NTS: it is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device wont have a mouse cursor
+        class Desktop : public CompositeWidget, public drivers::peripherals::MouseEventHandler, public drivers::clock::ClockEventHandler{     //NTS: it is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device won't have a mouse cursor
 
             protected:
                 uint32_t m_mouse_x;

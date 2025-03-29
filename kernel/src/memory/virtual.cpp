@@ -11,11 +11,11 @@ using namespace MaxOS::common;
 using namespace MaxOS::processes;
 
 VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
-: m_physical_memory_manager(PhysicalMemoryManager::s_current_manager),    //Todo: dont need to store this as its a static?
+: m_physical_memory_manager(PhysicalMemoryManager::s_current_manager),    //Todo: don't need to store this as its a static?
   m_is_kernel(is_kernel)
 {
 
-    // If not the kernel, we need to allocate a new PML4 table  TODO: Might not need a variable? Check if there isnt a kernel one and just assume it is the kernel one
+    // If not the kernel, we need to allocate a new PML4 table  TODO: Might not need a variable? Check if there isn't a kernel one and just assume it is the kernel one
     if(!m_is_kernel){
 
       // Get a new pml4 table
@@ -45,7 +45,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     }else{
       m_pml4_root_address = m_physical_memory_manager->get_pml4_root_address();
       m_pml4_root_physical_address = (uint64_t*)MemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
-    };
+    }
 
     // Log the VMM's PML4 address
     _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
@@ -282,7 +282,7 @@ void VirtualMemoryManager::free(void *address) {
   if(chunk == nullptr)
     return;
 
-  // If the chunk is shared, dont unmap it incase other processes are using it
+  // If the chunk is shared, don't unmap it incase other processes are using it
   if(chunk->flags & Shared){
 
     // Let the IPC handle the shared memory

@@ -225,7 +225,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
              * socket -> remotePort = msg -> srcPort;                                           //The remote port, e.g. the port of the server
              * socket -> remoteIP = srcIP_BE;                                                   //The remote IP, e.g. the IP of the server
              * socket -> acknowledgementNumber = bigEndian32( msg -> sequenceNumber ) + 1;      //The acknowledgement number, the number used to keep track of what has been received, this is just incremented by 1 each time
-             * socket -> sequenceNumber = 0xbeefcafe;                                           //The sequence number, the number of the next set that is to be sent but in this case sequence isnt enabled so just set it to anything
+             * socket -> sequenceNumber = 0xbeefcafe;                                           //The sequence number, the number of the next set that is to be sent but in this case sequence isn't enabled so just set it to anything
              * Send(socket, 0,0, SYN|ACK);                                                      //The response command, genneraly has to have the acknoledgement flag set
              * socket -> sequenceNumber++;                                                      //Increment the sequence number
              *
@@ -353,14 +353,14 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
         }
         else                                                                        //If it doesnt exist then create a new socket and send a reset flag
         {
-            TransmissionControlProtocolSocket socket(this);                     //Create a new socket
-            socket.remotePort = msg -> srcPort;                                         //Set the remote port
-            socket.remoteIP = sourceIP;                                                 //Set the remote IP
-            socket.localPort = msg -> dstPort;                                                  //Set the local port
-            socket.localIP = destinationIP;                                                     //Set the local IP
-            socket.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);              //Set the sequence number
-            socket.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;          //Set the acknowledgement number
-            sendTransmissionControlProtocolPacket(&socket, 0,0, RST);          //Send the reset flag
+            TransmissionControlProtocolSocket new_socket(this);                     //Create a new socket
+            new_socket.remotePort = msg -> srcPort;                                         //Set the remote port
+            new_socket.remoteIP = sourceIP;                                                 //Set the remote IP
+            new_socket.localPort = msg -> dstPort;                                                  //Set the local port
+            new_socket.localIP = destinationIP;                                                     //Set the local IP
+            new_socket.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);              //Set the sequence number
+            new_socket.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;          //Set the acknowledgement number
+            sendTransmissionControlProtocolPacket(&new_socket, 0,0, RST);          //Send the reset flag
         }
     }
 

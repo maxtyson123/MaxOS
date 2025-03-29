@@ -35,8 +35,8 @@ namespace MaxOS{
 
                     uint8_t ansi_code_length = -1;
                     char ansi_code[8] = "0000000";
-                    common::ConsoleColour m_foreground_color = common::ConsoleColour::Unititialised;
-                    common::ConsoleColour m_background_color = common::ConsoleColour::Unititialised;
+                    common::ConsoleColour m_foreground_color = common::ConsoleColour::Uninitialised;
+                    common::ConsoleColour m_background_color = common::ConsoleColour::Uninitialised;
 
                 public:
                     VESABootConsole(common::GraphicsContext*);

@@ -56,7 +56,7 @@ namespace MaxOS{
 
       enum ConsoleColour
       {
-        Unititialised = 0xFF,
+        Uninitialised = 0xFF,
         Black        = 0x00,
         Blue         = 0x01,
         Green        = 0x02,

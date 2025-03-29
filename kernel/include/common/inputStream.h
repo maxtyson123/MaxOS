@@ -434,4 +434,4 @@ namespace MaxOS{
     }
 }
 
-#endif //MAXOS_INPUTSTREAM_H
+#endif //MAXOS_COMMON_INPUTSTREAM_H

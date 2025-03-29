@@ -149,7 +149,7 @@ namespace MaxOS{
             Type minRight = (left + width < other.left + other.width ? left + width : other.left + other.width);
             Type minBottom = (top + height < other.top + other.height ? top+height : other.top + other.height);
 
-            // Add the non intersecting rectangles to the result
+            // Add the non-intersecting rectangles to the result
 
             // Add non-overlapping region above if current top is less than other top
             if (top < other.top)

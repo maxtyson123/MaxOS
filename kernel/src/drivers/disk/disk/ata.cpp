@@ -94,7 +94,7 @@ void AdvancedTechnologyAttachment::identify() {
  */
 void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int count)
 {
-    // Don't allow reading more then a sector
+    // Don't allow reading more than a sector
     if(sector & 0xF0000000 || count > m_bytes_per_sector)
         return;
 
@@ -150,7 +150,7 @@ void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int c
  */
 void AdvancedTechnologyAttachment::write_28(uint32_t sector, uint8_t* data, int count){
 
-    // Don't allow writing more then a sector
+    // Don't allow writing more han a sector
     if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)
         return;
 

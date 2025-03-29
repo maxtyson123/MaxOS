@@ -89,7 +89,7 @@ void set_count(int); // Sets m_the_count.
 int get_count() const; // Returns m_the_count.
 ```
 
-Precede getters that return values through out arguments with the word "get".
+Precede getters that return values throughout arguments with the word "get".
 
 ###### Right:
 
@@ -299,7 +299,7 @@ Comments should be the line above the code they are describing. They should not 
 
 Make comments look like sentences by starting with a capital letter and ending with a period (punctuation). One exception may be end of line comments like this `if (x == y) // false for NaN`.
 
-Use TODO for things that need to be done, FIXME for things that need to be fixed, and HACK for things that are ugly but work. Use FIXME when you think there is a better way to do something but you don't know what it is yet.
+Use TODO for things that need to be done, FIXME for things that need to be fixed, and HACK for things that are ugly but work. Use FIXME when you think there is a better way to do something, but you don't know what it is yet.
 
 
 ###### Right:
@@ -495,7 +495,7 @@ public:
 
 Curly braces may only be omitted from `if`/`else`/`for`/`while`/etc. statement blocks if the body is a single line.
 
-Additionally, if any body of a connected if/else statement requires curly braces according to this rule, all of them do.
+Additionally, if anybody of a connected if/else statement requires curly braces according to this rule, all of them do.
 
 ###### Right:
 ```cpp

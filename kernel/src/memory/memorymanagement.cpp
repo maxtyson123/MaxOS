@@ -124,7 +124,7 @@ void *MemoryManager::handle_malloc(size_t size) {
   temp -> prev = result;
   temp -> next = result -> next;
 
-  // If there is a chunk after the current one then set its previous to the new chunk
+  // If there is a chunk after the current one then set it's previous to the new chunk
   if(temp -> next != 0)
     temp -> next -> prev = temp;
 
@@ -232,12 +232,16 @@ MemoryChunk *MemoryManager::expand_heap(size_t size) {
   MemoryChunk* chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(size, Present | Write);
 
   // If the chunk is null then there is no more memory
-  ASSERT(chunk != 0, "Out of memory - kernel cannot allocate any more memory");
+  ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");
+
+  // Handled by assert, but just in case
+  if(chunk == nullptr)
+      return nullptr;
 
   // Set the chunk's properties
   chunk -> allocated = false;
   chunk -> size = size;
-  chunk -> next = 0;
+  chunk -> next = nullptr;
 
   // Insert the chunk into the linked list
   m_last_memory_chunk -> next = chunk;

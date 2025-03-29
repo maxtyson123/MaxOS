@@ -66,7 +66,7 @@ void Spinlock::acquire() {
       if(m_should_yield)
         Scheduler::get_system_scheduler()->yield();
 
-      // Dont optimise this loop
+      // don't optimise this loop
       asm("nop");
   }
 }

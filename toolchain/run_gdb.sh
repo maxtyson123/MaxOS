@@ -34,7 +34,7 @@ set print symbol-filename on
 # Split  screen
 layout split
 
-# Dont ask to confirm quit
+# don't ask to confirm quit
 define hook-quit
     set confirm off
 end

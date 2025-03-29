@@ -90,7 +90,7 @@ MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mou
     // Bring the window to the front
     bring_to_front();
 
-    // Convert the mouse coordinates to a int32_t
+    // Convert the mouse coordinates to an int32_t
     int32_t x = (int32_t) mouseX;
     int32_t y = (int32_t) mouseY;
 

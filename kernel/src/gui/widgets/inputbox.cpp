@@ -206,7 +206,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
                 cursor_position++;
             }else{
 
-                // Dont want to redraw the widget if nothing has changed
+                // Don't want to redraw the widget if nothing has changed
                 return;
             }
             break;

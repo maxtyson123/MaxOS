@@ -77,7 +77,7 @@ Max OS is a hobby operating system developed for the 64bit platform using C++ an
 
 Max OS supports device drivers, memory management, multitasking, a GUI, and more. The project is being developed with the goal of being able to run on real hardware, however, it is currently only able to run on a virtual machine.
 
-This GitHub repository contains the source code for the operating system, as well as the build scripts required to build the operating system from source. The repository also contains the latest built kernel, which can be downloaded from the workflow artifacts. To ensure a cleaner git history, each feature/change is done in a separate branch and then merged into the main branch once working. To see the history of each feature press on the pull request number. If you are intrested in the active developement find the latest branch <a href="https://github.com/maxtyson123/MaxOS/branches">Here</a>.
+This GitHub repository contains the source code for the operating system, as well as the build scripts required to build the operating system from source. The repository also contains the latest built kernel, which can be downloaded from the workflow artifacts. To ensure a cleaner git history, each feature/change is done in a separate branch and then merged into the main branch once working. To see the history of each feature press on the pull request number. If you are intrested in the active development find the latest branch <a href="https://github.com/maxtyson123/MaxOS/branches">Here</a>.
 
 
 _Note:_ Ignore all the networking code & drivers, they are very outdated, badly written and will soon be ported over to userspace and rewritten.
@@ -88,7 +88,7 @@ _Note:_ Ignore all the networking code & drivers, they are very outdated, badly 
 
 This is how to build the Max OS operating system from source. (Alternatively, you can download the latest built kernel from the workflow artifacts)
 
-Currently Max OS can only be built on a linux machine, but does support WSL. In the future I do plan to port the build system to Mac. 
+Currently, Max OS can only be built on a linux machine, but does support WSL. In the future I do plan to port the build system to Mac. 
 
 ### Prerequisites
 
@@ -112,7 +112,7 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 
 - Upon first build follow steps 1-5
 - If you change the file structure (e.g. add a new file) follow steps 3-5
-- If you running on a new boot (eg you rebooted your computer) follow steps 4-5
+- If you're running on a new boot (eg you rebooted your computer) follow steps 4-5
 - If you only change a file follow step 5
 
 1. Clone the repo
@@ -121,7 +121,7 @@ Note: If you want to run the operating system in a virtual machine, you will nee
    cd MaxOS
    ```
 
-2. Create the cross compiler (This will take a while)
+2. Create the cross-compiler (This will take a while)
    ```sh
    cd toolchain
    ./make_cross_compiler.sh
@@ -157,10 +157,10 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 No user usage so far (userland will be added in the future)
 
 #### Boot Console
-![Boot Console](docs/Screenshots/Boot/Console20%v2.png)
+![Boot Console](docs/Screenshots/Boot/Console_v3.png)
 
 #### GUI
-![GUI](docs/Screenshots/GUI/Windows20%VESA.png)
+![GUI](docs/Screenshots/GUI/Windows_VESA.png)
 
 <!-- ROADMAP -->
 ## Roadmap

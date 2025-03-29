@@ -3,17 +3,17 @@
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/MaxOS.sh
 
-# If the disk image already exists, delete it
+# If the disk image already exists no need to setup
 if [ -f ../MaxOS.img ]; then
-   msg "Image already setup"
-   exit 0
+    msg "Image already exists"
+    exit 0
 fi
 
 #Create a 2GB image
 qemu-img create ../MaxOS.img 2G  || fail "Could not create image"
 
 #Partion the image
-msg "Partioning image"
+msg "Partitioning image"
 fdisk ../MaxOS.img -u=cylinders << EOF
 o
 n
@@ -53,7 +53,7 @@ sudo mount -o loop /dev/loop0p1 /mnt/MaxOS_img_1  || fail "Could not mount image
 ## IMAGE 2
 msg "Creating filesystem for partition 2"
 
-#Create a FAT32 Filesystem (partion 2)
+#Create a FAT32 Filesystem (partition 2)
 sudo mkfs.vfat -F 32 /dev/loop0p2 || fail "Could not create filesystem"
 
 #Create a directory for the mount point

@@ -175,7 +175,7 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 for(int barNum = 5; barNum >= 0; barNum--){
                     BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
                     if(bar.address && (bar.type == InputOutput))
-                        deviceDescriptor.port_base = (uint32_t)bar.address;
+                        deviceDescriptor.port_base = (uint64_t )bar.address;
                 }
 
                 // write to the debug stream
@@ -187,7 +187,7 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                   handler->on_driver_selected(driver);
                   _kprintf("%h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
                 }else{
-                  list_known_deivce(deviceDescriptor);
+                  list_known_device(deviceDescriptor);
                 }
 
                 // New line
@@ -234,7 +234,7 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  */
 Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager*interrupt_manager) {
 
-    // Dont use new here, manually allocate memory instead
+    //TODO: Bullshit, do use new. Don't use new here, manually allocate memory instead
 
     Driver* driver = 0;
     switch (dev.vendor_id)
@@ -295,7 +295,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 }
 
 
-void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev) {
+void PeripheralComponentInterconnectController::list_known_device(PeripheralComponentInterconnectDeviceDescriptor dev) {
     switch (dev.vendor_id)
     {
         case 0x1022:
@@ -454,7 +454,7 @@ BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_
         return result;
 
     // read the base address register
-    uint32_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
+    uint64_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
     result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;
     result.address = (uint8_t*) (bar_value & ~0xF);
 

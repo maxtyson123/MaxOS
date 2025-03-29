@@ -7,7 +7,7 @@
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
 void write(const char* data, uint64_t length = 0)
 {
-  // Dont care abt length for now
+  // don't care abt length for now
   asm volatile("int $0x80" : : "a" (0x01), "b" (data));
 }
 

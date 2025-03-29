@@ -89,12 +89,12 @@ intel_i217::~intel_i217() {
 
 void intel_i217::Write(uint16_t address, uint32_t data) {
 
-    //Note: These Ports/MemIO cant be init in the constructor like they normaly would as it depends wether the device is using IO or MemIO, and checking that in every function would be messy
+    //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
 
     if(bar_type == 0) {                                             // If the base address register is memory mapped
 
-        MemIO32Bit dataMem(memBase + address);              // Create a 32 bit memory class at the address
-        dataMem.write(data);                                       // write the data to the memory adress
+        MemIO32Bit dataMem(memBase + address);              // Create a 32-bit memory class at the address
+        dataMem.write(data);                                       // write the data to the memory address
 
     } else {
 
@@ -111,11 +111,11 @@ void intel_i217::Write(uint16_t address, uint32_t data) {
 
 uint32_t intel_i217::Read(uint16_t address) {
 
-    //Note: These Ports/MemIO cant be init in the constructor like they normaly would as it depends wether the device is using IO or MemIO, and checking that in every function would be messy
+    //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
     if(bar_type == 0) {                                             // If the base address register is memory mapped
 
-        MemIO32Bit dataMem(memBase + address);               // Create a 32 bit memory class at the address
-        return dataMem.read();                                      // read the data from the memory adress
+        MemIO32Bit dataMem(memBase + address);               // Create a 32-bit memory class at the address
+        return dataMem.read();                                      // read the data from the memory address
 
     } else{
 
@@ -134,7 +134,7 @@ bool intel_i217::detectEEProm() {
     uint32_t val = 0;                                   // The value to be returned
     Write(epromRegister, 0x1);              // Set the register to read the EEProm
 
-    for(int i = 0; i < 1000 && ! epromPresent; i++)     //Loop 1000 times or until the EEProm is detected
+    for(int i = 0; i < 1000 && !epromPresent; i++)     //Loop 1000 times or until the EEProm is detected
     {
         val = Read( 0x0014);                    // read the register
 
@@ -217,11 +217,11 @@ void intel_i217::receiveInit() {
     Write(sendDescriptorLowRegister, (uint32_t)((uint64_t)ptr >> 32) );
     Write(sendDescriptorHighRegister, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
 
-    //write the recieve descriptor list address to the register
+    //write the receive descriptor list address to the register
     Write(receiveDescriptorLowRegister, (uint64_t)ptr);
     Write(receiveDescriptorHighRegister, 0);
 
-    //Set the recieve descriptor list length
+    //Set the receive descriptor list length
     Write(receiveDescriptorLengthRegister, 32 * 16);
 
 

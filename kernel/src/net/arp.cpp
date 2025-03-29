@@ -87,7 +87,7 @@ bool AddressResolutionProtocol::handleEthernetFramePayload(uint8_t* etherframePa
  */
 void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress address) {
 
-    //When a MAC adress is requested, instantiate a new ARP message block on the stack
+    //When a MAC address is requested, instantiate a new ARP message block on the stack
     AddressResolutionProtocolMessage arpMessage;
 
     //Set the message's values
@@ -127,7 +127,7 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(InternetProtocolAdd
 
     //TODO: Add clock to wait
 
-    //This isnt safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
+    //This isn't safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
     while (cacheIterator == addressCache.end()) {                         //Wait until the MAC address is found
         cacheIterator = addressCache.find(address);
     }

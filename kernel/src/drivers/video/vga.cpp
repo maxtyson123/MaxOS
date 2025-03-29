@@ -140,13 +140,13 @@ bool VideoGraphicsArray::internal_set_mode(uint32_t width, uint32_t height, uint
 uint8_t* VideoGraphicsArray::get_frame_buffer_segment()
 {
 
-    // Optimise so that dont have to read and write to the port every time
+    // Optimise so that don't have to read and write to the port every time
     return (uint8_t*)0xA0000;
 
     //read data from index number 6
     m_graphics_controller_index_port.write(0x06);
     uint8_t segmentNumber =
-        m_graphics_controller_data_port.read() & (3<<2); //Shift by 2 as only intrested in bits 3 & 4 (& 3 so all the other bits are removed)
+        m_graphics_controller_data_port.read() & (3<<2); //Shift by 2 as only interested in bits 3 & 4 (& 3 so all the other bits are removed)
     switch(segmentNumber)
     {
         default:

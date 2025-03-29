@@ -80,4 +80,4 @@ namespace MaxOS {
     }
 }
 
-#endif //MaxOS_GRAPHICSCONTEX_H
+#endif //MaxOS_COMMON_GRAPHICSCONTEX_H

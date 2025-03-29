@@ -73,7 +73,7 @@ using namespace MaxOS::filesystem;
 //TODO: Rework cmake to have debug and prod targets
 
 // Define static constructors
-extern "C" void* __dso_handle = nullptr;
+extern "C" void* __dso_handle  = nullptr;
 
 
 //Define what a constructor is
@@ -144,8 +144,8 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     // Print helpers
     string out = "";
-    #define log(x) out = x; cout << out; cout << (string)" " * (sub_boot_width - out.length() - 6) << tick << "\n";
-    #define header(x) cout << "\n\n" << ANSI_COLOURS[FG_White] << "[" << string(x).center(sub_boot_width - 2) << "]\n" << ANSI_COLOURS[Reset];
+    #define log(x) out = x; cout << out; cout << (string)" " * (sub_boot_width - out.length() - 6) << tick << "\n"
+    #define header(x) cout << "\n\n" << ANSI_COLOURS[FG_White] << "[" << string(x).center(sub_boot_width - 2) << "]\n" << ANSI_COLOURS[Reset]
 
     // Print the header
     cout << ANSI_COLOURS[FG_Blue] << (string)"=" * boot_width << "\n";
@@ -153,7 +153,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     cout << ANSI_COLOURS[FG_Blue] << (string)"=" * boot_width << "\n";
 
     // Stuff done earlier
-    header("Initialising System Components")
+    header("Initialising System Components");
     log("Set Up Serial Console");
     log("Parsed Multiboot");
     log("Set Up Paging");
@@ -170,7 +170,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up Syscalls");
 
     DriverManager driverManager;
-    header("Initialising Hardware")
+    header("Initialising Hardware");
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     log("Set Up ACPI");
@@ -233,7 +233,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     //driverSelectors.push_back(&USBController);
     //log("Set Up USB");
 
-    header("Device Management")
+    header("Device Management");
 
     // Find the drivers
     cout << "Finding Drivers" << ANSI_COLOURS[FG_White];
@@ -268,7 +268,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     Time now = kernelClock.get_time();
     cout << "TIME: " << now.hour << ":" << now.minute << ":" << now.second << "\n";
 
-    header("Finalisation")
+    header("Finalisation");
 
     // Initialise the drivers
     cout <<  "Initialising Devices" << ANSI_COLOURS[FG_White];
@@ -332,7 +332,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     ///  leaving kernelMain and  also having a idle_proc
     while (true){
 
-      // Print the ticks (debuging)
+      // Print the ticks (debugging)
       //_kprintf("%hTick: %d\r", scheduler.get_ticks());
 
       // yield ? wait until figured out the task manager cpu %

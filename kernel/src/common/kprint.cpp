@@ -33,11 +33,11 @@ char* itoa(int base, uint64_t  number)
     for (; number && i; --i, number /= base)
         buffer[i] = "0123456789ABCDEF"[number % base];
 
-    if (isNegative)
-    {
-        buffer[i] = '-';
-        return &buffer[i];
-    }
+//    if (isNegative)
+//    {
+//        buffer[i] = '-';
+//        return &buffer[i];
+//    }
 
     return &buffer[i + 1];
 }

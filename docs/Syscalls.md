@@ -1,11 +1,11 @@
 # Syscalls
-(To be moved into a better docs setup, ie search for all functions syscal_(name) and build the table from their?)
+(To be moved into a better docs setup, ie search for all functions syscall_(name) and build the table from their?)
 
-In the fututure there will be a syscall abstraction method allowing to switch out the syscall implementation for different platforms.
+In the future there will be a syscall abstraction method allowing to switch out the syscall implementation for different platforms.
 Ie a program could load linux vX if it supports it, or windows vX if it supports it. This will allow for versions such as MaxOSvX.
 This will be done via a translation layer to convert it into the correct syscall for the platform.
 
-This is helpful for updating syscall table (idk if that will even happen or it will just grow) becuase it can be dsigned in a way the previous version can be translated into the latest. This may be bad but idk yet. Ie Linux v2 could target MaxosV2 but then would have to be translated to MaxOsV3.
+This is helpful for updating syscall table (I don't know if that will even happen, or it will just grow) because it can be designed in a way the previous version can be translated into the latest. This may be bad but dk yet. Ie Linux v2 could target MaxosV2 but then would have to be translated to MaxOsV3.
 
 
 ## Interrupt Arguments

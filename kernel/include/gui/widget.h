@@ -122,7 +122,7 @@ namespace MaxOS{
          */
         template<int Left, int Top, int Width, int Height> class WidgetMoverResizer : public drivers::peripherals::MouseEventHandler{
             protected:
-                Widget* targettedWidget;
+                Widget* targetedWidget;
             public:
                 WidgetMoverResizer(Widget* widget);
                 ~WidgetMoverResizer();
@@ -159,7 +159,7 @@ namespace MaxOS{
         template <int Left, int Top, int Width, int Height> WidgetMoverResizer<Left,Top,Width,Height>::WidgetMoverResizer(Widget* target)
                 : drivers::peripherals::MouseEventHandler()
         {
-            this -> targettedWidget = target;
+            this ->targetedWidget = target;
         }
 
         template<int Left, int Top, int Width, int Height> WidgetMoverResizer<Left,Top,Width,Height>::~WidgetMoverResizer()
@@ -175,7 +175,7 @@ namespace MaxOS{
         template<int Left, int Top, int Width, int Height> void WidgetMoverResizer<Left, Top, Width, Height>::on_mouse_move_event(int8_t x, int8_t y)
         {
 
-            Widget* targ = this->targettedWidget;
+            Widget* targ = this->targetedWidget;
 
             // If there is actually a size of the widget to change
             if(Left != 0 || Top != 0)

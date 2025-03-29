@@ -46,7 +46,7 @@ void InterruptHandler::handle_interrupt() {
  */
 system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t *status) {
 
-  // For handlers that dont care about the status
+  // For handlers that don't care about the status
   handle_interrupt();
 
   // Return the status
@@ -120,7 +120,7 @@ InterruptManager::InterruptManager()
     idt.limit = 256 * sizeof(InterruptDescriptor) - 1;
     idt.base = (uint64_t)s_interrupt_descriptor_table;
     asm volatile("lidt %0" : : "m" (idt));
-};
+}
 
 InterruptManager::~InterruptManager()
 {
@@ -202,6 +202,7 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *st
       _kpanicf("Device Not Available: FPU Not Enabled\n");
       CPU::prepare_for_panic(status);
       CPU::PANIC("See above message for more information", status);
+      break;
 
     case 0x0D:
           return general_protection_fault(status);
@@ -249,7 +250,7 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
 
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
-  // Where to go afterwards
+  // Where to go afterward
   cpu_status_t* new_status = status;
 
   // If there is an interrupt manager, handle the interrupt
@@ -285,6 +286,9 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
 
   _kpanicf("Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n", faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
   CPU::PANIC("See above message for more information", status);
+
+  // Probably should never get here
+  return status;
 }
 
 /**
@@ -303,4 +307,6 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t *s
     _kpanicf("General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Not a Protection Exception");
     CPU::PANIC("See above message for more information", status);
 
+    // Probably should never get here
+    return status;
 }

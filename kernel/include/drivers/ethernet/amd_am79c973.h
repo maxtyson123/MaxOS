@@ -45,7 +45,7 @@ namespace MaxOS{
 
                 struct BufferDescriptor{
 
-                    uint32_t address;
+                    uint64_t address;
                     uint32_t flags;
                     uint32_t flags2;
                     uint32_t avail;

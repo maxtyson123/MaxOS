@@ -19,7 +19,7 @@
 
 #define ASSERT(condition, format, ...) \
     if(!(condition)) \
-        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);
+        _kprintf_internal(3, __FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__)
 
 
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...);

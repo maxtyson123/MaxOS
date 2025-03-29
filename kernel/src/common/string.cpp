@@ -18,7 +18,7 @@ String::String()
 String::String(char const *string)
 {
 
-  // Get the length of the string, prevent longer than 10000 because this should mean somthings gone wrong
+  // Get the length of the string, prevent longer than 10000 because this should mean somethings gone wrong
   m_length = 0;
   while (string[m_length] != '\0' && m_length <= 10000)
           m_length++;

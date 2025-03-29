@@ -48,7 +48,7 @@ void LocalAPIC::init() {
     _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
 
   } else {
-    ASSERT(false, "CPU does not support xAPIC")
+    ASSERT(false, "CPU does not support xAPIC");
   }
 
   // Get information about the APIC

@@ -7,7 +7,7 @@ project(MaxOS C CXX ASM)
 # Logs the compiler commands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Dont enable runtime type information
+# don't enable runtime type information
 set(CMAKE_SKIP_RPATH TRUE)
 
 # Set the standard to C++20

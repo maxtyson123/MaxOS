@@ -210,7 +210,7 @@ void* PhysicalMemoryManager::allocate_frame() {
   }
 
   // Check if there are enough frames
-  ASSERT(m_used_frames < m_bitmap_size, "No more frames available\n")
+  ASSERT(m_used_frames < m_bitmap_size, "No more frames available\n");
 
   // Loop through the bitmap
   for (uint16_t row = 0; row < m_total_entries; ++row) {
@@ -248,7 +248,7 @@ void* PhysicalMemoryManager::allocate_frame() {
   }
 
   // Error frame not found
-  ASSERT(false, "Frame not found\n")
+  ASSERT(false, "Frame not found\n");
   m_lock.unlock();
   return nullptr;
 
@@ -336,7 +336,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
           // Skip if index exceeds bounds
           if (index >= m_total_entries || bit >= ROW_BITS) {
-            ASSERT(false, "Index out of bounds\n")
+            ASSERT(false, "Index out of bounds\n");
           }
 
           m_bit_map[index] |= (1ULL << bit); // Mark the bit as used
@@ -353,7 +353,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
   // Error cant allocate that much
   m_lock.unlock();
-  ASSERT(false, "Cannot allocate that much memory\n")
+  ASSERT(false, "Cannot allocate that much memory\n");
   return nullptr;
 }
 
@@ -909,7 +909,7 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
 
 /**
  * @brief Reserves an area of physical memory
- * 
+ *
  * @param address The start of the area
  * @param size The size of the area
  */
