@@ -32,8 +32,9 @@ namespace MaxOS{
             CREATE_IPC_ENDPOINT,
             SEND_IPC_MESSAGE,
             REMOVE_IPC_ENDPOINT,
-            PROCESS_YIELD,
-            PROCESS_SLEEP
+            THREAD_YIELD,
+            THREAD_SLEEP,
+            THREAD_CLOSE,
         };
 
         typedef struct SyscallArguments{
@@ -44,6 +45,7 @@ namespace MaxOS{
             uint64_t arg4;
             uint64_t arg5;
             uint64_t return_value;
+            system::cpu_status_t* return_state;
         } syscall_args_t;
 
         // Could use a class based response but a single class might want multiple handlers eg fs
@@ -80,10 +82,9 @@ namespace MaxOS{
               static system::syscall_args_t* syscall_create_ipc_endpoint(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_send_ipc_message(system::syscall_args_t* args);
               static system::syscall_args_t* syscall_remove_ipc_endpoint(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_process_yield(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_process_sleep(system::syscall_args_t* args);
-
-
+              static system::syscall_args_t* syscall_thread_yield(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_thread_sleep(system::syscall_args_t* args);
+              static system::syscall_args_t* syscall_thread_close(system::syscall_args_t* args);
           };
 
     }

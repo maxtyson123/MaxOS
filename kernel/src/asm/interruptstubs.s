@@ -43,6 +43,7 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
     mov rdi, rsp
     cld
     call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE
+    mov rsp, rax    ; use the returned context
     restore_context
     add rsp, 16
     iretq

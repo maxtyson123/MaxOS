@@ -136,21 +136,13 @@ void CPU::stack_trace(size_t level) {
 
 #include <processes/scheduler.h>
 #include <memory/memorymanagement.h>
-bool CPU::is_panicking = false;
+
 void CPU::PANIC(char const *message, cpu_status_t* status) {
 
   // Get the current process
   Process* process = Scheduler::get_current_process();
 
-  // If the faulting address is in lower half just kill the process and move on (NOTE: Potential memory leak)
-  if(status && !memory::MemoryManager::in_higher_region(status->rip)){
-      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
-      Scheduler::get_system_scheduler()->force_remove_process(process);
-      return;
-  }
-
-
-  // Ensure ready to panic
+  // Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most likely called by a place that cant switch to the avoidable state
   if(!is_panicking)
     prepare_for_panic();
 
@@ -290,14 +282,31 @@ CPU *CPU::get_instance() {
 }
 
 /**
- * @brief Final preparation for a panic, currently just sets the panicking flag
+ * @brief Ensure the CPU must panic and prepare for it if so
+ *
+ * @param status The status of the CPU (if available)
+ * @return A CPU status to avoid having to panic or a nullptr if the CPU must panic
  */
-void CPU::prepare_for_panic() {
+cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
+
+  // Get the current process
+  Process* process = Scheduler::get_current_process();
+
+  // If the faulting address is in lower half just kill the process and move on
+  if(status && !memory::MemoryManager::in_higher_region(status->rip)){
+    _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
+    return Scheduler::get_system_scheduler()->force_remove_process(process);
+  }
+
+  // Don't get interrupted (can cause a loop)
+//  asm("cli");
 
   // We are panicking
   is_panicking = true;
 
   // Clear the first line
   _kpanicf("%h\n\n\n");
+
+  return nullptr;
 
 }

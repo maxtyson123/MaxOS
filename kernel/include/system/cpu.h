@@ -75,8 +75,8 @@ namespace MaxOS{
         CPU();
         ~CPU();
 
-        static bool is_panicking;
-        static void prepare_for_panic();
+        static inline bool is_panicking = { false };
+        static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
         static void PANIC(const char* message, cpu_status_t* status = nullptr);
         static void halt();
 

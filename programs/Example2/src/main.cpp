@@ -121,19 +121,15 @@ extern "C" void _start(void)
   const char* endpoint = "TestQueue";
 
   // Wait 4seconds
-//  wait(4000);
-//  write("Waited 4 seconds\n");
+  wait(4000);
+  write("Waited 4 seconds\n");
 
   // Send a message via IPC
-//  send_message(endpoint, (void*)message, 24);
+  send_message(endpoint, (void*)message, 24);
+
 
   // Close the process
+  write("Closing process\n");
   close();
 
-
-  //TODO: Sleep and close dont work
-
-  // Loop
-  while(true)
-    asm ("nop");
 }

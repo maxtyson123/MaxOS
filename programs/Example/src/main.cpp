@@ -94,6 +94,7 @@ extern "C" void _start(void)
   write_hex((uint64_t)message_queue);
 
   // Process events for ever:
+  write("Waiting for messages\n");
   while(true)
     if(message_queue->messages == nullptr)
         asm("nop");

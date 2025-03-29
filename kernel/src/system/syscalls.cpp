@@ -30,8 +30,8 @@ SyscallManager::SyscallManager(InterruptManager*interrupt_manager)
   set_syscall_handler(SyscallType::CREATE_IPC_ENDPOINT, syscall_create_ipc_endpoint);
   set_syscall_handler(SyscallType::SEND_IPC_MESSAGE, syscall_send_ipc_message);
   set_syscall_handler(SyscallType::REMOVE_IPC_ENDPOINT, syscall_remove_ipc_endpoint);
-  set_syscall_handler(SyscallType::PROCESS_YIELD, syscall_process_yield);
-  set_syscall_handler(SyscallType::PROCESS_SLEEP, syscall_process_sleep);
+  set_syscall_handler(SyscallType::THREAD_YIELD, syscall_thread_yield);
+  set_syscall_handler(SyscallType::THREAD_SLEEP, syscall_thread_sleep);
 
 }
 
@@ -52,6 +52,8 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
   m_current_args -> arg3 = status -> r10;
   m_current_args -> arg4 = status -> r8;
   m_current_args -> arg5 = status -> r9;
+  m_current_args -> return_value = 0;
+  m_current_args -> return_state = status;
 
   // Call the handler
   uint64_t syscall = status -> rax;
@@ -59,6 +61,10 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
     m_current_args = m_syscall_handlers[syscall](m_current_args);
   else
     _kprintf("Syscall %d not found\n", syscall);
+
+  // If there is a specific return state, use that
+  if(m_current_args -> return_state != status)
+    return m_current_args -> return_state;
 
   // Update the cpu state
   status -> rdi = m_current_args -> arg0;
@@ -83,6 +89,31 @@ void SyscallManager::remove_syscall_handler(uint8_t syscall) {
 }
 
 
+/**
+ * @brief System call to close a process
+ *
+ * @param args Arg0 = pid Arg1 = exit code
+ * @return Nothing
+ */
+system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t *args) {
+
+  // Get the args
+  uint64_t pid = args -> arg0;
+  int exit_code = (int)args -> arg1;
+
+  // Get the process if it is 0 then it is the current process
+  Process* process = pid == 0 ? Scheduler::get_current_process() : Scheduler::get_process(pid);
+
+  // Close the process
+  Scheduler::get_system_scheduler() -> remove_process(process);
+
+  // Schedule the next process
+  cpu_status_t* next_process =  Scheduler::get_system_scheduler() -> schedule_next(args -> return_state);
+  args -> return_state = next_process;
+
+  // Done
+  return args;
+}
 
 syscall_args_t *SyscallManager::syscall_klog(syscall_args_t *args) {
   _kprintf("%h%s[%s:%d]%s %s", ANSI_COLOURS[FG_Blue], Scheduler::get_current_process() -> name.c_str(), Scheduler::get_current_thread() -> tid,  ANSI_COLOURS[Reset], (char*)args -> arg0);
@@ -254,10 +285,12 @@ system::syscall_args_t * SyscallManager::syscall_remove_ipc_endpoint(system::sys
  * @param args Nothing
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_process_yield(system::syscall_args_t *args) {
+system::syscall_args_t* SyscallManager::syscall_thread_yield(system::syscall_args_t *args) {
 
   // Yield
-  Scheduler::get_system_scheduler() -> yield();
+  cpu_status_t* next_process = Scheduler::get_system_scheduler() -> yield();
+  args -> return_state = next_process;
+
   return args;
 }
 
@@ -267,13 +300,17 @@ system::syscall_args_t* SyscallManager::syscall_process_yield(system::syscall_ar
  * @param args Arg0 = milliseconds
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_process_sleep(system::syscall_args_t *args) {
+system::syscall_args_t* SyscallManager::syscall_thread_sleep(system::syscall_args_t *args) {
 
   // Get the milliseconds
   size_t milliseconds = args -> arg0;
 
+  // Store the updated state in the thread as the scheduler will not have the updated state when switching to the next thread
+  Scheduler::get_current_thread() -> execution_state = args -> return_state;
+
   // Sleep the thread
-  Scheduler::get_current_thread() -> sleep(milliseconds);
+  cpu_status_t* next_thread = Scheduler::get_current_thread() -> sleep(milliseconds);
+  args -> return_state = next_thread;
 
   // Done
   return args;
@@ -281,23 +318,29 @@ system::syscall_args_t* SyscallManager::syscall_process_sleep(system::syscall_ar
 }
 
 /**
- * @brief System call to close a process
+ * @brief System call to close a thread
  *
- * @param args Arg0 = pid Arg1 = exit code
- * @return
+ * @param args Arg0 = tid Arg1 = exit code
+ * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t *args) {
+system::syscall_args_t* SyscallManager::syscall_thread_close(system::syscall_args_t *args) {
+
 
   // Get the args
-  uint64_t pid = args -> arg0;
+  uint64_t tid = args -> arg0;
   int exit_code = (int)args -> arg1;
 
-  // Get the process if it is 0 then it is the current process
-  Process* process = pid == 0 ? Scheduler::get_current_process() : Scheduler::get_process(pid);
+  // Get the thread if it is 0 then it is the current thread
+  Thread* thread = tid == 0 ? Scheduler::get_current_thread() : Scheduler::get_thread(tid);
 
-  // Close the process
-  Scheduler::get_system_scheduler() -> remove_process(process);
+  // Close the thread
+  Scheduler::get_process(thread -> parent_pid) -> remove_thread(tid);
+
+  // Schedule the next thread
+  cpu_status_t* next_thread =  Scheduler::get_system_scheduler() -> schedule_next(args -> return_state);
+  args -> return_state = next_thread;
 
   // Done
   return args;
+
 }

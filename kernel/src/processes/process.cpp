@@ -67,15 +67,20 @@ Thread::~Thread() {
 
 }
 
-
-void Thread::sleep(size_t milliseconds) {
+/**
+ * @brief Sleeps the thread for a certain amount of time (Yields the thread)
+ *
+ * @param milliseconds The amount of time to sleep for
+ * @return The status of the CPU for the next thread to run
+ */
+cpu_status_t* Thread::sleep(size_t milliseconds) {
 
   // Update the vars
   thread_state = ThreadState::SLEEPING;
   wakeup_time = Scheduler::get_system_scheduler() -> get_ticks() + milliseconds;
 
   // Yield
-  Scheduler::get_system_scheduler() -> yield();
+  return Scheduler::get_system_scheduler() -> yield();
 
 }
 

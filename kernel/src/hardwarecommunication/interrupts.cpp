@@ -190,25 +190,29 @@ void InterruptManager::deactivate()
 /**
  * @brief Handles the interrupt request by passing it to the interrupt manager
  *
- * @param status The current stack pointer
- * @return The stack pointer
+ * @param status The current cpu status
+ * @return The updated cpu status
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
 
-  // System Handlers
+  // Fault Handlers
   switch (status->interrupt_number) {
 
-      case 0x0D:
-        general_protection_fault(status);
-        break;
+    case 0x7:
+      _kpanicf("Device Not Available: FPU Not Enabled\n");
+      CPU::prepare_for_panic(status);
+      CPU::PANIC("See above message for more information", status);
+
+    case 0x0D:
+          return general_protection_fault(status);
+
 
       case 0x0E:
-        page_fault(status);
-        break;
+        return page_fault(status);
     }
 
   // If there is an interrupt manager handle interrupt
-  if(s_active_interrupt_manager != 0)
+  if(s_active_interrupt_manager != nullptr)
     return s_active_interrupt_manager->handle_interrupt_request(status);
 
   // CPU Can continue
@@ -266,7 +270,7 @@ void InterruptManager::set_apic(LocalAPIC *apic) {
     m_local_apic = apic;
 }
 
-void InterruptManager::page_fault(system::cpu_status_t *status) {
+cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
   bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
   bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
   bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
@@ -275,7 +279,10 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
   uint64_t faulting_address;
   asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 
-  CPU::prepare_for_panic();
+  cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
+  if(can_avoid != nullptr)
+    return can_avoid;
+
   _kpanicf("Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n", faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
   CPU::PANIC("See above message for more information", status);
 }
@@ -284,10 +291,15 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
  * @brief Handles a general protection fault
  * @param status The cpu status
  */
-void InterruptManager::general_protection_fault(system::cpu_status_t *status) {
+cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t *status) {
     uint64_t error_code = status->error_code;
 
-    CPU::prepare_for_panic();
+    // Try to avoid the panic
+    cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
+    if(can_avoid != nullptr)
+      return can_avoid;
+
+    // Have to panic
     _kpanicf("General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Not a Protection Exception");
     CPU::PANIC("See above message for more information", status);
 

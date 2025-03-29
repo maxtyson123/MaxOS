@@ -34,6 +34,7 @@ namespace MaxOS{
         uint64_t m_next_tid;
 
         static Scheduler* s_instance;
+        static const uint64_t s_ticks_per_event = { 3 };
 
         IPC* m_ipc;
 
@@ -45,19 +46,22 @@ namespace MaxOS{
         system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
         system::cpu_status_t* schedule(system::cpu_status_t* status);
 
+        system::cpu_status_t* schedule_next(system::cpu_status_t* status);
+        system::cpu_status_t* yield();
+
         uint64_t add_process(Process* process);
         uint64_t remove_process(Process* process);
-        uint64_t force_remove_process(Process* process);
+        system::cpu_status_t* force_remove_process(Process* process);
         uint64_t add_thread(Thread* thread);
 
         static Scheduler* get_system_scheduler();
         static Process*   get_current_process();
         static Process*   get_process(uint64_t pid);
         static Thread*    get_current_thread();
+        static Thread*    get_thread(uint64_t tid);
         static IPC*       get_ipc();
 
         uint64_t get_ticks();
-        void yield();
 
         void load_multiboot_elfs(system::Multiboot* multiboot);
 
