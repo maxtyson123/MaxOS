@@ -61,9 +61,8 @@ global read_multiboot
 global gdt64
 global stack
 
-; extern kernel_tss
 extern kernelMain
-extern callConstructors
+extern call_constructors
 
 [bits 32]
 
@@ -271,7 +270,7 @@ higher_half:
 
     mov rax, cr3
     mov cr3, rax
-    call callConstructors
+    call call_constructors
     call kernelMain
 
 section .bss

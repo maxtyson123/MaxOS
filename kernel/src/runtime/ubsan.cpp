@@ -2,11 +2,11 @@
 // Created by 98max on 30/12/2024.
 //
 
-#include <system/ubsan.h>
+#include <runtime/ubsan.h>
 #include <common/kprint.h>
 
 using namespace MaxOS;
-using namespace MaxOS::system;
+using namespace MaxOS::runtime;
 
 
 UBSanHandler::UBSanHandler() {

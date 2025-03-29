@@ -2,13 +2,13 @@
 // Created by 98max on 30/12/2024.
 //
 
-#ifndef MAXOS_SYSTEM_UBSAN_H
-#define MAXOS_SYSTEM_UBSAN_H
+#ifndef MAXOS_RUNTIME_UBSAN_H
+#define MAXOS_RUNTIME_UBSAN_H
 
 #include <stdint.h>
 
 namespace MaxOS {
-    namespace system {
+    namespace runtime {
 
         #define ubsan_aligned(value, alignment) !(value & (alignment - 1))
 
@@ -99,4 +99,4 @@ namespace MaxOS {
 }
 
 
-#endif // MAXOS_SYSTEM_UBSAN_H
+#endif // MAXOS_RUNTIME_UBSAN_H

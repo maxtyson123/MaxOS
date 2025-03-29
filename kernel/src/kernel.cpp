@@ -72,26 +72,10 @@ using namespace MaxOS::filesystem;
 
 //TODO: Rework cmake to have debug and prod targets
 
-// Define static constructors
-extern "C" void* __dso_handle  = nullptr;
-
-
-//Define what a constructor is
-typedef void (*constructor)();
-
-//Iterates over space between start_ctors and end_ctors and jumps into all function pointers
-extern "C" constructor start_ctors;
-extern "C" constructor end_ctors;
-extern "C" void callConstructors()
-{
-    for(constructor* i = &start_ctors; i != &end_ctors; i++)        //Iterate over all constructors
-        (*i)();                                                     //Call the constructor
-}
-
 ConsoleStream* active_stream = nullptr;
 
 extern volatile uint64_t p4_table[512];
-extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
+extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)  // Only place where it is allowed to not use snake_case
 {
     // Initialise the serial console
     SerialConsole serialConsole;
@@ -312,7 +296,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
+    //       - kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
     //       - PCI to drivers page in osdev book, ubsan section maybe
     //       - Look at the event handler system again?
 
