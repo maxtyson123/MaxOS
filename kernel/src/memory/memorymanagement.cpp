@@ -222,6 +222,7 @@ void MemoryManager::handle_free(void *pointer) {
 
 /**
  * @brief Expands the heap by a given size
+ *
  * @param size The size to expand the heap by
  * @return The new chunk of memory
  */
@@ -254,6 +255,7 @@ MemoryChunk *MemoryManager::expand_heap(size_t size) {
 
 /**
  * @brief Returns the amount of memory used
+ *
  * @return The amount of memory used
  */
 int MemoryManager::memory_used() {
@@ -270,6 +272,7 @@ int MemoryManager::memory_used() {
 
 /**
  * @brief Aligns the size to the chunk alignment
+ *
  * @param size The size to align
  * @return The aligned size
  */
@@ -279,6 +282,7 @@ size_t MemoryManager::align(size_t size) {
 
 /**
  * @brief Converts a physical address to a higher region address if it is in the lower region using the higher half kernel offset
+ *
  * @param physical_address The physical address
  * @return The higher region address
  */
@@ -295,6 +299,7 @@ void* MemoryManager::to_higher_region(uintptr_t physical_address) {
 
 /**
  * @brief Converts a virtual address to a lower region address if it is in the higher region using the higher half kernel offset
+ *
  * @param virtual_address The virtual address
  * @return The lower region address
  */
@@ -309,6 +314,7 @@ void *MemoryManager::to_lower_region(uintptr_t virtual_address) {
 
 /**
  * @brief Converts a physical address to an IO region address if it is in the lower region using the higher half memory offset
+ *
  * @param physical_address The physical address
  * @return The IO region address
  */
@@ -324,6 +330,7 @@ void *MemoryManager::to_io_region(uintptr_t physical_address) {
 
 /**
  * @brief Converts a physical address to a direct map region address if it is in the lower region using the higher half direct map offset
+ *
  * @param physical_address The physical address
  * @return The direct map region address
  */
@@ -339,6 +346,7 @@ void *MemoryManager::to_dm_region(uintptr_t physical_address) {
 
 /**
  * @brief Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset
+ *
  * @param physical_address The physical address in the direct map region
  * @return The physical address
  */
@@ -355,6 +363,7 @@ void *MemoryManager::from_dm_region(uintptr_t physical_address) {
 
 /**
  * @brief Checks if a virtual address is in the higher region
+ *
  * @param virtual_address The virtual address
  * @return True if the address is in the higher region, false otherwise
  */
@@ -365,6 +374,7 @@ bool MemoryManager::in_higher_region(uintptr_t virtual_address) {
 
 /**
  * @brief Switches the active memory manager
+ *
  * @param manager The new memory manager
  */
 void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
@@ -383,6 +393,7 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
 
 /**
  * Gets the active virtual memory manager
+ *
  * @return The active virtual memory manager
  */
 VirtualMemoryManager* MemoryManager::get_vmm() {

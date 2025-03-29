@@ -31,6 +31,7 @@ Colour::Colour(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 Colour::~Colour() {
 
 }
+
 Colour::Colour(ConsoleColour colour) {
     parse_console_colour(colour);
 }
@@ -46,6 +47,7 @@ Colour::Colour(MaxOS::string string) {
 
 /**
  * @brief Parses a hex string, must be in the format #RRGGBB or #RRGGBBAA
+ *
  * @param hex_string The hex string
  */
 void Colour::parse_hex_string(string hex_string) {
@@ -69,6 +71,7 @@ void Colour::parse_hex_string(string hex_string) {
 
 /**
  * @brief Parses an ANSI string to a colour  in the format \033[--COLORm (30-37)
+ *
  * @param ansi_string The ANSI string
  */
 void Colour::parse_ansi_string(string ansi_string) {
@@ -122,6 +125,7 @@ void Colour::parse_ansi_string(string ansi_string) {
 
 /**
  * @brief Parses a console colour to a colour
+ *
  * @param colour The console colour
  */
 void Colour::parse_console_colour(ConsoleColour colour) {
@@ -228,6 +232,7 @@ void Colour::parse_console_colour(ConsoleColour colour) {
 
 /**
  * @brief Converts the colour to a console colour
+ *
  * @return The console colour
  */
 ConsoleColour Colour::to_console_colour() const {

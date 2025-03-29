@@ -53,7 +53,7 @@ namespace MaxOS{
 
         /**
          * @class SyscallManager
-         * @brief Handles system calls
+         * @brief Provides an API for userspace applications to interact with the kernel
          */
         class SyscallManager : hardwarecommunication::InterruptHandler{
 

@@ -146,6 +146,10 @@ namespace MaxOS
         uint64_t   entry_size;
       } elf_64_section_header_t;
 
+      /**
+       * @class Elf64
+       * @brief Handles the loading and parsing of 64-bit ELF files
+       */
       class Elf64
       {
         private:

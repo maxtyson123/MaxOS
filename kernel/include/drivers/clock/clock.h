@@ -86,7 +86,13 @@ namespace MaxOS {
             } PITCommand;
 
 
+            // Forward declaration
             class Clock;
+
+            /**
+             * @class PIT
+             * @brief Driver for the Programmable Interval Timer
+             */
             class PIT: public hardwarecommunication::InterruptHandler{
               friend Clock;
 

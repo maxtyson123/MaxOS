@@ -77,7 +77,7 @@ namespace MaxOS{
 
         /**
          * @class Colour
-         * @brief Stores the red, green, blue and alpha values of a colour
+         * @brief Stores the red, green, blue and alpha values of a colour. Can be parsed from a hex string, an ANSI string or a ConsoleColour
          */
         class Colour
         {

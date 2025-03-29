@@ -13,7 +13,7 @@ namespace MaxOS {
          * @class Pair
          * @brief A pair of two objects
          *
-         * @tparam First The type of the m_first_memory_chunk object
+         * @tparam First The type of the first object
          * @tparam Second The type of the second object
          */
         template<class First, class Second> class Pair {

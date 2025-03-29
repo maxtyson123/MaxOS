@@ -112,6 +112,7 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 
 /**
  * @brief Allocate a new chunk of virtual memory
+ *
  * @param size The size of the memory to allocate
  * @param flags The flags to set on the memory
  * @return The address of the allocated memory
@@ -124,6 +125,7 @@ void* VirtualMemoryManager::allocate(size_t size, size_t flags) {
 
 /**
  * @brief Allocate a new chunk of virtual memory at a specific address (ie for mmap io devices)
+ *
  * @param address The address to allocate at
  * @param size The size of the memory to allocate
  * @param flags The flags to set on the memory
@@ -244,6 +246,7 @@ void VirtualMemoryManager::new_region() {
 
 /**
  * @brief Free a chunk of virtual memory
+ *
  * @param address The address of the memory to free
  */
 void VirtualMemoryManager::free(void *address) {
@@ -307,6 +310,7 @@ void VirtualMemoryManager::free(void *address) {
 
 /**
  * @brief Returns the amount of memory used
+ *
  * @return The amount of memory used
  */
 size_t VirtualMemoryManager::memory_used() {
@@ -335,6 +339,7 @@ size_t VirtualMemoryManager::memory_used() {
 
 /**
  * @brief Add a free chunk to the free list
+ *
  * @param start_address The start address of the chunk
  * @param size The size of the chunk
  */
@@ -353,6 +358,7 @@ void VirtualMemoryManager::add_free_chunk(uintptr_t start_address, size_t size) 
 
 /**
  * @brief Find and remove a free chunk from the free list to use
+ *
  * @param size The size of the chunk to find
  * @return The free chunk or nullptr if not found
  */
@@ -390,6 +396,7 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
 
 /**
  * @brief Get the physical address of the PML4 root
+ *
  * @return The physical address of the PML4 root
  */
 uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
@@ -398,6 +405,7 @@ uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
 
 /**
  * @brief Load shared memory into the VMM's address space
+ *
  * @param name The name of the shared memory
  * @return The address of the shared memory in the VMM's address space
  */
@@ -415,6 +423,7 @@ void *VirtualMemoryManager::load_shared_memory(string name) {
 
 /**
  * @brief Load shared memory into the VMM's address space
+ *
  * @param physical_address The physical address of the shared memory
  * @param size The size of the shared memory
  * @return The address of the shared memory in the VMM's address space

@@ -33,6 +33,10 @@ namespace MaxOS
         // Forward declaration
         class Process;
 
+        /**
+         * @class Thread
+         * @brief The execution context of a sub-process thread
+         */
         class Thread{
 
             private:
@@ -64,7 +68,7 @@ namespace MaxOS
 
         /**
          * @class Process
-         * @brief A process that can be scheduled by the Scheduler
+         * @brief A process that can be scheduled by the Scheduler, wraps & manages threads as well as its own address space and resources.
          */
         class Process
         {

@@ -130,7 +130,7 @@ int String::lex_value(String const &string) const {
 /**
  * @brief Sets the string to the other string
  *
- * @param other
+ * @param other The string for this one to be updated to
  * @return String& The string
  */
 String &String::operator = (String const &other) {
@@ -146,6 +146,11 @@ String &String::operator = (String const &other) {
 
 }
 
+/**
+ * @brief The char pointer representation of the current string
+ *
+ * @return The char* string
+ */
 char* String::c_str() {
 
     // Return the string
@@ -215,6 +220,7 @@ bool String::operator == (String const &other) const {
 
 /**
  * @brief Checks if one string is not equal to another
+ *
  * @param other The other string
  * @return True if the strings are not equal, false otherwise
  */
@@ -408,6 +414,7 @@ String String::operator*(int times) const {
 
 /**
  * @brief Centers the string in a specified width
+ *
  * @param width The width of the string
  * @param fill The character to fill the string with
  * @return  The centered string
@@ -451,7 +458,7 @@ String String::center(int width, char fill) const {
 
 
 /**
- * @brief Checks if one string is equal to another
+ * @brief Checks if one string pointer is equal to another string pointer
  *
  * @param str1 The first string
  * @param str2 The second string
@@ -469,6 +476,13 @@ bool strcmp(char const *str1, char const *str2) {
 
 }
 
+/**
+ * @brief Checks if one string pointer is equal to a String
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
 bool strcmp(char const *str1, String const &str2) {
 
   // Use the other strcmp function
@@ -476,12 +490,26 @@ bool strcmp(char const *str1, String const &str2) {
 
 }
 
+/**
+ * @brief Checks if one String is equal to a string pointer
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
 bool strcmp(String const &str1, char const *str2) {
 
     // Use the other strcmp function
     return strcmp(str1.c_str(), str2);
 }
 
+/**
+ * @brief Checks if one String is equal to another String (better use is of "==")
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
 bool strcmp(String const &str1, String const &str2) {
 
   // Use the other strcmp function
@@ -490,11 +518,11 @@ bool strcmp(String const &str1, String const &str2) {
 }
 
 /**
- * @brief Checks if one string is equal to another
+ * @brief Checks if one string pointer is equal to another string pointer up to a specified length (each must be >= this length)
  *
  * @param str1 The first string
  * @param str2 The second string
- * @param length The length of the strings
+ * @param length The length of the string to compare
  * @return True if the strings are equal, false otherwise
  */
 bool strncmp(char const *str1, char const *str2, int length) {
@@ -509,6 +537,14 @@ bool strncmp(char const *str1, char const *str2, int length) {
 
 }
 
+/**
+ * @brief Checks if one string pointer is equal to another String up to a specified length (each must be >= this length)
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the string to compare
+ * @return True if the strings are equal, false otherwise
+ */
 bool strncmp(char const *str1, String const &str2, int length) {
 
   // Use the other strncmp function
@@ -516,6 +552,14 @@ bool strncmp(char const *str1, String const &str2, int length) {
 
 }
 
+/**
+ * @brief Checks if one String is equal to another string pointer up to a specified length (each must be >= this length)
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the string to compare
+ * @return True if the strings are equal, false otherwise
+ */
 bool strncmp(String const &str1, char const *str2, int length) {
 
   // Use the other strncmp function
@@ -523,6 +567,14 @@ bool strncmp(String const &str1, char const *str2, int length) {
 
 }
 
+/**
+ * @brief Checks if one String is equal to another String up to a specified length (each must be >= this length)
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the string to compare
+ * @return True if the strings are equal, false otherwise
+ */
 bool strncmp(String const &str1, String const &str2, int length) {
 
   // Use the other strncmp function

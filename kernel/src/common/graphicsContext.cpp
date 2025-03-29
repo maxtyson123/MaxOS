@@ -757,6 +757,12 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
             }
         }
 }
-uint64_t *GraphicsContext::get_framebuffer_address() {
+
+/**
+ * @brief Gets the address of the context's framebuffer to draw on
+ *
+ * @return The framebuffer address
+ */
+uint64_t* GraphicsContext::get_framebuffer_address() {
     return m_framebuffer_address;
 }

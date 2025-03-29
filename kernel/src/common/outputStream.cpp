@@ -46,6 +46,7 @@ void OutputStream::clear() {
 
 /**
  * @brief Writes a string to the output stream.
+ *
  * @param string_to_write The string to write to the output stream.
  */
 void OutputStream::write(string string_to_write) {
@@ -89,6 +90,7 @@ void OutputStream::write(string string_to_write) {
 
 /**
  * @brief Writes a character to the output stream.
+ *
  * @param char_to_write The character to write to the output stream.
  */
 void OutputStream::write_char(char) {
@@ -97,6 +99,7 @@ void OutputStream::write_char(char) {
 
 /**
  * @brief Writes an integer to the output stream.
+ *
  * @param int_to_write The integer to write to the output stream.
  */
 void OutputStream::write_int(int int_to_write) {
@@ -145,6 +148,7 @@ void OutputStream::write_int(int int_to_write) {
 
 /**
  * @brief Writes a hex to the output stream.
+ *
  * @param writeHex The hex to write to the output stream.
  */
 void OutputStream::write_hex(uint32_t hex_to_write) {
@@ -178,6 +182,7 @@ void OutputStream::write_hex(uint32_t hex_to_write) {
 
 /**
  * @brief Writes a interger to the output stream.
+ *
  * @param int_to_write The integer to write to the output stream.
  * @return The output stream.
  */
@@ -192,6 +197,7 @@ OutputStream &OutputStream::operator << (int int_to_write) {
 
 /**
  * @brief Writes a hexadecimal to the output stream.
+ *
  * @param hex_to_write The hex to write to the output stream.
  * @return The output stream.
  */
@@ -206,6 +212,7 @@ OutputStream &OutputStream::operator << (uint32_t hex_to_write) {
 
 /**
  * @brief Writes a string to the output stream.
+ *
  * @param string_to_write The string to write to the output stream.
  * @return The output stream.
  */
@@ -220,6 +227,7 @@ OutputStream &OutputStream::operator << (string string_to_write) {
 
 /**
  * @brief Writes a character to the output stream.
+ *
  * @param char_to_write The character to write to the output stream.
  * @return The output stream.
  */
@@ -230,5 +238,4 @@ OutputStream &OutputStream::operator<<(char char_to_write) {
 
     // Return the output stream
     return *this;
-
 }

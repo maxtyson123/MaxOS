@@ -9,6 +9,10 @@
 
 namespace MaxOS {
 
+    /**
+     * @class String
+     * @brief Dynamically sized string with various operations
+     */
     class String {
         private:
           char* m_string;

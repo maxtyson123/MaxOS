@@ -51,6 +51,7 @@ uint16_t VESABootConsole::height()
 {
     return m_graphics_context->get_height() / CHAR_HEIGHT;      // 8 pixels per character
 }
+
 /**
  * @brief Places a character at the specified location
  *
@@ -323,7 +324,9 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 }
 
-
+/**
+ * @brief Print the panic logo in the bottom right corner of the screen
+ */
 void VESABootConsole::print_logo_kernel_panic() {
 
   // Load the logo

@@ -34,6 +34,7 @@ IPC::~IPC() {
 
 /**
  * @brief Creates a new shared memory block
+ *
  * @param size The size of the block
  * @param name The name of the block
  * @return The shared memory block
@@ -73,6 +74,7 @@ ipc_shared_memory_t *IPC::alloc_shared_memory(size_t size, string name) {
 
 /**
  * @brief Gets a shared memory block by name
+ *
  * @param name The name of the block
  * @return The shared memory block or nullptr if not found
  */
@@ -100,6 +102,7 @@ ipc_shared_memory_t *IPC::get_shared_memory(string name) {
 
 /**
  * @brief Deletes a shared memory block by physical address
+ *
  * @param physical_address The physical address of the block
  */
 void IPC::free_shared_memory(uintptr_t physical_address) {
@@ -117,6 +120,7 @@ void IPC::free_shared_memory(uintptr_t physical_address) {
 
 /**
  * @brief Deletes a shared memory block by name
+ *
  * @param name The name of the block
  */
 void IPC::free_shared_memory(string name) {
@@ -138,6 +142,7 @@ void IPC::free_shared_memory(string name) {
 
 /**
  * @brief Deletes a shared memory block
+ *
  * @param block The block to delete (will only free memory if no one is using it)
  */
 void IPC::free_shared_memory(ipc_shared_memory_t *block) {
@@ -221,7 +226,8 @@ ipc_message_endpoint_t *IPC::get_message_endpoint(string name) {
 }
 
 /**
- * @brief Deletes a message endpoint by name, all messages will be lost
+ * @brief Deletes a message endpoint by name - all messages will be lost
+ *
  * @param name The name of the endpoint
  */
 void IPC::free_message_endpoint(string name) {
@@ -235,7 +241,8 @@ void IPC::free_message_endpoint(string name) {
 }
 
 /**
- * @brief Deletes a message endpoint, all messages will be lost
+ * @brief Deletes a message endpoint - all messages will be lost
+ *
  * @param endpoint
  */
 void IPC::free_message_endpoint(ipc_message_endpoint_t *endpoint) {
@@ -270,6 +277,7 @@ void IPC::free_message_endpoint(ipc_message_endpoint_t *endpoint) {
 
 /**
  * @brief Finds the endpoint by name and adds a message to it's queue
+ *
  * @param name The name of the endpoint
  * @param message The message to send
  * @param size The size of the message
@@ -288,6 +296,14 @@ void IPC::send_message(string name, void* message, size_t size) {
 
 
 }
+
+/**
+ * @brief Sends the message to an endpoint (buffer can be freed as it is copied in to the receiving process's memory)
+ *
+ * @param endpoint The endpoint to send the message to
+ * @param message The message to send
+ * @param size The size of the message
+ */
 void IPC::send_message(ipc_message_endpoint_t *endpoint, void *message, size_t size) {
 
   // Wait for the endpoint lock

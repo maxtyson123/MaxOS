@@ -61,6 +61,10 @@ namespace MaxOS {
         pte_t entries[512];
       } __attribute__((packed)) pml_t;
 
+      /**
+       * @class PhysicalMemoryManager
+       * @brief Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses
+       */
       class PhysicalMemoryManager{
 
         private:

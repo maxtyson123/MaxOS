@@ -22,13 +22,19 @@ ClockEventHandler::~ClockEventHandler() {
 
 /**
  * @brief Called when the clock ticks
- * @param time The current time
  *
+ * @param time The current time
  */
 void ClockEventHandler::on_time(common::Time const &) {
 
 }
 
+/**
+ * @brief Delegates the clock event to the relevant handler
+ *
+ * @param event The event being fired
+ * @return The event (may have been modified by the handler)
+ */
 Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
 
     switch (event -> type) {
@@ -159,7 +165,8 @@ void Clock::delay(uint32_t milliseconds) {
 }
 
 /**
- * @brief Gets the name of the vendor
+ * @brief Gets the vendor who created the device
+ *
  * @return The name of the vendor
  */
 string Clock::get_vendor_name() {
@@ -168,12 +175,18 @@ string Clock::get_vendor_name() {
 
 /**
  * @brief Gets the name of the device
+ *
  * @return The name of the device
  */
 string Clock::get_device_name() {
     return "Clock";
 }
 
+/**
+ * @brief Configures the APIC clock to fire an interrupt at a specified interval in milliseconds
+ *
+ * @param ms_per_tick How many milliseconds per interrupt
+ */
 void Clock::calibrate(uint64_t ms_per_tick) {
 
   // Get the ticks per ms
@@ -194,7 +207,11 @@ void Clock::calibrate(uint64_t ms_per_tick) {
   _kprintf("Clock Calibrated\n");
 }
 
-
+/**
+ * @brief Reads the current time from the APIC clock (in 24hr time)
+ *
+ * @return The current time in a Time struct format
+ */
 common::Time Clock::get_time() {
 
   // Wait for the clock to be ready
@@ -232,6 +249,7 @@ time(time)
 TimeEvent::~TimeEvent() {
 
 }
+
 PIT::PIT(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController *apic)
 : InterruptHandler(0x22, interrupt_manager),
   m_data_port(0x40),
@@ -246,10 +264,18 @@ PIT::~PIT() {
 
 }
 
+/**
+ * @brief Tick on each interrupt
+ */
 void PIT::handle_interrupt() {
   m_ticks++;
 }
 
+/**
+ * @brief Uses the PIT to calculate how many APIC ticks are in 1 millisecond
+ *
+ * @return The amount of APIC ticks per millisecond
+ */
 uint32_t PIT::ticks_per_ms() {
 
   // Set the redirect for the timer interrupt

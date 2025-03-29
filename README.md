@@ -79,6 +79,8 @@ Max OS supports device drivers, memory management, multitasking, a GUI, and more
 
 This GitHub repository contains the source code for the operating system, as well as the build scripts required to build the operating system from source. The repository also contains the latest built kernel, which can be downloaded from the workflow artifacts. To ensure a cleaner git history, each feature/change is done in a separate branch and then merged into the main branch once working. To see the history of each feature press on the pull request number. If you are intrested in the active developement find the latest branch <a href="https://github.com/maxtyson123/MaxOS/branches">Here</a>.
 
+
+_Note:_ Ignore all the networking code & drivers, they are very outdated, badly written and will soon be ported over to userspace and rewritten.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->

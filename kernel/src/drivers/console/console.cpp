@@ -403,6 +403,7 @@ void ConsoleArea::scroll_up() {
 
 /**
  * @brief Scroll an area of the console up by 1 line
+ *
  * @param left The left coordinate of the area to scroll
  * @param top The top coordinate of the area to scroll
  * @param width The m_width of the area to scroll

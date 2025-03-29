@@ -42,7 +42,12 @@ SyscallManager::~SyscallManager()
 
 }
 
-
+/**
+ * @brief Loads the args from the registers and delegates the syscall to the relevant handler if defined
+ *
+ * @param status The cpu state
+ * @return The cpu state (may be modified with return value in RAX or a new state by the handler)
+ */
 cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
 
   // Get the args from the cpu state
@@ -80,10 +85,21 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
   return status;
 }
 
+/**
+ * @brief Loads a syscall handler into the manager
+ *
+ * @param syscall The syscall ID number
+ * @param handler The handler to set
+ */
 void SyscallManager::set_syscall_handler(uint8_t syscall, syscall_func_t handler) {
   m_syscall_handlers[syscall] = handler;
 }
 
+/**
+ * @brief Removes a syscall handler from the manager
+ *
+ * @param syscall The syscall ID number
+ */
 void SyscallManager::remove_syscall_handler(uint8_t syscall) {
     m_syscall_handlers[syscall] = 0;
 }

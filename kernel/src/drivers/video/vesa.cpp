@@ -131,22 +131,18 @@ uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_
 }
 
 /**
- * @brief Renders a pixel on the screen in 16 bit mode
+ * @brief The name of the vendor of the VESA standard
  *
- * @param x The x coordinate of the pixel
- * @param y The y coordinate of the pixel
- * @param colour The 16bit colour of the pixel
+ * @return The name of the vendor
  */
 string VideoElectronicsStandardsAssociation::get_vendor_name() {
     return "NEC Home Electronics";  // Creator of the VESA standard
 }
 
 /**
- * @brief Gets the colour of a pixel on the screen in 16 bit mode
+ * @brief The name of the device
  *
- * @param x The x coordinate of the pixel
- * @param y The y coordinate of the pixel
- * @return The 16bit colour of the pixel
+ * @return The name of the device
  */
 string VideoElectronicsStandardsAssociation::get_device_name() {
     return "VESA compatible graphics card";

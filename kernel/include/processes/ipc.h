@@ -17,7 +17,7 @@
 namespace MaxOS {
     namespace processes {
 
-        //TODO: Can prob convert these to classes, Lock free, LibIPC, clean endpoints on proc kills
+        //TODO: Can prob convert these to classes, Lock free, LibIPC
 
         typedef struct IPCSharedMemory {
             uintptr_t physical_address;
@@ -28,7 +28,6 @@ namespace MaxOS {
         } ipc_shared_memory_t;
 
 
-        // TODO: Add these two to a LibIPC and link the kernel against it for easier use in userspace
         typedef struct IPCMessage{
             void* message_buffer;
             size_t message_size;
@@ -48,7 +47,7 @@ namespace MaxOS {
 
         /**
          * @class IPC
-         * @brief Handles Inter Process Communication
+         * @brief Manages the Inter-Process Communication (IPC) between processes via shared memory and message passing
          */
         class IPC {
 

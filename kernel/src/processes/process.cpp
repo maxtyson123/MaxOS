@@ -91,6 +91,7 @@ cpu_status_t* Thread::sleep(size_t milliseconds) {
 
 /**
  * @brief Constructor for the Process class (from a function)
+ *
  * @param name The name of the process
  * @param _entry_point The entry point of the process
  * @param args The arguments to pass to the process
@@ -168,6 +169,7 @@ Process::~Process() {
 
 /**
  * @brief Adds a thread to the process
+ *
  * @param thread The thread to add
  */
 void Process::add_thread(Thread *thread) {
@@ -188,6 +190,7 @@ void Process::add_thread(Thread *thread) {
 
 /**
  * @brief Finds a thread by its tid
+ *
  * @param tid
  */
 void Process::remove_thread(uint64_t tid) {
@@ -217,6 +220,7 @@ void Process::remove_thread(uint64_t tid) {
 
 /**
  * @brief Sets the pid of the process once added to the queue
+ *
  * @param pid
  */
 void Process::set_pid(uint64_t pid) {
@@ -247,6 +251,7 @@ Vector<Thread*> Process::get_threads() {
 
 /**
  * @brief Gets the pid of the process
+ *
  * @return The pid of the process
  */
 uint64_t Process::get_pid() {
@@ -276,6 +281,7 @@ void Process::set_up() {
 
 /**
  * @brief Gets the total ticks of the threads in the process (not this does not include any past killed threads)
+ *
  * @return The total ticks of the threads in the process
  */
 uint64_t Process::get_total_ticks() {

@@ -41,7 +41,10 @@ namespace MaxOS {
     } __attribute__((packed)) virtual_memory_region_t;
 
     // NOTE: Have to use a linked list as the VMM is not fully setup and thus cannot use the vector class
-
+    /**
+     * @class VirtualMemoryManager
+     * @brief Manages the virtual memory of the system and provides functions to allocate and free memory in the virtual address space
+     */
     class VirtualMemoryManager{
 
       private:

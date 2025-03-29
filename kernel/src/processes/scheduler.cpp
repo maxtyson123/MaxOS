@@ -40,6 +40,7 @@ Scheduler::~Scheduler() {
 
 /**
  * @brief Handles the interrupt 0x20
+ *
  * @param status The current CPU status
  * @return The new CPU status
  */
@@ -55,6 +56,7 @@ cpu_status_t* Scheduler::handle_interrupt(cpu_status_t *status) {
 
 /**
  * @brief Schedules the next thread to run
+ *
  * @param cpu_state The current CPU state
  * @return The next CPU state
  */
@@ -82,6 +84,7 @@ cpu_status_t *Scheduler::schedule(cpu_status_t* cpu_state) {
 
 /**
  * @brief Schedules the next thread to run
+ *
  * @param status The current CPU status of the thread
  * @return The next CPU status
  */
@@ -155,6 +158,7 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
 
 /**
  * @brief Adds a process to the scheduler
+ *
  * @param process The process to add
  * @return The process ID
  */
@@ -174,6 +178,7 @@ uint64_t Scheduler::add_process(Process *process) {
 
 /**
  * @brief Adds a thread to the scheduler
+ *
  * @param thread The thread to add
  * @return The thread ID
  */
@@ -193,6 +198,7 @@ uint64_t Scheduler::add_thread(Thread *thread) {
 
 /**
  * @brief Gets the system scheduler
+ *
  * @return The system scheduler or nullptr if not found
  */
 Scheduler *Scheduler::get_system_scheduler() {
@@ -205,6 +211,7 @@ Scheduler *Scheduler::get_system_scheduler() {
 
 /**
  * @brief Gets how long the system has been running for
+ *
  * @return The number of ticks
  */
 uint64_t Scheduler::get_ticks() {
@@ -239,6 +246,7 @@ void Scheduler::activate() {
 
 /**
  * @brief Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped)
+ *
  * @param process The process to remove
  * @param force If true, the process will be removed and so will all threads
  * @return -1 if the process has threads, 0 otherwise
@@ -304,6 +312,7 @@ cpu_status_t* Scheduler::force_remove_process(Process *process) {
 
 /**
  * @brief Gets the current process
+ *
  * @return The current process, or nullptr if not found
  */
 Process *Scheduler::get_current_process() {
@@ -322,6 +331,7 @@ Process *Scheduler::get_current_process() {
 
 /**
  * @brief Gets a process by its PID
+ *
  * @param pid The process ID
  * @return The process or nullptr if not found
  */
@@ -339,6 +349,7 @@ Process *Scheduler::get_process(uint64_t pid) {
 
 /**
  * @brief Gets the currently executing thread
+ *
  * @return The currently executing thread
  */
 Thread *Scheduler::get_current_thread() {
@@ -389,6 +400,7 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
 
 /**
  * @brief Gets the IPC handler
+ *
  * @return The IPC handler or nullptr if not found
  */
 IPC *Scheduler::get_ipc() {

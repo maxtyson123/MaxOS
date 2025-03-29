@@ -15,7 +15,7 @@ namespace MaxOS{
          * @class Rectangle
          * @brief Stores the left, top, width and height of a rectangle
          *
-         * @tparam Type The type of the rectangle
+         * @tparam Type The type of the rectangle (assumed to be numeric)
          */
         template<class Type> class Rectangle{
             public:

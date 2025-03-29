@@ -75,6 +75,12 @@ namespace MaxOS{
 
         static const uint16_t DaysInLeapYear = 366;
 
+        /**
+         * @brief Converts a time to an epoch
+         *
+         * @param time The time representation
+         * @return The epoch time
+         */
         static  uint64_t time_to_epoch(Time time){
                 uint64_t epoch = 0;
 

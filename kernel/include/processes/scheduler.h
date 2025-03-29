@@ -18,7 +18,7 @@ namespace MaxOS{
 
     /**
      * @class Scheduler
-     * @brief Schedules processes to run on the CPU
+     * @brief Schedules processes to run on the CPU via their threads
      */
      class Scheduler : public hardwarecommunication::InterruptHandler {
 

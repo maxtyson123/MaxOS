@@ -80,6 +80,7 @@ KeyboardDriver::KeyboardDriver(InterruptManager* manager)
   m_command_port(0x64)
 {
 }
+
 KeyboardDriver::~KeyboardDriver(){
 
 }
@@ -175,6 +176,11 @@ KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() {
 
 }
 
+/**
+ * @brief Handle the key down event
+ *
+ * @param scan_code The scan code of the key that was pressed
+ */
 void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 
     // 0 is a regular key, 1 is an extended code, 2 is an extended code with e1CodeBuffer

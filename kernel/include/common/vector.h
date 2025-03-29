@@ -110,6 +110,11 @@ namespace MaxOS{
 
         }
 
+        /**
+         * @brief Increases the size of the Vector by doubling the capacity
+         *
+         * @tparam Type Type of the Vector
+         */
         template <class Type> void Vector<Type>::increase_size() {
 
             // Allocate more space for the array

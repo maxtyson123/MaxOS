@@ -18,8 +18,8 @@ MouseEventHandler::MouseEventHandler() {
 
 /**
  * @brief Handles the triggered event and calls the appropriate function
- * @param event The event that was triggered
  *
+ * @param event The event that was triggered
  * @return The event that was triggered with the modified data
  */
 Event<MouseEvents>* MouseEventHandler::on_event(Event<MouseEvents> *event) {
@@ -111,15 +111,10 @@ void MouseDriver::activate() {
   command_port.write(0xD4);
   data_port.write(0xF4);
   data_port.read();
-
-
-
-
 }
 
 /**
  * @brief Handle the mouse interrupt
-
  */
 void MouseDriver::handle_interrupt(){
 

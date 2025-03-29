@@ -48,6 +48,7 @@ void Spinlock::unlock() {
 
 /**
  * @brief Check if the spinlock is locked
+ *
  * @return True if the spinlock is locked, false otherwise
  */
 bool Spinlock::is_locked() {
@@ -56,7 +57,7 @@ bool Spinlock::is_locked() {
 
 
 /**
- * @brief Acquire the spinlock
+ * @brief Acquire the spinlock: wait until the lock is available, yielding if desired until that happens.
  */
 void Spinlock::acquire() {
   while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {

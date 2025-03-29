@@ -17,6 +17,10 @@ UBSanHandler::~UBSanHandler() {
 
 }
 
+/**
+ * @brief Handles the UBSan error (currently only printing the location and panicking)
+ * @param location The location of the error
+ */
 void UBSanHandler::handle(source_location_t location) {
 
   // Print the location
@@ -27,6 +31,7 @@ void UBSanHandler::handle(source_location_t location) {
 
 /**
  * @brief Prints the type mismatch error for UBSan
+ *
  * @param info The type mismatch info
  * @param ptr The pointer to the object
  */
@@ -45,6 +50,7 @@ void UBSanHandler::print_type_mismatch(type_mismatch_info_t *info, uintptr_t ptr
 
 /**
  * @brief Prints the type mismatch error for UBSan v1
+ *
  * @param info The type mismatch info
  * @param ptr The pointer to the object
  */

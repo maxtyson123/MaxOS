@@ -23,7 +23,7 @@ namespace MaxOS{
 
             /**
              * @class VESABootConsole
-             * @brief Driver for the VESA Console during boot, handles the printing of characters and strings to the screen using VESA
+             * @brief Driver for the VESA Console during boot, handles the printing of characters and strings to the screen using VESA protocol
              */
             class VESABootConsole : public Driver, public Console
             {

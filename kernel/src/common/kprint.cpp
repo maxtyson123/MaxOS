@@ -10,7 +10,7 @@ using namespace MaxOS::system;
 using namespace MaxOS::common;
 
 /**
- * @brief Converts integer to string
+ * @brief Converts integer to string (does not handle negative numbers currently as int64_t wont hold higher half addresses which are deemed to be more important
  *
  * @param buffer The buffer to store the converted string
  * @param base The base of the number (10 for decimal, 16 for hex)
@@ -64,6 +64,7 @@ extern ConsoleStream* active_stream;
 
 /**
  * @brief Prints a character to the serial output if it is initialized
+ *
  * @param c The character to print
  */
 static void putchar (int c, bool cout_enabled = false)
@@ -81,7 +82,7 @@ static void putchar (int c, bool cout_enabled = false)
 }
 
 /**
- * @ brief Prints a debug prefix (in yellow) to the serial output
+ * @brief Prints a debug prefix to the serial output
  */
 void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 {
@@ -156,7 +157,7 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 Spinlock kprintf_lock;
 
 /**
- * @brief Prints a formatted string to the serial output
+ * @brief Prints a formatted string to the serial output (blocks until the other threads have finished printing their full message)
  *
  * ARGUMENTS:
  *  - %d for decimal
@@ -229,7 +230,7 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
 
   kprintf_lock.unlock();
 
-  // If it is type 3 panic
+  // If it is type 3, panic
   if(type == 3)
      CPU::PANIC("Check the serial output for more information");
 }
