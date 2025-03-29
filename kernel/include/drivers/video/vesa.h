@@ -35,7 +35,6 @@ namespace MaxOS {
                     uint32_t get_rendered_pixel_32_bit(uint32_t x, uint32_t y) final;
 
                     // Memory
-                    uint64_t* m_framebuffer_address;
                     size_t m_framebuffer_size;
 
                     // Info

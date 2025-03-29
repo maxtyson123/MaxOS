@@ -8,7 +8,7 @@
 #include <drivers/console/serial.h>
 #include <system/cpu.h>
 #include <stdarg.h>
-
+#include <common/spinlock.h>
 
 
 #define _kprintf(format, ...) \
@@ -23,5 +23,6 @@
 
 
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...);
+
 
 #endif // MAXOS_KPRINT_H

@@ -78,7 +78,7 @@ bool TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload
 {
     DataReceivedEvent* event = new DataReceivedEvent(this, data, size);
     raise_event(event);
-    MemoryManager::s_active_memory_manager->free(event);
+    MemoryManager::kfree(event);
     return true;
 }
 
@@ -108,14 +108,14 @@ void TransmissionControlProtocolSocket::Disconnect()
 void TransmissionControlProtocolSocket::Disconnected() {
     DisconnectedEvent* event = new DisconnectedEvent(this);
     raise_event(event);
-    MemoryManager::s_active_memory_manager->free(event);
+    MemoryManager::kfree(event);
 
 }
 
 void TransmissionControlProtocolSocket::Connected() {
     ConnectedEvent* event = new ConnectedEvent(this);
     raise_event(event);
-    MemoryManager::s_active_memory_manager->free(event);
+    MemoryManager::kfree(event);
 
 }
 
@@ -393,7 +393,7 @@ void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(T
     uint16_t lengthInclPHdr = totalLength + sizeof(TransmissionControlProtocolPseudoHeader);
 
     //Create a buffer for the packet
-    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(lengthInclPHdr);
+    uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(lengthInclPHdr);
     uint8_t* buffer2 = buffer + sizeof(TransmissionControlProtocolHeader) + sizeof(TransmissionControlProtocolPseudoHeader);
 
     //Create the headers
@@ -442,7 +442,7 @@ void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(T
 
     //Send and then free the data
     Send(socket -> remoteIP, (uint8_t*)msg, totalLength);
-    MemoryManager::s_active_memory_manager-> free(buffer);
+    MemoryManager::kfree(buffer);
 }
 
 /**
@@ -454,7 +454,7 @@ void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(T
 TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port)
 {
     //Create a new socket
-    TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
+    TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::kmalloc(sizeof(TransmissionControlProtocolSocket));
 
     //If there is space for the socket
     if(socket != 0)
@@ -516,7 +516,7 @@ void TransmissionControlProtocolHandler::Disconnect(TransmissionControlProtocolS
 TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Listen(uint16_t port)
 {
     //Create a new socket
-    TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
+    TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::kmalloc(sizeof(TransmissionControlProtocolSocket));
 
     //If there is space for the socket
     if(socket != 0)

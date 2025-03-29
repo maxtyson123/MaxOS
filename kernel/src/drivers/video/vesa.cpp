@@ -24,6 +24,8 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   m_pitch = m_framebuffer_info->common.framebuffer_pitch;
   m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
 
+  _kprintf("Framebuffer: bpp=%d, pitch=%d, size=%d\n", m_bpp, m_pitch, m_framebuffer_size);
+
   // Get the framebuffer address
   uint64_t physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
   uint64_t virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);

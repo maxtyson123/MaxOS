@@ -27,6 +27,8 @@ namespace MaxOS {
 
            Colour m_colour_pallet[256];
 
+           uint64_t* m_framebuffer_address { nullptr };
+
            virtual void render_pixel(uint32_t x, uint32_t y, uint32_t colour);
            virtual void render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour);
            virtual void render_pixel_16_bit(uint32_t x, uint32_t y, uint16_t colour);
@@ -46,8 +48,12 @@ namespace MaxOS {
            uint32_t colour_to_int(Colour);
            Colour int_to_colour(uint32_t);
 
+           // Convert uint32_t to uint64s?
            uint32_t get_width();
            uint32_t get_height();
+           uint32_t get_color_depth();
+
+           uint64_t* get_framebuffer_address();
 
            void put_pixel(int32_t x, int32_t y, Colour colour);
            void putPixel(int32_t x, int32_t y, int32_t colour);

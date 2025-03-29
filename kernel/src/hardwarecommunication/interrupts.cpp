@@ -18,7 +18,7 @@ InterruptDescriptor InterruptManager::s_interrupt_descriptor_table[256];
 
 ///__Handler__
 
-InterruptHandler::InterruptHandler(uint8_t interrupt_number, InterruptManager* interrupt_manager)
+InterruptHandler::InterruptHandler(uint8_t interrupt_number, InterruptManager* interrupt_manager)   //TODO: Make static so that it can be called without an instance
 : m_interrupt_number(interrupt_number),
   m_interrupt_manager(interrupt_manager)
 {
@@ -34,11 +34,25 @@ InterruptHandler::~InterruptHandler(){
 
 }
 
+
 void InterruptHandler::handle_interrupt() {
 
 }
 
+/**
+ * @brief Handles an interrupt and returns the status
+ * @param status The status of the CPU
+ * @return  The status of the CPU
+ */
+system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t *status) {
 
+  // For handlers that dont care about the status
+  handle_interrupt();
+
+  // Return the status
+  return status;
+
+}
 
 ///__Manger__
 
@@ -99,7 +113,7 @@ InterruptManager::InterruptManager()
     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
 
     // Set up the system call interrupt
-    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 0);   // System Call Interrupt
+    set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
 
     //Tell the processor to use the IDT
     IDTR idt;
@@ -176,21 +190,29 @@ void InterruptManager::deactivate()
 /**
  * @brief Handles the interrupt request by passing it to the interrupt manager
  *
- * @param status The current stack pointer
- * @return The stack pointer
+ * @param status The current cpu status
+ * @return The updated cpu status
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
 
-  // System Handlers
+  // Fault Handlers
   switch (status->interrupt_number) {
-    case 0x0E:
-      page_fault(status);
-      break;
 
-  }
+    case 0x7:
+      _kpanicf("Device Not Available: FPU Not Enabled\n");
+      CPU::prepare_for_panic(status);
+      CPU::PANIC("See above message for more information", status);
+
+    case 0x0D:
+          return general_protection_fault(status);
+
+
+      case 0x0E:
+        return page_fault(status);
+    }
 
   // If there is an interrupt manager handle interrupt
-  if(s_active_interrupt_manager != 0)
+  if(s_active_interrupt_manager != nullptr)
     return s_active_interrupt_manager->handle_interrupt_request(status);
 
   // CPU Can continue
@@ -227,25 +249,28 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
 
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
+  // Where to go afterwards
+  cpu_status_t* new_status = status;
+
   // If there is an interrupt manager, handle the interrupt
   if(m_interrupt_handlers[status -> interrupt_number] != 0)
-      m_interrupt_handlers[status -> interrupt_number]->handle_interrupt();
+    new_status = m_interrupt_handlers[status -> interrupt_number]->handle_interrupt(status);
   else
     _kprintf("Unhandled Interrupt 0x%x\n", status->interrupt_number);
 
   // Send the EOI to the APIC
   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
-      m_local_apic->send_eoi();
+    m_local_apic->send_eoi();
 
   // Return the status
-  return status;
+  return new_status;
 }
 
 void InterruptManager::set_apic(LocalAPIC *apic) {
     m_local_apic = apic;
 }
 
-void InterruptManager::page_fault(system::cpu_status_t *status) {
+cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
   bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
   bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
   bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
@@ -254,6 +279,28 @@ void InterruptManager::page_fault(system::cpu_status_t *status) {
   uint64_t faulting_address;
   asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 
-  ASSERT(false, "Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n",
-         faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+  cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
+  if(can_avoid != nullptr)
+    return can_avoid;
+
+  _kpanicf("Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n", faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+  CPU::PANIC("See above message for more information", status);
+}
+
+/**
+ * @brief Handles a general protection fault
+ * @param status The cpu status
+ */
+cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t *status) {
+    uint64_t error_code = status->error_code;
+
+    // Try to avoid the panic
+    cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
+    if(can_avoid != nullptr)
+      return can_avoid;
+
+    // Have to panic
+    _kpanicf("General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Not a Protection Exception");
+    CPU::PANIC("See above message for more information", status);
+
 }

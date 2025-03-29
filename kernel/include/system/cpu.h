@@ -40,6 +40,27 @@ namespace MaxOS{
       uint64_t ss;
     } __attribute__((__packed__)) cpu_status_t ;
 
+    typedef struct tss
+    {
+      uint32_t reserved0;
+      uint64_t rsp0;
+      uint64_t rsp1;
+      uint64_t rsp2;
+      uint64_t reserved1;
+      uint64_t reserved2;
+      uint64_t ist1;
+      uint64_t ist2;
+      uint64_t ist3;
+      uint64_t ist4;
+      uint64_t ist5;
+      uint64_t ist6;
+      uint64_t ist7;
+      uint64_t reserved3;
+      uint16_t reserved4;
+      uint16_t io_bitmap_offset;
+    }__attribute__((__packed__)) tss_t;
+
+
     typedef struct StackFrame{
       StackFrame* next;
       uintptr_t rip;
@@ -49,11 +70,20 @@ namespace MaxOS{
       private:
         static CPU* s_instance;
 
-
       public:
 
-        static void PANIC(const char* message);
+        CPU();
+        ~CPU();
+
+        static inline bool is_panicking = { false };
+        static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
+        static void PANIC(const char* message, cpu_status_t* status = nullptr);
         static void halt();
+
+        void init_tss();
+        tss_t tss;
+
+        static CPU* get_instance();
 
         static void get_status(cpu_status_t* status);
         static void set_status(cpu_status_t* status);

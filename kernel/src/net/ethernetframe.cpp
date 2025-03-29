@@ -158,7 +158,7 @@ void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t f
     errorMessages->write("EFH: Sending frame...");
 
     //Allocate memory for the buffer
-    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(size + sizeof(EthernetFrameHeader));
+    uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
     EthernetFrameHeader* frame = (EthernetFrameHeader*)buffer;
 
     //Put data in the header
@@ -177,5 +177,5 @@ void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t f
 
 
     //Free the buffer
-    MemoryManager::s_active_memory_manager-> free(buffer);
+    MemoryManager::kfree(buffer);
 }

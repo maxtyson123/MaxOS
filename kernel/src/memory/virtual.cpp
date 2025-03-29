@@ -4,22 +4,23 @@
 
 #include <memory/virtual.h>
 #include <common/kprint.h>
+#include <processes/scheduler.h>
 
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
+using namespace MaxOS::processes;
 
 VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
-: m_physical_memory_manager(PhysicalMemoryManager::s_current_manager),
+: m_physical_memory_manager(PhysicalMemoryManager::s_current_manager),    //Todo: dont need to store this as its a static?
   m_is_kernel(is_kernel)
 {
 
-    // If not the kernel, we need to allocate a new PML4 table
+    // If not the kernel, we need to allocate a new PML4 table  TODO: Might not need a variable? Check if there isnt a kernel one and just assume it is the kernel one
     if(!m_is_kernel){
 
       // Get a new pml4 table
       m_pml4_root_physical_address = (uint64_t*)m_physical_memory_manager->allocate_frame();
       m_pml4_root_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
-      _kprintf("Allocated new PML4 table at: 0x%x\n", m_pml4_root_address);
 
       // Clear the table
       m_physical_memory_manager -> clean_page_table(m_pml4_root_address);
@@ -40,9 +41,14 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
       _kprintf("Mapped higher half of kernel\n");
 
 
+
     }else{
       m_pml4_root_address = m_physical_memory_manager->get_pml4_root_address();
+      m_pml4_root_physical_address = (uint64_t*)MemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     };
+
+    // Log the VMM's PML4 address
+    _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
 
     // Space to store VMM chunks
     uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + m_physical_memory_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
@@ -55,6 +61,8 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     m_physical_memory_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
     _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
+    if(!m_is_kernel)
+      ASSERT(vmm_space_physical != m_physical_memory_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, m_physical_memory_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
 
     // Calculate the next available address
     m_next_available_address = PhysicalMemoryManager::s_page_size;
@@ -70,6 +78,34 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
 }
 
 VirtualMemoryManager::~VirtualMemoryManager() {
+
+  // Free all the frames used by the VMM
+  virtual_memory_region_t* region = m_first_region;
+
+  // Loop through the regions
+  while(region != nullptr){
+
+    // Loop through the chunks
+    for (size_t i = 0; i < s_chunks_per_page; i++){
+
+        // Loop through the pages
+        size_t pages = PhysicalMemoryManager::size_to_frames(region->chunks[i].size);
+        for (size_t j = 0; j < pages; j++){
+
+              // Get the frame
+              physical_address_t* frame = m_physical_memory_manager -> get_physical_address((virtual_address_t*)region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
+
+              // Free the frame
+              m_physical_memory_manager->free_frame(frame);
+
+        }
+
+    }
+
+    // Move to the next region
+    region = region->next;
+
+  }
 
 }
 
@@ -102,7 +138,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   // If specific address is given
   if(address != 0){
 
-      // Make sure isnt already allocated
+      // Make sure isn't already allocated
       if(address < m_next_available_address)
         return nullptr;
 
@@ -243,6 +279,14 @@ void VirtualMemoryManager::free(void *address) {
   if(chunk == nullptr)
     return;
 
+  // If the chunk is shared, dont unmap it incase other processes are using it
+  if(chunk->flags & Shared){
+
+    // Let the IPC handle the shared memory
+    Scheduler::get_ipc()->free_shared_memory((uintptr_t)address);
+
+  }
+
   // Unmap the memory
   size_t pages = PhysicalMemoryManager::size_to_frames(chunk->size);
   for (size_t i = 0; i < pages; i++){
@@ -342,4 +386,71 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
     // No chunk found
     return nullptr;
 
+}
+
+/**
+ * @brief Get the physical address of the PML4 root
+ * @return The physical address of the PML4 root
+ */
+uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
+    return m_pml4_root_physical_address;
+}
+
+/**
+ * @brief Load shared memory into the VMM's address space
+ * @param name The name of the shared memory
+ * @return The address of the shared memory in the VMM's address space
+ */
+void *VirtualMemoryManager::load_shared_memory(string name) {
+
+  // Get the shared memory block
+  ipc_shared_memory_t* block = Scheduler::get_ipc()->get_shared_memory(name);
+
+  // Load the shared memory
+  if(block != nullptr)
+    return load_shared_memory(block->physical_address, block->size);
+
+  return nullptr;
+}
+
+/**
+ * @brief Load shared memory into the VMM's address space
+ * @param physical_address The physical address of the shared memory
+ * @param size The size of the shared memory
+ * @return The address of the shared memory in the VMM's address space
+ */
+void *VirtualMemoryManager::load_shared_memory(uintptr_t physical_address, size_t size) {
+
+  // Make sure there is somthing to map
+  if(size == 0 || physical_address == 0)
+    return nullptr;
+
+  // Load it into physical memory
+  return load_physical_into_address_space(physical_address, size, Shared);
+}
+
+/**
+ * @brief Load physical memory into the VMM's address space
+ *
+ * @param physical_address The physical address of the memory
+ * @param size The size of the memory
+ * @param flags The flags to set on the memory
+ * @return The address of the memory in the VMM's address space
+ */
+void *VirtualMemoryManager::load_physical_into_address_space(uintptr_t physical_address, size_t size, size_t flags){
+
+  // Reserve some space
+  void* address = allocate(size, flags | Reserve);
+
+  // Map the shared memory
+  size_t pages = PhysicalMemoryManager::size_to_frames(size);
+  for (size_t i = 0; i < pages; i++){
+
+    // Map the frame
+    m_physical_memory_manager->map((physical_address_t*)(physical_address + (i * PhysicalMemoryManager::s_page_size)), (virtual_address_t*)((uintptr_t)address + (i * PhysicalMemoryManager::s_page_size)), Present | Write, m_pml4_root_address);
+
+  }
+
+  // All done
+  return address;
 }

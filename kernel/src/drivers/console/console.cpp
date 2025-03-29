@@ -45,7 +45,7 @@ uint16_t Console::height() {
  * @param y The y coordinate of the character
  * @param c The character to put on the console
  */
-void Console::put_character(uint16_t x, uint16_t y, char c) {
+void Console::put_character(uint16_t, uint16_t, char) {
 }
 
 /**
@@ -302,6 +302,7 @@ void ConsoleArea::put_character(uint16_t x, uint16_t y, char c) {
 
 }
 
+
 /**
  * @brief Change the foreground color of a character on the console area if the coordinates are within the area
  *
@@ -390,6 +391,33 @@ ConsoleColour ConsoleArea::get_background_color(uint16_t x, uint16_t y) {
     return m_console->get_background_color(m_left + x, m_top + y);
 }
 
+/**
+ * @brief Scroll the console area up by 1 line
+ */
+void ConsoleArea::scroll_up() {
+
+  // Get the console
+  m_console->scroll_up(m_left, m_top, m_width, m_height);
+
+}
+
+/**
+ * @brief Scroll an area of the console up by 1 line
+ * @param left The left coordinate of the area to scroll
+ * @param top The top coordinate of the area to scroll
+ * @param width The m_width of the area to scroll
+ * @param height The m_height of the area to scroll
+ * @param foreground The foreground color of the new line
+ * @param background The background color of the new line
+ * @param fill The character to fill the new line with
+ */
+void ConsoleArea::scroll_up(uint16_t left, uint16_t top, uint16_t width,
+                            uint16_t height, common::ConsoleColour foreground,
+                            common::ConsoleColour background, char fill) {
+
+  m_console->scroll_up(m_left + left, m_top + top, width, height, foreground, background, fill);
+
+}
 
 ///____ Console Stream ____///
 ConsoleStream::ConsoleStream(Console *console)
@@ -408,6 +436,8 @@ ConsoleStream::~ConsoleStream() {
  * @param c The character to write
  */
 void ConsoleStream::write_char(char c) {
+
+    uint16_t spaces = 0;
 
     // If the character placement is more than the width of the console go on a new line
     if(m_cursor_x >= m_console->width()) {
@@ -460,6 +490,14 @@ void ConsoleStream::write_char(char c) {
         case '\b':
             // Decrement the x coordinate
             m_cursor_x--;
+            break;
+
+        // Tab
+        case '\t':
+            // Figure out how many spaces to the next tab stop
+            spaces = 8 - (m_cursor_x % 8);
+            for(uint16_t i = 0; i < spaces; i++)
+                write_char(' ');
             break;
 
         default:

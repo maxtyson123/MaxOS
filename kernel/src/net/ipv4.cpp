@@ -171,7 +171,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
  */
 void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, uint8_t *data, uint32_t size) {
 
-    uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
+    uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
     InternetProtocolV4Header *message = (InternetProtocolV4Header*)buffer;                                                                            //Convert to struct for easier use
 
     message -> version = 4;                                                                                                                           //Set version
@@ -208,7 +208,7 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
 
     //Send message
     frameHandler -> sendEthernetFrame(MAC, this -> handledType, buffer, size + sizeof(InternetProtocolV4Header));      //Send message
-    MemoryManager::s_active_memory_manager->free(buffer);                                                                                                 //Free memory
+    MemoryManager::kfree(buffer);                                                                                                 //Free memory
 }
 
 /**

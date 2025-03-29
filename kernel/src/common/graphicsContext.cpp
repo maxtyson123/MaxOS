@@ -366,6 +366,14 @@ uint32_t GraphicsContext::get_height() {
 }
 
 /**
+ * @breif Gets the current color depth (bits per pixel)
+ * @return The color depth
+ */
+uint32_t GraphicsContext::get_color_depth() {
+  return m_color_depth;
+}
+
+/**
  * @brief Renders a pixel to the screen (automatically converts the colour to an integer)
  *
  * @param x The x coordinate of the pixel
@@ -620,7 +628,7 @@ void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t
 
     // Draw from left to right
     if(y1 < y0){
-      fill_rectangle(x1, y1, x0, y0, colour);
+        fill_rectangle(x1, y1, x0, y0, colour);
         return;
     }
 
@@ -748,4 +756,7 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
                     putPixel(x0+x,y0+y,colour);
             }
         }
+}
+uint64_t *GraphicsContext::get_framebuffer_address() {
+    return m_framebuffer_address;
 }

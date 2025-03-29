@@ -84,12 +84,16 @@ Max OS is a hobby operating system developed for the 64bit platform using C++ an
 
 Max OS supports device drivers, memory management, multitasking, a GUI, and more. The project is being developed with the goal of being able to run on real hardware, however, it is currently only able to run on a virtual machine.
 
+This GitHub repository contains the source code for the operating system, as well as the build scripts required to build the operating system from source. The repository also contains the latest built kernel, which can be downloaded from the workflow artifacts. To ensure a cleaner git history, each feature/change is done in a separate branch and then merged into the main branch once working. To see the history of each feature press on the pull request number. If you are intrested in the active developement find the latest branch <a href="https://github.com/maxtyson123/MaxOS/branches">Here</a>.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
 This is how to build the Max OS operating system from source. (Alternatively, you can download the latest built kernel from the workflow artifacts)
+
+Currently Max OS can only be built on a linux machine, but does support WSL. In the future I do plan to port the build system to Mac. 
 
 ### Prerequisites
 
@@ -131,6 +135,7 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 
 3. Generate makefiles
    ```sh
+   # If you edit the CMakeLists.txt file you will need to delete the build directory contents (not the folder) and regenerate the makefiles
    cd cmake-build
    
    # Add -DDEBUG=ON to enable debug mode
@@ -177,16 +182,29 @@ No user usage so far (userland will be added in the future)
 - [x] Multitasking
 - [x] GUI
 - [x] Window Manager
-- [ ] Paging
-- [ ] Userspace
-- [ ] IPC
+- [x] Paging
+- [x] Userspace
+- [x] IPC
 - [ ] VFS
-- [ ] Loading ELF
-- [ ] CLI
-- [ ] Porting Libc
+- [x] Loading ELF
+- [ ] Multiple Cores Support (SMP & Scheduler)
 - [ ] Userland GUI
-- [ ] DOOM Port?
-
+- [ ] CLI
+- [ ] Porting & Dynamically Linking Libc
+- [ ] Self-hosted os
+- [ ] App Framework & System Apps
+- [ ] DOOM Port
+- [ ] UserSpace Drivers
+- [ ] Userspace Networking
+- [ ] Auto Updater & Image Builder
+- [ ] Store
+- [ ] User Switching
+- [ ] Real Hardware Support
+- [ ] Pretty GUI
+- [ ] Port NeoVim, Wakatime & Some hot reloader
+- [ ] Create port of my 2048
+- [ ] Compatibility Layer(s)
+ 
 See the [open issues](https://github.com/maxtyson123/MaxOS/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

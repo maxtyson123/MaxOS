@@ -37,12 +37,14 @@
 #include <net/udp.h>
 #include <net/tcp.h>
 
+//PROCESS
+#include <processes/process.h>
+#include <processes/scheduler.h>
+
 //SYSTEM
-#include <system/process.h>
 #include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
-#include <system/multithreading.h>
 
 //MEMORY
 #include <memory/physical.h>
@@ -62,12 +64,17 @@ using namespace MaxOS::drivers::console;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::gui;
 using namespace MaxOS::net;
+using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
 
 //TODO: Rework cmake to have debug and prod targets
+
+// Define static constructors
+extern "C" void* __dso_handle = nullptr;
+
 
 //Define what a constructor is
 typedef void (*constructor)();
@@ -81,8 +88,10 @@ extern "C" void callConstructors()
         (*i)();                                                     //Call the constructor
 }
 
+ConsoleStream* active_stream = nullptr;
+
 extern volatile uint64_t p4_table[512];
-extern "C" void kernelMain(unsigned long addr, unsigned long magic)
+extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 {
     // Initialise the serial console
     SerialConsole serialConsole;
@@ -98,7 +107,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     _kprintf("-= IDT set up =-\n");
 
     uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
-    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, p4_table);
+    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, (uint64_t*)p4_table);
     _kprintf("-= Physical Memory Manager set up =-\n");
 
     VirtualMemoryManager vmm(true);
@@ -114,6 +123,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
 
     // Initialise the memory manager
     MemoryManager memoryManager(&vmm);
+    MemoryManager::s_kernel_memory_manager = &memoryManager;
     _kprintf("-= Memory Manager set up =-\n");
 
     // Initialise Console
@@ -124,6 +134,7 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 0, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     ConsoleStream cout(&mainConsoleArea);
+    active_stream = &cout;
 
     // Header constants
     const string tick = (string)"[ " + ANSI_COLOURS[FG_Green] + "OK" + ANSI_COLOURS[Reset] + " ]";
@@ -152,10 +163,10 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up Memory Manager (Kernel)");
     log("Set Up Video Driver");
 
-    ThreadManager threadManager;
-    log("Set Up Thread Manager");
+    Scheduler scheduler(&interrupts);
+    log("Set Up Scheduler");
 
-    SyscallHandler syscalls(&interrupts, 0x80);                               //Instantiate the function
+    SyscallManager syscalls(&interrupts);
     log("Set Up Syscalls");
 
     DriverManager driverManager;
@@ -199,6 +210,10 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     apic.get_io_apic() -> set_redirect(&mouseRedirect);
     log("Set Up Mouse");
 
+    // CPU
+    CPU cpu;
+    cpu.init_tss();
+    log("Set Up CPU");
 
     // Clock
     Clock kernelClock(&interrupts, &apic, 1);
@@ -213,6 +228,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     driverSelectors.push_back(&PCIController);
     log("Set Up PCI");
 
+    //USB
+    //UniversalSerialBusController USBController;
+    //driverSelectors.push_back(&USBController);
+    //log("Set Up USB");
+
     header("Device Management")
 
     // Find the drivers
@@ -223,7 +243,6 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
       (*selector)->select_drivers(&driverManager, &interrupts);
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
-
 
     // Resetting devices
     cout << "Resetting Devices" << ANSI_COLOURS[FG_White];
@@ -239,12 +258,11 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 17 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "RESET" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
-
     // Interrupts
     interrupts.activate();
     log("Activating Interrupts");
 
-    // Post interupt activation
+    // Post interrupt activation
     kernelClock.calibrate();
     kernelClock.delay(resetWaitTime);
     Time now = kernelClock.get_time();
@@ -276,9 +294,50 @@ extern "C" void kernelMain(unsigned long addr, unsigned long magic)
     cout << "\n\n";
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
     cout << ANSI_COLOURS[FG_Cyan] << string(" -- Kernel Ready --").center(boot_width) << "\n";
-    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
+    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << ANSI_COLOURS[Reset] << "\n";
+    cout.set_cursor(0, console.height() - 1);
 
-    // Wait
-    while (true);
+    // Idle Process
+    Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
+    idle->memory_manager = &memoryManager;
+    scheduler.add_process(idle);
+    idle->set_pid(0);
 
+    // Load executables
+    scheduler.load_multiboot_elfs(&multiboot);
+
+    // Start the Scheduler & updates the clock handler
+    interrupts.set_interrupt_handler(0x20, &scheduler);
+    scheduler.activate();
+
+
+    // TODO:
+    //       - Doxygen for classes & structs, Fix some more errors/warnings, kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
+    //       - PCI to drivers page in osdev book, ubsan section maybe
+
+
+    /// Boot Done ///
+    _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
+
+
+    /// How this idle works:
+    ///  I was debugging along and released that on the first ever schedule it will
+    ///  set current_thread->execution_state = cpu_state; where it is assumed cpu_state
+    ///  is the current thread state (ie what we have just been scheduling) and
+    ///  thus saves it in that thread. However, as the first thread has not had a
+    ///  chance to be scheduled yet, the current state is not the expected first
+    ///  thread's state and instead is the cpu state of the kernel.
+    ///  Now I could either fix that or leave it in as a cool way of never fully
+    ///  leaving kernelMain and  also having a idle_proc
+    while (true){
+
+      // Print the ticks (debuging)
+      //_kprintf("%hTick: %d\r", scheduler.get_ticks());
+
+      // yield ? wait until figured out the task manager cpu %
+
+      // Make sure the compiler doesn't optimise the loop away
+      asm("nop");
+
+    }
 }

@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <system/multiboot.h>
+#include <common/spinlock.h>
 
 namespace MaxOS {
 
@@ -84,6 +85,8 @@ namespace MaxOS {
 
           bool m_initialized;
 
+          common::Spinlock m_lock;
+
           // Table Management
           void create_table(pml_t* table, pml_t* next_table, size_t index);
           pte_t create_page_table_entry(uintptr_t address, size_t flags);
@@ -101,7 +104,7 @@ namespace MaxOS {
 
 
           // Vars
-          static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes
+          static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes  //TODO: combination of large and small pages
           uint64_t get_memory_size();
           uint64_t get_memory_used();
 
@@ -133,7 +136,6 @@ namespace MaxOS {
           static size_t align_direct_to_page(size_t size);
           static size_t align_up_to_page(size_t size, size_t s_page_size);
           static bool check_aligned(size_t size);
-          bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address);
           bool is_anonymous_available(size_t size);
 
           static PhysicalMemoryManager* s_current_manager;
@@ -142,6 +144,8 @@ namespace MaxOS {
           void reserve(uint64_t address);
           void reserve(uint64_t address, size_t size);
 
+          physical_address_t* get_physical_address(virtual_address_t* virtual_address,  uint64_t *pml4_root);
+          bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t *pml4_root);
       };
   }
 

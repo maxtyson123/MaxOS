@@ -7,6 +7,7 @@
 
 using namespace MaxOS::drivers;
 using namespace MaxOS::system;
+using namespace MaxOS::common;
 
 /**
  * @brief Converts integer to string
@@ -27,11 +28,7 @@ char* itoa(int base, uint64_t  number)
         return &buffer[i];
     }
 
-    if (number < 0 && base == 10)
-    {
-        isNegative = true;
-        number = -number;
-    }
+    //TODO: Handle negatives but then using an int64_t means we cant print higher half addresses in hex
 
     for (; number && i; --i, number /= base)
         buffer[i] = "0123456789ABCDEF"[number % base];
@@ -58,11 +55,18 @@ int strlen(const char* str)
    return len;
 }
 
+#include <drivers/console/console.h>
+using namespace MaxOS::drivers::console;
+
+// Pointer to the active stream
+extern ConsoleStream* active_stream;
+
+
 /**
  * @brief Prints a character to the serial output if it is initialized
  * @param c The character to print
  */
-static void putchar (int c)
+static void putchar (int c, bool cout_enabled = false)
 {
     // Check if the active serial console is null
     if (SerialConsole::s_active_serial_console == 0)
@@ -70,6 +74,10 @@ static void putchar (int c)
 
     // Put the character
     SerialConsole::s_active_serial_console->put_character(c);
+
+    // If there is an active stream write the character to the stream
+    if(active_stream != 0 && cout_enabled)
+            active_stream->write_char(c);
 }
 
 /**
@@ -79,7 +87,7 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
 {
 
   // Print the  colour
-  char* colour = "---------";
+  const char* colour = "---------";
   switch (type) {
 
     // Log (yellow)
@@ -90,14 +98,17 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
     // Assert, Panic (red)
     case 2:
     case 3:
-      colour = "\033[1;31m";
+      colour = "\033[0;31m";
+      break;
+
+    default:
       break;
   }
 
   for (int i = 0; i < strlen(colour); i++)
     putchar(colour[i]);
 
-  putchar('[');
+  putchar('[', type == 2);
 
   // File Output
   if(type == 0){
@@ -113,34 +124,36 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
       }
     }\
     for (int j = 0; j < strlen(file_str); j++)
-      putchar(file_str[j]);
-    putchar(':');
+      putchar(file_str[j], type == 2);
+    putchar(':', type == 2);
 
     // Print the line
     const char* line_str = itoa(10, line);
     for (int i = 0; i < strlen(line_str); i++)
-      putchar(line_str[i]);
+      putchar(line_str[i], type == 2);
   }else if(type == 3){
 
     // Print the text
     const char* text = "FATAL ERROR IN {";
     for (int i = 0; i < strlen(text); i++)
-      putchar(text[i]);
+      putchar(text[i], type == 2);
 
     // Print the function
     for (int i = 0; i < strlen(func); i++)
-      putchar(func[i]);
+      putchar(func[i], type == 2);
 
-    putchar('}');
+    putchar('}', type == 2);
   }
 
 
   // Print the kernel footer
   const char* footer = "] \033[0m";
   for (int i = 0; i < strlen(footer); i++)
-    putchar(footer[i]);
+    putchar(footer[i], type == 2);
 
 }
+
+Spinlock kprintf_lock;
 
 /**
  * @brief Prints a formatted string to the serial output
@@ -156,15 +169,17 @@ void pre_kprintf(const char* file, int line, const char* func, uint8_t type)
  */
 void _kprintf_internal(uint8_t type, const char* file, int line, const char* func, const char* format, ...)
 {
+
+  // wait for the lock
+  kprintf_lock.lock();
+
   // Create a pointer to the data
   va_list parameters;
   va_start(parameters, format);
 
-  // Print the header
-  if(*format != '\h')
+  // Print the header if the first two are not %h
+  if(*format != '%' && *(format + 1) != 'h')
     pre_kprintf(file, line,func, type);
-  else
-    format++;
 
 
   // Loop through the format string
@@ -174,7 +189,7 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
     // If it is not a %, print the character
     if (*format != '%')
     {
-      putchar(*format);
+      putchar(*format, type == 2);
       continue;
     }
 
@@ -189,7 +204,7 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
         int number = va_arg (parameters, int);
         char* str = itoa(10, number);
         for (int i = 0; i < strlen(str); i++)
-          putchar(str[i]);
+          putchar(str[i], type == 2);
         break;
       }
       case 'x':
@@ -198,7 +213,7 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
         uint64_t  number = va_arg (parameters, uint64_t );
         char* str = itoa(16, number);
         for (int i = 0; i < strlen(str); i++)
-          putchar(str[i]);
+          putchar(str[i], type == 2);
         break;
       }
       case 's':
@@ -206,15 +221,15 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
         // Print a string
         char* str = va_arg (parameters, char*);
         for (int i = 0; i < strlen(str); i++)
-          putchar(str[i]);
+          putchar(str[i], type == 2);
         break;
       }
     }
   }
 
+  kprintf_lock.unlock();
 
   // If it is type 3 panic
   if(type == 3)
      CPU::PANIC("Check the serial output for more information");
-
 }

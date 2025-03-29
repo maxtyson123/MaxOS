@@ -6,7 +6,7 @@
 
 using namespace MaxOS::memory;
 
-MemIO::MemIO(uint32_t address)
+MemIO::MemIO(uintptr_t address)
 : m_address(address)
 {
 
@@ -16,7 +16,7 @@ MemIO::~MemIO() {
 
 }
 
-MemIO8Bit::MemIO8Bit(uint32_t address)
+MemIO8Bit::MemIO8Bit(uintptr_t address)
 : MemIO(address)
 {
 }
@@ -43,7 +43,7 @@ uint8_t MemIO8Bit::read(){
     return *((volatile uint8_t*)(m_address));
 }
 
-MemIO16Bit::MemIO16Bit(uint32_t address)
+MemIO16Bit::MemIO16Bit(uintptr_t address)
 : MemIO(address)
 {
 }
@@ -70,7 +70,7 @@ uint16_t MemIO16Bit::read(){
     return *((volatile uint16_t*)(m_address));
 }
 
-MemIO32Bit::MemIO32Bit(uint32_t address)
+MemIO32Bit::MemIO32Bit(uintptr_t address)
         : MemIO(address)
 {
 }
@@ -97,8 +97,8 @@ uint32_t MemIO32Bit::read(){
     return *((volatile uint32_t*)(m_address));
 }
 
-MemIO64Bit::MemIO64Bit(uint32_t address)
-        : MemIO(address)
+MemIO64Bit::MemIO64Bit(uintptr_t address)
+: MemIO(address)
 {
 }
 
@@ -135,7 +135,7 @@ uint64_t MemIO64Bit::read(){
  * @param num The number of bytes to copy
  * @return The destination
  */
-void* memcpy(void* destination, const void* source, uint32_t num) {
+void* memcpy(void* destination, const void* source, uint64_t num) {
 
     unsigned char* dst = (unsigned char*) destination;
     const unsigned char* src = (const unsigned char*) source;
@@ -153,7 +153,7 @@ void* memcpy(void* destination, const void* source, uint32_t num) {
  * @param num The number of bytes to fill
  * @return The pointer to the block of memory
  */
-void* memset(void* ptr, int value, uint32_t num) {
+void* memset(void* ptr, int value, uint64_t num) {
     unsigned char* dst = (unsigned char*) ptr;
     for (size_t i = 0; i < num; i++)
         dst[i] = (unsigned char) value;
@@ -168,7 +168,7 @@ void* memset(void* ptr, int value, uint32_t num) {
  * @param num The number of bytes to copy
  * @return The destination
  */
-void* memmove(void* destination, const void* source, uint32_t num) {
+void* memmove(void* destination, const void* source, uint64_t num) {
     unsigned char* dst = (unsigned char*) destination;
     const unsigned char* src = (const unsigned char*) source;
     if (dst < src) {
@@ -189,7 +189,7 @@ void* memmove(void* destination, const void* source, uint32_t num) {
  * @param num The number of bytes to compare
  * @return 0 if the blocks of memory are equal, -1 if ptr1 < ptr2, 1 if ptr1 > ptr2
  */
-int memcmp(const void* ptr1, const void* ptr2, uint32_t num) {
+int memcmp(const void* ptr1, const void* ptr2, uint64_t num) {
   const unsigned char *p1 = (const unsigned char *)ptr1;
   const unsigned char *p2 = (const unsigned char *)ptr2;
   for (size_t i = 0; i < num; i++) {

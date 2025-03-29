@@ -185,13 +185,13 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
                 if(driver != nullptr){
                   handler->on_driver_selected(driver);
-                  _kprintf("\h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
+                  _kprintf("%h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
                 }else{
                   list_known_deivce(deviceDescriptor);
                 }
 
                 // New line
-                _kprintf("\h\n");
+                _kprintf("%h\n");
             }
         }
     }
@@ -245,7 +245,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x2000:    //am79c971
                 {
-                    amd_am79c973* result = (amd_am79c973*)MemoryManager::s_active_memory_manager ->malloc(sizeof(amd_am79c973));
+                    amd_am79c973* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
                     new (result) amd_am79c973(&dev, interrupt_manager);
                     return result;
 
@@ -261,7 +261,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    intel_i217* result = (intel_i217*)MemoryManager::s_active_memory_manager->malloc(sizeof(intel_i217));
+                    intel_i217* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
                     new (result) intel_i217(&dev, interrupt_manager);
                     return result;
                 }
@@ -282,7 +282,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x00:  //VGA
                 {
-                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::s_active_memory_manager->malloc(sizeof(VideoGraphicsArray));
+                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
                     new (result) VideoGraphicsArray();
                     return result;
                 }
@@ -301,13 +301,13 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x1022:
         {
             // The vendor is AMD
-            _kprintf("\hAMD ");
+            _kprintf("%hAMD ");
 
             // List the device
             switch (dev.device_id)
             {
                 default:
-                  _kprintf("\h0x%x", dev.device_id);
+                  _kprintf("%h0x%x", dev.device_id);
                   break;
             }
             break;
@@ -316,19 +316,19 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x106B:
         {
             // The vendor is Apple
-            _kprintf("\hApple ");
+            _kprintf("%hApple ");
 
             // List the device
             switch (dev.device_id)
             {
                 case 0x003F:
                 {
-                  _kprintf("\hKeyLargo/Intrepid USB");
+                  _kprintf("%hKeyLargo/Intrepid USB");
                   break;
                 }
 
                 default:
-                  _kprintf("\h0x%x", dev.device_id);
+                  _kprintf("%h0x%x", dev.device_id);
                   break;
             }
             break;
@@ -337,7 +337,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 1234:
         {
             // The vendor is QEMU
-          _kprintf("\hQEMU ");
+          _kprintf("%hQEMU ");
 
             // List the device
             switch (dev.device_id)
@@ -345,7 +345,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
 
                 case 0x1111:
                 {
-                  _kprintf("\hVirtual Video Controller");
+                  _kprintf("%hVirtual Video Controller");
                   break;
                 }
             }
@@ -355,7 +355,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x8086:
         {
             // The vendor is Intel
-            _kprintf("\hIntel ");
+            _kprintf("%hIntel ");
 
             // List the device
             switch (dev.device_id)
@@ -363,44 +363,44 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
 
                 case 0x1237:
                 {
-                  _kprintf("\h440FX");
+                  _kprintf("%h440FX");
                   break;
                 }
 
                 case 0x2415:
                 {
-                  _kprintf("\hAC'97");
+                  _kprintf("%hAC'97");
                   break;
                 }
 
                 case 0x7000:
                 {
-                  _kprintf("\hPIIX3");
+                  _kprintf("%hPIIX3");
                   break;
 
                 }
 
                 case 0x7010:
                 {
-                  _kprintf("\hPIIX4");
+                  _kprintf("%hPIIX4");
                   break;
 
                 }
 
                 case 0x7111:
                 {
-                  _kprintf("\hPIIX3 ACPI");
+                  _kprintf("%hPIIX3 ACPI");
                   break;
                 }
 
                 case 0x7113:
                 {
-                  _kprintf("\hPIIX4 ACPI");
+                  _kprintf("%hPIIX4 ACPI");
                   break;
                 }
 
                 default:
-                    _kprintf("\h0x%x", dev.device_id);
+                    _kprintf("%h0x%x", dev.device_id);
                     break;
 
             }
@@ -410,18 +410,18 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x80EE: {
 
             // The vendor is VirtualBox
-            _kprintf("\hVirtualBox ");
+            _kprintf("%hVirtualBox ");
 
             // List the device
             switch (dev.device_id) {
 
                 case 0xBEEF: {
-                  _kprintf("\hGraphics Adapter");
+                  _kprintf("%hGraphics Adapter");
                   break;
                 }
 
                 case 0xCAFE: {
-                  _kprintf("\hGuest Service");
+                  _kprintf("%hGuest Service");
                   break;
                 }
             }
@@ -429,7 +429,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         }
 
         default:    // Unknown
-          _kprintf("\hUnknown (0x%x:0x%x)", dev.vendor_id, dev.device_id);
+          _kprintf("%hUnknown (0x%x:0x%x)", dev.vendor_id, dev.device_id);
           break;
 
     }

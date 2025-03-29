@@ -321,7 +321,7 @@ See also: [Thread](https://wiki.osdev.org/Thread)
 - The main difference between a thread and a process is that threads share the same address space, while processes have separate address spaces. This means that threads can share data and code, while processes cannot. This also means that threads are faster than processes, because they do not need to be loaded into memory.
 - To implement threads in the OS, the kernel will have to implement a thread class. This class will have a function to create a thread, and a function to execute the thread. The thread class will also have a function to get the current thread.
 - The thread class will also have a function to get the current thread. This function will be used to get the current thread, and then the thread will be able to access its own stack.
-- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yeild function on the thread class.
+- Yeilding is when a thread gives up its time slice and allows another thread to run. This is done by calling the yield function on the thread class.
 - Processes and threads are different. A process is a program in execution. A thread is a component of a process. A process can have multiple threads. m_threads are often used to implement concurrency within a process. m_threads are also used to implement parallelism, where multiple processes can run simultaneously on a multi-core processor.
 <!-- TOC --><a name="dynamic-memory-management-heap"></a>
 ### Dynamic Memory Management / Heap
@@ -348,7 +348,7 @@ See also [Double Linked List](https://en.wikipedia.org/wiki/Linked_list#Doubly_l
 - However, if there is no free memory then the function will return 0 which would work if in user space as memory pointer 0 is out of bounds. The OS cant throw an exception like c++ normally would as currently there is no exception handler
 <!-- TOC --><a name="system-calls"></a>
 ### System Calls
-See also [List of syscalls](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
+See also [List of syscalls](https://x64.syscall.sh/)
 - The kernel can load a binary executable from the hard drive and then store it in memory and then attach the memory pointer to task management
 - When the operating system is unsecure from executables, they will be able to use assembly and such to talk to the hard drive and other devices, this can lead to malicious programs.
 - To get around this the kernel has to be put in userspace once fully initiated. Userspace tells the device to ignore "outb" commands and other low level operations.

@@ -203,14 +203,13 @@ void intel_i217::receiveInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
     struct receiveDescriptor *descs;                                                                                        //A pointer to the receive descriptors
-    ptr = (uint8_t *)(MemoryManager::s_active_memory_manager->malloc(sizeof(struct receiveDescriptor)*32 + 16));           //Allocate memory for the receive descriptors
+    ptr = (uint8_t *)(MemoryManager::kmalloc(sizeof(struct receiveDescriptor)*32 + 16));           //Allocate memory for the receive descriptors
     descs = (struct receiveDescriptor *)ptr;                                                                                //Set the pointer to the receive descriptors
 
     for(int i = 0; i < 32; i++)
     {
         receiveDsrctrs[i] = (struct receiveDescriptor *)((uint8_t *)descs + i*16);
-        receiveDsrctrs[i] -> bufferAddress = (uint64_t)(uint8_t *)(MemoryManager::s_active_memory_manager
-                                      ->malloc(8192 + 16));
+        receiveDsrctrs[i] -> bufferAddress = (uint64_t)(uint8_t *)(MemoryManager::kmalloc(8192 + 16));
         receiveDsrctrs[i] -> status = 0;
     }
 
@@ -248,7 +247,7 @@ void intel_i217::sendInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
     struct sendDescriptor *descs;                                                                                           //A pointer to the send descriptors
-    ptr = (uint8_t *)(MemoryManager::s_active_memory_manager->malloc(sizeof(struct sendDescriptor)*8 + 16));                //Allocate memory for the send descriptors
+    ptr = (uint8_t *)(MemoryManager::kmalloc(sizeof(struct sendDescriptor)*8 + 16));                //Allocate memory for the send descriptors
     descs = (struct sendDescriptor *)ptr;                                                                                   //Set the pointer to the send descriptors
 
 

@@ -71,6 +71,7 @@ void OutputStream::write(string string_to_write) {
           carriageReturn();
           break;
 
+
         // If the current character is a null terminator
         case '\0':
           return;

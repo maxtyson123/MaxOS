@@ -35,9 +35,9 @@ void UBSanHandler::print_type_mismatch(type_mismatch_info_t *info, uintptr_t ptr
   // Print the error
   _kprintf("UBSan: ");
   if(info -> alignment != 0 && ubsan_aligned(ptr, info -> alignment))
-    _kprintf("\h misaligned memory access\n");
+    _kprintf("%h misaligned memory access\n");
   else
-    _kprintf("\h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
+    _kprintf("%h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
 
   // Print the location
   handle(info -> location);
@@ -52,10 +52,10 @@ void UBSanHandler::print_type_mismatch_v1(type_mismatch_info_v1_t *info, uintptr
 
   // Print the error
   _kprintf("UBSan: ");
-  if(info -> log_alignment != 0 && ubsan_aligned(ptr, 1 << info -> log_alignment))
-    _kprintf("\h misaligned memory access\n");
+  if(info -> log_alignment != 0 && ubsan_aligned(ptr, (1 << (info -> log_alignment))))
+    _kprintf("%h misaligned memory access\n");
   else
-    _kprintf("\h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
+    _kprintf("%h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
 
   // Print the location
   handle(info -> location);

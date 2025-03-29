@@ -7,9 +7,11 @@
 
 using namespace MaxOS::memory;
 using namespace MaxOS::system;
+using namespace MaxOS::common;
 extern uint64_t p4_table[];
 
 PhysicalMemoryManager* PhysicalMemoryManager::s_current_manager = nullptr;
+extern uint64_t _kernel_start;
 extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
@@ -24,6 +26,9 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   m_pml4_root((pte_t *)pml4_root)
 {
 
+  // Clear the spinlock
+  m_lock = Spinlock();
+  m_lock.unlock();
 
   // Set the current manager
   s_current_manager = this;
@@ -31,6 +36,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   // SEE boot.s FOR SETUP OF PAGING
   m_pml4_root = (pte_t *)pml4_root;
   m_pml4_root_address = pml4_root;
+  _kprintf("PML4: 0x%x\n", m_pml4_root);
 
   // Store the information about the bitmap
   m_memory_size = (m_multiboot->get_basic_meminfo()->mem_upper + 1024) * 1024;
@@ -69,16 +75,18 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   }
   _kprintf("Mapped: physical = 0x%x-0x%x, virtual = 0x%x-0x%x\n", 0, physical_address, MemoryManager::s_hh_direct_map_offset, virtual_address); // TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem
 
-  // Get the bitmap & clear it
+  // Calculate the bitmap address
   m_anonymous_memory_physical_address += s_page_size;
   m_bit_map = get_bitmap_address();
 
+  // Clear the bitmap
   for (uint32_t i = 0; i < m_total_entries; ++i)
     m_bit_map[i] = 0;
-  _kprintf("Bitmap: location = 0x%x - 0x%x\n", m_bit_map, m_bit_map + m_bitmap_size / 8);
 
+  // Reserve the area for the bitmap
+  _kprintf("Bitmap: location = 0x%x - 0x%x (range of 0x%x)\n", m_bit_map, m_bit_map + m_bitmap_size / 8, m_bitmap_size / 8);
+  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
 
-  //end_of_reserved_area = m_anonymous_memory_physical_address + page size
 
   // Calculate how much space the kernel takes up
   uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
@@ -88,17 +96,9 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   }
 
   // Reserve the kernel in the bitmap
-  uint32_t kernel_rows = kernel_entries / ROW_BITS;
-  for (uint32_t i = 0; i < kernel_rows; ++i)
-      m_bit_map[i] = 0xFFFFFFFF;
+  _kprintf("Kernel: location = 0x%x - 0x%x (range of 0x%x)\n", 0, m_anonymous_memory_physical_address, kernel_entries * s_page_size);
+  reserve(0, kernel_entries * s_page_size);
 
-  // Change the final row to account for the remaining bits
-  m_bit_map[kernel_rows] = ~(0ul) << (kernel_entries - (kernel_rows * 64));
-  m_used_frames = kernel_entries;
-  _kprintf("Kernel: entries = %d, rows = %d, used = %d\n", kernel_entries, kernel_rows, m_used_frames);
-
-  // Reserve the area for the bitmap
-  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 + 1);
 
   // Reserve the area for the mmap
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
@@ -113,6 +113,20 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
     // Reserve the area
     reserve(entry->addr, entry->len);
+  }
+
+  // Reserve the area for each multiboot module
+  for(multiboot_tag* tag = multiboot -> get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+
+    // Check if the tag is a module
+    if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
+      continue;
+
+    // Get the module tag
+    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+
+    // Reserve the address
+    reserve(module->mod_start, module->mod_end - module->mod_start);
   }
 
   // Initialisation Done
@@ -166,6 +180,9 @@ bool PhysicalMemoryManager::check_aligned(size_t size){
  */
 void* PhysicalMemoryManager::allocate_frame() {
 
+  // Wait for the lock
+  m_lock.lock();
+
   // Check if the pmm is initialized
   if(!m_initialized){
 
@@ -178,6 +195,9 @@ void* PhysicalMemoryManager::allocate_frame() {
     // Mark frame as used
     m_anonymous_memory_physical_address += s_page_size;
     m_anonymous_memory_virtual_address += s_page_size;
+
+    // Clear the lock
+    m_lock.unlock();
 
     // Return the address
     return (void*)(m_anonymous_memory_physical_address - s_page_size);
@@ -214,20 +234,17 @@ void* PhysicalMemoryManager::allocate_frame() {
       frame_address *= s_page_size;
 
 
-      if(frame_address == 0x543000){
-        _kprintf("Working: 0x%x\n", frame_address);
-      }
+      // Clear the lock
+      m_lock.unlock();
 
-      // Make sure we are using the mem mapped region (TODO: This should be handled by being reserved)
-      if(frame_address < m_kernel_end)
-        continue;
-
+      // Return the address
       return (void*)(frame_address);
     }
   }
 
   // Error frame not found
   ASSERT(false, "Frame not found\n")
+  m_lock.unlock();
   return nullptr;
 
 }
@@ -238,12 +255,18 @@ void* PhysicalMemoryManager::allocate_frame() {
  */
 void PhysicalMemoryManager::free_frame(void *address) {
 
+    // Wait for the lock
+    m_lock.lock();
+
     // Mark the frame as not used
     m_used_frames--;
 
     // Set the bit to 0
     uint64_t frame_address = (uint64_t)address / s_page_size;
     m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
+
+    // Clear the lock
+    m_lock.unlock();
 }
 
 /**
@@ -253,6 +276,9 @@ void PhysicalMemoryManager::free_frame(void *address) {
  * @return A pointer to the start of the block (physical address)
  */
 void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) {
+
+  // Wait to be able to allocate
+  m_lock.lock();
 
   // Check how many frames are needed
   size_t frame_count = size_to_frames(size);
@@ -309,6 +335,8 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
           m_bit_map[index] |= (1ULL << bit); // Mark the bit as used
         }
 
+        // Clear the lock
+        m_lock.unlock();
 
         // Return the address
         return (void*)(start_address + (start_row * ROW_BITS + start_column) * s_page_size);
@@ -317,6 +345,8 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
   }
 
   // Error cant allocate that much
+  m_lock.unlock();
+  ASSERT(false, "Cannot allocate that much memory\n")
   return nullptr;
 }
 
@@ -335,11 +365,17 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
     if(frame_address >= m_bitmap_size)
       return;
 
+    // Wait to be able to free
+    m_lock.lock();
+
     // Mark the frames as not used
     m_used_frames -= frame_count;
     for (uint16_t i = 0; i < frame_count; ++i)
       m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
 
+
+    // Clear the lock
+    m_lock.unlock();
 }
 
 /**
@@ -359,6 +395,9 @@ void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t
 
   // Set the table to the next table
   table -> entries[index] = create_page_table_entry((uint64_t)new_table, Present | Write);
+
+  // Invalidate the TLB entry for the recursive mapping.
+  asm volatile("invlpg (%0)" ::"r" (next_table) : "memory");
 
   // Clear the table
   clean_page_table((uint64_t*)next_table);
@@ -497,9 +536,8 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
     uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
 
     // If it is in a lower region then assume it is the user space
-    uint8_t is_user = MemoryManager::in_higher_region((uint64_t)virtual_address);
+    uint8_t is_user = !(MemoryManager::in_higher_region((uint64_t)virtual_address));
     if(is_user) {
-
       // Change the flags to user
       flags |= User;
       is_user = User;
@@ -674,18 +712,6 @@ void PhysicalMemoryManager::unmap_area(virtual_address_t *virtual_address_start,
 }
 
 /**
- * @brief Checks if a virtual address is mapped and whether it points to the correct physical address
- * @param physical_address The physical address to check (if 0 then wont check if correct entry)
- * @param virtual_address The address to check if it is mapped to
- * @return True if the physical address is mapped to the virtual address
- */
-bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address) {
-  ASSERT(false, "Not implemented! Check if physical address is mapped to virtual address 0x%x -> 0x%x\n", physical_address, virtual_address)
-  // TODO: Implement
-  return false;
-}
-
-/**
  * @brief Cleans a page table (fills it with 0 or null entries)
  * @param table The table to clean
  */
@@ -835,6 +861,7 @@ size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
  */
 void PhysicalMemoryManager::reserve(uint64_t address) {
 
+
   // If the address is not part of physical memory then return
   if(address >= m_memory_size)
     return;
@@ -845,6 +872,9 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
   // Set the bit to 1 in the bitmap
   m_bit_map[address / ROW_BITS] |= (1 << (address % ROW_BITS));
 
+
+  _kprintf("Reserved Address: 0x%x\n", address);
+
 }
 
 /**
@@ -853,12 +883,16 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
  * @param size The size of the area
  */
 void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
+
   if(address >= m_memory_size)
     return;
 
+  // Wait to be able to reserve
+  m_lock.lock();
+
   // Align address and size to page boundaries
   address = align_direct_to_page(address);
-  size = align_to_page(size);
+  size = align_up_to_page(size, s_page_size);
 
   // Calculate how many pages need to be reserved
   size_t page_count = size / s_page_size;
@@ -869,5 +903,57 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
     m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
   }
 
-  _kprintf("Reserved Address: 0x%x - 0x%x\n", address, address + size);
+  // Update the used frames
+  m_used_frames += page_count;
+
+  // Clear the lock
+  m_lock.unlock();
+  _kprintf("Reserved Address: 0x%x - 0x%x (length of 0x%x)\n", address, address + size, size);
+}
+
+/**
+ * @brief Gets the physical address from a virtual address (if it exists)
+ *
+ * @param virtual_address The virtual address to get the physical address from
+ * @return  The physical address or nullptr if it does not exist
+ */
+physical_address_t *PhysicalMemoryManager::get_physical_address(virtual_address_t *virtual_address, uint64_t *pml4_root) {
+
+
+    // Get the indexes
+    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+
+    // Get the tables
+    uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
+    uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
+    uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
+
+    // Check if the tables are present (if any are not then a pt entry will not be present)
+    if(pt_table == nullptr)
+      return nullptr;
+
+
+    // Check if the entry is present
+    if(!(pt_table[pt_index] & 0b1))
+      return nullptr;
+
+    // Return the physical address
+    return (physical_address_t *)(pt_table[pt_index] & 0xFFFFFFFFFFFFF000);
+}
+
+/**
+ * @brief Checks if a physical address is mapped to a virtual address
+ *
+ * @param physical_address The physical address to check
+ * @param virtual_address The virtual address to check
+ * @param pml4_root The pml4 table to use
+ * @return True if the physical address is mapped to the virtual address
+ */
+bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t *pml4_root) {
+
+  return get_physical_address((virtual_address_t*)virtual_address, pml4_root) == (physical_address_t*)physical_address;
+
 }

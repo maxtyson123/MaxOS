@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
-#include <system/multithreading.h>
 #include <common/inputStream.h>
 #include <common/outputStream.h>
 #include <system/cpu.h>
@@ -36,6 +35,7 @@ namespace MaxOS {
 
             public:
                 virtual void handle_interrupt();
+                virtual system::cpu_status_t* handle_interrupt(system::cpu_status_t* status);
 
         };
 
@@ -68,7 +68,8 @@ namespace MaxOS {
             private:
               LocalAPIC* m_local_apic;
 
-              static void page_fault(system::cpu_status_t* status);
+              static system::cpu_status_t* page_fault(system::cpu_status_t* status);
+              static system::cpu_status_t* general_protection_fault(system::cpu_status_t* status);
 
             protected:
 
@@ -76,7 +77,6 @@ namespace MaxOS {
                 static common::OutputStream* s_error_messages;
                 const static uint16_t s_hardware_interrupt_offset {0x20};
                 InterruptHandler* m_interrupt_handlers[256];
-                system::ThreadManager* m_thread_manager;
 
                 static InterruptDescriptor s_interrupt_descriptor_table[256];
 
@@ -106,7 +106,7 @@ namespace MaxOS {
                 static void HandleInterruptRequest0x80();
                 static void HandleInterruptRequest0x0F();
                 static void HandleInterruptRequest0x31();
-                static void HandleInterruptRequest0x60();
+                static void HandleInterruptRequest0x60(); // System Call
 
                 // Exceptions
                 static void HandleException0x00();
