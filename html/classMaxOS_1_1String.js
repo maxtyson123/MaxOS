@@ -9,6 +9,7 @@ var classMaxOS_1_1String =
     [ "c_str", "classMaxOS_1_1String.html#ab631a346035367ca54668b93728c8620", null ],
     [ "center", "classMaxOS_1_1String.html#ab282882421b9a427219f6bcb36dcb5b0", null ],
     [ "copy", "classMaxOS_1_1String.html#a5d3f31f93c12aca6fd0be6923416cb70", null ],
+    [ "equals", "classMaxOS_1_1String.html#aad2418bd26eb55a72127ded64a7ddfc8", null ],
     [ "length", "classMaxOS_1_1String.html#acf733b9f4647d948a153dda31d5995a0", null ],
     [ "operator!=", "classMaxOS_1_1String.html#abfb25af8317420d71b0d54603d049383", null ],
     [ "operator*", "classMaxOS_1_1String.html#aaa88f46b1ddd7754b0d5fff1ce52c5da", null ],

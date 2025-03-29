@@ -1,4 +1,4 @@
-.TH "MaxOS::net::TransmissionControlProtocolSocket" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::TransmissionControlProtocolSocket" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -120,7 +120,7 @@ Definition at line 115 of file tcp\&.cpp\&.
 115                                                   {
 116     ConnectedEvent* event = new ConnectedEvent(this);
 117     raise_event(event);
-118     MemoryManager::s_active_memory_manager->free(event);
+118     MemoryManager::kfree(event);
 119 
 120 }
 .fi
@@ -145,7 +145,7 @@ Definition at line 108 of file tcp\&.cpp\&.
 108                                                      {
 109     DisconnectedEvent* event = new DisconnectedEvent(this);
 110     raise_event(event);
-111     MemoryManager::s_active_memory_manager->free(event);
+111     MemoryManager::kfree(event);
 112 
 113 }
 .fi
@@ -174,7 +174,7 @@ Definition at line 77 of file tcp\&.cpp\&.
 78 {
 79     DataReceivedEvent* event = new DataReceivedEvent(this, data, size);
 80     raise_event(event);
-81     MemoryManager::s_active_memory_manager->free(event);
+81     MemoryManager::kfree(event);
 82     return true;
 83 }
 .fi

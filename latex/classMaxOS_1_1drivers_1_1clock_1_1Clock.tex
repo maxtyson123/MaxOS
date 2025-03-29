@@ -26,7 +26,7 @@ void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a7d105f260a9197c78
 \begin{DoxyCompactList}\small\item\em Activates the clock, setting the binary coded decimal representation flag. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_abc9de19ed4bbd05fa8e449ef0df48ad5}{delay}} (uint32\+\_\+t milliseconds)
 \begin{DoxyCompactList}\small\item\em Delays the program for a specified number of milliseconds (rounded to the nearest 100) \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af2b8e14e79833d1eabf87abf79774cca}{calibrate}} ()
+void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}{calibrate}} (uint64\+\_\+t ms\+\_\+per\+\_\+tick=1)
 \item 
 \mbox{\hyperlink{structMaxOS_1_1common_1_1Time}{common\+::\+Time}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a138de5b2eb0367cd755e9e32cac3628f}{get\+\_\+time}} ()
 \item 
@@ -207,37 +207,37 @@ References m\+\_\+binary.
 
 Referenced by get\+\_\+time().
 
-\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1Clock_af2b8e14e79833d1eabf87abf79774cca}\label{classMaxOS_1_1drivers_1_1clock_1_1Clock_af2b8e14e79833d1eabf87abf79774cca}} 
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}\label{classMaxOS_1_1drivers_1_1clock_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}} 
 \index{MaxOS::drivers::clock::Clock@{MaxOS::drivers::clock::Clock}!calibrate@{calibrate}}
 \index{calibrate@{calibrate}!MaxOS::drivers::clock::Clock@{MaxOS::drivers::clock::Clock}}
 \doxysubsubsection{\texorpdfstring{calibrate()}{calibrate()}}
-{\footnotesize\ttfamily void Clock\+::calibrate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Clock\+::calibrate (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{ms\+\_\+per\+\_\+tick = {\ttfamily 1} }\end{DoxyParamCaption})}
 
 
 
-Definition at line 174 of file clock.\+cpp.
+Definition at line 177 of file clock.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{174                       \{}
-\DoxyCodeLine{175 }
-\DoxyCodeLine{176   \textcolor{comment}{// Get the ticks per ms}}
-\DoxyCodeLine{177   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}} pit(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_ad4f768f21181574bb7670369bf1a5af3}{m\_interrupt\_manager}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}});}
-\DoxyCodeLine{178   uint32\_t ticks\_per\_ms = pit.ticks\_per\_ms();}
-\DoxyCodeLine{179 }
-\DoxyCodeLine{180   \textcolor{comment}{// Set the timer vector to 0x20 and configure it for periodic mode}}
-\DoxyCodeLine{181   uint32\_t lvt = 0x20 | (1 << 17);}
-\DoxyCodeLine{182   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}} -\/> get\_local\_apic() -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x320, lvt);}
-\DoxyCodeLine{183 }
-\DoxyCodeLine{184   \textcolor{comment}{// Set the intial count}}
-\DoxyCodeLine{185   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}} -\/> get\_local\_apic() -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, ticks\_per\_ms);}
+\DoxyCodeLine{177                                           \{}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179   \textcolor{comment}{// Get the ticks per ms}}
+\DoxyCodeLine{180   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}} pit(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_ad4f768f21181574bb7670369bf1a5af3}{m\_interrupt\_manager}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}});}
+\DoxyCodeLine{181   uint32\_t ticks\_per\_ms = pit.ticks\_per\_ms();}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183   \textcolor{comment}{// Set the timer vector to 0x20 and configure it for periodic mode}}
+\DoxyCodeLine{184   uint32\_t lvt = 0x20 | (1 << 17);}
+\DoxyCodeLine{185   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}} -\/> get\_local\_apic() -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x320, lvt);}
 \DoxyCodeLine{186 }
-\DoxyCodeLine{187   \textcolor{comment}{// Clear the mask bit}}
-\DoxyCodeLine{188   lvt \&= \string~(1 << 16);}
-\DoxyCodeLine{189   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}} -\/> get\_local\_apic() -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, lvt);}
-\DoxyCodeLine{190 }
-\DoxyCodeLine{191   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Clock Calibrated\(\backslash\)n"});}
-\DoxyCodeLine{192 \}}
+\DoxyCodeLine{187   \textcolor{comment}{// Set the intial count}}
+\DoxyCodeLine{188   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}} -\/> get\_local\_apic() -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, ms\_per\_tick * ticks\_per\_ms);}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190   \textcolor{comment}{// Clear the mask bit}}
+\DoxyCodeLine{191   lvt \&= \string~(1 << 16);}
+\DoxyCodeLine{192   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa1fe13def15785a6c01f4db495228f24}{m\_apic}} -\/> get\_local\_apic() -\/> \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}(0x380, lvt);}
+\DoxyCodeLine{193 }
+\DoxyCodeLine{194   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Clock Calibrated\(\backslash\)n"});}
+\DoxyCodeLine{195 \}}
 
 \end{DoxyCode}
 
@@ -271,16 +271,19 @@ Definition at line 145 of file clock.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{145                                        \{}
 \DoxyCodeLine{146 }
-\DoxyCodeLine{147     \textcolor{comment}{// Round the number of milliseconds to the nearest 100}}
-\DoxyCodeLine{148     uint64\_t rounded\_milliseconds =  ((milliseconds+99)/100);}
+\DoxyCodeLine{147 }
+\DoxyCodeLine{148     \textcolor{comment}{//TODO Create a const for accurcy of clock and use that for calibration and rounding}}
 \DoxyCodeLine{149 }
-\DoxyCodeLine{150     \textcolor{comment}{// Calculate the number of ticks until the delay is over}}
-\DoxyCodeLine{151     uint64\_t ticks\_until\_delay\_is\_over = m\_ticks + rounded\_milliseconds;}
+\DoxyCodeLine{150     \textcolor{comment}{// Round the number of milliseconds to the nearest 100}}
+\DoxyCodeLine{151     uint64\_t rounded\_milliseconds =  ((milliseconds+99)/100);}
 \DoxyCodeLine{152 }
-\DoxyCodeLine{153     \textcolor{comment}{// Wait until the number of ticks is equal to the number of ticks until the delay is over}}
-\DoxyCodeLine{154     \textcolor{keywordflow}{while}(m\_ticks < ticks\_until\_delay\_is\_over)}
-\DoxyCodeLine{155         \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"nop"});}
-\DoxyCodeLine{156 \}}
+\DoxyCodeLine{153     \textcolor{comment}{// Calculate the number of ticks until the delay is over}}
+\DoxyCodeLine{154     uint64\_t ticks\_until\_delay\_is\_over = m\_ticks + rounded\_milliseconds;}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156     \textcolor{comment}{// Wait until the number of ticks is equal to the number of ticks until the delay is over}}
+\DoxyCodeLine{157     \textcolor{keywordflow}{while}(m\_ticks < ticks\_until\_delay\_is\_over)}
+\DoxyCodeLine{158         \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"nop"});}
+\DoxyCodeLine{159 \}}
 
 \end{DoxyCode}
 
@@ -306,13 +309,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a65b06f2917f
 
 
 
-Definition at line 170 of file clock.\+cpp.
+Definition at line 173 of file clock.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{170                               \{}
-\DoxyCodeLine{171     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"Clock"};}
-\DoxyCodeLine{172 \}}
+\DoxyCodeLine{173                               \{}
+\DoxyCodeLine{174     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"Clock"};}
+\DoxyCodeLine{175 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1Clock_a138de5b2eb0367cd755e9e32cac3628f}\label{classMaxOS_1_1drivers_1_1clock_1_1Clock_a138de5b2eb0367cd755e9e32cac3628f}} 
@@ -323,35 +326,35 @@ Definition at line 170 of file clock.\+cpp.
 
 
 
-Definition at line 195 of file clock.\+cpp.
+Definition at line 198 of file clock.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{195                            \{}
-\DoxyCodeLine{196 }
-\DoxyCodeLine{197   \textcolor{comment}{// Wait for the clock to be ready}}
-\DoxyCodeLine{198   \textcolor{keywordflow}{while}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0xA) \& 0x80)}
-\DoxyCodeLine{199       \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"nop"});}
-\DoxyCodeLine{200 }
-\DoxyCodeLine{201   \textcolor{comment}{// Create a time object}}
-\DoxyCodeLine{202   \mbox{\hyperlink{structMaxOS_1_1common_1_1Time}{Time}} time\{\};}
+\DoxyCodeLine{198                            \{}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200   \textcolor{comment}{// Wait for the clock to be ready}}
+\DoxyCodeLine{201   \textcolor{keywordflow}{while}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0xA) \& 0x80)}
+\DoxyCodeLine{202       \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"nop"});}
 \DoxyCodeLine{203 }
-\DoxyCodeLine{204   \textcolor{comment}{// read the time from the hardware clock}}
-\DoxyCodeLine{205   time.\mbox{\hyperlink{structMaxOS_1_1common_1_1Time_a50022d033aeb34a1870e7d8240a4e1ca}{year}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x9)) + 2000;}
-\DoxyCodeLine{206   time.month = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x8));}
-\DoxyCodeLine{207   time.day = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x7));}
-\DoxyCodeLine{208   time.hour = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x4));}
-\DoxyCodeLine{209   time.minute = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x2));}
-\DoxyCodeLine{210   time.second = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x0));}
-\DoxyCodeLine{211 }
-\DoxyCodeLine{212   \textcolor{comment}{// If the clock is using 12hr format and PM is set then add 12 to the hour}}
-\DoxyCodeLine{213   \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a93c66ecaa24a0024735e8ca110c23bae}{m\_24\_hour\_clock}} \&\& (time.hour \& 0x80) != 0)}
-\DoxyCodeLine{214     time.hour = ((time.hour \& 0x7F) + 12) \% 24;}
-\DoxyCodeLine{215 }
-\DoxyCodeLine{216 }
-\DoxyCodeLine{217   \textcolor{comment}{//Raise the clock event}}
-\DoxyCodeLine{218   \textcolor{keywordflow}{return} time;}
-\DoxyCodeLine{219 \}}
+\DoxyCodeLine{204   \textcolor{comment}{// Create a time object}}
+\DoxyCodeLine{205   \mbox{\hyperlink{structMaxOS_1_1common_1_1Time}{Time}} time\{\};}
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207   \textcolor{comment}{// read the time from the hardware clock}}
+\DoxyCodeLine{208   time.\mbox{\hyperlink{structMaxOS_1_1common_1_1Time_a50022d033aeb34a1870e7d8240a4e1ca}{year}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x9)) + 2000;}
+\DoxyCodeLine{209   time.month = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x8));}
+\DoxyCodeLine{210   time.day = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x7));}
+\DoxyCodeLine{211   time.hour = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x4));}
+\DoxyCodeLine{212   time.minute = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x2));}
+\DoxyCodeLine{213   time.second = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ada9760529d0a4a5be681e5baea0c5178}{binary\_representation}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}{read\_hardware\_clock}}(0x0));}
+\DoxyCodeLine{214 }
+\DoxyCodeLine{215   \textcolor{comment}{// If the clock is using 12hr format and PM is set then add 12 to the hour}}
+\DoxyCodeLine{216   \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a93c66ecaa24a0024735e8ca110c23bae}{m\_24\_hour\_clock}} \&\& (time.hour \& 0x80) != 0)}
+\DoxyCodeLine{217     time.hour = ((time.hour \& 0x7F) + 12) \% 24;}
+\DoxyCodeLine{218 }
+\DoxyCodeLine{219 }
+\DoxyCodeLine{220   \textcolor{comment}{//Raise the clock event}}
+\DoxyCodeLine{221   \textcolor{keywordflow}{return} time;}
+\DoxyCodeLine{222 \}}
 
 \end{DoxyCode}
 
@@ -360,7 +363,7 @@ References binary\+\_\+representation(), m\+\_\+24\+\_\+hour\+\_\+clock, read\+\
 
 
 
-Referenced by handle\+\_\+interrupt(), and kernel\+Main().
+Referenced by kernel\+Main().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1Clock_afff456a86d73eda4507a2fe503485ac5}\label{classMaxOS_1_1drivers_1_1clock_1_1Clock_afff456a86d73eda4507a2fe503485ac5}} 
 \index{MaxOS::drivers::clock::Clock@{MaxOS::drivers::clock::Clock}!get\_vendor\_name@{get\_vendor\_name}}
@@ -381,13 +384,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a7ad761c929a
 
 
 
-Definition at line 162 of file clock.\+cpp.
+Definition at line 165 of file clock.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{162                               \{}
-\DoxyCodeLine{163     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"Generic"};}
-\DoxyCodeLine{164 \}}
+\DoxyCodeLine{165                               \{}
+\DoxyCodeLine{166     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"Generic"};}
+\DoxyCodeLine{167 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1Clock_a1f0352d2346a3bef618e5c6f3bc71c0c}\label{classMaxOS_1_1drivers_1_1clock_1_1Clock_a1f0352d2346a3bef618e5c6f3bc71c0c}} 
@@ -424,14 +427,14 @@ Definition at line 74 of file clock.\+cpp.
 \DoxyCodeLine{85     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_abf1a0f66bbce7162968437985fd65471}{m\_ticks\_until\_next\_event}} = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_adf42c9a1226e5b2de6e547eb26d26510}{m\_ticks\_between\_events}};}
 \DoxyCodeLine{86 }
 \DoxyCodeLine{87     \textcolor{comment}{// Raise the time event}}
-\DoxyCodeLine{88     \mbox{\hyperlink{structMaxOS_1_1common_1_1Time}{Time}} time = \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a138de5b2eb0367cd755e9e32cac3628f}{get\_time}}();}
-\DoxyCodeLine{89     \mbox{\hyperlink{classMaxOS_1_1common_1_1EventManager_a5f25cd0e7747ab76ee9e057ad43966c9}{raise\_event}}(\textcolor{keyword}{new} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1TimeEvent}{TimeEvent}}(\&time));}
+\DoxyCodeLine{88 \textcolor{comment}{//    Time time = get\_time();}}
+\DoxyCodeLine{89 \textcolor{comment}{//    raise\_event(new TimeEvent(\&time));}}
 \DoxyCodeLine{90 \}}
 
 \end{DoxyCode}
 
 
-References get\+\_\+time(), m\+\_\+ticks\+\_\+between\+\_\+events, m\+\_\+ticks\+\_\+until\+\_\+next\+\_\+event, and Max\+O\+S\+::common\+::\+Event\+Manager$<$ Clock\+Events $>$\+::raise\+\_\+event().
+References m\+\_\+ticks\+\_\+between\+\_\+events, and m\+\_\+ticks\+\_\+until\+\_\+next\+\_\+event.
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}\label{classMaxOS_1_1drivers_1_1clock_1_1Clock_a2d5265022c472412b5055cd6630097ed}} 
 \index{MaxOS::drivers::clock::Clock@{MaxOS::drivers::clock::Clock}!read\_hardware\_clock@{read\_hardware\_clock}}

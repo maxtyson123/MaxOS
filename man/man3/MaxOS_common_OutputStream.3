@@ -1,4 +1,4 @@
-.TH "MaxOS::common::OutputStream" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::OutputStream" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -165,18 +165,18 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line 225 of file outputStream\&.cpp\&.
+Definition at line 226 of file outputStream\&.cpp\&.
 .PP
 .nf
-225                                                          {
-226 
-227     // Call the writeChar function to write the character to the output stream
-228     write_char(char_to_write);
-229 
-230     // Return the output stream
-231     return *this;
-232 
-233 }
+226                                                          {
+227 
+228     // Call the writeChar function to write the character to the output stream
+229     write_char(char_to_write);
+230 
+231     // Return the output stream
+232     return *this;
+233 
+234 }
 .fi
 .PP
 References write_char()\&.
@@ -197,17 +197,17 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line 183 of file outputStream\&.cpp\&.
+Definition at line 184 of file outputStream\&.cpp\&.
 .PP
 .nf
-183                                                          {
-184 
-185     // Call the writeInt function to write the integer to the output stream
-186     write_int(int_to_write);
-187 
-188     // Return the output stream
-189     return *this;
-190 }
+184                                                          {
+185 
+186     // Call the writeInt function to write the integer to the output stream
+187     write_int(int_to_write);
+188 
+189     // Return the output stream
+190     return *this;
+191 }
 .fi
 .PP
 References write_int()\&.
@@ -230,17 +230,17 @@ The output stream\&.
 .PP
 Reimplemented from \fBMaxOS::common::GenericOutputStream< string >\fP\&.
 .PP
-Definition at line 211 of file outputStream\&.cpp\&.
+Definition at line 212 of file outputStream\&.cpp\&.
 .PP
 .nf
-211                                                                {
-212 
-213     // Call the write function to write the string to the output stream
-214     write(string_to_write);
-215 
-216     // Return the output stream
-217     return *this;
-218 }
+212                                                                {
+213 
+214     // Call the write function to write the string to the output stream
+215     write(string_to_write);
+216 
+217     // Return the output stream
+218     return *this;
+219 }
 .fi
 .PP
 References write()\&.
@@ -261,17 +261,17 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line 197 of file outputStream\&.cpp\&.
+Definition at line 198 of file outputStream\&.cpp\&.
 .PP
 .nf
-197                                                               {
-198 
-199     // Call the write_hex function to write the hex to the output stream
-200     write_hex(hex_to_write);
-201 
-202     // Return the output stream
-203     return *this;
-204 }
+198                                                               {
+199 
+200     // Call the write_hex function to write the hex to the output stream
+201     write_hex(hex_to_write);
+202 
+203     // Return the output stream
+204     return *this;
+205 }
 .fi
 .PP
 References write_hex()\&.
@@ -315,20 +315,21 @@ Definition at line 51 of file outputStream\&.cpp\&.
 71           carriageReturn();
 72           break;
 73 
-74         // If the current character is a null terminator
-75         case '\0':
-76           return;
-77 
-78         // If the current character is any other character
-79         default:
-80 
-81           // write the current character to the output stream
-82           write_char(string_to_write[i]);
-83           break;
-84 
-85       }
-86     }
-87 }
+74 
+75         // If the current character is a null terminator
+76         case '\0':
+77           return;
+78 
+79         // If the current character is any other character
+80         default:
+81 
+82           // write the current character to the output stream
+83           write_char(string_to_write[i]);
+84           break;
+85 
+86       }
+87     }
+88 }
 .fi
 .PP
 References carriageReturn(), MaxOS::drivers::peripherals::i, MaxOS::String::length(), lineFeed(), and write_char()\&.
@@ -348,12 +349,12 @@ Writes a character to the output stream\&.
 .PP
 Reimplemented in \fBMaxOS::drivers::console::ConsoleStream\fP\&.
 .PP
-Definition at line 93 of file outputStream\&.cpp\&.
+Definition at line 94 of file outputStream\&.cpp\&.
 .PP
 .nf
-93                                   {
-94 
-95 }
+94                                   {
+95 
+96 }
 .fi
 .PP
 Referenced by carriageReturn(), lineFeed(), operator<<(), write(), write_hex(), and write_int()\&.
@@ -369,37 +370,37 @@ Writes a hex to the output stream\&.
 .PP
 
 .PP
-Definition at line 149 of file outputStream\&.cpp\&.
+Definition at line 150 of file outputStream\&.cpp\&.
 .PP
 .nf
-149                                                   {
-150 
-151     // write the hex prefix to the output stream
-152     write("0x");
-153 
-154     // If the hex is 0 then write a 0 to the output stream and return as no more calculations are needed
-155     if (hex_to_write == 0) {
-156         write("0");
-157         return;
-158     }
-159 
-160     int length = 0;
-161     unsigned int ibak = hex_to_write;
-162     while(ibak > 0)
-163     {
-164         ibak /= 16;
-165         length++;
-166     }
-167     for(; length > 0; length--)
-168     {
-169         ibak = hex_to_write;
-170         for(int j = 1; j < length; j++)
-171             ibak /= 16;
-172         const string Hex = "0123456789ABCDEF";
-173         write_char(Hex[ibak % 16]);
-174     }
-175 
-176 }
+150                                                   {
+151 
+152     // write the hex prefix to the output stream
+153     write("0x");
+154 
+155     // If the hex is 0 then write a 0 to the output stream and return as no more calculations are needed
+156     if (hex_to_write == 0) {
+157         write("0");
+158         return;
+159     }
+160 
+161     int length = 0;
+162     unsigned int ibak = hex_to_write;
+163     while(ibak > 0)
+164     {
+165         ibak /= 16;
+166         length++;
+167     }
+168     for(; length > 0; length--)
+169     {
+170         ibak = hex_to_write;
+171         for(int j = 1; j < length; j++)
+172             ibak /= 16;
+173         const string Hex = "0123456789ABCDEF";
+174         write_char(Hex[ibak % 16]);
+175     }
+176 
+177 }
 .fi
 .PP
 References MaxOS::drivers::peripherals::j, length, write(), and write_char()\&.
@@ -417,52 +418,52 @@ Writes an integer to the output stream\&.
 .PP
 
 .PP
-Definition at line 101 of file outputStream\&.cpp\&.
+Definition at line 102 of file outputStream\&.cpp\&.
 .PP
 .nf
-101                                              {
-102 
-103     // If the integer is 0 then write a 0 to the output stream and return as no more calculations are needed
-104     if (int_to_write == 0) {
-105       write_char('0');
-106         return;
-107     }
-108 
-109     // Store the int to write in a temporary variable
-110     int temp_write_int = int_to_write;
-111 
-112     // If the integer is negative then write a minus sign to the output stream and make the integer positive
-113     bool is_negative = int_to_write <= 0;
-114     if (is_negative) {
-115       write_char('-');
-116       temp_write_int = -temp_write_int;
-117     }
-118 
-119 // Check how many digits the integer has by dividing it by 10 until it is 0 (rounded automatically)
-120     int digits = 0;
-121     int temp = temp_write_int; // Copy the value to avoid modifying the original
-122     do {
-123         temp /= 10;
-124         digits++;
-125     } while (temp != 0);
-126 
-127 // Loop through each digit of the integer
-128     for (int current_digit = digits; current_digit > 0; --current_digit) {
-129 
-130         // Calculate the divisor to extract the current digit
-131         int divisor = 1;
-132         for (int i = 1; i < current_digit; i++) {
-133             divisor *= 10;
-134         }
-135 
-136         // Calculate the current digit
-137         int current_digit_value = (temp_write_int / divisor) % 10;
-138 
-139         // write the current digit to the output stream
-140         write_char('0' + current_digit_value);
-141     }
-142 
-143 }
+102                                              {
+103 
+104     // If the integer is 0 then write a 0 to the output stream and return as no more calculations are needed
+105     if (int_to_write == 0) {
+106       write_char('0');
+107         return;
+108     }
+109 
+110     // Store the int to write in a temporary variable
+111     int temp_write_int = int_to_write;
+112 
+113     // If the integer is negative then write a minus sign to the output stream and make the integer positive
+114     bool is_negative = int_to_write <= 0;
+115     if (is_negative) {
+116       write_char('-');
+117       temp_write_int = -temp_write_int;
+118     }
+119 
+120 // Check how many digits the integer has by dividing it by 10 until it is 0 (rounded automatically)
+121     int digits = 0;
+122     int temp = temp_write_int; // Copy the value to avoid modifying the original
+123     do {
+124         temp /= 10;
+125         digits++;
+126     } while (temp != 0);
+127 
+128 // Loop through each digit of the integer
+129     for (int current_digit = digits; current_digit > 0; --current_digit) {
+130 
+131         // Calculate the divisor to extract the current digit
+132         int divisor = 1;
+133         for (int i = 1; i < current_digit; i++) {
+134             divisor *= 10;
+135         }
+136 
+137         // Calculate the current digit
+138         int current_digit_value = (temp_write_int / divisor) % 10;
+139 
+140         // write the current digit to the output stream
+141         write_char('0' + current_digit_value);
+142     }
+143 
+144 }
 .fi
 .PP
 References MaxOS::drivers::peripherals::i, and write_char()\&.

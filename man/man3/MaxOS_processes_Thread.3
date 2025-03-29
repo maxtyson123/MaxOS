@@ -1,0 +1,213 @@
+.TH "MaxOS::processes::Thread" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::Thread
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <process\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBThread\fP (void(*_entry_point)(void *), void *args, int arg_amount, \fBProcess\fP *parent)"
+.br
+.RI "Constructor for the \fBThread\fP class\&. "
+.ti -1c
+.RI "\fB~Thread\fP ()"
+.br
+.RI "Destructor for the \fBThread\fP class\&. "
+.ti -1c
+.RI "system::cpu_status_t * \fBsleep\fP (size_t milliseconds)"
+.br
+.RI "Sleeps the thread for a certain amount of time (Yields the thread) "
+.ti -1c
+.RI "uintptr_t \fBget_tss_pointer\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBtid\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBparent_pid\fP"
+.br
+.ti -1c
+.RI "system::cpu_status_t * \fBexecution_state\fP"
+.br
+.ti -1c
+.RI "\fBthread_state_t\fP \fBthread_state\fP"
+.br
+.ti -1c
+.RI "size_t \fBticks\fP"
+.br
+.ti -1c
+.RI "size_t \fBwakeup_time\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 36 of file process\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Thread::Thread (void(*)(void *) _entry_point, void * args, int arg_amount, \fBProcess\fP * parent)"
+
+.PP
+Constructor for the \fBThread\fP class\&. 
+.PP
+Definition at line 18 of file process\&.cpp\&.
+.PP
+.nf
+18                                                                                         {
+19 
+20     // Basic setup
+21     thread_state = ThreadState::NEW;
+22     wakeup_time = 0;
+23     ticks = 0;
+24 
+25     // Create the stack
+26     m_stack_pointer = (uintptr_t)MemoryManager::malloc(s_stack_size);
+27 
+28     // Create the TSS stack
+29     if(parent -> is_kernel) {
+30 
+31         // Use the kernel stack
+32         m_tss_stack_pointer = CPU::get_instance() -> tss\&.rsp0;
+33 
+34     } else{
+35         m_tss_stack_pointer = (uintptr_t)MemoryManager::kmalloc(s_stack_size) + s_stack_size;
+36     }
+37 
+38     // Mak sure there is a stack
+39     ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
+40 
+41     // Set up the execution state
+42     execution_state = new cpu_status_t();
+43     execution_state->rip = (uint64_t)_entry_point;
+44     execution_state->ss = parent -> is_kernel ? 0x10 : 0x23;
+45     execution_state->cs = parent -> is_kernel ? 0x8  : 0x1B;
+46     execution_state->rflags = 0x202;
+47     execution_state->interrupt_number = 0;
+48     execution_state->error_code = 0;
+49     execution_state->rsp = (uint64_t)m_stack_pointer;
+50     execution_state->rbp = 0;
+51 
+52     // Copy the args into user space using memcopy
+53     uint64_t  argc = arg_amount;
+54     void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
+55     memcpy(argv, args, arg_amount * sizeof(void*));
+56 
+57 
+58     execution_state->rdi = argc;
+59     execution_state->rsi = (uint64_t)argv;
+60     //execution_state->rdx = (uint64_t)env_args;
+61 
+62     // Begin scheduling this thread
+63     parent_pid = parent->get_pid();
+64     tid = Scheduler::get_system_scheduler() -> add_thread(this);
+65 
+66 }
+.fi
+.PP
+References ASSERT, MaxOS::system::CPU::get_instance(), MaxOS::processes::Process::get_pid(), memcpy(), MaxOS::processes::NEW, and MaxOS::system::tss::rsp0\&.
+.SS "Thread::~Thread ()"
+
+.PP
+Destructor for the \fBThread\fP class\&. 
+.PP
+Definition at line 71 of file process\&.cpp\&.
+.PP
+.nf
+71                 {
+72 
+73 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "uintptr_t MaxOS::processes::Thread::get_tss_pointer () const\fC [inline]\fP"
+
+.PP
+Definition at line 60 of file process\&.h\&.
+.PP
+.nf
+60 { return m_tss_stack_pointer; }
+.fi
+.PP
+Referenced by MaxOS::processes::Scheduler::schedule_next()\&.
+.SS "cpu_status_t * Thread::sleep (size_t milliseconds)"
+
+.PP
+Sleeps the thread for a certain amount of time (Yields the thread) 
+.PP
+\fBParameters\fP
+.RS 4
+\fImilliseconds\fP The amount of time to sleep for 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The status of the CPU for the next thread to run 
+.RE
+.PP
+
+.PP
+Definition at line 81 of file process\&.cpp\&.
+.PP
+.nf
+81                                                {
+82 
+83   // Update the vars
+84   thread_state = ThreadState::SLEEPING;
+85   wakeup_time = Scheduler::get_system_scheduler() -> get_ticks() + milliseconds;
+86 
+87   // Yield
+88   return Scheduler::get_system_scheduler() -> yield();
+89 
+90 }
+.fi
+.PP
+References MaxOS::processes::SLEEPING\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "system::cpu_status_t* MaxOS::processes::Thread::execution_state"
+
+.PP
+Definition at line 54 of file process\&.h\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::schedule_next(), and MaxOS::processes::Scheduler::yield()\&.
+.SS "uint64_t MaxOS::processes::Thread::parent_pid"
+
+.PP
+Definition at line 52 of file process\&.h\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::add_thread(), and MaxOS::processes::Process::add_thread()\&.
+.SS "\fBthread_state_t\fP MaxOS::processes::Thread::thread_state"
+
+.PP
+Definition at line 55 of file process\&.h\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::schedule_next()\&.
+.SS "size_t MaxOS::processes::Thread::ticks"
+
+.PP
+Definition at line 57 of file process\&.h\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::schedule()\&.
+.SS "uint64_t MaxOS::processes::Thread::tid"
+
+.PP
+Definition at line 51 of file process\&.h\&.
+.SS "size_t MaxOS::processes::Thread::wakeup_time"
+
+.PP
+Definition at line 58 of file process\&.h\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::schedule_next()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

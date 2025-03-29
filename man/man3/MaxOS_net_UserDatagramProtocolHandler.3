@@ -1,4 +1,4 @@
-.TH "MaxOS::net::UserDatagramProtocolHandler" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::UserDatagramProtocolHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -157,7 +157,7 @@ Definition at line 143 of file udp\&.cpp\&.
 143                                                                                            {
 144 
 145 
-146     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+146     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 147 
 148     if(socket != 0) //If the socket was created
 149     {
@@ -200,7 +200,7 @@ Definition at line 204 of file udp\&.cpp\&.
 208         if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
 209         {
 210             sockets\&.erase(currentSocket);                            //Remove the socket from the list of sockets
-211             MemoryManager::s_active_memory_manager-> free(socket);      //Free the socket
+211             MemoryManager::kfree(socket);      //Free the socket
 212             break;                                                   //Break out of the loop
 213         }
 214     }
@@ -306,7 +306,7 @@ Definition at line 178 of file udp\&.cpp\&.
 .nf
 178                                                                              {
 179 
-180     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+180     UserDatagramProtocolSocket* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
 181 
 182     if(socket != 0) //If the socket was created
 183     {
@@ -349,7 +349,7 @@ Definition at line 225 of file udp\&.cpp\&.
 225                                                                                                        {
 226 
 227     uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
-228     uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager->malloc(totalSize);          //Allocate memory for the packet
+228     uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(totalSize);          //Allocate memory for the packet
 229     uint8_t* buffer2 = buffer + sizeof(UserDatagramProtocolHeader);                                 //Get the buffer that will be used to store the data
 230 
 231     UserDatagramProtocolHeader* header = (UserDatagramProtocolHeader*)buffer;                       //Create the header of the packet
@@ -375,7 +375,7 @@ Definition at line 225 of file udp\&.cpp\&.
 251     InternetProtocolPayloadHandler::Send(socket->remoteIP, buffer, totalSize);
 252 
 253     //Free the buffer
-254     MemoryManager::s_active_memory_manager->free(buffer);
+254     MemoryManager::kfree(buffer);
 255 
 256 }
 .fi

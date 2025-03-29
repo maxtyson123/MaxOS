@@ -1,10 +1,27 @@
 var cpu_8h =
 [
     [ "__attribute__", "structMaxOS_1_1system_1_1____attribute____.html", "structMaxOS_1_1system_1_1____attribute____" ],
+    [ "tss", "structMaxOS_1_1system_1_1tss.html", "structMaxOS_1_1system_1_1tss" ],
     [ "StackFrame", "structMaxOS_1_1system_1_1StackFrame.html", "structMaxOS_1_1system_1_1StackFrame" ],
-    [ "CPU", "classMaxOS_1_1system_1_1CPU.html", null ],
-    [ "__attribute__", "cpu_8h.html#a716b4890090b09d0ff90d9b887ad3aa1", null ],
-    [ "__attribute__", "cpu_8h.html#aa3fe75ab154a70f4c88eae3dacff9c26", null ],
+    [ "CPU", "classMaxOS_1_1system_1_1CPU.html", "classMaxOS_1_1system_1_1CPU" ],
+    [ "__attribute__", "cpu_8h.html#a0eefbe7986fc94cfb5bb15e0dca7d6b1", null ],
+    [ "__attribute__", "cpu_8h.html#a6ffe95b2b6023ed7f9266bbc3e94971a", null ],
+    [ "io_bitmap_offset", "cpu_8h.html#ac0cd4cbf2cda7bf0599dc6441efc8b3c", null ],
+    [ "ist1", "cpu_8h.html#a715597b286f1f3911516ff33f7daed1d", null ],
+    [ "ist2", "cpu_8h.html#a0cad174ca03880e2ef66877fa7452908", null ],
+    [ "ist3", "cpu_8h.html#adfffc52e9460241dab25a95518f110f1", null ],
+    [ "ist4", "cpu_8h.html#aa9913c81119fe2e85184295729bb919f", null ],
+    [ "ist5", "cpu_8h.html#ad44d2330d19aca0011f83bd384e17ffb", null ],
+    [ "ist6", "cpu_8h.html#a50ceffaaa84b8c9e483ab22a3e446a25", null ],
+    [ "ist7", "cpu_8h.html#a92d8554e63dfe173bb1cdc79e6105b77", null ],
     [ "next", "cpu_8h.html#adacd1bb3e91dd22eaae8f252d4135d4d", null ],
-    [ "rip", "cpu_8h.html#ad37248eb45d2509df75a205d8412ac65", null ]
+    [ "reserved0", "cpu_8h.html#aed93283265f941dc1d2bf8d634164493", null ],
+    [ "reserved1", "cpu_8h.html#a70e1f8ea009867b1bee1dcd6740874a1", null ],
+    [ "reserved2", "cpu_8h.html#a43927117f60a83134aaf449767b87b6c", null ],
+    [ "reserved3", "cpu_8h.html#aa0c86982c9eef8033adb225c9f4c0458", null ],
+    [ "reserved4", "cpu_8h.html#af9c80382144c72c09f80eb6458d5238e", null ],
+    [ "rip", "cpu_8h.html#ad37248eb45d2509df75a205d8412ac65", null ],
+    [ "rsp0", "cpu_8h.html#a72b38046f765f14ce3d8f74ead10766b", null ],
+    [ "rsp1", "cpu_8h.html#a01fe81e8371ef1ebbf418968c24938af", null ],
+    [ "rsp2", "cpu_8h.html#a15cb2c4ffbfbf962c70a94c7519ef51f", null ]
 ];

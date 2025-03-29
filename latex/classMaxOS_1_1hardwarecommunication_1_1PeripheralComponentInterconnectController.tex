@@ -120,7 +120,7 @@ Definition at line 235 of file pci.\+cpp.
 \DoxyCodeLine{245             \{}
 \DoxyCodeLine{246                 \textcolor{keywordflow}{case} 0x2000:    \textcolor{comment}{//am79c971}}
 \DoxyCodeLine{247                 \{}
-\DoxyCodeLine{248                     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}* result = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}*)MemoryManager::s\_active\_memory\_manager -\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}));}
+\DoxyCodeLine{248                     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}* result = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}));}
 \DoxyCodeLine{249                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1amd__am79c973}{amd\_am79c973}}(\&dev, interrupt\_manager);}
 \DoxyCodeLine{250                     \textcolor{keywordflow}{return} result;}
 \DoxyCodeLine{251 }
@@ -136,7 +136,7 @@ Definition at line 235 of file pci.\+cpp.
 \DoxyCodeLine{261             \{}
 \DoxyCodeLine{262                 \textcolor{keywordflow}{case} 0x100E: \textcolor{comment}{//i217 (Ethernet Controller)}}
 \DoxyCodeLine{263                 \{}
-\DoxyCodeLine{264                     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}* result = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}*)MemoryManager::s\_active\_memory\_manager-\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}));}
+\DoxyCodeLine{264                     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}* result = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}));}
 \DoxyCodeLine{265                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217}{intel\_i217}}(\&dev, interrupt\_manager);}
 \DoxyCodeLine{266                     \textcolor{keywordflow}{return} result;}
 \DoxyCodeLine{267                 \}}
@@ -157,7 +157,7 @@ Definition at line 235 of file pci.\+cpp.
 \DoxyCodeLine{282             \{}
 \DoxyCodeLine{283                 \textcolor{keywordflow}{case} 0x00:  \textcolor{comment}{//VGA}}
 \DoxyCodeLine{284                 \{}
-\DoxyCodeLine{285                     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}* result = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}*)MemoryManager::s\_active\_memory\_manager-\/>malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}));}
+\DoxyCodeLine{285                     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}* result = (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}));}
 \DoxyCodeLine{286                     \textcolor{keyword}{new} (result) \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray}{VideoGraphicsArray}}();}
 \DoxyCodeLine{287                     \textcolor{keywordflow}{return} result;}
 \DoxyCodeLine{288                 \}}
@@ -196,13 +196,13 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{301         \textcolor{keywordflow}{case} 0x1022:}
 \DoxyCodeLine{302         \{}
 \DoxyCodeLine{303             \textcolor{comment}{// The vendor is AMD}}
-\DoxyCodeLine{304             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hAMD "});}
+\DoxyCodeLine{304             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hAMD "});}
 \DoxyCodeLine{305 }
 \DoxyCodeLine{306             \textcolor{comment}{// List the device}}
 \DoxyCodeLine{307             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}})}
 \DoxyCodeLine{308             \{}
 \DoxyCodeLine{309                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{310                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)h0x\%x"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
+\DoxyCodeLine{310                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%h0x\%x"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
 \DoxyCodeLine{311                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{312             \}}
 \DoxyCodeLine{313             \textcolor{keywordflow}{break};}
@@ -211,19 +211,19 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{316         \textcolor{keywordflow}{case} 0x106B:}
 \DoxyCodeLine{317         \{}
 \DoxyCodeLine{318             \textcolor{comment}{// The vendor is Apple}}
-\DoxyCodeLine{319             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hApple "});}
+\DoxyCodeLine{319             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hApple "});}
 \DoxyCodeLine{320 }
 \DoxyCodeLine{321             \textcolor{comment}{// List the device}}
 \DoxyCodeLine{322             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}})}
 \DoxyCodeLine{323             \{}
 \DoxyCodeLine{324                 \textcolor{keywordflow}{case} 0x003F:}
 \DoxyCodeLine{325                 \{}
-\DoxyCodeLine{326                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hKeyLargo/Intrepid USB"});}
+\DoxyCodeLine{326                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hKeyLargo/Intrepid USB"});}
 \DoxyCodeLine{327                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{328                 \}}
 \DoxyCodeLine{329 }
 \DoxyCodeLine{330                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{331                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)h0x\%x"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
+\DoxyCodeLine{331                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%h0x\%x"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
 \DoxyCodeLine{332                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{333             \}}
 \DoxyCodeLine{334             \textcolor{keywordflow}{break};}
@@ -232,7 +232,7 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{337         \textcolor{keywordflow}{case} 1234:}
 \DoxyCodeLine{338         \{}
 \DoxyCodeLine{339             \textcolor{comment}{// The vendor is QEMU}}
-\DoxyCodeLine{340           \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hQEMU "});}
+\DoxyCodeLine{340           \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hQEMU "});}
 \DoxyCodeLine{341 }
 \DoxyCodeLine{342             \textcolor{comment}{// List the device}}
 \DoxyCodeLine{343             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}})}
@@ -240,7 +240,7 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{345 }
 \DoxyCodeLine{346                 \textcolor{keywordflow}{case} 0x1111:}
 \DoxyCodeLine{347                 \{}
-\DoxyCodeLine{348                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hVirtual Video Controller"});}
+\DoxyCodeLine{348                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hVirtual Video Controller"});}
 \DoxyCodeLine{349                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{350                 \}}
 \DoxyCodeLine{351             \}}
@@ -250,7 +250,7 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{355         \textcolor{keywordflow}{case} 0x8086:}
 \DoxyCodeLine{356         \{}
 \DoxyCodeLine{357             \textcolor{comment}{// The vendor is Intel}}
-\DoxyCodeLine{358             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hIntel "});}
+\DoxyCodeLine{358             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hIntel "});}
 \DoxyCodeLine{359 }
 \DoxyCodeLine{360             \textcolor{comment}{// List the device}}
 \DoxyCodeLine{361             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}})}
@@ -258,44 +258,44 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{363 }
 \DoxyCodeLine{364                 \textcolor{keywordflow}{case} 0x1237:}
 \DoxyCodeLine{365                 \{}
-\DoxyCodeLine{366                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)h440FX"});}
+\DoxyCodeLine{366                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%h440FX"});}
 \DoxyCodeLine{367                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{368                 \}}
 \DoxyCodeLine{369 }
 \DoxyCodeLine{370                 \textcolor{keywordflow}{case} 0x2415:}
 \DoxyCodeLine{371                 \{}
-\DoxyCodeLine{372                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hAC'97"});}
+\DoxyCodeLine{372                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hAC'97"});}
 \DoxyCodeLine{373                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{374                 \}}
 \DoxyCodeLine{375 }
 \DoxyCodeLine{376                 \textcolor{keywordflow}{case} 0x7000:}
 \DoxyCodeLine{377                 \{}
-\DoxyCodeLine{378                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hPIIX3"});}
+\DoxyCodeLine{378                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hPIIX3"});}
 \DoxyCodeLine{379                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{380 }
 \DoxyCodeLine{381                 \}}
 \DoxyCodeLine{382 }
 \DoxyCodeLine{383                 \textcolor{keywordflow}{case} 0x7010:}
 \DoxyCodeLine{384                 \{}
-\DoxyCodeLine{385                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hPIIX4"});}
+\DoxyCodeLine{385                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hPIIX4"});}
 \DoxyCodeLine{386                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{387 }
 \DoxyCodeLine{388                 \}}
 \DoxyCodeLine{389 }
 \DoxyCodeLine{390                 \textcolor{keywordflow}{case} 0x7111:}
 \DoxyCodeLine{391                 \{}
-\DoxyCodeLine{392                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hPIIX3 ACPI"});}
+\DoxyCodeLine{392                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hPIIX3 ACPI"});}
 \DoxyCodeLine{393                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{394                 \}}
 \DoxyCodeLine{395 }
 \DoxyCodeLine{396                 \textcolor{keywordflow}{case} 0x7113:}
 \DoxyCodeLine{397                 \{}
-\DoxyCodeLine{398                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hPIIX4 ACPI"});}
+\DoxyCodeLine{398                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hPIIX4 ACPI"});}
 \DoxyCodeLine{399                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{400                 \}}
 \DoxyCodeLine{401 }
 \DoxyCodeLine{402                 \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{403                     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)h0x\%x"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
+\DoxyCodeLine{403                     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%h0x\%x"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
 \DoxyCodeLine{404                     \textcolor{keywordflow}{break};}
 \DoxyCodeLine{405 }
 \DoxyCodeLine{406             \}}
@@ -305,18 +305,18 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{410         \textcolor{keywordflow}{case} 0x80EE: \{}
 \DoxyCodeLine{411 }
 \DoxyCodeLine{412             \textcolor{comment}{// The vendor is VirtualBox}}
-\DoxyCodeLine{413             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hVirtualBox "});}
+\DoxyCodeLine{413             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hVirtualBox "});}
 \DoxyCodeLine{414 }
 \DoxyCodeLine{415             \textcolor{comment}{// List the device}}
 \DoxyCodeLine{416             \textcolor{keywordflow}{switch} (dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}}) \{}
 \DoxyCodeLine{417 }
 \DoxyCodeLine{418                 \textcolor{keywordflow}{case} 0xBEEF: \{}
-\DoxyCodeLine{419                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hGraphics Adapter"});}
+\DoxyCodeLine{419                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hGraphics Adapter"});}
 \DoxyCodeLine{420                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{421                 \}}
 \DoxyCodeLine{422 }
 \DoxyCodeLine{423                 \textcolor{keywordflow}{case} 0xCAFE: \{}
-\DoxyCodeLine{424                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hGuest Service"});}
+\DoxyCodeLine{424                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hGuest Service"});}
 \DoxyCodeLine{425                   \textcolor{keywordflow}{break};}
 \DoxyCodeLine{426                 \}}
 \DoxyCodeLine{427             \}}
@@ -324,7 +324,7 @@ Definition at line 298 of file pci.\+cpp.
 \DoxyCodeLine{429         \}}
 \DoxyCodeLine{430 }
 \DoxyCodeLine{431         \textcolor{keywordflow}{default}:    \textcolor{comment}{// Unknown}}
-\DoxyCodeLine{432           \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)hUnknown (0x\%x:0x\%x)"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a449730b72e7af8c4fc588ae2b5306a2a}{vendor\_id}}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
+\DoxyCodeLine{432           \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%hUnknown (0x\%x:0x\%x)"}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a449730b72e7af8c4fc588ae2b5306a2a}{vendor\_id}}, dev.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor_a456992f1e2922b9bfd8128fd2a5ca998}{device\_id}});}
 \DoxyCodeLine{433           \textcolor{keywordflow}{break};}
 \DoxyCodeLine{434 }
 \DoxyCodeLine{435     \}}
@@ -397,13 +397,13 @@ Definition at line 159 of file pci.\+cpp.
 \DoxyCodeLine{185                 \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}}* driver = \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_ad3499aa1e24262d36e5b1456ea3e92c1}{get\_driver}}(deviceDescriptor, interrupt\_manager);}
 \DoxyCodeLine{186                 \textcolor{keywordflow}{if}(driver != \textcolor{keyword}{nullptr})\{}
 \DoxyCodeLine{187                   handler-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverSelectorEventHandler_ad25298d6b14e6f790715563932cca77e}{on\_driver\_selected}}(driver);}
-\DoxyCodeLine{188                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)h \%s \%s"}, driver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a7ad761c929a49cfebd8c443f5af788f6}{get\_vendor\_name}}().\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}(), driver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a65b06f2917f7a781e68f3748e81806b6}{get\_device\_name}}().\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}());}
+\DoxyCodeLine{188                   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%h \%s \%s"}, driver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a7ad761c929a49cfebd8c443f5af788f6}{get\_vendor\_name}}().\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}(), driver-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver_a65b06f2917f7a781e68f3748e81806b6}{get\_device\_name}}().\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}());}
 \DoxyCodeLine{189                 \}\textcolor{keywordflow}{else}\{}
 \DoxyCodeLine{190                   \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController_a8d9c39a9f59f70a97172fbdac6bccd82}{list\_known\_deivce}}(deviceDescriptor);}
 \DoxyCodeLine{191                 \}}
 \DoxyCodeLine{192 }
 \DoxyCodeLine{193                 \textcolor{comment}{// New line}}
-\DoxyCodeLine{194                 \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\(\backslash\)h\(\backslash\)n"});}
+\DoxyCodeLine{194                 \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"\%h\(\backslash\)n"});}
 \DoxyCodeLine{195             \}}
 \DoxyCodeLine{196         \}}
 \DoxyCodeLine{197     \}}

@@ -1,0 +1,521 @@
+\hypertarget{classMaxOS_1_1processes_1_1Process}{}\doxysection{Max\+OS\+::processes\+::Process Class Reference}
+\label{classMaxOS_1_1processes_1_1Process}\index{MaxOS::processes::Process@{MaxOS::processes::Process}}
+
+
+A process that can be scheduled by the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}.  
+
+
+
+
+{\ttfamily \#include $<$process.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_add19a143947dbccee3295fefeaaef414}{Process}} (\mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}, void($\ast$\+\_\+entry\+\_\+point)(void $\ast$), void $\ast$args, int arg\+\_\+amount, bool \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\+\_\+kernel}}=false)
+\begin{DoxyCompactList}\small\item\em Constructor for the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} class (from a function) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_ae372e106c4a6aac0be918133b86ce93d}{Process}} (\mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}, void $\ast$args, int arg\+\_\+amount, \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64}{Elf64}} $\ast$elf, bool \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\+\_\+kernel}}=false)
+\begin{DoxyCompactList}\small\item\em Constructor for the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} class (from an elf, will free the elf memory after loading) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a990776d181dbbde7ff8ac12713d814b3}{$\sim$\+Process}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af34be8cd3fb91bab4b5be0af5a6bb5e5}{set\+\_\+up}} ()
+\begin{DoxyCompactList}\small\item\em Generic setup function for the process. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector}{common\+::\+Vector}}$<$ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} $\ast$ $>$ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8cf973832029fbb77ad9e69b234813ef}{get\+\_\+threads}} ()
+\begin{DoxyCompactList}\small\item\em Gets the threads of the process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a87bca165b791fb0c3031e89201973ec7}{add\+\_\+thread}} (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} $\ast$thread)
+\begin{DoxyCompactList}\small\item\em Adds a thread to the process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\+\_\+thread}} (uint64\+\_\+t tid)
+\begin{DoxyCompactList}\small\item\em Finds a thread by its tid. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}{set\+\_\+pid}} (uint64\+\_\+t pid)
+\begin{DoxyCompactList}\small\item\em Sets the pid of the process once added to the queue. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56b7359906f289d7054247885002e2e5}{get\+\_\+pid}} ()
+\begin{DoxyCompactList}\small\item\em Gets the pid of the process. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a67a7109274db0afcdc5fc0e29f3bcd74}{get\+\_\+total\+\_\+ticks}} ()
+\begin{DoxyCompactList}\small\item\em Gets the total ticks of the threads in the process (not this does not include any past killed threads) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\+\_\+kernel}}
+\item 
+\mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{memory\+::\+Memory\+Manager}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\+\_\+manager}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A process that can be scheduled by the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}. 
+
+Definition at line 69 of file process.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_add19a143947dbccee3295fefeaaef414}\label{classMaxOS_1_1processes_1_1Process_add19a143947dbccee3295fefeaaef414}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!Process@{Process}}
+\index{Process@{Process}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{Process()}{Process()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Process\+::\+Process (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}}]{p\+\_\+name,  }\item[{void($\ast$)(void $\ast$)}]{\+\_\+entry\+\_\+point,  }\item[{void $\ast$}]{args,  }\item[{int}]{arg\+\_\+amount,  }\item[{bool}]{is\+\_\+kernel = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} class (from a function) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the process \\
+\hline
+{\em \+\_\+entry\+\_\+point} & The entry point of the process \\
+\hline
+{\em args} & The arguments to pass to the process \\
+\hline
+{\em arg\+\_\+amount} & The amount of arguments \\
+\hline
+{\em is\+\_\+kernel} & If the process is a kernel process \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 100 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{101 : \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}),}
+\DoxyCodeLine{102   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}(p\_name)}
+\DoxyCodeLine{103 \{}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105   \textcolor{comment}{// Basic setup}}
+\DoxyCodeLine{106   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af34be8cd3fb91bab4b5be0af5a6bb5e5}{set\_up}}();}
+\DoxyCodeLine{107 }
+\DoxyCodeLine{108   \textcolor{comment}{// Create the main thread}}
+\DoxyCodeLine{109   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}* main\_thread = \textcolor{keyword}{new} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}(\_entry\_point, args, arg\_amount, \textcolor{keyword}{this});}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111   \textcolor{comment}{// Add the thread}}
+\DoxyCodeLine{112   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a87bca165b791fb0c3031e89201973ec7}{add\_thread}}(main\_thread);}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{114 \}}
+
+\end{DoxyCode}
+
+
+References add\+\_\+thread(), and set\+\_\+up().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_ae372e106c4a6aac0be918133b86ce93d}\label{classMaxOS_1_1processes_1_1Process_ae372e106c4a6aac0be918133b86ce93d}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!Process@{Process}}
+\index{Process@{Process}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{Process()}{Process()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Process\+::\+Process (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}}]{p\+\_\+name,  }\item[{void $\ast$}]{args,  }\item[{int}]{arg\+\_\+amount,  }\item[{\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64}{Elf64}} $\ast$}]{elf,  }\item[{bool}]{is\+\_\+kernel = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} class (from an elf, will free the elf memory after loading) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the process \\
+\hline
+{\em args} & The arguments to pass to the process \\
+\hline
+{\em arg\+\_\+amount} & The amount of arguments \\
+\hline
+{\em elf} & The elf file to load the process from \\
+\hline
+{\em is\+\_\+kernel} & If the process is a kernel process \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 125 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{126 : \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}),}
+\DoxyCodeLine{127   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}(p\_name)}
+\DoxyCodeLine{128 \{}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130   \textcolor{comment}{// Basic setup}}
+\DoxyCodeLine{131   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af34be8cd3fb91bab4b5be0af5a6bb5e5}{set\_up}}();}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133   \textcolor{comment}{// Load the elf}}
+\DoxyCodeLine{134   elf -\/> load();}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136   \textcolor{comment}{// Get the entry point}}
+\DoxyCodeLine{137   void (*entry\_point)(\textcolor{keywordtype}{void} *) = (\textcolor{keywordtype}{void} (*)(\textcolor{keywordtype}{void} *))elf -\/> get\_header() -\/> entry;}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139   \textcolor{comment}{// Create the main thread}}
+\DoxyCodeLine{140   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}* main\_thread = \textcolor{keyword}{new} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}(entry\_point, args, arg\_amount, \textcolor{keyword}{this});}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142   \textcolor{comment}{// Add the thread}}
+\DoxyCodeLine{143   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a87bca165b791fb0c3031e89201973ec7}{add\_thread}}(main\_thread);}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145   \textcolor{comment}{// Free the elf}}
+\DoxyCodeLine{146   \textcolor{keyword}{delete} elf;}
+\DoxyCodeLine{147 \}}
+
+\end{DoxyCode}
+
+
+References add\+\_\+thread(), and set\+\_\+up().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_a990776d181dbbde7ff8ac12713d814b3}\label{classMaxOS_1_1processes_1_1Process_a990776d181dbbde7ff8ac12713d814b3}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!````~Process@{$\sim$Process}}
+\index{````~Process@{$\sim$Process}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{$\sim$Process()}{~Process()}}
+{\footnotesize\ttfamily Process\+::$\sim$\+Process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destructor for the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} class. 
+
+
+
+Definition at line 153 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{153                   \{}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{155   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Cleaning up process \%s\(\backslash\)n"}, \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}());}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157   \textcolor{comment}{// Free the threads}}
+\DoxyCodeLine{158   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} thread : m\_threads)}
+\DoxyCodeLine{159       \textcolor{keyword}{delete} thread;}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161   \textcolor{comment}{// Free the memory manager (only if it was created)}}
+\DoxyCodeLine{162   \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}})\{}
+\DoxyCodeLine{163       \textcolor{keyword}{delete} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}};}
+\DoxyCodeLine{164       \textcolor{keyword}{delete} m\_virtual\_memory\_manager;}
+\DoxyCodeLine{165   \}}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kprintf, Max\+O\+S\+::\+String\+::c\+\_\+str(), is\+\_\+kernel, memory\+\_\+manager, and name.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_a87bca165b791fb0c3031e89201973ec7}\label{classMaxOS_1_1processes_1_1Process_a87bca165b791fb0c3031e89201973ec7}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!add\_thread@{add\_thread}}
+\index{add\_thread@{add\_thread}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{add\_thread()}{add\_thread()}}
+{\footnotesize\ttfamily void Process\+::add\+\_\+thread (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} $\ast$}]{thread }\end{DoxyParamCaption})}
+
+
+
+Adds a thread to the process. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em thread} & The thread to add \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 173 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{173                                        \{}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175   \textcolor{comment}{// Pause interrupts while adding the thread}}
+\DoxyCodeLine{176   \textcolor{keyword}{asm}(\textcolor{stringliteral}{"cli"});}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178   \textcolor{comment}{// Store the thread}}
+\DoxyCodeLine{179   m\_threads.push\_back(thread);}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181   \textcolor{comment}{// Set the pid}}
+\DoxyCodeLine{182   thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a130e3726d7c4912ab2fdf6bf587f757f}{parent\_pid}} = m\_pid;}
+\DoxyCodeLine{183 }
+\DoxyCodeLine{184   \textcolor{comment}{// Can now resume interrupts}}
+\DoxyCodeLine{185   \textcolor{keyword}{asm}(\textcolor{stringliteral}{"sti"});}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::processes\+::\+Thread\+::parent\+\_\+pid.
+
+
+
+Referenced by Process().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_a56b7359906f289d7054247885002e2e5}\label{classMaxOS_1_1processes_1_1Process_a56b7359906f289d7054247885002e2e5}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!get\_pid@{get\_pid}}
+\index{get\_pid@{get\_pid}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{get\_pid()}{get\_pid()}}
+{\footnotesize\ttfamily uint64\+\_\+t Process\+::get\+\_\+pid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the pid of the process. 
+
+\begin{DoxyReturn}{Returns}
+The pid of the process 
+\end{DoxyReturn}
+
+
+Definition at line 252 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{252                           \{}
+\DoxyCodeLine{253   \textcolor{keywordflow}{return} m\_pid;}
+\DoxyCodeLine{254 \}}
+
+\end{DoxyCode}
+
+
+Referenced by Max\+O\+S\+::processes\+::\+I\+P\+C\+::alloc\+\_\+shared\+\_\+memory(), Max\+O\+S\+::processes\+::\+Scheduler\+::load\+\_\+multiboot\+\_\+elfs(), and Max\+O\+S\+::processes\+::\+Thread\+::\+Thread().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_a8cf973832029fbb77ad9e69b234813ef}\label{classMaxOS_1_1processes_1_1Process_a8cf973832029fbb77ad9e69b234813ef}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!get\_threads@{get\_threads}}
+\index{get\_threads@{get\_threads}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{get\_threads()}{get\_threads()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Vector}{Vector}}$<$ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} $\ast$ $>$ Process\+::get\+\_\+threads (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the threads of the process. 
+
+
+
+Definition at line 241 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{241                                      \{}
+\DoxyCodeLine{242 }
+\DoxyCodeLine{243   \textcolor{comment}{// Return the threads}}
+\DoxyCodeLine{244   \textcolor{keywordflow}{return} m\_threads;}
+\DoxyCodeLine{245 }
+\DoxyCodeLine{246 \}}
+
+\end{DoxyCode}
+
+
+Referenced by Max\+O\+S\+::processes\+::\+Scheduler\+::force\+\_\+remove\+\_\+process(), Max\+O\+S\+::processes\+::\+Scheduler\+::remove\+\_\+process(), and Max\+O\+S\+::processes\+::\+Scheduler\+::schedule\+\_\+next().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_a67a7109274db0afcdc5fc0e29f3bcd74}\label{classMaxOS_1_1processes_1_1Process_a67a7109274db0afcdc5fc0e29f3bcd74}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!get\_total\_ticks@{get\_total\_ticks}}
+\index{get\_total\_ticks@{get\_total\_ticks}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{get\_total\_ticks()}{get\_total\_ticks()}}
+{\footnotesize\ttfamily uint64\+\_\+t Process\+::get\+\_\+total\+\_\+ticks (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the total ticks of the threads in the process (not this does not include any past killed threads) 
+
+\begin{DoxyReturn}{Returns}
+The total ticks of the threads in the process 
+\end{DoxyReturn}
+
+
+Definition at line 281 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{281                                   \{}
+\DoxyCodeLine{282 }
+\DoxyCodeLine{283   uint64\_t total\_ticks = 0;}
+\DoxyCodeLine{284   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} thread : m\_threads)}
+\DoxyCodeLine{285     total\_ticks += thread-\/>ticks;}
+\DoxyCodeLine{286 }
+\DoxyCodeLine{287   \textcolor{keywordflow}{return} total\_ticks;}
+\DoxyCodeLine{288 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}\label{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!remove\_thread@{remove\_thread}}
+\index{remove\_thread@{remove\_thread}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{remove\_thread()}{remove\_thread()}}
+{\footnotesize\ttfamily void Process\+::remove\+\_\+thread (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{tid }\end{DoxyParamCaption})}
+
+
+
+Finds a thread by its tid. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tid} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 193 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{193                                         \{}
+\DoxyCodeLine{194 }
+\DoxyCodeLine{195   \textcolor{comment}{// Find the thread}}
+\DoxyCodeLine{196   \textcolor{keywordflow}{for} (uint16\_t \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_threads.size(); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++) \{}
+\DoxyCodeLine{197       \textcolor{keywordflow}{if} (m\_threads[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]-\/>tid == tid) \{}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{199         \textcolor{comment}{// Get the thread}}
+\DoxyCodeLine{200         \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}* thread = m\_threads[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{201 }
+\DoxyCodeLine{202         \textcolor{comment}{// Delete the thread}}
+\DoxyCodeLine{203         \textcolor{keyword}{delete} thread;}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205         \textcolor{comment}{// Remove the thread from the list}}
+\DoxyCodeLine{206         m\_threads.erase(m\_threads.begin() + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}});}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209         \textcolor{comment}{// If there are no more threads then delete the process (done on the scheduler side)}}
+\DoxyCodeLine{210         \textcolor{keywordflow}{if} (m\_threads.empty())}
+\DoxyCodeLine{211           \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ac85b93968affc260d78005549dc3c08f}{Scheduler::get\_system\_scheduler}}() -\/> remove\_process(\textcolor{keyword}{this});}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{214     \}}
+\DoxyCodeLine{215   \}}
+\DoxyCodeLine{216 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::processes\+::\+Scheduler\+::get\+\_\+system\+\_\+scheduler(), and Max\+O\+S\+::drivers\+::peripherals\+::i.
+
+
+
+Referenced by Max\+O\+S\+::processes\+::\+Scheduler\+::force\+\_\+remove\+\_\+process(), and Max\+O\+S\+::processes\+::\+Scheduler\+::schedule\+\_\+next().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}\label{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!set\_pid@{set\_pid}}
+\index{set\_pid@{set\_pid}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{set\_pid()}{set\_pid()}}
+{\footnotesize\ttfamily void Process\+::set\+\_\+pid (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{pid }\end{DoxyParamCaption})}
+
+
+
+Sets the pid of the process once added to the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pid} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 222 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{222                                   \{}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224   \textcolor{comment}{// Check if the pid is already set}}
+\DoxyCodeLine{225   \textcolor{keywordflow}{if} (m\_pid != 0)}
+\DoxyCodeLine{226         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228   \textcolor{comment}{// Set the pid}}
+\DoxyCodeLine{229   m\_pid = pid;}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231   \textcolor{comment}{// Assign the pid to the threads}}
+\DoxyCodeLine{232   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} thread : m\_threads)}
+\DoxyCodeLine{233         thread-\/>parent\_pid = pid;}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236 \}}
+
+\end{DoxyCode}
+
+
+Referenced by kernel\+Main().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_af34be8cd3fb91bab4b5be0af5a6bb5e5}\label{classMaxOS_1_1processes_1_1Process_af34be8cd3fb91bab4b5be0af5a6bb5e5}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!set\_up@{set\_up}}
+\index{set\_up@{set\_up}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{set\_up()}{set\_up()}}
+{\footnotesize\ttfamily void Process\+::set\+\_\+up (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Generic setup function for the process. 
+
+
+
+Definition at line 259 of file process.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{259                      \{}
+\DoxyCodeLine{260 }
+\DoxyCodeLine{261   \textcolor{comment}{// Pause interrupts while creating the process}}
+\DoxyCodeLine{262   \textcolor{keyword}{asm}(\textcolor{stringliteral}{"cli"});}
+\DoxyCodeLine{263 }
+\DoxyCodeLine{264   \textcolor{comment}{// Basic setup}}
+\DoxyCodeLine{265   m\_pid = \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ac85b93968affc260d78005549dc3c08f}{Scheduler::get\_system\_scheduler}}() -\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{266 }
+\DoxyCodeLine{267   \textcolor{comment}{// If it is a kernel process then don't need a new memory manager}}
+\DoxyCodeLine{268   \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}})\{}
+\DoxyCodeLine{269     m\_virtual\_memory\_manager = \textcolor{keyword}{new} \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}(\textcolor{keyword}{false});}
+\DoxyCodeLine{270     \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}} = \textcolor{keyword}{new} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{MemoryManager}}(m\_virtual\_memory\_manager);}
+\DoxyCodeLine{271   \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{272     \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}} = MemoryManager::s\_kernel\_memory\_manager;}
+\DoxyCodeLine{273   \}}
+\DoxyCodeLine{274 }
+\DoxyCodeLine{275 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::processes\+::\+Scheduler\+::add\+\_\+process(), Max\+O\+S\+::processes\+::\+Scheduler\+::get\+\_\+system\+\_\+scheduler(), is\+\_\+kernel, and memory\+\_\+manager.
+
+
+
+Referenced by Process().
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}\label{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!is\_kernel@{is\_kernel}}
+\index{is\_kernel@{is\_kernel}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{is\_kernel}{is\_kernel}}
+{\footnotesize\ttfamily bool Max\+O\+S\+::processes\+::\+Process\+::is\+\_\+kernel}
+
+
+
+Definition at line 95 of file process.\+h.
+
+
+
+Referenced by set\+\_\+up(), and $\sim$\+Process().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}\label{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!memory\_manager@{memory\_manager}}
+\index{memory\_manager@{memory\_manager}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{memory\_manager}{memory\_manager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{memory\+::\+Memory\+Manager}}$\ast$ Max\+O\+S\+::processes\+::\+Process\+::memory\+\_\+manager}
+
+
+
+Definition at line 98 of file process.\+h.
+
+
+
+Referenced by kernel\+Main(), Max\+O\+S\+::processes\+::\+Scheduler\+::schedule\+\_\+next(), set\+\_\+up(), and $\sim$\+Process().
+
+\mbox{\Hypertarget{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}\label{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}} 
+\index{MaxOS::processes::Process@{MaxOS::processes::Process}!name@{name}}
+\index{name@{name}!MaxOS::processes::Process@{MaxOS::processes::Process}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}} Max\+O\+S\+::processes\+::\+Process\+::name}
+
+
+
+Definition at line 97 of file process.\+h.
+
+
+
+Referenced by Max\+O\+S\+::processes\+::\+Scheduler\+::add\+\_\+process(), Max\+O\+S\+::system\+::\+C\+P\+U\+::\+P\+A\+N\+I\+C(), Max\+O\+S\+::system\+::\+C\+P\+U\+::prepare\+\_\+for\+\_\+panic(), and $\sim$\+Process().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/processes/\mbox{\hyperlink{process_8h}{process.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/processes/\mbox{\hyperlink{process_8cpp}{process.\+cpp}}\end{DoxyCompactItemize}

@@ -17,6 +17,7 @@ var namespaceMaxOS_1_1common =
     [ "OutputStream", "classMaxOS_1_1common_1_1OutputStream.html", "classMaxOS_1_1common_1_1OutputStream" ],
     [ "Pair", "classMaxOS_1_1common_1_1Pair.html", "classMaxOS_1_1common_1_1Pair" ],
     [ "Rectangle", "classMaxOS_1_1common_1_1Rectangle.html", "classMaxOS_1_1common_1_1Rectangle" ],
+    [ "Spinlock", "classMaxOS_1_1common_1_1Spinlock.html", "classMaxOS_1_1common_1_1Spinlock" ],
     [ "Time", "structMaxOS_1_1common_1_1Time.html", "structMaxOS_1_1common_1_1Time" ],
     [ "Vector", "classMaxOS_1_1common_1_1Vector.html", "classMaxOS_1_1common_1_1Vector" ],
     [ "VectorIterationHandler", "classMaxOS_1_1common_1_1VectorIterationHandler.html", "classMaxOS_1_1common_1_1VectorIterationHandler" ]

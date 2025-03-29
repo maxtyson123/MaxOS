@@ -176,7 +176,7 @@ Definition at line 143 of file udp.\+cpp.
 \DoxyCodeLine{143                                                                                            \{}
 \DoxyCodeLine{144 }
 \DoxyCodeLine{145 }
-\DoxyCodeLine{146     \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}));   \textcolor{comment}{//Allocate memory for the socket}}
+\DoxyCodeLine{146     \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}));   \textcolor{comment}{//Allocate memory for the socket}}
 \DoxyCodeLine{147 }
 \DoxyCodeLine{148     \textcolor{keywordflow}{if}(socket != 0) \textcolor{comment}{//If the socket was created}}
 \DoxyCodeLine{149     \{}
@@ -228,7 +228,7 @@ Definition at line 204 of file udp.\+cpp.
 \DoxyCodeLine{208         \textcolor{keywordflow}{if}((*currentSocket) == socket)                               \textcolor{comment}{//If the socket is the same as the socket that is being checked}}
 \DoxyCodeLine{209         \{}
 \DoxyCodeLine{210             \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolHandler_afba4884a9a289d39fd8b0fc928aaa295}{sockets}}.erase(currentSocket);                            \textcolor{comment}{//Remove the socket from the list of sockets}}
-\DoxyCodeLine{211             MemoryManager::s\_active\_memory\_manager-\/> free(socket);      \textcolor{comment}{//Free the socket}}
+\DoxyCodeLine{211             MemoryManager::kfree(socket);      \textcolor{comment}{//Free the socket}}
 \DoxyCodeLine{212             \textcolor{keywordflow}{break};                                                   \textcolor{comment}{//Break out of the loop}}
 \DoxyCodeLine{213         \}}
 \DoxyCodeLine{214     \}}
@@ -350,7 +350,7 @@ Definition at line 178 of file udp.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{178                                                                              \{}
 \DoxyCodeLine{179 }
-\DoxyCodeLine{180     \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}));   \textcolor{comment}{//Allocate memory for the socket}}
+\DoxyCodeLine{180     \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket}{UserDatagramProtocolSocket}}));   \textcolor{comment}{//Allocate memory for the socket}}
 \DoxyCodeLine{181 }
 \DoxyCodeLine{182     \textcolor{keywordflow}{if}(socket != 0) \textcolor{comment}{//If the socket was created}}
 \DoxyCodeLine{183     \{}
@@ -402,7 +402,7 @@ Definition at line 225 of file udp.\+cpp.
 \DoxyCodeLine{225                                                                                                        \{}
 \DoxyCodeLine{226 }
 \DoxyCodeLine{227     uint16\_t totalSize = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}) + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}};                                 \textcolor{comment}{//Get the total size of the packet}}
-\DoxyCodeLine{228     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/>malloc(totalSize);          \textcolor{comment}{//Allocate memory for the packet}}
+\DoxyCodeLine{228     uint8\_t* buffer = (uint8\_t*)MemoryManager::kmalloc(totalSize);          \textcolor{comment}{//Allocate memory for the packet}}
 \DoxyCodeLine{229     uint8\_t* buffer2 = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}});                                 \textcolor{comment}{//Get the buffer that will be used to store the data}}
 \DoxyCodeLine{230 }
 \DoxyCodeLine{231     \mbox{\hyperlink{structMaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}* \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}} = (\mbox{\hyperlink{structMaxOS_1_1net_1_1UserDatagramProtocolHeader}{UserDatagramProtocolHeader}}*)buffer;                       \textcolor{comment}{//Create the header of the packet}}
@@ -428,7 +428,7 @@ Definition at line 225 of file udp.\+cpp.
 \DoxyCodeLine{251     \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolPayloadHandler_a547124e71c39318710ca97724adc447b}{InternetProtocolPayloadHandler::Send}}(socket-\/>\mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolSocket_a7687a247ca91d84cefeb54c8c3a591da}{remoteIP}}, buffer, totalSize);}
 \DoxyCodeLine{252 }
 \DoxyCodeLine{253     \textcolor{comment}{//Free the buffer}}
-\DoxyCodeLine{254     MemoryManager::s\_active\_memory\_manager-\/>free(buffer);}
+\DoxyCodeLine{254     MemoryManager::kfree(buffer);}
 \DoxyCodeLine{255 }
 \DoxyCodeLine{256 \}}
 

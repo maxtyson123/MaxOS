@@ -1,0 +1,234 @@
+\hypertarget{classMaxOS_1_1common_1_1Spinlock}{}\doxysection{Max\+OS\+::common\+::Spinlock Class Reference}
+\label{classMaxOS_1_1common_1_1Spinlock}\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+
+
+A simple spinlock implementation.  
+
+
+
+
+{\ttfamily \#include $<$spinlock.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a750626d4d4d503f39af5d399adac6657}{Spinlock}} (bool should\+\_\+yield=false)
+\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a6ed28d5235616487585e102214c6a0c4}{$\sim$\+Spinlock}} ()
+\item 
+void \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}} ()
+\begin{DoxyCompactList}\small\item\em Lock the spinlock once it is available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}} ()
+\begin{DoxyCompactList}\small\item\em Unlock the spinlock. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_acfbb0fa5339be53356c1778b2e90afbb}{is\+\_\+locked}} ()
+\begin{DoxyCompactList}\small\item\em Check if the spinlock is locked. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{acquire}} ()
+\begin{DoxyCompactList}\small\item\em Acquire the spinlock. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{release}} ()
+\begin{DoxyCompactList}\small\item\em Release the spinlock. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A simple spinlock implementation. 
+
+Definition at line 16 of file spinlock.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_a750626d4d4d503f39af5d399adac6657}\label{classMaxOS_1_1common_1_1Spinlock_a750626d4d4d503f39af5d399adac6657}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!Spinlock@{Spinlock}}
+\index{Spinlock@{Spinlock}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{Spinlock()}{Spinlock()}}
+{\footnotesize\ttfamily Spinlock\+::\+Spinlock (\begin{DoxyParamCaption}\item[{bool}]{should\+\_\+yield = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 13 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{14 : m\_should\_yield(should\_yield) \{}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_a6ed28d5235616487585e102214c6a0c4}\label{classMaxOS_1_1common_1_1Spinlock_a6ed28d5235616487585e102214c6a0c4}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!````~Spinlock@{$\sim$Spinlock}}
+\index{````~Spinlock@{$\sim$Spinlock}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{$\sim$Spinlock()}{~Spinlock()}}
+{\footnotesize\ttfamily Spinlock\+::$\sim$\+Spinlock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 18 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{18                     \{}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}\label{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!acquire@{acquire}}
+\index{acquire@{acquire}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{acquire()}{acquire()}}
+{\footnotesize\ttfamily void Spinlock\+::acquire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Acquire the spinlock. 
+
+
+
+Definition at line 61 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{61                        \{}
+\DoxyCodeLine{62   \textcolor{keywordflow}{while} (\_\_atomic\_test\_and\_set(\&m\_locked, \_\_ATOMIC\_ACQUIRE)) \{}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64       \textcolor{comment}{// Wait for the lock to be available}}
+\DoxyCodeLine{65       \textcolor{keywordflow}{if}(m\_should\_yield)}
+\DoxyCodeLine{66         Scheduler::get\_system\_scheduler()-\/>yield();}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68       \textcolor{comment}{// Dont optimise this loop}}
+\DoxyCodeLine{69       \textcolor{keyword}{asm}(\textcolor{stringliteral}{"nop"});}
+\DoxyCodeLine{70   \}}
+\DoxyCodeLine{71 \}}
+
+\end{DoxyCode}
+
+
+Referenced by lock().
+
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_acfbb0fa5339be53356c1778b2e90afbb}\label{classMaxOS_1_1common_1_1Spinlock_acfbb0fa5339be53356c1778b2e90afbb}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!is\_locked@{is\_locked}}
+\index{is\_locked@{is\_locked}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{is\_locked()}{is\_locked()}}
+{\footnotesize\ttfamily bool Spinlock\+::is\+\_\+locked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Check if the spinlock is locked. 
+
+\begin{DoxyReturn}{Returns}
+True if the spinlock is locked, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line 53 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{53                          \{}
+\DoxyCodeLine{54     \textcolor{keywordflow}{return} m\_locked;}
+\DoxyCodeLine{55 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}\label{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!lock@{lock}}
+\index{lock@{lock}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{lock()}{lock()}}
+{\footnotesize\ttfamily void Spinlock\+::lock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Lock the spinlock once it is available. 
+
+
+
+Definition at line 25 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{25                     \{}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \textcolor{comment}{// Wait for the lock to be available}}
+\DoxyCodeLine{28     \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{acquire}}();}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     \textcolor{comment}{// Set the lock to be locked}}
+\DoxyCodeLine{31     m\_locked = \textcolor{keyword}{true};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \}}
+
+\end{DoxyCode}
+
+
+References acquire().
+
+
+
+Referenced by \+\_\+kprintf\+\_\+internal(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+frame(), and Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::reserve().
+
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}\label{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!release@{release}}
+\index{release@{release}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{release()}{release()}}
+{\footnotesize\ttfamily void Spinlock\+::release (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Release the spinlock. 
+
+
+
+Definition at line 76 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{76                        \{}
+\DoxyCodeLine{77   \_\_atomic\_clear(\&m\_locked, \_\_ATOMIC\_RELEASE);}
+\DoxyCodeLine{78 \}}
+
+\end{DoxyCode}
+
+
+Referenced by unlock().
+
+\mbox{\Hypertarget{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}\label{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}} 
+\index{MaxOS::common::Spinlock@{MaxOS::common::Spinlock}!unlock@{unlock}}
+\index{unlock@{unlock}!MaxOS::common::Spinlock@{MaxOS::common::Spinlock}}
+\doxysubsubsection{\texorpdfstring{unlock()}{unlock()}}
+{\footnotesize\ttfamily void Spinlock\+::unlock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Unlock the spinlock. 
+
+
+
+Definition at line 39 of file spinlock.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{39                       \{}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \textcolor{comment}{// Set the lock to be unlocked}}
+\DoxyCodeLine{42     m\_locked = \textcolor{keyword}{false};}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \textcolor{comment}{// Release the lock}}
+\DoxyCodeLine{45     \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{release}}();}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47 \}}
+
+\end{DoxyCode}
+
+
+References release().
+
+
+
+Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+frame(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager(), and Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::reserve().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/common/\mbox{\hyperlink{spinlock_8h}{spinlock.\+h}}\item 
+/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/common/\mbox{\hyperlink{spinlock_8cpp}{spinlock.\+cpp}}\end{DoxyCompactItemize}

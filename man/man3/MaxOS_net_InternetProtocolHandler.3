@@ -1,4 +1,4 @@
-.TH "MaxOS::net::InternetProtocolHandler" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::InternetProtocolHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -375,7 +375,7 @@ Definition at line 172 of file ipv4\&.cpp\&.
 .nf
 172                                                                                                                           {
 173 
-174     uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
+174     uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
 175     InternetProtocolV4Header *message = (InternetProtocolV4Header*)buffer;                                                                            //Convert to struct for easier use
 176 
 177     message -> version = 4;                                                                                                                           //Set version
@@ -412,7 +412,7 @@ Definition at line 172 of file ipv4\&.cpp\&.
 208 
 209     //Send message
 210     frameHandler -> sendEthernetFrame(MAC, this -> handledType, buffer, size + sizeof(InternetProtocolV4Header));      //Send message
-211     MemoryManager::s_active_memory_manager->free(buffer);                                                                                                 //Free memory
+211     MemoryManager::kfree(buffer);                                                                                                 //Free memory
 212 }
 .fi
 .PP

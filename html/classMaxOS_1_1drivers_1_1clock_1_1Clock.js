@@ -4,7 +4,7 @@ var classMaxOS_1_1drivers_1_1clock_1_1Clock =
     [ "~Clock", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#afc976ce68fa85e15cc06f9ed47bddb7c", null ],
     [ "activate", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#a7d105f260a9197c78e77e0ba437f0168", null ],
     [ "binary_representation", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#ada9760529d0a4a5be681e5baea0c5178", null ],
-    [ "calibrate", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#af2b8e14e79833d1eabf87abf79774cca", null ],
+    [ "calibrate", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#afab69ba284bca41ae58a19b1821ad6c1", null ],
     [ "delay", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#abc9de19ed4bbd05fa8e449ef0df48ad5", null ],
     [ "get_device_name", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#ad3eddc94ae13577816756ff70c72a02a", null ],
     [ "get_time", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html#a138de5b2eb0367cd755e9e32cac3628f", null ],

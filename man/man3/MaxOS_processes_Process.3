@@ -1,0 +1,419 @@
+.TH "MaxOS::processes::Process" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler\fP\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <process\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBProcess\fP (\fBstring\fP \fBname\fP, void(*_entry_point)(void *), void *args, int arg_amount, bool \fBis_kernel\fP=false)"
+.br
+.RI "Constructor for the \fBProcess\fP class (from a function) "
+.ti -1c
+.RI "\fBProcess\fP (\fBstring\fP \fBname\fP, void *args, int arg_amount, \fBElf64\fP *elf, bool \fBis_kernel\fP=false)"
+.br
+.RI "Constructor for the \fBProcess\fP class (from an elf, will free the elf memory after loading) "
+.ti -1c
+.RI "\fB~Process\fP ()"
+.br
+.RI "Destructor for the \fBProcess\fP class\&. "
+.ti -1c
+.RI "void \fBset_up\fP ()"
+.br
+.RI "Generic setup function for the process\&. "
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBThread\fP * > \fBget_threads\fP ()"
+.br
+.RI "Gets the threads of the process\&. "
+.ti -1c
+.RI "void \fBadd_thread\fP (\fBThread\fP *thread)"
+.br
+.RI "Adds a thread to the process\&. "
+.ti -1c
+.RI "void \fBremove_thread\fP (uint64_t tid)"
+.br
+.RI "Finds a thread by its tid\&. "
+.ti -1c
+.RI "void \fBset_pid\fP (uint64_t pid)"
+.br
+.RI "Sets the pid of the process once added to the queue\&. "
+.ti -1c
+.RI "uint64_t \fBget_pid\fP ()"
+.br
+.RI "Gets the pid of the process\&. "
+.ti -1c
+.RI "uint64_t \fBget_total_ticks\fP ()"
+.br
+.RI "Gets the total ticks of the threads in the process (not this does not include any past killed threads) "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBis_kernel\fP"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBname\fP"
+.br
+.ti -1c
+.RI "\fBmemory::MemoryManager\fP * \fBmemory_manager\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A process that can be scheduled by the \fBScheduler\fP\&. 
+.PP
+Definition at line 69 of file process\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Process::Process (\fBstring\fP p_name, void(*)(void *) _entry_point, void * args, int arg_amount, bool is_kernel = \fCfalse\fP)"
+
+.PP
+Constructor for the \fBProcess\fP class (from a function) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the process 
+.br
+\fI_entry_point\fP The entry point of the process 
+.br
+\fIargs\fP The arguments to pass to the process 
+.br
+\fIarg_amount\fP The amount of arguments 
+.br
+\fIis_kernel\fP If the process is a kernel process 
+.RE
+.PP
+
+.PP
+Definition at line 100 of file process\&.cpp\&.
+.PP
+.nf
+101 : is_kernel(is_kernel),
+102   name(p_name)
+103 {
+104 
+105   // Basic setup
+106   set_up();
+107 
+108   // Create the main thread
+109   Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
+110 
+111   // Add the thread
+112   add_thread(main_thread);
+113 
+114 }
+.fi
+.PP
+References add_thread(), and set_up()\&.
+.SS "Process::Process (\fBstring\fP p_name, void * args, int arg_amount, \fBElf64\fP * elf, bool is_kernel = \fCfalse\fP)"
+
+.PP
+Constructor for the \fBProcess\fP class (from an elf, will free the elf memory after loading) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the process 
+.br
+\fIargs\fP The arguments to pass to the process 
+.br
+\fIarg_amount\fP The amount of arguments 
+.br
+\fIelf\fP The elf file to load the process from 
+.br
+\fIis_kernel\fP If the process is a kernel process 
+.RE
+.PP
+
+.PP
+Definition at line 125 of file process\&.cpp\&.
+.PP
+.nf
+126 : is_kernel(is_kernel),
+127   name(p_name)
+128 {
+129 
+130   // Basic setup
+131   set_up();
+132 
+133   // Load the elf
+134   elf -> load();
+135 
+136   // Get the entry point
+137   void (*entry_point)(void *) = (void (*)(void *))elf -> get_header() -> entry;
+138 
+139   // Create the main thread
+140   Thread* main_thread = new Thread(entry_point, args, arg_amount, this);
+141 
+142   // Add the thread
+143   add_thread(main_thread);
+144 
+145   // Free the elf
+146   delete elf;
+147 }
+.fi
+.PP
+References add_thread(), and set_up()\&.
+.SS "Process::~Process ()"
+
+.PP
+Destructor for the \fBProcess\fP class\&. 
+.PP
+Definition at line 153 of file process\&.cpp\&.
+.PP
+.nf
+153                   {
+154 
+155   _kprintf("Cleaning up process %s\n", name\&.c_str());
+156 
+157   // Free the threads
+158   for (auto thread : m_threads)
+159       delete thread;
+160 
+161   // Free the memory manager (only if it was created)
+162   if(!is_kernel){
+163       delete memory_manager;
+164       delete m_virtual_memory_manager;
+165   }
+166 
+167 }
+.fi
+.PP
+References _kprintf, MaxOS::String::c_str(), is_kernel, memory_manager, and name\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void Process::add_thread (\fBThread\fP * thread)"
+
+.PP
+Adds a thread to the process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread\fP The thread to add 
+.RE
+.PP
+
+.PP
+Definition at line 173 of file process\&.cpp\&.
+.PP
+.nf
+173                                        {
+174 
+175   // Pause interrupts while adding the thread
+176   asm("cli");
+177 
+178   // Store the thread
+179   m_threads\&.push_back(thread);
+180 
+181   // Set the pid
+182   thread->parent_pid = m_pid;
+183 
+184   // Can now resume interrupts
+185   asm("sti");
+186 
+187 }
+.fi
+.PP
+References MaxOS::processes::Thread::parent_pid\&.
+.PP
+Referenced by Process()\&.
+.SS "uint64_t Process::get_pid ()"
+
+.PP
+Gets the pid of the process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The pid of the process 
+.RE
+.PP
+
+.PP
+Definition at line 252 of file process\&.cpp\&.
+.PP
+.nf
+252                           {
+253   return m_pid;
+254 }
+.fi
+.PP
+Referenced by MaxOS::processes::IPC::alloc_shared_memory(), MaxOS::processes::Scheduler::load_multiboot_elfs(), and MaxOS::processes::Thread::Thread()\&.
+.SS "\fBVector\fP< \fBThread\fP * > Process::get_threads ()"
+
+.PP
+Gets the threads of the process\&. 
+.PP
+Definition at line 241 of file process\&.cpp\&.
+.PP
+.nf
+241                                      {
+242 
+243   // Return the threads
+244   return m_threads;
+245 
+246 }
+.fi
+.PP
+Referenced by MaxOS::processes::Scheduler::force_remove_process(), MaxOS::processes::Scheduler::remove_process(), and MaxOS::processes::Scheduler::schedule_next()\&.
+.SS "uint64_t Process::get_total_ticks ()"
+
+.PP
+Gets the total ticks of the threads in the process (not this does not include any past killed threads) 
+.PP
+\fBReturns\fP
+.RS 4
+The total ticks of the threads in the process 
+.RE
+.PP
+
+.PP
+Definition at line 281 of file process\&.cpp\&.
+.PP
+.nf
+281                                   {
+282 
+283   uint64_t total_ticks = 0;
+284   for (auto thread : m_threads)
+285     total_ticks += thread->ticks;
+286 
+287   return total_ticks;
+288 }
+.fi
+.SS "void Process::remove_thread (uint64_t tid)"
+
+.PP
+Finds a thread by its tid\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file process\&.cpp\&.
+.PP
+.nf
+193                                         {
+194 
+195   // Find the thread
+196   for (uint16_t i = 0; i < m_threads\&.size(); i++) {
+197       if (m_threads[i]->tid == tid) {
+198 
+199         // Get the thread
+200         Thread* thread = m_threads[i];
+201 
+202         // Delete the thread
+203         delete thread;
+204 
+205         // Remove the thread from the list
+206         m_threads\&.erase(m_threads\&.begin() + i);
+207 
+208 
+209         // If there are no more threads then delete the process (done on the scheduler side)
+210         if (m_threads\&.empty())
+211           Scheduler::get_system_scheduler() -> remove_process(this);
+212 
+213         return;
+214     }
+215   }
+216 }
+.fi
+.PP
+References MaxOS::processes::Scheduler::get_system_scheduler(), and MaxOS::drivers::peripherals::i\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::force_remove_process(), and MaxOS::processes::Scheduler::schedule_next()\&.
+.SS "void Process::set_pid (uint64_t pid)"
+
+.PP
+Sets the pid of the process once added to the queue\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP 
+.RE
+.PP
+
+.PP
+Definition at line 222 of file process\&.cpp\&.
+.PP
+.nf
+222                                   {
+223 
+224   // Check if the pid is already set
+225   if (m_pid != 0)
+226         return;
+227 
+228   // Set the pid
+229   m_pid = pid;
+230 
+231   // Assign the pid to the threads
+232   for (auto thread : m_threads)
+233         thread->parent_pid = pid;
+234 
+235 
+236 }
+.fi
+.PP
+Referenced by kernelMain()\&.
+.SS "void Process::set_up ()"
+
+.PP
+Generic setup function for the process\&. 
+.PP
+Definition at line 259 of file process\&.cpp\&.
+.PP
+.nf
+259                      {
+260 
+261   // Pause interrupts while creating the process
+262   asm("cli");
+263 
+264   // Basic setup
+265   m_pid = Scheduler::get_system_scheduler() ->add_process(this);
+266 
+267   // If it is a kernel process then don't need a new memory manager
+268   if(!is_kernel){
+269     m_virtual_memory_manager = new VirtualMemoryManager(false);
+270     memory_manager = new MemoryManager(m_virtual_memory_manager);
+271   }else{
+272     memory_manager = MemoryManager::s_kernel_memory_manager;
+273   }
+274 
+275 }
+.fi
+.PP
+References MaxOS::processes::Scheduler::add_process(), MaxOS::processes::Scheduler::get_system_scheduler(), is_kernel, and memory_manager\&.
+.PP
+Referenced by Process()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "bool MaxOS::processes::Process::is_kernel"
+
+.PP
+Definition at line 95 of file process\&.h\&.
+.PP
+Referenced by set_up(), and ~Process()\&.
+.SS "\fBmemory::MemoryManager\fP* MaxOS::processes::Process::memory_manager"
+
+.PP
+Definition at line 98 of file process\&.h\&.
+.PP
+Referenced by kernelMain(), MaxOS::processes::Scheduler::schedule_next(), set_up(), and ~Process()\&.
+.SS "\fBstring\fP MaxOS::processes::Process::name"
+
+.PP
+Definition at line 97 of file process\&.h\&.
+.PP
+Referenced by MaxOS::processes::Scheduler::add_process(), MaxOS::system::CPU::PANIC(), MaxOS::system::CPU::prepare_for_panic(), and ~Process()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

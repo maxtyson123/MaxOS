@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::clock::Clock" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::clock::Clock" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,7 +30,7 @@ Inherits \fBMaxOS::drivers::Driver\fP, \fBMaxOS::hardwarecommunication::Interrup
 .br
 .RI "Delays the program for a specified number of milliseconds (rounded to the nearest 100) "
 .ti -1c
-.RI "void \fBcalibrate\fP ()"
+.RI "void \fBcalibrate\fP (uint64_t ms_per_tick=1)"
 .br
 .ti -1c
 .RI "\fBcommon::Time\fP \fBget_time\fP ()"
@@ -190,31 +190,31 @@ Definition at line 114 of file clock\&.cpp\&.
 References m_binary\&.
 .PP
 Referenced by get_time()\&.
-.SS "void Clock::calibrate ()"
+.SS "void Clock::calibrate (uint64_t ms_per_tick = \fC1\fP)"
 
 .PP
-Definition at line 174 of file clock\&.cpp\&.
+Definition at line 177 of file clock\&.cpp\&.
 .PP
 .nf
-174                       {
-175 
-176   // Get the ticks per ms
-177   PIT pit(m_interrupt_manager, m_apic);
-178   uint32_t ticks_per_ms = pit\&.ticks_per_ms();
-179 
-180   // Set the timer vector to 0x20 and configure it for periodic mode
-181   uint32_t lvt = 0x20 | (1 << 17);
-182   m_apic -> get_local_apic() -> write(0x320, lvt);
-183 
-184   // Set the intial count
-185   m_apic -> get_local_apic() -> write(0x380, ticks_per_ms);
+177                                           {
+178 
+179   // Get the ticks per ms
+180   PIT pit(m_interrupt_manager, m_apic);
+181   uint32_t ticks_per_ms = pit\&.ticks_per_ms();
+182 
+183   // Set the timer vector to 0x20 and configure it for periodic mode
+184   uint32_t lvt = 0x20 | (1 << 17);
+185   m_apic -> get_local_apic() -> write(0x320, lvt);
 186 
-187   // Clear the mask bit
-188   lvt &= ~(1 << 16);
-189   m_apic -> get_local_apic() -> write(0x380, lvt);
-190 
-191   _kprintf("Clock Calibrated\n");
-192 }
+187   // Set the intial count
+188   m_apic -> get_local_apic() -> write(0x380, ms_per_tick * ticks_per_ms);
+189 
+190   // Clear the mask bit
+191   lvt &= ~(1 << 16);
+192   m_apic -> get_local_apic() -> write(0x380, lvt);
+193 
+194   _kprintf("Clock Calibrated\n");
+195 }
 .fi
 .PP
 References _kprintf, m_apic, MaxOS::hardwarecommunication::InterruptHandler::m_interrupt_manager, MaxOS::drivers::clock::PIT::ticks_per_ms(), and write\&.
@@ -237,16 +237,19 @@ Definition at line 145 of file clock\&.cpp\&.
 .nf
 145                                        {
 146 
-147     // Round the number of milliseconds to the nearest 100
-148     uint64_t rounded_milliseconds =  ((milliseconds+99)/100);
+147 
+148     //TODO Create a const for accurcy of clock and use that for calibration and rounding
 149 
-150     // Calculate the number of ticks until the delay is over
-151     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
+150     // Round the number of milliseconds to the nearest 100
+151     uint64_t rounded_milliseconds =  ((milliseconds+99)/100);
 152 
-153     // Wait until the number of ticks is equal to the number of ticks until the delay is over
-154     while(m_ticks < ticks_until_delay_is_over)
-155         asm volatile("nop");
-156 }
+153     // Calculate the number of ticks until the delay is over
+154     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
+155 
+156     // Wait until the number of ticks is equal to the number of ticks until the delay is over
+157     while(m_ticks < ticks_until_delay_is_over)
+158         asm volatile("nop");
+159 }
 .fi
 .PP
 Referenced by kernelMain()\&.
@@ -264,49 +267,49 @@ The name of the device
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 170 of file clock\&.cpp\&.
+Definition at line 173 of file clock\&.cpp\&.
 .PP
 .nf
-170                               {
-171     return "Clock";
-172 }
+173                               {
+174     return "Clock";
+175 }
 .fi
 .SS "\fBcommon::Time\fP Clock::get_time ()"
 
 .PP
-Definition at line 195 of file clock\&.cpp\&.
+Definition at line 198 of file clock\&.cpp\&.
 .PP
 .nf
-195                            {
-196 
-197   // Wait for the clock to be ready
-198   while(read_hardware_clock(0xA) & 0x80)
-199       asm volatile("nop");
-200 
-201   // Create a time object
-202   Time time{};
+198                            {
+199 
+200   // Wait for the clock to be ready
+201   while(read_hardware_clock(0xA) & 0x80)
+202       asm volatile("nop");
 203 
-204   // read the time from the hardware clock
-205   time\&.year = binary_representation(read_hardware_clock(0x9)) + 2000;
-206   time\&.month = binary_representation(read_hardware_clock(0x8));
-207   time\&.day = binary_representation(read_hardware_clock(0x7));
-208   time\&.hour = binary_representation(read_hardware_clock(0x4));
-209   time\&.minute = binary_representation(read_hardware_clock(0x2));
-210   time\&.second = binary_representation(read_hardware_clock(0x0));
-211 
-212   // If the clock is using 12hr format and PM is set then add 12 to the hour
-213   if(!m_24_hour_clock && (time\&.hour & 0x80) != 0)
-214     time\&.hour = ((time\&.hour & 0x7F) + 12) % 24;
-215 
-216 
-217   //Raise the clock event
-218   return time;
-219 }
+204   // Create a time object
+205   Time time{};
+206 
+207   // read the time from the hardware clock
+208   time\&.year = binary_representation(read_hardware_clock(0x9)) + 2000;
+209   time\&.month = binary_representation(read_hardware_clock(0x8));
+210   time\&.day = binary_representation(read_hardware_clock(0x7));
+211   time\&.hour = binary_representation(read_hardware_clock(0x4));
+212   time\&.minute = binary_representation(read_hardware_clock(0x2));
+213   time\&.second = binary_representation(read_hardware_clock(0x0));
+214 
+215   // If the clock is using 12hr format and PM is set then add 12 to the hour
+216   if(!m_24_hour_clock && (time\&.hour & 0x80) != 0)
+217     time\&.hour = ((time\&.hour & 0x7F) + 12) % 24;
+218 
+219 
+220   //Raise the clock event
+221   return time;
+222 }
 .fi
 .PP
 References binary_representation(), m_24_hour_clock, read_hardware_clock(), and MaxOS::common::Time::year\&.
 .PP
-Referenced by handle_interrupt(), and kernelMain()\&.
+Referenced by kernelMain()\&.
 .SS "\fBstring\fP Clock::get_vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -321,12 +324,12 @@ The name of the vendor
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 162 of file clock\&.cpp\&.
+Definition at line 165 of file clock\&.cpp\&.
 .PP
 .nf
-162                               {
-163     return "Generic";
-164 }
+165                               {
+166     return "Generic";
+167 }
 .fi
 .SS "void Clock::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
@@ -352,12 +355,12 @@ Definition at line 74 of file clock\&.cpp\&.
 85     m_ticks_until_next_event = m_ticks_between_events;
 86 
 87     // Raise the time event
-88     Time time = get_time();
-89     raise_event(new TimeEvent(&time));
+88 //    Time time = get_time();
+89 //    raise_event(new TimeEvent(&time));
 90 }
 .fi
 .PP
-References get_time(), m_ticks_between_events, m_ticks_until_next_event, and MaxOS::common::EventManager< ClockEvents >::raise_event()\&.
+References m_ticks_between_events, and m_ticks_until_next_event\&.
 .SS "uint8_t Clock::read_hardware_clock (uint8_t address)\fC [protected]\fP"
 
 .PP

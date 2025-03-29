@@ -163,7 +163,7 @@ Definition at line 454 of file tcp.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{455 \{}
 \DoxyCodeLine{456     \textcolor{comment}{//Create a new socket}}
-\DoxyCodeLine{457     \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
+\DoxyCodeLine{457     \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
 \DoxyCodeLine{458 }
 \DoxyCodeLine{459     \textcolor{comment}{//If there is space for the socket}}
 \DoxyCodeLine{460     \textcolor{keywordflow}{if}(socket != 0)}
@@ -536,7 +536,7 @@ Definition at line 516 of file tcp.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{517 \{}
 \DoxyCodeLine{518     \textcolor{comment}{//Create a new socket}}
-\DoxyCodeLine{519     \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
+\DoxyCodeLine{519     \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}* socket = (\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolSocket}{TransmissionControlProtocolSocket}}));}
 \DoxyCodeLine{520 }
 \DoxyCodeLine{521     \textcolor{comment}{//If there is space for the socket}}
 \DoxyCodeLine{522     \textcolor{keywordflow}{if}(socket != 0)}
@@ -595,7 +595,7 @@ Definition at line 389 of file tcp.\+cpp.
 \DoxyCodeLine{393     uint16\_t lengthInclPHdr = \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}});}
 \DoxyCodeLine{394 }
 \DoxyCodeLine{395     \textcolor{comment}{//Create a buffer for the packet}}
-\DoxyCodeLine{396     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/> malloc(lengthInclPHdr);}
+\DoxyCodeLine{396     uint8\_t* buffer = (uint8\_t*)MemoryManager::kmalloc(lengthInclPHdr);}
 \DoxyCodeLine{397     uint8\_t* buffer2 = buffer + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1TransmissionControlProtocolHeader}{TransmissionControlProtocolHeader}}) + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader}{TransmissionControlProtocolPseudoHeader}});}
 \DoxyCodeLine{398 }
 \DoxyCodeLine{399     \textcolor{comment}{//Create the headers}}
@@ -644,7 +644,7 @@ Definition at line 389 of file tcp.\+cpp.
 \DoxyCodeLine{442 }
 \DoxyCodeLine{443     \textcolor{comment}{//Send and then free the data}}
 \DoxyCodeLine{444     \mbox{\hyperlink{classMaxOS_1_1net_1_1InternetProtocolPayloadHandler_a547124e71c39318710ca97724adc447b}{Send}}(socket -\/> remoteIP, (uint8\_t*)msg, \mbox{\hyperlink{ipv4_8h_a46d6b08cf598408355fa1fc5c1de902a}{totalLength}});}
-\DoxyCodeLine{445     MemoryManager::s\_active\_memory\_manager-\/> free(buffer);}
+\DoxyCodeLine{445     MemoryManager::kfree(buffer);}
 \DoxyCodeLine{446 \}}
 
 \end{DoxyCode}

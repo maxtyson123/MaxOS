@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::ethernet::intel_i217" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::ethernet::intel_i217" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -146,28 +146,28 @@ activate the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 292 of file intel_i217\&.cpp\&.
+Definition at line 291 of file intel_i217\&.cpp\&.
 .PP
 .nf
-292                           {
-293 
-294   m_driver_message_stream-> write("Activating Intel i217\n");
-295 
-296     //Enable interrupts
-297     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
-298     Write(interruptMaskRegister ,0xff & ~4);                   //Enable all interrupts except link status change
-299     Read(0xc0);                                                     //Clear all interrupts
-300 
-301     //while (!initDone);                                           //Wait for the init to be done
-302 
-303     //Initialise the send and receive descriptors
-304     receiveInit();
-305     sendInit();
-306 
-307     active = true;                                               // Set active to true
-308     m_driver_message_stream-> write("Intel i217 INIT DONE\n");
-309 
-310 }
+291                           {
+292 
+293   m_driver_message_stream-> write("Activating Intel i217\n");
+294 
+295     //Enable interrupts
+296     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
+297     Write(interruptMaskRegister ,0xff & ~4);                   //Enable all interrupts except link status change
+298     Read(0xc0);                                                     //Clear all interrupts
+299 
+300     //while (!initDone);                                           //Wait for the init to be done
+301 
+302     //Initialise the send and receive descriptors
+303     receiveInit();
+304     sendInit();
+305 
+306     active = true;                                               // Set active to true
+307     m_driver_message_stream-> write("Intel i217 INIT DONE\n");
+308 
+309 }
 .fi
 .PP
 References MaxOS::drivers::Driver::m_driver_message_stream, write, and MaxOS::memory::Write\&.
@@ -178,12 +178,12 @@ deactivate the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 392 of file intel_i217\&.cpp\&.
+Definition at line 391 of file intel_i217\&.cpp\&.
 .PP
 .nf
-392                             {
-393     Driver::deactivate();
-394 }
+391                             {
+392     Driver::deactivate();
+393 }
 .fi
 .PP
 References MaxOS::drivers::Driver::deactivate()\&.
@@ -194,35 +194,35 @@ References MaxOS::drivers::Driver::deactivate()\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriver\fP\&.
 .PP
-Definition at line 354 of file intel_i217\&.cpp\&.
+Definition at line 353 of file intel_i217\&.cpp\&.
 .PP
 .nf
-354                                                       {
-355 
-356   m_driver_message_stream-> write("Sending package\&.\&.\&. ");
-357     while(!active);
-358 
-359     //Put params into send buffer
-360     sendDsrctrs[currentSendBuffer] -> bufferAddress = (uint64_t)buffer;
-361     sendDsrctrs[currentSendBuffer] -> length = size;
-362 
-363     //Set the commands
-364     sendDsrctrs[currentSendBuffer] -> cmd = (1 << 0)    // End of Packet
-365                                           | (1 << 1)    // Insert FCS
-366                                           | (1 << 3)    // Report Status
-367                                           ;
-368 
-369     sendDsrctrs[currentSendBuffer] -> status = 0;
-370 
-371     uint8_t old_cur = currentSendBuffer;                                    //Save the current send buffer
-372     currentSendBuffer = (currentSendBuffer + 1) % 8;                        //Increment the current send buffer
-373     Write(sendDescriptorTailRegister, currentSendBuffer);       //write the current send buffer to the tail register
-374 
-375     //Wait for the packet to be sent
-376     while(!(sendDsrctrs[old_cur]->status & 0xff));
-377     m_driver_message_stream-> write(" Done\n");
-378 
-379 }
+353                                                       {
+354 
+355   m_driver_message_stream-> write("Sending package\&.\&.\&. ");
+356     while(!active);
+357 
+358     //Put params into send buffer
+359     sendDsrctrs[currentSendBuffer] -> bufferAddress = (uint64_t)buffer;
+360     sendDsrctrs[currentSendBuffer] -> length = size;
+361 
+362     //Set the commands
+363     sendDsrctrs[currentSendBuffer] -> cmd = (1 << 0)    // End of Packet
+364                                           | (1 << 1)    // Insert FCS
+365                                           | (1 << 3)    // Report Status
+366                                           ;
+367 
+368     sendDsrctrs[currentSendBuffer] -> status = 0;
+369 
+370     uint8_t old_cur = currentSendBuffer;                                    //Save the current send buffer
+371     currentSendBuffer = (currentSendBuffer + 1) % 8;                        //Increment the current send buffer
+372     Write(sendDescriptorTailRegister, currentSendBuffer);       //write the current send buffer to the tail register
+373 
+374     //Wait for the packet to be sent
+375     while(!(sendDsrctrs[old_cur]->status & 0xff));
+376     m_driver_message_stream-> write(" Done\n");
+377 
+378 }
 .fi
 .PP
 References bufferAddress, cmd, length, MaxOS::drivers::Driver::m_driver_message_stream, size, status, write, and MaxOS::memory::Write\&.
@@ -240,12 +240,12 @@ The device name of the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 400 of file intel_i217\&.cpp\&.
+Definition at line 399 of file intel_i217\&.cpp\&.
 .PP
 .nf
-400                                    {
-401     return "E1000 (i217)";
-402 }
+399                                    {
+400     return "E1000 (i217)";
+401 }
 .fi
 .SS "\fBstring\fP intel_i217::get_vendor_name ()\fC [virtual]\fP"
 
@@ -261,12 +261,12 @@ The vendor name of the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 396 of file intel_i217\&.cpp\&.
+Definition at line 395 of file intel_i217\&.cpp\&.
 .PP
 .nf
-396                                    {
-397     return "Intel";
-398 }
+395                                    {
+396     return "Intel";
+397 }
 .fi
 .SS "uint64_t intel_i217::GetMediaAccessControlAddress ()\fC [virtual]\fP"
 
@@ -282,15 +282,15 @@ the MAC address
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriver\fP\&.
 .PP
-Definition at line 381 of file intel_i217\&.cpp\&.
+Definition at line 380 of file intel_i217\&.cpp\&.
 .PP
 .nf
-381                                                   {
-382   m_driver_message_stream-> write("Getting MAC address\&.\&.\&. ");
-383     while(ownMAC == 0);
-384     return ownMAC;
-385 
-386 }
+380                                                   {
+381   m_driver_message_stream-> write("Getting MAC address\&.\&.\&. ");
+382     while(ownMAC == 0);
+383     return ownMAC;
+384 
+385 }
 .fi
 .PP
 References MaxOS::drivers::Driver::m_driver_message_stream, and write\&.
@@ -299,22 +299,22 @@ References MaxOS::drivers::Driver::m_driver_message_stream, and write\&.
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .PP
-Definition at line 312 of file intel_i217\&.cpp\&.
+Definition at line 311 of file intel_i217\&.cpp\&.
 .PP
 .nf
-312                                   {
-313 
-314     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
-315     uint32_t temp = Read(0xc0);                //read the interrupt status register
-316 
-317     m_driver_message_stream-> write("Interrupt from INTEL i217");
-318 
-319     if(temp & 0x04)
-320       m_driver_message_stream-> write("INTEL i217 START LINK");//initDone = true;
-321     if(temp & 0x10)
-322       m_driver_message_stream-> write("INTEL i217 GOOD THRESHOLD");
-323     if(temp & 0x80) FetchDataReceived();
-324 }
+311                                   {
+312 
+313     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
+314     uint32_t temp = Read(0xc0);                //read the interrupt status register
+315 
+316     m_driver_message_stream-> write("Interrupt from INTEL i217");
+317 
+318     if(temp & 0x04)
+319       m_driver_message_stream-> write("INTEL i217 START LINK");//initDone = true;
+320     if(temp & 0x10)
+321       m_driver_message_stream-> write("INTEL i217 GOOD THRESHOLD");
+322     if(temp & 0x80) FetchDataReceived();
+323 }
 .fi
 .PP
 References MaxOS::drivers::Driver::m_driver_message_stream, write, and MaxOS::memory::Write\&.
@@ -332,12 +332,12 @@ How long in milliseconds it took to reset the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 388 of file intel_i217\&.cpp\&.
+Definition at line 387 of file intel_i217\&.cpp\&.
 .PP
 .nf
-388                            {
-389     return Driver::reset();
-390 }
+387                            {
+388     return Driver::reset();
+389 }
 .fi
 .PP
 References MaxOS::drivers::Driver::reset()\&.

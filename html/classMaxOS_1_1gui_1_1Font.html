@@ -291,7 +291,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="keyboard_8h_source.html#l00050">MaxOS::drivers::peripherals::x</a>, and <a class="el" href="keyboard_8h_source.html#l00051">MaxOS::drivers::peripherals::y</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="text_8cpp_source.html#l00034">MaxOS::gui::widgets::Text::draw()</a>, <a class="el" href="inputbox_8cpp_source.html#l00067">MaxOS::gui::widgets::InputBox::draw()</a>, <a class="el" href="button_8cpp_source.html#l00091">MaxOS::gui::widgets::Button::draw()</a>, and <a class="el" href="vesaboot_8cpp_source.html#l00057">MaxOS::drivers::console::VESABootConsole::put_character()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="text_8cpp_source.html#l00034">MaxOS::gui::widgets::Text::draw()</a>, <a class="el" href="inputbox_8cpp_source.html#l00067">MaxOS::gui::widgets::InputBox::draw()</a>, <a class="el" href="button_8cpp_source.html#l00091">MaxOS::gui::widgets::Button::draw()</a>, and <a class="el" href="vesaboot_8cpp_source.html#l00061">MaxOS::drivers::console::VESABootConsole::put_character()</a>.</p>
 
 </div>
 </div>
@@ -373,69 +373,75 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="font_8cpp_source.html#l00058">58</a> of file <a class="el" href="font_8cpp_source.html">font.cpp</a>.</p>
 <div class="fragment"><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;{</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// Convert the colours</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    uint32_t foreground = context-&gt;<a class="code" href="classMaxOS_1_1common_1_1GraphicsContext.html#ab6f5a6dbc23c0ff8329d97b293913810">colour_to_int</a>(foreground_colour);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    uint32_t background = context-&gt;<a class="code" href="classMaxOS_1_1common_1_1GraphicsContext.html#ab6f5a6dbc23c0ff8329d97b293913810">colour_to_int</a>(background_colour);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// Ensure the area is within the actual area of the text</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> &lt; 0) {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a> += limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> = 0;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> &lt; 0) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a> += limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> = 0;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    }</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="comment">// Clamp the height and width max</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a> &gt; (<span class="keywordtype">int</span>)<a class="code" href="classMaxOS_1_1gui_1_1Font.html#a59d0e8f5b746ebe7870255bd40c9bd72">get_text_height</a>(text))</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a> = <a class="code" href="classMaxOS_1_1gui_1_1Font.html#a59d0e8f5b746ebe7870255bd40c9bd72">get_text_height</a>(text) - limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a> &gt; (<span class="keywordtype">int</span>)<a class="code" href="classMaxOS_1_1gui_1_1Font.html#aa3b8e198d89c1fc4434cc5d5c0284e40">get_text_width</a>(text))</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a> = <a class="code" href="classMaxOS_1_1gui_1_1Font.html#aa3b8e198d89c1fc4434cc5d5c0284e40">get_text_width</a>(text) - limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">// Calculate limits</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    int32_t xLimit = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    int32_t yLimit = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// Draw the text from top to bottom</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> yBitMapOffset = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a>; yBitMapOffset &lt;yLimit; yBitMapOffset++){</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> xBitMapOffset = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>; xBitMapOffset &lt; xLimit; ++xBitMapOffset) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="comment">// If the y is the middle then add a strikethrough</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1gui_1_1Font.html#a6f4e91cf21d739a2f3cbee42a011b649">is_strikethrough</a> &amp;&amp; yBitMapOffset == yLimit / 2) {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <span class="comment">// Draw the pixel</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, foreground);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <span class="comment">// If the y is the bottom then add an underline</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1gui_1_1Font.html#a1444dd90c5b6de56e176e758f3a2d704">is_underlined</a> &amp;&amp; yBitMapOffset == yLimit - 1) {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <span class="comment">// Draw the pixel</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, foreground);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// Convert the colours</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    uint32_t foreground = context-&gt;<a class="code" href="classMaxOS_1_1common_1_1GraphicsContext.html#ab6f5a6dbc23c0ff8329d97b293913810">colour_to_int</a>(foreground_colour);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    uint32_t background = context-&gt;<a class="code" href="classMaxOS_1_1common_1_1GraphicsContext.html#ab6f5a6dbc23c0ff8329d97b293913810">colour_to_int</a>(background_colour);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Ensure the area is within the actual area of the text</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> &lt; 0) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a> += limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> = 0;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> &lt; 0) {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a> += limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> = 0;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">// Clamp the height and width max</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a> &gt; (<span class="keywordtype">int</span>)<a class="code" href="classMaxOS_1_1gui_1_1Font.html#a59d0e8f5b746ebe7870255bd40c9bd72">get_text_height</a>(text))</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a> = <a class="code" href="classMaxOS_1_1gui_1_1Font.html#a59d0e8f5b746ebe7870255bd40c9bd72">get_text_height</a>(text) - limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">if</span> (limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a> &gt; (<span class="keywordtype">int</span>)<a class="code" href="classMaxOS_1_1gui_1_1Font.html#aa3b8e198d89c1fc4434cc5d5c0284e40">get_text_width</a>(text))</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a> = <a class="code" href="classMaxOS_1_1gui_1_1Font.html#aa3b8e198d89c1fc4434cc5d5c0284e40">get_text_width</a>(text) - limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="comment">// Calculate limits</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    int32_t xLimit = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">width</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    int32_t yLimit = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a> + limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">height</a>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="comment">// Draw the text from top to bottom</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> yBitMapOffset = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">top</a>; yBitMapOffset &lt;yLimit; yBitMapOffset++){</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> xBitMapOffset = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>; xBitMapOffset &lt; xLimit; ++xBitMapOffset) {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="comment">// If the y is the middle then add a strikethrough</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1gui_1_1Font.html#a6f4e91cf21d739a2f3cbee42a011b649">is_strikethrough</a> &amp;&amp; yBitMapOffset == yLimit / 2) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <span class="comment">// Draw the pixel</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, foreground);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="comment">// If the y is the bottom then add an underline</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classMaxOS_1_1gui_1_1Font.html#a1444dd90c5b6de56e176e758f3a2d704">is_underlined</a> &amp;&amp; yBitMapOffset == yLimit - 1) {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="comment">// Draw the pixel</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, foreground);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="comment">//TODO: Bold, Italic when other fonts are working</span></div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="comment">//TODO: Bold, Italic when other fonts are working</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="comment">// Get the character</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            uint8_t character = text[xBitMapOffset/8];</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;           <span class="comment">// Check if this pixel  is set or not</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;           <span class="keywordtype">bool</span> set = <a class="code" href="classMaxOS_1_1gui_1_1Font.html#a779ce8a1a3d0a139cb22ae1ec6b45417">m_font8x8</a>[(uint16_t)character * 8 + yBitMapOffset] &amp; (128 &gt;&gt; (xBitMapOffset % 8));</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;           <span class="comment">// Draw the pixel</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;           context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, set ? foreground : background);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;}</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="comment">// Get the character</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            uint8_t character = text[xBitMapOffset/8];</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;           <span class="comment">// Check if this pixel  is set or not</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;           <span class="keywordtype">bool</span> set = <a class="code" href="classMaxOS_1_1gui_1_1Font.html#a779ce8a1a3d0a139cb22ae1ec6b45417">m_font8x8</a>[(uint16_t)character * 8 + yBitMapOffset] &amp; (128 &gt;&gt; (xBitMapOffset % 8));</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;           <span class="comment">// Draw the pixel</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;           context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, set ? foreground : background);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    }</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="comment">// Draw the bottom 2  &quot;spacing lines&quot;</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> yBitMapOffset = yLimit; yBitMapOffset &lt; yLimit + 2; yBitMapOffset++) {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> xBitMapOffset = limitArea.<a class="code" href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">left</a>; xBitMapOffset &lt; xLimit; ++xBitMapOffset) {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            context -&gt; putPixel(<a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">x</a> + xBitMapOffset, <a class="code" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">y</a> + yBitMapOffset, background);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        }</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    }</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;}</div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="graphicsContext_8cpp_source.html#l00242">MaxOS::common::GraphicsContext::colour_to_int()</a>, <a class="el" href="rectangle_8h_source.html#l00025">MaxOS::common::Rectangle&lt; Type &gt;::height</a>, <a class="el" href="rectangle_8h_source.html#l00022">MaxOS::common::Rectangle&lt; Type &gt;::left</a>, <a class="el" href="rectangle_8h_source.html#l00023">MaxOS::common::Rectangle&lt; Type &gt;::top</a>, <a class="el" href="rectangle_8h_source.html#l00024">MaxOS::common::Rectangle&lt; Type &gt;::width</a>, <a class="el" href="keyboard_8h_source.html#l00050">MaxOS::drivers::peripherals::x</a>, and <a class="el" href="keyboard_8h_source.html#l00051">MaxOS::drivers::peripherals::y</a>.</p>
 
@@ -474,12 +480,12 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The height of the text </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="font_8cpp_source.html#l00133">133</a> of file <a class="el" href="font_8cpp_source.html">font.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                                     {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordflow">return</span> 8;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="font_8cpp_source.html#l00139">139</a> of file <a class="el" href="font_8cpp_source.html">font.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                                     {</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordflow">return</span> 8;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -516,12 +522,12 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The width of the text </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="font_8cpp_source.html#l00145">145</a> of file <a class="el" href="font_8cpp_source.html">font.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                         {</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordflow">return</span> text.<a class="code" href="classMaxOS_1_1String.html#acf733b9f4647d948a153dda31d5995a0">length</a>()*8;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="font_8cpp_source.html#l00151">151</a> of file <a class="el" href="font_8cpp_source.html">font.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                                         {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordflow">return</span> text.<a class="code" href="classMaxOS_1_1String.html#acf733b9f4647d948a153dda31d5995a0">length</a>()*8;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00166">MaxOS::String::length()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00174">MaxOS::String::length()</a>.</p>
 
 </div>
 </div>
@@ -661,20 +667,20 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html_a02aa1de4cd8eef57646079bbedaf9c64"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html#a02aa1de4cd8eef57646079bbedaf9c64">MaxOS::common::Rectangle::height</a></div><div class="ttdeci">Type height</div><div class="ttdef"><b>Definition:</b> <a href="rectangle_8h_source.html#l00025">rectangle.h:25</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1String_html_acf733b9f4647d948a153dda31d5995a0"><div class="ttname"><a href="classMaxOS_1_1String.html#acf733b9f4647d948a153dda31d5995a0">MaxOS::String::length</a></div><div class="ttdeci">int length(bool count_ansi=false) const</div><div class="ttdoc">Returns the length of the string.</div><div class="ttdef"><b>Definition:</b> <a href="string_8cpp_source.html#l00166">string.cpp:166</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1String_html_acf733b9f4647d948a153dda31d5995a0"><div class="ttname"><a href="classMaxOS_1_1String.html#acf733b9f4647d948a153dda31d5995a0">MaxOS::String::length</a></div><div class="ttdeci">int length(bool count_ansi=false) const</div><div class="ttdoc">Returns the length of the string.</div><div class="ttdef"><b>Definition:</b> <a href="string_8cpp_source.html#l00174">string.cpp:174</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca">MaxOS::drivers::peripherals::y</a></div><div class="ttdeci">@ y</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00051">keyboard.h:51</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff">MaxOS::drivers::peripherals::i</a></div><div class="ttdeci">@ i</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00035">keyboard.h:35</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_aa80fe1e9d019a378fdf59f901fc1d886"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#aa80fe1e9d019a378fdf59f901fc1d886">MaxOS::gui::Font::draw_text</a></div><div class="ttdeci">virtual void draw_text(int32_t x, int32_t y, common::Colour foreground_colour, common::Colour background_colour, common::GraphicsContext *context, string text)</div><div class="ttdoc">write the entire text to the screen</div><div class="ttdef"><b>Definition:</b> <a href="font_8cpp_source.html#l00031">font.cpp:31</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::common::Rectangle&lt; int32_t &gt;</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html_a2c109f69f412add34e8e538bfe7fe597"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html#a2c109f69f412add34e8e538bfe7fe597">MaxOS::common::Rectangle::top</a></div><div class="ttdeci">Type top</div><div class="ttdef"><b>Definition:</b> <a href="rectangle_8h_source.html#l00023">rectangle.h:23</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_a59d0e8f5b746ebe7870255bd40c9bd72"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#a59d0e8f5b746ebe7870255bd40c9bd72">MaxOS::gui::Font::get_text_height</a></div><div class="ttdeci">virtual uint32_t get_text_height(string)</div><div class="ttdoc">Get the height of the text.</div><div class="ttdef"><b>Definition:</b> <a href="font_8cpp_source.html#l00133">font.cpp:133</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_a59d0e8f5b746ebe7870255bd40c9bd72"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#a59d0e8f5b746ebe7870255bd40c9bd72">MaxOS::gui::Font::get_text_height</a></div><div class="ttdeci">virtual uint32_t get_text_height(string)</div><div class="ttdoc">Get the height of the text.</div><div class="ttdef"><b>Definition:</b> <a href="font_8cpp_source.html#l00139">font.cpp:139</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html_ab67ba6ac0175a62fbda64d780acf3e82"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html#ab67ba6ac0175a62fbda64d780acf3e82">MaxOS::common::Rectangle::left</a></div><div class="ttdeci">Type left</div><div class="ttdef"><b>Definition:</b> <a href="rectangle_8h_source.html#l00022">rectangle.h:22</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_a6f4e91cf21d739a2f3cbee42a011b649"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#a6f4e91cf21d739a2f3cbee42a011b649">MaxOS::gui::Font::is_strikethrough</a></div><div class="ttdeci">bool is_strikethrough</div><div class="ttdef"><b>Definition:</b> <a href="font_8h_source.html#l00037">font.h:37</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_a779ce8a1a3d0a139cb22ae1ec6b45417"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#a779ce8a1a3d0a139cb22ae1ec6b45417">MaxOS::gui::Font::m_font8x8</a></div><div class="ttdeci">uint8_t m_font8x8[2048]</div><div class="ttdef"><b>Definition:</b> <a href="font_8h_source.html#l00024">font.h:24</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_a1444dd90c5b6de56e176e758f3a2d704"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#a1444dd90c5b6de56e176e758f3a2d704">MaxOS::gui::Font::is_underlined</a></div><div class="ttdeci">bool is_underlined</div><div class="ttdef"><b>Definition:</b> <a href="font_8h_source.html#l00036">font.h:36</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1common_1_1GraphicsContext_html_ab6f5a6dbc23c0ff8329d97b293913810"><div class="ttname"><a href="classMaxOS_1_1common_1_1GraphicsContext.html#ab6f5a6dbc23c0ff8329d97b293913810">MaxOS::common::GraphicsContext::colour_to_int</a></div><div class="ttdeci">uint32_t colour_to_int(Colour)</div><div class="ttdoc">Converts a colour to an integer value based on the current color depth.</div><div class="ttdef"><b>Definition:</b> <a href="graphicsContext_8cpp_source.html#l00242">graphicsContext.cpp:242</a></div></div>
 <div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274">MaxOS::drivers::peripherals::x</a></div><div class="ttdeci">@ x</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00050">keyboard.h:50</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_aa3b8e198d89c1fc4434cc5d5c0284e40"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#aa3b8e198d89c1fc4434cc5d5c0284e40">MaxOS::gui::Font::get_text_width</a></div><div class="ttdeci">virtual uint32_t get_text_width(string)</div><div class="ttdoc">Get the width of the text.</div><div class="ttdef"><b>Definition:</b> <a href="font_8cpp_source.html#l00145">font.cpp:145</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1gui_1_1Font_html_aa3b8e198d89c1fc4434cc5d5c0284e40"><div class="ttname"><a href="classMaxOS_1_1gui_1_1Font.html#aa3b8e198d89c1fc4434cc5d5c0284e40">MaxOS::gui::Font::get_text_width</a></div><div class="ttdeci">virtual uint32_t get_text_width(string)</div><div class="ttdoc">Get the width of the text.</div><div class="ttdef"><b>Definition:</b> <a href="font_8cpp_source.html#l00151">font.cpp:151</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html_adcfd80cceb499bfb2b52a103c2b76950"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950">MaxOS::common::Rectangle::width</a></div><div class="ttdeci">Type width</div><div class="ttdef"><b>Definition:</b> <a href="rectangle_8h_source.html#l00024">rectangle.h:24</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

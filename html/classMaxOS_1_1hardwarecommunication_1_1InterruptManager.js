@@ -10,6 +10,5 @@ var classMaxOS_1_1hardwarecommunication_1_1InterruptManager =
     [ "set_apic", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#ae842d2256e3f2b67190bdce26db3cbd8", null ],
     [ "set_interrupt_handler", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#abbcbff53fabcefe8b5f77e1750b69813", null ],
     [ "InterruptHandler", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a9aef4ea3434f8ddeaf9c32a63e6faf05", null ],
-    [ "m_interrupt_handlers", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#ac2ca2eee404d5f5171bb4d216b650cc1", null ],
-    [ "m_thread_manager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#ac5412eb3decc01b9cf9c4fb763ddae42", null ]
+    [ "m_interrupt_handlers", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#ac2ca2eee404d5f5171bb4d216b650cc1", null ]
 ];

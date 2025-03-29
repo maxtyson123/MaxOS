@@ -1,4 +1,4 @@
-.TH "MaxOS::common::GraphicsContext" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::GraphicsContext" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -36,6 +36,12 @@ Inherited by \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .RI "uint32_t \fBget_height\fP ()"
 .br
 .RI "Gets the height of the screen\&. "
+.ti -1c
+.RI "uint32_t \fBget_color_depth\fP ()"
+.br
+.ti -1c
+.RI "uint64_t * \fBget_framebuffer_address\fP ()"
+.br
 .ti -1c
 .RI "void \fBput_pixel\fP (int32_t x, int32_t y, \fBColour\fP colour)"
 .br
@@ -154,6 +160,9 @@ Inherited by \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .br
 .ti -1c
 .RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
+.br
+.ti -1c
+.RI "uint64_t * \fBm_framebuffer_address\fP { nullptr }"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -339,7 +348,7 @@ Definition at line 242 of file graphicsContext\&.cpp\&.
 .PP
 References MaxOS::common::Colour::alpha, MaxOS::common::Colour::blue, MaxOS::drivers::peripherals::c, MaxOS::common::Colour::green, MaxOS::drivers::peripherals::i, m_color_depth, m_colour_pallet, and MaxOS::common::Colour::red\&.
 .PP
-Referenced by draw_circle(), draw_line(), draw_rectangle(), MaxOS::gui::Font::draw_text(), fill_circle(), fill_rectangle(), get_rendered_pixel(), and put_pixel()\&.
+Referenced by draw_circle(), draw_line(), draw_rectangle(), MaxOS::gui::Font::draw_text(), fill_circle(), fill_rectangle(), get_rendered_pixel(), put_pixel(), and MaxOS::drivers::console::VESABootConsole::scroll_up()\&.
 .SS "void GraphicsContext::draw_circle (int32_t x0, int32_t y0, int32_t radius, \fBColour\fP colour)"
 
 .PP
@@ -358,12 +367,12 @@ Draws a circle on the screen\&.
 .PP
 
 .PP
-Definition at line 665 of file graphicsContext\&.cpp\&.
+Definition at line 673 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-665                                                                                       {
-666   draw_circle(x0, y0, radius, colour_to_int(colour));
-667 }
+673                                                                                       {
+674   draw_circle(x0, y0, radius, colour_to_int(colour));
+675 }
 .fi
 .PP
 References colour_to_int()\&.
@@ -385,36 +394,36 @@ Draws a circle on the screen\&.
 .PP
 
 .PP
-Definition at line 677 of file graphicsContext\&.cpp\&.
+Definition at line 685 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-677                                                                                          {
-678 
-679     // Make sure the circle is with in the width and height of the screen
-680     if(x0 < 0) x0 = 0;
-681     if((uint32_t)x0 > m_width) x0 = m_width;
-682     if(y0 < 0) y0 = 0;
-683     if((uint32_t)y0 > m_height) y0 = m_height;
-684 
-685     // Mirror the Y axis as directly calling put_pixel will not do this
-686     if(mirror_y_axis)
-687         y0 = m_height -y0-1;
-688 
-689 
-690     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
-691     for(int32_t x = -radius; x <= radius; ++x){
+685                                                                                          {
+686 
+687     // Make sure the circle is with in the width and height of the screen
+688     if(x0 < 0) x0 = 0;
+689     if((uint32_t)x0 > m_width) x0 = m_width;
+690     if(y0 < 0) y0 = 0;
+691     if((uint32_t)y0 > m_height) y0 = m_height;
 692 
-693         // Draw a line from the top most point of the circle to the bottom most point of the circle
-694         for(int32_t y = -radius; y <= radius; ++y){
-695 
-696             // If the point is within the circle, draw it but make sure it is only part of the outline
-697             if(x*x + y*y <= radius*radius && x*x + y*y >= (radius-1)*(radius-1))
-698                 putPixel(x0+x,y0+y,colour);
-699         }
-700     }
-701 
-702 
-703 }
+693     // Mirror the Y axis as directly calling put_pixel will not do this
+694     if(mirror_y_axis)
+695         y0 = m_height -y0-1;
+696 
+697 
+698     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+699     for(int32_t x = -radius; x <= radius; ++x){
+700 
+701         // Draw a line from the top most point of the circle to the bottom most point of the circle
+702         for(int32_t y = -radius; y <= radius; ++y){
+703 
+704             // If the point is within the circle, draw it but make sure it is only part of the outline
+705             if(x*x + y*y <= radius*radius && x*x + y*y >= (radius-1)*(radius-1))
+706                 putPixel(x0+x,y0+y,colour);
+707         }
+708     }
+709 
+710 
+711 }
 .fi
 .PP
 References m_height, m_width, mirror_y_axis, putPixel(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -438,12 +447,12 @@ Draws a line on the screen\&.
 .PP
 
 .PP
-Definition at line 459 of file graphicsContext\&.cpp\&.
+Definition at line 467 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-459                                                                                              {
-460     drawLine(x0,y0,x1,y1, colour_to_int(colour));
-461 }
+467                                                                                              {
+468     drawLine(x0,y0,x1,y1, colour_to_int(colour));
+469 }
 .fi
 .PP
 References colour_to_int(), and drawLine()\&.
@@ -469,13 +478,13 @@ Draws a rectangle on the screen\&.
 .PP
 
 .PP
-Definition at line 569 of file graphicsContext\&.cpp\&.
+Definition at line 577 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-569                                                                                                   {
-570   draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
-571 
-572 }
+577                                                                                                   {
+578   draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
+579 
+580 }
 .fi
 .PP
 References colour_to_int()\&.
@@ -499,22 +508,22 @@ Draws a rectangle on the screen\&.
 .PP
 
 .PP
-Definition at line 583 of file graphicsContext\&.cpp\&.
+Definition at line 591 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-583                                                                                                     {
-584 
-585     // Ensure x and y 0 is smaller than x and y 1
-586     --y0;
-587     --x0;
-588 
-589     // Draw the rectangle
-590     drawLine(x0,y0,x1,y0,colour); // Top
-591     drawLine(x0,y1,x1,y1,colour); // Bottom
-592     drawLine(x0,y0,x0,y1,colour); // Left
-593     drawLine(x1,y0,x1,y1,colour); // Right
-594 
-595 }
+591                                                                                                     {
+592 
+593     // Ensure x and y 0 is smaller than x and y 1
+594     --y0;
+595     --x0;
+596 
+597     // Draw the rectangle
+598     drawLine(x0,y0,x1,y0,colour); // Top
+599     drawLine(x0,y1,x1,y1,colour); // Bottom
+600     drawLine(x0,y0,x0,y1,colour); // Left
+601     drawLine(x1,y0,x1,y1,colour); // Right
+602 
+603 }
 .fi
 .PP
 References drawLine()\&.
@@ -538,96 +547,96 @@ Draws a line on the screen\&.
 .PP
 
 .PP
-Definition at line 472 of file graphicsContext\&.cpp\&.
+Definition at line 480 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-472                                                                                               {
-473 
-474     // Store the minimum and maximum y values
-475     bool y_0_is_smaller = y0 < y1;
-476     int32_t y_min = y_0_is_smaller ? y0 : y1;
-477     int32_t y_max = y_0_is_smaller ? y1 : y0;
-478 
-479     //Reverse the points to draw from left to right
-480     if(x1 < x0){
-481         drawLine(x1,y1,x0,y0,colour);
-482         return;
-483     }
-484 
-485     // Vertical line
-486     if(x1 == x0)
-487     {
-488         // Force the line to be within the screen
-489         if(y_min < 0) y_min = 0;
-490         if((uint32_t)y_max >= m_height)
-491           y_max = m_height - 1;
+480                                                                                               {
+481 
+482     // Store the minimum and maximum y values
+483     bool y_0_is_smaller = y0 < y1;
+484     int32_t y_min = y_0_is_smaller ? y0 : y1;
+485     int32_t y_max = y_0_is_smaller ? y1 : y0;
+486 
+487     //Reverse the points to draw from left to right
+488     if(x1 < x0){
+489         drawLine(x1,y1,x0,y0,colour);
+490         return;
+491     }
 492 
-493         // Mirror the Y axis as directly calling put_pixel will not do this
-494         if(mirror_y_axis)
-495         {
-496             int32_t temp = y_max;
-497             y_max = m_height - y_min - 1;
-498             y_min = m_height - temp - 1;
-499         }
+493     // Vertical line
+494     if(x1 == x0)
+495     {
+496         // Force the line to be within the screen
+497         if(y_min < 0) y_min = 0;
+498         if((uint32_t)y_max >= m_height)
+499           y_max = m_height - 1;
 500 
-501         // Check that the line is within the screen
-502         if (0 > x0 || (uint32_t) x0 >= m_width) {
-503             return;
-504         }
-505 
-506         // Draw the line
-507         for(int32_t y = y_min; y <= y_max; ++y)
-508             putPixel(x0, y, colour);
-509 
-510         return;
-511     }
-512 
-513     // Horizontal line
-514     if(y1 == y0)
-515     {
-516         // Ensure the line is within the screen
-517         if(x0 < 0) x0 = 0;
-518         if((uint32_t)x1 >= m_width) x1 = m_width -1;
-519 
-520         // Mirror the Y axis as directly calling put_pixel will not do this
-521         if(mirror_y_axis)
-522             y0 = m_height -y0-1;
-523 
-524         // Check that the line is within the screen
-525         if (0 > y0 || (uint32_t) y0 >= m_height)
-526             return;
+501         // Mirror the Y axis as directly calling put_pixel will not do this
+502         if(mirror_y_axis)
+503         {
+504             int32_t temp = y_max;
+505             y_max = m_height - y_min - 1;
+506             y_min = m_height - temp - 1;
+507         }
+508 
+509         // Check that the line is within the screen
+510         if (0 > x0 || (uint32_t) x0 >= m_width) {
+511             return;
+512         }
+513 
+514         // Draw the line
+515         for(int32_t y = y_min; y <= y_max; ++y)
+516             putPixel(x0, y, colour);
+517 
+518         return;
+519     }
+520 
+521     // Horizontal line
+522     if(y1 == y0)
+523     {
+524         // Ensure the line is within the screen
+525         if(x0 < 0) x0 = 0;
+526         if((uint32_t)x1 >= m_width) x1 = m_width -1;
 527 
-528         // Draw the line
-529         for(int32_t x = x0; x <= x1; ++x)
-530             putPixel(x,y0,colour);
-531     }
-532 
-533     // TODO: Slope once SSE is implemented
-534     return;
+528         // Mirror the Y axis as directly calling put_pixel will not do this
+529         if(mirror_y_axis)
+530             y0 = m_height -y0-1;
+531 
+532         // Check that the line is within the screen
+533         if (0 > y0 || (uint32_t) y0 >= m_height)
+534             return;
 535 
-536     // If the line is not horizontal or vertical then it must be a diagonal line
-537     // Find the slope of the line
-538     float slope = ((float)(y1-y0))/(x1-x0);
-539 
-540     // A slope that is more horizontal should be drawn by incrementing x
-541     if(-1 <= slope && slope <= 1)
-542     {
-543         float y = y0;
-544         for(int32_t x = x0; x <= x1; x++, y+=slope)
-545             putPixel(x, (int32_t)y, colour);
-546     }
+536         // Draw the line
+537         for(int32_t x = x0; x <= x1; ++x)
+538             putPixel(x,y0,colour);
+539     }
+540 
+541     // TODO: Slope once SSE is implemented
+542     return;
+543 
+544     // If the line is not horizontal or vertical then it must be a diagonal line
+545     // Find the slope of the line
+546     float slope = ((float)(y1-y0))/(x1-x0);
 547 
-548     // A slope that is more vertical should be drawn by incrementing y
-549     else
+548     // A slope that is more horizontal should be drawn by incrementing x
+549     if(-1 <= slope && slope <= 1)
 550     {
-551         // Invert the slope
-552         slope = 1\&.0f/slope;
-553 
-554         float x = x0;
-555         for(int32_t y = y_min; y <= y_max; x+=slope, y++)
-556             putPixel((int32_t)x, y, colour);
-557     }
-558 }
+551         float y = y0;
+552         for(int32_t x = x0; x <= x1; x++, y+=slope)
+553             putPixel(x, (int32_t)y, colour);
+554     }
+555 
+556     // A slope that is more vertical should be drawn by incrementing y
+557     else
+558     {
+559         // Invert the slope
+560         slope = 1\&.0f/slope;
+561 
+562         float x = x0;
+563         for(int32_t y = y_min; y <= y_max; x+=slope, y++)
+564             putPixel((int32_t)x, y, colour);
+565     }
+566 }
 .fi
 .PP
 References m_height, m_width, mirror_y_axis, putPixel(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -651,13 +660,13 @@ Draws a circle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line 713 of file graphicsContext\&.cpp\&.
+Definition at line 721 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-713                                                                                        {
-714     fillCircle(x0,y0,radius, colour_to_int(colour));
-715 
-716 }
+721                                                                                        {
+722     fillCircle(x0,y0,radius, colour_to_int(colour));
+723 
+724 }
 .fi
 .PP
 References colour_to_int(), and fillCircle()\&.
@@ -681,12 +690,12 @@ Draws a rectangle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line 606 of file graphicsContext\&.cpp\&.
+Definition at line 614 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-606                                                                                                   {
-607   fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
-608 }
+614                                                                                                   {
+615   fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
+616 }
 .fi
 .PP
 References colour_to_int()\&.
@@ -712,46 +721,46 @@ Draws a rectangle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line 619 of file graphicsContext\&.cpp\&.
+Definition at line 627 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-619                                                                                                     {
-620 
-621     // Draw from left to right
-622     if(y1 < y0){
-623       fill_rectangle(x1, y1, x0, y0, colour);
-624         return;
-625     }
-626 
-627     // Make sure the rectangle is within the height of the screen
-628     if(y0 < 0) y0 = 0;
-629     if((uint32_t)y1 > m_height) y1 = m_height;
-630 
-631     // Make sure the rectangle is within the width of the screen
-632     bool x_0_is_smaller = x0 < x1;
-633     int32_t x_min = x_0_is_smaller ? x0 : x1;
-634     int32_t x_max = x_0_is_smaller ? x1 : x0;
-635 
-636     if(x_min < 0) x_min = 0;
-637     if((uint32_t)x_max > m_width)
-638       x_max = m_width;
-639 
-640     // Mirror the Y axis as directly calling put_pixel will not do this
-641     if(mirror_y_axis)
-642     {
-643         uint32_t temp = y1;
-644         y1 = m_height - y0 - 1;
-645         y0 = m_height - temp - 1;
-646     }
+627                                                                                                     {
+628 
+629     // Draw from left to right
+630     if(y1 < y0){
+631         fill_rectangle(x1, y1, x0, y0, colour);
+632         return;
+633     }
+634 
+635     // Make sure the rectangle is within the height of the screen
+636     if(y0 < 0) y0 = 0;
+637     if((uint32_t)y1 > m_height) y1 = m_height;
+638 
+639     // Make sure the rectangle is within the width of the screen
+640     bool x_0_is_smaller = x0 < x1;
+641     int32_t x_min = x_0_is_smaller ? x0 : x1;
+642     int32_t x_max = x_0_is_smaller ? x1 : x0;
+643 
+644     if(x_min < 0) x_min = 0;
+645     if((uint32_t)x_max > m_width)
+646       x_max = m_width;
 647 
-648     // Draw the rectangle
-649     for(int32_t y = y0; y < y1; ++y){
-650         for (int32_t x = x_min; x < x_max; ++x) {
-651             putPixel(x, y, colour);
-652         }
-653     }
-654 
-655 }
+648     // Mirror the Y axis as directly calling put_pixel will not do this
+649     if(mirror_y_axis)
+650     {
+651         uint32_t temp = y1;
+652         y1 = m_height - y0 - 1;
+653         y0 = m_height - temp - 1;
+654     }
+655 
+656     // Draw the rectangle
+657     for(int32_t y = y0; y < y1; ++y){
+658         for (int32_t x = x_min; x < x_max; ++x) {
+659             putPixel(x, y, colour);
+660         }
+661     }
+662 
+663 }
 .fi
 .PP
 References fill_rectangle(), m_height, m_width, mirror_y_axis, putPixel(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -773,40 +782,75 @@ Draws a circle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line 726 of file graphicsContext\&.cpp\&.
+Definition at line 734 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-726                                                                                         {
-727 
-728         // Make sure the circle is with in the width and height of the screen
-729         if(x0 < 0) x0 = 0;
-730         if((uint32_t)x0 > m_width) x0 = m_width;
-731         if(y0 < 0) y0 = 0;
-732         if((uint32_t)y0 > m_height) y0 = m_height;
-733 
-734         // Mirror the Y axis as directly calling put_pixel will not do this
-735         if(mirror_y_axis)
-736             y0 = m_height -y0-1;
-737 
-738         // Draw the circle
-739 
-740         // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
-741         for(int32_t x = -radius; x <= radius; ++x){
-742 
-743             // Draw a line from the top most point of the circle to the bottom most point of the circle
-744             for(int32_t y = -radius; y <= radius; ++y){
+734                                                                                         {
+735 
+736         // Make sure the circle is with in the width and height of the screen
+737         if(x0 < 0) x0 = 0;
+738         if((uint32_t)x0 > m_width) x0 = m_width;
+739         if(y0 < 0) y0 = 0;
+740         if((uint32_t)y0 > m_height) y0 = m_height;
+741 
+742         // Mirror the Y axis as directly calling put_pixel will not do this
+743         if(mirror_y_axis)
+744             y0 = m_height -y0-1;
 745 
-746                 // Only draw the pixel if it is within the circle
-747                 if(x*x + y*y <= radius*radius)
-748                     putPixel(x0+x,y0+y,colour);
-749             }
-750         }
-751 }
+746         // Draw the circle
+747 
+748         // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+749         for(int32_t x = -radius; x <= radius; ++x){
+750 
+751             // Draw a line from the top most point of the circle to the bottom most point of the circle
+752             for(int32_t y = -radius; y <= radius; ++y){
+753 
+754                 // Only draw the pixel if it is within the circle
+755                 if(x*x + y*y <= radius*radius)
+756                     putPixel(x0+x,y0+y,colour);
+757             }
+758         }
+759 }
 .fi
 .PP
 References m_height, m_width, mirror_y_axis, putPixel(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
 .PP
 Referenced by fill_circle()\&.
+.SS "uint32_t GraphicsContext::get_color_depth ()"
+@breif Gets the current color depth (bits per pixel) 
+.PP
+\fBReturns\fP
+.RS 4
+The color depth 
+.RE
+.PP
+
+.PP
+Definition at line 372 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+372                                           {
+373   return m_color_depth;
+374 }
+.fi
+.PP
+References m_color_depth\&.
+.PP
+Referenced by MaxOS::drivers::console::VESABootConsole::scroll_up()\&.
+.SS "uint64_t * GraphicsContext::get_framebuffer_address ()"
+
+.PP
+Definition at line 760 of file graphicsContext\&.cpp\&.
+.PP
+.nf
+760                                                    {
+761     return m_framebuffer_address;
+762 }
+.fi
+.PP
+References m_framebuffer_address\&.
+.PP
+Referenced by MaxOS::drivers::console::VESABootConsole::scroll_up()\&.
 .SS "uint32_t GraphicsContext::get_height ()"
 
 .PP
@@ -829,7 +873,7 @@ Definition at line 364 of file graphicsContext\&.cpp\&.
 .PP
 References m_height\&.
 .PP
-Referenced by MaxOS::gui::Desktop::Desktop(), and MaxOS::drivers::console::VESABootConsole::height()\&.
+Referenced by MaxOS::gui::Desktop::Desktop(), MaxOS::drivers::console::VESABootConsole::height(), and MaxOS::drivers::console::VESABootConsole::scroll_up()\&.
 .SS "\fBColour\fP GraphicsContext::get_pixel (int32_t x, int32_t y)"
 
 .PP
@@ -849,27 +893,27 @@ The colour of the pixel or black if the pixel is outside the screen
 .PP
 
 .PP
-Definition at line 411 of file graphicsContext\&.cpp\&.
+Definition at line 419 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-411                                                       {
-412 
-413     // Check if the pixel is within the m_width of the screen
-414     if (0 > x || (uint32_t)x >= m_width) {
-415         return Colour(0,0,0);
-416     }
-417 
-418     // Check if the pixel is within the m_height of the screen
-419     if (0 > y || (uint32_t) y >= m_height) {
-420         return Colour(0,0,0);
-421     }
-422 
-423     // Get the pixel and convert it to a colour
-424     uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height - y - 1 : y);
-425     return int_to_colour(translated_color);
-426 
-427 
-428 }
+419                                                       {
+420 
+421     // Check if the pixel is within the m_width of the screen
+422     if (0 > x || (uint32_t)x >= m_width) {
+423         return Colour(0,0,0);
+424     }
+425 
+426     // Check if the pixel is within the m_height of the screen
+427     if (0 > y || (uint32_t) y >= m_height) {
+428         return Colour(0,0,0);
+429     }
+430 
+431     // Get the pixel and convert it to a colour
+432     uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height - y - 1 : y);
+433     return int_to_colour(translated_color);
+434 
+435 
+436 }
 .fi
 .PP
 References get_rendered_pixel(), int_to_colour(), m_height, m_width, mirror_y_axis, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -1055,7 +1099,7 @@ Definition at line 355 of file graphicsContext\&.cpp\&.
 .PP
 References m_width\&.
 .PP
-Referenced by MaxOS::gui::Desktop::Desktop(), and MaxOS::drivers::console::VESABootConsole::width()\&.
+Referenced by MaxOS::gui::Desktop::Desktop(), MaxOS::drivers::console::VESABootConsole::scroll_up(), and MaxOS::drivers::console::VESABootConsole::width()\&.
 .SS "\fBColour\fP GraphicsContext::int_to_colour (uint32_t colour)"
 
 .PP
@@ -1144,21 +1188,21 @@ Inverts a pixel\&.
 .PP
 
 .PP
-Definition at line 436 of file graphicsContext\&.cpp\&.
+Definition at line 444 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-436                                                        {
-437     // Get the pixel
-438     Colour colour = get_pixel(x, y);
-439 
-440     // Invert the pixel
-441     colour\&.red = 255 - colour\&.red;
-442     colour\&.green = 255 - colour\&.green;
-443     colour\&.blue = 255 - colour\&.blue;
-444 
-445     // Render the pixel
-446     put_pixel(x, y, colour);
-447 }
+444                                                        {
+445     // Get the pixel
+446     Colour colour = get_pixel(x, y);
+447 
+448     // Invert the pixel
+449     colour\&.red = 255 - colour\&.red;
+450     colour\&.green = 255 - colour\&.green;
+451     colour\&.blue = 255 - colour\&.blue;
+452 
+453     // Render the pixel
+454     put_pixel(x, y, colour);
+455 }
 .fi
 .PP
 References MaxOS::common::Colour::blue, get_pixel(), MaxOS::common::Colour::green, put_pixel(), MaxOS::common::Colour::red, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -1180,14 +1224,14 @@ Renders a pixel to the screen (automatically converts the colour to an integer)
 .PP
 
 .PP
-Definition at line 375 of file graphicsContext\&.cpp\&.
+Definition at line 383 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-375                                                                    {
-376 
-377     // Convert the colour to an integer and then print it
-378     putPixel(x,y, colour_to_int(colour));
-379 }
+383                                                                    {
+384 
+385     // Convert the colour to an integer and then print it
+386     putPixel(x,y, colour_to_int(colour));
+387 }
 .fi
 .PP
 References colour_to_int(), putPixel(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -1209,24 +1253,24 @@ Renders a pixel to the screen (automatically converts the colour to an integer),
 .PP
 
 .PP
-Definition at line 388 of file graphicsContext\&.cpp\&.
+Definition at line 396 of file graphicsContext\&.cpp\&.
 .PP
 .nf
-388                                                                    {
-389 
-390     if (0 > x || (uint32_t)x >= m_width) {
-391         return;
-392     }
-393 
-394     // Check if the pixel is within the m_height of the screen
-395     if (0 > y || (uint32_t) y >= m_height) {
-396         return;
-397     }
-398 
-399     // Render the pixel
-400     render_pixel(x, mirror_y_axis ? m_height - y - 1 : y, colour);
+396                                                                    {
+397 
+398     if (0 > x || (uint32_t)x >= m_width) {
+399         return;
+400     }
 401 
-402 }
+402     // Check if the pixel is within the m_height of the screen
+403     if (0 > y || (uint32_t) y >= m_height) {
+404         return;
+405     }
+406 
+407     // Render the pixel
+408     render_pixel(x, mirror_y_axis ? m_height - y - 1 : y, colour);
+409 
+410 }
 .fi
 .PP
 References m_height, m_width, mirror_y_axis, render_pixel(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -1387,13 +1431,19 @@ Referenced by render_pixel()\&.
 .PP
 Definition at line 26 of file graphicsContext\&.h\&.
 .PP
-Referenced by colour_to_int(), get_rendered_pixel(), int_to_colour(), render_pixel(), and MaxOS::drivers::video::VideoDriver::set_mode()\&.
+Referenced by colour_to_int(), get_color_depth(), get_rendered_pixel(), int_to_colour(), render_pixel(), and MaxOS::drivers::video::VideoDriver::set_mode()\&.
 .SS "\fBColour\fP MaxOS::common::GraphicsContext::m_colour_pallet[256]\fC [protected]\fP"
 
 .PP
 Definition at line 28 of file graphicsContext\&.h\&.
 .PP
 Referenced by colour_to_int(), GraphicsContext(), and int_to_colour()\&.
+.SS "uint64_t* MaxOS::common::GraphicsContext::m_framebuffer_address { nullptr }\fC [protected]\fP"
+
+.PP
+Definition at line 30 of file graphicsContext\&.h\&.
+.PP
+Referenced by get_framebuffer_address(), MaxOS::drivers::video::VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(), MaxOS::drivers::video::VideoElectronicsStandardsAssociation::render_pixel_32_bit(), and MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\&.
 .SS "uint32_t MaxOS::common::GraphicsContext::m_height { 0 }\fC [protected]\fP"
 
 .PP

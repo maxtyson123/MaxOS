@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::ethernet::amd_am79c973" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::ethernet::amd_am79c973" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -120,10 +120,10 @@ Definition at line 14 of file amd_am79c973\&.cpp\&.
 68     //TODO: Use malloc?
 69 
 70     // Set Buffer descriptors memory
-71     sendBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
+71     sendBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
 72     initBlock\&.sendBufferDescrAddress = (uint32_t)sendBufferDescr;
 73 
-74     recvBufferDescr = (BufferDescriptor*)(MemoryManager::s_active_memory_manager->malloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
+74     recvBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
 75     initBlock\&.recvBufferDescrAddress = (uint32_t)recvBufferDescr;
 76 
 77     for(uint8_t i = 0; i < 8; i++)

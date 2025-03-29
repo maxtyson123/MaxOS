@@ -1,4 +1,4 @@
-.TH "MaxOS::net::TransmissionControlProtocolHandler" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::TransmissionControlProtocolHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -153,7 +153,7 @@ Definition at line 454 of file tcp\&.cpp\&.
 .nf
 455 {
 456     //Create a new socket
-457     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
+457     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::kmalloc(sizeof(TransmissionControlProtocolSocket));
 458 
 459     //If there is space for the socket
 460     if(socket != 0)
@@ -494,7 +494,7 @@ Definition at line 516 of file tcp\&.cpp\&.
 .nf
 517 {
 518     //Create a new socket
-519     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::s_active_memory_manager-> malloc(sizeof(TransmissionControlProtocolSocket));
+519     TransmissionControlProtocolSocket* socket = (TransmissionControlProtocolSocket*)MemoryManager::kmalloc(sizeof(TransmissionControlProtocolSocket));
 520 
 521     //If there is space for the socket
 522     if(socket != 0)
@@ -544,7 +544,7 @@ Definition at line 389 of file tcp\&.cpp\&.
 393     uint16_t lengthInclPHdr = totalLength + sizeof(TransmissionControlProtocolPseudoHeader);
 394 
 395     //Create a buffer for the packet
-396     uint8_t* buffer = (uint8_t*)MemoryManager::s_active_memory_manager-> malloc(lengthInclPHdr);
+396     uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(lengthInclPHdr);
 397     uint8_t* buffer2 = buffer + sizeof(TransmissionControlProtocolHeader) + sizeof(TransmissionControlProtocolPseudoHeader);
 398 
 399     //Create the headers
@@ -593,7 +593,7 @@ Definition at line 389 of file tcp\&.cpp\&.
 442 
 443     //Send and then free the data
 444     Send(socket -> remoteIP, (uint8_t*)msg, totalLength);
-445     MemoryManager::s_active_memory_manager-> free(buffer);
+445     MemoryManager::kfree(buffer);
 446 }
 .fi
 .PP

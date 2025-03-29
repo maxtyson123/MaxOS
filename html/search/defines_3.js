@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['entries_5fto_5faddress_3563',['ENTRIES_TO_ADDRESS',['../physical_8cpp.html#a9a863ef3a659fd011f2a7ee0bf553338',1,'physical.cpp']]]
+  ['char_5fheight_4035',['CHAR_HEIGHT',['../vesaboot_8cpp.html#ae2eecd07a9b6a2256002a15b28e388f2',1,'vesaboot.cpp']]]
 ];

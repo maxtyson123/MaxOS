@@ -1,13 +1,9 @@
 var searchData=
 [
-  ['vbe_5fcontrol_5finfo_3227',['vbe_control_info',['../structmultiboot__tag__vbe.html#a057304e943e881731680e06472c4bf1e',1,'multiboot_tag_vbe']]],
-  ['vbe_5finterface_5flen_3228',['vbe_interface_len',['../structmultiboot__tag__vbe.html#a513fc2ea3224e91c0870165152d989e1',1,'multiboot_tag_vbe']]],
-  ['vbe_5finterface_5foff_3229',['vbe_interface_off',['../structmultiboot__tag__vbe.html#a1370d764136d9cde9132c71ebf54bc3e',1,'multiboot_tag_vbe']]],
-  ['vbe_5finterface_5fseg_3230',['vbe_interface_seg',['../structmultiboot__tag__vbe.html#a72d62afb2de739a3e651aac357069abe',1,'multiboot_tag_vbe']]],
-  ['vbe_5fmode_3231',['vbe_mode',['../structmultiboot__tag__vbe.html#a3d8f77830f0e010b34939f4eeb24e64d',1,'multiboot_tag_vbe']]],
-  ['vbe_5fmode_5finfo_3232',['vbe_mode_info',['../structmultiboot__tag__vbe.html#a386399d7efb3952f08693fb0f5242bd9',1,'multiboot_tag_vbe']]],
-  ['vector_3233',['vector',['../unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry.html#ac756e3e65a2efaa9710b14e3747ad5e1',1,'MaxOS::hardwarecommunication::RedirectionEntry::vector()'],['../apic_8h.html#a6c3589b2f7ad6179e386511136265b54',1,'vector():&#160;apic.h']]],
-  ['vendor_5fid_3234',['vendor_id',['../classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#a449730b72e7af8c4fc588ae2b5306a2a',1,'MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor']]],
-  ['version_3235',['version',['../structMaxOS_1_1net_1_1InternetProtocolV4Header.html#a696220cf207d5b0d1469e0a6a7bf1109',1,'MaxOS::net::InternetProtocolV4Header::version()'],['../structmultiboot__tag__apm.html#a9062cb77271b7ed69970ede5c90a50ad',1,'multiboot_tag_apm::version()'],['../ipv4_8h.html#ab22abc2906422da61885ac6c8e6a1a59',1,'version():&#160;ipv4.h']]],
-  ['volume_5flabel_3236',['volume_label',['../structMaxOS_1_1filesystem_1_1BiosParameterBlock32.html#adf54b55e5a346a3dc3acc6161d5255c7',1,'MaxOS::filesystem::BiosParameterBlock32::volume_label()'],['../fat32_8h.html#a1726642eb49790a81d20ba1024d9791d',1,'volume_label():&#160;fat32.h']]]
+  ['uint_5f32_3600',['uint_32',['../structMaxOS_1_1filesystem_1_1BiosParameterBlock32.html#a2af50db3cdebb21872328109a64824aa',1,'MaxOS::filesystem::BiosParameterBlock32::uint_32()'],['../fat32_8h.html#a4c79470e2d0d72cdbbc391b10e1ba57d',1,'uint_32():&#160;fat32.h']]],
+  ['unused_3601',['unused',['../structMaxOS_1_1filesystem_1_1MasterBootRecord.html#ab3e81d86e782d958c30f9485b99d9d47',1,'MaxOS::filesystem::MasterBootRecord::unused()'],['../msdospart_8h.html#a69f7e996ff7ce0531e893a56c8515e6b',1,'unused():&#160;msdospart.h']]],
+  ['urgentptr_3602',['urgentPtr',['../structMaxOS_1_1net_1_1TransmissionControlProtocolHeader.html#a55c42b606b1c84fa5dfa28fe64966b39',1,'MaxOS::net::TransmissionControlProtocolHeader::urgentPtr()'],['../tcp_8h.html#aca974d34b50135a7d9b524a8fc2f5d00',1,'urgentPtr():&#160;tcp.h']]],
+  ['use_5fcount_3603',['use_count',['../structMaxOS_1_1processes_1_1IPCSharedMemory.html#ac3823e1763f5c8db75ae189cd17a3b30',1,'MaxOS::processes::IPCSharedMemory']]],
+  ['user_3604',['user',['../structMaxOS_1_1memory_1_1PageTableEntry.html#ad3a15b443bb60e90ac4d88dbf4818d4a',1,'MaxOS::memory::PageTableEntry::user()'],['../physical_8h.html#aa48fc3494320cff5dd03c1f27f00049d',1,'user():&#160;physical.h']]],
+  ['userdatagramprotocolhandler_3605',['userDatagramProtocolHandler',['../classMaxOS_1_1net_1_1UserDatagramProtocolSocket.html#ac024cb9dfed70bc71ceeb14d18cdfac2',1,'MaxOS::net::UserDatagramProtocolSocket']]]
 ];

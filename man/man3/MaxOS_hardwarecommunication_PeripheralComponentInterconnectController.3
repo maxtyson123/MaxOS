@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::PeripheralComponentInterconnectController" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::PeripheralComponentInterconnectController" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -101,7 +101,7 @@ Definition at line 235 of file pci\&.cpp\&.
 245             {
 246                 case 0x2000:    //am79c971
 247                 {
-248                     amd_am79c973* result = (amd_am79c973*)MemoryManager::s_active_memory_manager ->malloc(sizeof(amd_am79c973));
+248                     amd_am79c973* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
 249                     new (result) amd_am79c973(&dev, interrupt_manager);
 250                     return result;
 251 
@@ -117,7 +117,7 @@ Definition at line 235 of file pci\&.cpp\&.
 261             {
 262                 case 0x100E: //i217 (Ethernet Controller)
 263                 {
-264                     intel_i217* result = (intel_i217*)MemoryManager::s_active_memory_manager->malloc(sizeof(intel_i217));
+264                     intel_i217* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
 265                     new (result) intel_i217(&dev, interrupt_manager);
 266                     return result;
 267                 }
@@ -138,7 +138,7 @@ Definition at line 235 of file pci\&.cpp\&.
 282             {
 283                 case 0x00:  //VGA
 284                 {
-285                     VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::s_active_memory_manager->malloc(sizeof(VideoGraphicsArray));
+285                     VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
 286                     new (result) VideoGraphicsArray();
 287                     return result;
 288                 }
@@ -166,13 +166,13 @@ Definition at line 298 of file pci\&.cpp\&.
 301         case 0x1022:
 302         {
 303             // The vendor is AMD
-304             _kprintf("\hAMD ");
+304             _kprintf("%hAMD ");
 305 
 306             // List the device
 307             switch (dev\&.device_id)
 308             {
 309                 default:
-310                   _kprintf("\h0x%x", dev\&.device_id);
+310                   _kprintf("%h0x%x", dev\&.device_id);
 311                   break;
 312             }
 313             break;
@@ -181,19 +181,19 @@ Definition at line 298 of file pci\&.cpp\&.
 316         case 0x106B:
 317         {
 318             // The vendor is Apple
-319             _kprintf("\hApple ");
+319             _kprintf("%hApple ");
 320 
 321             // List the device
 322             switch (dev\&.device_id)
 323             {
 324                 case 0x003F:
 325                 {
-326                   _kprintf("\hKeyLargo/Intrepid USB");
+326                   _kprintf("%hKeyLargo/Intrepid USB");
 327                   break;
 328                 }
 329 
 330                 default:
-331                   _kprintf("\h0x%x", dev\&.device_id);
+331                   _kprintf("%h0x%x", dev\&.device_id);
 332                   break;
 333             }
 334             break;
@@ -202,7 +202,7 @@ Definition at line 298 of file pci\&.cpp\&.
 337         case 1234:
 338         {
 339             // The vendor is QEMU
-340           _kprintf("\hQEMU ");
+340           _kprintf("%hQEMU ");
 341 
 342             // List the device
 343             switch (dev\&.device_id)
@@ -210,7 +210,7 @@ Definition at line 298 of file pci\&.cpp\&.
 345 
 346                 case 0x1111:
 347                 {
-348                   _kprintf("\hVirtual Video Controller");
+348                   _kprintf("%hVirtual Video Controller");
 349                   break;
 350                 }
 351             }
@@ -220,7 +220,7 @@ Definition at line 298 of file pci\&.cpp\&.
 355         case 0x8086:
 356         {
 357             // The vendor is Intel
-358             _kprintf("\hIntel ");
+358             _kprintf("%hIntel ");
 359 
 360             // List the device
 361             switch (dev\&.device_id)
@@ -228,44 +228,44 @@ Definition at line 298 of file pci\&.cpp\&.
 363 
 364                 case 0x1237:
 365                 {
-366                   _kprintf("\h440FX");
+366                   _kprintf("%h440FX");
 367                   break;
 368                 }
 369 
 370                 case 0x2415:
 371                 {
-372                   _kprintf("\hAC'97");
+372                   _kprintf("%hAC'97");
 373                   break;
 374                 }
 375 
 376                 case 0x7000:
 377                 {
-378                   _kprintf("\hPIIX3");
+378                   _kprintf("%hPIIX3");
 379                   break;
 380 
 381                 }
 382 
 383                 case 0x7010:
 384                 {
-385                   _kprintf("\hPIIX4");
+385                   _kprintf("%hPIIX4");
 386                   break;
 387 
 388                 }
 389 
 390                 case 0x7111:
 391                 {
-392                   _kprintf("\hPIIX3 ACPI");
+392                   _kprintf("%hPIIX3 ACPI");
 393                   break;
 394                 }
 395 
 396                 case 0x7113:
 397                 {
-398                   _kprintf("\hPIIX4 ACPI");
+398                   _kprintf("%hPIIX4 ACPI");
 399                   break;
 400                 }
 401 
 402                 default:
-403                     _kprintf("\h0x%x", dev\&.device_id);
+403                     _kprintf("%h0x%x", dev\&.device_id);
 404                     break;
 405 
 406             }
@@ -275,18 +275,18 @@ Definition at line 298 of file pci\&.cpp\&.
 410         case 0x80EE: {
 411 
 412             // The vendor is VirtualBox
-413             _kprintf("\hVirtualBox ");
+413             _kprintf("%hVirtualBox ");
 414 
 415             // List the device
 416             switch (dev\&.device_id) {
 417 
 418                 case 0xBEEF: {
-419                   _kprintf("\hGraphics Adapter");
+419                   _kprintf("%hGraphics Adapter");
 420                   break;
 421                 }
 422 
 423                 case 0xCAFE: {
-424                   _kprintf("\hGuest Service");
+424                   _kprintf("%hGuest Service");
 425                   break;
 426                 }
 427             }
@@ -294,7 +294,7 @@ Definition at line 298 of file pci\&.cpp\&.
 429         }
 430 
 431         default:    // Unknown
-432           _kprintf("\hUnknown (0x%x:0x%x)", dev\&.vendor_id, dev\&.device_id);
+432           _kprintf("%hUnknown (0x%x:0x%x)", dev\&.vendor_id, dev\&.device_id);
 433           break;
 434 
 435     }
@@ -356,13 +356,13 @@ Definition at line 159 of file pci\&.cpp\&.
 185                 Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
 186                 if(driver != nullptr){
 187                   handler->on_driver_selected(driver);
-188                   _kprintf("\h %s %s", driver->get_vendor_name()\&.c_str(), driver->get_device_name()\&.c_str());
+188                   _kprintf("%h %s %s", driver->get_vendor_name()\&.c_str(), driver->get_device_name()\&.c_str());
 189                 }else{
 190                   list_known_deivce(deviceDescriptor);
 191                 }
 192 
 193                 // New line
-194                 _kprintf("\h\n");
+194                 _kprintf("%h\n");
 195             }
 196         }
 197     }

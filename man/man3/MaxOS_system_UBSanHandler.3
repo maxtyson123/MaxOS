@@ -1,4 +1,4 @@
-.TH "MaxOS::system::UBSanHandler" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::UBSanHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -103,9 +103,9 @@ Definition at line 33 of file ubsan\&.cpp\&.
 35   // Print the error
 36   _kprintf("UBSan: ");
 37   if(info -> alignment != 0 && ubsan_aligned(ptr, info -> alignment))
-38     _kprintf("\h misaligned memory access\n");
+38     _kprintf("%h misaligned memory access\n");
 39   else
-40     _kprintf("\h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
+40     _kprintf("%h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
 41 
 42   // Print the location
 43   handle(info -> location);
@@ -136,10 +136,10 @@ Definition at line 51 of file ubsan\&.cpp\&.
 52 
 53   // Print the error
 54   _kprintf("UBSan: ");
-55   if(info -> log_alignment != 0 && ubsan_aligned(ptr, 1 << info -> log_alignment))
-56     _kprintf("\h misaligned memory access\n");
+55   if(info -> log_alignment != 0 && ubsan_aligned(ptr, (1 << (info -> log_alignment))))
+56     _kprintf("%h misaligned memory access\n");
 57   else
-58     _kprintf("\h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
+58     _kprintf("%h %s address 0x%x with insufficient space for an object of type %s\n", Type_Check_Kinds[info -> type_check_kind], ptr, info -> type -> name);
 59 
 60   // Print the location
 61   handle(info -> location);

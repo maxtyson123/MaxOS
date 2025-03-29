@@ -3,6 +3,7 @@
 {\ttfamily \#include $<$drivers/console/serial.\+h$>$}\newline
 {\ttfamily \#include $<$system/cpu.\+h$>$}\newline
 {\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$common/spinlock.\+h$>$}\newline
 \doxysubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
@@ -86,76 +87,78 @@ A\+R\+G\+U\+M\+E\+N\+TS\+:
 \end{DoxyParams}
 
 
-Definition at line 157 of file kprint.\+cpp.
+Definition at line 170 of file kprint.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{158 \{}
-\DoxyCodeLine{159   \textcolor{comment}{// Create a pointer to the data}}
-\DoxyCodeLine{160   va\_list parameters;}
-\DoxyCodeLine{161   va\_start(parameters, format);}
-\DoxyCodeLine{162 }
-\DoxyCodeLine{163   \textcolor{comment}{// Print the header}}
-\DoxyCodeLine{164   \textcolor{keywordflow}{if}(*format != \textcolor{charliteral}{'\(\backslash\)h'})}
-\DoxyCodeLine{165     \mbox{\hyperlink{kprint_8cpp_a1eac1ff253b261e89fa89e29c6bd6c24}{pre\_kprintf}}(file, line,func, \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}});}
-\DoxyCodeLine{166   \textcolor{keywordflow}{else}}
-\DoxyCodeLine{167     format++;}
-\DoxyCodeLine{168 }
-\DoxyCodeLine{169 }
-\DoxyCodeLine{170   \textcolor{comment}{// Loop through the format string}}
-\DoxyCodeLine{171   \textcolor{keywordflow}{for} (; *format != \textcolor{charliteral}{'\(\backslash\)0'}; format++)}
-\DoxyCodeLine{172   \{}
-\DoxyCodeLine{173 }
-\DoxyCodeLine{174     \textcolor{comment}{// If it is not a \%, print the character}}
-\DoxyCodeLine{175     \textcolor{keywordflow}{if} (*format != \textcolor{charliteral}{'\%'})}
-\DoxyCodeLine{176     \{}
-\DoxyCodeLine{177       putchar(*format);}
-\DoxyCodeLine{178       \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{179     \}}
-\DoxyCodeLine{180 }
-\DoxyCodeLine{181     \textcolor{comment}{// Move to the next character}}
-\DoxyCodeLine{182     format++;}
+\DoxyCodeLine{171 \{}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173   \textcolor{comment}{// wait for the lock}}
+\DoxyCodeLine{174   \mbox{\hyperlink{kprint_8cpp_a3487c372392ab5759655b8843f4b7cf1}{kprintf\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176   \textcolor{comment}{// Create a pointer to the data}}
+\DoxyCodeLine{177   va\_list parameters;}
+\DoxyCodeLine{178   va\_start(parameters, format);}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180   \textcolor{comment}{// Print the header if the first two are not \%h}}
+\DoxyCodeLine{181   \textcolor{keywordflow}{if}(*format != \textcolor{charliteral}{'\%'} \&\& *(format + 1) != \textcolor{charliteral}{'h'})}
+\DoxyCodeLine{182     \mbox{\hyperlink{kprint_8cpp_a1eac1ff253b261e89fa89e29c6bd6c24}{pre\_kprintf}}(file, line,func, \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}});}
 \DoxyCodeLine{183 }
-\DoxyCodeLine{184     \textcolor{keywordflow}{switch} (*format)}
-\DoxyCodeLine{185     \{}
-\DoxyCodeLine{186       \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:}
-\DoxyCodeLine{187       \{}
-\DoxyCodeLine{188         \textcolor{comment}{// Print a decimal}}
-\DoxyCodeLine{189         \textcolor{keywordtype}{int} number = va\_arg (parameters, \textcolor{keywordtype}{int});}
-\DoxyCodeLine{190         \textcolor{keywordtype}{char}* str = \mbox{\hyperlink{kprint_8cpp_a61162f966722da75c036049e8ca8bf8b}{itoa}}(10, number);}
-\DoxyCodeLine{191         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{kprint_8cpp_ae6c8de953239811a34eeeab09458e55e}{strlen}}(str); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{192           putchar(str[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]);}
-\DoxyCodeLine{193         \textcolor{keywordflow}{break};}
-\DoxyCodeLine{194       \}}
-\DoxyCodeLine{195       \textcolor{keywordflow}{case} \textcolor{charliteral}{'x'}:}
-\DoxyCodeLine{196       \{}
-\DoxyCodeLine{197         \textcolor{comment}{// Print a hex}}
-\DoxyCodeLine{198         uint64\_t  number = va\_arg (parameters, uint64\_t );}
-\DoxyCodeLine{199         \textcolor{keywordtype}{char}* str = \mbox{\hyperlink{kprint_8cpp_a61162f966722da75c036049e8ca8bf8b}{itoa}}(16, number);}
-\DoxyCodeLine{200         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{kprint_8cpp_ae6c8de953239811a34eeeab09458e55e}{strlen}}(str); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{201           putchar(str[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]);}
-\DoxyCodeLine{202         \textcolor{keywordflow}{break};}
-\DoxyCodeLine{203       \}}
-\DoxyCodeLine{204       \textcolor{keywordflow}{case} \textcolor{charliteral}{'s'}:}
-\DoxyCodeLine{205       \{}
-\DoxyCodeLine{206         \textcolor{comment}{// Print a string}}
-\DoxyCodeLine{207         \textcolor{keywordtype}{char}* str = va\_arg (parameters, \textcolor{keywordtype}{char}*);}
-\DoxyCodeLine{208         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{kprint_8cpp_ae6c8de953239811a34eeeab09458e55e}{strlen}}(str); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{209           putchar(str[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}]);}
-\DoxyCodeLine{210         \textcolor{keywordflow}{break};}
-\DoxyCodeLine{211       \}}
-\DoxyCodeLine{212     \}}
-\DoxyCodeLine{213   \}}
-\DoxyCodeLine{214 }
-\DoxyCodeLine{215 }
-\DoxyCodeLine{216   \textcolor{comment}{// If it is type 3 panic}}
-\DoxyCodeLine{217   \textcolor{keywordflow}{if}(\mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} == 3)}
-\DoxyCodeLine{218      CPU::PANIC(\textcolor{stringliteral}{"Check the serial output for more information"});}
-\DoxyCodeLine{219 }
-\DoxyCodeLine{220 \}}
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185   \textcolor{comment}{// Loop through the format string}}
+\DoxyCodeLine{186   \textcolor{keywordflow}{for} (; *format != \textcolor{charliteral}{'\(\backslash\)0'}; format++)}
+\DoxyCodeLine{187   \{}
+\DoxyCodeLine{188 }
+\DoxyCodeLine{189     \textcolor{comment}{// If it is not a \%, print the character}}
+\DoxyCodeLine{190     \textcolor{keywordflow}{if} (*format != \textcolor{charliteral}{'\%'})}
+\DoxyCodeLine{191     \{}
+\DoxyCodeLine{192       putchar(*format, \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} == 2);}
+\DoxyCodeLine{193       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{194     \}}
+\DoxyCodeLine{195 }
+\DoxyCodeLine{196     \textcolor{comment}{// Move to the next character}}
+\DoxyCodeLine{197     format++;}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{199     \textcolor{keywordflow}{switch} (*format)}
+\DoxyCodeLine{200     \{}
+\DoxyCodeLine{201       \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:}
+\DoxyCodeLine{202       \{}
+\DoxyCodeLine{203         \textcolor{comment}{// Print a decimal}}
+\DoxyCodeLine{204         \textcolor{keywordtype}{int} number = va\_arg (parameters, \textcolor{keywordtype}{int});}
+\DoxyCodeLine{205         \textcolor{keywordtype}{char}* str = \mbox{\hyperlink{kprint_8cpp_a61162f966722da75c036049e8ca8bf8b}{itoa}}(10, number);}
+\DoxyCodeLine{206         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{kprint_8cpp_ae6c8de953239811a34eeeab09458e55e}{strlen}}(str); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{207           putchar(str[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}], \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} == 2);}
+\DoxyCodeLine{208         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{209       \}}
+\DoxyCodeLine{210       \textcolor{keywordflow}{case} \textcolor{charliteral}{'x'}:}
+\DoxyCodeLine{211       \{}
+\DoxyCodeLine{212         \textcolor{comment}{// Print a hex}}
+\DoxyCodeLine{213         uint64\_t  number = va\_arg (parameters, uint64\_t );}
+\DoxyCodeLine{214         \textcolor{keywordtype}{char}* str = \mbox{\hyperlink{kprint_8cpp_a61162f966722da75c036049e8ca8bf8b}{itoa}}(16, number);}
+\DoxyCodeLine{215         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{kprint_8cpp_ae6c8de953239811a34eeeab09458e55e}{strlen}}(str); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{216           putchar(str[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}], \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} == 2);}
+\DoxyCodeLine{217         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{218       \}}
+\DoxyCodeLine{219       \textcolor{keywordflow}{case} \textcolor{charliteral}{'s'}:}
+\DoxyCodeLine{220       \{}
+\DoxyCodeLine{221         \textcolor{comment}{// Print a string}}
+\DoxyCodeLine{222         \textcolor{keywordtype}{char}* str = va\_arg (parameters, \textcolor{keywordtype}{char}*);}
+\DoxyCodeLine{223         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{kprint_8cpp_ae6c8de953239811a34eeeab09458e55e}{strlen}}(str); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{224           putchar(str[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}], \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} == 2);}
+\DoxyCodeLine{225         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{226       \}}
+\DoxyCodeLine{227     \}}
+\DoxyCodeLine{228   \}}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230   \mbox{\hyperlink{kprint_8cpp_a3487c372392ab5759655b8843f4b7cf1}{kprintf\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232   \textcolor{comment}{// If it is type 3 panic}}
+\DoxyCodeLine{233   \textcolor{keywordflow}{if}(\mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} == 3)}
+\DoxyCodeLine{234      CPU::PANIC(\textcolor{stringliteral}{"Check the serial output for more information"});}
+\DoxyCodeLine{235 \}}
 
 \end{DoxyCode}
 
 
-References pre\+\_\+kprintf(), and type.
+References kprintf\+\_\+lock, Max\+O\+S\+::common\+::\+Spinlock\+::lock(), pre\+\_\+kprintf(), and type.
 

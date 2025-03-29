@@ -9,7 +9,6 @@ var classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation =
     [ "render_pixel_32_bit", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#abbf5baeb2ff3923e53e7a72852df8936", null ],
     [ "supports_mode", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a189a8228c2debaca1f9689ac3a1710d6", null ],
     [ "m_bpp", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a0ec40e16861cf661af6e290bf171c5e9", null ],
-    [ "m_framebuffer_address", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a9ccdc42ab1611cb2022468e7b2fb1e5e", null ],
     [ "m_framebuffer_info", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aa8da0c76b7ea1571e511c78ac0a7d8a9", null ],
     [ "m_framebuffer_size", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#ae2b7233f2e3d6bc368908cf59e4b1276", null ],
     [ "m_pitch", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#aae59fdbf1816558d9665195a911352a5", null ]

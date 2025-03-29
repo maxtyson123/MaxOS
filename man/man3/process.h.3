@@ -1,20 +1,38 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/process.h" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/system/process.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <system/multithreading\&.h>\fP
+\fC#include <system/cpu\&.h>\fP
+.br
+\fC#include <common/vector\&.h>\fP
+.br
+\fC#include <common/string\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <memory/virtual\&.h>\fP
+.br
+\fC#include <memory/memorymanagement\&.h>\fP
+.br
+\fC#include <memory/memoryIO\&.h>\fP
+.br
+\fC#include <processes/elf\&.h>\fP
 .br
 
 .SS "Classes"
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::system::Process\fP"
+.RI "class \fBMaxOS::processes::Thread\fP"
 .br
+.ti -1c
+.RI "class \fBMaxOS::processes::Process\fP"
+.br
+.RI "A process that can be scheduled by the \fBScheduler\fP\&. "
 .in -1c
 .SS "Namespaces"
 
@@ -23,7 +41,21 @@
 .RI " \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::system\fP"
+.RI " \fBMaxOS::processes\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef enum \fBMaxOS::processes::ThreadState\fP \fBMaxOS::processes::thread_state_t\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBMaxOS::processes::ThreadState\fP { \fBMaxOS::processes::NEW\fP, \fBMaxOS::processes::RUNNING\fP, \fBMaxOS::processes::READY\fP, \fBMaxOS::processes::SLEEPING\fP, \fBMaxOS::processes::WAITING\fP, \fBMaxOS::processes::STOPPED\fP }"
 .br
 .in -1c
 .SH "Author"

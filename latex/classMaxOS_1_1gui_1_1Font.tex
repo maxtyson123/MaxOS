@@ -180,69 +180,75 @@ Definition at line 58 of file font.\+cpp.
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{62 \{}
-\DoxyCodeLine{63 }
-\DoxyCodeLine{64 }
-\DoxyCodeLine{65     \textcolor{comment}{// Convert the colours}}
-\DoxyCodeLine{66     uint32\_t foreground = context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_ab6f5a6dbc23c0ff8329d97b293913810}{colour\_to\_int}}(foreground\_colour);}
-\DoxyCodeLine{67     uint32\_t background = context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_ab6f5a6dbc23c0ff8329d97b293913810}{colour\_to\_int}}(background\_colour);}
-\DoxyCodeLine{68 }
-\DoxyCodeLine{69     \textcolor{comment}{// Ensure the area is within the actual area of the text}}
-\DoxyCodeLine{70     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} < 0) \{}
-\DoxyCodeLine{71         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}} += limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}};}
-\DoxyCodeLine{72         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} = 0;}
-\DoxyCodeLine{73     \}}
-\DoxyCodeLine{74 }
-\DoxyCodeLine{75     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} < 0) \{}
-\DoxyCodeLine{76         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}} += limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}};}
-\DoxyCodeLine{77         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} = 0;}
-\DoxyCodeLine{78     \}}
-\DoxyCodeLine{79 }
-\DoxyCodeLine{80     \textcolor{comment}{// Clamp the height and width max}}
-\DoxyCodeLine{81     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}} > (\textcolor{keywordtype}{int})\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a59d0e8f5b746ebe7870255bd40c9bd72}{get\_text\_height}}(text))}
-\DoxyCodeLine{82         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}} = \mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a59d0e8f5b746ebe7870255bd40c9bd72}{get\_text\_height}}(text) -\/ limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}};}
-\DoxyCodeLine{83 }
-\DoxyCodeLine{84     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}} > (\textcolor{keywordtype}{int})\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_aa3b8e198d89c1fc4434cc5d5c0284e40}{get\_text\_width}}(text))}
-\DoxyCodeLine{85         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}} = \mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_aa3b8e198d89c1fc4434cc5d5c0284e40}{get\_text\_width}}(text) -\/ limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}};}
-\DoxyCodeLine{86 }
-\DoxyCodeLine{87 }
-\DoxyCodeLine{88     \textcolor{comment}{// Calculate limits}}
-\DoxyCodeLine{89     int32\_t xLimit = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}};}
-\DoxyCodeLine{90     int32\_t yLimit = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}};}
-\DoxyCodeLine{91 }
-\DoxyCodeLine{92     \textcolor{comment}{// Draw the text from top to bottom}}
-\DoxyCodeLine{93     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} yBitMapOffset = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}}; yBitMapOffset <yLimit; yBitMapOffset++)\{}
-\DoxyCodeLine{94         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} xBitMapOffset = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}}; xBitMapOffset < xLimit; ++xBitMapOffset) \{}
-\DoxyCodeLine{95 }
-\DoxyCodeLine{96             \textcolor{comment}{// If the y is the middle then add a strikethrough}}
-\DoxyCodeLine{97             \textcolor{keywordflow}{if} (\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a6f4e91cf21d739a2f3cbee42a011b649}{is\_strikethrough}} \&\& yBitMapOffset == yLimit / 2) \{}
-\DoxyCodeLine{98 }
-\DoxyCodeLine{99                 \textcolor{comment}{// Draw the pixel}}
-\DoxyCodeLine{100                 context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, foreground);}
-\DoxyCodeLine{101                 \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{102             \}}
-\DoxyCodeLine{103 }
-\DoxyCodeLine{104             \textcolor{comment}{// If the y is the bottom then add an underline}}
-\DoxyCodeLine{105             \textcolor{keywordflow}{if} (\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a1444dd90c5b6de56e176e758f3a2d704}{is\_underlined}} \&\& yBitMapOffset == yLimit -\/ 1) \{}
-\DoxyCodeLine{106 }
-\DoxyCodeLine{107                 \textcolor{comment}{// Draw the pixel}}
-\DoxyCodeLine{108                 context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, foreground);}
-\DoxyCodeLine{109                 \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{110             \}}
+\DoxyCodeLine{63     \textcolor{comment}{// Convert the colours}}
+\DoxyCodeLine{64     uint32\_t foreground = context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_ab6f5a6dbc23c0ff8329d97b293913810}{colour\_to\_int}}(foreground\_colour);}
+\DoxyCodeLine{65     uint32\_t background = context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_ab6f5a6dbc23c0ff8329d97b293913810}{colour\_to\_int}}(background\_colour);}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67     \textcolor{comment}{// Ensure the area is within the actual area of the text}}
+\DoxyCodeLine{68     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} < 0) \{}
+\DoxyCodeLine{69         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}} += limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}};}
+\DoxyCodeLine{70         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} = 0;}
+\DoxyCodeLine{71     \}}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} < 0) \{}
+\DoxyCodeLine{74         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}} += limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}};}
+\DoxyCodeLine{75         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} = 0;}
+\DoxyCodeLine{76     \}}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78     \textcolor{comment}{// Clamp the height and width max}}
+\DoxyCodeLine{79     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}} > (\textcolor{keywordtype}{int})\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a59d0e8f5b746ebe7870255bd40c9bd72}{get\_text\_height}}(text))}
+\DoxyCodeLine{80         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}} = \mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a59d0e8f5b746ebe7870255bd40c9bd72}{get\_text\_height}}(text) -\/ limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}};}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82     \textcolor{keywordflow}{if} (limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}} > (\textcolor{keywordtype}{int})\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_aa3b8e198d89c1fc4434cc5d5c0284e40}{get\_text\_width}}(text))}
+\DoxyCodeLine{83         limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}} = \mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_aa3b8e198d89c1fc4434cc5d5c0284e40}{get\_text\_width}}(text) -\/ limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}};}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86     \textcolor{comment}{// Calculate limits}}
+\DoxyCodeLine{87     int32\_t xLimit = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}};}
+\DoxyCodeLine{88     int32\_t yLimit = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}} + limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}};}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90     \textcolor{comment}{// Draw the text from top to bottom}}
+\DoxyCodeLine{91     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} yBitMapOffset = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a2c109f69f412add34e8e538bfe7fe597}{top}}; yBitMapOffset <yLimit; yBitMapOffset++)\{}
+\DoxyCodeLine{92         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} xBitMapOffset = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}}; xBitMapOffset < xLimit; ++xBitMapOffset) \{}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94             \textcolor{comment}{// If the y is the middle then add a strikethrough}}
+\DoxyCodeLine{95             \textcolor{keywordflow}{if} (\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a6f4e91cf21d739a2f3cbee42a011b649}{is\_strikethrough}} \&\& yBitMapOffset == yLimit / 2) \{}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97                 \textcolor{comment}{// Draw the pixel}}
+\DoxyCodeLine{98                 context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, foreground);}
+\DoxyCodeLine{99                 \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{100             \}}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102             \textcolor{comment}{// If the y is the bottom then add an underline}}
+\DoxyCodeLine{103             \textcolor{keywordflow}{if} (\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a1444dd90c5b6de56e176e758f3a2d704}{is\_underlined}} \&\& yBitMapOffset == yLimit -\/ 1) \{}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105                 \textcolor{comment}{// Draw the pixel}}
+\DoxyCodeLine{106                 context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, foreground);}
+\DoxyCodeLine{107                 \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{108             \}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110             \textcolor{comment}{//TODO: Bold, Italic when other fonts are working}}
 \DoxyCodeLine{111 }
-\DoxyCodeLine{112             \textcolor{comment}{//TODO: Bold, Italic when other fonts are working}}
-\DoxyCodeLine{113 }
-\DoxyCodeLine{114             \textcolor{comment}{// Get the character}}
-\DoxyCodeLine{115             uint8\_t character = text[xBitMapOffset/8];}
-\DoxyCodeLine{116 }
-\DoxyCodeLine{117            \textcolor{comment}{// Check if this pixel  is set or not}}
-\DoxyCodeLine{118            \textcolor{keywordtype}{bool} set = \mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a779ce8a1a3d0a139cb22ae1ec6b45417}{m\_font8x8}}[(uint16\_t)character * 8 + yBitMapOffset] \& (128 >> (xBitMapOffset \% 8));}
-\DoxyCodeLine{119 }
-\DoxyCodeLine{120            \textcolor{comment}{// Draw the pixel}}
-\DoxyCodeLine{121            context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, set ? foreground : background);}
-\DoxyCodeLine{122 }
-\DoxyCodeLine{123         \}}
-\DoxyCodeLine{124     \}}
-\DoxyCodeLine{125 \}}
+\DoxyCodeLine{112             \textcolor{comment}{// Get the character}}
+\DoxyCodeLine{113             uint8\_t character = text[xBitMapOffset/8];}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115            \textcolor{comment}{// Check if this pixel  is set or not}}
+\DoxyCodeLine{116            \textcolor{keywordtype}{bool} set = \mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_a779ce8a1a3d0a139cb22ae1ec6b45417}{m\_font8x8}}[(uint16\_t)character * 8 + yBitMapOffset] \& (128 >> (xBitMapOffset \% 8));}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118            \textcolor{comment}{// Draw the pixel}}
+\DoxyCodeLine{119            context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, set ? foreground : background);}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121         \}}
+\DoxyCodeLine{122     \}}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124     \textcolor{comment}{// Draw the bottom 2  "spacing lines"}}
+\DoxyCodeLine{125     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} yBitMapOffset = yLimit; yBitMapOffset < yLimit + 2; yBitMapOffset++) \{}
+\DoxyCodeLine{126         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} xBitMapOffset = limitArea.\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_ab67ba6ac0175a62fbda64d780acf3e82}{left}}; xBitMapOffset < xLimit; ++xBitMapOffset) \{}
+\DoxyCodeLine{127             context -\/> putPixel(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} + xBitMapOffset, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} + yBitMapOffset, background);}
+\DoxyCodeLine{128         \}}
+\DoxyCodeLine{129     \}}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{131 \}}
 
 \end{DoxyCode}
 
@@ -269,15 +275,15 @@ The height of the text
 \end{DoxyReturn}
 
 
-Definition at line 133 of file font.\+cpp.
+Definition at line 139 of file font.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{133                                      \{}
-\DoxyCodeLine{134 }
-\DoxyCodeLine{135     \textcolor{keywordflow}{return} 8;}
-\DoxyCodeLine{136 }
-\DoxyCodeLine{137 \}}
+\DoxyCodeLine{139                                      \{}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141     \textcolor{keywordflow}{return} 8;}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1gui_1_1Font_aa3b8e198d89c1fc4434cc5d5c0284e40}\label{classMaxOS_1_1gui_1_1Font_aa3b8e198d89c1fc4434cc5d5c0284e40}} 
@@ -300,13 +306,13 @@ The width of the text
 \end{DoxyReturn}
 
 
-Definition at line 145 of file font.\+cpp.
+Definition at line 151 of file font.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{145                                          \{}
-\DoxyCodeLine{146     \textcolor{keywordflow}{return} text.\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}()*8;}
-\DoxyCodeLine{147 \}}
+\DoxyCodeLine{151                                          \{}
+\DoxyCodeLine{152     \textcolor{keywordflow}{return} text.\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}()*8;}
+\DoxyCodeLine{153 \}}
 
 \end{DoxyCode}
 

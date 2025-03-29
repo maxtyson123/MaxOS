@@ -1,4 +1,4 @@
-.TH "MaxOS::system" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,10 +15,6 @@ MaxOS::system
 .ti -1c
 .RI "class \fBCPU\fP"
 .br
-.ti -1c
-.RI "struct \fBCPUState\fP"
-.br
-.RI "Stores the state of the \fBCPU\fP registers\&. "
 .ti -1c
 .RI "struct \fBGDTR\fP"
 .br
@@ -43,9 +39,6 @@ MaxOS::system
 .RI "struct \fBoverflow_info\fP"
 .br
 .ti -1c
-.RI "class \fBProcess\fP"
-.br
-.ti -1c
 .RI "struct \fBshift_out_of_bounds_info\fP"
 .br
 .ti -1c
@@ -55,25 +48,15 @@ MaxOS::system
 .RI "struct \fBStackFrame\fP"
 .br
 .ti -1c
-.RI "class \fBSyscallHandler\fP"
+.RI "struct \fBSyscallArguments\fP"
+.br
+.ti -1c
+.RI "class \fBSyscallManager\fP"
 .br
 .RI "Handles system calls\&. "
 .ti -1c
-.RI "class \fBTask\fP"
+.RI "struct \fBtss\fP"
 .br
-.RI "A task that can be scheduled by the \fBTaskManager\fP\&. "
-.ti -1c
-.RI "class \fBTaskManager\fP"
-.br
-.RI "Manages the scheduling of m_tasks\&. "
-.ti -1c
-.RI "class \fBThread\fP"
-.br
-.RI "A execution thread that can be scheduled by the \fBThreadManager\fP\&. "
-.ti -1c
-.RI "class \fBThreadManager\fP"
-.br
-.RI "Manages the scheduling of threads\&. "
 .ti -1c
 .RI "struct \fBtype_descriptor\fP"
 .br
@@ -91,6 +74,12 @@ MaxOS::system
 .SS "Typedefs"
 
 .in +1c
+.ti -1c
+.RI "typedef struct \fBMaxOS::system::SyscallArguments\fP \fBsyscall_args_t\fP"
+.br
+.ti -1c
+.RI "typedef \fBsyscall_args_t\fP *(* \fBsyscall_func_t\fP) (\fBsyscall_args_t\fP *args)"
+.br
 .ti -1c
 .RI "typedef struct \fBMaxOS::system::source_location\fP \fBsource_location_t\fP"
 .br
@@ -119,11 +108,19 @@ MaxOS::system
 .RI "typedef struct \fBMaxOS::system::invalid_value_info\fP \fBinvalid_value_info_t\fP"
 .br
 .in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBSyscallType\fP { \fBCLOSE_PROCESS\fP, \fBKLOG\fP, \fBCREATE_SHARED_MEMORY\fP, \fBOPEN_SHARED_MEMORY\fP, \fBALLOCATE_MEMORY\fP, \fBFREE_MEMORY\fP, \fBCREATE_IPC_ENDPOINT\fP, \fBSEND_IPC_MESSAGE\fP, \fBREMOVE_IPC_ENDPOINT\fP, \fBTHREAD_YIELD\fP, \fBTHREAD_SLEEP\fP, \fBTHREAD_CLOSE\fP }"
+.br
+.RI "DO NOT REARRANGE ONLY APPEND TO\&. "
+.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::StackFrame\fP \fB__attribute__\fP ((__packed__)) stack_frame_t"
+.RI "struct \fBMaxOS::system::tss\fP \fB__attribute__\fP ((__packed__)) tss_t"
 .br
 .ti -1c
 .RI "struct \fBMaxOS::system::GDTR\fP \fB__attribute__\fP ((packed))"
@@ -153,21 +150,79 @@ MaxOS::system
 
 .SS "typedef struct \fBMaxOS::system::source_location\fP \fBMaxOS::system::source_location_t\fP"
 
+.SS "typedef struct \fBMaxOS::system::SyscallArguments\fP \fBMaxOS::system::syscall_args_t\fP"
+
+.SS "typedef \fBsyscall_args_t\fP*(* MaxOS::system::syscall_func_t) (\fBsyscall_args_t\fP *args)"
+
+.PP
+Definition at line 52 of file syscalls\&.h\&.
 .SS "typedef struct \fBMaxOS::system::type_descriptor\fP \fBMaxOS::system::type_descriptor_t\fP"
 
 .SS "typedef struct \fBMaxOS::system::type_mismatch_info\fP \fBMaxOS::system::type_mismatch_info_t\fP"
 
 .SS "typedef struct \fBMaxOS::system::type_mismatch_info_v1\fP \fBMaxOS::system::type_mismatch_info_v1_t\fP"
 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBMaxOS::system::SyscallType\fP"
+
+.PP
+DO NOT REARRANGE ONLY APPEND TO\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICLOSE_PROCESS \fP\fP
+.TP
+\fB\fIKLOG \fP\fP
+.TP
+\fB\fICREATE_SHARED_MEMORY \fP\fP
+.TP
+\fB\fIOPEN_SHARED_MEMORY \fP\fP
+.TP
+\fB\fIALLOCATE_MEMORY \fP\fP
+.TP
+\fB\fIFREE_MEMORY \fP\fP
+.TP
+\fB\fICREATE_IPC_ENDPOINT \fP\fP
+.TP
+\fB\fISEND_IPC_MESSAGE \fP\fP
+.TP
+\fB\fIREMOVE_IPC_ENDPOINT \fP\fP
+.TP
+\fB\fITHREAD_YIELD \fP\fP
+.TP
+\fB\fITHREAD_SLEEP \fP\fP
+.TP
+\fB\fITHREAD_CLOSE \fP\fP
+.PP
+Definition at line 25 of file syscalls\&.h\&.
+.PP
+.nf
+25                         {
+26             CLOSE_PROCESS,
+27             KLOG,
+28             CREATE_SHARED_MEMORY,
+29             OPEN_SHARED_MEMORY,
+30             ALLOCATE_MEMORY,
+31             FREE_MEMORY,
+32             CREATE_IPC_ENDPOINT,
+33             SEND_IPC_MESSAGE,
+34             REMOVE_IPC_ENDPOINT,
+35             THREAD_YIELD,
+36             THREAD_SLEEP,
+37             THREAD_CLOSE,
+38         };
+.fi
 .SH "Function Documentation"
 .PP 
-.SS "struct \fBMaxOS::system::StackFrame\fP \fBMaxOS::system::__attribute__\fP ((__packed__))"
+.SS "struct \fBMaxOS::system::tss\fP \fBMaxOS::system::__attribute__\fP ((__packed__))"
 
 .SS "struct \fBMaxOS::system::GDTR\fP \fBMaxOS::system::__attribute__\fP ((packed))"
 
 .SH "Variable Documentation"
 .PP 
-.SS "class \fBMaxOS::system::Task\fP \fBMaxOS::system::__attribute__\fP"
+.SS "class \fBMaxOS::system::GlobalDescriptorTable\fP \fBMaxOS::system::__attribute__\fP"
 
 .SS "const char* MaxOS::system::Type_Check_Kinds[]"
 \fBInitial value:\fP

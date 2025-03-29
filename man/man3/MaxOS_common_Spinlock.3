@@ -1,0 +1,174 @@
+.TH "MaxOS::common::Spinlock" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::Spinlock \- A simple spinlock implementation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <spinlock\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSpinlock\fP (bool should_yield=false)"
+.br
+.ti -1c
+.RI "\fB~Spinlock\fP ()"
+.br
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.RI "Lock the spinlock once it is available\&. "
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.RI "Unlock the spinlock\&. "
+.ti -1c
+.RI "bool \fBis_locked\fP ()"
+.br
+.RI "Check if the spinlock is locked\&. "
+.ti -1c
+.RI "void \fBacquire\fP ()"
+.br
+.RI "Acquire the spinlock\&. "
+.ti -1c
+.RI "void \fBrelease\fP ()"
+.br
+.RI "Release the spinlock\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A simple spinlock implementation\&. 
+.PP
+Definition at line 16 of file spinlock\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Spinlock::Spinlock (bool should_yield = \fCfalse\fP)"
+
+.PP
+Definition at line 13 of file spinlock\&.cpp\&.
+.PP
+.nf
+14 : m_should_yield(should_yield) {
+15 
+16 }
+.fi
+.SS "Spinlock::~Spinlock ()"
+
+.PP
+Definition at line 18 of file spinlock\&.cpp\&.
+.PP
+.nf
+18                     {
+19 
+20 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void Spinlock::acquire ()"
+
+.PP
+Acquire the spinlock\&. 
+.PP
+Definition at line 61 of file spinlock\&.cpp\&.
+.PP
+.nf
+61                        {
+62   while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
+63 
+64       // Wait for the lock to be available
+65       if(m_should_yield)
+66         Scheduler::get_system_scheduler()->yield();
+67 
+68       // Dont optimise this loop
+69       asm("nop");
+70   }
+71 }
+.fi
+.PP
+Referenced by lock()\&.
+.SS "bool Spinlock::is_locked ()"
+
+.PP
+Check if the spinlock is locked\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the spinlock is locked, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file spinlock\&.cpp\&.
+.PP
+.nf
+53                          {
+54     return m_locked;
+55 }
+.fi
+.SS "void Spinlock::lock ()"
+
+.PP
+Lock the spinlock once it is available\&. 
+.PP
+Definition at line 25 of file spinlock\&.cpp\&.
+.PP
+.nf
+25                     {
+26 
+27     // Wait for the lock to be available
+28     acquire();
+29 
+30     // Set the lock to be locked
+31     m_locked = true;
+32 
+33 
+34 }
+.fi
+.PP
+References acquire()\&.
+.PP
+Referenced by _kprintf_internal(), MaxOS::memory::PhysicalMemoryManager::allocate_area(), MaxOS::memory::PhysicalMemoryManager::allocate_frame(), MaxOS::memory::PhysicalMemoryManager::free_area(), MaxOS::memory::PhysicalMemoryManager::free_frame(), and MaxOS::memory::PhysicalMemoryManager::reserve()\&.
+.SS "void Spinlock::release ()"
+
+.PP
+Release the spinlock\&. 
+.PP
+Definition at line 76 of file spinlock\&.cpp\&.
+.PP
+.nf
+76                        {
+77   __atomic_clear(&m_locked, __ATOMIC_RELEASE);
+78 }
+.fi
+.PP
+Referenced by unlock()\&.
+.SS "void Spinlock::unlock ()"
+
+.PP
+Unlock the spinlock\&. 
+.PP
+Definition at line 39 of file spinlock\&.cpp\&.
+.PP
+.nf
+39                       {
+40 
+41     // Set the lock to be unlocked
+42     m_locked = false;
+43 
+44     // Release the lock
+45     release();
+46 
+47 }
+.fi
+.PP
+References release()\&.
+.PP
+Referenced by MaxOS::memory::PhysicalMemoryManager::allocate_area(), MaxOS::memory::PhysicalMemoryManager::allocate_frame(), MaxOS::memory::PhysicalMemoryManager::free_area(), MaxOS::memory::PhysicalMemoryManager::free_frame(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), and MaxOS::memory::PhysicalMemoryManager::reserve()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

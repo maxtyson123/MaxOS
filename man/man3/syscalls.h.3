@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/syscalls.h" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/syscalls.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,16 +8,29 @@
 .PP
 \fC#include <stdint\&.h>\fP
 .br
+\fC#include <stddef\&.h>\fP
+.br
 \fC#include <hardwarecommunication/interrupts\&.h>\fP
 .br
-\fC#include <stddef\&.h>\fP
+\fC#include <common/vector\&.h>\fP
+.br
+\fC#include <common/colour\&.h>\fP
+.br
+\fC#include <memory/memorymanagement\&.h>\fP
+.br
+\fC#include <common/kprint\&.h>\fP
+.br
+\fC#include <processes/scheduler\&.h>\fP
 .br
 
 .SS "Classes"
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::system::SyscallHandler\fP"
+.RI "struct \fBMaxOS::system::SyscallArguments\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::system::SyscallManager\fP"
 .br
 .RI "Handles system calls\&. "
 .in -1c
@@ -30,6 +43,24 @@
 .ti -1c
 .RI " \fBMaxOS::system\fP"
 .br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBMaxOS::system::SyscallArguments\fP \fBMaxOS::system::syscall_args_t\fP"
+.br
+.ti -1c
+.RI "typedef syscall_args_t *(* \fBMaxOS::system::syscall_func_t\fP) (syscall_args_t *args)"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBMaxOS::system::SyscallType\fP { \fBMaxOS::system::CLOSE_PROCESS\fP, \fBMaxOS::system::KLOG\fP, \fBMaxOS::system::CREATE_SHARED_MEMORY\fP, \fBMaxOS::system::OPEN_SHARED_MEMORY\fP, \fBMaxOS::system::ALLOCATE_MEMORY\fP, \fBMaxOS::system::FREE_MEMORY\fP, \fBMaxOS::system::CREATE_IPC_ENDPOINT\fP, \fBMaxOS::system::SEND_IPC_MESSAGE\fP, \fBMaxOS::system::REMOVE_IPC_ENDPOINT\fP, \fBMaxOS::system::THREAD_YIELD\fP, \fBMaxOS::system::THREAD_SLEEP\fP, \fBMaxOS::system::THREAD_CLOSE\fP }"
+.br
+.RI "DO NOT REARRANGE ONLY APPEND TO\&. "
 .in -1c
 .SH "Author"
 .PP 

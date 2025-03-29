@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/kprint.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,8 @@
 \fC#include <system/cpu\&.h>\fP
 .br
 \fC#include <stdarg\&.h>\fP
+.br
+\fC#include <common/spinlock\&.h>\fP
 .br
 
 .SS "Macros"
@@ -78,75 +80,77 @@ s for string
 .PP
 
 .PP
-Definition at line 157 of file kprint\&.cpp\&.
+Definition at line 170 of file kprint\&.cpp\&.
 .PP
 .nf
-158 {
-159   // Create a pointer to the data
-160   va_list parameters;
-161   va_start(parameters, format);
-162 
-163   // Print the header
-164   if(*format != '\h')
-165     pre_kprintf(file, line,func, type);
-166   else
-167     format++;
-168 
-169 
-170   // Loop through the format string
-171   for (; *format != '\0'; format++)
-172   {
-173 
-174     // If it is not a %, print the character
-175     if (*format != '%')
-176     {
-177       putchar(*format);
-178       continue;
-179     }
-180 
-181     // Move to the next character
-182     format++;
+171 {
+172 
+173   // wait for the lock
+174   kprintf_lock\&.lock();
+175 
+176   // Create a pointer to the data
+177   va_list parameters;
+178   va_start(parameters, format);
+179 
+180   // Print the header if the first two are not %h
+181   if(*format != '%' && *(format + 1) != 'h')
+182     pre_kprintf(file, line,func, type);
 183 
-184     switch (*format)
-185     {
-186       case 'd':
-187       {
-188         // Print a decimal
-189         int number = va_arg (parameters, int);
-190         char* str = itoa(10, number);
-191         for (int i = 0; i < strlen(str); i++)
-192           putchar(str[i]);
-193         break;
-194       }
-195       case 'x':
-196       {
-197         // Print a hex
-198         uint64_t  number = va_arg (parameters, uint64_t );
-199         char* str = itoa(16, number);
-200         for (int i = 0; i < strlen(str); i++)
-201           putchar(str[i]);
-202         break;
-203       }
-204       case 's':
-205       {
-206         // Print a string
-207         char* str = va_arg (parameters, char*);
-208         for (int i = 0; i < strlen(str); i++)
-209           putchar(str[i]);
-210         break;
-211       }
-212     }
-213   }
-214 
-215 
-216   // If it is type 3 panic
-217   if(type == 3)
-218      CPU::PANIC("Check the serial output for more information");
-219 
-220 }
+184 
+185   // Loop through the format string
+186   for (; *format != '\0'; format++)
+187   {
+188 
+189     // If it is not a %, print the character
+190     if (*format != '%')
+191     {
+192       putchar(*format, type == 2);
+193       continue;
+194     }
+195 
+196     // Move to the next character
+197     format++;
+198 
+199     switch (*format)
+200     {
+201       case 'd':
+202       {
+203         // Print a decimal
+204         int number = va_arg (parameters, int);
+205         char* str = itoa(10, number);
+206         for (int i = 0; i < strlen(str); i++)
+207           putchar(str[i], type == 2);
+208         break;
+209       }
+210       case 'x':
+211       {
+212         // Print a hex
+213         uint64_t  number = va_arg (parameters, uint64_t );
+214         char* str = itoa(16, number);
+215         for (int i = 0; i < strlen(str); i++)
+216           putchar(str[i], type == 2);
+217         break;
+218       }
+219       case 's':
+220       {
+221         // Print a string
+222         char* str = va_arg (parameters, char*);
+223         for (int i = 0; i < strlen(str); i++)
+224           putchar(str[i], type == 2);
+225         break;
+226       }
+227     }
+228   }
+229 
+230   kprintf_lock\&.unlock();
+231 
+232   // If it is type 3 panic
+233   if(type == 3)
+234      CPU::PANIC("Check the serial output for more information");
+235 }
 .fi
 .PP
-References pre_kprintf(), and type\&.
+References kprintf_lock, MaxOS::common::Spinlock::lock(), pre_kprintf(), and type\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

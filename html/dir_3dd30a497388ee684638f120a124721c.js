@@ -7,6 +7,7 @@ var dir_3dd30a497388ee684638f120a124721c =
     [ "hardwarecommunication", "dir_db0ea32746a579685dada9b78141e93c.html", "dir_db0ea32746a579685dada9b78141e93c" ],
     [ "memory", "dir_8816d1e437cb0bf6611605a454a0f1dd.html", "dir_8816d1e437cb0bf6611605a454a0f1dd" ],
     [ "net", "dir_82f177c45cd488be05cef4b828696fe2.html", "dir_82f177c45cd488be05cef4b828696fe2" ],
+    [ "processes", "dir_3dca0007a4d2a42591f5e561e958d105.html", "dir_3dca0007a4d2a42591f5e561e958d105" ],
     [ "system", "dir_77cc232de84bcafdcd6ebadaf8a600a3.html", "dir_77cc232de84bcafdcd6ebadaf8a600a3" ],
     [ "kernel.cpp", "kernel_8cpp.html", "kernel_8cpp" ]
 ];

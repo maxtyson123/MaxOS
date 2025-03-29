@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,8 @@
 \fC#include <stddef\&.h>\fP
 .br
 \fC#include <system/multiboot\&.h>\fP
+.br
+\fC#include <common/spinlock\&.h>\fP
 .br
 
 .SS "Classes"
@@ -130,81 +132,81 @@
 .SS "#define PML1_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 0)"
 
 .PP
-Definition at line 22 of file physical\&.h\&.
+Definition at line 23 of file physical\&.h\&.
 .SS "#define PML2_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 1)"
 
 .PP
-Definition at line 21 of file physical\&.h\&.
+Definition at line 22 of file physical\&.h\&.
 .SS "#define PML3_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 2)"
 
 .PP
-Definition at line 20 of file physical\&.h\&.
+Definition at line 21 of file physical\&.h\&.
 .SS "#define PML4_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 3)"
 
 .PP
-Definition at line 19 of file physical\&.h\&.
+Definition at line 20 of file physical\&.h\&.
 .SS "#define PMLX_GET_INDEX(ADDR, LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
 
 .PP
-Definition at line 17 of file physical\&.h\&.
+Definition at line 18 of file physical\&.h\&.
 .SH "Variable Documentation"
 .PP 
 .SS "uint64_t accessed"
 
 .PP
-Definition at line 32 of file physical\&.h\&.
+Definition at line 33 of file physical\&.h\&.
 .SS "uint64_t available"
 
 .PP
-Definition at line 36 of file physical\&.h\&.
+Definition at line 37 of file physical\&.h\&.
 .SS "uint64_t cache_disabled"
 
 .PP
-Definition at line 31 of file physical\&.h\&.
+Definition at line 32 of file physical\&.h\&.
 .SS "uint64_t dirty"
 
 .PP
-Definition at line 33 of file physical\&.h\&.
+Definition at line 34 of file physical\&.h\&.
 .SS "pte_t entries[512]"
 
 .PP
-Definition at line 27 of file physical\&.h\&.
+Definition at line 28 of file physical\&.h\&.
 .PP
 Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find(), and MaxOS::memory::PhysicalMemoryManager::map()\&.
 .SS "uint64_t global"
 
 .PP
-Definition at line 35 of file physical\&.h\&.
+Definition at line 36 of file physical\&.h\&.
 .SS "uint64_t huge_page"
 
 .PP
-Definition at line 34 of file physical\&.h\&.
+Definition at line 35 of file physical\&.h\&.
 .SS "uint64_t physical_address"
 
 .PP
-Definition at line 37 of file physical\&.h\&.
+Definition at line 38 of file physical\&.h\&.
 .PP
-Referenced by MaxOS::memory::MemoryManager::from_dm_region(), MaxOS::memory::PhysicalMemoryManager::identity_map(), MaxOS::memory::PhysicalMemoryManager::is_mapped(), MaxOS::memory::PhysicalMemoryManager::map(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), MaxOS::memory::MemoryManager::to_dm_region(), MaxOS::memory::MemoryManager::to_higher_region(), MaxOS::memory::MemoryManager::to_io_region(), and MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\&.
+Referenced by MaxOS::processes::IPC::alloc_shared_memory(), MaxOS::processes::IPC::free_shared_memory(), MaxOS::memory::MemoryManager::from_dm_region(), MaxOS::memory::PhysicalMemoryManager::identity_map(), MaxOS::memory::PhysicalMemoryManager::is_mapped(), MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space(), MaxOS::memory::VirtualMemoryManager::load_shared_memory(), MaxOS::memory::PhysicalMemoryManager::map(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), MaxOS::system::SyscallManager::syscall_create_shared_memory(), MaxOS::system::SyscallManager::syscall_open_shared_memory(), MaxOS::memory::MemoryManager::to_dm_region(), MaxOS::memory::MemoryManager::to_higher_region(), MaxOS::memory::MemoryManager::to_io_region(), and MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\&.
 .SS "uint64_t present"
 
 .PP
-Definition at line 27 of file physical\&.h\&.
+Definition at line 28 of file physical\&.h\&.
 .PP
 Referenced by MaxOS::memory::PhysicalMemoryManager::map()\&.
 .SS "uint64_t user"
 
 .PP
-Definition at line 29 of file physical\&.h\&.
+Definition at line 30 of file physical\&.h\&.
 .SS "uint64_t write"
 
 .PP
-Definition at line 28 of file physical\&.h\&.
+Definition at line 29 of file physical\&.h\&.
 .PP
 Referenced by MaxOS::drivers::ethernet::intel_i217::activate(), MaxOS::drivers::clock::Clock::calibrate(), MaxOS::net::EthernetFrameHandler::DataReceived(), MaxOS::drivers::ethernet::intel_i217::DoSend(), MaxOS::drivers::Driver::error_message(), MaxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), MaxOS::drivers::ethernet::intel_i217::GetMediaAccessControlAddress(), MaxOS::drivers::ethernet::intel_i217::handle_interrupt(), MaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload(), MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::identify(), MaxOS::hardwarecommunication::LocalAPIC::init(), MaxOS::common::GenericOutputStream< string >::on_stream_read(), MaxOS::common::GenericOutputStream< string >::operator<<(), MaxOS::net::InternetControlMessageProtocol::RequestEchoReply(), MaxOS::drivers::ethernet::EthernetDriver::Send(), MaxOS::hardwarecommunication::LocalAPIC::send_eoi(), and MaxOS::drivers::clock::PIT::ticks_per_ms()\&.
 .SS "uint64_t write_through"
 
 .PP
-Definition at line 30 of file physical\&.h\&.
+Definition at line 31 of file physical\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

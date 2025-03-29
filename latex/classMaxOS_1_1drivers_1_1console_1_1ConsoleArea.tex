@@ -34,6 +34,10 @@ void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_abd612b431
 \begin{DoxyCompactList}\small\item\em Change the foreground color of a character on the console area if the coordinates are within the area. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a5d42861af07e0136e8f2ca352c2968be}{set\+\_\+background\+\_\+color}} (uint16\+\_\+t x, uint16\+\_\+t y, \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} background) override
 \begin{DoxyCompactList}\small\item\em Change the background color of a character on the console area if the coordinates are within the area. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a965920a5c4c07ab180837b6515c06206}{scroll\+\_\+up}} () override
+\begin{DoxyCompactList}\small\item\em Scroll the console area up by 1 line. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_af7e918f4d1e852240a00c8742c15bdb1}{scroll\+\_\+up}} (uint16\+\_\+t left, uint16\+\_\+t top, uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ad16e9bf52ec0c861d2ef0d012c491a6f}{width}}, uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a605e2c296e8dc748709fc677091348b0}{height}}, \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} foreground=\mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a435651475912320afbee577ea1e39874}{common\+::\+Light\+Grey}}, \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} background=\mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a3fab4e904157b2e96be41a69c8ae0553}{common\+::\+Black}}, char fill=\textquotesingle{} \textquotesingle{}) override
+\begin{DoxyCompactList}\small\item\em Scroll an area of the console up by 1 line. \end{DoxyCompactList}\item 
 char \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a249d061b5869e6fe246f8375d4468655}{get\+\_\+character}} (uint16\+\_\+t x, uint16\+\_\+t y) override
 \begin{DoxyCompactList}\small\item\em Return the character at the given coordinates if the coordinates are within the console area. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a4f559942686dea411caa84e6732c1e17}{get\+\_\+foreground\+\_\+color}} (uint16\+\_\+t x, uint16\+\_\+t y) override
@@ -58,7 +62,7 @@ uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a
 \doxysubsection{Detailed Description}
 A console that is a subsection of another console, limited by a width and height. 
 
-Definition at line 60 of file console.\+h.
+Definition at line 59 of file console.\+h.
 
 
 
@@ -168,19 +172,19 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 383 of file console.\+cpp.
+Definition at line 384 of file console.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{383                                                                       \{}
-\DoxyCodeLine{384 }
-\DoxyCodeLine{385     \textcolor{comment}{// Make sure the coordinates are within the console area}}
-\DoxyCodeLine{386     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
-\DoxyCodeLine{387         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a3fab4e904157b2e96be41a69c8ae0553}{ConsoleColour::Black}};}
-\DoxyCodeLine{388 }
-\DoxyCodeLine{389     \textcolor{comment}{// Return the background color of the character at the given coordinates}}
-\DoxyCodeLine{390     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a218478198147a9341918274d1da729a9}{get\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}});}
-\DoxyCodeLine{391 \}}
+\DoxyCodeLine{384                                                                       \{}
+\DoxyCodeLine{385 }
+\DoxyCodeLine{386     \textcolor{comment}{// Make sure the coordinates are within the console area}}
+\DoxyCodeLine{387     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
+\DoxyCodeLine{388         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a3fab4e904157b2e96be41a69c8ae0553}{ConsoleColour::Black}};}
+\DoxyCodeLine{389 }
+\DoxyCodeLine{390     \textcolor{comment}{// Return the background color of the character at the given coordinates}}
+\DoxyCodeLine{391     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a218478198147a9341918274d1da729a9}{get\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}});}
+\DoxyCodeLine{392 \}}
 
 \end{DoxyCode}
 
@@ -213,19 +217,19 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 348 of file console.\+cpp.
+Definition at line 349 of file console.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{348                                                       \{}
-\DoxyCodeLine{349 }
-\DoxyCodeLine{350     \textcolor{comment}{// Make sure the coordinates are within the console area}}
-\DoxyCodeLine{351     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
-\DoxyCodeLine{352         \textcolor{keywordflow}{return} \textcolor{charliteral}{' '};}
-\DoxyCodeLine{353 }
-\DoxyCodeLine{354     \textcolor{comment}{// Return the character at the given coordinates}}
-\DoxyCodeLine{355     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a57b4b441372491d5d4935cc964c6a690}{get\_character}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}});}
-\DoxyCodeLine{356 \}}
+\DoxyCodeLine{349                                                       \{}
+\DoxyCodeLine{350 }
+\DoxyCodeLine{351     \textcolor{comment}{// Make sure the coordinates are within the console area}}
+\DoxyCodeLine{352     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
+\DoxyCodeLine{353         \textcolor{keywordflow}{return} \textcolor{charliteral}{' '};}
+\DoxyCodeLine{354 }
+\DoxyCodeLine{355     \textcolor{comment}{// Return the character at the given coordinates}}
+\DoxyCodeLine{356     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a57b4b441372491d5d4935cc964c6a690}{get\_character}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}});}
+\DoxyCodeLine{357 \}}
 
 \end{DoxyCode}
 
@@ -258,20 +262,20 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 365 of file console.\+cpp.
+Definition at line 366 of file console.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{365                                                                       \{}
-\DoxyCodeLine{366 }
-\DoxyCodeLine{367     \textcolor{comment}{// Make sure the coordinates are within the console area}}
-\DoxyCodeLine{368     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
-\DoxyCodeLine{369         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a435651475912320afbee577ea1e39874}{ConsoleColour::LightGrey}};}
-\DoxyCodeLine{370 }
-\DoxyCodeLine{371     \textcolor{comment}{// Return the foreground color of the character at the given coordinates}}
-\DoxyCodeLine{372     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_ad1f76dfc4ae15376a39cedc55d56afce}{get\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}});}
-\DoxyCodeLine{373 }
-\DoxyCodeLine{374 \}}
+\DoxyCodeLine{366                                                                       \{}
+\DoxyCodeLine{367 }
+\DoxyCodeLine{368     \textcolor{comment}{// Make sure the coordinates are within the console area}}
+\DoxyCodeLine{369     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
+\DoxyCodeLine{370         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a435651475912320afbee577ea1e39874}{ConsoleColour::LightGrey}};}
+\DoxyCodeLine{371 }
+\DoxyCodeLine{372     \textcolor{comment}{// Return the foreground color of the character at the given coordinates}}
+\DoxyCodeLine{373     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_ad1f76dfc4ae15376a39cedc55d56afce}{get\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}});}
+\DoxyCodeLine{374 }
+\DoxyCodeLine{375 \}}
 
 \end{DoxyCode}
 
@@ -312,7 +316,7 @@ References m\+\_\+height.
 
 
 
-Referenced by Console\+Area().
+Referenced by Console\+Area(), and scroll\+\_\+up().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aae23f7107573f0f00e833f1c6ee05180}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aae23f7107573f0f00e833f1c6ee05180}} 
 \index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!put\_character@{put\_character}}
@@ -359,6 +363,86 @@ Definition at line 294 of file console.\+cpp.
 
 References Max\+O\+S\+::drivers\+::peripherals\+::c, m\+\_\+console, m\+\_\+height, m\+\_\+left, m\+\_\+top, m\+\_\+width, Max\+O\+S\+::drivers\+::console\+::\+Console\+::put\+\_\+character(), Max\+O\+S\+::drivers\+::peripherals\+::x, and Max\+O\+S\+::drivers\+::peripherals\+::y.
 
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a965920a5c4c07ab180837b6515c06206}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a965920a5c4c07ab180837b6515c06206}} 
+\index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!scroll\_up@{scroll\_up}}
+\index{scroll\_up@{scroll\_up}!MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}}
+\doxysubsubsection{\texorpdfstring{scroll\_up()}{scroll\_up()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Console\+Area\+::scroll\+\_\+up (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Scroll the console area up by 1 line. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{Max\+O\+S\+::drivers\+::console\+::\+Console}}.
+
+
+
+Definition at line 397 of file console.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{397                             \{}
+\DoxyCodeLine{398 }
+\DoxyCodeLine{399   \textcolor{comment}{// Get the console}}
+\DoxyCodeLine{400   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{scroll\_up}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}});}
+\DoxyCodeLine{401 }
+\DoxyCodeLine{402 \}}
+
+\end{DoxyCode}
+
+
+References m\+\_\+console, m\+\_\+height, m\+\_\+left, m\+\_\+top, m\+\_\+width, and Max\+O\+S\+::drivers\+::console\+::\+Console\+::scroll\+\_\+up().
+
+\mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_af7e918f4d1e852240a00c8742c15bdb1}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_af7e918f4d1e852240a00c8742c15bdb1}} 
+\index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!scroll\_up@{scroll\_up}}
+\index{scroll\_up@{scroll\_up}!MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}}
+\doxysubsubsection{\texorpdfstring{scroll\_up()}{scroll\_up()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Console\+Area\+::scroll\+\_\+up (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{left,  }\item[{uint16\+\_\+t}]{top,  }\item[{uint16\+\_\+t}]{width,  }\item[{uint16\+\_\+t}]{height,  }\item[{\mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}}}]{foreground = {\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a435651475912320afbee577ea1e39874}{common\+::\+Light\+Grey}}},  }\item[{\mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9}{common\+::\+Console\+Colour}}}]{background = {\ttfamily \mbox{\hyperlink{namespaceMaxOS_1_1common_a163092be7d061323a91e03e6e8965da9a3fab4e904157b2e96be41a69c8ae0553}{common\+::\+Black}}},  }\item[{char}]{fill = {\ttfamily \textquotesingle{}~\textquotesingle{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Scroll an area of the console up by 1 line. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em left} & The left coordinate of the area to scroll \\
+\hline
+{\em top} & The top coordinate of the area to scroll \\
+\hline
+{\em width} & The m\+\_\+width of the area to scroll \\
+\hline
+{\em height} & The m\+\_\+height of the area to scroll \\
+\hline
+{\em foreground} & The foreground color of the new line \\
+\hline
+{\em background} & The background color of the new line \\
+\hline
+{\em fill} & The character to fill the new line with \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_ac6050b6ec39574dfbfe2559413d793fd}{Max\+O\+S\+::drivers\+::console\+::\+Console}}.
+
+
+
+Definition at line 414 of file console.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{416                                                                        \{}
+\DoxyCodeLine{417 }
+\DoxyCodeLine{418   \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{scroll\_up}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + left, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + top, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ad16e9bf52ec0c861d2ef0d012c491a6f}{width}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a605e2c296e8dc748709fc677091348b0}{height}}, foreground, background, fill);}
+\DoxyCodeLine{419 }
+\DoxyCodeLine{420 \}}
+
+\end{DoxyCode}
+
+
+References height(), m\+\_\+console, m\+\_\+left, m\+\_\+top, Max\+O\+S\+::drivers\+::console\+::\+Console\+::scroll\+\_\+up(), and width().
+
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a5d42861af07e0136e8f2ca352c2968be}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a5d42861af07e0136e8f2ca352c2968be}} 
 \index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!set\_background\_color@{set\_background\_color}}
 \index{set\_background\_color@{set\_background\_color}!MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}}
@@ -384,20 +468,20 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 330 of file console.\+cpp.
+Definition at line 331 of file console.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{330                                                                                        \{}
-\DoxyCodeLine{331 }
-\DoxyCodeLine{332     \textcolor{comment}{// Make sure the coordinates are within the console area}}
-\DoxyCodeLine{333     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
-\DoxyCodeLine{334         \textcolor{keywordflow}{return};}
-\DoxyCodeLine{335 }
-\DoxyCodeLine{336     \textcolor{comment}{// Set the background color of the character}}
-\DoxyCodeLine{337     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_afed2ea9db3acf1d67461df3b8b79fdff}{set\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}, background);}
-\DoxyCodeLine{338 }
-\DoxyCodeLine{339 \}}
+\DoxyCodeLine{331                                                                                        \{}
+\DoxyCodeLine{332 }
+\DoxyCodeLine{333     \textcolor{comment}{// Make sure the coordinates are within the console area}}
+\DoxyCodeLine{334     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
+\DoxyCodeLine{335         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{336 }
+\DoxyCodeLine{337     \textcolor{comment}{// Set the background color of the character}}
+\DoxyCodeLine{338     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_afed2ea9db3acf1d67461df3b8b79fdff}{set\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}, background);}
+\DoxyCodeLine{339 }
+\DoxyCodeLine{340 \}}
 
 \end{DoxyCode}
 
@@ -429,20 +513,20 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_
 
 
 
-Definition at line 312 of file console.\+cpp.
+Definition at line 313 of file console.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{312                                                                                        \{}
-\DoxyCodeLine{313 }
-\DoxyCodeLine{314     \textcolor{comment}{// Make sure the coordinates are within the console area}}
-\DoxyCodeLine{315     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
-\DoxyCodeLine{316         \textcolor{keywordflow}{return};}
-\DoxyCodeLine{317 }
-\DoxyCodeLine{318     \textcolor{comment}{// Set the foreground color of the character}}
-\DoxyCodeLine{319     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a02474baa513537a51013dc04cac82e11}{set\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}, foreground);}
-\DoxyCodeLine{320 }
-\DoxyCodeLine{321 \}}
+\DoxyCodeLine{313                                                                                        \{}
+\DoxyCodeLine{314 }
+\DoxyCodeLine{315     \textcolor{comment}{// Make sure the coordinates are within the console area}}
+\DoxyCodeLine{316     \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}{m\_width}} || \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}} >= \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}{m\_height}})}
+\DoxyCodeLine{317         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{318 }
+\DoxyCodeLine{319     \textcolor{comment}{// Set the foreground color of the character}}
+\DoxyCodeLine{320     \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a756d8408462239192370175eecba3985}{m\_console}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a02474baa513537a51013dc04cac82e11}{set\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}{m\_left}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5c7e532b9391409dbee2092aa3650274}{x}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}{m\_top}} + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa792c56d6c3b72c637bc5edbe24bc1ca}{y}}, foreground);}
+\DoxyCodeLine{321 }
+\DoxyCodeLine{322 \}}
 
 \end{DoxyCode}
 
@@ -483,7 +567,7 @@ References m\+\_\+width.
 
 
 
-Referenced by Console\+Area().
+Referenced by Console\+Area(), and scroll\+\_\+up().
 
 
 
@@ -496,11 +580,11 @@ Referenced by Console\+Area().
 
 
 
-Definition at line 63 of file console.\+h.
+Definition at line 62 of file console.\+h.
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), scroll\+\_\+up(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ae3e74c1c3e61183e4f12035ffb382137}} 
 \index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!m\_height@{m\_height}}
@@ -510,11 +594,11 @@ Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+f
 
 
 
-Definition at line 67 of file console.\+h.
+Definition at line 66 of file console.\+h.
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), height(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), height(), put\+\_\+character(), scroll\+\_\+up(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_ab01a61a5c58492e1d71872a121cea579}} 
 \index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!m\_left@{m\_left}}
@@ -524,11 +608,11 @@ Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+f
 
 
 
-Definition at line 64 of file console.\+h.
+Definition at line 63 of file console.\+h.
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), scroll\+\_\+up(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_a20895dca7787fe5ba7cce5eb757f698c}} 
 \index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!m\_top@{m\_top}}
@@ -538,11 +622,11 @@ Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+f
 
 
 
-Definition at line 65 of file console.\+h.
+Definition at line 64 of file console.\+h.
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), scroll\+\_\+up(), set\+\_\+background\+\_\+color(), and set\+\_\+foreground\+\_\+color().
 
 \mbox{\Hypertarget{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}\label{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea_aab21ed9132109ac3ec07cdf1291d4034}} 
 \index{MaxOS::drivers::console::ConsoleArea@{MaxOS::drivers::console::ConsoleArea}!m\_width@{m\_width}}
@@ -552,11 +636,11 @@ Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+f
 
 
 
-Definition at line 66 of file console.\+h.
+Definition at line 65 of file console.\+h.
 
 
 
-Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), set\+\_\+background\+\_\+color(), set\+\_\+foreground\+\_\+color(), and width().
+Referenced by get\+\_\+background\+\_\+color(), get\+\_\+character(), get\+\_\+foreground\+\_\+color(), put\+\_\+character(), scroll\+\_\+up(), set\+\_\+background\+\_\+color(), set\+\_\+foreground\+\_\+color(), and width().
 
 
 

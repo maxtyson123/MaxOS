@@ -13,6 +13,8 @@ var classMaxOS_1_1common_1_1GraphicsContext =
     [ "fill_rectangle", "classMaxOS_1_1common_1_1GraphicsContext.html#abbd267da05e73010f198df1ddbbfdad0", null ],
     [ "fill_rectangle", "classMaxOS_1_1common_1_1GraphicsContext.html#a77540e5ce13f7c43f559d2eac9e9cff2", null ],
     [ "fillCircle", "classMaxOS_1_1common_1_1GraphicsContext.html#a07d68ec02af5c34de1b9e87a4ba125e4", null ],
+    [ "get_color_depth", "classMaxOS_1_1common_1_1GraphicsContext.html#a46f48f6dfaf11ec942517ac3da910fdd", null ],
+    [ "get_framebuffer_address", "classMaxOS_1_1common_1_1GraphicsContext.html#a200bb1963b70593cf58fe3f597c6c705", null ],
     [ "get_height", "classMaxOS_1_1common_1_1GraphicsContext.html#a0e77713e749b2844edb03fe4031e9207", null ],
     [ "get_pixel", "classMaxOS_1_1common_1_1GraphicsContext.html#a29851ddab3cfe96acd52f619b378b266", null ],
     [ "get_rendered_pixel", "classMaxOS_1_1common_1_1GraphicsContext.html#a73c9187b7d75c97da25c75adb43015b2", null ],
@@ -32,6 +34,7 @@ var classMaxOS_1_1common_1_1GraphicsContext =
     [ "render_pixel_8_bit", "classMaxOS_1_1common_1_1GraphicsContext.html#a30ff9d3da93e84cd8ec21ccc7a337d2a", null ],
     [ "m_color_depth", "classMaxOS_1_1common_1_1GraphicsContext.html#a3fd274ff03cf62852f505b21409210aa", null ],
     [ "m_colour_pallet", "classMaxOS_1_1common_1_1GraphicsContext.html#a5c545bb337e4870b51159e5b4812114c", null ],
+    [ "m_framebuffer_address", "classMaxOS_1_1common_1_1GraphicsContext.html#a8525f5b3eed43e679d3fac180663f608", null ],
     [ "m_height", "classMaxOS_1_1common_1_1GraphicsContext.html#af9b68ff5af74a6b5b0195953c9c869bb", null ],
     [ "m_width", "classMaxOS_1_1common_1_1GraphicsContext.html#aca58f041b7ccf48043681536c99c4dc9", null ],
     [ "mirror_y_axis", "classMaxOS_1_1common_1_1GraphicsContext.html#ac261b7a332db150a769b0a02601ccdc8", null ]

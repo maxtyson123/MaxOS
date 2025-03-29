@@ -23,8 +23,10 @@
 \item 
 \mbox{\hyperlink{structmultiboot__tag__new__acpi}{multiboot\+\_\+tag\+\_\+new\+\_\+acpi}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ae4e89fb581fcfe7803408dd30dc4f261}{get\+\_\+new\+\_\+acpi}} ()
 \item 
+\mbox{\hyperlink{structmultiboot__tag}{multiboot\+\_\+tag}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acdd3db0feb808adc5c0bf13dc33fb786}{get\+\_\+start\+\_\+tag}} ()
+\item 
 bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acc0c0a33a1fefd4bbed766129b9f20db}{is\+\_\+reserved}} (\mbox{\hyperlink{multiboot_8h_a8dfdd61648b48aa31845db590970e06a}{multiboot\+\_\+uint64\+\_\+t}} \mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}})
-\begin{DoxyCompactList}\small\item\em Check if an address is reserved. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Check if an address is reserved by a multiboot module. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -39,6 +41,8 @@ bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acc0c0a33a1fefd4bbed7661
 \mbox{\hyperlink{structmultiboot__tag__old__acpi}{multiboot\+\_\+tag\+\_\+old\+\_\+acpi}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a572b5590c47b1128f43c458de10a9271}{m\+\_\+old\+\_\+acpi}}
 \item 
 \mbox{\hyperlink{structmultiboot__tag__new__acpi}{multiboot\+\_\+tag\+\_\+new\+\_\+acpi}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}{m\+\_\+new\+\_\+acpi}}
+\item 
+\mbox{\hyperlink{structmultiboot__tag__module}{multiboot\+\_\+tag\+\_\+module}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a3547fb0a8ee07f8b25269c0d22d98297}{m\+\_\+module}}
 \item 
 unsigned long \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a54b723177f148ac11df116a27ab3bffb}{m\+\_\+base\+\_\+address}}
 \end{DoxyCompactItemize}
@@ -70,29 +74,29 @@ Definition at line 13 of file multiboot.\+cpp.
 \DoxyCodeLine{17     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Multiboot\(\backslash\)n"});}
 \DoxyCodeLine{18 }
 \DoxyCodeLine{19     \textcolor{comment}{// Loop through the tags and load them}}
-\DoxyCodeLine{20     \textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *tag;}
-\DoxyCodeLine{21     \textcolor{keywordflow}{for}(tag=(\textcolor{keyword}{struct} \mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *)(\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a54b723177f148ac11df116a27ab3bffb}{m\_base\_address}} + MemoryManager::s\_higher\_half\_kernel\_offset + 8); tag-\/>\mbox{\hyperlink{structmultiboot__tag_ac2a46af85d217c774d2a618291539334}{type}} != \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}}; tag = (\textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *) ((\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *) tag + ((tag-\/>\mbox{\hyperlink{structmultiboot__tag_a877e6f09bf575aa775a81897a54337f4}{size}} + 7) \& \string~7))) \{}
-\DoxyCodeLine{22 }
-\DoxyCodeLine{23       \textcolor{keywordflow}{switch} (tag -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}) \{}
-\DoxyCodeLine{24           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_ad173069cc56a0b2734d796577a1bd857}{MULTIBOOT\_TAG\_TYPE\_FRAMEBUFFER}}:}
-\DoxyCodeLine{25               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a48388fa09d529db631bf6f80d5ab3091}{m\_framebuffer}} = (\mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}} *)tag;}
-\DoxyCodeLine{26               \textcolor{keywordflow}{break};}
-\DoxyCodeLine{27 }
-\DoxyCodeLine{28           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_ae64c134a04cf27a23a036c3330ef827a}{MULTIBOOT\_TAG\_TYPE\_BASIC\_MEMINFO}}:}
-\DoxyCodeLine{29               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}{m\_basic\_meminfo}} = (\mbox{\hyperlink{structmultiboot__tag__basic__meminfo}{multiboot\_tag\_basic\_meminfo}} *)tag;}
-\DoxyCodeLine{30               \textcolor{keywordflow}{break};}
-\DoxyCodeLine{31 }
-\DoxyCodeLine{32           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_afe69dc4711fc7f5dc9604977b2393218}{MULTIBOOT\_TAG\_TYPE\_BOOT\_LOADER\_NAME}}:}
-\DoxyCodeLine{33               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}} = (\mbox{\hyperlink{structmultiboot__tag__string}{multiboot\_tag\_string}} *)tag;}
-\DoxyCodeLine{34               \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Bootloader: \%s\(\backslash\)n"}, \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}}-\/>\mbox{\hyperlink{structmultiboot__tag__string_a50125b332242abd0051cd348fd2d9b68}{string}});}
-\DoxyCodeLine{35               \textcolor{keywordflow}{break};}
-\DoxyCodeLine{36 }
-\DoxyCodeLine{37           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_a92170b084bd536b0e30e2373263f6685}{MULTIBOOT\_TAG\_TYPE\_BOOTDEV}}:}
-\DoxyCodeLine{38             \mbox{\hyperlink{structmultiboot__tag__bootdev}{multiboot\_tag\_bootdev}} *bootdev;}
-\DoxyCodeLine{39             bootdev = (\mbox{\hyperlink{structmultiboot__tag__bootdev}{multiboot\_tag\_bootdev}} *)tag;}
-\DoxyCodeLine{40             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Boot device: 0x\%x, 0x\%x, 0x\%x of type 0x\%x\(\backslash\)n"},}
-\DoxyCodeLine{41                     (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_a2bcf5d32579dc281148607d937ca099b}{biosdev}}, (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_a50f53a5f93c66c721734cd44f6ea56b0}{slice}},}
-\DoxyCodeLine{42                     (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_ac34809553805874feb470308a2baa1e1}{part}}, (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_a80f58414b4caf448202e9cf5fa6a471e}{type}});}
+\DoxyCodeLine{20     \textcolor{keywordflow}{for}(\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}* tag = \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acdd3db0feb808adc5c0bf13dc33fb786}{get\_start\_tag}}(); tag-\/>\mbox{\hyperlink{structmultiboot__tag_ac2a46af85d217c774d2a618291539334}{type}} != \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}}; tag = (\textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *) ((\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *) tag + ((tag-\/>size + 7) \& \string~7))) \{}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22       \textcolor{keywordflow}{switch} (tag -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}) \{}
+\DoxyCodeLine{23           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_ad173069cc56a0b2734d796577a1bd857}{MULTIBOOT\_TAG\_TYPE\_FRAMEBUFFER}}:}
+\DoxyCodeLine{24               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a48388fa09d529db631bf6f80d5ab3091}{m\_framebuffer}} = (\mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}} *)tag;}
+\DoxyCodeLine{25               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_ae64c134a04cf27a23a036c3330ef827a}{MULTIBOOT\_TAG\_TYPE\_BASIC\_MEMINFO}}:}
+\DoxyCodeLine{28               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}{m\_basic\_meminfo}} = (\mbox{\hyperlink{structmultiboot__tag__basic__meminfo}{multiboot\_tag\_basic\_meminfo}} *)tag;}
+\DoxyCodeLine{29               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_afe69dc4711fc7f5dc9604977b2393218}{MULTIBOOT\_TAG\_TYPE\_BOOT\_LOADER\_NAME}}:}
+\DoxyCodeLine{32               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}} = (\mbox{\hyperlink{structmultiboot__tag__string}{multiboot\_tag\_string}} *)tag;}
+\DoxyCodeLine{33               \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Bootloader: \%s\(\backslash\)n"}, \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}}-\/>\mbox{\hyperlink{structmultiboot__tag__string_a50125b332242abd0051cd348fd2d9b68}{string}});}
+\DoxyCodeLine{34               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_a92170b084bd536b0e30e2373263f6685}{MULTIBOOT\_TAG\_TYPE\_BOOTDEV}}:}
+\DoxyCodeLine{37             \mbox{\hyperlink{structmultiboot__tag__bootdev}{multiboot\_tag\_bootdev}} *bootdev;}
+\DoxyCodeLine{38             bootdev = (\mbox{\hyperlink{structmultiboot__tag__bootdev}{multiboot\_tag\_bootdev}} *)tag;}
+\DoxyCodeLine{39             \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Boot device: 0x\%x, 0x\%x, 0x\%x of type 0x\%x\(\backslash\)n"},}
+\DoxyCodeLine{40                     (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_a2bcf5d32579dc281148607d937ca099b}{biosdev}}, (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_a50f53a5f93c66c721734cd44f6ea56b0}{slice}},}
+\DoxyCodeLine{41                     (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_ac34809553805874feb470308a2baa1e1}{part}}, (\textcolor{keywordtype}{unsigned}) bootdev-\/>\mbox{\hyperlink{structmultiboot__tag__bootdev_a80f58414b4caf448202e9cf5fa6a471e}{type}});}
+\DoxyCodeLine{42             \textcolor{keywordflow}{break};}
 \DoxyCodeLine{43 }
 \DoxyCodeLine{44           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_ad5e7a09f39f1f37e50be39000af2af4e}{MULTIBOOT\_TAG\_TYPE\_MMAP}}:}
 \DoxyCodeLine{45 }
@@ -110,14 +114,24 @@ Definition at line 13 of file multiboot.\+cpp.
 \DoxyCodeLine{57           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_afa32c43ce21ca35f6b0062bddbedf37d}{MULTIBOOT\_TAG\_TYPE\_ACPI\_NEW}}:}
 \DoxyCodeLine{58                 \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}{m\_new\_acpi}} = (\mbox{\hyperlink{structmultiboot__tag__new__acpi}{multiboot\_tag\_new\_acpi}} *)tag;}
 \DoxyCodeLine{59                 \textcolor{keywordflow}{break};}
-\DoxyCodeLine{60       \}}
-\DoxyCodeLine{61     \}}
-\DoxyCodeLine{62 \}}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61           \textcolor{keywordflow}{case} \mbox{\hyperlink{multiboot_8h_a10b78479319b8790657f13414cf34736}{MULTIBOOT\_TAG\_TYPE\_MODULE}}:}
+\DoxyCodeLine{62               \mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}} *module;}
+\DoxyCodeLine{63               module = (\mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}} *)tag;}
+\DoxyCodeLine{64               \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Module: start=0x\%x, end=0x\%x, cmdline=\%s\(\backslash\)n"},}
+\DoxyCodeLine{65                         (\textcolor{keywordtype}{unsigned}) module-\/>\mbox{\hyperlink{structmultiboot__tag__module_af2870ead515a1c38d4484645ab54fb03}{mod\_start}},}
+\DoxyCodeLine{66                         (\textcolor{keywordtype}{unsigned}) module-\/>\mbox{\hyperlink{structmultiboot__tag__module_ae0a4f42952619e0807cbb5debbf6e5af}{mod\_end}},}
+\DoxyCodeLine{67                         module-\/>\mbox{\hyperlink{structmultiboot__tag__module_ae28133d78349211f87ff9fcfb9ab3056}{cmdline}});}
+\DoxyCodeLine{68               \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a3547fb0a8ee07f8b25269c0d22d98297}{m\_module}} = module;}
+\DoxyCodeLine{69               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{70           \}}
+\DoxyCodeLine{71     \}}
+\DoxyCodeLine{72 \}}
 
 \end{DoxyCode}
 
 
-References \+\_\+kprintf, multiboot\+\_\+tag\+\_\+bootdev\+::biosdev, m\+\_\+base\+\_\+address, m\+\_\+basic\+\_\+meminfo, m\+\_\+bootloader\+\_\+name, m\+\_\+framebuffer, m\+\_\+mmap, m\+\_\+new\+\_\+acpi, m\+\_\+old\+\_\+acpi, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+C\+P\+I\+\_\+\+N\+EW, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+C\+P\+I\+\_\+\+O\+LD, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+A\+S\+I\+C\+\_\+\+M\+E\+M\+I\+N\+FO, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+O\+O\+T\+\_\+\+L\+O\+A\+D\+E\+R\+\_\+\+N\+A\+ME, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+O\+O\+T\+D\+EV, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+E\+ND, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+M\+M\+AP, multiboot\+\_\+tag\+\_\+bootdev\+::part, multiboot\+\_\+tag\+::size, multiboot\+\_\+tag\+\_\+bootdev\+::slice, multiboot\+\_\+tag\+\_\+string\+::string, type, multiboot\+\_\+tag\+::type, and multiboot\+\_\+tag\+\_\+bootdev\+::type.
+References \+\_\+kprintf, multiboot\+\_\+tag\+\_\+bootdev\+::biosdev, multiboot\+\_\+tag\+\_\+module\+::cmdline, get\+\_\+start\+\_\+tag(), m\+\_\+basic\+\_\+meminfo, m\+\_\+bootloader\+\_\+name, m\+\_\+framebuffer, m\+\_\+mmap, m\+\_\+module, m\+\_\+new\+\_\+acpi, m\+\_\+old\+\_\+acpi, multiboot\+\_\+tag\+\_\+module\+::mod\+\_\+end, multiboot\+\_\+tag\+\_\+module\+::mod\+\_\+start, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+C\+P\+I\+\_\+\+N\+EW, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+C\+P\+I\+\_\+\+O\+LD, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+A\+S\+I\+C\+\_\+\+M\+E\+M\+I\+N\+FO, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+O\+O\+T\+\_\+\+L\+O\+A\+D\+E\+R\+\_\+\+N\+A\+ME, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+O\+O\+T\+D\+EV, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+E\+ND, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+M\+M\+AP, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+M\+O\+D\+U\+LE, multiboot\+\_\+tag\+\_\+bootdev\+::part, multiboot\+\_\+tag\+\_\+bootdev\+::slice, multiboot\+\_\+tag\+\_\+string\+::string, type, multiboot\+\_\+tag\+::type, and multiboot\+\_\+tag\+\_\+bootdev\+::type.
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1Multiboot_a6f30ad4d6a1d3f686833d5fc9de9d269}\label{classMaxOS_1_1system_1_1Multiboot_a6f30ad4d6a1d3f686833d5fc9de9d269}} 
 \index{MaxOS::system::Multiboot@{MaxOS::system::Multiboot}!````~Multiboot@{$\sim$Multiboot}}
@@ -127,13 +141,13 @@ References \+\_\+kprintf, multiboot\+\_\+tag\+\_\+bootdev\+::biosdev, m\+\_\+bas
 
 
 
-Definition at line 64 of file multiboot.\+cpp.
+Definition at line 74 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{64                       \{}
-\DoxyCodeLine{65 }
-\DoxyCodeLine{66 \}}
+\DoxyCodeLine{74                       \{}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76 \}}
 
 \end{DoxyCode}
 
@@ -147,15 +161,15 @@ Definition at line 64 of file multiboot.\+cpp.
 
 
 
-Definition at line 75 of file multiboot.\+cpp.
+Definition at line 85 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{75                                                           \{}
-\DoxyCodeLine{76 }
-\DoxyCodeLine{77     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}{m\_basic\_meminfo}};}
-\DoxyCodeLine{78 }
-\DoxyCodeLine{79 \}}
+\DoxyCodeLine{85                                                           \{}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}{m\_basic\_meminfo}};}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89 \}}
 
 \end{DoxyCode}
 
@@ -174,15 +188,15 @@ Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+
 
 
 
-Definition at line 81 of file multiboot.\+cpp.
+Definition at line 91 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{81                                                      \{}
-\DoxyCodeLine{82 }
-\DoxyCodeLine{83     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}};}
-\DoxyCodeLine{84 }
-\DoxyCodeLine{85 \}}
+\DoxyCodeLine{91                                                      \{}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}};}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95 \}}
 
 \end{DoxyCode}
 
@@ -197,15 +211,15 @@ References m\+\_\+bootloader\+\_\+name.
 
 
 
-Definition at line 69 of file multiboot.\+cpp.
+Definition at line 79 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{69                                                       \{}
-\DoxyCodeLine{70 }
-\DoxyCodeLine{71     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a48388fa09d529db631bf6f80d5ab3091}{m\_framebuffer}};}
-\DoxyCodeLine{72 }
-\DoxyCodeLine{73 \}}
+\DoxyCodeLine{79                                                       \{}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a48388fa09d529db631bf6f80d5ab3091}{m\_framebuffer}};}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83 \}}
 
 \end{DoxyCode}
 
@@ -224,15 +238,15 @@ Referenced by kernel\+Main().
 
 
 
-Definition at line 87 of file multiboot.\+cpp.
+Definition at line 97 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{87                                         \{}
-\DoxyCodeLine{88 }
-\DoxyCodeLine{89     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a439c0ec6b7446d338bdf1faeba52eef2}{m\_mmap}};}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91 \}}
+\DoxyCodeLine{97                                         \{}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a439c0ec6b7446d338bdf1faeba52eef2}{m\_mmap}};}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101 \}}
 
 \end{DoxyCode}
 
@@ -251,14 +265,14 @@ Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+
 
 
 
-Definition at line 99 of file multiboot.\+cpp.
+Definition at line 109 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{99                                                 \{}
-\DoxyCodeLine{100 }
-\DoxyCodeLine{101   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}{m\_new\_acpi}};}
-\DoxyCodeLine{102 \}}
+\DoxyCodeLine{109                                                 \{}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}{m\_new\_acpi}};}
+\DoxyCodeLine{112 \}}
 
 \end{DoxyCode}
 
@@ -277,14 +291,14 @@ Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+A
 
 
 
-Definition at line 93 of file multiboot.\+cpp.
+Definition at line 103 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{93                                                 \{}
-\DoxyCodeLine{94 }
-\DoxyCodeLine{95   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a572b5590c47b1128f43c458de10a9271}{m\_old\_acpi}};}
-\DoxyCodeLine{96 \}}
+\DoxyCodeLine{103                                                 \{}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105   \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a572b5590c47b1128f43c458de10a9271}{m\_old\_acpi}};}
+\DoxyCodeLine{106 \}}
 
 \end{DoxyCode}
 
@@ -295,6 +309,37 @@ References m\+\_\+old\+\_\+acpi.
 
 Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::\+Advanced\+Configuration\+And\+Power\+Interface().
 
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1Multiboot_acdd3db0feb808adc5c0bf13dc33fb786}\label{classMaxOS_1_1system_1_1Multiboot_acdd3db0feb808adc5c0bf13dc33fb786}} 
+\index{MaxOS::system::Multiboot@{MaxOS::system::Multiboot}!get\_start\_tag@{get\_start\_tag}}
+\index{get\_start\_tag@{get\_start\_tag}!MaxOS::system::Multiboot@{MaxOS::system::Multiboot}}
+\doxysubsubsection{\texorpdfstring{get\_start\_tag()}{get\_start\_tag()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmultiboot__tag}{multiboot\+\_\+tag}} $\ast$ Multiboot\+::get\+\_\+start\+\_\+tag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the start tag of the multiboot information (useful for iterating through the tags)
+
+\begin{DoxyReturn}{Returns}
+The start tag 
+\end{DoxyReturn}
+
+
+Definition at line 147 of file multiboot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{147                                         \{}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149   \textcolor{keywordflow}{return} (\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)(\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a54b723177f148ac11df116a27ab3bffb}{m\_base\_address}} + MemoryManager::s\_higher\_half\_kernel\_offset + 8);}
+\DoxyCodeLine{150 \}}
+
+\end{DoxyCode}
+
+
+References m\+\_\+base\+\_\+address.
+
+
+
+Referenced by is\+\_\+reserved(), and Multiboot().
+
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1Multiboot_acc0c0a33a1fefd4bbed766129b9f20db}\label{classMaxOS_1_1system_1_1Multiboot_acc0c0a33a1fefd4bbed766129b9f20db}} 
 \index{MaxOS::system::Multiboot@{MaxOS::system::Multiboot}!is\_reserved@{is\_reserved}}
 \index{is\_reserved@{is\_reserved}!MaxOS::system::Multiboot@{MaxOS::system::Multiboot}}
@@ -303,7 +348,7 @@ Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+A
 
 
 
-Check if an address is reserved. 
+Check if an address is reserved by a multiboot module. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -315,38 +360,37 @@ True if the address is reserved
 \end{DoxyReturn}
 
 
-Definition at line 109 of file multiboot.\+cpp.
+Definition at line 119 of file multiboot.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{109                                                       \{}
-\DoxyCodeLine{110 }
-\DoxyCodeLine{111   \textcolor{comment}{// Loop through the tags checking if the address is reserved}}
-\DoxyCodeLine{112   \textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *tag;}
-\DoxyCodeLine{113   \textcolor{keywordflow}{for}(tag=(\textcolor{keyword}{struct} \mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *)(\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a54b723177f148ac11df116a27ab3bffb}{m\_base\_address}} + MemoryManager::s\_higher\_half\_kernel\_offset + 8); tag-\/>\mbox{\hyperlink{structmultiboot__tag_ac2a46af85d217c774d2a618291539334}{type}} != \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}}; tag = (\textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *) ((\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *) tag + ((tag-\/>\mbox{\hyperlink{structmultiboot__tag_a877e6f09bf575aa775a81897a54337f4}{size}} + 7) \& \string~7))) \{}
-\DoxyCodeLine{114 }
-\DoxyCodeLine{115       \textcolor{comment}{// Check if the tag is a module}}
-\DoxyCodeLine{116       \textcolor{keywordflow}{if}(tag -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} != \mbox{\hyperlink{multiboot_8h_a10b78479319b8790657f13414cf34736}{MULTIBOOT\_TAG\_TYPE\_MODULE}})}
-\DoxyCodeLine{117         \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119       \textcolor{comment}{// Get the module tag}}
-\DoxyCodeLine{120       \textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}}* module = (\textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}}*)tag;}
-\DoxyCodeLine{121 }
-\DoxyCodeLine{122       \textcolor{comment}{// Check if the address is within the module}}
-\DoxyCodeLine{123       \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} >= module -\/> \mbox{\hyperlink{structmultiboot__tag__module_af2870ead515a1c38d4484645ab54fb03}{mod\_start}} \&\& address < module -\/> \mbox{\hyperlink{structmultiboot__tag__module_ae0a4f42952619e0807cbb5debbf6e5af}{mod\_end}})}
-\DoxyCodeLine{124         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{125   \}}
-\DoxyCodeLine{126 }
+\DoxyCodeLine{119                                                       \{}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121   \textcolor{comment}{// Loop through the tags checking if the address is reserved}}
+\DoxyCodeLine{122   \textcolor{keywordflow}{for}(\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}* tag = \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acdd3db0feb808adc5c0bf13dc33fb786}{get\_start\_tag}}(); tag-\/>\mbox{\hyperlink{structmultiboot__tag_ac2a46af85d217c774d2a618291539334}{type}} != \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}}; tag = (\textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}} *) ((\mbox{\hyperlink{multiboot_8h_a037f602538fccf97e90021c19fdfc047}{multiboot\_uint8\_t}} *) tag + ((tag-\/>size + 7) \& \string~7))) \{}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124       \textcolor{comment}{// Check if the tag is a module}}
+\DoxyCodeLine{125       \textcolor{keywordflow}{if}(tag -\/> \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}} != \mbox{\hyperlink{multiboot_8h_a10b78479319b8790657f13414cf34736}{MULTIBOOT\_TAG\_TYPE\_MODULE}})}
+\DoxyCodeLine{126         \textcolor{keywordflow}{continue};}
 \DoxyCodeLine{127 }
-\DoxyCodeLine{128   \textcolor{comment}{// Not part of multiboot}}
-\DoxyCodeLine{129   \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{128       \textcolor{comment}{// Get the module tag}}
+\DoxyCodeLine{129       \textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}}* module = (\textcolor{keyword}{struct }\mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}}*)tag;}
 \DoxyCodeLine{130 }
-\DoxyCodeLine{131 \}}
+\DoxyCodeLine{131       \textcolor{comment}{// Check if the address is within the module}}
+\DoxyCodeLine{132       \textcolor{keywordflow}{if}(\mbox{\hyperlink{amd__am79c973_8h_ac0d31ca829f934cccd89f8054e02773e}{address}} >= module -\/> \mbox{\hyperlink{structmultiboot__tag__module_af2870ead515a1c38d4484645ab54fb03}{mod\_start}} \&\& address < module -\/> \mbox{\hyperlink{structmultiboot__tag__module_ae0a4f42952619e0807cbb5debbf6e5af}{mod\_end}})}
+\DoxyCodeLine{133         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{134   \}}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137   \textcolor{comment}{// Not part of multiboot}}
+\DoxyCodeLine{138   \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140 \}}
 
 \end{DoxyCode}
 
 
-References address, m\+\_\+base\+\_\+address, multiboot\+\_\+tag\+\_\+module\+::mod\+\_\+end, multiboot\+\_\+tag\+\_\+module\+::mod\+\_\+start, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+E\+ND, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+M\+O\+D\+U\+LE, multiboot\+\_\+tag\+::size, type, and multiboot\+\_\+tag\+::type.
+References address, get\+\_\+start\+\_\+tag(), multiboot\+\_\+tag\+\_\+module\+::mod\+\_\+end, multiboot\+\_\+tag\+\_\+module\+::mod\+\_\+start, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+E\+ND, M\+U\+L\+T\+I\+B\+O\+O\+T\+\_\+\+T\+A\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+M\+O\+D\+U\+LE, type, and multiboot\+\_\+tag\+::type.
 
 
 
@@ -359,11 +403,11 @@ References address, m\+\_\+base\+\_\+address, multiboot\+\_\+tag\+\_\+module\+::
 
 
 
-Definition at line 429 of file multiboot.\+h.
+Definition at line 430 of file multiboot.\+h.
 
 
 
-Referenced by is\+\_\+reserved(), and Multiboot().
+Referenced by get\+\_\+start\+\_\+tag().
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}\label{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}} 
 \index{MaxOS::system::Multiboot@{MaxOS::system::Multiboot}!m\_basic\_meminfo@{m\_basic\_meminfo}}
@@ -420,6 +464,20 @@ Definition at line 425 of file multiboot.\+h.
 
 
 Referenced by get\+\_\+mmap(), and Multiboot().
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1Multiboot_a3547fb0a8ee07f8b25269c0d22d98297}\label{classMaxOS_1_1system_1_1Multiboot_a3547fb0a8ee07f8b25269c0d22d98297}} 
+\index{MaxOS::system::Multiboot@{MaxOS::system::Multiboot}!m\_module@{m\_module}}
+\index{m\_module@{m\_module}!MaxOS::system::Multiboot@{MaxOS::system::Multiboot}}
+\doxysubsubsection{\texorpdfstring{m\_module}{m\_module}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmultiboot__tag__module}{multiboot\+\_\+tag\+\_\+module}}$\ast$ Max\+O\+S\+::system\+::\+Multiboot\+::m\+\_\+module\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 428 of file multiboot.\+h.
+
+
+
+Referenced by Multiboot().
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}\label{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}} 
 \index{MaxOS::system::Multiboot@{MaxOS::system::Multiboot}!m\_new\_acpi@{m\_new\_acpi}}

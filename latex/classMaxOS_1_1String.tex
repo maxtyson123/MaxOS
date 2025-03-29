@@ -27,6 +27,8 @@ const char $\ast$ \mbox{\hyperlink{classMaxOS_1_1String_ab631a346035367ca54668b9
 \item 
 \mbox{\hyperlink{classMaxOS_1_1String}{String}} \mbox{\hyperlink{classMaxOS_1_1String_ab282882421b9a427219f6bcb36dcb5b0}{center}} (int width, char fill=\textquotesingle{} \textquotesingle{}) const
 \begin{DoxyCompactList}\small\item\em Centers the string in a specified width. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1String_aad2418bd26eb55a72127ded64a7ddfc8}{equals}} (\mbox{\hyperlink{classMaxOS_1_1String}{String}} const \&other) const
+\begin{DoxyCompactList}\small\item\em Checks if one string is equal to another. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1String}{String}} \& \mbox{\hyperlink{classMaxOS_1_1String_aa92f33016ddf4c760fcc93cbfc545b67}{operator=}} (\mbox{\hyperlink{classMaxOS_1_1String}{String}} const \&other)
 \begin{DoxyCompactList}\small\item\em Sets the string to the other string. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1String}{String}} \mbox{\hyperlink{classMaxOS_1_1String_a1e03682162710eb44b0948aa4befbe4b}{operator+}} (\mbox{\hyperlink{classMaxOS_1_1String}{String}} const \&other) const
@@ -97,21 +99,29 @@ Definition at line 18 of file string.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{19 \{}
 \DoxyCodeLine{20 }
-\DoxyCodeLine{21   \textcolor{comment}{// Get the length of the string}}
+\DoxyCodeLine{21   \textcolor{comment}{// Get the length of the string, prevent longer than 10000 because this should mean somthings gone wrong}}
 \DoxyCodeLine{22   m\_length = 0;}
-\DoxyCodeLine{23   \textcolor{keywordflow}{while} (\textcolor{keywordtype}{string}[m\_length] != \textcolor{charliteral}{'\(\backslash\)0'})}
+\DoxyCodeLine{23   \textcolor{keywordflow}{while} (\textcolor{keywordtype}{string}[m\_length] != \textcolor{charliteral}{'\(\backslash\)0'} \&\& m\_length <= 10000)}
 \DoxyCodeLine{24           m\_length++;}
 \DoxyCodeLine{25 }
-\DoxyCodeLine{26   \textcolor{comment}{// Allocate memory for the string (and null terminator)}}
-\DoxyCodeLine{27   m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[m\_length + 1];}
-\DoxyCodeLine{28 }
-\DoxyCodeLine{29   \textcolor{comment}{// Copy the string}}
-\DoxyCodeLine{30   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{31           m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = \textcolor{keywordtype}{string}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{32 }
-\DoxyCodeLine{33   \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{34   m\_string[m\_length] = \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{35 \}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27   \textcolor{comment}{// Allocate memory for the string (and null terminator)}}
+\DoxyCodeLine{28   m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[m\_length + 1];}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30   \textcolor{comment}{// Copy the string}}
+\DoxyCodeLine{31   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{32           m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = \textcolor{keywordtype}{string}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34   \textcolor{comment}{// If the length is more than 10,000 Replace the end with a warning incase future use actually requires that}}
+\DoxyCodeLine{35   \textcolor{keyword}{const} \textcolor{keywordtype}{char}* warning = \textcolor{stringliteral}{"MAXOS: String length exceeded 10000 -\/ might be a bug"};}
+\DoxyCodeLine{36   \textcolor{keywordflow}{if}(m\_length > 10000)}
+\DoxyCodeLine{37     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < 52; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{38       m\_string[m\_length -\/ 52 + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = warning[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41   \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{42   m\_string[m\_length] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{43 \}}
 
 \end{DoxyCode}
 
@@ -126,14 +136,14 @@ References Max\+O\+S\+::drivers\+::peripherals\+::i.
 
 
 
-Definition at line 65 of file string.\+cpp.
+Definition at line 73 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{65                                   \{}
-\DoxyCodeLine{66   \textcolor{comment}{// Copy the other string}}
-\DoxyCodeLine{67   \mbox{\hyperlink{classMaxOS_1_1String_a5d3f31f93c12aca6fd0be6923416cb70}{copy}}(other);}
-\DoxyCodeLine{68 \}}
+\DoxyCodeLine{73                                   \{}
+\DoxyCodeLine{74   \textcolor{comment}{// Copy the other string}}
+\DoxyCodeLine{75   \mbox{\hyperlink{classMaxOS_1_1String_a5d3f31f93c12aca6fd0be6923416cb70}{copy}}(other);}
+\DoxyCodeLine{76 \}}
 
 \end{DoxyCode}
 
@@ -148,36 +158,36 @@ References copy().
 
 
 
-Definition at line 38 of file string.\+cpp.
+Definition at line 46 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{38                         \{}
-\DoxyCodeLine{39 }
-\DoxyCodeLine{40   \textcolor{comment}{// The length of the string}}
-\DoxyCodeLine{41   m\_length = 0;}
-\DoxyCodeLine{42 }
-\DoxyCodeLine{43   \textcolor{comment}{// The value of the string}}
-\DoxyCodeLine{44   \textcolor{keywordtype}{int} temp = value;}
-\DoxyCodeLine{45 }
-\DoxyCodeLine{46   \textcolor{comment}{// Get the length of the string}}
-\DoxyCodeLine{47   \textcolor{keywordflow}{while} (temp != 0) \{}
-\DoxyCodeLine{48     temp /= 10;}
-\DoxyCodeLine{49     m\_length++;}
-\DoxyCodeLine{50   \}}
-\DoxyCodeLine{51 }
-\DoxyCodeLine{52   \textcolor{comment}{// Allocate memory for the string (and null terminator)}}
-\DoxyCodeLine{53   m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[m\_length + 1];}
-\DoxyCodeLine{54 }
-\DoxyCodeLine{55   \textcolor{comment}{// Copy the string}}
-\DoxyCodeLine{56   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = m\_length -\/ 1; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} >= 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}-\/-\/) \{}
-\DoxyCodeLine{57     m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = (value \% 10) + \textcolor{charliteral}{'0'};}
-\DoxyCodeLine{58     value /= 10;}
-\DoxyCodeLine{59   \}}
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61   \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{62   m\_string[m\_length] = \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{63 \}}
+\DoxyCodeLine{46                         \{}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48   \textcolor{comment}{// The length of the string}}
+\DoxyCodeLine{49   m\_length = 0;}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51   \textcolor{comment}{// The value of the string}}
+\DoxyCodeLine{52   \textcolor{keywordtype}{int} temp = value;}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54   \textcolor{comment}{// Get the length of the string}}
+\DoxyCodeLine{55   \textcolor{keywordflow}{while} (temp != 0) \{}
+\DoxyCodeLine{56     temp /= 10;}
+\DoxyCodeLine{57     m\_length++;}
+\DoxyCodeLine{58   \}}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60   \textcolor{comment}{// Allocate memory for the string (and null terminator)}}
+\DoxyCodeLine{61   m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[m\_length + 1];}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63   \textcolor{comment}{// Copy the string}}
+\DoxyCodeLine{64   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = m\_length -\/ 1; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} >= 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}-\/-\/) \{}
+\DoxyCodeLine{65     m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = (value \% 10) + \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{66     value /= 10;}
+\DoxyCodeLine{67   \}}
+\DoxyCodeLine{68 }
+\DoxyCodeLine{69   \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{70   m\_string[m\_length] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{71 \}}
 
 \end{DoxyCode}
 
@@ -192,16 +202,16 @@ References Max\+O\+S\+::drivers\+::peripherals\+::i.
 
 
 
-Definition at line 71 of file string.\+cpp.
+Definition at line 79 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{71                 \{}
-\DoxyCodeLine{72 }
-\DoxyCodeLine{73   \textcolor{comment}{// Free the memory}}
-\DoxyCodeLine{74   \textcolor{keyword}{delete}[] m\_string;}
-\DoxyCodeLine{75 }
-\DoxyCodeLine{76 \}}
+\DoxyCodeLine{79                 \{}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81   \textcolor{comment}{// Free the memory}}
+\DoxyCodeLine{82   \textcolor{keyword}{delete}[] m\_string;}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{84 \}}
 
 \end{DoxyCode}
 
@@ -222,21 +232,21 @@ The string as an array of characters
 \end{DoxyReturn}
 
 
-Definition at line 141 of file string.\+cpp.
+Definition at line 149 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{141                     \{}
-\DoxyCodeLine{142 }
-\DoxyCodeLine{143     \textcolor{comment}{// Return the string}}
-\DoxyCodeLine{144     \textcolor{keywordflow}{return} m\_string;}
-\DoxyCodeLine{145 }
-\DoxyCodeLine{146 \}}
+\DoxyCodeLine{149                     \{}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151     \textcolor{comment}{// Return the string}}
+\DoxyCodeLine{152     \textcolor{keywordflow}{return} m\_string;}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154 \}}
 
 \end{DoxyCode}
 
 
-Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Controller\+::select\+\_\+drivers(), strcmp(), and strncmp().
+Referenced by Max\+O\+S\+::processes\+::\+Scheduler\+::add\+\_\+process(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::free\+\_\+shared\+\_\+memory(), Max\+O\+S\+::system\+::\+C\+P\+U\+::\+P\+A\+N\+I\+C(), Max\+O\+S\+::system\+::\+C\+P\+U\+::prepare\+\_\+for\+\_\+panic(), Max\+O\+S\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Controller\+::select\+\_\+drivers(), strcmp(), strncmp(), and Max\+O\+S\+::processes\+::\+Process\+::$\sim$\+Process().
 
 \mbox{\Hypertarget{classMaxOS_1_1String_ab631a346035367ca54668b93728c8620}\label{classMaxOS_1_1String_ab631a346035367ca54668b93728c8620}} 
 \index{MaxOS::String@{MaxOS::String}!c\_str@{c\_str}}
@@ -266,46 +276,46 @@ The centered string
 \end{DoxyReturn}
 
 
-Definition at line 394 of file string.\+cpp.
+Definition at line 415 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{394                                                 \{}
-\DoxyCodeLine{395 }
-\DoxyCodeLine{396     \textcolor{comment}{// The centered string}}
-\DoxyCodeLine{397     \mbox{\hyperlink{classMaxOS_1_1String}{String}} centered;}
-\DoxyCodeLine{398 }
-\DoxyCodeLine{399     \textcolor{comment}{// The length of the string}}
-\DoxyCodeLine{400     \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length;}
-\DoxyCodeLine{401 }
-\DoxyCodeLine{402     \textcolor{comment}{// The number of characters to add}}
-\DoxyCodeLine{403     \textcolor{keywordtype}{int} add = (width -\/ \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}) / 2;}
-\DoxyCodeLine{404 }
-\DoxyCodeLine{405     \textcolor{comment}{// The length of the centered string}}
-\DoxyCodeLine{406     centered.m\_length = width;}
-\DoxyCodeLine{407 }
-\DoxyCodeLine{408     \textcolor{comment}{// Allocate memory for the centered string (and null terminator)}}
-\DoxyCodeLine{409     centered.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[width + 1];}
-\DoxyCodeLine{410 }
-\DoxyCodeLine{411     \textcolor{comment}{// Fill the string with the fill character}}
-\DoxyCodeLine{412     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < add; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{413         centered.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = fill;}
-\DoxyCodeLine{414 }
-\DoxyCodeLine{415     \textcolor{comment}{// Copy the string}}
-\DoxyCodeLine{416     for (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{417         centered.m\_string[add + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{418 }
-\DoxyCodeLine{419     \textcolor{comment}{// Fill the string with the fill character}}
-\DoxyCodeLine{420     for (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = add + \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < width; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{421         centered.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = fill;}
+\DoxyCodeLine{415                                                 \{}
+\DoxyCodeLine{416 }
+\DoxyCodeLine{417     \textcolor{comment}{// The centered string}}
+\DoxyCodeLine{418     \mbox{\hyperlink{classMaxOS_1_1String}{String}} centered;}
+\DoxyCodeLine{419 }
+\DoxyCodeLine{420     \textcolor{comment}{// The length of the string}}
+\DoxyCodeLine{421     \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length;}
 \DoxyCodeLine{422 }
-\DoxyCodeLine{423     \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{424     centered.m\_string[width] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{423     \textcolor{comment}{// The number of characters to add}}
+\DoxyCodeLine{424     \textcolor{keywordtype}{int} add = (width -\/ \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}) / 2;}
 \DoxyCodeLine{425 }
-\DoxyCodeLine{426     \textcolor{comment}{// Return the centered string}}
-\DoxyCodeLine{427     \textcolor{keywordflow}{return} centered;}
+\DoxyCodeLine{426     \textcolor{comment}{// The length of the centered string}}
+\DoxyCodeLine{427     centered.m\_length = width;}
 \DoxyCodeLine{428 }
-\DoxyCodeLine{429 \}}
+\DoxyCodeLine{429     \textcolor{comment}{// Allocate memory for the centered string (and null terminator)}}
+\DoxyCodeLine{430     centered.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[width + 1];}
+\DoxyCodeLine{431 }
+\DoxyCodeLine{432     \textcolor{comment}{// Fill the string with the fill character}}
+\DoxyCodeLine{433     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < add; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{434         centered.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = fill;}
+\DoxyCodeLine{435 }
+\DoxyCodeLine{436     \textcolor{comment}{// Copy the string}}
+\DoxyCodeLine{437     for (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{438         centered.m\_string[add + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{439 }
+\DoxyCodeLine{440     \textcolor{comment}{// Fill the string with the fill character}}
+\DoxyCodeLine{441     for (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = add + \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < width; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{442         centered.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = fill;}
+\DoxyCodeLine{443 }
+\DoxyCodeLine{444     \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{445     centered.m\_string[width] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{446 }
+\DoxyCodeLine{447     \textcolor{comment}{// Return the centered string}}
+\DoxyCodeLine{448     \textcolor{keywordflow}{return} centered;}
+\DoxyCodeLine{449 }
+\DoxyCodeLine{450 \}}
 
 \end{DoxyCode}
 
@@ -333,26 +343,26 @@ Copies the other string.
 \end{DoxyParams}
 
 
-Definition at line 83 of file string.\+cpp.
+Definition at line 91 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{83                                      \{}
-\DoxyCodeLine{84 }
-\DoxyCodeLine{85   \textcolor{comment}{// Get the length of the string}}
-\DoxyCodeLine{86   m\_length = other.length();}
-\DoxyCodeLine{87 }
-\DoxyCodeLine{88   \textcolor{comment}{// Allocate memory for the string (and null terminator)}}
-\DoxyCodeLine{89   m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[m\_length + 1];}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91   \textcolor{comment}{// Copy the string}}
-\DoxyCodeLine{92   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{93     m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{94 }
-\DoxyCodeLine{95   \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{96   m\_string[m\_length] = \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{97 }
-\DoxyCodeLine{98 \}}
+\DoxyCodeLine{91                                      \{}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93   \textcolor{comment}{// Get the length of the string}}
+\DoxyCodeLine{94   m\_length = other.length();}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{96   \textcolor{comment}{// Allocate memory for the string (and null terminator)}}
+\DoxyCodeLine{97   m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[m\_length + 1];}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99   \textcolor{comment}{// Copy the string}}
+\DoxyCodeLine{100   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{101     m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103   \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{104   m\_string[m\_length] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106 \}}
 
 \end{DoxyCode}
 
@@ -362,6 +372,55 @@ References Max\+O\+S\+::drivers\+::peripherals\+::i, and length().
 
 
 Referenced by operator+=(), operator=(), String(), Max\+O\+S\+::gui\+::widgets\+::\+Text\+::update\+\_\+text(), and Max\+O\+S\+::gui\+::widgets\+::\+Input\+Box\+::update\+\_\+text().
+
+\mbox{\Hypertarget{classMaxOS_1_1String_aad2418bd26eb55a72127ded64a7ddfc8}\label{classMaxOS_1_1String_aad2418bd26eb55a72127ded64a7ddfc8}} 
+\index{MaxOS::String@{MaxOS::String}!equals@{equals}}
+\index{equals@{equals}!MaxOS::String@{MaxOS::String}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool String\+::equals (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1String}{String}} const \&}]{other }\end{DoxyParamCaption}) const}
+
+
+
+Checks if one string is equal to another. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & The other string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the strings are equal, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line 187 of file string.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{187                                              \{}
+\DoxyCodeLine{188 }
+\DoxyCodeLine{189   \textcolor{comment}{// Check if the lengths are equal}}
+\DoxyCodeLine{190   \textcolor{keywordflow}{if} (m\_length != other.length())}
+\DoxyCodeLine{191     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193   \textcolor{comment}{// Check if the characters are equal}}
+\DoxyCodeLine{194   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{195     \textcolor{keywordflow}{if} (m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] != other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}])}
+\DoxyCodeLine{196       \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198   \textcolor{comment}{// The strings are equal}}
+\DoxyCodeLine{199   \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201 \}}
+
+\end{DoxyCode}
+
+
+References Max\+O\+S\+::drivers\+::peripherals\+::i, and length().
+
+
+
+Referenced by operator==().
 
 \mbox{\Hypertarget{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}\label{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}} 
 \index{MaxOS::String@{MaxOS::String}!length@{length}}
@@ -383,21 +442,21 @@ The length of the string
 \end{DoxyReturn}
 
 
-Definition at line 166 of file string.\+cpp.
+Definition at line 174 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{166                                         \{}
-\DoxyCodeLine{167 }
-\DoxyCodeLine{168     \textcolor{comment}{// Return the length of the string}}
-\DoxyCodeLine{169     \textcolor{keywordflow}{return} m\_length;}
-\DoxyCodeLine{170 }
-\DoxyCodeLine{171 \}}
+\DoxyCodeLine{174                               \{}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176     \textcolor{comment}{// Return the length of the string}}
+\DoxyCodeLine{177     \textcolor{keywordflow}{return} m\_length;}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179 \}}
 
 \end{DoxyCode}
 
 
-Referenced by center(), copy(), Max\+O\+S\+::gui\+::\+Font\+::get\+\_\+text\+\_\+width(), kernel\+Main(), Max\+O\+S\+::gui\+::widgets\+::\+Input\+Box\+::on\+\_\+key\+\_\+down(), operator$\ast$(), operator+(), operator+=(), operator==(), Max\+O\+S\+::gui\+::widgets\+::\+Input\+Box\+::update\+\_\+text(), and Max\+O\+S\+::common\+::\+Output\+Stream\+::write().
+Referenced by center(), copy(), equals(), Max\+O\+S\+::gui\+::\+Font\+::get\+\_\+text\+\_\+width(), kernel\+Main(), Max\+O\+S\+::gui\+::widgets\+::\+Input\+Box\+::on\+\_\+key\+\_\+down(), operator$\ast$(), operator+(), operator+=(), Max\+O\+S\+::gui\+::widgets\+::\+Input\+Box\+::update\+\_\+text(), and Max\+O\+S\+::common\+::\+Output\+Stream\+::write().
 
 \mbox{\Hypertarget{classMaxOS_1_1String_abfb25af8317420d71b0d54603d049383}\label{classMaxOS_1_1String_abfb25af8317420d71b0d54603d049383}} 
 \index{MaxOS::String@{MaxOS::String}!operator"!=@{operator"!=}}
@@ -419,20 +478,20 @@ True if the strings are not equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 200 of file string.\+cpp.
+Definition at line 221 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{200                                                    \{}
-\DoxyCodeLine{201 }
-\DoxyCodeLine{202     \textcolor{comment}{// If the strings are equal, return false}}
-\DoxyCodeLine{203     \textcolor{keywordflow}{if} (*\textcolor{keyword}{this} == other)}
-\DoxyCodeLine{204       \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{205 }
-\DoxyCodeLine{206     \textcolor{comment}{// The strings are not equal}}
-\DoxyCodeLine{207     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{208 }
-\DoxyCodeLine{209 \}}
+\DoxyCodeLine{221                                                    \{}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223     \textcolor{comment}{// If the strings are equal, return false}}
+\DoxyCodeLine{224     \textcolor{keywordflow}{if} (*\textcolor{keyword}{this} == other)}
+\DoxyCodeLine{225       \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{227     \textcolor{comment}{// The strings are not equal}}
+\DoxyCodeLine{228     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1String_aaa88f46b1ddd7754b0d5fff1ce52c5da}\label{classMaxOS_1_1String_aaa88f46b1ddd7754b0d5fff1ce52c5da}} 
@@ -455,34 +514,34 @@ The string repeated a number of times
 \end{DoxyReturn}
 
 
-Definition at line 363 of file string.\+cpp.
+Definition at line 384 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{363                                         \{}
-\DoxyCodeLine{364 }
-\DoxyCodeLine{365     \textcolor{comment}{// The repeated string}}
-\DoxyCodeLine{366     \mbox{\hyperlink{classMaxOS_1_1String}{String}} repeated;}
-\DoxyCodeLine{367 }
-\DoxyCodeLine{368     \textcolor{comment}{// The length of the repeated string}}
-\DoxyCodeLine{369     \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length * times;}
-\DoxyCodeLine{370     repeated.m\_length = \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}};}
-\DoxyCodeLine{371 }
-\DoxyCodeLine{372     \textcolor{comment}{// Allocate memory for the repeated string (and null terminator)}}
-\DoxyCodeLine{373     repeated.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} + 1];}
-\DoxyCodeLine{374 }
-\DoxyCodeLine{375     \textcolor{comment}{// Copy the string}}
-\DoxyCodeLine{376     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < times; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{377       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}}++)}
-\DoxyCodeLine{378         repeated.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * m\_length + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}}];}
-\DoxyCodeLine{379 }
-\DoxyCodeLine{380     \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{381     repeated.m\_string[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}] = \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{382 }
-\DoxyCodeLine{383     \textcolor{comment}{// Return the repeated string}}
-\DoxyCodeLine{384     \textcolor{keywordflow}{return} repeated;}
+\DoxyCodeLine{384                                         \{}
 \DoxyCodeLine{385 }
-\DoxyCodeLine{386 \}}
+\DoxyCodeLine{386     \textcolor{comment}{// The repeated string}}
+\DoxyCodeLine{387     \mbox{\hyperlink{classMaxOS_1_1String}{String}} repeated;}
+\DoxyCodeLine{388 }
+\DoxyCodeLine{389     \textcolor{comment}{// The length of the repeated string}}
+\DoxyCodeLine{390     \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length * times;}
+\DoxyCodeLine{391     repeated.m\_length = \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}};}
+\DoxyCodeLine{392 }
+\DoxyCodeLine{393     \textcolor{comment}{// Allocate memory for the repeated string (and null terminator)}}
+\DoxyCodeLine{394     repeated.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} + 1];}
+\DoxyCodeLine{395 }
+\DoxyCodeLine{396     \textcolor{comment}{// Copy the string}}
+\DoxyCodeLine{397     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < times; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{398       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}}++)}
+\DoxyCodeLine{399         repeated.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} * m\_length + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69abb821b2faaa50a438714c8a237cf0}{j}}];}
+\DoxyCodeLine{400 }
+\DoxyCodeLine{401     \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{402     repeated.m\_string[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{403 }
+\DoxyCodeLine{404     \textcolor{comment}{// Return the repeated string}}
+\DoxyCodeLine{405     \textcolor{keywordflow}{return} repeated;}
+\DoxyCodeLine{406 }
+\DoxyCodeLine{407 \}}
 
 \end{DoxyCode}
 
@@ -509,36 +568,36 @@ The concatenated string
 \end{DoxyReturn}
 
 
-Definition at line 269 of file string.\+cpp.
+Definition at line 290 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{269                                                     \{}
-\DoxyCodeLine{270 }
-\DoxyCodeLine{271   \textcolor{comment}{// The concatenated string}}
-\DoxyCodeLine{272   \mbox{\hyperlink{classMaxOS_1_1String}{String}} concatenated;}
-\DoxyCodeLine{273 }
-\DoxyCodeLine{274   \textcolor{comment}{// The length of the concatenated string}}
-\DoxyCodeLine{275   \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length + other.length();}
-\DoxyCodeLine{276   concatenated.m\_length = \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}};}
-\DoxyCodeLine{277 }
-\DoxyCodeLine{278   \textcolor{comment}{// Allocate memory for the concatenated string (and null terminator)}}
-\DoxyCodeLine{279   concatenated.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} + 1];}
-\DoxyCodeLine{280 }
-\DoxyCodeLine{281   \textcolor{comment}{// Copy the first string}}
-\DoxyCodeLine{282   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{283     concatenated.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{284 }
-\DoxyCodeLine{285   \textcolor{comment}{// Copy the second string}}
-\DoxyCodeLine{286   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < other.length(); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{287     concatenated.m\_string[m\_length + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{288 }
-\DoxyCodeLine{289   \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{290   concatenated.m\_string[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{290                                                     \{}
 \DoxyCodeLine{291 }
-\DoxyCodeLine{292   \textcolor{comment}{// Return the concatenated string}}
-\DoxyCodeLine{293   \textcolor{keywordflow}{return} concatenated;}
-\DoxyCodeLine{294 \}}
+\DoxyCodeLine{292   \textcolor{comment}{// The concatenated string}}
+\DoxyCodeLine{293   \mbox{\hyperlink{classMaxOS_1_1String}{String}} concatenated;}
+\DoxyCodeLine{294 }
+\DoxyCodeLine{295   \textcolor{comment}{// The length of the concatenated string}}
+\DoxyCodeLine{296   \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length + other.length();}
+\DoxyCodeLine{297   concatenated.m\_length = \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}};}
+\DoxyCodeLine{298 }
+\DoxyCodeLine{299   \textcolor{comment}{// Allocate memory for the concatenated string (and null terminator)}}
+\DoxyCodeLine{300   concatenated.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} + 1];}
+\DoxyCodeLine{301 }
+\DoxyCodeLine{302   \textcolor{comment}{// Copy the first string}}
+\DoxyCodeLine{303   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{304     concatenated.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{305 }
+\DoxyCodeLine{306   \textcolor{comment}{// Copy the second string}}
+\DoxyCodeLine{307   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < other.length(); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{308     concatenated.m\_string[m\_length + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{309 }
+\DoxyCodeLine{310   \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{311   concatenated.m\_string[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{312 }
+\DoxyCodeLine{313   \textcolor{comment}{// Return the concatenated string}}
+\DoxyCodeLine{314   \textcolor{keywordflow}{return} concatenated;}
+\DoxyCodeLine{315 \}}
 
 \end{DoxyCode}
 
@@ -565,42 +624,42 @@ The concatenated string
 \end{DoxyReturn}
 
 
-Definition at line 302 of file string.\+cpp.
+Definition at line 323 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{302                                                 \{}
-\DoxyCodeLine{303 }
-\DoxyCodeLine{304     \textcolor{comment}{// The concatenated string}}
-\DoxyCodeLine{305     \mbox{\hyperlink{classMaxOS_1_1String}{String}} concatenated;}
-\DoxyCodeLine{306 }
-\DoxyCodeLine{307     \textcolor{comment}{// The length of the concatenated string}}
-\DoxyCodeLine{308     \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length + other.length();}
-\DoxyCodeLine{309     concatenated.m\_length = \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}};}
-\DoxyCodeLine{310 }
-\DoxyCodeLine{311     \textcolor{comment}{// Allocate memory for the concatenated string (and null terminator)}}
-\DoxyCodeLine{312     concatenated.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} + 1];}
-\DoxyCodeLine{313 }
-\DoxyCodeLine{314     \textcolor{comment}{// Copy the first string}}
-\DoxyCodeLine{315     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{316       concatenated.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{317 }
-\DoxyCodeLine{318     \textcolor{comment}{// Copy the second string}}
-\DoxyCodeLine{319     for (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < other.length(); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{320       concatenated.m\_string[m\_length + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
-\DoxyCodeLine{321 }
-\DoxyCodeLine{322     \textcolor{comment}{// Write the null terminator}}
-\DoxyCodeLine{323     concatenated.m\_string[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{323                                                 \{}
 \DoxyCodeLine{324 }
-\DoxyCodeLine{325     \textcolor{comment}{// Free the old memory}}
-\DoxyCodeLine{326     \textcolor{keyword}{delete}[] m\_string;}
+\DoxyCodeLine{325     \textcolor{comment}{// The concatenated string}}
+\DoxyCodeLine{326     \mbox{\hyperlink{classMaxOS_1_1String}{String}} concatenated;}
 \DoxyCodeLine{327 }
-\DoxyCodeLine{328     \textcolor{comment}{// Copy the concatenated string}}
-\DoxyCodeLine{329     \mbox{\hyperlink{classMaxOS_1_1String_a5d3f31f93c12aca6fd0be6923416cb70}{copy}}(concatenated);}
-\DoxyCodeLine{330 }
-\DoxyCodeLine{331     \textcolor{comment}{// Return the concatenated string}}
-\DoxyCodeLine{332     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
-\DoxyCodeLine{333 \}}
+\DoxyCodeLine{328     \textcolor{comment}{// The length of the concatenated string}}
+\DoxyCodeLine{329     \textcolor{keywordtype}{int} \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} = m\_length + other.length();}
+\DoxyCodeLine{330     concatenated.m\_length = \mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}};}
+\DoxyCodeLine{331 }
+\DoxyCodeLine{332     \textcolor{comment}{// Allocate memory for the concatenated string (and null terminator)}}
+\DoxyCodeLine{333     concatenated.m\_string = \textcolor{keyword}{new} \textcolor{keywordtype}{char}[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}} + 1];}
+\DoxyCodeLine{334 }
+\DoxyCodeLine{335     \textcolor{comment}{// Copy the first string}}
+\DoxyCodeLine{336     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{337       concatenated.m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{338 }
+\DoxyCodeLine{339     \textcolor{comment}{// Copy the second string}}
+\DoxyCodeLine{340     for (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < other.length(); \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
+\DoxyCodeLine{341       concatenated.m\_string[m\_length + \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] = other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}];}
+\DoxyCodeLine{342 }
+\DoxyCodeLine{343     \textcolor{comment}{// Write the null terminator}}
+\DoxyCodeLine{344     concatenated.m\_string[\mbox{\hyperlink{classMaxOS_1_1String_acf733b9f4647d948a153dda31d5995a0}{length}}] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{345 }
+\DoxyCodeLine{346     \textcolor{comment}{// Free the old memory}}
+\DoxyCodeLine{347     \textcolor{keyword}{delete}[] m\_string;}
+\DoxyCodeLine{348 }
+\DoxyCodeLine{349     \textcolor{comment}{// Copy the concatenated string}}
+\DoxyCodeLine{350     \mbox{\hyperlink{classMaxOS_1_1String_a5d3f31f93c12aca6fd0be6923416cb70}{copy}}(concatenated);}
+\DoxyCodeLine{351 }
+\DoxyCodeLine{352     \textcolor{comment}{// Return the concatenated string}}
+\DoxyCodeLine{353     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{354 \}}
 
 \end{DoxyCode}
 
@@ -627,16 +686,16 @@ True if the string is less than the other, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 217 of file string.\+cpp.
+Definition at line 238 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{217                                                   \{}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219   \textcolor{comment}{// If the sum of this is less than the sum of the other, return true}}
-\DoxyCodeLine{220   \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) < lex\_value(other);}
-\DoxyCodeLine{221 }
-\DoxyCodeLine{222 \}}
+\DoxyCodeLine{238                                                   \{}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240   \textcolor{comment}{// If the sum of this is less than the sum of the other, return true}}
+\DoxyCodeLine{241   \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) < lex\_value(other);}
+\DoxyCodeLine{242 }
+\DoxyCodeLine{243 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1String_a2ee4e8d42626851256a5432bf838d5f9}\label{classMaxOS_1_1String_a2ee4e8d42626851256a5432bf838d5f9}} 
@@ -659,16 +718,16 @@ True if the string is less than or equal to the other, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 243 of file string.\+cpp.
+Definition at line 264 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{243                                                    \{}
-\DoxyCodeLine{244 }
-\DoxyCodeLine{245   \textcolor{comment}{// If the sum of this is less than or equal to the sum of the other, return true}}
-\DoxyCodeLine{246   \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) <= lex\_value(other);}
-\DoxyCodeLine{247 }
-\DoxyCodeLine{248 \}}
+\DoxyCodeLine{264                                                    \{}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266   \textcolor{comment}{// If the sum of this is less than or equal to the sum of the other, return true}}
+\DoxyCodeLine{267   \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) <= lex\_value(other);}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1String_aa92f33016ddf4c760fcc93cbfc545b67}\label{classMaxOS_1_1String_aa92f33016ddf4c760fcc93cbfc545b67}} 
@@ -691,22 +750,22 @@ Sets the string to the other string.
 \end{DoxyReturn}
 
 
-Definition at line 128 of file string.\+cpp.
+Definition at line 136 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{128                                                \{}
-\DoxyCodeLine{129 }
-\DoxyCodeLine{130     \textcolor{comment}{// Free the old memory}}
-\DoxyCodeLine{131     \textcolor{keyword}{delete}[] m\_string;}
-\DoxyCodeLine{132 }
-\DoxyCodeLine{133     \textcolor{comment}{// Copy the other string}}
-\DoxyCodeLine{134     \mbox{\hyperlink{classMaxOS_1_1String_a5d3f31f93c12aca6fd0be6923416cb70}{copy}}(other);}
-\DoxyCodeLine{135 }
-\DoxyCodeLine{136     \textcolor{comment}{// Return the string}}
-\DoxyCodeLine{137     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
-\DoxyCodeLine{138 }
-\DoxyCodeLine{139 \}}
+\DoxyCodeLine{136                                                \{}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138     \textcolor{comment}{// Free the old memory}}
+\DoxyCodeLine{139     \textcolor{keyword}{delete}[] m\_string;}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141     \textcolor{comment}{// Copy the other string}}
+\DoxyCodeLine{142     \mbox{\hyperlink{classMaxOS_1_1String_a5d3f31f93c12aca6fd0be6923416cb70}{copy}}(other);}
+\DoxyCodeLine{143 }
+\DoxyCodeLine{144     \textcolor{comment}{// Return the string}}
+\DoxyCodeLine{145     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{147 \}}
 
 \end{DoxyCode}
 
@@ -733,30 +792,21 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 179 of file string.\+cpp.
+Definition at line 209 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{179                                                    \{}
-\DoxyCodeLine{180 }
-\DoxyCodeLine{181     \textcolor{comment}{// Check if the lengths are equal}}
-\DoxyCodeLine{182     \textcolor{keywordflow}{if} (m\_length != other.length())}
-\DoxyCodeLine{183       \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{184 }
-\DoxyCodeLine{185     \textcolor{comment}{// Check if the characters are equal}}
-\DoxyCodeLine{186     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} = 0; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}} < m\_length; \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}++)}
-\DoxyCodeLine{187       \textcolor{keywordflow}{if} (m\_string[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}] != other[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf552e09750e0ce71af8fc4fa0b32b8ff}{i}}])}
-\DoxyCodeLine{188         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{189 }
-\DoxyCodeLine{190     \textcolor{comment}{// The strings are equal}}
-\DoxyCodeLine{191     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{192 }
-\DoxyCodeLine{193 \}}
+\DoxyCodeLine{209                                                    \{}
+\DoxyCodeLine{210 }
+\DoxyCodeLine{211     \textcolor{comment}{// Check if the strings are equal}}
+\DoxyCodeLine{212     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMaxOS_1_1String_aad2418bd26eb55a72127ded64a7ddfc8}{equals}}(other);}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214 \}}
 
 \end{DoxyCode}
 
 
-References Max\+O\+S\+::drivers\+::peripherals\+::i, and length().
+References equals().
 
 \mbox{\Hypertarget{classMaxOS_1_1String_a4b9b4c9eab5759a848229a8209ac3ddf}\label{classMaxOS_1_1String_a4b9b4c9eab5759a848229a8209ac3ddf}} 
 \index{MaxOS::String@{MaxOS::String}!operator$>$@{operator$>$}}
@@ -778,16 +828,16 @@ True if the string is greater than the other, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 230 of file string.\+cpp.
+Definition at line 251 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{230                                                   \{}
-\DoxyCodeLine{231 }
-\DoxyCodeLine{232   \textcolor{comment}{// If the sum of this is greater than the sum of the other, return true}}
-\DoxyCodeLine{233   \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) > lex\_value(other);}
-\DoxyCodeLine{234 }
-\DoxyCodeLine{235 \}}
+\DoxyCodeLine{251                                                   \{}
+\DoxyCodeLine{252 }
+\DoxyCodeLine{253   \textcolor{comment}{// If the sum of this is greater than the sum of the other, return true}}
+\DoxyCodeLine{254   \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) > lex\_value(other);}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1String_a21e5e59295a87f0af5b082c294c12f11}\label{classMaxOS_1_1String_a21e5e59295a87f0af5b082c294c12f11}} 
@@ -810,16 +860,16 @@ True if the string is greater than or equal to the other, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line 256 of file string.\+cpp.
+Definition at line 277 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{256                                                    \{}
-\DoxyCodeLine{257 }
-\DoxyCodeLine{258     \textcolor{comment}{// If the sum of this is greater than or equal to the sum of the other, return true}}
-\DoxyCodeLine{259     \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) >= lex\_value(other);}
-\DoxyCodeLine{260 }
-\DoxyCodeLine{261 \}}
+\DoxyCodeLine{277                                                    \{}
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279     \textcolor{comment}{// If the sum of this is greater than or equal to the sum of the other, return true}}
+\DoxyCodeLine{280     \textcolor{keywordflow}{return} lex\_value(*\textcolor{keyword}{this}) >= lex\_value(other);}
+\DoxyCodeLine{281 }
+\DoxyCodeLine{282 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1String_a1884de1766dad8ff42b6f6e965f25ef2}\label{classMaxOS_1_1String_a1884de1766dad8ff42b6f6e965f25ef2}} 
@@ -842,13 +892,13 @@ The character at the specified index
 \end{DoxyReturn}
 
 
-Definition at line 342 of file string.\+cpp.
+Definition at line 363 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{342                                   \{}
-\DoxyCodeLine{343   \textcolor{keywordflow}{return} m\_string[index];}
-\DoxyCodeLine{344 \}}
+\DoxyCodeLine{363                                   \{}
+\DoxyCodeLine{364   \textcolor{keywordflow}{return} m\_string[index];}
+\DoxyCodeLine{365 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1String_a433909e3ec663b557dcd55e361f6fec4}\label{classMaxOS_1_1String_a433909e3ec663b557dcd55e361f6fec4}} 
@@ -871,13 +921,13 @@ The character at the specified index
 \end{DoxyReturn}
 
 
-Definition at line 353 of file string.\+cpp.
+Definition at line 374 of file string.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{353                                         \{}
-\DoxyCodeLine{354     \textcolor{keywordflow}{return} m\_string[index];}
-\DoxyCodeLine{355 \}}
+\DoxyCodeLine{374                                         \{}
+\DoxyCodeLine{375     \textcolor{keywordflow}{return} m\_string[index];}
+\DoxyCodeLine{376 \}}
 
 \end{DoxyCode}
 

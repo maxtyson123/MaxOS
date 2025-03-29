@@ -4,13 +4,26 @@
 
 {\ttfamily \#include $<$cpu.\+h$>$}
 
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2fdd8153d0979ccad9ed8452897267f4}{C\+PU}} ()
+\begin{DoxyCompactList}\small\item\em Constructor for the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_aa32e0ed85bebabb167ace09050d20707}{$\sim$\+C\+PU}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a1227d972e880f4dcc6974172de28d6dd}{init\+\_\+tss}} ()
+\begin{DoxyCompactList}\small\item\em Initialises the T\+SS for interrupt handling. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a83a4b0d749e2d5e81ebb78bffdbcabb1}{P\+A\+N\+IC}} (const char $\ast$message)
+static cpu\+\_\+status\+\_\+t $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a874afe081e926714ab0d3630e66a0be2}{prepare\+\_\+for\+\_\+panic}} (cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}=nullptr)
+\begin{DoxyCompactList}\small\item\em Ensure the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} must panic and prepare for it if so. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a0d33c5755fcbfd08c75ae68f3d62577a}{P\+A\+N\+IC}} (const char $\ast$message, cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}=nullptr)
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a189729f4ca240ff52004a34b9057d448}{halt}} ()
 \item 
+static \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} $\ast$ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ade5429bb69b2f7800bf398b65de78cb9}{get\+\_\+instance}} ()
+\begin{DoxyCompactList}\small\item\em Gets the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} instance. \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}{get\+\_\+status}} (cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ab2744288c9f3b196502d4ae0f6b49b8b}{set\+\_\+status}} (cpu\+\_\+status\+\_\+t $\ast$\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
@@ -21,17 +34,80 @@ static uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{write\+\_\+msr}} (uint32\+\_\+t msr, uint64\+\_\+t value)
 \item 
-static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a9ff943a994f211939c9f1a907e73b0e1}{cpuid}} (uint32\+\_\+t leaf, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_a93d929ad1fc57af9d4f1793c361fb4f2}{eax}}, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_ae7c1e3339e4dead200cab41010e9127c}{ebx}}, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_af2b16bef95c844028dd145264d1d3875}{ecx}}, uint32\+\_\+t $\ast$\mbox{\hyperlink{multitasking_8h_ae6db045cebe7b4cf979120dccdee0d01}{edx}})
+static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a9ff943a994f211939c9f1a907e73b0e1}{cpuid}} (uint32\+\_\+t leaf, uint32\+\_\+t $\ast$eax, uint32\+\_\+t $\ast$ebx, uint32\+\_\+t $\ast$ecx, uint32\+\_\+t $\ast$edx)
 \item 
 static void \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae67e18fdfbb6fcd51d0f2509c9c43ff2}{stack\+\_\+trace}} (size\+\_\+t)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+tss\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a6cf50fdc207845c90071a63aaa550d7b}{tss}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a4918d8847c0c541134c3cef30d9320e7}{is\+\_\+panicking}} = \{ false \}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 
 
-Definition at line 48 of file cpu.\+h.
+Definition at line 69 of file cpu.\+h.
 
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a2fdd8153d0979ccad9ed8452897267f4}\label{classMaxOS_1_1system_1_1CPU_a2fdd8153d0979ccad9ed8452897267f4}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!CPU@{CPU}}
+\index{CPU@{CPU}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{CPU()}{CPU()}}
+{\footnotesize\ttfamily C\+P\+U\+::\+C\+PU (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} class. 
+
+
+
+Definition at line 252 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{252          \{}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254   \textcolor{comment}{// Set the instance}}
+\DoxyCodeLine{255   s\_instance = \textcolor{keyword}{this};}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257   \textcolor{comment}{// TODO = Multicore support}}
+\DoxyCodeLine{258 }
+\DoxyCodeLine{259 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_aa32e0ed85bebabb167ace09050d20707}\label{classMaxOS_1_1system_1_1CPU_aa32e0ed85bebabb167ace09050d20707}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!````~CPU@{$\sim$CPU}}
+\index{````~CPU@{$\sim$CPU}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{$\sim$CPU()}{~CPU()}}
+{\footnotesize\ttfamily C\+P\+U\+::$\sim$\+C\+PU (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destructor for the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} class. 
+
+
+
+Definition at line 264 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{264           \{}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266   \textcolor{comment}{// Clear the instance}}
+\DoxyCodeLine{267   s\_instance = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 \}}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Member Function Documentation}
@@ -43,20 +119,49 @@ Definition at line 48 of file cpu.\+h.
 
 
 
-Definition at line 107 of file cpu.\+cpp.
+Definition at line 112 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{107                                                                                          \{}
-\DoxyCodeLine{108 }
-\DoxyCodeLine{109   \textcolor{comment}{// Call the cpuid instruction}}
-\DoxyCodeLine{110   \_\_get\_cpuid(leaf, \mbox{\hyperlink{multitasking_8h_a93d929ad1fc57af9d4f1793c361fb4f2}{eax}}, \mbox{\hyperlink{multitasking_8h_ae7c1e3339e4dead200cab41010e9127c}{ebx}}, \mbox{\hyperlink{multitasking_8h_af2b16bef95c844028dd145264d1d3875}{ecx}}, \mbox{\hyperlink{multitasking_8h_ae6db045cebe7b4cf979120dccdee0d01}{edx}});}
-\DoxyCodeLine{111 \}}
+\DoxyCodeLine{112                                                                                          \{}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{114   \textcolor{comment}{// Call the cpuid instruction}}
+\DoxyCodeLine{115   \_\_get\_cpuid(leaf, eax, ebx, ecx, edx);}
+\DoxyCodeLine{116 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_ade5429bb69b2f7800bf398b65de78cb9}\label{classMaxOS_1_1system_1_1CPU_ade5429bb69b2f7800bf398b65de78cb9}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!get\_instance@{get\_instance}}
+\index{get\_instance@{get\_instance}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{get\_instance()}{get\_instance()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} $\ast$ C\+P\+U\+::get\+\_\+instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Gets the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} instance. 
+
+\begin{DoxyReturn}{Returns}
+The \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} instance 
+\end{DoxyReturn}
+
+
+Definition at line 275 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{275                        \{}
+\DoxyCodeLine{276 }
+\DoxyCodeLine{277   \textcolor{keywordflow}{if}(s\_instance)}
+\DoxyCodeLine{278     \textcolor{keywordflow}{return} s\_instance;}
+\DoxyCodeLine{279 }
+\DoxyCodeLine{280   \textcolor{keywordflow}{return} \textcolor{keyword}{new} \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2fdd8153d0979ccad9ed8452897267f4}{CPU}}();}
+\DoxyCodeLine{281 }
+\DoxyCodeLine{282 \}}
 
 \end{DoxyCode}
 
 
-References eax, ebx, ecx, and edx.
+Referenced by Max\+O\+S\+::processes\+::\+Scheduler\+::schedule\+\_\+next(), and Max\+O\+S\+::processes\+::\+Thread\+::\+Thread().
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}\label{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}} 
 \index{MaxOS::system::CPU@{MaxOS::system::CPU}!get\_status@{get\_status}}
@@ -66,30 +171,30 @@ References eax, ebx, ecx, and edx.
 
 
 
-Definition at line 18 of file cpu.\+cpp.
+Definition at line 23 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{18                                          \{}
-\DoxyCodeLine{19 }
-\DoxyCodeLine{20     \textcolor{comment}{// Get the registers}}
-\DoxyCodeLine{21     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r15, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15));}
-\DoxyCodeLine{22     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r14, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14));}
-\DoxyCodeLine{23     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r13, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13));}
-\DoxyCodeLine{24     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r12, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12));}
-\DoxyCodeLine{25     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r11, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11));}
-\DoxyCodeLine{26     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r10, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10));}
-\DoxyCodeLine{27     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r9, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9));}
-\DoxyCodeLine{28     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r8, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8));}
-\DoxyCodeLine{29     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rdi, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi));}
-\DoxyCodeLine{30     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rsi, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi));}
-\DoxyCodeLine{31     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rbp, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp));}
-\DoxyCodeLine{32     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rdx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx));}
-\DoxyCodeLine{33     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rcx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx));}
-\DoxyCodeLine{34     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rbx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx));}
-\DoxyCodeLine{35     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rax, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax));}
-\DoxyCodeLine{36 }
-\DoxyCodeLine{37 \}}
+\DoxyCodeLine{23                                          \{}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     \textcolor{comment}{// Get the registers}}
+\DoxyCodeLine{26     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r15, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15));}
+\DoxyCodeLine{27     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r14, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14));}
+\DoxyCodeLine{28     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r13, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13));}
+\DoxyCodeLine{29     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r12, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12));}
+\DoxyCodeLine{30     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r11, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11));}
+\DoxyCodeLine{31     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r10, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10));}
+\DoxyCodeLine{32     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r9, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9));}
+\DoxyCodeLine{33     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%r8, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8));}
+\DoxyCodeLine{34     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rdi, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi));}
+\DoxyCodeLine{35     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rsi, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi));}
+\DoxyCodeLine{36     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rbp, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp));}
+\DoxyCodeLine{37     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rdx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx));}
+\DoxyCodeLine{38     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rcx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx));}
+\DoxyCodeLine{39     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rbx, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx));}
+\DoxyCodeLine{40     \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%\%rax, \%0"} : \textcolor{stringliteral}{"=r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax));}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \}}
 
 \end{DoxyCode}
 
@@ -104,55 +209,215 @@ References status.
 
 
 
-Definition at line 14 of file cpu.\+cpp.
+Definition at line 19 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{14                \{}
-\DoxyCodeLine{15   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"hlt"});}
-\DoxyCodeLine{16 \}}
+\DoxyCodeLine{19                \{}
+\DoxyCodeLine{20   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"hlt"});}
+\DoxyCodeLine{21 \}}
 
 \end{DoxyCode}
-\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a83a4b0d749e2d5e81ebb78bffdbcabb1}\label{classMaxOS_1_1system_1_1CPU_a83a4b0d749e2d5e81ebb78bffdbcabb1}} 
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a1227d972e880f4dcc6974172de28d6dd}\label{classMaxOS_1_1system_1_1CPU_a1227d972e880f4dcc6974172de28d6dd}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!init\_tss@{init\_tss}}
+\index{init\_tss@{init\_tss}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{init\_tss()}{init\_tss()}}
+{\footnotesize\ttfamily void C\+P\+U\+::init\+\_\+tss (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initialises the T\+SS for interrupt handling. 
+
+
+
+Definition at line 191 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{191                    \{}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193   \textcolor{comment}{// The reserved have to be 0}}
+\DoxyCodeLine{194   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_ab664bb5979e082515f9624cf49870642}{reserved0}} = 0;}
+\DoxyCodeLine{195   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a3cafdff82d9c094c31a7781ecd415765}{reserved1}} = 0;}
+\DoxyCodeLine{196   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a5fa077fbbc4dd49d3b8104f49495084c}{reserved2}} = 0;}
+\DoxyCodeLine{197   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a10bd1193e892c7b8ca570e8c43f6aac4}{reserved3}} = 0;}
+\DoxyCodeLine{198   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a56c929f60a9052a7a72123a7c5f12cbe}{reserved4}} = 0;}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200   \textcolor{comment}{// The stacks}}
+\DoxyCodeLine{201   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a5719c6cb9ae842f74c0e1eccc4f89f3b}{rsp0}} = (uint64\_t)\mbox{\hyperlink{cpu_8cpp_a56f9ee420774363ee3bd9edf2e9f4a41}{stack}} + 16384;       \textcolor{comment}{// Kernel stack (scheduler will set the threads stack)}}
+\DoxyCodeLine{202   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_af9cd362e9de89da0ee55b8edf97f0420}{rsp1}} = 0;}
+\DoxyCodeLine{203   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_ae0ab62d12309e168845ca38538eed1b4}{rsp2}} = 0;}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205   \textcolor{comment}{// Interrupt stacks can all be 0}}
+\DoxyCodeLine{206   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a11da3c214625501eec5e0a3918caeaa3}{ist1}} = 0;}
+\DoxyCodeLine{207   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a164743fbcbef25fc197f102429cb35ea}{ist2}} = 0;}
+\DoxyCodeLine{208   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a7870630389d09eb0e65bb07c5631e389}{ist3}} = 0;}
+\DoxyCodeLine{209   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a637abb01d911b60e68ebcab127a00609}{ist4}} = 0;}
+\DoxyCodeLine{210   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a4839f4df5d9707ba0c101596e9bd6312}{ist5}} = 0;}
+\DoxyCodeLine{211   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a200d161eee0f5b9d14a6c3ff8d2e35d3}{ist6}} = 0;}
+\DoxyCodeLine{212   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a9fd9373a8b9a49c38004d34fa78c28c9}{ist7}} = 0;}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214   \textcolor{comment}{// Ports TODO when setting up userspace drivers come back to this}}
+\DoxyCodeLine{215   \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}}.\mbox{\hyperlink{structMaxOS_1_1system_1_1tss_a19e9eb44772f1a650935d6f36f06662e}{io\_bitmap\_offset}} = 0;}
+\DoxyCodeLine{216 }
+\DoxyCodeLine{217   \textcolor{comment}{// Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)}}
+\DoxyCodeLine{218   uint64\_t \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}} = (uint64\_t)\&\mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}};}
+\DoxyCodeLine{219   uint16\_t base\_1 = \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}} \& 0xFFFF;}
+\DoxyCodeLine{220   uint8\_t base\_2 = (\mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}} >> 16) \& 0xFF;}
+\DoxyCodeLine{221   uint8\_t base\_3 = (\mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}} >> 24) \& 0xFF;}
+\DoxyCodeLine{222   uint32\_t base\_4 = (\mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}} >> 32) \& 0xFFFFFFFF;}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224   uint16\_t limit\_low = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a6cf50fdc207845c90071a63aaa550d7b}{tss}});}
+\DoxyCodeLine{225 }
+\DoxyCodeLine{226   \textcolor{comment}{// Flags: 1 -\/ Type = 0x9, Descriptor Privilege Level = 0, Present = 1}}
+\DoxyCodeLine{227   \textcolor{comment}{//        2 -\/ Available = 0, Granularity = 0}}
+\DoxyCodeLine{228   uint8\_t flags\_1 = 0x89;}
+\DoxyCodeLine{229   uint8\_t flags\_2 = 0;}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232   \textcolor{comment}{// Create the TSS descriptors}}
+\DoxyCodeLine{233   uint64\_t tss\_descriptor\_low = (uint64\_t) base\_3 << 56 | (uint64\_t) flags\_2 << 48 | (uint64\_t) flags\_1 << 40 | (uint64\_t) base\_2 << 32 | (uint64\_t) base\_1 << 16 | (uint64\_t) limit\_low;}
+\DoxyCodeLine{234   uint64\_t tss\_descriptor\_high = base\_4;}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236   \textcolor{comment}{// Store in the GDT}}
+\DoxyCodeLine{237   \mbox{\hyperlink{cpu_8cpp_a3ca04db9517693017ecee841421cf073}{gdt64}}[5] = tss\_descriptor\_low;}
+\DoxyCodeLine{238   \mbox{\hyperlink{cpu_8cpp_a3ca04db9517693017ecee841421cf073}{gdt64}}[6] = tss\_descriptor\_high;}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240   \textcolor{comment}{// Load the TSS}}
+\DoxyCodeLine{241   \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Loading TSS: 0x0\%x 0x0\%x at 0x\%x\(\backslash\)n"}, tss\_descriptor\_low, tss\_descriptor\_high, \&\mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{tss}});}
+\DoxyCodeLine{242   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"ltr \%\%ax"} : : \textcolor{stringliteral}{"a"} (0x28));}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244   \textcolor{comment}{//TODO: For smp -\/ load the TSS for each core or find a better way to do this}}
+\DoxyCodeLine{245 }
+\DoxyCodeLine{246 }
+\DoxyCodeLine{247 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kprintf, base, gdt64, Max\+O\+S\+::system\+::tss\+::io\+\_\+bitmap\+\_\+offset, Max\+O\+S\+::system\+::tss\+::ist1, Max\+O\+S\+::system\+::tss\+::ist2, Max\+O\+S\+::system\+::tss\+::ist3, Max\+O\+S\+::system\+::tss\+::ist4, Max\+O\+S\+::system\+::tss\+::ist5, Max\+O\+S\+::system\+::tss\+::ist6, Max\+O\+S\+::system\+::tss\+::ist7, Max\+O\+S\+::system\+::tss\+::reserved0, Max\+O\+S\+::system\+::tss\+::reserved1, Max\+O\+S\+::system\+::tss\+::reserved2, Max\+O\+S\+::system\+::tss\+::reserved3, Max\+O\+S\+::system\+::tss\+::reserved4, Max\+O\+S\+::system\+::tss\+::rsp0, Max\+O\+S\+::system\+::tss\+::rsp1, Max\+O\+S\+::system\+::tss\+::rsp2, and stack.
+
+
+
+Referenced by kernel\+Main().
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a0d33c5755fcbfd08c75ae68f3d62577a}\label{classMaxOS_1_1system_1_1CPU_a0d33c5755fcbfd08c75ae68f3d62577a}} 
 \index{MaxOS::system::CPU@{MaxOS::system::CPU}!PANIC@{PANIC}}
 \index{PANIC@{PANIC}!MaxOS::system::CPU@{MaxOS::system::CPU}}
 \doxysubsubsection{\texorpdfstring{PANIC()}{PANIC()}}
-{\footnotesize\ttfamily void C\+P\+U\+::\+P\+A\+N\+IC (\begin{DoxyParamCaption}\item[{const char $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily void C\+P\+U\+::\+P\+A\+N\+IC (\begin{DoxyParamCaption}\item[{const char $\ast$}]{message,  }\item[{cpu\+\_\+status\+\_\+t $\ast$}]{status = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
-Definition at line 133 of file cpu.\+cpp.
+Definition at line 140 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{133                                    \{}
-\DoxyCodeLine{134 }
-\DoxyCodeLine{135   \textcolor{comment}{// Print using the backend}}
-\DoxyCodeLine{136   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/\(\backslash\)n"});}
-\DoxyCodeLine{137   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Kernel Panic: \%s\(\backslash\)n"}, message);}
-\DoxyCodeLine{138 }
-\DoxyCodeLine{139   \textcolor{comment}{// Stack trace}}
-\DoxyCodeLine{140   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"});}
-\DoxyCodeLine{141   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Stack Trace:\(\backslash\)n"});}
-\DoxyCodeLine{142   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae67e18fdfbb6fcd51d0f2509c9c43ff2}{stack\_trace}}(10);}
-\DoxyCodeLine{143 }
-\DoxyCodeLine{144   \textcolor{comment}{// Register dump}}
-\DoxyCodeLine{145   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"});}
-\DoxyCodeLine{146   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Register Dump:\(\backslash\)n"});}
-\DoxyCodeLine{147   cpu\_status\_t \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}};}
-\DoxyCodeLine{148   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}{get\_status}}(\&\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}});}
-\DoxyCodeLine{149   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a07c84fcc01f83f35d50295b7828a54c3}{print\_registers}}(\&\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}});}
-\DoxyCodeLine{150 }
-\DoxyCodeLine{151   \textcolor{comment}{// Halt}}
-\DoxyCodeLine{152   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/\(\backslash\)n"});}
-\DoxyCodeLine{153   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a189729f4ca240ff52004a34b9057d448}{halt}}();}
-\DoxyCodeLine{154 }
-\DoxyCodeLine{155 \}}
+\DoxyCodeLine{140                                                          \{}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142   \textcolor{comment}{// Get the current process}}
+\DoxyCodeLine{143   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}* process = Scheduler::get\_current\_process();}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145   \textcolor{comment}{// Ensure ready to panic  -\/ At this point it is not an issue if it is possible can avoid the panic as it is most likely called by a place that cant switch to the avoidable state}}
+\DoxyCodeLine{146   \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a4918d8847c0c541134c3cef30d9320e7}{is\_panicking}})}
+\DoxyCodeLine{147     \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a874afe081e926714ab0d3630e66a0be2}{prepare\_for\_panic}}();}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149   \textcolor{comment}{// Print using the backend}}
+\DoxyCodeLine{150   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/\(\backslash\)n"});}
+\DoxyCodeLine{151   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Kernel Panic: \%s\(\backslash\)n"}, message);}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153   \textcolor{comment}{// Info about the running process}}
+\DoxyCodeLine{154   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Process: \%s\(\backslash\)n"}, process ? process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}() : \textcolor{stringliteral}{"Kernel"});}
+\DoxyCodeLine{155   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"After running for \%d ticks (system uptime: \%d ticks)\(\backslash\)n"}, process -\/> get\_total\_ticks(), Scheduler::get\_system\_scheduler()-\/>get\_ticks());}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157   \textcolor{comment}{// Stack trace}}
+\DoxyCodeLine{158   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"});}
+\DoxyCodeLine{159   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Stack Trace:\(\backslash\)n"});}
+\DoxyCodeLine{160   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae67e18fdfbb6fcd51d0f2509c9c43ff2}{stack\_trace}}(10);}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162   \textcolor{comment}{// Register dump}}
+\DoxyCodeLine{163   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"});}
+\DoxyCodeLine{164   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"Register Dump:\(\backslash\)n"});}
+\DoxyCodeLine{165 }
+\DoxyCodeLine{166   \textcolor{keywordflow}{if}(!\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})\{}
+\DoxyCodeLine{167     cpu\_status\_t* new\_status = \textcolor{keyword}{new} cpu\_status\_t();                              \textcolor{comment}{// Who cares about freeing we're fucked anyway at this point}}
+\DoxyCodeLine{168     \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}{get\_status}}(new\_status);}
+\DoxyCodeLine{169     \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} = new\_status;}
+\DoxyCodeLine{170   \}}
+\DoxyCodeLine{171   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a07c84fcc01f83f35d50295b7828a54c3}{print\_registers}}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}});}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173   \textcolor{comment}{// Print some text to the user}}
+\DoxyCodeLine{174   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"});}
+\DoxyCodeLine{175   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hThere has been a fatal error in MaxOS and the system has been halted.\(\backslash\)n"});}
+\DoxyCodeLine{176   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hPlease restart the system. \(\backslash\)n"});}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179   \textcolor{comment}{// Print the logo}}
+\DoxyCodeLine{180   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/=-\/\(\backslash\)n"});}
+\DoxyCodeLine{181   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"print\_logo\_kernel\_panic();\(\backslash\)n\(\backslash\)067"});}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183   \textcolor{comment}{// Halt}}
+\DoxyCodeLine{184   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a189729f4ca240ff52004a34b9057d448}{halt}}();}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186 \}}
 
 \end{DoxyCode}
 
 
-References \+\_\+kpanicf, and status.
+References \+\_\+kpanicf, Max\+O\+S\+::\+String\+::c\+\_\+str(), Max\+O\+S\+::processes\+::\+Process\+::name, and status.
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a874afe081e926714ab0d3630e66a0be2}\label{classMaxOS_1_1system_1_1CPU_a874afe081e926714ab0d3630e66a0be2}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!prepare\_for\_panic@{prepare\_for\_panic}}
+\index{prepare\_for\_panic@{prepare\_for\_panic}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{prepare\_for\_panic()}{prepare\_for\_panic()}}
+{\footnotesize\ttfamily cpu\+\_\+status\+\_\+t $\ast$ C\+P\+U\+::prepare\+\_\+for\+\_\+panic (\begin{DoxyParamCaption}\item[{cpu\+\_\+status\+\_\+t $\ast$}]{status = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Ensure the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} must panic and prepare for it if so. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & The status of the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} (if available) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} status to avoid having to panic or a nullptr if the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}} must panic 
+\end{DoxyReturn}
+
+
+Definition at line 290 of file cpu.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{290                                                          \{}
+\DoxyCodeLine{291 }
+\DoxyCodeLine{292   \textcolor{comment}{// Get the current process}}
+\DoxyCodeLine{293   \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}* process = Scheduler::get\_current\_process();}
+\DoxyCodeLine{294 }
+\DoxyCodeLine{295   \textcolor{comment}{// If the faulting address is in lower half just kill the process and move on}}
+\DoxyCodeLine{296   \textcolor{keywordflow}{if}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}} \&\& !\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a7d412394ef0b7e29bbe278406751761b}{memory::MemoryManager::in\_higher\_region}}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rip))\{}
+\DoxyCodeLine{297     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"CPU Panicked in process \%s at 0x\%x -\/ killing process\(\backslash\)n"}, process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_a2af521b9de69dcbe3f1125390fbb3b5a}{c\_str}}(), \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rip);}
+\DoxyCodeLine{298     \textcolor{keywordflow}{return} Scheduler::get\_system\_scheduler()-\/>force\_remove\_process(process);}
+\DoxyCodeLine{299   \}}
+\DoxyCodeLine{300 }
+\DoxyCodeLine{301   \textcolor{comment}{// Don't get interrupted (can cause a loop)}}
+\DoxyCodeLine{302 \textcolor{comment}{//  asm("cli");}}
+\DoxyCodeLine{303 }
+\DoxyCodeLine{304   \textcolor{comment}{// We are panicking}}
+\DoxyCodeLine{305   \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a4918d8847c0c541134c3cef30d9320e7}{is\_panicking}} = \textcolor{keyword}{true};}
+\DoxyCodeLine{306 }
+\DoxyCodeLine{307   \textcolor{comment}{// Clear the first line}}
+\DoxyCodeLine{308   \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%h\(\backslash\)n\(\backslash\)n\(\backslash\)n"});}
+\DoxyCodeLine{309 }
+\DoxyCodeLine{310   \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{311 }
+\DoxyCodeLine{312 \}}
+
+\end{DoxyCode}
+
+
+References \+\_\+kpanicf, \+\_\+kprintf, Max\+O\+S\+::\+String\+::c\+\_\+str(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::in\+\_\+higher\+\_\+region(), Max\+O\+S\+::processes\+::\+Process\+::name, and status.
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a07c84fcc01f83f35d50295b7828a54c3}\label{classMaxOS_1_1system_1_1CPU_a07c84fcc01f83f35d50295b7828a54c3}} 
 \index{MaxOS::system::CPU@{MaxOS::system::CPU}!print\_registers@{print\_registers}}
@@ -162,42 +427,42 @@ References \+\_\+kpanicf, and status.
 
 
 
-Definition at line 59 of file cpu.\+cpp.
+Definition at line 64 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{59                                               \{}
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61     \textcolor{comment}{// Print the registers}}
-\DoxyCodeLine{62     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R15: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15);}
-\DoxyCodeLine{63     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R14: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14);}
-\DoxyCodeLine{64     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R13: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13);}
-\DoxyCodeLine{65     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R12: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12);}
-\DoxyCodeLine{66     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R11: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11);}
-\DoxyCodeLine{67     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R10: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10);}
-\DoxyCodeLine{68     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R9: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9);}
-\DoxyCodeLine{69     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"R8: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8);}
-\DoxyCodeLine{70     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RDI: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi);}
-\DoxyCodeLine{71     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RSI: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi);}
-\DoxyCodeLine{72     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RBP: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp);}
-\DoxyCodeLine{73     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RDX: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx);}
-\DoxyCodeLine{74     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RCX: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx);}
-\DoxyCodeLine{75     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RBX: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx);}
-\DoxyCodeLine{76     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RAX: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax);}
-\DoxyCodeLine{77     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"INTERRUPT NUMBER: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number);}
-\DoxyCodeLine{78     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"ERROR CODE: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>error\_code);}
-\DoxyCodeLine{79     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RIP: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rip);}
-\DoxyCodeLine{80     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"CS: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>cs);}
-\DoxyCodeLine{81     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RFLAGS: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rflags);}
-\DoxyCodeLine{82     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"RSP: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsp);}
-\DoxyCodeLine{83     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"SS: 0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>ss);}
-\DoxyCodeLine{84 }
-\DoxyCodeLine{85 \}}
+\DoxyCodeLine{64                                               \{}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66     \textcolor{comment}{// Print the registers}}
+\DoxyCodeLine{67     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR15: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15);}
+\DoxyCodeLine{68     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR14: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14);}
+\DoxyCodeLine{69     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR13: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13);}
+\DoxyCodeLine{70     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR12: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12);}
+\DoxyCodeLine{71     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR11: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11);}
+\DoxyCodeLine{72     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR10: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10);}
+\DoxyCodeLine{73     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR9: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9);}
+\DoxyCodeLine{74     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hR8: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8);}
+\DoxyCodeLine{75     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRDI: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi);}
+\DoxyCodeLine{76     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRSI: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi);}
+\DoxyCodeLine{77     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRBP: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp);}
+\DoxyCodeLine{78     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRDX: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx);}
+\DoxyCodeLine{79     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRCX: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx);}
+\DoxyCodeLine{80     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRBX: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx);}
+\DoxyCodeLine{81     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRAX: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax);}
+\DoxyCodeLine{82     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hINT: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>interrupt\_number);}
+\DoxyCodeLine{83     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hERRCD: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>error\_code);}
+\DoxyCodeLine{84     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRIP: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rip);}
+\DoxyCodeLine{85     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hCS: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>cs);}
+\DoxyCodeLine{86     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRFlGS: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rflags);}
+\DoxyCodeLine{87     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hRSP: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsp);}
+\DoxyCodeLine{88     \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%hSS: \(\backslash\)t0x\%x\(\backslash\)n"}, \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>ss);}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90 \}}
 
 \end{DoxyCode}
 
 
-References \+\_\+kprintf, and status.
+References \+\_\+kpanicf, and status.
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}\label{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}} 
 \index{MaxOS::system::CPU@{MaxOS::system::CPU}!read\_msr@{read\_msr}}
@@ -207,22 +472,22 @@ References \+\_\+kprintf, and status.
 
 
 
-Definition at line 88 of file cpu.\+cpp.
+Definition at line 93 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{88                                    \{}
-\DoxyCodeLine{89 }
-\DoxyCodeLine{90   \textcolor{comment}{// Low and high parts of the MSR}}
-\DoxyCodeLine{91   uint32\_t low, high;}
-\DoxyCodeLine{92 }
-\DoxyCodeLine{93   \textcolor{comment}{// Read the MSR}}
-\DoxyCodeLine{94   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"rdmsr"} : \textcolor{stringliteral}{"=a"} (low), \textcolor{stringliteral}{"=d"} (high) : \textcolor{stringliteral}{"c"} (msr));}
-\DoxyCodeLine{95 }
-\DoxyCodeLine{96   \textcolor{comment}{// Return the value}}
-\DoxyCodeLine{97   \textcolor{keywordflow}{return} (uint64\_t) low | ((uint64\_t) high << 32);}
-\DoxyCodeLine{98 }
-\DoxyCodeLine{99 \}}
+\DoxyCodeLine{93                                    \{}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95   \textcolor{comment}{// Low and high parts of the MSR}}
+\DoxyCodeLine{96   uint32\_t low, high;}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98   \textcolor{comment}{// Read the MSR}}
+\DoxyCodeLine{99   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"rdmsr"} : \textcolor{stringliteral}{"=a"} (low), \textcolor{stringliteral}{"=d"} (high) : \textcolor{stringliteral}{"c"} (msr));}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101   \textcolor{comment}{// Return the value}}
+\DoxyCodeLine{102   \textcolor{keywordflow}{return} (uint64\_t) low | ((uint64\_t) high << 32);}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_ab2744288c9f3b196502d4ae0f6b49b8b}\label{classMaxOS_1_1system_1_1CPU_ab2744288c9f3b196502d4ae0f6b49b8b}} 
@@ -233,30 +498,30 @@ Definition at line 88 of file cpu.\+cpp.
 
 
 
-Definition at line 38 of file cpu.\+cpp.
+Definition at line 43 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{38                                          \{}
-\DoxyCodeLine{39 }
-\DoxyCodeLine{40   \textcolor{comment}{// Set the registers}}
-\DoxyCodeLine{41   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r15"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15));}
-\DoxyCodeLine{42   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r14"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14));}
-\DoxyCodeLine{43   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r13"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13));}
-\DoxyCodeLine{44   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r12"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12));}
-\DoxyCodeLine{45   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r11"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11));}
-\DoxyCodeLine{46   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r10"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10));}
-\DoxyCodeLine{47   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r9"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9));}
-\DoxyCodeLine{48   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r8"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8));}
-\DoxyCodeLine{49   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rdi"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi));}
-\DoxyCodeLine{50   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rsi"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi));}
-\DoxyCodeLine{51   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rbp"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp));}
-\DoxyCodeLine{52   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rdx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx));}
-\DoxyCodeLine{53   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rcx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx));}
-\DoxyCodeLine{54   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rbx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx));}
-\DoxyCodeLine{55   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rax"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax));}
-\DoxyCodeLine{56 }
-\DoxyCodeLine{57 \}}
+\DoxyCodeLine{43                                          \{}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45   \textcolor{comment}{// Set the registers}}
+\DoxyCodeLine{46   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r15"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r15));}
+\DoxyCodeLine{47   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r14"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r14));}
+\DoxyCodeLine{48   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r13"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r13));}
+\DoxyCodeLine{49   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r12"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r12));}
+\DoxyCodeLine{50   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r11"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r11));}
+\DoxyCodeLine{51   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r10"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r10));}
+\DoxyCodeLine{52   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r9"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r9));}
+\DoxyCodeLine{53   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%r8"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>r8));}
+\DoxyCodeLine{54   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rdi"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdi));}
+\DoxyCodeLine{55   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rsi"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rsi));}
+\DoxyCodeLine{56   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rbp"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbp));}
+\DoxyCodeLine{57   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rdx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rdx));}
+\DoxyCodeLine{58   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rcx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rcx));}
+\DoxyCodeLine{59   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rbx"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rbx));}
+\DoxyCodeLine{60   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"mov \%0, \%\%rax"} : : \textcolor{stringliteral}{"r"} (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}-\/>rax));}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62 \}}
 
 \end{DoxyCode}
 
@@ -271,33 +536,33 @@ References status.
 
 
 
-Definition at line 113 of file cpu.\+cpp.
+Definition at line 118 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{113                                   \{}
-\DoxyCodeLine{114 }
-\DoxyCodeLine{115     \textcolor{comment}{// Get the first stack frame}}
-\DoxyCodeLine{116     stack\_frame\_t* frame = (stack\_frame\_t*)\_\_builtin\_frame\_address(0);}
-\DoxyCodeLine{117     \textcolor{keywordtype}{size\_t} current\_level = 0;}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119     \textcolor{comment}{// Loop through the frames logging}}
-\DoxyCodeLine{120     \textcolor{keywordflow}{while} (current\_level < level \&\& frame != \textcolor{keyword}{nullptr})\{}
-\DoxyCodeLine{121 }
-\DoxyCodeLine{122         \textcolor{comment}{// Print the frame}}
-\DoxyCodeLine{123         \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"(\%d);\(\backslash\)t at 0x\%x\(\backslash\)n"}, current\_level, frame-\/>rip);}
-\DoxyCodeLine{124 }
-\DoxyCodeLine{125         \textcolor{comment}{// Next frame}}
-\DoxyCodeLine{126         frame = frame -\/> \mbox{\hyperlink{virtual_8h_a20e8ff4d4c943d29eee7cfd80a5ff0f3}{next}};}
-\DoxyCodeLine{127         current\_level++;}
-\DoxyCodeLine{128 }
-\DoxyCodeLine{129     \}}
-\DoxyCodeLine{130 \}}
+\DoxyCodeLine{118                                   \{}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120     \textcolor{comment}{// Get the first stack frame}}
+\DoxyCodeLine{121     stack\_frame\_t* frame = (stack\_frame\_t*)\_\_builtin\_frame\_address(0);}
+\DoxyCodeLine{122     \textcolor{keywordtype}{size\_t} current\_level = 0;}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124     \textcolor{comment}{// Loop through the frames logging}}
+\DoxyCodeLine{125     \textcolor{keywordflow}{while} (current\_level < level \&\& frame != \textcolor{keyword}{nullptr})\{}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127         \textcolor{comment}{// Print the frame}}
+\DoxyCodeLine{128         \mbox{\hyperlink{kprint_8h_ad17f4069242d16af16fc559e667f26e1}{\_kpanicf}}(\textcolor{stringliteral}{"\%h(\%d):\(\backslash\)t at 0x\%x\(\backslash\)n"}, current\_level, frame-\/>rip);}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130         \textcolor{comment}{// Next frame}}
+\DoxyCodeLine{131         frame = frame -\/> \mbox{\hyperlink{virtual_8h_a20e8ff4d4c943d29eee7cfd80a5ff0f3}{next}};}
+\DoxyCodeLine{132         current\_level++;}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134     \}}
+\DoxyCodeLine{135 \}}
 
 \end{DoxyCode}
 
 
-References \+\_\+kprintf, and next.
+References \+\_\+kpanicf, and next.
 
 \mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}\label{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}} 
 \index{MaxOS::system::CPU@{MaxOS::system::CPU}!write\_msr@{write\_msr}}
@@ -307,18 +572,41 @@ References \+\_\+kprintf, and next.
 
 
 
-Definition at line 101 of file cpu.\+cpp.
+Definition at line 106 of file cpu.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{101                                                 \{}
-\DoxyCodeLine{102 }
-\DoxyCodeLine{103   \textcolor{comment}{// Write the MSR}}
-\DoxyCodeLine{104   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"wrmsr"} : : \textcolor{stringliteral}{"a"} ((uint32\_t) value), \textcolor{stringliteral}{"d"} ((uint32\_t) (value >> 32)), \textcolor{stringliteral}{"c"} (msr));}
-\DoxyCodeLine{105 }
-\DoxyCodeLine{106 \}}
+\DoxyCodeLine{106                                                 \{}
+\DoxyCodeLine{107 }
+\DoxyCodeLine{108   \textcolor{comment}{// Write the MSR}}
+\DoxyCodeLine{109   \textcolor{keyword}{asm} \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"wrmsr"} : : \textcolor{stringliteral}{"a"} ((uint32\_t) value), \textcolor{stringliteral}{"d"} ((uint32\_t) (value >> 32)), \textcolor{stringliteral}{"c"} (msr));}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111 \}}
 
 \end{DoxyCode}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a4918d8847c0c541134c3cef30d9320e7}\label{classMaxOS_1_1system_1_1CPU_a4918d8847c0c541134c3cef30d9320e7}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!is\_panicking@{is\_panicking}}
+\index{is\_panicking@{is\_panicking}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{is\_panicking}{is\_panicking}}
+{\footnotesize\ttfamily bool Max\+O\+S\+::system\+::\+C\+P\+U\+::is\+\_\+panicking = \{ false \}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Definition at line 78 of file cpu.\+h.
+
+\mbox{\Hypertarget{classMaxOS_1_1system_1_1CPU_a6cf50fdc207845c90071a63aaa550d7b}\label{classMaxOS_1_1system_1_1CPU_a6cf50fdc207845c90071a63aaa550d7b}} 
+\index{MaxOS::system::CPU@{MaxOS::system::CPU}!tss@{tss}}
+\index{tss@{tss}!MaxOS::system::CPU@{MaxOS::system::CPU}}
+\doxysubsubsection{\texorpdfstring{tss}{tss}}
+{\footnotesize\ttfamily tss\+\_\+t Max\+O\+S\+::system\+::\+C\+P\+U\+::tss}
+
+
+
+Definition at line 84 of file cpu.\+h.
+
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

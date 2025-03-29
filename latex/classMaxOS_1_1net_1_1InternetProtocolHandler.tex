@@ -461,7 +461,7 @@ Definition at line 172 of file ipv4.\+cpp.
 \begin{DoxyCode}{0}
 \DoxyCodeLine{172                                                                                                                           \{}
 \DoxyCodeLine{173 }
-\DoxyCodeLine{174     uint8\_t* buffer = (uint8\_t*)MemoryManager::s\_active\_memory\_manager-\/> malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}}) + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});                           \textcolor{comment}{//Allocate memory for the message}}
+\DoxyCodeLine{174     uint8\_t* buffer = (uint8\_t*)MemoryManager::kmalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}}) + \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}});                           \textcolor{comment}{//Allocate memory for the message}}
 \DoxyCodeLine{175     \mbox{\hyperlink{structMaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}} *message = (\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}}*)buffer;                                                                            \textcolor{comment}{//Convert to struct for easier use}}
 \DoxyCodeLine{176 }
 \DoxyCodeLine{177     message -\/> \mbox{\hyperlink{ipv4_8h_ab22abc2906422da61885ac6c8e6a1a59}{version}} = 4;                                                                                                                           \textcolor{comment}{//Set version}}
@@ -498,7 +498,7 @@ Definition at line 172 of file ipv4.\+cpp.
 \DoxyCodeLine{208 }
 \DoxyCodeLine{209     \textcolor{comment}{//Send message}}
 \DoxyCodeLine{210     \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFramePayloadHandler_ac54f71ce7d512ba22a6f3306ad459a70}{frameHandler}} -\/> sendEthernetFrame(MAC, \textcolor{keyword}{this} -\/> \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFramePayloadHandler_a902f9382cf1085858a123e304550ad80}{handledType}}, buffer, \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}} + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1net_1_1InternetProtocolV4Header}{InternetProtocolV4Header}}));      \textcolor{comment}{//Send message}}
-\DoxyCodeLine{211     MemoryManager::s\_active\_memory\_manager-\/>free(buffer);                                                                                                 \textcolor{comment}{//Free memory}}
+\DoxyCodeLine{211     MemoryManager::kfree(buffer);                                                                                                 \textcolor{comment}{//Free memory}}
 \DoxyCodeLine{212 \}}
 
 \end{DoxyCode}

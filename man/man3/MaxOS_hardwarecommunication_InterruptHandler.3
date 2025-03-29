@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::InterruptHandler" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::InterruptHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,13 +10,17 @@ MaxOS::hardwarecommunication::InterruptHandler \- Handles a certain interrupt nu
 .PP
 \fC#include <interrupts\&.h>\fP
 .PP
-Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::ethernet::amd_am79c973\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::peripherals::MouseDriver\fP, and \fBMaxOS::system::SyscallHandler\fP\fC [private]\fP\&.
+Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::ethernet::amd_am79c973\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::peripherals::MouseDriver\fP, \fBMaxOS::processes::Scheduler\fP, and \fBMaxOS::system::SyscallManager\fP\fC [private]\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "virtual void \fBhandle_interrupt\fP ()"
 .br
+.ti -1c
+.RI "virtual system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.br
+.RI "Handles an interrupt and returns the status\&. "
 .in -1c
 .SS "Protected Member Functions"
 
@@ -43,7 +47,7 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .PP 
 Handles a certain interrupt number\&. 
 .PP
-Definition at line 29 of file interrupts\&.h\&.
+Definition at line 28 of file interrupts\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "InterruptHandler::InterruptHandler (uint8_t interrupt_number, \fBInterruptManager\fP * interrupt_manager = \fC0\fP)\fC [protected]\fP"
@@ -84,29 +88,63 @@ References m_interrupt_manager, m_interrupt_number, and MaxOS::hardwarecommunica
 .SS "void InterruptHandler::handle_interrupt ()\fC [virtual]\fP"
 
 .PP
-Reimplemented in \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, \fBMaxOS::drivers::ethernet::amd_am79c973\fP, and \fBMaxOS::system::SyscallHandler\fP\&.
+Reimplemented in \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, and \fBMaxOS::drivers::ethernet::amd_am79c973\fP\&.
 .PP
-Definition at line 37 of file interrupts\&.cpp\&.
+Definition at line 38 of file interrupts\&.cpp\&.
 .PP
 .nf
-37                                         {
-38 
-39 }
+38                                         {
+39 
+40 }
 .fi
 .PP
-Referenced by MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\&.
+Referenced by handle_interrupt(), and MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\&.
+.SS "system::cpu_status_t * InterruptHandler::handle_interrupt (system::cpu_status_t * status)\fC [virtual]\fP"
+
+.PP
+Handles an interrupt and returns the status\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The status of the CPU 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The status of the CPU 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::processes::Scheduler\fP, and \fBMaxOS::system::SyscallManager\fP\&.
+.PP
+Definition at line 47 of file interrupts\&.cpp\&.
+.PP
+.nf
+47                                                                                  {
+48 
+49   // For handlers that dont care about the status
+50   handle_interrupt();
+51 
+52   // Return the status
+53   return status;
+54 
+55 }
+.fi
+.PP
+References handle_interrupt(), and status\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBInterruptManager\fP* MaxOS::hardwarecommunication::InterruptHandler::m_interrupt_manager\fC [protected]\fP"
 
 .PP
-Definition at line 32 of file interrupts\&.h\&.
+Definition at line 31 of file interrupts\&.h\&.
 .PP
 Referenced by MaxOS::drivers::clock::Clock::calibrate(), InterruptHandler(), and ~InterruptHandler()\&.
 .SS "uint8_t MaxOS::hardwarecommunication::InterruptHandler::m_interrupt_number\fC [protected]\fP"
 
 .PP
-Definition at line 31 of file interrupts\&.h\&.
+Definition at line 30 of file interrupts\&.h\&.
 .PP
 Referenced by ~InterruptHandler()\&.
 

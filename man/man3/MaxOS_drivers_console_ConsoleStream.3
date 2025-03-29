@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::console::ConsoleStream" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::console::ConsoleStream" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -60,7 +60,7 @@ Inherits \fBMaxOS::common::OutputStream\fP\&.
 .PP 
 A stream that can be used to write to a console\&. 
 .PP
-Definition at line 90 of file console\&.h\&.
+Definition at line 92 of file console\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "ConsoleStream::ConsoleStream (\fBConsole\fP * console)"
@@ -68,23 +68,23 @@ Definition at line 90 of file console\&.h\&.
 .PP
 ____ \fBConsole\fP Stream ____/// 
 .PP
-Definition at line 395 of file console\&.cpp\&.
+Definition at line 423 of file console\&.cpp\&.
 .PP
 .nf
-396 : m_console(console)
-397 {
-398 
-399 }
+424 : m_console(console)
+425 {
+426 
+427 }
 .fi
 .SS "ConsoleStream::~ConsoleStream ()"
 
 .PP
-Definition at line 401 of file console\&.cpp\&.
+Definition at line 429 of file console\&.cpp\&.
 .PP
 .nf
-401                               {
-402 
-403 }
+429                               {
+430 
+431 }
 .fi
 .SH "Member Function Documentation"
 .PP 
@@ -102,18 +102,20 @@ Set the m_position of the cursor\&.
 .PP
 
 .PP
-Definition at line 488 of file console\&.cpp\&.
+Definition at line 526 of file console\&.cpp\&.
 .PP
 .nf
-488                                                      {
-489 
-490     // Set the x and y coordinates
-491     m_cursor_x = x;
-492     m_cursor_y = y;
-493 }
+526                                                      {
+527 
+528     // Set the x and y coordinates
+529     m_cursor_x = x;
+530     m_cursor_y = y;
+531 }
 .fi
 .PP
 References m_cursor_x, m_cursor_y, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+.PP
+Referenced by kernelMain()\&.
 .SS "void ConsoleStream::write_char (char c)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
@@ -128,117 +130,127 @@ write a character to the console stream
 .PP
 Reimplemented from \fBMaxOS::common::OutputStream\fP\&.
 .PP
-Definition at line 410 of file console\&.cpp\&.
+Definition at line 438 of file console\&.cpp\&.
 .PP
 .nf
-410                                      {
-411 
-412     // If the character placement is more than the width of the console go on a new line
-413     if(m_cursor_x >= m_console->width()) {
-414 
-415         // Go to the start of the next line
-416         m_cursor_x = 0;
-417 
-418         // Increment the y coordinate but if it is more than the height of the console scroll the console
-419         if(++m_cursor_y >= m_console->height()){
-420 
-421             // Scroll the console
-422             m_console->scroll_up();
-423 
-424             // Decrement the y coordinate
-425             m_cursor_y = m_console->height()-1;
-426         }
-427     }
-428 
-429     // Check if the character is an ANSI escape code
-430     if(c == '\033') is_ansi = true;
-431 
-432     // Handle the character
-433     switch (c) {
-434         // New line
-435         case '\n':
-436             // Increment the y coordinate but if it is more than the height of the console scroll the console
-437             if(++m_cursor_y >= m_console->height()){
-438 
-439                 // Scroll the console
-440                 m_console->scroll_up();
+438                                      {
+439 
+440     uint16_t spaces = 0;
 441 
-442                 // Decrement the y coordinate
-443                 m_cursor_y = m_console->height()-1;
-444             }
-445 
-446             // don't break here, we want to go to the next case because of the \r
-447             [[fallthrough]];
-448 
-449         // Carriage return
-450         case '\r':
-451             // Go to the start of the next line
-452             m_cursor_x = 0;
-453             break;
-454 
-455         // Null Terminator
-456         case '\0':
-457             break;
+442     // If the character placement is more than the width of the console go on a new line
+443     if(m_cursor_x >= m_console->width()) {
+444 
+445         // Go to the start of the next line
+446         m_cursor_x = 0;
+447 
+448         // Increment the y coordinate but if it is more than the height of the console scroll the console
+449         if(++m_cursor_y >= m_console->height()){
+450 
+451             // Scroll the console
+452             m_console->scroll_up();
+453 
+454             // Decrement the y coordinate
+455             m_cursor_y = m_console->height()-1;
+456         }
+457     }
 458 
-459         // Backspace
-460         case '\b':
-461             // Decrement the x coordinate
-462             m_cursor_x--;
-463             break;
-464 
-465         default:
-466             // Put the character on the console
-467             m_console->put_character(m_cursor_x, m_cursor_y, c);
+459     // Check if the character is an ANSI escape code
+460     if(c == '\033') is_ansi = true;
+461 
+462     // Handle the character
+463     switch (c) {
+464         // New line
+465         case '\n':
+466             // Increment the y coordinate but if it is more than the height of the console scroll the console
+467             if(++m_cursor_y >= m_console->height()){
 468 
-469             // Increment the x coordinate
-470             if(!is_ansi)
-471               m_cursor_x++;
-472 
-473             break;
-474 
-475     }
-476 
-477     // Check if the ANSI code is complete
-478     if(c == 'm') is_ansi = false;
-479 
-480 }
+469                 // Scroll the console
+470                 m_console->scroll_up();
+471 
+472                 // Decrement the y coordinate
+473                 m_cursor_y = m_console->height()-1;
+474             }
+475 
+476             // don't break here, we want to go to the next case because of the \r
+477             [[fallthrough]];
+478 
+479         // Carriage return
+480         case '\r':
+481             // Go to the start of the next line
+482             m_cursor_x = 0;
+483             break;
+484 
+485         // Null Terminator
+486         case '\0':
+487             break;
+488 
+489         // Backspace
+490         case '\b':
+491             // Decrement the x coordinate
+492             m_cursor_x--;
+493             break;
+494 
+495         // Tab
+496         case '\t':
+497             // Figure out how many spaces to the next tab stop
+498             spaces = 8 - (m_cursor_x % 8);
+499             for(uint16_t i = 0; i < spaces; i++)
+500                 write_char(' ');
+501             break;
+502 
+503         default:
+504             // Put the character on the console
+505             m_console->put_character(m_cursor_x, m_cursor_y, c);
+506 
+507             // Increment the x coordinate
+508             if(!is_ansi)
+509               m_cursor_x++;
+510 
+511             break;
+512 
+513     }
+514 
+515     // Check if the ANSI code is complete
+516     if(c == 'm') is_ansi = false;
+517 
+518 }
 .fi
 .PP
-References MaxOS::drivers::peripherals::c, MaxOS::drivers::console::Console::height(), is_ansi, m_console, m_cursor_x, m_cursor_y, MaxOS::drivers::console::Console::put_character(), MaxOS::drivers::console::Console::scroll_up(), and MaxOS::drivers::console::Console::width()\&.
+References MaxOS::drivers::peripherals::c, MaxOS::drivers::console::Console::height(), MaxOS::drivers::peripherals::i, is_ansi, m_console, m_cursor_x, m_cursor_y, MaxOS::drivers::console::Console::put_character(), MaxOS::drivers::console::Console::scroll_up(), and MaxOS::drivers::console::Console::width()\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "bool MaxOS::drivers::console::ConsoleStream::is_ansi = false\fC [protected]\fP"
 
 .PP
-Definition at line 97 of file console\&.h\&.
+Definition at line 99 of file console\&.h\&.
 .PP
 Referenced by write_char()\&.
 .SS "\fBcommon::ConsoleColour\fP MaxOS::drivers::console::ConsoleStream::m_background\fC [protected]\fP"
 
 .PP
-Definition at line 96 of file console\&.h\&.
+Definition at line 98 of file console\&.h\&.
 .SS "\fBConsole\fP* MaxOS::drivers::console::ConsoleStream::m_console\fC [protected]\fP"
 
 .PP
-Definition at line 93 of file console\&.h\&.
+Definition at line 95 of file console\&.h\&.
 .PP
 Referenced by write_char()\&.
 .SS "uint16_t MaxOS::drivers::console::ConsoleStream::m_cursor_x { 0 }"
 
 .PP
-Definition at line 100 of file console\&.h\&.
+Definition at line 102 of file console\&.h\&.
 .PP
 Referenced by set_cursor(), and write_char()\&.
 .SS "uint16_t MaxOS::drivers::console::ConsoleStream::m_cursor_y { 0 }"
 
 .PP
-Definition at line 101 of file console\&.h\&.
+Definition at line 103 of file console\&.h\&.
 .PP
 Referenced by set_cursor(), and write_char()\&.
 .SS "\fBcommon::ConsoleColour\fP MaxOS::drivers::console::ConsoleStream::m_foreground\fC [protected]\fP"
 
 .PP
-Definition at line 95 of file console\&.h\&.
+Definition at line 97 of file console\&.h\&.
 
 .SH "Author"
 .PP 

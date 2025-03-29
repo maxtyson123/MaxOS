@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::Font" 3 "Tue Feb 25 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::Font" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -163,69 +163,75 @@ Definition at line 58 of file font\&.cpp\&.
 .PP
 .nf
 62 {
-63 
-64 
-65     // Convert the colours
-66     uint32_t foreground = context->colour_to_int(foreground_colour);
-67     uint32_t background = context->colour_to_int(background_colour);
-68 
-69     // Ensure the area is within the actual area of the text
-70     if (limitArea\&.top < 0) {
-71         limitArea\&.height += limitArea\&.top;
-72         limitArea\&.top = 0;
-73     }
-74 
-75     if (limitArea\&.left < 0) {
-76         limitArea\&.width += limitArea\&.left;
-77         limitArea\&.left = 0;
-78     }
-79 
-80     // Clamp the height and width max
-81     if (limitArea\&.top + limitArea\&.height > (int)get_text_height(text))
-82         limitArea\&.height = get_text_height(text) - limitArea\&.top;
-83 
-84     if (limitArea\&.left + limitArea\&.width > (int)get_text_width(text))
-85         limitArea\&.width = get_text_width(text) - limitArea\&.left;
-86 
-87 
-88     // Calculate limits
-89     int32_t xLimit = limitArea\&.left + limitArea\&.width;
-90     int32_t yLimit = limitArea\&.top + limitArea\&.height;
-91 
-92     // Draw the text from top to bottom
-93     for (int yBitMapOffset = limitArea\&.top; yBitMapOffset <yLimit; yBitMapOffset++){
-94         for (int xBitMapOffset = limitArea\&.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
-95 
-96             // If the y is the middle then add a strikethrough
-97             if (is_strikethrough && yBitMapOffset == yLimit / 2) {
-98 
-99                 // Draw the pixel
-100                 context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
-101                 continue;
-102             }
-103 
-104             // If the y is the bottom then add an underline
-105             if (is_underlined && yBitMapOffset == yLimit - 1) {
-106 
-107                 // Draw the pixel
-108                 context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
-109                 continue;
-110             }
+63     // Convert the colours
+64     uint32_t foreground = context->colour_to_int(foreground_colour);
+65     uint32_t background = context->colour_to_int(background_colour);
+66 
+67     // Ensure the area is within the actual area of the text
+68     if (limitArea\&.top < 0) {
+69         limitArea\&.height += limitArea\&.top;
+70         limitArea\&.top = 0;
+71     }
+72 
+73     if (limitArea\&.left < 0) {
+74         limitArea\&.width += limitArea\&.left;
+75         limitArea\&.left = 0;
+76     }
+77 
+78     // Clamp the height and width max
+79     if (limitArea\&.top + limitArea\&.height > (int)get_text_height(text))
+80         limitArea\&.height = get_text_height(text) - limitArea\&.top;
+81 
+82     if (limitArea\&.left + limitArea\&.width > (int)get_text_width(text))
+83         limitArea\&.width = get_text_width(text) - limitArea\&.left;
+84 
+85 
+86     // Calculate limits
+87     int32_t xLimit = limitArea\&.left + limitArea\&.width;
+88     int32_t yLimit = limitArea\&.top + limitArea\&.height;
+89 
+90     // Draw the text from top to bottom
+91     for (int yBitMapOffset = limitArea\&.top; yBitMapOffset <yLimit; yBitMapOffset++){
+92         for (int xBitMapOffset = limitArea\&.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
+93 
+94             // If the y is the middle then add a strikethrough
+95             if (is_strikethrough && yBitMapOffset == yLimit / 2) {
+96 
+97                 // Draw the pixel
+98                 context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
+99                 continue;
+100             }
+101 
+102             // If the y is the bottom then add an underline
+103             if (is_underlined && yBitMapOffset == yLimit - 1) {
+104 
+105                 // Draw the pixel
+106                 context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
+107                 continue;
+108             }
+109 
+110             //TODO: Bold, Italic when other fonts are working
 111 
-112             //TODO: Bold, Italic when other fonts are working
-113 
-114             // Get the character
-115             uint8_t character = text[xBitMapOffset/8];
-116 
-117            // Check if this pixel  is set or not
-118            bool set = m_font8x8[(uint16_t)character * 8 + yBitMapOffset] & (128 >> (xBitMapOffset % 8));
-119 
-120            // Draw the pixel
-121            context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, set ? foreground : background);
-122 
-123         }
-124     }
-125 }
+112             // Get the character
+113             uint8_t character = text[xBitMapOffset/8];
+114 
+115            // Check if this pixel  is set or not
+116            bool set = m_font8x8[(uint16_t)character * 8 + yBitMapOffset] & (128 >> (xBitMapOffset % 8));
+117 
+118            // Draw the pixel
+119            context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, set ? foreground : background);
+120 
+121         }
+122     }
+123 
+124     // Draw the bottom 2  "spacing lines"
+125     for (int yBitMapOffset = yLimit; yBitMapOffset < yLimit + 2; yBitMapOffset++) {
+126         for (int xBitMapOffset = limitArea\&.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
+127             context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, background);
+128         }
+129     }
+130 
+131 }
 .fi
 .PP
 References MaxOS::common::GraphicsContext::colour_to_int(), MaxOS::common::Rectangle< Type >::height, MaxOS::common::Rectangle< Type >::left, MaxOS::common::Rectangle< Type >::top, MaxOS::common::Rectangle< Type >::width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
@@ -246,14 +252,14 @@ The height of the text
 .PP
 
 .PP
-Definition at line 133 of file font\&.cpp\&.
+Definition at line 139 of file font\&.cpp\&.
 .PP
 .nf
-133                                      {
-134 
-135     return 8;
-136 
-137 }
+139                                      {
+140 
+141     return 8;
+142 
+143 }
 .fi
 .SS "uint32_t Font::get_text_width (\fBstring\fP text)\fC [virtual]\fP"
 
@@ -272,12 +278,12 @@ The width of the text
 .PP
 
 .PP
-Definition at line 145 of file font\&.cpp\&.
+Definition at line 151 of file font\&.cpp\&.
 .PP
 .nf
-145                                          {
-146     return text\&.length()*8;
-147 }
+151                                          {
+152     return text\&.length()*8;
+153 }
 .fi
 .PP
 References MaxOS::String::length()\&.
