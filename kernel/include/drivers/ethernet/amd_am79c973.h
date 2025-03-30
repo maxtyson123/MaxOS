@@ -19,13 +19,13 @@ namespace MaxOS{
 
         namespace ethernet{
 
-            class amd_am79c973;
+            class AMD_AM79C973;
 
             /**
              * @class AMD AM79C973
              * @brief Driver for the AMD AM79C973 Ethernet Controller
              */
-            class amd_am79c973 : public EthernetDriver, public hardwarecommunication::InterruptHandler{
+            class AMD_AM79C973 : public EthernetDriver, public hardwarecommunication::InterruptHandler{
 
                 struct InitializationBlock{
 
@@ -86,8 +86,8 @@ namespace MaxOS{
                 void FetchDataSent();                            //Fetches the data from the buffer
 
             public:
-                amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* amdNetMessageStream = nullptr);
-                ~amd_am79c973();
+                AMD_AM79C973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* amdNetMessageStream = nullptr);
+                ~AMD_AM79C973();
 
                 //Override driver default methods
                 uint32_t reset() final;

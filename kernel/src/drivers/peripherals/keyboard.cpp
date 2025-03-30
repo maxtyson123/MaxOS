@@ -70,11 +70,23 @@ Event<KeyboardEvents>* KeyboardEventHandler::on_event(Event<KeyboardEvents> *eve
 
 ///___Driver___
 
-KeyboardDriver::KeyboardDriver(InterruptManager* manager)
+KeyboardDriver::KeyboardDriver(InterruptManager* manager, IOAPIC* ioapic)
 : InterruptHandler(0x21, manager),
   m_data_port(0x60),
   m_command_port(0x64)
 {
+
+  // Redirect the interrupt to the keyboard driver
+  interrupt_redirect_t keyboardRedirect = {
+      .type = 0x1,
+      .index = 0x12,
+      .interrupt = 0x21,
+      .destination = 0x00,
+      .flags = 0x00,
+      .mask = false,
+  };
+  ioapic -> set_redirect(&keyboardRedirect);
+
 }
 
 KeyboardDriver::~KeyboardDriver()= default;

@@ -74,13 +74,27 @@ namespace MaxOS
          * @brief Manages the drivers, handles the adding and removing of drivers
          */
         class DriverManager : public DriverSelectorEventHandler {
+            private:
+
+              common::Vector<DriverSelector*> m_driver_selectors;
+              hardwarecommunication::InterruptManager* m_interrupt_manager;
+
             public:
-                DriverManager();
+                explicit DriverManager(hardwarecommunication::InterruptManager* interruptManager);
                 ~DriverManager();
+
+                void add_driver_selector(DriverSelector*);
+                void remove_driver_selector(DriverSelector*);
 
                 void add_driver(Driver*);
                 void remove_driver(Driver*);
                 void on_driver_selected(Driver*) final;
+
+                void find_drivers();
+                uint32_t reset_devices();
+                void initialise_drivers();
+                void deactivate_drivers();
+                void activate_drivers();
 
                 common::Vector<Driver*> drivers;
         };

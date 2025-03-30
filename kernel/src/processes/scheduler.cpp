@@ -12,7 +12,7 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
 
-Scheduler::Scheduler(InterruptManager* interrupt_manager)
+Scheduler::Scheduler(InterruptManager* interrupt_manager, Multiboot& multiboot)
 : InterruptHandler(0x20, interrupt_manager),
   m_current_thread_index(0),
   m_active(false),
@@ -25,6 +25,16 @@ Scheduler::Scheduler(InterruptManager* interrupt_manager)
 
   // Create the IPC handler
   m_ipc = new IPC();
+
+  // Create the idle process
+  auto* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
+  idle->memory_manager = MemoryManager::s_kernel_memory_manager;
+  add_process(idle);
+  idle->set_pid(0);
+
+  // Load the elfs
+  load_multiboot_elfs(&multiboot);
+
 }
 
 Scheduler::~Scheduler() {
@@ -239,6 +249,7 @@ cpu_status_t* Scheduler::yield() {
  * @brief Activates the scheduler
  */
 void Scheduler::activate() {
+    m_interrupt_manager->set_interrupt_handler(0x20, this);
     m_active = true;
 }
 

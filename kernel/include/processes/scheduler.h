@@ -39,7 +39,7 @@ namespace MaxOS{
         IPC* m_ipc;
 
       public:
-        explicit Scheduler(hardwarecommunication::InterruptManager* interrupt_manager);
+        explicit Scheduler(hardwarecommunication::InterruptManager* interrupt_manager, system::Multiboot& multiboot);
         ~Scheduler();
 
 

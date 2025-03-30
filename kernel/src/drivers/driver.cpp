@@ -147,7 +147,11 @@ void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommuni
 {
 }
 
-DriverManager::DriverManager() = default;
+DriverManager::DriverManager(hardwarecommunication::InterruptManager* interruptManager)
+: m_interrupt_manager(interruptManager)
+{
+
+}
 
 DriverManager::~DriverManager() {
 
@@ -186,4 +190,88 @@ void DriverManager::remove_driver(Driver* driver) {
  */
 void DriverManager::on_driver_selected(Driver* driver) {
   add_driver(driver);
+}
+
+/**
+ * @brief Add a driver selector to the manager
+ */
+void DriverManager::add_driver_selector(DriverSelector* driver_selector) {
+
+  // Add the driver selector
+  m_driver_selectors.push_back(driver_selector);
+
+}
+
+/**
+ * @brief Remove a driver selector from the manager
+ */
+void DriverManager::remove_driver_selector(DriverSelector* driver_selector) {
+
+  // Remove the driver selector
+  m_driver_selectors.erase(driver_selector);
+
+}
+
+/**
+ * @brief Find the drivers
+ */
+void DriverManager::find_drivers() {
+
+    // Select the drivers
+    for(auto & driver_selector : m_driver_selectors)
+        driver_selector -> select_drivers(this, m_interrupt_manager);
+}
+
+/**
+ * @brief Reset all the devices
+ *
+ * @return The longest time it takes to reset a device
+ */
+uint32_t DriverManager::reset_devices() {
+
+  uint32_t resetWaitTime = 0;
+  for(auto & driver : drivers)
+  {
+    // Reset the driver
+    uint32_t waitTime = driver->reset();
+
+    // If the wait time is longer than the current longest wait time, set it as the new longest wait time
+    if(waitTime > resetWaitTime)
+      resetWaitTime = waitTime;
+  }
+
+  return resetWaitTime;
+}
+
+/**
+ * @brief Initialise the drivers
+ */
+void DriverManager::initialise_drivers() {
+
+  // Initialise the drivers
+  for(auto & driver : drivers)
+      driver->initialise();
+
+}
+
+/**
+ * @brief Deactivate the drivers
+ */
+void DriverManager::deactivate_drivers() {
+
+  // Deactivate the drivers
+  for(auto & driver : drivers)
+    driver->deactivate();
+
+}
+
+/**
+ * @brief Activate the drivers
+ */
+void DriverManager::activate_drivers() {
+
+  // Activate the drivers
+  for(auto & driver : drivers)
+      driver->activate();
+
 }

@@ -75,11 +75,22 @@ MouseEventHandler::~MouseEventHandler() = default;
 
 ///__Driver__
 
-MouseDriver::MouseDriver(InterruptManager* manager)
+MouseDriver::MouseDriver(InterruptManager* manager, IOAPIC* ioapic)
 : InterruptHandler(0x2C, manager),
   data_port(0x60),
   command_port(0x64)
 {
+
+  // Register the driver  (TODO: maybe move this into InterruptHandler)
+  interrupt_redirect_t mouseRedirect = {
+      .type = 0xC,
+      .index = 0x28,
+      .interrupt = 0x2C,
+      .destination = 0x00,
+      .flags = 0x00,
+      .mask = false,
+  };
+  ioapic -> set_redirect(&mouseRedirect);
 
 }
 MouseDriver::~MouseDriver()= default;

@@ -11,7 +11,7 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 
-amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
+AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
 : EthernetDriver(amdNetMessageStream),
   InterruptHandler(dev -> interrupt + interrupts->hardware_interrupt_offset(), interrupts),
   MACAddress0Port(dev ->port_base),
@@ -106,14 +106,14 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
 
 }
 
-amd_am79c973::~amd_am79c973() = default;
+AMD_AM79C973::~AMD_AM79C973() = default;
 
 
 
 /**
  * @brief This function activates the device and starts it (Runs when the driver-manger calls activateAll())
  */
-void amd_am79c973::activate()
+void AMD_AM79C973::activate()
 {
 
     // TODO: Have a look at re - implementing this again someday
@@ -141,7 +141,7 @@ void amd_am79c973::activate()
  *
  * @return The amount of ms to wait
  */
-uint32_t amd_am79c973::reset() {
+uint32_t AMD_AM79C973::reset() {
 
   resetPort.read();
   resetPort.write(0);
@@ -156,7 +156,7 @@ uint32_t amd_am79c973::reset() {
  *
  * @param esp The stack pointer (where to return to)
 */
-void amd_am79c973::handle_interrupt() {
+void AMD_AM79C973::handle_interrupt() {
 
 
 
@@ -201,7 +201,7 @@ void amd_am79c973::handle_interrupt() {
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
-void amd_am79c973::DoSend(uint8_t *buffer, uint32_t size) {
+void AMD_AM79C973::DoSend(uint8_t *buffer, uint32_t size) {
 
     while(!active);
 
@@ -234,7 +234,7 @@ void amd_am79c973::DoSend(uint8_t *buffer, uint32_t size) {
         0x48);                           // Tell device to send the data currently in the buffer
 }
 
-void amd_am79c973::FetchDataReceived()
+void AMD_AM79C973::FetchDataReceived()
 {
 
     for(;(recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0; currentRecvBuffer = (currentRecvBuffer+1)%8)         //Loop through all the buffers
@@ -255,7 +255,7 @@ void amd_am79c973::FetchDataReceived()
     }
 }
 
-void amd_am79c973::FetchDataSent()
+void AMD_AM79C973::FetchDataSent()
 {
 
     /*
@@ -285,20 +285,20 @@ void amd_am79c973::FetchDataSent()
  *
  * @return The MAC address
  */
-uint64_t amd_am79c973::GetMediaAccessControlAddress() {
+uint64_t AMD_AM79C973::GetMediaAccessControlAddress() {
     while(ownMAC == 0);
     return ownMAC;
 }
 
-void amd_am79c973::deactivate() {
+void AMD_AM79C973::deactivate() {
 
 }
 
-string amd_am79c973::get_vendor_name() {
+string AMD_AM79C973::get_vendor_name() {
     return "AMD";
 }
 
-string amd_am79c973::get_device_name() {
+string AMD_AM79C973::get_device_name() {
     return "PCnet-Fast III (Am79C973)";
 }
 

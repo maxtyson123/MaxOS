@@ -10,13 +10,10 @@
 #include <hardwarecommunication/apic.h>
 
 //Drivers
-#include <drivers/disk/ata.h>
 #include <drivers/console/console.h>
 #include <drivers/console/serial.h>
-#include <drivers/console/textmode.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
-#include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/peripherals/keyboard.h>
 #include <drivers/peripherals/mouse.h>
 #include <drivers/video/vesa.h>
@@ -147,14 +144,9 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up Memory Manager (Kernel)");
     log("Set Up Video Driver");
 
-    Scheduler scheduler(&interrupts);
-    log("Set Up Scheduler");
 
-    SyscallManager syscalls(&interrupts);
-    log("Set Up Syscalls");
-
-    DriverManager driverManager;
     header("Initialising Hardware");
+    DriverManager driverManager(&interrupts);
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     log("Set Up ACPI");
@@ -163,35 +155,16 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     interrupts.set_apic(apic.get_local_apic());
     log("Set Up APIC");
 
-
     // Keyboard
-    KeyboardDriver keyboard(&interrupts);
+    KeyboardDriver keyboard(&interrupts, apic.get_io_apic());
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
     driverManager.add_driver(&keyboard);
-    interrupt_redirect_t keyboardRedirect = {
-        .type = 0x1,
-        .index = 0x12,
-        .interrupt = 0x21,
-        .destination = 0x00,
-        .flags = 0x00,
-        .mask = false,
-    };
-    apic.get_io_apic() -> set_redirect(&keyboardRedirect);
     log("Set Up Keyboard");
 
     // Mouse
-    MouseDriver mouse(&interrupts);
+    MouseDriver mouse(&interrupts, apic.get_io_apic());
     driverManager.add_driver(&mouse);
-    interrupt_redirect_t mouseRedirect = {
-        .type = 0xC,
-        .index = 0x28,
-        .interrupt = 0x2C,
-        .destination = 0x00,
-        .flags = 0x00,
-        .mask = false,
-    };
-    apic.get_io_apic() -> set_redirect(&mouseRedirect);
     log("Set Up Mouse");
 
     // CPU
@@ -204,43 +177,23 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     driverManager.add_driver(&kernelClock);
     log("Set Up Clock");
 
-    // Driver Selectors
-    Vector<DriverSelector*> driverSelectors;
-
     //PCI
-    PeripheralComponentInterconnectController PCIController;
-    driverSelectors.push_back(&PCIController);
+    PeripheralComponentInterconnectController pciController(&driverManager);
     log("Set Up PCI");
 
     //USB
-    //UniversalSerialBusController USBController;
-    //driverSelectors.push_back(&USBController);
+    //UniversalSerialBusController USBController(&driverManager);
     //log("Set Up USB");
 
     header("Device Management");
 
     // Find the drivers
-    cout << "Finding Drivers" << ANSI_COLOURS[FG_White];
-    for(auto & driverSelector : driverSelectors)
-    {
-      cout << ".";
-      driverSelector->select_drivers(&driverManager, &interrupts);
-    }
-    cout << ANSI_COLOURS[Reset] << (string)"." * (boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
+    driverManager.find_drivers();
+    log("Found Drivers");
 
-    // Resetting devices
-    cout << "Resetting Devices" << ANSI_COLOURS[FG_White];
-    uint32_t resetWaitTime = 0;
-    for(auto & driver : driverManager.drivers)
-    {
-      cout << ".";
-      uint32_t waitTime = driver->reset();
-
-      // If the wait time is longer than the current longest wait time, set it as the new longest wait time
-      if(waitTime > resetWaitTime)
-        resetWaitTime = waitTime;
-    }
-    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 17 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "RESET" + ANSI_COLOURS[Reset] + " ]" << "\n";
+    // Reset the devices
+    uint32_t reset_wait_time = driverManager.reset_devices();
+    log("Reset Devices");
 
     // Interrupts
     interrupts.activate();
@@ -248,31 +201,24 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     // Post interrupt activation
     kernelClock.calibrate();
-    kernelClock.delay(resetWaitTime);
-    Time now = kernelClock.get_time();
-    cout << "TIME: " << now.hour << ":" << now.minute << ":" << now.second << "\n";
+    kernelClock.delay(reset_wait_time);
+    log("Calibrated Clock");
 
     header("Finalisation");
 
+    Scheduler scheduler(&interrupts, multiboot);
+    log("Set Up Scheduler");
+
+    SyscallManager syscalls(&interrupts);
+    log("Set Up Syscalls");
+
     // Initialise the drivers
-    cout <<  "Initialising Devices" << ANSI_COLOURS[FG_White];
-    for(auto & driver : driverManager.drivers)
-    {
-      cout << ".";
-      driver->initialise();
-    }
-    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 20 - 15) << (string)"[ " + ANSI_COLOURS[FG_Green] + "INITIALISED" + ANSI_COLOURS[Reset] + " ]" << "\n";
+    driverManager.initialise_drivers();
+    log("Initialised Drivers");
 
-
-    // activate the drivers
-    cout << "Activating Devices" << ANSI_COLOURS[FG_White];
-    for(auto & driver : driverManager.drivers)
-    {
-      cout << ".";
-      driver->activate();
-    }
-    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 18 - 13) << (string)"[ " + ANSI_COLOURS[FG_Green] + "ACTIVATED" + ANSI_COLOURS[Reset] + " ]" << "\n";
-
+    // Activate the drivers
+    driverManager.activate_drivers();
+    log("Activated Drivers");
 
     // Print the footer
     cout << "\n\n";
@@ -281,22 +227,12 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << ANSI_COLOURS[Reset] << "\n";
     cout.set_cursor(0, console.height() - 1);
 
-    // Idle Process
-    auto* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
-    idle->memory_manager = &memoryManager;
-    scheduler.add_process(idle);
-    idle->set_pid(0);
-
-    // Load executables
-    scheduler.load_multiboot_elfs(&multiboot);
-
     // Start the Scheduler & updates the clock handler
-    interrupts.set_interrupt_handler(0x20, &scheduler);
     scheduler.activate();
 
 
     // TODO:
-    //       - clean up main, clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
+    //       - clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
     //       - PCI to drivers page in osdev book, ubsan section maybe
     //       - Look at the event handler system again?
 

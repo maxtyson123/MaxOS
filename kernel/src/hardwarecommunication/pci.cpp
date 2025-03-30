@@ -74,10 +74,13 @@ string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
 
 ///__CONTROLLER___
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController()
+PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(DriverManager* driver_manager)
 : m_data_port(0xCFC),
   m_command_port(0xCF8)
 {
+
+  // Add to the driver manager
+  driver_manager->add_driver_selector(this);
 
 }
 
@@ -224,24 +227,19 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  *
  * @param dev Device descriptor
  * @param interrupt_manager Interrupt manager
- * @return Driver for the device, 0 if there is no driver
+ * @return Driver for the device, null pointer if there is no driver
  */
 Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager*interrupt_manager) {
 
-    //TODO: Bullshit, do use new. Don't use new here, manually allocate memory instead
-
-    Driver* driver = nullptr;
     switch (dev.vendor_id)
     {
         case 0x1022:    //AMD
         {
             switch (dev.device_id)
             {
-                case 0x2000:    //am79c971
+                case 0x2000:
                 {
-                    auto* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
-                    new (result) amd_am79c973(&dev, interrupt_manager);
-                    return result;
+                    return new AMD_AM79C973(&dev, interrupt_manager);
 
                 }
                 default:
@@ -255,9 +253,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    auto* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
-                    new (result) intel_i217(&dev, interrupt_manager);
-                    return result;
+                    return new intel_i217(&dev, interrupt_manager);
                 }
                 default:
                     break;
@@ -276,16 +272,14 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x00:  //VGA
                 {
-                    auto* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
-                    new (result) VideoGraphicsArray();
-                    return result;
+                    return new VideoGraphicsArray();
                 }
             }
             break;
         }
     }
 
-    return driver;
+    return nullptr;
 }
 
 

@@ -13,6 +13,7 @@
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
+#include <hardwarecommunication/apic.h>
 #include <stdint.h>
 
 namespace MaxOS
@@ -424,7 +425,7 @@ namespace MaxOS
                 hardwarecommunication::Port8Bit m_command_port;
 
               public:
-                  explicit KeyboardDriver(hardwarecommunication::InterruptManager*);
+                  explicit KeyboardDriver(hardwarecommunication::InterruptManager*, hardwarecommunication::IOAPIC*);
                   ~KeyboardDriver();
 
                   void handle_interrupt() final;
