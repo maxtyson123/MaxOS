@@ -12,15 +12,18 @@ using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 
 amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
-        :   EthernetDriver(amdNetMessageStream),
-            InterruptHandler(dev -> interrupt + interrupts->hardware_interrupt_offset(), interrupts),
-            MACAddress0Port(dev ->port_base),
-            MACAddress2Port(dev ->port_base + 0x02),
-            MACAddress4Port(dev ->port_base + 0x04),
-            registerDataPort(dev ->port_base + 0x10),
-            registerAddressPort(dev ->port_base + 0x12),
-            busControlRegisterDataPort(dev ->port_base + 0x16),
-            resetPort(dev ->port_base + 0x14)
+: EthernetDriver(amdNetMessageStream),
+  InterruptHandler(dev -> interrupt + interrupts->hardware_interrupt_offset(), interrupts),
+  MACAddress0Port(dev ->port_base),
+  MACAddress2Port(dev ->port_base + 0x02),
+  MACAddress4Port(dev ->port_base + 0x04),
+  registerDataPort(dev ->port_base + 0x10),
+  registerAddressPort(dev ->port_base + 0x12),
+  busControlRegisterDataPort(dev ->port_base + 0x16),
+  resetPort(dev ->port_base + 0x14),
+  initBlock(),
+  sendBuffers(),
+  recvBuffers()
 {
     // No active buffer at the start
     currentSendBuffer = 0;
@@ -103,9 +106,7 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
 
 }
 
-amd_am79c973::~amd_am79c973()
-{
-}
+amd_am79c973::~amd_am79c973() = default;
 
 
 
@@ -245,7 +246,7 @@ void amd_am79c973::FetchDataReceived()
             if (size > 64)                                                              //If the size is the size of ethernet 2 frame
                 size -= 4;                                                              //remove the checksum
 
-            uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);   //Get the buffer
+            auto* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);   //Get the buffer
             FireDataReceived(buffer, size);                                             //Pass data to handler
         }
 

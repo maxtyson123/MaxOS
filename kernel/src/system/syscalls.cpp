@@ -62,7 +62,7 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
 
   // Call the handler
   uint64_t syscall = status -> rax;
-  if(m_syscall_handlers[syscall] != 0)
+  if(m_syscall_handlers[syscall] != nullptr)
     m_current_args = m_syscall_handlers[syscall](m_current_args);
   else
     _kprintf("Syscall %d not found\n", syscall);
@@ -101,7 +101,7 @@ void SyscallManager::set_syscall_handler(uint8_t syscall, syscall_func_t handler
  * @param syscall The syscall ID number
  */
 void SyscallManager::remove_syscall_handler(uint8_t syscall) {
-    m_syscall_handlers[syscall] = 0;
+    m_syscall_handlers[syscall] = nullptr;
 }
 
 
@@ -159,7 +159,7 @@ syscall_args_t* SyscallManager::syscall_create_shared_memory(syscall_args_t *arg
   char* name = (char*)args->arg1;
 
   // Ensure they are valid
-  if(size == 0 || name == 0)
+  if(size == 0 || name == nullptr)
     return nullptr;
 
   // Create the memory block
@@ -250,7 +250,7 @@ system::syscall_args_t* SyscallManager::syscall_create_ipc_endpoint(system::sysc
 
   // Get the name
   char* name = (char*)args -> arg0;
-  if(name == 0)
+  if(name == nullptr)
     return nullptr;
 
   // Create the endpoint
@@ -276,7 +276,7 @@ system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall
   size_t size = args -> arg2;
 
   // Validate the args
-  if(endpoint == 0 || message == 0 || size == 0)
+  if(endpoint == nullptr || message == nullptr || size == 0)
     return nullptr;
 
   // Send the message

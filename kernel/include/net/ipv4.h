@@ -67,7 +67,7 @@ namespace MaxOS{
 
                 common::Map<uint8_t, InternetProtocolPayloadHandler*> internetProtocolPayloadHandlers;
 
-                InternetProtocolAddressResolver* resolver;
+                InternetProtocolAddressResolver* resolver = nullptr;
                 common::OutputStream* errorMessages;
 
                 InternetProtocolAddress ownInternetProtocolAddress;
@@ -85,14 +85,14 @@ namespace MaxOS{
                 ~InternetProtocolHandler();
 
                 bool handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size) override;
-                void sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, uint8_t* data, uint32_t size);
+                void sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, const uint8_t* data, uint32_t size);
 
-                static uint16_t Checksum(uint16_t* data, uint32_t lengthInBytes);
+                static uint16_t Checksum(const uint16_t* data, uint32_t lengthInBytes);
 
                 static InternetProtocolAddress CreateInternetProtocolAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4);
                 static InternetProtocolAddress Parse(string address);
                 static SubnetMask CreateSubnetMask(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4);
-                InternetProtocolAddress GetInternetProtocolAddress();
+                InternetProtocolAddress GetInternetProtocolAddress() const;
                 drivers::ethernet::MediaAccessControlAddress GetMediaAccessControlAddress();
 
                 void connectInternetProtocolPayloadHandler(InternetProtocolPayloadHandler* internetProtocolPayloadHandler);

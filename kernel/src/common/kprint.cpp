@@ -70,14 +70,14 @@ extern ConsoleStream* active_stream;
 static void putchar (int c, bool cout_enabled = false)
 {
     // Check if the active serial console is null
-    if (SerialConsole::s_active_serial_console == 0)
+    if (SerialConsole::s_active_serial_console == nullptr)
             return;
 
     // Put the character
     SerialConsole::s_active_serial_console->put_character(c);
 
     // If there is an active stream write the character to the stream
-    if(active_stream != 0 && cout_enabled)
+    if(active_stream != nullptr && cout_enabled)
             active_stream->write_char(c);
 }
 

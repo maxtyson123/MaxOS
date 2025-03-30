@@ -11,18 +11,14 @@ Port::Port(uint16_t port_number)
 {
 }
 
-Port::~Port(){
-
-}
+Port::~Port()= default;
 
 Port8Bit::Port8Bit(uint16_t port_number)
 : Port(port_number)
 {
 }
 
-Port8Bit::~Port8Bit() {
-
-}
+Port8Bit::~Port8Bit() = default;
 
 /**
  * @brief write a byte to the port
@@ -49,9 +45,7 @@ Port8BitSlow::Port8BitSlow(uint16_t port_number)
 {
 }
 
-Port8BitSlow::~Port8BitSlow() {
-
-}
+Port8BitSlow::~Port8BitSlow() = default;
 
 /**
  * @brief write a byte to the port (slow)
@@ -68,9 +62,7 @@ Port16Bit::Port16Bit(uint16_t port_number)
 {
 }
 
-Port16Bit::~Port16Bit() {
-
-}
+Port16Bit::~Port16Bit() = default;
 
 /**
  * @brief write a word to the port
@@ -98,9 +90,7 @@ Port32Bit::Port32Bit(uint16_t port_number)
 {
 }
 
-Port32Bit::~Port32Bit() {
-
-}
+Port32Bit::~Port32Bit() = default;
 
 /**
  * @brief write a double word to the port (32Bit)

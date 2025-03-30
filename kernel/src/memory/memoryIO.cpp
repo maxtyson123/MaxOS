@@ -12,18 +12,14 @@ MemIO::MemIO(uintptr_t address)
 
 }
 
-MemIO::~MemIO() {
-
-}
+MemIO::~MemIO() = default;
 
 MemIO8Bit::MemIO8Bit(uintptr_t address)
 : MemIO(address)
 {
 }
 
-MemIO8Bit::~MemIO8Bit() {
-
-}
+MemIO8Bit::~MemIO8Bit() = default;
 
 /**
  * @brief Writes data to the memory address
@@ -48,9 +44,7 @@ MemIO16Bit::MemIO16Bit(uintptr_t address)
 {
 }
 
-MemIO16Bit::~MemIO16Bit() {
-
-}
+MemIO16Bit::~MemIO16Bit() = default;
 
 /**
  * @brief Writes data to the memory address
@@ -75,9 +69,7 @@ MemIO32Bit::MemIO32Bit(uintptr_t address)
 {
 }
 
-MemIO32Bit::~MemIO32Bit() {
-
-}
+MemIO32Bit::~MemIO32Bit() = default;
 
 /**
  * @brief Writes data to the memory address
@@ -102,9 +94,7 @@ MemIO64Bit::MemIO64Bit(uintptr_t address)
 {
 }
 
-MemIO64Bit::~MemIO64Bit() {
-
-}
+MemIO64Bit::~MemIO64Bit() = default;
 
 /**
  * @brief Writes data to the memory address
@@ -146,8 +136,8 @@ void* memcpy(void* destination, const void* source, uint64_t num) {
             return destination;
 
     // Get the source and destination
-    unsigned char* dst = (unsigned char*) destination;
-    const unsigned char* src = (const unsigned char*) source;
+    auto* dst = (unsigned char*) destination;
+    const auto* src = (const unsigned char*) source;
 
     // Copy the data
     for (size_t i = 0; i < num; i++)
@@ -172,7 +162,7 @@ void* memset(void* ptr, int value, uint64_t num) {
     if (ptr == nullptr)
         return ptr;
 
-    unsigned char* dst = (unsigned char*) ptr;
+    auto* dst = (unsigned char*) ptr;
     for (size_t i = 0; i < num; i++)
         dst[i] = (unsigned char) value;
     return ptr;
@@ -196,8 +186,8 @@ void* memmove(void* destination, const void* source, uint64_t num) {
   if (destination == nullptr || source == nullptr)
     return destination;
 
-  unsigned char* dst = (unsigned char*) destination;
-  const unsigned char* src = (const unsigned char*) source;
+  auto* dst = (unsigned char*) destination;
+  const auto* src = (const unsigned char*) source;
   if (dst < src) {
       for (size_t i = 0; i < num; i++)
           dst[i] = src[i];
@@ -222,8 +212,8 @@ int memcmp(const void* ptr1, const void* ptr2, uint64_t num) {
   if (ptr1 == nullptr || ptr2 == nullptr)
       return 0;
 
-  const unsigned char *p1 = (const unsigned char *)ptr1;
-  const unsigned char *p2 = (const unsigned char *)ptr2;
+  const auto *p1 = (const unsigned char *)ptr1;
+  const auto *p2 = (const unsigned char *)ptr2;
   for (size_t i = 0; i < num; i++) {
     if (p1[i] < p2[i])
       return -1;
@@ -231,12 +221,4 @@ int memcmp(const void* ptr1, const void* ptr2, uint64_t num) {
       return 1;
   }
   return 0;
-}
-
-// Make sure the memory functions are used
-void memFunctions() {
-    memcpy(nullptr, nullptr, 0);
-    memset(nullptr, 0, 0);
-    memmove(nullptr, nullptr, 0);
-    memcmp(nullptr, nullptr, 0);
 }

@@ -12,13 +12,9 @@ using namespace MaxOS::drivers::clock;
 
 ///__Handler__
 
-ClockEventHandler::ClockEventHandler() {
+ClockEventHandler::ClockEventHandler() = default;
 
-}
-
-ClockEventHandler::~ClockEventHandler() {
-
-}
+ClockEventHandler::~ClockEventHandler() = default;
 
 /**
  * @brief Called when the clock ticks
@@ -61,17 +57,13 @@ Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
 Clock::Clock(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
 : Driver(),
   InterruptHandler(0x20, interrupt_manager),
-  m_data_port(0x71),
-  m_command_port(0x70),
   m_apic(apic),
   m_ticks_between_events(time_between_events)
 {
 
 }
 
-Clock::~Clock() {
-
-}
+Clock::~Clock() = default;
 
 /**
  * @brief Handle the clock interrupt, raising the clock event if enough time has passed
@@ -117,7 +109,7 @@ uint8_t Clock::read_hardware_clock(uint8_t address)
  * @param number The number to convert
  * @return The binary representation of the number if the binary coded decimal representation is used, otherwise the number
  */
-uint8_t Clock::binary_representation(uint8_t number) {
+uint8_t Clock::binary_representation(uint8_t number) const {
 
     // If the binary coded decimal representation is not used, return the number
     if(m_binary)
@@ -246,9 +238,7 @@ time(time)
 
 }
 
-TimeEvent::~TimeEvent() {
-
-}
+TimeEvent::~TimeEvent() = default;
 
 PIT::PIT(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController *apic)
 : InterruptHandler(0x22, interrupt_manager),
@@ -260,9 +250,7 @@ PIT::PIT(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptContr
 
 }
 
-PIT::~PIT() {
-
-}
+PIT::~PIT() = default;
 
 /**
  * @brief Tick on each interrupt
@@ -313,7 +301,7 @@ uint32_t PIT::ticks_per_ms() {
   m_io_apic ->set_redirect_mask(redirect.index, false);
 
   // Calculate the number of ticks in 1 ms
-  uint32_t max = (uint32_t) - 1;
+  auto max = (uint32_t) - 1;
   m_local_apic -> write(0x380, max);
 
   while (m_ticks < s_calibrate_ticks)

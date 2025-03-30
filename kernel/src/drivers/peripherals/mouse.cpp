@@ -13,8 +13,7 @@ using namespace MaxOS::hardwarecommunication;
 
 ///__Handler__
 
-MouseEventHandler::MouseEventHandler() {
-}
+MouseEventHandler::MouseEventHandler() = default;
 
 /**
  * @brief Handles the triggered event and calls the appropriate function
@@ -72,9 +71,7 @@ void MouseEventHandler::on_mouse_move_event(int8_t, int8_t){
 
 }
 
-MouseEventHandler::~MouseEventHandler() {
-
-}
+MouseEventHandler::~MouseEventHandler() = default;
 
 ///__Driver__
 
@@ -85,9 +82,7 @@ MouseDriver::MouseDriver(InterruptManager* manager)
 {
 
 }
-MouseDriver::~MouseDriver(){
-
-}
+MouseDriver::~MouseDriver()= default;
 
 /**
  * @brief activate the mouse
@@ -171,9 +166,7 @@ MouseUpEvent::MouseUpEvent(uint8_t button)
 
 }
 
-MouseUpEvent::~MouseUpEvent() {
-
-}
+MouseUpEvent::~MouseUpEvent() = default;
 
 MouseDownEvent::MouseDownEvent(uint8_t button)
 : Event<MouseEvents>(MouseEvents::MOUSE_DOWN),
@@ -181,9 +174,7 @@ MouseDownEvent::MouseDownEvent(uint8_t button)
 {
 }
 
-MouseDownEvent::~MouseDownEvent() {
-
-}
+MouseDownEvent::~MouseDownEvent() = default;
 
 MouseMoveEvent::MouseMoveEvent(int8_t x, int8_t y)
 : Event<MouseEvents>(MouseEvents::MOUSE_MOVE),
@@ -192,6 +183,4 @@ MouseMoveEvent::MouseMoveEvent(int8_t x, int8_t y)
 {
 }
 
-MouseMoveEvent::~MouseMoveEvent() {
-
-}
+MouseMoveEvent::~MouseMoveEvent() = default;

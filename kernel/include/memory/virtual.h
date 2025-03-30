@@ -55,13 +55,13 @@ namespace MaxOS {
 
         virtual_memory_region_t* m_first_region;
         virtual_memory_region_t* m_current_region;
-        size_t m_current_chunk;
+        size_t m_current_chunk = 0;
         size_t m_next_available_address;
 
         static const size_t s_chunks_per_page = (PhysicalMemoryManager::s_page_size / sizeof(virtual_memory_chunk_t) - 1);
         static const size_t s_reserved_space = 0x138000000;
 
-        free_chunk_t* m_free_chunks;
+        free_chunk_t* m_free_chunks = nullptr;
         void add_free_chunk(uintptr_t start_address, size_t size);
         free_chunk_t* find_and_remove_free_chunk(size_t size);
 
@@ -69,7 +69,7 @@ namespace MaxOS {
 
 
       public:
-        VirtualMemoryManager(bool is_kernel);
+        explicit VirtualMemoryManager(bool is_kernel);
         ~VirtualMemoryManager();
 
         void* allocate(size_t size, size_t flags);
@@ -78,7 +78,7 @@ namespace MaxOS {
 
         void* load_physical_into_address_space(uintptr_t physical_address, size_t size, size_t flags);
 
-        void* load_shared_memory(string name);
+        void* load_shared_memory(const string& name);
         void* load_shared_memory(uintptr_t physical_address, size_t size);
 
         uint64_t* get_pml4_root_address_physical();

@@ -99,7 +99,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
-    VideoDriver* videoDriver = (VideoDriver*)&vesa;
+    auto* videoDriver = (VideoDriver*)&vesa;
     videoDriver->set_mode((int)multiboot.get_framebuffer()->common.framebuffer_width,
                           (int)multiboot.get_framebuffer()->common.framebuffer_height,
                           (int)multiboot.get_framebuffer()->common.framebuffer_bpp);
@@ -221,20 +221,20 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     // Find the drivers
     cout << "Finding Drivers" << ANSI_COLOURS[FG_White];
-    for(Vector<DriverSelector*>::iterator selector = driverSelectors.begin(); selector != driverSelectors.end(); selector++)
+    for(auto & driverSelector : driverSelectors)
     {
       cout << ".";
-      (*selector)->select_drivers(&driverManager, &interrupts);
+      driverSelector->select_drivers(&driverManager, &interrupts);
     }
-    cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
+    cout << ANSI_COLOURS[Reset] << (string)"." * (boot_width - driverSelectors.size() - 15 - 9) << (string)"[ " + ANSI_COLOURS[FG_Green] + "FOUND" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
     // Resetting devices
     cout << "Resetting Devices" << ANSI_COLOURS[FG_White];
     uint32_t resetWaitTime = 0;
-    for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
+    for(auto & driver : driverManager.drivers)
     {
       cout << ".";
-      uint32_t waitTime = (*driver)->reset();
+      uint32_t waitTime = driver->reset();
 
       // If the wait time is longer than the current longest wait time, set it as the new longest wait time
       if(waitTime > resetWaitTime)
@@ -256,20 +256,20 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     // Initialise the drivers
     cout <<  "Initialising Devices" << ANSI_COLOURS[FG_White];
-    for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
+    for(auto & driver : driverManager.drivers)
     {
       cout << ".";
-      (*driver)->initialise();
+      driver->initialise();
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 20 - 15) << (string)"[ " + ANSI_COLOURS[FG_Green] + "INITIALISED" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
 
     // activate the drivers
     cout << "Activating Devices" << ANSI_COLOURS[FG_White];
-    for(Vector<Driver*>::iterator driver = driverManager.drivers.begin(); driver != driverManager.drivers.end(); driver++)
+    for(auto & driver : driverManager.drivers)
     {
       cout << ".";
-      (*driver)->activate();
+      driver->activate();
     }
     cout << ANSI_COLOURS[Reset] << (string)"."*(boot_width - driverManager.drivers.size() - 18 - 13) << (string)"[ " + ANSI_COLOURS[FG_Green] + "ACTIVATED" + ANSI_COLOURS[Reset] + " ]" << "\n";
 
@@ -282,7 +282,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     cout.set_cursor(0, console.height() - 1);
 
     // Idle Process
-    Process* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
+    auto* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
     idle->memory_manager = &memoryManager;
     scheduler.add_process(idle);
     idle->set_pid(0);
@@ -296,7 +296,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - kernel more c++ support, clang tidy, remove statics where possible and use inline for setup, clean up main, clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
+    //       - clang tidy, remove statics where possible and use inline for setup, clean up main, clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
     //       - PCI to drivers page in osdev book, ubsan section maybe
     //       - Look at the event handler system again?
 

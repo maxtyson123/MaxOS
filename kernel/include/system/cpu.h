@@ -81,7 +81,7 @@ namespace MaxOS{
         static void halt();
 
         void init_tss();
-        tss_t tss;
+        tss_t tss = {};
 
         static CPU* get_instance();
 

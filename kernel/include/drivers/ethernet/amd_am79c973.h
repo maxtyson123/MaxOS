@@ -66,15 +66,15 @@ namespace MaxOS{
                 hardwarecommunication::Port16Bit resetPort;
 
                 //The main purpose of the initialization block it to hold a pointer to the array of BufferDescriptors, which hold the pointers to the buffers
-                InitializationBlock initBlock;
+                InitializationBlock initBlock{};
 
 
                 BufferDescriptor* sendBufferDescr;               //Descriptor entry
-                uint8_t sendBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
+                uint8_t sendBuffers[2*1024+15][8]{};       //8 Send Buffers, 2KB + 15 bytes
                 uint8_t currentSendBuffer;               //Which buffers are active
 
                 BufferDescriptor* recvBufferDescr;               //Descriptor entry
-                uint8_t recvBuffers[2*1024+15][8];       //8 Send Buffers, 2KB + 15 bytes
+                uint8_t recvBuffers[2*1024+15][8]{};       //8 Send Buffers, 2KB + 15 bytes
                 uint8_t currentRecvBuffer;               //Which buffers are active
 
                 //Ethernet Driver functions
@@ -86,24 +86,24 @@ namespace MaxOS{
                 void FetchDataSent();                            //Fetches the data from the buffer
 
             public:
-                amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* amdNetMessageStream = 0);
+                amd_am79c973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* amdNetMessageStream = nullptr);
                 ~amd_am79c973();
 
                 //Override driver default methods
-                uint32_t reset();
-                void activate();
-                void deactivate();
+                uint32_t reset() final;
+                void activate() final;
+                void deactivate() final;
 
                 // Naming
-                string get_vendor_name();
-                string get_device_name();
+                string get_vendor_name() final;
+                string get_device_name() final;
 
                 //Override Interrupt default methods
-                void handle_interrupt();
+                void handle_interrupt() final;
 
                 //Ethernet Driver functions
-                void DoSend(uint8_t* buffer, uint32_t size);
-                uint64_t GetMediaAccessControlAddress();
+                void DoSend(uint8_t* buffer, uint32_t size) final;
+                uint64_t GetMediaAccessControlAddress() final;
             };
 
 

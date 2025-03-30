@@ -118,7 +118,7 @@ void CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint
 void CPU::stack_trace(size_t level) {
 
     // Get the first stack frame
-    stack_frame_t* frame = (stack_frame_t*)__builtin_frame_address(0);
+    auto* frame = (stack_frame_t*)__builtin_frame_address(0);
     size_t current_level = 0;
 
     // Loop through the frames logging
@@ -164,7 +164,7 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   _kpanicf("Register Dump:\n");
 
   if(!status){
-    cpu_status_t* new_status = new cpu_status_t();                              // Who cares about freeing we're fucked anyway at this point
+    auto* new_status = new cpu_status_t();                              // Who cares about freeing we're fucked anyway at this point
     get_status(new_status);
     status = new_status;
   }
@@ -215,7 +215,7 @@ void CPU::init_tss() {
   tss.io_bitmap_offset = 0;
 
   // Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
-  uint64_t base = (uint64_t)&tss;
+  auto base = (uint64_t)&tss;
   uint16_t base_1 = base & 0xFFFF;
   uint8_t base_2 = (base >> 16) & 0xFF;
   uint8_t base_3 = (base >> 24) & 0xFF;

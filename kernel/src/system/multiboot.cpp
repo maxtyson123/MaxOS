@@ -71,9 +71,7 @@ Multiboot::Multiboot(unsigned long address)
     }
 }
 
-Multiboot::~Multiboot() {
-
-}
+Multiboot::~Multiboot() = default;
 
 
 multiboot_tag_framebuffer *Multiboot::get_framebuffer() {
@@ -126,7 +124,7 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
         continue;
 
       // Get the module tag
-      struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+      auto* module = (struct multiboot_tag_module*)tag;
 
       // Check if the address is within the module
       if(address >= module -> mod_start && address < module -> mod_end)
@@ -144,7 +142,7 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
  *
  * @return The start tag
  */
-multiboot_tag *Multiboot::get_start_tag() {
+multiboot_tag *Multiboot::get_start_tag() const {
 
   return (multiboot_tag*)(m_base_address + MemoryManager::s_higher_half_kernel_offset + 8);
 }

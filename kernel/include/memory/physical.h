@@ -73,7 +73,7 @@ namespace MaxOS {
           uint64_t* m_bit_map;
           uint32_t m_total_entries;
           uint32_t m_bitmap_size;
-          uint32_t m_used_frames;
+          uint32_t m_used_frames = 0;
           uint64_t m_memory_size;
           uint64_t m_kernel_end;
 
@@ -93,10 +93,10 @@ namespace MaxOS {
 
           // Table Management
           void create_table(pml_t* table, pml_t* next_table, size_t index);
-          pte_t create_page_table_entry(uintptr_t address, size_t flags);
-          bool table_has_entry(pml_t* table, size_t index);
+          static pte_t create_page_table_entry(uintptr_t address, size_t flags);
+          static bool table_has_entry(pml_t* table, size_t index);
           uint64_t* get_or_create_table(uint64_t* table, size_t index, size_t flags);
-          uint64_t* get_table_if_exists(uint64_t* table, size_t index);
+          static uint64_t* get_table_if_exists(const uint64_t* table, size_t index);
 
 
           uint64_t* get_bitmap_address();
@@ -109,8 +109,8 @@ namespace MaxOS {
 
           // Vars
           static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes  //TODO: combination of large and small pages
-          uint64_t get_memory_size();
-          uint64_t get_memory_used();
+          uint64_t get_memory_size() const;
+          uint64_t get_memory_used() const;
 
           // Pml4
           uint64_t* get_pml4_root_address();
@@ -143,7 +143,7 @@ namespace MaxOS {
           bool is_anonymous_available(size_t size);
 
           static PhysicalMemoryManager* s_current_manager;
-          void clean_page_table(uint64_t* table);
+          static void clean_page_table(uint64_t* table);
 
           void reserve(uint64_t address);
           void reserve(uint64_t address, size_t size);

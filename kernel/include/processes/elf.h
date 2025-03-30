@@ -161,17 +161,17 @@ namespace MaxOS
 
 
         public:
-            Elf64(uintptr_t elf_header_address);
+            explicit Elf64(uintptr_t elf_header_address);
             ~Elf64();
 
             void load();
             bool is_valid();
 
-            elf_64_header_t* get_header();
+            elf_64_header_t* get_header() const;
             elf_64_program_header_t* get_program_header(size_t index);
             elf_64_section_header_t* get_section_header(size_t index);
 
-            uint64_t to_vmm_flags(uint32_t type);
+            static uint64_t to_vmm_flags(uint32_t type);
 
       };
 

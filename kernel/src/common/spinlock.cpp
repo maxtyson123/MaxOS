@@ -15,9 +15,7 @@ Spinlock::Spinlock(bool should_yield)
 
 }
 
-Spinlock::~Spinlock() {
-
-}
+Spinlock::~Spinlock() = default;
 
 /**
  * @brief Lock the spinlock once it is available
@@ -51,7 +49,7 @@ void Spinlock::unlock() {
  *
  * @return True if the spinlock is locked, false otherwise
  */
-bool Spinlock::is_locked() {
+bool Spinlock::is_locked() const {
     return m_locked;
 }
 

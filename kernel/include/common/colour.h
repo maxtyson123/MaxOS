@@ -102,7 +102,7 @@ namespace MaxOS{
 
                 ~Colour();
 
-                ConsoleColour to_console_colour() const;
+                [[nodiscard]] ConsoleColour to_console_colour() const;
         };
 
     }

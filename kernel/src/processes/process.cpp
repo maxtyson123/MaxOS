@@ -68,9 +68,7 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
 /**
  * @brief Destructor for the Thread class
  */
-Thread::~Thread() {
-
-}
+Thread::~Thread() = default;
 
 /**
  * @brief Sleeps the thread for a certain amount of time (Yields the thread)
@@ -98,7 +96,7 @@ cpu_status_t* Thread::sleep(size_t milliseconds) {
  * @param arg_amount The amount of arguments
  * @param is_kernel If the process is a kernel process
  */
-Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
+Process::Process(const string& p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
 : is_kernel(is_kernel),
   name(p_name)
 {
@@ -107,7 +105,7 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args, int ar
   set_up();
 
   // Create the main thread
-  Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
+  auto* main_thread = new Thread(_entry_point, args, arg_amount, this);
 
   // Add the thread
   add_thread(main_thread);
@@ -123,7 +121,7 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args, int ar
  * @param elf  The elf file to load the process from
  * @param is_kernel  If the process is a kernel process
  */
-Process::Process(string p_name, void *args, int arg_amount, Elf64* elf, bool is_kernel)
+Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, bool is_kernel)
 : is_kernel(is_kernel),
   name(p_name)
 {
@@ -135,10 +133,10 @@ Process::Process(string p_name, void *args, int arg_amount, Elf64* elf, bool is_
   elf -> load();
 
   // Get the entry point
-  void (*entry_point)(void *) = (void (*)(void *))elf -> get_header() -> entry;
+  auto* entry_point = (void (*)(void *))elf -> get_header() -> entry;
 
   // Create the main thread
-  Thread* main_thread = new Thread(entry_point, args, arg_amount, this);
+  auto* main_thread = new Thread(entry_point, args, arg_amount, this);
 
   // Add the thread
   add_thread(main_thread);
@@ -196,7 +194,7 @@ void Process::add_thread(Thread *thread) {
 void Process::remove_thread(uint64_t tid) {
 
   // Find the thread
-  for (uint16_t i = 0; i < m_threads.size(); i++) {
+  for (uint32_t i = 0; i < m_threads.size(); i++) {
       if (m_threads[i]->tid == tid) {
 
         // Get the thread
@@ -254,7 +252,7 @@ Vector<Thread*> Process::get_threads() {
  *
  * @return The pid of the process
  */
-uint64_t Process::get_pid() {
+uint64_t Process::get_pid() const {
   return m_pid;
 }
 

@@ -4,7 +4,7 @@
 
 #include <drivers/console/serial.h>
 
-MaxOS::drivers::SerialConsole* MaxOS::drivers::SerialConsole::s_active_serial_console = 0;
+MaxOS::drivers::SerialConsole* MaxOS::drivers::SerialConsole::s_active_serial_console = nullptr;
 
 MaxOS::drivers::SerialConsole::SerialConsole()
 : m_data_port(0x3F8),
@@ -52,7 +52,7 @@ MaxOS::drivers::SerialConsole::~SerialConsole() {
 
     // If this is the active serial console, set it to null
     if (s_active_serial_console == this)
-            s_active_serial_console = 0;
+            s_active_serial_console = nullptr;
 
 }
 

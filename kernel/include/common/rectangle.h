@@ -39,8 +39,7 @@ namespace MaxOS{
 
         ///_______________________________________________TEMPLATES_________________________________________________________________///
 
-        template<class Type> Rectangle<Type>::Rectangle(){
-        }
+        template<class Type> Rectangle<Type>::Rectangle() = default;
 
 
         template<class Type> Rectangle<Type>::Rectangle(Type left, Type top, Type width, Type height)
@@ -69,9 +68,7 @@ namespace MaxOS{
             this->top = top;
         }
 
-        template<class Type> Rectangle<Type>::~Rectangle()
-        {
-        }
+        template<class Type> Rectangle<Type>::~Rectangle() = default;
 
         /**
          * @details Checks if the rectangle intersects with another rectangle

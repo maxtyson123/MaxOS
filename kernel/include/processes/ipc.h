@@ -62,17 +62,17 @@ namespace MaxOS {
               ~IPC();
 
               ipc_shared_memory_t*  alloc_shared_memory(size_t size, string name);
-              ipc_shared_memory_t*  get_shared_memory(string name);
-              void                  free_shared_memory(string name);
+              ipc_shared_memory_t*  get_shared_memory(const string& name);
+              void                  free_shared_memory(const string& name);
               void                  free_shared_memory(uintptr_t physical_address);
               void                  free_shared_memory(ipc_shared_memory_t* block);
 
-              ipc_message_endpoint_t* create_message_endpoint(string name);
-              ipc_message_endpoint_t* get_message_endpoint(string name);
-              void                    free_message_endpoint(string name);
-              void                    free_message_endpoint(ipc_message_endpoint_t* endpoint);
-              void                    send_message(string name, void* message, size_t size);
-              void                    send_message(ipc_message_endpoint_t* endpoint, void* message, size_t size);
+              ipc_message_endpoint_t* create_message_endpoint(const string& name);
+              ipc_message_endpoint_t* get_message_endpoint(const string& name);
+              void                    free_message_endpoint(const string& name);
+              static void                    free_message_endpoint(ipc_message_endpoint_t* endpoint);
+              void                    send_message(const string& name, void* message, size_t size);
+              static void                    send_message(ipc_message_endpoint_t* endpoint, void* message, size_t size);
 
 
           };

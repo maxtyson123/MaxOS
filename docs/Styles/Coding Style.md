@@ -58,7 +58,7 @@ public:
     ...
 
 private:
-    int m_length { 0 };
+    int m_length = 0;
 };
 ```
 
@@ -69,7 +69,7 @@ class String {
 public:
     ...
 
-    int length { 0 };
+    int length = 0 ;
 };
 ```
 
@@ -152,8 +152,8 @@ Constructors for C++ classes should initialize their members using C++ initializ
 ```cpp
 class MyClass {
     ...
-    Document* m_document { nullptr };
-    int m_my_member { 0 };
+    Document* m_document = nullptr;
+    int m_my_member = 0;
 };
 
 MyClass::MyClass(Document* document)
@@ -253,7 +253,7 @@ For types with methods, prefer `class` over `struct`.
 ```cpp
 struct Thingy {
     String name;
-    int frob_count { 0 };
+    int frob_count = 0;
 };
 
 class Doohickey {
@@ -265,7 +265,7 @@ public:
 
 private:
     String m_name;
-    int m_frob_count { 0 };
+    int m_frob_count = 0;
 }
 ```
 
@@ -278,7 +278,7 @@ public:
     int frob_count() const { return m_frob_count; }
 
 private:
-    int m_frob_count { 0 };
+    int m_frob_count = 0;
 }
 
 class Doohickey {
@@ -288,7 +288,7 @@ public:
     void jam();
 
     String name;
-    int frob_count { 0 };
+    int frob_count = 0;
 };
 ```
 
@@ -388,8 +388,6 @@ To document a class, use the following format:
  * Longer description of the class.
  */
 ```
-
-```cpp
 
 ###### Right:
 

@@ -51,8 +51,8 @@ namespace MaxOS{
 
             Type& operator[](uint32_t index) const;
 
-            bool empty() const;
-            uint32_t size() const;
+            [[nodiscard]] bool empty() const;
+            [[nodiscard]] uint32_t size() const;
 
             iterator begin() const;
             iterator end() const;
@@ -375,13 +375,9 @@ namespace MaxOS{
               callback(element);
         }
 
-        template<class Type> VectorIterationHandler<Type>::VectorIterationHandler() {
+        template<class Type> VectorIterationHandler<Type>::VectorIterationHandler() = default;
 
-        }
-
-        template<class Type> VectorIterationHandler<Type>::~VectorIterationHandler() {
-
-        }
+        template<class Type> VectorIterationHandler<Type>::~VectorIterationHandler() = default;
 
         template<class Type> void VectorIterationHandler<Type>::on_end_of_stream() {
 

@@ -98,15 +98,15 @@ namespace MaxOS{
                 ~CompositeWidget();
 
                 // Drawing functions
-                virtual void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
-                virtual void add_child(Widget* child) override;
+                void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
+                void add_child(Widget* child) override;
 
                 // Mouse functions
-                virtual void on_mouse_enter_widget(uint32_t toX, uint32_t toY) override;
-                virtual void on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) override;
-                virtual void on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) override;
-                virtual drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) override;
-                virtual void on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) override;
+                void on_mouse_enter_widget(uint32_t toX, uint32_t toY) override;
+                void on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) override;
+                void on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) override;
+                drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) override;
+                void on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) override;
 
         };
 
@@ -127,7 +127,7 @@ namespace MaxOS{
                 WidgetMoverResizer(Widget* widget);
                 ~WidgetMoverResizer();
 
-                void on_mouse_move_event(int8_t x, int8_t y);
+                void on_mouse_move_event(int8_t x, int8_t y) override;
 
         };
 
@@ -162,9 +162,7 @@ namespace MaxOS{
             this ->targetedWidget = target;
         }
 
-        template<int Left, int Top, int Width, int Height> WidgetMoverResizer<Left,Top,Width,Height>::~WidgetMoverResizer()
-        {
-        }
+        template<int Left, int Top, int Width, int Height> WidgetMoverResizer<Left,Top,Width,Height>::~WidgetMoverResizer() = default;
 
         /**
          * @details OnMouseMoved is called when the mouse is moved. Resizes and moves the widget when this happens.

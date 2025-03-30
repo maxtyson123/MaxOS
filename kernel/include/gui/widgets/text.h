@@ -32,11 +32,11 @@ namespace MaxOS {
                 common::Colour foreground_colour;
                 common::Colour background_colour;
 
-                Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
+                Text(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text);
                 ~Text();
 
                 void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
-                void update_text(string);
+                void update_text(const string&);
 
             };
         }

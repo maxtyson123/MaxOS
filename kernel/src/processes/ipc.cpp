@@ -53,7 +53,7 @@ ipc_shared_memory_t *IPC::alloc_shared_memory(size_t size, string name) {
   }
 
   // Create the shared memory block
-  ipc_shared_memory_t* block = new ipc_shared_memory_t;
+  auto* block = new ipc_shared_memory_t;
   block -> physical_address  = (uintptr_t)PhysicalMemoryManager::s_current_manager -> allocate_area(0, size);
   block -> size              = size;
   block -> use_count         = 1;
@@ -78,7 +78,7 @@ ipc_shared_memory_t *IPC::alloc_shared_memory(size_t size, string name) {
  * @param name The name of the block
  * @return The shared memory block or nullptr if not found
  */
-ipc_shared_memory_t *IPC::get_shared_memory(string name) {
+ipc_shared_memory_t *IPC::get_shared_memory(const string& name) {
 
   // Wait for the lock
   m_lock.lock();
@@ -123,7 +123,7 @@ void IPC::free_shared_memory(uintptr_t physical_address) {
  *
  * @param name The name of the block
  */
-void IPC::free_shared_memory(string name) {
+void IPC::free_shared_memory(const string& name) {
 
 
   // Find the block
@@ -177,7 +177,7 @@ void IPC::free_shared_memory(ipc_shared_memory_t *block) {
  * @param name The name of the endpoint
  * @return The endpoint
  */
-ipc_message_endpoint_t* IPC::create_message_endpoint(string name) {
+ipc_message_endpoint_t* IPC::create_message_endpoint(const string& name) {
 
   // Wait for the lock
   m_lock.lock();
@@ -190,7 +190,7 @@ ipc_message_endpoint_t* IPC::create_message_endpoint(string name) {
   }
 
   // Create the endpoint (With the queue on in the user's memory space)
-  ipc_message_endpoint_t* endpoint = new ipc_message_endpoint_t;
+  auto* endpoint = new ipc_message_endpoint_t;
   endpoint -> queue = (ipc_message_queue_t*)MemoryManager::malloc(sizeof(ipc_message_queue_t));
   endpoint -> queue -> messages = nullptr;
   endpoint -> owner_pid = Scheduler::get_current_process() -> get_pid();
@@ -212,7 +212,7 @@ ipc_message_endpoint_t* IPC::create_message_endpoint(string name) {
  * @param name The name of the endpoint
  * @return The endpoint or nullptr if not found
  */
-ipc_message_endpoint_t *IPC::get_message_endpoint(string name) {
+ipc_message_endpoint_t *IPC::get_message_endpoint(const string& name) {
 
   // Try to find the endpoint
   for(auto endpoint : m_message_endpoints){
@@ -230,7 +230,7 @@ ipc_message_endpoint_t *IPC::get_message_endpoint(string name) {
  *
  * @param name The name of the endpoint
  */
-void IPC::free_message_endpoint(string name) {
+void IPC::free_message_endpoint(const string& name) {
 
   // Find the endpoint
   ipc_message_endpoint_t* endpoint = get_message_endpoint(name);
@@ -261,7 +261,7 @@ void IPC::free_message_endpoint(ipc_message_endpoint_t *endpoint) {
   // Delete the messages
   ipc_message_t* message = endpoint -> queue -> messages;
   while(message != nullptr){
-      ipc_message_t* next = (ipc_message_t*)message -> next_message;
+      auto* next = (ipc_message_t*)message -> next_message;
       delete message;
       message = next;
   }
@@ -282,7 +282,7 @@ void IPC::free_message_endpoint(ipc_message_endpoint_t *endpoint) {
  * @param message The message to send
  * @param size The size of the message
  */
-void IPC::send_message(string name, void* message, size_t size) {
+void IPC::send_message(const string& name, void* message, size_t size) {
 
 
   // Find the endpoint
@@ -310,14 +310,14 @@ void IPC::send_message(ipc_message_endpoint_t *endpoint, void *message, size_t s
   endpoint -> message_lock.lock();
 
   // Copy the buffer into the kernel so that the endpoint can access it
-  uintptr_t* kernel_copy = (uintptr_t*)new char[size];
+  auto* kernel_copy = (uintptr_t*)new char[size];
   memcpy(kernel_copy, message, size);
 
   //Switch to endpoint's memory space
   MemoryManager::switch_active_memory_manager(Scheduler::get_process(endpoint -> owner_pid) -> memory_manager);
 
   // Create the message & copy it into the endpoint's memory space
-  ipc_message_t* new_message = (ipc_message_t*)MemoryManager::malloc(sizeof(ipc_message_t));
+  auto* new_message = (ipc_message_t*)MemoryManager::malloc(sizeof(ipc_message_t));
   void* new_buffer = MemoryManager::malloc(size);
   new_message -> message_buffer = memcpy(new_buffer, kernel_copy, size);
   new_message -> message_size = size;

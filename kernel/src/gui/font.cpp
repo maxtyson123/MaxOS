@@ -8,7 +8,7 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::gui;
 
-Font::Font(uint8_t* font_data)
+Font::Font(const uint8_t* font_data)
 {
 
   // Store the font data
@@ -17,9 +17,7 @@ Font::Font(uint8_t* font_data)
   }
 }
 
-Font::~Font() {
-
-}
+Font::~Font() = default;
 
 /**
  * @brief write the entire text to the screen
@@ -35,8 +33,8 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
     // Calculate the rectangle of the text
     int32_t top = 0;
     int32_t left = 0;
-    uint32_t width = get_text_width(text);
-    uint32_t height = get_text_height(text);
+    int32_t width = get_text_width(text);
+    int32_t height = get_text_height(text);
 
     // Create the rectangle
     Rectangle<int32_t> text_area(left, top, width, height);
@@ -136,7 +134,7 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
  * @param text The text to get the height of
  * @return The height of the text
  */
-uint32_t Font::get_text_height(string) {
+int32_t Font::get_text_height(string) {
 
     return 8;
 
@@ -148,6 +146,6 @@ uint32_t Font::get_text_height(string) {
  * @param text The text to get the width of
  * @return The width of the text
  */
-uint32_t Font::get_text_width(string text) {
+int32_t Font::get_text_width(string text) {
     return text.length()*8;
 }

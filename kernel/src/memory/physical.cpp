@@ -123,7 +123,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
       continue;
 
     // Get the module tag
-    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+    auto* module = (struct multiboot_tag_module*)tag;
 
     // Reserve the address
     reserve(module->mod_start, module->mod_end - module->mod_start);
@@ -133,9 +133,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   m_initialized = true;
 }
 
-PhysicalMemoryManager::~PhysicalMemoryManager() {
-
-}
+PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 
 /**
  * @brief Converts a size to the number of frames
@@ -213,13 +211,13 @@ void* PhysicalMemoryManager::allocate_frame() {
   ASSERT(m_used_frames < m_bitmap_size, "No more frames available\n");
 
   // Loop through the bitmap
-  for (uint16_t row = 0; row < m_total_entries; ++row) {
+  for (uint32_t row = 0; row < m_total_entries; ++row) {
 
     // If the row is full continue
     if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
       continue;
 
-    for (uint16_t column = 0; column < ROW_BITS; ++column) {
+    for (uint32_t column = 0; column < ROW_BITS; ++column) {
 
       // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
       if (column >= ROW_BITS)
@@ -291,18 +289,18 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
   size_t frame_count = size_to_frames(size);
 
   // Store the information about the frames needed to be allocated for this size
-  uint16_t start_row = 0;
-  uint16_t start_column = 0;
+  uint32_t start_row = 0;
+  uint32_t start_column = 0;
   size_t adjacent_frames = 0;
 
   // Loop through the bitmap
-  for (uint16_t row = 0; row < m_total_entries; ++row) {
+  for (uint32_t row = 0; row < m_total_entries; ++row) {
 
     // If the row is full continue
     if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
       continue;
 
-    for (uint16_t column = 0; column < ROW_BITS; ++column) {
+    for (uint32_t column = 0; column < ROW_BITS; ++column) {
 
       // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
       if (column >= ROW_BITS)
@@ -328,11 +326,11 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
         // Mark the frames as used
         m_used_frames += frame_count;
-        for (uint16_t i = 0; i < frame_count; ++i) {
+        for (uint32_t i = 0; i < frame_count; ++i) {
 
           // Get the location of the bit
-          uint16_t index = start_row + (start_column + i) / ROW_BITS;
-          uint16_t bit = (start_column + i) % ROW_BITS;
+          uint32_t index = start_row + (start_column + i) / ROW_BITS;
+          uint32_t bit = (start_column + i) % ROW_BITS;
 
           // Skip if index exceeds bounds
           if (index >= m_total_entries || bit >= ROW_BITS) {
@@ -378,7 +376,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
     // Mark the frames as not used
     m_used_frames -= frame_count;
-    for (uint16_t i = 0; i < frame_count; ++i)
+    for (uint32_t i = 0; i < frame_count; ++i)
       m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
 
 
@@ -400,7 +398,7 @@ void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t
     return;
 
   // Create the table
-  uint64_t *new_table = (uint64_t *)allocate_frame();
+  auto* new_table = (uint64_t *)allocate_frame();
 
   // Set the table to the next table
   table -> entries[index] = create_page_table_entry((uint64_t)new_table, Present | Write);
@@ -431,7 +429,7 @@ uint64_t* PhysicalMemoryManager::get_or_create_table(uint64_t *table, size_t ind
       return (uint64_t *) MemoryManager::to_dm_region((uintptr_t) table[index] & mask);
 
   // Need to create the table
-  uint64_t *new_table = (uint64_t*)allocate_frame();
+  auto* new_table = (uint64_t*)allocate_frame();
   table[index] = (uint64_t) new_table | flags;
 
   // Move the table to the higher half
@@ -467,7 +465,7 @@ bool PhysicalMemoryManager::table_has_entry(pml_t *table, size_t index) {
  * @param index The index of the table to get
  * @return  The table if it exists, nullptr otherwise
  */
-uint64_t *PhysicalMemoryManager::get_table_if_exists(uint64_t *table, size_t index) {
+uint64_t *PhysicalMemoryManager::get_table_if_exists(const uint64_t *table, size_t index) {
 
   // Address mask
   uint64_t mask = 0xFFFFFFF000;
@@ -496,7 +494,7 @@ uint64_t *PhysicalMemoryManager::get_table_if_exists(uint64_t *table, size_t ind
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_address, virtual_address_t* address, size_t flags) {
 
   // Base information
-  pml_t* pml4_table = (pml_t *)m_pml4_root_address;
+  auto* pml4_table = (pml_t *)m_pml4_root_address;
   size_t base_addr = 0xFFFF000000000000;
 
   // Get the indexes
@@ -506,9 +504,9 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_addre
   uint16_t pt_index   = PML1_GET_INDEX((uint64_t) address);
 
   // Get the tables
-  pml_t *pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
-  pml_t *pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
-  pml_t *pt_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
+  auto* pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
+  auto* pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
+  auto* pt_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
 
   // Create the tables
   create_table(pml4_table, pdpr_table, pml4_index);
@@ -586,7 +584,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
 virtual_address_t* PhysicalMemoryManager::map(virtual_address_t *virtual_address, size_t flags) {
 
   // Create a new physical address for the frame
-  physical_address_t* physical_address = (physical_address_t *)allocate_frame();
+  auto* physical_address = (physical_address_t *)allocate_frame();
 
   // Map the physical address to the virtual address
   return map(physical_address, virtual_address, flags);
@@ -651,7 +649,7 @@ void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, s
 void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
 
   // Base information
-  pml_t* pml4_table = (pml_t *)m_pml4_root_address;
+  auto* pml4_table = (pml_t *)m_pml4_root_address;
   size_t base_addr = 0xFFFF000000000000;
 
   // Get the indexes
@@ -661,9 +659,9 @@ void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
   uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
 
   // Get the tables
-  pml_t *pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
-  pml_t *pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
-  uint64_t* pt_table = (uint64_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
+  auto *pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
+  auto *pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
+  auto* pt_table = (uint64_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
 
   // Check if the entry is present
   if(table_has_entry(pml4_table, pml4_index) && table_has_entry(pdpr_table, pdpr_index) && table_has_entry(pd_table, pd_index))
@@ -861,7 +859,7 @@ uint64_t *PhysicalMemoryManager::get_pml4_root_address() {
  *
  * @return The memory size in bytes
  */
-uint64_t PhysicalMemoryManager::get_memory_size() {
+uint64_t PhysicalMemoryManager::get_memory_size() const {
   return m_memory_size;
 }
 
@@ -870,7 +868,7 @@ uint64_t PhysicalMemoryManager::get_memory_size() {
  *
  * @return The memory size in bytes
  */
-uint64_t PhysicalMemoryManager::get_memory_used() {
+uint64_t PhysicalMemoryManager::get_memory_used() const {
     return m_used_frames * s_page_size;
 }
 

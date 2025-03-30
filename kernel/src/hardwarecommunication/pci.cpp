@@ -17,19 +17,15 @@ using namespace MaxOS::memory;
 
 ///__DESCRIPTOR___
 
-PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() {
+PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() = default;
 
-}
-
-PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor() {
-
-}
+PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor() = default;
 
 /**
  * @brief Get the type of the device
  * @return Type of the device as a string (or Unknown if the type is not known)
  */
-string PeripheralComponentInterconnectDeviceDescriptor::get_type() {
+string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
     switch (class_id)
     {
         case 0x00: return (subclass_id == 0x01) ? "VGA" : "Legacy";
@@ -85,9 +81,7 @@ PeripheralComponentInterconnectController::PeripheralComponentInterconnectContro
 
 }
 
-PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() {
-
-}
+PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() = default;
 
 /**
  * @brief read data from the PCI Controller
@@ -236,7 +230,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 
     //TODO: Bullshit, do use new. Don't use new here, manually allocate memory instead
 
-    Driver* driver = 0;
+    Driver* driver = nullptr;
     switch (dev.vendor_id)
     {
         case 0x1022:    //AMD
@@ -245,7 +239,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x2000:    //am79c971
                 {
-                    amd_am79c973* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
+                    auto* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
                     new (result) amd_am79c973(&dev, interrupt_manager);
                     return result;
 
@@ -261,7 +255,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    intel_i217* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
+                    auto* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
                     new (result) intel_i217(&dev, interrupt_manager);
                     return result;
                 }
@@ -282,7 +276,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x00:  //VGA
                 {
-                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
+                    auto* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
                     new (result) VideoGraphicsArray();
                     return result;
                 }
@@ -295,7 +289,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 }
 
 
-void PeripheralComponentInterconnectController::list_known_device(PeripheralComponentInterconnectDeviceDescriptor dev) {
+void PeripheralComponentInterconnectController::list_known_device(const PeripheralComponentInterconnectDeviceDescriptor& dev) {
     switch (dev.vendor_id)
     {
         case 0x1022:
@@ -446,7 +440,7 @@ void PeripheralComponentInterconnectController::list_known_device(PeripheralComp
  */
 BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
-    BaseAddressRegister result;
+    BaseAddressRegister result{};
 
     // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
     uint32_t headerType = read(bus, device, function, 0x0E);

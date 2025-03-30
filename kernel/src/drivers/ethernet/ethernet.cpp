@@ -12,12 +12,10 @@ using namespace MaxOS::drivers::ethernet;
 ///__EVENT HANDLER___
 
 EthernetDriverEventHandler::EthernetDriverEventHandler()
-{
-}
+= default;
 
 EthernetDriverEventHandler::~EthernetDriverEventHandler()
-{
-}
+= default;
 
 
 
@@ -67,8 +65,7 @@ EthernetDriver::EthernetDriver(OutputStream* ethernetMessageStream)
 }
 
 EthernetDriver::~EthernetDriver()
-{
-}
+= default;
 
 /**
  * @brief Get the MAC address
@@ -134,10 +131,10 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
         raise_event(new DataReceivedEvent(buffer, size));
 
     // Loop through the events
-    for(typename Vector<Event<EthernetDriverEvents>*>::iterator event = values.begin(); event != values.end(); ++event) {
-        switch ((*event)->type) {
+    for(auto & value : values) {
+        switch (value->type) {
             case EthernetDriverEvents::DATA_RECEIVED:
-                if((*event)->return_value.boolValue){
+                if(value->return_value.boolValue){
                   m_driver_message_stream-> write("Sending back... \n");
                     Send(buffer, size);
                 }
@@ -196,8 +193,7 @@ DataSentEvent::DataSentEvent(uint8_t *buffer, uint32_t size)
 }
 
 DataSentEvent::~DataSentEvent()
-{
-}
+= default;
 
 DataReceivedEvent::DataReceivedEvent(uint8_t *buffer, uint32_t size)
 : Event(EthernetDriverEvents::DATA_RECEIVED)
@@ -207,8 +203,7 @@ DataReceivedEvent::DataReceivedEvent(uint8_t *buffer, uint32_t size)
 }
 
 DataReceivedEvent::~DataReceivedEvent()
-{
-}
+= default;
 
 BeforeSendEvent::BeforeSendEvent(uint8_t *buffer, uint32_t size)
 : Event(EthernetDriverEvents::BEFORE_SEND)
@@ -218,5 +213,4 @@ BeforeSendEvent::BeforeSendEvent(uint8_t *buffer, uint32_t size)
 }
 
 BeforeSendEvent::~BeforeSendEvent()
-{
-}
+= default;

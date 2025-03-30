@@ -22,8 +22,8 @@ namespace MaxOS{
         class Desktop : public CompositeWidget, public drivers::peripherals::MouseEventHandler, public drivers::clock::ClockEventHandler{     //NTS: it is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device won't have a mouse cursor
 
             protected:
-                uint32_t m_mouse_x;
-                uint32_t m_mouse_y;
+                int32_t m_mouse_x;
+                int32_t m_mouse_y;
 
                 common::GraphicsContext* m_graphics_context;
 
@@ -36,12 +36,12 @@ namespace MaxOS{
 
                 common::Vector<common::Rectangle<int32_t> > m_invalid_areas;
                 void internal_invalidate(common::Rectangle<int32_t>& area, common::Vector<common::Rectangle<int32_t> >::iterator start, common::Vector<common::Rectangle<int32_t> >::iterator stop);
-                void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
+                void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) final;
 
             public:
                 common::Colour colour;
 
-                Desktop(common::GraphicsContext* gc);
+                explicit Desktop(common::GraphicsContext* gc);
                 ~Desktop();
 
                 void add_child(Widget*) final;

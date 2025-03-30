@@ -9,13 +9,9 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
-LocalAPIC::LocalAPIC() {
+LocalAPIC::LocalAPIC() = default;
 
-}
-
-LocalAPIC::~LocalAPIC() {
-
-}
+LocalAPIC::~LocalAPIC() = default;
 
 void LocalAPIC::init() {
 
@@ -75,7 +71,7 @@ void LocalAPIC::init() {
 
 }
 
-uint32_t LocalAPIC::read(uint32_t reg) {
+uint32_t LocalAPIC::read(uint32_t reg) const{
 
   // If x2APIC is enabled, use the x2APIC MSR
   if(m_x2apic) {
@@ -87,7 +83,7 @@ uint32_t LocalAPIC::read(uint32_t reg) {
 
 }
 
-void LocalAPIC::write(uint32_t reg, uint32_t value) {
+void LocalAPIC::write(uint32_t reg, uint32_t value) const {
 
   // If x2APIC is enabled, use the x2APIC MSR
   if(m_x2apic) {
@@ -97,7 +93,7 @@ void LocalAPIC::write(uint32_t reg, uint32_t value) {
     }
 }
 
-uint32_t LocalAPIC::id() {
+uint32_t LocalAPIC::id() const {
 
   // Read the id
   uint32_t id = read(0x20);
@@ -107,22 +103,19 @@ uint32_t LocalAPIC::id() {
 
 }
 
-void LocalAPIC::send_eoi() {
+void LocalAPIC::send_eoi() const {
 
     // Send the EOI
     write(0xB0, 0);
 }
 
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
-: m_acpi(acpi),
-  m_madt(nullptr)
+: m_acpi(acpi)
 {
 
 }
 
-IOAPIC::~IOAPIC() {
-
-}
+IOAPIC::~IOAPIC() = default;
 
 void IOAPIC::init() {
 
@@ -131,7 +124,7 @@ void IOAPIC::init() {
   MADT_Item* io_apic_item = get_madt_item(1, 0);
 
   // Get the IO APIC
-  MADT_IOAPIC* io_apic = (MADT_IOAPIC*)MemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
+  auto* io_apic = (MADT_IOAPIC*)MemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)io_apic_item, (virtual_address_t*)(io_apic - sizeof(MADT_Item)), Present | Write);
 
 
@@ -163,7 +156,7 @@ void IOAPIC::init() {
       if(source_override_item != nullptr && source_override_item->type == 2) {
 
           // Get the override and populate the array
-          Override *override = (Override *)(source_override_item + 1);
+          auto* override = (Override *)(source_override_item + 1);
           m_override_array[m_override_array_size].bus = override->bus;
           m_override_array[m_override_array_size].source = override->source;
           m_override_array[m_override_array_size].global_system_interrupt = override->global_system_interrupt;
@@ -188,7 +181,7 @@ void IOAPIC::init() {
 MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 
     // The item starts at the start of the MADT
-    MADT_Item* item = (MADT_Item*)((uint64_t)m_madt + sizeof(MADT));
+    auto* item = (MADT_Item*)((uint64_t)m_madt + sizeof(MADT));
     uint64_t total_length = 0;
     uint8_t current_index = 0;
 
@@ -218,7 +211,7 @@ MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
     return nullptr;
 }
 
-uint32_t IOAPIC::read(uint32_t reg) {
+uint32_t IOAPIC::read(uint32_t reg) const {
 
   // Write the register
   *(volatile uint32_t*)(m_address_high + 0x00) = reg;
@@ -230,7 +223,7 @@ uint32_t IOAPIC::read(uint32_t reg) {
 
 }
 
-void IOAPIC::write(uint32_t reg, uint32_t value) {
+void IOAPIC::write(uint32_t reg, uint32_t value) const {
 
     // Write the register
     *(volatile uint32_t*)(m_address_high + 0x00) = reg;
@@ -261,8 +254,8 @@ void IOAPIC::write_redirect(uint8_t index, RedirectionEntry *entry) {
     return;
 
   // Low and high registers
-  uint32_t low = (uint32_t)entry->raw;
-  uint32_t high = (uint32_t)(entry->raw >> 32);
+  auto low = (uint32_t)entry->raw;
+  auto high = (uint32_t)(entry->raw >> 32);
 
   // Set the entry
   write(index, low);
@@ -272,7 +265,7 @@ void IOAPIC::write_redirect(uint8_t index, RedirectionEntry *entry) {
 void IOAPIC::set_redirect(interrupt_redirect_t *redirect) {
 
     // Create the redirection entry
-    RedirectionEntry entry;
+    RedirectionEntry entry = {};
     entry.raw = redirect->flags | (redirect -> interrupt & 0xFF);
     entry.destination = redirect->destination;
     entry.mask = redirect->mask;
@@ -301,7 +294,7 @@ void IOAPIC::set_redirect(interrupt_redirect_t *redirect) {
 void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
 
     // Read the current entry
-    RedirectionEntry entry;
+    RedirectionEntry entry = {};
     read_redirect(index, &entry);
 
     // Set the mask
@@ -334,9 +327,7 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
 
 }
 
-AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController() {
-
-}
+AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController() = default;
 
 void AdvancedProgrammableInterruptController::disable_pic() {
 

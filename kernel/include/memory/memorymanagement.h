@@ -53,11 +53,11 @@ namespace MaxOS{
               static const uint64_t s_hh_direct_map_offset      { s_higher_half_offset + PhysicalMemoryManager::s_page_size };
 
               // Each chunk is aligned to 16 bytes
-              static const size_t s_chunk_alignment { 0x10 };
+              static const size_t s_chunk_alignment =  0x10;
 
-              MemoryManager* previous_memory_manager;
+              MemoryManager* previous_memory_manager = nullptr;
 
-              MemoryManager(VirtualMemoryManager* virtual_memory_manager);
+              explicit MemoryManager(VirtualMemoryManager* virtual_memory_manager);
               ~MemoryManager();
 
               // Public Memory Management
@@ -75,7 +75,7 @@ namespace MaxOS{
 
               // Utility Functions
               int memory_used();
-              size_t align(size_t size);
+              static size_t align(size_t size);
               static void switch_active_memory_manager(MemoryManager* manager);
 
               // Higher Half Memory Management

@@ -61,10 +61,10 @@ namespace MaxOS {
           XSDT* m_xsdt;
           RSDT* m_rsdt;
 
-          static bool validate(const char* discriptor, size_t length);
+          static bool validate(const char*descriptor, size_t length);
 
         public:
-            AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);
+            explicit AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);
             ~AdvancedConfigurationAndPowerInterface();
 
             ACPISDTHeader* find(const char* signature);

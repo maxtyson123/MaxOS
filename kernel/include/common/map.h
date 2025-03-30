@@ -63,13 +63,9 @@ namespace MaxOS{
         };
 
         /// ______________ TEMPLATE IMPLEMENTATION ______________
-        template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() {
+        template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() = default;
 
-        }
-
-        template<class Key, class Value> MapIterationHandler<Key, Value>::~MapIterationHandler() {
-
-        }
+        template<class Key, class Value> MapIterationHandler<Key, Value>::~MapIterationHandler() = default;
 
         /**
          * @brief Called when the end of the stream is reached
@@ -91,13 +87,9 @@ namespace MaxOS{
 
         }
 
-        template<class Key, class Value> Map<Key, Value>::Map() {
+        template<class Key, class Value> Map<Key, Value>::Map() = default;
 
-        }
-
-        template<class Key, class Value> Map<Key, Value>::~Map() {
-
-        }
+        template<class Key, class Value> Map<Key, Value>::~Map() = default;
 
         /**
          * @brief Overloads the [] operator to return the value of the key

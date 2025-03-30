@@ -12,8 +12,8 @@ using namespace MaxOS::system;
 
 // Define the static variables
 
-InterruptManager* InterruptManager::s_active_interrupt_manager = 0;
-OutputStream* InterruptManager::s_error_messages = 0;
+InterruptManager* InterruptManager::s_active_interrupt_manager = nullptr;
+OutputStream* InterruptManager::s_error_messages = nullptr;
 InterruptDescriptor InterruptManager::s_interrupt_descriptor_table[256];
 
 ///__Handler__
@@ -29,7 +29,7 @@ InterruptHandler::InterruptHandler(uint8_t interrupt_number, InterruptManager* i
 InterruptHandler::~InterruptHandler(){
 
     // Unset the handler in the array
-    if(this->m_interrupt_manager != 0)
+    if(this->m_interrupt_manager != nullptr)
       this->m_interrupt_manager->remove_interrupt_handler(m_interrupt_number);
 
 }
@@ -63,13 +63,13 @@ InterruptManager::InterruptManager()
 {
 
      // Full the table of interrupts with 0
-     for(uint16_t i = 0; i < 256; i++) {
-        s_interrupt_descriptor_table[i].address_low_bits = 0;
-        s_interrupt_descriptor_table[i].address_mid_bits = 0;
-        s_interrupt_descriptor_table[i].address_high_bits = 0;
-        s_interrupt_descriptor_table[i].segment_selector = 0;
-        s_interrupt_descriptor_table[i].ist = 0;
-        s_interrupt_descriptor_table[i].flags = 0;
+     for(auto& descriptor : s_interrupt_descriptor_table) {
+       descriptor.address_low_bits = 0;
+       descriptor.address_mid_bits = 0;
+       descriptor.address_high_bits = 0;
+       descriptor.segment_selector = 0;
+       descriptor.ist = 0;
+       descriptor.flags = 0;
      }
 
      //Set Up the base interrupts
@@ -116,7 +116,7 @@ InterruptManager::InterruptManager()
     set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
 
     //Tell the processor to use the IDT
-    IDTR idt;
+    IDTR idt = {};
     idt.limit = 256 * sizeof(InterruptDescriptor) - 1;
     idt.base = (uint64_t)s_interrupt_descriptor_table;
     asm volatile("lidt %0" : : "m" (idt));
@@ -141,7 +141,7 @@ void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, v
 {
 
   // Get the address of the handler and the entry in the IDT
-  uint64_t handler_address = (uint64_t)handler;
+  auto handler_address = (uint64_t)handler;
   InterruptDescriptor* interrupt_descriptor = &s_interrupt_descriptor_table[interrupt];
 
   // Set the handler address
@@ -166,7 +166,7 @@ void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, v
 void InterruptManager::activate() {
 
     // Deactivate the current interrupt manager
-    if(s_active_interrupt_manager != 0)
+    if(s_active_interrupt_manager != nullptr)
       s_active_interrupt_manager->deactivate();
 
     // Set the current interrupt manager and start interrupts
@@ -182,7 +182,7 @@ void InterruptManager::deactivate()
 
     // If this is the active interrupt manager, deactivate it and stop interrupts
     if(s_active_interrupt_manager == this){
-      s_active_interrupt_manager = 0;
+      s_active_interrupt_manager = nullptr;
       asm("cli");
     }
 }
@@ -245,7 +245,7 @@ void InterruptManager::set_interrupt_handler(uint8_t interrupt, InterruptHandler
  * @param interrupt The interrupt number
  */
 void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
-  m_interrupt_handlers[interrupt] = 0;
+  m_interrupt_handlers[interrupt] = nullptr;
 }
 
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
@@ -254,7 +254,7 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
   cpu_status_t* new_status = status;
 
   // If there is an interrupt manager, handle the interrupt
-  if(m_interrupt_handlers[status -> interrupt_number] != 0)
+  if(m_interrupt_handlers[status -> interrupt_number] != nullptr)
     new_status = m_interrupt_handlers[status -> interrupt_number]->handle_interrupt(status);
   else
     _kprintf("Unhandled Interrupt 0x%x\n", status->interrupt_number);

@@ -30,7 +30,7 @@ namespace MaxOS {
             class TimeEvent : public common::Event<ClockEvents>{
                 public:
                     common::Time* time;
-                    TimeEvent(common::Time*);
+                    explicit TimeEvent(common::Time*);
                     ~TimeEvent();
             };
 
@@ -132,12 +132,12 @@ namespace MaxOS {
 
                 protected:
                   
-                    bool m_binary;
-                    bool m_24_hour_clock;
+                    bool m_binary { true };
+                    bool m_24_hour_clock { true };
 
                     // Ports
-                    hardwarecommunication::Port8Bit m_data_port;
-                    hardwarecommunication::Port8Bit m_command_port;
+                    hardwarecommunication::Port8Bit m_data_port { 0x71 };
+                    hardwarecommunication::Port8Bit m_command_port { 0x70 };
 
                     // APIC
                     hardwarecommunication::AdvancedProgrammableInterruptController* m_apic;
@@ -149,7 +149,7 @@ namespace MaxOS {
                     // Other functions
                     void handle_interrupt() final;
                     uint8_t read_hardware_clock(uint8_t address);
-                    uint8_t binary_representation(uint8_t number);
+                    uint8_t binary_representation(uint8_t number) const;
 
                 public:
                     Clock(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);

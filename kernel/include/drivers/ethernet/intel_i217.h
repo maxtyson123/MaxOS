@@ -47,10 +47,10 @@ namespace MaxOS{
                     uint16_t special;                   // Special
                 } __attribute__((packed));
 
-                uint8_t bar_type;                        // The type of base address register
-                uint16_t portBase;                       // The base address of the port I/O registers
-                uint64_t memBase;                        // The base address of the memory registers
-                uint8_t macAddress[6];                   // The MAC address of the device
+                uint8_t bar_type = { 0 };
+                uint16_t portBase = { 0 };
+                uint64_t memBase = { 0 };
+                uint8_t macAddress[6] = { 0 };
 
 
                 //Registers Addresses (Main Registers)
@@ -88,8 +88,8 @@ namespace MaxOS{
 
 
                 // write Commands and read results From NICs either using MemIO or IO Ports
-                void Write(uint16_t address, uint32_t data);
-                uint32_t Read(uint16_t address);
+                void Write(uint16_t address, uint32_t data) const;
+                uint32_t Read(uint16_t address) const;
 
                 //EPROM (Device Memory)
                 bool epromPresent;                                   // Whether the EPROM is present
@@ -111,25 +111,25 @@ namespace MaxOS{
 
             public:
 
-                intel_i217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* intelNetMessageStream = 0);         // Constructor. takes as a parameter a pointer to an object that encapsulate all he PCI configuration data of the device
+                intel_i217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* intelNetMessageStream = nullptr);         // Constructor. takes as a parameter a pointer to an object that encapsulate all he PCI configuration data of the device
                 ~intel_i217();                                                  // Default Destructor
 
 
                 //Override driver default methods
-                uint32_t reset();
-                void activate();
-                void deactivate();
+                uint32_t reset() final;
+                void activate() final;
+                void deactivate() final;
 
                 //Override Interrupt default methods
-                void handle_interrupt();
+                void handle_interrupt() final;
 
 
                 //Ethernet Driver functions
-                string get_vendor_name();
-                string get_device_name();
+                string get_vendor_name() final;
+                string get_device_name() final;
 
-                void DoSend(uint8_t* buffer, uint32_t size);
-                uint64_t GetMediaAccessControlAddress();
+                void DoSend(uint8_t* buffer, uint32_t size) final;
+                uint64_t GetMediaAccessControlAddress() final;
             };
 
         }

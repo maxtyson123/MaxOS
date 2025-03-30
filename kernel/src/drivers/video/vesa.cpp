@@ -27,8 +27,8 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   _kprintf("Framebuffer: bpp=%d, pitch=%d, size=%d\n", m_bpp, m_pitch, m_framebuffer_size);
 
   // Get the framebuffer address
-  uint64_t physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
-  uint64_t virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);
+  auto physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
+  auto virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);
   uint64_t end = physical_address + m_framebuffer_size;
   m_framebuffer_address = (uint64_t*)virtual_address;
 
@@ -49,9 +49,7 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
 }
 
-VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation(){
-
-}
+VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation()= default;
 
 /**
  * @brief Initializes the VESA driver
@@ -107,7 +105,7 @@ bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_
 void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colour) {
 
     // Get the address of the pixel
-    uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+    auto* pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
 
     // Set the pixel
     *pixel_address = colour;
@@ -124,7 +122,7 @@ void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint3
 uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
 
     // Get the address of the pixel
-    uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+    auto* pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
 
     // Return the pixel
     return *pixel_address;

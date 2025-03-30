@@ -440,7 +440,7 @@ namespace MaxOS {
           multiboot_tag_old_acpi* get_old_acpi();
           multiboot_tag_new_acpi* get_new_acpi();
 
-          multiboot_tag* get_start_tag();
+          multiboot_tag* get_start_tag() const;
 
           bool is_reserved(multiboot_uint64_t address);
 

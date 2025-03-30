@@ -100,7 +100,7 @@ namespace MaxOS{
         {
             public:
                 TransmissionControlProtocolSocket* socket;
-                ConnectedEvent(TransmissionControlProtocolSocket* socket);
+                explicit ConnectedEvent(TransmissionControlProtocolSocket* socket);
                 ~ConnectedEvent();
         };
 
@@ -108,7 +108,7 @@ namespace MaxOS{
         {
             public:
                 TransmissionControlProtocolSocket* socket;
-                DisconnectedEvent(TransmissionControlProtocolSocket* socket);
+                explicit DisconnectedEvent(TransmissionControlProtocolSocket* socket);
                 ~DisconnectedEvent();
         };
 
@@ -119,7 +119,7 @@ namespace MaxOS{
                 ~TransmissionControlProtocolPayloadHandler();
 
                 common::Event<TransmissionControlProtocolPayloadHandlerEvents>*
-                on_event(common::Event<TransmissionControlProtocolPayloadHandlerEvents>* event);
+                on_event(common::Event<TransmissionControlProtocolPayloadHandlerEvents>* event) override;
 
                 virtual void handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size);
                 virtual void Connected(TransmissionControlProtocolSocket* socket);
@@ -133,17 +133,17 @@ namespace MaxOS{
             friend class TransmissionControlProtocolHandler;
             friend class TransmissionControlProtocolPortListener;
             protected:
-                uint16_t remotePort;
-                uint32_t remoteIP;
-                uint16_t localPort;
-                uint32_t localIP;
-                uint32_t sequenceNumber;
-                uint32_t acknowledgementNumber;
+                uint16_t remotePort = 0;
+                uint32_t remoteIP = 0;
+                uint16_t localPort = 0;
+                uint32_t localIP = 0;
+                uint32_t sequenceNumber = 0;
+                uint32_t acknowledgementNumber = 0;
 
                 TransmissionControlProtocolHandler* transmissionControlProtocolHandler;
                 TransmissionControlProtocolSocketState state;
             public:
-                TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
+                explicit TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
                 ~TransmissionControlProtocolSocket();
 
                 virtual void Send(uint8_t* data, uint16_t size);
@@ -163,16 +163,16 @@ namespace MaxOS{
                 common::Vector<TransmissionControlProtocolSocket*> sockets;
 
                 static TransmissionControlProtocolPort freePorts;
-                void sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size, uint16_t flags = 0);
+                void sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, const uint8_t* data, uint16_t size, uint16_t flags = 0);
 
             public:
                 TransmissionControlProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
                 ~TransmissionControlProtocolHandler();
 
-                bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
+                bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) override;
 
                 TransmissionControlProtocolSocket* Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port);
-                TransmissionControlProtocolSocket* Connect(string internetProtocolAddressAndPort);
+                static TransmissionControlProtocolSocket* Connect(const string& internetProtocolAddressAndPort);
 
                 void Disconnect(TransmissionControlProtocolSocket* socket);
 

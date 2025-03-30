@@ -214,7 +214,7 @@ Scheduler *Scheduler::get_system_scheduler() {
  *
  * @return The number of ticks
  */
-uint64_t Scheduler::get_ticks() {
+uint64_t Scheduler::get_ticks() const {
     return m_ticks;
 }
 
@@ -266,7 +266,7 @@ uint64_t Scheduler::remove_process(Process *process) {
   }
 
   // Remove the process
-  for (uint16_t i = 0; i < m_processes.size(); i++) {
+  for (uint32_t i = 0; i < m_processes.size(); i++) {
     if (m_processes[i] == process) {
         m_processes.erase(m_processes.begin() + i);
 
@@ -378,10 +378,10 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
       continue;
 
     // Get the module tag
-    struct multiboot_tag_module* module = (struct multiboot_tag_module*)tag;
+    auto* module = (struct multiboot_tag_module*)tag;
 
     // Create the elf
-    Elf64* elf = new Elf64((uintptr_t)MemoryManager::to_dm_region((uintptr_t )module->mod_start));
+    auto* elf = new Elf64((uintptr_t)MemoryManager::to_dm_region((uintptr_t )module->mod_start));
     if(!elf->is_valid())
       continue;
 
@@ -391,7 +391,7 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
     char* args[1] = {module->cmdline};
 
     // Create the process
-    Process* process = new Process(module->cmdline, args, 1, elf);
+    auto* process = new Process(module->cmdline, args, 1, elf);
 
     _kprintf("Elf loaded to pid %d\n", process->get_pid());
   }

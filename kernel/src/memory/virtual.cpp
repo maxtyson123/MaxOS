@@ -231,7 +231,7 @@ void VirtualMemoryManager::new_region() {
   ASSERT(new_region_physical != nullptr, "Failed to allocate new VMM region\n");
 
   // Align the new region
-  virtual_memory_region_t* new_region = (virtual_memory_region_t*)PhysicalMemoryManager::align_to_page((uint64_t)m_current_region + PhysicalMemoryManager::s_page_size);
+  auto* new_region = (virtual_memory_region_t*)PhysicalMemoryManager::align_to_page((uint64_t)m_current_region + PhysicalMemoryManager::s_page_size);
 
   // Map the new region
   m_physical_memory_manager->map(new_region_physical, (virtual_address_t*)new_region, Present | Write, m_pml4_root_address);
@@ -347,7 +347,7 @@ void VirtualMemoryManager::add_free_chunk(uintptr_t start_address, size_t size) 
 
 
   // Create the new chunk
-  free_chunk_t* new_chunk = (free_chunk_t*)start_address;
+  auto* new_chunk = (free_chunk_t*)start_address;
   new_chunk->start_address = start_address;
   new_chunk->size = size;
   new_chunk->next = m_free_chunks;
@@ -409,7 +409,7 @@ uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
  * @param name The name of the shared memory
  * @return The address of the shared memory in the VMM's address space
  */
-void *VirtualMemoryManager::load_shared_memory(string name) {
+void *VirtualMemoryManager::load_shared_memory(const string& name) {
 
   // Get the shared memory block
   ipc_shared_memory_t* block = Scheduler::get_ipc()->get_shared_memory(name);

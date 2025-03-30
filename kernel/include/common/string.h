@@ -15,29 +15,29 @@ namespace MaxOS {
      */
     class String {
         private:
-          char* m_string;
-          int m_length;
+          char* m_string = nullptr;
+          int m_length = 0;
 
-          int lex_value(String const &other) const;
+          [[nodiscard]] static int lex_value(String const &other) ;
 
         public:
 
           String();
-          String(char const *string);
+          String(char const* string);
           String(String const &other);
-          String(int value);
+          explicit String(int value);
           ~String();
 
           void copy(String const &other);
 
-          int length(bool count_ansi = false) const;
+          [[nodiscard]] int length(bool count_ansi = false) const;
           char* c_str();
-          const char* c_str() const;
+          [[nodiscard]] const char* c_str() const;
 
-          String center(int width, char fill = ' ') const;
+          [[nodiscard]] String center(int width, char fill = ' ') const;
 
           // Operators (as functions, todo do the rest)
-          bool equals(String const &other) const;
+          [[nodiscard]] bool equals(String const &other) const;
 
           // Operators
           String &operator = (String const &other);

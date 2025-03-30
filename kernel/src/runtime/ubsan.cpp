@@ -9,13 +9,9 @@ using namespace MaxOS;
 using namespace MaxOS::runtime;
 
 
-UBSanHandler::UBSanHandler() {
+UBSanHandler::UBSanHandler() = default;
 
-}
-
-UBSanHandler::~UBSanHandler() {
-
-}
+UBSanHandler::~UBSanHandler() = default;
 
 /**
  * @brief Handles the UBSan error (currently only printing the location and panicking)

@@ -13,13 +13,9 @@ using namespace MaxOS::drivers::peripherals;
 
 /// ___ Button Event Handler ___
 
-ButtonEventHandler::ButtonEventHandler() {
+ButtonEventHandler::ButtonEventHandler() = default;
 
-}
-
-ButtonEventHandler::~ButtonEventHandler() {
-
-}
+ButtonEventHandler::~ButtonEventHandler() = default;
 
 /**
  * @brief Handles the button events
@@ -67,7 +63,7 @@ void ButtonEventHandler::on_button_released(Button*) {
 
 //// ___ Button ___
 
-Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
+Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
@@ -78,9 +74,7 @@ Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, strin
 
 }
 
-Button::~Button() {
-
-}
+Button::~Button() = default;
 
 /**
  * @brief Draws the button
@@ -198,9 +192,7 @@ ButtonReleasedEvent::ButtonReleasedEvent(Button *source)
 
 }
 
-ButtonReleasedEvent::~ButtonReleasedEvent() {
-
-}
+ButtonReleasedEvent::~ButtonReleasedEvent() = default;
 
 ButtonPressedEvent::ButtonPressedEvent(Button *source)
 : Event(ButtonEvents::BUTTON_PRESSED),
@@ -208,6 +200,4 @@ ButtonPressedEvent::ButtonPressedEvent(Button *source)
 {
 }
 
-ButtonPressedEvent::~ButtonPressedEvent() {
-
-}
+ButtonPressedEvent::~ButtonPressedEvent() = default;

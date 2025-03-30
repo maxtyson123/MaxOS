@@ -28,8 +28,7 @@ namespace MaxOS {
 
         ///_____________________________Implementation___________________________________________///
         template<class First, class Second> Pair<First,Second>::Pair()
-        {
-        }
+        = default;
 
         template<class First, class Second> Pair<First,Second>::Pair(First first, Second second)
         : first(first),
@@ -39,8 +38,7 @@ namespace MaxOS {
         }
 
         template<class First, class Second> Pair<First,Second>::~Pair()
-        {
-        }
+        = default;
     }
 
 }

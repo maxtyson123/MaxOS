@@ -52,10 +52,10 @@ uint32_t Driver::reset(){
  *
  * @param message The message to write
  */
-void Driver::error_message(string message) {
+void Driver::error_message(const string& message) const {
 
     // If there is a driver message stream write the message to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
         m_driver_message_stream-> write(message);
 
 }
@@ -65,10 +65,10 @@ void Driver::error_message(string message) {
  *
  * @param char_to_write The character to write
  */
-void Driver::error_message(char char_to_write) {
+void Driver::error_message(char char_to_write) const {
 
     // If there is a driver message stream write the character to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
       m_driver_message_stream-> write_char(char_to_write);
 
 }
@@ -79,10 +79,10 @@ void Driver::error_message(char char_to_write) {
  *
  * @param int_to_write The integer to write
  */
-void Driver::error_message(int int_to_write) {
+void Driver::error_message(int int_to_write) const {
 
     // If there is a driver message stream write the integer to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
             m_driver_message_stream-> write_int(int_to_write);
 }
 
@@ -91,10 +91,10 @@ void Driver::error_message(int int_to_write) {
  *
  * @param hex_to_write The hex to write
  */
-void Driver::error_message(uint32_t hex_to_write) {
+void Driver::error_message(uint32_t hex_to_write) const {
 
     // If there is a driver message stream write the hex to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
       m_driver_message_stream->write_hex(hex_to_write);
 
 }
@@ -120,12 +120,10 @@ string Driver::get_device_name()
 }
 
 DriverSelectorEventHandler::DriverSelectorEventHandler()
-{
-}
+= default;
 
 DriverSelectorEventHandler::~DriverSelectorEventHandler()
-{
-}
+= default;
 
 /**
  * @brief This function is called when a driver is selected
@@ -137,12 +135,10 @@ void DriverSelectorEventHandler::on_driver_selected(Driver*)
 }
 
 DriverSelector::DriverSelector()
-{
-}
+= default;
 
 DriverSelector::~DriverSelector()
-{
-}
+= default;
 
 /**
  * @brief Select the drivers
@@ -151,9 +147,7 @@ void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommuni
 {
 }
 
-DriverManager::DriverManager() {
-
-}
+DriverManager::DriverManager() = default;
 
 DriverManager::~DriverManager() {
 

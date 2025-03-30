@@ -225,7 +225,7 @@ namespace MaxOS
              */
             class KeyUpEvent : public common::Event<KeyboardEvents>{
                 public:
-                    KeyUpEvent(KeyCode, KeyboardState);
+                    KeyUpEvent(KeyCode, const KeyboardState&);
                     ~KeyUpEvent();
 
                     KeyCode key_code;
@@ -238,7 +238,7 @@ namespace MaxOS
              */
             class KeyDownEvent : public common::Event<KeyboardEvents>{
                 public:
-                    KeyDownEvent(KeyCode, KeyboardState);
+                    KeyDownEvent(KeyCode, const KeyboardState&);
                     ~KeyDownEvent();
 
                     KeyCode key_code;
@@ -254,7 +254,7 @@ namespace MaxOS
                     KeyboardEventHandler();
                     ~KeyboardEventHandler();
 
-                    virtual common::Event<KeyboardEvents>* on_event(common::Event<KeyboardEvents>*);
+                    common::Event<KeyboardEvents>* on_event(common::Event<KeyboardEvents>*) override;
 
                     virtual void on_key_down(KeyCode, KeyboardState);
                     virtual void on_key_up(KeyCode, KeyboardState);
@@ -277,7 +277,7 @@ namespace MaxOS
                     KeyboardInterpreter();
                     ~KeyboardInterpreter();
 
-                    void onKeyRead(bool, KeyboardState, KeyCode);
+                    void onKeyRead(bool, const KeyboardState&, KeyCode);
 
             };
 
@@ -424,7 +424,7 @@ namespace MaxOS
                 hardwarecommunication::Port8Bit m_command_port;
 
               public:
-                  KeyboardDriver(hardwarecommunication::InterruptManager*);
+                  explicit KeyboardDriver(hardwarecommunication::InterruptManager*);
                   ~KeyboardDriver();
 
                   void handle_interrupt() final;

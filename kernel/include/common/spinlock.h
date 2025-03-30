@@ -16,7 +16,7 @@ namespace MaxOS{
     class Spinlock
     {
       private:
-        bool m_locked;
+        bool m_locked = false;
         bool m_should_yield;
 
       public:
@@ -25,7 +25,7 @@ namespace MaxOS{
 
         void lock();
         void unlock();
-        bool is_locked();
+        bool is_locked() const;
 
         void acquire();
         void release();

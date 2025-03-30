@@ -15,13 +15,9 @@ using namespace MaxOS::hardwarecommunication;
 
 ///___Handler___
 
-KeyboardEventHandler::KeyboardEventHandler(){
+KeyboardEventHandler::KeyboardEventHandler()= default;
 
-}
-
-KeyboardEventHandler::~KeyboardEventHandler() {
-
-}
+KeyboardEventHandler::~KeyboardEventHandler() = default;
 
 /**
  * @brief Handle the key down event
@@ -81,9 +77,7 @@ KeyboardDriver::KeyboardDriver(InterruptManager* manager)
 {
 }
 
-KeyboardDriver::~KeyboardDriver(){
-
-}
+KeyboardDriver::~KeyboardDriver()= default;
 
 /**
  * @brief activate the keyboard driver
@@ -134,13 +128,9 @@ string KeyboardDriver::get_device_name() {
 ///___State___
 
 
-KeyboardState::KeyboardState() {
+KeyboardState::KeyboardState() = default;
 
-}
-
-KeyboardState::~KeyboardState() {
-
-}
+KeyboardState::~KeyboardState() = default;
 
 ///___Interpreter___
 
@@ -150,11 +140,9 @@ KeyboardInterpreter::KeyboardInterpreter()
 
 }
 
-KeyboardInterpreter::~KeyboardInterpreter() {
+KeyboardInterpreter::~KeyboardInterpreter() = default;
 
-}
-
-void KeyboardInterpreter::onKeyRead(bool released, KeyboardState state, KeyCode key_code) {
+void KeyboardInterpreter::onKeyRead(bool released, const KeyboardState& state, KeyCode key_code) {
 
     // Pass the key event to the handlers
     if(released)
@@ -172,9 +160,7 @@ KeyboardInterpreterEN_US::KeyboardInterpreterEN_US()
 
 }
 
-KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() {
-
-}
+KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() = default;
 
 /**
  * @brief Handle the key down event
@@ -719,24 +705,20 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
     
 }
 
-KeyDownEvent::KeyDownEvent(KeyCode keyCode, KeyboardState keyboardState)
+KeyDownEvent::KeyDownEvent(KeyCode keyCode, const KeyboardState& keyboardState)
 : Event<KeyboardEvents>(KeyboardEvents::KEYDOWN),
   key_code(keyCode),
   keyboard_state(keyboardState)
 {
 }
 
-KeyDownEvent::~KeyDownEvent() {
+KeyDownEvent::~KeyDownEvent() = default;
 
-}
-
-KeyUpEvent::KeyUpEvent(KeyCode key_code, KeyboardState keyboard_state)
+KeyUpEvent::KeyUpEvent(KeyCode key_code, const KeyboardState& keyboard_state)
 : Event<KeyboardEvents>(KeyboardEvents::KEYUP),
   key_code(key_code),
   keyboard_state(keyboard_state)
 {
 }
 
-KeyUpEvent::~KeyUpEvent() {
-
-}
+KeyUpEvent::~KeyUpEvent() = default;

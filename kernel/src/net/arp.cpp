@@ -20,9 +20,7 @@ net::AddressResolutionProtocol::AddressResolutionProtocol(EthernetFrameHandler* 
     this->errorMessages = errorMessages;
 }
 
-net::AddressResolutionProtocol::~AddressResolutionProtocol() {
-
-}
+net::AddressResolutionProtocol::~AddressResolutionProtocol() = default;
 
 /**
  * @brief Called when an ARP packet is received.
@@ -31,7 +29,7 @@ net::AddressResolutionProtocol::~AddressResolutionProtocol() {
  * @param size The size of the ARP packet.
  * @return True if the device should send a response, false otherwise.
  */
-bool AddressResolutionProtocol::handleEthernetFramePayload(uint8_t* etherframePayload, uint32_t size) {
+bool AddressResolutionProtocol::handleEthernetframePayload(uint8_t* etherframePayload, uint32_t size) {
 
     //Check if the size is correct
     if(size < sizeof(AddressResolutionProtocolMessage))
@@ -88,7 +86,7 @@ bool AddressResolutionProtocol::handleEthernetFramePayload(uint8_t* etherframePa
 void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress address) {
 
     //When a MAC address is requested, instantiate a new ARP message block on the stack
-    AddressResolutionProtocolMessage arpMessage;
+    AddressResolutionProtocolMessage arpMessage = {};
 
     //Set the message's values
     arpMessage.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian

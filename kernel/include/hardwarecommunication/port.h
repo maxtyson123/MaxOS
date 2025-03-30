@@ -17,7 +17,7 @@ namespace MaxOS {
             protected:
                 uint16_t m_port_number;
 
-                Port(uint16_t port_number);
+                explicit Port(uint16_t port_number);
                 ~Port();
         };
 
@@ -27,7 +27,7 @@ namespace MaxOS {
          */
         class Port8Bit : public Port {
             public:
-                Port8Bit(uint16_t port_number);
+                explicit Port8Bit(uint16_t port_number);
                 ~Port8Bit();
 
                 virtual void write(uint8_t data);
@@ -40,10 +40,10 @@ namespace MaxOS {
          */
         class Port8BitSlow : public Port8Bit {
             public:
-                Port8BitSlow(uint16_t port_number);
+                explicit Port8BitSlow(uint16_t port_number);
                 ~Port8BitSlow();
 
-                virtual void write(uint8_t data) final;
+                void write(uint8_t data) final;
         };
 
         /**
@@ -52,7 +52,7 @@ namespace MaxOS {
          */
         class Port16Bit : public Port {
             public:
-                Port16Bit(uint16_t port_number);
+                explicit Port16Bit(uint16_t port_number);
                 ~Port16Bit();
 
                 virtual void write(uint16_t data);
@@ -65,7 +65,7 @@ namespace MaxOS {
          */
         class Port32Bit : public Port {
             public:
-                Port32Bit(uint16_t port_number);
+                explicit Port32Bit(uint16_t port_number);
                 ~Port32Bit();
 
                 virtual void write(uint32_t data);

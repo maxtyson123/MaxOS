@@ -39,7 +39,7 @@ namespace MaxOS{
                     common::ConsoleColour m_background_color = common::ConsoleColour::Uninitialised;
 
                 public:
-                    VESABootConsole(common::GraphicsContext*);
+                    explicit VESABootConsole(common::GraphicsContext*);
                     ~VESABootConsole();
 
                     uint16_t width() final;

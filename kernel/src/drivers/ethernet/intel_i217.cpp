@@ -24,9 +24,7 @@ using namespace memory;
 
 intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager, OutputStream* intelNetMessageStream)
 : EthernetDriver(intelNetMessageStream),
-  InterruptHandler(deviceDescriptor->interrupt +
-                           interruptManager->hardware_interrupt_offset(), interruptManager)
-
+  InterruptHandler(deviceDescriptor->interrupt + interruptManager->hardware_interrupt_offset(), interruptManager)
 {
 
     //Set the registers
@@ -82,12 +80,10 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 
 }
 
-intel_i217::~intel_i217() {
-
-}
+intel_i217::~intel_i217() = default;
 
 
-void intel_i217::Write(uint16_t address, uint32_t data) {
+void intel_i217::Write(uint16_t address, uint32_t data) const {
 
     //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
 
@@ -109,7 +105,7 @@ void intel_i217::Write(uint16_t address, uint32_t data) {
 
 }
 
-uint32_t intel_i217::Read(uint16_t address) {
+uint32_t intel_i217::Read(uint16_t address) const {
 
     //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
     if(bar_type == 0) {                                             // If the base address register is memory mapped
@@ -185,8 +181,8 @@ bool intel_i217::readMACAddress() {
     {
 
 
-        uint8_t * mem_base_mac_8 = (uint8_t *) (memBase+0x5400);                   //Get the base address of the MAC address
-        uint32_t * mem_base_mac_32 = (uint32_t *) (memBase+0x5400);                //Get the base address of the MAC address
+        auto * mem_base_mac_8 = (uint8_t *) (memBase+0x5400);                   //Get the base address of the MAC address
+        auto * mem_base_mac_32 = (uint32_t *) (memBase+0x5400);                //Get the base address of the MAC address
 
         if ( mem_base_mac_32[0] != 0 )
         {
@@ -330,7 +326,7 @@ void intel_i217::FetchDataReceived() {
 
     while((receiveDsrctrs[currentReceiveBuffer] -> status & 0x1))
     {
-        uint8_t *buffer = (uint8_t *)receiveDsrctrs[currentReceiveBuffer] -> bufferAddress;
+        auto *buffer = (uint8_t *)receiveDsrctrs[currentReceiveBuffer] -> bufferAddress;
         uint16_t size = receiveDsrctrs[currentReceiveBuffer] -> length;
 
         if(size > 64){          // If the size is the size of ethernet 2 frame

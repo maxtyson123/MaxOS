@@ -26,7 +26,7 @@ namespace MaxOS {
             class VideoElectronicsStandardsAssociation : public VideoDriver {
 
                 private:
-                    bool init();
+                    static bool init();
 
                 protected:
                     bool internal_set_mode(uint32_t width,  uint32_t height,  uint32_t) final;
@@ -43,7 +43,7 @@ namespace MaxOS {
                     uint16_t m_pitch;
 
                 public:
-                    VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info);
+                    explicit VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info);
                     ~VideoElectronicsStandardsAssociation();
 
                     bool supports_mode( uint32_t width,  uint32_t height,  uint32_t) final;

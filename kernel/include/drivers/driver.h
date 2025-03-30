@@ -27,13 +27,13 @@ namespace MaxOS
 
                 common::OutputStream* m_driver_message_stream;
 
-                Driver(common::OutputStream* driverMessageStream = 0);
+                explicit Driver(common::OutputStream* driverMessageStream = nullptr);
                 ~Driver();
 
-                void error_message(string message);
-                void error_message(char char_to_write);
-                void error_message(int int_to_write);
-                void error_message(uint32_t hex_to_write);
+                void error_message(const string& message) const;
+                void error_message(char char_to_write) const;
+                void error_message(int int_to_write) const;
+                void error_message(uint32_t hex_to_write) const;
 
                 virtual void activate();
                 virtual void deactivate();

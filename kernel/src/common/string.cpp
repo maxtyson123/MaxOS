@@ -111,7 +111,7 @@ void String::copy(String const &other) {
  * @param string The string
  * @return The sum of the ascii values of the characters in the string
  */
-int String::lex_value(String const &string) const {
+int String::lex_value(String const &string) {
 
     // The sum of the ascii values of the characters in the string
     int sum = 0;
@@ -134,6 +134,10 @@ int String::lex_value(String const &string) const {
  * @return String& The string
  */
 String &String::operator = (String const &other) {
+
+    // Self assignment check
+    if (this == &other)
+        return *this;
 
     // Free the old memory
     delete[] m_string;
@@ -455,7 +459,6 @@ String String::center(int width, char fill) const {
     return centered;
 
 }
-
 
 /**
  * @brief Checks if one string pointer is equal to another string pointer

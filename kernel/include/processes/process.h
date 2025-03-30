@@ -61,7 +61,7 @@ namespace MaxOS
               size_t ticks;
               size_t wakeup_time;
 
-              uintptr_t get_tss_pointer() const { return m_tss_stack_pointer; }
+              [[nodiscard]] uintptr_t get_tss_pointer() const { return m_tss_stack_pointer; }
 
 
         };
@@ -78,12 +78,12 @@ namespace MaxOS
               common::Vector<uint16_t> m_resource_ids;
               common::Vector<Thread*> m_threads;
 
-              memory::VirtualMemoryManager* m_virtual_memory_manager;
-              uint64_t m_pid;
+              memory::VirtualMemoryManager* m_virtual_memory_manager = nullptr;
+              uint64_t m_pid = 0;
 
             public:
-                Process(string name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
-                Process(string name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
+                Process(const string& name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
+                Process(const string& name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
                 ~Process();
 
                 void set_up();
@@ -93,13 +93,13 @@ namespace MaxOS
                 void remove_thread(uint64_t tid);
 
                 void set_pid(uint64_t pid);
-                uint64_t get_pid();
+                uint64_t get_pid() const;
                 uint64_t get_total_ticks();
 
                 bool is_kernel;
 
                 string name;
-                memory::MemoryManager* memory_manager;
+                memory::MemoryManager* memory_manager = nullptr;
 
 
         };

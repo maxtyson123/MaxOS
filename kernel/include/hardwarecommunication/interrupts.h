@@ -30,7 +30,7 @@ namespace MaxOS {
                 uint8_t m_interrupt_number;
                 InterruptManager* m_interrupt_manager;
 
-                InterruptHandler(uint8_t interrupt_number, InterruptManager*interrupt_manager = 0);
+                explicit InterruptHandler(uint8_t interrupt_number, InterruptManager*interrupt_manager = nullptr);
                 ~InterruptHandler();
 
             public:
@@ -75,8 +75,8 @@ namespace MaxOS {
 
                 static InterruptManager* s_active_interrupt_manager;
                 static common::OutputStream* s_error_messages;
-                const static uint16_t s_hardware_interrupt_offset {0x20};
-                InterruptHandler* m_interrupt_handlers[256];
+                const static uint16_t s_hardware_interrupt_offset = {0x20};
+                InterruptHandler* m_interrupt_handlers[256] = {};
 
                 static InterruptDescriptor s_interrupt_descriptor_table[256];
 
@@ -150,7 +150,7 @@ namespace MaxOS {
                 InterruptManager();
                 ~InterruptManager();
 
-                uint16_t hardware_interrupt_offset();
+                static uint16_t hardware_interrupt_offset();
 
                 void set_interrupt_handler(uint8_t interrupt, InterruptHandler *handler);
                 void remove_interrupt_handler(uint8_t interrupt);

@@ -7,9 +7,7 @@
 
 using namespace MaxOS::common;
 
-Colour::Colour() {
-
-}
+Colour::Colour() = default;
 
 Colour::Colour(uint8_t red, uint8_t green, uint8_t blue)
 : red(red),
@@ -28,9 +26,7 @@ Colour::Colour(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 
 }
 
-Colour::~Colour() {
-
-}
+Colour::~Colour() = default;
 
 Colour::Colour(ConsoleColour colour) {
     parse_console_colour(colour);

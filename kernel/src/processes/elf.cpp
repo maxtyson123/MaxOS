@@ -25,8 +25,7 @@ Elf64::Elf64(uintptr_t elf_header_address)
  * @brief Destructor for the Elf64 class
  */
 Elf64::~Elf64()
-{
-}
+= default;
 
 /**
  * @brief Loads the elf program into memory if a valid elf file
@@ -46,7 +45,7 @@ void Elf64::load() {
  *
  * @return The header of the elf file
  */
-elf_64_header_t *Elf64::get_header() {
+elf_64_header_t *Elf64::get_header() const {
 
   // Return the header
   return (elf_64_header_t*)m_elf_header_address;
@@ -64,7 +63,7 @@ elf_64_program_header_t* Elf64::get_program_header(size_t index) {
   if(index >= get_header() -> program_header_count) return nullptr;
 
   // Get the address of the program headers
-  elf_64_program_header_t* program_headers = (elf_64_program_header_t*)(m_elf_header_address + get_header() -> program_header_offset);
+  auto* program_headers = (elf_64_program_header_t*)(m_elf_header_address + get_header() -> program_header_offset);
 
   // Return the requested program header
   return &program_headers[index];
@@ -83,7 +82,7 @@ elf_64_section_header_t *Elf64::get_section_header(size_t index) {
   if(index >= get_header() -> section_header_count) return nullptr;
 
   // Get the address of the section headers
-  elf_64_section_header_t* section_headers = (elf_64_section_header_t*)(m_elf_header_address + get_header() -> section_header_offset);
+  auto* section_headers = (elf_64_section_header_t*)(m_elf_header_address + get_header() -> section_header_offset);
 
   // Return the requested section header
   return &section_headers[index];

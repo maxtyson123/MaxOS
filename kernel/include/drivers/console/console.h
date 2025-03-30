@@ -94,15 +94,15 @@ namespace MaxOS {
               protected:
                   Console* m_console;
 
-                  common::ConsoleColour m_foreground;
-                  common::ConsoleColour m_background;
+                  common::ConsoleColour m_foreground { common::ConsoleColour::LightGrey };
+                  common::ConsoleColour m_background { common::ConsoleColour::Black };
                   bool is_ansi = false;
 
               public:
                   uint16_t m_cursor_x { 0 };
                   uint16_t m_cursor_y { 0 };
 
-                  ConsoleStream(Console*);
+                  explicit ConsoleStream(Console*);
                   ~ConsoleStream();
 
                   void write_char(char c) override;

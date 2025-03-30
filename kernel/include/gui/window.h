@@ -43,14 +43,14 @@ namespace MaxOS{
                 common::Colour frame_colour;
                 common::Colour frame_border_colour;
 
-                Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string title_text);
-                Window(Widget* containedWidget, string title_text);
+                Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& title_text);
+                Window(Widget* containedWidget, const string& title_text);
                 ~Window();
 
-                void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
-                void add_child(Widget* child);
+                void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
+                void add_child(Widget* child) override;
 
-                drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button);
+                drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) override;
         };
     }
 }

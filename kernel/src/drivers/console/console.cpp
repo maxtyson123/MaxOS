@@ -12,13 +12,9 @@ using namespace MaxOS::drivers::console;
 
 ///____ Console ____
 
-Console::Console() {
+Console::Console() = default;
 
-}
-
-Console::~Console() {
-
-}
+Console::~Console() = default;
 
 /**
  * @brief Get the width of the console in characters
@@ -163,10 +159,10 @@ void Console::scroll_up() {
 void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
     // For each line in the area to scroll (except the last line)
-    for(uint16_t y = top; y < top+height-1; y++){
+    for(uint32_t y = top; y < top+height-1; y++){
 
         // For each character in the line
-        for(uint16_t x = left; x < left+width; x++) {
+        for(uint32_t x = left; x < left+width; x++) {
 
             // Put the character from the line below
             put_character(x, y, get_character(x, y + 1),
@@ -262,9 +258,7 @@ ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t
 }
 
 
-ConsoleArea::~ConsoleArea() {
-
-}
+ConsoleArea::~ConsoleArea() = default;
 
 /**
  * @brief Return the width of the console area

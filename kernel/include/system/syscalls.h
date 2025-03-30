@@ -58,12 +58,12 @@ namespace MaxOS{
         class SyscallManager : hardwarecommunication::InterruptHandler{
 
           protected:
-            syscall_func_t m_syscall_handlers[256];
+            syscall_func_t m_syscall_handlers[256] = {};
             syscall_args_t* m_current_args;
 
 
           public:
-              SyscallManager(hardwarecommunication::InterruptManager*interrupt_manager);
+              explicit SyscallManager(hardwarecommunication::InterruptManager*interrupt_manager);
               ~SyscallManager();
 
               system::cpu_status_t* handle_interrupt(system::cpu_status_t* esp) final;

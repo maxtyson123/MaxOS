@@ -16,10 +16,7 @@ TextModeConsole::TextModeConsole()
 
 }
 
-TextModeConsole::~TextModeConsole()
-{
-
-}
+TextModeConsole::~TextModeConsole() = default;
 
 /**
  * @brief Gets the width of the console

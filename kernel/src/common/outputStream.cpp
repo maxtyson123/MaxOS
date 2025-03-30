@@ -13,9 +13,7 @@ OutputStream::OutputStream()
 
 }
 
-OutputStream::~OutputStream() {
-
-}
+OutputStream::~OutputStream() = default;
 
 /**
  * @brief Writes a newline to the output stream.

@@ -27,10 +27,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
     m_video_memory = (uint16_t*)MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
 }
 
-VESABootConsole::~VESABootConsole()
-{
-
-}
+VESABootConsole::~VESABootConsole() = default;
 
 /**
  * @brief Gets the width of the console
@@ -87,14 +84,14 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
         ansi_code[ansi_code_length] = '\0';
         ansi_code_length = -1;
 
-        if(strcmp("\033[0m", ansi_code)) {
+        if(strcmp("\033[0m", ansi_code) != 0) {
           m_foreground_color = ConsoleColour::Uninitialised;
           m_background_color = ConsoleColour::Uninitialised;
           return;
         }
 
         // Get the colour from the ANSI code
-        Colour* colour = new Colour(ansi_code);
+        auto* colour = new Colour(ansi_code);
 
         // Set the colour
         bool foreground = ansi_code[4] == '3';
@@ -126,10 +123,8 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     char s[] = " ";
     s[0] = c;
 
-    Colour foreground = m_foreground_color == ConsoleColour::Uninitialised
-                            ? get_foreground_color(x, y) : Colour(m_foreground_color);
-    Colour background = m_background_color == ConsoleColour::Uninitialised
-                            ? get_background_color(x, y) : Colour(m_background_color);
+    Colour foreground = m_foreground_color == ConsoleColour::Uninitialised ? get_foreground_color(x, y) : Colour(m_foreground_color);
+    Colour background = m_background_color == ConsoleColour::Uninitialised ? get_background_color(x, y) : Colour(m_background_color);
 
     // Use the m_font to draw the character
     m_font.draw_text(x * 8, y * CHAR_HEIGHT, foreground, background, m_graphics_context, s);
@@ -286,7 +281,7 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 
   // Get the framebuffer info
-  uint64_t* framebuffer_address = (uint64_t*)m_graphics_context->get_framebuffer_address();
+  auto* framebuffer_address = (uint64_t*)m_graphics_context->get_framebuffer_address();
   uint64_t  framebuffer_width   = m_graphics_context->get_width();
   uint64_t  framebuffer_height  = m_graphics_context->get_height();
   uint64_t  framebuffer_bpp     = m_graphics_context->get_color_depth();
@@ -320,11 +315,11 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
   }
 
   // Get that start and num elements
-  uint8_t* start = (uint8_t*)(framebuffer_address + (CHAR_HEIGHT * (this->height() - 1) * framebuffer_pitch) / 8);
+  auto* start = (uint8_t*)(framebuffer_address + (CHAR_HEIGHT * (this->height() - 1) * framebuffer_pitch) / 8);
   size_t num_elements = (8 * amount_to_scroll) / sizeof(uint32_t);
 
   // Cast the start pointer to an uint32_t pointer.
-  uint32_t* dest = (uint32_t*)(start);
+  auto* dest = (uint32_t*)(start);
 
   // Fill the range with the color
   uint32_t fill_value = m_graphics_context ->colour_to_int(to_set_background);

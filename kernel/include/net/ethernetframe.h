@@ -61,7 +61,7 @@ namespace MaxOS{
                 ~EthernetFrameHandler();
 
                 drivers::ethernet::MediaAccessControlAddress getMAC();
-                bool DataReceived(uint8_t* data, uint32_t size);
+                bool DataReceived(uint8_t* data, uint32_t size) override;
                 void connectHandler(EthernetFramePayloadHandler* handler);
                 void sendEthernetFrame(uint64_t destinationMAC, uint16_t frameType, uint8_t* data, uint32_t size);
 

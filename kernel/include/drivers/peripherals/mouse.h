@@ -43,7 +43,7 @@ namespace MaxOS {
             class MouseDownEvent : public common::Event<MouseEvents>{
                 public:
                     uint8_t button;
-                    MouseDownEvent(uint8_t);
+                    explicit MouseDownEvent(uint8_t);
                     ~MouseDownEvent();
             };
 
@@ -54,7 +54,7 @@ namespace MaxOS {
             class MouseUpEvent : public common::Event<MouseEvents>{
                 public:
                     uint8_t button;
-                    MouseUpEvent(uint8_t);
+                    explicit MouseUpEvent(uint8_t);
                     ~MouseUpEvent();
             };
 
@@ -84,14 +84,14 @@ namespace MaxOS {
                 hardwarecommunication::Port8Bit data_port;
                 hardwarecommunication::Port8Bit command_port;
 
-                void handle_interrupt();
+                void handle_interrupt() final;
 
-                uint8_t buffer[3];
-                uint8_t offset { 2 };
-                uint8_t buttons { 0 };
+                uint8_t buffer[3] = {};
+                uint8_t offset = 0;
+                uint8_t buttons = 0;
 
             public:
-                MouseDriver(hardwarecommunication::InterruptManager *manager);
+                explicit MouseDriver(hardwarecommunication::InterruptManager *manager);
                 ~MouseDriver();
 
                 void activate() final;

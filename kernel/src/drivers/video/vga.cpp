@@ -26,9 +26,7 @@ VideoGraphicsArray::VideoGraphicsArray()
 {
 }
 
-VideoGraphicsArray::~VideoGraphicsArray() {
-
-}
+VideoGraphicsArray::~VideoGraphicsArray() = default;
 
 /**
  * @brief This function is used to write to the VGA registers.
@@ -150,7 +148,7 @@ uint8_t* VideoGraphicsArray::get_frame_buffer_segment()
     switch(segmentNumber)
     {
         default:
-        case 0<<2: return (uint8_t*)0x00000;
+        case 0<<2: return (uint8_t*)nullptr;
         case 1<<2: return (uint8_t*)0xA0000;
         case 2<<2: return (uint8_t*)0xB0000;
         case 3<<2: return (uint8_t*)0xB8000;

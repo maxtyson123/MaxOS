@@ -27,9 +27,7 @@ AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, b
 
 }
 
-AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() {
-
-}
+AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() = default;
 
 /**
  * @brief Identify the ATA device
@@ -126,7 +124,7 @@ void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int c
         return;
 
     // read the data and store it in the array
-    for(uint16_t i = 0; i < count; i+= 2)
+    for(int i = 0; i < count; i+= 2)
     {
         uint16_t read_data = m_data_port.read();
 
@@ -148,7 +146,7 @@ void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int c
  * @param sector The sector to write to
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::write_28(uint32_t sector, uint8_t* data, int count){
+void AdvancedTechnologyAttachment::write_28(uint32_t sector, const uint8_t* data, int count){
 
     // Don't allow writing more han a sector
     if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)

@@ -28,8 +28,7 @@ EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* f
  * @brief Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list
  *
  */
-EthernetFramePayloadHandler::~EthernetFramePayloadHandler() {
-}
+EthernetFramePayloadHandler::~EthernetFramePayloadHandler() = default;
 
 
 bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t*, uint32_t) {
@@ -63,9 +62,7 @@ EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream*
 
 }
 
-EthernetFrameHandler::~EthernetFrameHandler() {
-
-}
+EthernetFrameHandler::~EthernetFrameHandler() = default;
 
 drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
     return ethernetDriver -> GetMediaAccessControlAddress();
@@ -88,7 +85,7 @@ bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
         return false;
 
     //Convert to struct for easier use
-    EthernetFrameHeader* frame = (EthernetFrameHeader*)buffer;
+    auto* frame = (EthernetFrameHeader*)buffer;
     bool sendBack = false;
 
     //Only handle if it is for this device
@@ -158,8 +155,8 @@ void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t f
     errorMessages->write("EFH: Sending frame...");
 
     //Allocate memory for the buffer
-    uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
-    EthernetFrameHeader* frame = (EthernetFrameHeader*)buffer;
+    auto* buffer = (uint8_t*)MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
+    auto* frame = (EthernetFrameHeader*)buffer;
 
     //Put data in the header
     frame -> destinationMAC = destinationMAC;

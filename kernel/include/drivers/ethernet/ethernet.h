@@ -71,7 +71,7 @@ namespace MaxOS{
                     ~EthernetDriverEventHandler();
 
                     virtual common::Event<EthernetDriverEvents>*
-                    on_event(common::Event<EthernetDriverEvents>* event);
+                    on_event(common::Event<EthernetDriverEvents>* event) override;
 
                     virtual void BeforeSend(uint8_t* buffer, uint32_t size);
                     virtual void DataSent(uint8_t* buffer, uint32_t size);
@@ -90,7 +90,7 @@ namespace MaxOS{
                     void FireDataSent(uint8_t* buffer, uint32_t size);
 
                 public:
-                    EthernetDriver(common::OutputStream* ethernetMessageStream);
+                    explicit EthernetDriver(common::OutputStream* ethernetMessageStream);
                     ~EthernetDriver();
 
                     static MediaAccessControlAddress CreateMediaAccessControlAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6);

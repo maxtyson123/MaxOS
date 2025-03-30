@@ -2,8 +2,8 @@
 // Created by 98max on 25/02/2025.
 //
 
-#ifndef MAXOS__PROCESSES_SCHEDULER_H
-#define MAXOS__PROCESSES_SCHEDULER_H
+#ifndef MAXOS_PROCESSES_SCHEDULER_H
+#define MAXOS_PROCESSES_SCHEDULER_H
 
 #include <common/vector.h>
 #include <system/cpu.h>
@@ -39,7 +39,7 @@ namespace MaxOS{
         IPC* m_ipc;
 
       public:
-        Scheduler(hardwarecommunication::InterruptManager* interrupt_manager);
+        explicit Scheduler(hardwarecommunication::InterruptManager* interrupt_manager);
         ~Scheduler();
 
 
@@ -61,9 +61,9 @@ namespace MaxOS{
         static Thread*    get_thread(uint64_t tid);
         static IPC*       get_ipc();
 
-        uint64_t get_ticks();
+        uint64_t get_ticks() const;
 
-        void load_multiboot_elfs(system::Multiboot* multiboot);
+        static void load_multiboot_elfs(system::Multiboot* multiboot);
 
         void activate();
         void deactivate();
@@ -73,4 +73,4 @@ namespace MaxOS{
 
 }
 
-#endif // MAXOS__PROCESSES_SCHEDULER_H
+#endif // MAXOS_PROCESSES_SCHEDULER_H
