@@ -43,8 +43,8 @@ namespace MaxOS{
             MemoryChunk* expand_heap(size_t size);
 
           public:
-              static MemoryManager* s_current_memory_manager;
-              static MemoryManager* s_kernel_memory_manager;
+              inline static MemoryManager* s_current_memory_manager = nullptr;
+              inline static MemoryManager* s_kernel_memory_manager = nullptr;
 
               static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };        //TODO: Move these constants to the pmm as the new structure means this isn't the core class and is instead just an abstract
               static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };

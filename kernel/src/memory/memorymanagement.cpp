@@ -8,11 +8,7 @@
 using namespace MaxOS;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
-
 using namespace MaxOS::system;
-
-MemoryManager* MemoryManager::s_kernel_memory_manager = nullptr;
-MemoryManager* MemoryManager::s_current_memory_manager = nullptr;
 
 MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 : m_virtual_memory_manager(vmm)

@@ -4,8 +4,6 @@
 
 #include <drivers/console/serial.h>
 
-MaxOS::drivers::SerialConsole* MaxOS::drivers::SerialConsole::s_active_serial_console = nullptr;
-
 MaxOS::drivers::SerialConsole::SerialConsole()
 : m_data_port(0x3F8),
   m_interrupt_enable_port(0x3F9),

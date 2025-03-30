@@ -73,12 +73,11 @@ namespace MaxOS {
 
             protected:
 
-                static InterruptManager* s_active_interrupt_manager;
-                static common::OutputStream* s_error_messages;
-                const static uint16_t s_hardware_interrupt_offset = {0x20};
-                InterruptHandler* m_interrupt_handlers[256] = {};
+                inline static InterruptManager* s_active_interrupt_manager = nullptr;
+                const static uint16_t s_hardware_interrupt_offset = 0x20;
 
-                static InterruptDescriptor s_interrupt_descriptor_table[256];
+                InterruptHandler* m_interrupt_handlers[256] = {};
+                inline static InterruptDescriptor s_interrupt_descriptor_table[256] = {};
 
                 static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (*handler)(), uint8_t descriptor_privilege_level);
 

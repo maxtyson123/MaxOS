@@ -13,9 +13,6 @@ using namespace MaxOS::processes;
 extern uint64_t gdt64[];
 extern uint64_t stack[];
 
-CPU* CPU::s_instance = nullptr;
-
-
 void CPU::halt() {
   asm volatile("hlt");
 }
@@ -251,9 +248,6 @@ void CPU::init_tss() {
  */
 CPU::CPU() {
 
-  // Set the instance
-  s_instance = this;
-
   // TODO = Multicore support
 
 }
@@ -261,25 +255,7 @@ CPU::CPU() {
 /**
  * @brief Destructor for the CPU class
  */
-CPU::~CPU() {
-
-  // Clear the instance
-  s_instance = nullptr;
-
-}
-
-/**
- * @brief Gets the CPU instance
- * @return The CPU instance
- */
-CPU *CPU::get_instance() {
-
-  if(s_instance)
-    return s_instance;
-
-  return new CPU();
-
-}
+CPU::~CPU() = default;
 
 /**
  * @brief Ensure the CPU must panic and prepare for it if so

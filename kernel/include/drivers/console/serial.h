@@ -29,7 +29,7 @@ namespace MaxOS {
             hardwarecommunication::Port8Bit m_line_status_port;
 
         public:
-          static SerialConsole* s_active_serial_console;
+          inline static SerialConsole* s_active_serial_console = nullptr;
 
           SerialConsole();
           ~SerialConsole();

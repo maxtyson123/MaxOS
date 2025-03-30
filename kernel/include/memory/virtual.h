@@ -50,7 +50,6 @@ namespace MaxOS {
       private:
         uint64_t * m_pml4_root_address;
         uint64_t * m_pml4_root_physical_address;
-        PhysicalMemoryManager* m_physical_memory_manager;
         bool m_is_kernel;
 
         virtual_memory_region_t* m_first_region;

@@ -10,11 +10,6 @@ using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
-// Define the static variables
-
-InterruptManager* InterruptManager::s_active_interrupt_manager = nullptr;
-OutputStream* InterruptManager::s_error_messages = nullptr;
-InterruptDescriptor InterruptManager::s_interrupt_descriptor_table[256];
 
 ///__Handler__
 

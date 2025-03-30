@@ -33,7 +33,7 @@ namespace MaxOS{
         uint64_t m_next_pid;
         uint64_t m_next_tid;
 
-        static Scheduler* s_instance;
+        inline static Scheduler* s_instance = nullptr;
         static const uint64_t s_ticks_per_event = { 3 };
 
         IPC* m_ipc;

@@ -142,7 +142,7 @@ namespace MaxOS {
           static bool check_aligned(size_t size);
           bool is_anonymous_available(size_t size);
 
-          static PhysicalMemoryManager* s_current_manager;
+          inline static PhysicalMemoryManager* s_current_manager = nullptr;
           static void clean_page_table(uint64_t* table);
 
           void reserve(uint64_t address);

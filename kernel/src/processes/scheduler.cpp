@@ -12,8 +12,6 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
 
-Scheduler* Scheduler::s_instance = nullptr;
-
 Scheduler::Scheduler(InterruptManager* interrupt_manager)
 : InterruptHandler(0x20, interrupt_manager),
   m_current_thread_index(0),
@@ -149,7 +147,7 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
   MemoryManager::switch_active_memory_manager(current_process->memory_manager);
 
   // Load the TSS for the thread
-  system::CPU::get_instance() -> tss.rsp0 = current_thread->get_tss_pointer();
+  system::CPU::tss.rsp0 = current_thread->get_tss_pointer();
 
   // Return the next thread's state
   return current_thread->execution_state;

@@ -8,16 +8,14 @@
 using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
-extern uint64_t p4_table[];
 
-PhysicalMemoryManager* PhysicalMemoryManager::s_current_manager = nullptr;
+extern uint64_t p4_table[];
 extern uint64_t _kernel_start;
 extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
 extern uint64_t multiboot_tag_end;
 extern uint64_t multiboot_tag_start;
-
 
 MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot, uint64_t pml4_root[512])
 : m_kernel_end((uint64_t)&_kernel_physical_end),

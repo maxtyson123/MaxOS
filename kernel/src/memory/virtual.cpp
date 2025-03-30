@@ -11,19 +11,18 @@ using namespace MaxOS::common;
 using namespace MaxOS::processes;
 
 VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
-: m_physical_memory_manager(PhysicalMemoryManager::s_current_manager),    //Todo: don't need to store this as its a static?
-  m_is_kernel(is_kernel)
+: m_is_kernel(is_kernel)
 {
 
     // If not the kernel, we need to allocate a new PML4 table  TODO: Might not need a variable? Check if there isn't a kernel one and just assume it is the kernel one
     if(!m_is_kernel){
 
       // Get a new pml4 table
-      m_pml4_root_physical_address = (uint64_t*)m_physical_memory_manager->allocate_frame();
+      m_pml4_root_physical_address = (uint64_t*)PhysicalMemoryManager::s_current_manager->allocate_frame();
       m_pml4_root_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
 
       // Clear the table
-      m_physical_memory_manager -> clean_page_table(m_pml4_root_address);
+      PhysicalMemoryManager::s_current_manager -> clean_page_table(m_pml4_root_address);
 
       // Map the higher half of the kernel (p4 256 - 511)
       for (size_t i = 256; i < 512; i++){
@@ -35,7 +34,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
         }
 
         // Set the new pml4 table to the old (kernel) pml4 table
-        m_pml4_root_address[i] = m_physical_memory_manager->get_pml4_root_address()[i];
+        m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager->get_pml4_root_address()[i];
 
       }
       _kprintf("Mapped higher half of kernel\n");
@@ -43,7 +42,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
 
 
     }else{
-      m_pml4_root_address = m_physical_memory_manager->get_pml4_root_address();
+      m_pml4_root_address = PhysicalMemoryManager::s_current_manager->get_pml4_root_address();
       m_pml4_root_physical_address = (uint64_t*)MemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     }
 
@@ -51,18 +50,18 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
 
     // Space to store VMM chunks
-    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + m_physical_memory_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
+    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
     m_first_region = (virtual_memory_region_t*)vmm_space;
     m_current_region = m_first_region;
 
     // Allocate space for the vmm
-    void* vmm_space_physical = m_physical_memory_manager->allocate_frame();
+    void* vmm_space_physical = PhysicalMemoryManager::s_current_manager->allocate_frame();
     ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space\n");
-    m_physical_memory_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
+    PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
     _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
     if(!m_is_kernel)
-      ASSERT(vmm_space_physical != m_physical_memory_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, m_physical_memory_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
+      ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
 
     // Calculate the next available address
     m_next_available_address = PhysicalMemoryManager::s_page_size;
@@ -93,10 +92,10 @@ VirtualMemoryManager::~VirtualMemoryManager() {
         for (size_t j = 0; j < pages; j++){
 
               // Get the frame
-              physical_address_t* frame = m_physical_memory_manager -> get_physical_address((virtual_address_t*)region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
+              physical_address_t* frame = PhysicalMemoryManager::s_current_manager -> get_physical_address((virtual_address_t*)region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
 
               // Free the frame
-              m_physical_memory_manager->free_frame(frame);
+              PhysicalMemoryManager::s_current_manager->free_frame(frame);
 
         }
 
@@ -165,11 +164,11 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
       for (size_t i = 0; i < pages; i++){
 
         // Allocate a new frame
-        physical_address_t* frame = m_physical_memory_manager->allocate_frame();
+        physical_address_t* frame = PhysicalMemoryManager::s_current_manager->allocate_frame();
         ASSERT(frame != nullptr, "Failed to allocate frame (from free chunk list)\n");
 
         // Map the frame
-        m_physical_memory_manager->map(frame, (virtual_address_t*)reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+        PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*)reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
 
       }
 
@@ -209,11 +208,11 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   for (size_t i = 0; i < pages; i++){
 
     // Allocate a new frame
-    physical_address_t* frame = m_physical_memory_manager->allocate_frame();
+    physical_address_t* frame = PhysicalMemoryManager::s_current_manager->allocate_frame();
     ASSERT(frame != nullptr, "Failed to allocate frame (from current region)\n");
 
     // Map the frame
-    m_physical_memory_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+    PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
 
   }
 
@@ -227,14 +226,14 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 void VirtualMemoryManager::new_region() {
 
   // Space for the new region
-  physical_address_t* new_region_physical = m_physical_memory_manager->allocate_frame();
+  physical_address_t* new_region_physical = PhysicalMemoryManager::s_current_manager->allocate_frame();
   ASSERT(new_region_physical != nullptr, "Failed to allocate new VMM region\n");
 
   // Align the new region
   auto* new_region = (virtual_memory_region_t*)PhysicalMemoryManager::align_to_page((uint64_t)m_current_region + PhysicalMemoryManager::s_page_size);
 
   // Map the new region
-  m_physical_memory_manager->map(new_region_physical, (virtual_address_t*)new_region, Present | Write, m_pml4_root_address);
+  PhysicalMemoryManager::s_current_manager->map(new_region_physical, (virtual_address_t*)new_region, Present | Write, m_pml4_root_address);
   new_region->next = nullptr;
 
   // Set the current region
@@ -295,7 +294,7 @@ void VirtualMemoryManager::free(void *address) {
   for (size_t i = 0; i < pages; i++){
 
         // Unmap the frame
-        m_physical_memory_manager->unmap((virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
+        PhysicalMemoryManager::s_current_manager->unmap((virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
 
   }
 
@@ -456,7 +455,7 @@ void *VirtualMemoryManager::load_physical_into_address_space(uintptr_t physical_
   for (size_t i = 0; i < pages; i++){
 
     // Map the frame
-    m_physical_memory_manager->map((physical_address_t*)(physical_address + (i * PhysicalMemoryManager::s_page_size)), (virtual_address_t*)((uintptr_t)address + (i * PhysicalMemoryManager::s_page_size)), Present | Write, m_pml4_root_address);
+    PhysicalMemoryManager::s_current_manager->map((physical_address_t*)(physical_address + (i * PhysicalMemoryManager::s_page_size)), (virtual_address_t*)((uintptr_t)address + (i * PhysicalMemoryManager::s_page_size)), Present | Write, m_pml4_root_address);
 
   }
 

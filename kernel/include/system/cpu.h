@@ -67,8 +67,6 @@ namespace MaxOS{
     } __attribute__((__packed__)) stack_frame_t;
 
     class CPU {
-      private:
-        static CPU* s_instance;
 
       public:
 
@@ -81,9 +79,7 @@ namespace MaxOS{
         static void halt();
 
         void init_tss();
-        tss_t tss = {};
-
-        static CPU* get_instance();
+        inline static tss_t tss = {};
 
         static void get_status(cpu_status_t* status);
         static void set_status(cpu_status_t* status);

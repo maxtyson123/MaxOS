@@ -29,7 +29,7 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     if(parent -> is_kernel) {
 
         // Use the kernel stack
-        m_tss_stack_pointer = CPU::get_instance() -> tss.rsp0;
+        m_tss_stack_pointer = CPU::tss.rsp0;
 
     } else{
         m_tss_stack_pointer = (uintptr_t)MemoryManager::kmalloc(s_stack_size) + s_stack_size;
