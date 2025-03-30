@@ -18,10 +18,10 @@ namespace MaxOS {
     namespace drivers {
         namespace peripherals {
 
-            enum MouseEvents{
-                MOUSE_MOVE,
-                MOUSE_DOWN,
-                MOUSE_UP
+            enum class MouseEvents{
+                MOVE,
+                DOWN,
+                UP
             };
 
             /**

@@ -20,9 +20,9 @@ namespace MaxOS {
             //forward declaration
             class Button;
 
-            enum ButtonEvents{
-                BUTTON_PRESSED,
-                BUTTON_RELEASED
+            enum class ButtonEvents{
+                PRESSED,
+                RELEASED
             };
 
             /**

@@ -34,7 +34,7 @@ void ClockEventHandler::on_time(common::Time const &) {
 Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
 
     switch (event -> type) {
-        case TIME:
+      case ClockEvents::TIME:
           on_time(*((TimeEvent *)event)->time);
             break;
             
@@ -279,10 +279,10 @@ uint32_t PIT::ticks_per_ms() {
 
   // Configure the PIT clock
   PITCommand command = {
-      .bcd_mode = BINARY,
-      .operating_mode = MODE_2,
-      .access_mode = LOW_HIGH_BYTE,
-      .channel = CHANNEL_0,
+      .bcd_mode       = (uint8_t)BCDMode::BINARY,
+      .operating_mode = (uint8_t)OperatingMode::RATE_GENERATOR,
+      .access_mode    = (uint8_t)AccessMode::LOW_HIGH_BYTE,
+      .channel        = (uint8_t)Channel::INTERRUPT
   };
   m_command_port.write(*(uint8_t *)&command);
 

@@ -28,12 +28,12 @@ Event<ButtonEvents>* ButtonEventHandler::on_event(Event<ButtonEvents> *event) {
     switch (event -> type) {
 
         // Button pressed
-        case BUTTON_PRESSED:
+        case ButtonEvents::PRESSED:
             on_button_pressed(((ButtonPressedEvent *)event)->source);
             break;
 
         // Button released
-        case BUTTON_RELEASED:
+        case ButtonEvents::RELEASED:
             on_button_released(((ButtonReleasedEvent *)event)->source);
             break;
 
@@ -186,7 +186,7 @@ void Button::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
 /// ___ Event ___
 
 ButtonReleasedEvent::ButtonReleasedEvent(Button *source)
-: Event(ButtonEvents::BUTTON_RELEASED),
+: Event(ButtonEvents::RELEASED),
   source(source)
 {
 
@@ -195,7 +195,7 @@ ButtonReleasedEvent::ButtonReleasedEvent(Button *source)
 ButtonReleasedEvent::~ButtonReleasedEvent() = default;
 
 ButtonPressedEvent::ButtonPressedEvent(Button *source)
-: Event(ButtonEvents::BUTTON_PRESSED),
+: Event(ButtonEvents::PRESSED),
   source(source)
 {
 }

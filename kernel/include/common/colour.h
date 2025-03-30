@@ -54,7 +54,7 @@ namespace MaxOS{
         Reset      = 16
       };
 
-      enum ConsoleColour
+      enum class ConsoleColour
       {
         Uninitialised = 0xFF,
         Black        = 0x00,

@@ -26,6 +26,7 @@ namespace MaxOS {
       typedef void virtual_address_t;
       typedef void physical_address_t;
 
+      // Flags for the page table entries (leave as enum not enum class for bitwise operations)
       typedef enum PageFlags {
         None          = 0,
         Present       = (1 << 0),
@@ -42,19 +43,19 @@ namespace MaxOS {
 
 
       // Struct for a page table entry
-        typedef struct PageTableEntry {
-          uint64_t present : 1;
-          uint64_t write : 1;
-          uint64_t user : 1;
-          uint64_t write_through : 1;
-          uint64_t cache_disabled : 1;
-          uint64_t accessed : 1;
-          uint64_t dirty : 1;
-          uint64_t huge_page : 1;
-          uint64_t global : 1;
-          uint64_t available : 3;
-          uint64_t physical_address : 52;
-        } __attribute__((packed)) pte_t;
+      typedef struct PageTableEntry {
+        uint64_t present : 1;
+        uint64_t write : 1;
+        uint64_t user : 1;
+        uint64_t write_through : 1;
+        uint64_t cache_disabled : 1;
+        uint64_t accessed : 1;
+        uint64_t dirty : 1;
+        uint64_t huge_page : 1;
+        uint64_t global : 1;
+        uint64_t available : 3;
+        uint64_t physical_address : 52;
+      } __attribute__((packed)) pte_t;
 
       // Struct for a page map level
       typedef struct PageMapLevel {
@@ -147,6 +148,7 @@ namespace MaxOS {
 
           void reserve(uint64_t address);
           void reserve(uint64_t address, size_t size);
+          void reserve_kernel_regions(system::Multiboot* multiboot);
 
           physical_address_t* get_physical_address(virtual_address_t* virtual_address,  uint64_t *pml4_root);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t *pml4_root);

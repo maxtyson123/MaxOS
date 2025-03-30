@@ -171,7 +171,7 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 // Get port number
                 for(int barNum = 5; barNum >= 0; barNum--){
                     BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
-                    if(bar.address && (bar.type == InputOutput))
+                    if(bar.address && (bar.type == BaseAddressRegisterType::InputOutput))
                         deviceDescriptor.port_base = (uint64_t )bar.address;
                 }
 
@@ -443,11 +443,11 @@ BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_
 
     // read the base address register
     uint64_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
-    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;
+    result.type = (bar_value & 0x1) ? BaseAddressRegisterType::InputOutput : BaseAddressRegisterType::MemoryMapped;
     result.address = (uint8_t*) (bar_value & ~0xF);
 
     // read the size of the base address register
-    write(bus, device, function, 0x10 + 4 * bar, 0xFFFFFFF0 | result.type);
+    write(bus, device, function, 0x10 + 4 * bar, 0xFFFFFFF0 | (int)result.type);
     result.size = read(bus, device, function, 0x10 + 4 * bar);
     result.size = (~result.size | 0xF) + 1;
 

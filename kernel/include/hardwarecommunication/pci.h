@@ -17,9 +17,9 @@ namespace MaxOS
 {
     namespace hardwarecommunication
     {
-        enum BaseAddressRegisterType{        //Used for the last bit of the address register
-            MemoryMapping = 0,
-            InputOutput = 1
+        enum class BaseAddressRegisterType{        //Used for the last bit of the address register
+            MemoryMapped,
+            InputOutput
         };
 
         /**

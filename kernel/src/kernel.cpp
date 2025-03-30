@@ -232,7 +232,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - clean up large functions, all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
+    //       - all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
     //       - PCI to drivers page in osdev book, ubsan section maybe
     //       - Look at the event handler system again?
 

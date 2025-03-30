@@ -35,13 +35,13 @@ Event<TransmissionControlProtocolPayloadHandlerEvents>* TransmissionControlProto
 
     switch (event -> type)
     {
-        case CONNECTED:
+      case TransmissionControlProtocolPayloadHandlerEvents::CONNECTED:
             Connected(((ConnectedEvent*)event) -> socket);
             break;
-        case DISCONNECTED:
+        case TransmissionControlProtocolPayloadHandlerEvents::DISCONNECTED:
             Disconnected(((DisconnectedEvent*)event) -> socket);
             break;
-        case DATA_RECEIVED:
+        case TransmissionControlProtocolPayloadHandlerEvents::DATA_RECEIVED:
             handleTransmissionControlProtocolPayload(((DataReceivedEvent*)event) -> socket, ((DataReceivedEvent*)event) -> data, ((DataReceivedEvent*)event) -> size);
             break;
     }
@@ -59,7 +59,7 @@ TransmissionControlProtocolSocket::TransmissionControlProtocolSocket(Transmissio
     this -> transmissionControlProtocolHandler = transmissionControlProtocolHandler;
 
     //Closed as default
-    state = CLOSED;
+    state = TCPSocketState::CLOSED;
 }
 
 TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket() = default;
@@ -88,10 +88,10 @@ bool TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload
 void TransmissionControlProtocolSocket::Send(uint8_t* data, uint16_t size)
 {
     //Wait for the socket to be connected
-    while(state != ESTABLISHED);
+    while(state != TCPSocketState::ESTABLISHED);
 
     //Pass the data to the backend
-    transmissionControlProtocolHandler -> sendTransmissionControlProtocolPacket(this, data, size, PSH|ACK);
+    transmissionControlProtocolHandler -> sendTransmissionControlProtocolPacket(this, data, size, (uint16_t)TCPFlag::PSH | (uint16_t)TCPFlag::ACK);
 }
 
 /**
@@ -185,8 +185,8 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
     {
         if( currentSocket -> localPort == localPort                               //Check if the local port is the same as the destination port
         &&  currentSocket -> localIP == destinationIP                                  //Check if the local IP is the same as the destination IP
-        &&  currentSocket -> state == LISTEN                                           //Check if the socket is in the LISTEN state
-        && (((msg -> flags) & (SYN | ACK)) == SYN))                                       //Check if the SYN flag is set (allow for acknoweldgement)
+        &&  currentSocket -> state == TCPSocketState::LISTEN                                           //Check if the socket is in the LISTEN state
+        && (((msg -> flags) & ((uint16_t)TCPFlag::SYN | (uint16_t)TCPFlag::ACK)) == (uint16_t)TCPFlag::SYN))                                       //Check if the SYN flag is set (allow for acknoweldgement)
         {
             socket = currentSocket;
         }
@@ -203,16 +203,16 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
     bool reset = false;
 
     //Check if the socket is found and if the socket wants to reset
-    if(socket != nullptr && msg -> flags & RST)
+    if(socket != nullptr && msg -> flags & (uint16_t)TCPFlag::RST)
     {
-        socket -> state = CLOSED;
+        socket -> state = TCPSocketState::CLOSED;
         socket -> Disconnected();
     }
 
     //Check if the socket is found and if the socket is not closed
-    if(socket != nullptr && socket -> state != CLOSED)
+    if(socket != nullptr && socket -> state != TCPSocketState::CLOSED)
     {
-        switch((msg -> flags) & (SYN | ACK | FIN))
+        switch((msg -> flags) & ((uint16_t)TCPFlag::SYN | (uint16_t)TCPFlag::ACK | (uint16_t)TCPFlag::FIN))
         {
             /*
              * Example for explanation:
@@ -226,15 +226,15 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
              *
              */
 
-            case SYN:
-                if(socket -> state == LISTEN)
+            case (uint16_t)TCPFlag::SYN:
+                if(socket -> state == TCPSocketState::LISTEN)
                 {
-                    socket -> state = SYN_RECEIVED;
+                    socket -> state = TCPSocketState::SYN_RECEIVED;
                     socket -> remotePort = msg -> srcPort;
                     socket -> remoteIP = sourceIP;
                     socket -> acknowledgementNumber = bigEndian32( msg -> sequenceNumber ) + 1;
                     socket -> sequenceNumber = 0xbeefcafe;
-                    sendTransmissionControlProtocolPacket(socket, nullptr,0, SYN|ACK);
+                    sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::SYN | (uint16_t)TCPFlag::ACK);
                     socket -> sequenceNumber++;
                 }
                 else
@@ -242,44 +242,44 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
                 break;
 
 
-            case SYN | ACK:
-                if(socket -> state == SYN_SENT)
+            case (uint16_t)TCPFlag::SYN | (uint16_t)TCPFlag::ACK:
+                if(socket -> state == TCPSocketState::SYN_SENT)
                 {
-                    socket -> state = ESTABLISHED;
+                    socket -> state = TCPSocketState::ESTABLISHED;
                     socket -> acknowledgementNumber = bigEndian32( msg -> sequenceNumber ) + 1;
                     socket -> sequenceNumber++;
-                    sendTransmissionControlProtocolPacket(socket, nullptr,0, ACK);
+                    sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::ACK);
                 }
                 else
                     reset = true;
                 break;
 
 
-            case SYN | FIN:
-            case SYN | FIN | ACK:
+            case (uint16_t)TCPFlag::SYN | (uint16_t)TCPFlag::FIN:
+            case (uint16_t)TCPFlag::SYN | (uint16_t)TCPFlag::FIN | (uint16_t)TCPFlag::ACK:
                 reset = true;
                 break;
 
 
-            case FIN:
-            case FIN|ACK:
-                if(socket -> state == ESTABLISHED)
+            case (uint16_t)TCPFlag::FIN:
+            case (uint16_t)TCPFlag::FIN | (uint16_t)TCPFlag::ACK:
+                if(socket -> state == TCPSocketState::ESTABLISHED)
                 {
-                    socket -> state = CLOSE_WAIT;
+                    socket -> state = TCPSocketState::CLOSE_WAIT;
                     socket -> acknowledgementNumber++;
-                    sendTransmissionControlProtocolPacket(socket, nullptr,0, ACK);
-                    sendTransmissionControlProtocolPacket(socket, nullptr,0, FIN|ACK);
+                    sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::ACK);
+                    sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::FIN | (uint16_t)TCPFlag::ACK);
                     socket -> Disconnected();
                 }
-                else if(socket -> state == CLOSE_WAIT)
+                else if(socket -> state == TCPSocketState::CLOSE_WAIT)
                 {
-                    socket -> state = CLOSED;
+                    socket -> state = TCPSocketState::CLOSED;
                 }
-                else if(socket -> state == FIN_WAIT1 || socket -> state == FIN_WAIT2)
+                else if(socket -> state == TCPSocketState::FIN_WAIT1 || socket -> state == TCPSocketState::FIN_WAIT2)
                 {
-                    socket -> state = CLOSED;
+                    socket -> state = TCPSocketState::CLOSED;
                     socket -> acknowledgementNumber++;
-                    sendTransmissionControlProtocolPacket(socket, nullptr,0, ACK);
+                    sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::ACK);
                     socket -> Disconnected();
                 }
                 else
@@ -287,25 +287,25 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
                 break;
 
 
-            case ACK:
-                if(socket -> state == SYN_RECEIVED)
+            case (uint16_t)TCPFlag::ACK:
+                if(socket -> state == TCPSocketState::SYN_RECEIVED)
                 {
-                    socket -> state = ESTABLISHED;
+                    socket -> state = TCPSocketState::ESTABLISHED;
                     socket -> Connected();
                     return false;
                 }
-                else if(socket -> state == FIN_WAIT1)
+                else if(socket -> state == TCPSocketState::FIN_WAIT1)
                 {
-                    socket -> state = FIN_WAIT2;
+                    socket -> state = TCPSocketState::FIN_WAIT2;
                     return false;
                 }
-                else if(socket -> state == CLOSE_WAIT)
+                else if(socket -> state == TCPSocketState::CLOSE_WAIT)
                 {
-                    socket -> state = CLOSED;
+                    socket -> state = TCPSocketState::CLOSED;
                     break;
                 }
 
-                if(msg -> flags == ACK)
+                if(msg -> flags == (uint16_t)TCPFlag::ACK)
                     break;
 
                 // no break, because of piggybacking
@@ -326,7 +326,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
                             if(payloadData[i] != 0)                                                     //Check if the data is not 0
                                 x = i;                                                                  //Set the number of bytes to send back to the current index
                         socket -> acknowledgementNumber += x - msg -> headerSize32*4 + 1;               //Increment the acknowledgement number by the number of bytes to send back
-                        sendTransmissionControlProtocolPacket(socket, nullptr,0, ACK);                                          //Send the acknowledgement
+                        sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::ACK);                                          //Send the acknowledgement
                     }
                 }
                 else
@@ -344,9 +344,9 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
     {
         if(socket != nullptr)                                                             //If the socket exists then send a reset flag
         {
-            sendTransmissionControlProtocolPacket(socket, nullptr,0, RST);
+            sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::RST);
         }
-        else                                                                        //If it doesnt exist then create a new socket and send a reset flag
+        else                                                                        //If it doesn't exist then create a new socket and send a reset flag
         {
             TransmissionControlProtocolSocket new_socket(this);                     //Create a new socket
             new_socket.remotePort = msg -> srcPort;                                         //Set the remote port
@@ -355,14 +355,14 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
             new_socket.localIP = destinationIP;                                                     //Set the local IP
             new_socket.sequenceNumber = bigEndian32(msg -> acknowledgementNumber);              //Set the sequence number
             new_socket.acknowledgementNumber = bigEndian32(msg -> sequenceNumber) + 1;          //Set the acknowledgement number
-            sendTransmissionControlProtocolPacket(&new_socket, nullptr,0, RST);          //Send the reset flag
+            sendTransmissionControlProtocolPacket(&new_socket, nullptr,0, (uint16_t)TCPFlag::RST);          //Send the reset flag
         }
     }
 
 
     errorMessages ->write("TCP: Handled packet\n");
 
-    if(socket != nullptr && socket -> state == CLOSED)                                        //If the socket is closed then remove it from the list
+    if(socket != nullptr && socket -> state == TCPSocketState::CLOSED)                                        //If the socket is closed then remove it from the list
     {
         sockets.erase(socket);
         return true;
@@ -411,7 +411,7 @@ void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(T
     msg -> urgentPtr = 0;
 
     //Through the options allow for the MSS to be set
-    msg -> options = ((flags & SYN) != 0) ? 0xB4050402 : 0;
+    msg -> options = ((flags & (uint16_t)TCPFlag::SYN) != 0) ? 0xB4050402 : 0;
 
     //Increase the sequence number
     socket -> sequenceNumber += size;
@@ -469,13 +469,13 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(I
 
         //Set the socket into the socket array and then set its state
         sockets.push_back(socket);
-        socket -> state = SYN_SENT;
+        socket -> state = TCPSocketState::SYN_SENT;
 
         //Dummy sequence number
         socket -> sequenceNumber = 0xbeefcafe;
 
         //Send a sync packet
-        sendTransmissionControlProtocolPacket(socket, nullptr,0, SYN);
+        sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::SYN);
     }
 
     return socket;
@@ -497,8 +497,8 @@ TransmissionControlProtocolSocket *TransmissionControlProtocolHandler::Connect(c
 void TransmissionControlProtocolHandler::Disconnect(TransmissionControlProtocolSocket* socket)
 {
 
-    socket -> state = FIN_WAIT1;                            //Begin fin wait sequence
-    sendTransmissionControlProtocolPacket(socket, nullptr,0, FIN + ACK);            //Send FIN|ACK packet
+    socket -> state = TCPSocketState::FIN_WAIT1;                            //Begin fin wait sequence
+    sendTransmissionControlProtocolPacket(socket, nullptr,0, (uint16_t)TCPFlag::FIN + (uint16_t)TCPFlag::ACK);            //Send FIN|ACK packet
     socket -> sequenceNumber++;                             //Increase the sequence number
 }
 
@@ -520,7 +520,7 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Listen(ui
         new (socket) TransmissionControlProtocolSocket(this);
 
         //Configure the socket
-        socket -> state = LISTEN;
+        socket -> state = TCPSocketState::LISTEN;
         socket -> localIP = internetProtocolHandler -> GetInternetProtocolAddress();
         socket -> localPort = ((port & 0xFF00)>>8) | ((port & 0x00FF) << 8);
 
@@ -548,7 +548,7 @@ void TransmissionControlProtocolHandler::Bind(TransmissionControlProtocolSocket*
 /// ___ EVENTS ___ ///
 
 DataReceivedEvent::DataReceivedEvent(TransmissionControlProtocolSocket *socket, uint8_t *data, uint16_t size)
-: Event(DATA_RECEIVED)
+: Event(TransmissionControlProtocolPayloadHandlerEvents::DATA_RECEIVED)
 {
     this -> socket = socket;
     this -> data = data;
@@ -559,7 +559,7 @@ DataReceivedEvent::~DataReceivedEvent()
 = default;
 
 ConnectedEvent::ConnectedEvent(TransmissionControlProtocolSocket *socket)
-: Event(CONNECTED)
+: Event(TransmissionControlProtocolPayloadHandlerEvents::CONNECTED)
 {
     this -> socket = socket;
 }
@@ -567,7 +567,7 @@ ConnectedEvent::~ConnectedEvent()
 = default;
 
 DisconnectedEvent::DisconnectedEvent(TransmissionControlProtocolSocket *socket)
-: Event(DISCONNECTED)
+: Event(TransmissionControlProtocolPayloadHandlerEvents::DISCONNECTED)
 {
     this -> socket = socket;
 }

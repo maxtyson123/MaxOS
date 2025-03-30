@@ -85,7 +85,7 @@ char Console::get_character(uint16_t, uint16_t) {
  * @return The background color of the character
  */
 ConsoleColour Console::get_foreground_color(uint16_t, uint16_t) {
-    return Green;
+    return ConsoleColour::Green;
 }
 
 /**
@@ -96,7 +96,7 @@ ConsoleColour Console::get_foreground_color(uint16_t, uint16_t) {
  * @return The background color of the character
  */
 ConsoleColour Console::get_background_color(uint16_t, uint16_t) {
-    return Green;
+    return ConsoleColour::Green;
 }
 
 /**

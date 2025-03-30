@@ -18,7 +18,7 @@ void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserD
 Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::on_event(Event<UserDatagramProtocolEvents> *event) {
 
     switch (event -> type) {
-        case UDP_DATA_RECEIVED:
+        case UserDatagramProtocolEvents::DATA_RECEIVED:
             handleUserDatagramProtocolMessage(((UDPDataReceivedEvent*)event) -> socket, ((UDPDataReceivedEvent*)event) -> data, ((UDPDataReceivedEvent*)event) -> size);
             break;
         default:
@@ -255,15 +255,14 @@ void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, const
  */
 void UserDatagramProtocolHandler::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler) {
 
-  socket->m_handlers.push_back(
-      userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
+  socket->m_handlers.push_back(userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
 
 
 }
 
 /// ___ Events ___ ///
 UDPDataReceivedEvent::UDPDataReceivedEvent(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size)
-: Event(UDP_DATA_RECEIVED)
+: Event(UserDatagramProtocolEvents::DATA_RECEIVED)
 {
     this -> socket = socket;    //Set the socket
     this -> data = data;        //Set the data

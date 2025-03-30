@@ -16,8 +16,8 @@ namespace MaxOS{
 
         namespace widgets {
 
-            enum InputBoxEvents{
-                INPUTBOX_TEXT_CHANGED
+            enum class InputBoxEvents{
+                TEXT_CHANGED
             };
 
             /**

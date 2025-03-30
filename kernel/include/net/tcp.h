@@ -15,7 +15,7 @@ namespace MaxOS{
 
         typedef uint16_t TransmissionControlProtocolPort;
 
-        enum TransmissionControlProtocolSocketState
+        enum class TCPSocketState
         {
             CLOSED,
             LISTEN,
@@ -29,11 +29,11 @@ namespace MaxOS{
             CLOSING,
             TIME_WAIT,
 
-            CLOSE_WAIT
-            //LAST_ACK
+            CLOSE_WAIT,
+            LAST_ACK
         };
 
-        enum TransmissionControlProtocolFlag
+        enum class TCPFlag
         {
             FIN = 1,
             SYN = 2,
@@ -79,7 +79,7 @@ namespace MaxOS{
         class TransmissionControlProtocolSocket;
         class TransmissionControlProtocolHandler;
 
-        enum TransmissionControlProtocolPayloadHandlerEvents
+        enum class TransmissionControlProtocolPayloadHandlerEvents
         {
             CONNECTED,
             DISCONNECTED,
@@ -141,7 +141,7 @@ namespace MaxOS{
                 uint32_t acknowledgementNumber = 0;
 
                 TransmissionControlProtocolHandler* transmissionControlProtocolHandler;
-                TransmissionControlProtocolSocketState state;
+                TCPSocketState state;
             public:
                 explicit TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
                 ~TransmissionControlProtocolSocket();

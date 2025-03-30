@@ -19,7 +19,7 @@ namespace MaxOS {
 
         namespace clock {
 
-            enum ClockEvents{
+            enum class ClockEvents{
                 TIME
             };
 
@@ -51,31 +51,31 @@ namespace MaxOS {
             };
 
 
-            enum Channel {
-              CHANNEL_0 = 0,
-              CHANNEL_1 = 1,
-              CHANNEL_2 = 2,
+            enum class Channel {
+              INTERRUPT,
+              DRAM_REFRESH,
+              SPEAKER,
             };
 
-            enum AccessMode {
-              LATCH_COUNT = 0,
-              LOW_BYTE = 1,
-              HIGH_BYTE = 2,
-              LOW_HIGH_BYTE = 3,
+            enum class AccessMode {
+              LATCH_COUNT,
+              LOW_BYTE,
+              HIGH_BYTE,
+              LOW_HIGH_BYTE,
             };
 
-            enum OperatingMode {
-              MODE_0 = 0, // Interrupt on Terminal Count
-              MODE_1 = 1, // Hardware Re-triggerable One-Shot
-              MODE_2 = 2, // Rate Generator
-              MODE_3 = 3, // Square Wave Generator
-              MODE_4 = 4, // Software Triggered Strobe
-              MODE_5 = 5, // Hardware Triggered Strobe
+            enum class OperatingMode {
+              INTERRUPT_ON_TERMINAL_COUNT,
+              ONE_SHOT,
+              RATE_GENERATOR,
+              SQUARE_WAVE,
+              SOFTWARE_STROBE,
+              HARDWARE_STROBE,
             };
 
-            enum BCDMode {
-              BINARY = 0,
-              BCD = 1,
+            enum class BCDMode {
+              BINARY,
+              BCD,
             };
 
             typedef struct {

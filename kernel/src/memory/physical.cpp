@@ -56,10 +56,11 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   _kprintf("Mmap in use: 0x%x - 0x%x\n", m_mmap->addr, m_mmap->addr + m_mmap->len);
 
   // Kernel Memory (anonymous memory to the next page)
-  _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
   m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)&_kernel_physical_end + s_page_size, s_page_size);
   m_anonymous_memory_virtual_address  = (uint64_t)align_up_to_page((size_t)&_kernel_end + s_page_size, s_page_size);
+  _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
   _kprintf("Anonymous Memory: physical = 0x%x, virtual = 0x%x\n", m_anonymous_memory_physical_address, m_anonymous_memory_virtual_address);
+
 
   // Map the physical memory into the virtual memory
   uint64_t physical_address = 0;
@@ -81,24 +82,33 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   for (uint32_t i = 0; i < m_total_entries; ++i)
     m_bit_map[i] = 0;
 
-  // Reserve the area for the bitmap
-  _kprintf("Bitmap: location = 0x%x - 0x%x (range of 0x%x)\n", m_bit_map, m_bit_map + m_bitmap_size / 8, m_bitmap_size / 8);
-  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
+  // Reserve the kernel regions
+  reserve_kernel_regions(multiboot);
 
+  // Initialisation Done
+  m_initialized = true;
+
+}
+
+PhysicalMemoryManager::~PhysicalMemoryManager() = default;
+
+
+void PhysicalMemoryManager::reserve_kernel_regions(Multiboot *multiboot) {
+
+  // Reserve the area for the bitmap
+  _kprintf(" Bitmap: location: 0x%x - 0x%x (range of 0x%x)\n", m_bit_map, m_bit_map + m_bitmap_size / 8, m_bitmap_size / 8);
+  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
 
   // Calculate how much space the kernel takes up
   uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
-  if ((((uint32_t)(m_anonymous_memory_physical_address)) % s_page_size) != 0) {
-    // If the kernel takes up more then a whole page(s)
+  if ((((uint32_t)(m_anonymous_memory_physical_address)) % s_page_size) != 0)
     kernel_entries += 1;
-  }
 
-  // Reserve the kernel in the bitmap
-  _kprintf("Kernel: location = 0x%x - 0x%x (range of 0x%x)\n", 0, m_anonymous_memory_physical_address, kernel_entries * s_page_size);
+  _kprintf("Kernel: location: 0x%x - 0x%x (range of 0x%x)\n", 0, m_anonymous_memory_physical_address, kernel_entries * s_page_size);
   reserve(0, kernel_entries * s_page_size);
 
-
   // Reserve the area for the mmap
+  uint64_t mem_end = m_mmap->addr + m_mmap->len;
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
 
     // Check if the entry is to be mapped
@@ -126,12 +136,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
     // Reserve the address
     reserve(module->mod_start, module->mod_end - module->mod_start);
   }
-
-  // Initialisation Done
-  m_initialized = true;
 }
-
-PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 
 /**
  * @brief Converts a size to the number of frames

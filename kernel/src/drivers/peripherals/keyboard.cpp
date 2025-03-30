@@ -205,7 +205,7 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
         m_next_is_extended_code_0 = false;
 
         // Check if the scan_code represents a shift key and return (fake shift)
-        if ((KeyboardInterpreterEN_US::KeyCodeEN_US)scan_code == KeyboardInterpreterEN_US::leftShift || (KeyboardInterpreterEN_US::KeyCodeEN_US)scan_code == KeyboardInterpreterEN_US::rightShift)
+        if ((KeyboardInterpreterEN_US::KeyCodeEN_US)scan_code == KeyCodeEN_US::leftShift || (KeyboardInterpreterEN_US::KeyCodeEN_US)scan_code == KeyCodeEN_US::rightShift)
             return;
     }
 

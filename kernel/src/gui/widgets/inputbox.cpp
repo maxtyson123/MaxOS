@@ -19,7 +19,7 @@ InputBoxEventHandler::~InputBoxEventHandler() = default;
 
 Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents> *event) {
     switch (event->type) {
-        case INPUTBOX_TEXT_CHANGED:
+        case InputBoxEvents::TEXT_CHANGED:
             on_input_box_text_changed(((InputBoxTextChangedEvent *)event)->new_text);
             break;
     }
@@ -174,7 +174,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
         {
 
             // If the key is a printable character, add it to the text
-            if(31 < keyDownCode && keyDownCode < 127)
+            if(31 < (int)keyDownCode && (int)keyDownCode < 127)
             {
                 uint32_t length = cursor_position;
 
@@ -236,7 +236,7 @@ string InputBox::get_text() {
 /// ___ Events ___ ///
 
 InputBoxTextChangedEvent::InputBoxTextChangedEvent(const string& new_text)
-: Event(INPUTBOX_TEXT_CHANGED),
+: Event(InputBoxEvents::TEXT_CHANGED),
   new_text(new_text)
 {
 }

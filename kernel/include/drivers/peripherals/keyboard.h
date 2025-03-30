@@ -22,7 +22,7 @@ namespace MaxOS
 
         namespace peripherals{
 
-            enum KeyCode : uint16_t{
+            enum class KeyCode : uint16_t{
 
                 // Alphabet
                 A = 'A', a = 'a',
@@ -290,7 +290,7 @@ namespace MaxOS
 
                 public:
 
-                    enum KeyCodeEN_US {
+                    enum class KeyCodeEN_US {
                         // First Row
                         escape      = 0x01,
                         f1          = 0x3B,

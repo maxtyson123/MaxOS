@@ -100,15 +100,15 @@ bool Elf64::is_valid() {
       return false;
 
   // Check if the elf is 64 bit
-  if(get_header() -> identification[Class] != Class64)
+  if(get_header() -> identification[(int)ElfIdentification::Class] != (int)ElfClass::Bits64)
     return false;
 
   // Check if the elf is little endian
-  if(get_header() -> identification[Data] != LittleEndian)
+  if(get_header() -> identification[(int)ElfIdentification::Data] != (int)ElfData::LittleEndian)
     return false;
 
   // Check if the elf is version 1
-  if(get_header() -> identification[Version] != Current)
+  if(get_header() -> identification[(int)ElfIdentification::Version] != (int)ElfVersion::Current)
     return false;
 
   // Check if the elf is for the MaxOS platform
@@ -116,11 +116,11 @@ bool Elf64::is_valid() {
   //      return false; TODO: Would be nice to have an OSABI
 
   // Check if the elf is executable
-  if(get_header() -> type != Executable)
+  if(get_header() -> type != (int)ElfType::Executable)
     return false;
 
   // Check if the elf is for the x86_64 platform
-  if(get_header() -> machine != x86_64)
+  if(get_header() -> machine != (int)ElfMachine::x86_64)
     return false;
 
   // LGTM
@@ -140,7 +140,7 @@ void Elf64::load_program_headers() {
         elf_64_program_header_t* program_header = get_program_header(i);
 
         // Check if the program header is loadable
-        if(program_header -> type != Load)
+        if(program_header -> type != (int)ElfProgramType::Load)
           continue;
 
         // Type of the program header

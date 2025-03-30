@@ -20,7 +20,7 @@ namespace MaxOS
     namespace processes
     {
 
-        typedef enum ThreadState{
+        typedef enum class ThreadState{
             NEW,
             RUNNING,
             READY,

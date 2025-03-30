@@ -26,8 +26,8 @@ namespace MaxOS
 
         } __attribute__((packed));
 
-        enum UserDatagramProtocolEvents{
-            UDP_DATA_RECEIVED,
+        enum class UserDatagramProtocolEvents{
+            DATA_RECEIVED,
         };
 
         //Predefine

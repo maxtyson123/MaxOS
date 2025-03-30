@@ -13,10 +13,10 @@ namespace MaxOS{
     namespace filesystem{
 
 
-        enum SeekType{
-            SEEK_SET,
-            SEEK_CUR,
-            SEEK_END
+        enum class SeekType{
+            SET,
+            CUR,
+            END
         };
 
 

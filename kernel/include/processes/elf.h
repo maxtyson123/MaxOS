@@ -16,32 +16,32 @@ namespace MaxOS
   namespace processes {
 
       ///      ELF Header
-      enum ElfIdentification{
-          Magic0 = 0,
-          Magic1 = 1,
-          Magic2 = 2,
-          Magic3 = 3,
-          Class  = 4,
-          Data   = 5,
-          Version= 6,
-          OSABI  = 7,
-          ABIVersion = 8,
-          Padding = 9
+      enum class ElfIdentification{
+          Magic0,
+          Magic1,
+          Magic2,
+          Magic3,
+          Class,
+          Data,
+          Version,
+          OSABI,
+          ABIVersion,
+          Padding,
       };
 
-      enum ElfClass{
-          InvalidClass,
-          Class32,
-          Class64
+      enum class ElfClass{
+          Invalid = 0,
+          Bits32 = 1,
+          Bits64 = 2
       };
 
-      enum ElfData{
+      enum class ElfData{
           InvalidData,
           LittleEndian,
           BigEndian
       };
 
-      enum ElfType{
+      enum class ElfType{
           None,
           Relocatable,
           Executable,
@@ -51,7 +51,7 @@ namespace MaxOS
           ProcessorSpecificHigh = 0xFFF
       };
 
-      enum ElfMachine{
+      enum class ElfMachine{
           NoMachine,
           ATnTWe32100,
           SPARC,
@@ -66,7 +66,7 @@ namespace MaxOS
           RISC_V    = 0xF3
       };
 
-      enum ElfVersion{
+      enum class ElfVersion{
           Invalid,
           Current
       };
@@ -90,16 +90,16 @@ namespace MaxOS
 
       ///      Program Header
 
-      enum ElfProgramType{
+      enum class ElfProgramType{
           Null,
           Load,
           Dynamic,
           Interpreter,
-          ProgramNote,
-          ProgramSharedLibrary,
-          ProgramHeaderTable,
-          ProgramTableProcessorSpecificLow  = 0x70000000,
-          ProgramTableProcessorSpecificHigh = 0x7FFFFFFF
+          Note,
+          SharedLibrary,
+          HeaderTable,
+          TableProcessorSpecificLow  = 0x70000000,
+          TableProcessorSpecificHigh = 0x7FFFFFFF
       };
 
       enum ElfProgramFlags{
@@ -121,8 +121,8 @@ namespace MaxOS
 
       ///      Section Header
 
-      enum ElfSectionType{
-          NullSection,
+      enum class ElfSectionType{
+          Null,
           ProgramBits,
           SymbolTable,
           StringTable,

@@ -18,7 +18,7 @@ namespace MaxOS{
 
             typedef uint64_t MediaAccessControlAddress;
 
-            enum EthernetDriverEvents{
+            enum class EthernetDriverEvents{
                 BEFORE_SEND,
                 DATA_SENT,
                 DATA_RECEIVED
