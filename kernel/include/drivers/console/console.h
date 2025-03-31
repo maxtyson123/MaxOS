@@ -98,9 +98,11 @@ namespace MaxOS {
                   common::ConsoleColour m_background { common::ConsoleColour::Black };
                   bool is_ansi = false;
 
-              public:
                   uint16_t m_cursor_x { 0 };
                   uint16_t m_cursor_y { 0 };
+
+              public:
+
 
                   explicit ConsoleStream(Console*);
                   ~ConsoleStream();

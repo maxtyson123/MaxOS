@@ -278,7 +278,7 @@ uint32_t PIT::ticks_per_ms() {
   m_io_apic -> set_redirect(&redirect);
 
   // Configure the PIT clock
-  PITCommand command = {
+  pit_command_t command = {
       .bcd_mode       = (uint8_t)BCDMode::BINARY,
       .operating_mode = (uint8_t)OperatingMode::RATE_GENERATOR,
       .access_mode    = (uint8_t)AccessMode::LOW_HIGH_BYTE,

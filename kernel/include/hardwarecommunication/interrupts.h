@@ -83,9 +83,6 @@ namespace MaxOS {
 
                 static void InterruptIgnore();
 
-                // Error Codes
-                // TODO
-
                 //Various Interrupts
                 static void HandleInterruptRequest0x00();
                 static void HandleInterruptRequest0x01();

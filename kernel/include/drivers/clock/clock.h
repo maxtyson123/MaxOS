@@ -78,12 +78,12 @@ namespace MaxOS {
               BCD,
             };
 
-            typedef struct {
-              uint8_t bcd_mode        : 1; // Bit 0: BCD/Binary mode
-              uint8_t operating_mode  : 3; // Bits 1-3: Mode of operation
-              uint8_t access_mode     : 2; // Bits 4-5: Access mode
-              uint8_t channel         : 2; // Bits 6-7: Channel
-            } PITCommand;
+            typedef struct PITCommand{
+              uint8_t bcd_mode        : 1;
+              uint8_t operating_mode  : 3;
+              uint8_t access_mode     : 2;
+              uint8_t channel         : 2;
+            } pit_command_t;
 
 
             // Forward declaration

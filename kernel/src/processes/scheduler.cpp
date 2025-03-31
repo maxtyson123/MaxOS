@@ -103,6 +103,7 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
 
   // Save the current state
   current_thread->execution_state = cpu_state;
+  current_thread -> save_sse_state();
   if(current_thread->thread_state == ThreadState::RUNNING)
     current_thread->thread_state = ThreadState::WAITING;
 
@@ -152,6 +153,7 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
 
   // Prepare the next thread to run
   current_thread -> thread_state = ThreadState::RUNNING;
+  current_thread -> restore_sse_state();
 
   // Load the threads memory manager
   MemoryManager::switch_active_memory_manager(current_process->memory_manager);
@@ -328,6 +330,10 @@ Process *Scheduler::get_current_process() {
 
   Process* current_process = nullptr;
 
+  // Make sure there is a active scheduler
+  if(!s_instance)
+    return nullptr;
+
   // Find the process that has the thread being executed
   for (auto process : s_instance -> m_processes)
     if (process->get_pid() == get_current_thread() -> parent_pid) {
@@ -390,7 +396,7 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
     auto* module = (struct multiboot_tag_module*)tag;
 
     // Create the elf
-    auto* elf = new Elf64((uintptr_t)MemoryManager::to_dm_region((uintptr_t )module->mod_start));
+    auto* elf = new Elf64((uintptr_t)PhysicalMemoryManager::to_dm_region((uintptr_t )module->mod_start));
     if(!elf->is_valid())
       continue;
 

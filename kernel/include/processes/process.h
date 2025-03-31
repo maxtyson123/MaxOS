@@ -44,6 +44,8 @@ namespace MaxOS
               uintptr_t m_stack_pointer;
               uintptr_t m_tss_stack_pointer;
 
+              char m_sse_save_region[512] __attribute__((aligned(16)));
+
               static const uint64_t s_stack_size = 0x10000;
 
             public:
@@ -62,6 +64,9 @@ namespace MaxOS
               size_t wakeup_time;
 
               [[nodiscard]] uintptr_t get_tss_pointer() const { return m_tss_stack_pointer; }
+
+              void save_sse_state();
+              void restore_sse_state();
 
 
         };

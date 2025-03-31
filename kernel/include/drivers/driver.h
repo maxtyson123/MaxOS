@@ -77,6 +77,8 @@ namespace MaxOS
             private:
 
               common::Vector<DriverSelector*> m_driver_selectors;
+              common::Vector<Driver*> m_drivers;
+
               hardwarecommunication::InterruptManager* m_interrupt_manager;
 
             public:
@@ -96,7 +98,7 @@ namespace MaxOS
                 void deactivate_drivers();
                 void activate_drivers();
 
-                common::Vector<Driver*> drivers;
+
         };
     }
 }

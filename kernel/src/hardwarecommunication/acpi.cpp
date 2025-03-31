@@ -19,7 +19,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     // Get the RSDP & RSDT
     auto* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
     auto rsdt_address = (uint64_t) rsdp->rsdt_address;
-    m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)rsdt_address);
+    m_rsdt = (RSDT*) PhysicalMemoryManager::to_higher_region((uint64_t)rsdt_address);
 
     // Map the RSDT
     rsdt_address = PhysicalMemoryManager::align_direct_to_page((size_t)rsdt_address);
@@ -43,7 +43,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
         address = PhysicalMemoryManager::align_direct_to_page((size_t)address);
 
         // Map to the higher half
-        PhysicalMemoryManager::s_current_manager->map((physical_address_t*)address, (void*)MemoryManager::to_io_region(address), Present | Write);
+        PhysicalMemoryManager::s_current_manager->map((physical_address_t*)address, (void*)PhysicalMemoryManager::to_io_region(address), Present | Write);
 
         // Reserve the memory
         PhysicalMemoryManager::s_current_manager->reserve(address);
@@ -116,7 +116,7 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const *signatur
       auto* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
 
       // Move the header to the higher half
-      header = (ACPISDTHeader*) MemoryManager::to_io_region((uint64_t)header);
+      header = (ACPISDTHeader*)PhysicalMemoryManager::to_io_region((uint64_t)header);
 
       // Check if the signature matches
       if(strncmp(header->signature, signature, 4) != 0)

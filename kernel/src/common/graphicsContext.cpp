@@ -536,9 +536,6 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
             putPixel(x,y0,colour);
     }
 
-    // TODO: Slope once SSE is implemented
-    return;
-
     // If the line is not horizontal or vertical then it must be a diagonal line
     // Find the slope of the line
     float slope = ((float)(y1-y0))/(x1-x0);

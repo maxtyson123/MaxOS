@@ -131,7 +131,6 @@ void CPU::stack_trace(size_t level) {
     }
 }
 
-#include <processes/scheduler.h>
 #include <memory/memorymanagement.h>
 
 void CPU::PANIC(char const *message, cpu_status_t* status) {
@@ -149,7 +148,8 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
 
   // Info about the running process
   _kpanicf("Process: %s\n", process ? process->name.c_str() : "Kernel");
-  _kpanicf("After running for %d ticks (system uptime: %d ticks)\n", process -> get_total_ticks(), Scheduler::get_system_scheduler()->get_ticks());
+  if(process)
+    _kpanicf("After running for %d ticks (system uptime: %d ticks)\n", process -> get_total_ticks(), Scheduler::get_system_scheduler()->get_ticks());
 
   // Stack trace
   _kpanicf("----------------------------\n");
@@ -248,7 +248,13 @@ void CPU::init_tss() {
  */
 CPU::CPU() {
 
-  // TODO = Multicore support
+
+  // TODO: Multicore
+
+  // Setup cpu features
+  init_tss();
+  init_sse();
+
 
 }
 
@@ -265,17 +271,19 @@ CPU::~CPU() = default;
  */
 cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
-  // Get the current process
-  Process* process = Scheduler::get_current_process();
 
-  // If the faulting address is in lower half just kill the process and move on
-  if(status && !memory::MemoryManager::in_higher_region(status->rip)){
-    _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
-    return Scheduler::get_system_scheduler()->force_remove_process(process);
+  // If it may have occurred in a process, switch to the avoidable state
+  if(Scheduler::get_system_scheduler() != nullptr && Scheduler::get_current_process() != nullptr){
+
+    // Get the current process
+    Process* process = Scheduler::get_current_process();
+
+    // If the faulting address is in lower half just kill the process and move on
+    if(status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)){
+      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
+      return Scheduler::get_system_scheduler()->force_remove_process(process);
+    }
   }
-
-  // Don't get interrupted (can cause a loop)
-//  asm("cli");
 
   // We are panicking
   is_panicking = true;
@@ -284,5 +292,102 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
   _kpanicf("%h\n\n\n");
 
   return nullptr;
+
+}
+
+/**
+ * @brief Initialises the SSE instructions
+ */
+void CPU::init_sse() {
+
+  // Get the CR0 register
+  uint64_t cr0;
+  asm volatile("mov %%cr0, %0" : "=r" (cr0));
+
+  // Get the CR4 register
+  uint64_t cr4;
+  asm volatile("mov %%cr4, %0" : "=r" (cr4));
+
+
+  // Check if FPU is supported
+  ASSERT(check_cpu_feature(CPU_FEATURE_EDX::FPU), "FPU not supported - needed for SSE");
+
+  // Clear the emulation flag, task switch flags and enable the monitor coprocessor, native exception bits
+  cr0 |=  (1 << 1);
+  cr0 &= ~(1 << 2);
+  cr0 &= ~(1 << 3);
+  cr0 |=  (1 << 5);
+  asm volatile("mov %0, %%cr0" : : "r" (cr0));
+
+  // Enable the FPU
+  asm volatile("fninit");
+
+  // Check if SSE is supported
+  ASSERT(check_cpu_feature(CPU_FEATURE_EDX::SSE), "SSE not supported");
+
+  // Enable FSAVE, FSTORE and SSE instructions
+  cr4 |= (1 << 9);
+  cr4 |= (1 << 10);
+  asm volatile("mov %0, %%cr4" : : "r" (cr4));
+
+
+  // Check if XSAVE is supported
+  s_xsave = check_cpu_feature(CPU_FEATURE_ECX::XSAVE) && check_cpu_feature(CPU_FEATURE_ECX::OSXSAVE);
+  _kprintf("XSAVE: %s\n", s_xsave ? "Supported" : "Not Supported");
+  if(!s_xsave) return;
+
+  // Enable the XSAVE and XRESTORE instructions
+  cr4 |= (1 << 18);
+  asm volatile("mov %0, %%cr4" : : "r" (cr4));
+
+  // Set the SSE and x87 bits
+  uint64_t xcr0;
+  asm volatile("xgetbv" : "=a" (xcr0) : "c" (0));
+  xcr0 |= 0x7;
+  asm volatile("xsetbv" : : "c" (0), "a" (xcr0));
+
+  // Check if AVX is supported
+  s_avx = check_cpu_feature(CPU_FEATURE_ECX::AVX);
+  _kprintf("AVX: %s\n", s_avx ? "Supported" : "Not Supported");
+  if(!s_avx) return;
+
+  // Enable the AVX instructions
+  cr4 |= (1 << 14);
+  asm volatile("mov %0, %%cr4" : : "r" (cr4));
+
+  _kprintf("SSE Enabled\n");
+}
+
+/**
+ * @brief Checks if a CPU feature is supported (ECX Register)
+ *
+ * @param feature The feature to check
+ * @return If the feature is supported
+ */
+bool CPU::check_cpu_feature(CPU_FEATURE_ECX feature) {
+
+  // Get the CPUID
+  uint32_t eax, ebx, ecx, edx;
+  cpuid(0x1, &eax, &ebx, &ecx, &edx);
+
+  // Check the feature
+  return ecx & (uint32_t)feature;
+
+}
+
+/**
+ * @brief Checks if a CPU feature is supported (EDX Register)
+ *
+ * @param feature The feature to check
+ * @return True if the feature is supported
+ */
+bool CPU::check_cpu_feature(CPU_FEATURE_EDX feature) {
+
+    // Get the CPUID
+    uint32_t eax, ebx, ecx, edx;
+    cpuid(0x1, &eax, &ebx, &ecx, &edx);
+
+    // Check the feature
+    return edx & (uint32_t)feature;
 
 }

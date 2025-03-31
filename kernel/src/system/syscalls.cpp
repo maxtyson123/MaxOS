@@ -163,10 +163,10 @@ syscall_args_t* SyscallManager::syscall_create_shared_memory(syscall_args_t *arg
     return nullptr;
 
   // Create the memory block
-  ipc_shared_memory_t* new_block = Scheduler::get_ipc() ->alloc_shared_memory(size, name);
+  IPCSharedMemory* new_block = Scheduler::get_ipc() ->alloc_shared_memory(size, name);
 
   // Load the block
-  void* virtual_address = MemoryManager::s_current_memory_manager -> get_vmm() ->load_shared_memory(new_block -> physical_address, size);
+  void* virtual_address = MemoryManager::s_current_memory_manager -> get_vmm() ->load_shared_memory(new_block -> physical_address(), size);
 
   // Return to the user
   args -> return_value = (uint64_t)virtual_address;
@@ -190,10 +190,10 @@ syscall_args_t * SyscallManager::syscall_open_shared_memory(syscall_args_t *args
     return nullptr;
 
   // Get the block (don't care if null as that is caught in the load_shared_memory function)
-  ipc_shared_memory_t* block = Scheduler::get_ipc() -> get_shared_memory((char*)name);
+  IPCSharedMemory* block = Scheduler::get_ipc() -> get_shared_memory((char*)name);
 
   // Load the block
-  void* virtual_address = MemoryManager::s_current_memory_manager -> get_vmm() ->load_shared_memory(block -> physical_address, block -> size);
+  void* virtual_address = MemoryManager::s_current_memory_manager -> get_vmm() ->load_shared_memory(block -> physical_address(), block -> size());
 
   // Return to the user
   args -> return_value = (uint64_t)virtual_address;
@@ -254,10 +254,10 @@ system::syscall_args_t* SyscallManager::syscall_create_ipc_endpoint(system::sysc
     return nullptr;
 
   // Create the endpoint
-  ipc_message_endpoint_t* endpoint = Scheduler::get_ipc() -> create_message_endpoint(name);
+  IPCMessageEndpoint* endpoint = Scheduler::get_ipc() -> create_message_endpoint(name);
 
   // Return the endpoint
-  args -> return_value = (uint64_t)endpoint -> queue;
+  args -> return_value = (uint64_t)endpoint -> queue();
   return args;
 
 }
@@ -280,7 +280,7 @@ system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall
     return nullptr;
 
   // Send the message
-  Scheduler::get_ipc() -> send_message(endpoint, message, size);
+  Scheduler::get_ipc() ->get_message_endpoint(endpoint) -> queue_message(message, size);
 
   // All done
   return args;

@@ -202,9 +202,8 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *st
     case 0x0D:
           return general_protection_fault(status);
 
-
-      case 0x0E:
-        return page_fault(status);
+    case 0x0E:
+      return page_fault(status);
     }
 
   // If there is an interrupt manager handle interrupt

@@ -45,30 +45,19 @@ String::String(char const *string)
 
 String::String(int value) {
 
-  // The length of the string
-  m_length = 0;
-
-  // The value of the string
-  int temp = value;
-
-  // Get the length of the string
-  while (temp != 0) {
-    temp /= 10;
-    m_length++;
-  }
-
-  // Allocate memory for the string (and null terminator)
-  m_string = new char[m_length + 1];
-
-  // Copy the string
-  for (int i = m_length - 1; i >= 0; i--) {
-    m_string[i] = (value % 10) + '0';
-    value /= 10;
-  }
-
-  // Write the null terminator
-  m_string[m_length] = '\0';
 }
+
+
+String::String(uint64_t value) {
+
+}
+
+String::String(float value) {
+
+
+
+}
+
 
 String::String(String const &other) {
   // Copy the other string
@@ -458,6 +447,149 @@ String String::center(int width, char fill) const {
     // Return the centered string
     return centered;
 
+}
+
+/**
+ * @brief Gets the length of a string
+ *
+ * @param str The string to get the length of
+ * @return The length of the string
+ */
+int strlen(const char* str)
+{
+  int len = 0;
+  for (; str[len] != '\0'; len++);
+  return len;
+}
+
+/**
+ * @brief Converts integer to string
+ *
+ * @param base The base of the number (10 for decimal, 16 for hex)
+ * @param number The number to convert
+ * @param buffer The buffer to store the converted string
+ *
+ * @return The converted string
+ */
+char* itoa(int base, int64_t number)
+{
+
+  // If there is no buffer use a default buffer
+  static char buffer[50] = {0};
+
+  int i = 49;
+  bool isNegative = number < 0;
+
+  if (number == 0)
+  {
+    buffer[i] = '0';
+    return &buffer[i];
+  }
+
+
+  for (; number && i; --i, number /= base)
+    buffer[i] = "0123456789ABCDEF"[number % base];
+
+  if (isNegative)
+  {
+      buffer[i] = '-';
+      return &buffer[i];
+  }
+
+  return &buffer[i + 1];
+}
+
+/**
+ * @brief Converts hex to string
+ *
+ * @param number The number to convert
+ * @param buffer The buffer to store the converted string
+ * @return The converted string
+ */
+char* htoa(uint64_t number)
+{
+  // If there is no buffer use a default buffer
+  static char buffer[50] = {0};
+  int i = 49;
+
+  if (number == 0)
+  {
+    buffer[i] = '0';
+    return &buffer[i];
+  }
+
+  for (; number && i; --i, number /= 16)
+    buffer[i] = "0123456789ABCDEF"[number % 16];
+
+  return &buffer[i + 1];
+}
+
+/**
+ * @brief Converts a float to a string
+ *
+ * @param number The number to convert
+ * @param buffer The buffer to store the converted string
+ * @return The converted string
+ */
+char* ftoa(float number) {
+
+  static char buffer[50];
+  char* ptr = buffer;
+
+  // Handle negative numbers.
+  if (number < 0) {
+    *ptr++ = '-';
+    number = -number;
+  }
+
+  // Separate integer and fractional parts.
+  int64_t intPart = (int64_t)number;
+  float fraction = number - (float)intPart;
+
+  // Convert integer part to string using itoa.
+  char* intStr = itoa(10, intPart);
+  while (*intStr) {
+    *ptr++ = *intStr++;
+  }
+
+  // Add the decimal point.
+  *ptr++ = '.';
+
+  // Define the desired precision for the fractional part.
+  const int precision = 6;
+
+  // Multiply the fraction to shift the decimal digits into integer range.
+  float fracValue = fraction;
+  for (int i = 0; i < precision; i++) {
+    fracValue *= 10.0f;
+  }
+
+  // Optionally, round the value.
+  auto fracInt = (int64_t)(fracValue + 0.5f);
+
+  // Convert the fractional part to string.
+  char fracBuffer[50];
+  char* fracStr = itoa(10, fracInt);
+
+  // Ensure we have leading zeros if the fractional part doesn't produce enough digits.
+  // Calculate length of the converted fractional string.
+  int len = 0;
+  for (char* p = fracStr; *p; p++) {
+    len++;
+  }
+  for (int i = 0; i < precision - len; i++) {
+    *ptr++ = '0';
+  }
+
+  // Copy the fractional digits.
+  while (*fracStr) {
+    *ptr++ = *fracStr++;
+  }
+
+  // Null-terminate the string.
+  *ptr = '\0';
+
+  return buffer;
 }
 
 /**

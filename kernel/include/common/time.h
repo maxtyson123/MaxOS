@@ -15,7 +15,7 @@ namespace MaxOS{
          * @struct Time
          * @brief Stores the year, month, day, hour, minute and second of a time.
          */
-        struct Time{
+        typedef struct Time{
 
             uint16_t year;
             uint8_t month;
@@ -29,7 +29,7 @@ namespace MaxOS{
                 return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
             }
 
-        };
+        } time_t;
 
         static const char* Months[] = {
             "January",

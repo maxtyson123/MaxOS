@@ -46,12 +46,6 @@ namespace MaxOS{
               inline static MemoryManager* s_current_memory_manager = nullptr;
               inline static MemoryManager* s_kernel_memory_manager = nullptr;
 
-              static const uint64_t s_higher_half_kernel_offset {  0xFFFFFFFF80000000 };        //TODO: Move these constants to the pmm as the new structure means this isn't the core class and is instead just an abstract
-              static const uint64_t s_higher_half_mem_offset    {  0xFFFF800000000000 };
-              static const uint64_t s_higher_half_mem_reserved  {  0x280000000 };
-              static const uint64_t s_higher_half_offset        { s_higher_half_mem_offset + s_higher_half_mem_reserved};
-              static const uint64_t s_hh_direct_map_offset      { s_higher_half_offset + PhysicalMemoryManager::s_page_size };
-
               // Each chunk is aligned to 16 bytes
               static const size_t s_chunk_alignment =  0x10;
 
@@ -77,14 +71,6 @@ namespace MaxOS{
               int memory_used();
               static size_t align(size_t size);
               static void switch_active_memory_manager(MemoryManager* manager);
-
-              // Higher Half Memory Management
-              static void* to_higher_region(uintptr_t physical_address);
-              static void* to_lower_region(uintptr_t virtual_address);
-              static void* to_io_region(uintptr_t physical_address);
-              static void* to_dm_region(uintptr_t physical_address);
-              static void* from_dm_region(uintptr_t physical_address);
-              static bool in_higher_region(uintptr_t virtual_address);
         };
     }
 }

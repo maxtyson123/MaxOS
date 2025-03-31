@@ -9,6 +9,7 @@
 #include <system/cpu.h>
 #include <stdarg.h>
 #include <common/spinlock.h>
+#include <common/string.h>
 
 
 #define _kprintf(format, ...) \

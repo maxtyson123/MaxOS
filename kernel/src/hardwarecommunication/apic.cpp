@@ -39,7 +39,7 @@ void LocalAPIC::init() {
     _kprintf("CPU supports xAPIC\n");
 
     // Map the APIC base address to the higher half
-    m_apic_base_high = (uint64_t)MemoryManager::to_io_region(m_apic_base);
+    m_apic_base_high = (uint64_t)PhysicalMemoryManager::to_io_region(m_apic_base);
     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_apic_base, (virtual_address_t*)m_apic_base_high, Write | Present);
     _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
 
@@ -124,13 +124,13 @@ void IOAPIC::init() {
   MADT_Item* io_apic_item = get_madt_item(1, 0);
 
   // Get the IO APIC
-  auto* io_apic = (MADT_IOAPIC*)MemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
+  auto* io_apic = (MADT_IOAPIC*)PhysicalMemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)io_apic_item, (virtual_address_t*)(io_apic - sizeof(MADT_Item)), Present | Write);
 
 
   // Map the IO APIC address to the higher half
   m_address = io_apic->io_apic_address;
-  m_address_high = (uint64_t)MemoryManager::to_io_region(m_address);
+  m_address_high = (uint64_t)PhysicalMemoryManager::to_io_region(m_address);
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
   _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
 

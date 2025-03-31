@@ -87,7 +87,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     InterruptManager interrupts;
     _kprintf("-= IDT set up =-\n");
 
-    uint32_t mbi_size = *(uint32_t *) (addr + MemoryManager::s_higher_half_kernel_offset);
+    uint32_t mbi_size = *(uint32_t *) (addr + PhysicalMemoryManager::s_higher_half_kernel_offset);
     PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, (uint64_t*)p4_table);
     _kprintf("-= Physical Memory Manager set up =-\n");
 
@@ -169,7 +169,6 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     // CPU
     CPU cpu;
-    cpu.init_tss();
     log("Set Up CPU");
 
     // Clock
@@ -232,9 +231,9 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
 
     // TODO:
-    //       - all enums use enum class, update notes, public variables check up, includes fix up, old code review, types, const referencing, classes
-    //       - PCI to drivers page in osdev book, ubsan section maybe
-    //       - Look at the event handler system again?
+    //       -   TODOs, classes for PMM, VMM, style,
+    //       -   Rewrite boot text again to have progress bar
+
 
 
     /// Boot Done ///

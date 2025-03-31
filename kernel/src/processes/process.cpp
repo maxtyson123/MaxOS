@@ -88,6 +88,34 @@ cpu_status_t* Thread::sleep(size_t milliseconds) {
 }
 
 /**
+ * @brief Saves the SSE, x87 FPU, and MMX states from memory to the thread
+ */
+void Thread::save_sse_state() {
+
+  // Ensure the state saving is enabled
+  if(!CPU::s_xsave)
+    return;
+
+  // Save the state
+  asm volatile("fxsave %0" : "=m" (m_sse_save_region));
+
+}
+
+/**
+ * @brief Restores the SSE, x87 FPU, and MMX states from the thread to memory
+ */
+void Thread::restore_sse_state() {
+
+  // Ensure the state saving is enabled
+  if(!CPU::s_xsave)
+    return;
+
+  // Restore the state
+  asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
+
+}
+
+/**
  * @brief Constructor for the Process class (from a function)
  *
  * @param name The name of the process

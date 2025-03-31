@@ -39,8 +39,8 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   // Store the information about the bitmap
   m_memory_size = (m_multiboot->get_basic_meminfo()->mem_upper + 1024) * 1024;
   m_bitmap_size = m_memory_size / s_page_size + 1;
-  m_total_entries = m_bitmap_size / ROW_BITS + 1;
-  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", ((m_memory_size / 1000) * 1024) / 1024 / 1024, m_bitmap_size, m_total_entries, s_page_size);
+  m_total_entries = m_bitmap_size / s_row_bits + 1;
+  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", m_memory_size / 1024 / 1024, m_bitmap_size, m_total_entries, s_page_size);
 
   // Get the mmap that stores the memory to use
   m_mmap_tag = m_multiboot->get_mmap();
@@ -64,7 +64,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
 
   // Map the physical memory into the virtual memory
   uint64_t physical_address = 0;
-  uint64_t virtual_address = MemoryManager::s_hh_direct_map_offset;
+  uint64_t virtual_address = s_hh_direct_map_offset;
   uint64_t mem_end = m_mmap->addr + m_mmap->len;
 
   while (physical_address < mem_end) {
@@ -72,7 +72,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
     physical_address += s_page_size;
     virtual_address += s_page_size;
   }
-  _kprintf("Mapped: physical = 0x%x-0x%x, virtual = 0x%x-0x%x\n", 0, physical_address, MemoryManager::s_hh_direct_map_offset, virtual_address); // TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem
+  _kprintf("Mapped: physical = 0x%x-0x%x, virtual = 0x%x-0x%x\n", 0, physical_address, s_hh_direct_map_offset, virtual_address); // TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem
 
   // Calculate the bitmap address
   m_anonymous_memory_physical_address += s_page_size;
@@ -97,7 +97,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot *multiboot) {
 
   // Reserve the area for the bitmap
   _kprintf(" Bitmap: location: 0x%x - 0x%x (range of 0x%x)\n", m_bit_map, m_bit_map + m_bitmap_size / 8, m_bitmap_size / 8);
-  reserve((uint64_t)MemoryManager::from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
+  reserve((uint64_t)from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
 
   // Calculate how much space the kernel takes up
   uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
@@ -220,11 +220,7 @@ void* PhysicalMemoryManager::allocate_frame() {
     if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
       continue;
 
-    for (uint32_t column = 0; column < ROW_BITS; ++column) {
-
-      // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
-      if (column >= ROW_BITS)
-        break;
+    for (uint32_t column = 0; column < s_row_bits; ++column) {
 
       // Check if the bitmap is free
       if (m_bit_map[row] & (1ULL << column))
@@ -236,7 +232,7 @@ void* PhysicalMemoryManager::allocate_frame() {
       m_used_frames++;
 
       // Return the address
-      uint64_t frame_address = (row * ROW_BITS) + column;
+      uint64_t frame_address = (row * s_row_bits) + column;
       frame_address *= s_page_size;
 
 
@@ -270,7 +266,7 @@ void PhysicalMemoryManager::free_frame(void *address) {
 
     // Set the bit to 0
     uint64_t frame_address = (uint64_t)address / s_page_size;
-    m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
+    m_bit_map[frame_address / s_row_bits] &= ~(1 << (frame_address % s_row_bits));
 
     // Clear the lock
     m_lock.unlock();
@@ -303,10 +299,10 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
     if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
       continue;
 
-    for (uint32_t column = 0; column < ROW_BITS; ++column) {
+    for (uint32_t column = 0; column < s_row_bits; ++column) {
 
       // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
-      if (column >= ROW_BITS)
+      if (column >= s_row_bits)
         break;
 
       // If this bit is not free, reset the adjacent frames
@@ -332,11 +328,11 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
         for (uint32_t i = 0; i < frame_count; ++i) {
 
           // Get the location of the bit
-          uint32_t index = start_row + (start_column + i) / ROW_BITS;
-          uint32_t bit = (start_column + i) % ROW_BITS;
+          uint32_t index = start_row + (start_column + i) / s_row_bits;
+          uint32_t bit = (start_column + i) % s_row_bits;
 
           // Skip if index exceeds bounds
-          if (index >= m_total_entries || bit >= ROW_BITS) {
+          if (index >= m_total_entries || bit >= s_row_bits) {
             ASSERT(false, "Index out of bounds\n");
           }
 
@@ -347,7 +343,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
         m_lock.unlock();
 
         // Return the address
-        return (void*)(start_address + (start_row * ROW_BITS + start_column) * s_page_size);
+        return (void*)(start_address + (start_row * s_row_bits + start_column) * s_page_size);
       }
     }
   }
@@ -380,7 +376,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
     // Mark the frames as not used
     m_used_frames -= frame_count;
     for (uint32_t i = 0; i < frame_count; ++i)
-      m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
+      m_bit_map[(frame_address + i) / s_row_bits] &= ~(1 << ((frame_address + i) % s_row_bits));
 
 
     // Clear the lock
@@ -429,14 +425,14 @@ uint64_t* PhysicalMemoryManager::get_or_create_table(uint64_t *table, size_t ind
 
   // If the table is already created return it
   if(table[index] & 0b1)
-      return (uint64_t *) MemoryManager::to_dm_region((uintptr_t) table[index] & mask);
+      return (uint64_t *) to_dm_region((uintptr_t) table[index] & mask);
 
   // Need to create the table
   auto* new_table = (uint64_t*)allocate_frame();
   table[index] = (uint64_t) new_table | flags;
 
   // Move the table to the higher half
-  new_table = (uint64_t*)MemoryManager::to_dm_region((uintptr_t) new_table);
+  new_table = (uint64_t*)to_dm_region((uintptr_t) new_table);
 
   // Clear the table
   clean_page_table(new_table);
@@ -479,7 +475,7 @@ uint64_t *PhysicalMemoryManager::get_table_if_exists(const uint64_t *table, size
 
   // Check if the table is present
   if(table[index] & 0b1)
-      return (uint64_t *) MemoryManager::to_dm_region((uintptr_t) table[index] & mask);
+      return (uint64_t *) to_dm_region((uintptr_t) table[index] & mask);
 
   // Not found
   return nullptr;
@@ -551,7 +547,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
     uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
 
     // If it is in a lower region then assume it is the user space
-    uint8_t is_user = !(MemoryManager::in_higher_region((uint64_t)virtual_address));
+    uint8_t is_user = !(in_higher_region((uint64_t)virtual_address));
     if(is_user) {
       // Change the flags to user
       flags |= User;
@@ -840,7 +836,7 @@ uint64_t *PhysicalMemoryManager::get_bitmap_address() {
         ASSERT(space >= (m_bitmap_size / 8 + 1), "Not enough space for the bitmap\n");
 
         // Return the address
-        return (uint64_t*)MemoryManager::to_dm_region(entry -> addr + offset);
+        return (uint64_t*)to_dm_region(entry -> addr + offset);
     }
 
   // Error no space for the bitmap
@@ -901,7 +897,7 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
   address = align_direct_to_page(address);
 
   // Set the bit to 1 in the bitmap
-  m_bit_map[address / ROW_BITS] |= (1 << (address % ROW_BITS));
+  m_bit_map[address / s_row_bits] |= (1 << (address % s_row_bits));
 
 
   _kprintf("Reserved Address: 0x%x\n", address);
@@ -932,7 +928,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
   uint64_t frame_index = address / s_page_size;
 
   for (size_t i = 0; i < page_count; ++i) {
-    m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
+    m_bit_map[(frame_index + i) / s_row_bits] |= (1ULL << ((frame_index + i) % s_row_bits));
   }
 
   // Update the used frames
@@ -988,4 +984,95 @@ bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virt
 
   return get_physical_address((virtual_address_t*)virtual_address, pml4_root) == (physical_address_t*)physical_address;
 
+}
+
+/**
+ * @brief Converts a physical address to a higher region address if it is in the lower region using the higher half kernel offset
+ *
+ * @param physical_address The physical address
+ * @return The higher region address
+ */
+void* PhysicalMemoryManager::to_higher_region(uintptr_t physical_address) {
+
+  // If it's in the lower half then add the offset
+  if(physical_address < s_higher_half_kernel_offset)
+    return (void*)(physical_address + s_higher_half_kernel_offset);
+
+  // Must be in the higher half
+  return (void*)physical_address;
+
+}
+
+/**
+ * @brief Converts a virtual address to a lower region address if it is in the higher region using the higher half kernel offset
+ *
+ * @param virtual_address The virtual address
+ * @return The lower region address
+ */
+void* PhysicalMemoryManager::to_lower_region(uintptr_t virtual_address) {
+  // If it's in the lower half then add the offset
+  if(virtual_address > s_higher_half_kernel_offset)
+    return (void*)(virtual_address - s_higher_half_kernel_offset);
+
+  // Must be in the lower half
+  return (void*)virtual_address;
+}
+
+/**
+ * @brief Converts a physical address to an IO region address if it is in the lower region using the higher half memory offset
+ *
+ * @param physical_address The physical address
+ * @return The IO region address
+ */
+void* PhysicalMemoryManager::to_io_region(uintptr_t physical_address) {
+
+  if(physical_address < s_higher_half_mem_offset)
+    return (void*)(physical_address + s_higher_half_mem_offset);
+
+  // Must be in the higher half
+  return (void*)physical_address;
+
+}
+
+/**
+ * @brief Converts a physical address to a direct map region address if it is in the lower region using the higher half direct map offset
+ *
+ * @param physical_address The physical address
+ * @return The direct map region address
+ */
+void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
+
+  if(physical_address < s_higher_half_offset)
+    return (void*)(physical_address + s_hh_direct_map_offset);
+
+  // Must be in the higher half
+  return (void*)physical_address;
+
+}
+
+/**
+ * @brief Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset
+ *
+ * @param physical_address The physical address in the direct map region
+ * @return The physical address
+ */
+void* PhysicalMemoryManager::from_dm_region(uintptr_t physical_address) {
+
+  if(physical_address > s_hh_direct_map_offset)
+    return (void*)(physical_address - s_hh_direct_map_offset);
+
+  // Must be in the lower half
+  return (void*)physical_address;
+
+}
+
+
+/**
+ * @brief Checks if a virtual address is in the higher region
+ *
+ * @param virtual_address The virtual address
+ * @return True if the address is in the higher region, false otherwise
+ */
+bool PhysicalMemoryManager::in_higher_region(uintptr_t virtual_address) {
+  return virtual_address & (1l << 62);
 }

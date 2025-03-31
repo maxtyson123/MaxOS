@@ -62,6 +62,8 @@ namespace MaxOS {
         pte_t entries[512];
       } __attribute__((packed)) pml_t;
 
+      //TODO: Global paging so dont have map in every process
+
       /**
        * @class PhysicalMemoryManager
        * @brief Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses
@@ -69,7 +71,6 @@ namespace MaxOS {
       class PhysicalMemoryManager{
 
         private:
-          const uint8_t ROW_BITS = { 64 };
 
           uint64_t* m_bit_map;
           uint32_t m_total_entries;
@@ -108,8 +109,16 @@ namespace MaxOS {
           ~PhysicalMemoryManager();
 
 
+          static const uint32_t s_page_size =  0x1000;
+          static const uint8_t s_row_bits =  64;
+
+          static const uint64_t s_higher_half_kernel_offset =  0xFFFFFFFF80000000;
+          static const uint64_t s_higher_half_mem_offset    =  0xFFFF800000000000;
+          static const uint64_t s_higher_half_mem_reserved  =  0x280000000;
+          static const uint64_t s_higher_half_offset        = s_higher_half_mem_offset + s_higher_half_mem_reserved;
+          static const uint64_t s_hh_direct_map_offset      = s_higher_half_offset + s_page_size;
+
           // Vars
-          static const uint32_t s_page_size = { 0x1000 };    // 4096 bytes  //TODO: combination of large and small pages
           uint64_t get_memory_size() const;
           uint64_t get_memory_used() const;
 
@@ -152,6 +161,14 @@ namespace MaxOS {
 
           physical_address_t* get_physical_address(virtual_address_t* virtual_address,  uint64_t *pml4_root);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t *pml4_root);
+
+          // Higher Half Memory Management
+          static void* to_higher_region(uintptr_t physical_address);
+          static void* to_lower_region(uintptr_t virtual_address);
+          static void* to_io_region(uintptr_t physical_address);
+          static void* to_dm_region(uintptr_t physical_address);
+          static void* from_dm_region(uintptr_t physical_address);
+          static bool in_higher_region(uintptr_t virtual_address);
       };
   }
 

@@ -9,51 +9,7 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
-/**
- * @brief Converts integer to string (does not handle negative numbers currently as int64_t wont hold higher half addresses which are deemed to be more important
- *
- * @param buffer The buffer to store the converted string
- * @param base The base of the number (10 for decimal, 16 for hex)
- * @param number The number to convert
- */
-char* itoa(int base, uint64_t  number)
-{
-    static char buffer[50] = {0};
-    int i = 49;
-    bool isNegative = false;
 
-    if (number == 0)
-    {
-        buffer[i] = '0';
-        return &buffer[i];
-    }
-
-    //TODO: Handle negatives but then using an int64_t means we cant print higher half addresses in hex
-
-    for (; number && i; --i, number /= base)
-        buffer[i] = "0123456789ABCDEF"[number % base];
-
-//    if (isNegative)
-//    {
-//        buffer[i] = '-';
-//        return &buffer[i];
-//    }
-
-    return &buffer[i + 1];
-}
-
-/**
- * @brief Gets the length of a string
- *
- * @param str The string to get the length of
- * @return The length of the string
- */
-int strlen(const char* str)
-{
-   int len = 0;
-   for (; str[len] != '\0'; len++);
-   return len;
-}
 
 #include <drivers/console/console.h>
 using namespace MaxOS::drivers::console;
@@ -160,10 +116,13 @@ Spinlock kprintf_lock;
  * @brief Prints a formatted string to the serial output (blocks until the other threads have finished printing their full message)
  *
  * ARGUMENTS:
+ *  - %f for float
  *  - %d for decimal
  *  - %x for hex
  *  - %u for unsigned decimal
  *  - %s for string
+ *  - %h for no header
+ *
  *
  * @param format The formatted string
  * @param ... The data to pass into the string
@@ -211,8 +170,8 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
       case 'x':
       {
         // Print a hex
-        uint64_t  number = va_arg (parameters, uint64_t );
-        char* str = itoa(16, number);
+        int  number = va_arg (parameters, int );
+        char* str = htoa(number);
         for (int i = 0; i < strlen(str); i++)
           putchar(str[i], type == 2);
         break;
@@ -221,6 +180,15 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
       {
         // Print a string
         char* str = va_arg (parameters, char*);
+        for (int i = 0; i < strlen(str); i++)
+          putchar(str[i], type == 2);
+        break;
+      }
+      case 'f':
+      {
+        // Print a float
+        float number = va_arg (parameters, double );
+        char* str = ftoa(number);
         for (int i = 0; i < strlen(str); i++)
           putchar(str[i], type == 2);
         break;

@@ -26,6 +26,8 @@ namespace MaxOS {
           String(char const* string);
           String(String const &other);
           explicit String(int value);
+          explicit String(uint64_t value);
+          explicit String(float value);
           ~String();
 
           void copy(String const &other);
@@ -36,7 +38,7 @@ namespace MaxOS {
 
           [[nodiscard]] String center(int width, char fill = ' ') const;
 
-          // Operators (as functions, todo do the rest)
+          // Operator functions
           [[nodiscard]] bool equals(String const &other) const;
 
           // Operators
@@ -62,6 +64,12 @@ namespace MaxOS {
 
     typedef String              string;
 }
+
+// Convert functions
+int strlen(const char* str);
+char* itoa(int base, int64_t  number);
+char* htoa(uint64_t number);
+char* ftoa(float number);
 
 // Compare functions
 bool strcmp(char const *str1, char const *str2);

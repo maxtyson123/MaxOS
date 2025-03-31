@@ -156,8 +156,8 @@ DriverManager::DriverManager(hardwarecommunication::InterruptManager* interruptM
 DriverManager::~DriverManager() {
 
     // Remove any drivers that are still attached
-    while (!drivers.empty())
-       remove_driver(*drivers.begin());
+    while (!m_drivers.empty())
+       remove_driver(*m_drivers.begin());
 
 }
 
@@ -167,7 +167,7 @@ DriverManager::~DriverManager() {
  * @param driver The driver to add
  */
 void DriverManager::add_driver(Driver* driver){
-  drivers.push_back(driver);
+  m_drivers.push_back(driver);
 }
 
 /**
@@ -181,7 +181,7 @@ void DriverManager::remove_driver(Driver* driver) {
     driver -> deactivate();
 
     // Remove the driver
-    drivers.erase(driver);
+    m_drivers.erase(driver);
 
 }
 
@@ -230,7 +230,7 @@ void DriverManager::find_drivers() {
 uint32_t DriverManager::reset_devices() {
 
   uint32_t resetWaitTime = 0;
-  for(auto & driver : drivers)
+  for(auto & driver : m_drivers)
   {
     // Reset the driver
     uint32_t waitTime = driver->reset();
@@ -249,7 +249,7 @@ uint32_t DriverManager::reset_devices() {
 void DriverManager::initialise_drivers() {
 
   // Initialise the drivers
-  for(auto & driver : drivers)
+  for(auto & driver : m_drivers)
       driver->initialise();
 
 }
@@ -260,7 +260,7 @@ void DriverManager::initialise_drivers() {
 void DriverManager::deactivate_drivers() {
 
   // Deactivate the drivers
-  for(auto & driver : drivers)
+  for(auto & driver : m_drivers)
     driver->deactivate();
 
 }
@@ -271,7 +271,7 @@ void DriverManager::deactivate_drivers() {
 void DriverManager::activate_drivers() {
 
   // Activate the drivers
-  for(auto & driver : drivers)
+  for(auto & driver : m_drivers)
       driver->activate();
 
 }

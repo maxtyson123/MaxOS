@@ -19,7 +19,7 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
 
       // Get a new pml4 table
       m_pml4_root_physical_address = (uint64_t*)PhysicalMemoryManager::s_current_manager->allocate_frame();
-      m_pml4_root_address = (uint64_t*)MemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
+      m_pml4_root_address = (uint64_t*)PhysicalMemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
 
       // Clear the table
       PhysicalMemoryManager::s_current_manager -> clean_page_table(m_pml4_root_address);
@@ -43,14 +43,14 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
 
     }else{
       m_pml4_root_address = PhysicalMemoryManager::s_current_manager->get_pml4_root_address();
-      m_pml4_root_physical_address = (uint64_t*)MemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
+      m_pml4_root_physical_address = (uint64_t*)PhysicalMemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     }
 
     // Log the VMM's PML4 address
     _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
 
     // Space to store VMM chunks
-    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(MemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
+    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
     m_first_region = (virtual_memory_region_t*)vmm_space;
     m_current_region = m_first_region;
 
@@ -411,11 +411,11 @@ uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
 void *VirtualMemoryManager::load_shared_memory(const string& name) {
 
   // Get the shared memory block
-  ipc_shared_memory_t* block = Scheduler::get_ipc()->get_shared_memory(name);
+  IPCSharedMemory* block = Scheduler::get_ipc()->get_shared_memory(name);
 
   // Load the shared memory
   if(block != nullptr)
-    return load_shared_memory(block->physical_address, block->size);
+    return load_shared_memory(block -> physical_address(), block -> size());
 
   return nullptr;
 }
