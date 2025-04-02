@@ -166,14 +166,34 @@ const char* String::c_str() const {
 /**
  * @brief Returns the length of the string
  *
- * @param count_ansi Whether to count the ansi characters (TODO: Implement - might be bad for performance)
+ * @param count_ansi Whether to count the ansi characters (default true)
  * @return The length of the string
  */
-int String::length(bool ) const {
+int String::length(bool count_ansi) const {
 
-    // Return the length of the string
-    return m_length;
+    // If ansi characters are not to be counted
+    if (count_ansi)
+      return m_length;
 
+
+    // Calculate the length of the string without ansi characters
+    int total_length = 0;
+    int clean_length = 0;
+    while (m_string[total_length] != '\0'){
+
+      // If the character is an ansi character, skip it
+      if (m_string[total_length] == '\033'){
+          while (m_string[total_length] != 'm')
+            total_length++;
+      }
+
+      // Increment the length
+      clean_length++;
+      total_length++;
+    }
+
+    // Return the length
+    return clean_length;
 }
 
 /**

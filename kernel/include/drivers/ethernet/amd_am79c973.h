@@ -86,7 +86,7 @@ namespace MaxOS{
                 void FetchDataSent();                            //Fetches the data from the buffer
 
             public:
-                AMD_AM79C973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* amdNetMessageStream = nullptr);
+                AMD_AM79C973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, common::OutputStream* amdNetMessageStream = nullptr);
                 ~AMD_AM79C973();
 
                 //Override driver default methods

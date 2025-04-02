@@ -153,7 +153,7 @@ bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bu
  * @param interrupt_manager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interrupt_manager)
+void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler)
 {
     for (int bus = 0; bus < 8; ++bus) {
         for (int device = 0; device < 32; ++device) {
@@ -179,7 +179,7 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 _kprintf("DEVICE FOUND: %s - ", deviceDescriptor.get_type().c_str());
 
                 // Select the driver and print information about the device
-                Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
+                Driver* driver = get_driver(deviceDescriptor);
                 if(driver != nullptr){
                   handler->on_driver_selected(driver);
                   _kprintf("%h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
@@ -229,7 +229,7 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  * @param interrupt_manager Interrupt manager
  * @return Driver for the device, null pointer if there is no driver
  */
-Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager*interrupt_manager) {
+Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev) {
 
     switch (dev.vendor_id)
     {
@@ -239,7 +239,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x2000:
                 {
-                    return new AMD_AM79C973(&dev, interrupt_manager);
+                    return new AMD_AM79C973(&dev);
 
                 }
                 default:
@@ -253,7 +253,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    return new intel_i217(&dev, interrupt_manager);
+                    return new intel_i217(&dev);
                 }
                 default:
                     break;

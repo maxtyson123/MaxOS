@@ -149,14 +149,16 @@ namespace MaxOS {
                     // Other functions
                     void handle_interrupt() final;
                     uint8_t read_hardware_clock(uint8_t address);
-                    uint8_t binary_representation(uint8_t number) const;
+                    [[nodiscard]] uint8_t binary_representation(uint8_t number) const;
 
                 public:
-                    Clock(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
+                    Clock(hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
                     ~Clock();
 
+                    inline static uint64_t s_clock_accuracy = 1;
+
                     void activate() override;
-                    void delay(uint32_t milliseconds);
+                    void delay(uint32_t milliseconds) const;
 
                     void calibrate(uint64_t ms_per_tick = 1);
                     common::Time get_time();

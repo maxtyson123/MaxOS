@@ -13,23 +13,53 @@ using namespace MaxOS::system;
 
 ///__Handler__
 
-InterruptHandler::InterruptHandler(uint8_t interrupt_number, InterruptManager* interrupt_manager)   //TODO: Make static so that it can be called without an instance
-: m_interrupt_number(interrupt_number),
-  m_interrupt_manager(interrupt_manager)
+InterruptHandler::InterruptHandler(uint8_t interrupt_number, int64_t redirect, uint64_t redirect_index)
+: m_interrupt_number(interrupt_number)
 {
+
+    // Get the interrupt manager
+    InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
+
+    // If there is no interrupt manager, nothing can be done
+    ASSERT(interrupt_manager != nullptr, "No active interrupt manager");
+
     // Set the handler in the array
-    m_interrupt_manager->set_interrupt_handler(interrupt_number, this);
+    interrupt_manager -> set_interrupt_handler(m_interrupt_number, this);
+
+    // If there is a redirect, set it
+    if(redirect == -1) return;
+
+    // Get the IO-APIC
+    IOAPIC* io_apic = interrupt_manager -> get_apic() -> get_io_apic();
+
+    // Register the driver
+    interrupt_redirect_t mouseRedirect = {
+        .type = (uint8_t)redirect,
+        .index = (uint8_t)redirect_index,
+        .interrupt = m_interrupt_number,
+        .destination = 0x00,
+        .flags = 0x00,
+        .mask = false,
+    };
+    io_apic -> set_redirect(&mouseRedirect);
 }
+
 
 InterruptHandler::~InterruptHandler(){
 
-    // Unset the handler in the array
-    if(this->m_interrupt_manager != nullptr)
-      this->m_interrupt_manager->remove_interrupt_handler(m_interrupt_number);
+  // Get the interrupt manager
+  InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
 
+  // If there is no interrupt manager, no need to remove the handler
+  if(interrupt_manager == nullptr) return;
+
+  // Remove the handler
+  interrupt_manager -> set_interrupt_handler(m_interrupt_number, nullptr);
 }
 
-
+/**
+ * @brief Handles an interrupt
+ */
 void InterruptHandler::handle_interrupt() {
 
 }
@@ -48,13 +78,13 @@ system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t *s
   return status;
 
 }
+I
 
 ///__Manger__
 
 
 
 InterruptManager::InterruptManager()
-: m_local_apic(nullptr)
 {
 
      // Full the table of interrupts with 0
@@ -255,14 +285,14 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
   // Send the EOI to the APIC
   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
-    m_local_apic->send_eoi();
+    m_apic->get_local_apic()->send_eoi();
 
   // Return the status
   return new_status;
 }
 
-void InterruptManager::set_apic(LocalAPIC *apic) {
-    m_local_apic = apic;
+void InterruptManager::set_apic(AdvancedProgrammableInterruptController *apic) {
+  m_apic = apic;
 }
 
 cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
@@ -303,4 +333,22 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t *s
 
     // Probably should never get here
     return status;
+}
+
+/**
+ * @brief Gets the APIC
+ *
+ * @return The APIC
+ */
+AdvancedProgrammableInterruptController* InterruptManager::get_apic() {
+        return m_apic;
+}
+
+/**
+ * @brief Gets the active interrupt manager
+ *
+ * @return The active interrupt manager
+ */
+InterruptManager *InterruptManager::get_active_interrupt_manager() {
+  return s_active_interrupt_manager;
 }

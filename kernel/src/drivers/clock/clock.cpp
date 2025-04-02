@@ -54,9 +54,9 @@ Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
  * @param interrupt_manager The interrupt manager
  * @param time_between_events The time between events in 10ths of a second
  */
-Clock::Clock(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
+Clock::Clock(AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
 : Driver(),
-  InterruptHandler(0x20, interrupt_manager),
+  InterruptHandler(0x20),
   m_apic(apic),
   m_ticks_between_events(time_between_events)
 {
@@ -136,17 +136,20 @@ void Clock::activate() {
 
 
 /**
- * @brief Delays the program for a specified number of milliseconds (rounded to the nearest 100)
+ * @brief Delays the program for a specified number of milliseconds
+ * (rounded up to the nearest degree of accuracy - ensured the delay is at least the specified number of milliseconds).
+ * This on the kernel level is a busy wait, for user level see the sleep function in the Thread class.
  *
- * @param milliseconds How many milliseconds to delay the program for
+ *
+ * @see Thread::sleep
+ *
+ * @param milliseconds How many milliseconds to delay the program for.
  */
-void Clock::delay(uint32_t milliseconds) {
+void Clock::delay(uint32_t milliseconds) const {
 
 
-    //TODO Create a const for accuracy of clock and use that for calibration and rounding
-
-    // Round the number of milliseconds to the nearest 100
-    uint64_t rounded_milliseconds =  ((milliseconds+99)/100);
+    // Round the number of milliseconds UP to the nearest clock accuracy
+    uint64_t rounded_milliseconds = (milliseconds + s_clock_accuracy - 1) / s_clock_accuracy;
 
     // Calculate the number of ticks until the delay is over
     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
@@ -180,6 +183,9 @@ string Clock::get_device_name() {
  * @param ms_per_tick How many milliseconds per interrupt
  */
 void Clock::calibrate(uint64_t ms_per_tick) {
+
+  // Update the clock accuracy
+  s_clock_accuracy = ms_per_tick;
 
   // Get the ticks per ms
   PIT pit(m_interrupt_manager, m_apic);
@@ -241,7 +247,7 @@ time(time)
 TimeEvent::~TimeEvent() = default;
 
 PIT::PIT(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController *apic)
-: InterruptHandler(0x22, interrupt_manager),
+: InterruptHandler(0x22),
   m_data_port(0x40),
   m_command_port(0x43),
   m_local_apic(apic -> get_local_apic()),

@@ -91,7 +91,7 @@ namespace MaxOS {
                 uint8_t buttons = 0;
 
             public:
-                explicit MouseDriver(hardwarecommunication::InterruptManager *manager, hardwarecommunication::IOAPIC* apic);
+                MouseDriver();
                 ~MouseDriver();
 
                 void activate() final;

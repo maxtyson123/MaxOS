@@ -325,6 +325,9 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
   _kprintf("Initialising IO APIC\n");
   m_io_apic.init();
 
+  // Register the APIC
+  InterruptManager::get_active_interrupt_manager()->set_apic(this);
+
 }
 
 AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController() = default;

@@ -129,27 +129,25 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up Memory Manager (Kernel)");
     log("Set Up Video Driver");
 
-
     header("Initialising Hardware");
-    DriverManager driverManager(&interrupts);
+    DriverManager driver_manager;
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     log("Set Up ACPI");
 
     AdvancedProgrammableInterruptController apic(&acpi);
-    interrupts.set_apic(apic.get_local_apic());
     log("Set Up APIC");
 
     // Keyboard (TODO: Move to userspace PS/2 driver)
-    KeyboardDriver keyboard(&interrupts, apic.get_io_apic());
+    KeyboardDriver keyboard;
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
-    driverManager.add_driver(&keyboard);
+    driver_manager.add_driver(&keyboard);
     log("Set Up Keyboard");
 
     // Mouse (TODO: Move to userspace PS/2 driver)
-    MouseDriver mouse(&interrupts, apic.get_io_apic());
-    driverManager.add_driver(&mouse);
+    MouseDriver mouse;
+    driver_manager.add_driver(&mouse);
     log("Set Up Mouse");
 
     // CPU
@@ -157,22 +155,22 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     log("Set Up CPU");
 
     // Clock
-    Clock kernelClock(&interrupts, &apic, 1);
-    driverManager.add_driver(&kernelClock);
+    Clock kernelClock(&apic, 1);
+    driver_manager.add_driver(&kernelClock);
     log("Set Up Clock");
 
     //USB
-    //UniversalSerialBusController USBController(&driverManager);
+    //UniversalSerialBusController USBController(&driver_manager);
     //log("Set Up USB");
 
     header("Device Management");
 
     // Find the drivers
-    driverManager.find_drivers();
+    driver_manager.find_drivers();
     log("Found Drivers");
 
     // Reset the devices
-    uint32_t reset_wait_time = driverManager.reset_devices();
+    uint32_t reset_wait_time = driver_manager.reset_devices();
     log("Reset Devices");
 
     // Interrupts
@@ -186,18 +184,18 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     header("Finalisation");
 
-    Scheduler scheduler(&interrupts, multiboot);
+    Scheduler scheduler(multiboot);
     log("Set Up Scheduler");
 
-    SyscallManager syscalls(&interrupts);
+    SyscallManager syscalls;
     log("Set Up Syscalls");
 
     // Initialise the drivers
-    driverManager.initialise_drivers();
+    driver_manager.initialise_drivers();
     log("Initialised Drivers");
 
     // Activate the drivers
-    driverManager.activate_drivers();
+    driver_manager.activate_drivers();
     log("Activated Drivers");
 
     // Print the footer
@@ -210,17 +208,14 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     // Start the Scheduler & updates the clock handler
     scheduler.activate();
 
-
     // TODO:
     //       -   TODOs, classes for PMM, VMM, style,
     //       -   Rewrite boot text again to have progress bar
     //       -   Rewrite boot script to be in c++ where possible
 
 
-
     /// Boot Done ///
     _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
-
 
     /// How this idle works:
     ///  I was debugging along and released that on the first ever schedule it will
@@ -233,5 +228,4 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     ///  leaving kernelMain and  also having a idle_proc
     while (true)
       asm("nop");
-
 }

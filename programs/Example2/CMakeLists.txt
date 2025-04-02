@@ -1,5 +1,3 @@
-# TODO MAKE AN EASIER GENERIC WAY TO DO THIS
-
 # Set the  flags
 SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra  -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -fno-use-cxa-atexit")
 

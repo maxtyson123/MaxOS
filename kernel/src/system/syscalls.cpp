@@ -13,8 +13,8 @@ using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
 
-SyscallManager::SyscallManager(InterruptManager*interrupt_manager)
-:    InterruptHandler(0x80, interrupt_manager)
+SyscallManager::SyscallManager()
+:    InterruptHandler(0x80)
 {
 
   // Clear the args

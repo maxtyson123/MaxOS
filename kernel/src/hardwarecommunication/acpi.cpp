@@ -83,6 +83,8 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
     // Check if the checksum is valid
     ASSERT(sum == 0, "Invalid checksum!");
   }
+
+
 }
 
 AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface() = default;

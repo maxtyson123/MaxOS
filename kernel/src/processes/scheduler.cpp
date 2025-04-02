@@ -12,8 +12,8 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
 
-Scheduler::Scheduler(InterruptManager* interrupt_manager, Multiboot& multiboot)
-: InterruptHandler(0x20, interrupt_manager),
+Scheduler::Scheduler(Multiboot& multiboot)
+: InterruptHandler(0x20),
   m_current_thread_index(0),
   m_active(false),
   m_ticks(0),

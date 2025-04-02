@@ -28,9 +28,8 @@ namespace MaxOS {
         class InterruptHandler {
             protected:
                 uint8_t m_interrupt_number;
-                InterruptManager* m_interrupt_manager;
 
-                explicit InterruptHandler(uint8_t interrupt_number, InterruptManager*interrupt_manager = nullptr);
+                explicit InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
                 ~InterruptHandler();
 
             public:
@@ -66,7 +65,7 @@ namespace MaxOS {
             friend class InterruptHandler;
 
             private:
-              LocalAPIC* m_local_apic;
+              AdvancedProgrammableInterruptController* m_apic = nullptr;
 
               static system::cpu_status_t* page_fault(system::cpu_status_t* status);
               static system::cpu_status_t* general_protection_fault(system::cpu_status_t* status);
@@ -146,12 +145,15 @@ namespace MaxOS {
                 InterruptManager();
                 ~InterruptManager();
 
+                static InterruptManager* get_active_interrupt_manager();
+
                 static uint16_t hardware_interrupt_offset();
 
                 void set_interrupt_handler(uint8_t interrupt, InterruptHandler *handler);
                 void remove_interrupt_handler(uint8_t interrupt);
 
-                void set_apic(LocalAPIC* apic);
+                void set_apic(AdvancedProgrammableInterruptController* apic);
+                AdvancedProgrammableInterruptController* get_apic();
 
                 void activate();
                 void deactivate();

@@ -11,9 +11,9 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 
-AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev, InterruptManager* interrupts, OutputStream *amdNetMessageStream)
+AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev, OutputStream *amdNetMessageStream)
 : EthernetDriver(amdNetMessageStream),
-  InterruptHandler(dev -> interrupt + interrupts->hardware_interrupt_offset(), interrupts),
+  InterruptHandler(0x20 + dev -> interrupt),
   MACAddress0Port(dev ->port_base),
   MACAddress2Port(dev ->port_base + 0x02),
   MACAddress4Port(dev ->port_base + 0x04),

@@ -111,7 +111,7 @@ namespace MaxOS{
 
             public:
 
-                intel_i217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, hardwarecommunication::InterruptManager* interruptManager, common::OutputStream* intelNetMessageStream = nullptr);         // Constructor. takes as a parameter a pointer to an object that encapsulate all he PCI configuration data of the device
+                intel_i217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor);
                 ~intel_i217();                                                  // Default Destructor
 
 

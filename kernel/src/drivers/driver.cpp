@@ -143,12 +143,11 @@ DriverSelector::~DriverSelector()
 /**
  * @brief Select the drivers
  */
-void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*)
+void DriverSelector::select_drivers(DriverSelectorEventHandler*)
 {
 }
 
-DriverManager::DriverManager(hardwarecommunication::InterruptManager* interruptManager)
-: m_interrupt_manager(interruptManager)
+DriverManager::DriverManager()
 {
 
 }
@@ -219,7 +218,7 @@ void DriverManager::find_drivers() {
 
     // Select the drivers
     for(auto & driver_selector : m_driver_selectors)
-        driver_selector -> select_drivers(this, m_interrupt_manager);
+        driver_selector -> select_drivers(this);
 }
 
 /**

@@ -22,9 +22,9 @@ using namespace memory;
 
 ///__DRIVER___
 
-intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager, OutputStream* intelNetMessageStream)
-: EthernetDriver(intelNetMessageStream),
-  InterruptHandler(deviceDescriptor->interrupt + interruptManager->hardware_interrupt_offset(), interruptManager)
+intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor)
+: EthernetDriver(nullptr),
+  InterruptHandler(0x20 + deviceDescriptor->interrupt)
 {
 
     //Set the registers

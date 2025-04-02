@@ -425,7 +425,7 @@ namespace MaxOS
                 hardwarecommunication::Port8Bit m_command_port;
 
               public:
-                  explicit KeyboardDriver(hardwarecommunication::InterruptManager*, hardwarecommunication::IOAPIC*);
+                  KeyboardDriver();
                   ~KeyboardDriver();
 
                   void handle_interrupt() final;

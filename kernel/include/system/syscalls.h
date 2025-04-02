@@ -63,7 +63,7 @@ namespace MaxOS{
 
 
           public:
-              explicit SyscallManager(hardwarecommunication::InterruptManager*interrupt_manager);
+              SyscallManager();
               ~SyscallManager();
 
               system::cpu_status_t* handle_interrupt(system::cpu_status_t* esp) final;

@@ -32,7 +32,7 @@ namespace MaxOS {
 
           void copy(String const &other);
 
-          [[nodiscard]] int length(bool count_ansi = false) const;
+          [[nodiscard]] int length(bool count_ansi = true) const;
           char* c_str();
           [[nodiscard]] const char* c_str() const;
 
