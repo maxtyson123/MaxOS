@@ -251,7 +251,6 @@ cpu_status_t* Scheduler::yield() {
  * @brief Activates the scheduler
  */
 void Scheduler::activate() {
-    m_interrupt_manager->set_interrupt_handler(0x20, this);
     m_active = true;
 }
 

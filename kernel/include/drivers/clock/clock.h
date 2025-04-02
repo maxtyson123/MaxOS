@@ -116,7 +116,7 @@ namespace MaxOS {
                 uint32_t ticks_per_ms();
 
               public:
-                PIT(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic);
+                PIT(hardwarecommunication::AdvancedProgrammableInterruptController* apic);
                 ~PIT();
 
             };

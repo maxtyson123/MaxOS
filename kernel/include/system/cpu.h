@@ -153,6 +153,8 @@ namespace MaxOS{
         static inline bool s_avx = false;
         void init_sse();
 
+        static bool check_nx();
+
         static void get_status(cpu_status_t* status);
         static void set_status(cpu_status_t* status);
         static void print_registers(cpu_status_t* status);

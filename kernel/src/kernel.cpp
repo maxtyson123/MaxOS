@@ -86,7 +86,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     PhysicalMemoryManager pmm(&multiboot);
     _kprintf("-= Physical Memory Manager set up =-\n");
 
-    VirtualMemoryManager vmm(true);
+    VirtualMemoryManager vmm;
     MemoryManager memoryManager(&vmm);
     _kprintf("-= Memory Manager set up =-\n");
 

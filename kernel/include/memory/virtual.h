@@ -51,7 +51,6 @@ namespace MaxOS {
       private:
         uint64_t * m_pml4_root_address;
         uint64_t * m_pml4_root_physical_address;
-        bool m_is_kernel;
 
         virtual_memory_region_t* m_first_region;
         virtual_memory_region_t* m_current_region;
@@ -66,10 +65,11 @@ namespace MaxOS {
         free_chunk_t* find_and_remove_free_chunk(size_t size);
 
         void new_region();
+        void fill_up_to_address(uintptr_t address, size_t flags, bool mark_used);
 
 
       public:
-        explicit VirtualMemoryManager(bool is_kernel);
+        VirtualMemoryManager();
         ~VirtualMemoryManager();
 
         void* allocate(size_t size, size_t flags);
@@ -81,6 +81,7 @@ namespace MaxOS {
         void* load_shared_memory(const string& name);
         void* load_shared_memory(uintptr_t physical_address, size_t size);
 
+        uint64_t* get_pml4_root_address();
         uint64_t* get_pml4_root_address_physical();
 
         size_t memory_used();

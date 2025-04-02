@@ -33,7 +33,7 @@ Elf64::~Elf64()
 void Elf64::load() {
 
   // Check if valid
-  if(!is_valid()) return; //TODO: error handling
+  if(!is_valid()) return; //TODO: error handling when the syscall for this is implemented
 
   // Load the program headers
   load_program_headers();
@@ -157,10 +157,8 @@ void Elf64::load_program_headers() {
         size_t zero_size = program_header -> memory_size - program_header -> file_size;
         memset((void*)((uintptr_t)address + program_header -> file_size), 0, zero_size);
 
-        // TODO: Now that we are done with modifying the memory, we should set the flags to the correct ones
-        // MemoryManager::s_current_memory_manager -> get_vmm() -> set_flags(address, flags);
-
-
+        // Now that we are done with modifying the memory, we should set the flags to the correct ones
+        PhysicalMemoryManager::s_current_manager -> change_page_flags((virtual_address_t*)address, flags, MemoryManager::s_current_memory_manager -> get_vmm() -> get_pml4_root_address());
     }
 
 }
@@ -179,13 +177,15 @@ uint64_t Elf64::to_vmm_flags(uint32_t type) {
   // 0x1   |   Write
   // 0x2   |   Read
 
-  uint64_t flags = 0;
+  uint64_t flags = Present | User | NoExecute;
 
+  // Enable write
   if(type & ElfWrite)
       flags |= Write;
 
-//  if(type & ElfProgramFlags::Execute)
-//      flags |= PageFlags::Execute;
+  // Disable no execute
+  if(type & ElfProgramFlags::ElfExecute)
+     flags &= ~NoExecute;
 
 
   return flags;

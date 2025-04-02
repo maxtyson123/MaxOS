@@ -10,19 +10,21 @@ using namespace MaxOS::memory;
 using namespace MaxOS::common;
 using namespace MaxOS::processes;
 
-VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
-: m_is_kernel(is_kernel)
+VirtualMemoryManager::VirtualMemoryManager()
 {
 
-    // If not the kernel, we need to allocate a new PML4 table  TODO: Might not need a variable? Check if there isn't a kernel one and just assume it is the kernel one
-    if(!m_is_kernel){
+    // Set the kernel flag
+    bool is_kernel = MemoryManager::s_kernel_memory_manager == nullptr;
+
+
+   if(!is_kernel){
 
       // Get a new pml4 table
       m_pml4_root_physical_address = (uint64_t*)PhysicalMemoryManager::s_current_manager->allocate_frame();
       m_pml4_root_address = (uint64_t*)PhysicalMemoryManager::to_dm_region((uint64_t)m_pml4_root_physical_address);
 
       // Clear the table
-      PhysicalMemoryManager::s_current_manager -> clean_page_table(m_pml4_root_address);
+      PhysicalMemoryManager::clean_page_table(m_pml4_root_address);
 
       // Map the higher half of the kernel (p4 256 - 511)
       for (size_t i = 256; i < 512; i++){
@@ -60,19 +62,12 @@ VirtualMemoryManager::VirtualMemoryManager(bool is_kernel)
     PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
     _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
-    if(!m_is_kernel)
+    if(!is_kernel)
       ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
 
-    // Calculate the next available address
-    m_next_available_address = PhysicalMemoryManager::s_page_size;
-    if(m_is_kernel){
-
-      // Kernel needs to start at the higher half
-      m_next_available_address += vmm_space + s_reserved_space;
-
-    }
+    // Calculate the next available address (kernel needs to reserve space for the higher half)
+    m_next_available_address = is_kernel ? vmm_space + s_reserved_space : PhysicalMemoryManager::s_page_size;
     _kprintf("Next available address: 0x%x\n", m_next_available_address);
-
 
 }
 
@@ -152,31 +147,28 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   // Make sure the size is aligned
   size = PhysicalMemoryManager::align_up_to_page(size, PhysicalMemoryManager::s_page_size);
 
-  // Check the free list for a chunk
-  free_chunk_t* reusable_chunk = find_and_remove_free_chunk(size);
+  // Check the free list for a chunk (if not asking for a specific address)
+  free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(size) : nullptr;
   if(reusable_chunk != nullptr){
 
-    // If the chunk is not being reserved
-    if(!(flags & Reserve)){
+    // If the chunk is not being reserved then the old memory needs to be unmapped
+    if(flags & Reserve){
 
-      // Map the memory
+      // Unmap the memory
       size_t pages = PhysicalMemoryManager::size_to_frames(size);
       for (size_t i = 0; i < pages; i++){
 
-        // Allocate a new frame
-        physical_address_t* frame = PhysicalMemoryManager::s_current_manager->allocate_frame();
-        ASSERT(frame != nullptr, "Failed to allocate frame (from free chunk list)\n");
+        // Get the frame
+        physical_address_t* frame = PhysicalMemoryManager::s_current_manager -> get_physical_address((virtual_address_t*)reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
 
-        // Map the frame
-        PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*)reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+        // Free the frame
+        PhysicalMemoryManager::s_current_manager->free_frame(frame);
 
       }
-
     }
 
     // Return the address
     return (void*)reusable_chunk->start_address;
-
   }
 
 
@@ -184,10 +176,9 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
   if(m_current_chunk >= s_chunks_per_page)
     new_region();
 
-  // If we need to allocate at a specific address
-  if(address != 0){
-    m_next_available_address = address;    //TODO: Creates mem fragmentation - fix
-  }
+  // If needed to allocate at a specific address, fill with free memory up to that address to prevent fragmentation
+  if(address != 0)
+    fill_up_to_address(address, flags, false);
 
   // Allocate the memory
   virtual_memory_chunk_t* chunk = &m_current_region->chunks[m_current_chunk];
@@ -289,15 +280,6 @@ void VirtualMemoryManager::free(void *address) {
 
   }
 
-  // Unmap the memory
-  size_t pages = PhysicalMemoryManager::size_to_frames(chunk->size);
-  for (size_t i = 0; i < pages; i++){
-
-        // Unmap the frame
-        PhysicalMemoryManager::s_current_manager->unmap((virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
-
-  }
-
   // Add the chunk to the free list
   add_free_chunk(chunk->start_address, chunk->size);
 
@@ -370,6 +352,8 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
 
       // Check if the chunk is big enough
       if(current->size >= size){
+
+          // TODO: Some other time this will need to be split if the chunk is too big
 
           // Remove the chunk
           if(previous != nullptr){
@@ -461,4 +445,65 @@ void *VirtualMemoryManager::load_physical_into_address_space(uintptr_t physical_
 
   // All done
   return address;
+}
+
+/**
+ * @brief Fill from the current address to the given address
+ *
+ * @param address The address to fill up to
+ * @param flags The flags to set on the memory
+ * @param mark_used If true, mark the memory as used
+ */
+void VirtualMemoryManager::fill_up_to_address(uintptr_t address, size_t flags, bool mark_used) {
+
+  // Make sure the address is aligned
+  address = PhysicalMemoryManager::align_to_page(address);
+
+  // Make sure the address is not before the next available address
+  ASSERT(address >= m_next_available_address, "FAILED TO FILL: Address is before the next available address - 0x%x < 0x%x\n", address, m_next_available_address);
+
+  // Calculate the size
+  size_t size = address - m_next_available_address;
+
+  // Allocate the memory
+  virtual_memory_chunk_t* chunk = &m_current_region->chunks[m_current_chunk];
+  chunk->size = size;
+  chunk->flags = flags;
+  chunk->start_address = m_next_available_address;
+
+  // Update the next available address
+  m_next_available_address += size;
+  m_current_chunk++;
+
+  // Map the memory
+  size_t pages = PhysicalMemoryManager::size_to_frames(size);
+  for (size_t i = 0; i < pages; i++){
+
+    // Allocate a new frame
+    physical_address_t* frame = PhysicalMemoryManager::s_current_manager->allocate_frame();
+    ASSERT(frame != nullptr, "Failed to allocate frame (from fill up)\n");
+
+    // Map the frame
+    PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*)chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+
+  }
+
+  // Mark as free if needed
+  if(!mark_used)
+      free((void*)chunk->start_address);
+}
+
+/**
+ * @brief Get the virtual address of the PML4 root
+ *
+ * @return The virtual address or nullptr if not found
+ */
+uint64_t *VirtualMemoryManager::get_pml4_root_address() {
+
+  // Make sure the address is valid
+  if(m_pml4_root_address == nullptr)
+    return nullptr;
+
+  // Return the address
+  return m_pml4_root_address;
 }

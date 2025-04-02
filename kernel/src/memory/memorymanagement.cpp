@@ -16,7 +16,7 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 
     // Create the VMM if not provided
     if(m_virtual_memory_manager == nullptr)
-       m_virtual_memory_manager = new VirtualMemoryManager(false);
+       m_virtual_memory_manager = new VirtualMemoryManager();
 
     // Enable the memory manager
     switch_active_memory_manager(this);
@@ -234,7 +234,7 @@ void MemoryManager::handle_free(void *pointer) {
 MemoryChunk *MemoryManager::expand_heap(size_t size) {
 
   // Create a new chunk of memory
-  auto* chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(size, Present | Write);
+  auto* chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(size, Present | Write | NoExecute);
 
   // If the chunk is null then there is no more memory
   ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");

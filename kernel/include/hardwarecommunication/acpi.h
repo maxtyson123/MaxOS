@@ -55,13 +55,19 @@ namespace MaxOS {
 
       class AdvancedConfigurationAndPowerInterface {
         protected:
-          uint8_t m_type;
+          bool m_using_new_acpi = false;
           ACPISDTHeader* m_header;
 
           XSDT* m_xsdt;
           RSDT* m_rsdt;
 
+          RSDPDescriptor* m_rsdp;
+          RSDPDescriptor2* m_rsdp2;
+
           static bool validate(const char*descriptor, size_t length);
+
+          void map_tables(uint8_t size_of_table);
+          bool valid_checksum();
 
         public:
             explicit AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);

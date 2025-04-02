@@ -254,8 +254,6 @@ CPU::CPU() {
   // Setup cpu features
   init_tss();
   init_sse();
-
-
 }
 
 /**
@@ -390,4 +388,21 @@ bool CPU::check_cpu_feature(CPU_FEATURE_EDX feature) {
     // Check the feature
     return edx & (uint32_t)feature;
 
+}
+
+/**
+ * @brief Checks if the No Execute page flag is supported
+ * @return True if the NX flag is supported
+ */
+bool CPU::check_nx() {
+
+  // Get the EFER MSR
+  uint64_t efer = read_msr(0xC0000080);
+
+  // Check if the NX flag is supported (bit 11)
+  bool supported = efer & (1 << 11);
+  _kprintf("NX: %s\n", supported ? "Supported" : "Not Supported");
+
+  // Return if the NX flag is supported
+  return supported;
 }

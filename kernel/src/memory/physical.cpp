@@ -32,6 +32,9 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
   // Set the current manager
   s_current_manager = this;
 
+  // Can the CPU execute code from a non-executable page?
+  m_nx_allowed = CPU::check_nx();
+
   // Store the information about the bitmap
   m_memory_size = (m_multiboot->get_basic_meminfo()->mem_upper + 1024) * 1024;
   m_bitmap_size = m_memory_size / s_page_size + 1;
@@ -287,10 +290,6 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
     for (uint32_t column = 0; column < s_row_bits; ++column) {
 
-      // Prevent out-of-bounds shifts if column exceeds the bit-width of uint64_t
-      if (column >= s_row_bits)
-        break;
-
       // If this bit is not free, reset the adjacent frames
       if (m_bit_map[row] & (1ULL << column)) {
         adjacent_frames = 0;
@@ -538,8 +537,11 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virt
       // Change the flags to user
       flags |= User;
       is_user = User;
-
     }
+
+    // Disable the NX is set but not allowed (must be 0 as it is reserved)
+    if(!m_nx_allowed && (flags & NoExecute))
+      flags &= ~NoExecute;
 
     // Store the tables
     uint64_t* pdpr_table = get_or_create_table(pml4_table, pml4_index, Present | Write | is_user);
@@ -960,6 +962,45 @@ physical_address_t *PhysicalMemoryManager::get_physical_address(virtual_address_
 
     // Return the physical address
     return (physical_address_t *)(pt_table[pt_index] & 0xFFFFFFFFFFFFF000);
+}
+
+/**
+ * @brief Changes the flags of a page
+ *
+ * @param virtual_address The virtual address of the page
+ * @param flags The flags to set the page to
+ */
+void PhysicalMemoryManager::change_page_flags(virtual_address_t *virtual_address, size_t flags, uint64_t *pml4_root) {
+
+  // Get the indexes
+  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+
+  // Get the tables
+  uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
+  uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
+  uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
+
+  // Check if the tables are present (if any are not then a pt entry will not be present)
+  if(pt_table == nullptr)
+    return;
+
+  // Check if the entry is present
+  if(!(pt_table[pt_index] & 0b1))
+    return;
+
+  // Disable the NX is set but not allowed (must be 0 as it is reserved)
+  if(!m_nx_allowed && (flags & NoExecute))
+    flags &= ~NoExecute;
+
+  // Change the flags
+  pt_table[pt_index] = (pt_table[pt_index] & 0xFFFFFFFFFFFFF000) | flags;
+
+  // Flush the TLB
+  asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
+
 }
 
 /**

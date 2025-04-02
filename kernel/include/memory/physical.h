@@ -29,15 +29,16 @@ namespace MaxOS {
       // Flags for the page table entries (leave as enum not enum class for bitwise operations)
       typedef enum PageFlags {
         None          = 0,
-        Present       = (1 << 0),
-        Write         = (1 << 1),
-        User          = (1 << 2),
-        WriteThrough  = (1 << 3),
-        CacheDisabled = (1 << 4),
-        Accessed      = (1 << 5),
-        Dirty         = (1 << 6),
-        HugePage      = (1 << 7),
-        Global        = (1 << 8)
+        Present       = (1    << 0),
+        Write         = (1    << 1),
+        User          = (1    << 2),
+        WriteThrough  = (1    << 3),
+        CacheDisabled = (1    << 4),
+        Accessed      = (1    << 5),
+        Dirty         = (1    << 6),
+        HugePage      = (1    << 7),
+        Global        = (1    << 8),
+        NoExecute     = (1ULL << 63)
 
       } page_flags_t;
 
@@ -90,6 +91,7 @@ namespace MaxOS {
           pte_t* m_pml4_root;
 
           bool m_initialized;
+          bool m_nx_allowed;
 
           common::Spinlock m_lock;
 
@@ -141,7 +143,7 @@ namespace MaxOS {
           void identity_map(physical_address_t* physical_address, size_t flags);
 
           void unmap(virtual_address_t* virtual_address);
-          void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
+          static void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
           void unmap_area(virtual_address_t* virtual_address_start, size_t length);
 
           // Tools
@@ -161,6 +163,8 @@ namespace MaxOS {
 
           physical_address_t* get_physical_address(virtual_address_t* virtual_address,  uint64_t *pml4_root);
           bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t *pml4_root);
+
+          void change_page_flags(virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root);
 
           // Higher Half Memory Management
           static void* to_higher_region(uintptr_t physical_address);

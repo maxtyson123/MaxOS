@@ -188,7 +188,7 @@ void Clock::calibrate(uint64_t ms_per_tick) {
   s_clock_accuracy = ms_per_tick;
 
   // Get the ticks per ms
-  PIT pit(m_interrupt_manager, m_apic);
+  PIT pit(m_apic);
   uint32_t ticks_per_ms = pit.ticks_per_ms();
 
   // Set the timer vector to 0x20 and configure it for periodic mode
@@ -246,7 +246,7 @@ time(time)
 
 TimeEvent::~TimeEvent() = default;
 
-PIT::PIT(InterruptManager *interrupt_manager, AdvancedProgrammableInterruptController *apic)
+PIT::PIT(AdvancedProgrammableInterruptController *apic)
 : InterruptHandler(0x22),
   m_data_port(0x40),
   m_command_port(0x43),

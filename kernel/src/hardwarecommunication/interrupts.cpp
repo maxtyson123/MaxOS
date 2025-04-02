@@ -78,7 +78,6 @@ system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t *s
   return status;
 
 }
-I
 
 ///__Manger__
 
@@ -145,6 +144,9 @@ InterruptManager::InterruptManager()
     idt.limit = 256 * sizeof(InterruptDescriptor) - 1;
     idt.base = (uint64_t)s_interrupt_descriptor_table;
     asm volatile("lidt %0" : : "m" (idt));
+
+    // Set the active interrupt manager
+    s_active_interrupt_manager = this;
 }
 
 InterruptManager::~InterruptManager()

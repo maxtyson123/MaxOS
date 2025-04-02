@@ -30,7 +30,6 @@ void MSDOSPartitionTable::read_partitions(AdvancedTechnologyAttachment *hd) {
 
         if(entry.partitionId == 0) continue;                      // If the partition id is 0, skip it
 
-        //TODO: Add a message stream
         //TODO: Create a new FAT32 object
 
     }
