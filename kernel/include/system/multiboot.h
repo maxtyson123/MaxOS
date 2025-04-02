@@ -430,7 +430,7 @@ namespace MaxOS {
           unsigned long m_base_address;
 
         public:
-          Multiboot(unsigned long address);
+          Multiboot(unsigned long address, unsigned long magic);
           ~Multiboot();
 
           multiboot_tag_framebuffer* get_framebuffer();

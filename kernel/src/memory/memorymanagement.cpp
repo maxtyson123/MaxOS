@@ -14,6 +14,10 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 : m_virtual_memory_manager(vmm)
 {
 
+    // Create the VMM if not provided
+    if(m_virtual_memory_manager == nullptr)
+       m_virtual_memory_manager = new VirtualMemoryManager(false);
+
     // Enable the memory manager
     switch_active_memory_manager(this);
 
@@ -29,12 +33,18 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
     // Set the last chunk to the first chunk
     m_last_memory_chunk = m_first_memory_chunk;
 
-    // The first chunk is the last chunk
-    _kprintf("First memory chunk: 0x%x\n", m_first_memory_chunk);
+    // First memory manager is the kernel memory manager
+    if(s_kernel_memory_manager == nullptr)
+       s_kernel_memory_manager = this;
 
 }
 
 MemoryManager::~MemoryManager() {
+
+
+    // Free the VMM (if this is not the kernel memory manager)
+    if(m_virtual_memory_manager != nullptr && s_current_memory_manager != s_kernel_memory_manager)
+      delete m_virtual_memory_manager;
 
     // Check if the current memory manager is this one
     if(s_kernel_memory_manager == this)
@@ -43,7 +53,6 @@ MemoryManager::~MemoryManager() {
     // Check if the current memory manager is this one
     if(s_current_memory_manager == this)
        s_current_memory_manager = nullptr;
-
 
 }
 

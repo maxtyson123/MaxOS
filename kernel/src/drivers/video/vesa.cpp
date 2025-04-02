@@ -47,6 +47,10 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
 
   // Reserve the physical memory
   PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
+
+  // Set the default video mode
+  this -> set_mode(framebuffer_info->common.framebuffer_width,framebuffer_info->common.framebuffer_height, framebuffer_info->common.framebuffer_bpp);
+
 }
 
 VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation()= default;

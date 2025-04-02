@@ -186,10 +186,9 @@ Process::~Process() {
       delete thread;
 
   // Free the memory manager (only if it was created)
-  if(!is_kernel){
+  if(!is_kernel)
       delete memory_manager;
-      delete m_virtual_memory_manager;
-  }
+
 
 }
 
@@ -296,13 +295,7 @@ void Process::set_up() {
   m_pid = Scheduler::get_system_scheduler() ->add_process(this);
 
   // If it is a kernel process then don't need a new memory manager
-  if(!is_kernel){
-    m_virtual_memory_manager = new VirtualMemoryManager(false);
-    memory_manager = new MemoryManager(m_virtual_memory_manager);
-  }else{
-    memory_manager = MemoryManager::s_kernel_memory_manager;
-  }
-
+  memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager :  new MemoryManager();
 }
 
 /**

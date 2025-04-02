@@ -72,7 +72,7 @@ namespace MaxOS {
 
         private:
 
-          uint64_t* m_bit_map;
+          uint64_t* m_bit_map = nullptr;
           uint32_t m_total_entries;
           uint32_t m_bitmap_size;
           uint32_t m_used_frames = 0;
@@ -101,11 +101,11 @@ namespace MaxOS {
           static uint64_t* get_table_if_exists(const uint64_t* table, size_t index);
 
 
-          uint64_t* get_bitmap_address();
+          void initialise_bit_map();
 
         public:
 
-          PhysicalMemoryManager(unsigned long reserved, system::Multiboot* multiboot, uint64_t pml4_root[512]);
+          PhysicalMemoryManager(system::Multiboot* multiboot);
           ~PhysicalMemoryManager();
 
 

@@ -83,7 +83,6 @@ namespace MaxOS
               common::Vector<uint16_t> m_resource_ids;
               common::Vector<Thread*> m_threads;
 
-              memory::VirtualMemoryManager* m_virtual_memory_manager = nullptr;
               uint64_t m_pid = 0;
 
             public:

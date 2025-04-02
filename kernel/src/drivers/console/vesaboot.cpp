@@ -23,8 +23,12 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
   m_font((uint8_t*)AMIGA_FONT)
 {
 
-    // Malloc the video memory
+    // Malloc the video memory text
     m_video_memory = (uint16_t*)MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
+
+    // Prepare the console
+    this -> clear();
+    print_logo();
 }
 
 VESABootConsole::~VESABootConsole() = default;

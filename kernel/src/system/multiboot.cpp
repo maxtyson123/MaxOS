@@ -10,9 +10,12 @@ using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
-Multiboot::Multiboot(unsigned long address)
+Multiboot::Multiboot(unsigned long address, unsigned long magic)
 : m_base_address(address)
 {
+
+  // Confirm the bootloader
+  ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
 
     _kprintf("Multiboot\n");
 

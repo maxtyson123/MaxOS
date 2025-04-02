@@ -9,32 +9,28 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
-extern uint64_t p4_table[];
-extern uint64_t _kernel_start;
+extern volatile uint64_t p4_table[512];
 extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
 extern uint64_t multiboot_tag_end;
 extern uint64_t multiboot_tag_start;
 
-MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserved, Multiboot* multiboot, uint64_t pml4_root[512])
+MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 : m_kernel_end((uint64_t)&_kernel_physical_end),
   m_multiboot(multiboot),
-  m_pml4_root_address(pml4_root),
-  m_pml4_root((pte_t *)pml4_root)
+  m_pml4_root_address((uint64_t*)p4_table),
+  m_pml4_root((pte_t *)p4_table)
 {
 
+  // Log the kernel memory
+  _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
+
   // Clear the spinlock
-  m_lock = Spinlock();
   m_lock.unlock();
 
   // Set the current manager
   s_current_manager = this;
-
-  // SEE boot.s FOR SETUP OF PAGING
-  m_pml4_root = (pte_t *)pml4_root;
-  m_pml4_root_address = pml4_root;
-  _kprintf("PML4: 0x%x\n", m_pml4_root);
 
   // Store the information about the bitmap
   m_memory_size = (m_multiboot->get_basic_meminfo()->mem_upper + 1024) * 1024;
@@ -47,7 +43,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
 
     // Skip if the region is not free or there is not enough space
-    if (entry->type != MULTIBOOT_MEMORY_AVAILABLE || (entry->addr + entry->len) < reserved)
+    if (entry->type != MULTIBOOT_MEMORY_AVAILABLE)
       continue;
 
     // We want the last entry
@@ -55,39 +51,26 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(unsigned long reserv
   }
   _kprintf("Mmap in use: 0x%x - 0x%x\n", m_mmap->addr, m_mmap->addr + m_mmap->len);
 
-  // Kernel Memory (anonymous memory to the next page)
+  // Memory after the kernel to be used for direct mapping (when there is no bitmap of the physical memory)
   m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)&_kernel_physical_end + s_page_size, s_page_size);
   m_anonymous_memory_virtual_address  = (uint64_t)align_up_to_page((size_t)&_kernel_end + s_page_size, s_page_size);
-  _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
   _kprintf("Anonymous Memory: physical = 0x%x, virtual = 0x%x\n", m_anonymous_memory_physical_address, m_anonymous_memory_virtual_address);
 
-
   // Map the physical memory into the virtual memory
-  uint64_t physical_address = 0;
-  uint64_t virtual_address = s_hh_direct_map_offset;
-  uint64_t mem_end = m_mmap->addr + m_mmap->len;
+  for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += s_page_size)
+    map((physical_address_t *)physical_address, (virtual_address_t *)(s_hh_direct_map_offset + physical_address), Present | Write);
 
-  while (physical_address < mem_end) {
-    map((physical_address_t *)physical_address, (virtual_address_t *)virtual_address, Present | Write);
-    physical_address += s_page_size;
-    virtual_address += s_page_size;
-  }
-  _kprintf("Mapped: physical = 0x%x-0x%x, virtual = 0x%x-0x%x\n", 0, physical_address, s_hh_direct_map_offset, virtual_address); // TODO: FAILS WHEN TRYING WITH LIKE 2Gb Mem
-
-  // Calculate the bitmap address
   m_anonymous_memory_physical_address += s_page_size;
-  m_bit_map = get_bitmap_address();
+  _kprintf("Mapped physical memory to higher half direct map at offset 0x%x\n", s_hh_direct_map_offset);
 
-  // Clear the bitmap
-  for (uint32_t i = 0; i < m_total_entries; ++i)
-    m_bit_map[i] = 0;
+  // Set up the bitmap
+  initialise_bit_map();
 
   // Reserve the kernel regions
   reserve_kernel_regions(multiboot);
 
   // Initialisation Done
   m_initialized = true;
-
 }
 
 PhysicalMemoryManager::~PhysicalMemoryManager() = default;
@@ -191,6 +174,9 @@ void* PhysicalMemoryManager::allocate_frame() {
 
   // Check if the pmm is initialized
   if(!m_initialized){
+
+
+    // TODO: This seems to destroy the multiboot memory map, need to fix this
 
     // Find the first free frame
     while ((!is_anonymous_available(m_anonymous_memory_physical_address)) && (m_anonymous_memory_physical_address < m_memory_size)) {
@@ -809,7 +795,7 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
  *
  * @return The address of the bitmap
  */
-uint64_t *PhysicalMemoryManager::get_bitmap_address() {
+void PhysicalMemoryManager::initialise_bit_map() {
 
 
   // Earliest address to place the bitmap (after the kernel and hh direct map)
@@ -836,12 +822,16 @@ uint64_t *PhysicalMemoryManager::get_bitmap_address() {
         ASSERT(space >= (m_bitmap_size / 8 + 1), "Not enough space for the bitmap\n");
 
         // Return the address
-        return (uint64_t*)to_dm_region(entry -> addr + offset);
-    }
+        m_bit_map = (uint64_t*)to_dm_region(entry -> addr + offset);
+        break;
+  }
 
   // Error no space for the bitmap
-  ASSERT(false, "No space for the bitmap\n");
-  return nullptr;
+  ASSERT(m_bit_map != nullptr, "No space for the bitmap\n");
+
+  // Clear the bitmap
+  for (uint32_t i = 0; i < m_total_entries; ++i)
+    m_bit_map[i] = 0;
 }
 
 /**

@@ -71,46 +71,31 @@ using namespace MaxOS::filesystem;
 
 ConsoleStream* active_stream = nullptr;
 
-extern volatile uint64_t p4_table[512];
 extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)  // Only place where it is allowed to not use snake_case
 {
     // Initialise the serial console
     SerialConsole serialConsole;
 
-    // Confirm the bootloader
-    ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
-
     // Make the multiboot header
-    Multiboot multiboot(addr);
+    Multiboot multiboot(addr, magic);
     _kprintf("-= MaxOS booted =-\n");
 
     InterruptManager interrupts;
     _kprintf("-= IDT set up =-\n");
 
-    uint32_t mbi_size = *(uint32_t *) (addr + PhysicalMemoryManager::s_higher_half_kernel_offset);
-    PhysicalMemoryManager pmm(addr + mbi_size, &multiboot, (uint64_t*)p4_table);
+    PhysicalMemoryManager pmm(&multiboot);
     _kprintf("-= Physical Memory Manager set up =-\n");
 
     VirtualMemoryManager vmm(true);
-    _kprintf("-= Virtual Memory Manager set up =-\n");
+    MemoryManager memoryManager(&vmm);
+    _kprintf("-= Memory Manager set up =-\n");
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
-    auto* videoDriver = (VideoDriver*)&vesa;
-    videoDriver->set_mode((int)multiboot.get_framebuffer()->common.framebuffer_width,
-                          (int)multiboot.get_framebuffer()->common.framebuffer_height,
-                          (int)multiboot.get_framebuffer()->common.framebuffer_bpp);
-
-
-    // Initialise the memory manager
-    MemoryManager memoryManager(&vmm);
-    MemoryManager::s_kernel_memory_manager = &memoryManager;
-    _kprintf("-= Memory Manager set up =-\n");
+    _kprintf("-= VESA set up =-\n");
 
     // Initialise Console
     VESABootConsole console(&vesa);
-    console.clear();
-    console.print_logo();
 
     // Create a stream for the console
     ConsoleArea mainConsoleArea(&console, 0, 0, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
@@ -155,14 +140,14 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     interrupts.set_apic(apic.get_local_apic());
     log("Set Up APIC");
 
-    // Keyboard
+    // Keyboard (TODO: Move to userspace PS/2 driver)
     KeyboardDriver keyboard(&interrupts, apic.get_io_apic());
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
     driverManager.add_driver(&keyboard);
     log("Set Up Keyboard");
 
-    // Mouse
+    // Mouse (TODO: Move to userspace PS/2 driver)
     MouseDriver mouse(&interrupts, apic.get_io_apic());
     driverManager.add_driver(&mouse);
     log("Set Up Mouse");
@@ -175,10 +160,6 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     Clock kernelClock(&interrupts, &apic, 1);
     driverManager.add_driver(&kernelClock);
     log("Set Up Clock");
-
-    //PCI
-    PeripheralComponentInterconnectController pciController(&driverManager);
-    log("Set Up PCI");
 
     //USB
     //UniversalSerialBusController USBController(&driverManager);
@@ -233,6 +214,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     // TODO:
     //       -   TODOs, classes for PMM, VMM, style,
     //       -   Rewrite boot text again to have progress bar
+    //       -   Rewrite boot script to be in c++ where possible
 
 
 
@@ -249,15 +231,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     ///  thread's state and instead is the cpu state of the kernel.
     ///  Now I could either fix that or leave it in as a cool way of never fully
     ///  leaving kernelMain and  also having a idle_proc
-    while (true){
-
-      // Print the ticks (debugging)
-      //_kprintf("%hTick: %d\r", scheduler.get_ticks());
-
-      // yield ? wait until figured out the task manager cpu %
-
-      // Make sure the compiler doesn't optimise the loop away
+    while (true)
       asm("nop");
 
-    }
 }
