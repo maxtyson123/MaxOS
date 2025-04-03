@@ -123,7 +123,7 @@ void KeyboardDriver::handle_interrupt(){
  * @brief Get the device name
  * @return The device name
  */
-string KeyboardDriver::get_device_name() {
+string KeyboardDriver::device_name() {
     return "Keyboard";
 }
 

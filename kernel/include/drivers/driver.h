@@ -40,8 +40,8 @@ namespace MaxOS
                 virtual void initialise();
                 virtual uint32_t reset();
 
-                virtual string get_vendor_name();
-                virtual string get_device_name();
+                virtual string vendor_name();
+                virtual string device_name();
         };
 
         //NOTE: Driver doesn't use the EventHandler class because it doesn't need to be connected to anything (May want to change this later)

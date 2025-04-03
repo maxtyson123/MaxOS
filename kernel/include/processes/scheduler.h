@@ -36,7 +36,7 @@ namespace MaxOS{
         inline static Scheduler* s_instance = nullptr;
         static const uint64_t s_ticks_per_event = { 3 };
 
-        IPC* m_ipc;
+        InterProcessCommunicationManager* m_ipc;
 
       public:
         explicit Scheduler(system::Multiboot& multiboot);
@@ -54,14 +54,14 @@ namespace MaxOS{
         system::cpu_status_t* force_remove_process(Process* process);
         uint64_t add_thread(Thread* thread);
 
-        static Scheduler* get_system_scheduler();
-        static Process*   get_current_process();
+        static Scheduler* system_scheduler();
+        static Process*   current_process();
         static Process*   get_process(uint64_t pid);
-        static Thread*    get_current_thread();
+        static Thread*    current_thread();
         static Thread*    get_thread(uint64_t tid);
-        static IPC*       get_ipc();
+        static InterProcessCommunicationManager*       scheduler_ipc();
 
-        uint64_t get_ticks() const;
+        [[nodiscard]] uint64_t ticks() const;
 
         static void load_multiboot_elfs(system::Multiboot* multiboot);
 

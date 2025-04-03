@@ -104,7 +104,7 @@ void Driver::error_message(uint32_t hex_to_write) const {
  *
  * @return The vendor name of the driver
  */
-string Driver::get_vendor_name()
+string Driver::vendor_name()
 {
     return "Generic";
 }
@@ -114,7 +114,7 @@ string Driver::get_vendor_name()
  *
  * @return The device name of the driver
  */
-string Driver::get_device_name()
+string Driver::device_name()
 {
     return "Unknown Driver";
 }

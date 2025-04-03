@@ -304,7 +304,7 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
     return;
 
   // Switch the address space
-  asm volatile("mov %0, %%cr3" :: "r"((uint64_t)manager->m_virtual_memory_manager->get_pml4_root_address_physical()) : "memory");
+  asm volatile("mov %0, %%cr3" :: "r"((uint64_t)manager->m_virtual_memory_manager->pml4_root_address_physical()) : "memory");
 
   // Set the active memory manager
   s_current_memory_manager = manager;
@@ -316,7 +316,7 @@ void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
  *
  * @return The active virtual memory manager
  */
-VirtualMemoryManager* MemoryManager::get_vmm() {
+VirtualMemoryManager* MemoryManager::vmm() {
 
   // Return the virtual memory manager
   return m_virtual_memory_manager;

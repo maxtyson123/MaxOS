@@ -63,7 +63,7 @@ namespace MaxOS
               size_t ticks;
               size_t wakeup_time;
 
-              [[nodiscard]] uintptr_t get_tss_pointer() const { return m_tss_stack_pointer; }
+              [[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }
 
               void save_sse_state();
               void restore_sse_state();
@@ -92,13 +92,13 @@ namespace MaxOS
 
                 void set_up();
 
-                common::Vector<Thread*> get_threads();
+                common::Vector<Thread*> threads();
                 void add_thread(Thread* thread);
                 void remove_thread(uint64_t tid);
 
                 void set_pid(uint64_t pid);
-                uint64_t get_pid() const;
-                uint64_t get_total_ticks();
+                uint64_t pid() const;
+                uint64_t total_ticks();
 
                 bool is_kernel;
 

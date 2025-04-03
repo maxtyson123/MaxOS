@@ -11,22 +11,22 @@ using namespace MaxOS::memory;
 AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot) {
 
   // If the new ACPI is not supported, panic
-  ASSERT(multiboot->get_new_acpi() != nullptr || multiboot->get_old_acpi() != nullptr, "No ACPI found!");
+  ASSERT(multiboot->new_acpi() != nullptr || multiboot->old_acpi() != nullptr, "No ACPI found!");
 
   // Check if the new ACPI is supported
-  m_using_new_acpi = multiboot->get_old_acpi() == nullptr;
+  m_using_new_acpi = multiboot->old_acpi() == nullptr;
   _kprintf("CPU Supports %s ACPI\n", m_using_new_acpi ? "New" : "Old");
 
 
   if(m_using_new_acpi){
 
     // Get the RSDP & XSDT
-    m_rsdp2 = (RSDPDescriptor2*)(multiboot->get_new_acpi() + 1);
+    m_rsdp2 = (RSDPDescriptor2*)(multiboot->new_acpi() + 1);
     m_xsdt = (XSDT*) PhysicalMemoryManager::to_higher_region((uint64_t)m_rsdp2->xsdt_address);
   }else{
 
     // Get the RSDP & RSDT
-    m_rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
+    m_rsdp = (RSDPDescriptor*)(multiboot->old_acpi() + 1);
     m_rsdt = (RSDT*) PhysicalMemoryManager::to_higher_region((uint64_t)m_rsdp->rsdt_address);
   }
 

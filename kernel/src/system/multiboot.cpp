@@ -20,7 +20,7 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
     _kprintf("Multiboot\n");
 
     // Loop through the tags and load them
-    for(multiboot_tag* tag = get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+    for(multiboot_tag* tag = start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
       switch (tag -> type) {
           case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
@@ -77,37 +77,37 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
 Multiboot::~Multiboot() = default;
 
 
-multiboot_tag_framebuffer *Multiboot::get_framebuffer() {
+multiboot_tag_framebuffer *Multiboot::framebuffer() {
 
     return m_framebuffer;
 
 }
 
-multiboot_tag_basic_meminfo *Multiboot::get_basic_meminfo() {
+multiboot_tag_basic_meminfo *Multiboot::basic_meminfo() {
 
     return m_basic_meminfo;
 
 }
 
-multiboot_tag_string *Multiboot::get_bootloader_name() {
+multiboot_tag_string *Multiboot::bootloader_name() {
 
     return m_bootloader_name;
 
 }
 
-multiboot_tag_mmap *Multiboot::get_mmap() {
+multiboot_tag_mmap *Multiboot::mmap() {
 
     return m_mmap;
 
 }
 
-multiboot_tag_old_acpi *Multiboot::get_old_acpi() {
+multiboot_tag_old_acpi *Multiboot::old_acpi() {
 
   return m_old_acpi;
 }
 
 
-multiboot_tag_new_acpi *Multiboot::get_new_acpi() {
+multiboot_tag_new_acpi *Multiboot::new_acpi() {
 
   return m_new_acpi;
 }
@@ -120,7 +120,7 @@ multiboot_tag_new_acpi *Multiboot::get_new_acpi() {
 bool Multiboot::is_reserved(multiboot_uint64_t address) {
 
   // Loop through the tags checking if the address is reserved
-  for(multiboot_tag* tag = get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+  for(multiboot_tag* tag = start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
       // Check if the tag is a module or mmap
       if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE && tag -> type != MULTIBOOT_TAG_TYPE_MMAP)
@@ -145,7 +145,7 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
  *
  * @return The start tag
  */
-multiboot_tag *Multiboot::get_start_tag() const {
+multiboot_tag *Multiboot::start_tag() const {
 
   return (multiboot_tag*)(m_base_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
 }

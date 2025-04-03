@@ -182,7 +182,7 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 Driver* driver = get_driver(deviceDescriptor);
                 if(driver != nullptr){
                   handler->on_driver_selected(driver);
-                  _kprintf("%h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
+                  _kprintf("%h %s %s", driver->vendor_name().c_str(), driver->device_name().c_str());
                 }else{
                   list_known_device(deviceDescriptor);
                 }

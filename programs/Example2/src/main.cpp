@@ -57,7 +57,7 @@ typedef struct TestSharedMemoryBlock
 
 } TestSharedMemoryBlock;
 
-typedef struct IPCMessage{
+typedef struct SharedMessage{
   void* message_buffer;
   size_t message_size;
   uintptr_t next_message;

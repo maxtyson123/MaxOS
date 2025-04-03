@@ -229,7 +229,7 @@ void InputBox::update_text(const string& new_text) {
 
 }
 
-string InputBox::get_text() {
+string InputBox::text() {
     return m_widget_text;
 }
 

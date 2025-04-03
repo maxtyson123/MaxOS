@@ -220,7 +220,7 @@ void AdvancedTechnologyAttachment::activate() {
  *
  * @return The name of the device
  */
-string AdvancedTechnologyAttachment::get_device_name() {
+string AdvancedTechnologyAttachment::device_name() {
 
     return "Advanced Technology Attachment";
 
@@ -231,7 +231,7 @@ string AdvancedTechnologyAttachment::get_device_name() {
  *
  * @return The name of the vendor
  */
-string AdvancedTechnologyAttachment::get_vendor_name() {
+string AdvancedTechnologyAttachment::vendor_name() {
 
     return "IDE";
 }

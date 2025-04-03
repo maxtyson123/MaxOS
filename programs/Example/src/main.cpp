@@ -42,13 +42,13 @@ void* create_shared_memory(uint64_t size, const char* name)
   return result;
 }
 
-typedef struct IPCMessage{
+typedef struct SharedMessage{
   void* message_buffer;
   size_t message_size;
   uintptr_t next_message;
 } ipc_message_t;
 
-typedef struct IPCMessageQueue{
+typedef struct SharedMessageQueue{
   ipc_message_t* messages;
 } ipc_message_queue_t;
 

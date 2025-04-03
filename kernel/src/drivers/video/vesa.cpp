@@ -137,7 +137,7 @@ uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_
  *
  * @return The name of the vendor
  */
-string VideoElectronicsStandardsAssociation::get_vendor_name() {
+string VideoElectronicsStandardsAssociation::vendor_name() {
     return "NEC Home Electronics";  // Creator of the VESA standard
 }
 
@@ -146,6 +146,6 @@ string VideoElectronicsStandardsAssociation::get_vendor_name() {
  *
  * @return The name of the device
  */
-string VideoElectronicsStandardsAssociation::get_device_name() {
+string VideoElectronicsStandardsAssociation::device_name() {
     return "VESA compatible graphics card";
 }

@@ -24,7 +24,7 @@ Scheduler::Scheduler(Multiboot& multiboot)
   s_instance = this;
 
   // Create the IPC handler
-  m_ipc = new IPC();
+  m_ipc = new InterProcessCommunicationManager();
 
   // Create the idle process
   auto* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
@@ -114,7 +114,7 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
   current_thread = m_threads[m_current_thread_index];
 
   // If the current thread is in the process then we can get the process
-  Process* current_process = get_current_process();
+  Process* owner_process = current_process();
 
   // Handle state changes
   switch (current_thread->thread_state) {
@@ -134,9 +134,9 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
     case ThreadState::STOPPED:
 
       // Find the process that has the thread and remove it
-      for (auto thread : current_process->get_threads()) {
+      for (auto thread : owner_process->threads()) {
         if (thread == current_thread) {
-          current_process->remove_thread(m_current_thread_index);
+          owner_process->remove_thread(m_current_thread_index);
           break;
         }
       }
@@ -156,10 +156,10 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
   current_thread -> restore_sse_state();
 
   // Load the threads memory manager
-  MemoryManager::switch_active_memory_manager(current_process->memory_manager);
+  MemoryManager::switch_active_memory_manager(owner_process->memory_manager);
 
   // Load the TSS for the thread
-  system::CPU::tss.rsp0 = current_thread->get_tss_pointer();
+  system::CPU::tss.rsp0 = current_thread->tss_pointer();
 
   // Return the next thread's state
   return current_thread->execution_state;
@@ -211,7 +211,7 @@ uint64_t Scheduler::add_thread(Thread *thread) {
  *
  * @return The system scheduler or nullptr if not found
  */
-Scheduler *Scheduler::get_system_scheduler() {
+Scheduler *Scheduler::system_scheduler() {
 
   if(s_instance)
     return s_instance;
@@ -224,7 +224,7 @@ Scheduler *Scheduler::get_system_scheduler() {
  *
  * @return The number of ticks
  */
-uint64_t Scheduler::get_ticks() const {
+uint64_t Scheduler::ticks() const {
     return m_ticks;
 }
 
@@ -235,7 +235,7 @@ cpu_status_t* Scheduler::yield() {
 
   // If this is the only thread, can't yield
   if (m_threads.size() <= 1)
-      return get_current_thread()->execution_state;
+      return current_thread()->execution_state;
 
   // Set the current thread to waiting if running
   if (m_threads[m_current_thread_index]->thread_state == ThreadState::RUNNING)
@@ -243,7 +243,7 @@ cpu_status_t* Scheduler::yield() {
 
 
   // Schedule the next thread
-  return schedule_next(get_current_thread()->execution_state);
+  return schedule_next(current_thread()->execution_state);
 
 }
 
@@ -264,10 +264,10 @@ void Scheduler::activate() {
 uint64_t Scheduler::remove_process(Process *process) {
 
   // Check if the process has no threads
-  if (!process->get_threads().empty()) {
+  if (!process->threads().empty()) {
 
     // Set the threads to stopped or remove them if forced
-    for (auto thread : process->get_threads())
+    for (auto thread : process->threads())
         thread->thread_state = ThreadState::STOPPED;
 
     // Need to wait until the threads are stopped before removing the process (this will be called again when all threads are stopped)
@@ -304,7 +304,7 @@ cpu_status_t* Scheduler::force_remove_process(Process *process) {
       return nullptr;
 
   // Remove all the threads
-  for (auto thread : process->get_threads()){
+  for (auto thread : process->threads()){
 
     // Remove the thread from the scheduler
     int index = m_threads.find(thread) - m_threads.begin();
@@ -317,7 +317,7 @@ cpu_status_t* Scheduler::force_remove_process(Process *process) {
 
 
   // Process will be dead now so run the next process (don't care about the execution state being outdated as we are removing it anyway)
-  return schedule_next(get_current_thread()->execution_state);
+  return schedule_next(current_thread()->execution_state);
 }
 
 /**
@@ -325,7 +325,7 @@ cpu_status_t* Scheduler::force_remove_process(Process *process) {
  *
  * @return The current process, or nullptr if not found
  */
-Process *Scheduler::get_current_process() {
+Process *Scheduler::current_process() {
 
   Process* current_process = nullptr;
 
@@ -335,7 +335,7 @@ Process *Scheduler::get_current_process() {
 
   // Find the process that has the thread being executed
   for (auto process : s_instance -> m_processes)
-    if (process->get_pid() == get_current_thread() -> parent_pid) {
+    if (process->pid() == current_thread() -> parent_pid) {
       current_process = process;
       break;
     }
@@ -353,7 +353,7 @@ Process *Scheduler::get_process(uint64_t pid) {
 
   // Try to find the process
   for (auto process : s_instance->m_processes)
-    if (process->get_pid() == pid)
+    if (process->pid() == pid)
       return process;
 
   // Not found
@@ -366,7 +366,7 @@ Process *Scheduler::get_process(uint64_t pid) {
  *
  * @return The currently executing thread
  */
-Thread *Scheduler::get_current_thread() {
+Thread *Scheduler::current_thread() {
 
   return s_instance -> m_threads[s_instance -> m_current_thread_index];
 
@@ -387,7 +387,7 @@ void Scheduler::deactivate() {
  */
 void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
 
-  for(multiboot_tag* tag = multiboot -> get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+  for(multiboot_tag* tag = multiboot -> start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
     if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
       continue;
 
@@ -407,7 +407,7 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
     // Create the process
     auto* process = new Process(module->cmdline, args, 1, elf);
 
-    _kprintf("Elf loaded to pid %d\n", process->get_pid());
+    _kprintf("Elf loaded to pid %d\n", process->pid());
   }
 
 }
@@ -417,7 +417,7 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
  *
  * @return The IPC handler or nullptr if not found
  */
-IPC *Scheduler::get_ipc() {
+InterProcessCommunicationManager *Scheduler::scheduler_ipc() {
 
   return s_instance -> m_ipc;
 

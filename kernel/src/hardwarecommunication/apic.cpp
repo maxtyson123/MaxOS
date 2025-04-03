@@ -326,7 +326,7 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
   m_io_apic.init();
 
   // Register the APIC
-  InterruptManager::get_active_interrupt_manager()->set_apic(this);
+  InterruptManager::active_interrupt_manager()->set_apic(this);
 
 }
 
@@ -355,9 +355,9 @@ void AdvancedProgrammableInterruptController::disable_pic() {
   m_pic_slave_data_port.write(0xFF);
 
 }
-LocalAPIC *AdvancedProgrammableInterruptController::get_local_apic() {
+LocalAPIC *AdvancedProgrammableInterruptController::local_apic() {
   return &m_local_apic;
 }
-IOAPIC *AdvancedProgrammableInterruptController::get_io_apic() {
+IOAPIC *AdvancedProgrammableInterruptController::io_apic() {
     return &m_io_apic;
 }

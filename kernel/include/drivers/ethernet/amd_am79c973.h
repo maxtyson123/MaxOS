@@ -95,8 +95,8 @@ namespace MaxOS{
                 void deactivate() final;
 
                 // Naming
-                string get_vendor_name() final;
-                string get_device_name() final;
+                string vendor_name() final;
+                string device_name() final;
 
                 //Override Interrupt default methods
                 void handle_interrupt() final;

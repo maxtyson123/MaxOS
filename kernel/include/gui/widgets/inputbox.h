@@ -68,7 +68,7 @@ namespace MaxOS{
                     void on_key_down(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState) override;
 
                     void update_text(const string&);
-                    string get_text();
+                    string text();
 
                     // InputBox Variables
                     common::Colour background_colour;

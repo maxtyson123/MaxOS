@@ -60,8 +60,8 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     //execution_state->rdx = (uint64_t)env_args;
 
     // Begin scheduling this thread
-    parent_pid = parent->get_pid();
-    tid = Scheduler::get_system_scheduler() -> add_thread(this);
+    parent_pid = parent->pid();
+    tid = Scheduler::system_scheduler() -> add_thread(this);
 
 }
 
@@ -80,10 +80,10 @@ cpu_status_t* Thread::sleep(size_t milliseconds) {
 
   // Update the vars
   thread_state = ThreadState::SLEEPING;
-  wakeup_time = Scheduler::get_system_scheduler() -> get_ticks() + milliseconds;
+  wakeup_time = Scheduler::system_scheduler() -> ticks() + milliseconds;
 
   // Yield
-  return Scheduler::get_system_scheduler() -> yield();
+  return Scheduler::system_scheduler() -> yield();
 
 }
 
@@ -161,7 +161,7 @@ Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, b
   elf -> load();
 
   // Get the entry point
-  auto* entry_point = (void (*)(void *))elf -> get_header() -> entry;
+  auto* entry_point = (void (*)(void *))elf -> header() -> entry;
 
   // Create the main thread
   auto* main_thread = new Thread(entry_point, args, arg_amount, this);
@@ -236,7 +236,7 @@ void Process::remove_thread(uint64_t tid) {
 
         // If there are no more threads then delete the process (done on the scheduler side)
         if (m_threads.empty())
-          Scheduler::get_system_scheduler() -> remove_process(this);
+          Scheduler::system_scheduler() -> remove_process(this);
 
         return;
     }
@@ -267,7 +267,7 @@ void Process::set_pid(uint64_t pid) {
 /**
  * @brief Gets the threads of the process
  */
-Vector<Thread*> Process::get_threads() {
+Vector<Thread*> Process::threads() {
 
   // Return the threads
   return m_threads;
@@ -279,7 +279,7 @@ Vector<Thread*> Process::get_threads() {
  *
  * @return The pid of the process
  */
-uint64_t Process::get_pid() const {
+uint64_t Process::pid() const {
   return m_pid;
 }
 
@@ -292,7 +292,7 @@ void Process::set_up() {
   asm("cli");
 
   // Basic setup
-  m_pid = Scheduler::get_system_scheduler() ->add_process(this);
+  m_pid = Scheduler::system_scheduler() ->add_process(this);
 
   // If it is a kernel process then don't need a new memory manager
   memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager :  new MemoryManager();
@@ -303,7 +303,7 @@ void Process::set_up() {
  *
  * @return The total ticks of the threads in the process
  */
-uint64_t Process::get_total_ticks() {
+uint64_t Process::total_ticks() {
 
   uint64_t total_ticks = 0;
   for (auto thread : m_threads)

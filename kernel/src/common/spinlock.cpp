@@ -62,7 +62,7 @@ void Spinlock::acquire() {
 
       // Wait for the lock to be available
       if(m_should_yield)
-        Scheduler::get_system_scheduler()->yield();
+        Scheduler::system_scheduler()->yield();
 
       // don't optimise this loop
       asm("nop");

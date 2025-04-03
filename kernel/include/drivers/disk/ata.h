@@ -48,8 +48,8 @@ namespace MaxOS{
 
                     void activate() final;
 
-                    string get_device_name() final;
-                    string get_vendor_name() final;
+                    string device_name() final;
+                    string vendor_name() final;
             };
        }
     }

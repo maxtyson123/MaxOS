@@ -91,7 +91,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     _kprintf("-= Memory Manager set up =-\n");
 
     // Initialise the VESA Driver
-    VideoElectronicsStandardsAssociation vesa(multiboot.get_framebuffer());
+    VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
     _kprintf("-= VESA set up =-\n");
 
     // Initialise Console
@@ -209,7 +209,6 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     scheduler.activate();
 
     // TODO:
-    //       -   style,
     //       -   Rewrite boot text again to have progress bar
     //       -   Rewrite boot script to be in c++ where possible
 

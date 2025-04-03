@@ -136,8 +136,8 @@ namespace MaxOS {
             explicit AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
             ~AdvancedProgrammableInterruptController();
 
-            LocalAPIC* get_local_apic();
-            IOAPIC* get_io_apic();
+            LocalAPIC* local_apic();
+            IOAPIC* io_apic();
 
       };
 

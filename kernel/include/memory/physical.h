@@ -123,11 +123,11 @@ namespace MaxOS {
           static const uint64_t s_hh_direct_map_offset      = s_higher_half_offset + s_page_size;
 
           // Vars
-          uint64_t get_memory_size() const;
-          uint64_t get_memory_used() const;
+          [[nodiscard]] uint64_t memory_size() const;
+          [[nodiscard]] uint64_t memory_used() const;
 
           // Pml4
-          uint64_t* get_pml4_root_address();
+          uint64_t* pml4_root_address();
 
           // Frame Management
           void* allocate_frame();

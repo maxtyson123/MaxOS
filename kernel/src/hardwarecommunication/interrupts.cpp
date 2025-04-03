@@ -30,7 +30,7 @@ InterruptHandler::InterruptHandler(uint8_t interrupt_number, int64_t redirect, u
     if(redirect == -1) return;
 
     // Get the IO-APIC
-    IOAPIC* io_apic = interrupt_manager -> get_apic() -> get_io_apic();
+    IOAPIC* io_apic = interrupt_manager -> active_apic() -> io_apic();
 
     // Register the driver
     interrupt_redirect_t mouseRedirect = {
@@ -287,7 +287,7 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
   // Send the EOI to the APIC
   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
-    m_apic->get_local_apic()->send_eoi();
+    m_apic->local_apic()->send_eoi();
 
   // Return the status
   return new_status;
@@ -342,7 +342,7 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t *s
  *
  * @return The APIC
  */
-AdvancedProgrammableInterruptController* InterruptManager::get_apic() {
+AdvancedProgrammableInterruptController* InterruptManager::active_apic() {
         return m_apic;
 }
 
@@ -351,6 +351,6 @@ AdvancedProgrammableInterruptController* InterruptManager::get_apic() {
  *
  * @return The active interrupt manager
  */
-InterruptManager *InterruptManager::get_active_interrupt_manager() {
+InterruptManager *InterruptManager::active_interrupt_manager() {
   return s_active_interrupt_manager;
 }

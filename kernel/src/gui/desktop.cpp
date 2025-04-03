@@ -15,7 +15,7 @@ using namespace MaxOS::drivers::peripherals;
  * @param gc The graphics context to use
  */
 Desktop::Desktop(GraphicsContext *gc)
-: CompositeWidget(0,0, gc->get_width(), gc->get_height()),
+: CompositeWidget(0,0, gc->width(), gc->height()),
   MouseEventHandler(),
   ClockEventHandler(),
   m_graphics_context(gc),
@@ -23,8 +23,8 @@ Desktop::Desktop(GraphicsContext *gc)
 {
 
     // Set the mouse m_position to the center of the screen
-    m_mouse_x = gc->get_width() / 2;
-    m_mouse_y = gc->get_height() / 2;
+    m_mouse_x = gc->width() / 2;
+    m_mouse_y = gc->height() / 2;
 
     // Draw the initial mouse cursor
     invert_mouse_cursor();

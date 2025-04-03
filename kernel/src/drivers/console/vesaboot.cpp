@@ -40,7 +40,7 @@ VESABootConsole::~VESABootConsole() = default;
  */
 uint16_t VESABootConsole::width()
 {
-    return m_graphics_context->get_width() / 8;       // 8 pixels per character
+    return m_graphics_context->width() / 8;       // 8 pixels per character
 }
 
 /**
@@ -50,7 +50,7 @@ uint16_t VESABootConsole::width()
  */
 uint16_t VESABootConsole::height()
 {
-    return m_graphics_context->get_height() / CHAR_HEIGHT;      // 8 pixels per character
+    return m_graphics_context->height() / CHAR_HEIGHT;      // 8 pixels per character
 }
 
 /**
@@ -245,8 +245,8 @@ void VESABootConsole::print_logo() {
       const char* logo = header_data;
 
       // Find the center of the screen
-      uint32_t center_x = m_graphics_context->get_width()/2;
-      uint32_t center_y = m_graphics_context->get_height()/2 + 20;
+      uint32_t center_x = m_graphics_context->width()/2;
+      uint32_t center_y = m_graphics_context->height()/2 + 20;
 
       // Draw the logo
       for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
@@ -285,10 +285,10 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 
   // Get the framebuffer info
-  auto* framebuffer_address = (uint64_t*)m_graphics_context->get_framebuffer_address();
-  uint64_t  framebuffer_width   = m_graphics_context->get_width();
-  uint64_t  framebuffer_height  = m_graphics_context->get_height();
-  uint64_t  framebuffer_bpp     = m_graphics_context->get_color_depth();
+  auto* framebuffer_address = (uint64_t*)m_graphics_context->framebuffer_address();
+  uint64_t  framebuffer_width   = m_graphics_context->width();
+  uint64_t  framebuffer_height  = m_graphics_context->height();
+  uint64_t  framebuffer_bpp     = m_graphics_context->color_depth();
   uint64_t  framebuffer_pitch   = framebuffer_width * (framebuffer_bpp / 8);
   uint64_t  framebuffer_size    = framebuffer_height * framebuffer_pitch;
 
@@ -342,8 +342,8 @@ void VESABootConsole::print_logo_kernel_panic() {
   const char* logo = header_data_kp;
 
   // Find the bottom right of the screen
-  uint32_t right_x = m_graphics_context->get_width() - kp_width - 10;
-  uint32_t bottom_y = m_graphics_context->get_height() - kp_height - 10;
+  uint32_t right_x = m_graphics_context->width() - kp_width - 10;
+  uint32_t bottom_y = m_graphics_context->height() - kp_height - 10;
 
   // Draw the logo
   for (uint32_t logoY = 0; logoY < kp_height; ++logoY) {

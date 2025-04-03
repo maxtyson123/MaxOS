@@ -15,7 +15,8 @@ namespace MaxOS
 {
   namespace processes {
 
-      ///      ELF Header
+      /// Style Guide Note: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format
+
       enum class ElfIdentification{
           Magic0,
           Magic1,
@@ -167,7 +168,7 @@ namespace MaxOS
             void load();
             bool is_valid();
 
-            elf_64_header_t* get_header() const;
+            [[nodiscard]] elf_64_header_t* header() const;
             elf_64_program_header_t* get_program_header(size_t index);
             elf_64_section_header_t* get_section_header(size_t index);
 

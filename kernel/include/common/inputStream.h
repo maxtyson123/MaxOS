@@ -27,8 +27,7 @@ namespace MaxOS{
             friend class GenericInputStream<Type>;
 
             protected:
-                common::Vector<GenericInputStream<Type>*>
-                  m_generic_input_streams;
+                common::Vector<GenericInputStream<Type>*> m_generic_input_streams;
             public:
                 InputStreamEventHandler();
                 ~InputStreamEventHandler();

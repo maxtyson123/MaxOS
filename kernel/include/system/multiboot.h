@@ -433,14 +433,14 @@ namespace MaxOS {
           Multiboot(unsigned long address, unsigned long magic);
           ~Multiboot();
 
-          multiboot_tag_framebuffer* get_framebuffer();
-          multiboot_tag_basic_meminfo* get_basic_meminfo();
-          multiboot_tag_string* get_bootloader_name();
-          multiboot_tag_mmap* get_mmap();
-          multiboot_tag_old_acpi* get_old_acpi();
-          multiboot_tag_new_acpi* get_new_acpi();
+          multiboot_tag_framebuffer* framebuffer();
+          multiboot_tag_basic_meminfo* basic_meminfo();
+          multiboot_tag_string* bootloader_name();
+          multiboot_tag_mmap* mmap();
+          multiboot_tag_old_acpi* old_acpi();
+          multiboot_tag_new_acpi* new_acpi();
 
-          multiboot_tag* get_start_tag() const;
+          [[nodiscard]] multiboot_tag* start_tag() const;
 
           bool is_reserved(multiboot_uint64_t address);
 

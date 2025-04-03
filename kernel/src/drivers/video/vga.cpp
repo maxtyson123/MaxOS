@@ -193,7 +193,7 @@ uint8_t VideoGraphicsArray::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
  *
  * @return The name of the vendor.
  */
-string VideoGraphicsArray::get_vendor_name() {
+string VideoGraphicsArray::vendor_name() {
     return "IBM"; // VGA was made by IBM
 }
 
@@ -202,6 +202,6 @@ string VideoGraphicsArray::get_vendor_name() {
  *
  * @return The name of the device.
  */
-string VideoGraphicsArray::get_device_name() {
+string VideoGraphicsArray::device_name() {
     return "VGA compatible graphics card";
 }

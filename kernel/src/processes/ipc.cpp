@@ -13,7 +13,7 @@ using namespace MaxOS::memory;
 /**
  * @brief Creates a new IPC handler
  */
-IPC::IPC() {
+InterProcessCommunicationManager::InterProcessCommunicationManager() {
 
   // Clear the spinlock
   m_lock = Spinlock();
@@ -21,7 +21,7 @@ IPC::IPC() {
 }
 
 
-IPC::~IPC() {
+InterProcessCommunicationManager::~InterProcessCommunicationManager() {
 
   // Free all the shared memory
   for(auto block : m_shared_memory_blocks){
@@ -38,7 +38,7 @@ IPC::~IPC() {
  * @param name The name of the block
  * @return The shared memory block
  */
-IPCSharedMemory* IPC::alloc_shared_memory(size_t size, string name) {
+SharedMemory* InterProcessCommunicationManager::alloc_shared_memory(size_t size, string name) {
 
   // Wait for the lock
   m_lock.lock();
@@ -52,7 +52,7 @@ IPCSharedMemory* IPC::alloc_shared_memory(size_t size, string name) {
   }
 
   // Create the shared memory block
-  auto* block = new IPCSharedMemory(name, size);
+  auto* block = new SharedMemory(name, size);
 
   // Add the block to the list
   m_shared_memory_blocks.push_back(block);
@@ -72,7 +72,7 @@ IPCSharedMemory* IPC::alloc_shared_memory(size_t size, string name) {
  * @param name The name of the block
  * @return The shared memory block or nullptr if not found
  */
-IPCSharedMemory* IPC::get_shared_memory(const string& name) {
+SharedMemory* InterProcessCommunicationManager::get_shared_memory(const string& name) {
 
   // Wait for the lock
   m_lock.lock();
@@ -99,7 +99,7 @@ IPCSharedMemory* IPC::get_shared_memory(const string& name) {
  *
  * @param physical_address The physical address of the block
  */
-void IPC::free_shared_memory(uintptr_t physical_address) {
+void InterProcessCommunicationManager::free_shared_memory(uintptr_t physical_address) {
 
     // Find the block
     for(auto block : m_shared_memory_blocks){
@@ -117,7 +117,7 @@ void IPC::free_shared_memory(uintptr_t physical_address) {
  *
  * @param name The name of the block
  */
-void IPC::free_shared_memory(const string& name) {
+void InterProcessCommunicationManager::free_shared_memory(const string& name) {
 
 
   // Find the block
@@ -139,7 +139,7 @@ void IPC::free_shared_memory(const string& name) {
  *
  * @param block The block to delete (will only free memory if no one is using it)
  */
-void IPC::free_shared_memory(IPCSharedMemory* block) {
+void InterProcessCommunicationManager::free_shared_memory(SharedMemory* block) {
 
   // Wait for the lock
   m_lock.lock();
@@ -169,20 +169,20 @@ void IPC::free_shared_memory(IPCSharedMemory* block) {
  * @param name The name of the endpoint
  * @return The endpoint
  */
-IPCMessageEndpoint* IPC::create_message_endpoint(const string& name) {
+SharedMessageEndpoint* InterProcessCommunicationManager::create_message_endpoint(const string& name) {
 
   // Wait for the lock
   m_lock.lock();
 
   // Make sure the name is unique
-  IPCMessageEndpoint* existing = get_message_endpoint(name);
+  SharedMessageEndpoint* existing = get_message_endpoint(name);
   if(existing != nullptr){
       m_lock.unlock();
       return nullptr;
   }
 
   // Create the endpoint
-  auto* endpoint = new IPCMessageEndpoint(name);
+  auto* endpoint = new SharedMessageEndpoint(name);
 
   // Add the endpoint to the list
   m_message_endpoints.push_back(endpoint);
@@ -200,7 +200,7 @@ IPCMessageEndpoint* IPC::create_message_endpoint(const string& name) {
  * @param name The name of the endpoint
  * @return The endpoint or nullptr if not found
  */
-IPCMessageEndpoint* IPC::get_message_endpoint(const string& name) {
+SharedMessageEndpoint* InterProcessCommunicationManager::get_message_endpoint(const string& name) {
 
   // Try to find the endpoint
   for(auto endpoint : m_message_endpoints){
@@ -218,10 +218,10 @@ IPCMessageEndpoint* IPC::get_message_endpoint(const string& name) {
  *
  * @param name The name of the endpoint
  */
-void IPC::free_message_endpoint(const string& name) {
+void InterProcessCommunicationManager::free_message_endpoint(const string& name) {
 
   // Find the endpoint
-  IPCMessageEndpoint* endpoint = get_message_endpoint(name);
+  SharedMessageEndpoint* endpoint = get_message_endpoint(name);
 
   // Free the endpoint
   free_message_endpoint(endpoint);
@@ -233,7 +233,7 @@ void IPC::free_message_endpoint(const string& name) {
  *
  * @param endpoint
  */
-void IPC::free_message_endpoint(IPCMessageEndpoint* endpoint) {
+void InterProcessCommunicationManager::free_message_endpoint(SharedMessageEndpoint* endpoint) {
 
   // Make sure the endpoint exists
   if(endpoint == nullptr)
@@ -253,17 +253,17 @@ void IPC::free_message_endpoint(IPCMessageEndpoint* endpoint) {
  *
  * @param name The name of the block
  */
-IPCSharedMemory::IPCSharedMemory(string name, size_t size)
+SharedMemory::SharedMemory(string name, size_t size)
 : m_size(size),
   name(new string(name))
 {
 
   m_physical_address  = (uintptr_t)PhysicalMemoryManager::s_current_manager -> allocate_area(0, size);
-  m_owner_pid         = Scheduler::get_current_process()->get_pid();
+  m_owner_pid         = Scheduler::current_process()->pid();
 
 }
 
-IPCSharedMemory::~IPCSharedMemory() {
+SharedMemory::~SharedMemory() {
 
   // Free the memory
   PhysicalMemoryManager::s_current_manager->free_area(m_physical_address, m_size);
@@ -274,7 +274,7 @@ IPCSharedMemory::~IPCSharedMemory() {
  *
  * @return The physical address
  */
-uintptr_t IPCSharedMemory::physical_address() const {
+uintptr_t SharedMemory::physical_address() const {
 
   return m_physical_address;
 
@@ -285,13 +285,13 @@ uintptr_t IPCSharedMemory::physical_address() const {
  *
  * @return The size
  */
-size_t IPCSharedMemory::size() const {
+size_t SharedMemory::size() const {
 
   return m_size;
 
 }
 
-IPCMessageEndpoint::IPCMessageEndpoint(string name)
+SharedMessageEndpoint::SharedMessageEndpoint(string name)
 : name(new string(name))
 {
 
@@ -299,12 +299,12 @@ IPCMessageEndpoint::IPCMessageEndpoint(string name)
   m_queue = (ipc_message_queue_t*)MemoryManager::malloc(sizeof(ipc_message_queue_t));
 
   // Get the owner
-  m_owner_pid = Scheduler::get_current_process() -> get_pid();
+  m_owner_pid = Scheduler::current_process() -> pid();
 
 
 }
 
-IPCMessageEndpoint::~IPCMessageEndpoint() {
+SharedMessageEndpoint::~SharedMessageEndpoint() {
 
   // Wait for the lock
   m_message_lock.lock();
@@ -331,7 +331,7 @@ IPCMessageEndpoint::~IPCMessageEndpoint() {
  *
  * @return The message queue
  */
-ipc_message_queue_t *IPCMessageEndpoint::queue() const {
+ipc_message_queue_t *SharedMessageEndpoint::queue() const {
 
   // Return the queue
   return m_queue;
@@ -343,10 +343,10 @@ ipc_message_queue_t *IPCMessageEndpoint::queue() const {
  *
  * @return True if the current process can delete the endpoint
  */
-bool IPCMessageEndpoint::owned_by_current_process() const {
+bool SharedMessageEndpoint::owned_by_current_process() const {
 
     // Check if the owner is the current process
-    return m_owner_pid == Scheduler::get_current_process() -> get_pid();
+    return m_owner_pid == Scheduler::current_process() -> pid();
 
 }
 
@@ -356,7 +356,7 @@ bool IPCMessageEndpoint::owned_by_current_process() const {
  * @param message The message to queue
  * @param size The size of the message
  */
-void IPCMessageEndpoint::queue_message(void *message, size_t size) {
+void SharedMessageEndpoint::queue_message(void *message, size_t size) {
 
   // Wait for the  lock
   m_message_lock.lock();
@@ -390,7 +390,7 @@ void IPCMessageEndpoint::queue_message(void *message, size_t size) {
     m_queue->messages = new_message;
 
   //Switch back from endpoint's memory space
-  MemoryManager::switch_active_memory_manager(Scheduler::get_current_process() -> memory_manager);
+  MemoryManager::switch_active_memory_manager(Scheduler::current_process() -> memory_manager);
 
   // Free the lock & kernel copy
   delete[] kernel_copy;

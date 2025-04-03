@@ -431,7 +431,7 @@ namespace MaxOS
                   void handle_interrupt() final;
 
                   void activate() final;
-                  string get_device_name() final;
+                  string device_name() final;
             };
         }
     }

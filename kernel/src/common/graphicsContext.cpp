@@ -350,7 +350,7 @@ Colour GraphicsContext::int_to_colour(uint32_t colour) {
  *
  * @return The width of the screen
  */
-uint32_t GraphicsContext::get_width() const {
+uint32_t GraphicsContext::width() const {
     return m_width;
 }
 
@@ -359,7 +359,7 @@ uint32_t GraphicsContext::get_width() const {
  *
  * @return The height of the screen
  */
-uint32_t GraphicsContext::get_height() const {
+uint32_t GraphicsContext::height() const {
     return m_height;
 }
 
@@ -367,7 +367,7 @@ uint32_t GraphicsContext::get_height() const {
  * @breif Gets the current color depth (bits per pixel)
  * @return The color depth
  */
-uint32_t GraphicsContext::get_color_depth() const {
+uint32_t GraphicsContext::color_depth() const {
   return m_color_depth;
 }
 
@@ -758,6 +758,6 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
  *
  * @return The framebuffer address
  */
-uint64_t* GraphicsContext::get_framebuffer_address() {
+uint64_t* GraphicsContext::framebuffer_address() {
     return m_framebuffer_address;
 }

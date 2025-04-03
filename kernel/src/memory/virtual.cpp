@@ -36,7 +36,7 @@ VirtualMemoryManager::VirtualMemoryManager()
         }
 
         // Set the new pml4 table to the old (kernel) pml4 table
-        m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager->get_pml4_root_address()[i];
+        m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager->pml4_root_address()[i];
 
       }
       _kprintf("Mapped higher half of kernel\n");
@@ -44,7 +44,7 @@ VirtualMemoryManager::VirtualMemoryManager()
 
 
     }else{
-      m_pml4_root_address = PhysicalMemoryManager::s_current_manager->get_pml4_root_address();
+      m_pml4_root_address = PhysicalMemoryManager::s_current_manager->pml4_root_address();
       m_pml4_root_physical_address = (uint64_t*)PhysicalMemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     }
 
@@ -52,7 +52,7 @@ VirtualMemoryManager::VirtualMemoryManager()
     _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
 
     // Space to store VMM chunks
-    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->get_memory_size() + PhysicalMemoryManager::s_page_size);
+    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->memory_size() + PhysicalMemoryManager::s_page_size);
     m_first_region = (virtual_memory_region_t*)vmm_space;
     m_current_region = m_first_region;
 
@@ -276,7 +276,7 @@ void VirtualMemoryManager::free(void *address) {
   if(chunk->flags & Shared){
 
     // Let the IPC handle the shared memory
-    Scheduler::get_ipc()->free_shared_memory((uintptr_t)address);
+    Scheduler::scheduler_ipc()->free_shared_memory((uintptr_t)address);
 
   }
 
@@ -382,7 +382,7 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
  *
  * @return The physical address of the PML4 root
  */
-uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
+uint64_t *VirtualMemoryManager::pml4_root_address_physical() {
     return m_pml4_root_physical_address;
 }
 
@@ -395,7 +395,7 @@ uint64_t *VirtualMemoryManager::get_pml4_root_address_physical() {
 void *VirtualMemoryManager::load_shared_memory(const string& name) {
 
   // Get the shared memory block
-  IPCSharedMemory* block = Scheduler::get_ipc()->get_shared_memory(name);
+  SharedMemory* block = Scheduler::scheduler_ipc()->get_shared_memory(name);
 
   // Load the shared memory
   if(block != nullptr)
@@ -498,7 +498,7 @@ void VirtualMemoryManager::fill_up_to_address(uintptr_t address, size_t flags, b
  *
  * @return The virtual address or nullptr if not found
  */
-uint64_t *VirtualMemoryManager::get_pml4_root_address() {
+uint64_t *VirtualMemoryManager::pml4_root_address() {
 
   // Make sure the address is valid
   if(m_pml4_root_address == nullptr)

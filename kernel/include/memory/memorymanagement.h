@@ -65,7 +65,7 @@ namespace MaxOS{
               // Internal Memory Management
               void* handle_malloc(size_t size);
               void handle_free(void* pointer);
-              VirtualMemoryManager* get_vmm();
+              VirtualMemoryManager* vmm();
 
               // Utility Functions
               int memory_used();

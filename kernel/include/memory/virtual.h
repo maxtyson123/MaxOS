@@ -81,8 +81,8 @@ namespace MaxOS {
         void* load_shared_memory(const string& name);
         void* load_shared_memory(uintptr_t physical_address, size_t size);
 
-        uint64_t* get_pml4_root_address();
-        uint64_t* get_pml4_root_address_physical();
+        uint64_t* pml4_root_address();
+        uint64_t* pml4_root_address_physical();
 
         size_t memory_used();
 

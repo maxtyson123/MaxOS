@@ -164,7 +164,7 @@ void Clock::delay(uint32_t milliseconds) const {
  *
  * @return The name of the vendor
  */
-string Clock::get_vendor_name() {
+string Clock::vendor_name() {
     return "Generic";
 }
 
@@ -173,7 +173,7 @@ string Clock::get_vendor_name() {
  *
  * @return The name of the device
  */
-string Clock::get_device_name() {
+string Clock::device_name() {
     return "Clock";
 }
 
@@ -193,14 +193,14 @@ void Clock::calibrate(uint64_t ms_per_tick) {
 
   // Set the timer vector to 0x20 and configure it for periodic mode
   uint32_t lvt = 0x20 | (1 << 17);
-  m_apic -> get_local_apic() -> write(0x320, lvt);
+  m_apic -> local_apic() -> write(0x320, lvt);
 
   // Set the initial count
-  m_apic -> get_local_apic() -> write(0x380, ms_per_tick * ticks_per_ms);
+  m_apic -> local_apic() -> write(0x380, ms_per_tick * ticks_per_ms);
 
   // Clear the mask bit
   lvt &= ~(1 << 16);
-  m_apic -> get_local_apic() -> write(0x380, lvt);
+  m_apic -> local_apic() -> write(0x380, lvt);
 
   _kprintf("Clock Calibrated\n");
 }
@@ -250,8 +250,8 @@ PIT::PIT(AdvancedProgrammableInterruptController *apic)
 : InterruptHandler(0x22),
   m_data_port(0x40),
   m_command_port(0x43),
-  m_local_apic(apic -> get_local_apic()),
-  m_io_apic(apic -> get_io_apic())
+  m_local_apic(apic -> local_apic()),
+  m_io_apic(apic -> io_apic())
 {
 
 }

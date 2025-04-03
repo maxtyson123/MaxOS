@@ -136,7 +136,7 @@ void CPU::stack_trace(size_t level) {
 void CPU::PANIC(char const *message, cpu_status_t* status) {
 
   // Get the current process
-  Process* process = Scheduler::get_current_process();
+  Process* process = Scheduler::current_process();
 
   // Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most likely called by a place that cant switch to the avoidable state
   if(!is_panicking)
@@ -149,7 +149,7 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   // Info about the running process
   _kpanicf("Process: %s\n", process ? process->name.c_str() : "Kernel");
   if(process)
-    _kpanicf("After running for %d ticks (system uptime: %d ticks)\n", process -> get_total_ticks(), Scheduler::get_system_scheduler()->get_ticks());
+    _kpanicf("After running for %d ticks (system uptime: %d ticks)\n", process -> total_ticks(), Scheduler::system_scheduler()->ticks());
 
   // Stack trace
   _kpanicf("----------------------------\n");
@@ -271,17 +271,17 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
 
   // If it may have occurred in a process, switch to the avoidable state
-//  if(Scheduler::get_system_scheduler() != nullptr && Scheduler::get_current_process() != nullptr){
-//
-//    // Get the current process
-//    Process* process = Scheduler::get_current_process();
-//
-//    // If the faulting address is in lower half just kill the process and move on
-//    if(status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)){
-//      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
-//      return Scheduler::get_system_scheduler()->force_remove_process(process);
-//    }
-//  }
+  if(Scheduler::system_scheduler() != nullptr && Scheduler::current_process() != nullptr){
+
+    // Get the current process
+    Process* process = Scheduler::current_process();
+
+    // If the faulting address is in lower half just kill the process and move on
+    if(status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)){
+      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
+      return Scheduler::system_scheduler()->force_remove_process(process);
+    }
+  }
 
   // We are panicking
   is_panicking = true;

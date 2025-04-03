@@ -19,7 +19,7 @@ namespace MaxOS {
 
         //TODO: LibIPC
 
-        class IPCSharedMemory{
+        class SharedMemory{
 
             private:
                 uintptr_t m_physical_address;
@@ -28,8 +28,8 @@ namespace MaxOS {
 
 
             public:
-                explicit IPCSharedMemory(string name, size_t size);
-                ~IPCSharedMemory();
+                explicit SharedMemory(string name, size_t size);
+                ~SharedMemory();
 
                 string* name;
                 uint64_t use_count = 1;
@@ -39,17 +39,17 @@ namespace MaxOS {
         };
 
 
-        typedef struct IPCMessage{
+        typedef struct SharedMessage{
             void* message_buffer;
             size_t message_size;
             uintptr_t next_message;
         } ipc_message_t;
 
-        typedef struct IPCMessageQueue{
+        typedef struct SharedMessageQueue{
             ipc_message_t* messages;
         } ipc_message_queue_t;
 
-        class IPCMessageEndpoint{
+        class SharedMessageEndpoint{
 
             private:
                 ipc_message_queue_t* m_queue = nullptr;
@@ -57,8 +57,8 @@ namespace MaxOS {
                 common::Spinlock m_message_lock;
 
             public:
-              explicit IPCMessageEndpoint(string name);
-              ~IPCMessageEndpoint();
+              explicit SharedMessageEndpoint(string name);
+              ~SharedMessageEndpoint();
 
               string* name;
               [[nodiscard]] ipc_message_queue_t* queue() const;
@@ -68,31 +68,31 @@ namespace MaxOS {
         };
 
         /**
-         * @class IPC
-         * @brief Manages the Inter-Process Communication (IPC) between processes via shared memory and message passing
+         * @class InterProcessCommunicationManager (IPC)
+         * @brief Manages the Inter-Process Communication between processes via shared memory and message passing
          */
-        class IPC {
+        class InterProcessCommunicationManager {
 
-          common::Vector<IPCSharedMemory*> m_shared_memory_blocks;
-          common::Vector<IPCMessageEndpoint*> m_message_endpoints;
+          common::Vector<SharedMemory*> m_shared_memory_blocks;
+          common::Vector<SharedMessageEndpoint*> m_message_endpoints;
 
           common::Spinlock m_lock;
 
           public:
 
-              IPC();
-              ~IPC();
+              InterProcessCommunicationManager();
+              ~InterProcessCommunicationManager();
 
-              IPCSharedMemory*  alloc_shared_memory(size_t size, string name);
-              IPCSharedMemory*  get_shared_memory(const string& name);
+              SharedMemory*  alloc_shared_memory(size_t size, string name);
+              SharedMemory*  get_shared_memory(const string& name);
               void              free_shared_memory(const string& name);
               void              free_shared_memory(uintptr_t physical_address);
-              void              free_shared_memory(IPCSharedMemory* block);
+              void              free_shared_memory(SharedMemory* block);
 
-              IPCMessageEndpoint* create_message_endpoint(const string& name);
-              IPCMessageEndpoint* get_message_endpoint(const string& name);
+              SharedMessageEndpoint* create_message_endpoint(const string& name);
+              SharedMessageEndpoint* get_message_endpoint(const string& name);
               void                free_message_endpoint(const string& name);
-              static void         free_message_endpoint(IPCMessageEndpoint* endpoint);
+              static void         free_message_endpoint(SharedMessageEndpoint* endpoint);
           };
 
     }

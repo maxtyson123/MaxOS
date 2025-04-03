@@ -36,13 +36,13 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
   m_nx_allowed = CPU::check_nx();
 
   // Store the information about the bitmap
-  m_memory_size = (m_multiboot->get_basic_meminfo()->mem_upper + 1024) * 1024;
+  m_memory_size = (m_multiboot->basic_meminfo()->mem_upper + 1024) * 1024;
   m_bitmap_size = m_memory_size / s_page_size + 1;
   m_total_entries = m_bitmap_size / s_row_bits + 1;
   _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", m_memory_size / 1024 / 1024, m_bitmap_size, m_total_entries, s_page_size);
 
   // Get the mmap that stores the memory to use
-  m_mmap_tag = m_multiboot->get_mmap();
+  m_mmap_tag = m_multiboot->mmap();
   for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
 
     // Skip if the region is not free or there is not enough space
@@ -110,7 +110,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot *multiboot) {
   }
 
   // Reserve the area for each multiboot module
-  for(multiboot_tag* tag = multiboot -> get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+  for(multiboot_tag* tag = multiboot -> start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
     // Check if the tag is a module
     if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
@@ -792,7 +792,7 @@ void PhysicalMemoryManager::initialise_bit_map() {
  *
  * @return The pml4 root address
  */
-uint64_t *PhysicalMemoryManager::get_pml4_root_address() {
+uint64_t *PhysicalMemoryManager::pml4_root_address() {
     return m_pml4_root_address;
 }
 
@@ -801,7 +801,7 @@ uint64_t *PhysicalMemoryManager::get_pml4_root_address() {
  *
  * @return The memory size in bytes
  */
-uint64_t PhysicalMemoryManager::get_memory_size() const {
+uint64_t PhysicalMemoryManager::memory_size() const {
   return m_memory_size;
 }
 
@@ -810,7 +810,7 @@ uint64_t PhysicalMemoryManager::get_memory_size() const {
  *
  * @return The memory size in bytes
  */
-uint64_t PhysicalMemoryManager::get_memory_used() const {
+uint64_t PhysicalMemoryManager::memory_used() const {
     return m_used_frames * s_page_size;
 }
 

@@ -13,6 +13,8 @@ namespace MaxOS{
 
   namespace system{
 
+    /// Style Guide Note: CPU abbreviation is preferred over Central Processing Unit
+
     typedef struct {
       uint64_t r15;
       uint64_t r14;

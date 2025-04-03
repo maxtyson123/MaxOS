@@ -145,7 +145,7 @@ namespace MaxOS {
                 InterruptManager();
                 ~InterruptManager();
 
-                static InterruptManager* get_active_interrupt_manager();
+                static InterruptManager* active_interrupt_manager();
 
                 static uint16_t hardware_interrupt_offset();
 
@@ -153,7 +153,7 @@ namespace MaxOS {
                 void remove_interrupt_handler(uint8_t interrupt);
 
                 void set_apic(AdvancedProgrammableInterruptController* apic);
-                AdvancedProgrammableInterruptController* get_apic();
+                AdvancedProgrammableInterruptController* active_apic();
 
                 void activate();
                 void deactivate();

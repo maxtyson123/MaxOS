@@ -49,11 +49,11 @@ namespace MaxOS {
            Colour int_to_colour(uint32_t);
 
            // Convert uint32_t to uint64s?
-           uint32_t get_width() const;
-           uint32_t get_height() const;
-           uint32_t get_color_depth() const;
+           [[nodiscard]] uint32_t width() const;
+           uint32_t height() const;
+           uint32_t color_depth() const;
 
-           uint64_t* get_framebuffer_address();
+           uint64_t* framebuffer_address();
 
            void put_pixel(int32_t x, int32_t y, const Colour& colour);
            void putPixel(int32_t x, int32_t y, uint32_t colour);

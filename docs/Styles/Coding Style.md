@@ -30,7 +30,7 @@ class Filedescriptor;
 String MIME_Type();
 ```
 
-Use full words, except in the rare case where an abbreviation would be more canonical and easier to understand.
+Use full words, except in the rare case where an abbreviation would be more canonical and easier to understand. If the word is long, use the full word in the class name and an abbreviation in the variable name. Denote the abbreviation in the doxygen comment.
 
 ###### Right:
 

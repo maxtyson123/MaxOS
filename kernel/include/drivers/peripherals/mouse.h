@@ -95,7 +95,7 @@ namespace MaxOS {
                 ~MouseDriver();
 
                 void activate() final;
-                string get_device_name() final;
+                string device_name() final;
             };
         }
     }

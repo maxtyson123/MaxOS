@@ -153,7 +153,7 @@ void MouseDriver::handle_interrupt(){
  *
  * @return The name of the device
  */
-string MouseDriver::get_device_name() {
+string MouseDriver::device_name() {
     return "Mouse";
 }
 

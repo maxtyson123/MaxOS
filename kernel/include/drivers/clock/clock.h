@@ -163,8 +163,8 @@ namespace MaxOS {
                     void calibrate(uint64_t ms_per_tick = 1);
                     common::Time get_time();
 
-                    string get_vendor_name() final;
-                    string get_device_name() final;
+                    string vendor_name() final;
+                    string device_name() final;
             };
 
         }
