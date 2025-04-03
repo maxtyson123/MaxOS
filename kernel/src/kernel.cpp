@@ -209,7 +209,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     scheduler.activate();
 
     // TODO:
-    //       -   TODOs, classes for PMM, VMM, style,
+    //       -   style,
     //       -   Rewrite boot text again to have progress bar
     //       -   Rewrite boot script to be in c++ where possible
 

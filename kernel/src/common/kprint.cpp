@@ -170,7 +170,7 @@ void _kprintf_internal(uint8_t type, const char* file, int line, const char* fun
       case 'x':
       {
         // Print a hex
-        int  number = va_arg (parameters, int );
+        uint64_t number = va_arg (parameters, uint64_t );
         char* str = htoa(number);
         for (int i = 0; i < strlen(str); i++)
           putchar(str[i], type == 2);

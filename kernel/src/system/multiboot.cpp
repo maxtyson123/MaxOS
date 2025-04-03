@@ -122,8 +122,8 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
   // Loop through the tags checking if the address is reserved
   for(multiboot_tag* tag = get_start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
 
-      // Check if the tag is a module
-      if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
+      // Check if the tag is a module or mmap
+      if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE && tag -> type != MULTIBOOT_TAG_TYPE_MMAP)
         continue;
 
       // Get the module tag

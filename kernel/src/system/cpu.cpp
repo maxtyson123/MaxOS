@@ -271,17 +271,17 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
 
   // If it may have occurred in a process, switch to the avoidable state
-  if(Scheduler::get_system_scheduler() != nullptr && Scheduler::get_current_process() != nullptr){
-
-    // Get the current process
-    Process* process = Scheduler::get_current_process();
-
-    // If the faulting address is in lower half just kill the process and move on
-    if(status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)){
-      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
-      return Scheduler::get_system_scheduler()->force_remove_process(process);
-    }
-  }
+//  if(Scheduler::get_system_scheduler() != nullptr && Scheduler::get_current_process() != nullptr){
+//
+//    // Get the current process
+//    Process* process = Scheduler::get_current_process();
+//
+//    // If the faulting address is in lower half just kill the process and move on
+//    if(status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)){
+//      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
+//      return Scheduler::get_system_scheduler()->force_remove_process(process);
+//    }
+//  }
 
   // We are panicking
   is_panicking = true;

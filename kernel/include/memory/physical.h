@@ -14,7 +14,7 @@ namespace MaxOS {
 
   namespace memory {
 
-
+    #define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))
     #define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))
 
     #define PML4_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 3)
@@ -45,18 +45,19 @@ namespace MaxOS {
 
       // Struct for a page table entry
       typedef struct PageTableEntry {
-        uint64_t present : 1;
-        uint64_t write : 1;
-        uint64_t user : 1;
-        uint64_t write_through : 1;
-        uint64_t cache_disabled : 1;
-        uint64_t accessed : 1;
-        uint64_t dirty : 1;
-        uint64_t huge_page : 1;
-        uint64_t global : 1;
-        uint64_t available : 3;
+        bool present : 1;
+        bool write : 1;
+        bool user : 1;
+        bool write_through : 1;
+        bool cache_disabled : 1;
+        bool accessed : 1;
+        bool dirty : 1;
+        bool huge_page : 1;
+        bool global : 1;
+        uint8_t available : 3;
         uint64_t physical_address : 52;
       } __attribute__((packed)) pte_t;
+
 
       // Struct for a page map level
       typedef struct PageMapLevel {
@@ -96,12 +97,13 @@ namespace MaxOS {
           common::Spinlock m_lock;
 
           // Table Management
-          void create_table(pml_t* table, pml_t* next_table, size_t index);
-          static pte_t create_page_table_entry(uintptr_t address, size_t flags);
-          static bool table_has_entry(pml_t* table, size_t index);
-          uint64_t* get_or_create_table(uint64_t* table, size_t index, size_t flags);
-          static uint64_t* get_table_if_exists(const uint64_t* table, size_t index);
+          pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
+          pml_t* get_and_create_table(pml_t* parent_table, uint64_t table_index, pml_t* table);
+          pte_t create_page_table_entry(uintptr_t address, size_t flags);
 
+          static uint64_t physical_address_of_entry(pte_t* entry);
+          pte_t* get_entry(virtual_address_t* virtual_address, pml_t* pml4_root);
+          pml_t* get_higher_half_table(uint64_t index, uint64_t index2 = 510, uint64_t index3 = 510);
 
           void initialise_bit_map();
 
@@ -143,7 +145,7 @@ namespace MaxOS {
           void identity_map(physical_address_t* physical_address, size_t flags);
 
           void unmap(virtual_address_t* virtual_address);
-          static void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
+          void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
           void unmap_area(virtual_address_t* virtual_address_start, size_t length);
 
           // Tools

@@ -369,31 +369,17 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 }
 
 /**
- * @brief Checks if a sub table is available a table, if not it is created
+ * @brief Gets the higher half of a tabled address in the kernel pml4
  *
- * @param table The table to check
- * @param next_table The table to create
- * @param index The index of the table to create
+ * @param index The index of the table to get
+ * @param index2 The index of the parent table
+ * @param index3 The index of the parent's parent table
+ * @return
  */
-void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t index) {
-
-  // If the table is already created return
-  if(table_has_entry(table, index))
-    return;
-
-  // Create the table
-  auto* new_table = (uint64_t *)allocate_frame();
-
-  // Set the table to the next table
-  table -> entries[index] = create_page_table_entry((uint64_t)new_table, Present | Write);
-
-  // Invalidate the TLB entry for the recursive mapping.
-  asm volatile("invlpg (%0)" ::"r" (next_table) : "memory");
-
-  // Clear the table
-  clean_page_table((uint64_t*)next_table);
-
+pml_t* PhysicalMemoryManager::get_higher_half_table(uint64_t index, uint64_t index2, uint64_t index3) {
+  return  (pml_t*)(0xFFFF000000000000 | ((510UL << 39) | (index3 << 30) | (index2 << 21) |  (index << 12)));
 }
+
 
 /**
  * @brief Gets or creates a table in a table
@@ -403,70 +389,113 @@ void PhysicalMemoryManager::create_table(pml_t* table, pml_t* next_table, size_t
  * @param flags The flags to set the table to
  * @return The created table
  */
-uint64_t* PhysicalMemoryManager::get_or_create_table(uint64_t *table, size_t index, size_t flags) {
+pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, size_t flags) {
 
-  // Address mask
-  uint64_t mask = 0xFFFFFFF000;
 
   // If the table is already created return it
-  if(table[index] & 0b1)
-      return (uint64_t *) to_dm_region((uintptr_t) table[index] & mask);
+  if(table -> entries[index].present)
+      return (pml_t *) to_dm_region((uintptr_t)physical_address_of_entry(&table -> entries[index]));
 
   // Need to create the table
   auto* new_table = (uint64_t*)allocate_frame();
-  table[index] = (uint64_t) new_table | flags;
+  table -> entries[index] = create_page_table_entry((uint64_t)new_table, flags);
 
-  // Move the table to the higher half
+  // Move the table to the higher half (can't rely on the direct map if the pmm is not initialized)
   new_table = (uint64_t*)to_dm_region((uintptr_t) new_table);
 
   // Clear the table
   clean_page_table(new_table);
 
   // All done
-  return new_table;
+  return (pml_t*)new_table;
 }
 
 /**
- * @brief Checks if a table has an entry
+ * @brief Creates a page table entry when the higher half is not initialized
  *
- * @param table The table to check
- * @param index The index of the table to check
- * @return True if the table has an entry
+ * @param parent_table The parent table to create the entry in
+ * @param table_index The index of the table to create
+ * @param pml4_index The index of the PML4 table
+ * @param pdpr_index The index of the PDPR table (defaults to 510)
+ * @param pd_index The index of the PD table (defaults to 510)
+ * @param pt_index The index of the PT table (defaults to 510)
+ *
+ * @return The created page table entry
  */
-bool PhysicalMemoryManager::table_has_entry(pml_t *table, size_t index) {
-  // Get the entry
-  pte_t* entry = &table -> entries[index];
+pml_t* PhysicalMemoryManager::get_and_create_table(pml_t* parent_table, uint64_t table_index, pml_t* table) {
 
   // If the table is already created return it
-  return (entry -> present);
+  if(parent_table -> entries[table_index].present)
+    return table;
 
+  // Create the table
+  auto* new_table = (uint64_t *)allocate_frame();
+  parent_table -> entries[table_index] = create_page_table_entry((uint64_t)new_table, Present | Write);
+
+  // Invalidate the table
+  asm volatile("invlpg (%0)" ::"r" (table) : "memory");
+
+  // Clear the table
+  clean_page_table((uint64_t*)table);
+
+  // Return the table
+  return (pml_t *)table;
 }
+
+
 
 /**
- * @brief Gets a table if it exists
+ * @brief Get the page table entry for a virtual address
  *
- * @param table  The table to check
- * @param index The index of the table to get
- * @return  The table if it exists, nullptr otherwise
+ * @param virtual_address The virtual address to get the entry for
+ * @return The page table entry for the virtual address or nullptr if not found
  */
-uint64_t *PhysicalMemoryManager::get_table_if_exists(const uint64_t *table, size_t index) {
+pte_t *PhysicalMemoryManager::get_entry(virtual_address_t* virtual_address, pml_t* pml4_table) {
 
-  // Address mask
-  uint64_t mask = 0xFFFFFFF000;
+  // Check if the address is in the higher region
+  uint8_t is_user = !(in_higher_region((uint64_t)virtual_address));
+  if(is_user)
+     is_user = User;
 
-  // If the table is null return null
-  if(table == nullptr)
-    return nullptr;
+  // Get the indexes
+  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
+  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
 
-  // Check if the table is present
-  if(table[index] & 0b1)
-      return (uint64_t *) to_dm_region((uintptr_t) table[index] & mask);
+  // Get the tables
+  pml_t* pdpr_table = nullptr;
+  pml_t* pd_table   = nullptr;
+  pml_t* pt_table   = nullptr;
 
-  // Not found
-  return nullptr;
+  // If it is before initialization then cant rely on the direct map
+  if(!m_initialized) {
+    pdpr_table = get_and_create_table(pml4_table, pml4_index, get_higher_half_table(pml4_index));
+    pd_table   = get_and_create_table(pdpr_table, pdpr_index, get_higher_half_table(pdpr_index, pml4_index));
+    pt_table   = get_and_create_table(pd_table,   pd_index,   get_higher_half_table(pd_index, pdpr_index, pml4_index));
+
+  }else{
+    pdpr_table = get_or_create_table(pml4_table, pml4_index, Present | Write | is_user);
+    pd_table   = get_or_create_table(pdpr_table, pdpr_index, Present | Write | is_user);
+    pt_table   = get_or_create_table(pd_table,   pd_index,   Present | Write | is_user);
+  }
+
+  // Get the entry
+  return &pt_table -> entries[pt_index];
 }
 
-#define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))
+
+/**
+ * @brief Gets the physical address of an entry
+ *
+ * @param entry The entry to get the physical address of
+ * @return The physical address of the entry
+ */
+uint64_t PhysicalMemoryManager::physical_address_of_entry(pte_t *entry) {
+  return entry -> physical_address << 12;
+}
+
+
 /**
  * @brief Maps a physical address to a virtual address, using the kernel's pml4 table
  *
@@ -475,43 +504,10 @@ uint64_t *PhysicalMemoryManager::get_table_if_exists(const uint64_t *table, size
  * @param flags The flags to set the mapping to
  * @return The virtual address
  */
-virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_address, virtual_address_t* address, size_t flags) {
+virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_address, virtual_address_t* virtual_address, size_t flags) {
 
-  // Base information
-  auto* pml4_table = (pml_t *)m_pml4_root_address;
-  size_t base_addr = 0xFFFF000000000000;
-
-  // Get the indexes
-  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) address);
-  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) address);
-  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) address);
-  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) address);
-
-  // Get the tables
-  auto* pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
-  auto* pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
-  auto* pt_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
-
-  // Create the tables
-  create_table(pml4_table, pdpr_table, pml4_index);
-  create_table(pdpr_table, pd_table, pdpr_index);
-  create_table(pd_table, pt_table, pd_index);
-
-  // Get the entry
-  pte_t* pte = &pt_table -> entries[pt_index];
-
-  // If it already exists return the address
-  if(pte -> present)
-    return address;
-
-  // Map the physical address to the virtual address
- *pte = create_page_table_entry((uint64_t)physical_address, flags);
-
-
-  // Flush the TLB
-  asm volatile("invlpg (%0)" ::"r" (address) : "memory");
-
-  return address;
+  // Map using the kernel's pml4 table
+  return map(physical_address, virtual_address, flags, (uint64_t*)m_pml4_root_address);
 }
 
 /**
@@ -523,37 +519,24 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical_addre
  * @param pml4_table The pml4 table to use
  * @return The virtual address
  */
-virtual_address_t* PhysicalMemoryManager::map(physical_address_t *physical, virtual_address_t *virtual_address, size_t flags, uint64_t *pml4_table) {
-
-    // Get the indexes
-    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
+virtual_address_t* PhysicalMemoryManager::map(physical_address_t* physical_address, virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_table) {
 
     // If it is in a lower region then assume it is the user space
     uint8_t is_user = !(in_higher_region((uint64_t)virtual_address));
     if(is_user) {
       // Change the flags to user
       flags |= User;
-      is_user = User;
     }
 
-    // Disable the NX is set but not allowed (must be 0 as it is reserved)
-    if(!m_nx_allowed && (flags & NoExecute))
-      flags &= ~NoExecute;
+    // Get the entry
+    pte_t* pte = get_entry(virtual_address, (pml_t *)pml4_table);
 
-    // Store the tables
-    uint64_t* pdpr_table = get_or_create_table(pml4_table, pml4_index, Present | Write | is_user);
-    uint64_t* pd_table = get_or_create_table(pdpr_table, pdpr_index, Present | Write | is_user);
-    uint64_t* pt_table = get_or_create_table(pd_table, pd_index, Present | Write | is_user);
-
-    // If the page is already mapped return the address
-    if(pt_table[pt_index] & 0b1)
+    // If it already exists return the address
+    if(pte -> present)
       return virtual_address;
 
     // Map the physical address to the virtual address
-    pt_table[pt_index] = (uint64_t) physical | flags;
+    *pte = create_page_table_entry((uint64_t)physical_address, flags);
 
     // Flush the TLB
     asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
@@ -635,34 +618,8 @@ void PhysicalMemoryManager::identity_map(physical_address_t *physical_address, s
  */
 void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
 
-  // Base information
-  auto* pml4_table = (pml_t *)m_pml4_root_address;
-  size_t base_addr = 0xFFFF000000000000;
-
-  // Get the indexes
-  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
-  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
-  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
-  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
-
-  // Get the tables
-  auto *pdpr_table =(pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l,510l, (uint64_t) pml4_index));
-  auto *pd_table = (pml_t *) (base_addr | ENTRIES_TO_ADDRESS(510l,510l, (uint64_t) pml4_index, (uint64_t) pdpr_index));
-  auto* pt_table = (uint64_t *) (base_addr | ENTRIES_TO_ADDRESS(510l, (uint64_t) pml4_index, (uint64_t) pdpr_index, (uint64_t) pd_index));
-
-  // Check if the entry is present
-  if(table_has_entry(pml4_table, pml4_index) && table_has_entry(pdpr_table, pdpr_index) && table_has_entry(pd_table, pd_index))
-    return;
-
-  // Check if the entry isn't present
-  if(!(pt_table[pt_index] & 0b1))
-    return;
-
-  // Unmap the entry
-  pt_table[pt_index] = 0x00l;
-
-  // Flush the TLB
-  asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
+  // Pass the kernel's pml4 table
+  unmap(virtual_address, (uint64_t*)m_pml4_root_address);
 }
 
 /**
@@ -671,30 +628,17 @@ void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address) {
  * @param virtual_address The virtual address to unmap
  * @param pml4_root The pml4 table to use
  */
-void PhysicalMemoryManager::unmap(virtual_address_t *virtual_address, uint64_t *pml4_root) {
+void PhysicalMemoryManager::unmap(virtual_address_t *virtual_address, uint64_t* pml4_root) {
 
-    // Get the indexes
-    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
-
-    // Get the tables
-    uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
-    uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
-    uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
-
-    // Check if the tables are present (if any are not then a pt entry will not be present)
-    if(pt_table == nullptr)
-      return;
-
+    // Get the entries
+    pte_t* pte = get_entry(virtual_address, (pml_t *)pml4_root);
 
     // Check if the entry is present
-    if(!(pt_table[pt_index] & 0b1))
+    if(!pte -> present)
       return;
 
     // Unmap the entry
-    pt_table[pt_index] = 0x00l;
+    pte -> present = false;
 
     // Flush the TLB
     asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
@@ -738,18 +682,25 @@ void PhysicalMemoryManager::clean_page_table(uint64_t *table) {
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) {
 
   pte_t page =  (pte_t){
-    .present = 1,
-    .write = (flags & Write) != 0,
-    .user = (flags & User) != 0,
-    .write_through = (flags & (1 << 7)) != 0,
-    .cache_disabled = 0,
-    .accessed = 0,
-    .dirty = 0,
-    .huge_page = (flags & HugePage) != 0,
-    .global = 0,
-    .available = 0,
-    .physical_address = (uint64_t)address >> 12
+    .present            = (flags & Present) != 0,
+    .write              = (flags & Write) != 0,
+    .user               = (flags & User) != 0,
+    .write_through      = (flags & WriteThrough) != 0,
+    .cache_disabled     = (flags & CacheDisabled) != 0,
+    .accessed           = (flags & Accessed) != 0,
+    .dirty              = (flags & Dirty) != 0,
+    .huge_page          = (flags & HugePage) != 0,
+    .global             = (flags & Global) != 0,
+    .available          = 0,
+    .physical_address   = (uint64_t)address >> 12,
   };
+
+  // Set the NX bit if it is allowed
+  if(m_nx_allowed && (flags & NoExecute)){
+      auto page_raw = (uint64_t)&page;
+      page_raw |= NoExecute;
+      page = *(pte_t*)page_raw;
+  }
 
   return page;
 }
@@ -939,29 +890,15 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
  */
 physical_address_t *PhysicalMemoryManager::get_physical_address(virtual_address_t *virtual_address, uint64_t *pml4_root) {
 
-
-    // Get the indexes
-    uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
-    uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
-
-    // Get the tables
-    uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
-    uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
-    uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
-
-    // Check if the tables are present (if any are not then a pt entry will not be present)
-    if(pt_table == nullptr)
-      return nullptr;
-
+    // Get the entry
+    pte_t* entry = get_entry(virtual_address, (pml_t *)pml4_root);
 
     // Check if the entry is present
-    if(!(pt_table[pt_index] & 0b1))
+    if(!entry -> present)
       return nullptr;
 
-    // Return the physical address
-    return (physical_address_t *)(pt_table[pt_index] & 0xFFFFFFFFFFFFF000);
+    // Get the physical address
+    return (physical_address_t*)physical_address_of_entry(entry);
 }
 
 /**
@@ -972,31 +909,15 @@ physical_address_t *PhysicalMemoryManager::get_physical_address(virtual_address_
  */
 void PhysicalMemoryManager::change_page_flags(virtual_address_t *virtual_address, size_t flags, uint64_t *pml4_root) {
 
-  // Get the indexes
-  uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
-  uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
-  uint16_t pd_index   = PML2_GET_INDEX((uint64_t) virtual_address);
-  uint16_t pt_index   = PML1_GET_INDEX((uint64_t) virtual_address);
-
-  // Get the tables
-  uint64_t* pdpr_table = get_table_if_exists(pml4_root, pml4_index);
-  uint64_t* pd_table = get_table_if_exists(pdpr_table, pdpr_index);
-  uint64_t* pt_table = get_table_if_exists(pd_table, pd_index);
-
-  // Check if the tables are present (if any are not then a pt entry will not be present)
-  if(pt_table == nullptr)
-    return;
+  // Get the entry
+  pte_t* entry = get_entry(virtual_address, (pml_t *)pml4_root);
 
   // Check if the entry is present
-  if(!(pt_table[pt_index] & 0b1))
+  if(!entry -> present)
     return;
 
-  // Disable the NX is set but not allowed (must be 0 as it is reserved)
-  if(!m_nx_allowed && (flags & NoExecute))
-    flags &= ~NoExecute;
-
   // Change the flags
-  pt_table[pt_index] = (pt_table[pt_index] & 0xFFFFFFFFFFFFF000) | flags;
+  *entry = create_page_table_entry(physical_address_of_entry(entry), flags);
 
   // Flush the TLB
   asm volatile("invlpg (%0)" ::"r" (virtual_address) : "memory");
