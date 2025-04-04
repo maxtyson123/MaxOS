@@ -1,41 +1,24 @@
 //Common
 #include <stdint.h>
-#include <common/version.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 //Hardware com
 #include <hardwarecommunication/interrupts.h>
-#include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/acpi.h>
 #include <hardwarecommunication/apic.h>
 
 //Drivers
-#include <drivers/console/console.h>
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
 #include <drivers/peripherals/keyboard.h>
 #include <drivers/peripherals/mouse.h>
 #include <drivers/video/vesa.h>
-#include <drivers/video/video.h>
 
 //GUI
 #include <gui/desktop.h>
-#include <gui/window.h>
-#include <gui/widgets/text.h>
-#include <gui/widgets/button.h>
-#include <gui/widgets/inputbox.h>
-
-//NET
-#include <net/ethernetframe.h>
-#include <net/arp.h>
-#include <net/ipv4.h>
-#include <net/icmp.h>
-#include <net/udp.h>
-#include <net/tcp.h>
 
 //PROCESS
-#include <processes/process.h>
 #include <processes/scheduler.h>
 
 //SYSTEM
@@ -47,163 +30,138 @@
 #include <memory/physical.h>
 #include <memory/virtual.h>
 
-//FILESYSTEM
-#include <filesystem/msdospart.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::peripherals;
-using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::drivers::clock;
 using namespace MaxOS::drivers::console;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::gui;
-using namespace MaxOS::net;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
-using namespace MaxOS::filesystem;
 
 
 //TODO: Rework cmake to have debug and prod targets
 
-ConsoleStream* active_stream = nullptr;
-
 extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)  // Only place where it is allowed to not use snake_case
 {
-    // Initialise the serial console
+    // Initialise the logger
+    Logger logger;
     SerialConsole serialConsole;
+    logger.add_log_writer(&serialConsole);
 
     // Make the multiboot header
     Multiboot multiboot(addr, magic);
-    _kprintf("-= MaxOS booted =-\n");
+    Logger::INFO() << "MaxOS Booted Successfully \n";
 
+    // Initialise the IDT
     InterruptManager interrupts;
-    _kprintf("-= IDT set up =-\n");
+    Logger::INFO() << "Interrupt Manager set up \n";
 
+    // Initialise the PMM
     PhysicalMemoryManager pmm(&multiboot);
-    _kprintf("-= Physical Memory Manager set up =-\n");
+    Logger::INFO() << "Physical Memory Manager set up \n";
 
+    // Initialise the Memory Manager
     VirtualMemoryManager vmm;
     MemoryManager memoryManager(&vmm);
-    _kprintf("-= Memory Manager set up =-\n");
+    Logger::INFO() << "Virtual Memory Manager set up \n";
 
     // Initialise the VESA Driver
     VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
-    _kprintf("-= VESA set up =-\n");
+    Logger::INFO() << "VESA Driver set up \n";
 
     // Initialise Console
     VESABootConsole console(&vesa);
-
-    // Create a stream for the console
-    ConsoleArea mainConsoleArea(&console, 0, 0, console.width(), console.height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
-    ConsoleStream cout(&mainConsoleArea);
-    active_stream = &cout;
-
-    // Header constants
-    const string tick = (string)"[ " + ANSI_COLOURS[FG_Green] + "OK" + ANSI_COLOURS[Reset] + " ]";
-    const string boot_title = string("Kernel Boot Sequence - MaxOS v") + string(VERSION_STRING) + " [build " + string(BUILD_NUMBER) + "]";
-    const int boot_width = boot_title.length() + 20;
-    const int sub_boot_width = boot_width;
-
-    // Print helpers
-    string out = "";
-    #define log(x) out = x; cout << out; cout << (string)" " * (sub_boot_width - out.length() - 6) << tick << "\n"
-    #define header(x) cout << "\n\n" << ANSI_COLOURS[FG_White] << "[" << string(x).center(sub_boot_width - 2) << "]\n" << ANSI_COLOURS[Reset]
-
-    // Print the header
-    cout << ANSI_COLOURS[FG_Blue] << (string)"=" * boot_width << "\n";
-    cout << ANSI_COLOURS[FG_Cyan] << boot_title.center(boot_width) << "\n";
-    cout << ANSI_COLOURS[FG_Blue] << (string)"=" * boot_width << "\n";
+    Logger::INFO() << "Console set up \n";
 
     // Stuff done earlier
-    header("Initialising System Components");
-    log("Set Up Serial Console");
-    log("Parsed Multiboot");
-    log("Set Up Paging");
-    log("Set Up Interrupt Manager");
-    log("Set Up Physical Memory Manager");
-    log("Set Up Virtual Memory Manager");
-    log("Set Up Memory Manager (Kernel)");
-    log("Set Up Video Driver");
+    Logger::HEADER() << "Initialising System Components \n";
+    Logger::INFO() << "Set Up Serial Console \n";
+    Logger::INFO() << "Parsed Multiboot \n";
+    Logger::INFO() << "Set Up Paging \n";
+    Logger::INFO() << "Set Up Interrupt Manager \n";
+    Logger::INFO() << "Set Up Physical Memory Manager \n";
+    Logger::INFO() << "Set Up Virtual Memory Manager \n";
+    Logger::INFO() << "Set Up Memory Manager (Kernel) \n";
+    Logger::INFO() << "Set Up Video Driver \n";
 
-    header("Initialising Hardware");
+    Logger::HEADER() << "Initialising Hardware"; Logger::Endline();
     DriverManager driver_manager;
 
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
-    log("Set Up ACPI");
+    Logger::INFO() << "Set Up ACPI \n";
 
     AdvancedProgrammableInterruptController apic(&acpi);
-    log("Set Up APIC");
+    Logger::INFO() << "Set Up APIC \n";
 
     // Keyboard (TODO: Move to userspace PS/2 driver)
     KeyboardDriver keyboard;
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
     driver_manager.add_driver(&keyboard);
-    log("Set Up Keyboard");
+    Logger::INFO() << "Set Up Keyboard \n";
 
     // Mouse (TODO: Move to userspace PS/2 driver)
     MouseDriver mouse;
     driver_manager.add_driver(&mouse);
-    log("Set Up Mouse");
+    Logger::INFO() << "Set Up Mouse \n";
 
     // CPU
     CPU cpu;
-    log("Set Up CPU");
+    Logger::INFO() << "Set Up CPU \n";
 
     // Clock
     Clock kernelClock(&apic, 1);
     driver_manager.add_driver(&kernelClock);
-    log("Set Up Clock");
+    Logger::INFO() << "Set Up Clock \n";
 
     //USB
     //UniversalSerialBusController USBController(&driver_manager);
-    //log("Set Up USB");
+    //Logger::INFO() << "Set Up USB \n";
 
-    header("Device Management");
+    Logger::HEADER() << "Device Management"; Logger::Endline();
 
     // Find the drivers
     driver_manager.find_drivers();
-    log("Found Drivers");
+    Logger::INFO() << "Found Drivers \n";
 
     // Reset the devices
     uint32_t reset_wait_time = driver_manager.reset_devices();
-    log("Reset Devices");
+    Logger::INFO() << "Reset Devices \n";
 
     // Interrupts
     interrupts.activate();
-    log("Activating Interrupts");
+    Logger::INFO() << "Activating Interrupts \n";
 
     // Post interrupt activation
     kernelClock.calibrate();
     kernelClock.delay(reset_wait_time);
-    log("Calibrated Clock");
+    Logger::INFO() << "Calibrated Clock \n";
 
-    header("Finalisation");
+    Logger::HEADER() << "Finalisation"; Logger::Endline();
 
     Scheduler scheduler(multiboot);
-    log("Set Up Scheduler");
+    Logger::INFO() << "Set Up Scheduler \n";
 
     SyscallManager syscalls;
-    log("Set Up Syscalls");
+    Logger::INFO() << "Set Up Syscalls \n";
 
     // Initialise the drivers
     driver_manager.initialise_drivers();
-    log("Initialised Drivers");
+    Logger::INFO() << "Initialised Drivers \n";
 
     // Activate the drivers
     driver_manager.activate_drivers();
-    log("Activated Drivers");
+    Logger::INFO() << "Activated Drivers \n";
 
-    // Print the footer
-    cout << "\n\n";
-    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << "\n";
-    cout << ANSI_COLOURS[FG_Cyan] << string(" -- Kernel Ready --").center(boot_width) << "\n";
-    cout << ANSI_COLOURS[FG_Blue] << (string)"-" * boot_width << ANSI_COLOURS[Reset] << "\n";
-    cout.set_cursor(0, console.height() - 1);
+    // Kernel Boot done
+    Logger::HEADER() << "MaxOS Kernel Successfully Booted"; Logger::Endline();
+    console.finish();
 
     // Start the Scheduler & updates the clock handler
     scheduler.activate();
@@ -212,9 +170,6 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     //       -   Rewrite boot text again to have progress bar
     //       -   Rewrite boot script to be in c++ where possible
 
-
-    /// Boot Done ///
-    _kprintf("%h%s[System Booted]%s MaxOS v%s\n", ANSI_COLOURS[FG_Green], ANSI_COLOURS[Reset], VERSION_STRING);
 
     /// How this idle works:
     ///  I was debugging along and released that on the first ever schedule it will

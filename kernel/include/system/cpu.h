@@ -146,7 +146,7 @@ namespace MaxOS{
         static inline bool is_panicking = { false };
         static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
         static void PANIC(const char* message, cpu_status_t* status = nullptr);
-        static void halt();
+        [[noreturn]] static void halt();
 
         void init_tss();
         inline static tss_t tss = {};

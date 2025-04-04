@@ -2,7 +2,7 @@
 // Created by 98max on 25/02/2025.
 //
 #include <processes/process.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 #include <processes/scheduler.h>    //TODO: This is a circular dependency, need to fix, make the scheduler handle that sorta stuff
 
 using namespace MaxOS;
@@ -179,7 +179,7 @@ Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, b
  */
 Process::~Process() {
 
-  _kprintf("Cleaning up process %s\n", name.c_str());
+  uint64_t pages = PhysicalMemoryManager::s_current_manager -> memory_used();
 
   // Free the threads
   for (auto thread : m_threads)
@@ -189,7 +189,8 @@ Process::~Process() {
   if(!is_kernel)
       delete memory_manager;
 
-
+  // Log the cleanup
+  Logger::DEBUG() << "Process " << name.c_str() << " cleaned up, memory before: " << pages << " bytes, after cleanup: " << PhysicalMemoryManager::s_current_manager -> memory_used() << " bytes\n";
 }
 
 /**

@@ -3,7 +3,7 @@
 //
 
 #include <hardwarecommunication/interrupts.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -226,7 +226,7 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *st
   switch (status->interrupt_number) {
 
     case 0x7:
-      _kpanicf("Device Not Available: FPU Not Enabled\n");
+      Logger::ERROR() << "Device Not Available: FPU Not Enabled\n";
       CPU::prepare_for_panic(status);
       CPU::PANIC("See above message for more information", status);
       break;
@@ -283,7 +283,7 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
   if(m_interrupt_handlers[status -> interrupt_number] != nullptr)
     new_status = m_interrupt_handlers[status -> interrupt_number]->handle_interrupt(status);
   else
-    _kprintf("Unhandled Interrupt 0x%x\n", status->interrupt_number);
+    Logger::WARNING() << "Interrupt " << (int)status->interrupt_number << " not handled\n";
 
   // Send the EOI to the APIC
   if(s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
@@ -310,7 +310,7 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
   if(can_avoid != nullptr)
     return can_avoid;
 
-  _kpanicf("Page Fault (0x%x): present: %s, write: %s, user-mode: %s, reserved write: %s, instruction fetch: %s\n", faulting_address, (present ? "Yes" : "No"), (write ? "Yes" : "No"), (user_mode ? "Yes" : "No"), (reserved_write ? "Yes" : "No"), (instruction_fetch ? "Yes" : "No"));
+  Logger::ERROR() << "Page Fault: (0x" << faulting_address << "): present: " << (present ? "Yes" : "No") << ", write: " << (write ? "Yes" : "No") << ", user-mode: " << (user_mode ? "Yes" : "No") << ", reserved write: " << (reserved_write ? "Yes" : "No") << ", instruction fetch: " << (instruction_fetch ? "Yes" : "No") << "\n";
   CPU::PANIC("See above message for more information", status);
 
   // Probably should never get here
@@ -330,7 +330,7 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t *s
       return can_avoid;
 
     // Have to panic
-    _kpanicf("General Protection Fault (0x%x): %s\n", status -> rip, (error_code & 0x1) ? "Protection-Exception" : "Not a Protection Exception");
+    Logger::ERROR() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << "\n";
     CPU::PANIC("See above message for more information", status);
 
     // Probably should never get here

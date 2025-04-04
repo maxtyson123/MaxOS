@@ -118,14 +118,6 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
 
         }
     }
-
-    // Draw the bottom 2  "spacing lines"
-    for (int yBitMapOffset = yLimit; yBitMapOffset < yLimit + 2; yBitMapOffset++) {
-        for (int xBitMapOffset = limitArea.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
-            context -> putPixel(x + xBitMapOffset, y + yBitMapOffset, background);
-        }
-    }
-
 }
 
 /**

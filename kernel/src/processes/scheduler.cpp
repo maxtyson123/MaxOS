@@ -3,7 +3,7 @@
 //
 
 #include <processes/scheduler.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
@@ -179,7 +179,7 @@ uint64_t Scheduler::add_process(Process *process) {
 
   // Add the process to the list
   m_processes.push_back(process);
-  _kprintf("Adding process %d: %s\n", m_next_pid, process->name.c_str());
+  Logger::DEBUG() << "Adding process " << m_next_pid << ": " << process->name << "\n";
 
   // Return the process ID
   return m_next_pid;
@@ -199,7 +199,7 @@ uint64_t Scheduler::add_thread(Thread *thread) {
 
     // Add the thread to the list
     m_threads.push_back(thread);
-    _kprintf("Adding thread %d to process %d\n", m_next_tid, thread->parent_pid);
+    Logger::DEBUG() << "Adding thread " << m_next_tid << " to process " << thread->parent_pid << "\n";
 
     // Return the thread ID
     return m_next_tid;
@@ -399,15 +399,15 @@ void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
     if(!elf->is_valid())
       continue;
 
-    _kprintf("Creating process from multiboot module for %s (at 0x%x)\n", module->cmdline, module->mod_start);
+    Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t)module->mod_start << ")\n";
 
     // Create an array of args for the process
     char* args[1] = {module->cmdline};
 
     // Create the process
     auto* process = new Process(module->cmdline, args, 1, elf);
-
-    _kprintf("Elf loaded to pid %d\n", process->pid());
+    
+    Logger::DEBUG() << "Elf loaded to pid " << process->pid() << "\n";
   }
 
 }

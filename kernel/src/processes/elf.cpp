@@ -3,7 +3,7 @@
 //
 
 #include <processes/elf.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::processes;

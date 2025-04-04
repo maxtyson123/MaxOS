@@ -2,6 +2,7 @@
 // Created by 98max on 30/03/2025.
 //
 #include <runtime/cplusplus.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::runtime;

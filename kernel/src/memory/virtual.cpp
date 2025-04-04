@@ -3,7 +3,7 @@
 //
 
 #include <memory/virtual.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 #include <processes/scheduler.h>
 
 using namespace MaxOS::memory;
@@ -39,7 +39,7 @@ VirtualMemoryManager::VirtualMemoryManager()
         m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager->pml4_root_address()[i];
 
       }
-      _kprintf("Mapped higher half of kernel\n");
+      Logger::DEBUG() << "Mapped higher half of kernel\n";
 
 
 
@@ -49,7 +49,7 @@ VirtualMemoryManager::VirtualMemoryManager()
     }
 
     // Log the VMM's PML4 address
-    _kprintf("VMM PML4: physical - 0x%x, virtual - 0x%x\n", m_pml4_root_physical_address, m_pml4_root_address);
+    Logger::DEBUG() << "VMM PML4: physical - 0x" << (uint64_t)m_pml4_root_physical_address << ", virtual - 0x" << (uint64_t)m_pml4_root_address << "\n";
 
     // Space to store VMM chunks
     uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->memory_size() + PhysicalMemoryManager::s_page_size);
@@ -61,13 +61,13 @@ VirtualMemoryManager::VirtualMemoryManager()
     ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space\n");
     PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
     m_first_region->next = nullptr;
-    _kprintf("Allocated VMM: physical: 0x%x, virtual: 0x%x\n", vmm_space_physical, vmm_space);
+    Logger::DEBUG() << "VMM space: physical - 0x" << (uint64_t)vmm_space_physical << ", virtual - 0x" << (uint64_t)vmm_space << "\n";
     if(!is_kernel)
       ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
 
     // Calculate the next available address (kernel needs to reserve space for the higher half)
     m_next_available_address = is_kernel ? vmm_space + s_reserved_space : PhysicalMemoryManager::s_page_size;
-    _kprintf("Next available address: 0x%x\n", m_next_available_address);
+    Logger::DEBUG() << "Next available address: 0x" << m_next_available_address << "\n";
 
 }
 

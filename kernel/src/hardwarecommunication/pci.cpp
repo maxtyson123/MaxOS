@@ -4,7 +4,7 @@
 #include <hardwarecommunication/pci.h>
 #include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/ethernet/intel_i217.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 
 using namespace MaxOS;
@@ -176,19 +176,19 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 }
 
                 // write to the debug stream
-                _kprintf("DEVICE FOUND: %s - ", deviceDescriptor.get_type().c_str());
+                Logger::DEBUG() << "DEVICE FOUND: " << deviceDescriptor.get_type() << " - ";
 
                 // Select the driver and print information about the device
                 Driver* driver = get_driver(deviceDescriptor);
                 if(driver != nullptr){
                   handler->on_driver_selected(driver);
-                  _kprintf("%h %s %s", driver->vendor_name().c_str(), driver->device_name().c_str());
+                  Logger::Out() << driver->vendor_name() << " " << driver->device_name();
                 }else{
                   list_known_device(deviceDescriptor);
                 }
 
                 // New line
-                _kprintf("%h\n");
+                Logger::Out() << "\n";
             }
         }
     }
@@ -289,13 +289,13 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
         case 0x1022:
         {
             // The vendor is AMD
-            _kprintf("%hAMD ");
+            Logger::Out() << "AMD ";
 
             // List the device
             switch (dev.device_id)
             {
                 default:
-                  _kprintf("%h0x%x", dev.device_id);
+                  Logger::Out() << "0x%x" << dev.device_id;
                   break;
             }
             break;
@@ -304,19 +304,19 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
         case 0x106B:
         {
             // The vendor is Apple
-            _kprintf("%hApple ");
+            Logger::Out() << "Apple ";
 
             // List the device
             switch (dev.device_id)
             {
                 case 0x003F:
                 {
-                  _kprintf("%hKeyLargo/Intrepid USB");
+                  Logger::Out() << "KeyLargo/Intrepid USB";
                   break;
                 }
 
                 default:
-                  _kprintf("%h0x%x", dev.device_id);
+                  Logger::Out() << "0x%x" << dev.device_id;
                   break;
             }
             break;
@@ -325,7 +325,7 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
         case 1234:
         {
             // The vendor is QEMU
-          _kprintf("%hQEMU ");
+          Logger::Out() << "QEMU ";
 
             // List the device
             switch (dev.device_id)
@@ -333,7 +333,7 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
 
                 case 0x1111:
                 {
-                  _kprintf("%hVirtual Video Controller");
+                  Logger::Out() << "Virtual Video Controller";
                   break;
                 }
             }
@@ -343,7 +343,7 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
         case 0x8086:
         {
             // The vendor is Intel
-            _kprintf("%hIntel ");
+            Logger::Out() << "Intel ";
 
             // List the device
             switch (dev.device_id)
@@ -351,44 +351,44 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
 
                 case 0x1237:
                 {
-                  _kprintf("%h440FX");
+                  Logger::Out() << "440FX";
                   break;
                 }
 
                 case 0x2415:
                 {
-                  _kprintf("%hAC'97");
+                  Logger::Out() << "AC'97";
                   break;
                 }
 
                 case 0x7000:
                 {
-                  _kprintf("%hPIIX3");
+                  Logger::Out() << "PIIX3";
                   break;
 
                 }
 
                 case 0x7010:
                 {
-                  _kprintf("%hPIIX4");
+                  Logger::Out() << "PIIX4";
                   break;
 
                 }
 
                 case 0x7111:
                 {
-                  _kprintf("%hPIIX3 ACPI");
+                  Logger::Out() << "PIIX3 ACPI";
                   break;
                 }
 
                 case 0x7113:
                 {
-                  _kprintf("%hPIIX4 ACPI");
+                  Logger::Out() << "PIIX4 ACPI";
                   break;
                 }
 
                 default:
-                    _kprintf("%h0x%x", dev.device_id);
+                    Logger::Out() << "0x%x" << dev.device_id;
                     break;
 
             }
@@ -398,26 +398,27 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
         case 0x80EE: {
 
             // The vendor is VirtualBox
-            _kprintf("%hVirtualBox ");
+            Logger::Out() << "VirtualBox ";
 
             // List the device
             switch (dev.device_id) {
 
                 case 0xBEEF: {
-                  _kprintf("%hGraphics Adapter");
+                  Logger::Out() << "Graphics Adapter";
                   break;
                 }
 
                 case 0xCAFE: {
-                  _kprintf("%hGuest Service");
+                  Logger::Out() << "Guest Service";
                   break;
                 }
             }
             break;
         }
 
-        default:    // Unknown
-          _kprintf("%hUnknown (0x%x:0x%x)", dev.vendor_id, dev.device_id);
+        // Unknown
+        default:
+          Logger::Out() << "Unknown (0x" << dev.vendor_id << ":0x" << dev.device_id << ")";
           break;
 
     }

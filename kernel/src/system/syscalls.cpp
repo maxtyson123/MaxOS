@@ -3,7 +3,7 @@
 //
 
 #include <system/syscalls.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -65,7 +65,7 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
   if(m_syscall_handlers[syscall] != nullptr)
     m_current_args = m_syscall_handlers[syscall](m_current_args);
   else
-    _kprintf("Syscall %d not found\n", syscall);
+    Logger::ERROR() << "Syscall " << syscall << " not found\n";
 
   // If there is a specific return state, use that
   if(m_current_args -> return_state != status)
@@ -137,9 +137,9 @@ syscall_args_t *SyscallManager::syscall_klog(syscall_args_t *args) {
 
   // If the first two characters are %h then no header
   if(message[0] == '%' && message[1] == 'h')
-    _kprintf("%s", message);
+    Logger::Out() << message + 2;
   else
-    _kprintf("%h%s[%s:%d]%s %s", ANSI_COLOURS[FG_Blue], Scheduler::current_process() -> name.c_str(), Scheduler::current_thread() -> tid,  ANSI_COLOURS[Reset], message);
+    Logger::Out() << ANSI_COLOURS[FG_Blue] << "[" << Scheduler::current_process() -> name.c_str() << ":" << Scheduler::current_thread() -> tid << "]" << ANSI_COLOURS[Reset] << message;
 
   return args;
 }

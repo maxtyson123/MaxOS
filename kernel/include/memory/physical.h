@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <system/multiboot.h>
+#include <system/cpu.h>
 #include <common/spinlock.h>
 
 namespace MaxOS {

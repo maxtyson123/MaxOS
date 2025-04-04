@@ -35,23 +35,23 @@ namespace MaxOS{
 
       enum ANSIColour
       {
-        FG_Black   = 0,
-        FG_Red     = 1,
-        FG_Green   = 2,
-        FG_Yellow  = 3,
-        FG_Blue    = 4,
-        FG_Magenta = 5,
-        FG_Cyan    = 6,
-        FG_White   = 7,
-        BG_Black   = 8,
-        BG_Red     = 9,
-        BG_Green   = 10,
-        BG_Yellow  = 11,
-        BG_Blue    = 12,
-        BG_Magenta = 13,
-        BG_Cyan    = 14,
-        BG_White   = 15,
-        Reset      = 16
+        FG_Black,
+        FG_Red,
+        FG_Green,
+        FG_Yellow,
+        FG_Blue,
+        FG_Magenta,
+        FG_Cyan,
+        FG_White,
+        BG_Black,
+        BG_Red,
+        BG_Green,
+        BG_Yellow,
+        BG_Blue,
+        BG_Magenta,
+        BG_Cyan,
+        BG_White,
+        Reset,
       };
 
       enum class ConsoleColour

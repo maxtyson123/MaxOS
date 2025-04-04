@@ -3,7 +3,7 @@
 //
 
 #include <drivers/video/vesa.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::drivers;
@@ -17,14 +17,14 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   m_framebuffer_info(framebuffer_info)
 {
   // Get the framebuffer info
-  _kprintf("Framebuffer info: 0x%x\n", m_framebuffer_info);
+  Logger::DEBUG() << "Framebuffer info: 0x " << (uint64_t)m_framebuffer_info << "\n";
 
   // Set the framebuffer address, bpp and pitch
   m_bpp = m_framebuffer_info->common.framebuffer_bpp;
   m_pitch = m_framebuffer_info->common.framebuffer_pitch;
   m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
 
-  _kprintf("Framebuffer: bpp=%d, pitch=%d, size=%d\n", m_bpp, m_pitch, m_framebuffer_size);
+  Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\n";
 
   // Get the framebuffer address
   auto physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
@@ -32,7 +32,7 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   uint64_t end = physical_address + m_framebuffer_size;
   m_framebuffer_address = (uint64_t*)virtual_address;
 
-  _kprintf("Framebuffer address: physical=0x%x, virtual=0x%x\n", physical_address, virtual_address);
+  Logger::DEBUG() << "Framebuffer address: physical=0x" << physical_address << ", virtual=0x" << virtual_address << "\n";
 
   // Map the framebuffer
   while (physical_address < end) {
@@ -43,7 +43,7 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   }
 
   size_t pages = PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address);
-  _kprintf("Framebuffer mapped: 0x%x - 0x%x (pages: %d)\n", m_framebuffer_address, virtual_address, pages);
+  Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t)m_framebuffer_address << " - 0x" << virtual_address << " (pages: " << pages << ")\n";
 
   // Reserve the physical memory
   PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);

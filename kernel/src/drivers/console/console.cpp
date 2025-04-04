@@ -3,7 +3,6 @@
 //
 
 #include <drivers/console/console.h>
-#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;

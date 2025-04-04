@@ -3,7 +3,6 @@
 //
 
 #include <common/colour.h>
-#include <common/kprint.h>
 
 using namespace MaxOS::common;
 
@@ -114,6 +113,7 @@ void Colour::parse_ansi_string(string ansi_string) {
         parse_console_colour(ConsoleColour::White);
         break;
 
+
       default:
         break;
   }
@@ -212,10 +212,11 @@ void Colour::parse_console_colour(ConsoleColour colour) {
       blue = 255;
       break;
 
+    // Same as CLION yellow
     case ConsoleColour::Yellow:
-      red = 255;
-      green = 255;
-      blue = 85;
+      red = 0x96;
+      green = 0x82;
+      blue = 0x0E;
       break;
 
     case ConsoleColour::White:
@@ -276,7 +277,7 @@ ConsoleColour Colour::to_console_colour() const {
   if (red == 255 && green == 85 && blue == 255)
     return ConsoleColour::LightMagenta;
 
-  if (red == 255 && green == 255 && blue == 85)
+  if (red == 0x96 && green == 0x82 && blue == 0x0E)
     return ConsoleColour::Yellow;
 
   if (red == 255 && green == 255 && blue == 255)

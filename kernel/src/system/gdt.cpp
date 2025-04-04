@@ -3,7 +3,7 @@
 //
 
 #include <system/gdt.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
@@ -40,13 +40,13 @@ GlobalDescriptorTable::GlobalDescriptorTable()
     uint64_t user_data_segment_descriptor = kernel_data_segment_descriptor | (3 << 13);
     m_gdt[4] = user_data_segment_descriptor;
 
-    _kprintf("Created GDT entries\n");
+    Logger::DEBUG() << "Created GDT entries\n";
 
 
     // TODO: This is done in assembly but would be nice to do here
 
 
-    _kprintf("Reloaded segment registers\n");
+    Logger::DEBUG() << "Reloaded segment registers\n";
 
 }
 

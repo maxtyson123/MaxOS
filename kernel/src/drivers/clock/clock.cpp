@@ -2,7 +2,7 @@
 // Created by 98max on 10/04/2023.
 //
 #include <drivers/clock/clock.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -202,7 +202,7 @@ void Clock::calibrate(uint64_t ms_per_tick) {
   lvt &= ~(1 << 16);
   m_apic -> local_apic() -> write(0x380, lvt);
 
-  _kprintf("Clock Calibrated\n");
+  Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per tick\n";
 }
 
 /**
@@ -316,7 +316,7 @@ uint32_t PIT::ticks_per_ms() {
   uint32_t elapsed = max - (m_local_apic -> read(0x390));
   uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
 
-  _kprintf("Ticks per ms: %d\n", ticks_per_ms);
+  Logger::DEBUG() << "Ticks per ms: " << (int)ticks_per_ms << "\n";
 
   // Disable the PIT interrupt again
   m_local_apic -> write(0x380, 0x00);

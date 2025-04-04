@@ -3,7 +3,6 @@
 //
 
 #include <common/spinlock.h>
-#include <common/kprint.h>
 #include <processes/scheduler.h>
 
 using namespace MaxOS;

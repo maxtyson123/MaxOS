@@ -2,7 +2,8 @@
 // Created by 98max on 18/01/2024.
 //
 #include <hardwarecommunication/apic.h>
-#include <common/kprint.h>
+#include <common/logger.h>
+#include <hardwarecommunication/interrupts.h>
 
 using namespace MaxOS;
 using namespace MaxOS::hardwarecommunication;
@@ -31,17 +32,17 @@ void LocalAPIC::init() {
     m_x2apic = true;
     msr_info |= (1 << 10);
     CPU::write_msr(0x1B, msr_info);
-    _kprintf("CPU supports x2APIC\n");
+    Logger::DEBUG() << "CPU supports x2APIC\n";
 
   } else if (xleaf & (1 << 9)) {
 
     m_x2apic = false;
-    _kprintf("CPU supports xAPIC\n");
+    Logger::DEBUG() << "CPU supports xAPIC\n";
 
     // Map the APIC base address to the higher half
     m_apic_base_high = (uint64_t)PhysicalMemoryManager::to_io_region(m_apic_base);
     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_apic_base, (virtual_address_t*)m_apic_base_high, Write | Present);
-    _kprintf("APIC Base: phy=0x%x, virt=0x%x\n", m_apic_base, m_apic_base_high);
+    Logger::DEBUG() << "APIC Base: phy=0x" << m_apic_base << ", virt=0x" << m_apic_base_high << "\n";
 
   } else {
     ASSERT(false, "CPU does not support xAPIC");
@@ -51,23 +52,24 @@ void LocalAPIC::init() {
   uint32_t spurious_vector = read(0xF0);
   bool is_enabled = msr_info & (1 << 11);
   bool is_bsp = msr_info & (1 << 8);
-  _kprintf("APIC: boot processor: %d, enabled (globally): %d, spurious vector: 0x%x\n", is_bsp, is_enabled, spurious_vector);
+  Logger::DEBUG() << "APIC: boot processor: " << (is_bsp ? "Yes" : "No") << ", enabled (globally): " << (is_enabled ? "Yes" : "No") << " Spurious Vector: 0x" << (uint64_t)(spurious_vector & 0xFF) << "\n";
+
 
   if(!is_enabled) {
-    _kprintf("APIC is not enabled\n");
+    Logger::WARNING() << "APIC is not enabled\n";
     return;
   }
 
   // Enable the APIC
   write(0xF0, (1 << 8) | 0x100);
-  _kprintf("APIC Enabled\n");
+  Logger::DEBUG() << "APIC Enabled\n";
 
   // Reserve the APIC base
   PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
 
   // Read the APIC version
   uint32_t version = read(0x30);
-  _kprintf("APIC Version: 0x%x\n", version & 0xFF);
+  Logger::DEBUG() << "APIC Version: 0x" << (uint64_t)(version & 0xFF) << "\n";
 
 }
 
@@ -132,15 +134,15 @@ void IOAPIC::init() {
   m_address = io_apic->io_apic_address;
   m_address_high = (uint64_t)PhysicalMemoryManager::to_io_region(m_address);
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
-  _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
+  Logger::DEBUG() << "IO APIC Address: phy=0x" << m_address << ", virt=0x" << m_address_high << "\n";
 
   // Get the IO APIC version and max redirection entry
   m_version = read(0x1);
   m_max_redirect_entry = (uint8_t)(m_version >> 16);
 
   // Log the IO APIC information
-  _kprintf("IO APIC Version: 0x%x\n", m_version);
-  _kprintf("IO APIC Max Redirection Entry: 0x%x\n", m_max_redirect_entry);
+  Logger::DEBUG() << "IO APIC Version: 0x" << (uint64_t)(m_version & 0xFF) << "\n";
+  Logger::DEBUG() << "IO APIC Max Redirection Entry: 0x" << (uint64_t)m_max_redirect_entry << "\n";
 
   // Get the source override item
   MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
@@ -175,7 +177,7 @@ void IOAPIC::init() {
   }
 
   // Log how many overrides were found
-  _kprintf("IO APIC Source Overrides: 0x%x\n", m_override_array_size);
+  Logger::DEBUG() << "IO APIC Source Overrides: 0x" << m_override_array_size << "\n";
 }
 
 MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
@@ -314,15 +316,15 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
 {
 
   // Init the Local APIC
-  _kprintf("Initialising Local APIC\n");
+  Logger::DEBUG() << "Initialising Local APIC\n";
   m_local_apic.init();
 
   // Disable the old PIC
-  _kprintf("Disabling PIC\n");
+  Logger::DEBUG() << "Disabling PIC\n";
   disable_pic();
 
   // Init the IO APIC
-  _kprintf("Initialising IO APIC\n");
+  Logger::DEBUG() << "Initialising IO APIC\n";
   m_io_apic.init();
 
   // Register the APIC

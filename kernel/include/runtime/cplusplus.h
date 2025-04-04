@@ -5,8 +5,6 @@
 #ifndef MAXOS_RUNTIME_CPLUSPLUS_H
 #define MAXOS_RUNTIME_CPLUSPLUS_H
 
-#include <common/kprint.h>
-
 namespace MaxOS {
     namespace runtime {
 

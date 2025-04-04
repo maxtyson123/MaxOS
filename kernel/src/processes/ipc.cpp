@@ -7,7 +7,7 @@ using namespace MaxOS::processes;
 using namespace MaxOS::common;
 using namespace MaxOS::memory;
 
-#include <common/kprint.h>
+#include <common/logger.h>
 #include <processes/scheduler.h>      //TODO: Circular dependency, need to fix
 
 /**
@@ -60,7 +60,7 @@ SharedMemory* InterProcessCommunicationManager::alloc_shared_memory(size_t size,
   // Clear the lock
   m_lock.unlock();
 
-  _kprintf("Created shared memory block %s at 0x%x\n", name.c_str(), block -> physical_address());
+  Logger::DEBUG() << "Created shared memory block " << name << " at 0x" << block -> physical_address() << "\n";
 
   // Return the block
   return block;
@@ -153,7 +153,7 @@ void InterProcessCommunicationManager::free_shared_memory(SharedMemory* block) {
     return;
   }
 
-  _kprintf("Deleting shared memory block %s at 0x%x\n", block->name->c_str(), block -> physical_address());
+  Logger::DEBUG() << "Deleting shared memory block " << block->name->c_str() << " at 0x" << block -> physical_address() << "\n";
 
   // Free the block
   delete block;

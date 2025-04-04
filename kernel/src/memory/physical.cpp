@@ -2,7 +2,7 @@
 // Created by 98max on 1/30/2024.
 //
 
-#include <common/kprint.h>
+#include <common/logger.h>
 #include <memory/physical.h>
 
 using namespace MaxOS::memory;
@@ -24,7 +24,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
 {
 
   // Log the kernel memory
-  _kprintf("Kernel Memory: kernel_end = 0x%x, kernel_size = 0x%x, kernel_physical_end = 0x%x\n", &_kernel_end, &_kernel_size, &_kernel_physical_end);
+  Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t)&_kernel_end << ", kernel_size = 0x" << (uint64_t)&_kernel_size << ", kernel_physical_end = 0x" << (uint64_t)&_kernel_physical_end << "\n";
 
   // Clear the spinlock
   m_lock.unlock();
@@ -39,7 +39,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
   m_memory_size = (m_multiboot->basic_meminfo()->mem_upper + 1024) * 1024;
   m_bitmap_size = m_memory_size / s_page_size + 1;
   m_total_entries = m_bitmap_size / s_row_bits + 1;
-  _kprintf("Mem Info: size = %dmb, bitmap size = %d, total entries = %d, page size = %db\n", m_memory_size / 1024 / 1024, m_bitmap_size, m_total_entries, s_page_size);
+  Logger::DEBUG() << "Memory Info: size = 0x" << m_memory_size << ", bitmap size = 0x" << (uint64_t)m_bitmap_size << ", total entries = " << (int)m_total_entries << ", page size = 0x" << (uint64_t)s_page_size << "\n";
 
   // Get the mmap that stores the memory to use
   m_mmap_tag = m_multiboot->mmap();
@@ -52,19 +52,19 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
     // We want the last entry
     m_mmap = entry;
   }
-  _kprintf("Mmap in use: 0x%x - 0x%x\n", m_mmap->addr, m_mmap->addr + m_mmap->len);
+  Logger::DEBUG() << "Mmap in use: 0x" << (uint64_t)m_mmap->addr << " - 0x" << (uint64_t)(m_mmap->addr + m_mmap->len) << "\n";
 
   // Memory after the kernel to be used for direct mapping (when there is no bitmap of the physical memory)
   m_anonymous_memory_physical_address = (uint64_t)align_up_to_page((size_t)&_kernel_physical_end + s_page_size, s_page_size);
   m_anonymous_memory_virtual_address  = (uint64_t)align_up_to_page((size_t)&_kernel_end + s_page_size, s_page_size);
-  _kprintf("Anonymous Memory: physical = 0x%x, virtual = 0x%x\n", m_anonymous_memory_physical_address, m_anonymous_memory_virtual_address);
+  Logger::DEBUG() << "Anonymous Memory: physical = " << (uint64_t)m_anonymous_memory_physical_address << ", virtual = " << (uint64_t)m_anonymous_memory_virtual_address << "\n";
 
   // Map the physical memory into the virtual memory
   for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += s_page_size)
     map((physical_address_t *)physical_address, (virtual_address_t *)(s_hh_direct_map_offset + physical_address), Present | Write);
 
   m_anonymous_memory_physical_address += s_page_size;
-  _kprintf("Mapped physical memory to higher half direct map at offset 0x%x\n", s_hh_direct_map_offset);
+  Logger::DEBUG() << "Mapped physical memory to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\n";
 
   // Set up the bitmap
   initialise_bit_map();
@@ -82,7 +82,7 @@ PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 void PhysicalMemoryManager::reserve_kernel_regions(Multiboot *multiboot) {
 
   // Reserve the area for the bitmap
-  _kprintf(" Bitmap: location: 0x%x - 0x%x (range of 0x%x)\n", m_bit_map, m_bit_map + m_bitmap_size / 8, m_bitmap_size / 8);
+  Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t)m_bit_map << " - 0x" << (uint64_t)(m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t)m_bitmap_size / 8 << ")\n";
   reserve((uint64_t)from_dm_region((uint64_t)m_bit_map), m_bitmap_size / 8 );
 
   // Calculate how much space the kernel takes up
@@ -90,7 +90,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot *multiboot) {
   if ((((uint32_t)(m_anonymous_memory_physical_address)) % s_page_size) != 0)
     kernel_entries += 1;
 
-  _kprintf("Kernel: location: 0x%x - 0x%x (range of 0x%x)\n", 0, m_anonymous_memory_physical_address, kernel_entries * s_page_size);
+  Logger::DEBUG() << "Kernel: location: 0x" << (uint64_t)m_anonymous_memory_physical_address << " - 0x" << (uint64_t)(m_anonymous_memory_physical_address + kernel_entries * s_page_size) << " (range of 0x" << (uint64_t)kernel_entries * s_page_size << ")\n";
   reserve(0, kernel_entries * s_page_size);
 
   // Reserve the area for the mmap
@@ -843,7 +843,7 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
   m_bit_map[address / s_row_bits] |= (1 << (address % s_row_bits));
 
 
-  _kprintf("Reserved Address: 0x%x\n", address);
+  Logger::DEBUG() << "Reserved Address: 0x" << address << "\n";
 
 }
 
@@ -879,7 +879,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
 
   // Clear the lock
   m_lock.unlock();
-  _kprintf("Reserved Address: 0x%x - 0x%x (length of 0x%x)\n", address, address + size, size);
+  Logger::DEBUG() << "Reserved Address: 0x" << address << " - 0x" << address + size << " (length of 0x" << size << ")\n";
 }
 
 /**

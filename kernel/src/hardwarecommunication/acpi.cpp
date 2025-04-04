@@ -2,12 +2,13 @@
 // Created by 98max on 18/01/2024.
 //
 #include <hardwarecommunication/acpi.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
+using namespace MaxOS::common;
 AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot) {
 
   // If the new ACPI is not supported, panic
@@ -15,7 +16,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 
   // Check if the new ACPI is supported
   m_using_new_acpi = multiboot->old_acpi() == nullptr;
-  _kprintf("CPU Supports %s ACPI\n", m_using_new_acpi ? "New" : "Old");
+  Logger::DEBUG() << "CPU Supports " << (m_using_new_acpi ? "New" : "Old") << " ACPI\n";
 
 
   if(m_using_new_acpi){
@@ -34,7 +35,7 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
   uint64_t physical_address = m_using_new_acpi ? m_rsdp2->xsdt_address : m_rsdp->rsdt_address;
   auto virtual_address = (uint64_t)PhysicalMemoryManager::to_higher_region(physical_address);
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)PhysicalMemoryManager::align_direct_to_page(physical_address), (virtual_address_t*)virtual_address, Present | Write);
-  _kprintf("XSDT/RSDT: physical: 0x%x, virtual: 0x%x\n", physical_address, virtual_address);
+  Logger::DEBUG() << "XSDT/RSDT: physical: 0x" << physical_address << ", virtual: 0x" << virtual_address << "\n";
 
   // Reserve the XSDT/RSDT
   PhysicalMemoryManager::s_current_manager->reserve(m_using_new_acpi ? (uint64_t)m_rsdp2->xsdt_address : (uint64_t)m_rsdp->rsdt_address);
@@ -43,13 +44,11 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
   m_header = m_using_new_acpi ? &m_xsdt->header : &m_rsdt->header;
 
   // Map the Tables
-  _kprintf("Mapping ACPI Tables\n");
+  Logger::DEBUG() << "Mapping ACPI Tables\n";
   map_tables(m_using_new_acpi ? sizeof (uint64_t) : sizeof (uint32_t));
 
   // Check if the checksum is valid
   ASSERT(valid_checksum(), "ACPI: Invalid checksum!");
-
-
 }
 
 AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface() = default;

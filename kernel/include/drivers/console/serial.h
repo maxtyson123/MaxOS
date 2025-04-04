@@ -18,7 +18,7 @@ namespace MaxOS {
        * @class SerialConsole
        * @brief A driver for the serial output
        */
-      class SerialConsole : public Driver {
+        class SerialConsole : public Driver, public common::OutputStream{
 
         private:
             hardwarecommunication::Port8Bit m_data_port;
@@ -35,6 +35,7 @@ namespace MaxOS {
           ~SerialConsole();
 
           void put_character(char c);
+          void write_char(char c) final;
 
       };
 

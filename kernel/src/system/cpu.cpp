@@ -2,8 +2,9 @@
 // Created by 98max on 18/01/2024.
 //
 #include <system/cpu.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 #include <processes/scheduler.h>
+#include <drivers/console/vesaboot.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
@@ -13,8 +14,9 @@ using namespace MaxOS::processes;
 extern uint64_t gdt64[];
 extern uint64_t stack[];
 
-void CPU::halt() {
-  asm volatile("hlt");
+[[noreturn]] void CPU::halt() {
+  while (true)
+    asm volatile("hlt");
 }
 
 void CPU::get_status(cpu_status_t *status) {
@@ -61,28 +63,28 @@ void CPU::set_status(cpu_status_t *status) {
 void CPU::print_registers(cpu_status_t *status) {
 
     // Print the registers
-    _kpanicf("%hR15: \t0x%x\n", status->r15);
-    _kpanicf("%hR14: \t0x%x\n", status->r14);
-    _kpanicf("%hR13: \t0x%x\n", status->r13);
-    _kpanicf("%hR12: \t0x%x\n", status->r12);
-    _kpanicf("%hR11: \t0x%x\n", status->r11);
-    _kpanicf("%hR10: \t0x%x\n", status->r10);
-    _kpanicf("%hR9: \t0x%x\n", status->r9);
-    _kpanicf("%hR8: \t0x%x\n", status->r8);
-    _kpanicf("%hRDI: \t0x%x\n", status->rdi);
-    _kpanicf("%hRSI: \t0x%x\n", status->rsi);
-    _kpanicf("%hRBP: \t0x%x\n", status->rbp);
-    _kpanicf("%hRDX: \t0x%x\n", status->rdx);
-    _kpanicf("%hRCX: \t0x%x\n", status->rcx);
-    _kpanicf("%hRBX: \t0x%x\n", status->rbx);
-    _kpanicf("%hRAX: \t0x%x\n", status->rax);
-    _kpanicf("%hINT: \t0x%x\n", status->interrupt_number);
-    _kpanicf("%hERRCD: \t0x%x\n", status->error_code);
-    _kpanicf("%hRIP: \t0x%x\n", status->rip);
-    _kpanicf("%hCS: \t0x%x\n", status->cs);
-    _kpanicf("%hRFlGS: \t0x%x\n", status->rflags);
-    _kpanicf("%hRSP: \t0x%x\n", status->rsp);
-    _kpanicf("%hSS: \t0x%x\n", status->ss);
+    Logger::ERROR() << "R15: \t0x" << status->r15 << "\n";
+    Logger::ERROR() << "R14: \t0x" << status->r14 << "\n";
+    Logger::ERROR() << "R13: \t0x" << status->r13 << "\n";
+    Logger::ERROR() << "R12: \t0x" << status->r12 << "\n";
+    Logger::ERROR() << "R11: \t0x" << status->r11 << "\n";
+    Logger::ERROR() << "R10: \t0x" << status->r10 << "\n";
+    Logger::ERROR() << "R9: \t0x" << status->r9 << "\n";
+    Logger::ERROR() << "R8: \t0x" << status->r8 << "\n";
+    Logger::ERROR() << "RDI: \t0x" << status->rdi << "\n";
+    Logger::ERROR() << "RSI: \t0x" << status->rsi << "\n";
+    Logger::ERROR() << "RBP: \t0x" << status->rbp << "\n";
+    Logger::ERROR() << "RDX: \t0x" << status->rdx << "\n";
+    Logger::ERROR() << "RCX: \t0x" << status->rcx << "\n";
+    Logger::ERROR() << "RBX: \t0x" << status->rbx << "\n";
+    Logger::ERROR() << "RAX: \t0x" << status->rax << "\n";
+    Logger::ERROR() << "INT: \t0x" << status->interrupt_number << "\n";
+    Logger::ERROR() << "ERRCD: \t0x" << status->error_code << "\n";
+    Logger::ERROR() << "RIP: \t0x" << status->rip << "\n";
+    Logger::ERROR() << "CS: \t0x" << status->cs << "\n";
+    Logger::ERROR() << "RFlGS: \t0x" << status->rflags << "\n";
+    Logger::ERROR() << "RSP: \t0x" << status->rsp << "\n";
+    Logger::ERROR() << "SS: \t0x" << status->ss << "\n";
 
 }
 
@@ -122,7 +124,7 @@ void CPU::stack_trace(size_t level) {
     while (current_level < level && frame != nullptr){
 
         // Print the frame
-        _kpanicf("%h(%d):\t at 0x%x\n", current_level, frame->rip);
+        Logger::ERROR() << "(" << current_level << "):\t at 0x" << frame->rip << "\n";
 
         // Next frame
         frame = frame -> next;
@@ -132,6 +134,7 @@ void CPU::stack_trace(size_t level) {
 }
 
 #include <memory/memorymanagement.h>
+#include <drivers/console/vesaboot.h>
 
 void CPU::PANIC(char const *message, cpu_status_t* status) {
 
@@ -143,22 +146,22 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
     prepare_for_panic();
 
   // Print using the backend
-  _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
-  _kpanicf("Kernel Panic: %s\n", message);
+  Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
+  Logger::ERROR() << "Kernel Panic: " << message << "\n";
 
   // Info about the running process
-  _kpanicf("Process: %s\n", process ? process->name.c_str() : "Kernel");
+  Logger::ERROR() << "Process: " << (process ? process->name.c_str() : "Kernel") << "\n";
   if(process)
-    _kpanicf("After running for %d ticks (system uptime: %d ticks)\n", process -> total_ticks(), Scheduler::system_scheduler()->ticks());
+    Logger::ERROR() << "After running for " << process->total_ticks() << " ticks (system uptime: " << Scheduler::system_scheduler()->ticks() << " ticks)\n";
 
   // Stack trace
-  _kpanicf("----------------------------\n");
-  _kpanicf("Stack Trace:\n");
+  Logger::ERROR() << "----------------------------\n";
+  Logger::ERROR() << "Stack Trace:\n";
   stack_trace(10);
 
   // Register dump
-  _kpanicf("----------------------------\n");
-  _kpanicf("Register Dump:\n");
+  Logger::ERROR() << "----------------------------\n";
+  Logger::ERROR() << "Register Dump:\n";
 
   if(!status){
     auto* new_status = new cpu_status_t();                              // Who cares about freeing we're fucked anyway at this point
@@ -168,14 +171,14 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   print_registers(status);
 
   // Print some text to the user
-  _kpanicf("----------------------------\n");
-  _kpanicf("%hThere has been a fatal error in MaxOS and the system has been halted.\n");
-  _kpanicf("%hPlease restart the system. \n");
+  Logger::ERROR() << "----------------------------\n";
+  Logger::ERROR() << "There has been a fatal error in MaxOS and the system has been halted.\n";
+  Logger::ERROR() << "Please restart the system.\n";
 
 
   // Print the logo
-  _kpanicf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
-  _kpanicf("print_logo_kernel_panic();\n\067");
+  Logger::ERROR() << "----------------------------\n";
+  console::VESABootConsole::print_logo_kernel_panic();
 
   // Halt
   halt();
@@ -235,7 +238,7 @@ void CPU::init_tss() {
   gdt64[6] = tss_descriptor_high;
 
   // Load the TSS
-  _kprintf("Loading TSS: 0x0%x 0x0%x at 0x%x\n", tss_descriptor_low, tss_descriptor_high, &tss);
+  Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t )&tss << "\n";
   asm volatile("ltr %%ax" : : "a" (0x28));
 
   //TODO: For smp - load the TSS for each core or find a better way to do this
@@ -278,16 +281,13 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
     // If the faulting address is in lower half just kill the process and move on
     if(status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)){
-      _kprintf("CPU Panicked in process %s at 0x%x - killing process\n", process->name.c_str(), status->rip);
+      Logger::ERROR() << "CPU Panicked in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
       return Scheduler::system_scheduler()->force_remove_process(process);
     }
   }
 
   // We are panicking
   is_panicking = true;
-
-  // Clear the first line
-  _kpanicf("%h\n\n\n");
 
   return nullptr;
 
@@ -331,7 +331,7 @@ void CPU::init_sse() {
 
   // Check if XSAVE is supported
   s_xsave = check_cpu_feature(CPU_FEATURE_ECX::XSAVE) && check_cpu_feature(CPU_FEATURE_ECX::OSXSAVE);
-  _kprintf("XSAVE: %s\n", s_xsave ? "Supported" : "Not Supported");
+  Logger::DEBUG() << "XSAVE: " << (s_xsave ? "Supported" : "Not Supported") << "\n";
   if(!s_xsave) return;
 
   // Enable the XSAVE and XRESTORE instructions
@@ -346,14 +346,14 @@ void CPU::init_sse() {
 
   // Check if AVX is supported
   s_avx = check_cpu_feature(CPU_FEATURE_ECX::AVX);
-  _kprintf("AVX: %s\n", s_avx ? "Supported" : "Not Supported");
+  Logger::DEBUG() << "AVX: " << (s_avx ? "Supported" : "Not Supported") << "\n";
   if(!s_avx) return;
 
   // Enable the AVX instructions
   cr4 |= (1 << 14);
   asm volatile("mov %0, %%cr4" : : "r" (cr4));
 
-  _kprintf("SSE Enabled\n");
+  Logger::DEBUG() << "SSE Enabled\n";
 }
 
 /**
@@ -401,7 +401,7 @@ bool CPU::check_nx() {
 
   // Check if the NX flag is supported (bit 11)
   bool supported = efer & (1 << 11);
-  _kprintf("NX: %s\n", supported ? "Supported" : "Not Supported");
+  Logger::DEBUG() << "NX: " << (supported ? "Supported" : "Not Supported") << "\n";
 
   // Return if the NX flag is supported
   return supported;
