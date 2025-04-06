@@ -29,7 +29,7 @@ namespace MaxOS {
             protected:
                 uint8_t m_interrupt_number;
 
-                explicit InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
+                InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
                 ~InterruptHandler();
 
             public:

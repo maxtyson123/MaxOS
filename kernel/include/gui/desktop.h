@@ -41,7 +41,7 @@ namespace MaxOS{
             public:
                 common::Colour colour;
 
-                explicit Desktop(common::GraphicsContext* gc);
+                Desktop(common::GraphicsContext* gc);
                 ~Desktop();
 
                 void add_child(Widget*) final;

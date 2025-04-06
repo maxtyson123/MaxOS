@@ -76,14 +76,18 @@ void Logger::set_log_level(LogLevel log_level) {
   switch (log_level) {
 
     case LogLevel::HEADER:
-        *this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[\n[  \t\t\t ";
+
+        // Spacing if needed
+        if(s_max_log_level > LogLevel::HEADER)
+            write_char('\n');
+        *this << ANSI_COLOURS[ANSIColour::FG_Blue] << "[  \t\t ";
         break;
     case LogLevel::INFO:
-      *this << ANSI_COLOURS[ANSIColour::FG_Green] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
+      *this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
       break;
 
     case LogLevel::DEBUG:
-      *this << ANSI_COLOURS[ANSIColour::FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[ANSIColour::Reset] << "\t";
+      *this << ANSI_COLOURS[ANSIColour::FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
       break;
 
     case LogLevel::WARNING:
@@ -96,12 +100,17 @@ void Logger::set_log_level(LogLevel log_level) {
   }
 }
 
+
 /**
  * @brief Writes a character to the logger
  *
  * @param c The character to write
  */
 void Logger::write_char(char c) {
+
+  // Ensure logging at this level is enabled
+   if(m_log_level > s_max_log_level)
+     return;
 
   // Write the character to all output streams
   for(int i = 0; i < m_log_writer_count; i++)
@@ -111,34 +120,18 @@ void Logger::write_char(char c) {
 }
 
 /**
- * @brief Sets the log level of the logger
- *
- * @param log_level The log level to set
- * @return This logger
- */
-Logger &Logger::operator<<(LogLevel log_level) {
-
-    // Set the log level
-    set_log_level(log_level);
-
-    // Return this logger
-    return *this;
-
-}
-
-/**
  * @brief Gets the active logger
  * @return The active logger
  */
-Logger Logger::Out() {
-    return *s_active_logger;
+Logger& Logger::Out() {
+    return *active_logger();
 }
 
 /**
  * @brief Gets active logger set to task level
  * @return The task logger
  */
-Logger Logger::HEADER(){
+Logger& Logger::HEADER(){
 
     // Set the log level to task
     s_active_logger->set_log_level(LogLevel::HEADER);
@@ -283,28 +276,43 @@ void Logger::ASSERT(bool condition, char const *message, ...) {
 }
 
 /**
- * @brief Prints a new line to the logger
+ * @brief Sets the log level of the logger
  *
+ * @param log_level The log level to set
  * @return This logger
  */
-Logger Logger::Endline() {
+Logger& Logger::operator<<(LogLevel log_level) {
 
+    // Set the log level
+    set_log_level(log_level);
 
-    // Print a new line
+    // Return this logger
+    return *this;
+
+}
+
+/**
+ * @brief Handles a line feed for different log levels
+ */
+void Logger::lineFeed() {
+
     switch (s_active_logger -> m_log_level) {
+
+        // Give more space to the header if needed
         case LogLevel::HEADER:
-            *s_active_logger << ANSI_COLOURS[ANSIColour::FG_Cyan] << "\n[" << ANSI_COLOURS[ANSIColour::Reset] << "\n";
+            write_char('\n');
+
+            if(s_max_log_level > LogLevel::HEADER)
+                write_char('\n');
             break;
+
+        // Default to just a new line
         case LogLevel::INFO:
         case LogLevel::DEBUG:
         case LogLevel::WARNING:
         case LogLevel::ERROR:
-            *s_active_logger << ANSI_COLOURS[ANSIColour::Reset] << "\n";
-            break;
-    
-    }
+            write_char('\n');
 
-    // Return this logger
-    return Out();
+    }
 
 }

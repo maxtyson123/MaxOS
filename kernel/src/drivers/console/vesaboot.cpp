@@ -24,14 +24,14 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
     s_graphics_context = graphics_context;
 
     // Malloc the video memory text
-    m_video_memory = (uint16_t*)MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
+    m_video_memory_meta = (uint16_t*)MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
 
     // Prepare the console
     this -> clear();
     print_logo();
 
     // Connect to the loggers
-    m_console_area = new ConsoleArea(this, 0, 0, width(), height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+    m_console_area = new ConsoleArea(this, 0, 0, width() / 2 - 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     cout = new ConsoleStream(m_console_area);
     Logger::active_logger() -> add_log_writer(cout);
     Logger::INFO() << "Console Stream set up \n";
@@ -56,7 +56,7 @@ uint16_t VESABootConsole::width()
  */
 uint16_t VESABootConsole::height()
 {
-    return s_graphics_context->height() / Font::font_size;
+    return s_graphics_context->height() / Font::font_height;
 }
 
 /**
@@ -121,7 +121,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     int offset = (y* width() + x);
 
     // Set the character at the offset, by masking the character with the current character (last 8 bits)
-    m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
+    m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xFF00) | (uint16_t)c;
 
     // Convert the char into a string
     char s[] = " ";
@@ -131,7 +131,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
     Colour background = m_background_color == ConsoleColour::Uninitialised ? get_background_color(x, y) : Colour(m_background_color);
 
     // Use the m_font to draw the character
-    m_font.draw_text(x * 8, y * Font::font_size, foreground, background, s_graphics_context, s);
+    m_font.draw_text(x * 8, y * Font::font_height, foreground, background, s_graphics_context, s);
 
 }
 
@@ -152,7 +152,7 @@ void VESABootConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour
     int offset = (y* width() + x);
 
     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-    m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t)foreground << 8);
+    m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xF0FF) | ((uint16_t)foreground << 8);
 }
 
 /**
@@ -172,7 +172,7 @@ void VESABootConsole::set_background_color(uint16_t x, uint16_t y, ConsoleColour
     int offset = (y* width() + x);
 
     // Set the background color at the offset, by masking the background color with the current background color (bits 12-15)
-    m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t)background << 12);
+    m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0x0FFF) | ((uint16_t)background << 12);
 
 }
 
@@ -193,7 +193,7 @@ char VESABootConsole::get_character(uint16_t x, uint16_t y) {
     int offset = (y* width() + x);
 
     // Return the character at the offset, by masking the character with the current character (last 8 bits)
-    return (char)(m_video_memory[offset] & 0x00FF);
+    return (char)(m_video_memory_meta[offset] & 0x00FF);
 }
 
 /**
@@ -213,7 +213,7 @@ ConsoleColour VESABootConsole::get_foreground_color(uint16_t x, uint16_t y) {
     int offset = (y* width() + x);
 
     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-    return (ConsoleColour)((m_video_memory[offset] & 0x0F00) >> 8);
+    return (ConsoleColour)((m_video_memory_meta[offset] & 0x0F00) >> 8);
 }
 
 /**
@@ -233,7 +233,7 @@ ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
     int offset = (y* width() + x);
 
     // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
-    return (ConsoleColour)((m_video_memory[offset] & 0xF000) >> 12);
+    return (ConsoleColour)((m_video_memory_meta[offset] & 0xF000) >> 12);
 }
 
 /**
@@ -246,7 +246,7 @@ void VESABootConsole::print_logo() {
 
       // Find the center of the screen
       uint32_t center_x = s_graphics_context->width()/2;
-      uint32_t center_y = s_graphics_context->height()/2 + 20;
+      uint32_t center_y = s_graphics_context->height()/2 - 80;
 
       // Draw the logo
       for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
@@ -270,13 +270,13 @@ void VESABootConsole::print_logo() {
 /**
  * @brief Scrolls the console up by 1 line
  *
- * @param left The left coordinate of the area to scroll (not used)
- * @param top The top coordinate of the area to scroll (not used)
- * @param width The width of the area to scroll (not used)
- * @param height The height of the area to scroll (not used)
- * @param foreground The foreground color of the new line (not used)
- * @param background The background color of the new line (not used)
- * @param fill The character to fill the new line with (not used)
+ * @param left The left coordinate of the area to scroll
+ * @param top The top coordinate of the area to scroll
+ * @param width The width of the area to scroll
+ * @param height The height of the area to scroll
+ * @param foreground The foreground color of the new line
+ * @param background The background color of the new line
+ * @param fill The character to fill the new line with
  */
 void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
                                 uint16_t height,
@@ -285,48 +285,53 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 
   // Get the framebuffer info
-  auto* framebuffer_address = (uint64_t*)s_graphics_context->framebuffer_address();
-  uint64_t  framebuffer_width   = s_graphics_context->width();
-  uint64_t  framebuffer_height  = s_graphics_context->height();
-  uint64_t  framebuffer_bpp     = s_graphics_context->color_depth();
-  uint64_t  framebuffer_pitch   = framebuffer_width * (framebuffer_bpp / 8);
-  uint64_t  framebuffer_size    = framebuffer_height * framebuffer_pitch;
-
+  auto* framebuffer_address = (uint8_t*)s_graphics_context->framebuffer_address();
+  uint64_t framebuffer_width   = s_graphics_context->width();
+  uint64_t framebuffer_height  = s_graphics_context->height();
+  uint64_t framebuffer_bpp     = s_graphics_context->color_depth(); // in bits per pixel
+  uint64_t bytes_per_pixel     = framebuffer_bpp / 8;
+  uint64_t framebuffer_pitch   = framebuffer_width * bytes_per_pixel;
 
   // Calculate the number of pixels per line
-  uint64_t amount_to_scroll = (Font::font_size * framebuffer_pitch) / 8;
-  uint64_t amount_to_copy =  framebuffer_size - (8 * amount_to_scroll);
+  uint16_t line_height = Font::font_height;
 
-  // Move the entire framebuffer up by 1 line
-  memmove((void*)framebuffer_address, (void*)(framebuffer_address +  amount_to_scroll), amount_to_copy);
+  // Calculate the number of pixels in the region
+  uint16_t region_pixel_y = top * line_height;
+  uint16_t region_pixel_height  = height * line_height;
+  uint16_t region_pixel_left    = left * Font::font_width;
+  uint16_t region_pixel_width   = width * Font::font_width;
+  size_t row_bytes              = region_pixel_width * bytes_per_pixel;
 
   // Decide the colour of the pixel
-  ConsoleColour to_set_foreground = CPU::is_panicking ? ConsoleColour::White : foreground;
-  ConsoleColour to_set_background = CPU::is_panicking ? ConsoleColour::Red : background;
+  ConsoleColour to_set_foreground = CPU::is_panicking ? ConsoleColour::White : get_foreground_color(left, top + height - 1);
+  ConsoleColour to_set_background = CPU::is_panicking ? ConsoleColour::Red : get_background_color(left, top + height - 1);
   Colour fill_colour = Colour(to_set_background);
+  uint32_t fill_value = s_graphics_context->colour_to_int(to_set_background);
 
-  // Clear the last line (set all pixels to the fill character)
-  uint16_t     y = top + height - 1;
-  for(uint16_t x = left; x < left+width; x++) {
-
-    // Set the pixel
-    set_foreground_color(x, y, to_set_foreground);
-    set_background_color(x, y, to_set_background);
+  // Scroll the region upward by one text line
+  for (uint16_t row = 0; row < region_pixel_height - line_height; row++) {
+     uint8_t* src   = framebuffer_address + (region_pixel_y + row + line_height) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+     uint8_t* dest  = framebuffer_address + (region_pixel_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+     memmove(dest, src, row_bytes);
   }
 
-  // Get that start and num elements
-  auto* start = (uint8_t*)(framebuffer_address + (Font::font_size * (this->height() - 1) * framebuffer_pitch) / 8);
-  size_t num_elements = (8 * amount_to_scroll) / sizeof(uint32_t);
+  // Clear the last line of the region
+  uint16_t clear_start_y = region_pixel_y + region_pixel_height - line_height;
+  for (uint16_t row = 0; row < line_height; row++) {
+     uint8_t* row_addr = framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
 
-  // Cast the start pointer to an uint32_t pointer.
-  auto* dest = (uint32_t*)(start);
-
-  // Fill the range with the color
-  uint32_t fill_value = s_graphics_context ->colour_to_int(to_set_background);
-  for (size_t i = 0; i < num_elements; ++i) {
-    dest[i] = fill_value; // Use your desired 32-bit value.
+     // Fill the row with the fill colour (note: this is a 32-bit as we are using 32-bit colour depth)
+     size_t num_elements = row_bytes / sizeof(uint32_t);
+     auto* dest32 = (uint32_t*)row_addr;
+     memset(dest32, 0, row_bytes);
   }
 
+  //Update any per-pixel colour metadata
+  uint16_t text_row = top + height - 1;
+  for (uint16_t x = left; x < left + width; x++) {
+      set_foreground_color(x, text_row, to_set_foreground);
+      set_background_color(x, text_row, to_set_background);
+  }
 }
 
 /**

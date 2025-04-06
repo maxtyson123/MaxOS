@@ -43,7 +43,7 @@ namespace MaxOS {
             class MouseDownEvent : public common::Event<MouseEvents>{
                 public:
                     uint8_t button;
-                    explicit MouseDownEvent(uint8_t);
+                    MouseDownEvent(uint8_t);
                     ~MouseDownEvent();
             };
 
@@ -54,7 +54,7 @@ namespace MaxOS {
             class MouseUpEvent : public common::Event<MouseEvents>{
                 public:
                     uint8_t button;
-                    explicit MouseUpEvent(uint8_t);
+                    MouseUpEvent(uint8_t);
                     ~MouseUpEvent();
             };
 

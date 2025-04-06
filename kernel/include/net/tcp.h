@@ -100,7 +100,7 @@ namespace MaxOS{
         {
             public:
                 TransmissionControlProtocolSocket* socket;
-                explicit ConnectedEvent(TransmissionControlProtocolSocket* socket);
+                ConnectedEvent(TransmissionControlProtocolSocket* socket);
                 ~ConnectedEvent();
         };
 
@@ -108,7 +108,7 @@ namespace MaxOS{
         {
             public:
                 TransmissionControlProtocolSocket* socket;
-                explicit DisconnectedEvent(TransmissionControlProtocolSocket* socket);
+                DisconnectedEvent(TransmissionControlProtocolSocket* socket);
                 ~DisconnectedEvent();
         };
 
@@ -143,7 +143,7 @@ namespace MaxOS{
                 TransmissionControlProtocolHandler* transmissionControlProtocolHandler;
                 TCPSocketState state;
             public:
-                explicit TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
+                TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
                 ~TransmissionControlProtocolSocket();
 
                 virtual void Send(uint8_t* data, uint16_t size);

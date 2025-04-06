@@ -29,7 +29,7 @@ namespace MaxOS{
             {
 
                 private:
-                    uint16_t* m_video_memory;
+                    uint16_t* m_video_memory_meta;
                     inline static common::GraphicsContext* s_graphics_context = nullptr;
                     ConsoleArea* m_console_area;
                     gui::Font m_font;
@@ -41,7 +41,7 @@ namespace MaxOS{
                     common::ConsoleColour m_background_color = common::ConsoleColour::Uninitialised;
 
                 public:
-                    explicit VESABootConsole(common::GraphicsContext*);
+                    VESABootConsole(common::GraphicsContext*);
                     ~VESABootConsole();
 
                     uint16_t width() final;

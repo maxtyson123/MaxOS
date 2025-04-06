@@ -31,7 +31,7 @@ namespace MaxOS {
              */
             class ButtonPressedEvent : public common::Event<ButtonEvents>{
                 public:
-                    explicit ButtonPressedEvent(Button*);
+                    ButtonPressedEvent(Button*);
                     ~ButtonPressedEvent();
 
                     Button* source;
@@ -43,7 +43,7 @@ namespace MaxOS {
              */
             class ButtonReleasedEvent : public common::Event<ButtonEvents>{
                 public:
-                    explicit ButtonReleasedEvent(Button*);
+                    ButtonReleasedEvent(Button*);
                     ~ButtonReleasedEvent();
 
                     Button* source;

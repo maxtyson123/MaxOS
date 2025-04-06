@@ -137,9 +137,9 @@ syscall_args_t *SyscallManager::syscall_klog(syscall_args_t *args) {
 
   // If the first two characters are %h then no header
   if(message[0] == '%' && message[1] == 'h')
-    Logger::Out() << message + 2;
+    Logger::INFO() << message + 2;
   else
-    Logger::Out() << ANSI_COLOURS[FG_Blue] << "[" << Scheduler::current_process() -> name.c_str() << ":" << Scheduler::current_thread() -> tid << "]" << ANSI_COLOURS[Reset] << message;
+    Logger::INFO() << ANSI_COLOURS[FG_Blue] << "(" << Scheduler::current_process() -> name.c_str() << ":" << Scheduler::current_thread() -> tid << "): " << ANSI_COLOURS[Reset] << message;
 
   return args;
 }

@@ -51,7 +51,7 @@ namespace MaxOS{
 
               MemoryManager* previous_memory_manager = nullptr;
 
-              explicit MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
+              MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
               ~MemoryManager();
 
               // Public Memory Management

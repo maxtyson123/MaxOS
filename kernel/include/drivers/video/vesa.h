@@ -43,7 +43,7 @@ namespace MaxOS {
                     uint16_t m_pitch;
 
                 public:
-                    explicit VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info);
+                    VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info);
                     ~VideoElectronicsStandardsAssociation();
 
                     bool supports_mode( uint32_t width,  uint32_t height,  uint32_t) final;

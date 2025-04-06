@@ -39,7 +39,7 @@ namespace MaxOS{
         InterProcessCommunicationManager* m_ipc;
 
       public:
-        explicit Scheduler(system::Multiboot& multiboot);
+        Scheduler(system::Multiboot& multiboot);
         ~Scheduler();
 
 

@@ -30,7 +30,8 @@ namespace MaxOS{
                 ~Font();
 
                 static const uint8_t padding = 3;
-                static const uint16_t font_size = 8 + 2*padding;
+                static const uint16_t font_height = 8 + 2 * padding;
+                static const uint16_t font_width = 8;
 
                 bool is_bold { false };
                 bool is_italic { false };

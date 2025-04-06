@@ -54,121 +54,95 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     SerialConsole serialConsole;
     logger.add_log_writer(&serialConsole);
 
-    // Make the multiboot header
+    Logger::HEADER() << "Initialising System Components \n";
+
     Multiboot multiboot(addr, magic);
     Logger::INFO() << "MaxOS Booted Successfully \n";
 
-    // Initialise the IDT
+    Logger::INFO() << "Setting up Interrupt Manager\n";
     InterruptManager interrupts;
-    Logger::INFO() << "Interrupt Manager set up \n";
 
-    // Initialise the PMM
+    Logger::INFO() << "Setting up Physical Memory Manager\n";
     PhysicalMemoryManager pmm(&multiboot);
-    Logger::INFO() << "Physical Memory Manager set up \n";
 
-    // Initialise the Memory Manager
+    Logger::INFO() << "Setting up Kernel Memory Manager\n";
     VirtualMemoryManager vmm;
     MemoryManager memoryManager(&vmm);
-    Logger::INFO() << "Virtual Memory Manager set up \n";
 
-    // Initialise the VESA Driver
+    Logger::INFO() << "Setting up VESA Driver\n";
     VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
-    Logger::INFO() << "VESA Driver set up \n";
 
-    // Initialise Console
+    Logger::INFO() << "Setting up VESA Console\n";
     VESABootConsole console(&vesa);
-    Logger::INFO() << "Console set up \n";
 
-    // Stuff done earlier
-    Logger::HEADER() << "Initialising System Components \n";
-    Logger::INFO() << "Set Up Serial Console \n";
-    Logger::INFO() << "Parsed Multiboot \n";
-    Logger::INFO() << "Set Up Paging \n";
-    Logger::INFO() << "Set Up Interrupt Manager \n";
-    Logger::INFO() << "Set Up Physical Memory Manager \n";
-    Logger::INFO() << "Set Up Virtual Memory Manager \n";
-    Logger::INFO() << "Set Up Memory Manager (Kernel) \n";
-    Logger::INFO() << "Set Up Video Driver \n";
-
-    Logger::HEADER() << "Initialising Hardware"; Logger::Endline();
+    Logger::HEADER() << "Initialising Hardware\n";
     DriverManager driver_manager;
 
+    Logger::INFO() << "Setting up ACPI\n";
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
-    Logger::INFO() << "Set Up ACPI \n";
 
+    Logger::INFO() << "Setting up APIC\n";
     AdvancedProgrammableInterruptController apic(&acpi);
-    Logger::INFO() << "Set Up APIC \n";
 
-    // Keyboard (TODO: Move to userspace PS/2 driver)
+    // TODO: Move to userspace PS/2 driver)
+    Logger::INFO() << "Setting up Keyboard\n";
     KeyboardDriver keyboard;
     KeyboardInterpreterEN_US keyboardInterpreter;
     keyboard.connect_input_stream_event_handler(&keyboardInterpreter);
     driver_manager.add_driver(&keyboard);
-    Logger::INFO() << "Set Up Keyboard \n";
 
-    // Mouse (TODO: Move to userspace PS/2 driver)
+    // TODO: Move to userspace PS/2 driver)
+    Logger::INFO() << "Setting up Mouse \n";
     MouseDriver mouse;
     driver_manager.add_driver(&mouse);
-    Logger::INFO() << "Set Up Mouse \n";
 
-    // CPU
+    Logger::INFO() << "Setting up CPU \n";
     CPU cpu;
-    Logger::INFO() << "Set Up CPU \n";
 
-    // Clock
+    Logger::INFO() << "Setting up Clock \n";
     Clock kernelClock(&apic, 1);
     driver_manager.add_driver(&kernelClock);
-    Logger::INFO() << "Set Up Clock \n";
 
-    //USB
+    //Logger::INFO() << "Setting up USB \n";
     //UniversalSerialBusController USBController(&driver_manager);
-    //Logger::INFO() << "Set Up USB \n";
 
-    Logger::HEADER() << "Device Management"; Logger::Endline();
+    Logger::HEADER() << "Device Management\n";
 
-    // Find the drivers
+    Logger::INFO() << "Finding Drivers \n";
     driver_manager.find_drivers();
-    Logger::INFO() << "Found Drivers \n";
 
-    // Reset the devices
+    Logger::INFO() << "Resetting Devices \n";
     uint32_t reset_wait_time = driver_manager.reset_devices();
-    Logger::INFO() << "Reset Devices \n";
 
-    // Interrupts
-    interrupts.activate();
     Logger::INFO() << "Activating Interrupts \n";
+    interrupts.activate();
 
-    // Post interrupt activation
+    Logger::INFO() << "Calibrating Clock \n";
     kernelClock.calibrate();
     kernelClock.delay(reset_wait_time);
-    Logger::INFO() << "Calibrated Clock \n";
 
-    Logger::HEADER() << "Finalisation"; Logger::Endline();
+    Logger::HEADER() << "Finalisation\n";
 
+    Logger::INFO() << "Setting up Scheduler \n";
     Scheduler scheduler(multiboot);
-    Logger::INFO() << "Set Up Scheduler \n";
 
+    Logger::INFO() << "Setting up Syscalls \n";
     SyscallManager syscalls;
-    Logger::INFO() << "Set Up Syscalls \n";
 
-    // Initialise the drivers
+    Logger::INFO() << "Initialising Drivers \n";
     driver_manager.initialise_drivers();
-    Logger::INFO() << "Initialised Drivers \n";
 
-    // Activate the drivers
+    Logger::INFO() << "Activating Drivers \n";
     driver_manager.activate_drivers();
-    Logger::INFO() << "Activated Drivers \n";
 
-    // Kernel Boot done
-    Logger::HEADER() << "MaxOS Kernel Successfully Booted"; Logger::Endline();
+    Logger::HEADER() << "MaxOS Kernel Successfully Booted\n";
     console.finish();
-
-    // Start the Scheduler & updates the clock handler
     scheduler.activate();
 
     // TODO:
     //       -   Rewrite boot text again to have progress bar
     //       -   Rewrite boot script to be in c++ where possible
+    //       -   Comments clean up
 
 
     /// How this idle works:

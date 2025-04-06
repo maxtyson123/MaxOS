@@ -104,7 +104,7 @@ namespace MaxOS {
               public:
 
 
-                  explicit ConsoleStream(Console*);
+                  ConsoleStream(Console*);
                   ~ConsoleStream();
 
                   void write_char(char c) override;

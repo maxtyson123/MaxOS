@@ -25,9 +25,9 @@ namespace MaxOS {
           String();
           String(char const* string);
           String(String const &other);
-          explicit String(int value);
-          explicit String(uint64_t value);
-          explicit String(float value);
+          String(int value);
+          String(uint64_t value);
+          String(float value);
           ~String();
 
           void copy(String const &other);

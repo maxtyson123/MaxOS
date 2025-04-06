@@ -70,7 +70,7 @@ namespace MaxOS {
           bool valid_checksum();
 
         public:
-            explicit AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);
+            AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);
             ~AdvancedConfigurationAndPowerInterface();
 
             ACPISDTHeader* find(const char* signature);

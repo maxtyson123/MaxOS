@@ -106,7 +106,7 @@ namespace MaxOS {
             void write_redirect(uint8_t index, RedirectionEntry* entry);
 
           public:
-              explicit IOAPIC(AdvancedConfigurationAndPowerInterface* acpi);
+              IOAPIC(AdvancedConfigurationAndPowerInterface* acpi);
               ~IOAPIC();
 
               uint32_t read(uint32_t reg) const;
@@ -133,7 +133,7 @@ namespace MaxOS {
 
 
         public:
-            explicit AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
+            AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
             ~AdvancedProgrammableInterruptController();
 
             LocalAPIC* local_apic();

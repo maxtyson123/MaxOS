@@ -30,7 +30,7 @@ namespace MaxOS {
             class TimeEvent : public common::Event<ClockEvents>{
                 public:
                     common::Time* time;
-                    explicit TimeEvent(common::Time*);
+                    TimeEvent(common::Time*);
                     ~TimeEvent();
             };
 

@@ -13,23 +13,24 @@
 
         /**
          * @enum LogLevel
-         * @brief Enum for the different log levels
+         * @brief Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type.
          */
          enum class LogLevel
          {
+             WARNING,
+             ERROR,
              HEADER,
              INFO,
              DEBUG,
-             WARNING,
-             ERROR,
          };
+
 
         /**
          * @class Logger
          * @brief A class that handles logging messages to the console and files.
          */
          class Logger : public MaxOS::common::OutputStream
-        {
+         {
             private:
 
                 // Cant use vector as this needs to be init before the heap
@@ -39,7 +40,9 @@
                 bool m_log_writers_enabled[m_max_log_writers] { false };
 
                 static inline Logger* s_active_logger = nullptr;
+
                 LogLevel m_log_level { LogLevel::INFO };
+                inline static LogLevel s_max_log_level = LogLevel::DEBUG;
 
             public:
                 Logger();
@@ -51,16 +54,16 @@
                 void set_log_level(LogLevel log_level);
 
                 void write_char(char c) final;
+                void lineFeed() final;
                 void printf(const char* format, ...);
 
                 static void ASSERT(bool condition, const char* message, ...);
 
                 static Logger* active_logger();
 
-                static Logger Out();
-                static Logger Endline();
+                static Logger& Out();
 
-                static Logger HEADER();
+                static Logger& HEADER();
                 static Logger INFO();
                 static Logger DEBUG();
                 static Logger WARNING();

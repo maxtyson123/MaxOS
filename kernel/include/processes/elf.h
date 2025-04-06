@@ -162,7 +162,7 @@ namespace MaxOS
 
 
         public:
-            explicit Elf64(uintptr_t elf_header_address);
+            Elf64(uintptr_t elf_header_address);
             ~Elf64();
 
             void load();

@@ -22,7 +22,7 @@ namespace MaxOS{
         template <typename EventType> class Event
         {
             public:
-                explicit Event(EventType type);
+                Event(EventType type);
                 ~Event();
 
                 EventType type;

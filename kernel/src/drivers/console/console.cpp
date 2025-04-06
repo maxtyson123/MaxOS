@@ -434,20 +434,9 @@ void ConsoleStream::write_char(char c) {
     uint16_t spaces = 0;
 
     // If the character placement is more than the width of the console go on a new line
-    if(m_cursor_x >= m_console->width()) {
-
-        // Go to the start of the next line
-        m_cursor_x = 0;
-
-        // Increment the y coordinate but if it is more than the height of the console scroll the console
-        if(++m_cursor_y >= m_console->height()){
-
-            // Scroll the console
-            m_console->scroll_up();
-
-            // Decrement the y coordinate
-            m_cursor_y = m_console->height()-1;
-        }
+    if(m_cursor_x >= m_console->width() && c != '\n'){
+        lineFeed();
+        write("             ");
     }
 
     // Check if the character is an ANSI escape code

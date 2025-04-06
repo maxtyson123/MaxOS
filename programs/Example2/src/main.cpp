@@ -120,9 +120,8 @@ extern "C" int _start(int argc, char** argv)
 
     // Write the arg
     write(argv[i]);
-
   }
-  write("\n");
+  write("%h\n");
 
   // Write to the console
   write("MaxOS Test Program v3.1\n");

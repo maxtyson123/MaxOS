@@ -136,8 +136,8 @@ void Colour::parse_console_colour(ConsoleColour colour) {
 
     case ConsoleColour::Blue:
       red = 0;
-      green = 0;
-      blue = 170;
+      green = 128;
+      blue = 253;
       break;
 
     case ConsoleColour::Green:
@@ -238,7 +238,7 @@ ConsoleColour Colour::to_console_colour() const {
   if (red == 0 && green == 0 && blue == 0)
     return ConsoleColour::Black;
 
-  if (red == 0 && green == 0 && blue == 170)
+  if (red == 0 && green == 128 && blue == 253)
     return ConsoleColour::Blue;
 
   if (red == 0 && green == 170 && blue == 0)

@@ -47,7 +47,7 @@ namespace MaxOS{
         {
             public:
                 InputStreamProcessor();
-                explicit InputStreamProcessor(InputStreamEventHandler<ProcessorType>* generic_stream_event_handler);
+                InputStreamProcessor(InputStreamEventHandler<ProcessorType>* generic_stream_event_handler);
                 ~InputStreamProcessor();
 
                 void on_end_of_stream(GenericInputStream<Type>* stream) override;
@@ -64,7 +64,7 @@ namespace MaxOS{
         {
             public:
                 InputStreamSocket();
-                explicit InputStreamSocket(InputStreamEventHandler<Type>*);
+                InputStreamSocket(InputStreamEventHandler<Type>*);
                 ~InputStreamSocket();
 
                 void on_stream_read(Type) override;
@@ -106,7 +106,7 @@ namespace MaxOS{
 
             public:
                 GenericInputStream();
-                explicit GenericInputStream(InputStreamEventHandler<Type>*);
+                GenericInputStream(InputStreamEventHandler<Type>*);
                 ~GenericInputStream();
 
                 void connect_input_stream_event_handler(InputStreamEventHandler<Type>*);
@@ -127,7 +127,7 @@ namespace MaxOS{
         class InputStream : public GenericInputStream<string>
         {
             public:
-                explicit InputStream(InputStreamEventHandler<string>*);
+                InputStream(InputStreamEventHandler<string>*);
         };
 
 

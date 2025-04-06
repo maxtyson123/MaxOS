@@ -27,7 +27,7 @@ namespace MaxOS
 
                 common::OutputStream* m_driver_message_stream;
 
-                explicit Driver(common::OutputStream* driverMessageStream = nullptr);
+                Driver(common::OutputStream* driverMessageStream = nullptr);
                 ~Driver();
 
                 void error_message(const string& message) const;
@@ -80,7 +80,7 @@ namespace MaxOS
               common::Vector<Driver*> m_drivers;
 
             public:
-                explicit DriverManager();
+                DriverManager();
                 ~DriverManager();
 
                 void add_driver_selector(DriverSelector*);

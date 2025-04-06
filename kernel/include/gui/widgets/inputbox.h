@@ -26,7 +26,7 @@ namespace MaxOS{
              */
             class InputBoxTextChangedEvent : public common::Event<InputBoxEvents>{
               public:
-                  explicit InputBoxTextChangedEvent(const string&);
+                  InputBoxTextChangedEvent(const string&);
                   ~InputBoxTextChangedEvent();
 
                   string new_text;
