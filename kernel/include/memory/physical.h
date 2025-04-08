@@ -104,7 +104,7 @@ namespace MaxOS {
 
           static uint64_t physical_address_of_entry(pte_t* entry);
           pte_t* get_entry(virtual_address_t* virtual_address, pml_t* pml4_root);
-          pml_t* get_higher_half_table(uint64_t index, uint64_t index2 = 510, uint64_t index3 = 510);
+          static pml_t* get_higher_half_table(uint64_t index, uint64_t index2 = 510, uint64_t index3 = 510);
 
           void initialise_bit_map();
 

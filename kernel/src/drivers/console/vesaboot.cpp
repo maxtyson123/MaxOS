@@ -33,8 +33,13 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
     // Connect to the loggers
     m_console_area = new ConsoleArea(this, 0, 0, width() / 2 - 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     cout = new ConsoleStream(m_console_area);
-    Logger::active_logger() -> add_log_writer(cout);
-    Logger::INFO() << "Console Stream set up \n";
+
+    #ifdef TARGET_DEBUG
+//        Logger::active_logger() -> add_log_writer(cout);
+//        Logger::INFO() << "Console Stream set up \n";
+    #endif
+
+    update_progress_bar(0);
 }
 
 VESABootConsole::~VESABootConsole() = default;
@@ -319,11 +324,8 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
   uint16_t clear_start_y = region_pixel_y + region_pixel_height - line_height;
   for (uint16_t row = 0; row < line_height; row++) {
      uint8_t* row_addr = framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
-
-     // Fill the row with the fill colour (note: this is a 32-bit as we are using 32-bit colour depth)
-     size_t num_elements = row_bytes / sizeof(uint32_t);
      auto* dest32 = (uint32_t*)row_addr;
-     memset(dest32, 0, row_bytes);
+     memset(dest32, fill_value, row_bytes);
   }
 
   //Update any per-pixel colour metadata
@@ -373,5 +375,58 @@ void VESABootConsole::finish() {
 
   // Disable the logger
   Logger::active_logger()->disable_log_writer(cout);
+
+}
+
+/**
+ * @brief Updates the progress bar
+ *
+ * @param percentage The percentage to update the progress bar to (0-100)
+ */
+void VESABootConsole::update_progress_bar(uint8_t percentage) {
+
+    // Must be within bounds
+    if(percentage > 100)
+        percentage = 100;
+
+    // Must have a valid graphics context
+    if(s_graphics_context == nullptr)
+        return;
+
+    uint8_t progress_height = 15;
+    uint8_t progress_spacing = 20;
+    uint8_t progress_width_cull = 40;
+
+    // Find the center of the screen
+    uint32_t right_x = (s_graphics_context->width()/2) - logo_width / 2;
+    uint32_t bottom_y = (s_graphics_context->height()/2 - 80) - logo_height / 2;
+
+    // Find the bounds
+    uint32_t start_x = progress_width_cull;
+    uint32_t start_y = logo_height + progress_spacing;
+    uint32_t end_x = logo_width - progress_width_cull;
+    uint32_t end_y = logo_height + progress_height + progress_spacing;
+
+    // Draw the progress bar
+    for (uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
+        for (uint32_t progress_x = start_x; progress_x < end_x; ++progress_x) {
+
+            // Check if drawing border
+            bool is_border = (progress_y == start_y) || (progress_y == end_y - 1) ||
+                             (progress_x == start_x) || (progress_x == end_x - 1);
+
+            // Only draw the border if it is the first time drawing it
+            is_border = is_border && percentage == 0;
+
+            // If it is not within the percentage, skip it
+            if (progress_x > logo_width * percentage / 100 && !is_border)
+                continue;
+
+
+            // Draw the pixel
+            s_graphics_context->put_pixel(right_x + progress_x, bottom_y + progress_y, common::Colour(0xFF, 0xFF, 0xFF));
+
+        }
+    }
 
 }

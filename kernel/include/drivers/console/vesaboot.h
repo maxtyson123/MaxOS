@@ -62,6 +62,7 @@ namespace MaxOS{
 
                     void print_logo();
                     static void print_logo_kernel_panic();
+                    static void update_progress_bar(uint8_t percentage);
             };
 
         }

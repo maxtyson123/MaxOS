@@ -34,14 +34,18 @@
             private:
 
                 // Cant use vector as this needs to be init before the heap
-                uint8_t m_log_writer_count { 0 };
-                static const uint8_t m_max_log_writers { 5 };
-                OutputStream* m_log_writers[m_max_log_writers];
-                bool m_log_writers_enabled[m_max_log_writers] { false };
+                uint8_t m_log_writer_count = 0;
+                static const uint8_t m_max_log_writers = 5;
+                OutputStream* m_log_writers[m_max_log_writers] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+                bool m_log_writers_enabled[m_max_log_writers] = {false, false, false, false, false};
+
+                // Progress bar
+                static const uint8_t s_progress_total = 25;
+                uint8_t m_progress_current = 0;
 
                 static inline Logger* s_active_logger = nullptr;
 
-                LogLevel m_log_level { LogLevel::INFO };
+                LogLevel m_log_level = LogLevel::INFO;
                 inline static LogLevel s_max_log_level = LogLevel::DEBUG;
 
             public:

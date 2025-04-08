@@ -39,7 +39,7 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
   m_memory_size = (m_multiboot->basic_meminfo()->mem_upper + 1024) * 1024;
   m_bitmap_size = m_memory_size / s_page_size + 1;
   m_total_entries = m_bitmap_size / s_row_bits + 1;
-  Logger::DEBUG() << "Memory Info: size = 0x" << m_memory_size << ", bitmap size = 0x" << (uint64_t)m_bitmap_size << ", total entries = " << (int)m_total_entries << ", page size = 0x" << (uint64_t)s_page_size << "\n";
+  Logger::DEBUG() << "Memory Info: size = " << (int)(m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t)m_bitmap_size << ", total entries = " << (int)m_total_entries << ", page size = 0x" << (uint64_t)s_page_size << "\n";
 
   // Get the mmap that stores the memory to use
   m_mmap_tag = m_multiboot->mmap();

@@ -3,9 +3,11 @@
 //
 #include <common/logger.h>
 #include <stdarg.h>
+#include <drivers/console/vesaboot.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
+using namespace MaxOS::drivers::console;
 
 
 Logger::Logger()
@@ -71,6 +73,12 @@ void Logger::set_log_level(LogLevel log_level) {
 
   // Set the log level
   m_log_level = log_level;
+
+  // Update the progress bar
+  if(log_level == LogLevel::INFO){
+      VESABootConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
+      m_progress_current ++;
+  }
 
   // Print the header
   switch (log_level) {

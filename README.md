@@ -133,8 +133,8 @@ Note: If you want to run the operating system in a virtual machine, you will nee
    # If you edit the CMakeLists.txt file you will need to delete the build directory contents (not the folder) and regenerate the makefiles
    cd cmake-build
    
-   # Add -DDEBUG=ON to enable debug mode
-   cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
+   # Change to -DCMAKE_BUILD_TYPE=Debug to enable debug mode
+   cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release 
    ```
 
 4. Clean the build directory

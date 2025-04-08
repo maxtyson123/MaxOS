@@ -51,19 +51,18 @@ VirtualMemoryManager::VirtualMemoryManager()
     // Log the VMM's PML4 address
     Logger::DEBUG() << "VMM PML4: physical - 0x" << (uint64_t)m_pml4_root_physical_address << ", virtual - 0x" << (uint64_t)m_pml4_root_address << "\n";
 
-    // Space to store VMM chunks
-    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->memory_size() + PhysicalMemoryManager::s_page_size);
-    m_first_region = (virtual_memory_region_t*)vmm_space;
-    m_current_region = m_first_region;
-
     // Allocate space for the vmm
+    uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->memory_size() + PhysicalMemoryManager::s_page_size);    //TODO: Check that am not slowly overwriting the kernel (filling first space with 0s bugs out the kernel)
     void* vmm_space_physical = PhysicalMemoryManager::s_current_manager->allocate_frame();
-    ASSERT(vmm_space_physical != nullptr, "Failed to allocate VMM space\n");
     PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*)vmm_space, Present | Write, m_pml4_root_address);
-    m_first_region->next = nullptr;
     Logger::DEBUG() << "VMM space: physical - 0x" << (uint64_t)vmm_space_physical << ", virtual - 0x" << (uint64_t)vmm_space << "\n";
     if(!is_kernel)
       ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical, PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)vmm_space, m_pml4_root_address));
+
+    // Set the first region
+    m_first_region = (virtual_memory_region_t*)vmm_space;
+    m_current_region = m_first_region;
+    m_first_region->next = nullptr;
 
     // Calculate the next available address (kernel needs to reserve space for the higher half)
     m_next_available_address = is_kernel ? vmm_space + s_reserved_space : PhysicalMemoryManager::s_page_size;
@@ -81,6 +80,10 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 
     // Loop through the chunks
     for (size_t i = 0; i < s_chunks_per_page; i++){
+
+        // Have reached the end?
+        if(i == m_current_chunk && region == m_current_region)
+          break;
 
         // Loop through the pages
         size_t pages = PhysicalMemoryManager::size_to_frames(region->chunks[i].size);
@@ -174,7 +177,7 @@ void *VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
   // Is there space in the current region
   if(m_current_chunk >= s_chunks_per_page)
-    new_region();
+     new_region();
 
   // If needed to allocate at a specific address, fill with free memory up to that address to prevent fragmentation
   if(address != 0)
@@ -226,6 +229,13 @@ void VirtualMemoryManager::new_region() {
   // Map the new region
   PhysicalMemoryManager::s_current_manager->map(new_region_physical, (virtual_address_t*)new_region, Present | Write, m_pml4_root_address);
   new_region->next = nullptr;
+
+  // Clear the new region
+  for (size_t i = 0; i < s_chunks_per_page; i++){
+    new_region->chunks[i].size = 0;
+    new_region->chunks[i].flags = 0;
+    new_region->chunks[i].start_address = 0;
+  }
 
   // Set the current region
   m_current_region -> next = new_region;

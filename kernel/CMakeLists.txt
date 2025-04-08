@@ -1,5 +1,5 @@
 # Set the flags
-SET(CMAKE_CXX_FLAGS " -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra  -mno-red-zone -mno-80387 -mno-mmx -mcmodel=kernel -g -fno-use-cxa-atexit")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra  -mno-red-zone -mno-80387 -mno-mmx -mcmodel=kernel -fno-use-cxa-atexit")
 
 # Disable certain warnings
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function")
@@ -20,10 +20,10 @@ TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
 # Update the version before building
 ADD_CUSTOM_COMMAND(
-    COMMENT "Versioning kernel"
+    COMMENT "Post-processing kernel"
     TARGET MaxOSk64
     PRE_BUILD
-    COMMAND ${CMAKE_SOURCE_DIR}/toolchain/version.sh
+    COMMAND ${CMAKE_SOURCE_DIR}/toolchain/post-process/run.sh
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}

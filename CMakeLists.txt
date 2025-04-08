@@ -20,18 +20,21 @@ INCLUDE_DIRECTORIES(libraries/)
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/lib/gcc/${TOOLCHAIN_PLATFORM}/${GCC_VER}/)
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/${TOOLCHAIN_PLATFORM}/lib/)
 
+# DEBUG / PROD
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+endif()
+
+## Set flags based on build type
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DTARGET_DEBUG)
+endif()
+
 # Look to build in these directories
 ADD_SUBDIRECTORY(kernel)
 #ADD_SUBDIRECTORY(libraries)
 ADD_SUBDIRECTORY(programs)
 #ADD_SUBDIRECTORY(ports)
-
-ADD_CUSTOM_TARGET(optional_apps
-        # Build the optional apps
-#        COMMENT "Building optional apps"
-#        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/build_optional_apps.sh
-#        USES_TERMINAL
-)
 
 ADD_CUSTOM_TARGET(image
         # Create the disk image
@@ -63,16 +66,6 @@ ADD_CUSTOM_TARGET(debug
         # Run qemu
         COMMENT "Running qemu"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_qemu.sh --debug
-
-        # Ensure it runs in the terminal
-        USES_TERMINAL
-)
-
-ADD_CUSTOM_TARGET(gdb
-        # Run GDB
-        COMMENT "Running GDB"
-        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_gdb.sh
-        BYPRODUCTS ${CMAKE_SOURCE_DIR}/MaxOS.sym
 
         # Ensure it runs in the terminal
         USES_TERMINAL
