@@ -35,8 +35,8 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
     cout = new ConsoleStream(m_console_area);
 
     #ifdef TARGET_DEBUG
-//        Logger::active_logger() -> add_log_writer(cout);
-//        Logger::INFO() << "Console Stream set up \n";
+        Logger::active_logger() -> add_log_writer(cout);
+        Logger::INFO() << "Console Stream set up \n";
     #endif
 
     update_progress_bar(0);
