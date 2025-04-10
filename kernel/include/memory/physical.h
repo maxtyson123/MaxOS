@@ -113,7 +113,6 @@ namespace MaxOS {
           PhysicalMemoryManager(system::Multiboot* multiboot);
           ~PhysicalMemoryManager();
 
-
           static const uint32_t s_page_size =  0x1000;
           static const uint8_t s_row_bits =  64;
 
@@ -129,6 +128,7 @@ namespace MaxOS {
 
           // Pml4
           uint64_t* pml4_root_address();
+          static void unmap_lower_kernel();
 
           // Frame Management
           void* allocate_frame();
@@ -178,7 +178,6 @@ namespace MaxOS {
           static bool in_higher_region(uintptr_t virtual_address);
       };
   }
-
 }
 
 #endif // MAXOS_MEMORY_PHYSICAL_H

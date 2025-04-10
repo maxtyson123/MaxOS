@@ -8,6 +8,7 @@
 #include <cpuid.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <system/gdt.h>
 
 namespace MaxOS{
 
@@ -140,7 +141,7 @@ namespace MaxOS{
 
       public:
 
-        CPU();
+        CPU(GlobalDescriptorTable* gdt);
         ~CPU();
 
         static inline bool is_panicking = { false };
@@ -148,7 +149,7 @@ namespace MaxOS{
         static void PANIC(const char* message, cpu_status_t* status = nullptr);
         [[noreturn]] static void halt();
 
-        void init_tss();
+        void init_tss(GlobalDescriptorTable* gdt);
         inline static tss_t tss = {};
 
         static inline bool s_xsave = false;

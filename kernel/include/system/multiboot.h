@@ -427,8 +427,6 @@ namespace MaxOS {
           multiboot_tag_new_acpi* m_new_acpi;
           multiboot_tag_module* m_module;
 
-          unsigned long m_base_address;
-
         public:
           Multiboot(unsigned long address, unsigned long magic);
           ~Multiboot();
@@ -439,6 +437,9 @@ namespace MaxOS {
           multiboot_tag_mmap* mmap();
           multiboot_tag_old_acpi* old_acpi();
           multiboot_tag_new_acpi* new_acpi();
+
+          unsigned long start_address;
+          unsigned long end_address;
 
           [[nodiscard]] multiboot_tag* start_tag() const;
 

@@ -17,7 +17,6 @@ FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
 ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS})
 TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
-
 # Update the version before building
 ADD_CUSTOM_COMMAND(
     COMMENT "Post-processing kernel"

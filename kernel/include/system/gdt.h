@@ -13,13 +13,28 @@ namespace MaxOS {
 
 
         /**
-         * @struct GDTR
-         * @brief A struct used to store information for the GDT Register
+         * @static DescriptorFlags
+         * @brief Flags for the GDT entries
          */
-        struct GDTR {
-            uint16_t limit;
+         enum class DescriptorFlags : uint64_t {
+             Write               = (1ULL << 41),
+             Execute             = (1ULL << 43),
+             CodeOrDataSegment   = (1ULL << 44),
+             GrowDown            = (1ULL << 45),
+             ConformFromLower    = (1ULL << 46),
+             Present             = (1ULL << 47),
+             LongMode            = (1ULL << 53),
+         };
+
+
+        /**
+         * @struct GlobalDescriptorTableRegister
+         * @brief How the CPU stores the GDT
+         */
+        typedef struct GlobalDescriptorTableRegister {
+            uint16_t size;
             uint64_t address;
-        } __attribute__((packed));
+        } __attribute__((packed)) gdtr_t;
 
         /**
          * @class GlobalDescriptorTable
@@ -27,11 +42,11 @@ namespace MaxOS {
          */
         class GlobalDescriptorTable {
 
-          uint64_t m_gdt[5];
-
           public:
               GlobalDescriptorTable();
               ~GlobalDescriptorTable();
+
+              uint64_t table[7];
           };
     }
 }

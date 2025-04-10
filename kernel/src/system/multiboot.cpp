@@ -12,17 +12,28 @@ using namespace MaxOS::memory;
 using namespace MaxOS::common;
 
 Multiboot::Multiboot(unsigned long address, unsigned long magic)
-: m_base_address(address)
+: start_address(address)
 {
 
   // Confirm the bootloader
   ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
   Logger::DEBUG() << "Multiboot2 Bootloader Detected at 0x" << (uint64_t)address << "\n";
 
-  // Loop through the tags and load them
-  for(multiboot_tag* tag = start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+  multiboot_tag* tag = start_tag();
 
+  // Loop through the tags and load them
+  while (true) {
+
+    // Handle the tag
     switch (tag -> type) {
+
+        case MULTIBOOT_TAG_TYPE_END:
+            end_address = (unsigned long)PhysicalMemoryManager::to_lower_region((uint64_t)tag);
+            return;
+
+            //0xffffffff80394dd8
+            //0xFFFFFFFF80000000
+
         case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
             m_framebuffer = (multiboot_tag_framebuffer *)tag;
             break;
@@ -66,6 +77,9 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
             m_module = module;
             break;
     }
+
+    // Move to the next tag
+    tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7));
   }
 }
 
@@ -142,5 +156,5 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
  */
 multiboot_tag *Multiboot::start_tag() const {
 
-  return (multiboot_tag*)(m_base_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
+  return (multiboot_tag*)(start_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
 }

@@ -14,6 +14,24 @@ using namespace MaxOS::processes;
 extern uint64_t gdt64[];
 extern uint64_t stack[];
 
+/**
+ * @brief Constructor for the CPU class
+ */
+CPU::CPU(GlobalDescriptorTable* gdt){
+
+
+    // TODO: Multicore
+
+    // Setup cpu features
+    init_tss(gdt);
+    init_sse();
+}
+
+/**
+ * @brief Destructor for the CPU class
+ */
+CPU::~CPU() = default;
+
 [[noreturn]] void CPU::halt() {
   while (true)
     asm volatile("hlt");
@@ -188,7 +206,7 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
 /**
  * @brief Initialises the TSS for interrupt handling
  */
-void CPU::init_tss() {
+void CPU::init_tss(GlobalDescriptorTable* gdt) {
 
   // The reserved have to be 0
   tss.reserved0 = 0;
@@ -234,8 +252,8 @@ void CPU::init_tss() {
   uint64_t tss_descriptor_high = base_4;
 
   // Store in the GDT
-  gdt64[5] = tss_descriptor_low;
-  gdt64[6] = tss_descriptor_high;
+  gdt -> table[5] = tss_descriptor_low;
+  gdt -> table[6] = tss_descriptor_high;
 
   // Load the TSS
   Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t )&tss << "\n";
@@ -245,24 +263,6 @@ void CPU::init_tss() {
 
 
 }
-
-/**
- * @brief Constructor for the CPU class
- */
-CPU::CPU() {
-
-
-  // TODO: Multicore
-
-  // Setup cpu features
-  init_tss();
-  init_sse();
-}
-
-/**
- * @brief Destructor for the CPU class
- */
-CPU::~CPU() = default;
 
 /**
  * @brief Ensure the CPU must panic and prepare for it if so

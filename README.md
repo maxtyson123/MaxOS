@@ -144,7 +144,8 @@ Note: If you want to run the operating system in a virtual machine, you will nee
 
 5. Build the operating system & Run it in QEMU
    ```sh
-   make install image run
+   # Replace 'run' with 'gdb' on a debug build to make the kernel wait for gdb to attach on port 1234  
+   make run
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

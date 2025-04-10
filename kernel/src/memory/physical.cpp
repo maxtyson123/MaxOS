@@ -9,30 +9,32 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
-extern volatile uint64_t p4_table[512];
+volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
+volatile extern __attribute__((aligned(4096))) unsigned char p3_table[];
+volatile extern __attribute__((aligned(4096))) unsigned char p3_table_hh[];
+volatile extern __attribute__((aligned(4096))) unsigned char p2_table[];
+volatile extern __attribute__((aligned(4096))) unsigned char p1_table[];
+
 extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
-extern uint64_t multiboot_tag_end;
-extern uint64_t multiboot_tag_start;
 
-MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
+PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 : m_kernel_end((uint64_t)&_kernel_physical_end),
   m_multiboot(multiboot),
   m_pml4_root_address((uint64_t*)p4_table),
   m_pml4_root((pte_t *)p4_table)
 {
 
+  // Unload the kernel from the lower half
+  unmap_lower_kernel();
+
   // Log the kernel memory
   Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t)&_kernel_end << ", kernel_size = 0x" << (uint64_t)&_kernel_size << ", kernel_physical_end = 0x" << (uint64_t)&_kernel_physical_end << "\n";
 
-  // Clear the spinlock
+  // Set up the current manager
   m_lock.unlock();
-
-  // Set the current manager
   s_current_manager = this;
-
-  // Can the CPU execute code from a non-executable page?
   m_nx_allowed = CPU::check_nx();
 
   // Store the information about the bitmap
@@ -68,8 +70,6 @@ MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot
 
   // Set up the bitmap
   initialise_bit_map();
-
-  // Reserve the kernel regions
   reserve_kernel_regions(multiboot);
 
   // Initialisation Done
@@ -714,7 +714,8 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
 bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
 
   // Return false if the address range is entirely within or overlaps with the multiboot reserved region
-  if ((address > multiboot_tag_start && address + s_page_size < multiboot_tag_end) || (address + s_page_size > multiboot_tag_start && address < multiboot_tag_end)) {
+  if ((address > m_multiboot-> start_address && address + s_page_size < m_multiboot -> end_address)
+  ||  (address + s_page_size > m_multiboot-> start_address && address < m_multiboot -> end_address)) {
     return false;
   }
 
@@ -1027,4 +1028,12 @@ void* PhysicalMemoryManager::from_dm_region(uintptr_t physical_address) {
  */
 bool PhysicalMemoryManager::in_higher_region(uintptr_t virtual_address) {
   return virtual_address & (1l << 62);
+}
+
+
+/**
+ * @brief Unmaps the kernel physical memory from the lower half that was set up during the kernel boot
+ */
+void PhysicalMemoryManager::unmap_lower_kernel() {
+    p4_table[0] = 0;
 }

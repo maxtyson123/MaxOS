@@ -21,14 +21,14 @@ LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/lib/gcc/${TOOLCHAIN_PLATFORM}/${GCC_VER}/
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/${TOOLCHAIN_PLATFORM}/lib/)
 
 # DEBUG / PROD
-if(NOT CMAKE_BUILD_TYPE)
+IF(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
-endif()
+ENDIF()
 
 ## Set flags based on build type
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DTARGET_DEBUG)
-endif()
+ENDIF()
 
 # Look to build in these directories
 ADD_SUBDIRECTORY(kernel)
@@ -37,6 +37,9 @@ ADD_SUBDIRECTORY(programs)
 #ADD_SUBDIRECTORY(ports)
 
 ADD_CUSTOM_TARGET(image
+        # Everything needs to be installed (compiled) before we can create the disk image
+        # DEPENDS install (TODO Rewrite so auto installs)
+
         # Create the disk image
         COMMENT "Creating disk image"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/create_disk_img.sh
@@ -54,6 +57,9 @@ ADD_CUSTOM_TARGET(image
 )
 
 ADD_CUSTOM_TARGET(run
+        # Requires a bootable image to be created
+        DEPENDS image
+
         # Run qemu
         COMMENT "Running qemu"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_qemu.sh
@@ -62,11 +68,18 @@ ADD_CUSTOM_TARGET(run
         USES_TERMINAL
 )
 
-ADD_CUSTOM_TARGET(debug
+# Run qemu with debug if the debug flag is set
+IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    ADD_CUSTOM_TARGET(gdb
+
+        # Requires a bootable image to be created
+        DEPENDS image
+
         # Run qemu
-        COMMENT "Running qemu"
+        COMMENT "Running qemu with gdb"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/run_qemu.sh --debug
 
         # Ensure it runs in the terminal
         USES_TERMINAL
-)
+    )
+ENDIF()

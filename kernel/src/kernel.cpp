@@ -44,17 +44,15 @@ using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
-
-//TODO: Rework cmake to have debug and prod targets
-
-extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)  // Only place where it is allowed to not use snake_case
+extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic)
 {
     // Initialise the logger
     Logger logger;
     SerialConsole serialConsole;
     logger.add_log_writer(&serialConsole);
 
-    Logger::HEADER() << "Initialising System Components \n";
+    GlobalDescriptorTable gdt;
+    Logger::INFO() << "GDT Loaded \n";
 
     Multiboot multiboot(addr, magic);
     Logger::INFO() << "MaxOS Booted Successfully \n";
@@ -97,7 +95,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     driver_manager.add_driver(&mouse);
 
     Logger::INFO() << "Setting up CPU \n";
-    CPU cpu;
+    CPU cpu(&gdt);
 
     Logger::INFO() << "Setting up Clock \n";
     Clock kernelClock(&apic, 1);
@@ -105,8 +103,6 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
 
     //Logger::INFO() << "Setting up USB \n";
     //UniversalSerialBusController USBController(&driver_manager);
-
-    Logger::HEADER() << "Device Management\n";
 
     Logger::INFO() << "Finding Drivers \n";
     driver_manager.find_drivers();
@@ -140,9 +136,7 @@ extern "C" [[noreturn]] void kernelMain(unsigned long addr, unsigned long magic)
     scheduler.activate();
 
     // TODO:
-    //       -   Rewrite boot text again to have progress bar
     //       -   Rewrite boot script to be in c++ where possible
-    //       -   Comments clean up
 
 
     /// How this idle works:
