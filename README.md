@@ -88,7 +88,7 @@ _Note:_ Ignore all the networking code & drivers, they are very outdated, badly 
 
 This is how to build the Max OS operating system from source. (Alternatively, you can download the latest built kernel from the workflow artifacts)
 
-Currently, Max OS can only be built on a linux machine, but does support WSL. In the future I do plan to port the build system to Mac. 
+Currently, Max OS can only be built on a linux-like machine, but does support WSL & Mac. If you are using WSL, make sure the repo is on the WSL machine and not the Windows machine. 
 
 ### Prerequisites
 
@@ -102,12 +102,24 @@ This is the list of required packages to build the operating system from source.
 * texinfo
 * libisl-dev
 * cmake
+* telnet
+
+Linux:
   ```sh
   sudo apt update
-  sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake
+  sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake telnet
   ```
 
+Mac:
+```sh
+  # Install Devtools (via Xcode or some other method)
+  # Install Homebrew
+  brew install coreutils bison gmp libmpc mpfr texinfo gcc@13 cmake nasm telnet
+```
+
+
 Note: If you want to run the operating system in a virtual machine, you will need to install QEMU. (If in WSL the script will look for a Windows installation of QEMU)
+
 ### Installation
 
 - Upon first build follow steps 1-5
@@ -147,6 +159,23 @@ Note: If you want to run the operating system in a virtual machine, you will nee
    # Replace 'run' with 'gdb' on a debug build to make the kernel wait for gdb to attach on port 1234  
    make run
    ```
+   
+6. (OPTIONAL) I use CLion IDE for development, if  you want to use it too follow these steps for IDE features:
+    - Cmake
+      - Open CLion
+      - Select "Open or Import"
+      - Select the `CMakeLists.txt` file in the root directory of the project
+      - Make sure the profile is set to these settings:
+        - CMake: `cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt`
+        - Directory: `cmake-[release/debug]`
+      - Click "OK"
+      - Wait for CLion to index the project (this may take a while)
+    - Code Style
+      - Go to Settings -> Editor -> Code Styles -> (cog) -> Import Scheme -> C/C++ -> Import Scheme -> From `docs/Styles/ClionCodeStyleSettings.xml`
+    - Debugger
+      - Run a gdb build with `make gdb`
+      - Create new configuration: Edit Configurations -> Add -> Remote Debugger
+      - 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -199,6 +228,7 @@ No user usage so far (userland will be added in the future)
 - [ ] Pretty GUI
 - [ ] Port NeoVim, Wakatime & Some hot reloader
 - [ ] Create port of my 2048
+- [ ] Own LibC
 - [ ] Compatibility Layer(s)
  
 See the [open issues](https://github.com/maxtyson123/MaxOS/issues) for a full list of proposed features (and known issues).

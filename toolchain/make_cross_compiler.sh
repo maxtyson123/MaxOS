@@ -4,8 +4,41 @@ source ./MaxOS.sh
 # Install Dependencies if not told otherwise
 if [ "$1" != "--no-deps" ]; then
     msg "Installing extra dependencies"
-    sudo apt update
-    sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake nasm telnet
+
+    # If we are on MacOS, install dependencies using brew
+    if [ "$IS_MACOS" -eq 1 ]; then
+        msg "Installing dependencies using brew"
+        brew install  coreutils\
+                      bison \
+                      gmp \
+                      libmpc \
+                      mpfr \
+                      texinfo \
+                      isl \
+                      cmake \
+                      nasm \
+                      telnet \
+                      || fail "Couldn't install dependencies"
+
+        # Scripting tools that linux has by default
+        brew install wget gcc@13 gnu-sed
+    else
+        msg "Installing dependencies using apt"
+        sudo apt update
+        sudo apt install -y build-essential \
+                            bison \
+                            libgmp3-dev \
+                            libmpc-dev \
+                            libmpfr-dev \
+                            texinfo \
+                            libisl-dev \
+                            cmake \
+                            nasm \
+                            telnet \
+            || fail "Couldn't install dependencies"
+    fi
+
+
 fi
 
 # Make A Directory For The Cross Compiler
@@ -16,15 +49,31 @@ cd ./cross_compiler
 export PREFIX="$PWD/cross"
 export TARGET=x86_64-elf
 export PATH="$PREFIX/bin:$PATH"
+export SYSROOT="$PREFIX/$TARGET/sysroot"
 
-# Store versions in a variable
-BINUTILS_VERSION=2.39
-GCC_VERSION=12.2.0
+# Don't include debug info in toolchain, optimize TODO: Mac M chip doesn't support -mtune=native causing clang to fail
+#export CFLAGS="-g0 -O2 "
+#export CXXFLAGS="-g0 -O2 "
 
-# Print what we are doing
+# Mac Os likes to use its own gcc which fails to build the cross compiler
+if [ "$IS_MACOS" -eq 1 ]; then
+      export CPATH=/opt/homebrew/include:/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/
+      export LIBRARY_PATH=/opt/homebrew/lib:/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/
+      export CC=gcc-13
+      export CXX=g++-13
+      export CPP=cpp-13
+      export LD=gcc-13
+fi
+
+# Create the sysroot directory
+mkdir -p "$SYSROOT"
+
+BINUTILS_VERSION=2.41
+GCC_VERSION=13.2.0
+NUM_JOBS=$(nproc)
 msg "Installing binutils-$BINUTILS_VERSION and gcc-$GCC_VERSION for $TARGET to $PREFIX"
 
-# == Build Binutils ==
+ == Build Binutils ==
 
 # Download Binutils if not already downloaded
 if [ ! -f binutils-$BINUTILS_VERSION.tar.gz ]; then
@@ -42,8 +91,8 @@ cd build-binutils
 
 # Build binutils
 msg "Building binutils-$BINUTILS_VERSION"
-make            || fail "Building binutils failed"
-make install    || fail "Installing binutils to $PREFIX failed"
+make -j "$NUM_JOBS"       || fail "Building binutils failed"
+make install              || fail "Installing binutils to $PREFIX failed"
 cd ../
 
 # == Build GCC ==
@@ -59,20 +108,30 @@ fi
 msg "Configuring gcc-$GCC_VERSION"
 mkdir build-gcc
 cd build-gcc
-../gcc-$GCC_VERSION/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers  || fail "Configuring gcc failed"
+extra_config_args=()
+if [ "$IS_MACOS" -eq 1 ]; then
+  for library in gmp mpfr mpc; do
+	  [ "$library" = "mpc" ] && brew_formula="libmpc" || brew_formula="$library"
+	  extra_config_args+=("--with-$library=$(brew --prefix --installed "$brew_formula")")
+	done
+fi
+
+../gcc-$GCC_VERSION/configure --prefix="$PREFIX" --target="$TARGET" --disable-nls --enable-languages=c,c++ --without-headers "${extra_config_args[@]}" || fail "Configuring gcc failed"
 
 # Build GCC
 msg "Building gcc-$GCC_VERSION"
-make all-gcc                  || fail "Building gcc failed"
-make all-target-libgcc        || fail "Building libgcc failed"
-make install-gcc              || fail "Installing gcc failed"
-make install-target-libgcc    || fail "Installing libgcc failed"
+make all-gcc -j "$NUM_JOBS"           || fail "Building gcc failed"
+make all-target-libgcc -j "$NUM_JOBS" || fail "Building libgcc failed"
+make install-gcc                      || fail "Installing gcc failed"
+make install-target-libgcc            || fail "Installing libgcc failed"
+cd ../
 
 #  Leave the build directory
-cd ../../
+cd ../
 
-# Make a  build directory for cmake
-mkdir ../cmake-build
+ls
 
 # Setup the first version of the kernel
+cd post-process
 ./version.sh --force
+cd ../

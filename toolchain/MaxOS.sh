@@ -34,3 +34,28 @@ fail () {
     exit $?
   fi
 }
+
+SED_EXC=sed
+STAT_EXC=stat
+
+MOUNT_DIR="/mnt"
+
+# Set a variable if this is MacOS
+IS_MACOS=0
+if [[ ($(uname) == "Darwin") ]]; then
+  IS_MACOS=1
+  msg "Running on MacOS"
+
+  #Set the path to the brew binary
+  BREW_PATH=$(which brew)
+  if [ -z "$BREW_PATH" ]; then
+    err "Brew not found, please install brew"
+    exit 1
+  fi
+
+  # Ensure use of gnu tools
+  SED_EXC=gsed
+  STAT_EXC=gstat
+
+  MOUNT_DIR="/Volumes"
+fi

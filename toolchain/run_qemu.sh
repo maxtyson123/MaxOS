@@ -58,6 +58,13 @@ else
 
 fi
 
+# If in Mac hdiutil locks the img so create a copy
+if [ "$IS_MACOS" -eq 1 ]; then
+  msg "Creating a copy of the image."
+  cp "$IMAGE_PATH" "$IMAGE_PATH.copy" || fail "Error: Could not copy image."
+    IMAGE_PATH="$IMAGE_PATH.copy"
+fi
+
 # If in WSL, convert the image path to a windows path
 if [ "$IN_WSL" -ne "0" ]; then
   msg "Converting image path to windows path."
@@ -95,7 +102,7 @@ DISPLAY_TYPE=""
 if "$QEMU_EXECUTABLE" --display help | grep -q "sdl"; then
   msg "Using sdl display."
   DISPLAY_TYPE="-display sdl"
-elif "$QEMU_EXECUTABLE" --display help | grep -q "cococa"; then
+elif "$QEMU_EXECUTABLE" --display help | grep -q "cocoa"; then
   msg "Using cocoa display."
   DISPLAY_TYPE="-display cocoa"
 else
@@ -153,3 +160,9 @@ QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"                          # Don't 
 # Run qemu
 msg "Running qemu with args: $QEMU_ARGS"
 "$QEMU_EXECUTABLE" $QEMU_ARGS
+
+# Clean up the image copy
+if [ "$IS_MACOS" -eq 1 ]; then
+  msg "Cleaning up image copy."
+  rm "$IMAGE_PATH"
+fi
