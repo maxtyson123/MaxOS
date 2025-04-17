@@ -15,7 +15,6 @@ global stack
 
 global start
 extern kernel_main
-extern call_constructors
 
 [bits 32]
 
@@ -124,7 +123,6 @@ kernel_entry:
     mov rsp, stack.top
 
     ; Run the kernel
-    call call_constructors
     call kernel_main
 
 section .bss

@@ -73,7 +73,7 @@ GCC_VERSION=13.2.0
 NUM_JOBS=$(nproc)
 msg "Installing binutils-$BINUTILS_VERSION and gcc-$GCC_VERSION for $TARGET to $PREFIX"
 
- == Build Binutils ==
+# == Build Binutils ==
 
 # Download Binutils if not already downloaded
 if [ ! -f binutils-$BINUTILS_VERSION.tar.gz ]; then
@@ -125,6 +125,44 @@ make all-target-libgcc -j "$NUM_JOBS" || fail "Building libgcc failed"
 make install-gcc                      || fail "Installing gcc failed"
 make install-target-libgcc            || fail "Installing libgcc failed"
 cd ../
+
+
+# Build grub manually on Mac OS only
+if [ "$IS_MACOS" -eq 1 ]; then
+
+    brew install i686-elf-grub
+
+
+#    msg "Installing grub dependencies"
+#    brew install automake autoconf gettext pkg-config objconv
+#
+#    # Setup where the cross compiler is
+#    export PATH="/opt/homebrew/opt/flex/bin:$SCRIPTDIR/../cross/bin:$PATH"
+#    export CC=$TARGET-gcc
+#    export CPP=$TARGET-cpp
+#    export LD=$TARGET-ld
+#    export AR=$TARGET-ar
+#    export AS=$TARGET-as
+#    export RANLIB=$TARGET-ranlib
+#
+#
+#    msg "Downloading grub"
+#    git clone git://git.savannah.gnu.org/grub.git
+#    cd grub
+#    git checkout 77063f4cb672f423272db7e21ca448cf3de98dcf || fail "Couldn't checkout grub revision"
+#    ./autogen.sh || fail "Couldn't run autogen.sh"
+#    cd ../
+#
+#    msg "Configuring grub"
+#    mkdir build-grub
+#    cd build-grub
+#    ../grub/configure --prefix="$PREFIX" --target="$TARGET" --disable-werror || fail "Configuring grub failed"
+#
+#    # Build grub
+#    msg "Building grub"
+#    make -j "$NUM_JOBS"       || fail "Building grub failed"
+#    make install              || fail "Installing grub to $PREFIX failed"
+fi
 
 #  Leave the build directory
 cd ../

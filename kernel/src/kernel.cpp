@@ -44,8 +44,11 @@ using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
+extern "C" void call_constructors();
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic)
 {
+    call_constructors();
+
     // Initialise the logger
     Logger logger;
     SerialConsole serialConsole;
@@ -136,7 +139,10 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     scheduler.activate();
 
     // TODO:
-    //       -   Rewrite boot script to be in c++ where possible
+    //       -   Mac OS Port
+    //       -   Remove the init() of apics
+    //       -   Condense driver manager code in kernel main (may have removed pci somewhere by accident)
+    //       -   Clean up scripts dir
 
 
     /// How this idle works:

@@ -221,7 +221,8 @@ No user usage so far (userland will be added in the future)
 - [ ] DOOM Port
 - [ ] UserSpace Drivers
 - [ ] Userspace Networking
-- [ ] Auto Updater & Image Builder
+- [ ] Connect to Clion with SMB for files and GDB for debugging in userspace
+- [ ] Auto Updater & Image Builder (ISO Release)
 - [ ] Store
 - [ ] User Switching
 - [ ] Real Hardware Support
