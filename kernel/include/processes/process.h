@@ -86,11 +86,10 @@ namespace MaxOS
               uint64_t m_pid = 0;
 
             public:
+                Process(const string& name, bool is_kernel = false);
                 Process(const string& name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
                 Process(const string& name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
                 ~Process();
-
-                void set_up();
 
                 common::Vector<Thread*> threads();
                 void add_thread(Thread* thread);

@@ -21,9 +21,10 @@ Scheduler::Scheduler(Multiboot& multiboot)
   m_next_tid(-1)
 
 {
-  s_instance = this;
 
-  // Create the IPC handler
+  /// Setup the basic scheduler
+  Logger::INFO() << "Setting up Scheduler \n";
+  s_instance = this;
   m_ipc = new InterProcessCommunicationManager();
 
   // Create the idle process
@@ -34,7 +35,6 @@ Scheduler::Scheduler(Multiboot& multiboot)
 
   // Load the elfs
   load_multiboot_elfs(&multiboot);
-
 }
 
 Scheduler::~Scheduler() {

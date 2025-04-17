@@ -7,10 +7,10 @@
 
 #include <stdint.h>
 #include <common/outputStream.h>
-#include <memory/memorymanagement.h>
-#include <hardwarecommunication/interrupts.h>
 #include <common/eventHandler.h>
 #include <common/string.h>
+#include <common/logger.h>
+#include <memory/memorymanagement.h>
 
 namespace MaxOS
 {

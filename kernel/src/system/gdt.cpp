@@ -11,6 +11,8 @@ using namespace MaxOS::system;
 GlobalDescriptorTable::GlobalDescriptorTable()
 {
 
+    Logger::INFO() << "Setting up Global Descriptor Table\n";
+
     // Null descriptor
     table[0] = 0;
 

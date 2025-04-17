@@ -91,7 +91,7 @@ namespace MaxOS
                   bool device_has_functions(uint16_t bus, uint16_t device);
 
           public:
-                  PeripheralComponentInterconnectController(drivers::DriverManager* driver_manager);
+                  PeripheralComponentInterconnectController();
                   ~PeripheralComponentInterconnectController();
 
                   void select_drivers(drivers::DriverSelectorEventHandler *handler) override;

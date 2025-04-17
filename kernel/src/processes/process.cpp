@@ -116,21 +116,37 @@ void Thread::restore_sse_state() {
 }
 
 /**
+ * @brief Base Constructor for the Process
+ *
+ * @param p_name The name of the process
+ * @param is_kernel If the process is a kernel process
+ */
+Process::Process(const string& p_name, bool is_kernel)
+: is_kernel(is_kernel),
+  name(p_name)
+{
+  // Pause interrupts while creating the process
+  asm("cli");
+
+  // Basic setup
+  m_pid = Scheduler::system_scheduler() ->add_process(this);
+
+  // If it is a kernel process then don't need a new memory manager
+  memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager :  new MemoryManager();
+}
+
+/**
  * @brief Constructor for the Process class (from a function)
  *
- * @param name The name of the process
+ * @param p_name The name of the process
  * @param _entry_point The entry point of the process
  * @param args The arguments to pass to the process
  * @param arg_amount The amount of arguments
  * @param is_kernel If the process is a kernel process
  */
 Process::Process(const string& p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
-: is_kernel(is_kernel),
-  name(p_name)
+: Process(p_name, is_kernel)
 {
-
-  // Basic setup
-  set_up();
 
   // Create the main thread
   auto* main_thread = new Thread(_entry_point, args, arg_amount, this);
@@ -150,23 +166,16 @@ Process::Process(const string& p_name, void (*_entry_point)(void *), void *args,
  * @param is_kernel  If the process is a kernel process
  */
 Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, bool is_kernel)
-: is_kernel(is_kernel),
-  name(p_name)
+: Process(p_name, is_kernel)
 {
 
-  // Basic setup
-  set_up();
-
-  // Load the elf
-  elf -> load();
 
   // Get the entry point
+  elf -> load();
   auto* entry_point = (void (*)(void *))elf -> header() -> entry;
 
   // Create the main thread
   auto* main_thread = new Thread(entry_point, args, arg_amount, this);
-
-  // Add the thread
   add_thread(main_thread);
 
   // Free the elf
@@ -282,21 +291,6 @@ Vector<Thread*> Process::threads() {
  */
 uint64_t Process::pid() const {
   return m_pid;
-}
-
-/**
- * @brief Generic setup function for the process
- */
-void Process::set_up() {
-
-  // Pause interrupts while creating the process
-  asm("cli");
-
-  // Basic setup
-  m_pid = Scheduler::system_scheduler() ->add_process(this);
-
-  // If it is a kernel process then don't need a new memory manager
-  memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager :  new MemoryManager();
 }
 
 /**

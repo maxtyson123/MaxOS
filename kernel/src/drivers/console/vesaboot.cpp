@@ -15,19 +15,16 @@ using namespace MaxOS::drivers::console;
 using namespace MaxOS::system;
 
 VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
-: Driver(),
-  Console(),
-  m_font((uint8_t*)AMIGA_FONT)
+: m_font((uint8_t*)AMIGA_FONT)
 {
 
-    // Set the graphics context
+    // Set up
+    Logger::INFO() << "Setting up VESA console\n";
     s_graphics_context = graphics_context;
-
-    // Malloc the video memory text
     m_video_memory_meta = (uint16_t*)MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
 
     // Prepare the console
-    this -> clear();
+    VESABootConsole::clear();
     print_logo();
 
     // Connect to the loggers
@@ -323,9 +320,10 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
   // Clear the last line of the region
   uint16_t clear_start_y = region_pixel_y + region_pixel_height - line_height;
   for (uint16_t row = 0; row < line_height; row++) {
-     uint8_t* row_addr = framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
-     auto* dest32 = (uint32_t*)row_addr;
-     memset(dest32, fill_value, row_bytes);
+      auto row_add = (uint32_t*)(framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * 4);
+      for (uint16_t col = 0; col < region_pixel_width; col++) {
+          row_add[col] = fill_value;
+      }
   }
 
   //Update any per-pixel colour metadata
@@ -369,6 +367,9 @@ void VESABootConsole::print_logo_kernel_panic() {
  * @brief Cleans up the boot console
  */
 void VESABootConsole::finish() {
+
+  // Done
+  Logger::INFO() << "MaxOS Kernel Successfully Booted\n";
 
   // Move COUT to the bottom of the screen
   cout->set_cursor(width(), height());
@@ -424,7 +425,7 @@ void VESABootConsole::update_progress_bar(uint8_t percentage) {
 
 
             // Draw the pixel
-            s_graphics_context->put_pixel(right_x + progress_x, bottom_y + progress_y, common::Colour(0xFF, 0xFF, 0xFF));
+            s_graphics_context->put_pixel(right_x + progress_x, bottom_y + progress_y, Colour(0xFF, 0xFF, 0xFF));
 
         }
     }

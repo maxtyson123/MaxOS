@@ -26,6 +26,8 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
   m_pml4_root((pte_t *)p4_table)
 {
 
+  Logger::INFO() << "Setting up Physical Memory Manager\n";
+
   // Unload the kernel from the lower half
   unmap_lower_kernel();
 

@@ -7,7 +7,7 @@
 using namespace MaxOS;
 using namespace MaxOS::drivers;
 
-SerialConsole::SerialConsole()
+SerialConsole::SerialConsole(Logger* logger)
 : m_data_port(0x3F8),
   m_interrupt_enable_port(0x3F9),
   m_fifo_control_port(0x3FA),
@@ -45,15 +45,13 @@ SerialConsole::SerialConsole()
   m_modem_control_port.write(0x0F);
 
   // Set the active serial console
-  s_active_serial_console = this;
+  logger->add_log_writer(this);
+
 
 }
 
 SerialConsole::~SerialConsole() {
 
-    // If this is the active serial console, set it to null
-    if (s_active_serial_console == this)
-            s_active_serial_console = nullptr;
 
 }
 

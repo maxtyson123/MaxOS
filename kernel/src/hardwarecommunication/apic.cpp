@@ -10,12 +10,8 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
-LocalAPIC::LocalAPIC() = default;
-
-LocalAPIC::~LocalAPIC() = default;
-
-void LocalAPIC::init() {
-
+LocalAPIC::LocalAPIC()
+{
   // Read information about the local APIC
   uint64_t msr_info = CPU::read_msr(0x1B);
 
@@ -70,8 +66,9 @@ void LocalAPIC::init() {
   // Read the APIC version
   uint32_t version = read(0x30);
   Logger::DEBUG() << "APIC Version: 0x" << (uint64_t)(version & 0xFF) << "\n";
-
 }
+
+LocalAPIC::~LocalAPIC() = default;
 
 uint32_t LocalAPIC::read(uint32_t reg) const{
 
@@ -115,11 +112,6 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi)
 {
 
-}
-
-IOAPIC::~IOAPIC() = default;
-
-void IOAPIC::init() {
 
   // Get the information about the IO APIC
   m_madt = (MADT*)m_acpi->find("APIC");
@@ -179,6 +171,8 @@ void IOAPIC::init() {
   // Log how many overrides were found
   Logger::DEBUG() << "IO APIC Source Overrides: 0x" << m_override_array_size << "\n";
 }
+
+IOAPIC::~IOAPIC() = default;
 
 MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 
@@ -307,17 +301,17 @@ void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
 }
 
 AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi)
-: m_local_apic(),
-  m_io_apic(acpi),
-  m_pic_master_command_port(0x20),
+: m_pic_master_command_port(0x20),
   m_pic_master_data_port(0x21),
   m_pic_slave_command_port(0xA0),
   m_pic_slave_data_port(0xA1)
 {
 
+  Logger::INFO() << "Setting up APIC\n";
+
   // Init the Local APIC
   Logger::DEBUG() << "Initialising Local APIC\n";
-  m_local_apic.init();
+  m_local_apic = new LocalAPIC();
 
   // Disable the old PIC
   Logger::DEBUG() << "Disabling PIC\n";
@@ -325,14 +319,21 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
 
   // Init the IO APIC
   Logger::DEBUG() << "Initialising IO APIC\n";
-  m_io_apic.init();
+  m_io_apic = new IOAPIC(acpi);
 
   // Register the APIC
   InterruptManager::active_interrupt_manager()->set_apic(this);
 
 }
 
-AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController() = default;
+AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController()
+{
+
+  // Free the memory
+  delete m_local_apic;
+  delete m_io_apic;
+
+}
 
 void AdvancedProgrammableInterruptController::disable_pic() {
 
@@ -357,9 +358,11 @@ void AdvancedProgrammableInterruptController::disable_pic() {
   m_pic_slave_data_port.write(0xFF);
 
 }
-LocalAPIC *AdvancedProgrammableInterruptController::local_apic() {
-  return &m_local_apic;
+LocalAPIC *AdvancedProgrammableInterruptController::local_apic() const
+{
+  return m_local_apic;
 }
-IOAPIC *AdvancedProgrammableInterruptController::io_apic() {
-    return &m_io_apic;
+IOAPIC* AdvancedProgrammableInterruptController::io_apic() const
+{
+    return m_io_apic;
 }

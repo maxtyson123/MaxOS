@@ -3,10 +3,12 @@
 //
 
 #include <drivers/driver.h>
+#include <hardwarecommunication/pci.h>
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::memory;
+using namespace MaxOS::hardwarecommunication;
 
 Driver::Driver(OutputStream* driverMessageStream)
 : m_driver_message_stream(driverMessageStream) {
@@ -147,9 +149,13 @@ void DriverSelector::select_drivers(DriverSelectorEventHandler*)
 {
 }
 
+
 DriverManager::DriverManager()
 {
 
+  Logger::INFO() << "Setting up Driver Manager \n";
+  add_driver_selector(new PeripheralComponentInterconnectController);
+  // add_driver_selector(new UniversalSerialBusController);
 }
 
 DriverManager::~DriverManager() {
@@ -157,6 +163,10 @@ DriverManager::~DriverManager() {
     // Remove any drivers that are still attached
     while (!m_drivers.empty())
        remove_driver(*m_drivers.begin());
+
+   // Free the driver selectors
+   for(auto & driver_selector : m_driver_selectors)
+       delete driver_selector;
 
 }
 
@@ -216,6 +226,8 @@ void DriverManager::remove_driver_selector(DriverSelector* driver_selector) {
  */
 void DriverManager::find_drivers() {
 
+    Logger::INFO() << "Finding Drivers \n";
+
     // Select the drivers
     for(auto & driver_selector : m_driver_selectors)
         driver_selector -> select_drivers(this);
@@ -227,6 +239,8 @@ void DriverManager::find_drivers() {
  * @return The longest time it takes to reset a device
  */
 uint32_t DriverManager::reset_devices() {
+
+  Logger::INFO() << "Resetting Devices \n";
 
   uint32_t resetWaitTime = 0;
   for(auto & driver : m_drivers)
@@ -247,8 +261,10 @@ uint32_t DriverManager::reset_devices() {
  */
 void DriverManager::initialise_drivers() {
 
+  Logger::INFO() << "Initialising Drivers \n";
+
   // Initialise the drivers
-  for(auto & driver : m_drivers)
+  for(auto& driver : m_drivers)
       driver->initialise();
 
 }
@@ -268,6 +284,9 @@ void DriverManager::deactivate_drivers() {
  * @brief Activate the drivers
  */
 void DriverManager::activate_drivers() {
+
+
+  Logger::INFO() << "Activating Drivers \n";
 
   // Activate the drivers
   for(auto & driver : m_drivers)

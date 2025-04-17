@@ -5,9 +5,9 @@
 #ifndef MAXOS_SERIAL_H
 #define MAXOS_SERIAL_H
 
-#include <stdint.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
+#include <common/logger.h>
 
 namespace MaxOS {
 
@@ -29,9 +29,7 @@ namespace MaxOS {
             hardwarecommunication::Port8Bit m_line_status_port;
 
         public:
-          inline static SerialConsole* s_active_serial_console = nullptr;
-
-          SerialConsole();
+          SerialConsole(Logger* logger);
           ~SerialConsole();
 
           void put_character(char c);

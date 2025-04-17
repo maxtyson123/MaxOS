@@ -17,6 +17,7 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   m_framebuffer_info(framebuffer_info)
 {
   // Get the framebuffer info
+  Logger::INFO() << "Setting up VESA driver\n";
   Logger::DEBUG() << "Framebuffer info: 0x " << (uint64_t)m_framebuffer_info << "\n";
 
   // Set the framebuffer address, bpp and pitch

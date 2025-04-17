@@ -23,6 +23,7 @@ CPU::CPU(GlobalDescriptorTable* gdt){
     // TODO: Multicore
 
     // Setup cpu features
+    Logger::INFO() << "Setting up CPU \n";
     init_tss(gdt);
     init_sse();
 }

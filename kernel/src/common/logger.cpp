@@ -84,12 +84,9 @@ void Logger::set_log_level(LogLevel log_level) {
   switch (log_level) {
 
     case LogLevel::HEADER:
-
-        // Spacing if needed
-        if(s_max_log_level > LogLevel::HEADER)
-            write_char('\n');
-        *this << ANSI_COLOURS[ANSIColour::FG_Blue] << "[  \t\t ";
+        *this << ANSI_COLOURS[ANSIColour::FG_Blue] << "[  BOOT    ] ";
         break;
+
     case LogLevel::INFO:
       *this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
       break;
@@ -139,7 +136,7 @@ Logger& Logger::Out() {
  * @brief Gets active logger set to task level
  * @return The task logger
  */
-Logger& Logger::HEADER(){
+Logger Logger::HEADER(){
 
     // Set the log level to task
     s_active_logger->set_log_level(LogLevel::HEADER);
@@ -305,16 +302,7 @@ Logger& Logger::operator<<(LogLevel log_level) {
 void Logger::lineFeed() {
 
     switch (s_active_logger -> m_log_level) {
-
-        // Give more space to the header if needed
         case LogLevel::HEADER:
-            write_char('\n');
-
-            if(s_max_log_level > LogLevel::HEADER)
-                write_char('\n');
-            break;
-
-        // Default to just a new line
         case LogLevel::INFO:
         case LogLevel::DEBUG:
         case LogLevel::WARNING:

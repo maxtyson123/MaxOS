@@ -121,8 +121,8 @@ namespace MaxOS {
       class AdvancedProgrammableInterruptController {
 
         protected:
-            LocalAPIC m_local_apic;
-            IOAPIC m_io_apic;
+            LocalAPIC* m_local_apic;
+            IOAPIC* m_io_apic;
 
             Port8BitSlow m_pic_master_command_port;
             Port8BitSlow m_pic_master_data_port;
@@ -136,8 +136,8 @@ namespace MaxOS {
             AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
             ~AdvancedProgrammableInterruptController();
 
-            LocalAPIC* local_apic();
-            IOAPIC* io_apic();
+            LocalAPIC* local_apic() const;
+            IOAPIC* io_apic() const;
 
       };
 

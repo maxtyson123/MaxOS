@@ -14,6 +14,7 @@
 #include <common/colour.h>
 #include <system/cpu.h>
 #include <memory/memoryIO.h>
+#include <memory/memorymanagement.h>
 
 namespace MaxOS{
 

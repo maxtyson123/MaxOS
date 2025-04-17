@@ -67,7 +67,7 @@
 
                 static Logger& Out();
 
-                static Logger& HEADER();
+                static Logger HEADER();
                 static Logger INFO();
                 static Logger DEBUG();
                 static Logger WARNING();

@@ -60,7 +60,7 @@ Clock::Clock(AdvancedProgrammableInterruptController* apic, uint16_t time_betwee
   m_apic(apic),
   m_ticks_between_events(time_between_events)
 {
-
+    Logger::INFO() << "Setting up Clock \n";
 }
 
 Clock::~Clock() = default;
@@ -183,6 +183,8 @@ string Clock::device_name() {
  * @param ms_per_tick How many milliseconds per interrupt
  */
 void Clock::calibrate(uint64_t ms_per_tick) {
+
+  Logger::INFO() << "Calibrating Clock \n";
 
   // Update the clock accuracy
   s_clock_accuracy = ms_per_tick;

@@ -74,13 +74,11 @@ string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
 
 ///__CONTROLLER___
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController(DriverManager* driver_manager)
+PeripheralComponentInterconnectController::PeripheralComponentInterconnectController()
 : m_data_port(0xCFC),
   m_command_port(0xCF8)
 {
 
-  // Add to the driver manager
-  driver_manager->add_driver_selector(this);
 
 }
 

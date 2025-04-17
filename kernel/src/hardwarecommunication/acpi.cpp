@@ -11,6 +11,8 @@ using namespace MaxOS::memory;
 using namespace MaxOS::common;
 AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot) {
 
+  Logger::INFO() << "Setting up ACPI\n";
+
   // If the new ACPI is not supported, panic
   ASSERT(multiboot->new_acpi() != nullptr || multiboot->old_acpi() != nullptr, "No ACPI found!");
 

@@ -58,13 +58,6 @@ else
 
 fi
 
-# If in Mac hdiutil locks the img so create a copy
-if [ "$IS_MACOS" -eq 1 ]; then
-  msg "Creating a copy of the image."
-  cp "$IMAGE_PATH" "$IMAGE_PATH.copy" || fail "Error: Could not copy image."
-    IMAGE_PATH="$IMAGE_PATH.copy"
-fi
-
 # If in WSL, convert the image path to a windows path
 if [ "$IN_WSL" -ne "0" ]; then
   msg "Converting image path to windows path."
@@ -137,7 +130,7 @@ if [  "$USE_DEBUG" -ne "0" ]; then
       ACCELERATOR=""
     fi
 
-    objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
+    $SCRIPTDIR/../toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
     msg "Generated debug symbols"
 fi
 
@@ -147,7 +140,7 @@ if [ "$USE_ISO" -eq 1 ]; then
   BOOT_DEVICE="-cdrom ../MaxOS.iso"
 else
   msg "Using disk img boot device."
-  BOOT_DEVICE="-drive file=$IMAGE_PATH,format=raw,if=ide,cache=directsync,id=disk0"
+  BOOT_DEVICE="-drive file=$IMAGE_PATH,format=raw,if=ide,cache=directsync,id=disk0,file.locking=off"
 fi
 
 # Create the args
@@ -168,9 +161,3 @@ QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"                          # Don't 
 # Run qemu
 msg "Running qemu with args: $QEMU_ARGS"
 "$QEMU_EXECUTABLE" $QEMU_ARGS
-
-# Clean up the image copy
-if [ "$IS_MACOS" -eq 1 ]; then
-  msg "Cleaning up image copy."
-  rm "$IMAGE_PATH"
-fi
