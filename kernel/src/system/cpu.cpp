@@ -9,21 +9,24 @@
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::drivers;
+using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
 
-extern uint64_t gdt64[];
 extern uint64_t stack[];
 
 /**
  * @brief Constructor for the CPU class
  */
-CPU::CPU(GlobalDescriptorTable* gdt){
+CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot){
 
+
+    Logger::INFO() << "Setting up CPU \n";
+    acpi = new AdvancedConfigurationAndPowerInterface(multiboot);
+    apic = new AdvancedProgrammableInterruptController(acpi);
 
     // TODO: Multicore
 
     // Setup cpu features
-    Logger::INFO() << "Setting up CPU \n";
     init_tss(gdt);
     init_sse();
 }

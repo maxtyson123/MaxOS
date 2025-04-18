@@ -19,10 +19,10 @@ TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
 # Update the version before building
 ADD_CUSTOM_COMMAND(
-    COMMENT "Post-processing kernel"
+    COMMENT "post_processing kernel"
     TARGET MaxOSk64
     PRE_BUILD
-    COMMAND ${CMAKE_SOURCE_DIR}/toolchain/post-process/run.sh
+    COMMAND ${CMAKE_SOURCE_DIR}/toolchain/post_process/run.sh
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}

@@ -170,6 +170,6 @@ cd ../
 ls
 
 # Setup the first version of the kernel
-cd post-process
+cd post_process
 ./version.sh --force
 cd ../

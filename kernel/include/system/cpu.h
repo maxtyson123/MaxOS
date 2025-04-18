@@ -9,6 +9,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <system/gdt.h>
+#include <hardwarecommunication/acpi.h>
+#include <hardwarecommunication/apic.h>
 
 namespace MaxOS{
 
@@ -141,8 +143,11 @@ namespace MaxOS{
 
       public:
 
-        CPU(GlobalDescriptorTable* gdt);
+        CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot);
         ~CPU();
+
+        hardwarecommunication::AdvancedConfigurationAndPowerInterface* acpi;
+        hardwarecommunication::AdvancedProgrammableInterruptController* apic;
 
         static inline bool is_panicking = { false };
         static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);

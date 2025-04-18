@@ -70,10 +70,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
     Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
     DriverManager driver_manager;
-    AdvancedConfigurationAndPowerInterface acpi(&multiboot);
-    AdvancedProgrammableInterruptController apic(&acpi);
-    CPU cpu(&gdt);
-    Clock kernel_clock(&apic, 1);
+    CPU cpu(&gdt, &multiboot);
+    Clock kernel_clock(cpu.apic, 1);
     driver_manager.add_driver(&kernel_clock);
     driver_manager.find_drivers();
     uint32_t reset_wait_time = driver_manager.reset_devices();
@@ -90,10 +88,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     SyscallManager syscalls;
     console.finish();
     scheduler.activate();
-
-    // TODO:
-    //       -   Clean up scripts dir
-    //       -   Fix the random elf crash
 
     // Idle loop  (read Idle.md)
     while (true)
