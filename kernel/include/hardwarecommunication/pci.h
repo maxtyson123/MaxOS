@@ -17,9 +17,9 @@ namespace MaxOS
 {
     namespace hardwarecommunication
     {
-        enum BaseAddressRegisterType{        //Used for the last bit of the address register
-            MemoryMapping = 0,
-            InputOutput = 1
+        enum class BaseAddressRegisterType{        //Used for the last bit of the address register
+            MemoryMapped,
+            InputOutput
         };
 
         /**
@@ -42,31 +42,31 @@ namespace MaxOS
          */
         class PeripheralComponentInterconnectDeviceDescriptor {
             public:
-                bool has_port_base;
-                uint32_t port_base;  //Port used for communication
+                bool has_port_base = false;
+                uint32_t port_base = 0;
 
-                bool has_memory_base;
-                uint32_t memory_base;  //Mem address used for communication
+                bool has_memory_base = false;
+                uint32_t memory_base = 0;
 
-                uint32_t interrupt; //The interrupt
+                uint32_t interrupt = 0;
 
-                uint16_t bus;
-                uint16_t device;
-                uint16_t function;
+                uint16_t bus = 0;
+                uint16_t device = 0;
+                uint16_t function = 0;
 
-                uint16_t vendor_id;
-                uint16_t device_id;
+                uint16_t vendor_id = 0;
+                uint16_t device_id = 0;
 
-                uint8_t class_id;
-                uint8_t subclass_id;
-                uint8_t interface_id;
+                uint8_t class_id = 0;
+                uint8_t subclass_id = 0;
+                uint8_t interface_id = 0;
 
-                uint8_t revision;
+                uint8_t revision = 0;
 
                 PeripheralComponentInterconnectDeviceDescriptor();
                 ~PeripheralComponentInterconnectDeviceDescriptor();
 
-                string get_type();
+                string get_type() const;
         };
 
 
@@ -94,11 +94,11 @@ namespace MaxOS
                   PeripheralComponentInterconnectController();
                   ~PeripheralComponentInterconnectController();
 
-                  void select_drivers(drivers::DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager* interrupt_manager) override;
-                  drivers::Driver* get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interrupt_manager);
-                  void list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev);
+                  void select_drivers(drivers::DriverSelectorEventHandler *handler) override;
+                  static drivers::Driver* get_driver(PeripheralComponentInterconnectDeviceDescriptor dev);
+                  static void list_known_device(const PeripheralComponentInterconnectDeviceDescriptor& dev);
         };
     }
 }
 
-#endif //MAX_HARDWARECOMMUNICATION_OS_PCI_H
+#endif //MAX_OS_HARDWARECOMMUNICATION_PCI_H

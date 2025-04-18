@@ -17,7 +17,7 @@ using namespace MaxOS::filesystem;
 void MSDOSPartitionTable::read_partitions(AdvancedTechnologyAttachment *hd) {
 
     // read the MBR from the hard disk
-    MasterBootRecord masterBootRecord;
+    MasterBootRecord masterBootRecord = {};
     hd -> read_28(0, (uint8_t *)&masterBootRecord, sizeof(MasterBootRecord));
 
     // Check if the magic number is correct
@@ -26,11 +26,10 @@ void MSDOSPartitionTable::read_partitions(AdvancedTechnologyAttachment *hd) {
 
 
     // Loop through the primary partitions
-    for(int i = 0; i < 4; i++){
+    for(auto& entry : masterBootRecord.primaryPartition){
 
-        if(masterBootRecord.primaryPartition[i].partitionId == 0) continue;                      // If the partition id is 0, skip it
+        if(entry.partitionId == 0) continue;                      // If the partition id is 0, skip it
 
-        //TODO: Add a message stream
         //TODO: Create a new FAT32 object
 
     }

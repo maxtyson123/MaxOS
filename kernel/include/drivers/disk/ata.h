@@ -43,13 +43,13 @@ namespace MaxOS{
 
                     void identify();
                     void read_28(uint32_t sector, uint8_t* data, int count);
-                    void write_28(uint32_t sector, uint8_t* data, int count);
+                    void write_28(uint32_t sector, const uint8_t* data, int count);
                     void flush();
 
                     void activate() final;
 
-                    string get_device_name() final;
-                    string get_vendor_name() final;
+                    string device_name() final;
+                    string vendor_name() final;
             };
        }
     }

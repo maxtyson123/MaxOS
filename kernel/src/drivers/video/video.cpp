@@ -15,9 +15,7 @@ VideoDriver::VideoDriver()
 
 }
 
-VideoDriver::~VideoDriver() {
-
-}
+VideoDriver::~VideoDriver() = default;
 
 /**
  * @brief Set the mode of the video driver

@@ -2,8 +2,8 @@
 // Created by 98max on 25/02/2025.
 //
 
-#ifndef MAXOS__PROCESSES_SCHEDULER_H
-#define MAXOS__PROCESSES_SCHEDULER_H
+#ifndef MAXOS_PROCESSES_SCHEDULER_H
+#define MAXOS_PROCESSES_SCHEDULER_H
 
 #include <common/vector.h>
 #include <system/cpu.h>
@@ -18,7 +18,7 @@ namespace MaxOS{
 
     /**
      * @class Scheduler
-     * @brief Schedules processes to run on the CPU
+     * @brief Schedules processes to run on the CPU via their threads
      */
      class Scheduler : public hardwarecommunication::InterruptHandler {
 
@@ -33,13 +33,13 @@ namespace MaxOS{
         uint64_t m_next_pid;
         uint64_t m_next_tid;
 
-        static Scheduler* s_instance;
+        inline static Scheduler* s_instance = nullptr;
         static const uint64_t s_ticks_per_event = { 3 };
 
-        IPC* m_ipc;
+        InterProcessCommunicationManager* m_ipc;
 
       public:
-        Scheduler(hardwarecommunication::InterruptManager* interrupt_manager);
+        Scheduler(system::Multiboot& multiboot);
         ~Scheduler();
 
 
@@ -54,16 +54,16 @@ namespace MaxOS{
         system::cpu_status_t* force_remove_process(Process* process);
         uint64_t add_thread(Thread* thread);
 
-        static Scheduler* get_system_scheduler();
-        static Process*   get_current_process();
+        static Scheduler* system_scheduler();
+        static Process*   current_process();
         static Process*   get_process(uint64_t pid);
-        static Thread*    get_current_thread();
+        static Thread*    current_thread();
         static Thread*    get_thread(uint64_t tid);
-        static IPC*       get_ipc();
+        static InterProcessCommunicationManager*       scheduler_ipc();
 
-        uint64_t get_ticks();
+        [[nodiscard]] uint64_t ticks() const;
 
-        void load_multiboot_elfs(system::Multiboot* multiboot);
+        static void load_multiboot_elfs(system::Multiboot* multiboot);
 
         void activate();
         void deactivate();
@@ -73,4 +73,4 @@ namespace MaxOS{
 
 }
 
-#endif // MAXOS__PROCESSES_SCHEDULER_H
+#endif // MAXOS_PROCESSES_SCHEDULER_H

@@ -27,8 +27,7 @@ namespace MaxOS{
             friend class GenericInputStream<Type>;
 
             protected:
-                common::Vector<GenericInputStream<Type>*>
-                  m_generic_input_streams;
+                common::Vector<GenericInputStream<Type>*> m_generic_input_streams;
             public:
                 InputStreamEventHandler();
                 ~InputStreamEventHandler();
@@ -51,7 +50,7 @@ namespace MaxOS{
                 InputStreamProcessor(InputStreamEventHandler<ProcessorType>* generic_stream_event_handler);
                 ~InputStreamProcessor();
 
-                virtual void on_end_of_stream(GenericInputStream<Type>* stream) override;
+                void on_end_of_stream(GenericInputStream<Type>* stream) override;
         };
 
 
@@ -68,7 +67,7 @@ namespace MaxOS{
                 InputStreamSocket(InputStreamEventHandler<Type>*);
                 ~InputStreamSocket();
 
-                virtual void on_stream_read(Type) override;
+                void on_stream_read(Type) override;
         };
 
         /**
@@ -89,8 +88,8 @@ namespace MaxOS{
                 InputStreamBuffer(Type event_fire_element, Type termination_element);
                 ~InputStreamBuffer();
 
-                virtual void on_stream_read(Type) override;
-                virtual void on_end_of_stream(GenericInputStream<Type>*) override;
+                void on_stream_read(Type) override;
+                void on_end_of_stream(GenericInputStream<Type>*) override;
                 void flush();
         };
 
@@ -139,9 +138,7 @@ namespace MaxOS{
          *
          * @tparam Type the type of data the stream is handling
          */
-        template<class Type> InputStreamEventHandler<Type>::InputStreamEventHandler() {
-
-        }
+        template<class Type> InputStreamEventHandler<Type>::InputStreamEventHandler() = default;
 
         /**
          * @breif Destroys the InputStreamProcessor and disconnects it from all streams
@@ -212,9 +209,7 @@ namespace MaxOS{
          * @tparam Type  The type of data the stream is handling
          * @tparam ProcessorType The type of data to convert the data into via the processor
          */
-        template<class Type, class ProcessorType> InputStreamProcessor<Type, ProcessorType>::~InputStreamProcessor() {
-
-        }
+        template<class Type, class ProcessorType> InputStreamProcessor<Type, ProcessorType>::~InputStreamProcessor() = default;
 
         /**
          * @breif Called when a stream has finished. Passes the event on to the handlers and then removes the stream from the array of streams
@@ -239,9 +234,7 @@ namespace MaxOS{
          *
          * @tparam Type The type of data the stream is handling
          */
-        template<class Type> InputStreamSocket<Type>::InputStreamSocket() {
-
-        }
+        template<class Type> InputStreamSocket<Type>::InputStreamSocket() = default;
 
         /**
          * @breif Creates a new InputStreamSocket and connects it to the handler
@@ -260,9 +253,7 @@ namespace MaxOS{
          *
          * @tparam Type The type of data the stream is handling
          */
-        template<class Type> InputStreamSocket<Type>::~InputStreamSocket() {
-
-        }
+        template<class Type> InputStreamSocket<Type>::~InputStreamSocket() = default;
 
         /**
          * @breif Called when data is read from a stream. Passes the event on to the internetProtocolHandlers
@@ -297,9 +288,7 @@ namespace MaxOS{
          *
          * @tparam Type The type of data the stream is handling
          */
-        template<class Type> InputStreamBuffer<Type>::~InputStreamBuffer() {
-
-        }
+        template<class Type> InputStreamBuffer<Type>::~InputStreamBuffer() = default;
 
         /**
          * @breif Called when data is read from a stream. Adds the data to the buffer and checks if the event should be fired
@@ -368,9 +357,7 @@ namespace MaxOS{
          *
          * @tparam Type The type of data the stream is handling
          */
-        template<class Type> GenericInputStream<Type>::GenericInputStream() {
-
-        }
+        template<class Type> GenericInputStream<Type>::GenericInputStream() = default;
 
         /**
          * @breif Creates a new GenericInputStream and connects it to the handler
@@ -434,4 +421,4 @@ namespace MaxOS{
     }
 }
 
-#endif //MAXOS_INPUTSTREAM_H
+#endif //MAXOS_COMMON_INPUTSTREAM_H

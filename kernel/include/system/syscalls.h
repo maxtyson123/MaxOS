@@ -11,7 +11,6 @@
 #include <common/vector.h>
 #include <common/colour.h>
 #include <memory/memorymanagement.h>
-#include <common/kprint.h>
 #include <processes/scheduler.h>
 
 
@@ -48,22 +47,22 @@ namespace MaxOS{
             system::cpu_status_t* return_state;
         } syscall_args_t;
 
-        // Could use a class based response but a single class might want multiple handlers eg fs
+        // Could use a class based response but a single class might want multiple handlers e.g. fs
         typedef syscall_args_t* (*syscall_func_t)(syscall_args_t* args);
 
         /**
          * @class SyscallManager
-         * @brief Handles system calls
+         * @brief Provides an API for userspace applications to interact with the kernel
          */
         class SyscallManager : hardwarecommunication::InterruptHandler{
 
           protected:
-            syscall_func_t m_syscall_handlers[256];
+            syscall_func_t m_syscall_handlers[256] = {};
             syscall_args_t* m_current_args;
 
 
           public:
-              SyscallManager(hardwarecommunication::InterruptManager*interrupt_manager);
+              SyscallManager();
               ~SyscallManager();
 
               system::cpu_status_t* handle_interrupt(system::cpu_status_t* esp) final;

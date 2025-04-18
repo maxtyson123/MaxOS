@@ -26,9 +26,7 @@ Widget::Widget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 }
 
 
-Widget::~Widget(){
-
-}
+Widget::~Widget() = default;
 
 /**
  * @brief Draw the widget on the screen
@@ -64,7 +62,7 @@ void Widget::invalidate() {
 void Widget::invalidate(Rectangle<int32_t> &area) {
 
     // If the widget has a parent, invalidate the area of the parent
-    if(m_parent != 0)
+    if(m_parent != nullptr)
         m_parent->invalidate(area);
 }
 
@@ -83,11 +81,11 @@ void Widget::add_child(Widget *child) {
 Coordinates Widget::absolute_coordinates(common::Coordinates coordinates) {
 
     // Return the parents absolute coordinates
-    if(m_parent != 0)
+    if(m_parent != nullptr)
         return m_parent->absolute_coordinates(Coordinates(coordinates.first + m_position.left, coordinates.second + m_position.top));
 
     // If the widget has no m_parent, return the coordinates of the widget
-    return Coordinates(coordinates.first + m_position.left, coordinates.second + m_position.top);
+    return {coordinates.first + m_position.left, coordinates.second + m_position.top};
 
 }
 
@@ -162,11 +160,11 @@ void Widget::resize(int32_t width, int32_t height) {
     }
 
     //Loop through the areas that need to be redrawn and invalidate them
-    for(uint32_t i = 0; i < invalid_areas_old.size(); i++)
-        invalidate(invalid_areas_old[i]);
+    for(auto& area : invalid_areas_old)
+        invalidate(area);
 
-    for(uint32_t i = 0; i < invalid_areas_new.size(); i++)
-        invalidate(invalid_areas_new[i]);
+    for(auto& area : invalid_areas_new)
+        invalidate(area);
 
 }
 
@@ -187,7 +185,7 @@ void Widget::focus() {
 void Widget::set_focus(Widget *widget) {
 
     // Focus the parent to this widget
-    if(m_parent != 0)
+    if(m_parent != nullptr)
       m_parent->set_focus(widget);
 }
 
@@ -223,7 +221,7 @@ void Widget::bring_to_front() {
 void Widget::bring_to_front(Widget *widget) {
 
     // Bring the parent to the front of the screen
-    if(m_parent != 0)
+    if(m_parent != nullptr)
        m_parent->bring_to_front(widget);
 
 }
@@ -277,7 +275,7 @@ peripherals::MouseEventHandler* Widget::on_mouse_button_pressed(uint32_t, uint32
     focus();
 
     // Return 0 as the event has been handled
-    return 0;
+    return nullptr;
 }
 
 /**
@@ -293,9 +291,7 @@ void Widget::on_mouse_button_released(uint32_t, uint32_t, uint8_t) {
 
 ///__COMPOSITE WIDGET__
 
-CompositeWidget::CompositeWidget() {
-
-}
+CompositeWidget::CompositeWidget() = default;
 
 CompositeWidget::CompositeWidget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : Widget(left, top, width,height)
@@ -303,9 +299,7 @@ CompositeWidget::CompositeWidget(int32_t left, int32_t top, uint32_t width, uint
 
 }
 
-CompositeWidget::~CompositeWidget() {
-
-}
+CompositeWidget::~CompositeWidget() = default;
 
 /**
  * @brief Draws a section of the widget and its m_children
@@ -355,8 +349,8 @@ void CompositeWidget::draw(GraphicsContext *gc, Rectangle<int32_t> &area, Vector
 
             // Draw what is left of the area that needs to be redrawn
             Vector<Rectangle<int32_t>> rest_draw_area = area.subtract(child_area);
-            for(Vector<Rectangle<int32_t>>::iterator rest_area_part = rest_draw_area.begin(); rest_area_part != rest_draw_area.end(); rest_area_part++)
-                draw(gc, *rest_area_part, child_widget + 1);
+            for(auto & rest_area_part : rest_draw_area)
+                draw(gc, rest_area_part, child_widget + 1);
 
             // Return as the entire area has now been drawn
             return;
@@ -501,7 +495,7 @@ void CompositeWidget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint3
  */
 peripherals::MouseEventHandler *CompositeWidget::on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) {
 
-    MouseEventHandler*mouse_event_handler = 0;
+    MouseEventHandler*mouse_event_handler = nullptr;
 
     for(auto&child_widget : m_children){
 

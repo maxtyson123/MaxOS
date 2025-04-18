@@ -5,9 +5,9 @@
 #ifndef MAXOS_SERIAL_H
 #define MAXOS_SERIAL_H
 
-#include <stdint.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>
+#include <common/logger.h>
 
 namespace MaxOS {
 
@@ -18,7 +18,7 @@ namespace MaxOS {
        * @class SerialConsole
        * @brief A driver for the serial output
        */
-      class SerialConsole : public Driver {
+        class SerialConsole : public Driver, public common::OutputStream{
 
         private:
             hardwarecommunication::Port8Bit m_data_port;
@@ -29,12 +29,11 @@ namespace MaxOS {
             hardwarecommunication::Port8Bit m_line_status_port;
 
         public:
-          static SerialConsole* s_active_serial_console;
-
-          SerialConsole();
+          SerialConsole(Logger* logger);
           ~SerialConsole();
 
           void put_character(char c);
+          void write_char(char c) final;
 
       };
 

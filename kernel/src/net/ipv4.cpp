@@ -24,9 +24,7 @@ InternetProtocolAddressResolver::InternetProtocolAddressResolver(InternetProtoco
 
 
 
-InternetProtocolAddressResolver::~InternetProtocolAddressResolver() {
-
-}
+InternetProtocolAddressResolver::~InternetProtocolAddressResolver() = default;
 
 MediaAccessControlAddress InternetProtocolAddressResolver::Resolve(InternetProtocolAddress) {
     return 0xFFFFFFFFFFFF; // the broadcast address
@@ -49,9 +47,7 @@ InternetProtocolPayloadHandler::InternetProtocolPayloadHandler(InternetProtocolH
 
 }
 
-InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() {
-
-}
+InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() = default;
 
 /**
  * @brief Called when an IP packet is received. (Deafult, does nothing, overide for use)
@@ -99,9 +95,7 @@ InternetProtocolHandler::InternetProtocolHandler(EthernetFrameHandler *backend, 
     this -> errorMessages = errorMessages;
 }
 
-InternetProtocolHandler::~InternetProtocolHandler() {
-
-}
+InternetProtocolHandler::~InternetProtocolHandler() = default;
 
 /**
  * @brief Called when an IP packet is received.
@@ -119,7 +113,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
         return false;
 
     //Convert to struct for easier use
-    InternetProtocolV4Header* ipMessage = (InternetProtocolV4Header*)ethernetframePayload;
+    auto* ipMessage = (InternetProtocolV4Header*)ethernetframePayload;
     bool sendBack = false;
 
     //Only handle if it is for this device
@@ -133,7 +127,7 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
         Map<uint8_t, InternetProtocolPayloadHandler*>::iterator handlerIterator = internetProtocolPayloadHandlers.find(ipMessage -> protocol);
         if(handlerIterator != internetProtocolPayloadHandlers.end()) {
             InternetProtocolPayloadHandler* handler = handlerIterator -> second;
-            if(handler != 0) {
+            if(handler != nullptr) {
                 sendBack = handler -> handleInternetProtocolPayload(ipMessage -> sourceIP, ipMessage -> destinationIP, ethernetframePayload + sizeof(InternetProtocolV4Header), length - sizeof(InternetProtocolV4Header));
             }
         }
@@ -169,14 +163,14 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
  * @param data The payload of the IP packet.
  * @param size The size of the IP packet.
  */
-void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, uint8_t *data, uint32_t size) {
+void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, const uint8_t *data, uint32_t size) {
 
-    uint8_t* buffer = (uint8_t*)MemoryManager::kmalloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
-    InternetProtocolV4Header *message = (InternetProtocolV4Header*)buffer;                                                                            //Convert to struct for easier use
+    auto* buffer = (uint8_t*)MemoryManager::kmalloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
+    auto *message = (InternetProtocolV4Header*)buffer;                                                                            //Convert to struct for easier use
 
     message -> version = 4;                                                                                                                           //Set version
     message -> headerLength = sizeof(InternetProtocolV4Header)/4;                                                                                     //Set header length
-    message -> typeOfService = 0;                                                                                                                     //Set type of service (not priv)
+    message -> typeOfService = 0;                                                                                                                     //Set type of service (not private)
 
     message -> totalLength = size + sizeof(InternetProtocolV4Header);                                                                                 //Set total length
     message -> totalLength = ((message -> totalLength & 0xFF00) >> 8)                                                                                 // Convert to big endian (Swap bytes)
@@ -218,7 +212,7 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
  * @param lengthInBytes The length of the data in bytes.
  * @return The checksum.
  */
-uint16_t InternetProtocolHandler::Checksum(uint16_t *data, uint32_t lengthInBytes) {
+uint16_t InternetProtocolHandler::Checksum(const uint16_t *data, uint32_t lengthInBytes) {
 
     uint32_t temp = 0;                                                                             //Init sum
 
@@ -252,8 +246,8 @@ InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     uint8_t digits[4];
 
     uint8_t currentDigit = 0;
-    for(int i = 0; i < 4; i++)
-        digits[i] = 0;
+    for(unsigned char & digit : digits)
+        digit = 0;
 
     for(int i = 0; i < address.length(); i++) {
         if(address[i] == '.') {
@@ -272,7 +266,7 @@ SubnetMask InternetProtocolHandler::CreateSubnetMask(uint8_t digit1, uint8_t dig
     return (SubnetMask)CreateInternetProtocolAddress(digit1, digit2, digit3, digit4);
 }
 
-InternetProtocolAddress InternetProtocolHandler::GetInternetProtocolAddress() {
+InternetProtocolAddress InternetProtocolHandler::GetInternetProtocolAddress() const {
     return ownInternetProtocolAddress;
 }
 

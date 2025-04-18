@@ -15,33 +15,34 @@ namespace MaxOS
 {
   namespace processes {
 
-      ///      ELF Header
-      enum ElfIdentification{
-          Magic0 = 0,
-          Magic1 = 1,
-          Magic2 = 2,
-          Magic3 = 3,
-          Class  = 4,
-          Data   = 5,
-          Version= 6,
-          OSABI  = 7,
-          ABIVersion = 8,
-          Padding = 9
+      /// Style Guide Note: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format
+
+      enum class ElfIdentification{
+          Magic0,
+          Magic1,
+          Magic2,
+          Magic3,
+          Class,
+          Data,
+          Version,
+          OSABI,
+          ABIVersion,
+          Padding,
       };
 
-      enum ElfClass{
-          InvalidClass,
-          Class32,
-          Class64
+      enum class ElfClass{
+          Invalid = 0,
+          Bits32 = 1,
+          Bits64 = 2
       };
 
-      enum ElfData{
+      enum class ElfData{
           InvalidData,
           LittleEndian,
           BigEndian
       };
 
-      enum ElfType{
+      enum class ElfType{
           None,
           Relocatable,
           Executable,
@@ -51,7 +52,7 @@ namespace MaxOS
           ProcessorSpecificHigh = 0xFFF
       };
 
-      enum ElfMachine{
+      enum class ElfMachine{
           NoMachine,
           ATnTWe32100,
           SPARC,
@@ -66,7 +67,7 @@ namespace MaxOS
           RISC_V    = 0xF3
       };
 
-      enum ElfVersion{
+      enum class ElfVersion{
           Invalid,
           Current
       };
@@ -90,16 +91,16 @@ namespace MaxOS
 
       ///      Program Header
 
-      enum ElfProgramType{
+      enum class ElfProgramType{
           Null,
           Load,
           Dynamic,
           Interpreter,
-          ProgramNote,
-          ProgramSharedLibrary,
-          ProgramHeaderTable,
-          ProgramTableProcessorSpecificLow  = 0x70000000,
-          ProgramTableProcessorSpecificHigh = 0x7FFFFFFF
+          Note,
+          SharedLibrary,
+          HeaderTable,
+          TableProcessorSpecificLow  = 0x70000000,
+          TableProcessorSpecificHigh = 0x7FFFFFFF
       };
 
       enum ElfProgramFlags{
@@ -121,8 +122,8 @@ namespace MaxOS
 
       ///      Section Header
 
-      enum ElfSectionType{
-          NullSection,
+      enum class ElfSectionType{
+          Null,
           ProgramBits,
           SymbolTable,
           StringTable,
@@ -146,6 +147,10 @@ namespace MaxOS
         uint64_t   entry_size;
       } elf_64_section_header_t;
 
+      /**
+       * @class Elf64
+       * @brief Handles the loading and parsing of 64-bit ELF files
+       */
       class Elf64
       {
         private:
@@ -163,11 +168,11 @@ namespace MaxOS
             void load();
             bool is_valid();
 
-            elf_64_header_t* get_header();
+            [[nodiscard]] elf_64_header_t* header() const;
             elf_64_program_header_t* get_program_header(size_t index);
             elf_64_section_header_t* get_section_header(size_t index);
 
-            uint64_t to_vmm_flags(uint32_t type);
+            static uint64_t to_vmm_flags(uint32_t type);
 
       };
 

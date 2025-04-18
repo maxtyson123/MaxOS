@@ -18,10 +18,10 @@ namespace MaxOS {
     namespace drivers {
         namespace peripherals {
 
-            enum MouseEvents{
-                MOUSE_MOVE,
-                MOUSE_DOWN,
-                MOUSE_UP
+            enum class MouseEvents{
+                MOVE,
+                DOWN,
+                UP
             };
 
             /**
@@ -84,18 +84,18 @@ namespace MaxOS {
                 hardwarecommunication::Port8Bit data_port;
                 hardwarecommunication::Port8Bit command_port;
 
-                void handle_interrupt();
+                void handle_interrupt() final;
 
-                uint8_t buffer[3];
-                uint8_t offset { 2 };
-                uint8_t buttons { 0 };
+                uint8_t buffer[3] = {};
+                uint8_t offset = 0;
+                uint8_t buttons = 0;
 
             public:
-                MouseDriver(hardwarecommunication::InterruptManager *manager);
+                MouseDriver();
                 ~MouseDriver();
 
                 void activate() final;
-                string get_device_name() final;
+                string device_name() final;
             };
         }
     }

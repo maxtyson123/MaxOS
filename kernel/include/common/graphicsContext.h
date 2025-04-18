@@ -21,8 +21,8 @@ namespace MaxOS {
         protected:
            bool mirror_y_axis { false };
 
-           uint32_t m_width { 0 };
-           uint32_t m_height { 0 };
+           int32_t m_width { 0 };
+           int32_t m_height { 0 };
            uint32_t m_color_depth { 0 };
 
            Colour m_colour_pallet[256];
@@ -45,34 +45,34 @@ namespace MaxOS {
            GraphicsContext();
            ~GraphicsContext();
 
-           uint32_t colour_to_int(Colour);
+           uint32_t colour_to_int(const Colour&);
            Colour int_to_colour(uint32_t);
 
            // Convert uint32_t to uint64s?
-           uint32_t get_width();
-           uint32_t get_height();
-           uint32_t get_color_depth();
+           [[nodiscard]] uint32_t width() const;
+           uint32_t height() const;
+           uint32_t color_depth() const;
 
-           uint64_t* get_framebuffer_address();
+           uint64_t* framebuffer_address();
 
-           void put_pixel(int32_t x, int32_t y, Colour colour);
-           void putPixel(int32_t x, int32_t y, int32_t colour);
+           void put_pixel(int32_t x, int32_t y, const Colour& colour);
+           void putPixel(int32_t x, int32_t y, uint32_t colour);
            Colour get_pixel(int32_t x, int32_t y);
            void invert_pixel(int32_t x, int32_t y);
 
-           void draw_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour);
+           void draw_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, const Colour& colour);
            void drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour);
 
-           void draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour);
+           void draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, const Colour& colour);
            void draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour);
 
-           void fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour);
+           void fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, const Colour& colour);
            void fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t colour);
 
-           void draw_circle(int32_t x0, int32_t y0, int32_t radius, Colour colour);
+           void draw_circle(int32_t x0, int32_t y0, int32_t radius, const Colour& colour);
            void draw_circle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour);
 
-           void fill_circle(int32_t x0, int32_t y0, int32_t radius, Colour colour);
+           void fill_circle(int32_t x0, int32_t y0, int32_t radius, const Colour& colour);
            void fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_t colour);
 
        };
@@ -80,4 +80,4 @@ namespace MaxOS {
     }
 }
 
-#endif //MaxOS_GRAPHICSCONTEX_H
+#endif //MaxOS_COMMON_GRAPHICSCONTEX_H

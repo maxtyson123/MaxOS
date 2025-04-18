@@ -95,7 +95,7 @@ DISPLAY_TYPE=""
 if "$QEMU_EXECUTABLE" --display help | grep -q "sdl"; then
   msg "Using sdl display."
   DISPLAY_TYPE="-display sdl"
-elif "$QEMU_EXECUTABLE" --display help | grep -q "cococa"; then
+elif "$QEMU_EXECUTABLE" --display help | grep -q "cocoa"; then
   msg "Using cocoa display."
   DISPLAY_TYPE="-display cocoa"
 else
@@ -130,13 +130,22 @@ if [  "$USE_DEBUG" -ne "0" ]; then
       ACCELERATOR=""
     fi
 
-    objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
+    $SCRIPTDIR/../toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
     msg "Generated debug symbols"
+fi
+
+BOOT_DEVICE=""
+if [ "$USE_ISO" -eq 1 ]; then
+  msg "Using ISO boot device."
+  BOOT_DEVICE="-cdrom ../MaxOS.iso"
+else
+  msg "Using disk img boot device."
+  BOOT_DEVICE="-drive file=$IMAGE_PATH,format=raw,if=ide,cache=directsync,id=disk0,file.locking=off"
 fi
 
 # Create the args
 QEMU_ARGS=""
-QEMU_ARGS="$QEMU_ARGS -m 1G"                                            # 2 GB of RAM
+QEMU_ARGS="$QEMU_ARGS -m 4G"                                            # 4 GB Ram
 QEMU_ARGS="$QEMU_ARGS -smp cores=4"                                     # 4 cores
 QEMU_ARGS="$QEMU_ARGS -serial stdio"                                    # Use stdio for serial
 QEMU_ARGS="$QEMU_ARGS -monitor telnet::45454,server,nowait"             # Use telnet for monitor
@@ -146,8 +155,7 @@ QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                                     # Enable
 QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                                    # Enable display
 QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"                   # Add a network device
 QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                                 # Add port forwarding
-QEMU_ARGS="$QEMU_ARGS -drive file=$IMAGE_PATH,format=raw"               # Add the image as a drive
-QEMU_ARGS="$QEMU_ARGS,if=ide,cache=directsync,id=disk0"                 # Configure the drive to be an ide drive with direct sync caching
+QEMU_ARGS="$QEMU_ARGS $BOOT_DEVICE"
 QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"                          # Don't reboot or shutdown on exit
 
 # Run qemu

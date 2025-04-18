@@ -15,7 +15,7 @@ using namespace MaxOS::drivers::peripherals;
  * @param gc The graphics context to use
  */
 Desktop::Desktop(GraphicsContext *gc)
-: CompositeWidget(0,0, gc->get_width(), gc->get_height()),
+: CompositeWidget(0,0, gc->width(), gc->height()),
   MouseEventHandler(),
   ClockEventHandler(),
   m_graphics_context(gc),
@@ -23,8 +23,8 @@ Desktop::Desktop(GraphicsContext *gc)
 {
 
     // Set the mouse m_position to the center of the screen
-    m_mouse_x = gc->get_width() / 2;
-    m_mouse_y = gc->get_height() / 2;
+    m_mouse_x = gc->width() / 2;
+    m_mouse_y = gc->height() / 2;
 
     // Draw the initial mouse cursor
     invert_mouse_cursor();
@@ -33,9 +33,7 @@ Desktop::Desktop(GraphicsContext *gc)
     Widget::invalidate();
 }
 
-Desktop::~Desktop() {
-
-}
+Desktop::~Desktop() = default;
 
 /**
  * @brief Updates the currently focussed widget to be the given widget
@@ -76,12 +74,12 @@ void Desktop::invert_mouse_cursor() {
     //TODO: Get image drawing going and draw a proper mouse
 
     // Draw the horizontal line
-    for (uint32_t x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
+    for (int32_t x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
       m_graphics_context->invert_pixel(x, m_mouse_y);
     }
 
     // Draw the vertical line
-    for (uint32_t y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
+    for (int32_t y = m_mouse_y - 3; y <= m_mouse_y + 3; ++y) {
       m_graphics_context->invert_pixel(m_mouse_x, y);
     }
 }
@@ -106,8 +104,8 @@ void Desktop::internal_invalidate(common::Rectangle<int32_t>&area, Vector<Rectan
         Vector<Rectangle<int32_t>> coveredAreas = area.subtract(*invaild_rect);
 
         // Invalidate the covered areas
-        for(Vector<Rectangle<int32_t>>::iterator coveredArea = coveredAreas.begin(); coveredArea != coveredAreas.end(); coveredArea++)
-            internal_invalidate(*coveredArea, invaild_rect + 1, stop);
+        for(auto& coveredArea : coveredAreas)
+            internal_invalidate(coveredArea, invaild_rect + 1, stop);
 
         // The entire area will be invalidated by now
         return;
@@ -235,7 +233,7 @@ void Desktop::on_mouse_move_event(int8_t x, int8_t y) {
     invert_mouse_cursor();
 
     // If a widget is being dragged then pass the event to it
-    if(m_dragged_widget != 0)
+    if(m_dragged_widget != nullptr)
         m_dragged_widget->on_mouse_move_event(newMouseX - m_mouse_x, newMouseY - m_mouse_y);
 
     // Handle the mouse moving event (pass it to the widget that the mouse is over)
@@ -273,7 +271,7 @@ void Desktop::on_mouse_up_event(uint8_t button) {
     CompositeWidget::on_mouse_button_released(m_mouse_x, m_mouse_y, button);
 
     // Dragging has stopped
-    m_dragged_widget = 0;
+    m_dragged_widget = nullptr;
 
 }
 
@@ -285,7 +283,7 @@ void Desktop::on_mouse_up_event(uint8_t button) {
 void Desktop::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 
     // Pass the event to the widget that is  in focus
-    if (m_focussed_widget != 0)
+    if (m_focussed_widget != nullptr)
       m_focussed_widget->on_key_down(keyDownCode, keyDownState);
 }
 
@@ -297,6 +295,6 @@ void Desktop::on_key_down(KeyCode keyDownCode, KeyboardState keyDownState) {
 void Desktop::on_key_up(KeyCode keyUpCode, KeyboardState keyUpState) {
 
     // Pass the event to the widget that is  in focus
-    if (m_focussed_widget != 0)
+    if (m_focussed_widget != nullptr)
       m_focussed_widget->on_key_up(keyUpCode, keyUpState);
 }

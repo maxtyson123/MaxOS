@@ -41,11 +41,11 @@ namespace MaxOS{
                 AddressResolutionProtocol(EthernetFrameHandler* ethernetFrameHandler, InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
                 ~AddressResolutionProtocol();
 
-                bool handleEthernetFramePayload(uint8_t* data, uint32_t size);
+                bool handleEthernetframePayload(uint8_t* data, uint32_t size);
 
                 void RequestMACAddress(InternetProtocolAddress address);
-                drivers::ethernet::MediaAccessControlAddress Resolve(InternetProtocolAddress address);
-                void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress);
+                drivers::ethernet::MediaAccessControlAddress Resolve(InternetProtocolAddress address) final;
+                void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress) final;
         };
 
     }

@@ -30,7 +30,7 @@ class Filedescriptor;
 String MIME_Type();
 ```
 
-Use full words, except in the rare case where an abbreviation would be more canonical and easier to understand.
+Use full words, except in the rare case where an abbreviation would be more canonical and easier to understand. If the word is long, use the full word in the class name and an abbreviation in the variable name. Denote the abbreviation in the doxygen comment.
 
 ###### Right:
 
@@ -58,7 +58,7 @@ public:
     ...
 
 private:
-    int m_length { 0 };
+    int m_length = 0;
 };
 ```
 
@@ -69,7 +69,7 @@ class String {
 public:
     ...
 
-    int length { 0 };
+    int length = 0 ;
 };
 ```
 
@@ -89,7 +89,7 @@ void set_count(int); // Sets m_the_count.
 int get_count() const; // Returns m_the_count.
 ```
 
-Precede getters that return values through out arguments with the word "get".
+Precede getters that return values throughout arguments with the word "get".
 
 ###### Right:
 
@@ -152,8 +152,8 @@ Constructors for C++ classes should initialize their members using C++ initializ
 ```cpp
 class MyClass {
     ...
-    Document* m_document { nullptr };
-    int m_my_member { 0 };
+    Document* m_document = nullptr;
+    int m_my_member = 0;
 };
 
 MyClass::MyClass(Document* document)
@@ -253,7 +253,7 @@ For types with methods, prefer `class` over `struct`.
 ```cpp
 struct Thingy {
     String name;
-    int frob_count { 0 };
+    int frob_count = 0;
 };
 
 class Doohickey {
@@ -265,7 +265,7 @@ public:
 
 private:
     String m_name;
-    int m_frob_count { 0 };
+    int m_frob_count = 0;
 }
 ```
 
@@ -278,7 +278,7 @@ public:
     int frob_count() const { return m_frob_count; }
 
 private:
-    int m_frob_count { 0 };
+    int m_frob_count = 0;
 }
 
 class Doohickey {
@@ -288,7 +288,7 @@ public:
     void jam();
 
     String name;
-    int frob_count { 0 };
+    int frob_count = 0;
 };
 ```
 
@@ -299,7 +299,7 @@ Comments should be the line above the code they are describing. They should not 
 
 Make comments look like sentences by starting with a capital letter and ending with a period (punctuation). One exception may be end of line comments like this `if (x == y) // false for NaN`.
 
-Use TODO for things that need to be done, FIXME for things that need to be fixed, and HACK for things that are ugly but work. Use FIXME when you think there is a better way to do something but you don't know what it is yet.
+Use TODO for things that need to be done, FIXME for things that need to be fixed, and HACK for things that are ugly but work. Use FIXME when you think there is a better way to do something, but you don't know what it is yet.
 
 
 ###### Right:
@@ -388,8 +388,6 @@ To document a class, use the following format:
  * Longer description of the class.
  */
 ```
-
-```cpp
 
 ###### Right:
 
@@ -495,7 +493,7 @@ public:
 
 Curly braces may only be omitted from `if`/`else`/`for`/`while`/etc. statement blocks if the body is a single line.
 
-Additionally, if any body of a connected if/else statement requires curly braces according to this rule, all of them do.
+Additionally, if anybody of a connected if/else statement requires curly braces according to this rule, all of them do.
 
 ###### Right:
 ```cpp

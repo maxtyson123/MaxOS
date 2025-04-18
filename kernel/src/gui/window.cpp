@@ -10,7 +10,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::peripherals;
 
-Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, string title_text)
+Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& title_text)
 : CompositeWidget(left, top, width, height),
   m_title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, title_text),
   m_mover(this),
@@ -40,7 +40,7 @@ Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, strin
 
 }
 
-Window::Window(Widget *containedWidget, string title_text)
+Window::Window(Widget *containedWidget, const string& title_text)
 : CompositeWidget(0, 0, containedWidget->position().width + 2 * 5 + 2, containedWidget->position().height + 2 * 5 + 10 + 2),
   m_title(0, -(10 + 5) + 2, containedWidget->position().width, 10 + 5 - 3,title_text),
   m_mover(this),
@@ -70,9 +70,7 @@ Window::Window(Widget *containedWidget, string title_text)
 
 }
 
-Window::~Window() {
-
-}
+Window::~Window() = default;
 
 /**
  * @brief Handles the mouse button being pressed.
@@ -90,9 +88,9 @@ MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mou
     // Bring the window to the front
     bring_to_front();
 
-    // Convert the mouse coordinates to a int32_t
-    int32_t x = (int32_t) mouseX;
-    int32_t y = (int32_t) mouseY;
+    // Convert the mouse coordinates to an int32_t
+    auto x = (int32_t) mouseX;
+    auto y = (int32_t) mouseY;
 
     if(x <= frame_thickness)
     {
@@ -192,7 +190,7 @@ void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& 
 void Window::add_child(Widget *child) {
 
     // If there is a child to add
-    if(child != 0){
+    if(child != nullptr){
 
         // Change the position of the child to be inside the window contents
         Rectangle<int32_t> childPosition = child->position();

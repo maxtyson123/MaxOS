@@ -18,7 +18,7 @@ namespace MaxOS{
 
             typedef uint64_t MediaAccessControlAddress;
 
-            enum EthernetDriverEvents{
+            enum class EthernetDriverEvents{
                 BEFORE_SEND,
                 DATA_SENT,
                 DATA_RECEIVED
@@ -71,7 +71,7 @@ namespace MaxOS{
                     ~EthernetDriverEventHandler();
 
                     virtual common::Event<EthernetDriverEvents>*
-                    on_event(common::Event<EthernetDriverEvents>* event);
+                    on_event(common::Event<EthernetDriverEvents>* event) override;
 
                     virtual void BeforeSend(uint8_t* buffer, uint32_t size);
                     virtual void DataSent(uint8_t* buffer, uint32_t size);

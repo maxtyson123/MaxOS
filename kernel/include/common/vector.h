@@ -51,8 +51,8 @@ namespace MaxOS{
 
             Type& operator[](uint32_t index) const;
 
-            bool empty() const;
-            uint32_t size() const;
+            [[nodiscard]] bool empty() const;
+            [[nodiscard]] uint32_t size() const;
 
             iterator begin() const;
             iterator end() const;
@@ -110,6 +110,11 @@ namespace MaxOS{
 
         }
 
+        /**
+         * @brief Increases the size of the Vector by doubling the capacity
+         *
+         * @tparam Type Type of the Vector
+         */
         template <class Type> void Vector<Type>::increase_size() {
 
             // Allocate more space for the array
@@ -370,13 +375,9 @@ namespace MaxOS{
               callback(element);
         }
 
-        template<class Type> VectorIterationHandler<Type>::VectorIterationHandler() {
+        template<class Type> VectorIterationHandler<Type>::VectorIterationHandler() = default;
 
-        }
-
-        template<class Type> VectorIterationHandler<Type>::~VectorIterationHandler() {
-
-        }
+        template<class Type> VectorIterationHandler<Type>::~VectorIterationHandler() = default;
 
         template<class Type> void VectorIterationHandler<Type>::on_end_of_stream() {
 

@@ -7,7 +7,7 @@
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
 void write(const char* data, uint64_t length = 0)
 {
-  // Dont care abt length for now
+  // don't care abt length for now
   asm volatile("int $0x80" : : "a" (0x01), "b" (data));
 }
 
@@ -57,7 +57,7 @@ typedef struct TestSharedMemoryBlock
 
 } TestSharedMemoryBlock;
 
-typedef struct IPCMessage{
+typedef struct SharedMessage{
   void* message_buffer;
   size_t message_size;
   uintptr_t next_message;
@@ -120,9 +120,8 @@ extern "C" int _start(int argc, char** argv)
 
     // Write the arg
     write(argv[i]);
-
   }
-  write("\n");
+  write("%h\n");
 
   // Write to the console
   write("MaxOS Test Program v3.1\n");

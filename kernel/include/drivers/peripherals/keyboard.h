@@ -13,6 +13,7 @@
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
+#include <hardwarecommunication/apic.h>
 #include <stdint.h>
 
 namespace MaxOS
@@ -21,7 +22,7 @@ namespace MaxOS
 
         namespace peripherals{
 
-            enum KeyCode : uint16_t{
+            enum class KeyCode : uint16_t{
 
                 // Alphabet
                 A = 'A', a = 'a',
@@ -151,7 +152,7 @@ namespace MaxOS
                 capsLock,
                 leftShift,
                 leftControl,
-                leftOS,                 //weird ass windows key or command on mac
+                leftOS,                 //weird ass Windows key or command on Mac
                 leftAlt,
 
                 // Right Side
@@ -179,7 +180,7 @@ namespace MaxOS
                 numberPadNine,
                 numberPadFullStop,
 
-                // Numper Pad (Non Number Lock)
+                // Number Pad (Non Number Lock)
                 numberPadHome,
                 numberPadPageDown,
                 numberPadPageUp,
@@ -225,7 +226,7 @@ namespace MaxOS
              */
             class KeyUpEvent : public common::Event<KeyboardEvents>{
                 public:
-                    KeyUpEvent(KeyCode, KeyboardState);
+                    KeyUpEvent(KeyCode, const KeyboardState&);
                     ~KeyUpEvent();
 
                     KeyCode key_code;
@@ -238,7 +239,7 @@ namespace MaxOS
              */
             class KeyDownEvent : public common::Event<KeyboardEvents>{
                 public:
-                    KeyDownEvent(KeyCode, KeyboardState);
+                    KeyDownEvent(KeyCode, const KeyboardState&);
                     ~KeyDownEvent();
 
                     KeyCode key_code;
@@ -254,7 +255,7 @@ namespace MaxOS
                     KeyboardEventHandler();
                     ~KeyboardEventHandler();
 
-                    virtual common::Event<KeyboardEvents>* on_event(common::Event<KeyboardEvents>*);
+                    common::Event<KeyboardEvents>* on_event(common::Event<KeyboardEvents>*) override;
 
                     virtual void on_key_down(KeyCode, KeyboardState);
                     virtual void on_key_up(KeyCode, KeyboardState);
@@ -277,7 +278,7 @@ namespace MaxOS
                     KeyboardInterpreter();
                     ~KeyboardInterpreter();
 
-                    void onKeyRead(bool, KeyboardState, KeyCode);
+                    void on_key_read(bool, const KeyboardState&, KeyCode);
 
             };
 
@@ -289,7 +290,7 @@ namespace MaxOS
 
                 public:
 
-                    enum KeyCodeEN_US {
+                    enum class KeyCodeEN_US {
                         // First Row
                         escape      = 0x01,
                         f1          = 0x3B,
@@ -424,13 +425,13 @@ namespace MaxOS
                 hardwarecommunication::Port8Bit m_command_port;
 
               public:
-                  KeyboardDriver(hardwarecommunication::InterruptManager*);
+                  KeyboardDriver();
                   ~KeyboardDriver();
 
                   void handle_interrupt() final;
 
                   void activate() final;
-                  string get_device_name() final;
+                  string device_name() final;
             };
         }
     }

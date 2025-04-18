@@ -19,7 +19,7 @@ namespace MaxOS {
 
         namespace clock {
 
-            enum ClockEvents{
+            enum class ClockEvents{
                 TIME
             };
 
@@ -51,42 +51,48 @@ namespace MaxOS {
             };
 
 
-            enum Channel {
-              CHANNEL_0 = 0,
-              CHANNEL_1 = 1,
-              CHANNEL_2 = 2,
+            enum class Channel {
+              INTERRUPT,
+              DRAM_REFRESH,
+              SPEAKER,
             };
 
-            enum AccessMode {
-              LATCH_COUNT = 0,
-              LOW_BYTE = 1,
-              HIGH_BYTE = 2,
-              LOW_HIGH_BYTE = 3,
+            enum class AccessMode {
+              LATCH_COUNT,
+              LOW_BYTE,
+              HIGH_BYTE,
+              LOW_HIGH_BYTE,
             };
 
-            enum OperatingMode {
-              MODE_0 = 0, // Interrupt on Terminal Count
-              MODE_1 = 1, // Hardware Retriggerable One-Shot
-              MODE_2 = 2, // Rate Generator
-              MODE_3 = 3, // Square Wave Generator
-              MODE_4 = 4, // Software Triggered Strobe
-              MODE_5 = 5, // Hardware Triggered Strobe
+            enum class OperatingMode {
+              INTERRUPT_ON_TERMINAL_COUNT,
+              ONE_SHOT,
+              RATE_GENERATOR,
+              SQUARE_WAVE,
+              SOFTWARE_STROBE,
+              HARDWARE_STROBE,
             };
 
-            enum BCDMode {
-              BINARY = 0,
-              BCD = 1,
+            enum class BCDMode {
+              BINARY,
+              BCD,
             };
 
-            typedef struct {
-              uint8_t bcd_mode        : 1; // Bit 0: BCD/Binary mode
-              uint8_t operating_mode  : 3; // Bits 1-3: Mode of operation
-              uint8_t access_mode     : 2; // Bits 4-5: Access mode
-              uint8_t channel         : 2; // Bits 6-7: Channel
-            } PITCommand;
+            typedef struct PITCommand{
+              uint8_t bcd_mode        : 1;
+              uint8_t operating_mode  : 3;
+              uint8_t access_mode     : 2;
+              uint8_t channel         : 2;
+            } pit_command_t;
 
 
+            // Forward declaration
             class Clock;
+
+            /**
+             * @class PIT
+             * @brief Driver for the Programmable Interval Timer
+             */
             class PIT: public hardwarecommunication::InterruptHandler{
               friend Clock;
 
@@ -110,7 +116,7 @@ namespace MaxOS {
                 uint32_t ticks_per_ms();
 
               public:
-                PIT(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic);
+                PIT(hardwarecommunication::AdvancedProgrammableInterruptController* apic);
                 ~PIT();
 
             };
@@ -126,12 +132,12 @@ namespace MaxOS {
 
                 protected:
                   
-                    bool m_binary;
-                    bool m_24_hour_clock;
+                    bool m_binary { true };
+                    bool m_24_hour_clock { true };
 
                     // Ports
-                    hardwarecommunication::Port8Bit m_data_port;
-                    hardwarecommunication::Port8Bit m_command_port;
+                    hardwarecommunication::Port8Bit m_data_port { 0x71 };
+                    hardwarecommunication::Port8Bit m_command_port { 0x70 };
 
                     // APIC
                     hardwarecommunication::AdvancedProgrammableInterruptController* m_apic;
@@ -143,20 +149,22 @@ namespace MaxOS {
                     // Other functions
                     void handle_interrupt() final;
                     uint8_t read_hardware_clock(uint8_t address);
-                    uint8_t binary_representation(uint8_t number);
+                    [[nodiscard]] uint8_t binary_representation(uint8_t number) const;
 
                 public:
-                    Clock(hardwarecommunication::InterruptManager* interrupt_manager, hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
+                    Clock(hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
                     ~Clock();
 
+                    inline static uint64_t s_clock_accuracy = 1;
+
                     void activate() override;
-                    void delay(uint32_t milliseconds);
+                    void delay(uint32_t milliseconds) const;
 
                     void calibrate(uint64_t ms_per_tick = 1);
                     common::Time get_time();
 
-                    string get_vendor_name() final;
-                    string get_device_name() final;
+                    string vendor_name() final;
+                    string device_name() final;
             };
 
         }

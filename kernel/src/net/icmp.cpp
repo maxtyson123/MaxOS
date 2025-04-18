@@ -17,9 +17,7 @@ InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolH
 
 
 
-InternetControlMessageProtocol::~InternetControlMessageProtocol() {
-
-}
+InternetControlMessageProtocol::~InternetControlMessageProtocol() = default;
 /**
  * @brief Called by the InternetProtocolProvider when a new packet has arrived
  *
@@ -44,7 +42,7 @@ bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProto
     }
 
     // Cast the payload to the ICMP header
-    InternetControlMessageProtocolHeader* icmp = (InternetControlMessageProtocolHeader*)payloadData;
+    auto* icmp = (InternetControlMessageProtocolHeader*)payloadData;
 
     switch (icmp -> type) {
 
@@ -78,7 +76,7 @@ void InternetControlMessageProtocol::RequestEchoReply(uint32_t ip_be) {
 
     errorMessages -> write("ICMP: Sending echo request\n");
 
-    InternetControlMessageProtocolHeader icmp;
+    InternetControlMessageProtocolHeader icmp = {};
     icmp.type = 8;                      // Echo request
     icmp.code = 0;                      // Code must be 0
     icmp.checksum = 0;                  // Checksum must be 0 to calculate it

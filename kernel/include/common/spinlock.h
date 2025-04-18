@@ -11,12 +11,12 @@ namespace MaxOS{
 
     /**
      * @class Spinlock
-     * @brief A simple spinlock implementation
+     * @brief Enables a resource to be used by only one instance at a time through locking and unlocking
      */
     class Spinlock
     {
       private:
-        bool m_locked;
+        bool m_locked = false;
         bool m_should_yield;
 
       public:
@@ -25,7 +25,7 @@ namespace MaxOS{
 
         void lock();
         void unlock();
-        bool is_locked();
+        bool is_locked() const;
 
         void acquire();
         void release();

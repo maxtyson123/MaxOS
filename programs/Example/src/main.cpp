@@ -5,9 +5,9 @@
 #include <stddef.h>
 
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
-void write(const char* data, uint64_t length = 0)
+void write(const char* data)
 {
-  // Dont care abt length for now
+  // don't care abt length for now
   asm volatile("int $0x80" : : "a" (0x01), "b" (data));
 }
 
@@ -42,36 +42,13 @@ void* create_shared_memory(uint64_t size, const char* name)
   return result;
 }
 
-typedef struct TestSharedMemoryBlock
-{
-  char message[100];
-
-} TestSharedMemoryBlock;
-
-void setstring(char* str, const char* message)
-{
-  while(*message != '\0')
-    *str++ = *message++;
-  *str = '\0';
-}
-
-bool strequal(const char* str1, const char* str2)
-{
-  while(*str1 != '\0' && *str2 != '\0')
-  {
-    if(*str1++ != *str2++)
-      return false;
-  }
-  return *str1 == *str2;
-}
-
-typedef struct IPCMessage{
+typedef struct SharedMessage{
   void* message_buffer;
   size_t message_size;
   uintptr_t next_message;
 } ipc_message_t;
 
-typedef struct IPCMessageQueue{
+typedef struct SharedMessageQueue{
   ipc_message_t* messages;
 } ipc_message_queue_t;
 
@@ -82,7 +59,12 @@ void* make_message_queue(char* name)
   return result;
 }
 
-extern "C" void _start(void)
+void  yield()
+{
+    asm volatile("int $0x80" : : "a" (0x09));
+}
+
+extern "C" [[noreturn]] void _start(void)
 {
 
   // Write to the console
@@ -90,19 +72,23 @@ extern "C" void _start(void)
 
   // Create a message endpoint
   ipc_message_queue_t* message_queue = (ipc_message_queue_t *)make_message_queue("TestQueue");
+  if (!message_queue)
+  {
+    write("Failed to create message queue\n");
+    while (true)
+      yield();
+  }
+
   write("Message queue created: \n");
   write_hex((uint64_t)message_queue);
 
-  // Process events for ever:
+  // Process events forever:
   write("Waiting for messages\n");
   while(true)
     if(message_queue->messages == nullptr)
-        asm("nop");
+      yield();
     else{
 
-      //TODO: Should:
-      //      Copy message into a buffer
-      //      Delete orginal message
 
       // Store the message
       ipc_message_t* message = message_queue->messages;

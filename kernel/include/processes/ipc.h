@@ -17,65 +17,82 @@
 namespace MaxOS {
     namespace processes {
 
-        //TODO: Can prob convert these to classes, Lock free, LibIPC, clean endpoints on proc kills
+        //TODO: LibIPC
 
-        typedef struct IPCSharedMemory {
-            uintptr_t physical_address;
-            size_t size;
-            uint64_t use_count;
-            uint64_t owner_pid;
-            string* name;
-        } ipc_shared_memory_t;
+        class SharedMemory{
+
+            private:
+                uintptr_t m_physical_address;
+                size_t m_size;
+                uint64_t m_owner_pid;
 
 
-        // TODO: Add these two to a LibIPC and link the kernel against it for easier use in userspace
-        typedef struct IPCMessage{
+            public:
+                SharedMemory(string name, size_t size);
+                ~SharedMemory();
+
+                string* name;
+                uint64_t use_count = 1;
+
+                [[nodiscard]] uintptr_t physical_address() const;
+                [[nodiscard]] size_t size() const;
+        };
+
+
+        typedef struct SharedMessage{
             void* message_buffer;
             size_t message_size;
             uintptr_t next_message;
         } ipc_message_t;
 
-        typedef struct IPCMessageQueue{
+        typedef struct SharedMessageQueue{
             ipc_message_t* messages;
         } ipc_message_queue_t;
 
-        typedef struct IPCMessageEndpoint {
-            ipc_message_queue_t* queue;
-            uint64_t owner_pid;
-            string* name;
-            common::Spinlock message_lock;
-        } ipc_message_endpoint_t;
+        class SharedMessageEndpoint{
+
+            private:
+                ipc_message_queue_t* m_queue = nullptr;
+                uint64_t m_owner_pid;
+                common::Spinlock m_message_lock;
+
+            public:
+              SharedMessageEndpoint(string name);
+              ~SharedMessageEndpoint();
+
+              string* name;
+              [[nodiscard]] ipc_message_queue_t* queue() const;
+
+              void queue_message(void* message, size_t size);
+              [[nodiscard]] bool owned_by_current_process() const;
+        };
 
         /**
-         * @class IPC
-         * @brief Handles Inter Process Communication
+         * @class InterProcessCommunicationManager (IPC)
+         * @brief Manages the Inter-Process Communication between processes via shared memory and message passing
          */
-        class IPC {
+        class InterProcessCommunicationManager {
 
-          common::Vector<ipc_shared_memory_t*> m_shared_memory_blocks;
-          common::Vector<ipc_message_endpoint_t*> m_message_endpoints;
+          common::Vector<SharedMemory*> m_shared_memory_blocks;
+          common::Vector<SharedMessageEndpoint*> m_message_endpoints;
 
           common::Spinlock m_lock;
 
           public:
 
-              IPC();
-              ~IPC();
+              InterProcessCommunicationManager();
+              ~InterProcessCommunicationManager();
 
-              ipc_shared_memory_t*  alloc_shared_memory(size_t size, string name);
-              ipc_shared_memory_t*  get_shared_memory(string name);
-              void                  free_shared_memory(string name);
-              void                  free_shared_memory(uintptr_t physical_address);
-              void                  free_shared_memory(ipc_shared_memory_t* block);
+              SharedMemory*  alloc_shared_memory(size_t size, string name);
+              SharedMemory*  get_shared_memory(const string& name);
+              void              free_shared_memory(const string& name);
+              void              free_shared_memory(uintptr_t physical_address);
+              void              free_shared_memory(SharedMemory* block);
 
-              ipc_message_endpoint_t* create_message_endpoint(string name);
-              ipc_message_endpoint_t* get_message_endpoint(string name);
-              void                    free_message_endpoint(string name);
-              void                    free_message_endpoint(ipc_message_endpoint_t* endpoint);
-              void                    send_message(string name, void* message, size_t size);
-              void                    send_message(ipc_message_endpoint_t* endpoint, void* message, size_t size);
-
-
+              SharedMessageEndpoint* create_message_endpoint(const string& name);
+              SharedMessageEndpoint* get_message_endpoint(const string& name);
+              void                free_message_endpoint(const string& name);
+              static void         free_message_endpoint(SharedMessageEndpoint* endpoint);
           };
 
     }

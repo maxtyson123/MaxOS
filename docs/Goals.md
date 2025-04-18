@@ -30,7 +30,7 @@
 - Chess
 - 2048
 - Conways game of life
-- Solitare
+- Solitaire
 - Minesweeper
 - Snake
 - Paint
@@ -59,6 +59,6 @@
 
 # Other
 - Clipboard
-- Privelges (Rings, read/write)
+- Privileges (Rings, read/write)
 - Apps installer
 - App store

@@ -4,9 +4,10 @@
 
 #include <drivers/console/serial.h>
 
-MaxOS::drivers::SerialConsole* MaxOS::drivers::SerialConsole::s_active_serial_console = 0;
+using namespace MaxOS;
+using namespace MaxOS::drivers;
 
-MaxOS::drivers::SerialConsole::SerialConsole()
+SerialConsole::SerialConsole(Logger* logger)
 : m_data_port(0x3F8),
   m_interrupt_enable_port(0x3F9),
   m_fifo_control_port(0x3FA),
@@ -44,23 +45,22 @@ MaxOS::drivers::SerialConsole::SerialConsole()
   m_modem_control_port.write(0x0F);
 
   // Set the active serial console
-  s_active_serial_console = this;
+  logger->add_log_writer(this);
+
 
 }
 
-MaxOS::drivers::SerialConsole::~SerialConsole() {
+SerialConsole::~SerialConsole() {
 
-    // If this is the active serial console, set it to null
-    if (s_active_serial_console == this)
-            s_active_serial_console = 0;
 
 }
 
 /**
  * @brief Waits for the serial port to be ready, then writes a character to it
+ *
  * @param c The character to write
  */
-void MaxOS::drivers::SerialConsole::put_character(char c) {
+void SerialConsole::put_character(char c) {
 
     // Wait for the serial port to be ready
     while (0 == (m_line_status_port.read() & 0x20));
@@ -68,4 +68,7 @@ void MaxOS::drivers::SerialConsole::put_character(char c) {
     // Write the character
     m_data_port.write(c);
 
+}
+void SerialConsole::write_char(char c) {
+  put_character(c);
 }

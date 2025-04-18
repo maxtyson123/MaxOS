@@ -10,7 +10,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::gui;
 using namespace MaxOS::gui::widgets;
 
-Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
+Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   font((uint8_t*)AMIGA_FONT),
   foreground_colour(Colour(0,0,0)),
@@ -20,10 +20,7 @@ Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, string te
     update_text(text);
 }
 
-Text::~Text() {
-
-
-}
+Text::~Text() = default;
 
 /**
  * @brief Draw the text on the screen
@@ -56,7 +53,7 @@ void Text::draw(GraphicsContext *gc, Rectangle<int32_t>& area) {
  * @brief Update the text of the widget
  * @param new_text The new text to display
  */
-void Text::update_text(string new_text) {
+void Text::update_text(const string& new_text) {
 
 
     // Set the text

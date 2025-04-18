@@ -20,9 +20,9 @@ namespace MaxOS {
             //forward declaration
             class Button;
 
-            enum ButtonEvents{
-                BUTTON_PRESSED,
-                BUTTON_RELEASED
+            enum class ButtonEvents{
+                PRESSED,
+                RELEASED
             };
 
             /**
@@ -58,7 +58,7 @@ namespace MaxOS {
                     ButtonEventHandler();
                     ~ButtonEventHandler();
 
-                    virtual common::Event<ButtonEvents>* on_event(common::Event<ButtonEvents>*) override;
+                    common::Event<ButtonEvents>* on_event(common::Event<ButtonEvents>*) override;
 
                     virtual void on_button_pressed(Button* source);
                     virtual void on_button_released(Button* source);
@@ -71,7 +71,7 @@ namespace MaxOS {
             class Button : public Widget, public common::EventManager<ButtonEvents> {
 
                 public:
-                    Button(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
+                    Button(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text);
                     ~Button();
 
                     // Widget Stuff

@@ -8,10 +8,15 @@
 #include <cpuid.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <system/gdt.h>
+#include <hardwarecommunication/acpi.h>
+#include <hardwarecommunication/apic.h>
 
 namespace MaxOS{
 
   namespace system{
+
+    /// Style Guide Note: CPU abbreviation is preferred over Central Processing Unit
 
     typedef struct {
       uint64_t r15;
@@ -60,6 +65,74 @@ namespace MaxOS{
       uint16_t io_bitmap_offset;
     }__attribute__((__packed__)) tss_t;
 
+    // Osdev Wiki: https://wiki.osdev.org/CPUID
+    enum class CPU_FEATURE_ECX : int32_t {
+        SSE3         = 1 << 0,
+        PCLMUL       = 1 << 1,
+        DTES64       = 1 << 2,
+        MONITOR      = 1 << 3,
+        DS_CPL       = 1 << 4,
+        VMX          = 1 << 5,
+        SMX          = 1 << 6,
+        EST          = 1 << 7,
+        TM2          = 1 << 8,
+        SSSE3        = 1 << 9,
+        CID          = 1 << 10,
+        SDBG         = 1 << 11,
+        FMA          = 1 << 12,
+        CX16         = 1 << 13,
+        XTPR         = 1 << 14,
+        PDCM         = 1 << 15,
+        PCID         = 1 << 17,
+        DCA          = 1 << 18,
+        SSE4_1       = 1 << 19,
+        SSE4_2       = 1 << 20,
+        X2APIC       = 1 << 21,
+        MOVBE        = 1 << 22,
+        POPCNT       = 1 << 23,
+        TSC          = 1 << 24,
+        AES          = 1 << 25,
+        XSAVE        = 1 << 26,
+        OSXSAVE      = 1 << 27,
+        AVX          = 1 << 28,
+        F16C         = 1 << 29,
+        RDRAND       = 1 << 30,
+        HYPERVISOR   = 1 << 31,
+    };
+    
+    enum class CPU_FEATURE_EDX : int32_t {
+        FPU          = 1 << 0,
+        VME          = 1 << 1,
+        DE           = 1 << 2,
+        PSE          = 1 << 3,
+        TSC          = 1 << 4,
+        MSR          = 1 << 5,
+        PAE          = 1 << 6,
+        MCE          = 1 << 7,
+        CX8          = 1 << 8,
+        APIC         = 1 << 9,
+        SEP          = 1 << 11,
+        MTRR         = 1 << 12,
+        PGE          = 1 << 13,
+        MCA          = 1 << 14,
+        CMOV         = 1 << 15,
+        PAT          = 1 << 16,
+        PSE36        = 1 << 17,
+        PSN          = 1 << 18,
+        CLFLUSH      = 1 << 19,
+        DS           = 1 << 21,
+        ACPI         = 1 << 22,
+        MMX          = 1 << 23,
+        FXSR         = 1 << 24,
+        SSE          = 1 << 25,
+        SSE2         = 1 << 26,
+        SS           = 1 << 27,
+        HTT          = 1 << 28,
+        TM           = 1 << 29,
+        IA64         = 1 << 30,
+        PBE          = 1 << 31
+    };
+
 
     typedef struct StackFrame{
       StackFrame* next;
@@ -67,23 +140,28 @@ namespace MaxOS{
     } __attribute__((__packed__)) stack_frame_t;
 
     class CPU {
-      private:
-        static CPU* s_instance;
 
       public:
 
-        CPU();
+        CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot);
         ~CPU();
+
+        hardwarecommunication::AdvancedConfigurationAndPowerInterface* acpi;
+        hardwarecommunication::AdvancedProgrammableInterruptController* apic;
 
         static inline bool is_panicking = { false };
         static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
         static void PANIC(const char* message, cpu_status_t* status = nullptr);
-        static void halt();
+        [[noreturn]] static void halt();
 
-        void init_tss();
-        tss_t tss;
+        void init_tss(GlobalDescriptorTable* gdt);
+        inline static tss_t tss = {};
 
-        static CPU* get_instance();
+        static inline bool s_xsave = false;
+        static inline bool s_avx = false;
+        void init_sse();
+
+        static bool check_nx();
 
         static void get_status(cpu_status_t* status);
         static void set_status(cpu_status_t* status);
@@ -93,6 +171,8 @@ namespace MaxOS{
         static void write_msr(uint32_t msr, uint64_t value);
 
         static void cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx);
+        static bool check_cpu_feature(CPU_FEATURE_ECX feature);
+        static bool check_cpu_feature(CPU_FEATURE_EDX feature);
 
         static void stack_trace(size_t);
     };

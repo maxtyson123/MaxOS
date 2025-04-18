@@ -73,18 +73,12 @@ namespace MaxOS{
         }
 
 
-        template<typename EventType> Event<EventType>::~Event() {
+        template<typename EventType> Event<EventType>::~Event() = default;
 
-        }
-
-        template<typename EventType> EventHandler<EventType>::EventHandler() {
-
-        }
+        template<typename EventType> EventHandler<EventType>::EventHandler() = default;
 
 
-        template<typename EventType> EventHandler<EventType>::~EventHandler() {
-
-        }
+        template<typename EventType> EventHandler<EventType>::~EventHandler() = default;
 
         /**
          * @brief This function is called when an event is raised
@@ -96,13 +90,9 @@ namespace MaxOS{
             return event;
         }
 
-        template<typename EventType> EventManager<EventType>::EventManager() {
+        template<typename EventType> EventManager<EventType>::EventManager() = default;
 
-        }
-
-        template<typename EventType> EventManager<EventType>::~EventManager() {
-
-        }
+        template<typename EventType> EventManager<EventType>::~EventManager() = default;
 
 
         /**

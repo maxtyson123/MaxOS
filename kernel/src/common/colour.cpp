@@ -3,13 +3,10 @@
 //
 
 #include <common/colour.h>
-#include <common/kprint.h>
 
 using namespace MaxOS::common;
 
-Colour::Colour() {
-
-}
+Colour::Colour() = default;
 
 Colour::Colour(uint8_t red, uint8_t green, uint8_t blue)
 : red(red),
@@ -28,9 +25,8 @@ Colour::Colour(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 
 }
 
-Colour::~Colour() {
+Colour::~Colour() = default;
 
-}
 Colour::Colour(ConsoleColour colour) {
     parse_console_colour(colour);
 }
@@ -46,6 +42,7 @@ Colour::Colour(MaxOS::string string) {
 
 /**
  * @brief Parses a hex string, must be in the format #RRGGBB or #RRGGBBAA
+ *
  * @param hex_string The hex string
  */
 void Colour::parse_hex_string(string hex_string) {
@@ -69,6 +66,7 @@ void Colour::parse_hex_string(string hex_string) {
 
 /**
  * @brief Parses an ANSI string to a colour  in the format \033[--COLORm (30-37)
+ *
  * @param ansi_string The ANSI string
  */
 void Colour::parse_ansi_string(string ansi_string) {
@@ -84,36 +82,37 @@ void Colour::parse_ansi_string(string ansi_string) {
   switch (colour) {
 
       case 0:
-        parse_console_colour(Black);
+        parse_console_colour(ConsoleColour::Black);
         break;
 
       case 1:
-        parse_console_colour(Red);
+        parse_console_colour(ConsoleColour::Red);
         break;
 
       case 2:
-        parse_console_colour(Green);
+        parse_console_colour(ConsoleColour::Green);
         break;
 
       case 3:
-        parse_console_colour(Yellow);
+        parse_console_colour(ConsoleColour::Yellow);
         break;
 
       case 4:
-        parse_console_colour(Blue);
+        parse_console_colour(ConsoleColour::Blue);
         break;
 
       case 5:
-        parse_console_colour(Magenta);
+        parse_console_colour(ConsoleColour::Magenta);
         break;
 
       case 6:
-        parse_console_colour(Cyan);
+        parse_console_colour(ConsoleColour::Cyan);
         break;
 
       case 7:
-        parse_console_colour(White);
+        parse_console_colour(ConsoleColour::White);
         break;
+
 
       default:
         break;
@@ -122,103 +121,105 @@ void Colour::parse_ansi_string(string ansi_string) {
 
 /**
  * @brief Parses a console colour to a colour
+ *
  * @param colour The console colour
  */
 void Colour::parse_console_colour(ConsoleColour colour) {
   switch (colour) {
 
-  case Unititialised:
-  case Black:
+  case ConsoleColour::Uninitialised:
+  case ConsoleColour::Black:
       red = 0;
       green = 0;
       blue = 0;
       break;
 
-    case Blue:
+    case ConsoleColour::Blue:
       red = 0;
-      green = 0;
-      blue = 170;
+      green = 128;
+      blue = 253;
       break;
 
-    case Green:
+    case ConsoleColour::Green:
       red = 0;
       green = 170;
       blue = 0;
       break;
 
-    case Cyan:
+    case ConsoleColour::Cyan:
       red = 0;
       green = 170;
       blue = 170;
       break;
 
-    case Red:
+    case ConsoleColour::Red:
       red = 170;
       green = 0;
       blue = 0;
       break;
 
-    case Magenta:
+    case ConsoleColour::Magenta:
       red = 170;
       green = 0;
       blue = 170;
       break;
 
-    case Brown:
+    case ConsoleColour::Brown:
       red = 170;
       green = 85;
       blue = 0;
       break;
 
-    case LightGrey:
+    case ConsoleColour::LightGrey:
       red = 170;
       green = 170;
       blue = 170;
       break;
 
-    case DarkGrey:
+    case ConsoleColour::DarkGrey:
       red = 85;
       green = 85;
       blue = 85;
       break;
 
-    case LightBlue:
+    case ConsoleColour::LightBlue:
       red = 85;
       green = 85;
       blue = 255;
       break;
 
-    case LightGreen:
+    case ConsoleColour::LightGreen:
       red = 85;
       green = 255;
       blue = 85;
       break;
 
-    case LightCyan:
+    case ConsoleColour::LightCyan:
       red = 85;
       green = 255;
       blue = 255;
       break;
 
-    case LightRed:
+    case ConsoleColour::LightRed:
       red = 255;
       green = 85;
       blue = 85;
       break;
 
-    case LightMagenta:
+    case ConsoleColour::LightMagenta:
       red = 255;
       green = 85;
       blue = 255;
       break;
 
-    case Yellow:
-      red = 255;
-      green = 255;
-      blue = 85;
+    // Same as CLION yellow
+    case ConsoleColour::Yellow:
+      red = 0x96;
+      green = 0x82;
+      blue = 0x0E;
       break;
 
-    case White:
+    case ConsoleColour::White:
       red = 255;
       green = 255;
       blue = 255;
@@ -228,59 +229,60 @@ void Colour::parse_console_colour(ConsoleColour colour) {
 
 /**
  * @brief Converts the colour to a console colour
+ *
  * @return The console colour
  */
 ConsoleColour Colour::to_console_colour() const {
 
 
   if (red == 0 && green == 0 && blue == 0)
-    return Black;
+    return ConsoleColour::Black;
 
-  if (red == 0 && green == 0 && blue == 170)
-    return Blue;
+  if (red == 0 && green == 128 && blue == 253)
+    return ConsoleColour::Blue;
 
   if (red == 0 && green == 170 && blue == 0)
-    return Green;
+    return ConsoleColour::Green;
 
   if (red == 0 && green == 170 && blue == 170)
-    return Cyan;
+    return ConsoleColour::Cyan;
 
   if (red == 170 && green == 0 && blue == 0)
-    return Red;
+    return ConsoleColour::Red;
 
   if (red == 170 && green == 0 && blue == 170)
-    return Magenta;
+    return ConsoleColour::Magenta;
 
   if (red == 170 && green == 85 && blue == 0)
-    return Brown;
+    return ConsoleColour::Brown;
 
   if (red == 170 && green == 170 && blue == 170)
-    return LightGrey;
+    return ConsoleColour::LightGrey;
 
   if (red == 85 && green == 85 && blue == 85)
-    return DarkGrey;
+    return ConsoleColour::DarkGrey;
 
   if (red == 85 && green == 85 && blue == 255)
-    return LightBlue;
+    return ConsoleColour::LightBlue;
 
   if (red == 85 && green == 255 && blue == 85)
-    return LightGreen;
+    return ConsoleColour::LightGreen;
 
   if (red == 85 && green == 255 && blue == 255)
-    return LightCyan;
+    return ConsoleColour::LightCyan;
 
   if (red == 255 && green == 85 && blue == 85)
-    return LightRed;
+    return ConsoleColour::LightRed;
 
   if (red == 255 && green == 85 && blue == 255)
-    return LightMagenta;
+    return ConsoleColour::LightMagenta;
 
-  if (red == 255 && green == 255 && blue == 85)
-    return Yellow;
+  if (red == 0x96 && green == 0x82 && blue == 0x0E)
+    return ConsoleColour::Yellow;
 
   if (red == 255 && green == 255 && blue == 255)
-    return White;
+    return ConsoleColour::White;
 
   // Return a default value in case no match is found
-  return Black;
+  return ConsoleColour::Black;
 }

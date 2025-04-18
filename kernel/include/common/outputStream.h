@@ -49,14 +49,16 @@ namespace MaxOS{
                 virtual void carriageReturn();
                 virtual void clear();
 
-                virtual void write(string string_to_write) override;
+                void write(string string_to_write) override;
+                void write(const char* string_to_write);
                 virtual void write_char(char char_to_write);
                 virtual void write_int(int int_to_write);
-                virtual void write_hex(uint32_t hex_to_write);
+                virtual void write_hex(uint64_t hex_to_write);
 
                 OutputStream& operator << (string string_to_write) override;
+                OutputStream& operator << (const char* string_to_write);
                 OutputStream& operator << (int int_to_write);
-                OutputStream& operator << (uint32_t hex_to_write);
+                OutputStream& operator << (uint64_t hex_to_write);
                 OutputStream& operator << (char char_to_write);
         };
 
@@ -69,18 +71,14 @@ namespace MaxOS{
          *
          * @tparam Type The type of the elements that will be written to the stream.
          */
-        template<class Type> GenericOutputStream<Type>::GenericOutputStream() {
-
-        }
+        template<class Type> GenericOutputStream<Type>::GenericOutputStream() = default;
 
         /**
          * @brief Destructor of the GenericOutputStream class.
          *
          * @tparam Type The type of the elements that will be written to the stream.
          */
-        template<class Type> GenericOutputStream<Type>::~GenericOutputStream() {
-
-        }
+        template<class Type> GenericOutputStream<Type>::~GenericOutputStream() = default;
 
         /**
          * @brief Writes the date that was read from the input stream to the output stream.

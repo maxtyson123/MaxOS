@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
-source $SCRIPTDIR/MaxOS.sh
+source $SCRIPTDIR/../MaxOS.sh
 
 msg "Incrementing build count"
 # If the buildCount file doesn't exist, create it
@@ -16,7 +16,7 @@ echo "$new_value" > .buildCount
 msg "Writing version header"
 # Version data
 MAJOR_VERSION="0"
-MINOR_VERSION="2"
+MINOR_VERSION="3"
 VERSION_NAME="Development Version"
 BUILD_NUMBER=$(cat .buildCount)
 BUILD_YEAR="$(date +'%-Y')"
@@ -31,11 +31,11 @@ GIT_COMMIT="$(git rev-list --count HEAD)"
 GIT_AUTHOR="$(git log -1 --pretty=format:'%an')"
 
 # Make the output file
-OUTPUT_FILE="${SCRIPTDIR}/../kernel/include/common/version.h.tmp"
+OUTPUT_FILE="${SCRIPTDIR}/../../kernel/include/common/version.h.tmp"
 
 # If we are forcing it then remove the tmp option
 if [ "$1" == "--force" ]; then
-  OUTPUT_FILE="${SCRIPTDIR}/../kernel/include/common/version.h"
+  OUTPUT_FILE="${SCRIPTDIR}/../../kernel/include/common/version.h"
 fi
 
 # Write the version header

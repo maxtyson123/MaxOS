@@ -4,8 +4,6 @@
 
 #include <common/graphicsContext.h>
 
-#include <common/kprint.h>
-
 using namespace MaxOS::common;
 
 GraphicsContext::GraphicsContext()
@@ -26,8 +24,8 @@ GraphicsContext::GraphicsContext()
     m_colour_pallet[0x09] = Colour(0x00,0x00,0xFF);    // Blue
     m_colour_pallet[0x0A] = Colour(0x00,0xA8,0x57);    // Green (Pigment)
     m_colour_pallet[0x0B] = Colour(0x00,0xA8,0xFF);    // Vivid Cerulean
-    m_colour_pallet[0x0C] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
-    m_colour_pallet[0x0D] = Colour(0xA8,0x00,0x57);    // Jazzberry Jam
+    m_colour_pallet[0x0C] = Colour(0xA8,0x00,0x57);    // Jazz berry Jam
+    m_colour_pallet[0x0D] = Colour(0xA8,0x00,0x57);    // Jazz berry Jam
     m_colour_pallet[0x0E] = Colour(0xA8,0xA8,0x57);    // Olive Green
     m_colour_pallet[0x0F] = Colour(0xA8,0xA8,0xFF);    // Maximum Blue Purple
 
@@ -90,9 +88,7 @@ GraphicsContext::GraphicsContext()
 
 }
 
-GraphicsContext::~GraphicsContext() {
-
-}
+GraphicsContext::~GraphicsContext() = default;
 
 /**
  * @brief Renders a pixel to the screen based on the current color depth
@@ -239,7 +235,7 @@ uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t, uint32_t) {
  * @param colour The colour class to convert
  * @return The integer value of the colour
  */
-uint32_t GraphicsContext::colour_to_int(Colour colour) {
+uint32_t GraphicsContext::colour_to_int(const Colour& colour) {
 
     switch(m_color_depth)
     {
@@ -352,7 +348,7 @@ Colour GraphicsContext::int_to_colour(uint32_t colour) {
  *
  * @return The width of the screen
  */
-uint32_t GraphicsContext::get_width() {
+uint32_t GraphicsContext::width() const {
     return m_width;
 }
 
@@ -361,7 +357,7 @@ uint32_t GraphicsContext::get_width() {
  *
  * @return The height of the screen
  */
-uint32_t GraphicsContext::get_height() {
+uint32_t GraphicsContext::height() const {
     return m_height;
 }
 
@@ -369,7 +365,7 @@ uint32_t GraphicsContext::get_height() {
  * @breif Gets the current color depth (bits per pixel)
  * @return The color depth
  */
-uint32_t GraphicsContext::get_color_depth() {
+uint32_t GraphicsContext::color_depth() const {
   return m_color_depth;
 }
 
@@ -380,7 +376,7 @@ uint32_t GraphicsContext::get_color_depth() {
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
  */
-void GraphicsContext::put_pixel(int32_t x, int32_t y, Colour colour) {
+void GraphicsContext::put_pixel(int32_t x, int32_t y, const Colour& colour) {
 
     // Convert the colour to an integer and then print it
     putPixel(x,y, colour_to_int(colour));
@@ -393,7 +389,7 @@ void GraphicsContext::put_pixel(int32_t x, int32_t y, Colour colour) {
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
  */
-void GraphicsContext::putPixel(int32_t x, int32_t y, int32_t colour) {
+void GraphicsContext::putPixel(int32_t x, int32_t y, uint32_t colour) {
 
     if (0 > x || (uint32_t)x >= m_width) {
         return;
@@ -420,12 +416,12 @@ Colour GraphicsContext::get_pixel(int32_t x, int32_t y) {
 
     // Check if the pixel is within the m_width of the screen
     if (0 > x || (uint32_t)x >= m_width) {
-        return Colour(0,0,0);
+        return {0,0,0};
     }
 
     // Check if the pixel is within the m_height of the screen
     if (0 > y || (uint32_t) y >= m_height) {
-        return Colour(0,0,0);
+        return {0,0,0};
     }
 
     // Get the pixel and convert it to a colour
@@ -464,7 +460,7 @@ void GraphicsContext::invert_pixel(int32_t x, int32_t y) {
  * @param y1 The y coordinate of the final point
  * @param colour The colour of the line
  */
-void GraphicsContext::draw_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+void GraphicsContext::draw_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, const Colour& colour) {
     drawLine(x0,y0,x1,y1, colour_to_int(colour));
 }
 
@@ -495,7 +491,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
     {
         // Force the line to be within the screen
         if(y_min < 0) y_min = 0;
-        if((uint32_t)y_max >= m_height)
+        if(y_max >= m_height)
           y_max = m_height - 1;
 
         // Mirror the Y axis as directly calling put_pixel will not do this
@@ -523,23 +519,20 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
     {
         // Ensure the line is within the screen
         if(x0 < 0) x0 = 0;
-        if((uint32_t)x1 >= m_width) x1 = m_width -1;
+        if(x1 >= m_width) x1 = m_width -1;
 
         // Mirror the Y axis as directly calling put_pixel will not do this
         if(mirror_y_axis)
             y0 = m_height -y0-1;
 
         // Check that the line is within the screen
-        if (0 > y0 || (uint32_t) y0 >= m_height)
+        if (0 > y0 || y0 >= m_height)
             return;
 
         // Draw the line
         for(int32_t x = x0; x <= x1; ++x)
             putPixel(x,y0,colour);
     }
-
-    // TODO: Slope once SSE is implemented
-    return;
 
     // If the line is not horizontal or vertical then it must be a diagonal line
     // Find the slope of the line
@@ -574,7 +567,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
  * @param y1 The y coordinate of the bottom right corner
  * @param colour The colour of the rectangle
  */
-void GraphicsContext::draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+void GraphicsContext::draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, const Colour& colour) {
   draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
 
 }
@@ -611,7 +604,7 @@ void GraphicsContext::draw_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t
  * @param y1 The y coordinate of the bottom right corner
  * @param colour The colour of the rectangle
  */
-void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, Colour colour) {
+void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, const Colour& colour) {
   fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
 }
 
@@ -634,7 +627,7 @@ void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t
 
     // Make sure the rectangle is within the height of the screen
     if(y0 < 0) y0 = 0;
-    if((uint32_t)y1 > m_height) y1 = m_height;
+    if(y1 > m_height) y1 = m_height;
 
     // Make sure the rectangle is within the width of the screen
     bool x_0_is_smaller = x0 < x1;
@@ -642,13 +635,13 @@ void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t
     int32_t x_max = x_0_is_smaller ? x1 : x0;
 
     if(x_min < 0) x_min = 0;
-    if((uint32_t)x_max > m_width)
+    if(x_max > m_width)
       x_max = m_width;
 
     // Mirror the Y axis as directly calling put_pixel will not do this
     if(mirror_y_axis)
     {
-        uint32_t temp = y1;
+        int32_t temp = y1;
         y1 = m_height - y0 - 1;
         y0 = m_height - temp - 1;
     }
@@ -670,7 +663,7 @@ void GraphicsContext::fill_rectangle(int32_t x0, int32_t y0, int32_t x1, int32_t
  * @param radius The radius of the circle
  * @param colour The colour of the circle
  */
-void GraphicsContext::draw_circle(int32_t x0, int32_t y0, int32_t radius, Colour colour){
+void GraphicsContext::draw_circle(int32_t x0, int32_t y0, int32_t radius, const Colour& colour){
   draw_circle(x0, y0, radius, colour_to_int(colour));
 }
 
@@ -686,9 +679,9 @@ void GraphicsContext::draw_circle(int32_t x0, int32_t y0, int32_t radius, uint32
 
     // Make sure the circle is with in the width and height of the screen
     if(x0 < 0) x0 = 0;
-    if((uint32_t)x0 > m_width) x0 = m_width;
+    if(x0 > m_width) x0 = m_width;
     if(y0 < 0) y0 = 0;
-    if((uint32_t)y0 > m_height) y0 = m_height;
+    if(y0 > m_height) y0 = m_height;
 
     // Mirror the Y axis as directly calling put_pixel will not do this
     if(mirror_y_axis)
@@ -718,7 +711,7 @@ void GraphicsContext::draw_circle(int32_t x0, int32_t y0, int32_t radius, uint32
  * @param radius The radius of the circle
  * @param colour The colour of the circle
  */
-void GraphicsContext::fill_circle(int32_t x0, int32_t y0, int32_t radius, Colour colour) {
+void GraphicsContext::fill_circle(int32_t x0, int32_t y0, int32_t radius, const Colour& colour) {
     fillCircle(x0,y0,radius, colour_to_int(colour));
 
 }
@@ -735,9 +728,9 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
 
         // Make sure the circle is with in the width and height of the screen
         if(x0 < 0) x0 = 0;
-        if((uint32_t)x0 > m_width) x0 = m_width;
+        if(x0 > m_width) x0 = m_width;
         if(y0 < 0) y0 = 0;
-        if((uint32_t)y0 > m_height) y0 = m_height;
+        if(y0 > m_height) y0 = m_height;
 
         // Mirror the Y axis as directly calling put_pixel will not do this
         if(mirror_y_axis)
@@ -757,6 +750,12 @@ void GraphicsContext::fillCircle(int32_t x0, int32_t y0, int32_t radius, uint32_
             }
         }
 }
-uint64_t *GraphicsContext::get_framebuffer_address() {
+
+/**
+ * @brief Gets the address of the context's framebuffer to draw on
+ *
+ * @return The framebuffer address
+ */
+uint64_t* GraphicsContext::framebuffer_address() {
     return m_framebuffer_address;
 }

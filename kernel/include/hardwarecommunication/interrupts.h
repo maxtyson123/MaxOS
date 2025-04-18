@@ -28,9 +28,8 @@ namespace MaxOS {
         class InterruptHandler {
             protected:
                 uint8_t m_interrupt_number;
-                InterruptManager* m_interrupt_manager;
 
-                InterruptHandler(uint8_t interrupt_number, InterruptManager*interrupt_manager = 0);
+                InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
                 ~InterruptHandler();
 
             public:
@@ -66,26 +65,22 @@ namespace MaxOS {
             friend class InterruptHandler;
 
             private:
-              LocalAPIC* m_local_apic;
+              AdvancedProgrammableInterruptController* m_apic = nullptr;
 
               static system::cpu_status_t* page_fault(system::cpu_status_t* status);
               static system::cpu_status_t* general_protection_fault(system::cpu_status_t* status);
 
             protected:
 
-                static InterruptManager* s_active_interrupt_manager;
-                static common::OutputStream* s_error_messages;
-                const static uint16_t s_hardware_interrupt_offset {0x20};
-                InterruptHandler* m_interrupt_handlers[256];
+                inline static InterruptManager* s_active_interrupt_manager = nullptr;
+                const static uint16_t s_hardware_interrupt_offset = 0x20;
 
-                static InterruptDescriptor s_interrupt_descriptor_table[256];
+                InterruptHandler* m_interrupt_handlers[256] = {};
+                inline static InterruptDescriptor s_interrupt_descriptor_table[256] = {};
 
                 static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (*handler)(), uint8_t descriptor_privilege_level);
 
                 static void InterruptIgnore();
-
-                // Error Codes
-                // TODO
 
                 //Various Interrupts
                 static void HandleInterruptRequest0x00();
@@ -150,12 +145,15 @@ namespace MaxOS {
                 InterruptManager();
                 ~InterruptManager();
 
-                uint16_t hardware_interrupt_offset();
+                static InterruptManager* active_interrupt_manager();
+
+                static uint16_t hardware_interrupt_offset();
 
                 void set_interrupt_handler(uint8_t interrupt, InterruptHandler *handler);
                 void remove_interrupt_handler(uint8_t interrupt);
 
-                void set_apic(LocalAPIC* apic);
+                void set_apic(AdvancedProgrammableInterruptController* apic);
+                AdvancedProgrammableInterruptController* active_apic();
 
                 void activate();
                 void deactivate();

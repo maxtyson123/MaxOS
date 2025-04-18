@@ -8,13 +8,9 @@ using namespace MaxOS;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 
-RawDataHandler::RawDataHandler()
-{
-}
+RawDataHandler::RawDataHandler() = default;
 
-RawDataHandler::~RawDataHandler()
-{
-}
+RawDataHandler::~RawDataHandler() = default;
 
 bool RawDataHandler::HandleRawData(uint8_t*, uint32_t)
 {

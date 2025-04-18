@@ -18,7 +18,7 @@ String::String()
 String::String(char const *string)
 {
 
-  // Get the length of the string, prevent longer than 10000 because this should mean somthings gone wrong
+  // Get the length of the string, prevent longer than 10000 because this should mean somethings gone wrong
   m_length = 0;
   while (string[m_length] != '\0' && m_length <= 10000)
           m_length++;
@@ -45,30 +45,19 @@ String::String(char const *string)
 
 String::String(int value) {
 
-  // The length of the string
-  m_length = 0;
-
-  // The value of the string
-  int temp = value;
-
-  // Get the length of the string
-  while (temp != 0) {
-    temp /= 10;
-    m_length++;
-  }
-
-  // Allocate memory for the string (and null terminator)
-  m_string = new char[m_length + 1];
-
-  // Copy the string
-  for (int i = m_length - 1; i >= 0; i--) {
-    m_string[i] = (value % 10) + '0';
-    value /= 10;
-  }
-
-  // Write the null terminator
-  m_string[m_length] = '\0';
 }
+
+
+String::String(uint64_t value) {
+
+}
+
+String::String(float value) {
+
+
+
+}
+
 
 String::String(String const &other) {
   // Copy the other string
@@ -111,7 +100,7 @@ void String::copy(String const &other) {
  * @param string The string
  * @return The sum of the ascii values of the characters in the string
  */
-int String::lex_value(String const &string) const {
+int String::lex_value(String const &string) {
 
     // The sum of the ascii values of the characters in the string
     int sum = 0;
@@ -130,10 +119,14 @@ int String::lex_value(String const &string) const {
 /**
  * @brief Sets the string to the other string
  *
- * @param other
+ * @param other The string for this one to be updated to
  * @return String& The string
  */
 String &String::operator = (String const &other) {
+
+    // Self assignment check
+    if (this == &other)
+        return *this;
 
     // Free the old memory
     delete[] m_string;
@@ -146,6 +139,11 @@ String &String::operator = (String const &other) {
 
 }
 
+/**
+ * @brief The char pointer representation of the current string
+ *
+ * @return The char* string
+ */
 char* String::c_str() {
 
     // Return the string
@@ -168,14 +166,34 @@ const char* String::c_str() const {
 /**
  * @brief Returns the length of the string
  *
- * @param count_ansi Whether to count the ansi characters (TODO: Implement - might be bad for performance)
+ * @param count_ansi Whether to count the ansi characters (default true)
  * @return The length of the string
  */
-int String::length(bool ) const {
+int String::length(bool count_ansi) const {
 
-    // Return the length of the string
-    return m_length;
+    // If ansi characters are not to be counted
+    if (count_ansi)
+      return m_length;
 
+
+    // Calculate the length of the string without ansi characters
+    int total_length = 0;
+    int clean_length = 0;
+    while (m_string[total_length] != '\0'){
+
+      // If the character is an ansi character, skip it
+      if (m_string[total_length] == '\033'){
+          while (m_string[total_length] != 'm')
+            total_length++;
+      }
+
+      // Increment the length
+      clean_length++;
+      total_length++;
+    }
+
+    // Return the length
+    return clean_length;
 }
 
 /**
@@ -215,6 +233,7 @@ bool String::operator == (String const &other) const {
 
 /**
  * @brief Checks if one string is not equal to another
+ *
  * @param other The other string
  * @return True if the strings are not equal, false otherwise
  */
@@ -408,6 +427,7 @@ String String::operator*(int times) const {
 
 /**
  * @brief Centers the string in a specified width
+ *
  * @param width The width of the string
  * @param fill The character to fill the string with
  * @return  The centered string
@@ -449,9 +469,151 @@ String String::center(int width, char fill) const {
 
 }
 
+/**
+ * @brief Gets the length of a string
+ *
+ * @param str The string to get the length of
+ * @return The length of the string
+ */
+int strlen(const char* str)
+{
+  int len = 0;
+  for (; str[len] != '\0'; len++);
+  return len;
+}
 
 /**
- * @brief Checks if one string is equal to another
+ * @brief Converts integer to string
+ *
+ * @param base The base of the number (10 for decimal, 16 for hex)
+ * @param number The number to convert
+ * @param buffer The buffer to store the converted string
+ *
+ * @return The converted string
+ */
+char* itoa(int base, int64_t number)
+{
+
+  // If there is no buffer use a default buffer
+  static char buffer[50] = {0};
+
+  int i = 49;
+  bool isNegative = number < 0;
+
+  if (number == 0)
+  {
+    buffer[i] = '0';
+    return &buffer[i];
+  }
+
+
+  for (; number && i; --i, number /= base)
+    buffer[i] = "0123456789ABCDEF"[number % base];
+
+  if (isNegative)
+  {
+      buffer[i] = '-';
+      return &buffer[i];
+  }
+
+  return &buffer[i + 1];
+}
+
+/**
+ * @brief Converts hex to string
+ *
+ * @param number The number to convert
+ * @param buffer The buffer to store the converted string
+ * @return The converted string
+ */
+char* htoa(uint64_t number)
+{
+  // If there is no buffer use a default buffer
+  static char buffer[50] = {0};
+  int i = 49;
+
+  if (number == 0)
+  {
+    buffer[i] = '0';
+    return &buffer[i];
+  }
+
+  for (; number && i; --i, number /= 16)
+    buffer[i] = "0123456789ABCDEF"[number % 16];
+
+  return &buffer[i + 1];
+}
+
+/**
+ * @brief Converts a float to a string
+ *
+ * @param number The number to convert
+ * @param buffer The buffer to store the converted string
+ * @return The converted string
+ */
+char* ftoa(float number) {
+
+  static char buffer[50];
+  char* ptr = buffer;
+
+  // Handle negative numbers.
+  if (number < 0) {
+    *ptr++ = '-';
+    number = -number;
+  }
+
+  // Separate integer and fractional parts.
+  int64_t intPart = (int64_t)number;
+  float fraction = number - (float)intPart;
+
+  // Convert integer part to string using itoa.
+  char* intStr = itoa(10, intPart);
+  while (*intStr) {
+    *ptr++ = *intStr++;
+  }
+
+  // Add the decimal point.
+  *ptr++ = '.';
+
+  // Define the desired precision for the fractional part.
+  const int precision = 6;
+
+  // Multiply the fraction to shift the decimal digits into integer range.
+  float fracValue = fraction;
+  for (int i = 0; i < precision; i++) {
+    fracValue *= 10.0f;
+  }
+
+  // Optionally, round the value.
+  auto fracInt = (int64_t)(fracValue + 0.5f);
+
+  // Convert the fractional part to string.
+  char fracBuffer[50];
+  char* fracStr = itoa(10, fracInt);
+
+  // Ensure we have leading zeros if the fractional part doesn't produce enough digits.
+  // Calculate length of the converted fractional string.
+  int len = 0;
+  for (char* p = fracStr; *p; p++) {
+    len++;
+  }
+  for (int i = 0; i < precision - len; i++) {
+    *ptr++ = '0';
+  }
+
+  // Copy the fractional digits.
+  while (*fracStr) {
+    *ptr++ = *fracStr++;
+  }
+
+  // Null-terminate the string.
+  *ptr = '\0';
+
+  return buffer;
+}
+
+/**
+ * @brief Checks if one string pointer is equal to another string pointer
  *
  * @param str1 The first string
  * @param str2 The second string
@@ -469,6 +631,13 @@ bool strcmp(char const *str1, char const *str2) {
 
 }
 
+/**
+ * @brief Checks if one string pointer is equal to a String
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
 bool strcmp(char const *str1, String const &str2) {
 
   // Use the other strcmp function
@@ -476,12 +645,26 @@ bool strcmp(char const *str1, String const &str2) {
 
 }
 
+/**
+ * @brief Checks if one String is equal to a string pointer
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
 bool strcmp(String const &str1, char const *str2) {
 
     // Use the other strcmp function
     return strcmp(str1.c_str(), str2);
 }
 
+/**
+ * @brief Checks if one String is equal to another String (better use is of "==")
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @return True if the strings are equal, false otherwise
+ */
 bool strcmp(String const &str1, String const &str2) {
 
   // Use the other strcmp function
@@ -490,11 +673,11 @@ bool strcmp(String const &str1, String const &str2) {
 }
 
 /**
- * @brief Checks if one string is equal to another
+ * @brief Checks if one string pointer is equal to another string pointer up to a specified length (each must be >= this length)
  *
  * @param str1 The first string
  * @param str2 The second string
- * @param length The length of the strings
+ * @param length The length of the string to compare
  * @return True if the strings are equal, false otherwise
  */
 bool strncmp(char const *str1, char const *str2, int length) {
@@ -509,6 +692,14 @@ bool strncmp(char const *str1, char const *str2, int length) {
 
 }
 
+/**
+ * @brief Checks if one string pointer is equal to another String up to a specified length (each must be >= this length)
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the string to compare
+ * @return True if the strings are equal, false otherwise
+ */
 bool strncmp(char const *str1, String const &str2, int length) {
 
   // Use the other strncmp function
@@ -516,6 +707,14 @@ bool strncmp(char const *str1, String const &str2, int length) {
 
 }
 
+/**
+ * @brief Checks if one String is equal to another string pointer up to a specified length (each must be >= this length)
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the string to compare
+ * @return True if the strings are equal, false otherwise
+ */
 bool strncmp(String const &str1, char const *str2, int length) {
 
   // Use the other strncmp function
@@ -523,6 +722,14 @@ bool strncmp(String const &str1, char const *str2, int length) {
 
 }
 
+/**
+ * @brief Checks if one String is equal to another String up to a specified length (each must be >= this length)
+ *
+ * @param str1 The first string
+ * @param str2 The second string
+ * @param length The length of the string to compare
+ * @return True if the strings are equal, false otherwise
+ */
 bool strncmp(String const &str1, String const &str2, int length) {
 
   // Use the other strncmp function

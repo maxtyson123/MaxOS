@@ -13,13 +13,9 @@ using namespace MaxOS::drivers::peripherals;
 
 /// ___ Button Event Handler ___
 
-ButtonEventHandler::ButtonEventHandler() {
+ButtonEventHandler::ButtonEventHandler() = default;
 
-}
-
-ButtonEventHandler::~ButtonEventHandler() {
-
-}
+ButtonEventHandler::~ButtonEventHandler() = default;
 
 /**
  * @brief Handles the button events
@@ -32,12 +28,12 @@ Event<ButtonEvents>* ButtonEventHandler::on_event(Event<ButtonEvents> *event) {
     switch (event -> type) {
 
         // Button pressed
-        case BUTTON_PRESSED:
+        case ButtonEvents::PRESSED:
             on_button_pressed(((ButtonPressedEvent *)event)->source);
             break;
 
         // Button released
-        case BUTTON_RELEASED:
+        case ButtonEvents::RELEASED:
             on_button_released(((ButtonReleasedEvent *)event)->source);
             break;
 
@@ -67,7 +63,7 @@ void ButtonEventHandler::on_button_released(Button*) {
 
 //// ___ Button ___
 
-Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
+Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
@@ -78,9 +74,7 @@ Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, strin
 
 }
 
-Button::~Button() {
-
-}
+Button::~Button() = default;
 
 /**
  * @brief Draws the button
@@ -192,22 +186,18 @@ void Button::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
 /// ___ Event ___
 
 ButtonReleasedEvent::ButtonReleasedEvent(Button *source)
-: Event(ButtonEvents::BUTTON_RELEASED),
+: Event(ButtonEvents::RELEASED),
   source(source)
 {
 
 }
 
-ButtonReleasedEvent::~ButtonReleasedEvent() {
-
-}
+ButtonReleasedEvent::~ButtonReleasedEvent() = default;
 
 ButtonPressedEvent::ButtonPressedEvent(Button *source)
-: Event(ButtonEvents::BUTTON_PRESSED),
+: Event(ButtonEvents::PRESSED),
   source(source)
 {
 }
 
-ButtonPressedEvent::~ButtonPressedEvent() {
-
-}
+ButtonPressedEvent::~ButtonPressedEvent() = default;

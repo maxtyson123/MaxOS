@@ -15,7 +15,7 @@ namespace MaxOS{
          * @class Rectangle
          * @brief Stores the left, top, width and height of a rectangle
          *
-         * @tparam Type The type of the rectangle
+         * @tparam Type The type of the rectangle (assumed to be numeric)
          */
         template<class Type> class Rectangle{
             public:
@@ -39,8 +39,7 @@ namespace MaxOS{
 
         ///_______________________________________________TEMPLATES_________________________________________________________________///
 
-        template<class Type> Rectangle<Type>::Rectangle(){
-        }
+        template<class Type> Rectangle<Type>::Rectangle() = default;
 
 
         template<class Type> Rectangle<Type>::Rectangle(Type left, Type top, Type width, Type height)
@@ -69,9 +68,7 @@ namespace MaxOS{
             this->top = top;
         }
 
-        template<class Type> Rectangle<Type>::~Rectangle()
-        {
-        }
+        template<class Type> Rectangle<Type>::~Rectangle() = default;
 
         /**
          * @details Checks if the rectangle intersects with another rectangle
@@ -149,7 +146,7 @@ namespace MaxOS{
             Type minRight = (left + width < other.left + other.width ? left + width : other.left + other.width);
             Type minBottom = (top + height < other.top + other.height ? top+height : other.top + other.height);
 
-            // Add the non intersecting rectangles to the result
+            // Add the non-intersecting rectangles to the result
 
             // Add non-overlapping region above if current top is less than other top
             if (top < other.top)

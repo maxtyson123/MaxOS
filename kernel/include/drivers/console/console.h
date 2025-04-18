@@ -40,13 +40,13 @@ namespace MaxOS {
 
 
                   virtual void put_character(uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background);
-                  virtual void put_string(uint16_t x, uint16_t y, string s, common::ConsoleColour foreground = common::LightGrey, common::ConsoleColour background = common::Black);
+                  virtual void put_string(uint16_t x, uint16_t y, string s, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black);
 
                   virtual void scroll_up();
-                  virtual void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::LightGrey, common::ConsoleColour background = common::Black, char fill= ' ');
+                  virtual void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black, char fill= ' ');
 
                   virtual void clear();
-                  virtual void clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::LightGrey, common::ConsoleColour background = common::Black, char fill=' ');
+                  virtual void clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black, char fill=' ');
 
                   virtual void invert_colors(uint16_t x, uint16_t y);
 
@@ -78,7 +78,7 @@ namespace MaxOS {
                   void set_background_color(uint16_t x, uint16_t y, common::ConsoleColour background) override;
 
                   void scroll_up() override;
-                  void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::LightGrey, common::ConsoleColour background = common::Black, char fill= ' ') override;
+                  void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black, char fill= ' ') override;
 
                   char get_character(uint16_t x, uint16_t y) override;
                   common::ConsoleColour get_foreground_color(uint16_t x, uint16_t y) override;
@@ -94,13 +94,15 @@ namespace MaxOS {
               protected:
                   Console* m_console;
 
-                  common::ConsoleColour m_foreground;
-                  common::ConsoleColour m_background;
+                  common::ConsoleColour m_foreground { common::ConsoleColour::LightGrey };
+                  common::ConsoleColour m_background { common::ConsoleColour::Black };
                   bool is_ansi = false;
 
-              public:
                   uint16_t m_cursor_x { 0 };
                   uint16_t m_cursor_y { 0 };
+
+              public:
+
 
                   ConsoleStream(Console*);
                   ~ConsoleStream();

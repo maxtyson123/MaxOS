@@ -16,8 +16,8 @@ namespace MaxOS{
 
         namespace widgets {
 
-            enum InputBoxEvents{
-                INPUTBOX_TEXT_CHANGED
+            enum class InputBoxEvents{
+                TEXT_CHANGED
             };
 
             /**
@@ -26,7 +26,7 @@ namespace MaxOS{
              */
             class InputBoxTextChangedEvent : public common::Event<InputBoxEvents>{
               public:
-                  InputBoxTextChangedEvent(string);
+                  InputBoxTextChangedEvent(const string&);
                   ~InputBoxTextChangedEvent();
 
                   string new_text;
@@ -41,7 +41,7 @@ namespace MaxOS{
                 InputBoxEventHandler();
                 ~InputBoxEventHandler();
 
-                virtual common::Event<InputBoxEvents>* on_event(common::Event<InputBoxEvents>* event) override;
+                common::Event<InputBoxEvents>* on_event(common::Event<InputBoxEvents>* event) override;
 
                 virtual void on_input_box_text_changed(string);
             };
@@ -57,7 +57,7 @@ namespace MaxOS{
 
                 public:
                     InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height);
-                    InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text);
+                    InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text);
                     ~InputBox();
 
                     void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
@@ -67,15 +67,15 @@ namespace MaxOS{
 
                     void on_key_down(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState) override;
 
-                    void update_text(string);
-                    string get_text();
+                    void update_text(const string&);
+                    string text();
 
                     // InputBox Variables
                     common::Colour background_colour;
                     common::Colour foreground_colour;
                     common::Colour border_colour;
                     gui::Font font;
-                    uint32_t cursor_position { 0 };
+                    int32_t cursor_position { 0 };
 
             };
         }

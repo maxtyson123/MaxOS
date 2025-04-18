@@ -38,7 +38,7 @@
 /*  Alignment of the multiboot info structure. */
 #define MULTIBOOT_INFO_ALIGN                    0x00000008
 
-/*  Flags set in the ’flags’ member of the multiboot header. */
+/*  Flags set in the 'flags' member of the multiboot header. */
 
 #define MULTIBOOT_TAG_ALIGN                  8
 #define MULTIBOOT_TAG_TYPE_END               0
@@ -427,20 +427,21 @@ namespace MaxOS {
           multiboot_tag_new_acpi* m_new_acpi;
           multiboot_tag_module* m_module;
 
-          unsigned long m_base_address;
-
         public:
-          Multiboot(unsigned long address);
+          Multiboot(unsigned long address, unsigned long magic);
           ~Multiboot();
 
-          multiboot_tag_framebuffer* get_framebuffer();
-          multiboot_tag_basic_meminfo* get_basic_meminfo();
-          multiboot_tag_string* get_bootloader_name();
-          multiboot_tag_mmap* get_mmap();
-          multiboot_tag_old_acpi* get_old_acpi();
-          multiboot_tag_new_acpi* get_new_acpi();
+          multiboot_tag_framebuffer* framebuffer();
+          multiboot_tag_basic_meminfo* basic_meminfo();
+          multiboot_tag_string* bootloader_name();
+          multiboot_tag_mmap* mmap();
+          multiboot_tag_old_acpi* old_acpi();
+          multiboot_tag_new_acpi* new_acpi();
 
-          multiboot_tag* get_start_tag();
+          unsigned long start_address;
+          unsigned long end_address;
+
+          [[nodiscard]] multiboot_tag* start_tag() const;
 
           bool is_reserved(multiboot_uint64_t address);
 

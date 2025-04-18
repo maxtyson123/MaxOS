@@ -6,7 +6,6 @@
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
 
 #include <hardwarecommunication/port.h>
-#include <system/cpu.h>
 #include <hardwarecommunication/acpi.h>
 #include <memory/physical.h>
 
@@ -17,10 +16,10 @@ namespace MaxOS {
       class  LocalAPIC {
 
         protected:
-          uint64_t m_apic_base;
-          uint64_t m_apic_base_high;
-          uint32_t m_id;
-          bool m_x2apic;
+          uint64_t m_apic_base{};
+          uint64_t m_apic_base_high{};
+          uint32_t m_id{};
+          bool m_x2apic{};
 
         public:
             LocalAPIC();
@@ -28,11 +27,11 @@ namespace MaxOS {
 
             void init();
 
-            uint32_t read(uint32_t reg);
-            void write(uint32_t reg, uint32_t value);
+            [[nodiscard]] uint32_t read(uint32_t reg) const;
+            void write(uint32_t reg, uint32_t value) const;
 
-            uint32_t id();
-            void send_eoi();
+            [[nodiscard]] uint32_t id() const;
+            void send_eoi() const;
 
         };
 
@@ -91,14 +90,14 @@ namespace MaxOS {
         class IOAPIC {
           private:
             AdvancedConfigurationAndPowerInterface* m_acpi;
-            MADT* m_madt;
-            uint32_t m_address;
-            uint64_t m_address_high;
-            uint32_t m_version;
-            uint8_t m_max_redirect_entry;
+            MADT* m_madt  = { nullptr };
+            uint64_t m_address = 0;
+            uint64_t m_address_high = 0;
+            uint32_t m_version = 0;
+            uint8_t m_max_redirect_entry  = 0;
 
-            uint32_t m_override_array_size;
-            Override m_override_array[0x10];
+            uint8_t m_override_array_size = 0;
+            Override m_override_array[0x10] = {};
 
             MADT_Item* get_madt_item(uint8_t type, uint8_t index);
 
@@ -109,8 +108,8 @@ namespace MaxOS {
               IOAPIC(AdvancedConfigurationAndPowerInterface* acpi);
               ~IOAPIC();
 
-              uint32_t read(uint32_t reg);
-              void write(uint32_t reg, uint32_t value);
+              uint32_t read(uint32_t reg) const;
+              void write(uint32_t reg, uint32_t value) const;
 
               void set_redirect(interrupt_redirect_t* redirect);
               void set_redirect_mask(uint8_t index, bool mask);
@@ -121,8 +120,8 @@ namespace MaxOS {
       class AdvancedProgrammableInterruptController {
 
         protected:
-            LocalAPIC m_local_apic;
-            IOAPIC m_io_apic;
+            LocalAPIC* m_local_apic;
+            IOAPIC* m_io_apic;
 
             Port8BitSlow m_pic_master_command_port;
             Port8BitSlow m_pic_master_data_port;
@@ -136,10 +135,8 @@ namespace MaxOS {
             AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
             ~AdvancedProgrammableInterruptController();
 
-            LocalAPIC* get_local_apic();
-            IOAPIC* get_io_apic();
-
-            void enable_pic_pit();
+            LocalAPIC* local_apic() const;
+            IOAPIC* io_apic() const;
 
       };
 

@@ -3,7 +3,7 @@
 //
 
 #include <drivers/video/vesa.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::drivers;
@@ -17,22 +17,23 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   m_framebuffer_info(framebuffer_info)
 {
   // Get the framebuffer info
-  _kprintf("Framebuffer info: 0x%x\n", m_framebuffer_info);
+  Logger::INFO() << "Setting up VESA driver\n";
+  Logger::DEBUG() << "Framebuffer info: 0x " << (uint64_t)m_framebuffer_info << "\n";
 
   // Set the framebuffer address, bpp and pitch
   m_bpp = m_framebuffer_info->common.framebuffer_bpp;
   m_pitch = m_framebuffer_info->common.framebuffer_pitch;
   m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
 
-  _kprintf("Framebuffer: bpp=%d, pitch=%d, size=%d\n", m_bpp, m_pitch, m_framebuffer_size);
+  Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\n";
 
   // Get the framebuffer address
-  uint64_t physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
-  uint64_t virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);
+  auto physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
+  auto virtual_address = (uint64_t)PhysicalMemoryManager::to_dm_region(physical_address);
   uint64_t end = physical_address + m_framebuffer_size;
   m_framebuffer_address = (uint64_t*)virtual_address;
 
-  _kprintf("Framebuffer address: physical=0x%x, virtual=0x%x\n", physical_address, virtual_address);
+  Logger::DEBUG() << "Framebuffer address: physical=0x" << physical_address << ", virtual=0x" << virtual_address << "\n";
 
   // Map the framebuffer
   while (physical_address < end) {
@@ -43,15 +44,17 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
   }
 
   size_t pages = PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address);
-  _kprintf("Framebuffer mapped: 0x%x - 0x%x (pages: %d)\n", m_framebuffer_address, virtual_address, pages);
+  Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t)m_framebuffer_address << " - 0x" << virtual_address << " (pages: " << pages << ")\n";
 
   // Reserve the physical memory
   PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
+
+  // Set the default video mode
+  this -> set_mode(framebuffer_info->common.framebuffer_width,framebuffer_info->common.framebuffer_height, framebuffer_info->common.framebuffer_bpp);
+
 }
 
-VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation(){
-
-}
+VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation()= default;
 
 /**
  * @brief Initializes the VESA driver
@@ -107,7 +110,7 @@ bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_
 void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colour) {
 
     // Get the address of the pixel
-    uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+    auto* pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
 
     // Set the pixel
     *pixel_address = colour;
@@ -124,30 +127,26 @@ void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint3
 uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
 
     // Get the address of the pixel
-    uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+    auto* pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
 
     // Return the pixel
     return *pixel_address;
 }
 
 /**
- * @brief Renders a pixel on the screen in 16 bit mode
+ * @brief The name of the vendor of the VESA standard
  *
- * @param x The x coordinate of the pixel
- * @param y The y coordinate of the pixel
- * @param colour The 16bit colour of the pixel
+ * @return The name of the vendor
  */
-string VideoElectronicsStandardsAssociation::get_vendor_name() {
+string VideoElectronicsStandardsAssociation::vendor_name() {
     return "NEC Home Electronics";  // Creator of the VESA standard
 }
 
 /**
- * @brief Gets the colour of a pixel on the screen in 16 bit mode
+ * @brief The name of the device
  *
- * @param x The x coordinate of the pixel
- * @param y The y coordinate of the pixel
- * @return The 16bit colour of the pixel
+ * @return The name of the device
  */
-string VideoElectronicsStandardsAssociation::get_device_name() {
+string VideoElectronicsStandardsAssociation::device_name() {
     return "VESA compatible graphics card";
 }

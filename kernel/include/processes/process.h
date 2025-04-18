@@ -20,7 +20,7 @@ namespace MaxOS
     namespace processes
     {
 
-        typedef enum ThreadState{
+        typedef enum class ThreadState{
             NEW,
             RUNNING,
             READY,
@@ -33,12 +33,18 @@ namespace MaxOS
         // Forward declaration
         class Process;
 
+        /**
+         * @class Thread
+         * @brief The execution context of a sub-process thread
+         */
         class Thread{
 
             private:
 
               uintptr_t m_stack_pointer;
               uintptr_t m_tss_stack_pointer;
+
+              char m_sse_save_region[512] __attribute__((aligned(16)));
 
               static const uint64_t s_stack_size = 0x10000;
 
@@ -57,14 +63,17 @@ namespace MaxOS
               size_t ticks;
               size_t wakeup_time;
 
-              uintptr_t get_tss_pointer() const { return m_tss_stack_pointer; }
+              [[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }
+
+              void save_sse_state();
+              void restore_sse_state();
 
 
         };
 
         /**
          * @class Process
-         * @brief A process that can be scheduled by the Scheduler
+         * @brief A process that can be scheduled by the Scheduler, wraps & manages threads as well as its own address space and resources.
          */
         class Process
         {
@@ -74,28 +83,26 @@ namespace MaxOS
               common::Vector<uint16_t> m_resource_ids;
               common::Vector<Thread*> m_threads;
 
-              memory::VirtualMemoryManager* m_virtual_memory_manager;
-              uint64_t m_pid;
+              uint64_t m_pid = 0;
 
             public:
-                Process(string name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
-                Process(string name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
+                Process(const string& name, bool is_kernel = false);
+                Process(const string& name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
+                Process(const string& name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
                 ~Process();
 
-                void set_up();
-
-                common::Vector<Thread*> get_threads();
+                common::Vector<Thread*> threads();
                 void add_thread(Thread* thread);
                 void remove_thread(uint64_t tid);
 
                 void set_pid(uint64_t pid);
-                uint64_t get_pid();
-                uint64_t get_total_ticks();
+                uint64_t pid() const;
+                uint64_t total_ticks();
 
                 bool is_kernel;
 
                 string name;
-                memory::MemoryManager* memory_manager;
+                memory::MemoryManager* memory_manager = nullptr;
 
 
         };

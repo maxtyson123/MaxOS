@@ -13,28 +13,27 @@ using namespace MaxOS::hardwarecommunication;
 
 ///__Handler__
 
-MouseEventHandler::MouseEventHandler() {
-}
+MouseEventHandler::MouseEventHandler() = default;
 
 /**
  * @brief Handles the triggered event and calls the appropriate function
- * @param event The event that was triggered
  *
+ * @param event The event that was triggered
  * @return The event that was triggered with the modified data
  */
 Event<MouseEvents>* MouseEventHandler::on_event(Event<MouseEvents> *event) {
     switch (event->type){
 
-        case MOUSE_MOVE:
+        case MouseEvents::MOVE:
           this->on_mouse_move_event(((MouseMoveEvent *)event)->x,
                                     ((MouseMoveEvent *)event)->y);
             break;
 
-        case MOUSE_DOWN:
+        case MouseEvents::DOWN:
           this->on_mouse_down_event(((MouseDownEvent *)event)->button);
             break;
 
-        case MOUSE_UP:
+      case MouseEvents::UP:
           this->on_mouse_up_event(((MouseUpEvent *)event)->button);
             break;
 
@@ -72,22 +71,18 @@ void MouseEventHandler::on_mouse_move_event(int8_t, int8_t){
 
 }
 
-MouseEventHandler::~MouseEventHandler() {
-
-}
+MouseEventHandler::~MouseEventHandler() = default;
 
 ///__Driver__
 
-MouseDriver::MouseDriver(InterruptManager* manager)
-: InterruptHandler(0x2C, manager),
+MouseDriver::MouseDriver()
+: InterruptHandler(0x2C, 0xC, 0x28),
   data_port(0x60),
   command_port(0x64)
 {
 
 }
-MouseDriver::~MouseDriver(){
-
-}
+MouseDriver::~MouseDriver()= default;
 
 /**
  * @brief activate the mouse
@@ -111,15 +106,10 @@ void MouseDriver::activate() {
   command_port.write(0xD4);
   data_port.write(0xF4);
   data_port.read();
-
-
-
-
 }
 
 /**
  * @brief Handle the mouse interrupt
-
  */
 void MouseDriver::handle_interrupt(){
 
@@ -163,40 +153,34 @@ void MouseDriver::handle_interrupt(){
  *
  * @return The name of the device
  */
-string MouseDriver::get_device_name() {
+string MouseDriver::device_name() {
     return "Mouse";
 }
 
 ///__Events__
 
 MouseUpEvent::MouseUpEvent(uint8_t button)
-: Event<MouseEvents>(MouseEvents::MOUSE_UP),
+: Event<MouseEvents>(MouseEvents::UP),
   button(button)
 {
 
 }
 
-MouseUpEvent::~MouseUpEvent() {
-
-}
+MouseUpEvent::~MouseUpEvent() = default;
 
 MouseDownEvent::MouseDownEvent(uint8_t button)
-: Event<MouseEvents>(MouseEvents::MOUSE_DOWN),
+: Event<MouseEvents>(MouseEvents::DOWN),
   button(button)
 {
 }
 
-MouseDownEvent::~MouseDownEvent() {
-
-}
+MouseDownEvent::~MouseDownEvent() = default;
 
 MouseMoveEvent::MouseMoveEvent(int8_t x, int8_t y)
-: Event<MouseEvents>(MouseEvents::MOUSE_MOVE),
+: Event<MouseEvents>(MouseEvents::MOVE),
   x(x),
   y(y)
 {
 }
 
-MouseMoveEvent::~MouseMoveEvent() {
-
-}
+MouseMoveEvent::~MouseMoveEvent() = default;

@@ -4,7 +4,7 @@
 #include <hardwarecommunication/pci.h>
 #include <drivers/ethernet/amd_am79c973.h>
 #include <drivers/ethernet/intel_i217.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 
 using namespace MaxOS;
@@ -17,19 +17,15 @@ using namespace MaxOS::memory;
 
 ///__DESCRIPTOR___
 
-PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() {
+PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() = default;
 
-}
-
-PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor() {
-
-}
+PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor() = default;
 
 /**
  * @brief Get the type of the device
  * @return Type of the device as a string (or Unknown if the type is not known)
  */
-string PeripheralComponentInterconnectDeviceDescriptor::get_type() {
+string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
     switch (class_id)
     {
         case 0x00: return (subclass_id == 0x01) ? "VGA" : "Legacy";
@@ -83,11 +79,10 @@ PeripheralComponentInterconnectController::PeripheralComponentInterconnectContro
   m_command_port(0xCF8)
 {
 
-}
-
-PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() {
 
 }
+
+PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() = default;
 
 /**
  * @brief read data from the PCI Controller
@@ -156,7 +151,7 @@ bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bu
  * @param interrupt_manager Interrupt manager
  * @return Driver for the device
  */
-void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler, hardwarecommunication::InterruptManager *interrupt_manager)
+void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler *handler)
 {
     for (int bus = 0; bus < 8; ++bus) {
         for (int device = 0; device < 32; ++device) {
@@ -174,24 +169,24 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 // Get port number
                 for(int barNum = 5; barNum >= 0; barNum--){
                     BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
-                    if(bar.address && (bar.type == InputOutput))
-                        deviceDescriptor.port_base = (uint32_t)bar.address;
+                    if(bar.address && (bar.type == BaseAddressRegisterType::InputOutput))
+                        deviceDescriptor.port_base = (uint64_t )bar.address;
                 }
 
                 // write to the debug stream
-                _kprintf("DEVICE FOUND: %s - ", deviceDescriptor.get_type().c_str());
+                Logger::DEBUG() << "DEVICE FOUND: " << deviceDescriptor.get_type() << " - ";
 
                 // Select the driver and print information about the device
-                Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
+                Driver* driver = get_driver(deviceDescriptor);
                 if(driver != nullptr){
                   handler->on_driver_selected(driver);
-                  _kprintf("%h %s %s", driver->get_vendor_name().c_str(), driver->get_device_name().c_str());
+                  Logger::Out() << driver->vendor_name() << " " << driver->device_name();
                 }else{
-                  list_known_deivce(deviceDescriptor);
+                  list_known_device(deviceDescriptor);
                 }
 
                 // New line
-                _kprintf("%h\n");
+                Logger::Out() << "\n";
             }
         }
     }
@@ -230,24 +225,19 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  *
  * @param dev Device descriptor
  * @param interrupt_manager Interrupt manager
- * @return Driver for the device, 0 if there is no driver
+ * @return Driver for the device, null pointer if there is no driver
  */
-Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager*interrupt_manager) {
+Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev) {
 
-    // Dont use new here, manually allocate memory instead
-
-    Driver* driver = 0;
     switch (dev.vendor_id)
     {
         case 0x1022:    //AMD
         {
             switch (dev.device_id)
             {
-                case 0x2000:    //am79c971
+                case 0x2000:
                 {
-                    amd_am79c973* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
-                    new (result) amd_am79c973(&dev, interrupt_manager);
-                    return result;
+                    return new AMD_AM79C973(&dev);
 
                 }
                 default:
@@ -261,9 +251,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x100E: //i217 (Ethernet Controller)
                 {
-                    intel_i217* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
-                    new (result) intel_i217(&dev, interrupt_manager);
-                    return result;
+                    return new intel_i217(&dev);
                 }
                 default:
                     break;
@@ -282,32 +270,30 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
             {
                 case 0x00:  //VGA
                 {
-                    VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
-                    new (result) VideoGraphicsArray();
-                    return result;
+                    return new VideoGraphicsArray();
                 }
             }
             break;
         }
     }
 
-    return driver;
+    return nullptr;
 }
 
 
-void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComponentInterconnectDeviceDescriptor dev) {
+void PeripheralComponentInterconnectController::list_known_device(const PeripheralComponentInterconnectDeviceDescriptor& dev) {
     switch (dev.vendor_id)
     {
         case 0x1022:
         {
             // The vendor is AMD
-            _kprintf("%hAMD ");
+            Logger::Out() << "AMD ";
 
             // List the device
             switch (dev.device_id)
             {
                 default:
-                  _kprintf("%h0x%x", dev.device_id);
+                  Logger::Out() << "0x%x" << dev.device_id;
                   break;
             }
             break;
@@ -316,19 +302,19 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x106B:
         {
             // The vendor is Apple
-            _kprintf("%hApple ");
+            Logger::Out() << "Apple ";
 
             // List the device
             switch (dev.device_id)
             {
                 case 0x003F:
                 {
-                  _kprintf("%hKeyLargo/Intrepid USB");
+                  Logger::Out() << "KeyLargo/Intrepid USB";
                   break;
                 }
 
                 default:
-                  _kprintf("%h0x%x", dev.device_id);
+                  Logger::Out() << "0x%x" << dev.device_id;
                   break;
             }
             break;
@@ -337,7 +323,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 1234:
         {
             // The vendor is QEMU
-          _kprintf("%hQEMU ");
+          Logger::Out() << "QEMU ";
 
             // List the device
             switch (dev.device_id)
@@ -345,7 +331,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
 
                 case 0x1111:
                 {
-                  _kprintf("%hVirtual Video Controller");
+                  Logger::Out() << "Virtual Video Controller";
                   break;
                 }
             }
@@ -355,7 +341,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x8086:
         {
             // The vendor is Intel
-            _kprintf("%hIntel ");
+            Logger::Out() << "Intel ";
 
             // List the device
             switch (dev.device_id)
@@ -363,44 +349,44 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
 
                 case 0x1237:
                 {
-                  _kprintf("%h440FX");
+                  Logger::Out() << "440FX";
                   break;
                 }
 
                 case 0x2415:
                 {
-                  _kprintf("%hAC'97");
+                  Logger::Out() << "AC'97";
                   break;
                 }
 
                 case 0x7000:
                 {
-                  _kprintf("%hPIIX3");
+                  Logger::Out() << "PIIX3";
                   break;
 
                 }
 
                 case 0x7010:
                 {
-                  _kprintf("%hPIIX4");
+                  Logger::Out() << "PIIX4";
                   break;
 
                 }
 
                 case 0x7111:
                 {
-                  _kprintf("%hPIIX3 ACPI");
+                  Logger::Out() << "PIIX3 ACPI";
                   break;
                 }
 
                 case 0x7113:
                 {
-                  _kprintf("%hPIIX4 ACPI");
+                  Logger::Out() << "PIIX4 ACPI";
                   break;
                 }
 
                 default:
-                    _kprintf("%h0x%x", dev.device_id);
+                    Logger::Out() << "0x%x" << dev.device_id;
                     break;
 
             }
@@ -410,26 +396,27 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
         case 0x80EE: {
 
             // The vendor is VirtualBox
-            _kprintf("%hVirtualBox ");
+            Logger::Out() << "VirtualBox ";
 
             // List the device
             switch (dev.device_id) {
 
                 case 0xBEEF: {
-                  _kprintf("%hGraphics Adapter");
+                  Logger::Out() << "Graphics Adapter";
                   break;
                 }
 
                 case 0xCAFE: {
-                  _kprintf("%hGuest Service");
+                  Logger::Out() << "Guest Service";
                   break;
                 }
             }
             break;
         }
 
-        default:    // Unknown
-          _kprintf("%hUnknown (0x%x:0x%x)", dev.vendor_id, dev.device_id);
+        // Unknown
+        default:
+          Logger::Out() << "Unknown (0x" << dev.vendor_id << ":0x" << dev.device_id << ")";
           break;
 
     }
@@ -446,7 +433,7 @@ void PeripheralComponentInterconnectController::list_known_deivce(PeripheralComp
  */
 BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
-    BaseAddressRegister result;
+    BaseAddressRegister result{};
 
     // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
     uint32_t headerType = read(bus, device, function, 0x0E);
@@ -454,12 +441,12 @@ BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_
         return result;
 
     // read the base address register
-    uint32_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
-    result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;
+    uint64_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
+    result.type = (bar_value & 0x1) ? BaseAddressRegisterType::InputOutput : BaseAddressRegisterType::MemoryMapped;
     result.address = (uint8_t*) (bar_value & ~0xF);
 
     // read the size of the base address register
-    write(bus, device, function, 0x10 + 4 * bar, 0xFFFFFFF0 | result.type);
+    write(bus, device, function, 0x10 + 4 * bar, 0xFFFFFFF0 | (int)result.type);
     result.size = read(bus, device, function, 0x10 + 4 * bar);
     result.size = (~result.size | 0xF) + 1;
 

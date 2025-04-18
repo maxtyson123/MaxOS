@@ -26,7 +26,7 @@ namespace MaxOS {
             class VideoElectronicsStandardsAssociation : public VideoDriver {
 
                 private:
-                    bool init();
+                    static bool init();
 
                 protected:
                     bool internal_set_mode(uint32_t width,  uint32_t height,  uint32_t) final;
@@ -48,8 +48,8 @@ namespace MaxOS {
 
                     bool supports_mode( uint32_t width,  uint32_t height,  uint32_t) final;
 
-                    string get_vendor_name() final;
-                    string get_device_name() final;
+                    string vendor_name() final;
+                    string device_name() final;
 
             };
 

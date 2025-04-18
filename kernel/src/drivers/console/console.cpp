@@ -3,7 +3,6 @@
 //
 
 #include <drivers/console/console.h>
-#include <common/kprint.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -12,13 +11,9 @@ using namespace MaxOS::drivers::console;
 
 ///____ Console ____
 
-Console::Console() {
+Console::Console() = default;
 
-}
-
-Console::~Console() {
-
-}
+Console::~Console() = default;
 
 /**
  * @brief Get the width of the console in characters
@@ -89,7 +84,7 @@ char Console::get_character(uint16_t, uint16_t) {
  * @return The background color of the character
  */
 ConsoleColour Console::get_foreground_color(uint16_t, uint16_t) {
-    return Green;
+    return ConsoleColour::Green;
 }
 
 /**
@@ -100,7 +95,7 @@ ConsoleColour Console::get_foreground_color(uint16_t, uint16_t) {
  * @return The background color of the character
  */
 ConsoleColour Console::get_background_color(uint16_t, uint16_t) {
-    return Green;
+    return ConsoleColour::Green;
 }
 
 /**
@@ -163,10 +158,10 @@ void Console::scroll_up() {
 void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
     // For each line in the area to scroll (except the last line)
-    for(uint16_t y = top; y < top+height-1; y++){
+    for(uint32_t y = top; y < top+height-1; y++){
 
         // For each character in the line
-        for(uint16_t x = left; x < left+width; x++) {
+        for(uint32_t x = left; x < left+width; x++) {
 
             // Put the character from the line below
             put_character(x, y, get_character(x, y + 1),
@@ -262,9 +257,7 @@ ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t
 }
 
 
-ConsoleArea::~ConsoleArea() {
-
-}
+ConsoleArea::~ConsoleArea() = default;
 
 /**
  * @brief Return the width of the console area
@@ -403,6 +396,7 @@ void ConsoleArea::scroll_up() {
 
 /**
  * @brief Scroll an area of the console up by 1 line
+ *
  * @param left The left coordinate of the area to scroll
  * @param top The top coordinate of the area to scroll
  * @param width The m_width of the area to scroll
@@ -440,20 +434,9 @@ void ConsoleStream::write_char(char c) {
     uint16_t spaces = 0;
 
     // If the character placement is more than the width of the console go on a new line
-    if(m_cursor_x >= m_console->width()) {
-
-        // Go to the start of the next line
-        m_cursor_x = 0;
-
-        // Increment the y coordinate but if it is more than the height of the console scroll the console
-        if(++m_cursor_y >= m_console->height()){
-
-            // Scroll the console
-            m_console->scroll_up();
-
-            // Decrement the y coordinate
-            m_cursor_y = m_console->height()-1;
-        }
+    if(m_cursor_x >= m_console->width() && c != '\n'){
+        lineFeed();
+        write("             ");
     }
 
     // Check if the character is an ANSI escape code

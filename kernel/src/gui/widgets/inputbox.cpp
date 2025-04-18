@@ -13,17 +13,13 @@ using namespace MaxOS::drivers::peripherals;
 
 /// ___ Event Handlers ___ ///
 
-InputBoxEventHandler::InputBoxEventHandler() {
+InputBoxEventHandler::InputBoxEventHandler() = default;
 
-}
-
-InputBoxEventHandler::~InputBoxEventHandler() {
-
-}
+InputBoxEventHandler::~InputBoxEventHandler() = default;
 
 Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents> *event) {
     switch (event->type) {
-        case INPUTBOX_TEXT_CHANGED:
+        case InputBoxEvents::TEXT_CHANGED:
             on_input_box_text_changed(((InputBoxTextChangedEvent *)event)->new_text);
             break;
     }
@@ -47,7 +43,7 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 
 }
 
-InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, string text)
+InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
   foreground_colour(Colour(0x00, 0x00, 0x00)),
@@ -60,9 +56,7 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, s
 
 }
 
-InputBox::~InputBox() {
-
-}
+InputBox::~InputBox() = default;
 
 void InputBox::draw(GraphicsContext *gc, Rectangle<int32_t> &area) {
 
@@ -180,7 +174,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
         {
 
             // If the key is a printable character, add it to the text
-            if(31 < keyDownCode && keyDownCode < 127)
+            if(31 < (int)keyDownCode && (int)keyDownCode < 127)
             {
                 uint32_t length = cursor_position;
 
@@ -206,7 +200,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
                 cursor_position++;
             }else{
 
-                // Dont want to redraw the widget if nothing has changed
+                // Don't want to redraw the widget if nothing has changed
                 return;
             }
             break;
@@ -222,7 +216,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 
 }
 
-void InputBox::update_text(string new_text) {
+void InputBox::update_text(const string& new_text) {
 
     m_widget_text.copy(new_text);
     cursor_position = m_widget_text.length();
@@ -235,18 +229,16 @@ void InputBox::update_text(string new_text) {
 
 }
 
-string InputBox::get_text() {
+string InputBox::text() {
     return m_widget_text;
 }
 
 /// ___ Events ___ ///
 
-InputBoxTextChangedEvent::InputBoxTextChangedEvent(string new_text)
-: Event(INPUTBOX_TEXT_CHANGED),
+InputBoxTextChangedEvent::InputBoxTextChangedEvent(const string& new_text)
+: Event(InputBoxEvents::TEXT_CHANGED),
   new_text(new_text)
 {
 }
 
-InputBoxTextChangedEvent::~InputBoxTextChangedEvent() {
-
-}
+InputBoxTextChangedEvent::~InputBoxTextChangedEvent() = default;

@@ -22,11 +22,9 @@ using namespace memory;
 
 ///__DRIVER___
 
-intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor, InterruptManager *interruptManager, OutputStream* intelNetMessageStream)
-: EthernetDriver(intelNetMessageStream),
-  InterruptHandler(deviceDescriptor->interrupt +
-                           interruptManager->hardware_interrupt_offset(), interruptManager)
-
+intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor)
+: EthernetDriver(nullptr),
+  InterruptHandler(0x20 + deviceDescriptor->interrupt)
 {
 
     //Set the registers
@@ -82,19 +80,17 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 
 }
 
-intel_i217::~intel_i217() {
-
-}
+intel_i217::~intel_i217() = default;
 
 
-void intel_i217::Write(uint16_t address, uint32_t data) {
+void intel_i217::Write(uint16_t address, uint32_t data) const {
 
-    //Note: These Ports/MemIO cant be init in the constructor like they normaly would as it depends wether the device is using IO or MemIO, and checking that in every function would be messy
+    //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
 
     if(bar_type == 0) {                                             // If the base address register is memory mapped
 
-        MemIO32Bit dataMem(memBase + address);              // Create a 32 bit memory class at the address
-        dataMem.write(data);                                       // write the data to the memory adress
+        MemIO32Bit dataMem(memBase + address);              // Create a 32-bit memory class at the address
+        dataMem.write(data);                                       // write the data to the memory address
 
     } else {
 
@@ -109,13 +105,13 @@ void intel_i217::Write(uint16_t address, uint32_t data) {
 
 }
 
-uint32_t intel_i217::Read(uint16_t address) {
+uint32_t intel_i217::Read(uint16_t address) const {
 
-    //Note: These Ports/MemIO cant be init in the constructor like they normaly would as it depends wether the device is using IO or MemIO, and checking that in every function would be messy
+    //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
     if(bar_type == 0) {                                             // If the base address register is memory mapped
 
-        MemIO32Bit dataMem(memBase + address);               // Create a 32 bit memory class at the address
-        return dataMem.read();                                      // read the data from the memory adress
+        MemIO32Bit dataMem(memBase + address);               // Create a 32-bit memory class at the address
+        return dataMem.read();                                      // read the data from the memory address
 
     } else{
 
@@ -134,7 +130,7 @@ bool intel_i217::detectEEProm() {
     uint32_t val = 0;                                   // The value to be returned
     Write(epromRegister, 0x1);              // Set the register to read the EEProm
 
-    for(int i = 0; i < 1000 && ! epromPresent; i++)     //Loop 1000 times or until the EEProm is detected
+    for(int i = 0; i < 1000 && !epromPresent; i++)     //Loop 1000 times or until the EEProm is detected
     {
         val = Read( 0x0014);                    // read the register
 
@@ -185,8 +181,8 @@ bool intel_i217::readMACAddress() {
     {
 
 
-        uint8_t * mem_base_mac_8 = (uint8_t *) (memBase+0x5400);                   //Get the base address of the MAC address
-        uint32_t * mem_base_mac_32 = (uint32_t *) (memBase+0x5400);                //Get the base address of the MAC address
+        auto * mem_base_mac_8 = (uint8_t *) (memBase+0x5400);                   //Get the base address of the MAC address
+        auto * mem_base_mac_32 = (uint32_t *) (memBase+0x5400);                //Get the base address of the MAC address
 
         if ( mem_base_mac_32[0] != 0 )
         {
@@ -217,11 +213,11 @@ void intel_i217::receiveInit() {
     Write(sendDescriptorLowRegister, (uint32_t)((uint64_t)ptr >> 32) );
     Write(sendDescriptorHighRegister, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
 
-    //write the recieve descriptor list address to the register
+    //write the receive descriptor list address to the register
     Write(receiveDescriptorLowRegister, (uint64_t)ptr);
     Write(receiveDescriptorHighRegister, 0);
 
-    //Set the recieve descriptor list length
+    //Set the receive descriptor list length
     Write(receiveDescriptorLengthRegister, 32 * 16);
 
 
@@ -330,7 +326,7 @@ void intel_i217::FetchDataReceived() {
 
     while((receiveDsrctrs[currentReceiveBuffer] -> status & 0x1))
     {
-        uint8_t *buffer = (uint8_t *)receiveDsrctrs[currentReceiveBuffer] -> bufferAddress;
+        auto *buffer = (uint8_t *)receiveDsrctrs[currentReceiveBuffer] -> bufferAddress;
         uint16_t size = receiveDsrctrs[currentReceiveBuffer] -> length;
 
         if(size > 64){          // If the size is the size of ethernet 2 frame
@@ -392,11 +388,11 @@ void intel_i217::deactivate() {
     Driver::deactivate();
 }
 
-string intel_i217::get_vendor_name() {
+string intel_i217::vendor_name() {
     return "Intel";
 }
 
-string intel_i217::get_device_name() {
+string intel_i217::device_name() {
     return "E1000 (i217)";
 }
 

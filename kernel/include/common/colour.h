@@ -35,28 +35,28 @@ namespace MaxOS{
 
       enum ANSIColour
       {
-        FG_Black   = 0,
-        FG_Red     = 1,
-        FG_Green   = 2,
-        FG_Yellow  = 3,
-        FG_Blue    = 4,
-        FG_Magenta = 5,
-        FG_Cyan    = 6,
-        FG_White   = 7,
-        BG_Black   = 8,
-        BG_Red     = 9,
-        BG_Green   = 10,
-        BG_Yellow  = 11,
-        BG_Blue    = 12,
-        BG_Magenta = 13,
-        BG_Cyan    = 14,
-        BG_White   = 15,
-        Reset      = 16
+        FG_Black,
+        FG_Red,
+        FG_Green,
+        FG_Yellow,
+        FG_Blue,
+        FG_Magenta,
+        FG_Cyan,
+        FG_White,
+        BG_Black,
+        BG_Red,
+        BG_Green,
+        BG_Yellow,
+        BG_Blue,
+        BG_Magenta,
+        BG_Cyan,
+        BG_White,
+        Reset,
       };
 
-      enum ConsoleColour
+      enum class ConsoleColour
       {
-        Unititialised = 0xFF,
+        Uninitialised = 0xFF,
         Black        = 0x00,
         Blue         = 0x01,
         Green        = 0x02,
@@ -77,7 +77,7 @@ namespace MaxOS{
 
         /**
          * @class Colour
-         * @brief Stores the red, green, blue and alpha values of a colour
+         * @brief Stores the red, green, blue and alpha values of a colour. Can be parsed from a hex string, an ANSI string or a ConsoleColour
          */
         class Colour
         {
@@ -102,7 +102,7 @@ namespace MaxOS{
 
                 ~Colour();
 
-                ConsoleColour to_console_colour() const;
+                [[nodiscard]] ConsoleColour to_console_colour() const;
         };
 
     }

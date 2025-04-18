@@ -20,16 +20,18 @@ namespace MaxOS{
          */
         class Font{
             protected:
-                bool m_is_8_by_8;
-                uint8_t m_font8x8[2048];
+                bool m_is_8_by_8 = { true };
+                uint8_t m_font8x8[2048] = {0};
 
             public:
 
                 // Font takes the data
-                Font(uint8_t* font_data);
+                Font(const uint8_t* font_data);
                 ~Font();
 
-                uint16_t font_size { 8 };
+                static const uint8_t padding = 3;
+                static const uint16_t font_height = 8 + 2 * padding;
+                static const uint16_t font_width = 8;
 
                 bool is_bold { false };
                 bool is_italic { false };
@@ -39,8 +41,8 @@ namespace MaxOS{
                 virtual void draw_text(int32_t x, int32_t y, common::Colour foreground_colour, common::Colour background_colour, common::GraphicsContext *context, string text);
                 virtual void draw_text(int32_t x, int32_t y, common::Colour foreground_colour, common::Colour background_colour, common::GraphicsContext *context, string text, common::Rectangle<int32_t> limitArea);
 
-                virtual uint32_t get_text_height(string);
-                virtual uint32_t get_text_width(string);
+                virtual int32_t get_text_height(string);
+                virtual int32_t get_text_width(string);
 
         };
     }

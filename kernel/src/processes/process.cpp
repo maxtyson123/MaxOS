@@ -2,7 +2,7 @@
 // Created by 98max on 25/02/2025.
 //
 #include <processes/process.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 #include <processes/scheduler.h>    //TODO: This is a circular dependency, need to fix, make the scheduler handle that sorta stuff
 
 using namespace MaxOS;
@@ -29,7 +29,7 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     if(parent -> is_kernel) {
 
         // Use the kernel stack
-        m_tss_stack_pointer = CPU::get_instance() -> tss.rsp0;
+        m_tss_stack_pointer = CPU::tss.rsp0;
 
     } else{
         m_tss_stack_pointer = (uintptr_t)MemoryManager::kmalloc(s_stack_size) + s_stack_size;
@@ -49,7 +49,7 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     execution_state->rsp = (uint64_t)m_stack_pointer;
     execution_state->rbp = 0;
 
-    // Copy the args into user space using memcopy
+    // Copy the args into userspace
     uint64_t  argc = arg_amount;
     void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
     memcpy(argv, args, arg_amount * sizeof(void*));
@@ -60,17 +60,15 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     //execution_state->rdx = (uint64_t)env_args;
 
     // Begin scheduling this thread
-    parent_pid = parent->get_pid();
-    tid = Scheduler::get_system_scheduler() -> add_thread(this);
+    parent_pid = parent->pid();
+    tid = Scheduler::system_scheduler() -> add_thread(this);
 
 }
 
 /**
  * @brief Destructor for the Thread class
  */
-Thread::~Thread() {
-
-}
+Thread::~Thread() = default;
 
 /**
  * @brief Sleeps the thread for a certain amount of time (Yields the thread)
@@ -82,31 +80,76 @@ cpu_status_t* Thread::sleep(size_t milliseconds) {
 
   // Update the vars
   thread_state = ThreadState::SLEEPING;
-  wakeup_time = Scheduler::get_system_scheduler() -> get_ticks() + milliseconds;
+  wakeup_time = Scheduler::system_scheduler() -> ticks() + milliseconds;
 
   // Yield
-  return Scheduler::get_system_scheduler() -> yield();
+  return Scheduler::system_scheduler() -> yield();
 
 }
 
 /**
+ * @brief Saves the SSE, x87 FPU, and MMX states from memory to the thread
+ */
+void Thread::save_sse_state() {
+
+  // Ensure the state saving is enabled
+  if(!CPU::s_xsave)
+    return;
+
+  // Save the state
+  asm volatile("fxsave %0" : "=m" (m_sse_save_region));
+
+}
+
+/**
+ * @brief Restores the SSE, x87 FPU, and MMX states from the thread to memory
+ */
+void Thread::restore_sse_state() {
+
+  // Ensure the state saving is enabled
+  if(!CPU::s_xsave)
+    return;
+
+  // Restore the state
+  asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
+
+}
+
+/**
+ * @brief Base Constructor for the Process
+ *
+ * @param p_name The name of the process
+ * @param is_kernel If the process is a kernel process
+ */
+Process::Process(const string& p_name, bool is_kernel)
+: is_kernel(is_kernel),
+  name(p_name)
+{
+  // Pause interrupts while creating the process
+  asm("cli");
+
+  // Basic setup
+  m_pid = Scheduler::system_scheduler() ->add_process(this);
+
+  // If it is a kernel process then don't need a new memory manager
+  memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager :  new MemoryManager();
+}
+
+/**
  * @brief Constructor for the Process class (from a function)
- * @param name The name of the process
+ *
+ * @param p_name The name of the process
  * @param _entry_point The entry point of the process
  * @param args The arguments to pass to the process
  * @param arg_amount The amount of arguments
  * @param is_kernel If the process is a kernel process
  */
-Process::Process(string p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
-: is_kernel(is_kernel),
-  name(p_name)
+Process::Process(const string& p_name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel)
+: Process(p_name, is_kernel)
 {
 
-  // Basic setup
-  set_up();
-
   // Create the main thread
-  Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
+  auto* main_thread = new Thread(_entry_point, args, arg_amount, this);
 
   // Add the thread
   add_thread(main_thread);
@@ -122,24 +165,17 @@ Process::Process(string p_name, void (*_entry_point)(void *), void *args, int ar
  * @param elf  The elf file to load the process from
  * @param is_kernel  If the process is a kernel process
  */
-Process::Process(string p_name, void *args, int arg_amount, Elf64* elf, bool is_kernel)
-: is_kernel(is_kernel),
-  name(p_name)
+Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, bool is_kernel)
+: Process(p_name, is_kernel)
 {
 
-  // Basic setup
-  set_up();
-
-  // Load the elf
-  elf -> load();
 
   // Get the entry point
-  void (*entry_point)(void *) = (void (*)(void *))elf -> get_header() -> entry;
+  elf -> load();
+  auto* entry_point = (void (*)(void *))elf -> header() -> entry;
 
   // Create the main thread
-  Thread* main_thread = new Thread(entry_point, args, arg_amount, this);
-
-  // Add the thread
+  auto* main_thread = new Thread(entry_point, args, arg_amount, this);
   add_thread(main_thread);
 
   // Free the elf
@@ -152,22 +188,23 @@ Process::Process(string p_name, void *args, int arg_amount, Elf64* elf, bool is_
  */
 Process::~Process() {
 
-  _kprintf("Cleaning up process %s\n", name.c_str());
+  uint64_t pages = PhysicalMemoryManager::s_current_manager -> memory_used();
 
   // Free the threads
   for (auto thread : m_threads)
       delete thread;
 
   // Free the memory manager (only if it was created)
-  if(!is_kernel){
+  if(!is_kernel)
       delete memory_manager;
-      delete m_virtual_memory_manager;
-  }
 
+  // Log the cleanup
+  Logger::DEBUG() << "Process " << name.c_str() << " cleaned up, memory before: " << pages << " bytes, after cleanup: " << PhysicalMemoryManager::s_current_manager -> memory_used() << " bytes\n";
 }
 
 /**
  * @brief Adds a thread to the process
+ *
  * @param thread The thread to add
  */
 void Process::add_thread(Thread *thread) {
@@ -188,12 +225,13 @@ void Process::add_thread(Thread *thread) {
 
 /**
  * @brief Finds a thread by its tid
+ *
  * @param tid
  */
 void Process::remove_thread(uint64_t tid) {
 
   // Find the thread
-  for (uint16_t i = 0; i < m_threads.size(); i++) {
+  for (uint32_t i = 0; i < m_threads.size(); i++) {
       if (m_threads[i]->tid == tid) {
 
         // Get the thread
@@ -208,7 +246,7 @@ void Process::remove_thread(uint64_t tid) {
 
         // If there are no more threads then delete the process (done on the scheduler side)
         if (m_threads.empty())
-          Scheduler::get_system_scheduler() -> remove_process(this);
+          Scheduler::system_scheduler() -> remove_process(this);
 
         return;
     }
@@ -217,6 +255,7 @@ void Process::remove_thread(uint64_t tid) {
 
 /**
  * @brief Sets the pid of the process once added to the queue
+ *
  * @param pid
  */
 void Process::set_pid(uint64_t pid) {
@@ -238,7 +277,7 @@ void Process::set_pid(uint64_t pid) {
 /**
  * @brief Gets the threads of the process
  */
-Vector<Thread*> Process::get_threads() {
+Vector<Thread*> Process::threads() {
 
   // Return the threads
   return m_threads;
@@ -247,38 +286,19 @@ Vector<Thread*> Process::get_threads() {
 
 /**
  * @brief Gets the pid of the process
+ *
  * @return The pid of the process
  */
-uint64_t Process::get_pid() {
+uint64_t Process::pid() const {
   return m_pid;
 }
 
 /**
- * @brief Generic setup function for the process
- */
-void Process::set_up() {
-
-  // Pause interrupts while creating the process
-  asm("cli");
-
-  // Basic setup
-  m_pid = Scheduler::get_system_scheduler() ->add_process(this);
-
-  // If it is a kernel process then don't need a new memory manager
-  if(!is_kernel){
-    m_virtual_memory_manager = new VirtualMemoryManager(false);
-    memory_manager = new MemoryManager(m_virtual_memory_manager);
-  }else{
-    memory_manager = MemoryManager::s_kernel_memory_manager;
-  }
-
-}
-
-/**
  * @brief Gets the total ticks of the threads in the process (not this does not include any past killed threads)
+ *
  * @return The total ticks of the threads in the process
  */
-uint64_t Process::get_total_ticks() {
+uint64_t Process::total_ticks() {
 
   uint64_t total_ticks = 0;
   for (auto thread : m_threads)

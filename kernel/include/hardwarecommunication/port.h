@@ -43,7 +43,7 @@ namespace MaxOS {
                 Port8BitSlow(uint16_t port_number);
                 ~Port8BitSlow();
 
-                virtual void write(uint8_t data) final;
+                void write(uint8_t data) final;
         };
 
         /**

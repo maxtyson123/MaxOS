@@ -3,7 +3,7 @@
 //
 
 #include <system/syscalls.h>
-#include <common/kprint.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -13,11 +13,12 @@ using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
 
-SyscallManager::SyscallManager(InterruptManager*interrupt_manager)
-:    InterruptHandler(0x80, interrupt_manager)
+SyscallManager::SyscallManager()
+:    InterruptHandler(0x80)
 {
 
   // Clear the args
+  Logger::INFO() << "Setting up Syscalls \n";
   m_current_args = new syscall_args_t;
 
   // Register the handlers
@@ -42,7 +43,12 @@ SyscallManager::~SyscallManager()
 
 }
 
-
+/**
+ * @brief Loads the args from the registers and delegates the syscall to the relevant handler if defined
+ *
+ * @param status The cpu state
+ * @return The cpu state (may be modified with return value in RAX or a new state by the handler)
+ */
 cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
 
   // Get the args from the cpu state
@@ -57,10 +63,10 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
 
   // Call the handler
   uint64_t syscall = status -> rax;
-  if(m_syscall_handlers[syscall] != 0)
+  if(m_syscall_handlers[syscall] != nullptr)
     m_current_args = m_syscall_handlers[syscall](m_current_args);
   else
-    _kprintf("Syscall %d not found\n", syscall);
+    Logger::ERROR() << "Syscall " << syscall << " not found\n";
 
   // If there is a specific return state, use that
   if(m_current_args -> return_state != status)
@@ -80,12 +86,23 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
   return status;
 }
 
+/**
+ * @brief Loads a syscall handler into the manager
+ *
+ * @param syscall The syscall ID number
+ * @param handler The handler to set
+ */
 void SyscallManager::set_syscall_handler(uint8_t syscall, syscall_func_t handler) {
   m_syscall_handlers[syscall] = handler;
 }
 
+/**
+ * @brief Removes a syscall handler from the manager
+ *
+ * @param syscall The syscall ID number
+ */
 void SyscallManager::remove_syscall_handler(uint8_t syscall) {
-    m_syscall_handlers[syscall] = 0;
+    m_syscall_handlers[syscall] = nullptr;
 }
 
 
@@ -102,13 +119,13 @@ system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_ar
   int exit_code = (int)args -> arg1;
 
   // Get the process if it is 0 then it is the current process
-  Process* process = pid == 0 ? Scheduler::get_current_process() : Scheduler::get_process(pid);
+  Process* process = pid == 0 ? Scheduler::current_process() : Scheduler::get_process(pid);
 
   // Close the process
-  Scheduler::get_system_scheduler() -> remove_process(process);
+  Scheduler::system_scheduler() -> remove_process(process);
 
   // Schedule the next process
-  cpu_status_t* next_process =  Scheduler::get_system_scheduler() -> schedule_next(args -> return_state);
+  cpu_status_t* next_process =  Scheduler::system_scheduler() -> schedule_next(args -> return_state);
   args -> return_state = next_process;
 
   // Done
@@ -121,9 +138,9 @@ syscall_args_t *SyscallManager::syscall_klog(syscall_args_t *args) {
 
   // If the first two characters are %h then no header
   if(message[0] == '%' && message[1] == 'h')
-    _kprintf("%s", message);
+    Logger::INFO() << message + 2;
   else
-    _kprintf("%h%s[%s:%d]%s %s", ANSI_COLOURS[FG_Blue], Scheduler::get_current_process() -> name.c_str(), Scheduler::get_current_thread() -> tid,  ANSI_COLOURS[Reset], message);
+    Logger::INFO() << ANSI_COLOURS[FG_Blue] << "(" << Scheduler::current_process() -> name.c_str() << ":" << Scheduler::current_thread() -> tid << "): " << ANSI_COLOURS[Reset] << message;
 
   return args;
 }
@@ -143,14 +160,14 @@ syscall_args_t* SyscallManager::syscall_create_shared_memory(syscall_args_t *arg
   char* name = (char*)args->arg1;
 
   // Ensure they are valid
-  if(size == 0 || name == 0)
+  if(size == 0 || name == nullptr)
     return nullptr;
 
   // Create the memory block
-  ipc_shared_memory_t* new_block = Scheduler::get_ipc() ->alloc_shared_memory(size, name);
+  SharedMemory* new_block = Scheduler::scheduler_ipc() ->alloc_shared_memory(size, name);
 
   // Load the block
-  void* virtual_address = MemoryManager::s_current_memory_manager -> get_vmm() ->load_shared_memory(new_block -> physical_address, size);
+  void* virtual_address = MemoryManager::s_current_memory_manager -> vmm() ->load_shared_memory(new_block -> physical_address(), size);
 
   // Return to the user
   args -> return_value = (uint64_t)virtual_address;
@@ -173,11 +190,11 @@ syscall_args_t * SyscallManager::syscall_open_shared_memory(syscall_args_t *args
   if(name == 0)
     return nullptr;
 
-  // Get the block (dont care if null as that is caught in the load_shared_memory function)
-  ipc_shared_memory_t* block = Scheduler::get_ipc() -> get_shared_memory((char*)name);
+  // Get the block (don't care if null as that is caught in the load_shared_memory function)
+  SharedMemory* block = Scheduler::scheduler_ipc() -> get_shared_memory((char*)name);
 
   // Load the block
-  void* virtual_address = MemoryManager::s_current_memory_manager -> get_vmm() ->load_shared_memory(block -> physical_address, block -> size);
+  void* virtual_address = MemoryManager::s_current_memory_manager -> vmm() ->load_shared_memory(block -> physical_address(), block -> size());
 
   // Return to the user
   args -> return_value = (uint64_t)virtual_address;
@@ -234,14 +251,14 @@ system::syscall_args_t* SyscallManager::syscall_create_ipc_endpoint(system::sysc
 
   // Get the name
   char* name = (char*)args -> arg0;
-  if(name == 0)
+  if(name == nullptr)
     return nullptr;
 
   // Create the endpoint
-  ipc_message_endpoint_t* endpoint = Scheduler::get_ipc() -> create_message_endpoint(name);
+  SharedMessageEndpoint* endpoint = Scheduler::scheduler_ipc() -> create_message_endpoint(name);
 
   // Return the endpoint
-  args -> return_value = (uint64_t)endpoint -> queue;
+  args -> return_value = (uint64_t)endpoint -> queue();
   return args;
 
 }
@@ -260,11 +277,11 @@ system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall
   size_t size = args -> arg2;
 
   // Validate the args
-  if(endpoint == 0 || message == 0 || size == 0)
+  if(endpoint == nullptr || message == nullptr || size == 0)
     return nullptr;
 
   // Send the message
-  Scheduler::get_ipc() -> send_message(endpoint, message, size);
+  Scheduler::scheduler_ipc() ->get_message_endpoint(endpoint) -> queue_message(message, size);
 
   // All done
   return args;
@@ -279,7 +296,7 @@ system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall
 system::syscall_args_t * SyscallManager::syscall_remove_ipc_endpoint(system::syscall_args_t *args) {
 
   // Remove the endpoint
-  Scheduler::get_ipc() -> free_message_endpoint((char*)args -> arg0);
+  Scheduler::scheduler_ipc() -> free_message_endpoint((char*)args -> arg0);
 
   // Done
   return args;
@@ -296,7 +313,7 @@ system::syscall_args_t * SyscallManager::syscall_remove_ipc_endpoint(system::sys
 system::syscall_args_t* SyscallManager::syscall_thread_yield(system::syscall_args_t *args) {
 
   // Yield
-  cpu_status_t* next_process = Scheduler::get_system_scheduler() -> yield();
+  cpu_status_t* next_process = Scheduler::system_scheduler() -> yield();
   args -> return_state = next_process;
 
   return args;
@@ -314,10 +331,10 @@ system::syscall_args_t* SyscallManager::syscall_thread_sleep(system::syscall_arg
   size_t milliseconds = args -> arg0;
 
   // Store the updated state in the thread as the scheduler will not have the updated state when switching to the next thread
-  Scheduler::get_current_thread() -> execution_state = args -> return_state;
+  Scheduler::current_thread() -> execution_state = args -> return_state;
 
   // Sleep the thread
-  cpu_status_t* next_thread = Scheduler::get_current_thread() -> sleep(milliseconds);
+  cpu_status_t* next_thread = Scheduler::current_thread() -> sleep(milliseconds);
   args -> return_state = next_thread;
 
   // Done
@@ -339,13 +356,13 @@ system::syscall_args_t* SyscallManager::syscall_thread_close(system::syscall_arg
   int exit_code = (int)args -> arg1;
 
   // Get the thread if it is 0 then it is the current thread
-  Thread* thread = tid == 0 ? Scheduler::get_current_thread() : Scheduler::get_thread(tid);
+  Thread* thread = tid == 0 ? Scheduler::current_thread() : Scheduler::get_thread(tid);
 
   // Close the thread
   Scheduler::get_process(thread -> parent_pid) -> remove_thread(tid);
 
   // Schedule the next thread
-  cpu_status_t* next_thread =  Scheduler::get_system_scheduler() -> schedule_next(args -> return_state);
+  cpu_status_t* next_thread =  Scheduler::system_scheduler() -> schedule_next(args -> return_state);
   args -> return_state = next_thread;
 
   // Done

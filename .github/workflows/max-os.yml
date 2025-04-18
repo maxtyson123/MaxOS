@@ -15,7 +15,7 @@ on:
 jobs:
   build-os:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: toolchain/cross_compiler
-          key: ${{ runner.os }}-cross_compiler_2
+          key: ${{ runner.os }}-cross_compiler_3
 
       - name: Build toolchain
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
@@ -42,9 +42,9 @@ jobs:
 
       - name: Build MaxOS (Release)
         run: |
-          cd toolchain
+          cd toolchain/post_process
           ./version.sh --force
-          cd ../
+          cd ../../
           mkdir -p cmake-build
           cd cmake-build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt

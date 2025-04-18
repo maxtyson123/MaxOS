@@ -3,19 +3,21 @@
 //
 
 #include <drivers/driver.h>
+#include <hardwarecommunication/pci.h>
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::memory;
+using namespace MaxOS::hardwarecommunication;
 
 Driver::Driver(OutputStream* driverMessageStream)
 : m_driver_message_stream(driverMessageStream) {
 
-};
+}
 
 Driver::~Driver(){
-    this ->m_driver_message_stream = 0;
-};
+    this ->m_driver_message_stream = nullptr;
+}
 
 /**
  * @brief activate the driver
@@ -52,10 +54,10 @@ uint32_t Driver::reset(){
  *
  * @param message The message to write
  */
-void Driver::error_message(string message) {
+void Driver::error_message(const string& message) const {
 
     // If there is a driver message stream write the message to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
         m_driver_message_stream-> write(message);
 
 }
@@ -65,10 +67,10 @@ void Driver::error_message(string message) {
  *
  * @param char_to_write The character to write
  */
-void Driver::error_message(char char_to_write) {
+void Driver::error_message(char char_to_write) const {
 
     // If there is a driver message stream write the character to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
       m_driver_message_stream-> write_char(char_to_write);
 
 }
@@ -79,10 +81,10 @@ void Driver::error_message(char char_to_write) {
  *
  * @param int_to_write The integer to write
  */
-void Driver::error_message(int int_to_write) {
+void Driver::error_message(int int_to_write) const {
 
     // If there is a driver message stream write the integer to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
             m_driver_message_stream-> write_int(int_to_write);
 }
 
@@ -91,10 +93,10 @@ void Driver::error_message(int int_to_write) {
  *
  * @param hex_to_write The hex to write
  */
-void Driver::error_message(uint32_t hex_to_write) {
+void Driver::error_message(uint32_t hex_to_write) const {
 
     // If there is a driver message stream write the hex to it
-    if(m_driver_message_stream != 0)
+    if(m_driver_message_stream != nullptr)
       m_driver_message_stream->write_hex(hex_to_write);
 
 }
@@ -104,7 +106,7 @@ void Driver::error_message(uint32_t hex_to_write) {
  *
  * @return The vendor name of the driver
  */
-string Driver::get_vendor_name()
+string Driver::vendor_name()
 {
     return "Generic";
 }
@@ -114,18 +116,16 @@ string Driver::get_vendor_name()
  *
  * @return The device name of the driver
  */
-string Driver::get_device_name()
+string Driver::device_name()
 {
     return "Unknown Driver";
 }
 
 DriverSelectorEventHandler::DriverSelectorEventHandler()
-{
-}
+= default;
 
 DriverSelectorEventHandler::~DriverSelectorEventHandler()
-{
-}
+= default;
 
 /**
  * @brief This function is called when a driver is selected
@@ -137,29 +137,36 @@ void DriverSelectorEventHandler::on_driver_selected(Driver*)
 }
 
 DriverSelector::DriverSelector()
-{
-}
+= default;
 
 DriverSelector::~DriverSelector()
-{
-}
+= default;
 
 /**
  * @brief Select the drivers
  */
-void DriverSelector::select_drivers(DriverSelectorEventHandler*, hardwarecommunication::InterruptManager*)
+void DriverSelector::select_drivers(DriverSelectorEventHandler*)
 {
 }
 
-DriverManager::DriverManager() {
 
+DriverManager::DriverManager()
+{
+
+  Logger::INFO() << "Setting up Driver Manager \n";
+  add_driver_selector(new PeripheralComponentInterconnectController);
+  // add_driver_selector(new UniversalSerialBusController);
 }
 
 DriverManager::~DriverManager() {
 
     // Remove any drivers that are still attached
-    while (!drivers.empty())
-       remove_driver(*drivers.begin());
+    while (!m_drivers.empty())
+       remove_driver(*m_drivers.begin());
+
+   // Free the driver selectors
+   for(auto & driver_selector : m_driver_selectors)
+       delete driver_selector;
 
 }
 
@@ -169,7 +176,7 @@ DriverManager::~DriverManager() {
  * @param driver The driver to add
  */
 void DriverManager::add_driver(Driver* driver){
-  drivers.push_back(driver);
+  m_drivers.push_back(driver);
 }
 
 /**
@@ -183,7 +190,7 @@ void DriverManager::remove_driver(Driver* driver) {
     driver -> deactivate();
 
     // Remove the driver
-    drivers.erase(driver);
+    m_drivers.erase(driver);
 
 }
 
@@ -192,4 +199,97 @@ void DriverManager::remove_driver(Driver* driver) {
  */
 void DriverManager::on_driver_selected(Driver* driver) {
   add_driver(driver);
+}
+
+/**
+ * @brief Add a driver selector to the manager
+ */
+void DriverManager::add_driver_selector(DriverSelector* driver_selector) {
+
+  // Add the driver selector
+  m_driver_selectors.push_back(driver_selector);
+
+}
+
+/**
+ * @brief Remove a driver selector from the manager
+ */
+void DriverManager::remove_driver_selector(DriverSelector* driver_selector) {
+
+  // Remove the driver selector
+  m_driver_selectors.erase(driver_selector);
+
+}
+
+/**
+ * @brief Find the drivers
+ */
+void DriverManager::find_drivers() {
+
+    Logger::INFO() << "Finding Drivers \n";
+
+    // Select the drivers
+    for(auto & driver_selector : m_driver_selectors)
+        driver_selector -> select_drivers(this);
+}
+
+/**
+ * @brief Reset all the devices
+ *
+ * @return The longest time it takes to reset a device
+ */
+uint32_t DriverManager::reset_devices() {
+
+  Logger::INFO() << "Resetting Devices \n";
+
+  uint32_t resetWaitTime = 0;
+  for(auto & driver : m_drivers)
+  {
+    // Reset the driver
+    uint32_t waitTime = driver->reset();
+
+    // If the wait time is longer than the current longest wait time, set it as the new longest wait time
+    if(waitTime > resetWaitTime)
+      resetWaitTime = waitTime;
+  }
+
+  return resetWaitTime;
+}
+
+/**
+ * @brief Initialise the drivers
+ */
+void DriverManager::initialise_drivers() {
+
+  Logger::INFO() << "Initialising Drivers \n";
+
+  // Initialise the drivers
+  for(auto& driver : m_drivers)
+      driver->initialise();
+
+}
+
+/**
+ * @brief Deactivate the drivers
+ */
+void DriverManager::deactivate_drivers() {
+
+  // Deactivate the drivers
+  for(auto & driver : m_drivers)
+    driver->deactivate();
+
+}
+
+/**
+ * @brief Activate the drivers
+ */
+void DriverManager::activate_drivers() {
+
+
+  Logger::INFO() << "Activating Drivers \n";
+
+  // Activate the drivers
+  for(auto & driver : m_drivers)
+      driver->activate();
+
 }
