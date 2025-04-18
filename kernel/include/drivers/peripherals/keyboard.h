@@ -278,7 +278,7 @@ namespace MaxOS
                     KeyboardInterpreter();
                     ~KeyboardInterpreter();
 
-                    void onKeyRead(bool, const KeyboardState&, KeyCode);
+                    void on_key_read(bool, const KeyboardState&, KeyCode);
 
             };
 

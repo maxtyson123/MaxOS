@@ -72,6 +72,13 @@ extern "C" [[noreturn]] void _start(void)
 
   // Create a message endpoint
   ipc_message_queue_t* message_queue = (ipc_message_queue_t *)make_message_queue("TestQueue");
+  if (!message_queue)
+  {
+    write("Failed to create message queue\n");
+    while (true)
+      yield();
+  }
+
   write("Message queue created: \n");
   write_hex((uint64_t)message_queue);
 

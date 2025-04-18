@@ -51,7 +51,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
     // Initialise the logger
     Logger logger;
-    SerialConsole serialConsole(&logger);
+    SerialConsole serial_console(&logger);
     Logger::INFO() << "MaxOS Booted Successfully \n";
 
     Logger::HEADER() << "Stage {1}: System Initialisation\n";
@@ -73,15 +73,15 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     AdvancedConfigurationAndPowerInterface acpi(&multiboot);
     AdvancedProgrammableInterruptController apic(&acpi);
     CPU cpu(&gdt);
-    Clock kernelClock(&apic, 1);
-    driver_manager.add_driver(&kernelClock);
+    Clock kernel_clock(&apic, 1);
+    driver_manager.add_driver(&kernel_clock);
     driver_manager.find_drivers();
     uint32_t reset_wait_time = driver_manager.reset_devices();
 
     Logger::HEADER() << "Stage {3}: Device Finalisation\n";
     interrupts.activate();
-    kernelClock.calibrate();
-    kernelClock.delay(reset_wait_time);
+    kernel_clock.calibrate();
+    kernel_clock.delay(reset_wait_time);
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
