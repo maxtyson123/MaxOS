@@ -2,18 +2,21 @@
 // Created by 98max on 12/10/2022.
 //
 #include <hardwarecommunication/pci.h>
-#include <drivers/ethernet/amd_am79c973.h>
-#include <drivers/ethernet/intel_i217.h>
 #include <common/logger.h>
 
+// Divers that need PCI descriptors
+#include <drivers/ethernet/amd_am79c973.h>
+#include <drivers/ethernet/intel_i217.h>
+#include <drivers/disk/ide.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::memory;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::drivers::video;
-using namespace MaxOS::memory;
+using namespace MaxOS::drivers::disk;
 
 ///__DESCRIPTOR___
 
@@ -165,8 +168,7 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                 if(deviceDescriptor.vendor_id == 0x0000 || deviceDescriptor.vendor_id == 0x0001 || deviceDescriptor.vendor_id == 0xFFFF)
                     continue;
 
-
-                // Get port number
+                // Get the earliest port number
                 for(int barNum = 5; barNum >= 0; barNum--){
                     BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
                     if(bar.address && (bar.type == BaseAddressRegisterType::InputOutput))
@@ -249,10 +251,17 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
         {
             switch (dev.device_id)
             {
+
                 case 0x100E: //i217 (Ethernet Controller)
                 {
                     return new intel_i217(&dev);
                 }
+
+                case 0x7010: // PIIX4 (IDE Controller)
+                {
+                    return  new IntegratedDriveElectronicsController(&dev);
+                }
+
                 default:
                     break;
             }
@@ -362,13 +371,6 @@ void PeripheralComponentInterconnectController::list_known_device(const Peripher
                 case 0x7000:
                 {
                   Logger::Out() << "PIIX3";
-                  break;
-
-                }
-
-                case 0x7010:
-                {
-                  Logger::Out() << "PIIX4";
                   break;
 
                 }

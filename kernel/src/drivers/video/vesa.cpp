@@ -13,8 +13,7 @@ using namespace MaxOS::system;
 using namespace MaxOS::common;
 
 VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info)
-: VideoDriver(),
-  m_framebuffer_info(framebuffer_info)
+: m_framebuffer_info(framebuffer_info)
 {
   // Get the framebuffer info
   Logger::INFO() << "Setting up VESA driver\n";

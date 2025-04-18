@@ -96,7 +96,7 @@ void Logger::set_log_level(LogLevel log_level) {
       break;
 
     case LogLevel::WARNING:
-      *this << ANSI_COLOURS[ANSIColour::FG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+      *this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
       break;
 
     case LogLevel::ERROR:

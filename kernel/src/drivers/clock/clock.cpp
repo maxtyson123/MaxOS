@@ -55,8 +55,7 @@ Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
  * @param time_between_events The time between events in 10ths of a second
  */
 Clock::Clock(AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
-: Driver(),
-  InterruptHandler(0x20),
+: InterruptHandler(0x20),
   m_apic(apic),
   m_ticks_between_events(time_between_events)
 {

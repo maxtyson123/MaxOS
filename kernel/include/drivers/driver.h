@@ -22,18 +22,10 @@ namespace MaxOS
          * @brief base class for all drivers, handles the activation, deactivation, initialisation and reset of the driver as well as error messages and identifying the device
          */
         class Driver {
-            protected:
             public:
 
-                common::OutputStream* m_driver_message_stream;
-
-                Driver(common::OutputStream* driverMessageStream = nullptr);
+                Driver();
                 ~Driver();
-
-                void error_message(const string& message) const;
-                void error_message(char char_to_write) const;
-                void error_message(int int_to_write) const;
-                void error_message(uint32_t hex_to_write) const;
 
                 virtual void activate();
                 virtual void deactivate();

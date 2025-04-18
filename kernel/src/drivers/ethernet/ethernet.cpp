@@ -59,13 +59,8 @@ Event<EthernetDriverEvents>* EthernetDriverEventHandler::on_event(Event<Ethernet
 
 ///__ETHERNET DRIVER___
 
-EthernetDriver::EthernetDriver(OutputStream* ethernetMessageStream)
-: Driver(ethernetMessageStream)
-{
-}
-
-EthernetDriver::~EthernetDriver()
-= default;
+EthernetDriver::EthernetDriver() = default;
+EthernetDriver::~EthernetDriver() = default;
 
 /**
  * @brief Get the MAC address
@@ -85,15 +80,6 @@ MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress()
  */
 void EthernetDriver::Send(uint8_t* buffer, uint32_t size)
 {
-  m_driver_message_stream-> write("Sending: ");
-
-    int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
-    for(uint32_t i = displayType; i < size; i++)
-    {
-      m_driver_message_stream->write_hex(buffer[i]);
-      m_driver_message_stream-> write(" ");
-    }
-    m_driver_message_stream-> write("\n");
 
     // Raise the event
     raise_event(new BeforeSendEvent(buffer, size));
@@ -116,15 +102,6 @@ void EthernetDriver::DoSend(uint8_t*, uint32_t)
  */
 void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
 {
-  m_driver_message_stream-> write("Receiving: ");
-    //size = 64;
-    int displayType = 34;                                                        //What header to hide (Ethernet Header = 14, IP Header = 34, UDP = 42, TCP Header = 54, ARP = 42)
-    for(uint32_t i = displayType; i < size; i++)
-    {
-      m_driver_message_stream->write_hex(buffer[i]);
-      m_driver_message_stream-> write(" ");
-    }
-    m_driver_message_stream-> write("\n");
 
     // Raise the event
     Vector<Event<EthernetDriverEvents>*> values =
@@ -134,17 +111,14 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size)
     for(auto & value : values) {
         switch (value->type) {
             case EthernetDriverEvents::DATA_RECEIVED:
-                if(value->return_value.boolValue){
-                  m_driver_message_stream-> write("Sending back... \n");
+                if(value->return_value.boolValue)
                     Send(buffer, size);
-                }
                 break;
 
             default:
                 break;
         }
     }
-    m_driver_message_stream-> write("DATA HANDLED\n");
 }
 
 /**

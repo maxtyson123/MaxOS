@@ -14,7 +14,9 @@ SET_SOURCE_FILES_PROPERTIES(${ASM_SRCS} PROPERTIES LANGUAGE ASM)
 FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
 
 # Create the kernel
-ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS})
+ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS}
+        include/drivers/disk/ide.h
+        src/drivers/disk/ide.cpp)
 TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
 # Update the version before building

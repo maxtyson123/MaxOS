@@ -36,9 +36,8 @@ namespace MaxOS{
                     bool m_is_master;
                     uint16_t m_bytes_per_sector { 512 };
 
-                    common::OutputStream* ata_message_stream;
                 public:
-                    AdvancedTechnologyAttachment(uint16_t port_base, bool master, common::OutputStream* output_stream);
+                    AdvancedTechnologyAttachment(uint16_t port_base, bool master);
                     ~AdvancedTechnologyAttachment();
 
                     void identify();

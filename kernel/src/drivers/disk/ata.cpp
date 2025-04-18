@@ -10,9 +10,8 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 
-AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master, OutputStream*output_stream)
-: Driver(output_stream),
-  m_data_port(port_base),
+AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master)
+: m_data_port(port_base),
   m_error_port(port_base + 1),
   m_sector_count_port(port_base + 2),
   m_LBA_low_port(port_base + 3),
@@ -21,8 +20,7 @@ AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, b
   m_device_port(port_base + 6),
   m_command_port(port_base + 7),
   m_control_port(port_base + 0x206),
-  m_is_master(master),
-  ata_message_stream(output_stream)
+  m_is_master(master)
 {
 
 }
@@ -44,7 +42,7 @@ void AdvancedTechnologyAttachment::identify() {
   m_device_port.write(0xA0);
   uint8_t status = m_command_port.read();
   if(status == 0xFF){
-    ata_message_stream-> write("Invalid Status");
+    Logger::WARNING() << "ATA Device: Invalid status";
     return;
   }
 
@@ -71,16 +69,22 @@ void AdvancedTechnologyAttachment::identify() {
 
   //Check for any errors
   if(status & 0x01){
-    ata_message_stream-> write("ERROR");
+    Logger::WARNING() << "ATA Device: Error reading status\n";
     return;
   }
 
-  // read the data and print it
+  // Print the data
+  Logger::DEBUG() << "ATA: ";
   for (uint16_t i = 0; i < 256; ++i) {
-      uint16_t data = m_data_port.read();
-      ata_message_stream-> write(" 0x");
-      ata_message_stream-> write_hex(data);
+
+    uint16_t data = m_data_port.read();
+    char *text = "  \0";
+    text[0] = (data >> 8) & 0xFF;
+    text[1] = data & 0xFF;
+    Logger::Out() << text;
+
   }
+  Logger::Out() << "\n";
 }
 
 /**
@@ -232,6 +236,5 @@ string AdvancedTechnologyAttachment::device_name() {
  * @return The name of the vendor
  */
 string AdvancedTechnologyAttachment::vendor_name() {
-
     return "IDE";
 }

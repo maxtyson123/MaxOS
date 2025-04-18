@@ -10,14 +10,8 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::memory;
 using namespace MaxOS::hardwarecommunication;
 
-Driver::Driver(OutputStream* driverMessageStream)
-: m_driver_message_stream(driverMessageStream) {
-
-}
-
-Driver::~Driver(){
-    this ->m_driver_message_stream = nullptr;
-}
+Driver::Driver() = default;
+Driver::~Driver() = default;
 
 /**
  * @brief activate the driver
@@ -47,58 +41,6 @@ void Driver::initialise() {
  */
 uint32_t Driver::reset(){
     return 0;
-}
-
-/**
- * @brief write a message to the driver message stream if it is not null
- *
- * @param message The message to write
- */
-void Driver::error_message(const string& message) const {
-
-    // If there is a driver message stream write the message to it
-    if(m_driver_message_stream != nullptr)
-        m_driver_message_stream-> write(message);
-
-}
-
-/**
- * @brief write a character to the driver message stream if it is not null
- *
- * @param char_to_write The character to write
- */
-void Driver::error_message(char char_to_write) const {
-
-    // If there is a driver message stream write the character to it
-    if(m_driver_message_stream != nullptr)
-      m_driver_message_stream-> write_char(char_to_write);
-
-}
-
-
-/**
- * @brief write an integer to the driver message stream if it is not null
- *
- * @param int_to_write The integer to write
- */
-void Driver::error_message(int int_to_write) const {
-
-    // If there is a driver message stream write the integer to it
-    if(m_driver_message_stream != nullptr)
-            m_driver_message_stream-> write_int(int_to_write);
-}
-
-/**
- * @brief write a hex to the driver message stream if it is not null
- *
- * @param hex_to_write The hex to write
- */
-void Driver::error_message(uint32_t hex_to_write) const {
-
-    // If there is a driver message stream write the hex to it
-    if(m_driver_message_stream != nullptr)
-      m_driver_message_stream->write_hex(hex_to_write);
-
 }
 
 /**
