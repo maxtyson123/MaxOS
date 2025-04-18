@@ -6,7 +6,6 @@
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
 
 #include <hardwarecommunication/port.h>
-#include <system/cpu.h>
 #include <hardwarecommunication/acpi.h>
 #include <memory/physical.h>
 

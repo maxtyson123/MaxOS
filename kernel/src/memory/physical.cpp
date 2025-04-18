@@ -4,6 +4,8 @@
 
 #include <common/logger.h>
 #include <memory/physical.h>
+#include <system/cpu.h>
+
 
 using namespace MaxOS::memory;
 using namespace MaxOS::system;
