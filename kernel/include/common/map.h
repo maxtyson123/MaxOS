@@ -53,6 +53,8 @@ namespace MaxOS{
                 iterator find(Key);
 
                 bool empty();
+                int size();
+            
                 void clear();
                 void insert(Key, Value);
                 void erase(Key);
@@ -161,6 +163,18 @@ namespace MaxOS{
          */
         template<class Key, class Value> bool Map<Key, Value>::empty() {
             return m_elements.empty();
+        }
+
+        /**
+         * @brief The number of elements in the map
+         *
+         * @return The number of elements in the Map
+         */
+        template <class Key, class Value> int Map<Key, Value>::size()
+        {
+            // Return the size of the vector
+            return m_elements.size();
+
         }
 
         /**

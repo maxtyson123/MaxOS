@@ -29,8 +29,10 @@ AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() = default;
 
 /**
  * @brief Identify the ATA device
+ *
+ * @return True if the device is present, false otherwise
  */
-void AdvancedTechnologyAttachment::identify() {
+bool AdvancedTechnologyAttachment::identify() {
 
   // Select the device (master or slave)
   m_device_port.write(m_is_master ? 0xA0 : 0xB0);
@@ -43,7 +45,7 @@ void AdvancedTechnologyAttachment::identify() {
   uint8_t status = m_command_port.read();
   if(status == 0xFF){
     Logger::WARNING() << "ATA Device: Invalid status";
-    return;
+    return false;
   }
 
   // Select the device (master or slave)
@@ -61,7 +63,7 @@ void AdvancedTechnologyAttachment::identify() {
   // Check if the device is present
   status = m_command_port.read();
   if(status == 0x00)
-    return;
+    return false;
 
   // Wait for the device to be ready or for an error to occur
   while (((status & 0x80) == 0x80)  && ((status & 0x01) != 0x01))
@@ -70,39 +72,32 @@ void AdvancedTechnologyAttachment::identify() {
   //Check for any errors
   if(status & 0x01){
     Logger::WARNING() << "ATA Device: Error reading status\n";
-    return;
+    return false;
   }
 
-  // Print the data
-  Logger::DEBUG() << "ATA: ";
-  for (uint16_t i = 0; i < 256; ++i) {
-
+  // Read the rest of the data
+  for (uint16_t i = 0; i < 256; ++i)
     uint16_t data = m_data_port.read();
-    char *text = "  \0";
-    text[0] = (data >> 8) & 0xFF;
-    text[1] = data & 0xFF;
-    Logger::Out() << text;
 
-  }
-  Logger::Out() << "\n";
+  // Device is present and ready
+  return true;
 }
 
 /**
- * @brief read a sector from the ATA device
+ * @brief Read a sector from the ATA device
  *
  * @param sector The sector to read
- * @param data The data to read into
- * @param count The amount of data to read from that sector
+ * @param data_buffer The data to read into
+ * @param amount The amount of data to read from that sector
  */
-void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int count)
+void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, size_t amount)
 {
     // Don't allow reading more than a sector
-    if(sector & 0xF0000000 || count > m_bytes_per_sector)
+    if(sector & 0xF0000000 || amount > m_bytes_per_sector)
         return;
 
     // Select the device (master or slave) and reset it
-    m_device_port.write((m_is_master ? 0xE0 : 0xF0) |
-                        ((sector & 0x0F000000) >> 24));
+    m_device_port.write((m_is_master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
     m_error_port.write(0);
     m_sector_count_port.write(1);
 
@@ -128,19 +123,19 @@ void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int c
         return;
 
     // read the data and store it in the array
-    for(int i = 0; i < count; i+= 2)
+    for(int i = 0; i < amount; i+= 2)
     {
         uint16_t read_data = m_data_port.read();
 
-        data[i] = read_data & 0x00FF;
+        data_buffer[i] = read_data & 0x00FF;
 
         // Place the next byte in the array if there is one
-        if(i+1 < count)
-            data[i+1] = (read_data >> 8) & 0x00FF;
+        if(i+1 < amount)
+            data_buffer[i+1] = (read_data >> 8) & 0x00FF;
     }
 
     // read the remaining bytes
-    for(uint16_t i = count + (count % 2); i < m_bytes_per_sector; i+= 2)
+    for(uint16_t i = amount + (amount % 2); i < m_bytes_per_sector; i+= 2)
       m_data_port.read();
 }
 
@@ -148,17 +143,17 @@ void AdvancedTechnologyAttachment::read_28(uint32_t sector, uint8_t* data, int c
  * @brief write to a sector on the ATA device
  *
  * @param sector The sector to write to
+ * @param data The data to write
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::write_28(uint32_t sector, const uint8_t* data, int count){
+void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, size_t count){
 
     // Don't allow writing more han a sector
     if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)
         return;
 
     // Select the device (master or slave) and reset it
-    m_device_port.write(m_is_master ? 0xE0
-                                    : 0xF0 | ((sector & 0x0F000000) >> 24));
+    m_device_port.write(m_is_master ? 0xE0 : 0xF0 | ((sector & 0x0F000000) >> 24));
     m_error_port.write(0);
     m_sector_count_port.write(1);
 
@@ -213,10 +208,12 @@ void AdvancedTechnologyAttachment::flush() {
 }
 
 /**
- * @brief Activate the ATA device
+ * @brief Activate the ATA device by mounting it to the virtual file system
  */
 void AdvancedTechnologyAttachment::activate() {
-  Driver::activate();
+
+
+
 }
 
 /**

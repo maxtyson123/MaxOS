@@ -213,14 +213,15 @@ No user usage so far (userland will be added in the future)
 - [ ] VFS
 - [x] Loading ELF
 - [ ] Multiple Cores Support (SMP & Scheduler)
+- [ ] Move drivers to userspace 
+- [ ] Move VFS to userspace
 - [ ] Userland GUI
 - [ ] CLI
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Self-hosted os
 - [ ] App Framework & System Apps
 - [ ] DOOM Port
-- [ ] UserSpace Drivers
-- [ ] Userspace Networking
+- [ ] Move networking to userspace (& rewrite, fix)
 - [ ] Connect to Clion with SMB for files and GDB for debugging in userspace
 - [ ] Auto Updater & Image Builder (ISO Release)
 - [ ] Store

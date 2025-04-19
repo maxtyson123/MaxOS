@@ -7,7 +7,9 @@
 
 #include <drivers/disk/ata.h>
 #include <stdint.h>
+#include <common/map.h>
 #include <hardwarecommunication/pci.h>
+#include <filesystem/partition/msdos.h>
 
 
 namespace MaxOS{
@@ -22,18 +24,15 @@ namespace MaxOS{
             */
             class IntegratedDriveElectronicsController : public Driver{
 
-                AdvancedTechnologyAttachment primary_maser;
-                AdvancedTechnologyAttachment primary_slave;
 
-                AdvancedTechnologyAttachment secondary_maser;
-                AdvancedTechnologyAttachment secondary_slave;
-
+                common::Map<AdvancedTechnologyAttachment*, bool> devices;
 
                 public:
                     IntegratedDriveElectronicsController(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* device_descriptor);
                     ~IntegratedDriveElectronicsController();
 
-                    void initialise() override;
+                    void initialise() final;
+                    void activate() final;
 
                     string vendor_name() final;
                     string device_name() final;
