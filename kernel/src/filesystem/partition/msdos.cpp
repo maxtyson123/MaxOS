@@ -35,9 +35,22 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
     if(entry.type == 0)
       continue;
 
-    Logger::DEBUG() << "Partition 0x" << (uint64_t)entry.type << " at 0x" << (uint64_t)entry.start_LBA << "\n";
+    Logger::DEBUG() << "Partition 0x" << (uint64_t)entry.type << " at 0x" << (uint64_t)entry.start_LBA << ": ";
 
-    //TODO: Create a new FAT32 object
+    // Create a file system for the partition
+    switch ((PartitionType)entry.type)
+    {
+        case PartitionType::EMPTY:
+          Logger::Out() << "Empty partition\n";
+          break;
 
+        case PartitionType::FAT32:
+          Logger::Out() << "FAT32 partition\n";
+          break;
+
+        default:
+          Logger::Out() << "Unknown or unimplemented partition type: " << entry.type << "\n";
+
+    }
   }
 }

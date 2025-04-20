@@ -93,3 +93,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     while (true)
       asm("nop");
 }
+
+// TODO:
+//  - Define a vfs structure & filesystem structure
+//  - Implement FAT32
+//  - Implement ext2
