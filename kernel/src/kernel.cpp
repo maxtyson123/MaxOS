@@ -1,34 +1,21 @@
 //Common
 #include <stdint.h>
 #include <common/logger.h>
-
-//Hardware com
 #include <hardwarecommunication/interrupts.h>
-#include <hardwarecommunication/acpi.h>
-#include <hardwarecommunication/apic.h>
-
-//Drivers
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
 #include <drivers/peripherals/keyboard.h>
 #include <drivers/peripherals/mouse.h>
 #include <drivers/video/vesa.h>
-
-//GUI
 #include <gui/desktop.h>
-
-//PROCESS
 #include <processes/scheduler.h>
-
-//SYSTEM
 #include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
-
-//MEMORY
 #include <memory/physical.h>
 #include <memory/virtual.h>
+#include <filesystem/vfs.h>
 
 
 using namespace MaxOS;
@@ -43,6 +30,7 @@ using namespace MaxOS::gui;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
+using namespace MaxOS::filesystem;
 
 extern "C" void call_constructors();
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic)
@@ -69,9 +57,10 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     VESABootConsole console(&vesa);
 
     Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
-    DriverManager driver_manager;
+    VirtualFileSystem vfs;
     CPU cpu(&gdt, &multiboot);
     Clock kernel_clock(cpu.apic, 1);
+    DriverManager driver_manager;
     driver_manager.add_driver(&kernel_clock);
     driver_manager.find_drivers();
     uint32_t reset_wait_time = driver_manager.reset_devices();
@@ -97,4 +86,5 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // TODO:
 //  - Define a vfs structure & filesystem structure
 //  - Implement FAT32
+//  - Userspace Files
 //  - Implement ext2

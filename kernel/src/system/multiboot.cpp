@@ -50,7 +50,7 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
         case MULTIBOOT_TAG_TYPE_BOOTDEV:
           multiboot_tag_bootdev *bootdev;
           bootdev = (multiboot_tag_bootdev *)tag;
-          Logger::DEBUG() << "Boot device: 0x" << (uint64_t) bootdev->biosdev << ", 0x" << (uint64_t) bootdev->slice << ", 0x" << (uint64_t) bootdev->part << " of type 0x" << (uint64_t) bootdev->type << "\n";
+          Logger::DEBUG() << "Boot device: drive=0x" << (uint64_t)bootdev->biosdev << ", partition=0x" << (uint64_t)bootdev->part << "\n";
           break;
 
         case MULTIBOOT_TAG_TYPE_MMAP:

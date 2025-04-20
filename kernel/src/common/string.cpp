@@ -164,6 +164,94 @@ const char* String::c_str() const {
 }
 
 /**
+ * @brief Checks if the string starts with the other string (must contain the same characters in the same order)
+ *
+ * @param other The other string
+ * @return True if the string starts with the other string, false otherwise
+ */
+bool String::starts_with(String const& other)
+{
+
+  // Must at least be able to fit the other string
+  if (m_length < other.length())
+    return false;
+
+  // Check if the string starts with the other string
+  for (int i = 0; i < other.length(); i++)
+    if (m_string[i] != other[i])
+      return false;
+
+  // No string left over to check so it must contain other
+  return true;
+}
+
+/**
+ * @brief Get a section of the string
+ *
+ * @param start The start of the substring
+ * @param length The length of the substring
+ * @return The substring or empty string if out of bounds
+ */
+String String::substring(int start, int length) const
+{
+
+  // Ensure the start is within bounds
+  if (start < 0 || start >= m_length)
+    return {};
+
+  // Ensure the length is within bounds
+  if (length < 0 || start + length > m_length)
+    return {};
+
+  // Allocate memory for the substring (and null terminator)
+  String substring;
+  substring.m_length = length;
+  substring.m_string = new char[length + 1];
+
+  // Copy the substring
+  for (int i = 0; i < length; i++)
+    substring.m_string[i] = m_string[start + i];
+
+  // Write the null terminator
+  substring.m_string[length] = '\0';
+
+  return substring;
+}
+
+/**
+ * @brief Splits the string by the delimiter
+ *
+ * @param delimiter What to split the string by
+ * @return A vector of strings that were split by the delimiter
+ */
+common::Vector<String> String::split(String const& delimiter) const
+{
+  // The vector of strings
+  common::Vector<String> strings;
+
+  // Go through the string and split it by the delimiter
+  int start = 0;
+  int end = 0;
+  while (end < m_length) {
+
+    // If the character is the delimiter, add the string to the vector
+    if (m_string[end] == delimiter[0]) {
+      strings.push_back(substring(start, end - start));
+      start = end + 1;
+    }
+
+    // Increment the end
+    end++;
+  }
+
+  // Add the last string to the vector
+  strings.push_back(substring(start, end - start));
+
+  // Return the vector of strings
+  return strings;
+}
+
+/**
  * @brief Returns the length of the string
  *
  * @param count_ansi Whether to count the ansi characters (default true)

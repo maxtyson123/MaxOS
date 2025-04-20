@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+#include <common/vector.h>
+
 namespace MaxOS {
 
     /**
@@ -34,7 +36,12 @@ namespace MaxOS {
 
           [[nodiscard]] int length(bool count_ansi = true) const;
           char* c_str();
-          [[nodiscard]] const char* c_str() const;
+          const char* c_str() const;
+
+          bool starts_with(String const &other);
+          String substring(int start, int length) const;
+          common::Vector<String> split(String const &delimiter) const;
+
 
           [[nodiscard]] String center(int width, char fill = ' ') const;
 
