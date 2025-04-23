@@ -140,6 +140,23 @@ void File::flush()
  */
 void File::seek(SeekType seek_type, size_t offset)
 {
+
+  // Seek based on the type
+  switch (seek_type)
+  {
+    case SeekType::SET:
+      m_offset = offset;
+      break;
+
+    case SeekType::CURRENT:
+      m_offset += offset;
+      break;
+
+    case SeekType::END:
+      m_offset = size() - offset;
+      break;
+  }
+
 }
 
 /**
@@ -149,17 +166,7 @@ void File::seek(SeekType seek_type, size_t offset)
  */
 uint32_t File::position()
 {
-  return 0;
-}
-
-/**
- * @brief Get the size of the file
- *
- * @return The size of the file (in bytes)
- */
-size_t File::size()
-{
-  return 0;
+  return m_offset;
 }
 
 /**
@@ -169,12 +176,50 @@ size_t File::size()
  */
 string File::name()
 {
-  return "";
+  return m_name;
+}
+
+/**
+ * @brief Get the size of the file
+ *
+ * @return The size of the file (in bytes)
+ */
+size_t File::size()
+{
+  return m_size;
 }
 
 Directory::Directory() = default;
 
 Directory::~Directory() = default;
+
+/**
+ * @brief Get the files in the directory
+ *
+ * @return A list of all the files in the directory
+ */
+common::Vector<File*> Directory::files()
+{
+  return m_files;
+}
+
+/**
+ * @brief Open a file in the directory
+ *
+ * @param name The name of the file to open
+ * @return
+ */
+File* Directory::open_file(const string& name)
+{
+
+  // Try to find the file
+  for (auto& file : m_files)
+    if (file->name() == name)
+      return file;
+
+  // File not found
+  return nullptr;
+}
 
 /**
  * @brief Create a file in the directory
@@ -183,17 +228,6 @@ Directory::~Directory() = default;
  * @return A new file object or null if it could not be created
  */
 File* Directory::create_file(const string& name)
-{
-  return nullptr;
-}
-
-/**
- * @brief Open a file in the directory
- *
- * @param name The name of the file to open
- * @return 
- */
-File* Directory::open_file(const string& name)
 {
   return nullptr;
 }
@@ -208,13 +242,31 @@ void Directory::remove_file(const string& name)
 }
 
 /**
- * @brief Get the files in the directory
+ * @brief Get the subdirectories in the directory
  *
- * @return A list of all the files in the directory
+ * @return The subdirectories in the directory
  */
-common::Vector<File*> Directory::files()
+common::Vector<Directory*> Directory::subdirectories()
 {
-  return m_files;
+  return m_subdirectories;
+}
+
+/**
+ * @brief Open a directory in the directory
+ *
+ * @param name The name of the directory to open
+ * @return The directory object or null if it could not be opened
+ */
+Directory* Directory::open_subdirectory(const string& name)
+{
+
+  // Try to find the directory
+  for (auto& subdirectory : m_subdirectories)
+    if (subdirectory->name() == name)
+      return subdirectory;
+
+  // Directory not found
+  return nullptr;
 }
 
 /**
@@ -229,17 +281,6 @@ Directory* Directory::create_subdirectory(const string& name)
 }
 
 /**
- * @brief Open a directory in the directory
- *
- * @param name The name of the directory to open
- * @return The directory object or null if it could not be opened
- */
-Directory* Directory::open_subdirectory(const string& name)
-{
-  return nullptr;
-}
-
-/**
  * @brief Try to remove a directory in the directory
  * @param name The name of the directory to remove
  */
@@ -247,15 +288,6 @@ void Directory::remove_subdirectory(const string& name)
 {
 }
 
-/**
- * @brief Get the subdirectories in the directory
- *
- * @return The subdirectories in the directory
- */
-common::Vector<Directory*> Directory::subdirectories()
-{
-  return m_subdirectories;
-}
 
 /**
  * @brief Get the name of the directory
@@ -274,7 +306,14 @@ string Directory::name()
  */
 size_t Directory::size()
 {
-  return 0;
+
+  // Sum the size of all the files
+  size_t size = 0;
+  for (auto& file : m_files)
+    size += file->size();
+
+  return size;
+
 }
 
 FileSystem::FileSystem() = default;
@@ -288,7 +327,7 @@ FileSystem::~FileSystem() = default;
  */
 Directory* FileSystem::root_directory()
 {
-  return nullptr;
+  return m_root_directory;
 }
 
 /**

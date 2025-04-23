@@ -27,6 +27,9 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
     return;
   }
 
+  // Get the VFS
+  VirtualFileSystem* vfs = VirtualFileSystem::current_file_system();
+
 
   // Loop through the primary partitions
   for(auto& entry : mbr.primary_partition){
@@ -46,6 +49,7 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
 
         case PartitionType::FAT32:
           Logger::Out() << "FAT32 partition\n";
+          vfs -> mount_filesystem(new Fat32FileSystem(hd, entry.start_LBA));
           break;
 
         default:

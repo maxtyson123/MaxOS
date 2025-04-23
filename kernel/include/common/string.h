@@ -26,6 +26,7 @@ namespace MaxOS {
 
           String();
           String(char const* string);
+          String(uint8_t const* string, int length);
           String(String const &other);
           String(int value);
           String(uint64_t value);

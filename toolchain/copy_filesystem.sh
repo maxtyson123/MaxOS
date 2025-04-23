@@ -27,6 +27,11 @@ sudo rm -rf "$DESTINATION/boot"    && sudo cp -r $SCRIPTDIR/../filesystem/boot  
 sudo rm -rf "$DESTINATION/os"    && sudo cp -r $SCRIPTDIR/../filesystem/os   $DESTINATION
 sudo rm -rf "$DESTINATION/user"  && sudo cp -r $SCRIPTDIR/../filesystem/user $DESTINATION
 
+# If MacOS is used remove the MacOS folder
+if [ "$USE_ISO" -eq 1 ]; then
+  sudo rm -rf "$DESTINATION/MacOS"
+fi
+
 # Sync filesystem
 msg "Syncing filesystem"
 sudo sync

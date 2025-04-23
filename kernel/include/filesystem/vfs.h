@@ -22,7 +22,7 @@ namespace MaxOS{
           VirtualFileSystem();
           ~VirtualFileSystem();
 
-          VirtualFileSystem* current_file_system();
+          static VirtualFileSystem* current_file_system();
 
           void mount_filesystem(FileSystem* filesystem);
           void mount_filesystem(FileSystem* filesystem, string mount_point);

@@ -72,6 +72,21 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
+
+    // FS Tests
+    Directory* root = vfs.root_directory();
+    ASSERT(root != nullptr, "Root directory is null\n");
+    for (auto& file : root->files())
+    {
+      Logger::DEBUG() << "File: " << file->name() << "\n";
+      Logger::DEBUG() << "Size: " << file->size() << "\n";
+    }
+    for (auto& directory : root->subdirectories())
+    {
+      Logger::DEBUG() << "Directory: " << directory->name() << "\n";
+      Logger::DEBUG() << "Size: " << directory->size() << "\n";
+    }
+
     Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
     SyscallManager syscalls;
@@ -84,7 +99,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - Define a vfs structure & filesystem structure
 //  - Implement FAT32
+//  - Test FAT32, When created I think it recursively reads all the subdirectories so it will be slow - need to open on demand instead
 //  - Userspace Files
 //  - Implement ext2
+//  - Class & Struct docstrings
+//  - Logo on fail in center

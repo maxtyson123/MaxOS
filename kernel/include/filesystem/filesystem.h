@@ -42,23 +42,24 @@ namespace MaxOS{
         class File
         {
 
-            private:
+            protected:
                 uint32_t m_offset;
                 string m_name;
+                size_t m_size;
 
             public:
                 File();
-                ~File();
+                virtual ~File();
 
                 virtual void write(const uint8_t* data, size_t size);
                 virtual void read(uint8_t* data, size_t size);
                 virtual void flush();
 
-                virtual void seek(SeekType seek_type, size_t offset);
-                virtual uint32_t position();
+                void seek(SeekType seek_type, size_t offset);
+                uint32_t position();
 
-                virtual size_t size();
-                virtual string name();
+                size_t size();
+                string name();
         };
 
         /**
@@ -67,7 +68,7 @@ namespace MaxOS{
          */
         class Directory
         {
-            private:
+            protected:
                 common::Vector<File*> m_files;
                 common::Vector<Directory*> m_subdirectories;
 
@@ -75,20 +76,20 @@ namespace MaxOS{
 
             public:
                 Directory();
-                ~Directory();
+                virtual ~Directory();
 
-                virtual File* create_file(const string& name);
-                virtual File* open_file(const string& name);
-                virtual void remove_file(const string& name);
                 common::Vector<File*> files();
+                File* open_file(const string& name);
+                virtual File* create_file(const string& name);
+                virtual void remove_file(const string& name);
 
-                virtual Directory* create_subdirectory(const string& name);
-                virtual Directory* open_subdirectory(const string& name);
-                virtual void remove_subdirectory(const string& name);
                 common::Vector<Directory*> subdirectories();
+                Directory* open_subdirectory(const string& name);
+                virtual Directory* create_subdirectory(const string& name);
+                virtual void remove_subdirectory(const string& name);
 
-                virtual string name();
-                virtual size_t size();
+                string name();
+                size_t size();
         };
 
         /**
@@ -97,12 +98,14 @@ namespace MaxOS{
          */
         class FileSystem
         {
+            protected:
+                Directory* m_root_directory;
 
             public:
                 FileSystem();
-                ~FileSystem();
+                virtual ~FileSystem();
 
-                virtual Directory* root_directory();
+                Directory* root_directory();
                 Directory* get_directory(const string& path);
 
                 bool exists(const string& path);

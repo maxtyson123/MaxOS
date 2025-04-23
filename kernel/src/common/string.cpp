@@ -42,6 +42,18 @@ String::String(char const *string)
   m_string[m_length] = '\0';
 }
 
+String::String(uint8_t const* string, int length)
+{
+  // Allocate memory for the string (and null terminator)
+  m_string = new char[length + 1];
+
+  // Copy the string
+  for (int i = 0; i < length; i++)
+    m_string[i] = string[i];
+
+  // Write the null terminator
+  m_string[length] = '\0';
+}
 
 String::String(int value) {
 
