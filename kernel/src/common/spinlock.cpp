@@ -21,13 +21,8 @@ Spinlock::~Spinlock() = default;
  */
 void Spinlock::lock() {
 
-    // Wait for the lock to be available
     acquire();
-
-    // Set the lock to be locked
     m_locked = true;
-
-
 }
 
 /**
@@ -35,10 +30,7 @@ void Spinlock::lock() {
  */
 void Spinlock::unlock() {
 
-    // Set the lock to be unlocked
     m_locked = false;
-
-    // Release the lock
     release();
 
 }
@@ -63,8 +55,6 @@ void Spinlock::acquire() {
       if(m_should_yield)
         Scheduler::system_scheduler()->yield();
 
-      // don't optimise this loop
-      asm("nop");
   }
 }
 

@@ -92,8 +92,8 @@ cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
  * @param syscall The syscall ID number
  * @param handler The handler to set
  */
-void SyscallManager::set_syscall_handler(uint8_t syscall, syscall_func_t handler) {
-  m_syscall_handlers[syscall] = handler;
+void SyscallManager::set_syscall_handler(SyscallType syscall, syscall_func_t handler) {
+  m_syscall_handlers[(uint8_t)syscall] = handler;
 }
 
 /**
@@ -101,8 +101,8 @@ void SyscallManager::set_syscall_handler(uint8_t syscall, syscall_func_t handler
  *
  * @param syscall The syscall ID number
  */
-void SyscallManager::remove_syscall_handler(uint8_t syscall) {
-    m_syscall_handlers[syscall] = nullptr;
+void SyscallManager::remove_syscall_handler(SyscallType syscall) {
+    m_syscall_handlers[(uint8_t)syscall] = nullptr;
 }
 
 

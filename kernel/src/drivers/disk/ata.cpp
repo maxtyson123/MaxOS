@@ -37,7 +37,7 @@ bool AdvancedTechnologyAttachment::identify() {
   // Select the device (master or slave)
   m_device_port.write(m_is_master ? 0xA0 : 0xB0);
 
-  // Reset the HOB (High Order Byte)
+  // Reset the High Order Byte
   m_control_port.write(0);
 
   // Check if the master is present
@@ -57,10 +57,8 @@ bool AdvancedTechnologyAttachment::identify() {
   m_LBA_mid_port.write(0);
   m_LBA_high_Port.write(0);
 
-  // Send the identify command
-  m_command_port.write(0x0EC);
-
   // Check if the device is present
+  m_command_port.write(0x0EC);
   status = m_command_port.read();
   if(status == 0x00)
     return false;
@@ -75,7 +73,7 @@ bool AdvancedTechnologyAttachment::identify() {
     return false;
   }
 
-  // Read the rest of the data
+  // Read the rest of the data as a whole sector needs to be read
   for (uint16_t i = 0; i < 256; ++i)
     uint16_t data = m_data_port.read();
 
@@ -106,7 +104,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
     m_LBA_mid_port.write((sector & 0x0000FF00) >> 8);
     m_LBA_high_Port.write((sector & 0x00FF0000) >> 16);
 
-    // Send the read command
+    // Tell the device to prepare for reading
     m_command_port.write(0x20);
 
     // Make sure the device is there
@@ -122,11 +120,10 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
     if(status & 0x01)
         return;
 
-    // read the data and store it in the array
+    // Read the data into the array
     for(int i = 0; i < amount; i+= 2)
     {
         uint16_t read_data = m_data_port.read();
-
         data_buffer[i] = read_data & 0x00FF;
 
         // Place the next byte in the array if there is one
@@ -134,7 +131,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
             data_buffer[i+1] = (read_data >> 8) & 0x00FF;
     }
 
-    // read the remaining bytes
+    // Read the remaining bytes as a full sector has to be read
     for(uint16_t i = amount + (amount % 2); i < m_bytes_per_sector; i+= 2)
       m_data_port.read();
 }
@@ -148,7 +145,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
  */
 void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, size_t count){
 
-    // Don't allow writing more han a sector
+    // Don't allow writing more than a sector
     if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)
         return;
 
@@ -177,7 +174,7 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, s
         m_data_port.write(writeData);
     }
 
-    // write the remaining bytes
+    // Write the remaining bytes as a full sector has to be written
     for(int i = count + (count%2); i < m_bytes_per_sector; i += 2)
       m_data_port.write(0x0000);
 }
@@ -202,18 +199,11 @@ void AdvancedTechnologyAttachment::flush() {
   while (((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
       status = m_command_port.read();
 
+  // Check for an error
   if(status & 0x01)
       return;
 
-}
-
-/**
- * @brief Activate the ATA device by mounting it to the virtual file system
- */
-void AdvancedTechnologyAttachment::activate() {
-
-
-
+  // ...
 }
 
 /**

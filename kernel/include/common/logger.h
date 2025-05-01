@@ -58,7 +58,6 @@
                 void set_log_level(LogLevel log_level);
 
                 void write_char(char c) final;
-                void lineFeed() final;
                 void printf(const char* format, ...);
 
                 static void ASSERT(bool condition, const char* message, ...);

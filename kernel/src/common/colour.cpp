@@ -31,7 +31,7 @@ Colour::Colour(ConsoleColour colour) {
     parse_console_colour(colour);
 }
 
-Colour::Colour(MaxOS::string string) {
+Colour::Colour(string string) {
 
     if(string[0] == '#')
         parse_hex_string(string);
@@ -52,9 +52,9 @@ void Colour::parse_hex_string(string hex_string) {
         return;
 
     // Parse the red, green and blue values
-    red = (hex_string[1] - '0') * 16 + (hex_string[2] - '0');
+    red   = (hex_string[1] - '0') * 16 + (hex_string[2] - '0');
     green = (hex_string[3] - '0') * 16 + (hex_string[4] - '0');
-    blue = (hex_string[5] - '0') * 16 + (hex_string[6] - '0');
+    blue  = (hex_string[5] - '0') * 16 + (hex_string[6] - '0');
 
     // Parse the alpha value
     alpha = 255;
@@ -77,8 +77,6 @@ void Colour::parse_ansi_string(string ansi_string) {
 
   // Parse the colour
   uint8_t colour = ansi_string[5] - '0';
-
-  // Set the colour
   switch (colour) {
 
       case 0:

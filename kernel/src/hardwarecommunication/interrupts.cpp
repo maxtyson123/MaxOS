@@ -19,21 +19,18 @@ InterruptHandler::InterruptHandler(uint8_t interrupt_number, int64_t redirect, u
 
     // Get the interrupt manager
     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
-
-    // If there is no interrupt manager, nothing can be done
     ASSERT(interrupt_manager != nullptr, "No active interrupt manager");
 
-    // Set the handler in the array
+    // Register the handler
     interrupt_manager -> set_interrupt_handler(m_interrupt_number, this);
 
-    // If there is a redirect, set it
-    if(redirect == -1) return;
+    // Not all interrupts need redirecting
+    if(redirect == -1)
+      return;
 
-    // Get the IO-APIC
+    // Redirect a legacy interrupt to an interrupt the kernel expects
     IOAPIC* io_apic = interrupt_manager -> active_apic() -> io_apic();
-
-    // Register the driver
-    interrupt_redirect_t mouseRedirect = {
+    interrupt_redirect_t temp = {
         .type = (uint8_t)redirect,
         .index = (uint8_t)redirect_index,
         .interrupt = m_interrupt_number,
@@ -41,7 +38,7 @@ InterruptHandler::InterruptHandler(uint8_t interrupt_number, int64_t redirect, u
         .flags = 0x00,
         .mask = false,
     };
-    io_apic -> set_redirect(&mouseRedirect);
+    io_apic -> set_redirect(&temp);
 }
 
 
@@ -49,8 +46,6 @@ InterruptHandler::~InterruptHandler(){
 
   // Get the interrupt manager
   InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
-
-  // If there is no interrupt manager, no need to remove the handler
   if(interrupt_manager == nullptr) return;
 
   // Remove the handler
@@ -74,21 +69,18 @@ system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t *s
   // For handlers that don't care about the status
   handle_interrupt();
 
-  // Return the status
+  // Return the default status
   return status;
 
 }
-
-///__Manger__
-
-
 
 InterruptManager::InterruptManager()
 {
 
   Logger::INFO() << "Setting up Interrupt Manager\n";
+  s_active_interrupt_manager = this;
 
-  // Full the table of interrupts with 0
+  // Clear the table
   for(auto& descriptor : s_interrupt_descriptor_table) {
     descriptor.address_low_bits = 0;
     descriptor.address_mid_bits = 0;
@@ -141,14 +133,11 @@ InterruptManager::InterruptManager()
   // Set up the system call interrupt
   set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
 
-  //Tell the processor to use the IDT
+  // Tell the processor to use the IDT
   IDTR idt = {};
   idt.limit = 256 * sizeof(InterruptDescriptor) - 1;
   idt.base = (uint64_t)s_interrupt_descriptor_table;
   asm volatile("lidt %0" : : "m" (idt));
-
-  // Set the active interrupt manager
-  s_active_interrupt_manager = this;
 }
 
 InterruptManager::~InterruptManager()
@@ -196,7 +185,7 @@ void InterruptManager::activate() {
 
   Logger::INFO() << "Activating Interrupts \n";
 
-  // Deactivate the current interrupt manager
+  // Deactivate the current (old) interrupt manager
   if(s_active_interrupt_manager != nullptr)
     s_active_interrupt_manager->deactivate();
 
@@ -211,11 +200,13 @@ void InterruptManager::activate() {
 void InterruptManager::deactivate()
 {
 
-    // If this is the active interrupt manager, deactivate it and stop interrupts
-    if(s_active_interrupt_manager == this){
-      s_active_interrupt_manager = nullptr;
-      asm("cli");
-    }
+  // Cant deactivate if it isn't the system one
+  if (s_active_interrupt_manager != nullptr)
+    return;
+
+  // Prevent interrupts from firing when nothing is set up to handle them
+  asm("cli");
+  s_active_interrupt_manager = nullptr;
 }
 
 /**
@@ -226,7 +217,7 @@ void InterruptManager::deactivate()
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t *status) {
 
-  // Fault Handlers
+  // Default Fault (haha) Handlers
   switch (status->interrupt_number) {
 
     case 0x7:
@@ -302,18 +293,22 @@ void InterruptManager::set_apic(AdvancedProgrammableInterruptController *apic) {
 }
 
 cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
-  bool present = (status ->error_code & 0x1) != 0;         // Bit 0: Page present flag
-  bool write = (status ->error_code & 0x2) != 0;           // Bit 1: Write operation flag
-  bool user_mode = (status ->error_code & 0x4) != 0;       // Bit 2: User mode flag
-  bool reserved_write = (status ->error_code & 0x8) != 0;  // Bit 3: Reserved bit write flag
-  bool instruction_fetch = (status ->error_code & 0x10) != 0; // Bit 4: Instruction fetch flag (on some CPUs)
+
+  // Extract the information about the fault
+  bool present = (status ->error_code & 0x1) != 0;
+  bool write = (status ->error_code & 0x2) != 0;
+  bool user_mode = (status ->error_code & 0x4) != 0;
+  bool reserved_write = (status ->error_code & 0x8) != 0;
+  bool instruction_fetch = (status ->error_code & 0x10) != 0;
   uint64_t faulting_address;
   asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 
+  // Try kill the process so the system doesnt die
   cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
   if(can_avoid != nullptr)
     return can_avoid;
 
+  // Cant avoid it so halt the kernel
   Logger::ERROR() << "Page Fault: (0x" << faulting_address << "): present: " << (present ? "Yes" : "No") << ", write: " << (write ? "Yes" : "No") << ", user-mode: " << (user_mode ? "Yes" : "No") << ", reserved write: " << (reserved_write ? "Yes" : "No") << ", instruction fetch: " << (instruction_fetch ? "Yes" : "No") << "\n";
   CPU::PANIC("See above message for more information", status);
 

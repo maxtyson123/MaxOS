@@ -12,13 +12,12 @@ using namespace MaxOS::memory;
 
 LocalAPIC::LocalAPIC()
 {
-  // Read information about the local APIC
-  uint64_t msr_info = CPU::read_msr(0x1B);
-
   // Get the APIC base address
+  uint64_t msr_info = CPU::read_msr(0x1B);
   m_apic_base = msr_info & 0xFFFFF000;
+  PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
 
-  // Read if the APIC supports x2APIC
+  // Check if the APIC supports x2APIC
   uint32_t ignored, xleaf, x2leaf;
   CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
 
@@ -59,39 +58,48 @@ LocalAPIC::LocalAPIC()
   // Enable the APIC
   write(0xF0, (1 << 8) | 0x100);
   Logger::DEBUG() << "APIC Enabled\n";
-
-  // Reserve the APIC base
-  PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
-
-  // Read the APIC version
-  uint32_t version = read(0x30);
-  Logger::DEBUG() << "APIC Version: 0x" << (uint64_t)(version & 0xFF) << "\n";
 }
 
 LocalAPIC::~LocalAPIC() = default;
 
+/**
+ * @brief Read a value from the apic register using the MSR or memory I/O depending on the local apic version
+ *
+ * @param reg The register to read
+ * @return The value of the register
+ */
 uint32_t LocalAPIC::read(uint32_t reg) const{
 
-  // If x2APIC is enabled, use the x2APIC MSR
-  if(m_x2apic) {
+  // If x2APIC is enabled I/O is done through the MSR
+  if(m_x2apic)
       return (uint32_t)CPU::read_msr((reg >> 4) + 0x800);
-  } else {
-      return (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg));
 
-  }
+  return *(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg);
+
 
 }
 
+/**
+ * @brief Write a value to the apic register using the MSR or memory I/O depending on the local apic version
+ *
+ * @param reg The register to write to
+ * @param value The value to write
+ */
 void LocalAPIC::write(uint32_t reg, uint32_t value) const {
 
-  // If x2APIC is enabled, use the x2APIC MSR
-  if(m_x2apic) {
+  // If x2APIC is enabled I/O is done through the MSR
+  if(m_x2apic)
       CPU::write_msr((reg >> 4) + 0x800, value);
-  } else {
-      (*(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg)) = value;
-    }
+
+  // Default to memory I/O
+  *(volatile uint32_t*)((uintptr_t)m_apic_base_high + reg) = value;
 }
 
+/**
+ * @brief Get the id of the local apic
+ *
+ * @return The id of the local apic
+ */
 uint32_t LocalAPIC::id() const {
 
   // Read the id
@@ -102,16 +110,17 @@ uint32_t LocalAPIC::id() const {
 
 }
 
+/**
+ * @brief Acknowledge that the interrupt has been handled, allowing the PIC to process the next interrupt
+ */
 void LocalAPIC::send_eoi() const {
 
-    // Send the EOI
     write(0xB0, 0);
 }
 
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi)
 {
-
 
   // Get the information about the IO APIC
   m_madt = (MADT*)m_acpi->find("APIC");
@@ -120,7 +129,6 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
   // Get the IO APIC
   auto* io_apic = (MADT_IOAPIC*)PhysicalMemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)io_apic_item, (virtual_address_t*)(io_apic - sizeof(MADT_Item)), Present | Write);
-
 
   // Map the IO APIC address to the higher half
   m_address = io_apic->io_apic_address;
@@ -138,12 +146,9 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 
   // Get the source override item
   MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
-
-  // Loop through the source override items
   uint32_t total_length = sizeof(MADT);
   while (total_length < m_madt->header.length && m_override_array_size < 0x10){ // 0x10 is the max items
 
-      // Increment the total length
       total_length += source_override_item->length;
 
       // If there is an override, populate the array
@@ -155,26 +160,28 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
           m_override_array[m_override_array_size].source = override->source;
           m_override_array[m_override_array_size].global_system_interrupt = override->global_system_interrupt;
           m_override_array[m_override_array_size].flags = override->flags;
-
-          // Increment the override array size
           m_override_array_size++;
       }
 
       // Get the next item
       source_override_item = get_madt_item(2, m_override_array_size);
-
-      // If there is no next item then break
       if(source_override_item == nullptr)
           break;
   }
 
-  // Log how many overrides were found
   Logger::DEBUG() << "IO APIC Source Overrides: 0x" << m_override_array_size << "\n";
 }
 
 IOAPIC::~IOAPIC() = default;
 
-MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
+/**
+ * @brief Get an item in the MADT
+ *
+ * @param type The type of item
+ * @param index The index of the item
+ * @return The item or null if not found
+ */
+MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 
     // The item starts at the start of the MADT
     auto* item = (MADT_Item*)((uint64_t)m_madt + sizeof(MADT));
@@ -184,41 +191,48 @@ MADT_Item *IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
     // Loop through the items
     while (total_length + sizeof(MADT) < m_madt->header.length && current_index <= index) {
 
-        // Check if the item is the correct type
+        // Correct type
         if(item->type == type) {
 
-            // Check if the item is the correct index
-            if(current_index == index) {
+            // Correct index means found
+            if(current_index == index)
                 return item;
-            }
 
-            // Increment the index
+            // Right type wrong index so move on
             current_index++;
         }
 
         // Increment the total length
         total_length += item->length;
-
-        // Increment the item
         item = (MADT_Item*)((uint64_t)item + item->length);
     }
 
-    // Return null if the item was not found
+    // No item found
     return nullptr;
 }
 
+/**
+ * @brief Read a value from a IO Apic register
+ *
+ * @param reg The register to read from
+ * @return The value at the register
+ */
 uint32_t IOAPIC::read(uint32_t reg) const {
 
-  // Write the register
+  // Tell the APIC what register to read from
   *(volatile uint32_t*)(m_address_high + 0x00) = reg;
 
-  // Return the value
+  // Read the value
   return *(volatile uint32_t*)(m_address_high + 0x10);
-
-
-
 }
 
+/**
+ * @brief Write a value to an IO Apic register
+ *
+ * @param reg The register to write to
+ * @param value The value to set the register to
+ * @return The value at the register
+ */
 void IOAPIC::write(uint32_t reg, uint32_t value) const {
 
     // Write the register
@@ -228,28 +242,38 @@ void IOAPIC::write(uint32_t reg, uint32_t value) const {
     *(volatile uint32_t*)(m_address_high + 0x10) = value;
 }
 
+/**
+ * @brief Read a redirect entry into a buffer
+ *
+ * @param index The index of the entry
+ * @param entry The buffer to read into
+ */
 void IOAPIC::read_redirect(uint8_t index, RedirectionEntry *entry) {
 
-  // If the index is out of bounds, return
+  // Check bounds
   if(index < 0x10 || index > 0x3F)
     return;
 
-  // Low and high registers
+  // Read the entry chunks into the buffer (struct is auto extracted from the raw information)
   uint32_t low = read(index);
   uint32_t high = read(index + 1);
-
-  // Set the entry
   entry->raw = ((uint64_t)high << 32) | ((uint64_t)low);
 
 }
 
+/**
+ * @brief Write a redirect entry from a buffer
+ *
+ * @param index The index of the entry
+ * @param entry The buffer to write into
+ */
 void IOAPIC::write_redirect(uint8_t index, RedirectionEntry *entry) {
 
-  // If the index is out of bounds, return
+  // Check bounds
   if(index < 0x10 || index > 0x3F)
     return;
 
-  // Low and high registers
+  // Break the entry down into 32bit chunks
   auto low = (uint32_t)entry->raw;
   auto high = (uint32_t)(entry->raw >> 32);
 
@@ -258,7 +282,12 @@ void IOAPIC::write_redirect(uint8_t index, RedirectionEntry *entry) {
   write(index + 1, high);
 }
 
-void IOAPIC::set_redirect(interrupt_redirect_t *redirect) {
+/**
+ * @brief Redirect a system interrupt to a different IRQ
+ *
+ * @param redirect The redirection entry
+ */
+void IOAPIC::set_redirect(interrupt_redirect_t* redirect) {
 
     // Create the redirection entry
     RedirectionEntry entry = {};
@@ -278,15 +307,20 @@ void IOAPIC::set_redirect(interrupt_redirect_t *redirect) {
 
         // Set the trigger mode
         entry.trigger_mode = (((m_override_array[i].flags >> 2) & 0b11) == 2);
-
         break;
 
     }
 
     // Write the redirect
     write_redirect(redirect->index, &entry);
-
 }
+
+/**
+ * @brief Enables/Disables an interrupt redirect by masking it
+ *
+ * @param index The index of the redirect mask
+ * @param mask True = masked = disabled, False = unmasked = enabled
+ */
 void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
 
     // Read the current entry
@@ -295,8 +329,6 @@ void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
 
     // Set the mask
     entry.mask = mask;
-
-    // Write the entry
     write_redirect(index, &entry);
 }
 
@@ -307,22 +339,21 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
   m_pic_slave_data_port(0xA1)
 {
 
+  // Register this APIC
   Logger::INFO() << "Setting up APIC\n";
+  InterruptManager::active_interrupt_manager()->set_apic(this);
 
   // Init the Local APIC
   Logger::DEBUG() << "Initialising Local APIC\n";
   m_local_apic = new LocalAPIC();
 
-  // Disable the old PIC
+  // Disable the legacy mode PIC
   Logger::DEBUG() << "Disabling PIC\n";
   disable_pic();
 
   // Init the IO APIC
   Logger::DEBUG() << "Initialising IO APIC\n";
   m_io_apic = new IOAPIC(acpi);
-
-  // Register the APIC
-  InterruptManager::active_interrupt_manager()->set_apic(this);
 
 }
 

@@ -41,10 +41,8 @@ void IntegratedDriveElectronicsController::initialise()
   for(auto& device : devices)
   {
 
-    // Get the ata device
-    auto ata_device = device.first;
-
     // Check if the device is present
+    auto ata_device = device.first;
     if(ata_device == nullptr)
       continue;
 
@@ -69,7 +67,6 @@ void IntegratedDriveElectronicsController::initialise()
  */
 void IntegratedDriveElectronicsController::activate()
 {
-
 
   // Loop through the devices and load the partitions
   for(auto& device : devices)

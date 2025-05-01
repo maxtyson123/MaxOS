@@ -363,7 +363,6 @@ Directory* FileSystem::get_directory(const string& path)
     directory_path = Path::file_path(directory_path);
   }
 
-  // Return the directory
   return directory;
 }
 

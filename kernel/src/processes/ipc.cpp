@@ -203,10 +203,9 @@ SharedMessageEndpoint* InterProcessCommunicationManager::create_message_endpoint
 SharedMessageEndpoint* InterProcessCommunicationManager::get_message_endpoint(const string& name) {
 
   // Try to find the endpoint
-  for(auto endpoint : m_message_endpoints){
+  for(auto endpoint : m_message_endpoints)
       if(endpoint -> name -> equals(name))
         return endpoint;
-  }
 
   // Not found
   return nullptr;

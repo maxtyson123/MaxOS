@@ -177,7 +177,7 @@ namespace MaxOS{
 
         enum class DirectoryEntryType
         {
-            EMPTY   = 0x00,
+            LAST   = 0x00,
             DIRECTORY = 0x10,
             FILE    = 0x20,
             DELETED = 0xE5,

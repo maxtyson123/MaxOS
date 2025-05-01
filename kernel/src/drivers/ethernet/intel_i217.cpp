@@ -11,6 +11,12 @@ using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 using namespace memory;
 
+/// MAX OS NET CODE:
+///     All the old (this) networking code poorly written and not used, this will be moved to userspace in the future
+///     but is kept here as a reference for now.
+///
+///     See OSDEV wiki for the credit for this driver
+
 // Buffer Sizes
 #define buffer256                  (3 << 16)
 #define buffer512                  (2 << 16)

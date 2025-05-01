@@ -44,7 +44,7 @@ uint32_t Driver::reset(){
 }
 
 /**
- * @brief Get the vendor name of the driver
+ * @brief Get who created the device
  *
  * @return The vendor name of the driver
  */

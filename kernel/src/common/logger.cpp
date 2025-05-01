@@ -77,7 +77,7 @@ void Logger::set_log_level(LogLevel log_level) {
   // Update the progress bar
   if(log_level == LogLevel::INFO){
       VESABootConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
-      m_progress_current ++;
+      m_progress_current++;
   }
 
   // Print the header
@@ -138,10 +138,8 @@ Logger& Logger::Out() {
  */
 Logger Logger::HEADER(){
 
-    // Set the log level to task
     s_active_logger->set_log_level(LogLevel::HEADER);
 
-    // Return the logger
     return Out();
 
 }
@@ -152,12 +150,9 @@ Logger Logger::HEADER(){
  */
 Logger Logger::INFO() {
 
-    // Set the log level to info
     s_active_logger->set_log_level(LogLevel::INFO);
 
-    // Return the logger
     return Out();
-
 }
 
 /**
@@ -166,10 +161,8 @@ Logger Logger::INFO() {
  */
 Logger Logger::DEBUG() {
 
-    // Set the log level to debug
     s_active_logger->set_log_level(LogLevel::DEBUG);
 
-    // Return the logger
     return Out();
 
 }
@@ -180,10 +173,8 @@ Logger Logger::DEBUG() {
  */
 Logger Logger::WARNING() {
 
-    // Set the log level to warning
     s_active_logger->set_log_level(LogLevel::WARNING);
 
-    // Return the logger
     return Out();
 }
 
@@ -194,10 +185,8 @@ Logger Logger::WARNING() {
  */
 Logger Logger::ERROR() {
 
-    // Set the log level to error
     s_active_logger->set_log_level(LogLevel::ERROR);
 
-    // Return the logger
     return Out();
 
 }
@@ -207,7 +196,7 @@ Logger Logger::ERROR() {
  *
  * @return The active logger
  */
-Logger *Logger::active_logger() {
+Logger* Logger::active_logger() {
     return s_active_logger;
 }
 
@@ -286,29 +275,10 @@ void Logger::ASSERT(bool condition, char const *message, ...) {
  * @param log_level The log level to set
  * @return This logger
  */
-Logger& Logger::operator<<(LogLevel log_level) {
+Logger& Logger::operator << (LogLevel log_level) {
 
-    // Set the log level
     set_log_level(log_level);
 
-    // Return this logger
     return *this;
-
-}
-
-/**
- * @brief Handles a line feed for different log levels
- */
-void Logger::lineFeed() {
-
-    switch (s_active_logger -> m_log_level) {
-        case LogLevel::HEADER:
-        case LogLevel::INFO:
-        case LogLevel::DEBUG:
-        case LogLevel::WARNING:
-        case LogLevel::ERROR:
-            write_char('\n');
-
-    }
 
 }

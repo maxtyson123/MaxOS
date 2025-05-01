@@ -54,20 +54,20 @@ void VideoGraphicsArray::write_registers(uint8_t* registers)
     registers[0x03] = registers[0x03] | 0x80;
     registers[0x11] = registers[0x11] & ~0x80;
 
-    // write the CRTC registers
+    // Write the CRTC registers
     for (uint8_t i = 0; i < 25; i++ ) {
       m_crtc_index_port.write(i);
       crtc_data_port.write(*(registers++));
     }
 
-    // write the graphics controller registers
+    // Write the graphics controller registers
     for(uint8_t i = 0; i < 9; i++)
     {
       m_graphics_controller_index_port.write(i);
       m_graphics_controller_data_port.write(*(registers++));
     }
 
-    // write the attribute controller registers
+    // Write the attribute controller registers
     for(uint8_t i = 0; i < 21; i++)
     {
       m_attribute_controller_reset_port.read();
@@ -102,8 +102,6 @@ bool VideoGraphicsArray::supports_mode(uint32_t width, uint32_t height, uint32_t
  */
 bool VideoGraphicsArray::internal_set_mode(uint32_t width, uint32_t height, uint32_t colour_depth)
 {
-    if(!supports_mode(width, height, colour_depth))
-        return false;
 
     //Values from osdev / modes.c
     unsigned char g_320x200x256[] =
@@ -165,10 +163,7 @@ uint8_t* VideoGraphicsArray::get_frame_buffer_segment()
  */
 void VideoGraphicsArray::render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour){
 
-    // Get the address of the pixel
-    uint8_t*pixel_address = get_frame_buffer_segment() + 320*y + x;
-
-    // Set the pixel
+    uint8_t*pixel_address = get_frame_buffer_segment() + 320 * y + x;
     *pixel_address = colour;
 }
 
@@ -181,11 +176,8 @@ void VideoGraphicsArray::render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colo
  */
 uint8_t VideoGraphicsArray::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
 
-    // Get the address of the pixel
-    uint8_t*pixel_address = get_frame_buffer_segment() + 320*y + x;
-
-    // Return the pixel
-    return *pixel_address;
+    uint8_t* pixel_address = get_frame_buffer_segment() + 320 * y + x;
+    return* pixel_address;
 }
 
 /**
@@ -194,7 +186,9 @@ uint8_t VideoGraphicsArray::get_rendered_pixel_8_bit(uint32_t x, uint32_t y) {
  * @return The name of the vendor.
  */
 string VideoGraphicsArray::vendor_name() {
-    return "IBM"; // VGA was made by IBM
+
+    // VGA was made by IBM
+    return "IBM";
 }
 
 /**

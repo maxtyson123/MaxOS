@@ -45,8 +45,6 @@ namespace MaxOS{
                     void write(uint32_t sector, const uint8_t* data, size_t count) final;
                     void flush() final;
 
-                    void activate() final;
-
                     string device_name() final;
                     string vendor_name() final;
             };

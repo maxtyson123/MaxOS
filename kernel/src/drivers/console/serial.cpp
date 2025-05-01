@@ -46,8 +46,6 @@ SerialConsole::SerialConsole(Logger* logger)
 
   // Set the active serial console
   logger->add_log_writer(this);
-
-
 }
 
 SerialConsole::~SerialConsole() {

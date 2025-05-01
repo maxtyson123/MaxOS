@@ -16,7 +16,7 @@ using namespace MaxOS::drivers::disk;
  */
 void MSDOSPartition::mount_partitions(Disk* hd) {
 
-  // read the MBR from the hard disk
+  // Read the MBR from the hard disk
   MasterBootRecord mbr = {};
   hd -> read(0, (uint8_t *)&mbr, sizeof(MasterBootRecord));
 
@@ -29,7 +29,6 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
 
   // Get the VFS
   VirtualFileSystem* vfs = VirtualFileSystem::current_file_system();
-
 
   // Loop through the primary partitions
   for(auto& entry : mbr.primary_partition){

@@ -42,7 +42,6 @@ Event<ClockEvents>* ClockEventHandler::on_event(Event<ClockEvents>* event) {
             break;
     }
 
-    // Return the event
     return event;
 }
 
@@ -70,20 +69,20 @@ Clock::~Clock() = default;
  */
 void Clock::handle_interrupt() {
 
-    // Increment the number of ticks and decrement the number of ticks until the next event
+    // Clock has ticked
     m_ticks++;
     m_ticks_until_next_event--;
 
-    // If the number of ticks until the next event is not 0 then return
+    // Dont raise events until needed
     if(m_ticks_until_next_event != 0)
         return;
-
-    // Otherwise, reset the number of ticks until the next event
-    m_ticks_until_next_event = m_ticks_between_events;
 
     // Raise the time event
 //    Time time = get_time();
 //    raise_event(new TimeEvent(&time));
+
+    // Reset
+    m_ticks_until_next_event = m_ticks_between_events;
 }
 
 
@@ -95,10 +94,8 @@ void Clock::handle_interrupt() {
  */
 uint8_t Clock::read_hardware_clock(uint8_t address)
 {
-    // Send the address to the hardware clock
-    m_command_port.write(address);
 
-    // read the value from the hardware clock
+    m_command_port.write(address);
     return m_data_port.read();
 }
 
@@ -110,11 +107,11 @@ uint8_t Clock::read_hardware_clock(uint8_t address)
  */
 uint8_t Clock::binary_representation(uint8_t number) const {
 
-    // If the binary coded decimal representation is not used, return the number
+    // Check if the conversion needed
     if(m_binary)
         return number;
 
-    // Otherwise, return the binary representation
+    // Convert to the binary represnation
     return ((number / 16) * 10) + (number & 0x0f);
 
 }
@@ -124,10 +121,10 @@ uint8_t Clock::binary_representation(uint8_t number) const {
  */
 void Clock::activate() {
 
-    // read the status register
+    // Get the stats from the clock
     uint8_t status = read_hardware_clock(0xB);
 
-    // Set the clock information
+    // Store the clock status
     m_24_hour_clock = status & 0x02;
     m_binary = status & 0x04;
 
@@ -150,10 +147,8 @@ void Clock::delay(uint32_t milliseconds) const {
     // Round the number of milliseconds UP to the nearest clock accuracy
     uint64_t rounded_milliseconds = (milliseconds + s_clock_accuracy - 1) / s_clock_accuracy;
 
-    // Calculate the number of ticks until the delay is over
+    // Wait until the time has passed
     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
-
-    // Wait until the number of ticks is equal to the number of ticks until the delay is over
     while(m_ticks < ticks_until_delay_is_over)
         asm volatile("nop");
 }
@@ -192,14 +187,14 @@ void Clock::calibrate(uint64_t ms_per_tick) {
   PIT pit(m_apic);
   uint32_t ticks_per_ms = pit.ticks_per_ms();
 
-  // Set the timer vector to 0x20 and configure it for periodic mode
+  // Configure the clock to periodic mode
   uint32_t lvt = 0x20 | (1 << 17);
   m_apic -> local_apic() -> write(0x320, lvt);
 
   // Set the initial count
   m_apic -> local_apic() -> write(0x380, ms_per_tick * ticks_per_ms);
 
-  // Clear the mask bit
+  // Clear the interrupt mask for the clock
   lvt &= ~(1 << 16);
   m_apic -> local_apic() -> write(0x380, lvt);
 
@@ -217,10 +212,8 @@ common::Time Clock::get_time() {
   while(read_hardware_clock(0xA) & 0x80)
       asm volatile("nop");
 
-  // Create a time object
+  // Read the time from the clock
   Time time{};
-
-  // read the time from the hardware clock
   time.year = binary_representation(read_hardware_clock(0x9)) + 2000;
   time.month = binary_representation(read_hardware_clock(0x8));
   time.day = binary_representation(read_hardware_clock(0x7));
@@ -232,8 +225,6 @@ common::Time Clock::get_time() {
   if(!m_24_hour_clock && (time.hour & 0x80) != 0)
     time.hour = ((time.hour & 0x7F) + 12) % 24;
 
-
-  //Raise the clock event
   return time;
 }
 

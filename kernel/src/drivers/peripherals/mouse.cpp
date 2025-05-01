@@ -39,7 +39,6 @@ Event<MouseEvents>* MouseEventHandler::on_event(Event<MouseEvents> *event) {
 
     }
 
-    // Return the event
     return event;
 }
 
@@ -90,19 +89,18 @@ MouseDriver::~MouseDriver()= default;
 void MouseDriver::activate() {
 
 
-
   //  Get the current state of the mouse
   command_port.write(0x20);
   uint8_t status = (data_port.read() | 2);
 
-  // write the new state
+  // Write the new state
   command_port.write(0x60);
   data_port.write(status);
 
   // Tell the PIC to start listening to the mouse
   command_port.write(0xAB);
 
-  // activate the mouse
+  // Activate the mouse
   command_port.write(0xD4);
   data_port.write(0xF4);
   data_port.read();
@@ -113,39 +111,39 @@ void MouseDriver::activate() {
  */
 void MouseDriver::handle_interrupt(){
 
-    //Only if the 6th bit of data is one then there is data to handle
+    // Check if there is data to handle
     uint8_t status = command_port.read();
     if(!(status & 0x20))
         return;
 
-    // read the data and store it in the buffer
-    buffer[offset] = data_port.read();
-    offset = (offset + 1) % 3;
+    // Read the data
+    m_buffer[m_offset] = data_port.read();
+    m_offset = (m_offset + 1) % 3;
 
     // If the mouse data transmission is incomplete (3rd piece of data isn't through)
-    if(offset != 0)
+    if(m_offset != 0)
         return;
 
     // If the mouse is moved (y-axis is inverted)
-    if(buffer[1] != 0 || buffer[2] != 0)
-      raise_event(new MouseMoveEvent(buffer[1], -buffer[2]));
+    if(m_buffer[1] != 0 || m_buffer[2] != 0)
+      raise_event(new MouseMoveEvent(m_buffer[1], -m_buffer[2]));
 
+    // Handle button presses
     for (int i = 0; i < 3; ++i) {
 
-        // Check if the button state has changed
-        if((buffer[0] & (0x1<<i)) != (buttons & (0x1<<i)))
-        {
-            // Check if the button is up or down
-            if(buttons & (0x1<<i))
-              raise_event(new MouseUpEvent(i + 1));
-            else
-              raise_event(new MouseDownEvent(i + 1));
+        // This button is still in the same state
+        if((m_buffer[0] & (0x1 << i)) == (m_buttons & (0x1 << i)))
+          continue;
 
-        }
+        // Pass to handlers
+        bool is_pressed = (m_buttons & (0x1 << i)) != 0;
+        if(is_pressed)
+          raise_event(new MouseDownEvent(m_buffer[i]));
+        else
+          raise_event(new MouseUpEvent(m_buffer[i]));
     }
 
-    // Update the buttons
-    buttons = buffer[0];
+    m_buttons = m_buffer[0];
 }
 
 /**

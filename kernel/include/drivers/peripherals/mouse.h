@@ -86,9 +86,9 @@ namespace MaxOS {
 
                 void handle_interrupt() final;
 
-                uint8_t buffer[3] = {};
-                uint8_t offset = 0;
-                uint8_t buttons = 0;
+                uint8_t m_buffer[3] = {};
+                uint8_t m_offset = 0;
+                uint8_t m_buttons = 0;
 
             public:
                 MouseDriver();

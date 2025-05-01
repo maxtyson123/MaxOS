@@ -21,6 +21,7 @@ namespace MaxOS {
           int m_length = 0;
 
           [[nodiscard]] static int lex_value(String const &other) ;
+          void allocate_self();
 
         public:
 

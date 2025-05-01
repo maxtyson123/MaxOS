@@ -24,15 +24,12 @@ ButtonEventHandler::~ButtonEventHandler() = default;
  */
 Event<ButtonEvents>* ButtonEventHandler::on_event(Event<ButtonEvents> *event) {
 
-    // Check the event type
     switch (event -> type) {
 
-        // Button pressed
         case ButtonEvents::PRESSED:
             on_button_pressed(((ButtonPressedEvent *)event)->source);
             break;
 
-        // Button released
         case ButtonEvents::RELEASED:
             on_button_released(((ButtonReleasedEvent *)event)->source);
             break;

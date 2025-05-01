@@ -101,7 +101,7 @@ void KeyboardDriver::activate() {
     m_command_port.write(0x60);
     m_data_port.write(status);
 
-    // activate the keyboard
+    // Activate the keyboard
     m_data_port.write(0xF4);
 }
 
@@ -110,13 +110,10 @@ void KeyboardDriver::activate() {
  */
 void KeyboardDriver::handle_interrupt(){
 
-    // read the scancode from the keyboard
-    uint8_t key = m_data_port.read();
-
     // Pass the scan code to the m_handlers
-    for(auto& handler : this -> m_input_stream_event_handlers){
+    uint8_t key = m_data_port.read();
+    for(auto& handler : m_input_stream_event_handlers)
         handler -> on_stream_read(key);
-    }
 }
 
 /**
@@ -171,27 +168,29 @@ KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() = default;
  */
 void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 
-    // 0 is a regular key, 1 is an extended code, 2 is an extended code with e1CodeBuffer
-    int keyType = 0;
 
     // Check if the key was released
-    bool released = (scan_code & 0x80) && (m_current_extended_code_1 || (scan_code != 0xe1)) && (m_next_is_extended_code_0 || (scan_code != 0xe0));
+    bool released   =  (scan_code & 0x80) && (m_current_extended_code_1
+                    || (scan_code != 0xe1)) && (m_next_is_extended_code_0
+                    || (scan_code != 0xe0));
 
     // Clear the released bit
     if (released)
       scan_code &= ~0x80;
 
-    // Set the e0Code flag to true
+    // Start of an extended scan code
     if (scan_code == 0xe0)
     {
       m_next_is_extended_code_0 = true;
       return;
     }
 
-    // If e0Code is true, set keyType to 1 and reset e0Code
+    // Handle extended scan codes
+    ScanCodeType type = ScanCodeType::REGULAR;
     if (m_next_is_extended_code_0)
     {
-        keyType = 1;
+
+        type = ScanCodeType::EXTENDED;
         m_next_is_extended_code_0 = false;
 
         // Check if the scan_code represents a shift key and return (fake shift)
@@ -217,17 +216,18 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
     // If e1Code is 2, set keyType to 2, reset e1Code, and update e1CodeBuffer
     if (m_current_extended_code_1 == 2)
     {
-        keyType = 2;
+        type = ScanCodeType::EXTENDED;
         m_current_extended_code_1 = 0;
         m_extended_code_1_buffer |= (((uint16_t)scan_code) << 8);
     }
 
+    // Scan code value manipulations
     bool is_shifting = this ->m_keyboard_state.left_shift || this ->m_keyboard_state.right_shift;
     bool should_be_upper_case = is_shifting != this ->m_keyboard_state.caps_lock;
 
 
     // TODO: Probably a better way to do this (investigate when adding more keyboard layouts)
-    if(keyType == 0)
+    if(type == ScanCodeType::REGULAR)
     switch ((KeyCodeEN_US)scan_code) {
 
         // First row

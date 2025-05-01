@@ -22,6 +22,12 @@ namespace MaxOS
 
         namespace peripherals{
 
+            enum class ScanCodeType : int{
+                REGULAR,
+                EXTENDED,
+                EXTENDED_BUFFER
+            };
+
             enum class KeyCode : uint16_t{
 
                 // Alphabet

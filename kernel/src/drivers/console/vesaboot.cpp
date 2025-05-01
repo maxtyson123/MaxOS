@@ -26,11 +26,10 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
     // Prepare the console
     VESABootConsole::clear();
     print_logo();
-
-    // Connect to the loggers
     m_console_area = new ConsoleArea(this, 0, 0, width() / 2 - 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
     cout = new ConsoleStream(m_console_area);
 
+    // Only log to the screen when debugging
     #ifdef TARGET_DEBUG
         Logger::active_logger() -> add_log_writer(cout);
         Logger::INFO() << "Console Stream set up \n";
@@ -80,7 +79,9 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
       // Do not draw the escape character
       return;
 
-    } else if (ansi_code_length < 8) {
+    }
+
+    if (ansi_code_length < 8) {
 
       // Add the character to the ANSI code
       ansi_code[ansi_code_length++] = c;
@@ -289,20 +290,18 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
   // Get the framebuffer info
   auto* framebuffer_address = (uint8_t*)s_graphics_context->framebuffer_address();
   uint64_t framebuffer_width   = s_graphics_context->width();
-  uint64_t framebuffer_height  = s_graphics_context->height();
   uint64_t framebuffer_bpp     = s_graphics_context->color_depth(); // in bits per pixel
   uint64_t bytes_per_pixel     = framebuffer_bpp / 8;
   uint64_t framebuffer_pitch   = framebuffer_width * bytes_per_pixel;
 
-  // Calculate the number of pixels per line
   uint16_t line_height = Font::font_height;
 
-  // Calculate the number of pixels in the region
-  uint16_t region_pixel_y = top * line_height;
+  // Region conversions
+  uint16_t region_pixel_y       = top * line_height;
   uint16_t region_pixel_height  = height * line_height;
   uint16_t region_pixel_left    = left * Font::font_width;
   uint16_t region_pixel_width   = width * Font::font_width;
-  size_t row_bytes              = region_pixel_width * bytes_per_pixel;
+  size_t   row_bytes            = region_pixel_width * bytes_per_pixel;
 
   // Decide the colour of the pixel
   ConsoleColour to_set_foreground = CPU::is_panicking ? ConsoleColour::White : get_foreground_color(left, top + height - 1);
@@ -369,14 +368,13 @@ void VESABootConsole::print_logo_kernel_panic() {
 void VESABootConsole::finish() {
 
   // Done
-  Logger::INFO() << "MaxOS Kernel Successfully Booted\n";
+  Logger::HEADER() << "MaxOS Kernel Successfully Booted\n";
 
-  // Move COUT to the bottom of the screen
+  // CPU::PANIC will override a disabled logger so the console should scroll itself into view as it is unknown what
+  // will be on the screen now and that may mess with the presentation of the text (ie white text on a white background)
   cout->set_cursor(width(), height());
 
-  // Disable the logger
   Logger::active_logger()->disable_log_writer(cout);
-
 }
 
 /**
@@ -386,7 +384,7 @@ void VESABootConsole::finish() {
  */
 void VESABootConsole::update_progress_bar(uint8_t percentage) {
 
-    // Must be within bounds
+    // Check bounds
     if(percentage > 100)
         percentage = 100;
 
@@ -403,10 +401,10 @@ void VESABootConsole::update_progress_bar(uint8_t percentage) {
     uint32_t bottom_y = (s_graphics_context->height()/2 - 80) - logo_height / 2;
 
     // Find the bounds
-    uint32_t start_x = progress_width_cull;
-    uint32_t start_y = logo_height + progress_spacing;
-    uint32_t end_x = logo_width - progress_width_cull;
-    uint32_t end_y = logo_height + progress_height + progress_spacing;
+    uint32_t start_x    = progress_width_cull;
+    uint32_t start_y    = logo_height + progress_spacing;
+    uint32_t end_x      = logo_width - progress_width_cull;
+    uint32_t end_y      = logo_height + progress_height + progress_spacing;
 
     // Draw the progress bar
     for (uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
@@ -423,11 +421,8 @@ void VESABootConsole::update_progress_bar(uint8_t percentage) {
             if (progress_x > logo_width * percentage / 100 && !is_border)
                 continue;
 
-
-            // Draw the pixel
             s_graphics_context->put_pixel(right_x + progress_x, bottom_y + progress_y, Colour(0xFF, 0xFF, 0xFF));
 
         }
     }
-
 }

@@ -11,6 +11,10 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 
+/// MAX OS NET CODE:
+///     All the old (this) networking code poorly written and not used, this will be moved to userspace in the future
+///     but is kept here as a reference for now.
+
 AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
 : InterruptHandler(0x20 + dev -> interrupt),
   MACAddress0Port(dev ->port_base),

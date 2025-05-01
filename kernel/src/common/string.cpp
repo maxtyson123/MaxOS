@@ -9,7 +9,7 @@ String::String()
 {
 
   // String that only contains the null terminator
-  m_string = new char[1];
+  allocate_self();
   m_string[0] = '\0';
   m_length = 1;
 
@@ -22,10 +22,7 @@ String::String(char const *string)
   m_length = 0;
   while (string[m_length] != '\0' && m_length <= 10000)
           m_length++;
-
-
-  // Allocate memory for the string (and null terminator)
-  m_string = new char[m_length + 1];
+  allocate_self();
 
   // Copy the string
   for (int i = 0; i < m_length; i++)
@@ -38,14 +35,14 @@ String::String(char const *string)
       m_string[m_length - 52 + i] = warning[i];
 
 
-  // Write the null terminator
   m_string[m_length] = '\0';
 }
 
 String::String(uint8_t const* string, int length)
 {
   // Allocate memory for the string (and null terminator)
-  m_string = new char[length + 1];
+  m_length = length;
+  allocate_self();
 
   // Copy the string
   for (int i = 0; i < length; i++)
@@ -66,13 +63,10 @@ String::String(uint64_t value) {
 
 String::String(float value) {
 
-
-
 }
 
 
 String::String(String const &other) {
-  // Copy the other string
   copy(other);
 }
 
@@ -91,11 +85,9 @@ String::~String() {
  */
 void String::copy(String const &other) {
 
-  // Get the length of the string
-  m_length = other.length();
-
   // Allocate memory for the string (and null terminator)
-  m_string = new char[m_length + 1];
+  m_length = other.length();
+  allocate_self();
 
   // Copy the string
   for (int i = 0; i < m_length; i++)
@@ -114,18 +106,24 @@ void String::copy(String const &other) {
  */
 int String::lex_value(String const &string) {
 
-    // The sum of the ascii values of the characters in the string
+    // Sum the ascii values of the characters in the string
     int sum = 0;
-
-    // Add the ascii values of the characters in the string
     for (int i = 0; i < string.length(); i++)
       sum += string[i];
 
-    // Return the sum
     return sum;
-
 }
 
+/**
+ * @brief Allocates memory for the string
+ */
+void String::allocate_self()
+{
+
+  // Create space for this string and the null terminator
+  m_string = new char[m_length + 1];
+
+}
 
 
 /**
@@ -158,7 +156,6 @@ String &String::operator = (String const &other) {
  */
 char* String::c_str() {
 
-    // Return the string
     return m_string;
 
 }
@@ -170,7 +167,6 @@ char* String::c_str() {
  */
 const char* String::c_str() const {
 
-    // Return the string
     return m_string;
 
 }
@@ -218,7 +214,7 @@ String String::substring(int start, int length) const
   // Allocate memory for the substring (and null terminator)
   String substring;
   substring.m_length = length;
-  substring.m_string = new char[length + 1];
+  substring.allocate_self();
 
   // Copy the substring
   for (int i = 0; i < length; i++)
@@ -238,28 +234,25 @@ String String::substring(int start, int length) const
  */
 common::Vector<String> String::split(String const& delimiter) const
 {
-  // The vector of strings
   common::Vector<String> strings;
 
   // Go through the string and split it by the delimiter
   int start = 0;
   int end = 0;
-  while (end < m_length) {
+  for ( ; end < m_length; end++) {
 
-    // If the character is the delimiter, add the string to the vector
-    if (m_string[end] == delimiter[0]) {
-      strings.push_back(substring(start, end - start));
-      start = end + 1;
-    }
+    // Not splitting
+    if (m_string[end] != delimiter[0])
+      continue;
 
-    // Increment the end
-    end++;
+    // Add the splice of the string
+    strings.push_back(substring(start, end - start));
+    start = end + 1;
   }
 
   // Add the last string to the vector
   strings.push_back(substring(start, end - start));
 
-  // Return the vector of strings
   return strings;
 }
 
@@ -282,10 +275,9 @@ int String::length(bool count_ansi) const {
     while (m_string[total_length] != '\0'){
 
       // If the character is an ansi character, skip it
-      if (m_string[total_length] == '\033'){
+      if (m_string[total_length] == '\033')
           while (m_string[total_length] != 'm')
             total_length++;
-      }
 
       // Increment the length
       clean_length++;
@@ -339,12 +331,12 @@ bool String::operator == (String const &other) const {
  */
 bool String::operator != (String const &other) const {
 
-    // If the strings are equal, return false
+    // Self assignment check
     if (*this == other)
       return false;
 
-    // The strings are not equal
-    return true;
+
+    return !equals(other);
 
 }
 
@@ -356,7 +348,6 @@ bool String::operator != (String const &other) const {
  */
 bool String::operator < (String const &other) const {
 
-  // If the sum of this is less than the sum of the other, return true
   return lex_value(*this) < lex_value(other);
 
 }
@@ -369,7 +360,6 @@ bool String::operator < (String const &other) const {
  */
 bool String::operator > (String const &other) const {
 
-  // If the sum of this is greater than the sum of the other, return true
   return lex_value(*this) > lex_value(other);
 
 }
@@ -382,7 +372,6 @@ bool String::operator > (String const &other) const {
  */
 bool String::operator <= (String const &other) const {
 
-  // If the sum of this is less than or equal to the sum of the other, return true
   return lex_value(*this) <= lex_value(other);
 
 }
@@ -395,7 +384,6 @@ bool String::operator <= (String const &other) const {
  */
 bool String::operator >= (String const &other) const {
 
-    // If the sum of this is greater than or equal to the sum of the other, return true
     return lex_value(*this) >= lex_value(other);
 
 }
@@ -410,13 +398,8 @@ String String::operator + (String const &other) const {
 
   // The concatenated string
   String concatenated;
-
-  // The length of the concatenated string
-  int length = m_length + other.length();
-  concatenated.m_length = length;
-
-  // Allocate memory for the concatenated string (and null terminator)
-  concatenated.m_string = new char[length + 1];
+  concatenated.m_length = m_length + other.length();
+  concatenated.allocate_self();
 
   // Copy the first string
   for (int i = 0; i < m_length; i++)
@@ -427,7 +410,7 @@ String String::operator + (String const &other) const {
     concatenated.m_string[m_length + i] = other[i];
 
   // Write the null terminator
-  concatenated.m_string[length] = '\0';
+  concatenated.m_string[m_length] = '\0';
 
   // Return the concatenated string
   return concatenated;
@@ -443,13 +426,8 @@ String &String::operator += (String const &other) {
 
     // The concatenated string
     String concatenated;
-
-    // The length of the concatenated string
-    int length = m_length + other.length();
-    concatenated.m_length = length;
-
-    // Allocate memory for the concatenated string (and null terminator)
-    concatenated.m_string = new char[length + 1];
+    concatenated.m_length = m_length + other.length();
+    concatenated.allocate_self();
 
     // Copy the first string
     for (int i = 0; i < m_length; i++)
@@ -460,7 +438,7 @@ String &String::operator += (String const &other) {
       concatenated.m_string[m_length + i] = other[i];
 
     // Write the null terminator
-    concatenated.m_string[length] = '\0';
+    concatenated.m_string[m_length] = '\0';
 
     // Free the old memory
     delete[] m_string;
@@ -504,13 +482,8 @@ String String::operator*(int times) const {
 
     // The repeated string
     String repeated;
-
-    // The length of the repeated string
-    int length = m_length * times;
-    repeated.m_length = length;
-
-    // Allocate memory for the repeated string (and null terminator)
-    repeated.m_string = new char[length + 1];
+    repeated.m_length *= times;
+    repeated.allocate_self();
 
     // Copy the string
     for (int i = 0; i < times; i++)
@@ -518,7 +491,7 @@ String String::operator*(int times) const {
         repeated.m_string[i * m_length + j] = m_string[j];
 
     // Write the null terminator
-    repeated.m_string[length] = '\0';
+    repeated.m_string[m_length] = '\0';
 
     // Return the repeated string
     return repeated;
@@ -534,39 +507,30 @@ String String::operator*(int times) const {
  */
 String String::center(int width, char fill) const {
 
+    // The number of characters to add
+    int add = (width - m_length) / 2;
+
     // The centered string
     String centered;
-
-    // The length of the string
-    int length = m_length;
-
-    // The number of characters to add
-    int add = (width - length) / 2;
-
-    // The length of the centered string
     centered.m_length = width;
+    centered.allocate_self();
 
-    // Allocate memory for the centered string (and null terminator)
-    centered.m_string = new char[width + 1];
-
-    // Fill the string with the fill character
+    // Fill the right side (before)
     for (int i = 0; i < add; i++)
         centered.m_string[i] = fill;
 
-    // Copy the string
-    for (int i = 0; i < length; i++)
+    // Copy the string (middle)
+    for (int i = 0; i < m_length; i++)
         centered.m_string[add + i] = m_string[i];
 
-    // Fill the string with the fill character
-    for (int i = add + length; i < width; i++)
+    // Fill the left side (after)
+    for (int i = add + m_length; i < width; i++)
         centered.m_string[i] = fill;
 
     // Write the null terminator
     centered.m_string[width] = '\0';
 
-    // Return the centered string
     return centered;
-
 }
 
 /**

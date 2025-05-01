@@ -21,7 +21,7 @@ namespace MaxOS{
         class SyscallManager;
 
         /// DO NOT REARRANGE ONLY APPEND TO
-        enum SyscallType{
+        enum class SyscallType{
             CLOSE_PROCESS,
             KLOG,
             CREATE_SHARED_MEMORY,
@@ -44,7 +44,7 @@ namespace MaxOS{
             uint64_t arg4;
             uint64_t arg5;
             uint64_t return_value;
-            system::cpu_status_t* return_state;
+            cpu_status_t* return_state;
         } syscall_args_t;
 
         // Could use a class based response but a single class might want multiple handlers e.g. fs
@@ -65,25 +65,25 @@ namespace MaxOS{
               SyscallManager();
               ~SyscallManager();
 
-              system::cpu_status_t* handle_interrupt(system::cpu_status_t* esp) final;
+              cpu_status_t* handle_interrupt(cpu_status_t* esp) final;
 
-              void set_syscall_handler(uint8_t syscall, syscall_func_t handler);
-              void remove_syscall_handler(uint8_t syscall);
+              void set_syscall_handler(SyscallType syscall, syscall_func_t handler);
+              void remove_syscall_handler(SyscallType syscall);
 
 
               // Syscalls
-              static system::syscall_args_t* syscall_close_process(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_klog(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_create_shared_memory(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_open_shared_memory(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_allocate_memory(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_free_memory(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_create_ipc_endpoint(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_send_ipc_message(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_remove_ipc_endpoint(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_thread_yield(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_thread_sleep(system::syscall_args_t* args);
-              static system::syscall_args_t* syscall_thread_close(system::syscall_args_t* args);
+              static syscall_args_t* syscall_close_process(syscall_args_t* args);
+              static syscall_args_t* syscall_klog(syscall_args_t* args);
+              static syscall_args_t* syscall_create_shared_memory(syscall_args_t* args);
+              static syscall_args_t* syscall_open_shared_memory(syscall_args_t* args);
+              static syscall_args_t* syscall_allocate_memory(syscall_args_t* args);
+              static syscall_args_t* syscall_free_memory(syscall_args_t* args);
+              static syscall_args_t* syscall_create_ipc_endpoint(syscall_args_t* args);
+              static syscall_args_t* syscall_send_ipc_message(syscall_args_t* args);
+              static syscall_args_t* syscall_remove_ipc_endpoint(syscall_args_t* args);
+              static syscall_args_t* syscall_thread_yield(syscall_args_t* args);
+              static syscall_args_t* syscall_thread_sleep(syscall_args_t* args);
+              static syscall_args_t* syscall_thread_close(syscall_args_t* args);
           };
 
     }

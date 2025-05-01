@@ -21,16 +21,12 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
     // Enable the memory manager
     switch_active_memory_manager(this);
 
-    // Get the first chunk of memory
+    // Setup the first chunk of memory
     this -> m_first_memory_chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
-
-    // Set the first chunk's properties
     m_first_memory_chunk-> allocated = false;
     m_first_memory_chunk-> prev = nullptr;
     m_first_memory_chunk-> next = nullptr;
     m_first_memory_chunk-> size = PhysicalMemoryManager::s_page_size - sizeof(MemoryChunk);
-
-    // Set the last chunk to the first chunk
     m_last_memory_chunk = m_first_memory_chunk;
 
     // First memory manager is the kernel memory manager
@@ -46,18 +42,18 @@ MemoryManager::~MemoryManager() {
     if(m_virtual_memory_manager != nullptr && s_current_memory_manager != s_kernel_memory_manager)
       delete m_virtual_memory_manager;
 
-    // Check if the current memory manager is this one
+    // Remove the kernel reference to this
     if(s_kernel_memory_manager == this)
       s_kernel_memory_manager = nullptr;
 
-    // Check if the current memory manager is this one
+    // Remove the active reference to this
     if(s_current_memory_manager == this)
        s_current_memory_manager = nullptr;
 
 }
 
 /**
- * @brief Allocates a block of memory using the current memory manager
+ * @brief Allocates a block of memory in the current USERSPACE heap
  *
  * @param size size of the block
  * @return a pointer to the block, 0 if no block is available or no memory manager is set
@@ -68,12 +64,12 @@ void* MemoryManager::malloc(size_t size) {
     if(s_current_memory_manager == nullptr)
             return nullptr;
 
-    return s_current_memory_manager->handle_malloc(size);
+    return s_current_memory_manager -> handle_malloc(size);
 
 }
 
 /**
- * @brief Allocates a block of memory using the kernel memory manager
+ * @brief Allocates a block of memory in the KERNEL space
  *
  * @param size The size of the block
  * @return The pointer to the block, or nullptr if no block is available
@@ -97,11 +93,11 @@ void *MemoryManager::kmalloc(size_t size) {
 void *MemoryManager::handle_malloc(size_t size) {
   MemoryChunk* result = nullptr;
 
-  // Don't allocate a block of size 0
+  // Nothing to allocate
   if(size == 0)
     return nullptr;
 
-  // Size must include the size of the chunk and be aligned
+  // Add room to store the chunk information
   size = align(size + sizeof(MemoryChunk));
 
   // Find the next free chunk that is big enough
@@ -110,37 +106,37 @@ void *MemoryManager::handle_malloc(size_t size) {
       result = chunk;
   }
 
-  // If there is no free chunk then expand the heap
+  // If there is no free chunk then make more room
   if(result == nullptr)
     result = expand_heap(size);
 
-  // If there is not enough space to create a new chunk then just allocate the current chunk
+  // If there is not left over space to store extra chunks there is no need to split the chunk
   if(result -> size < size + sizeof(MemoryChunk) + 1) {
     result->allocated = true;
     return (void *)(((size_t)result) + sizeof(MemoryChunk));
   }
 
-  // Create a new chunk after the current one
-  auto* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
+  // Split the chunk into: what was requested + free overflow space for future allocates
+  //  - This prevents waste in the event that a big free chunk was found but the requested size would only use a portion of that
+  auto* extra = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
+  extra -> allocated = false;
+  extra -> size      = result->size - size - sizeof(MemoryChunk);
+  extra -> prev      = result;
 
-  // Set the new chunk's properties and insert it into the linked list
-  temp -> allocated = false;
-  temp -> size =  result->size - size - sizeof(MemoryChunk);
-  temp -> prev = result;
-  temp -> next = result -> next;
+  // Add to the linked list
+  extra -> next = result -> next;
+  if(extra -> next != nullptr)
+     extra -> next -> prev = extra;
 
-  // If there is a chunk after the current one then set it's previous to the new chunk
-  if(temp -> next != nullptr)
-    temp -> next -> prev = temp;
-
-  // Current chunk is now allocated and is pointing to the new chunk
-  result->size = size;
+  // Requested chunk is now allocated exactly to the size requested and points to the free (split) block of memory that
+  // it did not use
+  result -> size      = size;
   result -> allocated = true;
-  result->next = temp;
+  result -> next      = extra;
 
   // Update the last memory chunk if necessary
   if(result == m_last_memory_chunk)
-    m_last_memory_chunk = temp;
+    m_last_memory_chunk = extra;
 
   return (void*)(((size_t)result) + sizeof(MemoryChunk));
 }
@@ -182,31 +178,30 @@ void MemoryManager::kfree(void *pointer) {
  */
 void MemoryManager::handle_free(void *pointer) {
 
-
-    // If nothing to free then return
+    // Cant free unallocated memory
     if(pointer == nullptr)
           return;
 
-    // If block is not in the memory manager's range then return
+    // Check bounds
     if((uint64_t ) pointer < (uint64_t ) m_first_memory_chunk || (uint64_t ) pointer > (uint64_t ) m_last_memory_chunk)
         return;
 
-    // Create a new free chunk
+    // Get the chunk information from the pointer
     auto* chunk = (MemoryChunk*)((size_t)pointer - sizeof(MemoryChunk));
     chunk -> allocated = false;
 
     // If there is a free chunk before this chunk then merge them
     if(chunk -> prev != nullptr && !chunk -> prev -> allocated){
 
-        // Increase the previous chunk's size and remove the current chunk from the linked list
-        chunk->prev->size += chunk->size + sizeof(MemoryChunk);
+        // Grow the chunk behind this one so that it now contains the freed one
+        chunk -> prev -> size += chunk -> size + sizeof(MemoryChunk);
         chunk -> prev -> next = chunk -> next;
 
-        // If there is a next chunk then ensure this chunk is removed from its linked list
+        // The chunk in front of the freed one now needs to point to the merged chunk
         if(chunk -> next != nullptr)
             chunk -> next -> prev = chunk->prev;
 
-        // Chunk is now the previous chunk
+        // Freed chunk doesn't exist anymore so now working with the merged chunk
         chunk = chunk -> prev;
 
     }
@@ -214,11 +209,12 @@ void MemoryManager::handle_free(void *pointer) {
     // If there is a free chunk after this chunk then merge them
     if(chunk -> next != nullptr && !chunk -> next -> allocated){
 
-        // Increase the current chunk's size and remove the next chunk from the linked list
+        // Grow this chunk so that it now contains the free chunk in front of the old (now freed) one
         chunk -> size += chunk -> next -> size + sizeof(MemoryChunk);
-        chunk -> next = chunk -> next -> next;
 
-        // Remove the just merged chunk from the linked list
+        // Now that this chunk contains the next one, it has to point to the one in front of what has just been merged
+        // and that has to point to this
+        chunk -> next = chunk -> next -> next;
         if(chunk -> next != nullptr)
             chunk -> next -> prev = chunk;
 
@@ -235,8 +231,6 @@ MemoryChunk *MemoryManager::expand_heap(size_t size) {
 
   // Create a new chunk of memory
   auto* chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(size, Present | Write | NoExecute);
-
-  // If the chunk is null then there is no more memory
   ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");
 
   // Handled by assert, but just in case
@@ -245,15 +239,16 @@ MemoryChunk *MemoryManager::expand_heap(size_t size) {
 
   // Set the chunk's properties
   chunk -> allocated = false;
-  chunk -> size = size;
-  chunk -> next = nullptr;
+  chunk -> size      = size;
+  chunk -> next      = nullptr;
 
   // Insert the chunk into the linked list
   m_last_memory_chunk -> next = chunk;
   chunk -> prev = m_last_memory_chunk;
   m_last_memory_chunk = chunk;
 
-  // If it is possible to move to merge the new chunk with the previous chunk then do so (note: this happens if the previous chunk is free but cant contain the size required)
+  // If it is possible to merge the new chunk with the previous chunk then do so (note: this happens if the
+  // previous chunk is free but cant contain the size required)
   if(!chunk -> prev -> allocated)
     free((void*)((size_t)chunk + sizeof(MemoryChunk)));
 
@@ -297,7 +292,7 @@ size_t MemoryManager::align(size_t size) {
  *
  * @param manager The new memory manager
  */
-void MemoryManager::switch_active_memory_manager(MemoryManager *manager) {
+void MemoryManager::switch_active_memory_manager(MemoryManager* manager) {
 
   // Make sure there is a manager
   if(manager == nullptr)

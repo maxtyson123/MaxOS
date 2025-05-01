@@ -414,21 +414,13 @@ void GraphicsContext::putPixel(int32_t x, int32_t y, uint32_t colour) {
  */
 Colour GraphicsContext::get_pixel(int32_t x, int32_t y) {
 
-    // Check if the pixel is within the m_width of the screen
-    if (0 > x || (uint32_t)x >= m_width) {
+    // Check if the pixel is within the bounds of the screen
+    if (0 > x || (uint32_t)x >= m_width || 0 > y || (uint32_t) y >= m_height)
         return {0,0,0};
-    }
-
-    // Check if the pixel is within the m_height of the screen
-    if (0 > y || (uint32_t) y >= m_height) {
-        return {0,0,0};
-    }
 
     // Get the pixel and convert it to a colour
     uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height - y - 1 : y);
     return int_to_colour(translated_color);
-
-
 }
 
 /**
@@ -438,13 +430,14 @@ Colour GraphicsContext::get_pixel(int32_t x, int32_t y) {
  * @param y The y coordinate of the pixel
  */
 void GraphicsContext::invert_pixel(int32_t x, int32_t y) {
+
     // Get the pixel
     Colour colour = get_pixel(x, y);
 
     // Invert the pixel
-    colour.red = 255 - colour.red;
-    colour.green = 255 - colour.green;
-    colour.blue = 255 - colour.blue;
+    colour.red      = 255 - colour.red;
+    colour.green    = 255 - colour.green;
+    colour.blue     = 255 - colour.blue;
 
     // Render the pixel
     put_pixel(x, y, colour);

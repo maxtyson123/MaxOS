@@ -94,9 +94,7 @@ lba_t Fat32Volume::set_next_cluster(lba_t cluster, lba_t next_cluster)
   *(uint32_t *)&fat[entry] = next_cluster & 0x0FFFFFFF;
   disk -> write(sector, fat, bytes_per_sector);
 
-  // Return the next cluster
   return next_cluster;
-
 }
 
 /**
@@ -117,8 +115,6 @@ lba_t Fat32Volume::find_free_cluster()
     if (next_cluster(start) == 0)
       return start;
 
-
-  // No free clusters found
   ASSERT(false, "No free clusters found in the FAT table");
   return 0;
 }
@@ -134,8 +130,6 @@ lba_t Fat32Volume::allocate_cluster(lba_t cluster)
 
     // Allocate 1 cluster
     allocate_cluster(cluster, 1);
-
-
 }
 
 /**
@@ -155,28 +149,24 @@ lba_t Fat32Volume::allocate_cluster(lba_t cluster, size_t amount)
   // Go through allocating the clusters
   for (size_t i = 0; i < amount; i++)
   {
-    // Get the next cluster
     lba_t next_cluster = find_free_cluster();
 
     // Update the fsinfo
     fsinfo.next_free_cluster = next_cluster + 1;
     fsinfo.free_cluster_count -= 1;
 
-    // Update the chain (if this is an existing chain)
+    // If there is an existing chain it needs to be updated
     if (cluster != 0)
       set_next_cluster(cluster, next_cluster);
 
-    // Move to the next cluster
     cluster = next_cluster;
   }
 
-  // Save the fsinfo
+  // Once all the updates are done flush the changes to the disk
   disk -> write(fat_info_lba, (uint8_t *)&fsinfo, sizeof(fs_info_t));
 
-  // Mark the end of the chain
+  // Finish the chin
   set_next_cluster(cluster, (lba_t)ClusterState::END_OF_CHAIN);
-
-  // Return the cluster
   return cluster;
 }
 
@@ -211,7 +201,7 @@ void Fat32Volume::free_cluster(lba_t cluster, size_t amount)
   for (size_t i = 0; i < amount; i++)
   {
 
-    // Get the next cluster
+    // Store the next cluster before it is set to free
     lba_t next_in_chain = next_cluster(cluster);
 
     // Update the fsinfo
@@ -236,7 +226,6 @@ Fat32File::Fat32File(Fat32Volume* volume, lba_t cluster, size_t size, const stri
   m_first_cluster(cluster)
 {
 
-  // Set the base file information
   m_name = name;
   m_size = size;
   m_offset = 0;
@@ -279,11 +268,10 @@ Fat32Directory::Fat32Directory(Fat32Volume* volume, lba_t cluster, const string&
   m_first_cluster(cluster)
 {
 
-  // Set the name
   m_name = name;
 
   // Read the directory
-  while (cluster >= 2 && cluster < (lba_t)ClusterState::BAD)
+  for (; cluster != (lba_t)ClusterState::END_OF_CHAIN; cluster = m_volume -> next_cluster(cluster))
   {
 
     // Get the buffer and address to read
@@ -301,31 +289,23 @@ Fat32Directory::Fat32Directory(Fat32Volume* volume, lba_t cluster, const string&
     {
 
       // Get the entry
-      auto entry = (dir_entry_t *)&buffer[entry_offset];
-
-      // Skip the MacOS specific entries
-      if (strncmp(string(entry -> extension, 3), "Mac", 3))
-        continue;
-
-      // Store the entry
+      auto entry = (dir_entry_t*)&buffer[entry_offset];
       m_entries.push_back(*entry);
 
-      // Check if the entry is the end of the directory
-      if (entry -> name[0] == (uint8_t)DirectoryEntryType::EMPTY)
-        return;
-
-      // Check if the entry is free
-      if (entry -> name[0] == (uint8_t)DirectoryEntryType::DELETED)
+      // Skip free entries and volume labels
+      if (entry -> name[0] == (uint8_t)DirectoryEntryType::DELETED || (entry -> attributes & 0x08) == 0x08)
         continue;
+
+      // Check if the entry is the end of the directory
+      if (entry -> name[0] == (uint8_t)DirectoryEntryType::LAST)
+        return;
 
       // Parse the long name entry
       if ((entry -> attributes & 0x0F) == 0x0F)
       {
 
-        // Get the long name entry
-        auto* long_name_entry = (long_file_name_entry_t*)entry;
-
         // Extract the long name from each part (in reverse order)
+        auto* long_name_entry = (long_file_name_entry_t*)entry;
         for (int i = 0; i < 13; i++) {
 
           // Get the character (in utf8 encoding)
@@ -341,29 +321,24 @@ Fat32Directory::Fat32Directory(Fat32Volume* volume, lba_t cluster, const string&
           if (c == '\0' || c == (char)0xFF)
             break;
 
-          // Add the character to the long name
+          // Add to the start as the entries are stored in reverse
           long_name = string(c) + long_name;
         }
       }
 
       // Get the name of the entry
       string name = long_name == "" ? string(entry->name, 8) : long_name;
-
-      // Reset the long name for the next entry
       long_name = "";
 
       // Get the starting cluster
       lba_t start_cluster = (entry -> first_cluster_high << 16) | entry -> first_cluster_low;
 
       // Store the file or directory
-      if (entry -> attributes & 0x10)
+      if (entry -> attributes & (uint8_t)DirectoryEntryType::DIRECTORY)
         m_subdirectories.push_back(new Fat32Directory(volume, start_cluster, name));
       else
         m_files.push_back(new Fat32File(volume, start_cluster, entry -> size, name));
     }
-
-    // Get the next cluster in the chain
-    cluster = m_volume -> next_cluster(cluster);
   }
 }
 
@@ -436,8 +411,6 @@ lba_t Fat32Directory::create_entry(const string& name, bool is_directory)
       else
         lfn_entry.name3[j - 11] = c;
     }
-
-    // Add the entry to the list
     lfn_entries.push_back(lfn_entry);
   }
 
@@ -452,20 +425,16 @@ lba_t Fat32Directory::create_entry(const string& name, bool is_directory)
   // Find free space for the new entry and the name
   size_t entries_needed = 1 + lfn_entries.size();
   size_t entry_index = 0;
-  for (size_t i = 0; i < m_entries.size(); i++)
+  for (; entry_index < m_entries.size(); entry_index++)
   {
     // Check if there are enough free entries in a row
     bool found = true;
     for (size_t j = 0; j < entries_needed; j++)
-      if (m_entries[i + j].name[0] != 0x00 && m_entries[i + j].name[0] != 0xE5)
+      if (m_entries[entry_index + j].name[0] != 0x00 && m_entries[entry_index + j].name[0] != 0xE5)
         found = false;
 
-    // If free space is found, set the entry index
     if (found)
-    {
-      entry_index = i;
       break;
-    }
   }
 
   // Store the entries in the cache
@@ -530,12 +499,12 @@ void Fat32Directory::remove_entry(lba_t cluster, const string& name)
 
   // Find the entry in the directory
   size_t entry_index = 0;
-  for (size_t i = 0; i < m_entries.size(); i++)
+  for (; entry_index < m_entries.size(); entry_index++)
   {
-    auto& entry = m_entries[i];
+    auto& entry = m_entries[entry_index];
 
     // End of directory means no more entries
-    if (entry.name[0] == (uint8_t)DirectoryEntryType::EMPTY)
+    if (entry.name[0] == (uint8_t)DirectoryEntryType::LAST)
       return;
 
     // Skip deleted entries
@@ -545,17 +514,14 @@ void Fat32Directory::remove_entry(lba_t cluster, const string& name)
     // Check if the entry is the one to remove
     lba_t start_cluster = (entry.first_cluster_high << 16) | entry.first_cluster_low;
     if (start_cluster == cluster)
-    {
-      entry_index = i;
       break;
-    }
   }
 
   // Make sure the entry is valid
   if (entry_index >= m_entries.size())
     return;
 
-  // Find any lfn entries that belong to this entry
+  // Find any long file name entries that belong to this entry
   size_t delete_entry_index = entry_index;
   while (delete_entry_index > 0 && (m_entries[delete_entry_index - 1].attributes & 0x0F) == 0x0F)
     delete_entry_index--;
@@ -568,7 +534,6 @@ void Fat32Directory::remove_entry(lba_t cluster, const string& name)
   lba_t first_directory_entry_lba = m_volume -> data_lba + (m_first_cluster - 2) * m_volume -> sectors_per_cluster;
   for (size_t i = delete_entry_index; i <= entry_index; i++)
   {
-    // Get the offset to write the entry
     uint32_t offset = (i * sizeof(dir_entry_t)) / m_volume -> bytes_per_sector;
     m_volume -> disk -> write(first_directory_entry_lba + offset, (uint8_t *)&m_entries[i], sizeof(dir_entry_t));
   }
@@ -576,11 +541,8 @@ void Fat32Directory::remove_entry(lba_t cluster, const string& name)
   // Count the number of clusters in the chain
   size_t cluster_count = 0;
   lba_t next_cluster = cluster;
-  while (next_cluster >= 2 && next_cluster < (lba_t)ClusterState::BAD)
-  {
+  for (; next_cluster < (lba_t)ClusterState::BAD; next_cluster = m_volume -> next_cluster(next_cluster))
     cluster_count++;
-    next_cluster = m_volume -> next_cluster(next_cluster);
-  }
 
   // Free the clusters in the chain
   m_volume -> free_cluster(cluster, cluster_count);
@@ -618,13 +580,12 @@ void Fat32Directory::remove_file(const string& name)
   for (auto& file : m_files)
     if (file -> name() == name)
     {
+
       // Remove the file from the directory
       m_files.erase(file);
-
-      // Remove the entry
       remove_entry(((Fat32File*)file) -> first_cluster(), name);
 
-      // Delete the file
+      // Delete the file reference
       delete file;
       return;
     }
@@ -675,10 +636,8 @@ void Fat32Directory::remove_subdirectory(const string& name)
       for (auto& subdirectory : subdirectory -> subdirectories())
         subdirectory -> remove_subdirectory(subdirectory -> name());
 
-      // Remove the directory from this directory
-      m_subdirectories.erase(subdirectory);
-
       // Remove the entry
+      m_subdirectories.erase(subdirectory);
       remove_entry(((Fat32Directory*)subdirectory) -> first_cluster(), name);
 
       // Delete the directory

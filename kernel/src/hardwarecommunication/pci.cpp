@@ -106,7 +106,7 @@ uint32_t PeripheralComponentInterconnectController::read(uint16_t bus, uint16_t 
                 | (registeroffset & 0xFC);
     m_command_port.write(id);
 
-    // read the data from the port
+    // Read the data from the port
     uint32_t result = m_data_port.read();
     return result >> (8* (registeroffset % 4));
 
@@ -131,7 +131,7 @@ void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t dev
                   | (registeroffset & 0xFC);
     m_command_port.write(id);
 
-    // write the data to the port
+    // Write the data to the port
     m_data_port.write(value);
 }
 
@@ -144,7 +144,7 @@ void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t dev
  */
 bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bus, uint16_t device) {
 
-    return read(bus, device, 0, 0x0E) & (1<<7);
+    return read(bus, device, 0, 0x0E) & (1 << 7);
 }
 
 /**
@@ -175,7 +175,6 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                         deviceDescriptor.port_base = (uint64_t )bar.address;
                 }
 
-                // write to the debug stream
                 Logger::DEBUG() << "DEVICE FOUND: " << deviceDescriptor.get_type() << " - ";
 
                 // Select the driver and print information about the device
@@ -187,7 +186,6 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
                   list_known_device(deviceDescriptor);
                 }
 
-                // New line
                 Logger::Out() << "\n";
             }
         }
@@ -437,7 +435,7 @@ BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_
 
     BaseAddressRegister result{};
 
-    // only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
+    // Only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
     uint32_t headerType = read(bus, device, function, 0x0E);
     if (headerType & 0x3F)
         return result;
@@ -447,7 +445,7 @@ BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_
     result.type = (bar_value & 0x1) ? BaseAddressRegisterType::InputOutput : BaseAddressRegisterType::MemoryMapped;
     result.address = (uint8_t*) (bar_value & ~0xF);
 
-    // read the size of the base address register
+    // Read the size of the base address register
     write(bus, device, function, 0x10 + 4 * bar, 0xFFFFFFF0 | (int)result.type);
     result.size = read(bus, device, function, 0x10 + 4 * bar);
     result.size = (~result.size | 0xF) + 1;
