@@ -22,22 +22,24 @@ Scheduler::Scheduler(Multiboot& multiboot)
 
 {
 
-  /// Setup the basic scheduler
+  // Setup the basic scheduler
   Logger::INFO() << "Setting up Scheduler \n";
   s_instance = this;
   m_ipc = new InterProcessCommunicationManager();
 
   // Create the idle process
   auto* idle = new Process("kernelMain Idle", nullptr, nullptr,0, true);
-  idle->memory_manager = MemoryManager::s_kernel_memory_manager;
+  idle -> memory_manager = MemoryManager::s_kernel_memory_manager;
   add_process(idle);
-  idle->set_pid(0);
+  idle -> set_pid(0);
 
   // Load the elfs
   load_multiboot_elfs(&multiboot);
 }
 
 Scheduler::~Scheduler() {
+
+  // Deactivate this scheduler
   s_instance = nullptr;
   m_active = false;
 
@@ -54,11 +56,7 @@ Scheduler::~Scheduler() {
  */
 cpu_status_t* Scheduler::handle_interrupt(cpu_status_t *status) {
 
-    // Schedule the next thread
     return schedule(status);
-
-    /// Note: Could have set scheduler to just be the handle interrupt function,
-    ////      but in the future there may be a need to schedule at other times
 }
 
 
@@ -70,10 +68,9 @@ cpu_status_t* Scheduler::handle_interrupt(cpu_status_t *status) {
  */
 cpu_status_t *Scheduler::schedule(cpu_status_t* cpu_state) {
 
-  // If there are no threads to schedule or not active, return the current state
+  // Scheduler cant schedule anything
   if (m_threads.empty() || !m_active)
       return cpu_state;
-
 
   // Thread that we are dealing with
   Thread* current_thread = m_threads[m_current_thread_index];
@@ -82,7 +79,7 @@ cpu_status_t *Scheduler::schedule(cpu_status_t* cpu_state) {
   m_ticks++;
   current_thread->ticks++;
 
-   // Wait for a bit so that the scheduler doesn't run too fast
+   // Wait for a bit so that the scheduler doesn't run too fast TODO: fix
    if (m_ticks % s_ticks_per_event != 0) return cpu_state;
 
    // Schedule the next thread
@@ -96,24 +93,22 @@ cpu_status_t *Scheduler::schedule(cpu_status_t* cpu_state) {
  * @param status The current CPU status of the thread
  * @return The next CPU status
  */
-system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) {
+cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
-  // Get the current thread
+  // Get the thread that is executing right now
   Thread* current_thread = m_threads[m_current_thread_index];
 
-  // Save the current state
+  // Save its state
   current_thread->execution_state = cpu_state;
   current_thread -> save_sse_state();
   if(current_thread->thread_state == ThreadState::RUNNING)
     current_thread->thread_state = ThreadState::WAITING;
 
-  // Switch to the next thread
+  // Switch to the thread that will now run
   m_current_thread_index++;
   m_current_thread_index %= m_threads.size();
-
   current_thread = m_threads[m_current_thread_index];
 
-  // If the current thread is in the process then we can get the process
   Process* owner_process = current_process();
 
   // Handle state changes
@@ -155,13 +150,10 @@ system::cpu_status_t *Scheduler::schedule_next(system::cpu_status_t* cpu_state) 
   current_thread -> thread_state = ThreadState::RUNNING;
   current_thread -> restore_sse_state();
 
-  // Load the threads memory manager
+  // Load the thread's memory manager and task state
   MemoryManager::switch_active_memory_manager(owner_process->memory_manager);
+  CPU::tss.rsp0 = current_thread->tss_pointer();
 
-  // Load the TSS for the thread
-  system::CPU::tss.rsp0 = current_thread->tss_pointer();
-
-  // Return the next thread's state
   return current_thread->execution_state;
 }
 
@@ -212,11 +204,7 @@ uint64_t Scheduler::add_thread(Thread *thread) {
  * @return The system scheduler or nullptr if not found
  */
 Scheduler *Scheduler::system_scheduler() {
-
-  if(s_instance)
-    return s_instance;
-
-  return nullptr;
+  return s_instance;
 }
 
 /**
@@ -229,7 +217,7 @@ uint64_t Scheduler::ticks() const {
 }
 
 /**
- * @brief Yield the current thread
+ * @brief Pass execution to the next thread
  */
 cpu_status_t* Scheduler::yield() {
 
@@ -297,7 +285,7 @@ uint64_t Scheduler::remove_process(Process *process) {
  * @param process The process to remove
  * @return The status of the CPU for the next process to run or nullptr if the process was not found
  */
-cpu_status_t* Scheduler::force_remove_process(Process *process) {
+cpu_status_t* Scheduler::force_remove_process(Process* process) {
 
   // If there is no process, fail
   if (!process)
@@ -311,12 +299,12 @@ cpu_status_t* Scheduler::force_remove_process(Process *process) {
     m_threads.erase(m_threads.begin() + index);
 
     // Delete the thread
-    process->remove_thread(thread->tid);
+    process -> remove_thread(thread->tid);
 
   }
 
-
-  // Process will be dead now so run the next process (don't care about the execution state being outdated as we are removing it anyway)
+  // Process will be dead now so run the next process (don't care about the execution state being outdated as it is being
+  // removed regardless)
   return schedule_next(current_thread()->execution_state);
 }
 
@@ -329,7 +317,7 @@ Process *Scheduler::current_process() {
 
   Process* current_process = nullptr;
 
-  // Make sure there is a active scheduler
+  // Make sure there is something with process attached
   if(!s_instance)
     return nullptr;
 
@@ -377,7 +365,6 @@ Thread *Scheduler::current_thread() {
  */
 void Scheduler::deactivate() {
     m_active = false;
-
 }
 
 /**
@@ -385,29 +372,30 @@ void Scheduler::deactivate() {
  *
  * @param multiboot The multiboot structure
  */
-void Scheduler::load_multiboot_elfs(system::Multiboot *multiboot) {
+void Scheduler::load_multiboot_elfs(Multiboot *multiboot) {
 
   for(multiboot_tag* tag = multiboot -> start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+
+    // Tag is not an ELF
     if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE)
       continue;
 
-    // Get the module tag
+    // Try create the elf from the module
     auto* module = (struct multiboot_tag_module*)tag;
-
-    // Create the elf
-    auto* elf = new Elf64((uintptr_t)PhysicalMemoryManager::to_dm_region((uintptr_t )module->mod_start));
+    auto* elf = new Elf64((uintptr_t)PhysicalMemoryManager::to_dm_region(module->mod_start));
     if(!elf->is_valid())
       continue;
 
     Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t)module->mod_start << ")\n";
 
-    // Create an array of args for the process
+    // Create an array of args for the process TODO: handle multiple args ("" & spaces)
     char* args[1] = {module->cmdline};
 
     // Create the process
     auto* process = new Process(module->cmdline, args, 1, elf);
     
     Logger::DEBUG() << "Elf loaded to pid " << process->pid() << "\n";
+    delete elf;
   }
 
 }

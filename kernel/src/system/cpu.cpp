@@ -31,9 +31,6 @@ CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot){
     init_sse();
 }
 
-/**
- * @brief Destructor for the CPU class
- */
 CPU::~CPU() = default;
 
 [[noreturn]] void CPU::halt() {
@@ -113,10 +110,8 @@ void CPU::print_registers(cpu_status_t *status) {
 
 uint64_t CPU::read_msr(uint32_t msr) {
 
-  // Low and high parts of the MSR
-  uint32_t low, high;
-
   // Read the MSR
+  uint32_t low, high;
   asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
 
   // Return the value
@@ -140,17 +135,17 @@ void CPU::stack_trace(size_t level) {
 
     // Get the first stack frame
     auto* frame = (stack_frame_t*)__builtin_frame_address(0);
-    size_t current_level = 0;
 
     // Loop through the frames logging
-    while (current_level < level && frame != nullptr){
+    for (size_t current_level = 0; current_level < level; current_level++){
 
         // Print the frame
         Logger::ERROR() << "(" << current_level << "):\t at 0x" << frame->rip << "\n";
 
         // Next frame
         frame = frame -> next;
-        current_level++;
+        if (frame == nullptr)
+          break;
 
     }
 }
@@ -163,7 +158,8 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   // Get the current process
   Process* process = Scheduler::current_process();
 
-  // Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most likely called by a place that cant switch to the avoidable state
+  // Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most
+  // likely called by a place that cant switch to the avoidable state
   if(!is_panicking)
     prepare_for_panic();
 
@@ -185,8 +181,10 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   Logger::ERROR() << "----------------------------\n";
   Logger::ERROR() << "Register Dump:\n";
 
+  // Log the regs
+  cpu_status_t* new_status = nullptr;
   if(!status){
-    auto* new_status = new cpu_status_t();                              // Who cares about freeing we're fucked anyway at this point
+    new_status = new cpu_status_t;
     get_status(new_status);
     status = new_status;
   }
@@ -205,6 +203,8 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   // Halt
   halt();
 
+  // Should really never get here but if somehow that happens why not be memory safe
+  delete new_status;
 }
 
 /**
@@ -249,7 +249,6 @@ void CPU::init_tss(GlobalDescriptorTable* gdt) {
   //        2 - Available = 0, Granularity = 0
   uint8_t flags_1 = 0x89;
   uint8_t flags_2 = 0;
-
 
   // Create the TSS descriptors
   uint64_t tss_descriptor_low = (uint64_t) base_3 << 56 | (uint64_t) flags_2 << 48 | (uint64_t) flags_1 << 40 | (uint64_t) base_2 << 32 | (uint64_t) base_1 << 16 | (uint64_t) limit_low;

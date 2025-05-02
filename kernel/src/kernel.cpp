@@ -5,8 +5,6 @@
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
-#include <drivers/peripherals/keyboard.h>
-#include <drivers/peripherals/mouse.h>
 #include <drivers/video/vesa.h>
 #include <gui/desktop.h>
 #include <processes/scheduler.h>

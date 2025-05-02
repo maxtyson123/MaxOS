@@ -39,21 +39,20 @@ Thread::Thread(void (*_entry_point)(void *), void *args, int arg_amount, Process
     ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
 
     // Set up the execution state
-    execution_state = new cpu_status_t();
-    execution_state->rip = (uint64_t)_entry_point;
-    execution_state->ss = parent -> is_kernel ? 0x10 : 0x23;
-    execution_state->cs = parent -> is_kernel ? 0x8  : 0x1B;
-    execution_state->rflags = 0x202;
-    execution_state->interrupt_number = 0;
-    execution_state->error_code = 0;
-    execution_state->rsp = (uint64_t)m_stack_pointer;
-    execution_state->rbp = 0;
+    execution_state = new cpu_status_t;
+    execution_state -> rip = (uint64_t)_entry_point;
+    execution_state -> ss = parent -> is_kernel ? 0x10 : 0x23;
+    execution_state -> cs = parent -> is_kernel ? 0x8  : 0x1B;
+    execution_state -> rflags = 0x202;
+    execution_state -> interrupt_number = 0;
+    execution_state -> error_code = 0;
+    execution_state -> rsp = m_stack_pointer;
+    execution_state -> rbp = 0;
 
     // Copy the args into userspace
     uint64_t  argc = arg_amount;
     void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
     memcpy(argv, args, arg_amount * sizeof(void*));
-
 
     execution_state->rdi = argc;
     execution_state->rsi = (uint64_t)argv;
@@ -78,11 +77,11 @@ Thread::~Thread() = default;
  */
 cpu_status_t* Thread::sleep(size_t milliseconds) {
 
-  // Update the vars
+  // Update the state
   thread_state = ThreadState::SLEEPING;
   wakeup_time = Scheduler::system_scheduler() -> ticks() + milliseconds;
 
-  // Yield
+  // Let other processes do stuff while this thread is sleeping
   return Scheduler::system_scheduler() -> yield();
 
 }
@@ -133,6 +132,8 @@ Process::Process(const string& p_name, bool is_kernel)
 
   // If it is a kernel process then don't need a new memory manager
   memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager :  new MemoryManager();
+
+  // Resuming interrupts are done when adding a thread
 }
 
 /**
@@ -169,7 +170,6 @@ Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, b
 : Process(p_name, is_kernel)
 {
 
-
   // Get the entry point
   elf -> load();
   auto* entry_point = (void (*)(void *))elf -> header() -> entry;
@@ -177,9 +177,6 @@ Process::Process(const string& p_name, void *args, int arg_amount, Elf64* elf, b
   // Create the main thread
   auto* main_thread = new Thread(entry_point, args, arg_amount, this);
   add_thread(main_thread);
-
-  // Free the elf
-  delete elf;
 }
 
 
@@ -214,9 +211,7 @@ void Process::add_thread(Thread *thread) {
 
   // Store the thread
   m_threads.push_back(thread);
-
-  // Set the pid
-  thread->parent_pid = m_pid;
+  thread -> parent_pid = m_pid;
 
   // Can now resume interrupts
   asm("sti");
@@ -232,24 +227,23 @@ void Process::remove_thread(uint64_t tid) {
 
   // Find the thread
   for (uint32_t i = 0; i < m_threads.size(); i++) {
-      if (m_threads[i]->tid == tid) {
 
-        // Get the thread
-        Thread* thread = m_threads[i];
+      // Thread is not what is being removed
+      if (m_threads[i]->tid != tid)
+        continue;
 
-        // Delete the thread
-        delete thread;
+      // Delete the thread
+      Thread* thread = m_threads[i];
+      delete thread;
 
-        // Remove the thread from the list
-        m_threads.erase(m_threads.begin() + i);
+      // Remove the thread from the list
+      m_threads.erase(m_threads.begin() + i);
 
+      // If there are no more threads then delete the process from the scheduler
+      if (m_threads.empty())
+        Scheduler::system_scheduler() -> remove_process(this);
 
-        // If there are no more threads then delete the process (done on the scheduler side)
-        if (m_threads.empty())
-          Scheduler::system_scheduler() -> remove_process(this);
-
-        return;
-    }
+      return;
   }
 }
 
@@ -269,7 +263,7 @@ void Process::set_pid(uint64_t pid) {
 
   // Assign the pid to the threads
   for (auto thread : m_threads)
-        thread->parent_pid = pid;
+      thread->parent_pid = pid;
 
 
 }
@@ -278,10 +272,7 @@ void Process::set_pid(uint64_t pid) {
  * @brief Gets the threads of the process
  */
 Vector<Thread*> Process::threads() {
-
-  // Return the threads
   return m_threads;
-
 }
 
 /**

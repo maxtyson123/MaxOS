@@ -13,10 +13,8 @@ using namespace MaxOS::processes;
 VirtualMemoryManager::VirtualMemoryManager()
 {
 
-    // Set the kernel flag
-    bool is_kernel = MemoryManager::s_kernel_memory_manager == nullptr;
-
-
+   // Set the kernel flag
+   bool is_kernel = MemoryManager::s_kernel_memory_manager == nullptr;
    if(!is_kernel){
 
       // Get a new pml4 table
