@@ -3,7 +3,8 @@
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/MaxOS.sh
 
-#TODO: Scalibitlity for partition size and amount of partitions
+# TODO: Scalibitlity for partition size and amount of partitions
+# TODO: Better loop device handling
 
 # If the disk image already exists no need to setup
 if [ -f ../MaxOS.img ]; then
@@ -32,13 +33,18 @@ else
   1
   1
   130
+  t
+  b
+  a
+  1
   n
   p
   2
   131
   243
-  a
-  1
+  t
+  2
+  b
   w
 EOF
 
@@ -55,8 +61,7 @@ fi
 # Get the partions
 part1=""
 part2=""
-if [ -f ../MaxOS.img ]; then
-  msg "MacOS: Image mounted already"
+if [  "$IS_MACOS" -eq 1 ]; then
   part1="${dev}s1"
   part2="${dev}s2"
   sudo diskutil unmount /Volumes/BOOT
@@ -64,6 +69,7 @@ if [ -f ../MaxOS.img ]; then
 
 else
   msg "Attaching image to loop device"
+  dev="/dev/loop0"
   sudo losetup -D
   sudo losetup --partscan /dev/loop0 ../MaxOS.img  || fail "Could not mount image to loop device"
 fi
@@ -87,7 +93,6 @@ if [ "$IS_MACOS" -eq 1 ]; then
   sudo diskutil unmount "$part2" || warn "Couldn't unmount $part2 before formatting"
   sudo mount -t msdos "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount partition 2"
 else
-  sudo diskutil unmount "$part2" || warn "Couldn't unmount $part2 before formatting"
   sudo mkfs.vfat -F 32 /dev/loop0p2 || fail "Could not create filesystem"
   sudo mount -o loop /dev/loop0p2 "$MOUNT_DIR/MaxOS_img_2"  || fail "Could not mount image to mount point"
 fi
@@ -124,5 +129,6 @@ if [ "$IS_MACOS" -eq 1 ]; then
     sync
     sudo sync
 else
+  msg "Installing GRUB to disk image: $dev"
   sudo grub-install --root-directory="$MOUNT_DIR/MaxOS_img_1" --no-floppy --modules="$GRUB_MODULES" "$dev" || fail "Could not install grub"
 fi

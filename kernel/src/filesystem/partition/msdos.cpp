@@ -52,7 +52,7 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
           break;
 
         default:
-          Logger::Out() << "Unknown or unimplemented partition type: " << entry.type << "\n";
+          Logger::Out() << "Unknown or unimplemented partition type: 0x" << (uint64_t)entry.type << "\n";
 
     }
   }
