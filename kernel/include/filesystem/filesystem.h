@@ -78,6 +78,8 @@ namespace MaxOS{
                 Directory();
                 virtual ~Directory();
 
+                virtual void read_from_disk();
+
                 common::Vector<File*> files();
                 File* open_file(const string& name);
                 virtual File* create_file(const string& name);

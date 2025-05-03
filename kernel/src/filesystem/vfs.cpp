@@ -251,7 +251,7 @@ Directory* VirtualFileSystem::root_directory()
 }
 
 /**
- * @brief Try to create a directory on the virtual file system
+ * @brief Try to open a directory on the virtual file system and read it's contents
  *
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
@@ -272,12 +272,16 @@ Directory* VirtualFileSystem::open_directory(string path)
     string directory_path = Path::file_path(relative_path);
 
     // Open the directory
-    return fs -> get_directory(directory_path);
+    Directory* directory = fs -> get_directory(directory_path);
+    if (!directory)
+        return nullptr;
+    directory -> read_from_disk();
 
+    return directory;
 }
 
 /**
- * @brief Try to create a directory on the virtual file system
+ * @brief Try to create a directory on the virtual file system & read its contents
  *
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
@@ -300,7 +304,10 @@ Directory* VirtualFileSystem::create_directory(string path)
 
     // Create the directory
     string directory_name = Path::file_name(path);
-    return parent_directory -> create_subdirectory(directory_name);
+    Directory* directory =  parent_directory -> create_subdirectory(directory_name);
+    directory -> read_from_disk();
+
+    return directory;
 }
 
 /**

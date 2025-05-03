@@ -194,6 +194,13 @@ Directory::Directory() = default;
 Directory::~Directory() = default;
 
 /**
+ * @brief Read the directory from the disk
+ */
+void Directory::read_from_disk(){
+
+}
+
+/**
  * @brief Get the files in the directory
  *
  * @return A list of all the files in the directory
@@ -262,8 +269,10 @@ Directory* Directory::open_subdirectory(const string& name)
 
   // Try to find the directory
   for (auto& subdirectory : m_subdirectories)
-    if (subdirectory->name() == name)
+    if (subdirectory->name() == name) {
+      subdirectory -> read_from_disk();
       return subdirectory;
+    }
 
   // Directory not found
   return nullptr;

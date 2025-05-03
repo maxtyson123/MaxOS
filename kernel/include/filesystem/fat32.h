@@ -205,6 +205,8 @@ namespace MaxOS{
 
                 static const size_t MAX_NAME_LENGTH = 255;
 
+                void read_from_disk() final;
+
                 File* create_file(const string& name) final;
                 void remove_file(const string& name) final;
 

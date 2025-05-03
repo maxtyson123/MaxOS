@@ -97,8 +97,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - Implement FAT32
-//  - Test FAT32, When created I think it recursively reads all the subdirectories so it will be slow - need to open on demand instead
+//  - Fix FAT32
 //  - Userspace Files
 //  - Implement ext2
 //  - Class & Struct docstrings
