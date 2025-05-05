@@ -42,7 +42,9 @@ namespace MaxOS {
 
           bool starts_with(String const &other);
           String substring(int start, int length) const;
+
           common::Vector<String> split(String const &delimiter) const;
+          String strip() const;
 
 
           [[nodiscard]] String center(int width, char fill = ' ') const;

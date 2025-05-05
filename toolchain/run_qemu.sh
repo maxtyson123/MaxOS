@@ -135,6 +135,7 @@ if [  "$USE_DEBUG" -ne "0" ]; then
 fi
 
 BOOT_DEVICE=""
+: "${USE_ISO:=0}"
 if [ "$USE_ISO" -eq 1 ]; then
   msg "Using ISO boot device."
   BOOT_DEVICE="-cdrom ../MaxOS.iso"

@@ -3,9 +3,11 @@
 //
 
 #include <filesystem/filesystem.h>
+#include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::filesystem;
+using namespace MaxOS::common;
 
 /**
  * @brief Check if a path is valid
@@ -322,6 +324,40 @@ size_t Directory::size()
     size += file->size();
 
   return size;
+
+}
+
+/**
+ * @brief Print the contents of this directory (recursive print of sub-dirs)
+ *
+ * @param level Level of recursion
+ */
+void Directory::debug_print(int level){
+
+    // Prevent infinite recursion bugs
+    level++;
+    ASSERT(level < 1000, "Infinte recursion in tree printing of directory");
+
+    // Print all the files
+    for (auto& file : m_files)
+      Logger::DEBUG() << (string)"-" * level << " " << file -> name() << " (file)" << " Size: 0x" << file -> size() << "\n";
+
+    // Recursive call all the directories
+    for(auto& directory : m_subdirectories){
+
+      // Prevent trying to re read this directory or the parent one
+      string name = directory -> name();
+      name = name.strip();
+      if(name == "." || name == "..")
+        continue;
+
+      Logger::DEBUG() << string("-") * level << name << " (directory)" "\n";
+      directory -> read_from_disk();
+      directory -> debug_print(level);
+
+    }
+
+
 
 }
 

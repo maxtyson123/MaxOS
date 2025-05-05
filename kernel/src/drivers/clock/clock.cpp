@@ -145,7 +145,7 @@ void Clock::delay(uint32_t milliseconds) const {
 
 
     // Round the number of milliseconds UP to the nearest clock accuracy
-    uint64_t rounded_milliseconds = (milliseconds + s_clock_accuracy - 1) / s_clock_accuracy;
+    uint64_t rounded_milliseconds = (milliseconds + clock_accuracy - 1) / clock_accuracy;
 
     // Wait until the time has passed
     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
@@ -179,9 +179,7 @@ string Clock::device_name() {
 void Clock::calibrate(uint64_t ms_per_tick) {
 
   Logger::INFO() << "Calibrating Clock \n";
-
-  // Update the clock accuracy
-  s_clock_accuracy = ms_per_tick;
+  clock_accuracy = ms_per_tick;
 
   // Get the ticks per ms
   PIT pit(m_apic);

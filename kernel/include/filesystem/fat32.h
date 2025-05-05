@@ -127,10 +127,6 @@ namespace MaxOS{
                 bpb32_t bpb;
                 fs_info_t fsinfo;
 
-                uint8_t  sectors_per_cluster;
-                uint16_t bytes_per_sector;
-
-                size_t   fat_size;
                 size_t   fat_total_clusters;
                 lba_t    fat_first_sector;
                 lba_t    fat_lba;
@@ -141,15 +137,15 @@ namespace MaxOS{
 
                 drivers::disk::Disk* disk;
 
-                lba_t next_cluster(lba_t cluster);
-                lba_t set_next_cluster(lba_t cluster, lba_t next_cluster);
-                lba_t find_free_cluster();
+                uint32_t next_cluster(uint32_t cluster);
+                uint32_t set_next_cluster(uint32_t cluster, uint32_t next_cluster);
+                uint32_t find_free_cluster();
 
-                lba_t allocate_cluster(lba_t cluster);
-                lba_t allocate_cluster(lba_t cluster, size_t amount);
+                uint32_t allocate_cluster(uint32_t cluster);
+                uint32_t allocate_cluster(uint32_t cluster, size_t amount);
 
-                void free_cluster(lba_t cluster);
-                void free_cluster(lba_t cluster, size_t amount);
+                void free_cluster(uint32_t cluster);
+                void free_cluster(uint32_t cluster, size_t amount);
         };
 
         /**
@@ -162,17 +158,17 @@ namespace MaxOS{
             private:
                 Fat32Volume* m_volume;
 
-                lba_t m_first_cluster;
+                uint32_t m_first_cluster;
 
             public:
-                Fat32File(Fat32Volume* volume, lba_t cluster, size_t size, const string& name);
+                Fat32File(Fat32Volume* volume, uint32_t cluster, size_t size, const string& name);
                 ~Fat32File() final;
 
                 void write(const uint8_t* data, size_t size) final;
                 void read(uint8_t* data, size_t size) final;
                 void flush() final;
 
-                lba_t first_cluster() const { return m_first_cluster; }
+                uint32_t first_cluster() const { return m_first_cluster; }
         };
 
         enum class DirectoryEntryType

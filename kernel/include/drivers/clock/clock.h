@@ -155,7 +155,7 @@ namespace MaxOS {
                     Clock(hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
                     ~Clock();
 
-                    inline static uint64_t s_clock_accuracy = 1;
+                    uint64_t clock_accuracy = 1;
 
                     void activate() override;
                     void delay(uint32_t milliseconds) const;

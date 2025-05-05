@@ -74,16 +74,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     // FS Tests
     Directory* root = vfs.root_directory();
     ASSERT(root != nullptr, "Root directory is null\n");
-    for (auto& file : root->files())
-    {
-      Logger::DEBUG() << "File: " << file->name() << "\n";
-      Logger::DEBUG() << "Size: " << file->size() << "\n";
-    }
-    for (auto& directory : root->subdirectories())
-    {
-      Logger::DEBUG() << "Directory: " << directory->name() << "\n";
-      Logger::DEBUG() << "Size: " << directory->size() << "\n";
-    }
+    root ->debug_print();
 
     Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -97,7 +88,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - Fix FAT32
+//  - Fix FAT32 (extenstions, strip, lfn)
+//  - FAT32 Tests
+//  - Fix tabs (mac mess up)
 //  - Userspace Files
 //  - Implement ext2
 //  - Class & Struct docstrings

@@ -491,7 +491,7 @@ String String::operator*(int times) const {
         repeated.m_string[i * m_length + j] = m_string[j];
 
     // Write the null terminator
-    repeated.m_string[m_length] = '\0';
+    repeated.m_string[repeated.m_length] = '\0';
 
     // Return the repeated string
     return repeated;
@@ -531,6 +531,30 @@ String String::center(int width, char fill) const {
     centered.m_string[width] = '\0';
 
     return centered;
+}
+
+/**
+ * @brief Strips the string of whitespace
+ *
+ * @return The stripped string (new string)
+ */
+String String::strip() const {
+
+  // The stripped string
+  String stripped;
+  stripped.copy(*this);
+
+  // Search from the back for the earliest non-whitespace character
+  int end = m_length - 1;
+  while (end >= 0 && (m_string[end] == ' ' || m_string[end] == '\n' || m_string[end] == '\t'))
+      end--;
+
+  // Make sure there is something to strip
+  if (end < 0)
+      return stripped;
+
+  // Split the string to remove the end
+  return stripped.substring(0, end + 1);
 }
 
 /**

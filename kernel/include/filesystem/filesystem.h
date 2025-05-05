@@ -92,6 +92,8 @@ namespace MaxOS{
 
                 string name();
                 size_t size();
+
+                void debug_print(int level = 0);
         };
 
         /**

@@ -120,14 +120,15 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
     if(status & 0x01)
         return;
 
-    // Read the data into the array
-    for(int i = 0; i < amount; i+= 2)
+    for(size_t i = 0; i < amount; i+= 2)
     {
+
+        // Read from the disk (2 bytes) and store the first byte
         uint16_t read_data = m_data_port.read();
         data_buffer[i] = read_data & 0x00FF;
 
-        // Place the next byte in the array if there is one
-        if(i+1 < amount)
+        // Place the second byte in the array if there is one
+        if(i + 1 < amount)
             data_buffer[i+1] = (read_data >> 8) & 0x00FF;
     }
 

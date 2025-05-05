@@ -13,7 +13,8 @@ fi
 
 DESTINATION="$MOUNT_DIR/MaxOS_img_1"
 
-# MacOS uses an ISO for now
+# Produce an ISO? default to no
+: "${USE_ISO:=0}"
 if [ "$USE_ISO" -eq 1 ]; then
   DESTINATION="$SCRIPTDIR/../iso"
   if [ ! -d "$DESTINATION" ]; then
@@ -26,11 +27,6 @@ msg "Copying filesystem to image"
 sudo rm -rf "$DESTINATION/boot"    && sudo cp -r $SCRIPTDIR/../filesystem/boot   $DESTINATION
 sudo rm -rf "$DESTINATION/os"    && sudo cp -r $SCRIPTDIR/../filesystem/os   $DESTINATION
 sudo rm -rf "$DESTINATION/user"  && sudo cp -r $SCRIPTDIR/../filesystem/user $DESTINATION
-
-# If MacOS is used remove the MacOS folder
-if [ "$USE_ISO" -eq 1 ]; then
-  sudo rm -rf "$DESTINATION/MacOS"
-fi
 
 # Sync filesystem
 msg "Syncing filesystem"
