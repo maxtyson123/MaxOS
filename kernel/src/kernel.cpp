@@ -70,11 +70,10 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
-
     // FS Tests
     Directory* root = vfs.root_directory();
     ASSERT(root != nullptr, "Root directory is null\n");
-    root ->debug_print();
+    root -> debug_print();
 
     Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);

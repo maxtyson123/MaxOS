@@ -8,4 +8,6 @@ TOTAL=$(grep -r "Logger::INFO" "${SCRIPTDIR}/../../kernel/src/" | wc -l)
 msg "Total INFO: ${TOTAL}"
 
 # Store in the source file
-$SED_EXC -i "s/static const uint8_t s_progress_total { 100 };/static const uint8_t s_progress_total { ${TOTAL} };/" "${SCRIPTDIR}/../../kernel/include/common/logger.h"
+$SED_EXC -i \
+  -E "s/(s_progress_total[[:space:]]*=[[:space:]]*)[0-9]+;/\1${TOTAL};/" \
+  "${SCRIPTDIR}/../../kernel/src/common/logger.cpp"

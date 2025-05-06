@@ -7,7 +7,6 @@
 
 #include <common/outputStream.h>
 #include <common/colour.h>
-#include <common/version.h>
 
 
 
@@ -40,7 +39,7 @@
                 bool m_log_writers_enabled[m_max_log_writers] = {false, false, false, false, false};
 
                 // Progress bar
-                static const uint8_t s_progress_total = 25;
+                static inline uint8_t s_progress_total = 100;
                 uint8_t m_progress_current = 0;
 
                 static inline Logger* s_active_logger = nullptr;

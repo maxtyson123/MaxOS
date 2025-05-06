@@ -4,18 +4,20 @@
 #include <common/logger.h>
 #include <stdarg.h>
 #include <drivers/console/vesaboot.h>
+#include <common/version.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers::console;
 
-
 Logger::Logger()
 :m_log_writers()
 {
 
-  // Set the logger to this
   s_active_logger = this;
+
+  // The following line is generated automatically by the MaxOS build system.
+  s_progress_total = 23;
 
 }
 

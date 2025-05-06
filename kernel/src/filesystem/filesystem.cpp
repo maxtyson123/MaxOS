@@ -336,7 +336,7 @@ void Directory::debug_print(int level){
 
     // Prevent infinite recursion bugs
     level++;
-    ASSERT(level < 1000, "Infinte recursion in tree printing of directory");
+    ASSERT(level < 1000, "Infinite recursion in tree printing of directory");
 
     // Print all the files
     for (auto& file : m_files)
@@ -345,13 +345,12 @@ void Directory::debug_print(int level){
     // Recursive call all the directories
     for(auto& directory : m_subdirectories){
 
-      // Prevent trying to re read this directory or the parent one
-      string name = directory -> name();
-      name = name.strip();
+      // Prevent trying to re-read this directory or the parent one
+      string name = directory -> name().strip();
       if(name == "." || name == "..")
         continue;
 
-      Logger::DEBUG() << string("-") * level << name << " (directory)" "\n";
+      Logger::DEBUG() << string("-") * level << " " << name << " (directory) \n";
       directory -> read_from_disk();
       directory -> debug_print(level);
 

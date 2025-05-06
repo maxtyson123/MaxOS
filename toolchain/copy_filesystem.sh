@@ -22,19 +22,30 @@ if [ "$USE_ISO" -eq 1 ]; then
   fi
 fi
 
-#Copy filesystem
-msg "Copying filesystem to image"
-sudo rm -rf "$DESTINATION/boot"    && sudo cp -r $SCRIPTDIR/../filesystem/boot   $DESTINATION
-sudo rm -rf "$DESTINATION/os"    && sudo cp -r $SCRIPTDIR/../filesystem/os   $DESTINATION
-sudo rm -rf "$DESTINATION/user"  && sudo cp -r $SCRIPTDIR/../filesystem/user $DESTINATION
+# Linux: setup loop device to write to
+dev=""
+IMAGE="../MaxOS.img"
+if [ "$IS_MACOS" -ne 1 ]; then
+  msg "Mounting img"
+  dev=$(sudo losetup --find --show --partscan "$IMAGE")
+  sudo mount "$dev"p1 "$MOUNT_DIR/MaxOS_img_1"
+  sudo mount "$dev"p2 "$MOUNT_DIR/MaxOS_img_2"
+fi
 
-# Sync filesystem
-msg "Syncing filesystem"
-sudo sync
+# Syncing local filesystem
+msg "Copying filesystem to image"
+sudo rsync --no-owner --no-group -a --delete -c "$SCRIPTDIR/../filesystem/"  "$MOUNT_DIR/MaxOS_img_1/"
+#TODO: rsync Mac, unmount/remount mac
 
 # Create the iso
 if [ "$USE_ISO" -eq 1 ]; then
   msg "Creating ISO"
   i686-elf-grub-mkrescue --modules="part_msdos fat normal" --output="$SCRIPTDIR/../MaxOS.iso" $DESTINATION || fail "Failed to create rescue ISO"
   sudo rm -rf $DESTINATION
+fi
+
+# Linux: clean up the loop device
+if [ "$IS_MACOS" -ne 1 ]; then
+  sudo umount "$dev"p1 "$dev"p2
+  sudo losetup -d "$dev"
 fi
