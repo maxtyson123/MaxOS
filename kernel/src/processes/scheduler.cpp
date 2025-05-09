@@ -102,7 +102,7 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
   current_thread->execution_state = cpu_state;
   current_thread -> save_sse_state();
   if(current_thread->thread_state == ThreadState::RUNNING)
-    current_thread->thread_state = ThreadState::WAITING;
+    current_thread->thread_state = ThreadState::READY;
 
   // Switch to the thread that will now run
   m_current_thread_index++;
@@ -227,7 +227,7 @@ cpu_status_t* Scheduler::yield() {
 
   // Set the current thread to waiting if running
   if (m_threads[m_current_thread_index]->thread_state == ThreadState::RUNNING)
-      m_threads[m_current_thread_index]->thread_state = ThreadState::WAITING;
+      m_threads[m_current_thread_index]->thread_state = ThreadState::READY;
 
 
   // Schedule the next thread

@@ -18,7 +18,7 @@ namespace MaxOS {
     class String {
         private:
           char* m_string = nullptr;
-          int m_length = 0;
+          int m_length = 0;           // Does not include the null terminator
 
           [[nodiscard]] static int lex_value(String const &other) ;
           void allocate_self();
@@ -26,6 +26,7 @@ namespace MaxOS {
         public:
 
           String();
+          explicit String(char c);
           String(char const* string);
           String(uint8_t const* string, int length);
           String(String const &other);

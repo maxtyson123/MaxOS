@@ -21,8 +21,7 @@ Fat32Volume::Fat32Volume(Disk* hd, uint32_t partition_offset)
 
   // Parse the FAT info
   fat_total_clusters = bpb.total_sectors_32 - (bpb.reserved_sectors + (bpb.table_copies * bpb.table_size_32));
-  fat_first_sector = bpb.reserved_sectors;
-  fat_lba = partition_offset + fat_first_sector;
+  fat_lba = partition_offset + bpb.reserved_sectors;
   fat_info_lba = partition_offset + bpb.fat_info;
   disk -> read(fat_info_lba, (uint8_t *)&fsinfo, sizeof(fs_info_t));
 
@@ -52,7 +51,7 @@ lba_t Fat32Volume::next_cluster(lba_t cluster)
 
   // Get the location in the FAT table
   lba_t offset = cluster * sizeof(uint32_t);
-  lba_t sector = fat_first_sector + (offset / bpb.bytes_per_sector);
+  lba_t sector = fat_lba + (offset / bpb.bytes_per_sector);
   uint32_t entry  = offset % bpb.bytes_per_sector;
 
   // Read the FAT entry
@@ -76,7 +75,7 @@ uint32_t Fat32Volume::set_next_cluster(uint32_t cluster, uint32_t next_cluster)
 
   // Get the location in the FAT table
   lba_t offset = cluster * sizeof(uint32_t);
-  lba_t sector = fat_first_sector + (offset / bpb.bytes_per_sector);
+  lba_t sector = fat_lba + (offset / bpb.bytes_per_sector);
   uint32_t entry  = offset % bpb.bytes_per_sector;
 
   // Read the FAT entry
@@ -265,17 +264,7 @@ Fat32Directory::Fat32Directory(Fat32Volume* volume, uint32_t cluster, const stri
 
 }
 
-Fat32Directory::~Fat32Directory()
-{
-
-  // Free the files
-  for (auto & file : m_files)
-    delete file;
-
-  // Free the subdirectories
-  for (auto & subdirectory : m_subdirectories)
-    delete subdirectory;
-}
+Fat32Directory::~Fat32Directory() = default;
 
 /**
  * @brief Create a new entry in the directory
@@ -474,79 +463,120 @@ void Fat32Directory::remove_entry(uint32_t cluster, const string& name)
 
 }
 
-void Fat32Directory::read_from_disk() {
+/**
+ * @brief Read all of the directory entries for each cluster in this directory
+ */
+void Fat32Directory::read_all_entries() {
+  m_entries.clear();
+
+  size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
+  auto buffer = new uint8_t[buffer_space];
 
   // Read the directory
-  for (uint32_t cluster = m_first_cluster; cluster != (uint32_t)ClusterState::END_OF_CHAIN; cluster = m_volume -> next_cluster(cluster))
-  {
-
-    // Get the buffer and address to read
-    uint8_t buffer[m_volume -> bpb.bytes_per_sector * m_volume -> bpb.sectors_per_cluster];
-    lba_t lba = m_volume -> data_lba + (cluster - 2) * m_volume -> bpb.sectors_per_cluster;
+  for (uint32_t cluster = m_first_cluster; cluster != (uint32_t)ClusterState::END_OF_CHAIN; cluster = m_volume -> next_cluster(cluster)) {
 
     // Read each sector in the cluster
-    for (size_t sector = 0; sector < m_volume -> bpb.sectors_per_cluster; sector++)
-      m_volume -> disk -> read(lba + sector, buffer + sector * m_volume -> bpb.bytes_per_sector, m_volume -> bpb.bytes_per_sector);
-
-    string long_name = "";
+    memset(buffer, 0, buffer_space);
+    lba_t lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
+    for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
+      m_volume->disk->read(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
 
     // Parse the directory entries (each entry is 32 bytes)
-    for (size_t entry_offset = 0; entry_offset < sizeof(buffer); entry_offset += 32)
-    {
+    for (size_t entry_offset = 0; entry_offset < buffer_space; entry_offset += 32) {
 
-      // Get the entry
+      // Store the entry
       auto entry = (dir_entry_t*)&buffer[entry_offset];
       m_entries.push_back(*entry);
-
-      // Skip free entries and volume labels
-      if (entry -> name[0] == (uint8_t)DirectoryEntryType::DELETED || (entry -> attributes & 0x08) == 0x08)
-        continue;
 
       // Check if the entry is the end of the directory
       if (entry -> name[0] == (uint8_t)DirectoryEntryType::LAST)
         return;
-
-      // Parse the long name entry
-      if ((entry -> attributes & 0x0F) == 0x0F)
-      {
-
-        // Extract the long name from each part (in reverse order)
-        auto* long_name_entry = (long_file_name_entry_t*)entry;
-        for (int i = 0; i < 13; i++) {
-
-          // Get the character (in utf8 encoding)
-          char c;
-          if (i < 5)
-            c = long_name_entry->name1[i] & 0xFF;
-          else if (i < 11)
-            c = long_name_entry->name2[i - 5] & 0xFF;
-          else
-            c = long_name_entry->name3[i - 11] & 0xFF;
-
-          // Check if the character is valid
-          if (c == '\0' || c == (char)0xFF)
-            break;
-
-          // Add to the start as the entries are stored in reverse
-          long_name = string(c) + long_name;
-        }
-      }
-
-      // Get the name of the entry
-      string name = long_name == "" ? string(entry->name, 8) : long_name;
-      long_name = "";
-
-      // Get the starting cluster
-      uint32_t start_cluster = (entry -> first_cluster_high << 16) | entry -> first_cluster_low;
-
-      // Store the file or directory
-      if (entry -> attributes & (uint8_t)DirectoryEntryType::DIRECTORY)
-        m_subdirectories.push_back(new Fat32Directory(m_volume, start_cluster, name));
-      else
-        m_files.push_back(new Fat32File(m_volume, start_cluster, entry -> size, name));
     }
+
   }
 
+  delete[] buffer;
+}
+
+void Fat32Directory::read_from_disk() {
+
+  for(auto& file : m_files)
+    delete file;
+  m_files.clear();
+
+  for(auto& directory : m_subdirectories)
+    delete directory;
+  m_subdirectories.clear();
+
+  // Load the entries from the disk into memory
+  read_all_entries();
+
+  // Parse the entries
+  string long_name = "";
+  for(auto& entry : m_entries){
+
+    // Skip free entries and volume labels
+    if (entry.name[0] == (uint8_t)DirectoryEntryType::DELETED
+    || entry.attributes == (uint8_t)DirectoryEntryAttributes::FREE
+    || entry.attributes == (uint8_t)DirectoryEntryAttributes::VOLUME_ID)
+      continue;
+
+    if (entry.attributes == (uint8_t)DirectoryEntryAttributes::LONG_NAME)
+    {
+
+      // Extract the long name from each part (in reverse order)
+      auto long_name_entry = (long_file_name_entry_t*)&entry;
+      string current_long_name = "";
+      for (int i = 0; i < 13; i++) {
+
+        // Get the character (in utf8 encoding)
+        char c;
+        if (i < 5)
+          c = long_name_entry -> name1[i] & 0xFF;
+        else if (i < 11)
+          c = long_name_entry -> name2[i - 5] & 0xFF;
+        else
+          c = long_name_entry -> name3[i - 11] & 0xFF;
+
+        // Padding / invalid or end of string
+        if (c == (char)0xFF || c == '\0')
+          break;
+
+        // Add to the start as the entries are stored in reverse
+        current_long_name += string(c);
+      }
+
+      // Entry parsed (prepend name)
+      long_name = current_long_name + long_name;
+      continue;
+
+    }
+
+    bool is_directory = entry.attributes == (uint8_t)DirectoryEntryAttributes::DIRECTORY;
+
+    // Get the name of the entry
+    string name = long_name;
+    if(long_name == ""){
+      name = string(entry.name, 8);
+      if(!is_directory){
+        name = name.strip();
+        name += ".";
+        name += string(entry.extension, 3);
+      }
+    }
+
+    long_name = "";
+
+    // Get the starting cluster
+    uint32_t start_cluster = (entry.first_cluster_high << 16) | entry.first_cluster_low;
+
+    // Store the file or directory
+    if (is_directory)
+      m_subdirectories.push_back(new Fat32Directory(m_volume, start_cluster, name.strip()));
+    else
+      m_files.push_back(new Fat32File(m_volume, start_cluster, entry.size, name));
+
+  }
 }
 
 /**
@@ -624,26 +654,26 @@ Directory* Fat32Directory::create_subdirectory(const string& name)
 void Fat32Directory::remove_subdirectory(const string& name)
 {
   // Find the directory if it exists
-  for (auto& subdirectory : m_subdirectories)
-    if (subdirectory -> name() == name)
-    {
+  for (auto& subdirectory : m_subdirectories) {
+    if (subdirectory->name() != name)
+      continue;
 
-      // Remove all the files in the directory
-      for (auto& file : subdirectory -> files())
-        subdirectory -> remove_file(file -> name());
+    // Remove all the files in the directory
+    for (auto &file : subdirectory->files())
+      subdirectory->remove_file(file->name());
 
-      // Remove all the subdirectories in the directory
-      for (auto& subdirectory : subdirectory -> subdirectories())
-        subdirectory -> remove_subdirectory(subdirectory -> name());
+    // Remove all the subdirectories in the directory
+    for (auto &subdirectory : subdirectory->subdirectories())
+      subdirectory->remove_subdirectory(subdirectory->name());
 
-      // Remove the entry
-      m_subdirectories.erase(subdirectory);
-      remove_entry(((Fat32Directory*)subdirectory) -> first_cluster(), name);
+    // Remove the entry
+    m_subdirectories.erase(subdirectory);
+    remove_entry(((Fat32Directory *)subdirectory)->first_cluster(), name);
 
-      // Delete the directory
-      delete subdirectory;
-      return;
-    }
+    // Delete the directory
+    delete subdirectory;
+    return;
+  }
 }
 
 Fat32FileSystem::Fat32FileSystem(Disk* disk, uint32_t partition_offset)
@@ -656,9 +686,4 @@ Fat32FileSystem::Fat32FileSystem(Disk* disk, uint32_t partition_offset)
 
 }
 
-Fat32FileSystem::~Fat32FileSystem(){
-
-  // Free the root directory
-  delete m_root_directory;
-
-}
+Fat32FileSystem::~Fat32FileSystem() = default;

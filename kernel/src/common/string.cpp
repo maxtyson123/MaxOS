@@ -11,7 +11,20 @@ String::String()
   // String that only contains the null terminator
   allocate_self();
   m_string[0] = '\0';
+  m_length = 0;
+
+}
+
+String::String(char c) {
+
+  // Create the mem
   m_length = 1;
+  allocate_self();
+
+  // Store the char
+  m_string[0] = c;
+  m_string[m_length] = '\0';
+
 
 }
 
@@ -34,7 +47,6 @@ String::String(char const *string)
     for (int i = 0; i < 52; i++)
       m_string[m_length - 52 + i] = warning[i];
 
-
   m_string[m_length] = '\0';
 }
 
@@ -54,15 +66,17 @@ String::String(uint8_t const* string, int length)
 
 String::String(int value) {
 
+  //TODO
+
 }
 
 
 String::String(uint64_t value) {
-
+  //TODO
 }
 
 String::String(float value) {
-
+  //TODO
 }
 
 
@@ -410,7 +424,7 @@ String String::operator + (String const &other) const {
     concatenated.m_string[m_length + i] = other[i];
 
   // Write the null terminator
-  concatenated.m_string[m_length] = '\0';
+  concatenated.m_string[concatenated.m_length] = '\0';
 
   // Return the concatenated string
   return concatenated;
@@ -424,29 +438,9 @@ String String::operator + (String const &other) const {
  */
 String &String::operator += (String const &other) {
 
-    // The concatenated string
-    String concatenated;
-    concatenated.m_length = m_length + other.length();
-    concatenated.allocate_self();
-
-    // Copy the first string
-    for (int i = 0; i < m_length; i++)
-      concatenated.m_string[i] = m_string[i];
-
-    // Copy the second string
-    for (int i = 0; i < other.length(); i++)
-      concatenated.m_string[m_length + i] = other[i];
-
-    // Write the null terminator
-    concatenated.m_string[m_length] = '\0';
-
-    // Free the old memory
-    delete[] m_string;
-
-    // Copy the concatenated string
+    // Add the other string to this string
+    String concatenated = *this + other;
     copy(concatenated);
-
-    // Return the concatenated string
     return *this;
 }
 

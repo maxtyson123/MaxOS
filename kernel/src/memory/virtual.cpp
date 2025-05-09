@@ -46,8 +46,7 @@ VirtualMemoryManager::VirtualMemoryManager()
       m_pml4_root_physical_address = (uint64_t*)PhysicalMemoryManager::to_lower_region((uint64_t)m_pml4_root_address);
     }
 
-    // Log the VMM's PML4 address
-    Logger::DEBUG() << "VMM PML4: physical - 0x" << (uint64_t)m_pml4_root_physical_address << ", virtual - 0x" << (uint64_t)m_pml4_root_address << "\n";
+    // Log the VMM's PML4 addressLogger::DEBUG() << "VMM PML4: physical - 0x" << (uint64_t)m_pml4_root_physical_address << ", virtual - 0x" << (uint64_t)m_pml4_root_address << "\n";
 
     // Allocate space for the vmm
     uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->memory_size() + PhysicalMemoryManager::s_page_size);    //TODO: Check that am not slowly overwriting the kernel (filling first space with 0s bugs out the kernel)

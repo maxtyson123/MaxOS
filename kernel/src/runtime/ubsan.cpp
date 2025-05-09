@@ -137,3 +137,8 @@ extern "C" void __ubsan_handle_missing_return(location_only_info_t* info) {
   Logger::DEBUG() << "UBSan: Missing return\n";
   UBSanHandler::handle(info -> location);
 }
+
+extern "C" void __ubsan_handle_vla_bound_not_positive(vla_bound_not_positive_info_t* info) {
+  Logger::DEBUG() << "UBSan: VLA bound not positive\n";
+  UBSanHandler::handle(info -> location);
+}

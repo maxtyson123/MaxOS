@@ -33,6 +33,8 @@ namespace MaxOS{
                 static string file_extension(string path);
                 static string file_path(string path);
 
+                static string top_directory(string path);
+
         };
 
         /**

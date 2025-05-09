@@ -103,6 +103,29 @@ string Path::file_path(string path)
 
 }
 
+/**
+ * @brief Get the top directory of a path
+ *
+ * @param path The path to get the top directory from
+ * @return The top directory or the original path if it does not exist
+ */
+string Path::top_directory(string path) {
+
+    // Find the first /
+    int first_slash = -1;
+    for (int i = 0; i < path.length(); i++)
+    if (path[i] == '/')
+    first_slash = i;
+
+    // Make sure there was a slash to split
+    if (first_slash == -1)
+    return path;
+
+    // Get the top directory
+    string top_directory = path.substring(0, first_slash);
+    return top_directory;
+}
+
 File::File() = default;
 
 File::~File() = default;
@@ -193,7 +216,17 @@ size_t File::size()
 
 Directory::Directory() = default;
 
-Directory::~Directory() = default;
+Directory::~Directory() {
+
+  // Free the files
+  for (auto & file : m_files)
+    delete file;
+
+  // Free the subdirectories
+  for (auto & subdirectory : m_subdirectories)
+    delete subdirectory;
+
+}
 
 /**
  * @brief Read the directory from the disk
@@ -327,42 +360,14 @@ size_t Directory::size()
 
 }
 
-/**
- * @brief Print the contents of this directory (recursive print of sub-dirs)
- *
- * @param level Level of recursion
- */
-void Directory::debug_print(int level){
-
-    // Prevent infinite recursion bugs
-    level++;
-    ASSERT(level < 1000, "Infinite recursion in tree printing of directory");
-
-    // Print all the files
-    for (auto& file : m_files)
-      Logger::DEBUG() << (string)"-" * level << " " << file -> name() << " (file)" << " Size: 0x" << file -> size() << "\n";
-
-    // Recursive call all the directories
-    for(auto& directory : m_subdirectories){
-
-      // Prevent trying to re-read this directory or the parent one
-      string name = directory -> name().strip();
-      if(name == "." || name == "..")
-        continue;
-
-      Logger::DEBUG() << string("-") * level << " " << name << " (directory) \n";
-      directory -> read_from_disk();
-      directory -> debug_print(level);
-
-    }
-
-
-
-}
-
 FileSystem::FileSystem() = default;
 
-FileSystem::~FileSystem() = default;
+FileSystem::~FileSystem() {
+
+  // Free the root directory
+  delete m_root_directory;
+
+};
 
 /**
  * @brief Get the directory at "/"
@@ -393,10 +398,10 @@ Directory* FileSystem::get_directory(const string& path)
   while (directory_path.length() > 0)
   {
     // Get the name of the directory
-    string directory_name = Path::file_name(directory_path);
+    string directory_name = Path::top_directory(directory_path);
 
     // Open the directory
-    Directory* subdirectory = directory->open_subdirectory(directory_name);
+    Directory* subdirectory = directory -> open_subdirectory(directory_name);
     if (!subdirectory)
       return nullptr;
 
@@ -404,7 +409,7 @@ Directory* FileSystem::get_directory(const string& path)
     directory = subdirectory;
 
     // Get the path to the next directory
-    directory_path = Path::file_path(directory_path);
+    directory_path = directory_path.substring(directory_name.length() + 1, directory_path.length() - directory_name.length() - 1);
   }
 
   return directory;

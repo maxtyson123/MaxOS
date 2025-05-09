@@ -77,6 +77,12 @@ namespace MaxOS {
             "cast to virtual base of",
         };
 
+
+        typedef struct vla_bound_not_positive_info{
+                source_location_t location;
+                type_descriptor_t* type;
+        } vla_bound_not_positive_info_t;
+
         /**
          * @class UBSanHandler
          * @brief Handles undefined behaviour sanitizer

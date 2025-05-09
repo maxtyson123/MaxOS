@@ -92,6 +92,24 @@ namespace MaxOS{
 
         } __attribute__((packed)) dir_entry_t;
 
+        enum class DirectoryEntryAttributes
+        {
+            FREE           = 0x00,
+            READ_ONLY      = 0x01,
+            HIDDEN         = 0x02,
+            SYSTEM         = 0x04,
+            VOLUME_ID      = 0x08,
+            DIRECTORY      = 0x10,
+            ARCHIVE        = 0x20,
+            LONG_NAME      = READ_ONLY | HIDDEN | SYSTEM | VOLUME_ID,
+        };
+
+        enum class DirectoryEntryType
+        {
+          LAST   = 0x00,
+          DELETED = 0xE5,
+        };
+
         typedef struct LongFileNameEntry
         {
             uint8_t     order;
@@ -128,7 +146,6 @@ namespace MaxOS{
                 fs_info_t fsinfo;
 
                 size_t   fat_total_clusters;
-                lba_t    fat_first_sector;
                 lba_t    fat_lba;
                 lba_t    fat_info_lba;
 
@@ -171,14 +188,6 @@ namespace MaxOS{
                 uint32_t first_cluster() const { return m_first_cluster; }
         };
 
-        enum class DirectoryEntryType
-        {
-            LAST   = 0x00,
-            DIRECTORY = 0x10,
-            FILE    = 0x20,
-            DELETED = 0xE5,
-        };
-
         /**
          * @class Fat32Directory
          * @brief Handles the directory operations on the FAT32 filesystem
@@ -194,10 +203,11 @@ namespace MaxOS{
 
                 lba_t create_entry(const string& name, bool is_directory);
                 void remove_entry(lba_t cluster, const string& name);
+                void read_all_entries();
 
             public:
                 Fat32Directory(Fat32Volume* volume, lba_t cluster, const string& name);
-                ~Fat32Directory() final;
+                ~Fat32Directory();
 
                 static const size_t MAX_NAME_LENGTH = 255;
 
@@ -223,7 +233,7 @@ namespace MaxOS{
 
             public:
                 Fat32FileSystem(drivers::disk::Disk* disk, uint32_t partition_offset);
-                ~Fat32FileSystem() final;
+                ~Fat32FileSystem();
         };
 
   }

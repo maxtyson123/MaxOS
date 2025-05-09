@@ -112,7 +112,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
     if(status == 0x00)
       return;
 
-    // Wait for the device to be ready or for an error to occur
+    // Wait for the device to be ready or for an error to occur TODO: Userspace block here
     while(((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
         status = m_command_port.read();
 

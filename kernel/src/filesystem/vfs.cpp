@@ -228,7 +228,7 @@ string VirtualFileSystem::get_relative_path(FileSystem* filesystem, string path)
         return "";
 
     // Get the relative path
-    string relative_path = path.substring(0, mount_point.length());
+    string relative_path = path.substring(mount_point.length(), path.length() - mount_point.length());
     return relative_path;
 }
 
