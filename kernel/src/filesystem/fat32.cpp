@@ -125,7 +125,7 @@ uint32_t Fat32Volume::allocate_cluster(uint32_t cluster)
 }
 
 /**
- * @brief Allocate a number of clusters in the FAT table
+ * @brief Allocate a number of clusters in the FAT table, updates the fsinfo and the chain
  *
  * @param cluster The base cluster to start from or 0 if this is a new chain
  * @param amount The number of clusters to allocate
@@ -213,38 +213,166 @@ void Fat32Volume::free_cluster(uint32_t cluster, size_t amount)
 }
 
 
-Fat32File::Fat32File(Fat32Volume* volume, uint32_t cluster, size_t size, const string& name)
+Fat32File::Fat32File(Fat32Volume* volume, Fat32Directory* parent, dir_entry_t* info, const string& name)
 : m_volume(volume),
-  m_first_cluster(cluster)
+  m_parent_directory(parent),
+  m_entry(info),
+  m_first_cluster((info -> first_cluster_high << 16) | info -> first_cluster_low)
 {
 
   m_name = name;
-  m_size = size;
+  m_size = info -> size;
   m_offset = 0;
 }
 
 Fat32File::~Fat32File() = default;
 
 /**
- * @brief Write data to the file
+ * @brief Write data to the file (at the current seek position, updated to be += amount)
  *
  * @param data The byte buffer to write
- * @param size The amount of data to write
+ * @param amount The amount of data to write
  */
-void Fat32File::write(const uint8_t* data, size_t size)
+void Fat32File::write(const uint8_t* data, size_t amount)
 {
-  File::write(data, size);
+
+  size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
+  auto buffer = new uint8_t[buffer_space];
+
+  uint64_t current_offset = 0;
+  uint64_t bytes_written  = 0;
+  uint32_t last = m_first_cluster;
+
+  // Read the file
+  for (uint32_t cluster = last; cluster != (uint32_t)ClusterState::END_OF_CHAIN; cluster = m_volume -> next_cluster(cluster)) {
+    last = cluster;
+
+    // No cluster to read from (blank file)
+    if (cluster == 0)
+        break;
+
+    // Skip clusters before the offset
+    if((current_offset + buffer_space) < m_offset){
+      current_offset += buffer_space;
+      continue;
+    }
+
+    // Read each sector in the cluster (prevent overwriting the data)
+    memset(buffer, 0, buffer_space);
+    lba_t lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
+    for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
+      m_volume->disk->read(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+
+    // If the offset is in the middle of the cluster
+    size_t buffer_offset = 0;
+    if(m_offset > current_offset)
+      buffer_offset = m_offset - current_offset;
+
+    // Calculate how many bytes are being copied (read from cluster at offset?
+    // or read part of cluster?)
+    size_t cluster_remaining_bytes = buffer_space - buffer_offset;
+    size_t data_remaining_bytes    = amount - bytes_written ;
+    size_t bytes_to_copy           = (cluster_remaining_bytes < data_remaining_bytes) ? cluster_remaining_bytes : data_remaining_bytes;
+    bytes_to_copy                  = (bytes_to_copy > buffer_space) ? buffer_space : bytes_to_copy;
+
+    // Update the data
+    memcpy(buffer + buffer_offset, data + bytes_written , bytes_to_copy);
+    bytes_written  += bytes_to_copy;
+    current_offset += bytes_to_copy;
+
+    // Write the data back to the disk
+    for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
+      m_volume->disk->write(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+  }
+
+  // Extend the file
+  while(bytes_written < amount)
+  {
+    // Allocate a new cluster
+    uint32_t new_cluster = m_volume -> allocate_cluster(last);
+    if (new_cluster == 0)
+      break;
+
+    if(last == 0)
+      m_first_cluster = new_cluster;
+
+    // Update the data
+    size_t bytes_to_copy = (amount - bytes_written) > buffer_space ? buffer_space : (amount - bytes_written);
+    memcpy(buffer, data + bytes_written , bytes_to_copy);
+    bytes_written  += bytes_to_copy;
+    current_offset += bytes_to_copy;
+
+    // Write the data back to the disk
+    lba_t lba = m_volume->data_lba + (new_cluster - 2) * m_volume->bpb.sectors_per_cluster;
+    for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
+      m_volume->disk->write(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+
+  }
+
+  m_offset += bytes_written;
+
+  // Update the file size on disk
+  if (m_offset > m_size){
+    m_size = m_offset;
+    m_entry -> size = m_size;
+    m_entry -> first_cluster_high = (m_first_cluster >> 16) & 0xFFFF;
+    m_entry -> first_cluster_low = m_first_cluster & 0xFFFF;
+    m_parent_directory -> save_entry_to_disk(m_entry);
+
+  }
+
+  delete[] buffer;
 }
 
 /**
- * @brief Read data from the file
+ * @brief Read data from the file (at the current seek position, updated to be += amount)
  *
  * @param data The byte buffer to read into
- * @param size The amount of data to read
+ * @param amount The amount of data to read
  */
-void Fat32File::read(uint8_t* data, size_t size)
+void Fat32File::read(uint8_t* data, size_t amount)
 {
-  File::read(data, size);
+  size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
+  auto buffer = new uint8_t[buffer_space];
+
+  uint64_t current_offset = 0;
+  uint64_t bytes_read = 0;
+
+  // Read the file
+  for (uint32_t cluster = m_first_cluster; cluster != (uint32_t)ClusterState::END_OF_CHAIN; cluster = m_volume -> next_cluster(cluster)) {
+
+    // Skip clusters before the offset
+    if((current_offset + buffer_space) < m_offset){
+      current_offset += buffer_space;
+      continue;
+    }
+
+    // Read each sector in the cluster
+    memset(buffer, 0, buffer_space);
+    lba_t lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
+    for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
+      m_volume->disk->read(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+
+    // If the offset is in the middle of the cluster
+    size_t buffer_offset = 0;
+    if(m_offset > current_offset)
+      buffer_offset = m_offset - current_offset;
+
+    // Calculate how many bytes are being copied (read from cluster at offset?
+    // or read part of cluster?)
+    size_t cluster_remaining_bytes = buffer_space - buffer_offset;
+    size_t data_remaining_bytes    = amount - bytes_read;
+    size_t bytes_to_copy           = (cluster_remaining_bytes < data_remaining_bytes) ? cluster_remaining_bytes : data_remaining_bytes;
+    bytes_to_copy                  = (bytes_to_copy > buffer_space) ? buffer_space : bytes_to_copy;
+
+    // Read the data
+    memcpy(data + bytes_read, buffer + buffer_offset, bytes_to_copy);
+    bytes_read += bytes_to_copy;
+    current_offset += buffer_space;
+  }
+
+  m_offset += bytes_read;
+  delete[] buffer;
 }
 
 /**
@@ -273,10 +401,11 @@ Fat32Directory::~Fat32Directory() = default;
  * @param is_directory True if the entry is a directory, false if it is a file
  * @return The cluster of the new entry
  */
-lba_t Fat32Directory::create_entry(const string& name, bool is_directory)
+dir_entry_t* Fat32Directory::create_entry(const string& name, bool is_directory)
 {
 
-  //TODO: Write to all the FAT copies
+  // TODO: Write to all the FAT copies
+  // TODO: Grow the cluster chain if needed
 
   // Allocate a cluster for the new entry
   uint32_t cluster = m_volume -> allocate_cluster(0);
@@ -377,7 +506,7 @@ lba_t Fat32Directory::create_entry(const string& name, bool is_directory)
 
   // Creating the file is done
   if (!is_directory)
-    return cluster;
+    return &m_entries[entry_index];
 
   // Create the "." in the directory
   dir_entry_t current_dir_entry;
@@ -399,7 +528,7 @@ lba_t Fat32Directory::create_entry(const string& name, bool is_directory)
   m_volume -> disk -> write(child_lba + sizeof(dir_entry_t), (uint8_t *)&parent_dir_entry, sizeof(dir_entry_t));
 
   // Directory created
-  return cluster;
+  return &m_entries[entry_index];
 }
 
 /**
@@ -412,41 +541,22 @@ void Fat32Directory::remove_entry(uint32_t cluster, const string& name)
 {
 
   // Find the entry in the directory
-  size_t entry_index = 0;
-  for (; entry_index < m_entries.size(); entry_index++)
-  {
-    auto& entry = m_entries[entry_index];
-
-    // End of directory means no more entries
-    if (entry.name[0] == (uint8_t)DirectoryEntryType::LAST)
-      return;
-
-    // Skip deleted entries
-    if (entry.name[0] == (uint8_t)DirectoryEntryType::DELETED)
-      continue;
-
-    // Check if the entry is the one to remove
-    uint32_t start_cluster = (entry.first_cluster_high << 16) | entry.first_cluster_low;
-    if (start_cluster == cluster)
-      break;
-  }
-
-  // Make sure the entry is valid
-  if (entry_index >= m_entries.size())
+  int entry = entry_index(cluster);
+  if(entry == -1)
     return;
 
   // Find any long file name entries that belong to this entry
-  size_t delete_entry_index = entry_index;
+  size_t delete_entry_index = entry;
   while (delete_entry_index > 0 && (m_entries[delete_entry_index - 1].attributes & 0x0F) == 0x0F)
     delete_entry_index--;
 
   // Mark the entries as deleted
-  for (size_t i = delete_entry_index; i < entry_index; i++)
+  for (size_t i = delete_entry_index; i < entry; i++)
     m_entries[i].name[0] = (uint8_t)DirectoryEntryType::DELETED;
 
   // Update the entries on the disk
   lba_t first_directory_entry_lba = m_volume -> data_lba + (m_first_cluster - 2) * m_volume -> bpb.sectors_per_cluster;
-  for (size_t i = delete_entry_index; i <= entry_index; i++)
+  for (size_t i = delete_entry_index; i <= entry; i++)
   {
     uint32_t offset = (i * sizeof(dir_entry_t)) / m_volume -> bpb.bytes_per_sector;
     m_volume -> disk -> write(first_directory_entry_lba + offset, (uint8_t *)&m_entries[i], sizeof(dir_entry_t));
@@ -496,6 +606,63 @@ void Fat32Directory::read_all_entries() {
   }
 
   delete[] buffer;
+}
+
+
+/**
+ * @brief Writes an updated directory entry to the disk
+ *
+ * @param entry The entry to write
+ */
+void Fat32Directory::save_entry_to_disk(DirectoryEntry* entry) {
+
+  int index = 0;
+  for (auto & m_entry : m_entries){
+    index++;
+    if (&m_entry == entry)
+      break;
+  }
+
+  // Write the entry to the disk
+  lba_t lba = m_volume -> data_lba + (m_first_cluster - 2) * m_volume -> bpb.sectors_per_cluster;
+  uint32_t offset = (index * sizeof(dir_entry_t)) / m_volume -> bpb.bytes_per_sector;
+  m_volume -> disk -> write(lba + offset, (uint8_t *)entry, sizeof(dir_entry_t));
+
+}
+
+/**
+ * @brief Find cluster's directory entry index in the store entries
+ *
+ * @param cluster The cluster
+ * @return The index or -1 if not found
+ */
+int Fat32Directory::entry_index(lba_t cluster) {
+
+  int entry_index = 0;
+  for (; entry_index < m_entries.size(); entry_index++)
+  {
+    auto& entry = m_entries[entry_index];
+
+    // End of directory means no more entries
+    if (entry.name[0] == (uint8_t)DirectoryEntryType::LAST)
+      return -1;
+
+    // Skip deleted entries
+    if (entry.name[0] == (uint8_t)DirectoryEntryType::DELETED)
+      continue;
+
+    // Check if the entry is the one
+    uint32_t start_cluster = (entry.first_cluster_high << 16) | entry.first_cluster_low;
+    if (start_cluster == cluster)
+      break;
+  }
+
+  // Make sure the entry is valid
+  if (entry_index >= m_entries.size())
+    return -1;
+
+  return entry_index;
+
 }
 
 void Fat32Directory::read_from_disk() {
@@ -574,7 +741,7 @@ void Fat32Directory::read_from_disk() {
     if (is_directory)
       m_subdirectories.push_back(new Fat32Directory(m_volume, start_cluster, name.strip()));
     else
-      m_files.push_back(new Fat32File(m_volume, start_cluster, entry.size, name));
+      m_files.push_back(new Fat32File(m_volume, this, &entry, name));
 
   }
 }
@@ -598,7 +765,7 @@ File* Fat32Directory::create_file(const string& name)
     return nullptr;
 
   // Create the file
-  auto file = new Fat32File(m_volume, create_entry(name, false), 0, name);
+  auto file = new Fat32File(m_volume, this, create_entry(name, false), name);
   m_files.push_back(file);
   return file;
 }
@@ -640,7 +807,11 @@ Directory* Fat32Directory::create_subdirectory(const string& name)
     return nullptr;
 
   // Create the directory
-  auto directory = new Fat32Directory(m_volume, create_entry(name, true), name);
+  auto entry = create_entry(name, true);
+  uint32_t cluster = ((entry -> first_cluster_high << 16) | entry -> first_cluster_low);
+
+  // Store the directory
+  auto directory = new Fat32Directory(m_volume, cluster, name);
   m_subdirectories.push_back(directory);
   return directory;
 
@@ -675,6 +846,7 @@ void Fat32Directory::remove_subdirectory(const string& name)
     return;
   }
 }
+
 
 Fat32FileSystem::Fat32FileSystem(Disk* disk, uint32_t partition_offset)
 : m_volume(disk, partition_offset)

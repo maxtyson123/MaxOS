@@ -83,12 +83,20 @@ namespace MaxOS{
                 virtual void read_from_disk();
 
                 common::Vector<File*> files();
+                common::Vector<Directory*> subdirectories();
+
                 File* open_file(const string& name);
+                Directory* open_subdirectory(const string& name);
+
                 virtual File* create_file(const string& name);
                 virtual void remove_file(const string& name);
 
-                common::Vector<Directory*> subdirectories();
-                Directory* open_subdirectory(const string& name);
+                void rename_file(File* file, const string& new_name);
+                virtual void rename_file(const string& old_name, const string& new_name);
+
+                void rename_subdirectory(Directory* directory, const string& new_name);
+                virtual void rename_subdirectory(const string& old_name, const string& new_name);
+
                 virtual Directory* create_subdirectory(const string& name);
                 virtual void remove_subdirectory(const string& name);
 

@@ -165,6 +165,9 @@ namespace MaxOS{
                 void free_cluster(uint32_t cluster, size_t amount);
         };
 
+        // Forward def
+        class Fat32Directory;
+
         /**
          * @class Fat32File
          * @brief Handles the file operations on the FAT32 filesystem
@@ -174,15 +177,17 @@ namespace MaxOS{
 
             private:
                 Fat32Volume* m_volume;
+                Fat32Directory* m_parent_directory;
 
+                dir_entry_t* m_entry;
                 uint32_t m_first_cluster;
 
             public:
-                Fat32File(Fat32Volume* volume, uint32_t cluster, size_t size, const string& name);
+                Fat32File(Fat32Volume* volume, Fat32Directory* parent, dir_entry_t* info, const string& name);
                 ~Fat32File() final;
 
-                void write(const uint8_t* data, size_t size) final;
-                void read(uint8_t* data, size_t size) final;
+                void write(const uint8_t* data, size_t amount) final;
+                void read(uint8_t* data, size_t amount) final;
                 void flush() final;
 
                 uint32_t first_cluster() const { return m_first_cluster; }
@@ -194,6 +199,7 @@ namespace MaxOS{
          */
         class Fat32Directory : public Directory
         {
+            friend class Fat32File;
 
             private:
                 Fat32Volume* m_volume;
@@ -201,9 +207,15 @@ namespace MaxOS{
 
                 common::Vector<dir_entry_t> m_entries;
 
-                lba_t create_entry(const string& name, bool is_directory);
+                dir_entry_t* create_entry(const string& name, bool is_directory);
                 void remove_entry(lba_t cluster, const string& name);
                 void read_all_entries();
+
+                int entry_index(lba_t cluster);
+
+            protected:
+
+                void save_entry_to_disk(dir_entry_t* entry);
 
             public:
                 Fat32Directory(Fat32Volume* volume, lba_t cluster, const string& name);

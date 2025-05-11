@@ -136,7 +136,7 @@ File::~File() = default;
  * @param data The byte buffer to write
  * @param size The amount of data to write
  */
-void File::write(const uint8_t* data, size_t size)
+void File::write(const uint8_t* data, size_t amount)
 {
 }
 
@@ -146,7 +146,7 @@ void File::write(const uint8_t* data, size_t size)
  * @param data The byte buffer to read into
  * @param size The amount of data to read
  */
-void File::read(uint8_t* data, size_t size)
+void File::read(uint8_t* data, size_t amount)
 {
 }
 
@@ -358,6 +358,51 @@ size_t Directory::size()
 
   return size;
 
+}
+/**
+ * @brief Rename a file in the directory
+ *
+ * @param file The file to rename
+ * @param new_name The new name of the file
+ */
+void Directory::rename_file(File *file, string const &new_name) {
+
+    rename_file(file -> name(), new_name);
+
+}
+
+/**
+ * @brief Rename a file in the directory
+ *
+ * @param old_name The file to rename
+ * @param new_name The new name of the file
+ */
+void Directory::rename_file(string const &old_name, string const &new_name) {
+
+    ASSERT(false, "not implemented");
+
+}
+
+/**
+ * @brief Rename a subdirectory in the directory
+ *
+ * @param directory The directory to rename
+ * @param new_name The new name of the directory
+ */
+void Directory::rename_subdirectory(Directory *directory, string const &new_name) {
+
+    rename_subdirectory(directory -> name(), new_name);
+
+}
+
+/**
+ * @brief Rename a subdirectory in the directory
+ *
+ * @param old_name The directory to rename
+ * @param new_name The new name of the directory
+ */
+void Directory::rename_subdirectory(string const &old_name, string const &new_name) {
+  ASSERT(false, "not implemented");
 }
 
 FileSystem::FileSystem() = default;
