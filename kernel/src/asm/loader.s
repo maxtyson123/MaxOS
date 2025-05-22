@@ -27,17 +27,7 @@ start:
     ; Setup lower half of the stack
     mov esp, stack.top - KERNEL_VIRTUAL_ADDR
 
-    ; Map the kernel into the higher half
-    mov eax, p3_table_hh - KERNEL_VIRTUAL_ADDR
-    or eax, FLAGS
-    mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 511 * 8], eax
-
-    ; Map the kernel into the higher half (second  level)
-    mov eax, p2_table - KERNEL_VIRTUAL_ADDR
-    or eax, FLAGS
-    mov dword[(p3_table_hh - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
-
-    ; Map the pml4 into itself
+    ; Identity map the p4 table
     mov eax, p4_table - KERNEL_VIRTUAL_ADDR
     or eax, FLAGS
     mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
@@ -51,6 +41,16 @@ start:
     mov eax, p2_table - KERNEL_VIRTUAL_ADDR
     or eax, FLAGS
     mov dword [(p3_table - KERNEL_VIRTUAL_ADDR) + 0], eax
+
+    ; Map the kernel into the higher half
+    mov eax, p3_table_hh - KERNEL_VIRTUAL_ADDR
+    or eax, FLAGS
+    mov dword [(p4_table - KERNEL_VIRTUAL_ADDR) + 511 * 8], eax
+
+    ; Map the kernel into the higher half (second  level)
+    mov eax, p2_table - KERNEL_VIRTUAL_ADDR
+    or eax, FLAGS
+    mov dword[(p3_table_hh - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
 
     ; Map 8MB of kernel memory  (2 page directories)
     mov ebx, 0
@@ -67,7 +67,7 @@ start:
         cmp ebx, PD_LOOP_LIMIT
         jne .map_pd_table
 
-    ; Fill the page directory with the page tables
+    ; Fill the page directory with the kernel page tables
     mov ecx, 0
     .map_p2_table:
 

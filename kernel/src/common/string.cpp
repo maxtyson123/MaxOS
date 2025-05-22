@@ -282,7 +282,6 @@ int String::length(bool count_ansi) const {
     if (count_ansi)
       return m_length;
 
-
     // Calculate the length of the string without ansi characters
     int total_length = 0;
     int clean_length = 0;

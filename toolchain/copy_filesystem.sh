@@ -1,9 +1,31 @@
 #!/bin/bash
 
+#TODO: rsync Mac, unmount/remount mac
+
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/MaxOS.sh
 
-msg "Copying boot files to image"
+# Parse the args
+REVERSE=0
+while [ "$#" -gt "0" ]; do
+  case "$1" in
+    --reverse)
+      REVERSE=1
+      shift 1
+      ;;
+    *)
+      warn "Error: Unknown argument $1"
+      ;;
+  esac
+done
+
+
+
+if [ "$REVERSE" -ne 1 ]; then
+  msg "Copying boot files to image"
+else
+  msg "Pulling changes made during run"
+fi
 
 # Bootscript maps 8MB of kernel memory so ensure that the elf file is less than 8MB
 KERNEL_SIZE=$($STAT_EXC -c %s "$SCRIPTDIR/../filesystem/boot/MaxOSk64")
@@ -13,9 +35,17 @@ fi
 
 DESTINATION="$MOUNT_DIR/MaxOS_img_1"
 
-# Produce an ISO? default to no
+
+
 : "${USE_ISO:=0}"
+# Produce an ISO? default to no
 if [ "$USE_ISO" -eq 1 ]; then
+
+  # Cant pull changes from the iso
+  if [ "$REVERSE" -ne 1 ]; then
+    exit 0
+  fi
+
   DESTINATION="$SCRIPTDIR/../iso"
   if [ ! -d "$DESTINATION" ]; then
     mkdir -p "$DESTINATION"
@@ -33,9 +63,13 @@ if [ "$IS_MACOS" -ne 1 ]; then
 fi
 
 # Syncing local filesystem
-msg "Copying filesystem to image"
-sudo rsync --no-owner --no-group -a --delete -c "$SCRIPTDIR/../filesystem/"  "$MOUNT_DIR/MaxOS_img_1/"
-#TODO: rsync Mac, unmount/remount mac
+if [ "$REVERSE" -ne 1 ]; then
+  msg "Copying filesystem to image"
+  sudo rsync --no-o --no-g -a --delete -c "$SCRIPTDIR/../filesystem/"  "$MOUNT_DIR/MaxOS_img_1/"
+else
+  msg "Copying changes on image to local filesystem"
+  sudo rsync  --chown=$(id -un):$(id -gn) -a --delete -c "$MOUNT_DIR/MaxOS_img_1/" "$SCRIPTDIR/../filesystem/"
+fi
 
 # Create the iso
 if [ "$USE_ISO" -eq 1 ]; then

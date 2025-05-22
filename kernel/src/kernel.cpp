@@ -78,10 +78,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     grub_cfg -> write((uint8_t*)test_data.c_str(), test_data.length());
 
     grub_cfg ->seek(SeekType::SET, 0);
-    uint8_t buffer[100];
+    auto buffer = new uint8_t[100];
     grub_cfg ->read(buffer, 100);
     Logger::DEBUG() << (char*)buffer << "\n";
-
 
     Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -95,8 +94,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - Read from files
-//  - Timing storage
+/// - FAT32 TODOS
 //  - FAT32 Tests
 //  - [x] Read subdirectories contents
 //  - [x] Read long path subdirectories contents

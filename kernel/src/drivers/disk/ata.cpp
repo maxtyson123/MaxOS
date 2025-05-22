@@ -94,8 +94,13 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
     if(sector & 0xF0000000 || amount > m_bytes_per_sector)
         return;
 
-    // Select the device (master or slave) and reset it
+    // Select the device (master or slave)
     m_device_port.write((m_is_master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
+
+    // Device is busy (TODO: YIELD)
+    while((m_command_port.read() & 0x80) != 0);
+
+    // Reset the device
     m_error_port.write(0);
     m_sector_count_port.write(1);
 
@@ -150,8 +155,13 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, s
     if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)
         return;
 
-    // Select the device (master or slave) and reset it
+    // Select the device (master or slave)
     m_device_port.write(m_is_master ? 0xE0 : 0xF0 | ((sector & 0x0F000000) >> 24));
+
+    // Device is busy (TODO: YIELD)
+    while((m_command_port.read() & 0x80) != 0);
+
+    // Reset the device
     m_error_port.write(0);
     m_sector_count_port.write(1);
 
@@ -163,7 +173,12 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, s
     // Send the write command
     m_command_port.write(0x30);
 
-    // write the data to the device
+    // Wait for the device be ready writing (TODO: YIELD)
+    uint8_t status = m_command_port.read();
+    while ((status & 0x80) != 0 || (status & 0x08) == 0)
+      status = m_command_port.read();
+
+    // Write the data to the device
     for (uint16_t i = 0; i < m_bytes_per_sector; i+= 2) {
 
         uint16_t  writeData = data[i];
@@ -178,6 +193,13 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, s
     // Write the remaining bytes as a full sector has to be written
     for(int i = count + (count%2); i < m_bytes_per_sector; i += 2)
       m_data_port.write(0x0000);
+
+    // Wait for the device to finish writing (TODO: YIELD)
+    status = m_command_port.read();
+    while ((status & 0x80) != 0 || (status & 0x08) != 0)
+      status = m_command_port.read();
+
+    flush();
 }
 /**
  * @brief Flush the cache of the ATA device

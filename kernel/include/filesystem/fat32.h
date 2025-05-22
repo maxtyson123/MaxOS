@@ -212,10 +212,12 @@ namespace MaxOS{
                 void read_all_entries();
 
                 int entry_index(lba_t cluster);
+                int find_free_entries(size_t amount);
 
             protected:
 
                 void save_entry_to_disk(dir_entry_t* entry);
+                void update_entry_on_disk(int index);
 
             public:
                 Fat32Directory(Fat32Volume* volume, lba_t cluster, const string& name);
@@ -231,7 +233,7 @@ namespace MaxOS{
                 Directory* create_subdirectory(const string& name) final;
                 void remove_subdirectory(const string& name) final;
 
-                lba_t first_cluster() const { return m_first_cluster; }
+                [[nodiscard]] lba_t first_cluster() const { return m_first_cluster; }
         };
 
         /**
