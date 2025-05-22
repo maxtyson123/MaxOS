@@ -94,7 +94,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-/// - FAT32 TODOS
 //  - FAT32 Tests
 //  - [x] Read subdirectories contents
 //  - [x] Read long path subdirectories contents

@@ -107,13 +107,13 @@ namespace MaxOS{
         enum class DirectoryEntryType
         {
           LAST   = 0x00,
-          DELETED = 0xE5,
+          FREE = 0xE5,
         };
 
         typedef struct LongFileNameEntry
         {
             uint8_t     order;
-            uint16_t     name1[5];
+            uint16_t    name1[5];
             uint8_t     attributes;
             uint8_t     type;
             uint8_t     checksum;
@@ -148,6 +148,7 @@ namespace MaxOS{
                 size_t   fat_total_clusters;
                 lba_t    fat_lba;
                 lba_t    fat_info_lba;
+                lba_t    fat_copies;
 
                 lba_t    data_lba;
                 lba_t    root_lba;
@@ -203,7 +204,10 @@ namespace MaxOS{
 
             private:
                 Fat32Volume* m_volume;
+
                 lba_t m_first_cluster;
+                lba_t m_last_cluster;
+                size_t m_current_cluster_length = 0;
 
                 common::Vector<dir_entry_t> m_entries;
 
@@ -213,6 +217,10 @@ namespace MaxOS{
 
                 int entry_index(lba_t cluster);
                 int find_free_entries(size_t amount);
+                int expand_directory(size_t amount);
+
+                static common::Vector<long_file_name_entry_t> to_long_filenames(string name);
+                static string parse_long_filename(long_file_name_entry_t* entry, const string& current);
 
             protected:
 
