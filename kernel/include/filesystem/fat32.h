@@ -125,11 +125,11 @@ namespace MaxOS{
 
         typedef uint32_t lba_t;
 
-        enum class ClusterState
+        enum class ClusterState: uint32_t
         {
             FREE            = 0x00000000,
             BAD             = 0x0FFFFFF7,
-            END_OF_CHAIN    = 0x0FFFFFF8,
+            END_OF_CHAIN    = 0xFFFFFFFF,
         };
 
         /**

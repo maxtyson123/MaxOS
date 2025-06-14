@@ -529,9 +529,10 @@ String String::center(int width, char fill) const {
 /**
  * @brief Strips the string of whitespace
  *
+ * @param strip_char The character to strip (default = ' ')
  * @return The stripped string (new string)
  */
-String String::strip() const {
+String String::strip(char strip_char) const {
 
   // The stripped string
   String stripped;
@@ -539,7 +540,7 @@ String String::strip() const {
 
   // Search from the back for the earliest non-whitespace character
   int end = m_length - 1;
-  while (end >= 0 && (m_string[end] == ' ' || m_string[end] == '\n' || m_string[end] == '\t'))
+  while (end >= 0 && (m_string[end] == strip_char || m_string[end] == '\n' || m_string[end] == '\t'))
       end--;
 
   // Make sure there is something to strip

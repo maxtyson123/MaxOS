@@ -292,6 +292,8 @@ Directory* VirtualFileSystem::create_directory(string path)
     if (!Path::vaild(path))
         return nullptr;
 
+    path = path.strip('/');
+
     // Try to find the filesystem that is responsible for the path
     FileSystem* fs = find_filesystem(path);
     if (!fs)
@@ -320,6 +322,8 @@ void VirtualFileSystem::delete_directory(string path)
     // Ensure a valid path is given
     if (!Path::vaild(path))
         return;
+
+    path = path.strip('/');
 
     // Open the directory
     Directory* directory = open_directory(path);

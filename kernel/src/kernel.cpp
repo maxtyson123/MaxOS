@@ -71,16 +71,12 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.activate_drivers();
 
     // FS Tests
-    File* grub_cfg = vfs.open_file("/test/a.txt");
-    Logger::DEBUG() << "Opened file: " << grub_cfg->name() << "\n";
+    Directory* test = vfs.create_directory("/test/sub/");
+    Logger::DEBUG() << "Created directory: " << test->name() << "\n";
 
-    string test_data = "Hello World!";
-    grub_cfg -> write((uint8_t*)test_data.c_str(), test_data.length());
-
-    grub_cfg ->seek(SeekType::SET, 0);
-    auto buffer = new uint8_t[100];
-    grub_cfg ->read(buffer, 100);
-    Logger::DEBUG() << (char*)buffer << "\n";
+    Directory* test2 = vfs.open_directory("/test/");
+    for(auto& folder : test2 -> subdirectories())
+      Logger::DEBUG() << "   " << folder -> name() << "\n";
 
     Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -94,18 +90,20 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - FAT32 Tests
+//  - FAT32 Tests:
 //  - [x] Read subdirectories contents
 //  - [x] Read long path subdirectories contents
 //  - [ ] Create subdirectories
 //  - [ ] Create long path subdirectories
-//  - [ ] Delete subdirectories
+//  - [ ] Delete subdirectories (need to add ability to free clusters first
 //  - [ ] Delete long path subdirectories
 //  - [ ] Rename directory
 //  - [ ] Rename file
+//  - [ ] Rename lfn directory
+//  - [ ] Rename lfn file
 //  - [x] Read files
 //  - [ ] Read large files
-//  - [ ] Write files
+//  - [x] Write files
 //  - [ ] Write large files
 //  - [ ] Create files
 //  - [ ] Delete files
@@ -117,6 +115,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 //  - [ ] Read directories on a different mount point
 //  - [ ] Create directories on a different mount point
 //  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, etc
+
 
 //  - Fix tabs (mac mess up)
 //  - Userspace Files (syscalls, proper path handling, working directories, file handles)

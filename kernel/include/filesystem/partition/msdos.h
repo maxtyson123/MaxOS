@@ -342,9 +342,6 @@ namespace MaxOS{
 
 
         // TODO: Abstract some of this into a base class and use it for GPT and other partition tables
-
-
-
     }
   }
 }

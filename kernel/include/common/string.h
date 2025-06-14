@@ -45,7 +45,7 @@ namespace MaxOS {
           String substring(int start, int length) const;
 
           common::Vector<String> split(String const &delimiter) const;
-          String strip() const;
+          String strip(char strip_char = ' ') const;
 
 
           [[nodiscard]] String center(int width, char fill = ' ') const;

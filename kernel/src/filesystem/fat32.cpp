@@ -169,6 +169,7 @@ uint32_t Fat32Volume::allocate_cluster(uint32_t cluster, size_t amount)
 
   // Finish the chin
   set_next_cluster(cluster, (uint32_t)ClusterState::END_OF_CHAIN);
+  uint32_t next = next_cluster(cluster);
   return cluster;
 }
 
@@ -420,7 +421,6 @@ Fat32Directory::~Fat32Directory() = default;
  */
 dir_entry_t* Fat32Directory::create_entry(const string& name, bool is_directory)
 {
-  // TODO: Grow the cluster chain if needed
 
   // Allocate a cluster for the new entry
   uint32_t cluster = m_volume -> allocate_cluster(0);
@@ -437,10 +437,10 @@ dir_entry_t* Fat32Directory::create_entry(const string& name, bool is_directory)
     short_extension[i] = (8 + i < name.length()) ? name[8 + i] : ' ';
 
   // Create the directory entry
-  dir_entry_t entry;
+  dir_entry_t entry = {};
   memcpy(entry.name, short_name, sizeof(short_name));
   memcpy(entry.extension, short_extension, sizeof(short_extension));
-  entry.attributes = is_directory ? 0x10 : 0x20;
+  entry.attributes = is_directory ? (uint8_t)DirectoryEntryAttributes::DIRECTORY : (uint8_t)DirectoryEntryAttributes::ARCHIVE;
   entry.first_cluster_high = (cluster >> 16) & 0xFFFF;
   entry.first_cluster_low = cluster & 0xFFFF;
 
@@ -463,23 +463,27 @@ dir_entry_t* Fat32Directory::create_entry(const string& name, bool is_directory)
     return &m_entries[entry_index];
 
   // Create the "." in the directory
-  dir_entry_t current_dir_entry;
+  dir_entry_t current_dir_entry = {};
   memcpy(current_dir_entry.name, ".", 1);
   current_dir_entry.attributes = 0x10;
   current_dir_entry.first_cluster_high = (cluster >> 16) & 0xFFFF;
   current_dir_entry.first_cluster_low = cluster & 0xFFFF;
 
   // Create the ".." in the directory
-  dir_entry_t parent_dir_entry;
+  dir_entry_t parent_dir_entry = {};
   memcpy(parent_dir_entry.name, "..", 2);
   parent_dir_entry.attributes = 0x10;
   parent_dir_entry.first_cluster_high = (m_first_cluster >> 16) & 0xFFFF;
   parent_dir_entry.first_cluster_low = m_first_cluster & 0xFFFF;
 
   // Write the entries to the disk
-  lba_t child_lba = m_volume -> data_lba + (cluster - 2) * m_volume -> bpb.sectors_per_cluster;
-  m_volume -> disk -> write(child_lba, (uint8_t *)&current_dir_entry, sizeof(dir_entry_t));
-  m_volume -> disk -> write(child_lba + sizeof(dir_entry_t), (uint8_t *)&parent_dir_entry, sizeof(dir_entry_t));
+  uint32_t bytes_per_sector = m_volume -> bpb.bytes_per_sector;
+  lba_t child_lba = m_volume -> data_lba + (cluster - 2) * bytes_per_sector;
+  uint8_t buffer[bytes_per_sector];
+  memset(buffer, 0, bytes_per_sector);
+  memcpy(buffer, (uint8_t *)&current_dir_entry, sizeof(dir_entry_t));
+  memcpy(buffer + sizeof(dir_entry_t), (uint8_t *)&parent_dir_entry, sizeof(dir_entry_t));
+  m_volume -> disk -> write(child_lba, buffer, bytes_per_sector);
 
   // Directory created
   return &m_entries[entry_index];
