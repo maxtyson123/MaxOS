@@ -51,6 +51,10 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
           vfs -> mount_filesystem(new Fat32FileSystem(hd, entry.start_LBA));
           break;
 
+        case PartitionType::LINUX_EXT2:
+          Logger::Out() << "EXT2 partition\n";
+          break;
+
         default:
           Logger::Out() << "Unknown or unimplemented partition type: 0x" << (uint64_t)entry.type << "\n";
 

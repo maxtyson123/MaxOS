@@ -90,7 +90,31 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-
+//  - EXT2 Tests:
+//  - [ ] Read subdirectories contents
+//  - [ ] Read long path subdirectories contents
+//  - [ ] Create subdirectories
+//  - [ ] Create long path subdirectories
+//  - [ ] Delete subdirectories (need to add ability to free clusters first
+//  - [ ] Delete long path subdirectories
+//  - [ ] Rename directory
+//  - [ ] Rename file
+//  - [ ] Rename lfn directory
+//  - [ ] Rename lfn file
+//  - [ ] Read files
+//  - [ ] Read large files
+//  - [ ] Write files
+//  - [ ] Write large files
+//  - [ ] Create files
+//  - [ ] Delete files
+//  - [ ] Read long path files
+//  - [ ] Create long path files
+//  - [ ] Delete long path files
+//  - [ ] Create files on a different mount point
+//  - [ ] Delete files on a different mount point
+//  - [ ] Read directories on a different mount point
+//  - [ ] Create directories on a different mount point
+//  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, etc
 
 
 //  - Fix tabs (mac mess up)
