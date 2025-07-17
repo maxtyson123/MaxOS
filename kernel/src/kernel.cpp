@@ -90,35 +90,10 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - FAT32 Tests:
-//  - [x] Read subdirectories contents
-//  - [x] Read long path subdirectories contents
-//  - [ ] Create subdirectories
-//  - [ ] Create long path subdirectories
-//  - [ ] Delete subdirectories (need to add ability to free clusters first
-//  - [ ] Delete long path subdirectories
-//  - [ ] Rename directory
-//  - [ ] Rename file
-//  - [ ] Rename lfn directory
-//  - [ ] Rename lfn file
-//  - [x] Read files
-//  - [ ] Read large files
-//  - [x] Write files
-//  - [ ] Write large files
-//  - [ ] Create files
-//  - [ ] Delete files
-//  - [x] Read long path files
-//  - [ ] Create long path files
-//  - [ ] Delete long path files
-//  - [ ] Create files on a different mount point
-//  - [ ] Delete files on a different mount point
-//  - [ ] Read directories on a different mount point
-//  - [ ] Create directories on a different mount point
-//  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, etc
+
 
 
 //  - Fix tabs (mac mess up)
 //  - Userspace Files (syscalls, proper path handling, working directories, file handles)
-//  - Implement ext2
 //  - Class & Struct docstrings
 //  - Logo on fail in center
