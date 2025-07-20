@@ -14,6 +14,8 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
   partition_offset(partition_offset)
 {
 
+	ext2_lock.unlock();
+
 	// Read superblock
 	uint8_t buffer[1024];
 	disk->read(partition_offset + 2, buffer, 512);
@@ -128,7 +130,21 @@ Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
   m_inode_number(inode),
   m_inode()
 {
+
+	// Set up the base information
 	m_name = name;
+	m_inode = m_volume ->read_inode(m_inode_number);
+	m_size = (size_t)m_inode.size_upper | m_inode.size_lower;
+
+	// Read the block pointers
+	for (uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
+		m_block_pointers.push_back(m_inode.block_pointers[direct_pointer]);
+
+	auto* buffer = new uint8_t[m_volume -> block_size];
+	parse_indirect(1, m_inode.l1_indirect, buffer);
+	parse_indirect(2, m_inode.l2_indirect, buffer);
+	parse_indirect(3, m_inode.l3_indirect, buffer);
+	delete[] buffer;
 }
 
 /**
@@ -138,6 +154,7 @@ Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
  * @param amount The amount of data to write
  */
 void Ext2File::write(uint8_t const *data, size_t amount) {
+
 	File::write(data, amount);
 }
 
@@ -147,8 +164,65 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 * @param data The byte buffer to read into
 * @param amount The amount of data to read
 */
-void Ext2File::read(uint8_t *data, size_t amount) {
-	File::read(data, amount);
+void Ext2File::read(uint8_t* data, size_t amount) {
+
+	// Nothing to read
+	if(m_size == 0 || amount == 0)
+		return;
+
+	// Prepare for reading
+	m_volume -> ext2_lock.lock();
+	auto* buffer = new uint8_t[m_volume -> block_size];
+
+	// Force bounds
+	if(m_offset + amount > m_size)
+		amount = m_size - m_offset;
+
+	// Convert bytes to blocks
+	uint32_t block_start    = m_offset / m_volume -> block_size;
+	uint32_t block_offset   = m_offset % m_volume -> block_size;
+
+	// Read each block
+	size_t current_block = block_start;
+	for (size_t remaining = amount; remaining > 0; remaining -= m_volume -> block_size) {
+
+		// Read the block
+		m_volume -> read_block(m_block_pointers[current_block], buffer);
+
+		// Data may be part-way through the first block
+		if(current_block == block_start){
+
+			size_t block_remaining = m_volume -> block_size - block_offset;
+
+			// Read ends partway through block
+			if(amount < block_remaining){
+				memcpy(data, buffer + block_offset, amount);
+				break;
+			}
+
+			// Copy the entire rest of the block
+			memcpy(data, buffer + block_offset, block_remaining);
+			remaining += block_offset;
+			continue;
+		}
+
+		size_t block_remaining = amount - remaining;
+
+		// Last part of the data is part-way through the block
+		if(remaining < m_volume -> block_size){
+			memcpy(data, buffer + block_remaining, remaining);
+			break;
+		}
+
+		// Copy the entire block
+		memcpy(data, buffer + block_remaining, m_volume -> block_size);
+	}
+
+	// Clean up
+	m_offset += amount;
+	m_volume -> ext2_lock.unlock();
+	delete[] buffer;
+
 }
 
 /**
@@ -156,6 +230,42 @@ void Ext2File::read(uint8_t *data, size_t amount) {
  */
 void Ext2File::flush() {
 	File::flush();
+}
+
+/**
+ * @brief Caches the indirect layers block pointers
+ *
+ * @param level Recursion level
+ * @param block The block number to parse from
+ * @param buffer Buffer to read into
+ */
+void Ext2File::parse_indirect(uint32_t level, uint32_t block, uint8_t *buffer) {
+
+	// Invalid
+	if(block == 0)
+		return;
+
+	// Read the block
+	m_volume -> read_block(block, buffer);
+	auto* pointers = (uint32_t*)buffer;
+
+	// Parse the pointers
+	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
+		uint32_t pointer = pointers[i];
+
+		// Invaild
+		if(pointer == 0)
+			break;
+
+		// Has indirect sub entries
+		if(level > 1){
+			parse_indirect(level - 1, pointer, buffer);
+			continue;
+		}
+
+		// Parse the entry
+		m_block_pointers.push_back(pointer);
+	}
 }
 
 Ext2File::~Ext2File() = default;
@@ -225,7 +335,7 @@ void Ext2Directory::parse_indirect(uint32_t level, uint32_t block, uint8_t* buff
 		return;
 
 	// Read the block
-	m_volume ->read_block(block, buffer);
+	m_volume -> read_block(block, buffer);
 	auto* pointers = (uint32_t*)buffer;
 
 	// Parse the pointers
@@ -253,6 +363,8 @@ void Ext2Directory::parse_indirect(uint32_t level, uint32_t block, uint8_t* buff
  */
 void Ext2Directory::read_from_disk() {
 
+	m_volume -> ext2_lock.lock();
+
 	// Read the inode
 	m_inode = m_volume ->read_inode(m_inode_number);
 
@@ -279,15 +391,12 @@ void Ext2Directory::read_from_disk() {
 		parse_entries(buffer);
 	}
 
-	// Single Indirect
+	// Indirect blocks
 	parse_indirect(1, m_inode.l1_indirect, buffer);
-
-	// Double Indirect
 	parse_indirect(2, m_inode.l2_indirect, buffer);
-
-	// Triple Indirect
 	parse_indirect(3, m_inode.l3_indirect, buffer);
 
+	m_volume -> ext2_lock.unlock();
 	delete[] buffer;
 }
 

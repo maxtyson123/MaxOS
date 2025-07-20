@@ -9,6 +9,7 @@
 #include <filesystem/filesystem.h>
 #include <stdint.h>
 #include <memory/memoryIO.h>
+#include <common/spinlock.h>
 
 namespace MaxOS {
   namespace filesystem {
@@ -227,6 +228,8 @@ namespace MaxOS {
 			  uint32_t blocks_per_inode_table;
 			  uint32_t sectors_per_inode_table;
 
+			  common::Spinlock ext2_lock;
+
 			  void                      read_block(uint32_t block_num, uint8_t* buffer);
 			  inode_t                   read_inode(uint32_t inode_num);
 			  block_group_descriptor_t  read_block_group(uint32_t group_num);
@@ -237,18 +240,21 @@ namespace MaxOS {
 		   * @brief Handles the file operations on the ext2 filesystem
 		   */
 		  class Ext2File final : public File {
-		  private:
-			  Ext2Volume* m_volume;
-			  uint32_t m_inode_number;
-			  inode_t m_inode;
+			  private:
+				  Ext2Volume* m_volume;
+				  uint32_t m_inode_number;
+				  inode_t m_inode;
 
-		  public:
-			  Ext2File(Ext2Volume* volume, uint32_t inode, const string& name);
-			  ~Ext2File() final;
+				  common::Vector<uint32_t> m_block_pointers;
+				  void parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer);
 
-			  void write(const uint8_t* data, size_t amount) final;
-			  void read(uint8_t* data, size_t amount) final;
-			  void flush() final;
+			  public:
+				  Ext2File(Ext2Volume* volume, uint32_t inode, const string& name);
+				  ~Ext2File() final;
+
+				  void write(const uint8_t* data, size_t amount) final;
+				  void read(uint8_t* data, size_t amount) final;
+				  void flush() final;
 		  };
 
 		  /**

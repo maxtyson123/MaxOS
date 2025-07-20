@@ -70,20 +70,17 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
-    // FS Tests
-	Directory* root = vfs.open_directory("/test");
-	ASSERT(root != nullptr, "Root directory is null\n");
-	for (auto& file : root->files())
-	{
-		Logger::DEBUG() << "File: " << file->name() << "\n";
-		Logger::DEBUG() << "Size: " << file->size() << "\n";
-	}
-	for (auto& directory : root->subdirectories())
-	{
-		Logger::DEBUG() << "Directory: " << directory->name() << "\n";
-		Logger::DEBUG() << "Size: " << directory->size() << "\n";
-	}
+	// FS Tests
+	File* grub_cfg = vfs.open_file("/test/a.txt");
+	Logger::DEBUG() << "Opened file: " << grub_cfg->name() << "\n";
 
+//	string test_data = "Hello World!";
+//	grub_cfg -> write((uint8_t*)test_data.c_str(), test_data.length());
+
+	grub_cfg ->seek(SeekType::SET, 0);
+	uint8_t buffer[100];
+	grub_cfg ->read(buffer, 100);
+	Logger::DEBUG() << (char*)buffer << "\n";
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
