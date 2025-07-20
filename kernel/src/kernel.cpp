@@ -71,14 +71,21 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.activate_drivers();
 
     // FS Tests
-    Directory* test = vfs.create_directory("/test/sub/");
-    Logger::DEBUG() << "Created directory: " << test->name() << "\n";
+	Directory* root = vfs.open_directory("/test");
+	ASSERT(root != nullptr, "Root directory is null\n");
+	for (auto& file : root->files())
+	{
+		Logger::DEBUG() << "File: " << file->name() << "\n";
+		Logger::DEBUG() << "Size: " << file->size() << "\n";
+	}
+	for (auto& directory : root->subdirectories())
+	{
+		Logger::DEBUG() << "Directory: " << directory->name() << "\n";
+		Logger::DEBUG() << "Size: " << directory->size() << "\n";
+	}
 
-    Directory* test2 = vfs.open_directory("/test/");
-    for(auto& folder : test2 -> subdirectories())
-      Logger::DEBUG() << "   " << folder -> name() << "\n";
 
-    Logger::HEADER() << "Stage {4}: System Finalisation\n";
+	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
     SyscallManager syscalls;
     console.finish();
@@ -91,30 +98,20 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 // TODO:
 //  - EXT2 Tests:
-//  - [ ] Read subdirectories contents
-//  - [ ] Read long path subdirectories contents
+//  - [x] Read subdirectories contents
+//  - [ ] Read files
+//  - [ ] Write files
 //  - [ ] Create subdirectories
-//  - [ ] Create long path subdirectories
-//  - [ ] Delete subdirectories (need to add ability to free clusters first
-//  - [ ] Delete long path subdirectories
+//  - [ ] Delete subdirectories
 //  - [ ] Rename directory
 //  - [ ] Rename file
-//  - [ ] Rename lfn directory
-//  - [ ] Rename lfn file
-//  - [ ] Read files
-//  - [ ] Read large files
-//  - [ ] Write files
-//  - [ ] Write large files
 //  - [ ] Create files
 //  - [ ] Delete files
-//  - [ ] Read long path files
-//  - [ ] Create long path files
-//  - [ ] Delete long path files
 //  - [ ] Create files on a different mount point
 //  - [ ] Delete files on a different mount point
 //  - [ ] Read directories on a different mount point
 //  - [ ] Create directories on a different mount point
-//  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, etc
+//  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, large file r/w
 
 
 //  - Fix tabs (mac mess up)

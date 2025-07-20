@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <drivers/disk/disk.h>
 #include <filesystem/fat32.h>
+#include <filesystem/ext2.h>
 #include <filesystem/vfs.h>
 
 namespace MaxOS{

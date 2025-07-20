@@ -152,8 +152,6 @@ namespace MaxOS{
 
         } __attribute__((packed)) long_file_name_entry_t;
 
-        typedef uint32_t lba_t;
-
         enum class ClusterState: uint32_t
         {
             FREE            = 0x00000000,
@@ -202,7 +200,7 @@ namespace MaxOS{
          * @class Fat32File
          * @brief Handles the file operations on the FAT32 filesystem
          */
-        class Fat32File : public File
+        class Fat32File final : public File
         {
 
             private:

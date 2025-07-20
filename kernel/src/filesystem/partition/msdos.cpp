@@ -53,6 +53,7 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
 
         case PartitionType::LINUX_EXT2:
           Logger::Out() << "EXT2 partition\n";
+		    vfs -> mount_filesystem(new ext2::Ext2FileSystem(hd, entry.start_LBA));
           break;
 
         default:

@@ -886,7 +886,11 @@ File* Fat32Directory::create_file(const string& name)
   return file;
 }
 
-
+/**
+ * @brief Delete a file from the subdirectory
+ *
+ * @param name The name of the file to delete
+ */
 void Fat32Directory::remove_file(const string& name)
 {
   // Find the file if it exists

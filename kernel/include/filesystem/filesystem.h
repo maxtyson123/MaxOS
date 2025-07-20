@@ -14,6 +14,8 @@ namespace MaxOS{
 
     namespace filesystem{
 
+		// Easier to read
+	    typedef uint32_t lba_t;
 
         enum class SeekType{
             SET,

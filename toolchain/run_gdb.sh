@@ -2,50 +2,26 @@
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/MaxOS.sh
 
-IP=localhost
-IN_WSL=0
-if command -v wslpath >/dev/null; then
-  msg "WSL detected."
+msg "QEMU GDB Runner Started"
 
-  # Get the ip from ipconfig.exe
-  LOCAL_IP=${LOCAL_IP:-`ipconfig.exe | grep -im1 'IPv4 Address' | cut -d ':' -f2`}
+while true; do
 
-  echo "WSL IP is: ${LOCAL_IP}"
-  IP=${LOCAL_IP}
+  msg "Waiting for GDB to start"
+  while true; do
+      GDB_PID=$(pgrep -fx '/usr/bin/gdb.*')
+      if  [[ -n "$GDB_PID" ]]; then
+        msg "GDB Started with PID $GDB_PID"
+        tmux send-keys -t 0 "make install gdb" C-m
+        break
+      fi
+      sleep 0.2
+  done
 
-  # Strip the carriage return
-  IP=${IP%$'\r'}
-fi
+  msg "Waiting for debug session to end"
+  while kill -0 "$GDB_PID" 2>/dev/null; do
+    sleep 0.2
+  done
+  taskkill.exe /IM "qemu-system-x86_64.exe" /F
 
+done
 
-# Make the GDB .init file
-cat > ~/.gdbinit <<EOF
-
-# Load the OS
-symbol-file ../MaxOS.sym
-target remote $IP:1234
-
-# Pretty printing
-set pagination off
-set print pretty on
-set print address on
-set print symbol-filename on
-
-# Split  screen
-layout split
-
-# don't ask to confirm quit
-define hook-quit
-    set confirm off
-end
-
-#### Current debugging ###
-b kernelMain
-continue
-EOF
-
-# Run GDB
-gdb
-
-# Delete the GDB .init file
-#rm ~/.gdbinit

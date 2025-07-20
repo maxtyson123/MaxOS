@@ -86,7 +86,7 @@ bool AdvancedTechnologyAttachment::identify() {
  *
  * @param sector The sector to read
  * @param data_buffer The data to read into
- * @param amount The amount of data to read from that sector
+ * @param amount The amount of bytes to read from that sector
  */
 void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, size_t amount)
 {
