@@ -111,7 +111,7 @@ uint8_t Clock::binary_representation(uint8_t number) const {
     if(m_binary)
         return number;
 
-    // Convert to the binary represnation
+    // Convert to the binary representation
     return ((number / 16) * 10) + (number & 0x0f);
 
 }
@@ -120,6 +120,8 @@ uint8_t Clock::binary_representation(uint8_t number) const {
  * @brief Activates the clock, setting the binary coded decimal representation flag
  */
 void Clock::activate() {
+
+	s_active_clock = this;
 
     // Get the stats from the clock
     uint8_t status = read_hardware_clock(0xB);
@@ -224,6 +226,10 @@ common::Time Clock::get_time() {
     time.hour = ((time.hour & 0x7F) + 12) % 24;
 
   return time;
+}
+
+Clock *Clock::active_clock() {
+	return s_active_clock;
 }
 
 

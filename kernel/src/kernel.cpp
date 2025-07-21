@@ -74,8 +74,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	File* grub_cfg = vfs.open_file("/test/a.txt");
 	Logger::DEBUG() << "Opened file: " << grub_cfg->name() << "\n";
 
-//	string test_data = "Hello World!";
-//	grub_cfg -> write((uint8_t*)test_data.c_str(), test_data.length());
+	string test_data = "Hello World!";
+	grub_cfg -> write((uint8_t*)test_data.c_str(), test_data.length());
 
 	grub_cfg ->seek(SeekType::SET, 0);
 	uint8_t buffer[100];

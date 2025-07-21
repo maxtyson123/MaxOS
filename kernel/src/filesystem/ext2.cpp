@@ -8,6 +8,7 @@ using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::ext2;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
+using namespace MaxOS::drivers::clock;
 
 Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 : disk(disk),
@@ -61,12 +62,54 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 Ext2Volume::~Ext2Volume() = default;
 
 /**
+ * @breif Write a single block from a buffer into onto the disk
+ *
+ * @param block_num The block to update
+ * @param buffer The buffer to read from
+ */
+void Ext2Volume::write_block(uint32_t block_num, uint8_t *buffer) {
+
+	// Read each sector of the block
+	for (size_t i = 0; i < sectors_per_block; ++i)
+		disk->write(partition_offset + block_num * sectors_per_block + i, buffer + i * 512, 512);
+
+};
+
+/**
+ * @brief Write an inode to the filesystem
+ *
+ * @param inode_num The inode index
+ * @param inode The inode to read from
+ */
+void Ext2Volume::write_inode(uint32_t inode_num, inode_t* inode) {
+
+	// Locate the inode
+	uint32_t group = (inode_num - 1) / superblock.inodes_per_group;
+	uint32_t index = (inode_num - 1) % superblock.inodes_per_group;
+
+	// Locate the block
+	uint32_t inode_table        = block_groups[group] -> inode_table_address;
+	uint32_t offset             = index * superblock.inode_size;
+	uint32_t block              = offset / block_size;
+	uint32_t in_block_offset    = offset % block_size;
+
+	// Read the inode
+	auto* buffer = new uint8_t[block_size];
+	read_block(inode_table + block, buffer);
+	memcpy(buffer + in_block_offset, inode, sizeof(inode_t));
+
+	// Modify the block
+	write_block(inode_table + block, buffer);
+	delete[] buffer;
+}
+
+/**
  * @breif Reads a single block from the disk into a buffer
  *
  * @param block_num The block to read
  * @param buffer The buffer to read into
  */
-void Ext2Volume::read_block(uint32_t block_num, uint8_t *buffer) {
+void Ext2Volume::read_block(uint32_t block_num, uint8_t *buffer) const {
 
 	// Read each sector of the block
 	for (size_t i = 0; i < sectors_per_block; ++i)
@@ -79,7 +122,7 @@ void Ext2Volume::read_block(uint32_t block_num, uint8_t *buffer) {
  *
  * @param inode_num The inode index
  */
-inode_t Ext2Volume::read_inode(uint32_t inode_num) {
+inode_t Ext2Volume::read_inode(uint32_t inode_num) const {
 
 	inode_t inode;
 
@@ -123,7 +166,7 @@ block_group_descriptor_t Ext2Volume::read_block_group(uint32_t group_num) {
 
 	delete[] buffer;
 	return descriptor;
-};
+}
 
 Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
 : m_volume(volume),
@@ -155,7 +198,76 @@ Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
  */
 void Ext2File::write(uint8_t const *data, size_t amount) {
 
-	File::write(data, amount);
+	// Nothing to write
+	if(m_size == 0)
+		return;
+
+	// Prepare for writing
+	m_volume -> ext2_lock.lock();
+	auto* buffer = new uint8_t[m_volume -> block_size];
+
+	// Force bounds
+	if(m_offset + amount > m_size)
+		amount = m_size - m_offset;
+
+	// Convert bytes to blocks
+	uint32_t block_start    = m_offset / m_volume -> block_size;
+	uint32_t block_offset   = m_offset % m_volume -> block_size;
+
+	// TODO: Expand the file
+
+	// Save the updated metadata
+	m_inode.size_lower = (uint32_t)(m_size  & 0xFFFFFFFFULL);
+	m_inode.size_upper = (uint32_t)(m_size  >> 32);
+	m_inode.last_modification_time = time_to_epoch(Clock::active_clock() -> get_time());
+	m_volume -> write_inode(m_inode_number, &m_inode);
+
+	// Read each block
+	size_t current_block = block_start;
+	for (size_t remaining = amount; remaining > 0; remaining -= m_volume -> block_size) {
+
+		// Read the block
+		uint32_t block = m_block_pointers[current_block];
+		m_volume -> read_block(block, buffer);
+		current_block++;
+
+		// Data may be part-way through the first block
+		if((current_block - 1) == block_start){
+
+			size_t block_remaining = m_volume -> block_size - block_offset;
+
+			// Replacement ends partway through block
+			if(amount < block_remaining){
+				memcpy(buffer + block_offset, data, amount);
+				m_volume ->write_block(block, buffer);
+				break;
+			}
+
+			// Replace the entire rest of the block
+			memcpy(buffer + block_offset, data, block_remaining);
+			m_volume ->write_block(block, buffer);
+			remaining += block_offset;
+			continue;
+		}
+
+		size_t block_remaining = amount - remaining;
+
+		// Last part of the data to be replaced is part-way through the block
+		if(remaining < m_volume -> block_size){
+			memcpy(buffer + block_remaining, data, remaining);
+			m_volume ->write_block(block, buffer);
+			break;
+		}
+
+		// Replace the entire block
+		memcpy(buffer + block_remaining, data, m_volume -> block_size);
+		m_volume ->write_block(block, buffer);
+	}
+
+	// Clean up
+	m_offset += amount;
+	m_volume -> ext2_lock.unlock();
+	delete[] buffer;
 }
 
 /**
@@ -222,7 +334,6 @@ void Ext2File::read(uint8_t* data, size_t amount) {
 	m_offset += amount;
 	m_volume -> ext2_lock.unlock();
 	delete[] buffer;
-
 }
 
 /**

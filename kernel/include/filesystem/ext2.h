@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <memory/memoryIO.h>
 #include <common/spinlock.h>
+#include <drivers/clock/clock.h>
 
 namespace MaxOS {
   namespace filesystem {
@@ -230,8 +231,11 @@ namespace MaxOS {
 
 			  common::Spinlock ext2_lock;
 
-			  void                      read_block(uint32_t block_num, uint8_t* buffer);
-			  inode_t                   read_inode(uint32_t inode_num);
+			  void                      write_block(uint32_t block_num, uint8_t* buffer);
+			  void                      write_inode(uint32_t inode_num, inode_t* inode);
+
+			  void                      read_block(uint32_t block_num, uint8_t* buffer) const;
+			  inode_t                   read_inode(uint32_t inode_num) const;
 			  block_group_descriptor_t  read_block_group(uint32_t group_num);
 		  };
 

@@ -19,8 +19,6 @@ while [ "$#" -gt "0" ]; do
   esac
 done
 
-
-
 if [ "$REVERSE" -ne 1 ]; then
   msg "Copying boot files to image"
 else
@@ -34,7 +32,6 @@ if [ "$KERNEL_SIZE" -gt 8000000 ]; then
 fi
 
 DESTINATION="$MOUNT_DIR/MaxOS_img_1"
-
 
 
 : "${USE_ISO:=0}"
@@ -68,7 +65,7 @@ if [ "$REVERSE" -ne 1 ]; then
   sudo rsync --no-o --no-g -a --delete -c "$SCRIPTDIR/../filesystem/"  "$MOUNT_DIR/MaxOS_img_1/"
 else
   msg "Copying changes on image to local filesystem"
-  sudo rsync  --chown=$(id -un):$(id -gn) -a --delete -c "$MOUNT_DIR/MaxOS_img_1/" "$SCRIPTDIR/../filesystem/"
+  sudo rsync --itemize-changes --chown=$(id -un):$(id -gn) -a --delete -c "$MOUNT_DIR/MaxOS_img_1/" "$SCRIPTDIR/../filesystem/"
 fi
 
 # Create the iso
