@@ -208,35 +208,46 @@ namespace MaxOS {
 
 		  class Ext2Volume {
 
-		  public:
-			  Ext2Volume(drivers::disk::Disk* disk, lba_t partition_offset);
-			  ~Ext2Volume();
+			  private:
+			     common::Vector<uint32_t>  allocate_group_blocks(uint32_t block_group, uint32_t amount);
+				 void write_back_block_groups();
+				 void write_back_superblock();
 
-			  drivers::disk::Disk* disk;
-			  lba_t partition_offset;
+			  public:
+				  Ext2Volume(drivers::disk::Disk* disk, lba_t partition_offset);
+				  ~Ext2Volume();
 
-			  superblock_t superblock;
-			  block_group_descriptor_t** block_groups;
+				  drivers::disk::Disk* disk;
+				  lba_t partition_offset;
 
-			  size_t block_size;
-			  uint32_t block_group_descriptor_table;
-			  uint32_t block_group_descriptor_table_size;
-			  uint32_t total_block_groups;
-			  size_t pointers_per_block;
-			  uint32_t inodes_per_block;
-			  uint32_t sectors_per_block;
+				  superblock_t superblock;
+				  block_group_descriptor_t** block_groups;
 
-			  uint32_t blocks_per_inode_table;
-			  uint32_t sectors_per_inode_table;
+				  size_t    block_size;
+				  uint32_t  block_group_descriptor_table;
+				  uint32_t  block_group_descriptor_table_size;
+				  uint32_t  total_block_groups;
+				  size_t    pointers_per_block;
+				  uint32_t  inodes_per_block;
+				  uint32_t  sectors_per_block;
 
-			  common::Spinlock ext2_lock;
+				  uint32_t  blocks_per_inode_table;
+				  uint32_t  sectors_per_inode_table;
 
-			  void                      write_block(uint32_t block_num, uint8_t* buffer);
-			  void                      write_inode(uint32_t inode_num, inode_t* inode);
+				  common::Spinlock ext2_lock;
 
-			  void                      read_block(uint32_t block_num, uint8_t* buffer) const;
-			  inode_t                   read_inode(uint32_t inode_num) const;
-			  block_group_descriptor_t  read_block_group(uint32_t group_num);
+				  void                      write_block(uint32_t block_num, uint8_t* buffer);
+				  void                      write_inode(uint32_t inode_num, inode_t* inode);
+
+				  void                      read_block(uint32_t block_num, uint8_t* buffer) const;
+				  [[nodiscard]] inode_t     read_inode(uint32_t inode_num) const;
+				  block_group_descriptor_t  read_block_group(uint32_t group_num);
+
+				  uint32_t                  allocate_block();
+				  common::Vector<uint32_t>  allocate_blocks(uint32_t amount);
+				  uint32_t                  bytes_to_blocks(size_t bytes) const;
+
+			  // TODO: free blocks
 		  };
 
 		  /**
@@ -251,6 +262,8 @@ namespace MaxOS {
 
 				  common::Vector<uint32_t> m_block_pointers;
 				  void parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer);
+				  void write_indirect(uint32_t level, uint32_t& block, size_t& index);
+				  void store_blocks(const common::Vector<uint32_t>& blocks);
 
 			  public:
 				  Ext2File(Ext2Volume* volume, uint32_t inode, const string& name);

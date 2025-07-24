@@ -98,17 +98,14 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
         }
 
         // Get the colour from the ANSI code
-        auto* colour = new Colour(ansi_code);
+        const Colour colour(ansi_code);
 
         // Set the colour
         bool foreground = ansi_code[4] == '3';
         if (foreground)
-          m_foreground_color = colour->to_console_colour();
+          m_foreground_color = colour.to_console_colour();
         else
-          m_background_color = colour->to_console_colour();
-
-        // Delete the colour
-        delete colour;
+          m_background_color = colour.to_console_colour();
 
       }
 

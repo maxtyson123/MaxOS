@@ -5,6 +5,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::filesystem;
+using namespace MaxOS::common;
 using namespace MaxOS::filesystem::ext2;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
@@ -168,6 +169,159 @@ block_group_descriptor_t Ext2Volume::read_block_group(uint32_t group_num) {
 	return descriptor;
 }
 
+/**
+ * @brief Allocates a single block to be used by an inode
+ *
+ * @return The new block number or 0 if the allocation failed
+ */
+uint32_t Ext2Volume::allocate_block() {
+
+	return allocate_blocks(1)[0];
+}
+
+/**
+ * @brief Allocates a set of blocks to be used by an inode
+ *
+ * @param amount The amount of blocks to allocate
+ * @return A list of the allocated blocks or [0] if the allocation failed
+ */
+Vector<uint32_t> Ext2Volume::allocate_blocks(uint32_t amount) {
+
+	Logger::DEBUG() << "ALLOCATING BLOCKS: 0x" << (uint64_t)amount << "\n";
+
+	// No blocks to allocate
+	if (!amount)
+		return {1,0};
+
+	// Find the block group with enough free blocks
+	block_group_descriptor_t* block_group = block_groups[0];
+	for (uint32_t bg_index = 0; bg_index < total_block_groups; block_group = block_groups[++bg_index])
+		if (block_group -> free_blocks >= amount)
+			return allocate_group_blocks(bg_index, amount);
+
+	// No block group can contain the block so split across multiple
+	Vector<uint32_t> result {};
+	while (amount > 0){
+
+		// Find the block group with most free blocks
+		block_group = block_groups[0];
+		uint32_t bg_index = 0;
+		for (; bg_index < total_block_groups; ++bg_index)
+			if (block_groups[bg_index] -> free_blocks > block_group -> free_blocks)
+				block_group = block_groups[bg_index];
+
+		// No space
+		if(block_group -> free_blocks == 0)
+			return {1, 0};
+
+		// Allocate the remaining blocks
+		auto allocated = allocate_group_blocks(bg_index, 1);
+		amount -= allocated.size();
+		for (auto block : allocated)
+			result.push_back(block);
+	}
+
+	return result;
+}
+
+/**
+ * @brief Allocate a certain amount of blocks in a block group
+ *
+ * @param block_group The block group where the allocation is performed
+ * @param amount The amount of blocks to allocate
+ * @return The block numbers allocated
+ */
+common::Vector<uint32_t> Ext2Volume::allocate_group_blocks(uint32_t block_group, uint32_t amount) {
+
+	// Ensure enough space
+	block_group_descriptor_t* descriptor = block_groups[block_group];
+	if (amount > descriptor -> free_blocks)
+		return {1, 0};
+
+	// Prepare
+	Vector<uint32_t> result {};
+	auto zeros = new uint8_t [block_size];
+	memset(zeros, 0, block_size);
+
+	// Read bitmap
+	auto bitmap = new uint8_t[block_size];
+	read_block(descriptor -> block_usage_bitmap, bitmap);
+
+	// Allocate the blocks
+	for (uint32_t i = 0; i < superblock.blocks_per_group; ++i) {
+
+		// Block is already used
+		if((bitmap[i / 8] & (1u << (i % 8))) != 0)
+			continue;
+
+		// Mark as used
+		descriptor -> free_blocks--;
+		superblock.unallocated_blocks--;
+		bitmap[i / 8] |= (uint8_t) (1u << (i % 8));
+
+		// Zero out data
+		uint32_t block = block_group * superblock.blocks_per_group + (block_size == 1024 ? 1 : 0) + i;
+		write_block(block, zeros);
+		result.push_back(block);
+
+		// All done
+		amount--;
+		if(!amount)
+			break;
+	}
+
+	// Save the changed metadata
+	write_block(descriptor -> block_usage_bitmap, bitmap);
+	write_back_block_groups();
+	write_back_superblock();
+
+	delete[] bitmap;
+	delete[] zeros;
+	return result;
+}
+
+/**
+ * @brief Save any changes of the block groups to the disk
+ */
+void Ext2Volume::write_back_block_groups() {
+
+	// Store the block groups
+	uint32_t sectors_to_write = (block_group_descriptor_table_size + block_size - 1) / block_size * sectors_per_block;
+	auto* bg_buffer = new uint8_t[sectors_to_write * 512];
+	for (uint32_t i = 0; i < total_block_groups; ++i)
+		memcpy(bg_buffer + i * sizeof(block_group_descriptor_t), block_groups[i], sizeof(block_group_descriptor_t));
+
+	// Write the block groups
+	for (uint32_t i = 0; i < sectors_to_write; ++i)
+		disk->write(partition_offset + block_group_descriptor_table * sectors_per_block + i, bg_buffer + i * 512, 512);
+
+	delete[] bg_buffer;
+}
+
+/**
+ * @brief Save the in memory superblock to the disk
+ */
+void Ext2Volume::write_back_superblock() {
+
+	// Store superblock
+	uint8_t buffer[1024];
+	memcpy(buffer, &superblock, sizeof(superblock_t));
+
+	// Write to disk
+	disk->write(partition_offset + 2, buffer, 512);
+	disk->write(partition_offset + 3, buffer + 512, 512);
+}
+
+/**
+ * @brief How many blocks are needed to contain a set amount of bytes
+ *
+ * @param bytes Bytes needed
+ * @return The blocks required
+ */
+uint32_t Ext2Volume::bytes_to_blocks(size_t bytes) const {
+	return (bytes + block_size - 1) / block_size;
+}
+
 Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
 : m_volume(volume),
   m_inode_number(inode),
@@ -181,7 +335,8 @@ Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
 
 	// Read the block pointers
 	for (uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
-		m_block_pointers.push_back(m_inode.block_pointers[direct_pointer]);
+		if(m_inode.block_pointers[direct_pointer])
+			m_block_pointers.push_back(m_inode.block_pointers[direct_pointer]);
 
 	auto* buffer = new uint8_t[m_volume -> block_size];
 	parse_indirect(1, m_inode.l1_indirect, buffer);
@@ -204,64 +359,49 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 
 	// Prepare for writing
 	m_volume -> ext2_lock.lock();
-	auto* buffer = new uint8_t[m_volume -> block_size];
+	const uint32_t block_size = m_volume -> block_size;
+	auto* buffer = new uint8_t[block_size];
 
-	// Force bounds
-	if(m_offset + amount > m_size)
-		amount = m_size - m_offset;
+	// Expand the file
+	if(m_offset + amount > m_size) {
 
-	// Convert bytes to blocks
-	uint32_t block_start    = m_offset / m_volume -> block_size;
-	uint32_t block_offset   = m_offset % m_volume -> block_size;
+		// Allocate new blocks
+		auto blocks = m_volume ->allocate_blocks(m_volume -> bytes_to_blocks((m_offset + amount) - m_size));
+		ASSERT(blocks[0] != 0, "Failed to allocate new blocks for file");
 
-	// TODO: Expand the file
+		// Save the changes
+		store_blocks(blocks);
+		m_size = (m_offset + amount);
+
+	}
 
 	// Save the updated metadata
 	m_inode.size_lower = (uint32_t)(m_size  & 0xFFFFFFFFULL);
 	m_inode.size_upper = (uint32_t)(m_size  >> 32);
 	m_inode.last_modification_time = time_to_epoch(Clock::active_clock() -> get_time());
-	m_volume -> write_inode(m_inode_number, &m_inode);
+	m_volume -> write_inode(m_inode_number, &m_inode);  // - Also saves blocks
 
-	// Read each block
+	// Convert bytes to blocks
+	uint32_t block_start    = m_offset / block_size;
+	uint32_t block_offset   = m_offset % block_size;
+
+	// Write each block
 	size_t current_block = block_start;
-	for (size_t remaining = amount; remaining > 0; remaining -= m_volume -> block_size) {
+	size_t written = 0;
+	while (written < amount) {
 
 		// Read the block
-		uint32_t block = m_block_pointers[current_block];
+		uint32_t block = m_block_pointers[current_block++];
 		m_volume -> read_block(block, buffer);
-		current_block++;
 
-		// Data may be part-way through the first block
-		if((current_block - 1) == block_start){
+		// Where in this block to start writing
+		size_t buffer_start = (current_block - 1 == block_start) ? block_offset : 0;
+		size_t writable = (amount - written < block_size - buffer_start) ? (amount - written) : (block_size - buffer_start);
 
-			size_t block_remaining = m_volume -> block_size - block_offset;
-
-			// Replacement ends partway through block
-			if(amount < block_remaining){
-				memcpy(buffer + block_offset, data, amount);
-				m_volume ->write_block(block, buffer);
-				break;
-			}
-
-			// Replace the entire rest of the block
-			memcpy(buffer + block_offset, data, block_remaining);
-			m_volume ->write_block(block, buffer);
-			remaining += block_offset;
-			continue;
-		}
-
-		size_t block_remaining = amount - remaining;
-
-		// Last part of the data to be replaced is part-way through the block
-		if(remaining < m_volume -> block_size){
-			memcpy(buffer + block_remaining, data, remaining);
-			m_volume ->write_block(block, buffer);
-			break;
-		}
-
-		// Replace the entire block
-		memcpy(buffer + block_remaining, data, m_volume -> block_size);
+		// Update the block
+		memcpy(buffer + buffer_start, data + written, writable);
 		m_volume ->write_block(block, buffer);
+		written += writable;
 	}
 
 	// Clean up
@@ -284,50 +424,34 @@ void Ext2File::read(uint8_t* data, size_t amount) {
 
 	// Prepare for reading
 	m_volume -> ext2_lock.lock();
-	auto* buffer = new uint8_t[m_volume -> block_size];
+	const uint32_t block_size = m_volume -> block_size;
+	auto* buffer = new uint8_t[block_size];
 
 	// Force bounds
 	if(m_offset + amount > m_size)
 		amount = m_size - m_offset;
 
 	// Convert bytes to blocks
-	uint32_t block_start    = m_offset / m_volume -> block_size;
-	uint32_t block_offset   = m_offset % m_volume -> block_size;
+	uint32_t block_start    = m_offset / block_size;
+	uint32_t block_offset   = m_offset % block_size;
 
 	// Read each block
 	size_t current_block = block_start;
-	for (size_t remaining = amount; remaining > 0; remaining -= m_volume -> block_size) {
+	size_t read = 0;
+	while (read < amount){
 
 		// Read the block
-		m_volume -> read_block(m_block_pointers[current_block], buffer);
+		uint32_t block = m_block_pointers[current_block++];
+		m_volume -> read_block(block, buffer);
 
-		// Data may be part-way through the first block
-		if(current_block == block_start){
+		// Where in this block to start reading
+		size_t buffer_start = (current_block - 1 == block_start) ? block_offset : 0;
+		size_t readable = (amount - read < block_size - buffer_start) ? (amount - read) : (block_size - buffer_start);
 
-			size_t block_remaining = m_volume -> block_size - block_offset;
+		// Read the block
+		memcpy(data + read, buffer + buffer_start, readable);
+		read += readable;
 
-			// Read ends partway through block
-			if(amount < block_remaining){
-				memcpy(data, buffer + block_offset, amount);
-				break;
-			}
-
-			// Copy the entire rest of the block
-			memcpy(data, buffer + block_offset, block_remaining);
-			remaining += block_offset;
-			continue;
-		}
-
-		size_t block_remaining = amount - remaining;
-
-		// Last part of the data is part-way through the block
-		if(remaining < m_volume -> block_size){
-			memcpy(data, buffer + block_remaining, remaining);
-			break;
-		}
-
-		// Copy the entire block
-		memcpy(data, buffer + block_remaining, m_volume -> block_size);
 	}
 
 	// Clean up
@@ -377,6 +501,97 @@ void Ext2File::parse_indirect(uint32_t level, uint32_t block, uint8_t *buffer) {
 		// Parse the entry
 		m_block_pointers.push_back(pointer);
 	}
+}
+
+/**
+ * @brief Writes the Cache to the indirect layer block pointers
+ *
+ * @param level Recursion level
+ * @param block The block number to parse from
+ * @param buffer Buffer to read into
+ * @param index Current entry to write
+ */
+void Ext2File::write_indirect(uint32_t level, uint32_t& block, size_t& index) {
+
+	// Nothing left to write
+	size_t remaining = m_block_pointers.size() - index;
+	if (remaining == 0 || index >= m_block_pointers.size())
+		return;
+
+	// Level hasn't been set yet
+	if(block == 0)
+		block = m_volume -> allocate_block();
+
+	// Allocate a local buffer for this recursion level
+	auto* buffer = new uint8_t[m_volume->block_size];
+	memset(buffer, 0, m_volume->block_size);
+	auto* pointers = (uint32_t*)buffer;
+
+	// Write the pointers
+	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
+
+		// Invalid
+		if (index >= m_block_pointers.size())
+			break;
+
+		// Has indirect
+		if (level > 1) {
+			write_indirect(level - 1, pointers[i], index);
+			continue;
+		}
+
+		// Save the pointer
+		pointers[i] = m_block_pointers[index++];
+	}
+
+	m_volume ->write_block(block, buffer);
+	delete[] buffer;
+}
+
+/**
+ * @brief Saves the blocks to both the cached array and on disk inode
+ *
+ * @param blocks The blocks to save
+ */
+void Ext2File::store_blocks(const common::Vector<uint32_t>& blocks) {
+
+	Logger::DEBUG() << "STORING BLOCKS\n";
+
+	// Store in cache
+	for(auto block : blocks)
+		m_block_pointers.push_back(block);
+
+	// Direct blocks
+	for (uint32_t i = 0; i < 12; ++i)
+		m_inode.block_pointers[i] = i < m_block_pointers.size() ? m_block_pointers[i] : 0;
+
+	// No need to do any indirects
+	if(m_block_pointers.size() < 12)
+		return;
+
+	// Setup Recursive blocks
+	size_t index = 12;
+	auto* buffer = new uint8_t[m_volume -> block_size];
+
+	// Write the blocks
+	uint32_t indirect_blocks[3] = { m_inode.l1_indirect, m_inode.l2_indirect, m_inode.l3_indirect };
+	for (int i = 0; i < 3; ++i) {
+
+		// Have to use temp because of packed field
+		uint32_t temp = indirect_blocks[i];
+		write_indirect(i + 1, temp, index);
+		indirect_blocks[i] = temp;
+	}
+
+	// Save the new blocks
+	m_inode.l1_indirect = indirect_blocks[0];
+	m_inode.l2_indirect = indirect_blocks[1];
+	m_inode.l3_indirect = indirect_blocks[2];
+
+	delete[] buffer;
+
+	// NOTE: Blocks get allocated when writing indirects. This is then saved later in the write() function
+
 }
 
 Ext2File::~Ext2File() = default;

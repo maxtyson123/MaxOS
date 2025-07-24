@@ -113,7 +113,8 @@ void *MemoryManager::handle_malloc(size_t size) {
   // If there is not left over space to store extra chunks there is no need to split the chunk
   if(result -> size < size + sizeof(MemoryChunk) + 1) {
     result->allocated = true;
-    return (void *)(((size_t)result) + sizeof(MemoryChunk));
+	void* p = (void *)(((size_t)result) + sizeof(MemoryChunk));
+    return p;
   }
 
   // Split the chunk into: what was requested + free overflow space for future allocates
@@ -343,7 +344,8 @@ void* operator new(size_t size) throw(){
 void* operator new[](size_t size) throw(){
 
   // Handle the memory allocation
-  return MaxOS::memory::MemoryManager::kmalloc(size);
+  void* p = MaxOS::memory::MemoryManager::kmalloc(size);
+  return p;
 
 }
 

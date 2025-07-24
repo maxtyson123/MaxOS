@@ -42,6 +42,10 @@ These are my notes relative to various parts of the OS
 
 <!-- TOC end -->
 
+NOTE TO SELF: FUNC AS VARIABLE:  auto func_name = [&](uint32_t p) {
+  // Code
+};
+
 <!-- TOC --><a name="hardware-communication"></a>
 # Hardware Communication
 Here are some notes on how the communication with hardware works, this is used for the keyboard and mouse communication and setting up other devices, e.g. GPU

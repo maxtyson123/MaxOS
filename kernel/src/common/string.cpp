@@ -475,7 +475,7 @@ String String::operator*(int times) const {
 
     // The repeated string
     String repeated;
-    repeated.m_length *= times;
+    repeated.m_length = m_length * times;
     repeated.allocate_self();
 
     // Copy the string

@@ -47,9 +47,13 @@ namespace MaxOS{
 
             Vector();
             Vector(int Size, Type element);
+	        Vector(const Vector<Type>& other);
+	        Vector(Vector<Type>&& other);
             ~Vector();
 
             Type& operator[](uint32_t index) const;
+	        Vector<Type>& operator=(const Vector<Type>& other);
+	        Vector<Type>& operator=(Vector<Type>&& other);
 
             [[nodiscard]] bool empty() const;
             [[nodiscard]] uint32_t size() const;
@@ -72,7 +76,7 @@ namespace MaxOS{
             void Iterate(void callback(Type&));
         };
 
-        ///______________________________________Implementation__________________________________________________
+	    ///______________________________________Implementation__________________________________________________
         /**
         * @brief Constructor for Vector
         *
@@ -96,12 +100,48 @@ namespace MaxOS{
 
             // Allocate space for the array
             m_elements = new Type[size];
+	        m_capacity = size > 0 ? size : 1;
+			m_size     = 0;
 
             // Push all the elements to the Vector
             for (int i = 0; i < size; ++i)
                     push_back(element);
         }
 
+		/**
+		 * @brief Copy constructor for Vector
+		 *
+		 * @tparam Type The type of data to be stored
+		 * @param other The vector to copy from
+		 */
+	    template<class Type> Vector<Type>::Vector(const Vector<Type>& other)
+	    : m_size(other.m_size),
+		  m_capacity(other.m_capacity)
+		{
+			// Copy each element into a new array
+		    m_elements = new Type[m_capacity];
+		    for (uint32_t i = 0; i < m_size; ++i)
+			    m_elements[i] = other.m_elements[i];
+	    }
+
+		/**
+		 * @brief Move constructor for Vector
+		 *
+	     * @tparam Type The type of data to be stored
+		 * @param other The vector to copy from
+		 */
+	    template<class Type> Vector<Type>::Vector(Vector<Type> &&other)
+		: m_elements(other.m_elements),
+		  m_size(other.m_size),
+		  m_capacity(other.m_capacity)
+	    {
+
+			// Clear the other Vector
+			other.m_elements = nullptr;
+			other.m_size = 0;
+			other.m_capacity = 0;
+
+	    }
 
         template<class Type> Vector<Type>::~Vector() {
 
@@ -116,6 +156,7 @@ namespace MaxOS{
          * @tparam Type Type of the Vector
          */
         template <class Type> void Vector<Type>::increase_size() {
+
 
             // Allocate more space for the array
             Type* new_elements = new Type[m_capacity * 2];
@@ -145,13 +186,66 @@ namespace MaxOS{
         template<class Type> Type &Vector<Type>::operator[](uint32_t index) const{
 
             // If the index is in the Vector
-            if (index <= m_size)
+            if (index < m_size)
                 return m_elements[index];
 
             // Return the last element of the Vector
             return m_elements[m_size - 1];
 
         }
+
+		/**
+		 * @brief Assignment by copy, data is copied into a new buffer stored in this vector
+		 *
+		 * @tparam Type Type of the Vector
+         * @param other The vector to copy from
+		 * @return This vector, with the copied elements
+		 */
+	    template<class Type> Vector<Type>& Vector<Type>::operator=(const Vector<Type>& other) {
+
+			// Setting to itself?
+			if (this == &other)
+				return *this;
+
+			// Create a new buffer to store the elements
+		    delete[] m_elements;
+			m_elements = new Type[other.m_capacity];
+
+			// Copy data
+		    m_size = other.m_size;
+		    m_capacity = other.m_capacity;
+		    for (uint32_t i = 0; i < m_size; ++i)
+			    m_elements[i] = other.m_elements[i];
+
+		    return *this;
+	    }
+
+	    /**
+		 * @brief Assignment by move, data is moved into the buffer stored in this vector and the other vector is cleared
+		 *
+		 * @tparam Type Type of the Vector
+		 * @param other The vector to copy from
+		 * @return This vector, with the copied elements
+		 */
+	    template<class Type> Vector<Type>& Vector<Type>::operator=(Vector<Type>&& other) noexcept {
+
+		    // Moving to itself?
+		    if (this == &other)
+			    return *this;
+
+		    // Move into this vector
+		    delete[] m_elements;
+		    m_elements = other.m_elements;
+		    m_size = other.m_size;
+		    m_capacity = other.m_capacity;
+
+			// Remove from other vector
+		    other.m_elements = nullptr;
+		    other.m_size = 0;
+		    other.m_capacity = 0;
+
+		    return *this;
+	    }
 
         /**
          * @brief Returns the number of elements in the Vector
@@ -251,9 +345,8 @@ namespace MaxOS{
         template<class Type> typename Vector<Type>::iterator Vector<Type>::push_front(Type element) {
 
             // Check if we need to allocate more space for the array
-            if(m_size == m_capacity){
+            if(m_size == m_capacity)
                     increase_size();
-            }
 
             // Move all elements one index to the right
             for (iterator i = end(); i > begin(); --i)
@@ -274,16 +367,16 @@ namespace MaxOS{
          */
         template<class Type> void Vector<Type>::pop_front() {
 
-          // Make sure the Vector is not empty
-          if (m_size == 0)
-            return;
+	        // Make sure the Vector is not empty
+	        if (m_size == 0)
+	          return;
 
-          // Move all elements one index to the left
-          for (iterator i = begin(); i != end(); ++i)
-              *i = *(i + 1);
+            // Move all elements one index to the left
+	        for (uint32_t i = 0; i < m_size - 1; ++i)
+		        m_elements[i] = m_elements[i + 1];
 
-          // Decrease the size of the Vector
-          --m_size;
+            // Decrease the size of the Vector
+            --m_size;
         }
 
         /**
