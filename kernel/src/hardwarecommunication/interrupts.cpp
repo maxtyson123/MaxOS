@@ -303,7 +303,7 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t *status) {
   uint64_t faulting_address;
   asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 
-  // Try kill the process so the system doesnt die
+  // Try kill the process so the system doesn't die
   cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
   if(can_avoid != nullptr)
     return can_avoid;

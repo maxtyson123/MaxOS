@@ -77,13 +77,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	uint32_t write = 12 * 700;
 	auto* test_data = new uint8_t[write];
 	memset(test_data, (uint32_t)'a', write);
-	test_data[write - 1] = '\0';
 	grub_cfg -> write(test_data, write);
-
-	// DEBUG CMDS:
-	// watch *((char[32]*)0xffff800478025000), p *(MemoryChunk*)0xffff800478025000 - 'a' buffer memchunk
-	// watch *((char[32]*)0xffff800478028000), p *(MemoryChunk*)0xffff800478028000 - 'a' buffer memchunk -> next
-	//
 
 	grub_cfg ->seek(SeekType::SET, 0);
 	uint8_t buffer[100];

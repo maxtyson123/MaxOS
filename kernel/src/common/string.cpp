@@ -66,20 +66,60 @@ String::String(uint8_t const* string, int length)
 
 String::String(int value) {
 
-  //TODO
+	// Convert to a string
+	const char* str = itoa(10, value);
+	m_length = strlen(str);
+
+	// Create space to store
+	allocate_self();
+
+	// Store the string
+	for (int i = 0; i < m_length; i++)
+		m_string[i] = str[i];
+	m_string[m_length] = '\0';
 
 }
 
-
+/**
+ * @brief Constructs a string from a hex value (Excludes 0x____)
+ * @param value
+ */
 String::String(uint64_t value) {
-  //TODO
+
+	// Convert to a string
+	const char* str = htoa(value);
+	m_length = strlen(str);
+
+	// Create space to store
+	allocate_self();
+
+	// Store the string
+	for (int i = 0; i < m_length; i++)
+		m_string[i] = str[i];
+	m_string[m_length] = '\0';
 }
 
 String::String(float value) {
-  //TODO
+
+	// Convert to a string
+	const char* str = ftoa(value);
+	m_length = strlen(str);
+
+	// Create space to store
+	allocate_self();
+
+	// Store the string
+	for (int i = 0; i < m_length; i++)
+		m_string[i] = str[i];
+	m_string[m_length] = '\0';
+
 }
 
-
+/**
+ * @brief Copy constructor for the string
+ *
+ * @param other String to copy from
+ */
 String::String(String const &other) {
   copy(other);
 }
@@ -88,7 +128,8 @@ String::String(String const &other) {
 String::~String() {
 
   // Free the memory
-  delete[] m_string;
+  if(!m_using_small)
+	  delete[] m_string;
 
 }
 
@@ -133,9 +174,13 @@ int String::lex_value(String const &string) {
  */
 void String::allocate_self()
 {
+	// Clear the old buffer if in use
+	if(m_string && !m_using_small)
+		delete[] m_string;
 
-  // Create space for this string and the null terminator
-  m_string = new char[m_length + 1];
+	// Try to use the small string buffer
+	m_using_small = m_length + 1 <= s_small_storage;
+	m_string = m_using_small ? m_small_string :  new char[m_length + 1];
 
 }
 
@@ -144,16 +189,13 @@ void String::allocate_self()
  * @brief Sets the string to the other string
  *
  * @param other The string for this one to be updated to
- * @return String& The string
+ * @return String The string
  */
 String &String::operator = (String const &other) {
 
     // Self assignment check
     if (this == &other)
         return *this;
-
-    // Free the old memory
-    delete[] m_string;
 
     // Copy the other string
     copy(other);
