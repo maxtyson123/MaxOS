@@ -182,11 +182,10 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
   Logger::ERROR() << "Register Dump:\n";
 
   // Log the regs
-  cpu_status_t* new_status = nullptr;
+  cpu_status_t new_status {};
   if(!status){
-    new_status = new cpu_status_t;
-    get_status(new_status);
-    status = new_status;
+    get_status(&new_status);
+    status = &new_status;
   }
   print_registers(status);
 
@@ -202,9 +201,6 @@ void CPU::PANIC(char const *message, cpu_status_t* status) {
 
   // Halt
   halt();
-
-  // Should really never get here but if somehow that happens why not be memory safe
-  delete new_status;
 }
 
 /**

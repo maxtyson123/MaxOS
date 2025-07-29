@@ -71,18 +71,15 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.activate_drivers();
 
 	// FS Tests
-	File* grub_cfg = vfs.open_file("/test/a.txt");
-	Logger::DEBUG() << "Opened file: " << grub_cfg->name() << "\n";
+	Directory* newdir = vfs.create_directory("/test/a");
+	for (const auto &item: newdir->subdirectories())
+		Logger::DEBUG() << "DIRECTORY: " << item->name() << "\n";
 
-	uint32_t write = 12 * 700;
-	auto* test_data = new uint8_t[write];
-	memset(test_data, (uint32_t)'a', write);
-	grub_cfg -> write(test_data, write);
-
-	grub_cfg ->seek(SeekType::SET, 0);
-	uint8_t buffer[100];
-	grub_cfg ->read(buffer, 100);
-	Logger::DEBUG() << (char*)buffer << "\n";
+//	File* newf = vfs.create_file("/test/bob.txt");
+//	uint32_t write = 12 * 700;
+//	auto* test_data = new uint8_t[write];
+//	memset(test_data, (uint32_t)'a', write);
+//	newf -> write(test_data, write);
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -98,8 +95,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // TODO:
 //  - EXT2 Tests:
 //  - [x] Read subdirectories contents
-//  - [ ] Read files
-//  - [ ] Write files
+//  - [x] Read files
+//  - [x] Write files
 //  - [ ] Create subdirectories
 //  - [ ] Delete subdirectories
 //  - [ ] Rename directory

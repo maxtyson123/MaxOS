@@ -55,8 +55,7 @@ namespace MaxOS{
 	        Vector<Type>& operator=(const Vector<Type>& other);
 	        Vector<Type>& operator=(Vector<Type>&& other);
 
-            [[nodiscard]] bool empty() const;
-            [[nodiscard]] uint32_t size() const;
+            [[nodiscard]] bool empty() const;            [[nodiscard]] uint32_t size() const;
 
             iterator begin() const;
             iterator end() const;

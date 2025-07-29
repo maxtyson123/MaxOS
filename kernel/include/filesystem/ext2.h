@@ -236,19 +236,49 @@ namespace MaxOS {
 
 				  common::Spinlock ext2_lock;
 
-				  void                      write_block(uint32_t block_num, uint8_t* buffer);
-				  void                      write_inode(uint32_t inode_num, inode_t* inode);
+				  void                       write_block(uint32_t block_num, uint8_t* buffer);
+				  void                       write_inode(uint32_t inode_num, inode_t* inode);
+			      [[nodiscard]] uint32_t     create_inode(bool is_directory);
 
 				  void                      read_block(uint32_t block_num, uint8_t* buffer) const;
 				  [[nodiscard]] inode_t     read_inode(uint32_t inode_num) const;
 				  block_group_descriptor_t  read_block_group(uint32_t group_num);
 
-				  uint32_t                  allocate_block();
-				  common::Vector<uint32_t>  allocate_blocks(uint32_t amount);
-				  uint32_t                  bytes_to_blocks(size_t bytes) const;
+			      [[nodiscard]] uint32_t                  allocate_block();
+			      [[nodiscard]] common::Vector<uint32_t>  allocate_blocks(uint32_t amount);
+			      [[nodiscard]] uint32_t                  bytes_to_blocks(size_t bytes) const;
 
 			  // TODO: free blocks
 		  };
+
+		  /**
+		   * @class InodeHandler
+		   * @brief Simplfies the management of an inode & its blocks
+		   */
+		   class InodeHandler {
+
+			   private:
+			        Ext2Volume* m_volume = nullptr;
+
+				   void parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer);
+				   void write_indirect(uint32_t level, uint32_t& block, size_t& index);
+				   void store_blocks(const common::Vector<uint32_t>& blocks);
+
+			   public:
+			        InodeHandler(Ext2Volume* volume, uint32_t inode);
+					~InodeHandler();
+
+					uint32_t inode_number;
+					inode_t inode;
+					common::Vector<uint32_t> block_cache;
+
+					[[nodiscard]] size_t size() const;
+					void set_size(size_t size);
+					size_t grow(size_t amount, bool flush = true);
+
+					void save();
+
+		   };
 
 		  /**
 		   * @class Ext2File
@@ -257,13 +287,7 @@ namespace MaxOS {
 		  class Ext2File final : public File {
 			  private:
 				  Ext2Volume* m_volume;
-				  uint32_t m_inode_number;
-				  inode_t m_inode;
-
-				  common::Vector<uint32_t> m_block_pointers;
-				  void parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer);
-				  void write_indirect(uint32_t level, uint32_t& block, size_t& index);
-				  void store_blocks(const common::Vector<uint32_t>& blocks);
+				  InodeHandler m_inode;
 
 			  public:
 				  Ext2File(Ext2Volume* volume, uint32_t inode, const string& name);
@@ -280,26 +304,29 @@ namespace MaxOS {
 		   */
 		  class Ext2Directory final : public Directory {
 
-		  private:
-			  Ext2Volume* m_volume;
-			  uint32_t m_inode_number;
-			  inode_t m_inode;
+			  private:
+				  Ext2Volume* m_volume;
+				  InodeHandler m_inode;
 
-			  common::Vector<directory_entry_t> m_entries;
-			  void parse_entries(uint8_t* buffer);
-			  void parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer);
+				  common::Vector<directory_entry_t> m_entries;
+				  common::Vector<string> m_entry_names;
 
-		  public:
-			  Ext2Directory(Ext2Volume* volume, uint32_t inode, const string& name);
-			  ~Ext2Directory() final;
+				  void write_entries();
+			      directory_entry_t create_entry(const string& name, uint32_t inode, bool is_directory = false);
 
-			  void read_from_disk() final;
+				  void parse_block(uint8_t* buffer);
 
-			  File* create_file(const string& name) final;
-			  void remove_file(const string& name) final;
+			  public:
+				  Ext2Directory(Ext2Volume* volume, uint32_t inode, const string& name);
+				  ~Ext2Directory() final;
 
-			  Directory* create_subdirectory(const string& name) final;
-			  void remove_subdirectory(const string& name) final;
+				  void read_from_disk() final;
+
+				  File* create_file(const string& name) final;
+				  void remove_file(const string& name) final;
+
+				  Directory* create_subdirectory(const string& name) final;
+				  void remove_subdirectory(const string& name) final;
 		  };
 
 		  /**

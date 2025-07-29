@@ -19,7 +19,7 @@ SyscallManager::SyscallManager()
 
   // Clear the args
   Logger::INFO() << "Setting up Syscalls \n";
-  m_current_args = new syscall_args_t;
+  m_current_args = {};
 
   // Register the handlers
   set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);

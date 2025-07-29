@@ -187,7 +187,7 @@ uint32_t Ext2Volume::allocate_block() {
  */
 Vector<uint32_t> Ext2Volume::allocate_blocks(uint32_t amount) {
 
-	Logger::DEBUG() << "ALLOCATING BLOCKS: 0x" << (uint64_t)amount << "\n";
+	Logger::DEBUG() << "ALLOCATING 0x" << (uint64_t )amount << " BLOCKS";
 
 	// No blocks to allocate
 	if (!amount)
@@ -322,27 +322,271 @@ uint32_t Ext2Volume::bytes_to_blocks(size_t bytes) const {
 	return (bytes + block_size - 1) / block_size;
 }
 
+/**
+ * @brief Creates a new inode
+ *
+ * @param is_directory is the inode to be used for a directory
+ * @return The new inode
+ */
+uint32_t Ext2Volume::create_inode(bool is_directory) {
+
+	ext2_lock.lock();
+
+	// Find the block group with enough free inodes
+	block_group_descriptor_t* block_group = block_groups[0];
+	uint32_t bg_index = 0;
+	for (; bg_index < total_block_groups; block_group = block_groups[++bg_index])
+		if (block_group -> free_inodes >= 1)
+			break;
+
+	// Read bitmap
+	auto bitmap = new uint8_t[block_size];
+	read_block(block_group -> block_inode_bitmap, bitmap);
+
+	// Find a free inode
+	uint32_t inode_index = 0;
+	for (; inode_index < superblock.blocks_per_group; ++inode_index) {
+
+		// Block is already used
+		if ((bitmap[inode_index / 8] & (1u << (inode_index % 8))) != 0)
+			continue;
+
+		// Mark as used
+		block_group -> free_inodes--;
+		superblock.unallocated_inodes--;
+		bitmap[inode_index / 8] |= (uint8_t) (1u << (inode_index % 8));
+
+		break;
+	}
+	inode_index += bg_index * superblock.inodes_per_group;
+
+	// Save the changed metadata
+	write_block(block_group -> block_usage_bitmap, bitmap);
+	write_back_block_groups();
+	write_back_superblock();
+
+	// Create the inode
+	inode_t inode {};
+	inode.creation_time          = time_to_epoch(Clock::active_clock()->get_time());
+	inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
+	inode.block_pointers[0]      = allocate_block();
+	inode.hard_links             = is_directory ? 1 : 0;
+	inode.type                   = (uint32_t)(is_directory ? InodeType::DIRECTORY : InodeType::FILE);
+	write_inode(inode_index, &inode);
+
+	ext2_lock.unlock();
+	return inode_index;
+
+}
+
+InodeHandler::InodeHandler(Ext2Volume* volume, uint32_t inode_index)
+: m_volume(volume),
+  inode_number(inode_index),
+  inode(m_volume -> read_inode(inode_number))
+{
+
+	// Read the block pointers
+	for (uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
+		if(inode.block_pointers[direct_pointer])
+			block_cache.push_back(inode.block_pointers[direct_pointer]);
+
+	auto* buffer = new uint8_t[m_volume -> block_size];
+	parse_indirect(1, inode.l1_indirect, buffer);
+	parse_indirect(2, inode.l2_indirect, buffer);
+	parse_indirect(3, inode.l3_indirect, buffer);
+	delete[] buffer;
+
+}
+
+/**
+ * @brief Read the size upper and lower into a single size_t
+ * @return The size of the inode data (not the inode itself)
+ */
+size_t InodeHandler::size() const {
+	return (size_t)inode.size_upper | inode.size_lower;
+}
+
+/**
+ * @brief Store the size of the inode data. (does not write to disk)
+ * @param size The new size
+ */
+void InodeHandler::set_size(size_t size) {
+
+	inode.size_lower = (uint32_t)(size  & 0xFFFFFFFFULL);
+	inode.size_upper = (uint32_t)(size  >> 32);
+
+}
+
+/**
+ * @brief Caches the indirect layers block pointers
+ *
+ * @param level Recursion level
+ * @param block The block number to parse from
+ * @param buffer Buffer to read into
+ */
+void InodeHandler::parse_indirect(uint32_t level, uint32_t block, uint8_t *buffer) {
+
+	// Invalid
+	if(block == 0)
+		return;
+
+	// Read the block
+	m_volume -> read_block(block, buffer);
+	auto* pointers = (uint32_t*)buffer;
+
+	// Parse the pointers
+	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
+		uint32_t pointer = pointers[i];
+
+		// Invaild
+		if(pointer == 0)
+			break;
+
+		// Has indirect sub entries
+		if(level > 1){
+			parse_indirect(level - 1, pointer, buffer);
+			continue;
+		}
+
+		// Parse the entry
+		block_cache.push_back(pointer);
+	}
+
+}
+
+/**
+ * @brief Writes the Cache to the indirect layer block pointers
+ *
+ * @param level Recursion level
+ * @param block The block number to parse from
+ * @param buffer Buffer to read into
+ * @param index Current entry to write
+ */
+void InodeHandler::write_indirect(uint32_t level, uint32_t &block, size_t &index) {
+
+	// Nothing left to write
+	size_t remaining = block_cache.size() - index;
+	if (remaining == 0 || index >= block_cache.size())
+		return;
+
+	// Level hasn't been set yet
+	if(block == 0)
+		block = m_volume -> allocate_block();
+
+	// Allocate a local buffer for this recursion level
+	auto* buffer = new uint8_t[m_volume->block_size];
+	memset(buffer, 0, m_volume->block_size);
+	auto* pointers = (uint32_t*)buffer;
+
+	// Write the pointers
+	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
+
+		// Invalid
+		if (index >= block_cache.size())
+			break;
+
+		// Has indirect
+		if (level > 1) {
+			write_indirect(level - 1, pointers[i], index);
+			continue;
+		}
+
+		// Save the pointer
+		pointers[i] = block_cache[index++];
+	}
+
+	m_volume ->write_block(block, buffer);
+	delete[] buffer;
+}
+
+/**
+ * @brief Saves the blocks to both the cached array and on disk inode
+ *
+ * @param blocks The blocks to save
+ */
+void InodeHandler::store_blocks(Vector<uint32_t> const &blocks) {
+
+	Logger::DEBUG() << "STORING BLOCKS\n";
+
+	// Store in cache
+	for(auto block : blocks)
+		block_cache.push_back(block);
+
+	// Direct blocks
+	for (uint32_t i = 0; i < 12; ++i)
+		inode.block_pointers[i] = i < block_cache.size() ? block_cache[i] : 0;
+
+	// No need to do any indirects
+	if(block_cache.size() < 12)
+		return;
+
+	// Setup Recursive blocks
+	size_t index = 12;
+	auto* buffer = new uint8_t[m_volume -> block_size];
+
+	// Write the blocks
+	uint32_t indirect_blocks[3] = { inode.l1_indirect, inode.l2_indirect, inode.l3_indirect };
+	for (int i = 0; i < 3; ++i) {
+
+		// Have to use temp because of packed field
+		uint32_t temp = indirect_blocks[i];
+		write_indirect(i + 1, temp, index);
+		indirect_blocks[i] = temp;
+	}
+
+	// Save the new blocks
+	inode.l1_indirect = indirect_blocks[0];
+	inode.l2_indirect = indirect_blocks[1];
+	inode.l3_indirect = indirect_blocks[2];
+
+	delete[] buffer;
+
+	// NOTE: Blocks get allocated when writing indirects. This is then saved later in the write() function
+
+}
+
+/**
+ * @brief Increase the size of the inode's storage capacity by allocating new blocks.
+ *
+ * @param amount The amount to grow to in bytes
+ * @return
+ */
+size_t InodeHandler::grow(size_t amount, bool flush) {
+
+	// Nothing to grow
+	if(amount <= 0)
+		return size();
+
+	// Allocate new blocks
+	auto blocks = m_volume -> allocate_blocks(m_volume -> bytes_to_blocks(amount));
+	ASSERT(blocks[0] != 0, "Failed to allocate new blocks for file");
+
+	// Save the changes
+	store_blocks(blocks);
+	set_size(size() + amount);
+	if(flush)
+		save();
+
+	return size() + amount;
+
+}
+
+void InodeHandler::save() {
+
+	m_volume -> write_inode(inode_number, &inode);
+}
+
+InodeHandler::~InodeHandler() = default;
+
 Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
 : m_volume(volume),
-  m_inode_number(inode),
-  m_inode()
+  m_inode(volume, inode)
 {
 
 	// Set up the base information
 	m_name = name;
-	m_inode = m_volume ->read_inode(m_inode_number);
-	m_size = (size_t)m_inode.size_upper | m_inode.size_lower;
+	m_size = m_inode.size();
 
-	// Read the block pointers
-	for (uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
-		if(m_inode.block_pointers[direct_pointer])
-			m_block_pointers.push_back(m_inode.block_pointers[direct_pointer]);
-
-	auto* buffer = new uint8_t[m_volume -> block_size];
-	parse_indirect(1, m_inode.l1_indirect, buffer);
-	parse_indirect(2, m_inode.l2_indirect, buffer);
-	parse_indirect(3, m_inode.l3_indirect, buffer);
-	delete[] buffer;
 }
 
 /**
@@ -363,23 +607,12 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 	auto* buffer = new uint8_t[block_size];
 
 	// Expand the file
-	if(m_offset + amount > m_size) {
-
-		// Allocate new blocks
-		auto blocks = m_volume ->allocate_blocks(m_volume -> bytes_to_blocks((m_offset + amount) - m_size));
-		ASSERT(blocks[0] != 0, "Failed to allocate new blocks for file");
-
-		// Save the changes
-		store_blocks(blocks);
-		m_size = (m_offset + amount);
-
-	}
+	if(m_offset + amount > m_size)
+		m_size = m_inode.grow((m_offset + amount) - m_size, false);
 
 	// Save the updated metadata
-	m_inode.size_lower = (uint32_t)(m_size  & 0xFFFFFFFFULL);
-	m_inode.size_upper = (uint32_t)(m_size  >> 32);
-	m_inode.last_modification_time = time_to_epoch(Clock::active_clock() -> get_time());
-	m_volume -> write_inode(m_inode_number, &m_inode);  // - Also saves blocks
+	m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock() -> get_time());
+	m_inode.save();
 
 	// Convert bytes to blocks
 	uint32_t block_start    = m_offset / block_size;
@@ -391,7 +624,7 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 	while (written < amount) {
 
 		// Read the block
-		uint32_t block = m_block_pointers[current_block++];
+		uint32_t block = m_inode.block_cache[current_block++];
 		m_volume -> read_block(block, buffer);
 
 		// Where in this block to start writing
@@ -441,7 +674,7 @@ void Ext2File::read(uint8_t* data, size_t amount) {
 	while (read < amount){
 
 		// Read the block
-		uint32_t block = m_block_pointers[current_block++];
+		uint32_t block = m_inode.block_cache[current_block++];
 		m_volume -> read_block(block, buffer);
 
 		// Where in this block to start reading
@@ -467,140 +700,12 @@ void Ext2File::flush() {
 	File::flush();
 }
 
-/**
- * @brief Caches the indirect layers block pointers
- *
- * @param level Recursion level
- * @param block The block number to parse from
- * @param buffer Buffer to read into
- */
-void Ext2File::parse_indirect(uint32_t level, uint32_t block, uint8_t *buffer) {
-
-	// Invalid
-	if(block == 0)
-		return;
-
-	// Read the block
-	m_volume -> read_block(block, buffer);
-	auto* pointers = (uint32_t*)buffer;
-
-	// Parse the pointers
-	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
-		uint32_t pointer = pointers[i];
-
-		// Invaild
-		if(pointer == 0)
-			break;
-
-		// Has indirect sub entries
-		if(level > 1){
-			parse_indirect(level - 1, pointer, buffer);
-			continue;
-		}
-
-		// Parse the entry
-		m_block_pointers.push_back(pointer);
-	}
-}
-
-/**
- * @brief Writes the Cache to the indirect layer block pointers
- *
- * @param level Recursion level
- * @param block The block number to parse from
- * @param buffer Buffer to read into
- * @param index Current entry to write
- */
-void Ext2File::write_indirect(uint32_t level, uint32_t& block, size_t& index) {
-
-	// Nothing left to write
-	size_t remaining = m_block_pointers.size() - index;
-	if (remaining == 0 || index >= m_block_pointers.size())
-		return;
-
-	// Level hasn't been set yet
-	if(block == 0)
-		block = m_volume -> allocate_block();
-
-	// Allocate a local buffer for this recursion level
-	auto* buffer = new uint8_t[m_volume->block_size];
-	memset(buffer, 0, m_volume->block_size);
-	auto* pointers = (uint32_t*)buffer;
-
-	// Write the pointers
-	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
-
-		// Invalid
-		if (index >= m_block_pointers.size())
-			break;
-
-		// Has indirect
-		if (level > 1) {
-			write_indirect(level - 1, pointers[i], index);
-			continue;
-		}
-
-		// Save the pointer
-		pointers[i] = m_block_pointers[index++];
-	}
-
-	m_volume ->write_block(block, buffer);
-	delete[] buffer;
-}
-
-/**
- * @brief Saves the blocks to both the cached array and on disk inode
- *
- * @param blocks The blocks to save
- */
-void Ext2File::store_blocks(const common::Vector<uint32_t>& blocks) {
-
-	Logger::DEBUG() << "STORING BLOCKS\n";
-
-	// Store in cache
-	for(auto block : blocks)
-		m_block_pointers.push_back(block);
-
-	// Direct blocks
-	for (uint32_t i = 0; i < 12; ++i)
-		m_inode.block_pointers[i] = i < m_block_pointers.size() ? m_block_pointers[i] : 0;
-
-	// No need to do any indirects
-	if(m_block_pointers.size() < 12)
-		return;
-
-	// Setup Recursive blocks
-	size_t index = 12;
-	auto* buffer = new uint8_t[m_volume -> block_size];
-
-	// Write the blocks
-	uint32_t indirect_blocks[3] = { m_inode.l1_indirect, m_inode.l2_indirect, m_inode.l3_indirect };
-	for (int i = 0; i < 3; ++i) {
-
-		// Have to use temp because of packed field
-		uint32_t temp = indirect_blocks[i];
-		write_indirect(i + 1, temp, index);
-		indirect_blocks[i] = temp;
-	}
-
-	// Save the new blocks
-	m_inode.l1_indirect = indirect_blocks[0];
-	m_inode.l2_indirect = indirect_blocks[1];
-	m_inode.l3_indirect = indirect_blocks[2];
-
-	delete[] buffer;
-
-	// NOTE: Blocks get allocated when writing indirects. This is then saved later in the write() function
-
-}
-
 Ext2File::~Ext2File() = default;
 
 
 Ext2Directory::Ext2Directory(Ext2Volume *volume, uint32_t inode, const string& name)
 : m_volume(volume),
-  m_inode_number(inode),
-  m_inode()
+  m_inode(m_volume, inode)
 {
 	m_name = name;
 }
@@ -608,7 +713,7 @@ Ext2Directory::Ext2Directory(Ext2Volume *volume, uint32_t inode, const string& n
 /**
  * @brief Store all entries from a buffer and convert to File or Directory objects
  */
-void Ext2Directory::parse_entries(uint8_t* buffer) {
+void Ext2Directory::parse_block(uint8_t* buffer) {
 
 	size_t offset = 0;
 	while (offset < m_volume -> block_size){
@@ -623,7 +728,12 @@ void Ext2Directory::parse_entries(uint8_t* buffer) {
 
 		// Parse
 		string filename(buffer + offset + sizeof(directory_entry_t), entry->name_length);
+		m_entry_names.push_back(filename);
 		uint32_t inode = entry->inode;
+
+		// Correct the entries size (last one fulls the rest of the block)
+		entry -> size = sizeof(directory_entry_t) + filename.length();
+		entry -> size += entry -> size % 4 ? 4 - entry -> size % 4 : 0;
 
 		// Create the object
 		switch ((InodeType)entry->type) {
@@ -648,51 +758,13 @@ void Ext2Directory::parse_entries(uint8_t* buffer) {
 }
 
 /**
- * @brief Recursively parses the indirect entries
- *
- * @param level Recursion level
- * @param block The block number to parse from
- * @param buffer Buffer to read into
- */
-void Ext2Directory::parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer) {
-
-	// Invalid
-	if(block == 0)
-		return;
-
-	// Read the block
-	m_volume -> read_block(block, buffer);
-	auto* pointers = (uint32_t*)buffer;
-
-	// Parse the pointers
-	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
-		uint32_t pointer = pointers[i];
-
-		// Invaild
-		if(pointer == 0)
-			break;
-
-		// Has indirect sub entries
-		if(level > 1){
-			parse_indirect(level - 1, pointer, buffer);
-			continue;
-		}
-
-		// Parse the entry
-		m_volume ->read_block(pointer, buffer);
-		parse_entries(buffer);
-	}
-}
-
-/**
  * @brief Read the directory from the inode on the disk
  */
 void Ext2Directory::read_from_disk() {
 
 	m_volume -> ext2_lock.lock();
-
-	// Read the inode
-	m_inode = m_volume ->read_inode(m_inode_number);
+	m_entries.clear();
+	m_entry_names.clear();
 
 	// Clear the old files & Directories
 	for(auto& file : m_files)
@@ -705,8 +777,8 @@ void Ext2Directory::read_from_disk() {
 
 	// Read the direct blocks (cant use for( : ))
 	auto* buffer = new uint8_t[m_volume -> block_size];
-	for (int i = 0; i < 12; ++i) {
-		uint32_t block_pointer = m_inode.block_pointers[i];
+	for (int i = 0; i < m_inode.block_cache.size(); ++i) {
+		uint32_t block_pointer = m_inode.block_cache[i];
 
 		// Invalid block
 		if(block_pointer == 0)
@@ -714,16 +786,98 @@ void Ext2Directory::read_from_disk() {
 
 		// Parse the block
 		m_volume->read_block(block_pointer, buffer);
-		parse_entries(buffer);
+		parse_block(buffer);
 	}
-
-	// Indirect blocks
-	parse_indirect(1, m_inode.l1_indirect, buffer);
-	parse_indirect(2, m_inode.l2_indirect, buffer);
-	parse_indirect(3, m_inode.l3_indirect, buffer);
 
 	m_volume -> ext2_lock.unlock();
 	delete[] buffer;
+}
+
+void Ext2Directory::write_entries() {
+
+	// Calculate the size needed to store the entries and the null entry
+	size_t size_required = sizeof(directory_entry_t);
+	for (int i = 0; i < m_entries.size(); ++i) {
+		size_t size = sizeof(directory_entry_t) + m_entries[i].name_length;
+		size += (size % 4) ? 4 - size % 4 : 0;
+		size_required += size;
+	}
+	size_required = m_volume -> bytes_to_blocks(size_required);
+
+	// Prepare for writing
+	m_volume -> ext2_lock.lock();
+	const uint32_t block_size = m_volume -> block_size;
+	auto* buffer = new uint8_t[block_size];
+	memset(buffer, 0, block_size);
+
+	// Expand the directory
+	if(size_required > m_inode.block_cache.size())
+		m_inode.grow((size_required - m_inode.block_cache.size()) * m_volume -> block_size, false);
+
+	// Save the updated metadata
+	m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock() -> get_time());
+	m_inode.save();
+
+	// Write each entry
+	size_t current_block = 0;
+	size_t buffer_offset  = 0;
+	for (int i = 0; i < m_entries.size(); ++i){
+
+		// Get the current entry
+		directory_entry_t& entry = m_entries[i];
+		char* name = m_entry_names[i].c_str();
+
+
+		// Entry needs to be stored in the next block
+		if(entry.size + buffer_offset > block_size){
+			m_volume ->write_block(m_inode.block_cache[current_block], buffer);
+			memset(buffer, 0, block_size);
+			current_block++;
+			buffer_offset = 0;
+		}
+
+		// If it is the last entry it takes up the rest of the block
+		if(i == m_entries.size() - 1)
+			entry.size = block_size - buffer_offset;
+
+		// Copy the entry and the name
+		memcpy(buffer + buffer_offset, &entry, sizeof(entry));
+		memcpy(buffer + buffer_offset + sizeof(entry), name, entry.name_length + 1);
+		buffer_offset += entry.size;
+	}
+
+	// Save the last block
+	m_volume -> write_block(m_inode.block_cache[current_block], buffer);
+
+	// Clean up
+	m_entries.pop_back();
+	m_entry_names.pop_back();
+	delete[] buffer;
+	m_volume->ext2_lock.unlock();
+}
+
+directory_entry_t Ext2Directory::create_entry(const string& name, uint32_t inode, bool is_directory) {
+
+	// Create the inode
+	directory_entry_t entry {};
+	entry.inode = inode ? inode : m_volume -> create_inode(is_directory);
+	entry.type = (uint32_t)InodeType::DIRECTORY;
+	entry.name_length = name.length();
+	entry.size = sizeof(entry) + entry.name_length;
+	entry.size += entry.size % 4 ? 4 - entry.size % 4 : 0;
+
+	// Save the inode
+	m_entries.push_back(entry);
+	m_entry_names.push_back(name);
+	write_entries();
+
+	// subdirectories' ".." hard links to this entry
+	if(is_directory && !inode){
+		m_inode.inode.hard_links++;
+		m_inode.save();
+	}
+
+	return entry;
 }
 
 /**
@@ -733,8 +887,16 @@ void Ext2Directory::read_from_disk() {
  * @return The new file object or null if it could not be created
  */
 File *Ext2Directory::create_file(string const &name) {
-	// TODO
-	return nullptr;
+
+	// Check if the file already exists
+	for (auto & file : m_files)
+		if (file -> name() == name)
+			return nullptr;
+
+	// Create the file
+	auto file = new Ext2File(m_volume, create_entry(name, 0, false).inode, name);
+	m_files.push_back(file);
+	return file;
 }
 
 /**
@@ -753,7 +915,21 @@ void Ext2Directory::remove_file(string const &name) {
  * @return The new directory object or null if it could not be created
  */
 Directory *Ext2Directory::create_subdirectory(string const &name) {
-	return Directory::create_subdirectory(name);
+
+	// Check if the directory already exists
+	for (auto & subdirectory : m_subdirectories)
+		if (subdirectory -> name() == name)
+			return nullptr;
+
+	// Store the directory
+	auto directory = new Ext2Directory(m_volume, create_entry(name, 0, true).inode, name);
+	m_subdirectories.push_back(directory);
+
+	// Create self & parent references
+	directory->create_entry(".", directory->m_inode.inode_number, true);
+	directory->create_entry("..", m_inode.inode_number, true);
+
+	return directory;
 }
 
 /**
