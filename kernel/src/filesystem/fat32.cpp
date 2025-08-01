@@ -17,7 +17,8 @@ Fat32Volume::Fat32Volume(Disk* hd, uint32_t partition_offset)
 {
 
   // Read the BIOS parameter block
-  disk -> read(partition_offset, (uint8_t *)&bpb, sizeof(bpb32_t));
+  buffer_t bpb_buffer(&bpb,sizeof(bpb32_t));
+  disk -> read(partition_offset, &bpb_buffer);
 
   // Parse the FAT info
   uint32_t total_data_sectors = bpb.total_sectors_32 - (bpb.reserved_sectors + (bpb.table_copies * bpb.table_size_32));
@@ -25,7 +26,8 @@ Fat32Volume::Fat32Volume(Disk* hd, uint32_t partition_offset)
   fat_lba = partition_offset + bpb.reserved_sectors;
   fat_copies = bpb.table_copies;
   fat_info_lba = partition_offset + bpb.fat_info;
-  disk -> read(fat_info_lba, (uint8_t *)&fsinfo, sizeof(fs_info_t));
+  buffer_t fs_buffer(&fsinfo, sizeof(fs_info_t));
+  disk -> read(fat_info_lba, &fs_buffer);
 
   data_lba = fat_lba + (bpb.table_copies * bpb.table_size_32);
   root_lba = data_lba + bpb.sectors_per_cluster * (bpb.root_cluster - 2);
@@ -57,11 +59,11 @@ lba_t Fat32Volume::next_cluster(lba_t cluster)
   uint32_t entry_index  = offset % bpb.bytes_per_sector;
 
   // Read the FAT entry
-  uint8_t fat[bpb.bytes_per_sector];
-  disk -> read(sector, fat, bpb.bytes_per_sector);
+  buffer_t fat(bpb.bytes_per_sector);
+  disk -> read(sector, &fat);
 
   // Get the next cluster info (mask the upper 4 bits)
-  auto entry = (uint32_t *)(&fat[entry_index]);
+  auto entry = (uint32_t *)(&(fat.raw()[entry_index])); //  TODO & here is weird
   return *entry & 0x0FFFFFFF;
 }
 
@@ -86,13 +88,13 @@ uint32_t Fat32Volume::set_next_cluster(uint32_t cluster, uint32_t next_cluster)
     uint32_t entry_index  = offset % bpb.bytes_per_sector;
 
     // Read the FAT entry
-    uint8_t fat[bpb.bytes_per_sector];
-    disk -> read(sector, fat, bpb.bytes_per_sector);
+    buffer_t fat(bpb.bytes_per_sector);
+    disk -> read(sector, &fat);
 
     // Set the next cluster info (mask the upper 4 bits)
-    auto entry = (uint32_t *)(&fat[entry_index]);
+    auto entry = (uint32_t *)(&(fat.raw()[entry_index]));
     *entry = next_cluster & 0x0FFFFFFF;
-    disk -> write(sector, fat, bpb.bytes_per_sector);
+    disk -> write(sector, &fat);
 
   }
 
@@ -165,7 +167,8 @@ uint32_t Fat32Volume::allocate_cluster(uint32_t cluster, size_t amount)
   }
 
   // Once all the updates are done flush the changes to the disk
-  disk -> write(fat_info_lba, (uint8_t *)&fsinfo, sizeof(fs_info_t));
+  buffer_t fs_info_buffer(&fsinfo, sizeof(fs_info_t));
+  disk -> write(fat_info_lba, &fs_info_buffer);
 
   // Finish the chin
   set_next_cluster(cluster, (uint32_t)ClusterState::END_OF_CHAIN);
@@ -217,7 +220,8 @@ void Fat32Volume::free_cluster(uint32_t cluster, size_t amount)
   }
 
   // Save the fsinfo
-  disk -> write(fat_info_lba, (uint8_t *)&fsinfo, sizeof(fs_info_t));
+  buffer_t fs_info_buffer(&fsinfo, sizeof(fs_info_t));
+  disk -> write(fat_info_lba, &fs_info_buffer);
 
   // Mark the end of the chain
   set_next_cluster(cluster, (uint32_t)ClusterState::END_OF_CHAIN);
@@ -244,11 +248,12 @@ Fat32File::~Fat32File() = default;
  * @param data The byte buffer to write
  * @param amount The amount of data to write
  */
-void Fat32File::write(const uint8_t* data, size_t amount)
+void Fat32File::write(const buffer_t* data, size_t amount)
 {
 
   size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
-  auto buffer = new uint8_t[buffer_space];
+  buffer_t buffer(buffer_space);
+  buffer.clear();
 
   uint64_t current_offset = 0;
   uint64_t bytes_written  = 0;
@@ -269,10 +274,10 @@ void Fat32File::write(const uint8_t* data, size_t amount)
     }
 
     // Read each sector in the cluster (prevent overwriting the data)
-    memset(buffer, 0, buffer_space);
     lba_t lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
     for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
-      m_volume->disk->read(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+      m_volume->disk->read(lba + sector, &buffer, m_volume->bpb.bytes_per_sector);
+	buffer.set_offset(0);
 
     // If the offset is in the middle of the cluster
     size_t buffer_offset = 0;
@@ -287,13 +292,14 @@ void Fat32File::write(const uint8_t* data, size_t amount)
     bytes_to_copy                  = (bytes_to_copy > buffer_space) ? buffer_space : bytes_to_copy;
 
     // Update the data
-    memcpy(buffer + buffer_offset, data + bytes_written , bytes_to_copy);
+	buffer.copy_from(data, bytes_to_copy, buffer_offset, bytes_written);
     bytes_written  += bytes_to_copy;
     current_offset += bytes_to_copy;
+    buffer.set_offset(0);
 
     // Write the data back to the disk
     for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
-      m_volume->disk->write(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+      m_volume->disk->write(lba + sector, &buffer, m_volume->bpb.bytes_per_sector);
   }
 
   // Extend the file
@@ -309,18 +315,18 @@ void Fat32File::write(const uint8_t* data, size_t amount)
 
     // Update the data
     size_t bytes_to_copy = (amount - bytes_written) > buffer_space ? buffer_space : (amount - bytes_written);
-    memcpy(buffer, data + bytes_written , bytes_to_copy);
+	buffer.copy_from(data, bytes_to_copy, 0, bytes_written);
     bytes_written  += bytes_to_copy;
     current_offset += bytes_to_copy;
+	buffer.set_offset(0);
 
     // Write the data back to the disk
     lba_t lba = m_volume->data_lba + (new_cluster - 2) * m_volume->bpb.sectors_per_cluster;
     for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
-      m_volume->disk->write(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+      m_volume->disk->write(lba + sector, &buffer, m_volume->bpb.bytes_per_sector);
 
     // Go to the next cluster
     last = new_cluster;
-
   }
 
   // Update file size
@@ -335,7 +341,6 @@ void Fat32File::write(const uint8_t* data, size_t amount)
   // TODO: When implemented as a usermode driver save the time
   m_parent_directory -> save_entry_to_disk(m_entry);
 
-  delete[] buffer;
 }
 
 /**
@@ -344,10 +349,11 @@ void Fat32File::write(const uint8_t* data, size_t amount)
  * @param data The byte buffer to read into
  * @param amount The amount of data to read
  */
-void Fat32File::read(uint8_t* data, size_t amount)
+void Fat32File::read(buffer_t* data, size_t amount)
 {
   size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
-  auto buffer = new uint8_t[buffer_space];
+  buffer_t buffer(buffer_space);
+  buffer.clear();
 
   uint64_t current_offset = 0;
   uint64_t bytes_read = 0;
@@ -362,10 +368,10 @@ void Fat32File::read(uint8_t* data, size_t amount)
     }
 
     // Read each sector in the cluster
-    memset(buffer, 0, buffer_space);
     lba_t lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
     for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
-      m_volume->disk->read(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+      m_volume->disk->read(lba + sector, &buffer, m_volume->bpb.bytes_per_sector);
+    buffer.set_offset(0);
 
     // If the offset is in the middle of the cluster
     size_t buffer_offset = 0;
@@ -380,7 +386,7 @@ void Fat32File::read(uint8_t* data, size_t amount)
     bytes_to_copy                  = (bytes_to_copy > buffer_space) ? buffer_space : bytes_to_copy;
 
     // Read the data
-    memcpy(data + bytes_read, buffer + buffer_offset, bytes_to_copy);
+	buffer.copy_from(data, bytes_to_copy, buffer_offset, bytes_read);
     bytes_read += bytes_to_copy;
     current_offset += buffer_space;
 
@@ -390,7 +396,6 @@ void Fat32File::read(uint8_t* data, size_t amount)
   }
 
   m_offset += bytes_read;
-  delete[] buffer;
 }
 
 /**
@@ -479,11 +484,11 @@ dir_entry_t* Fat32Directory::create_entry(const string& name, bool is_directory)
   // Write the entries to the disk
   uint32_t bytes_per_sector = m_volume -> bpb.bytes_per_sector;
   lba_t child_lba = m_volume -> data_lba + (cluster - 2) * bytes_per_sector;
-  uint8_t buffer[bytes_per_sector];
-  memset(buffer, 0, bytes_per_sector);
-  memcpy(buffer, (uint8_t *)&current_dir_entry, sizeof(dir_entry_t));
-  memcpy(buffer + sizeof(dir_entry_t), (uint8_t *)&parent_dir_entry, sizeof(dir_entry_t));
-  m_volume -> disk -> write(child_lba, buffer, bytes_per_sector);
+  buffer_t buffer(bytes_per_sector);
+  buffer.clear();
+  buffer.copy_from(&current_dir_entry, sizeof(dir_entry_t));
+  buffer.copy_from(&parent_dir_entry, sizeof(dir_entry_t));
+  m_volume -> disk -> write(child_lba, &buffer);
 
   // Directory created
   return &m_entries[entry_index];
@@ -532,7 +537,8 @@ void Fat32Directory::read_all_entries() {
   m_entries.clear();
 
   size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
-  auto buffer = new uint8_t[buffer_space];
+  buffer_t buffer (buffer_space);
+  buffer.clear();
 
   // Read the directory
   for (uint32_t cluster = m_first_cluster; cluster != (uint32_t)ClusterState::END_OF_CHAIN; cluster = m_volume -> next_cluster(cluster)) {
@@ -542,16 +548,15 @@ void Fat32Directory::read_all_entries() {
     m_current_cluster_length++;
 
     // Read each sector in the cluster
-    memset(buffer, 0, buffer_space);
     lba_t lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
     for (size_t sector = 0; sector < m_volume->bpb.sectors_per_cluster; sector++)
-      m_volume->disk->read(lba + sector,buffer + sector * m_volume->bpb.bytes_per_sector,m_volume->bpb.bytes_per_sector);
+      m_volume->disk->read(lba + sector, &buffer, m_volume->bpb.bytes_per_sector);
 
     // Parse the directory entries (each entry is 32 bytes)
     for (size_t entry_offset = 0; entry_offset < buffer_space; entry_offset += 32) {
 
       // Store the entry
-      auto entry = (dir_entry_t*)&buffer[entry_offset];
+      auto entry = (dir_entry_t*)&(buffer.raw()[entry_offset]);
       m_entries.push_back(*entry);
 
       // Check if the entry is the end of the directory
@@ -560,8 +565,6 @@ void Fat32Directory::read_all_entries() {
     }
 
   }
-
-  delete[] buffer;
 }
 
 
@@ -600,12 +603,12 @@ void Fat32Directory::update_entry_on_disk(int index) {
 
   // Read the full sector into a buffer
   lba_t base_lba = m_volume->data_lba + (cluster - 2) * m_volume->bpb.sectors_per_cluster;
-  uint8_t sector_buffer[bytes_per_sector];
-  m_volume->disk->read(base_lba + sector_offset, sector_buffer, bytes_per_sector);
+  buffer_t sector_buffer(bytes_per_sector, false);
+  m_volume->disk->read(base_lba + sector_offset, &sector_buffer);
 
   // Update the entry in the buffer
-  memcpy(sector_buffer + in_sector_offset, &entry, sizeof(dir_entry_t));
-  m_volume->disk->write(base_lba + sector_offset, sector_buffer, bytes_per_sector);
+  sector_buffer.copy_from(&entry, sizeof(dir_entry_t), in_sector_offset);
+  m_volume->disk->write(base_lba + sector_offset, &sector_buffer);
 }
 
 /**

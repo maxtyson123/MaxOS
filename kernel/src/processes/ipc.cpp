@@ -326,8 +326,8 @@ void SharedMessageEndpoint::queue_message(void *message, size_t size) {
   m_message_lock.lock();
 
   // Copy the buffer into the kernel so that the endpoint (this code) can access it when the memory spaces are switched
-  auto* kernel_copy = (uintptr_t*)new char[size];
-  memcpy(kernel_copy, message, size);
+  buffer_t kernel_copy(size);
+  kernel_copy.copy_from(message,size);
 
   //Switch to endpoint's memory space
   MemoryManager::switch_active_memory_manager(Scheduler::get_process(m_owner_pid) -> memory_manager);
@@ -335,7 +335,7 @@ void SharedMessageEndpoint::queue_message(void *message, size_t size) {
   // Create the message & copy it into the endpoint's memory space
   auto* new_message = (ipc_message_t*)MemoryManager::malloc(sizeof(ipc_message_t));
   void* new_buffer = MemoryManager::malloc(size);
-  new_message -> message_buffer = memcpy(new_buffer, kernel_copy, size);
+  new_message -> message_buffer = memcpy(new_buffer, kernel_copy.raw(), size);
   new_message -> message_size = size;
   new_message -> next_message = 0;
 
@@ -353,10 +353,7 @@ void SharedMessageEndpoint::queue_message(void *message, size_t size) {
   if (current == nullptr)
     m_queue->messages = new_message;
 
-  // Return to the caller's memory space
+  // Clean up
   MemoryManager::switch_active_memory_manager(Scheduler::current_process() -> memory_manager);
-
-  // Free the lock & kernel copy
-  delete[] kernel_copy;
   m_message_lock.unlock();
 }

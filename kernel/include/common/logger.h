@@ -75,5 +75,17 @@
                 Logger& operator << (LogLevel log_level);
         };
 
+		/**
+		* @brief If the specified condition is not met then the kernel will crash with the specified message.
+		*
+		* This macro wraps Logger::ASSERT and supports printf-style formatting with variadic arguments.
+		*
+		* @param condition The condition to check.
+		* @param format The format string (like printf).
+		* @param ... Additional arguments to format.
+		*
+		* @see Logger::ASSERT
+		*/
         #define ASSERT(condition, format, ...) Logger::ASSERT(condition, format, ##__VA_ARGS__)
+
 #endif // MAXOS_COMMON_LOGGER_H

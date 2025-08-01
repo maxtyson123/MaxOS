@@ -5,6 +5,7 @@
 #include <filesystem/partition/msdos.h>
 
 using namespace MaxOS;
+using namespace MaxOS::common;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::partition;
 using namespace MaxOS::drivers::disk;
@@ -18,7 +19,8 @@ void MSDOSPartition::mount_partitions(Disk* hd) {
 
   // Read the MBR from the hard disk
   MasterBootRecord mbr = {};
-  hd -> read(0, (uint8_t *)&mbr, sizeof(MasterBootRecord));
+  buffer_t mbr_buffer(&mbr,sizeof(MasterBootRecord));
+  hd -> read(0, &mbr_buffer);
 
   // Check if the magic number is correct
   if(mbr.magic != 0xAA55)

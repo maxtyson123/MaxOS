@@ -214,8 +214,8 @@ namespace MaxOS{
                 Fat32File(Fat32Volume* volume, Fat32Directory* parent, dir_entry_t* info, const string& name);
                 ~Fat32File() final;
 
-                void write(const uint8_t* data, size_t amount) final;
-                void read(uint8_t* data, size_t amount) final;
+                void write(const common::buffer_t* data, size_t amount) final;
+                void read(common::buffer_t* data, size_t amount) final;
                 void flush() final;
 
                 uint32_t first_cluster() const { return m_first_cluster; }

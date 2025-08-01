@@ -5,6 +5,7 @@
 #ifndef MAXOS_DRIVERS_DISK_ATA_H
 #define MAXOS_DRIVERS_DISK_ATA_H
 
+#include <common/buffer.h>
 #include <common/outputStream.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/disk/disk.h>
@@ -41,8 +42,8 @@ namespace MaxOS{
                     ~AdvancedTechnologyAttachment();
 
                     bool identify();
-                    void read(uint32_t sector, uint8_t* data_buffer, size_t amount) final;
-                    void write(uint32_t sector, const uint8_t* data, size_t count) final;
+                    void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount) final;
+                    void write(uint32_t sector, const common::buffer_t* data, size_t count) final;
                     void flush() final;
 
                     string device_name() final;

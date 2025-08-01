@@ -1,6 +1,7 @@
 //Common
 #include <stdint.h>
 #include <common/logger.h>
+#include <common/buffer.h>
 #include <hardwarecommunication/interrupts.h>
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>

@@ -6,6 +6,7 @@
 #define MAXOS_DRIVERS_DISK_H
 
 #include <common/outputStream.h>
+#include <common/buffer.h>
 #include <drivers/driver.h>
 #include <stdint.h>
 
@@ -26,8 +27,12 @@ namespace MaxOS{
                     Disk();
                     ~Disk();
 
-                    virtual void read(uint32_t sector, uint8_t* data_buffer, size_t amount);
-                    virtual void write(uint32_t sector, const uint8_t* data, size_t count);
+					void         read(uint32_t sector, common::buffer_t* data_buffer);
+                    virtual void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount);
+
+                    void         write(uint32_t sector, const common::buffer_t* data);
+                    virtual void write(uint32_t sector, const common::buffer_t* data, size_t count);
+
                     virtual void flush();
 
                     void activate() override;

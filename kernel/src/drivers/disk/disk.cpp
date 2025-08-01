@@ -5,12 +5,25 @@
 #include <drivers/disk/disk.h>
 
 using namespace MaxOS;
+using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 
 Disk::Disk() = default;
 Disk::~Disk() = default;
 
+/**
+ * @brief Read data from the disk into a buffer (max capacity 512 bytes)
+ *
+ * @param sector The sector to read from
+ * @param data_buffer The buffer to read the data into
+ */
+void Disk::read(uint32_t sector, common::buffer_t *data_buffer) {
+
+	size_t amount = (data_buffer -> capacity() > 512) ? 512 : data_buffer -> capacity();
+	read(sector, data_buffer, amount);
+
+}
 
 /**
  * @brief Read data from the disk
@@ -19,8 +32,15 @@ Disk::~Disk() = default;
  * @param data_buffer The buffer to read the data into
  * @param amount The amount of data to read
  */
-void Disk::read(uint32_t sector, uint8_t* data_buffer, size_t amount)
-{
+void Disk::read(uint32_t sector, buffer_t* data_buffer, size_t amount){
+
+}
+
+void Disk::write(uint32_t sector, common::buffer_t const *data) {
+
+	size_t amount = (data -> capacity() > 512) ? 512 : data -> capacity();
+	write(sector, data, amount);
+
 }
 
 /**
@@ -30,7 +50,7 @@ void Disk::read(uint32_t sector, uint8_t* data_buffer, size_t amount)
  * @param data_buffer The buffer to write the data into
  * @param amount The amount of data to write
  */
-void Disk::write(uint32_t sector, const uint8_t* data, size_t count)
+void Disk::write(uint32_t sector, const buffer_t* data, size_t count)
 {
 }
 

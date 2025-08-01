@@ -19,10 +19,9 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 	ext2_lock.unlock();
 
 	// Read superblock
-	uint8_t buffer[1024];
-	disk->read(partition_offset + 2, buffer, 512);
-	disk->read(partition_offset + 3, buffer + 512, 512);
-	memcpy(&superblock, buffer, sizeof(superblock_t));
+	buffer_t superblock_buffer(&superblock, 512);
+	disk->read(partition_offset + 2, &superblock_buffer, 512);
+	disk->read(partition_offset + 3, &superblock_buffer, 512);
 
 	// Validate signature
 	ASSERT(superblock.signature == 0xEF53, "Ext2 Filesystem doesnt have a valid signature\n");
@@ -47,17 +46,15 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 	// Read the block groups
 	block_groups = new block_group_descriptor_t*[total_block_groups] {nullptr};
 	uint32_t sectors_to_read = (block_group_descriptor_table_size + block_size - 1) / block_size * sectors_per_block;
-	auto* bg_buffer = new uint8_t[sectors_to_read * 512];
+	buffer_t bg_buffer(sectors_to_read * 512);
 	for (uint32_t i = 0; i < sectors_to_read; ++i)
-		disk->read(partition_offset + block_group_descriptor_table * sectors_per_block + i, bg_buffer + i * 512, 512);
+		disk->read(partition_offset + block_group_descriptor_table * sectors_per_block + i, &bg_buffer, 512);
 
 	// Store the block groups
 	for (uint32_t i = 0; i < total_block_groups; ++i) {
 		block_groups[i] = new block_group_descriptor_t;
-		memcpy(block_groups[i], bg_buffer + i * sizeof(block_group_descriptor_t), sizeof(block_group_descriptor_t));
+		memcpy(block_groups[i], bg_buffer.raw() + i * sizeof(block_group_descriptor_t), sizeof(block_group_descriptor_t));
 	}
-	delete[] bg_buffer;
-
 }
 
 Ext2Volume::~Ext2Volume() = default;
@@ -68,12 +65,18 @@ Ext2Volume::~Ext2Volume() = default;
  * @param block_num The block to update
  * @param buffer The buffer to read from
  */
-void Ext2Volume::write_block(uint32_t block_num, uint8_t *buffer) {
+void Ext2Volume::write_block(uint32_t block_num, buffer_t* buffer) {
+
+	// Ensure the buffer is in the right format
+	buffer -> set_offset(0);
+	buffer -> update_offset = true;
 
 	// Read each sector of the block
 	for (size_t i = 0; i < sectors_per_block; ++i)
-		disk->write(partition_offset + block_num * sectors_per_block + i, buffer + i * 512, 512);
+		disk->write(partition_offset + block_num * sectors_per_block + i, buffer, 512);
 
+	// Reset buffer
+	buffer -> set_offset(0);
 };
 
 /**
@@ -95,13 +98,12 @@ void Ext2Volume::write_inode(uint32_t inode_num, inode_t* inode) {
 	uint32_t in_block_offset    = offset % block_size;
 
 	// Read the inode
-	auto* buffer = new uint8_t[block_size];
-	read_block(inode_table + block, buffer);
-	memcpy(buffer + in_block_offset, inode, sizeof(inode_t));
+	buffer_t buffer(block_size);
+	read_block(inode_table + block, &buffer);
+	buffer.copy_from(inode, sizeof(inode_t), in_block_offset);
 
 	// Modify the block
-	write_block(inode_table + block, buffer);
-	delete[] buffer;
+	write_block(inode_table + block, &buffer);
 }
 
 /**
@@ -110,11 +112,18 @@ void Ext2Volume::write_inode(uint32_t inode_num, inode_t* inode) {
  * @param block_num The block to read
  * @param buffer The buffer to read into
  */
-void Ext2Volume::read_block(uint32_t block_num, uint8_t *buffer) const {
+void Ext2Volume::read_block(uint32_t block_num, buffer_t* buffer) const {
+
+	// Ensure the buffer is in the right format
+	buffer -> set_offset(0);
+	buffer -> update_offset = true;
 
 	// Read each sector of the block
 	for (size_t i = 0; i < sectors_per_block; ++i)
-		disk->read(partition_offset + block_num * sectors_per_block + i, buffer + i * 512, 512);
+		disk->read(partition_offset + block_num * sectors_per_block + i, buffer, 512);
+
+	// Reset buffer
+	buffer -> set_offset(0);
 
 }
 
@@ -137,12 +146,12 @@ inode_t Ext2Volume::read_inode(uint32_t inode_num) const {
 	uint32_t block              = offset / block_size;
 	uint32_t in_block_offset    = offset % block_size;
 
-	// Read the inode
-	auto* buffer = new uint8_t[block_size];
-	read_block(inode_table + block, buffer);
-	memcpy(&inode, buffer + in_block_offset, sizeof(inode_t));
+	// Read the block
+	buffer_t buffer(block_size);
+	read_block(inode_table + block, &buffer);
 
-	delete[] buffer;
+	// Read the inode from the block
+	buffer.copy_to(&inode, sizeof(inode_t), in_block_offset);
 	return inode;
 }
 
@@ -161,11 +170,11 @@ block_group_descriptor_t Ext2Volume::read_block_group(uint32_t group_num) {
 	uint32_t in_block_offset    = offset % block_size;
 
 	// Read the block group
-	auto* buffer = new uint8_t[block_size];
-	read_block(2 + block, buffer);
-	memcpy(&descriptor, buffer + in_block_offset, sizeof(block_group_descriptor_t));
+	buffer_t buffer(block_size);
+	read_block(2 + block, &buffer);
 
-	delete[] buffer;
+	// Read the descriptor from the group
+	buffer.copy_to(&descriptor, sizeof(block_group_descriptor_t), in_block_offset);
 	return descriptor;
 }
 
@@ -240,28 +249,28 @@ common::Vector<uint32_t> Ext2Volume::allocate_group_blocks(uint32_t block_group,
 
 	// Prepare
 	Vector<uint32_t> result {};
-	auto zeros = new uint8_t [block_size];
-	memset(zeros, 0, block_size);
+	buffer_t zeros (block_size);
+	zeros.clear();
 
 	// Read bitmap
-	auto bitmap = new uint8_t[block_size];
-	read_block(descriptor -> block_usage_bitmap, bitmap);
+	buffer_t bitmap (block_size);
+	read_block(descriptor -> block_usage_bitmap, &bitmap);
 
 	// Allocate the blocks
 	for (uint32_t i = 0; i < superblock.blocks_per_group; ++i) {
 
 		// Block is already used
-		if((bitmap[i / 8] & (1u << (i % 8))) != 0)
+		if((bitmap.raw()[i / 8] & (1u << (i % 8))) != 0)
 			continue;
 
 		// Mark as used
 		descriptor -> free_blocks--;
 		superblock.unallocated_blocks--;
-		bitmap[i / 8] |= (uint8_t) (1u << (i % 8));
+		bitmap.raw()[i / 8] |= (uint8_t) (1u << (i % 8));
 
 		// Zero out data
 		uint32_t block = block_group * superblock.blocks_per_group + (block_size == 1024 ? 1 : 0) + i;
-		write_block(block, zeros);
+		write_block(block, &zeros);
 		result.push_back(block);
 
 		// All done
@@ -271,12 +280,10 @@ common::Vector<uint32_t> Ext2Volume::allocate_group_blocks(uint32_t block_group,
 	}
 
 	// Save the changed metadata
-	write_block(descriptor -> block_usage_bitmap, bitmap);
+	write_block(descriptor -> block_usage_bitmap, &bitmap);
 	write_back_block_groups();
 	write_back_superblock();
 
-	delete[] bitmap;
-	delete[] zeros;
 	return result;
 }
 
@@ -287,15 +294,14 @@ void Ext2Volume::write_back_block_groups() {
 
 	// Store the block groups
 	uint32_t sectors_to_write = (block_group_descriptor_table_size + block_size - 1) / block_size * sectors_per_block;
-	auto* bg_buffer = new uint8_t[sectors_to_write * 512];
+	buffer_t bg_buffer(sectors_to_write * 512);
 	for (uint32_t i = 0; i < total_block_groups; ++i)
-		memcpy(bg_buffer + i * sizeof(block_group_descriptor_t), block_groups[i], sizeof(block_group_descriptor_t));
+		bg_buffer.copy_from(block_groups[i], sizeof(block_group_descriptor_t));
 
 	// Write the block groups
+	bg_buffer.set_offset(0);
 	for (uint32_t i = 0; i < sectors_to_write; ++i)
-		disk->write(partition_offset + block_group_descriptor_table * sectors_per_block + i, bg_buffer + i * 512, 512);
-
-	delete[] bg_buffer;
+		disk->write(partition_offset + block_group_descriptor_table * sectors_per_block + i, &bg_buffer, 512);
 }
 
 /**
@@ -304,12 +310,12 @@ void Ext2Volume::write_back_block_groups() {
 void Ext2Volume::write_back_superblock() {
 
 	// Store superblock
-	uint8_t buffer[1024];
-	memcpy(buffer, &superblock, sizeof(superblock_t));
+	buffer_t buffer(1024);
+	buffer.copy_from(&superblock, sizeof(superblock_t));
 
 	// Write to disk
-	disk->write(partition_offset + 2, buffer, 512);
-	disk->write(partition_offset + 3, buffer + 512, 512);
+	disk->write(partition_offset + 2, &buffer, 512);
+	disk->write(partition_offset + 3, &buffer, 512);
 }
 
 /**
@@ -340,28 +346,28 @@ uint32_t Ext2Volume::create_inode(bool is_directory) {
 			break;
 
 	// Read bitmap
-	auto bitmap = new uint8_t[block_size];
-	read_block(block_group -> block_inode_bitmap, bitmap);
+	buffer_t bitmap(block_size);
+	read_block(block_group -> block_inode_bitmap, &bitmap);
 
 	// Find a free inode
 	uint32_t inode_index = 0;
 	for (; inode_index < superblock.blocks_per_group; ++inode_index) {
 
 		// Block is already used
-		if ((bitmap[inode_index / 8] & (1u << (inode_index % 8))) != 0)
+		if ((bitmap.raw()[inode_index / 8] & (1u << (inode_index % 8))) != 0)
 			continue;
 
 		// Mark as used
 		block_group -> free_inodes--;
 		superblock.unallocated_inodes--;
-		bitmap[inode_index / 8] |= (uint8_t) (1u << (inode_index % 8));
+		bitmap.raw()[inode_index / 8] |= (uint8_t) (1u << (inode_index % 8));
 
 		break;
 	}
 	inode_index += bg_index * superblock.inodes_per_group;
 
 	// Save the changed metadata
-	write_block(block_group -> block_usage_bitmap, bitmap);
+	write_block(block_group -> block_usage_bitmap, &bitmap);
 	write_back_block_groups();
 	write_back_superblock();
 
@@ -390,11 +396,10 @@ InodeHandler::InodeHandler(Ext2Volume* volume, uint32_t inode_index)
 		if(inode.block_pointers[direct_pointer])
 			block_cache.push_back(inode.block_pointers[direct_pointer]);
 
-	auto* buffer = new uint8_t[m_volume -> block_size];
-	parse_indirect(1, inode.l1_indirect, buffer);
-	parse_indirect(2, inode.l2_indirect, buffer);
-	parse_indirect(3, inode.l3_indirect, buffer);
-	delete[] buffer;
+	buffer_t buffer(m_volume -> block_size);
+	parse_indirect(1, inode.l1_indirect, &buffer);
+	parse_indirect(2, inode.l2_indirect, &buffer);
+	parse_indirect(3, inode.l3_indirect, &buffer);
 
 }
 
@@ -424,7 +429,7 @@ void InodeHandler::set_size(size_t size) {
  * @param block The block number to parse from
  * @param buffer Buffer to read into
  */
-void InodeHandler::parse_indirect(uint32_t level, uint32_t block, uint8_t *buffer) {
+void InodeHandler::parse_indirect(uint32_t level, uint32_t block, buffer_t* buffer) {
 
 	// Invalid
 	if(block == 0)
@@ -474,9 +479,9 @@ void InodeHandler::write_indirect(uint32_t level, uint32_t &block, size_t &index
 		block = m_volume -> allocate_block();
 
 	// Allocate a local buffer for this recursion level
-	auto* buffer = new uint8_t[m_volume->block_size];
-	memset(buffer, 0, m_volume->block_size);
-	auto* pointers = (uint32_t*)buffer;
+	buffer_t buffer(m_volume->block_size);
+	buffer.clear();
+	auto* pointers = (uint32_t*)buffer.raw();
 
 	// Write the pointers
 	for (size_t i = 0; i < m_volume->pointers_per_block; ++i) {
@@ -495,8 +500,7 @@ void InodeHandler::write_indirect(uint32_t level, uint32_t &block, size_t &index
 		pointers[i] = block_cache[index++];
 	}
 
-	m_volume ->write_block(block, buffer);
-	delete[] buffer;
+	m_volume ->write_block(block, &buffer);
 }
 
 /**
@@ -522,7 +526,6 @@ void InodeHandler::store_blocks(Vector<uint32_t> const &blocks) {
 
 	// Setup Recursive blocks
 	size_t index = 12;
-	auto* buffer = new uint8_t[m_volume -> block_size];
 
 	// Write the blocks
 	uint32_t indirect_blocks[3] = { inode.l1_indirect, inode.l2_indirect, inode.l3_indirect };
@@ -538,8 +541,6 @@ void InodeHandler::store_blocks(Vector<uint32_t> const &blocks) {
 	inode.l1_indirect = indirect_blocks[0];
 	inode.l2_indirect = indirect_blocks[1];
 	inode.l3_indirect = indirect_blocks[2];
-
-	delete[] buffer;
 
 	// NOTE: Blocks get allocated when writing indirects. This is then saved later in the write() function
 
@@ -595,7 +596,7 @@ Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
  * @param data The byte buffer to write
  * @param amount The amount of data to write
  */
-void Ext2File::write(uint8_t const *data, size_t amount) {
+void Ext2File::write(buffer_t const *data, size_t amount) {
 
 	// Nothing to write
 	if(m_size == 0)
@@ -604,7 +605,7 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 	// Prepare for writing
 	m_volume -> ext2_lock.lock();
 	const uint32_t block_size = m_volume -> block_size;
-	auto* buffer = new uint8_t[block_size];
+	buffer_t buffer(block_size, false);
 
 	// Expand the file
 	if(m_offset + amount > m_size)
@@ -625,22 +626,21 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 
 		// Read the block
 		uint32_t block = m_inode.block_cache[current_block++];
-		m_volume -> read_block(block, buffer);
+		m_volume -> read_block(block, &buffer);
 
 		// Where in this block to start writing
 		size_t buffer_start = (current_block - 1 == block_start) ? block_offset : 0;
 		size_t writable = (amount - written < block_size - buffer_start) ? (amount - written) : (block_size - buffer_start);
 
 		// Update the block
-		memcpy(buffer + buffer_start, data + written, writable);
-		m_volume ->write_block(block, buffer);
+		buffer.copy_from(data + written, writable, buffer_start);
+		m_volume ->write_block(block, &buffer);
 		written += writable;
 	}
 
 	// Clean up
 	m_offset += amount;
 	m_volume -> ext2_lock.unlock();
-	delete[] buffer;
 }
 
 /**
@@ -649,7 +649,7 @@ void Ext2File::write(uint8_t const *data, size_t amount) {
 * @param data The byte buffer to read into
 * @param amount The amount of data to read
 */
-void Ext2File::read(uint8_t* data, size_t amount) {
+void Ext2File::read(buffer_t* data, size_t amount) {
 
 	// Nothing to read
 	if(m_size == 0 || amount == 0)
@@ -658,7 +658,7 @@ void Ext2File::read(uint8_t* data, size_t amount) {
 	// Prepare for reading
 	m_volume -> ext2_lock.lock();
 	const uint32_t block_size = m_volume -> block_size;
-	auto* buffer = new uint8_t[block_size];
+	buffer_t buffer(block_size, false);
 
 	// Force bounds
 	if(m_offset + amount > m_size)
@@ -675,14 +675,14 @@ void Ext2File::read(uint8_t* data, size_t amount) {
 
 		// Read the block
 		uint32_t block = m_inode.block_cache[current_block++];
-		m_volume -> read_block(block, buffer);
+		m_volume -> read_block(block, &buffer);
 
 		// Where in this block to start reading
 		size_t buffer_start = (current_block - 1 == block_start) ? block_offset : 0;
 		size_t readable = (amount - read < block_size - buffer_start) ? (amount - read) : (block_size - buffer_start);
 
 		// Read the block
-		memcpy(data + read, buffer + buffer_start, readable);
+		buffer.copy_from(data + read, readable, buffer_start);
 		read += readable;
 
 	}
@@ -690,7 +690,6 @@ void Ext2File::read(uint8_t* data, size_t amount) {
 	// Clean up
 	m_offset += amount;
 	m_volume -> ext2_lock.unlock();
-	delete[] buffer;
 }
 
 /**
@@ -713,7 +712,7 @@ Ext2Directory::Ext2Directory(Ext2Volume *volume, uint32_t inode, const string& n
 /**
  * @brief Store all entries from a buffer and convert to File or Directory objects
  */
-void Ext2Directory::parse_block(uint8_t* buffer) {
+void Ext2Directory::parse_block(buffer_t * buffer) {
 
 	size_t offset = 0;
 	while (offset < m_volume -> block_size){
@@ -727,7 +726,7 @@ void Ext2Directory::parse_block(uint8_t* buffer) {
 			break;
 
 		// Parse
-		string filename(buffer + offset + sizeof(directory_entry_t), entry->name_length);
+		string filename(buffer->raw() + offset + sizeof(directory_entry_t), entry->name_length);
 		m_entry_names.push_back(filename);
 		uint32_t inode = entry->inode;
 
@@ -776,7 +775,7 @@ void Ext2Directory::read_from_disk() {
 	m_subdirectories.clear();
 
 	// Read the direct blocks (cant use for( : ))
-	auto* buffer = new uint8_t[m_volume -> block_size];
+	buffer_t buffer(m_volume -> block_size);
 	for (int i = 0; i < m_inode.block_cache.size(); ++i) {
 		uint32_t block_pointer = m_inode.block_cache[i];
 
@@ -785,12 +784,11 @@ void Ext2Directory::read_from_disk() {
 			break;
 
 		// Parse the block
-		m_volume->read_block(block_pointer, buffer);
-		parse_block(buffer);
+		m_volume -> read_block(block_pointer, &buffer);
+		parse_block(&buffer);
 	}
 
 	m_volume -> ext2_lock.unlock();
-	delete[] buffer;
 }
 
 void Ext2Directory::write_entries() {
@@ -807,8 +805,8 @@ void Ext2Directory::write_entries() {
 	// Prepare for writing
 	m_volume -> ext2_lock.lock();
 	const uint32_t block_size = m_volume -> block_size;
-	auto* buffer = new uint8_t[block_size];
-	memset(buffer, 0, block_size);
+	buffer_t buffer(block_size, false);
+	buffer.clear();
 
 	// Expand the directory
 	if(size_required > m_inode.block_cache.size())
@@ -830,8 +828,8 @@ void Ext2Directory::write_entries() {
 
 		// Entry needs to be stored in the next block
 		if(entry.size + buffer_offset > block_size){
-			m_volume ->write_block(m_inode.block_cache[current_block], buffer);
-			memset(buffer, 0, block_size);
+			m_volume ->write_block(m_inode.block_cache[current_block], &buffer);
+			buffer.clear();
 			current_block++;
 			buffer_offset = 0;
 		}
@@ -841,18 +839,17 @@ void Ext2Directory::write_entries() {
 			entry.size = block_size - buffer_offset;
 
 		// Copy the entry and the name
-		memcpy(buffer + buffer_offset, &entry, sizeof(entry));
-		memcpy(buffer + buffer_offset + sizeof(entry), name, entry.name_length + 1);
+		buffer.copy_from(&entry, sizeof(entry), buffer_offset);
+		buffer.copy_from(name, entry.name_length + 1, buffer_offset + sizeof(entry));
 		buffer_offset += entry.size;
 	}
 
 	// Save the last block
-	m_volume -> write_block(m_inode.block_cache[current_block], buffer);
+	m_volume -> write_block(m_inode.block_cache[current_block], &buffer);
 
 	// Clean up
 	m_entries.pop_back();
 	m_entry_names.pop_back();
-	delete[] buffer;
 	m_volume->ext2_lock.unlock();
 }
 

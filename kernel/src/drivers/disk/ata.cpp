@@ -88,7 +88,7 @@ bool AdvancedTechnologyAttachment::identify() {
  * @param data_buffer The data to read into
  * @param amount The amount of bytes to read from that sector
  */
-void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, size_t amount)
+void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t* data_buffer, size_t amount)
 {
     // Don't allow reading more than a sector
     if(sector & 0xF0000000 || amount > m_bytes_per_sector)
@@ -130,11 +130,11 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
 
         // Read from the disk (2 bytes) and store the first byte
         uint16_t read_data = m_data_port.read();
-        data_buffer[i] = read_data & 0x00FF;
+        data_buffer -> write(i, read_data & 0x00FF);
 
         // Place the second byte in the array if there is one
         if(i + 1 < amount)
-            data_buffer[i+1] = (read_data >> 8) & 0x00FF;
+	        data_buffer -> write(i + 1, (read_data >> 8) & 0x00FF);
     }
 
     // Read the remaining bytes as a full sector has to be read
@@ -149,7 +149,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, uint8_t* data_buffer, s
  * @param data The data to write
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, size_t count){
+void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t* data, size_t count){
 
     // Don't allow writing more than a sector
     if(sector > 0x0FFFFFFF || count > m_bytes_per_sector)
@@ -181,11 +181,11 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const uint8_t* data, s
     // Write the data to the device
     for (uint16_t i = 0; i < m_bytes_per_sector; i+= 2) {
 
-        uint16_t  writeData = data[i];
+        uint16_t writeData = data -> read(i);
 
         // Place the next byte in the array if there is one
         if(i+1 < count)
-            writeData |= ((uint16_t)data[i+1]) << 8;
+            writeData |= (uint16_t)(data ->read(i+1)) << 8;
 
         m_data_port.write(writeData);
     }

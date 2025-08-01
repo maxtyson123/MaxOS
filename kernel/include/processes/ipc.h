@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <common/vector.h>
 #include <common/string.h>
+#include <common/buffer.h>
 #include <common/spinlock.h>
 #include <memory/physical.h>
 #include <memory/memoryIO.h>

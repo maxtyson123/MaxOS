@@ -236,11 +236,11 @@ namespace MaxOS {
 
 				  common::Spinlock ext2_lock;
 
-				  void                       write_block(uint32_t block_num, uint8_t* buffer);
+				  void                       write_block(uint32_t block_num, common::buffer_t* buffer);
 				  void                       write_inode(uint32_t inode_num, inode_t* inode);
 			      [[nodiscard]] uint32_t     create_inode(bool is_directory);
 
-				  void                      read_block(uint32_t block_num, uint8_t* buffer) const;
+				  void                      read_block(uint32_t block_num, common::buffer_t* buffer) const;
 				  [[nodiscard]] inode_t     read_inode(uint32_t inode_num) const;
 				  block_group_descriptor_t  read_block_group(uint32_t group_num);
 
@@ -260,7 +260,7 @@ namespace MaxOS {
 			   private:
 			        Ext2Volume* m_volume = nullptr;
 
-				   void parse_indirect(uint32_t level, uint32_t block, uint8_t* buffer);
+				   void parse_indirect(uint32_t level, uint32_t block, common::buffer_t* buffer);
 				   void write_indirect(uint32_t level, uint32_t& block, size_t& index);
 				   void store_blocks(const common::Vector<uint32_t>& blocks);
 
@@ -293,8 +293,8 @@ namespace MaxOS {
 				  Ext2File(Ext2Volume* volume, uint32_t inode, const string& name);
 				  ~Ext2File() final;
 
-				  void write(const uint8_t* data, size_t amount) final;
-				  void read(uint8_t* data, size_t amount) final;
+				  void write(const common::buffer_t* data, size_t amount) final;
+				  void read(common::buffer_t* data, size_t amount) final;
 				  void flush() final;
 		  };
 
@@ -314,7 +314,7 @@ namespace MaxOS {
 				  void write_entries();
 			      directory_entry_t create_entry(const string& name, uint32_t inode, bool is_directory = false);
 
-				  void parse_block(uint8_t* buffer);
+				  void parse_block(common::buffer_t* buffer);
 
 			  public:
 				  Ext2Directory(Ext2Volume* volume, uint32_t inode, const string& name);
