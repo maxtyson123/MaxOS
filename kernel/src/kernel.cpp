@@ -71,16 +71,11 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
-	// FS Tests
-	Directory* newdir = vfs.create_directory("/test/a");
-	for (const auto &item: newdir->subdirectories())
-		Logger::DEBUG() << "DIRECTORY: " << item->name() << "\n";
-
-//	File* newf = vfs.create_file("/test/bob.txt");
-//	uint32_t write = 12 * 700;
-//	auto* test_data = new uint8_t[write];
-//	memset(test_data, (uint32_t)'a', write);
-//	newf -> write(test_data, write);
+	// FS Tests (TOOD: Cant read contents of maxos created entries)
+	File* file = vfs.open_file("/test/working.file");
+	buffer_t fb(100);
+	file->read(&fb, 100);
+	Logger::DEBUG() << "FILE:" << (char*)fb.raw() << "\n";
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -98,16 +93,12 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 //  - [x] Read subdirectories contents
 //  - [x] Read files
 //  - [x] Write files
-//  - [ ] Create subdirectories
+//  - [x] Create subdirectories
 //  - [ ] Delete subdirectories
 //  - [ ] Rename directory
 //  - [ ] Rename file
-//  - [ ] Create files
+//  - [x] Create files
 //  - [ ] Delete files
-//  - [ ] Create files on a different mount point
-//  - [ ] Delete files on a different mount point
-//  - [ ] Read directories on a different mount point
-//  - [ ] Create directories on a different mount point
 //  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, large file r/w
 
 

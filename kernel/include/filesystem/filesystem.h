@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <common/string.h>
 #include <common/vector.h>
+#include <common/buffer.h>
 
 namespace MaxOS{
 
@@ -55,8 +56,8 @@ namespace MaxOS{
                 File();
                 virtual ~File();
 
-                virtual void write(const uint8_t* data, size_t size);
-                virtual void read(uint8_t* data, size_t size);
+                virtual void write(const common::buffer_t* data, size_t size);
+                virtual void read(common::buffer_t* data, size_t size);
                 virtual void flush();
 
                 void seek(SeekType seek_type, size_t offset);
@@ -104,8 +105,6 @@ namespace MaxOS{
 
                 string name();
                 size_t size();
-
-                void debug_print(int level = 0);
         };
 
         /**

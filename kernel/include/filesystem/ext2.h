@@ -150,13 +150,13 @@ namespace MaxOS {
 
 		  enum class InodeType {
 			  UNKNOWN,
-			  FILE,
-			  DIRECTORY,
-			  CHARACTER_DEVICE,
-			  BLOCK_DEVICE,
-			  FIFO,
-			  SOCKET,
-			  SYMBOLIC_LINK
+			  FIFO              = 0x1000,
+			  CHARACTER_DEVICE  = 0x2000,
+			  DIRECTORY         = 0x4000,
+			  BLOCK_DEVICE      = 0x6000,
+			  FILE              = 0x8000,
+			  SYMBOLIC_LINK     = 0xA000,
+			  SOCKET            = 0xC000,
 		  };
 
 		  enum class InodePermissions{
@@ -172,6 +172,12 @@ namespace MaxOS {
 			  STICKY        = 0x200,
 			  GROUP_ID      = 0x400,
 			  USER_ID       = 0x800,
+		  };
+
+		  enum class InodePermissionsDefaults{
+			  FILE      = 0x1A4,
+			  DIRECTORY = 0x1ED,
+
 		  };
 
 		  enum class InodeFlags{
@@ -206,6 +212,17 @@ namespace MaxOS {
 			  // Rest are name chars
 		  } __attribute__((packed)) directory_entry_t;
 
+		  enum class EntryType {
+			  UNKNOWN,
+			  FILE,
+			  DIRECTORY,
+			  CHARACTER_DEVICE,
+			  BLOCK_DEVICE,
+			  FIFO,
+			  SOCKET,
+			  SYMBOLIC_LINK
+		  };
+
 		  class Ext2Volume {
 
 			  private:
@@ -224,7 +241,7 @@ namespace MaxOS {
 				  block_group_descriptor_t** block_groups;
 
 				  size_t    block_size;
-				  uint32_t  block_group_descriptor_table;
+			      uint32_t  block_group_descriptor_table_block;
 				  uint32_t  block_group_descriptor_table_size;
 				  uint32_t  total_block_groups;
 				  size_t    pointers_per_block;
@@ -242,7 +259,6 @@ namespace MaxOS {
 
 				  void                      read_block(uint32_t block_num, common::buffer_t* buffer) const;
 				  [[nodiscard]] inode_t     read_inode(uint32_t inode_num) const;
-				  block_group_descriptor_t  read_block_group(uint32_t group_num);
 
 			      [[nodiscard]] uint32_t                  allocate_block();
 			      [[nodiscard]] common::Vector<uint32_t>  allocate_blocks(uint32_t amount);

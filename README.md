@@ -194,7 +194,7 @@ No user usage so far (userland will be added in the future)
 
 <!-- ROADMAP -->
 ## Roadmap
-
+#### Core Kernel
 - [x] Bootloader
 - [x] GDT
 - [x] IDT
@@ -215,23 +215,24 @@ No user usage so far (userland will be added in the future)
 - [ ] Multiple Cores Support (SMP & Scheduler)
 - [ ] Move drivers to userspace 
 - [ ] Move VFS to userspace
-- [ ] Userland GUI
-- [ ] CLI
 - [ ] Porting & Dynamically Linking Libc
-- [ ] Self-hosted os
-- [ ] App Framework & System Apps
-- [ ] DOOM Port
 - [ ] Move networking to userspace (& rewrite, fix)
+
+#### Userland
+- [ ] GUI
+- [ ] Terminal
 - [ ] Connect to Clion with SMB for files and GDB for debugging in userspace
+- [ ] DOOM Port
+- [ ] Self-hosted os
+- [ ] GUI Framework
+- [ ] App Framework & System Apps
 - [ ] Auto Updater & Image Builder (ISO Release)
 - [ ] Store
 - [ ] User Switching
 - [ ] Real Hardware Support
-- [ ] Pretty GUI
 - [ ] Port NeoVim, Wakatime & Some hot reloader
 - [ ] Create port of my 2048
 - [ ] Own LibC
-- [ ] Compatibility Layer(s)
  
 See the [open issues](https://github.com/maxtyson123/MaxOS/issues) for a full list of proposed features (and known issues).
 

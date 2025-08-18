@@ -136,7 +136,7 @@ File::~File() = default;
  * @param data The byte buffer to write
  * @param size The amount of data to write
  */
-void File::write(const uint8_t* data, size_t amount)
+void File::write(const common::buffer_t* data, size_t amount)
 {
 }
 
@@ -146,7 +146,7 @@ void File::write(const uint8_t* data, size_t amount)
  * @param data The byte buffer to read into
  * @param size The amount of data to read
  */
-void File::read(uint8_t* data, size_t amount)
+void File::read(common::buffer_t* data, size_t amount)
 {
 }
 

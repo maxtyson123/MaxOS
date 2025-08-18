@@ -130,11 +130,11 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t* data_buffer, 
 
         // Read from the disk (2 bytes) and store the first byte
         uint16_t read_data = m_data_port.read();
-        data_buffer -> write(i, read_data & 0x00FF);
+        data_buffer -> write(read_data & 0x00FF);
 
         // Place the second byte in the array if there is one
         if(i + 1 < amount)
-	        data_buffer -> write(i + 1, (read_data >> 8) & 0x00FF);
+	        data_buffer -> write((read_data >> 8) & 0x00FF);
     }
 
     // Read the remaining bytes as a full sector has to be read
@@ -181,11 +181,11 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t* data, 
     // Write the data to the device
     for (uint16_t i = 0; i < m_bytes_per_sector; i+= 2) {
 
-        uint16_t writeData = data -> read(i);
+        uint16_t writeData = data -> read();
 
         // Place the next byte in the array if there is one
         if(i+1 < count)
-            writeData |= (uint16_t)(data ->read(i+1)) << 8;
+            writeData |= (uint16_t)(data ->read()) << 8;
 
         m_data_port.write(writeData);
     }

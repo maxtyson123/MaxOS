@@ -34,17 +34,20 @@ namespace MaxOS{
 				~Buffer();
 
 				uint8_t* raw() const;
+
 				void clear();
+				void full(uint8_t byte, size_t offset = 0, size_t amount = 0);
 
 				bool update_offset = true;
+				void set_offset(size_t offset);
 
 				size_t capacity() const;
 				void resize(size_t size);
 
-				void set_offset(size_t offset);
-
+				void write(uint8_t byte);
 				void write(size_t offset, uint8_t byte);
-				uint8_t read(size_t offset) const;
+				uint8_t read();
+				uint8_t read(size_t offset);
 
 				void copy_from(const Buffer* buffer);
 				void copy_from(const Buffer* buffer, size_t length);

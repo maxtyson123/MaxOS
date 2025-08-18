@@ -42,10 +42,8 @@ Buffer::Buffer(void* source, size_t size, bool update_offset)
  * @brief Destroy the buffer, freeing the memory
  */
 Buffer::~Buffer() {
-	Logger::DEBUG() << "CLEARING BUFFER\n";
-
-	if(!m_dont_delete)
-		delete m_bytes;
+	if(!m_dont_delete && m_bytes)
+		delete[] m_bytes;
 }
 
 /**
@@ -58,11 +56,29 @@ uint8_t *Buffer::raw() const{
 }
 
 /**
- * @brief Fulls the buffer with 0's
+ * @brief Fulls the buffer with 0's and resets the offset
  */
 void Buffer::clear() {
 
+	m_offset = 0;
 	memset(m_bytes, 0, m_capacity);
+}
+
+/**
+ * @brief Full the buffer with a specified byte at an offset
+ *
+ * @param byte The byte to write
+ * @param offset Where to start writing (deafults to 0)
+ * @param amount
+ */
+void Buffer::full(uint8_t byte, size_t offset, size_t amount) {
+
+	// Prevent writing past the buffer bounds
+	if (amount == 0) amount = m_capacity - m_offset - offset;
+	ASSERT(m_offset + offset + amount <= capacity(), "Buffer overflow");
+
+	memset(m_bytes + m_offset + offset, byte, amount);
+
 }
 
 /**
@@ -84,12 +100,16 @@ void Buffer::resize(size_t size) {
 	auto* new_buffer = new uint8_t[size];
 
 	// Copy the old buffer
-	memcpy(new_buffer, m_bytes, m_capacity);
+	if(m_bytes)
+		memcpy(new_buffer, m_bytes, m_capacity);
 
 	// Store the new buffer
-	delete m_bytes;
-	m_bytes = new_buffer;
-	m_capacity = size;
+	if(!m_dont_delete && m_bytes)
+		delete[] m_bytes;
+
+	m_bytes         = new_buffer;
+	m_capacity      = size;
+	m_dont_delete   = true;
 
 }
 
@@ -100,9 +120,21 @@ void Buffer::resize(size_t size) {
  */
 void Buffer::set_offset(size_t offset) {
 
-	m_offset = offset;
+	if(update_offset)
+		m_offset = offset;
 
 }
+
+/**
+ * @brief Safely writes a byte to the buffer at the current offset
+ *
+ * @param byte The byte to write
+ */
+void Buffer::write(uint8_t byte) {
+	m_bytes[m_offset] = byte;
+	set_offset(m_offset + 1);
+}
+
 
 /**
  * @brief Safely writes a byte to the buffer at the specified offset
@@ -117,7 +149,18 @@ void Buffer::write(size_t offset, uint8_t byte) {
 
 	// Set the byte
 	m_bytes[m_offset + offset] = byte;
+	set_offset(m_offset + 1);
 
+}
+
+/**
+ * @brief Safely reads a byte from the buffer at the current offset
+ *
+ * @param offset The offset into the buffer storage array
+ */
+uint8_t Buffer::read() {
+	set_offset(m_offset + 1);
+	return m_bytes[m_offset - 1];
 }
 
 /**
@@ -125,13 +168,14 @@ void Buffer::write(size_t offset, uint8_t byte) {
  *
  * @param offset The offset into the buffer storage array
  */
-uint8_t Buffer::read(size_t offset) const {
+uint8_t Buffer::read(size_t offset) {
 
 	// Prevent writing past the buffer bounds
 	ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
 
 	// Set the byte
-	return m_bytes[m_offset + offset];
+	set_offset(m_offset + 1);
+	return m_bytes[(m_offset - 1) + offset];
 }
 
 /**
@@ -181,6 +225,7 @@ void Buffer::copy_from(const Buffer *buffer, size_t length, size_t offset) {
  * @param source Where to read from
  * @param length How much to read
  * @param offset Where to start writing into this at
+ * @param offset Where to start reading from the other buffer
  */
 void Buffer::copy_from(const Buffer *buffer, size_t length, size_t offset, size_t offset_other) {
 
@@ -201,10 +246,7 @@ void Buffer::copy_from(void const *source, size_t length) {
 	// Copy the bytes
 	ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity");
 	memcpy(m_bytes + m_offset, source, length);
-
-	// Update the offset
-	if(update_offset)
-		set_offset(m_offset + length);
+	set_offset(m_offset + length);
 }
 
 /**
@@ -219,10 +261,7 @@ void Buffer::copy_from(void const *source, size_t length, size_t offset) {
 	// Copy the bytes
 	ASSERT((length  + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
 	memcpy(m_bytes + offset + m_offset, source, length);
-
-	// Update the offset
-	if(update_offset)
-		set_offset(m_offset + length);
+	set_offset(m_offset + length);
 
 }
 
@@ -296,10 +335,7 @@ void Buffer::copy_to(void* destination, size_t length) {
 	// Copy the bytes
 	ASSERT(length + m_offset <= (m_capacity), "Copy exceeds buffer capacity");
 	memcpy(destination, m_bytes + m_offset, length);
-
-	// Update the offset
-	if(update_offset)
-		set_offset(m_offset + length);
+	set_offset(m_offset + length);
 
 }
 
@@ -315,9 +351,6 @@ void Buffer::copy_to(void *destination, size_t length, size_t offset) {
 	// Copy the bytes
 	ASSERT((length  + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
 	memcpy(destination, m_bytes + offset + m_offset, length);
-
-	// Update the offset
-	if(update_offset)
-		set_offset(m_offset + length);
+	set_offset(m_offset + length);
 
 }
