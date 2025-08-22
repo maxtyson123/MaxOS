@@ -6,6 +6,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::filesystem;
+using namespace MaxOS::common;
 
 VirtualFileSystem::VirtualFileSystem()
 {
@@ -256,7 +257,7 @@ Directory* VirtualFileSystem::root_directory()
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
  */
-Directory* VirtualFileSystem::open_directory(string path)
+Directory* VirtualFileSystem::open_directory(const string& path)
 {
     // Ensure a valid path is given
     if (!Path::vaild(path))
@@ -281,7 +282,7 @@ Directory* VirtualFileSystem::open_directory(string path)
 }
 
 /**
- * @brief Try to create a directory on the virtual file system & read its contents
+ * @brief Attempts to open the parent directory and creates the sub directory at the end of the path
  *
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
@@ -301,19 +302,34 @@ Directory* VirtualFileSystem::create_directory(string path)
 
     // Open the parent directory
     Directory* parent_directory = open_directory(path);
-    if (!parent_directory)
-        return nullptr;
+    if(!parent_directory)
+	    return nullptr;
 
-    // Create the directory
-    string directory_name = Path::file_name(path);
-    Directory* directory =  parent_directory -> create_subdirectory(directory_name);
-    directory -> read_from_disk();
+	string directory_name = Path::file_name(path);
+	return create_directory(parent_directory, directory_name);
 
-    return directory;
 }
 
 /**
- * @brief Delete a directory on the virtual file system
+ * @brief Creates a subdirectory in the specified directory and
+ *
+ * @param parent Where to create the directory
+ * @param name The name of the new directory
+ * @return The created directory
+ */
+Directory *VirtualFileSystem::create_directory(Directory *parent, string const &name) {
+
+	// Create the directory
+	Directory* directory =  parent -> create_subdirectory(name);
+	directory -> read_from_disk();
+
+	return directory;
+
+}
+
+
+/**
+ * @brief Attempts to open the parent directory and deletes the sub directory at the end of the path
  *
  * @param path The path to the directory
  */
@@ -326,23 +342,87 @@ void VirtualFileSystem::delete_directory(string path)
     path = path.strip('/');
 
     // Open the directory
-    Directory* directory = open_directory(path);
-    if (!directory)
-        return;
+    Directory* parent_directory = open_directory(path);
+	if (!parent_directory)
+		return;
 
-    // Delete the directory
-    string directory_name = Path::file_name(path);
-    directory -> remove_subdirectory(directory_name);
+	// Delete the directory
+	string directory_name = Path::file_name(path);
+	delete_directory(parent_directory, directory_name);
+
+}
+
+/**
+ * @brief Delete a directory on the virtual file system and it's sub contents
+ *
+ * @param parent The directory that contains the reference to the directory being deleted
+ * @param name The name of the directory to delete
+ */
+void VirtualFileSystem::delete_directory(Directory* parent, const string& name) {
+
+	// Find the directory and delete it
+	for(const auto& directory : parent -> subdirectories())
+		if(directory -> name() == name)
+			delete_directory(parent, directory);
+
+}
+
+/**
+ * @brief Delete a directory on the virtual file system and it's sub contents
+ *
+ * @param parent The directory that contains the reference to the directory being deleted
+ * @param directory The the directory to delete
+ */
+void VirtualFileSystem::delete_directory(Directory *parent, Directory *directory) {
+
+	// Nothing to delete
+	if(!directory)
+		return;
+
+	// Store a reference to each subdirectory and its parent
+	Map<Directory*, Directory*> stack;
+	Vector<Pair<Directory*, Directory*>> to_delete;
+	stack.push_back(parent, directory);
+
+	while (!stack.empty()){
+
+		// Save the current
+		auto current = stack.pop_back();
+		auto current_directory = current.second;
+		current_directory->read_from_disk();
+		to_delete.push_back({current.first, current_directory});
+
+		// Empty the directory
+		for(const auto& file : current_directory->files())
+			delete_file(current_directory, file->name());
+
+		// Process the subdirectories
+		for(const auto& subdir : current_directory->subdirectories())
+			if(subdir -> name() != "." && subdir -> name() != "..")
+				stack.push_back(current_directory, subdir);
+
+	}
+
+	// Delete the directory from the bottom of the tree
+	for (int i = to_delete.size() - 1; i >= 0; --i) {
+
+		// Get the parent and child
+		const auto& current = to_delete[i];
+		Directory* owner                    = current.first;
+		Directory* subdirectory             = current.second;
+
+		owner->remove_subdirectory(subdirectory->name());
+	}
 }
 
 
 /**
- * @brief Try to create a file on the virtual file system
+ * @brief Attempts to open the parent directory and create the file at the end of the path
  *
  * @param path The path to the file (including the extension)
  * @return The file object or null if it could not be created
  */
-File* VirtualFileSystem::create_file(string path)
+File* VirtualFileSystem::create_file(const string& path)
 {
     // Ensure a valid path is given
     if (!Path::vaild(path))
@@ -355,21 +435,17 @@ File* VirtualFileSystem::create_file(string path)
 
     // Create the file
     string file_name = Path::file_name(path);
-    return directory -> create_file(file_name);
+	return create_file(directory, file_name);
 }
 
 /**
- * @brief Try to open a file on the virtual file system
+ * @brief Create a file in a directory
  *
- * @param path The path to the file (including the extension)
- * @return The file object or null if it could not be opened
+ * @param parent The directory where the file should be created
+ * @param name The name of the file to create
  */
-File* VirtualFileSystem::open_file(string path)
-{
-
-    // Open the file at the start
-    return open_file(path, 0);
-
+File* VirtualFileSystem::create_file(Directory *parent, string const &name) {
+	return parent -> create_file(name);
 }
 
 
@@ -377,10 +453,10 @@ File* VirtualFileSystem::open_file(string path)
  * @brief Try to open a file on the virtual file system with a given offset
  *
  * @param path The path to the file (including the extension)
- * @param offset The offset to seek to
- * @return
+ * @param offset The offset to seek to (default = 0)
+ * @return The file or null pointer if not found
  */
-File* VirtualFileSystem::open_file(string path, size_t offset)
+File* VirtualFileSystem::open_file(const string& path, size_t offset)
 {
     // Ensure a valid path is given
     if (!Path::vaild(path))
@@ -389,26 +465,39 @@ File* VirtualFileSystem::open_file(string path, size_t offset)
     // Open the directory
     Directory* directory = open_directory(path);
     if (!directory)
-        return nullptr;
+		return nullptr;
 
-    // Open the file
-    File* opened_file = directory -> open_file(Path::file_name(path));
-    if (!opened_file)
-        return nullptr;
+	return open_file(directory, Path::file_name(path), offset);
 
-    // Seek to the offset
-    opened_file -> seek(SeekType::SET, offset);
-
-    // File opened successfully
-    return opened_file;
 }
 
 /**
- * @brief Delete a file on the virtual file system
+ * @brief Opens a file in a directory with the given offset
+ *
+ * @param parent The directory containing the file
+ * @param name The name of the file to open
+ * @param offset How far in the file to open (default = 0)
+ * @return The file or null pointer if not found
+ */
+File *VirtualFileSystem::open_file(Directory *parent, string const &name, size_t offset) {
+
+	// Open the file
+	File* opened_file = parent -> open_file(name);
+	if (!opened_file)
+		return nullptr;
+
+	// Seek to the offset
+	opened_file -> seek(SeekType::SET, offset);
+
+	return opened_file;
+}
+
+/**
+ * @brief Opens a directory on the vfs and deletes the file at the end of the path
  *
  * @param path The path to the file (including the extension)
  */
-void VirtualFileSystem::delete_file(string path)
+void VirtualFileSystem::delete_file(const string& path)
 {
     // Ensure a valid path is given
     if (!Path::vaild(path))
@@ -417,9 +506,23 @@ void VirtualFileSystem::delete_file(string path)
     // Open the directory
     Directory* directory = open_directory(path);
     if (!directory)
-        return;
+       return;
 
-    // Delete the file
-    string file_name = Path::file_name(path);
-    directory -> remove_file(file_name);
+	// Delete the file
+	string file_name = Path::file_name(path);
+	delete_file(directory, file_name);
+
+}
+
+/**
+ * @brief Delete a file in the given directory
+ *
+ * @param parent The directory containing the file
+ * @param name The name of the file
+ */
+void VirtualFileSystem::delete_file(Directory *parent, string const &name) {
+
+	// Delete the file
+	parent -> remove_file(name);
+
 }

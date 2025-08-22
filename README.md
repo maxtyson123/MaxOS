@@ -228,6 +228,7 @@ No user usage so far (userland will be added in the future)
 - [ ] App Framework & System Apps
 - [ ] Auto Updater & Image Builder (ISO Release)
 - [ ] Store
+- [ ] Security of some sort
 - [ ] User Switching
 - [ ] Real Hardware Support
 - [ ] Port NeoVim, Wakatime & Some hot reloader

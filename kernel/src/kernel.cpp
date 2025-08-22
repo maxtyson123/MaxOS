@@ -72,10 +72,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.activate_drivers();
 
 	// FS Tests (TOOD: Cant read contents of maxos created entries)
-	File* file = vfs.open_file("/test/working.file");
-	buffer_t fb(100);
-	file->read(&fb, 100);
-	Logger::DEBUG() << "FILE:" << (char*)fb.raw() << "\n";
+	vfs.delete_directory("/test/bob/");
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -94,14 +91,15 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 //  - [x] Read files
 //  - [x] Write files
 //  - [x] Create subdirectories
-//  - [ ] Delete subdirectories
+//  - [X] Delete subdirectories (and test deletes sub contents)
 //  - [ ] Rename directory
 //  - [ ] Rename file
 //  - [x] Create files
-//  - [ ] Delete files
+//  - [X] Delete files
 //  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, large file r/w
 
 
+//  - Fix multiple def where could be a parameter (idk why I needed two functions for that)
 //  - Fix tabs (mac mess up)
 //  - Userspace Files (syscalls, proper path handling, working directories, file handles)
 //  - Class & Struct docstrings

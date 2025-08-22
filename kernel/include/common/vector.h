@@ -55,17 +55,18 @@ namespace MaxOS{
 	        Vector<Type>& operator=(const Vector<Type>& other);
 	        Vector<Type>& operator=(Vector<Type>&& other);
 
-            [[nodiscard]] bool empty() const;            [[nodiscard]] uint32_t size() const;
+            [[nodiscard]] bool empty() const;
+			[[nodiscard]] uint32_t size() const;
 
             iterator begin() const;
             iterator end() const;
             iterator find(Type) const;
 
             iterator push_back(Type);
-            void pop_back();
+            Type pop_back();
 
             iterator push_front(Type);
-            void pop_front();
+            Type pop_front();
 
             void erase(Type);
             void erase(iterator position);
@@ -257,10 +258,10 @@ namespace MaxOS{
         }
 
         /**
-         * @brief Returns the m_first_memory_chunk element of the Vector
+         * @brief Returns the first element of the Vector
          *
          * @tparam Type Type of the Vector
-         * @return The m_first_memory_chunk element of the Vector
+         * @return The first element of the Vector
          */
         template<class Type> typename Vector<Type>::iterator Vector<Type>::begin() const{
             return &m_elements[0];
@@ -327,11 +328,13 @@ namespace MaxOS{
          * @brief Removes the last element from the Vector
          * @tparam Type Type of the Vector
          */
-        template<class Type> void Vector<Type>::pop_back() {
+        template<class Type> Type Vector<Type>::pop_back() {
 
             // Remove the last element from the Vector
             if (m_size > 0)
                     --m_size;
+
+	        return m_elements[m_size];
         }
 
         /**
@@ -364,11 +367,13 @@ namespace MaxOS{
          *
          * @tparam Type Type of the Vector
          */
-        template<class Type> void Vector<Type>::pop_front() {
+        template<class Type> Type Vector<Type>::pop_front() {
 
 	        // Make sure the Vector is not empty
 	        if (m_size == 0)
 	          return;
+
+			Type element = m_elements[0];
 
             // Move all elements one index to the left
 	        for (uint32_t i = 0; i < m_size - 1; ++i)
@@ -376,6 +381,7 @@ namespace MaxOS{
 
             // Decrease the size of the Vector
             --m_size;
+	        return element;
         }
 
         /**

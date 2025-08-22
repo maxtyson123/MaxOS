@@ -6,6 +6,7 @@
 #define MAXOS_FILESYSTEM_VFS_H
 
 #include <common/map.h>
+#include <common/pair.h>
 #include <filesystem/filesystem.h>
 
 namespace MaxOS{
@@ -36,14 +37,23 @@ namespace MaxOS{
           string get_relative_path(FileSystem* filesystem, string path);
 
           Directory* root_directory();
-          Directory* open_directory(string path);
-          Directory* create_directory(string path);
-          void delete_directory(string path);
+          Directory* open_directory(const string& path);
 
-          File* create_file(string path);
-          File* open_file(string path);
-          File* open_file(string path, size_t offset);
-          void delete_file(string path);
+		  Directory* create_directory(string path);
+		  static Directory* create_directory(Directory* parent, const string& name);
+
+          void delete_directory(string path);
+          static void delete_directory(Directory* parent, const string& name);
+          static void delete_directory(Directory* parent, Directory* directory);
+
+          File* create_file(const string& path);
+          static File* create_file(Directory* parent, const string& name);
+
+          File* open_file(const string& path, size_t offset = 0);
+          static File* open_file(Directory* parent, const string& name, size_t offset = 0);
+
+          void delete_file(const string& path);
+          static void delete_file(Directory* parent, const string& name);
       };
   }
 }

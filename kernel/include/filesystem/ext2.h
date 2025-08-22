@@ -227,7 +227,10 @@ namespace MaxOS {
 
 			  private:
 			     common::Vector<uint32_t>  allocate_group_blocks(uint32_t block_group, uint32_t amount);
-				 void write_back_block_groups();
+			     void                      free_group_blocks(uint32_t block_group, uint32_t amount, uint32_t start);
+
+
+				 void write_back_block_groups() const;
 				 void write_back_superblock();
 
 			  public:
@@ -255,7 +258,9 @@ namespace MaxOS {
 
 				  void                       write_block(uint32_t block_num, common::buffer_t* buffer);
 				  void                       write_inode(uint32_t inode_num, inode_t* inode);
+
 			      [[nodiscard]] uint32_t     create_inode(bool is_directory);
+			      void                       free_inode(uint32_t inode);
 
 				  void                      read_block(uint32_t block_num, common::buffer_t* buffer) const;
 				  [[nodiscard]] inode_t     read_inode(uint32_t inode_num) const;
@@ -263,6 +268,9 @@ namespace MaxOS {
 			      [[nodiscard]] uint32_t                  allocate_block();
 			      [[nodiscard]] common::Vector<uint32_t>  allocate_blocks(uint32_t amount);
 			      [[nodiscard]] uint32_t                  bytes_to_blocks(size_t bytes) const;
+
+				  void free_blocks(const common::Vector<uint32_t>& blocks);
+
 
 			  // TODO: free blocks
 		  };
@@ -293,6 +301,8 @@ namespace MaxOS {
 					size_t grow(size_t amount, bool flush = true);
 
 					void save();
+
+					void free();
 
 		   };
 

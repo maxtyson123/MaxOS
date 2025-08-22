@@ -42,29 +42,39 @@ namespace MaxOS{
                 Vector<Pair<Key, Value>> m_elements;
 
             public:
-                typedef typename Vector<Pair<Key, Value> >::iterator iterator;
+                typedef typename Vector<Pair<Key, Value>>::iterator iterator;
 
                 Map();
                 ~Map();
 
-                Value& operator[](Key);
+	            Value& operator[](Key);
+
+		        bool empty();
+		        int size();
+
                 iterator begin();
                 iterator end();
                 iterator find(Key);
 
-                bool empty();
-                int size();
-            
-                void clear();
-                void insert(Key, Value);
-                void erase(Key);
+		        iterator push_back(Key, Value);
+	            Pair<Key, Value> pop_back();
+
+		        iterator push_front(Key, Value);
+	            Pair<Key, Value> pop_front();
+
+	            void insert(Key, Value);
+
+		        void erase(Key);
+		        void erase(iterator position);
+		        void clear();
 
                 void iterate(MapIterationHandler<Key, Value>* handler);
                 void iterate(void callback(Key&, Value&));
 
         };
 
-        /// ______________ TEMPLATE IMPLEMENTATION ______________
+
+	    /// ______________ TEMPLATE IMPLEMENTATION ______________
         template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() = default;
 
         template<class Key, class Value> MapIterationHandler<Key, Value>::~MapIterationHandler() = default;
@@ -139,20 +149,32 @@ namespace MaxOS{
          */
         template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::find(Key element) {
 
-            // Loop through the elements
-            for (iterator it = begin(); it != end(); it++) {
-
-                // If the key of the current element is equal to the key we are looking for
-                if (it -> first == element) {
-                    // Return the iterator
+            // Search for the element
+            for (iterator it = begin(); it != end(); it++)
+                if (it -> first == element)
                     return it;
-                }
-            }
 
-            // If it is not found, return the end iterator
+            // Item not found
             return end();
 
         }
+
+	    template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_back(Key key, Value value) {
+		    return m_elements.push_back(Pair<Key, Value>(key, value));
+	    }
+
+	    template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_back() {
+		    return m_elements.pop_back();
+	    }
+
+	    template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_front(Key key, Value value) {
+		    return m_elements.push_front({key, value});
+	    }
+
+	    template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_front() {
+		    return m_elements.pop_front();
+	    }
+
 
         /**
          * @brief Returns whether the map is empty
@@ -227,6 +249,11 @@ namespace MaxOS{
             }
 
         }
+
+	    template<class Key, class Value> void Map<Key, Value>::erase(Map::iterator position) {
+			m_elements.erase(position);
+
+	    }
 
         /**
          * @brief Iterates through the map and calls the handler

@@ -263,9 +263,49 @@ common::Vector<uint32_t> Ext2Volume::allocate_group_blocks(uint32_t block_group,
 }
 
 /**
+ * @brief Free a certain amount of blocks in a block group and zero's them out.
+ *
+ * @param block_group The block group where the blocks exist
+ * @param amount The amount of blocks to free
+ */
+void Ext2Volume::free_group_blocks(uint32_t block_group, uint32_t amount, uint32_t start) {
+
+
+	// Read bitmap
+	block_group_descriptor_t* descriptor = block_groups[block_group];
+	buffer_t bitmap (block_size);
+	read_block(descriptor -> block_usage_bitmap, &bitmap);
+
+	// Convert start to be index based on the group instead of global
+	start -= (block_group * superblock.blocks_per_group + superblock.starting_block);
+
+	// Free the blocks
+	for (uint32_t i = start; i < amount; ++i) {
+
+		// Block is already free (shouldn't happen)
+		if((bitmap.raw()[i / 8] & (1u << (i % 8))) == 0)
+			continue;
+
+		// Mark as free
+		descriptor -> free_blocks++;
+		superblock.unallocated_blocks++;
+		bitmap.raw()[i / 8] &= ~(1u << (i % 8));
+
+		// TODO: Decide whether to zero out or not, my implementation zeros on allocation but idk about others
+	}
+
+	// Save the changed metadata
+	write_block(descriptor -> block_usage_bitmap, &bitmap);
+	write_back_block_groups();
+	write_back_superblock();
+
+}
+
+
+/**
  * @brief Save any changes of the block groups to the disk
  */
-void Ext2Volume::write_back_block_groups() {
+void Ext2Volume::write_back_block_groups() const {
 
 	// Locate the block groups
 	uint32_t bgdt_blocks        = (block_group_descriptor_table_size + block_size - 1) / block_size;
@@ -310,7 +350,7 @@ uint32_t Ext2Volume::bytes_to_blocks(size_t bytes) const {
 }
 
 /**
- * @brief Creates a new inode
+ * @brief Allocates a new inode and sets the base metadata. Also allocates block 0 of the inode
  *
  * @param is_directory is the inode to be used for a directory
  * @return The new inode
@@ -372,6 +412,86 @@ uint32_t Ext2Volume::create_inode(bool is_directory) {
 	return inode_index;
 
 }
+
+/**
+ * @brief Mark an inode as free. Note: does NOT unallocated the inodes blocks, use free_group_blocks().
+ * @see free_group_blocks
+ *
+ * @param inode The inode number to mark as free
+ */
+void Ext2Volume::free_inode(uint32_t inode) {
+
+
+	// Find the block group containing the inode
+	uint32_t bg_index = (inode - 1) / superblock.inodes_per_group;
+	block_group_descriptor_t* block_group = block_groups[bg_index];
+
+	// Read bitmap
+	buffer_t bitmap(block_size);
+	read_block(block_group -> block_inode_bitmap, &bitmap);
+
+	// First group contains reserved inodes
+	uint32_t inode_index = (inode - 1) % superblock.inodes_per_group;
+	if (bg_index == 0 && superblock.first_inode > 1)
+		return;
+
+	// Mark as used
+	block_group -> free_inodes++;
+	superblock.unallocated_inodes++;
+	bitmap.raw()[inode_index / 8] &= (uint8_t) ~(1u << (inode_index % 8));
+
+
+	// Save the changed metadata
+	write_block(block_group -> block_inode_bitmap, &bitmap);
+	write_back_block_groups();
+	write_back_superblock();
+}
+
+
+/**
+ * @brief Frees a group of blocks. Preferably with adjacent blocks apearing next to each other but not enforced.
+ * @param blocks The blocks to free
+ */
+void Ext2Volume::free_blocks(const common::Vector<uint32_t>& blocks) {
+
+	// No blocks to free
+	if(blocks.empty())
+		return;
+
+	uint32_t start      = blocks[0];
+	uint32_t previous   = start;
+	uint32_t amount     = 1;
+
+	// Free each adjacent set of blocks
+	for(auto& block : blocks ){
+
+		// First is already accounted for
+		if (block == start)
+			continue;
+
+		// Is this block adjacent
+		if((previous + 1) == block){
+			previous = block;
+			amount += 1;
+			continue;
+		}
+
+		// Adjacent set has ended
+		uint32_t group = (start - superblock.starting_block) / superblock.blocks_per_group;
+		free_group_blocks(group, amount, start);
+
+		// Reset
+		start = block;
+		previous = start;
+		amount = 1;
+	}
+
+	// Account for the last set of blocks in the loop
+	uint32_t group = (start - superblock.starting_block) / superblock.blocks_per_group;
+	free_group_blocks(group, amount, start);
+
+}
+
 
 InodeHandler::InodeHandler(Ext2Volume* volume, uint32_t inode_index)
 : m_volume(volume),
@@ -560,9 +680,27 @@ size_t InodeHandler::grow(size_t amount, bool flush) {
 
 }
 
+/**
+ * @brief Writes the inode meta data to disk
+ */
 void InodeHandler::save() {
 
 	m_volume -> write_inode(inode_number, &inode);
+}
+
+/**
+ * @brief Marks this inode's blocks as free and then the inode as free
+ */
+void InodeHandler::free() {
+
+	m_volume -> ext2_lock.lock();
+
+	// Free the inode
+	m_volume -> free_blocks(block_cache);
+	m_volume -> free_inode(inode_number);
+
+	m_volume -> ext2_lock.unlock();
+
 }
 
 InodeHandler::~InodeHandler() = default;
@@ -853,12 +991,6 @@ directory_entry_t Ext2Directory::create_entry(const string& name, uint32_t inode
 	m_entry_names.push_back(name);
 	write_entries();
 
-	// subdirectories' ".." hard links to this entry
-	if(is_directory && !inode){
-		m_inode.inode.hard_links++;
-		m_inode.save();
-	}
-
 	return entry;
 }
 
@@ -887,7 +1019,28 @@ File *Ext2Directory::create_file(string const &name) {
  * @param name The name of the file to delete
  */
 void Ext2Directory::remove_file(string const &name) {
-	Directory::remove_file(name);
+
+	// Find the entry
+	uint32_t index = 0;
+	directory_entry_t* entry = nullptr;
+	for (; index < m_entries.size(); ++index)
+		if(m_entry_names[index] == name){
+			entry = &m_entries[index];
+			break;
+		}
+
+	// No entry found
+	if(!entry || entry -> type != (uint8_t)EntryType::FILE)
+		return;
+
+	// Clear the inode
+	InodeHandler inode(m_volume, entry -> inode);
+	inode.free();
+
+	// Remove the reference from this directory
+	m_entries.erase(entry);
+	m_entry_names.erase(m_entry_names.begin() + index);
+	write_entries();
 }
 
 /**
@@ -920,7 +1073,28 @@ Directory *Ext2Directory::create_subdirectory(string const &name) {
  * @param name The name of the entry to remove
  */
 void Ext2Directory::remove_subdirectory(string const &name) {
-	Directory::remove_subdirectory(name);
+
+	// Find the entry
+	uint32_t index = 0;
+	directory_entry_t* entry = nullptr;
+	for (; index < m_entries.size(); ++index)
+		if(m_entry_names[index] == name){
+			entry = &m_entries[index];
+			break;
+		}
+
+	// No entry found
+	if(!entry || entry -> type != (uint8_t)EntryType::DIRECTORY)
+		return;
+
+	// Clear the inode
+	InodeHandler inode(m_volume, entry -> inode);
+	inode.free();
+
+	// Remove the reference from this directory
+	m_entries.erase(entry);
+	m_entry_names.erase(m_entry_names.begin() + index);
+	write_entries();
 }
 
 Ext2Directory::~Ext2Directory() = default;
