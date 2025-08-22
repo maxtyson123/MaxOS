@@ -71,8 +71,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
-	// FS Tests (TOOD: Cant read contents of maxos created entries)
-	vfs.delete_directory("/test/bob/");
+	// FS Tests
+	Directory* dir = vfs.open_directory("/test/bob/");
+	dir->rename_subdirectory("super","idol");
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
@@ -92,10 +93,11 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 //  - [x] Write files
 //  - [x] Create subdirectories
 //  - [X] Delete subdirectories (and test deletes sub contents)
-//  - [ ] Rename directory
-//  - [ ] Rename file
+//  - [x] Rename directory
+//  - [x] Rename file
 //  - [x] Create files
 //  - [X] Delete files
+//  - [ ] Cant read contents of maxos created entries
 //  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, large file r/w
 
 

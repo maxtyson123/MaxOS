@@ -879,6 +879,60 @@ void Ext2Directory::parse_block(buffer_t * buffer) {
 }
 
 /**
+ * @brief Removes an entry reference from the directory
+ *
+ * @param name The name of the entry to remove
+ * @param is_directory Is the entry expected to be a directory (otherwise assumed to be a file)
+ * @param clear Should the inode be freed and the data blocks unallocated
+ */
+void Ext2Directory::remove_entry(string const &name, bool is_directory, bool clear) {
+
+	// Find the entry
+	uint32_t index = 0;
+	directory_entry_t* entry = nullptr;
+	for (; index < m_entries.size(); ++index)
+		if(m_entry_names[index] == name){
+			entry = &m_entries[index];
+			break;
+		}
+
+	// No entry found
+	if(!entry || entry -> type != (uint8_t)(is_directory ? EntryType::DIRECTORY : EntryType::FILE))
+		return;
+
+	// Clear the inode
+	if(clear){
+		InodeHandler inode(m_volume, entry -> inode);
+		inode.free();
+	}
+
+	// Remove the reference from this directory
+	m_entries.erase(entry);
+	m_entry_names.erase(m_entry_names.begin() + index);
+	write_entries();
+
+}
+
+/**
+ * @brief Rename a directory entry and save it to disk
+ *
+ * @param old_name The current name of the entry
+ * @param new_name The name to change it to
+ * @param is_directory Search for entries with the type DIRECTORY (otherwise assume FILE)
+ */
+void Ext2Directory::rename_entry(string const &old_name, string const &new_name, bool is_directory){
+
+	// Change the name
+	for (int i = 0; i < m_entry_names.size(); ++i)
+		if(m_entry_names[i] == old_name && m_entries[i].type == (uint8_t)(is_directory ? EntryType::DIRECTORY : EntryType::FILE))
+			m_entry_names[i] = new_name;
+
+	// Save the change
+	write_entries();
+
+}
+
+/**
  * @brief Read the directory from the inode on the disk
  */
 void Ext2Directory::read_from_disk() {
@@ -918,7 +972,7 @@ void Ext2Directory::write_entries() {
 	// Calculate the size needed to store the entries and the null entry
 	size_t size_required = sizeof(directory_entry_t);
 	for (int i = 0; i < m_entries.size(); ++i) {
-		size_t size = sizeof(directory_entry_t) + m_entries[i].name_length + 1;
+		size_t size = sizeof(directory_entry_t) + m_entry_names[i].length() + 1;
 		size += (size % 4) ? 4 - size % 4 : 0;
 		size_required += size;
 	}
@@ -948,6 +1002,7 @@ void Ext2Directory::write_entries() {
 		char* name = m_entry_names[i].c_str();
 
 		// Update the size
+		entry.name_length = m_entry_names[i].length();
 		entry.size = sizeof(directory_entry_t) + entry.name_length + 1;
 		entry.size += (entry.size % 4) ? 4 - (entry.size % 4) : 0;
 
@@ -1014,33 +1069,22 @@ File *Ext2Directory::create_file(string const &name) {
 }
 
 /**
- * @brief Delete a file from the subdirectory
+ * @brief Delete a file from this directory
  *
  * @param name The name of the file to delete
  */
 void Ext2Directory::remove_file(string const &name) {
+	remove_entry(name, false);
+}
 
-	// Find the entry
-	uint32_t index = 0;
-	directory_entry_t* entry = nullptr;
-	for (; index < m_entries.size(); ++index)
-		if(m_entry_names[index] == name){
-			entry = &m_entries[index];
-			break;
-		}
-
-	// No entry found
-	if(!entry || entry -> type != (uint8_t)EntryType::FILE)
-		return;
-
-	// Clear the inode
-	InodeHandler inode(m_volume, entry -> inode);
-	inode.free();
-
-	// Remove the reference from this directory
-	m_entries.erase(entry);
-	m_entry_names.erase(m_entry_names.begin() + index);
-	write_entries();
+/**
+ * @brief Renames the file from the old name to the new name if it exists
+ *
+ * @param old_name The current name of the file that is to be changed
+ * @param new_name What the new name should be
+ */
+void Ext2Directory::rename_file(string const &old_name, string const &new_name) {
+	rename_entry(old_name, new_name, false);
 }
 
 /**
@@ -1073,28 +1117,17 @@ Directory *Ext2Directory::create_subdirectory(string const &name) {
  * @param name The name of the entry to remove
  */
 void Ext2Directory::remove_subdirectory(string const &name) {
+	remove_entry(name, true);
+}
 
-	// Find the entry
-	uint32_t index = 0;
-	directory_entry_t* entry = nullptr;
-	for (; index < m_entries.size(); ++index)
-		if(m_entry_names[index] == name){
-			entry = &m_entries[index];
-			break;
-		}
-
-	// No entry found
-	if(!entry || entry -> type != (uint8_t)EntryType::DIRECTORY)
-		return;
-
-	// Clear the inode
-	InodeHandler inode(m_volume, entry -> inode);
-	inode.free();
-
-	// Remove the reference from this directory
-	m_entries.erase(entry);
-	m_entry_names.erase(m_entry_names.begin() + index);
-	write_entries();
+/**
+ * @brief Renames the directory from the old name to the new name if it exists
+ *
+ * @param old_name The current name of the directory that is to be changed
+ * @param new_name What the new name should be
+ */
+void Ext2Directory::rename_subdirectory(string const &old_name, string const &new_name) {
+	rename_entry(old_name, new_name, true);
 }
 
 Ext2Directory::~Ext2Directory() = default;

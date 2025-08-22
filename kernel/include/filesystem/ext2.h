@@ -342,6 +342,9 @@ namespace MaxOS {
 
 				  void parse_block(common::buffer_t* buffer);
 
+				  void remove_entry(const string& name, bool is_directory, bool clear = true);
+				  void rename_entry(const string& old_name, const string& new_name, bool is_directory);
+
 			  public:
 				  Ext2Directory(Ext2Volume* volume, uint32_t inode, const string& name);
 				  ~Ext2Directory() final;
@@ -350,9 +353,11 @@ namespace MaxOS {
 
 				  File* create_file(const string& name) final;
 				  void remove_file(const string& name) final;
+			      void rename_file(const string& old_name, const string& new_name) final;
 
 				  Directory* create_subdirectory(const string& name) final;
 				  void remove_subdirectory(const string& name) final;
+			      void rename_subdirectory(const string& old_name, const string& new_name) final;
 		  };
 
 		  /**
