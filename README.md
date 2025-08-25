@@ -103,6 +103,7 @@ This is the list of required packages to build the operating system from source.
 * libisl-dev
 * cmake
 * telnet
+* rsync
 
 Linux:
   ```sh

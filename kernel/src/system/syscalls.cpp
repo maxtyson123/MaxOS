@@ -19,7 +19,7 @@ SyscallManager::SyscallManager()
 
   // Clear the args
   Logger::INFO() << "Setting up Syscalls \n";
-  m_current_args = {};
+  m_current_args = new syscall_args_t;
 
   // Register the handlers
   set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
@@ -36,12 +36,7 @@ SyscallManager::SyscallManager()
 
 }
 
-SyscallManager::~SyscallManager()
-{
-    // Delete the args
-    delete m_current_args;
-
-}
+SyscallManager::~SyscallManager() = default;
 
 /**
  * @brief Loads the args from the registers and delegates the syscall to the relevant handler if defined
@@ -118,10 +113,8 @@ system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_ar
   uint64_t pid = args -> arg0;
   int exit_code = (int)args -> arg1;
 
-  // Get the process if it is 0 then it is the current process
-  Process* process = pid == 0 ? Scheduler::current_process() : Scheduler::get_process(pid);
-
   // Close the process
+  Process* process = pid == 0 ? Scheduler::current_process() : Scheduler::get_process(pid);
   Scheduler::system_scheduler() -> remove_process(process);
 
   // Schedule the next process

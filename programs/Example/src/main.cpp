@@ -52,7 +52,7 @@ typedef struct SharedMessageQueue{
   ipc_message_t* messages;
 } ipc_message_queue_t;
 
-void* make_message_queue(char* name)
+void* make_message_queue(const char* name)
 {
   void* result = nullptr;
   asm volatile("int $0x80" : "=a" (result) : "a" (0x06), "b" (name));

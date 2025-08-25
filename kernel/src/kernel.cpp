@@ -71,10 +71,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
-	// FS Tests
-	Directory* dir = vfs.open_directory("/test/bob/");
-	dir->rename_subdirectory("super","idol");
-
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
     SyscallManager syscalls;
