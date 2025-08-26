@@ -71,6 +71,13 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     driver_manager.initialise_drivers();
     driver_manager.activate_drivers();
 
+    auto dir = vfs.create_directory("/test/bob");
+    auto file = vfs.create_file("/test/bob/file.txt");
+    if(!dir || !file)
+      Logger::ERROR() << "Failed to create test directory or file\n";
+    else
+      Logger::INFO() << "Created test directory and file\n";
+
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
     Scheduler scheduler(multiboot);
     SyscallManager syscalls;
@@ -81,21 +88,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
     while (true)
       asm("nop");
 }
-
-// TODO:
-//  - EXT2 Tests:
-//  - [x] Read subdirectories contents
-//  - [x] Read files
-//  - [x] Write files
-//  - [x] Create subdirectories
-//  - [X] Delete subdirectories (and test deletes sub contents)
-//  - [x] Rename directory
-//  - [x] Rename file
-//  - [x] Create files
-//  - [X] Delete files
-//  - [ ] Cant read contents of maxos created entries
-//  - [ ] Stress test the filesystem: 1000s of files in a directory, long nested directories, long path files, large file r/w
-
 
 //  - Fix multiple def where could be a parameter (idk why I needed two functions for that)
 //  - Fix tabs (mac mess up)

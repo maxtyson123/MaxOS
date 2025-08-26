@@ -280,7 +280,7 @@ void Ext2Volume::free_group_blocks(uint32_t block_group, uint32_t amount, uint32
 	start -= (block_group * superblock.blocks_per_group + superblock.starting_block);
 
 	// Free the blocks
-	for (uint32_t i = start; i < amount; ++i) {
+	for (uint32_t i = start; i < start + amount; ++i) {
 
 		// Block is already free (shouldn't happen)
 		if((bitmap.raw()[i / 8] & (1u << (i % 8))) == 0)
@@ -432,10 +432,10 @@ void Ext2Volume::free_inode(uint32_t inode) {
 
 	// First group contains reserved inodes
 	uint32_t inode_index = (inode - 1) % superblock.inodes_per_group;
-	if (bg_index == 0 && superblock.first_inode > 1)
-		return;
+    if(bg_index == 0 && (inode_index < (superblock.first_inode - 1)))
+        return;
 
-	// Mark as used
+    // Mark as used
 	block_group -> free_inodes++;
 	superblock.unallocated_inodes++;
 	bitmap.raw()[inode_index / 8] &= (uint8_t) ~(1u << (inode_index % 8));
@@ -725,7 +725,7 @@ Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
 void Ext2File::write(buffer_t const *data, size_t amount) {
 
 	// Nothing to write
-	if(m_size == 0)
+	if(amount == 0)
 		return;
 
 	// Prepare for writing
@@ -808,7 +808,7 @@ void Ext2File::read(buffer_t* data, size_t amount) {
 		size_t readable = (amount - read < block_size - buffer_start) ? (amount - read) : (block_size - buffer_start);
 
 		// Read the block
-		buffer.copy_from(data, readable, buffer_start, read);
+		buffer.copy_to(data, readable, buffer_start, read);
 		read += readable;
 
 	}
@@ -976,7 +976,11 @@ void Ext2Directory::write_entries() {
 		size += (size % 4) ? 4 - size % 4 : 0;
 		size_required += size;
 	}
-	size_required = m_volume -> bytes_to_blocks(size_required);
+
+    // Expand the directory
+    size_t blocks_required = m_volume -> bytes_to_blocks(size_required);
+    if(blocks_required > m_inode.block_cache.size())
+        m_inode.grow((blocks_required - m_inode.block_cache.size()) * m_volume -> block_size, false);
 
 	// Prepare for writing
 	m_volume -> ext2_lock.lock();
@@ -984,11 +988,8 @@ void Ext2Directory::write_entries() {
 	buffer_t buffer(block_size, false);
 	buffer.clear();
 
-	// Expand the directory
-	if(size_required > m_inode.block_cache.size())
-		m_inode.grow((size_required - m_inode.block_cache.size()) * m_volume -> block_size, false);
-
 	// Save the updated metadata
+    m_inode.set_size(blocks_required * block_size);
 	m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock() -> get_time());
 	m_inode.save();
 
