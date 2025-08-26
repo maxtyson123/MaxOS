@@ -7,12 +7,14 @@
 
 #include <system/cpu.h>
 #include <common/vector.h>
+#include <common/map.h>
 #include <common/string.h>
 #include <stdint.h>
 #include <memory/virtual.h>
 #include <memory/memorymanagement.h>
 #include <memory/memoryIO.h>
 #include <processes/elf.h>
+#include <processes/resource.h>
 
 
 namespace MaxOS
@@ -67,8 +69,6 @@ namespace MaxOS
 
               void save_sse_state();
               void restore_sse_state();
-
-
         };
 
         /**
@@ -79,8 +79,6 @@ namespace MaxOS
         {
 
             private:
-
-              common::Vector<uint16_t> m_resource_ids;
               common::Vector<Thread*> m_threads;
 
               uint64_t m_pid = 0;
@@ -103,6 +101,7 @@ namespace MaxOS
 
                 string name;
                 memory::MemoryManager* memory_manager = nullptr;
+				ResourceManager resources;
 
 
         };

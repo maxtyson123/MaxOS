@@ -74,10 +74,11 @@ namespace MaxOS {
          */
         class InterProcessCommunicationManager {
 
-          common::Vector<SharedMemory*> m_shared_memory_blocks;
-          common::Vector<SharedMessageEndpoint*> m_message_endpoints;
+			private:
+			  common::Vector<SharedMemory*> m_shared_memory_blocks;
+			  common::Vector<SharedMessageEndpoint*> m_message_endpoints;
 
-          common::Spinlock m_lock;
+			  common::Spinlock m_lock;
 
           public:
 
