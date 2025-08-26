@@ -11,21 +11,22 @@ using namespace MaxOS::drivers::disk;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::partition;
 
-IntegratedDriveElectronicsController::IntegratedDriveElectronicsController(PeripheralComponentInterconnectDeviceDescriptor* device_descriptor)
+IntegratedDriveElectronicsController::IntegratedDriveElectronicsController(
+PeripheralComponentInterconnectDeviceDescriptor *device_descriptor)
 {
-  // TODO: Use the device descriptor to get the port base and add the devices dynamically
+	// TODO: Use the device descriptor to get the port base and add the devices dynamically
 
-  // Primary
-  auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
-  auto primary_slave = new AdvancedTechnologyAttachment(0x1F0, false);
-  devices.insert(primary_maser, true);
-  devices.insert(primary_slave, false);
+	// Primary
+	auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
+	auto primary_slave = new AdvancedTechnologyAttachment(0x1F0, false);
+	devices.insert(primary_maser, true);
+	devices.insert(primary_slave, false);
 
-  // Secondary
-  auto secondary_maser = new AdvancedTechnologyAttachment(0x170, true);
-  auto secondary_slave = new AdvancedTechnologyAttachment(0x170, false);
-  devices.insert(secondary_maser, true);
-  devices.insert(secondary_slave, false);
+	// Secondary
+	auto secondary_maser = new AdvancedTechnologyAttachment(0x170, true);
+	auto secondary_slave = new AdvancedTechnologyAttachment(0x170, false);
+	devices.insert(secondary_maser, true);
+	devices.insert(secondary_slave, false);
 
 }
 
@@ -34,67 +35,60 @@ IntegratedDriveElectronicsController::~IntegratedDriveElectronicsController() = 
 /**
  * @brief Initialise the IDE controller by identifying the devices
  */
-void IntegratedDriveElectronicsController::initialise()
-{
+void IntegratedDriveElectronicsController::initialise() {
 
-  // Loop through the devices and identify them
-  for(auto& device : devices)
-  {
+	// Loop through the devices and identify them
+	for (auto &device: devices) {
 
-    // Check if the device is present
-    auto ata_device = device.first;
-    if(ata_device == nullptr)
-      continue;
+		// Check if the device is present
+		auto ata_device = device.first;
+		if (ata_device == nullptr)
+			continue;
 
-    // Identify the device
-    bool exists = ata_device->identify();
+		// Identify the device
+		bool exists = ata_device->identify();
 
-    // Remove the device if it does not exist
-    if(!exists)
-    {
-      devices.erase(ata_device);
-      delete ata_device;
-      continue;
-    }
-  }
+		// Remove the device if it does not exist
+		if (!exists) {
+			devices.erase(ata_device);
+			delete ata_device;
+			continue;
+		}
+	}
 
-  // Log the init done
-  Logger::DEBUG() << "IDE Controller: Initialised " << devices.size() << " devices\n";
+	// Log the init done
+	Logger::DEBUG() << "IDE Controller: Initialised " << devices.size() << " devices\n";
 }
 
 /**
  * @brief Activate the IDE controller by mounting the devices to the virtual file system
  */
-void IntegratedDriveElectronicsController::activate()
-{
+void IntegratedDriveElectronicsController::activate() {
 
-  // Loop through the devices and load the partitions
-  for(auto& device : devices)
-  {
+	// Loop through the devices and load the partitions
+	for (auto &device: devices) {
 
-    // Ensure there is a device and that it is the master
-    if(device.first == nullptr || !device.second)
-      continue;
+		// Ensure there is a device and that it is the master
+		if (device.first == nullptr || !device.second)
+			continue;
 
-    // Mount the device
-    MSDOSPartition::mount_partitions(device.first);
+		// Mount the device
+		MSDOSPartition::mount_partitions(device.first);
 
-  }
+	}
 }
 
 
 /**
  * @brief Get the vendor name
  */
-string IntegratedDriveElectronicsController::vendor_name()
-{
-  return "Intel";
+string IntegratedDriveElectronicsController::vendor_name() {
+	return "Intel";
 }
 
 /**
  * @brief Get the device name
  */
-string IntegratedDriveElectronicsController::device_name()
-{
-  return "PIIX4";
+string IntegratedDriveElectronicsController::device_name() {
+	return "PIIX4";
 }

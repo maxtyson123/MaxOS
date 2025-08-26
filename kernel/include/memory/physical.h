@@ -100,7 +100,7 @@ namespace MaxOS {
           // Table Management
           pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
           pml_t* get_and_create_table(pml_t* parent_table, uint64_t table_index, pml_t* table);
-          pte_t create_page_table_entry(uintptr_t address, size_t flags);
+          pte_t create_page_table_entry(uintptr_t address, size_t flags) const;
 
           static uint64_t physical_address_of_entry(pte_t* entry);
           pte_t* get_entry(virtual_address_t* virtual_address, pml_t* pml4_root);

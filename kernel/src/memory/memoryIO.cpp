@@ -26,8 +26,9 @@ MemIO8Bit::~MemIO8Bit() = default;
  *
  * @param data  the data to write
  */
-void MemIO8Bit::write(uint8_t data){
-    (*((volatile uint8_t*)(m_address)))=(data);
+void MemIO8Bit::write(uint8_t data) {
+
+	(*((volatile uint8_t*) (m_address))) = (data);
 }
 
 /**
@@ -35,8 +36,9 @@ void MemIO8Bit::write(uint8_t data){
  *
  * @return the data read
  */
-uint8_t MemIO8Bit::read(){
-    return *((volatile uint8_t*)(m_address));
+uint8_t MemIO8Bit::read() {
+
+	return *((volatile uint8_t*) (m_address));
 }
 
 MemIO16Bit::MemIO16Bit(uintptr_t address)
@@ -51,8 +53,9 @@ MemIO16Bit::~MemIO16Bit() = default;
  *
  * @param data  the data to write
  */
-void MemIO16Bit::write(uint16_t data){
-    (*((volatile uint16_t*)(m_address)))=(data);
+void MemIO16Bit::write(uint16_t data) {
+
+	(*((volatile uint16_t*) (m_address))) = (data);
 }
 
 /**
@@ -60,12 +63,13 @@ void MemIO16Bit::write(uint16_t data){
  *
  * @return the data read
  */
-uint16_t MemIO16Bit::read(){
-    return *((volatile uint16_t*)(m_address));
+uint16_t MemIO16Bit::read() {
+
+	return *((volatile uint16_t*) (m_address));
 }
 
 MemIO32Bit::MemIO32Bit(uintptr_t address)
-        : MemIO(address)
+: MemIO(address)
 {
 }
 
@@ -76,8 +80,9 @@ MemIO32Bit::~MemIO32Bit() = default;
  *
  * @param data  the data to write
  */
-void MemIO32Bit::write(uint32_t data){
-    (*((volatile uint32_t*)(m_address)))=(data);
+void MemIO32Bit::write(uint32_t data) {
+
+	(*((volatile uint32_t*) (m_address))) = (data);
 }
 
 /**
@@ -85,8 +90,9 @@ void MemIO32Bit::write(uint32_t data){
  *
  * @return the data read
  */
-uint32_t MemIO32Bit::read(){
-    return *((volatile uint32_t*)(m_address));
+uint32_t MemIO32Bit::read() {
+
+	return *((volatile uint32_t*) (m_address));
 }
 
 MemIO64Bit::MemIO64Bit(uintptr_t address)
@@ -101,8 +107,9 @@ MemIO64Bit::~MemIO64Bit() = default;
  *
  * @param data  the data to write
  */
-void MemIO64Bit::write(uint64_t data){
-    (*((volatile uint64_t*)(m_address)))=(data);
+void MemIO64Bit::write(uint64_t data) {
+
+	(*((volatile uint64_t*) (m_address))) = (data);
 }
 
 /**
@@ -110,8 +117,9 @@ void MemIO64Bit::write(uint64_t data){
  *
  * @return the data read
  */
-uint64_t MemIO64Bit::read(){
-    return *((volatile uint64_t*)(m_address));
+uint64_t MemIO64Bit::read() {
+
+	return *((volatile uint64_t*) (m_address));
 }
 
 
@@ -127,29 +135,28 @@ uint64_t MemIO64Bit::read(){
  */
 void* memcpy(void* destination, const void* source, uint64_t num) {
 
-    // Make sure the source and destination are not the same
-    if (destination == source)
-        return destination;
+	// Make sure the source and destination are not the same
+	if (destination == source)
+		return destination;
 
-    // Make sure they exist
-    if (destination == nullptr || source == nullptr)
-            return destination;
+	// Make sure they exist
+	if (destination == nullptr || source == nullptr)
+		return destination;
 
-    // Get the source and destination
-    auto* dst = (unsigned char*) destination;
-    const auto* src = (const unsigned char*) source;
+	// Get the source and destination
+	auto* dst = (unsigned char*) destination;
+	const auto* src = (const unsigned char*) source;
 
-    // Copy the data
-    for (size_t i = 0; i < num; i++)
-        dst[i] = src[i];
+	// Copy the data
+	for (size_t i = 0; i < num; i++)
+		dst[i] = src[i];
 
-    // Usefully for easier code writing
-    return destination;
+	// Usefully for easier code writing
+	return destination;
 }
 
 /**
  * @brief Fills a block of memory with a specified value
-
  *
  * @param ptr The pointer to the block of memory
  * @param value The value to fill the block of memory with
@@ -158,14 +165,14 @@ void* memcpy(void* destination, const void* source, uint64_t num) {
  */
 void* memset(void* ptr, uint32_t value, uint64_t num) {
 
-    // Make sure the pointer exists
-    if (ptr == nullptr)
-        return ptr;
+	// Make sure the pointer exists
+	if (ptr == nullptr)
+		return ptr;
 
-    auto* dst = (unsigned char*) ptr;
-    for (size_t i = 0; i < num; i++)
-        dst[i] = (unsigned char) value;
-    return ptr;
+	auto* dst = (unsigned char*) ptr;
+	for (size_t i = 0; i < num; i++)
+		dst[i] = (unsigned char) value;
+	return ptr;
 }
 
 /**
@@ -178,24 +185,24 @@ void* memset(void* ptr, uint32_t value, uint64_t num) {
  */
 void* memmove(void* destination, const void* source, uint64_t num) {
 
-  // Make sure the source and destination are not the same
-  if (destination == source)
-    return destination;
+	// Make sure the source and destination are not the same
+	if (destination == source)
+		return destination;
 
-  // Make sure they exist
-  if (destination == nullptr || source == nullptr)
-    return destination;
+	// Make sure they exist
+	if (destination == nullptr || source == nullptr)
+		return destination;
 
-  auto* dst = (unsigned char*) destination;
-  const auto* src = (const unsigned char*) source;
-  if (dst < src) {
-      for (size_t i = 0; i < num; i++)
-          dst[i] = src[i];
-  } else {
-      for (size_t i = num; i != 0; i--)
-          dst[i-1] = src[i-1];
-  }
-    return destination;
+	auto* dst = (unsigned char*) destination;
+	const auto* src = (const unsigned char*) source;
+	if (dst < src) {
+		for (size_t i = 0; i < num; i++)
+			dst[i] = src[i];
+	} else {
+		for (size_t i = num; i != 0; i--)
+			dst[i - 1] = src[i - 1];
+	}
+	return destination;
 }
 
 /**
@@ -208,17 +215,17 @@ void* memmove(void* destination, const void* source, uint64_t num) {
  */
 int memcmp(const void* ptr1, const void* ptr2, uint64_t num) {
 
-  // Make sure the pointers exist
-  if (ptr1 == nullptr || ptr2 == nullptr)
-      return 0;
+	// Make sure the pointers exist
+	if (ptr1 == nullptr || ptr2 == nullptr)
+		return 0;
 
-  const auto *p1 = (const unsigned char *)ptr1;
-  const auto *p2 = (const unsigned char *)ptr2;
-  for (size_t i = 0; i < num; i++) {
-    if (p1[i] < p2[i])
-      return -1;
-    if (p1[i] > p2[i])
-      return 1;
-  }
-  return 0;
+	const auto* p1 = (const unsigned char*) ptr1;
+	const auto* p2 = (const unsigned char*) ptr2;
+	for (size_t i = 0; i < num; i++) {
+		if (p1[i] < p2[i])
+			return -1;
+		if (p1[i] > p2[i])
+			return 1;
+	}
+	return 0;
 }

@@ -82,8 +82,8 @@ namespace MaxOS
                   Port32Bit m_command_port;
 
                   // I/O
-                  uint32_t read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset);
-                  void write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
+                  uint32_t read(uint16_t bus, uint16_t device, uint16_t function, uint32_t register_offset);
+                  void write(uint16_t bus, uint16_t device, uint16_t function, uint32_t register_offset, uint32_t value);
 
                   // Device
                   PeripheralComponentInterconnectDeviceDescriptor get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function);

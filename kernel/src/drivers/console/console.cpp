@@ -9,8 +9,6 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::console;
 
-///____ Console ____
-
 Console::Console() = default;
 
 Console::~Console() = default;
@@ -216,10 +214,6 @@ void Console::invert_colors(uint16_t x, uint16_t y) {
     set_background_color(x, y, foreground);
 }
 
-
-///____ Console Area ____///
-
-
 ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t width, uint16_t height)
 : m_console(console),
   m_left(left),
@@ -246,7 +240,6 @@ ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t
         }
 
 }
-
 
 ConsoleArea::~ConsoleArea() = default;
 
@@ -379,9 +372,7 @@ ConsoleColour ConsoleArea::get_background_color(uint16_t x, uint16_t y) {
  */
 void ConsoleArea::scroll_up() {
 
-
   m_console->scroll_up(m_left, m_top, m_width, m_height);
-
 }
 
 /**
@@ -403,7 +394,6 @@ void ConsoleArea::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 }
 
-///____ Console Stream ____///
 ConsoleStream::ConsoleStream(Console *console)
 : m_console(console)
 {

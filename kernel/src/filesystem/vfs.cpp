@@ -8,21 +8,20 @@ using namespace MaxOS;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::common;
 
-VirtualFileSystem::VirtualFileSystem()
-{
+VirtualFileSystem::VirtualFileSystem() {
 
-    // Set the current file system to this instance
-    s_current_file_system = this;
+	// Set the current file system to this instance
+	s_current_file_system = this;
 
 }
 
-VirtualFileSystem::~VirtualFileSystem()
-{
-    // Remove all mounted filesystems
-    unmount_all();
+VirtualFileSystem::~VirtualFileSystem() {
 
-    // Set the current file system to null
-    s_current_file_system = nullptr;
+	// Remove all mounted filesystems
+	unmount_all();
+
+	// Set the current file system to null
+	s_current_file_system = nullptr;
 
 }
 
@@ -31,9 +30,8 @@ VirtualFileSystem::~VirtualFileSystem()
  *
  * @return The current virtual file system or null if none is set
  */
-VirtualFileSystem* VirtualFileSystem::current_file_system()
-{
-    return s_current_file_system;
+VirtualFileSystem* VirtualFileSystem::current_file_system() {
+	return s_current_file_system;
 }
 
 /**
@@ -41,25 +39,23 @@ VirtualFileSystem* VirtualFileSystem::current_file_system()
  *
  * @param filesystem The filesystem to add
  */
-void VirtualFileSystem::mount_filesystem(FileSystem* filesystem)
-{
+void VirtualFileSystem::mount_filesystem(FileSystem* filesystem) {
 
-    // Check if the filesystem is already mounted
-    if (filesystems.find(filesystem) != filesystems.end())
-    {
-        Logger::WARNING() << "Filesystem already mounted\n";
-        return;
-    }
+	// Check if the filesystem is already mounted
+	if (filesystems.find(filesystem) != filesystems.end()) {
+		Logger::WARNING() << "Filesystem already mounted\n";
+		return;
+	}
 
-    // Get the mount point for the filesystem
-    string mount_point = "/filesystem_" + filesystems.size();
+	// Get the mount point for the filesystem
+	string mount_point = "/filesystem_" + filesystems.size();
 
-    // If this is the first filesystem to be mounted, set the root filesystem
-    if (filesystems.size() == 0)
-        mount_point = "/";
+	// If this is the first filesystem to be mounted, set the root filesystem
+	if (filesystems.size() == 0)
+		mount_point = "/";
 
-    // Add the filesystem to the map
-    filesystems.insert(filesystem, mount_point);
+	// Add the filesystem to the map
+	filesystems.insert(filesystem, mount_point);
 }
 
 /**
@@ -68,18 +64,16 @@ void VirtualFileSystem::mount_filesystem(FileSystem* filesystem)
  * @param filesystem The filesystem to add
  * @param mount_point The mount point for the filesystem
  */
-void VirtualFileSystem::mount_filesystem(FileSystem* filesystem, string mount_point)
-{
+void VirtualFileSystem::mount_filesystem(FileSystem* filesystem, const string& mount_point) {
 
-    // Check if the filesystem is already mounted
-    if (filesystems.find(filesystem) != filesystems.end())
-    {
-        Logger::WARNING() << "Filesystem already mounted at " << mount_point << "\n";
-        return;
-    }
+	// Check if the filesystem is already mounted
+	if (filesystems.find(filesystem) != filesystems.end()) {
+		Logger::WARNING() << "Filesystem already mounted at " << mount_point << "\n";
+		return;
+	}
 
-    // Add the filesystem to the map
-    filesystems.insert(filesystem, mount_point);
+	// Add the filesystem to the map
+	filesystems.insert(filesystem, mount_point);
 }
 
 /**
@@ -87,18 +81,17 @@ void VirtualFileSystem::mount_filesystem(FileSystem* filesystem, string mount_po
  *
  * @param filesystem The filesystem to remove
  */
-void VirtualFileSystem::unmount_filesystem(FileSystem* filesystem)
-{
+void VirtualFileSystem::unmount_filesystem(FileSystem* filesystem) {
 
-    // Check if the filesystem is mounted
-    if (filesystems.find(filesystem) == filesystems.end())
-        return;
+	// Check if the filesystem is mounted
+	if (filesystems.find(filesystem) == filesystems.end())
+		return;
 
-    // Remove the filesystem from the map
-    filesystems.erase(filesystem);
+	// Remove the filesystem from the map
+	filesystems.erase(filesystem);
 
-    // Delete the filesystem
-    delete filesystem;
+	// Delete the filesystem
+	delete filesystem;
 }
 
 /**
@@ -106,36 +99,26 @@ void VirtualFileSystem::unmount_filesystem(FileSystem* filesystem)
  *
  * @param mount_point Where the filesystem is mounted
  */
-void VirtualFileSystem::unmount_filesystem(string mount_point)
-{
-    // Check if the filesystem is mounted
-    auto it = filesystems.begin();
-    while (it != filesystems.end())
-    {
-        if (it->second == mount_point)
-        {
-            // Remove the filesystem from the map
-            return unmount_filesystem(it->first);
-        }
-        ++it;
-    }
+void VirtualFileSystem::unmount_filesystem(const string& mount_point) {
 
-    // Filesystem not found
-    Logger::WARNING() << "Filesystem not found at " << mount_point << "\n";
+	// Remove the filesystem from the map
+	for(const auto& filesystem : filesystems)
+		if (filesystem.second == mount_point)
+			return unmount_filesystem(filesystem.first);
+
+	// Filesystem not found
+	Logger::WARNING() << "Filesystem not found at " << mount_point << "\n";
 }
 
 /**
  * @brief Remove all mounted filesystems
  */
-void VirtualFileSystem::unmount_all()
-{
+void VirtualFileSystem::unmount_all() {
 
-    // Loop through the filesystems and unmount them
-    for (auto it = filesystems.begin(); it != filesystems.end();)
-    {
-        unmount_filesystem(it->first);
-        it = filesystems.begin();
-    }
+	// Loop through the filesystems and unmount them
+	for(const auto& filesystem : filesystems)
+		unmount_filesystem(filesystem.first);
+
 }
 
 /**
@@ -143,15 +126,14 @@ void VirtualFileSystem::unmount_all()
  *
  * @return The file system mounted "/" or null if none is mounted
  */
-FileSystem* VirtualFileSystem::root_filesystem()
-{
+FileSystem* VirtualFileSystem::root_filesystem() {
 
-    // Ensure there is at least one filesystem mounted
-    if (filesystems.size() == 0)
-        return nullptr;
+	// Ensure there is at least one filesystem mounted
+	if (filesystems.size() == 0)
+		return nullptr;
 
-    // It is always the first filesystem mounted
-    return filesystems.begin()->first;
+	// It is always the first filesystem mounted
+	return filesystems.begin()->first;
 }
 
 /**
@@ -160,20 +142,15 @@ FileSystem* VirtualFileSystem::root_filesystem()
  * @param mount_point The mount point to search for
  * @return The filesystem mounted at the given mount point or null if none is found
  */
-FileSystem* VirtualFileSystem::get_filesystem(string mount_point)
-{
+FileSystem* VirtualFileSystem::get_filesystem(const string& mount_point) {
 
-    // Check if the filesystem is mounted
-    auto it = filesystems.begin();
-    while (it != filesystems.end())
-    {
-        if (it->second == mount_point)
-            return it->first;
-        ++it;
-    }
+	// Check if the filesystem is mounted
+	for(const auto& filesystem : filesystems)
+		if (filesystem.second == mount_point)
+			return filesystem.first;
 
-    // Filesystem not found
-    return nullptr;
+	// Filesystem not found
+	return nullptr;
 }
 
 /**
@@ -182,29 +159,26 @@ FileSystem* VirtualFileSystem::get_filesystem(string mount_point)
  * @param path The path to search for
  * @return The filesystem that contains the path or null if none is found
  */
-FileSystem* VirtualFileSystem::find_filesystem(string path)
-{
+FileSystem* VirtualFileSystem::find_filesystem(string path) {
 
-    // Longest matching path will be where the filesystem is mounted
-    string longest_match = "";
-    FileSystem* longest_match_fs = nullptr;
+	// Longest matching path will be where the filesystem is mounted
+	string longest_match = "";
+	FileSystem* longest_match_fs = nullptr;
 
-    // Search through the filesystems
-    for (auto it = filesystems.begin(); it != filesystems.end(); ++it)
-    {
-        // Get the filesystem and mount point
-        FileSystem* fs = it->first;
-        string mount_point = it->second;
+	// Search through the filesystems
+	for (const auto& filesystem : filesystems) {
+		// Get the filesystem and mount point
+		FileSystem* fs = filesystem.first;
+		string mount_point = filesystem.second;
 
-        // Check if the path starts with the mount point
-        if (path.starts_with(mount_point) && mount_point.length() > longest_match.length())
-        {
-            longest_match = mount_point;
-            longest_match_fs = fs;
-        }
-    }
+		// Check if the path starts with the mount point
+		if (path.starts_with(mount_point) && mount_point.length() > longest_match.length()) {
+			longest_match = mount_point;
+			longest_match_fs = fs;
+		}
+	}
 
-    return longest_match_fs;
+	return longest_match_fs;
 }
 
 /**
@@ -214,23 +188,23 @@ FileSystem* VirtualFileSystem::find_filesystem(string path)
  * @param path The path to get the relative path for
  * @return The relative path on the filesystem or an empty string if none is found
  */
-string VirtualFileSystem::get_relative_path(FileSystem* filesystem, string path)
-{
-    // Find the mount point for the filesystem
-    auto it = filesystems.find(filesystem);
-    if (it == filesystems.end())
-        return "";
+string VirtualFileSystem::get_relative_path(FileSystem* filesystem, string path) {
 
-    // Get the mount point
-    string mount_point = it->second;
+	// Find the mount point for the filesystem
+	auto fs = filesystems.find(filesystem);
+	if (fs == filesystems.end())
+		return "";
 
-    // Make sure that the path points to the filesystem
-    if (!path.starts_with(mount_point))
-        return "";
+	// Get the mount point
+	string mount_point = fs->second;
 
-    // Get the relative path
-    string relative_path = path.substring(mount_point.length(), path.length() - mount_point.length());
-    return relative_path;
+	// Make sure that the path points to the filesystem
+	if (!path.starts_with(mount_point))
+		return "";
+
+	// Get the relative path
+	string relative_path = path.substring(mount_point.length(), path.length() - mount_point.length());
+	return relative_path;
 }
 
 /**
@@ -238,17 +212,15 @@ string VirtualFileSystem::get_relative_path(FileSystem* filesystem, string path)
  *
  * @return The root directory of the virtual file system
  */
-Directory* VirtualFileSystem::root_directory()
-{
-    // Get the root filesystem
-    FileSystem* fs = root_filesystem();
+Directory* VirtualFileSystem::root_directory() {
 
-    // Check if the filesystem is mounted
-    if (!fs)
-        return nullptr;
+	// Get the root filesystem
+	FileSystem* fs = root_filesystem();
+	if (!fs)
+		return nullptr;
 
-    // Get the root directory
-    return fs->root_directory();
+	// Get the root directory
+	return fs->root_directory();
 }
 
 /**
@@ -257,28 +229,28 @@ Directory* VirtualFileSystem::root_directory()
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
  */
-Directory* VirtualFileSystem::open_directory(const string& path)
-{
-    // Ensure a valid path is given
-    if (!Path::vaild(path))
-        return nullptr;
+Directory* VirtualFileSystem::open_directory(const string &path) {
 
-    // Try to find the filesystem that is responsible for the path
-    FileSystem* fs = find_filesystem(path);
-    if (!fs)
-        return nullptr;
+	// Ensure a valid path is given
+	if (!Path::vaild(path))
+		return nullptr;
 
-    // Get where to open the directory
-    string relative_path = get_relative_path(fs, path);
-    string directory_path = Path::file_path(relative_path);
+	// Try to find the filesystem that is responsible for the path
+	FileSystem* fs = find_filesystem(path);
+	if (!fs)
+		return nullptr;
 
-    // Open the directory
-    Directory* directory = fs -> get_directory(directory_path);
-    if (!directory)
-        return nullptr;
-    directory -> read_from_disk();
+	// Get where to open the directory
+	string relative_path = get_relative_path(fs, path);
+	string directory_path = Path::file_path(relative_path);
 
-    return directory;
+	// Open the directory
+	Directory* directory = fs->get_directory(directory_path);
+	if (!directory)
+		return nullptr;
+	directory->read_from_disk();
+
+	return directory;
 }
 
 /**
@@ -287,27 +259,26 @@ Directory* VirtualFileSystem::open_directory(const string& path)
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
  */
-Directory* VirtualFileSystem::create_directory(string path)
-{
-    // Ensure a valid path is given
-    if (!Path::vaild(path))
-        return nullptr;
+Directory* VirtualFileSystem::create_directory(string path) {
 
-    path = path.strip('/');
+	// Ensure a valid path is given
+	if (!Path::vaild(path))
+		return nullptr;
 
-    // Try to find the filesystem that is responsible for the path
-    FileSystem* fs = find_filesystem(path);
-    if (!fs)
-        return nullptr;
+	path = path.strip('/');
 
-    // Open the parent directory
-    Directory* parent_directory = open_directory(path);
-    if(!parent_directory)
-	    return nullptr;
+	// Try to find the filesystem that is responsible for the path
+	FileSystem* fs = find_filesystem(path);
+	if (!fs)
+		return nullptr;
+
+	// Open the parent directory
+	Directory* parent_directory = open_directory(path);
+	if (!parent_directory)
+		return nullptr;
 
 	string directory_name = Path::file_name(path);
 	return create_directory(parent_directory, directory_name);
-
 }
 
 /**
@@ -317,14 +288,13 @@ Directory* VirtualFileSystem::create_directory(string path)
  * @param name The name of the new directory
  * @return The created directory
  */
-Directory *VirtualFileSystem::create_directory(Directory *parent, string const &name) {
+Directory* VirtualFileSystem::create_directory(Directory* parent, string const &name) {
 
 	// Create the directory
-	Directory* directory =  parent -> create_subdirectory(name);
-	directory -> read_from_disk();
+	Directory* directory = parent->create_subdirectory(name);
+	directory->read_from_disk();
 
 	return directory;
-
 }
 
 
@@ -333,23 +303,22 @@ Directory *VirtualFileSystem::create_directory(Directory *parent, string const &
  *
  * @param path The path to the directory
  */
-void VirtualFileSystem::delete_directory(string path)
-{
-    // Ensure a valid path is given
-    if (!Path::vaild(path))
-        return;
+void VirtualFileSystem::delete_directory(string path) {
 
-    path = path.strip('/');
+	// Ensure a valid path is given
+	if (!Path::vaild(path))
+		return;
 
-    // Open the directory
-    Directory* parent_directory = open_directory(path);
+	path = path.strip('/');
+
+	// Open the directory
+	Directory* parent_directory = open_directory(path);
 	if (!parent_directory)
 		return;
 
 	// Delete the directory
 	string directory_name = Path::file_name(path);
 	delete_directory(parent_directory, directory_name);
-
 }
 
 /**
@@ -358,11 +327,11 @@ void VirtualFileSystem::delete_directory(string path)
  * @param parent The directory that contains the reference to the directory being deleted
  * @param name The name of the directory to delete
  */
-void VirtualFileSystem::delete_directory(Directory* parent, const string& name) {
+void VirtualFileSystem::delete_directory(Directory* parent, const string &name) {
 
 	// Find the directory and delete it
-	for(const auto& directory : parent -> subdirectories())
-		if(directory -> name() == name)
+	for (const auto& directory: parent->subdirectories())
+		if (directory->name() == name)
 			delete_directory(parent, directory);
 
 }
@@ -373,10 +342,10 @@ void VirtualFileSystem::delete_directory(Directory* parent, const string& name) 
  * @param parent The directory that contains the reference to the directory being deleted
  * @param directory The the directory to delete
  */
-void VirtualFileSystem::delete_directory(Directory *parent, Directory *directory) {
+void VirtualFileSystem::delete_directory(Directory* parent, Directory* directory) {
 
 	// Nothing to delete
-	if(!directory)
+	if (!directory)
 		return;
 
 	// Store a reference to each subdirectory and its parent
@@ -384,7 +353,7 @@ void VirtualFileSystem::delete_directory(Directory *parent, Directory *directory
 	Vector<Pair<Directory*, Directory*>> to_delete;
 	stack.push_back(parent, directory);
 
-	while (!stack.empty()){
+	while (!stack.empty()) {
 
 		// Save the current
 		auto current = stack.pop_back();
@@ -393,12 +362,12 @@ void VirtualFileSystem::delete_directory(Directory *parent, Directory *directory
 		to_delete.push_back({current.first, current_directory});
 
 		// Empty the directory
-		for(const auto& file : current_directory->files())
+		for (const auto &file: current_directory->files())
 			delete_file(current_directory, file->name());
 
 		// Process the subdirectories
-		for(const auto& subdir : current_directory->subdirectories())
-			if(subdir -> name() != "." && subdir -> name() != "..")
+		for (const auto &subdir: current_directory->subdirectories())
+			if (subdir->name() != "." && subdir->name() != "..")
 				stack.push_back(current_directory, subdir);
 
 	}
@@ -407,9 +376,9 @@ void VirtualFileSystem::delete_directory(Directory *parent, Directory *directory
 	for (int i = to_delete.size() - 1; i >= 0; --i) {
 
 		// Get the parent and child
-		const auto& current = to_delete[i];
-		Directory* owner                    = current.first;
-		Directory* subdirectory             = current.second;
+		const auto &current = to_delete[i];
+		Directory* owner = current.first;
+		Directory* subdirectory = current.second;
 
 		owner->remove_subdirectory(subdirectory->name());
 	}
@@ -422,19 +391,19 @@ void VirtualFileSystem::delete_directory(Directory *parent, Directory *directory
  * @param path The path to the file (including the extension)
  * @return The file object or null if it could not be created
  */
-File* VirtualFileSystem::create_file(const string& path)
-{
-    // Ensure a valid path is given
-    if (!Path::vaild(path))
-        return nullptr;
+File* VirtualFileSystem::create_file(const string &path) {
 
-    // Open the directory
-    Directory* directory = open_directory(path);
-    if (!directory)
-        return nullptr;
+	// Ensure a valid path is given
+	if (!Path::vaild(path))
+		return nullptr;
 
-    // Create the file
-    string file_name = Path::file_name(path);
+	// Open the directory
+	Directory* directory = open_directory(path);
+	if (!directory)
+		return nullptr;
+
+	// Create the file
+	string file_name = Path::file_name(path);
 	return create_file(directory, file_name);
 }
 
@@ -444,10 +413,9 @@ File* VirtualFileSystem::create_file(const string& path)
  * @param parent The directory where the file should be created
  * @param name The name of the file to create
  */
-File* VirtualFileSystem::create_file(Directory *parent, string const &name) {
-	return parent -> create_file(name);
+File* VirtualFileSystem::create_file(Directory* parent, string const &name) {
+	return parent->create_file(name);
 }
-
 
 /**
  * @brief Try to open a file on the virtual file system with a given offset
@@ -456,19 +424,18 @@ File* VirtualFileSystem::create_file(Directory *parent, string const &name) {
  * @param offset The offset to seek to (default = 0)
  * @return The file or null pointer if not found
  */
-File* VirtualFileSystem::open_file(const string& path, size_t offset)
-{
-    // Ensure a valid path is given
-    if (!Path::vaild(path))
-        return nullptr;
+File* VirtualFileSystem::open_file(const string &path, size_t offset) {
 
-    // Open the directory
-    Directory* directory = open_directory(path);
-    if (!directory)
+	// Ensure a valid path is given
+	if (!Path::vaild(path))
+		return nullptr;
+
+	// Open the directory
+	Directory* directory = open_directory(path);
+	if (!directory)
 		return nullptr;
 
 	return open_file(directory, Path::file_name(path), offset);
-
 }
 
 /**
@@ -479,15 +446,15 @@ File* VirtualFileSystem::open_file(const string& path, size_t offset)
  * @param offset How far in the file to open (default = 0)
  * @return The file or null pointer if not found
  */
-File *VirtualFileSystem::open_file(Directory *parent, string const &name, size_t offset) {
+File* VirtualFileSystem::open_file(Directory* parent, string const &name, size_t offset) {
 
 	// Open the file
-	File* opened_file = parent -> open_file(name);
+	File* opened_file = parent->open_file(name);
 	if (!opened_file)
 		return nullptr;
 
 	// Seek to the offset
-	opened_file -> seek(SeekType::SET, offset);
+	opened_file->seek(SeekType::SET, offset);
 
 	return opened_file;
 }
@@ -497,21 +464,20 @@ File *VirtualFileSystem::open_file(Directory *parent, string const &name, size_t
  *
  * @param path The path to the file (including the extension)
  */
-void VirtualFileSystem::delete_file(const string& path)
-{
-    // Ensure a valid path is given
-    if (!Path::vaild(path))
-        return;
+void VirtualFileSystem::delete_file(const string &path) {
 
-    // Open the directory
-    Directory* directory = open_directory(path);
-    if (!directory)
-       return;
+	// Ensure a valid path is given
+	if (!Path::vaild(path))
+		return;
+
+	// Open the directory
+	Directory* directory = open_directory(path);
+	if (!directory)
+		return;
 
 	// Delete the file
 	string file_name = Path::file_name(path);
 	delete_file(directory, file_name);
-
 }
 
 /**
@@ -520,9 +486,8 @@ void VirtualFileSystem::delete_file(const string& path)
  * @param parent The directory containing the file
  * @param name The name of the file
  */
-void VirtualFileSystem::delete_file(Directory *parent, string const &name) {
+void VirtualFileSystem::delete_file(Directory* parent, string const &name) {
 
 	// Delete the file
-	parent -> remove_file(name);
-
+	parent->remove_file(name);
 }

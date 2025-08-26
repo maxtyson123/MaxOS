@@ -26,13 +26,13 @@ namespace MaxOS{
           static VirtualFileSystem* current_file_system();
 
           void mount_filesystem(FileSystem* filesystem);
-          void mount_filesystem(FileSystem* filesystem, string mount_point);
+          void mount_filesystem(FileSystem* filesystem, const string& mount_point);
           void unmount_filesystem(FileSystem* filesystem);
-          void unmount_filesystem(string mount_point);
+          void unmount_filesystem(const string& mount_point);
           void unmount_all();
 
           FileSystem* root_filesystem();
-          FileSystem* get_filesystem(string mount_point);
+          FileSystem* get_filesystem(const string& mount_point);
           FileSystem* find_filesystem(string path);
           string get_relative_path(FileSystem* filesystem, string path);
 

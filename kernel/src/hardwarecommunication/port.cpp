@@ -11,11 +11,10 @@ Port::Port(uint16_t port_number)
 {
 }
 
-Port::~Port()= default;
+Port::~Port() = default;
 
 Port8Bit::Port8Bit(uint16_t port_number)
-: Port(port_number)
-{
+: Port(port_number) {
 }
 
 Port8Bit::~Port8Bit() = default;
@@ -25,8 +24,9 @@ Port8Bit::~Port8Bit() = default;
  *
  * @param data the byte to write
  */
-void Port8Bit::write(uint8_t data){
-    asm volatile("outb %0, %1" : : "a" (data), "Nd" (m_port_number));
+void Port8Bit::write(uint8_t data) {
+
+	asm volatile("outb %0, %1" : : "a" (data), "Nd" (m_port_number));
 }
 
 /**
@@ -34,15 +34,15 @@ void Port8Bit::write(uint8_t data){
  *
  * @return the byte read
  */
-uint8_t Port8Bit::read(){
-    uint8_t result;
-    asm volatile("inb %1, %0" : "=a" (result) : "Nd" (m_port_number));
-    return result;
+uint8_t Port8Bit::read() {
+
+	uint8_t result;
+	asm volatile("inb %1, %0" : "=a" (result) : "Nd" (m_port_number));
+	return result;
 }
 
 Port8BitSlow::Port8BitSlow(uint16_t port_number)
-: Port8Bit(port_number)
-{
+: Port8Bit(port_number) {
 }
 
 Port8BitSlow::~Port8BitSlow() = default;
@@ -52,14 +52,14 @@ Port8BitSlow::~Port8BitSlow() = default;
  *
  * @param data the byte to write
  */
-void Port8BitSlow::write(uint8_t data){
-    asm volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (data), "Nd" (m_port_number));
+void Port8BitSlow::write(uint8_t data) {
+
+	asm volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (data), "Nd" (m_port_number));
 }
 
 
 Port16Bit::Port16Bit(uint16_t port_number)
-: Port(port_number)
-{
+: Port(port_number) {
 }
 
 Port16Bit::~Port16Bit() = default;
@@ -69,8 +69,9 @@ Port16Bit::~Port16Bit() = default;
  *
  * @param data the word to write
  */
-void Port16Bit::write(uint16_t data){
-    asm volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
+void Port16Bit::write(uint16_t data) {
+
+	asm volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
 }
 
 /**
@@ -78,16 +79,16 @@ void Port16Bit::write(uint16_t data){
  *
  * @return the word read
  */
-uint16_t Port16Bit::read(){
-    uint16_t result;
-    asm volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
-    return result;
+uint16_t Port16Bit::read() {
+
+	uint16_t result;
+	asm volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
+	return result;
 }
 
 
 Port32Bit::Port32Bit(uint16_t port_number)
-: Port(port_number)
-{
+: Port(port_number) {
 }
 
 Port32Bit::~Port32Bit() = default;
@@ -97,8 +98,9 @@ Port32Bit::~Port32Bit() = default;
  *
  * @param data the double word to write
  */
-void Port32Bit::write(uint32_t data){
-    asm volatile("outl %0, %1" : : "a" (data), "Nd" (m_port_number));
+void Port32Bit::write(uint32_t data) {
+
+	asm volatile("outl %0, %1" : : "a" (data), "Nd" (m_port_number));
 }
 
 /**
@@ -106,8 +108,9 @@ void Port32Bit::write(uint32_t data){
  *
  * @return the double word read
  */
-uint32_t Port32Bit::read(){
-    uint32_t result;
-    asm volatile("inl %1, %0" : "=a" (result) : "Nd" (m_port_number));
-    return result;
+uint32_t Port32Bit::read() {
+
+	uint32_t result;
+	asm volatile("inl %1, %0" : "=a" (result) : "Nd" (m_port_number));
+	return result;
 }

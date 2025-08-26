@@ -21,8 +21,8 @@ Spinlock::~Spinlock() = default;
  */
 void Spinlock::lock() {
 
-    acquire();
-    m_locked = true;
+	acquire();
+	m_locked = true;
 }
 
 /**
@@ -30,9 +30,8 @@ void Spinlock::lock() {
  */
 void Spinlock::unlock() {
 
-    m_locked = false;
-    release();
-
+	m_locked = false;
+	release();
 }
 
 /**
@@ -41,7 +40,7 @@ void Spinlock::unlock() {
  * @return True if the spinlock is locked, false otherwise
  */
 bool Spinlock::is_locked() const {
-    return m_locked;
+	return m_locked;
 }
 
 
@@ -49,18 +48,18 @@ bool Spinlock::is_locked() const {
  * @brief Acquire the spinlock: wait until the lock is available, yielding if desired until that happens.
  */
 void Spinlock::acquire() {
-  while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
+	while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
 
-      // Wait for the lock to be available
-      if(m_should_yield)
-        Scheduler::system_scheduler()->yield();
+		// Wait for the lock to be available
+		if (m_should_yield)
+			Scheduler::system_scheduler()->yield();
 
-  }
+	}
 }
 
 /**
  * @brief Release the spinlock
  */
 void Spinlock::release() {
-  __atomic_clear(&m_locked, __ATOMIC_RELEASE);
+	__atomic_clear(&m_locked, __ATOMIC_RELEASE);
 }

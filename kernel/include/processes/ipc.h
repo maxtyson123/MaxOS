@@ -29,7 +29,7 @@ namespace MaxOS {
 
 
             public:
-                SharedMemory(string name, size_t size);
+                SharedMemory(const string& name, size_t size);
                 ~SharedMemory();
 
                 string* name;
@@ -58,7 +58,7 @@ namespace MaxOS {
                 common::Spinlock m_message_lock;
 
             public:
-              SharedMessageEndpoint(string name);
+              SharedMessageEndpoint(const string& name);
               ~SharedMessageEndpoint();
 
               string* name;

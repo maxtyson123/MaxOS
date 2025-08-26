@@ -1,7 +1,5 @@
-//Common
 #include <stdint.h>
 #include <common/logger.h>
-#include <common/buffer.h>
 #include <hardwarecommunication/interrupts.h>
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>
@@ -15,7 +13,6 @@
 #include <memory/physical.h>
 #include <memory/virtual.h>
 #include <filesystem/vfs.h>
-
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -32,65 +29,56 @@ using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
 extern "C" void call_constructors();
-extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic)
-{
-    call_constructors();
+extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {
 
-    // Initialise the logger
-    Logger logger;
-    SerialConsole serial_console(&logger);
-    Logger::INFO() << "MaxOS Booted Successfully \n";
+	call_constructors();
 
-    Logger::HEADER() << "Stage {1}: System Initialisation\n";
-    Multiboot multiboot(addr, magic);
-    GlobalDescriptorTable gdt;
-    InterruptManager interrupts;
+	// Initialise the logger
+	Logger logger;
+	SerialConsole serial_console(&logger);
+	Logger::INFO() << "MaxOS Booted Successfully \n";
 
-    Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
-    PhysicalMemoryManager pmm(&multiboot);
-    VirtualMemoryManager vmm;
-    MemoryManager memoryManager(&vmm);
+	Logger::HEADER() << "Stage {1}: System Initialisation\n";
+	Multiboot multiboot(addr, magic);
+	GlobalDescriptorTable gdt;
+	InterruptManager interrupts;
 
-    Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
-    VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
-    VESABootConsole console(&vesa);
+	Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
+	PhysicalMemoryManager pmm(&multiboot);
+	VirtualMemoryManager vmm;
+	MemoryManager memoryManager(&vmm);
 
-    Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
-    VirtualFileSystem vfs;
-    CPU cpu(&gdt, &multiboot);
-    Clock kernel_clock(cpu.apic, 1);
-    DriverManager driver_manager;
-    driver_manager.add_driver(&kernel_clock);
-    driver_manager.find_drivers();
-    uint32_t reset_wait_time = driver_manager.reset_devices();
+	Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
+	VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
+	VESABootConsole console(&vesa);
 
-    Logger::HEADER() << "Stage {3}: Device Finalisation\n";
-    interrupts.activate();
-    kernel_clock.calibrate();
-    kernel_clock.delay(reset_wait_time);
-    driver_manager.initialise_drivers();
-    driver_manager.activate_drivers();
+	Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
+	VirtualFileSystem vfs;
+	CPU cpu(&gdt, &multiboot);
+	Clock kernel_clock(cpu.apic, 1);
+	DriverManager driver_manager;
+	driver_manager.add_driver(&kernel_clock);
+	driver_manager.find_drivers();
+	uint32_t reset_wait_time = driver_manager.reset_devices();
 
-    auto dir = vfs.create_directory("/test/bob");
-    auto file = vfs.create_file("/test/bob/file.txt");
-    if(!dir || !file)
-      Logger::ERROR() << "Failed to create test directory or file\n";
-    else
-      Logger::INFO() << "Created test directory and file\n";
+	Logger::HEADER() << "Stage {3}: Device Finalisation\n";
+	interrupts.activate();
+	kernel_clock.calibrate();
+	kernel_clock.delay(reset_wait_time);
+	driver_manager.initialise_drivers();
+	driver_manager.activate_drivers();
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
-    Scheduler scheduler(multiboot);
-    SyscallManager syscalls;
-    console.finish();
-    scheduler.activate();
+	Scheduler scheduler(multiboot);
+	SyscallManager syscalls;
+	console.finish();
+	scheduler.activate();
 
-    // Idle loop  (read Idle.md)
-    while (true)
-      asm("nop");
+	// Idle loop  (read Idle.md)
+	while (true)
+		asm("nop");
 }
 
-//  - Fix multiple def where could be a parameter (idk why I needed two functions for that)
-//  - Fix tabs (mac mess up)
 //  - Userspace Files (syscalls, proper path handling, working directories, file handles)
 //  - Class & Struct docstrings
 //  - Logo on fail in center
