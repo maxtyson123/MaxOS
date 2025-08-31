@@ -366,12 +366,15 @@ namespace MaxOS{
          * @brief Removes the m_first_memory_chunk element from the Vector
          *
          * @tparam Type Type of the Vector
+         * @return The element that was removed, or a default constructed element if the Vector is empty
          */
         template<class Type> Type Vector<Type>::pop_front() {
 
 	        // Make sure the Vector is not empty
 	        if (m_size == 0)
-	          return;
+	          return Type();
+
+			// Store the element to return
 
 			Type element = m_elements[0];
 

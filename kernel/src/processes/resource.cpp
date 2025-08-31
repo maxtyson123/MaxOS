@@ -6,7 +6,7 @@
 using namespace MaxOS;
 using namespace MaxOS::processes;
 
-Resource::Resource(const string& name, ResourceType type)
+Resource::Resource(const string& name, size_t flags, ResourceType type)
 : m_name(name),
   m_type(type)
 {
@@ -35,9 +35,10 @@ void Resource::close() {
  *
  * @param buffer The buffer to read into
  * @param size How many bytes to read
+ * @param flags Optional flags to pass (unused by default but resource type specific)
  * @return How many bytes were successfully read
  */
-size_t Resource::read(void* buffer, size_t size) {
+size_t Resource::read(void* buffer, size_t size, size_t flags) {
 	return 0;
 }
 
@@ -46,9 +47,10 @@ size_t Resource::read(void* buffer, size_t size) {
  *
  * @param buffer The buffer to read from
  * @param size How many bytes to write
+ * @param flags Optional flags to pass (unused by default but resource type specific)
  * @return How many bytes were successfully written
  */
-size_t Resource::write(void const* buffer, size_t size) {
+size_t Resource::write(void const* buffer, size_t size, size_t flags) {
 
 	return 0;
 }
@@ -65,22 +67,20 @@ string Resource::name() {
 /**
  * @brief Gets the type of this resource
  *
- * @return Tje type
+ * @return The type
  */
 ResourceType Resource::type() {
 
 	return m_type;
 }
 
-ResourceRegistry::ResourceRegistry(ResourceType type)
+BaseResourceRegistry::BaseResourceRegistry(ResourceType type)
 : m_type(type)
 {
-
 	GlobalResourceRegistry::add_registry(type, this);
-
 }
 
-ResourceRegistry::~ResourceRegistry(){
+BaseResourceRegistry::~BaseResourceRegistry(){
 
 	GlobalResourceRegistry::remove_registry(this);
 }
@@ -90,7 +90,7 @@ ResourceRegistry::~ResourceRegistry(){
  *
  * @return The type
  */
-ResourceType ResourceRegistry::type() {
+ResourceType BaseResourceRegistry::type() {
 
 	return m_type;
 }
@@ -101,7 +101,7 @@ ResourceType ResourceRegistry::type() {
  * @param name The name of the resource to find
  * @return The resource or nullptr if the resource was not found
  */
-Resource* ResourceRegistry::get_resource(string const& name) {
+Resource* BaseResourceRegistry::get_resource(string const& name) {
 
 	// Resource isn't stored in this registry
 	if(m_resources.find(name) == m_resources.end())
@@ -114,11 +114,31 @@ Resource* ResourceRegistry::get_resource(string const& name) {
 }
 
 /**
+ * @brief Registers a resource in the registry
+ *
+ * @param resource The resource to store
+ * @param name The name of the resource (must not already be in use)
+ * @return True if the register was successful, false if not
+ */
+bool BaseResourceRegistry::register_resource(Resource* resource) {
+
+	// Resource name is already stored in this registry
+	if(m_resources.find(resource->name()) != m_resources.end())
+		return false;
+
+	m_resources.insert(resource->name(), resource);
+	m_resource_uses.insert(resource->name(), 0);
+	return true;
+}
+
+
+/**
  * @brief Close the resource provided, if it exists in this registry
  *
  * @param resource The resource to close
+ * @param flags Optional flags to pass (unused by default but registry type specific)
  */
-void ResourceRegistry::close_resource(Resource* resource) {
+void BaseResourceRegistry::close_resource(Resource* resource, size_t flags) {
 
 	// Resource isn't stored in this registry
 	if(m_resources.find(resource->name()) == m_resources.end())
@@ -138,19 +158,14 @@ void ResourceRegistry::close_resource(Resource* resource) {
 }
 
 /**
- * @brief Registers a resource in the registry
+ * @brief Try to create a new resource with the specified name, will fail if the name is in use
  *
- * @param resource The resource to store
- * @param name The name of the resource (must not already be in use)
+ * @param name The name of the resource to create
+ * @param flags Optional flags to pass (unused by default but registry type specific)
+ * @return The resource created or nullptr if failed to create the resource
  */
-void ResourceRegistry::register_resource(Resource* resource, const string& name) {
-
-	// Resource name is already stored in this registry
-	if(m_resources.find(resource->name()) != m_resources.end())
-		return;
-
-	m_resources.insert(name, resource);
-	m_resource_uses.insert(name, 0);
+Resource* BaseResourceRegistry::create_resource(string const& name, size_t flags) {
+	return nullptr;
 }
 
 GlobalResourceRegistry::GlobalResourceRegistry() {
@@ -170,7 +185,7 @@ GlobalResourceRegistry::~GlobalResourceRegistry() {
  * @param type The type of registry to get
  * @return The registry or nullptr if not found
  */
-ResourceRegistry* GlobalResourceRegistry::get_registry(ResourceType type) {
+BaseResourceRegistry* GlobalResourceRegistry::get_registry(ResourceType type) {
 
 	auto registry = s_current->m_registries.find(type);
 	if(registry == s_current->m_registries.end())
@@ -185,7 +200,7 @@ ResourceRegistry* GlobalResourceRegistry::get_registry(ResourceType type) {
  * @param type The type of registry being added
  * @param registry The registry to add
  */
-void GlobalResourceRegistry::add_registry(ResourceType type, ResourceRegistry* registry) {
+void GlobalResourceRegistry::add_registry(ResourceType type, BaseResourceRegistry* registry) {
 
 	// Does it already exist?
 	if(s_current->m_registries.find(type) != s_current->m_registries.end())
@@ -200,10 +215,10 @@ void GlobalResourceRegistry::add_registry(ResourceType type, ResourceRegistry* r
  * @param type The type of registry being added
  * @param registry The registry to add
  */
-void GlobalResourceRegistry::remove_registry(ResourceRegistry* registry) {
+void GlobalResourceRegistry::remove_registry(BaseResourceRegistry* registry) {
 
 	// Does it already exist?
-	if(s_current->m_registries.find(registry->type()) != s_current->m_registries.end())
+	if(s_current->m_registries.find(registry->type()) == s_current->m_registries.end())
 		return;
 
 	s_current->m_registries.erase(registry->type());
@@ -214,11 +229,26 @@ ResourceManager::ResourceManager() = default;
 
 ResourceManager::~ResourceManager(){
 
-	// Close all resources
-	for(const auto& resource : m_resources)
-		close_resource(resource.first);
+	// Collect all resources (as closing will break iteration)
+	common::Vector<uint64_t> handles;
+	for (const auto& kv : m_resources)
+		handles.push_back(kv.first);
+
+	// Close the resources
+	for (auto h : handles)
+		close_resource(h, 0);
 
 };
+
+/**
+ * @brief Get the resources currently open
+ *
+ * @return The resources
+ */
+common::Map<uint64_t, Resource*> ResourceManager::resources() {
+
+	return m_resources;
+}
 
 /**
  * @brief Registers a resource with the resource manager and then opens it
@@ -227,7 +257,7 @@ ResourceManager::~ResourceManager(){
  * @param name The name of the resource
  * @return The handle id of the resource or 0 if failed
  */
-uint64_t ResourceManager::open_resource(ResourceType type, string const& name) {
+uint64_t ResourceManager::open_resource(ResourceType type, string const& name, size_t flags) {
 
 	// Get the resource
 	auto resource = GlobalResourceRegistry::get_registry(type) -> get_resource(name);
@@ -244,17 +274,22 @@ uint64_t ResourceManager::open_resource(ResourceType type, string const& name) {
 
 /**
  * @brief Un registers the resource and then closes it
- * @param handle
+ *
+ * @param handle The handle number of the resource
+ * @param flags Flags to pass to the closing
  */
-void ResourceManager::close_resource(uint64_t handle) {
+void ResourceManager::close_resource(uint64_t handle, size_t flags) {
 
-	Resource* resource = m_resources[handle];
+	auto it = m_resources.find(handle);
+	if(it == m_resources.end())
+		return;
 
 	// Remove it
+	Resource* resource = it->second;
 	m_resources.erase(handle);
 
 	// Close it
-	GlobalResourceRegistry::get_registry(resource->type()) -> close_resource(resource);
+	GlobalResourceRegistry::get_registry(resource->type()) -> close_resource(resource, flags);
 }
 
 /**
@@ -285,3 +320,5 @@ Resource* ResourceManager::get_resource(string const& name) {
 
 	return nullptr;
 }
+
+

@@ -9,6 +9,7 @@
 #include <common/map.h>
 #include <common/vector.h>
 #include <common/string.h>
+#include <common/logger.h>
 
 namespace MaxOS {
 	namespace processes {
@@ -27,8 +28,8 @@ namespace MaxOS {
 
 			public:
 
-				Resource(const string& name, ResourceType type);
-				~Resource();
+				Resource(const string& name, size_t flags, ResourceType type);
+				virtual ~Resource();
 
 				string name();
 				ResourceType type();
@@ -36,11 +37,11 @@ namespace MaxOS {
 				virtual void open();
 				virtual void close();
 
-				virtual size_t read(void* buffer, size_t size);
-				virtual size_t write(const void* buffer, size_t size);
+				virtual size_t read(void* buffer, size_t size, size_t flags);
+				virtual size_t write(const void* buffer, size_t size, size_t flags);
 		};
 
-		class ResourceRegistry{
+		 class BaseResourceRegistry{
 
 			private:
 				common::Map<string, Resource*> m_resources;
@@ -49,33 +50,54 @@ namespace MaxOS {
 				ResourceType m_type;
 
 			public:
-				explicit ResourceRegistry(ResourceType type);
-				~ResourceRegistry();
+				explicit BaseResourceRegistry(ResourceType type);
+				~BaseResourceRegistry();
 
 				ResourceType type();
 
-				Resource* get_resource(const string& name);
-				void close_resource(Resource* resource);
+			 	virtual Resource* 	get_resource(const string& name);
+			 	virtual bool 		register_resource(Resource* resource);
 
-				void register_resource(Resource* resource, const string& name);
+			 	virtual void 		close_resource(Resource* resource, size_t flags);
+				virtual Resource* 	create_resource(const string& name, size_t flags);
 		};
+
+		template<class Type> class ResourceRegistry : public BaseResourceRegistry{
+
+			public:
+				explicit ResourceRegistry(ResourceType type);
+				~ResourceRegistry() = default;
+
+				Resource* create_resource(const string& name, size_t flags) final {
+
+					auto resource = new Type(name, flags, type());
+
+					// Creation failed
+					if(!register_resource(resource)){
+						delete resource;
+						return nullptr;
+					}
+
+					return  resource;
+				}
+		};
+
+		template <class Type> ResourceRegistry<Type>::ResourceRegistry(ResourceType type):BaseResourceRegistry(type) {}
 
 		class GlobalResourceRegistry{
 
 			private:
-				common::Map<ResourceType, ResourceRegistry*> m_registries;
+				common::Map<ResourceType, BaseResourceRegistry*> m_registries;
 				inline static GlobalResourceRegistry* s_current;
 
 			public:
 				GlobalResourceRegistry();
 				~GlobalResourceRegistry();
 
-				static ResourceRegistry* get_registry(ResourceType type);
+				static BaseResourceRegistry* get_registry(ResourceType type);
 
-				static void add_registry(ResourceType type, ResourceRegistry* registry);
-				static void remove_registry(ResourceRegistry* registry);
-
-
+				static void add_registry(ResourceType type, BaseResourceRegistry* registry);
+				static void remove_registry(BaseResourceRegistry* registry);
 		};
 
 		class ResourceManager{
@@ -89,8 +111,10 @@ namespace MaxOS {
 				ResourceManager();
 				~ResourceManager();
 
-				uint64_t open_resource(ResourceType type, const string& name);
-				void 	 close_resource(uint64_t handle);
+				common::Map<uint64_t, Resource*> resources();
+
+				uint64_t open_resource(ResourceType type, const string& name, size_t flags);
+				void 	 close_resource(uint64_t handle, size_t flags);
 
 				Resource* get_resource(uint64_t handle);
 				Resource* get_resource(const string& name);

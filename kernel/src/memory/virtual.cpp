@@ -278,9 +278,21 @@ void VirtualMemoryManager::free(void* address) {
 	// If the chunk is shared, don't unmap it incase other processes are using it
 	if (chunk->flags & Shared) {
 
-		// Let the IPC handle the shared memory
-		Scheduler::scheduler_ipc()->free_shared_memory((uintptr_t) address);
+		// Find the resource
+		for(const auto& resource : Scheduler::current_process()->resource_manager.resources()){
 
+			// Skip non-shared memory resources
+			if(resource.second->type() != ResourceType::SHARED_MEMORY)
+				continue;
+
+			// Skip shared memory that points elsewhere
+			auto shared = (SharedMemory*)resource.second;
+			if((void*)shared->physical_address() != address)
+				continue;
+
+			// Close the resource
+			Scheduler::current_process()->resource_manager.close_resource(resource.first, 0);
+		}
 	}
 
 	// Add the chunk to the free list
@@ -398,7 +410,7 @@ uint64_t* VirtualMemoryManager::pml4_root_address_physical() {
 void* VirtualMemoryManager::load_shared_memory(const string& name) {
 
 	// Get the shared memory block
-	SharedMemory* block = Scheduler::scheduler_ipc()->get_shared_memory(name);
+	auto block = (SharedMemory*)Scheduler::current_process()->resource_manager.get_resource(name);
 
 	// Load the shared memory
 	if (block != nullptr)

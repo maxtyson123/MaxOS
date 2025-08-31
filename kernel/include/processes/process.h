@@ -101,7 +101,7 @@ namespace MaxOS
 
                 string name;
                 memory::MemoryManager* memory_manager = nullptr;
-				ResourceManager resources;
+				ResourceManager resource_manager;
 
 
         };

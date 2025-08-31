@@ -22,15 +22,15 @@ namespace MaxOS{
 
         /// DO NOT REARRANGE ONLY APPEND TO
         enum class SyscallType{
-            CLOSE_PROCESS,
+            CLOSE_PROCESS,	// TODO: merge into THREAD_CLOSE
             KLOG,
-            CREATE_SHARED_MEMORY,
-            OPEN_SHARED_MEMORY,
             ALLOCATE_MEMORY,
             FREE_MEMORY,
-            CREATE_IPC_ENDPOINT,
-            SEND_IPC_MESSAGE,
-            REMOVE_IPC_ENDPOINT,
+            RESOURCE_CREATE,
+            RESOURCE_OPEN,
+            RESOURCE_CLOSE,
+			RESOURCE_WRITE,
+			RESOURCE_READ,
             THREAD_YIELD,
             THREAD_SLEEP,
             THREAD_CLOSE,
@@ -70,17 +70,16 @@ namespace MaxOS{
               void set_syscall_handler(SyscallType syscall, syscall_func_t handler);
               void remove_syscall_handler(SyscallType syscall);
 
-
-              // Syscalls
+              // Syscalls (TODO: Very c style, should be made class based that automatically registers)
               static syscall_args_t* syscall_close_process(syscall_args_t* args);
               static syscall_args_t* syscall_klog(syscall_args_t* args);
-              static syscall_args_t* syscall_create_shared_memory(syscall_args_t* args);
-              static syscall_args_t* syscall_open_shared_memory(syscall_args_t* args);
               static syscall_args_t* syscall_allocate_memory(syscall_args_t* args);
               static syscall_args_t* syscall_free_memory(syscall_args_t* args);
-              static syscall_args_t* syscall_create_ipc_endpoint(syscall_args_t* args);
-              static syscall_args_t* syscall_send_ipc_message(syscall_args_t* args);
-              static syscall_args_t* syscall_remove_ipc_endpoint(syscall_args_t* args);
+			  static syscall_args_t* syscall_resource_create(syscall_args_t* args);
+			  static syscall_args_t* syscall_resource_open(syscall_args_t* args);
+			  static syscall_args_t* syscall_resource_close(syscall_args_t* args);
+			  static syscall_args_t* syscall_resource_write(syscall_args_t* args);
+			  static syscall_args_t* syscall_resource_read(syscall_args_t* args);
               static syscall_args_t* syscall_thread_yield(syscall_args_t* args);
               static syscall_args_t* syscall_thread_sleep(syscall_args_t* args);
               static syscall_args_t* syscall_thread_close(syscall_args_t* args);

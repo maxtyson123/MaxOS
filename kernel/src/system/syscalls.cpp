@@ -24,15 +24,16 @@ SyscallManager::SyscallManager()
 	// Register the handlers
 	set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
 	set_syscall_handler(SyscallType::KLOG, syscall_klog);
-	set_syscall_handler(SyscallType::CREATE_SHARED_MEMORY, syscall_create_shared_memory);
-	set_syscall_handler(SyscallType::OPEN_SHARED_MEMORY, syscall_open_shared_memory);
 	set_syscall_handler(SyscallType::ALLOCATE_MEMORY, syscall_allocate_memory);
 	set_syscall_handler(SyscallType::FREE_MEMORY, syscall_free_memory);
-	set_syscall_handler(SyscallType::CREATE_IPC_ENDPOINT, syscall_create_ipc_endpoint);
-	set_syscall_handler(SyscallType::SEND_IPC_MESSAGE, syscall_send_ipc_message);
-	set_syscall_handler(SyscallType::REMOVE_IPC_ENDPOINT, syscall_remove_ipc_endpoint);
+	set_syscall_handler(SyscallType::RESOURCE_CREATE, syscall_resource_create);
+	set_syscall_handler(SyscallType::RESOURCE_OPEN, syscall_resource_open);
+	set_syscall_handler(SyscallType::RESOURCE_CLOSE, syscall_resource_close);
+	set_syscall_handler(SyscallType::RESOURCE_WRITE, syscall_resource_write);
+	set_syscall_handler(SyscallType::RESOURCE_READ, syscall_resource_read);
 	set_syscall_handler(SyscallType::THREAD_YIELD, syscall_thread_yield);
 	set_syscall_handler(SyscallType::THREAD_SLEEP, syscall_thread_sleep);
+	set_syscall_handler(SyscallType::THREAD_CLOSE, syscall_thread_close);
 
 }
 
@@ -141,59 +142,6 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 }
 
 /**
- * @brief System call to create a shared memory block (To close, free the memory, it is automatically handled when the process exits)
- *
- * @param args Arg0 = size, Arg1 = name
- * @return The virtual address of the shared memory block or null if failed
- */
-syscall_args_t* SyscallManager::syscall_create_shared_memory(syscall_args_t* args) {
-
-	// Extract the arguments
-	size_t size = args->arg0;
-	char* name = (char*) args->arg1;
-
-	// Ensure they are valid
-	if (size == 0 || name == nullptr)
-		return nullptr;
-
-	// Create the memory block
-	SharedMemory* new_block = Scheduler::scheduler_ipc()->alloc_shared_memory(size, name);
-
-	// Load the block
-	void* virtual_address = MemoryManager::s_current_memory_manager->vmm()->load_shared_memory(new_block->physical_address(), size);
-
-	// Return to the user
-	args->return_value = (uint64_t) virtual_address;
-	return args;
-}
-
-/**
- * @brief System call to open a shared memory block (To close, free the memory, it is automatically handled when the process exits)
- *
- * @param args Arg0 = name
- * @return The virtual address of the shared memory block or null if failed
- */
-syscall_args_t* SyscallManager::syscall_open_shared_memory(syscall_args_t* args) {
-
-	// Extract the arguments
-	uint64_t name = args->arg0;
-
-	// Ensure they are valid
-	if (name == 0)
-		return nullptr;
-
-	// Get the block (don't care if null as that is caught in the load_shared_memory function)
-	SharedMemory* block = Scheduler::scheduler_ipc()->get_shared_memory((char*) name);
-
-	// Load the block
-	void* virtual_address = MemoryManager::s_current_memory_manager->vmm()->load_shared_memory(block->physical_address(), block->size());
-
-	// Return to the user
-	args->return_value = (uint64_t) virtual_address;
-	return args;
-}
-
-/**
  * @brief System call to free a block of memory
  *
  * @param args Arg0 = size
@@ -201,14 +149,12 @@ syscall_args_t* SyscallManager::syscall_open_shared_memory(syscall_args_t* args)
  */
 syscall_args_t* SyscallManager::syscall_allocate_memory(syscall_args_t* args) {
 
-	// Get the size
-	size_t size = args->arg0;
-
 	// Malloc the memory
+	size_t size = args->arg0;
 	void* address = MemoryManager::malloc(size);
 
 	// Return the address
-	args->return_value = (uint64_t) address;
+	args->return_value = (uint64_t)address;
 	return args;
 }
 
@@ -220,76 +166,120 @@ syscall_args_t* SyscallManager::syscall_allocate_memory(syscall_args_t* args) {
  */
 syscall_args_t* SyscallManager::syscall_free_memory(syscall_args_t* args) {
 
-	// Get the address
-	void* address = (void*) args->arg0;
-
 	// Free the memory
+	void* address = (void*) args->arg0;
 	MemoryManager::free(address);
 
-	// Done
 	return args;
 }
 
 /**
- * @brief System call to create an IPC endpoint
+ * @brief System call to create a resource
  *
- * @param args Arg0 = name
- * @return The IPC endpoint buffer linked list address
+ * @param args Arg0 = ResourceType Arg1 = Name Arg2 = Flags
+ * @return 1 if resource was created sucessfully, 0 otherwise
  */
-system::syscall_args_t* SyscallManager::syscall_create_ipc_endpoint(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_resource_create(syscall_args_t* args) {
 
-	// Get the name
-	char* name = (char*) args->arg0;
-	if (name == nullptr)
-		return nullptr;
+	// Parse params
+	auto type 	= (ResourceType)args->arg0;
+	auto name 	= (char*)args->arg1;
+	auto flags 	= (size_t)args->arg2;
 
-	// Create the endpoint
-	SharedMessageEndpoint* endpoint = Scheduler::scheduler_ipc()->create_message_endpoint(name);
+	// Try to create the resource
+	auto resource = GlobalResourceRegistry::get_registry(type)->create_resource(name, flags);
 
-	// Return the endpoint
-	args->return_value = (uint64_t) endpoint->queue();
+	// Handle response
+	args->return_value = resource ? 1 : 0;
 	return args;
 }
 
 /**
- * @brief System call to send an IPC message
+ * @brief System call to open a resource
  *
- * @param args Arg0 = endpoint name, Arg1 = message, Arg2 = size
+ * @param args Arg0 = ResourceType Arg1 = Name Arg2 = Flags
+ * @return The handle of the resource or 0 if failed
+ */
+syscall_args_t* SyscallManager::syscall_resource_open(syscall_args_t* args) {
+
+	// Parse params
+	auto type 	= (ResourceType)args->arg0;
+	auto name 	= (char*)args->arg1;
+	auto flags 	= (size_t)args->arg2;
+
+	// Open the resource
+	args->return_value = Scheduler::current_process()->resource_manager.open_resource(type, name, flags);
+	return args;
+}
+
+/**
+ * @brief System call to close a resource
+ *
+ * @param args Arg0 = Handle Arg1 = Flags
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_send_ipc_message(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_resource_close(syscall_args_t* args) {
 
-	// Get the args
-	char* endpoint = (char*) args->arg0;
-	void* message = (void*) args->arg1;
-	size_t size = args->arg2;
+	// Parse params
+	auto handle	= (uint64_t )args->arg0;
+	auto flags 	= (size_t)args->arg1;
 
-	// Validate the args
-	if (endpoint == nullptr || message == nullptr || size == 0)
-		return nullptr;
-
-	// Send the message
-	Scheduler::scheduler_ipc()->get_message_endpoint(endpoint)->queue_message(message, size);
-
-	// All done
+	// Close the resource
+	Scheduler::current_process()->resource_manager.close_resource(handle, flags);
 	return args;
 }
 
 /**
- * @brief System call to remove an IPC endpoint
+ * @brief System call to write to a resource
  *
- * @param args Arg0 = endpoint name
- * @return Nothing
+ * @param args Arg0 = Handle Arg1 = Buffer Arg2 = Size Arg3 = Flags
+ * @return The number of bytes written or 0 if failed
  */
-system::syscall_args_t* SyscallManager::syscall_remove_ipc_endpoint(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_resource_write(syscall_args_t* args) {
 
-	// Remove the endpoint
-	Scheduler::scheduler_ipc()->free_message_endpoint((char*) args->arg0);
+	// Parse params
+	auto handle	= (uint64_t )args->arg0;
+	auto buffer = (void*)args->arg1;
+	auto size 	= (size_t)args->arg2;
+	auto flags 	= (size_t)args->arg3;
 
-	// Done
+	// Open the resource
+	auto resource = Scheduler::current_process()->resource_manager.get_resource(handle);
+	if(!resource){
+		args->return_value = 0;
+		return args;
+	}
+
+	// Write to the resource
+	args->return_value = resource->write(buffer,size,flags);
 	return args;
 }
 
+/**
+ * @brief System call to read from a resource
+ *
+ * @param args Arg0 = Handle Arg1 = Buffer Arg2 = Size Arg3 = Flags
+ * @return The number of bytes read or 0 if failed
+ */
+syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
+
+	// Parse params
+	auto handle	= (uint64_t )args->arg0;
+	auto buffer = (void*)args->arg1;
+	auto size 	= (size_t)args->arg2;
+	auto flags 	= (size_t)args->arg3;
+
+	// Open the resource
+	auto resource = Scheduler::current_process()->resource_manager.get_resource(handle);
+	if(!resource){
+		args->return_value = 0;
+		return args;
+	}
+
+	// Write to the resource
+	args->return_value = resource->read(buffer,size,flags);
+	return args;
+}
 
 /**
  * @brief System call to yield the current process
@@ -335,7 +325,6 @@ system::syscall_args_t* SyscallManager::syscall_thread_sleep(system::syscall_arg
  * @return Nothing
  */
 system::syscall_args_t* SyscallManager::syscall_thread_close(system::syscall_args_t* args) {
-
 
 	// Get the args
 	uint64_t tid = args->arg0;

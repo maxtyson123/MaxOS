@@ -17,13 +17,14 @@ Scheduler::Scheduler(Multiboot& multiboot)
   m_active(false),
   m_ticks(0),
   m_next_pid(-1),
-  m_next_tid(-1)
+  m_next_tid(-1),
+  m_shared_memory_registry(ResourceType::SHARED_MEMORY),
+  m_shared_messages_registry(ResourceType::MESSAGE_ENDPOINT)
 {
 
 	// Set up the basic scheduler
 	Logger::INFO() << "Setting up Scheduler \n";
 	s_instance = this;
-	m_ipc = new InterProcessCommunicationManager();
 
 	// Create the idle process
 	auto* idle = new Process("kernelMain Idle", nullptr, nullptr, 0, true);
@@ -40,9 +41,6 @@ Scheduler::~Scheduler() {
 	// Deactivate this scheduler
 	s_instance = nullptr;
 	m_active = false;
-
-	// Delete the IPC handler
-	delete m_ipc;
 }
 
 /**
@@ -392,16 +390,6 @@ void Scheduler::load_multiboot_elfs(Multiboot* multiboot) {
 		Logger::DEBUG() << "Elf loaded to pid " << process->pid() << "\n";
 		delete elf;
 	}
-}
-
-/**
- * @brief Gets the IPC handler
- *
- * @return The IPC handler or nullptr if not found
- */
-InterProcessCommunicationManager* Scheduler::scheduler_ipc() {
-
-	return s_instance->m_ipc;
 }
 
 /**

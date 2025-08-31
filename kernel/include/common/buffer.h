@@ -33,7 +33,7 @@ namespace MaxOS{
 				Buffer(void* source, size_t size, bool update_offset = true);
 				~Buffer();
 
-				uint8_t* raw() const;
+				[[nodiscard]] uint8_t* raw() const;
 
 				void clear();
 				void full(uint8_t byte, size_t offset = 0, size_t amount = 0);
@@ -41,7 +41,7 @@ namespace MaxOS{
 				bool update_offset = true;
 				void set_offset(size_t offset);
 
-				size_t capacity() const;
+				[[nodiscard]] size_t capacity() const;
 				void resize(size_t size);
 
 				void write(uint8_t byte);
