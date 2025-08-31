@@ -14,10 +14,10 @@ SET_SOURCE_FILES_PROPERTIES(${ASM_SRCS} PROPERTIES LANGUAGE ASM)
 FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
 
 # Update the version before building
-set(VERSION_HEADER       "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h")
-set(VERSION_HEADER_TMP   "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp")
-set(POST_PROCESS_SCRIPT  "${CMAKE_SOURCE_DIR}/toolchain/pre_process/run.sh")
-add_custom_command(
+SET(VERSION_HEADER       "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h")
+SET(VERSION_HEADER_TMP   "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp")
+SET(POST_PROCESS_SCRIPT  "${CMAKE_SOURCE_DIR}/toolchain/pre_process/run.sh")
+ADD_CUSTOM_COMMAND(
         OUTPUT      "${VERSION_HEADER}"
         COMMAND     "${POST_PROCESS_SCRIPT}"
         COMMAND     ${CMAKE_COMMAND} -E copy_if_different "${VERSION_HEADER_TMP}" "${VERSION_HEADER}"
@@ -26,18 +26,17 @@ add_custom_command(
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
         COMMENT     "Regenerating version.h because kernel sources changed"
 )
-add_custom_target(VersionScript  DEPENDS "${VERSION_HEADER}"
-)
+ADD_CUSTOM_TARGET(VersionScript  DEPENDS "${VERSION_HEADER}")
 
 # Create the kernel
 ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS} ${VERSION_HEADER})
-add_dependencies(MaxOSk64 VersionScript)
+ADD_DEPENDENCIES(MaxOSk64 VersionScript)
 TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
 # Linker
 SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
 SET_TARGET_PROPERTIES(MaxOSk64 PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-TARGET_LINK_LIBRARIES(MaxOSk64 gcc)
+TARGET_LINK_LIBRARIES(MaxOSk64 PRIVATE gcc system_static)
 TARGET_LINK_OPTIONS(MaxOSk64 PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
 
 # Set the include directories

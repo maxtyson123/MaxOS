@@ -5,6 +5,7 @@
 #include <system/syscalls.h>
 #include <common/logger.h>
 
+using namespace ::system;
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
@@ -110,7 +111,7 @@ void SyscallManager::remove_syscall_handler(SyscallType syscall) {
  * @param args Arg0 = pid Arg1 = exit code
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* args) {
 
 	// Get the args
 	uint64_t pid = args->arg0;
@@ -287,9 +288,10 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
  * @param args Nothing
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_thread_yield(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_thread_yield(syscall_args_t* args) {
 
 	// Yield
+	Scheduler::current_thread()->execution_state = args->return_state;
 	cpu_status_t* next_process = Scheduler::system_scheduler()->yield();
 	args->return_state = next_process;
 
@@ -302,7 +304,7 @@ system::syscall_args_t* SyscallManager::syscall_thread_yield(system::syscall_arg
  * @param args Arg0 = milliseconds
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_thread_sleep(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_thread_sleep(syscall_args_t* args) {
 
 	// Get the milliseconds
 	size_t milliseconds = args->arg0;
@@ -324,7 +326,7 @@ system::syscall_args_t* SyscallManager::syscall_thread_sleep(system::syscall_arg
  * @param args Arg0 = tid Arg1 = exit code
  * @return Nothing
  */
-system::syscall_args_t* SyscallManager::syscall_thread_close(system::syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_thread_close(syscall_args_t* args) {
 
 	// Get the args
 	uint64_t tid = args->arg0;

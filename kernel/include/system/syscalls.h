@@ -12,6 +12,7 @@
 #include <common/colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
+#include <system/syscalls.h>	// TODO: Rename / make clear that this references the system lib
 
 
 namespace MaxOS{
@@ -19,22 +20,6 @@ namespace MaxOS{
 
         // Forward declaration
         class SyscallManager;
-
-        /// DO NOT REARRANGE ONLY APPEND TO
-        enum class SyscallType{
-            CLOSE_PROCESS,	// TODO: merge into THREAD_CLOSE
-            KLOG,
-            ALLOCATE_MEMORY,
-            FREE_MEMORY,
-            RESOURCE_CREATE,
-            RESOURCE_OPEN,
-            RESOURCE_CLOSE,
-			RESOURCE_WRITE,
-			RESOURCE_READ,
-            THREAD_YIELD,
-            THREAD_SLEEP,
-            THREAD_CLOSE,
-        };
 
         typedef struct SyscallArguments{
             uint64_t arg0;
@@ -67,8 +52,8 @@ namespace MaxOS{
 
               cpu_status_t* handle_interrupt(cpu_status_t* esp) final;
 
-              void set_syscall_handler(SyscallType syscall, syscall_func_t handler);
-              void remove_syscall_handler(SyscallType syscall);
+              void set_syscall_handler(::system::SyscallType syscall, syscall_func_t handler);
+              void remove_syscall_handler(::system::SyscallType syscall);
 
               // Syscalls (TODO: Very c style, should be made class based that automatically registers)
               static syscall_args_t* syscall_close_process(syscall_args_t* args);

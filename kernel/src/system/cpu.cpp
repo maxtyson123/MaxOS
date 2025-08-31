@@ -278,11 +278,12 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 			Logger::ERROR() << "CPU Panicked in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
 			return Scheduler::system_scheduler()->force_remove_process(process);
 		}
+
+		// Otherwise occurred whilst the kernel was doing something for the process
 	}
 
 	// We are panicking
 	is_panicking = true;
-
 	return nullptr;
 }
 

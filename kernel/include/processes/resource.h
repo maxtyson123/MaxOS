@@ -10,35 +10,33 @@
 #include <common/vector.h>
 #include <common/string.h>
 #include <common/logger.h>
+#include <syscalls.h>
 
 namespace MaxOS {
 	namespace processes {
 
-		enum class ResourceType{
-			MESSAGE_ENDPOINT,
-			SHARED_MEMORY
-		};
+		typedef ::system::ResourceType resource_type_t;
+		typedef ::system::ResourceErrorBase resource_error_base_t;
 
 		class Resource {
 
 			private:
-
 				string m_name;
-				ResourceType m_type;
+				resource_type_t m_type;
 
 			public:
 
-				Resource(const string& name, size_t flags, ResourceType type);
+				Resource(const string& name, size_t flags, resource_type_t type);
 				virtual ~Resource();
 
 				string name();
-				ResourceType type();
+				resource_type_t type();
 
-				virtual void open();
-				virtual void close();
+				virtual void open(size_t flags);
+				virtual void close(size_t flags);
 
-				virtual size_t read(void* buffer, size_t size, size_t flags);
-				virtual size_t write(const void* buffer, size_t size, size_t flags);
+				virtual int read(void* buffer, size_t size, size_t flags);
+				virtual int write(const void* buffer, size_t size, size_t flags);
 		};
 
 		 class BaseResourceRegistry{
@@ -47,13 +45,13 @@ namespace MaxOS {
 				common::Map<string, Resource*> m_resources;
 				common::Map<string, uint64_t>  m_resource_uses;
 
-				ResourceType m_type;
+			 	resource_type_t m_type;
 
 			public:
-				explicit BaseResourceRegistry(ResourceType type);
+				explicit BaseResourceRegistry(resource_type_t type);
 				~BaseResourceRegistry();
 
-				ResourceType type();
+				resource_type_t type();
 
 			 	virtual Resource* 	get_resource(const string& name);
 			 	virtual bool 		register_resource(Resource* resource);
@@ -65,7 +63,7 @@ namespace MaxOS {
 		template<class Type> class ResourceRegistry : public BaseResourceRegistry{
 
 			public:
-				explicit ResourceRegistry(ResourceType type);
+				explicit ResourceRegistry(resource_type_t type);
 				~ResourceRegistry() = default;
 
 				Resource* create_resource(const string& name, size_t flags) final {
@@ -82,21 +80,21 @@ namespace MaxOS {
 				}
 		};
 
-		template <class Type> ResourceRegistry<Type>::ResourceRegistry(ResourceType type):BaseResourceRegistry(type) {}
+		template <class Type> ResourceRegistry<Type>::ResourceRegistry(resource_type_t type):BaseResourceRegistry(type) {}
 
 		class GlobalResourceRegistry{
 
 			private:
-				common::Map<ResourceType, BaseResourceRegistry*> m_registries;
+				common::Map<resource_type_t, BaseResourceRegistry*> m_registries;
 				inline static GlobalResourceRegistry* s_current;
 
 			public:
 				GlobalResourceRegistry();
 				~GlobalResourceRegistry();
 
-				static BaseResourceRegistry* get_registry(ResourceType type);
+				static BaseResourceRegistry* get_registry(resource_type_t type);
 
-				static void add_registry(ResourceType type, BaseResourceRegistry* registry);
+				static void add_registry(resource_type_t type, BaseResourceRegistry* registry);
 				static void remove_registry(BaseResourceRegistry* registry);
 		};
 
@@ -113,7 +111,7 @@ namespace MaxOS {
 
 				common::Map<uint64_t, Resource*> resources();
 
-				uint64_t open_resource(ResourceType type, const string& name, size_t flags);
+				uint64_t open_resource(resource_type_t type, const string& name, size_t flags);
 				void 	 close_resource(uint64_t handle, size_t flags);
 
 				Resource* get_resource(uint64_t handle);

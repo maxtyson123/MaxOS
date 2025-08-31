@@ -36,6 +36,7 @@ namespace MaxOS{
         inline static Scheduler* s_instance = nullptr;
         static const uint64_t s_ticks_per_event = { 3 };
 
+		GlobalResourceRegistry m_global_resource_registry = {};
 		ResourceRegistry<SharedMemory> m_shared_memory_registry;
 		ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
 

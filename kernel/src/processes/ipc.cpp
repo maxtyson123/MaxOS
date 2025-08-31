@@ -16,29 +16,33 @@ using namespace MaxOS::memory;
  *
  * @param name The name of the block
  */
-SharedMemory::SharedMemory(const string& name, size_t size, ResourceType type)
+SharedMemory::SharedMemory(const string& name, size_t size, resource_type_t type)
 : Resource(name, size, type),
   m_size(size),
   name(name)
 {
 
 	m_physical_address = (uintptr_t) PhysicalMemoryManager::s_current_manager->allocate_area(0, size);
-	m_owner_pid = Scheduler::current_process()->pid();
 }
 
-SharedMemory::~SharedMemory() {
+SharedMemory::~SharedMemory() = default;
 
-	PhysicalMemoryManager::s_current_manager->free_area(m_physical_address, m_size);
-}
+/**
+ * @brief Get the address that the current process has this shared memory mapped to
+ *
+ * @param buffer Not used
+ * @param size Not used
+ * @param flags Not used
+ * @return The virtual address in the current process's address space or 0 if not found
+ */
+int SharedMemory::read(void* buffer, size_t size, size_t flags) {
 
-size_t SharedMemory::read(void* buffer, size_t size, size_t flags) {
-
-	// Reading gets the address
-	if(size < sizeof(m_physical_address))
+	// Process hasn't opened the resource
+	auto it = m_mappings.find(Scheduler::current_process()->pid());
+	if(it == m_mappings.end())
 		return 0;
 
-	memcpy(buffer, &m_physical_address, sizeof(m_physical_address));
-	return sizeof(m_physical_address);
+	return it->second;
 }
 
 /**
@@ -61,7 +65,35 @@ size_t SharedMemory::size() const {
 	return m_size;
 }
 
-SharedMessageEndpoint::SharedMessageEndpoint(const string& name, size_t size, ResourceType type)
+/**
+ * @brief Map the shared memory into the address space of the owning process
+ *
+ * @param flags Not used for this resource
+ */
+void SharedMemory::open(size_t flags) {
+
+	// Process has already opened this memory
+	auto it = m_mappings.find(Scheduler::current_process()->pid());
+	if(it != m_mappings.end())
+		return;
+
+	auto virtual_address = (uintptr_t)Scheduler::current_process()->memory_manager->vmm()->load_shared_memory(m_physical_address, m_size);
+	m_mappings.insert(Scheduler::current_process()->pid(), virtual_address);
+
+}
+
+/**
+ * @brief Frees the page containing the shared memory
+ *
+ * @param flags Not used for this resource
+ */
+void SharedMemory::close(size_t flags) {
+
+	PhysicalMemoryManager::s_current_manager->free_area(m_physical_address, m_size);
+
+}
+
+SharedMessageEndpoint::SharedMessageEndpoint(const string& name, size_t size, resource_type_t type)
 : Resource(name, size, type)
 {
 
@@ -74,24 +106,6 @@ SharedMessageEndpoint::~SharedMessageEndpoint() {
 		delete message;
 }
 
-/**
- * @brief Queues a message to be processed by the endpoint (buffer can be freed as it is copied in to the receiving process's memory)
- *
- * @param message The message to queue
- * @param size The size of the message
- */
-void SharedMessageEndpoint::queue_message(void const* message, size_t size) {
-
-	m_message_lock.lock();
-
-	// Create the message
-	auto* new_message = new buffer_t(size);
-	new_message->copy_from(message, size);
-	m_queue.push_back(new_message);
-
-	m_message_lock.unlock();
-}
-
 // TODO: Add a min() max() to common somewhere
 
 /**
@@ -101,11 +115,11 @@ void SharedMessageEndpoint::queue_message(void const* message, size_t size) {
  * @param size Max size of the message to be read
  * @return The amount of bytes read
  */
-size_t SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
+int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
 
 	// Wait for a message
-	while(m_queue.empty())
-		Scheduler::system_scheduler()->yield();
+	if(m_queue.empty())
+		return -1 * (int)resource_error_base_t::SHOULD_BLOCK;
 
 	// Read the message into the buffer
 	buffer_t* message = m_queue.pop_front();
@@ -122,8 +136,15 @@ size_t SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
  * @param size The size of the message
  * @return The amount of bytes written
  */
-size_t SharedMessageEndpoint::write(void const* buffer, size_t size, size_t flags) {
+int SharedMessageEndpoint::write(void const* buffer, size_t size, size_t flags) {
 
-	queue_message(buffer, size);
+	m_message_lock.lock();
+
+	// Create the message
+	auto* new_message = new buffer_t(size);
+	new_message->copy_from(buffer, size);
+	m_queue.push_back(new_message);
+
+	m_message_lock.unlock();
 	return size;
 }

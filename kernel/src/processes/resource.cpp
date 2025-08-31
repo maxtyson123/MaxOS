@@ -6,7 +6,7 @@
 using namespace MaxOS;
 using namespace MaxOS::processes;
 
-Resource::Resource(const string& name, size_t flags, ResourceType type)
+Resource::Resource(const string& name, size_t flags, resource_type_t type)
 : m_name(name),
   m_type(type)
 {
@@ -17,16 +17,20 @@ Resource::~Resource() = default;
 
 /**
  * @brief Opens the resource
+ *
+ * @param flags Optional flags to pass (unused by default but resource type specific)
  */
-void Resource::open() {
+void Resource::open(size_t flags) {
 
 }
 
 
 /**
  * @brief Closes the resource
+ *
+ * @param flags Optional flags to pass (unused by default but resource type specific)
  */
-void Resource::close() {
+void Resource::close(size_t flags) {
 
 }
 
@@ -36,9 +40,9 @@ void Resource::close() {
  * @param buffer The buffer to read into
  * @param size How many bytes to read
  * @param flags Optional flags to pass (unused by default but resource type specific)
- * @return How many bytes were successfully read
+ * @return How many bytes were successfully read (negative can be used as errors)
  */
-size_t Resource::read(void* buffer, size_t size, size_t flags) {
+int Resource::read(void* buffer, size_t size, size_t flags) {
 	return 0;
 }
 
@@ -50,7 +54,7 @@ size_t Resource::read(void* buffer, size_t size, size_t flags) {
  * @param flags Optional flags to pass (unused by default but resource type specific)
  * @return How many bytes were successfully written
  */
-size_t Resource::write(void const* buffer, size_t size, size_t flags) {
+int Resource::write(void const* buffer, size_t size, size_t flags) {
 
 	return 0;
 }
@@ -69,12 +73,12 @@ string Resource::name() {
  *
  * @return The type
  */
-ResourceType Resource::type() {
+resource_type_t Resource::type() {
 
 	return m_type;
 }
 
-BaseResourceRegistry::BaseResourceRegistry(ResourceType type)
+BaseResourceRegistry::BaseResourceRegistry(resource_type_t type)
 : m_type(type)
 {
 	GlobalResourceRegistry::add_registry(type, this);
@@ -90,7 +94,7 @@ BaseResourceRegistry::~BaseResourceRegistry(){
  *
  * @return The type
  */
-ResourceType BaseResourceRegistry::type() {
+resource_type_t BaseResourceRegistry::type() {
 
 	return m_type;
 }
@@ -151,7 +155,7 @@ void BaseResourceRegistry::close_resource(Resource* resource, size_t flags) {
 		return;
 
 	// Can safely close the resource
-	resource->close();
+	resource->close(flags);
 	m_resources.erase(resource->name());
 	m_resource_uses.erase(resource->name());
 	delete resource;
@@ -185,7 +189,7 @@ GlobalResourceRegistry::~GlobalResourceRegistry() {
  * @param type The type of registry to get
  * @return The registry or nullptr if not found
  */
-BaseResourceRegistry* GlobalResourceRegistry::get_registry(ResourceType type) {
+BaseResourceRegistry* GlobalResourceRegistry::get_registry(resource_type_t type) {
 
 	auto registry = s_current->m_registries.find(type);
 	if(registry == s_current->m_registries.end())
@@ -200,7 +204,7 @@ BaseResourceRegistry* GlobalResourceRegistry::get_registry(ResourceType type) {
  * @param type The type of registry being added
  * @param registry The registry to add
  */
-void GlobalResourceRegistry::add_registry(ResourceType type, BaseResourceRegistry* registry) {
+void GlobalResourceRegistry::add_registry(resource_type_t type, BaseResourceRegistry* registry) {
 
 	// Does it already exist?
 	if(s_current->m_registries.find(type) != s_current->m_registries.end())
@@ -257,7 +261,7 @@ common::Map<uint64_t, Resource*> ResourceManager::resources() {
  * @param name The name of the resource
  * @return The handle id of the resource or 0 if failed
  */
-uint64_t ResourceManager::open_resource(ResourceType type, string const& name, size_t flags) {
+uint64_t ResourceManager::open_resource(resource_type_t type, string const& name, size_t flags) {
 
 	// Get the resource
 	auto resource = GlobalResourceRegistry::get_registry(type) -> get_resource(name);
@@ -268,7 +272,7 @@ uint64_t ResourceManager::open_resource(ResourceType type, string const& name, s
 	m_resources.insert(m_next_handle, resource);
 
 	// Open it
-	resource->open();
+	resource->open(flags);
 	return m_next_handle++;
 }
 

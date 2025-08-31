@@ -18,8 +18,8 @@ Scheduler::Scheduler(Multiboot& multiboot)
   m_ticks(0),
   m_next_pid(-1),
   m_next_tid(-1),
-  m_shared_memory_registry(ResourceType::SHARED_MEMORY),
-  m_shared_messages_registry(ResourceType::MESSAGE_ENDPOINT)
+  m_shared_memory_registry(resource_type_t::SHARED_MEMORY),
+  m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT)
 {
 
 	// Set up the basic scheduler

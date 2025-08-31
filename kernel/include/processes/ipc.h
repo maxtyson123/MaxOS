@@ -18,23 +18,25 @@
 namespace MaxOS {
     namespace processes {
 
-        //TODO: LibIPC
-
         class SharedMemory final : public Resource {
 
             private:
                 uintptr_t m_physical_address;
                 size_t m_size;
-                uint64_t m_owner_pid;
+
+				common::Map<size_t, uintptr_t> m_mappings;
 
             public:
-                SharedMemory(const string& name, size_t size, ResourceType type);
+                SharedMemory(const string& name, size_t size, resource_type_t type);
                 ~SharedMemory() final;
 
                 string name;
                 uint64_t use_count = 1;
 
-				size_t read(void* buffer, size_t size, size_t flags) final;
+				void 	open(size_t flags) final;
+				void 	close(size_t flags) final;
+
+				int 	read(void* buffer, size_t size, size_t flags) final;
 
                 [[nodiscard]] uintptr_t physical_address() const;
                 [[nodiscard]] size_t size() const;
@@ -47,13 +49,11 @@ namespace MaxOS {
                 common::Spinlock m_message_lock;
 
             public:
-              SharedMessageEndpoint(const string& name, size_t size, ResourceType type);
+              SharedMessageEndpoint(const string& name, size_t size, resource_type_t type);
               ~SharedMessageEndpoint() final;
 
-			  size_t read(void* buffer, size_t size, size_t flags) final;
-			  size_t write(const void* buffer, size_t size, size_t flags) final;
-
-              void queue_message(void const* message, size_t size);
+			  int read(void* buffer, size_t size, size_t flags) final;
+			  int write(const void* buffer, size_t size, size_t flags) final;
         };
     }
 

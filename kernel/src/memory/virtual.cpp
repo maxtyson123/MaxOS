@@ -282,7 +282,7 @@ void VirtualMemoryManager::free(void* address) {
 		for(const auto& resource : Scheduler::current_process()->resource_manager.resources()){
 
 			// Skip non-shared memory resources
-			if(resource.second->type() != ResourceType::SHARED_MEMORY)
+			if(resource.second->type() != resource_type_t::SHARED_MEMORY)
 				continue;
 
 			// Skip shared memory that points elsewhere
