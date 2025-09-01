@@ -5,7 +5,7 @@
 #include <system/syscalls.h>
 #include <common/logger.h>
 
-using namespace ::system;
+using namespace ::syscore;
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
@@ -135,7 +135,7 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 
 	// If the first two characters are %h then no header
 	if (message[0] == '%' && message[1] == 'h')
-		Logger::INFO() << message + 2;
+		Logger::Out() << message + 2;
 	else
 		Logger::INFO() << ANSI_COLOURS[FG_Blue] << "(" << Scheduler::current_process()->name.c_str() << ":" << Scheduler::current_thread()->tid << "): " << ANSI_COLOURS[Reset] << message;
 

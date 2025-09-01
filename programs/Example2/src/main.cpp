@@ -4,8 +4,12 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <ipc/messages.h>
+#include <filesystem/directory.h>
+#include <syscalls.h>
 
-using namespace IPC;
+using namespace syscore;
+using namespace syscore::ipc;
+using namespace syscore::filesystem;
 
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
 void write(const char* data, uint64_t length = 0)
@@ -66,32 +70,38 @@ void wait(uint64_t ms)
 
 extern "C" int _start(int argc, char** argv)
 {
+	// Write to the console
+	write("MaxOS Test Program v3\n");
 
-  // Print the args
-  write("Args:\n");
-  for(int i = 0; i < argc; i++)
-  {
+	uint64_t dd = open_directory("/test/abc/");
+	write("dd: \n");
+	write_hex(dd);
 
-    // Write the arg
-    write(argv[i]);
-  }
-  write("%h\n");
+	// Read Tests
+//	write("size: \n");
+//	write_hex(directory_entries_size(dd));
+//
+//	uint8_t buffer[163];
+//	directory_entries(dd, buffer, 163);
+//	size_t offset = 0;
+//	while (offset < 163)
+//	{
+//		auto* entry = (entry_information_t*)(buffer + offset);
+//		write(entry->name);
+//		write("%h\n");
+//		offset += entry->entry_length;
+//	}
 
-  // Write to the console
-  write("MaxOS Test Program v3.1\n");
+  	// Write Tests
+//	new_file(dd, "c.txt");
+//	new_directory(dd, "sub");
+//
+//	remove_file(dd, "c.txt");
+//	remove_directory(dd, "sub");
 
-  const char* message = "Message from process 2\n";
+//	rename_directory(dd, "def");
 
-  // Wait 4seconds
-  wait(1000);
-  write("Waited 1 seconds\n");
-
-  // Send a message via IPC
-  uint64_t endpoint = open_endpoint("TestQueue");
-  send_message(endpoint, (void*)message, 24);
-
-  // Close the process
-  write("Closing process\n");
-  close();
+	while (true)
+		thread_yield();
 
 }

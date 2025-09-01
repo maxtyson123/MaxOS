@@ -13,6 +13,7 @@
 #include <memory/physical.h>
 #include <memory/virtual.h>
 #include <filesystem/vfs.h>
+#include <filesystem/vfsresource.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -70,6 +71,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
 	Scheduler scheduler(multiboot);
+	VFSResourceRegistry vfs_registry(&vfs);
 	SyscallManager syscalls;
 	console.finish();
 	scheduler.activate();
@@ -79,6 +81,11 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 		asm("nop");
 }
 
-//  - Userspace Files (syscalls, proper path handling, working directories, file handles)
+// TODO:
+//  - Userspace Files (proper path handling, working directories)
+
+// TODO:
+//  - SMP
 //  - Class & Struct docstrings
 //  - Logo on fail in center
+//  - Sanitize syscall input

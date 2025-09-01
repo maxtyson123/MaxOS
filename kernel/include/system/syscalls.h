@@ -52,8 +52,8 @@ namespace MaxOS{
 
               cpu_status_t* handle_interrupt(cpu_status_t* esp) final;
 
-              void set_syscall_handler(::system::SyscallType syscall, syscall_func_t handler);
-              void remove_syscall_handler(::system::SyscallType syscall);
+              void set_syscall_handler(::syscore::SyscallType syscall, syscall_func_t handler);
+              void remove_syscall_handler(::syscore::SyscallType syscall);
 
               // Syscalls (TODO: Very c style, should be made class based that automatically registers)
               static syscall_args_t* syscall_close_process(syscall_args_t* args);

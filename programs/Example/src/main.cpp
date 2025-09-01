@@ -4,8 +4,11 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <ipc/messages.h>
+#include <filesystem/file.h>
 
-using namespace IPC;
+using namespace syscore;
+using namespace syscore::ipc;
+using namespace syscore::filesystem;
 
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
 void write(const char* data) {
@@ -44,27 +47,35 @@ extern "C" [[noreturn]] void _start(void) {
 	// Write to the console
 	write("MaxOS Test Program v3\n");
 
-	// Create a message endpoint
-	uint64_t queue = create_endpoint("TestQueue");
-	if (!queue) {
-		write("Failed to create message queue\n");
-		while (true)
-			yield();
-	}
+	uint64_t fd = open_file("/test/a.txt");
+	write("fd: \n");
+	write_hex(fd);
 
-	write("Message queue created: \n");
-	write_hex(queue);
+	// Read Tests
+// 	uint8_t buffer[50] = {};
+//	file_read(fd, buffer, 50);
+//	write("contents: \n");
+//	write((char*)buffer);
+//	write("%h\n");
+//
+//	write("offset: \n");
+//	write_hex(file_offset(fd));
+//
+//	write("size: \n");
+//	write_hex(file_size(fd));
+//
+//	write("new offset: \n");
+//	seek_file(fd, 0, SeekType::SET);
+//	write_hex(file_offset(fd));
 
-	// Process events forever:
-	write("Waiting for messages\n");
-	uint8_t message[255] = {};
+	// Write tests
+//	const char* message = "Heyyyy kernel";
+//	write("writing: \n");
+//	file_write(fd, (void*)message, strlen(message));
+//
+//	write("renaming: \n");
+//	rename_file(fd, "b.txt");
 
-	while (true){
-
-		// Store the message
-		read_message(queue, message, 255);
-		write("Message received: \n");
-		write((char*)message);
-
-	}
+	while (true)
+		yield();
 }

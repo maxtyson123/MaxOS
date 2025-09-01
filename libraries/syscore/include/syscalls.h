@@ -2,17 +2,18 @@
 // Created by 98max on 8/31/2025.
 //
 
-#ifndef SYSTEM_SYSCALLS_H
-#define SYSTEM_SYSCALLS_H
+#ifndef SYSCORE_SYSCALLS_H
+#define SYSCORE_SYSCALLS_H
 
 #include <stdint.h>
 #include <stddef.h>
 
-namespace system{
+namespace syscore{
 
 	enum class ResourceType{
 		MESSAGE_ENDPOINT,
-		SHARED_MEMORY
+		SHARED_MEMORY,
+		FILESYSTEM,
 	};
 
 	enum class ResourceErrorBase{
@@ -56,4 +57,4 @@ namespace system{
 	void thread_exit();
 }
 
-#endif //SYSTEM_SYSCALLS_H
+#endif //SYSCORE_SYSCALLS_H

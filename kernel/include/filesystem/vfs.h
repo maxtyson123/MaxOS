@@ -31,13 +31,15 @@ namespace MaxOS{
           void unmount_filesystem(const string& mount_point);
           void unmount_all();
 
+		  Directory* root_directory();
           FileSystem* root_filesystem();
+
           FileSystem* get_filesystem(const string& mount_point);
           FileSystem* find_filesystem(string path);
           string get_relative_path(FileSystem* filesystem, string path);
 
-          Directory* root_directory();
           Directory* open_directory(const string& path);
+		  static Directory* open_directory(Directory* parent, const string& name);
 
 		  Directory* create_directory(string path);
 		  static Directory* create_directory(Directory* parent, const string& name);

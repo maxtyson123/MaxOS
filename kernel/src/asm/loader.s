@@ -1,8 +1,8 @@
 %define KERNEL_VIRTUAL_ADDR 0xFFFFFFFF80000000
 %define PAGE_SIZE 0x1000
 %define FLAGS 0b10 | 1
-%define LOOP_LIMIT 1024
-%define PD_LOOP_LIMIT 2
+%define LOOP_LIMIT 2048
+%define PD_LOOP_LIMIT 4
 
 
 global p2_table
@@ -137,7 +137,7 @@ p3_table_hh:
 p2_table:
     resb 4096
 p1_tables:
-    resb 8192
+    resb 16384
 
 
 ; The stack for the kernel

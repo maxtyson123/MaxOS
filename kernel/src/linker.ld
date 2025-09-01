@@ -8,6 +8,7 @@ SECTIONS {
     .multiboot_header :
     {
         /* Be sure that multiboot header is at the beginning */
+        _multiboot_header_start = .;
         *(.multiboot_header)
     }
 

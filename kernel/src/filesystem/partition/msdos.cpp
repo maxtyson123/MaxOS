@@ -8,6 +8,7 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::partition;
+using namespace MaxOS::filesystem::format;
 using namespace MaxOS::drivers::disk;
 
 /**

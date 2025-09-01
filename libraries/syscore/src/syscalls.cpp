@@ -4,7 +4,7 @@
 
 #include <syscalls.h>
 
-namespace system{
+namespace syscore{
 
 	int as_error(ResourceErrorBase code){
 		return -1 * (int)code;

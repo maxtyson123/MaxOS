@@ -2,7 +2,7 @@
 // Created by 98max on 1/01/2023.
 //
 
-#include <filesystem/fat32.h>
+#include <filesystem/format/fat32.h>
 #include <memory/memoryIO.h>
 
 using namespace MaxOS;
@@ -10,6 +10,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 using namespace MaxOS::filesystem;
+using namespace MaxOS::filesystem::format;
 using namespace MaxOS::memory;
 
 Fat32Volume::Fat32Volume(Disk *hd, uint32_t partition_offset)

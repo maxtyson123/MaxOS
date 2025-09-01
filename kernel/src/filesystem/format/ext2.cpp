@@ -1,12 +1,13 @@
 //
 // Created by 98max on 17/07/2025.
 //
-#include <filesystem/ext2.h>
+#include <filesystem/format/ext2.h>
 
 using namespace MaxOS;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::common;
-using namespace MaxOS::filesystem::ext2;
+using namespace MaxOS::filesystem::format;
+using namespace MaxOS::filesystem::format::ext2;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 using namespace MaxOS::drivers::clock;

@@ -10,6 +10,7 @@
 #include <common/string.h>
 #include <common/vector.h>
 #include <common/buffer.h>
+#include <syscore/include/filesystem/file.h>
 
 namespace MaxOS{
 
@@ -17,12 +18,7 @@ namespace MaxOS{
 
 		// Easier to read
 	    typedef uint32_t lba_t;
-
-        enum class SeekType{
-            SET,
-            CURRENT,
-            END
-        };
+		typedef syscore::filesystem::SeekType SeekType;
 
         /**
          * @class Path
@@ -31,12 +27,15 @@ namespace MaxOS{
         class Path
         {
             public:
-                static bool   vaild(string path);
+                static bool   valid(string path);
+				static bool   is_file(const string& path);
+
                 static string file_name(string path);
                 static string file_extension(string path);
                 static string file_path(string path);
 
                 static string top_directory(string path);
+				static string parent_directory(string path);
 
         };
 
@@ -66,6 +65,7 @@ namespace MaxOS{
                 size_t size();
                 string name();
         };
+
 
         /**
          * @class Directory

@@ -15,7 +15,7 @@ using namespace MaxOS::common;
  * @param path The path to check
  * @return True if the path is valid, false otherwise
  */
-bool Path::vaild(string path) {
+bool Path::valid(string path) {
 
 	// Must not be empty
 	if (path.length() == 0)
@@ -29,6 +29,18 @@ bool Path::vaild(string path) {
 	return true;
 
 }
+
+/**
+ * @brief Check if a path is a file
+ *
+ * @param path The path to check
+ * @return True if the path is a file, false otherwise
+ */
+bool Path::is_file(const string& path) {
+
+	return file_name(path).length() > 0 && file_extension(path).length() > 0;
+}
+
 
 /**
  * @brief Get the file name component of a path if it exists or an empty string
@@ -69,7 +81,7 @@ string Path::file_extension(string path) {
 
 	// Make sure there was a dot to split
 	if (last_dot == -1)
-		return path;
+		return "";
 
 	// Get the file extension (what is after the ".")
 	string file_extension = path.substring(last_dot + 1, path.length() - last_dot - 1);
@@ -122,6 +134,28 @@ string Path::top_directory(string path) {
 	// Get the top directory
 	string top_directory = path.substring(0, first_slash);
 	return top_directory;
+}
+
+/**
+ * @brief Get the parent directory of the path
+ *
+ * @param path The path to either the file or the directory
+ * @return
+ */
+string Path::parent_directory(string path) {
+
+	// Find the last /
+	int last_slash = -1;
+	for (int i = 0; i < path.length(); i++)
+		if (path[i] == '/')
+			last_slash = i;
+
+	// If no slash or only root, return empty string
+	if (last_slash <= 0)
+		return "/";
+
+	// Return substring up to last slash
+	return path.substring(0, last_slash);
 }
 
 File::File() = default;

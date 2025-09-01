@@ -15,8 +15,8 @@
 namespace MaxOS {
 	namespace processes {
 
-		typedef ::system::ResourceType resource_type_t;
-		typedef ::system::ResourceErrorBase resource_error_base_t;
+		typedef ::syscore::ResourceType resource_type_t;
+		typedef ::syscore::ResourceErrorBase resource_error_base_t;
 
 		class Resource {
 
@@ -41,7 +41,7 @@ namespace MaxOS {
 
 		 class BaseResourceRegistry{
 
-			private:
+		 	protected:
 				common::Map<string, Resource*> m_resources;
 				common::Map<string, uint64_t>  m_resource_uses;
 
@@ -66,7 +66,7 @@ namespace MaxOS {
 				explicit ResourceRegistry(resource_type_t type);
 				~ResourceRegistry() = default;
 
-				Resource* create_resource(const string& name, size_t flags) final {
+				Resource* create_resource(const string& name, size_t flags) override {
 
 					auto resource = new Type(name, flags, type());
 

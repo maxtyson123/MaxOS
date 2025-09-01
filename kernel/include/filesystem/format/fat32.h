@@ -10,8 +10,8 @@
 #include <stdint.h>
 
 namespace MaxOS{
-
     namespace filesystem{
+		namespace format{
 
       // TODO: Revisit when I have the energy.
       //  BUG: Subdirectory seems to write to the disk this end but tools like
@@ -285,6 +285,7 @@ namespace MaxOS{
                 ~Fat32FileSystem();
         };
 
+  	}
   }
 }
 

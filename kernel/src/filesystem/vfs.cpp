@@ -122,6 +122,22 @@ void VirtualFileSystem::unmount_all() {
 }
 
 /**
+ * @brief Get the root directory of the virtual file system
+ *
+ * @return The root directory of the virtual file system
+ */
+Directory* VirtualFileSystem::root_directory() {
+
+	// Get the root filesystem
+	FileSystem* fs = root_filesystem();
+	if (!fs)
+		return nullptr;
+
+	// Get the root directory
+	return fs->root_directory();
+}
+
+/**
  * @brief Get the filesystem mounted at the root
  *
  * @return The file system mounted "/" or null if none is mounted
@@ -208,22 +224,6 @@ string VirtualFileSystem::get_relative_path(FileSystem* filesystem, string path)
 }
 
 /**
- * @brief Get the root directory of the virtual file system
- *
- * @return The root directory of the virtual file system
- */
-Directory* VirtualFileSystem::root_directory() {
-
-	// Get the root filesystem
-	FileSystem* fs = root_filesystem();
-	if (!fs)
-		return nullptr;
-
-	// Get the root directory
-	return fs->root_directory();
-}
-
-/**
  * @brief Try to open a directory on the virtual file system and read it's contents
  *
  * @param path The path to the directory
@@ -232,7 +232,7 @@ Directory* VirtualFileSystem::root_directory() {
 Directory* VirtualFileSystem::open_directory(const string &path) {
 
 	// Ensure a valid path is given
-	if (!Path::vaild(path))
+	if (!Path::valid(path))
 		return nullptr;
 
 	// Try to find the filesystem that is responsible for the path
@@ -253,6 +253,17 @@ Directory* VirtualFileSystem::open_directory(const string &path) {
 	return directory;
 }
 
+Directory* VirtualFileSystem::open_directory(Directory* parent, string const& name) {
+
+	// Open the file
+	Directory* opened_directory = parent->open_subdirectory(name);
+	if (!opened_directory)
+		return nullptr;
+
+	opened_directory->read_from_disk();
+	return opened_directory;
+}
+
 /**
  * @brief Attempts to open the parent directory and creates the sub directory at the end of the path
  *
@@ -262,7 +273,7 @@ Directory* VirtualFileSystem::open_directory(const string &path) {
 Directory* VirtualFileSystem::create_directory(string path) {
 
 	// Ensure a valid path is given
-	if (!Path::vaild(path))
+	if (!Path::valid(path))
 		return nullptr;
 
 	path = path.strip('/');
@@ -306,7 +317,7 @@ Directory* VirtualFileSystem::create_directory(Directory* parent, string const &
 void VirtualFileSystem::delete_directory(string path) {
 
 	// Ensure a valid path is given
-	if (!Path::vaild(path))
+	if (!Path::valid(path))
 		return;
 
 	path = path.strip('/');
@@ -394,7 +405,7 @@ void VirtualFileSystem::delete_directory(Directory* parent, Directory* directory
 File* VirtualFileSystem::create_file(const string &path) {
 
 	// Ensure a valid path is given
-	if (!Path::vaild(path))
+	if (!Path::valid(path))
 		return nullptr;
 
 	// Open the directory
@@ -427,7 +438,7 @@ File* VirtualFileSystem::create_file(Directory* parent, string const &name) {
 File* VirtualFileSystem::open_file(const string &path, size_t offset) {
 
 	// Ensure a valid path is given
-	if (!Path::vaild(path))
+	if (!Path::valid(path))
 		return nullptr;
 
 	// Open the directory
@@ -467,7 +478,7 @@ File* VirtualFileSystem::open_file(Directory* parent, string const &name, size_t
 void VirtualFileSystem::delete_file(const string &path) {
 
 	// Ensure a valid path is given
-	if (!Path::vaild(path))
+	if (!Path::valid(path))
 		return;
 
 	// Open the directory

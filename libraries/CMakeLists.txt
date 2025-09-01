@@ -1,3 +1,2 @@
 # The libraries
-add_subdirectory(ipc)
-add_subdirectory(system)
+add_subdirectory(syscore)
