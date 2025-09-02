@@ -15,19 +15,36 @@ using namespace MaxOS::processes;
 
 extern uint64_t stack[];
 
+Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
+: m_madt(madt_item)
+{
+
+	m_id 		= m_madt->processor_id;
+	m_apic_id 	= m_madt->apic_id;
+	m_bsp		= m_id == 0;				// TODO: Not required to be true so safer to check current lapic is == this lapic
+
+	m_enabled 		= (m_madt->flags & 0x1) != 0;
+	m_can_enable 	= (m_madt->flags & 0x2) != 0;
+
+
+	Logger::DEBUG() << "Found CPU ID: " << m_id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable << ")\n";
+
+}
+
+Core::~Core() {
+
+}
+
 /**
  * @brief Constructor for the CPU class
  */
-CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot) {
-
+CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
+: acpi(multiboot),
+  apic(&acpi)
+{
 
 	Logger::INFO() << "Setting up CPU \n";
-	acpi = new AdvancedConfigurationAndPowerInterface(multiboot);
-	apic = new AdvancedProgrammableInterruptController(acpi);
-
-	// TODO: Multicore
-
-	// Setup cpu features
+	init_cores();
 	init_tss(gdt);
 	init_sse();
 }
@@ -346,6 +363,31 @@ void CPU::init_sse() {
 	asm volatile("mov %0, %%cr4" : : "r" (cr4));
 
 	Logger::DEBUG() << "SSE Enabled\n";
+}
+
+/**
+ * @brief
+ *
+ */
+void CPU::init_cores() {
+
+	// Search and setup each core
+	int index = 0;
+	while (true){
+
+		// Try to find a processor
+		MADT_Item* processor_madt = apic.io_apic()->get_madt_item(MADT_TYPES::PROCESSOR_APIC, index);
+		if(!processor_madt)
+			break;
+
+		// Create a cpu
+		auto* processor_apic = (madt_processor_apic_t*) ((uint64_t) processor_madt + sizeof(MADT_Item));
+		cores.push_back(new Core(processor_apic));
+		index++;
+	}
+
+
+
 }
 
 /**

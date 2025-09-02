@@ -122,10 +122,10 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 
 	// Get the information about the IO APIC
 	m_madt = (MADT*) m_acpi->find("APIC");
-	MADT_Item* io_apic_item = get_madt_item(1, 0);
+	MADT_Item* io_apic_item = get_madt_item(MADT_TYPES::IO_APIC, 0);
 
 	// Get the IO APIC
-	auto* io_apic = (MADT_IOAPIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADT_Item));
+	auto* io_apic = (MADT_IO_APIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADT_Item));
 	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic - sizeof(MADT_Item)), Present | Write);
 
 	// Map the IO APIC address to the higher half

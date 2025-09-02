@@ -139,6 +139,24 @@ namespace MaxOS{
       uintptr_t rip;
     } __attribute__((__packed__)) stack_frame_t;
 
+	class Core{
+
+		private:
+			hardwarecommunication::madt_processor_apic_t* m_madt;
+
+			bool m_enabled;
+			bool m_can_enable;
+			bool m_bsp;
+
+			uint8_t m_id;
+			uint8_t m_apic_id;
+
+		public:
+			explicit Core(hardwarecommunication::madt_processor_apic_t* madt_item);
+			~Core();
+
+	};
+
     class CPU {
 
       public:
@@ -146,8 +164,8 @@ namespace MaxOS{
         CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot);
         ~CPU();
 
-        hardwarecommunication::AdvancedConfigurationAndPowerInterface* acpi;
-        hardwarecommunication::AdvancedProgrammableInterruptController* apic;
+        hardwarecommunication::AdvancedConfigurationAndPowerInterface acpi;
+        hardwarecommunication::AdvancedProgrammableInterruptController apic;
 
         static inline bool is_panicking = { false };
         static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
@@ -160,6 +178,9 @@ namespace MaxOS{
         static inline bool s_xsave = false;
         static inline bool s_avx = false;
         void init_sse();
+
+		common::Vector<Core*> cores;
+		void init_cores();
 
         static bool check_nx();
 

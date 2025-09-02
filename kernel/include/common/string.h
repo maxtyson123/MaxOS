@@ -21,7 +21,7 @@ namespace MaxOS {
           int m_length = 0;           // Does not include the null terminator
 
 		  const static uint8_t s_small_storage = 0x99;
-		  char m_small_string[s_small_storage];
+		  char m_small_string[s_small_storage] = {0};
 		  bool m_using_small = true;
 
           [[nodiscard]] static int lex_value(String const &other) ;
@@ -34,9 +34,10 @@ namespace MaxOS {
           String(char const* string);
           String(uint8_t const* string, int length);
           String(String const &other);
-          String(int value);
-          String(uint64_t value);
-          String(float value);
+          explicit String(int value);
+          explicit String(uint64_t value);
+          explicit String(float value);
+		  explicit String(bool value);
           ~String();
 
           void copy(String const &other);

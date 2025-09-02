@@ -56,7 +56,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
 	VirtualFileSystem vfs;
 	CPU cpu(&gdt, &multiboot);
-	Clock kernel_clock(cpu.apic, 1);
+	Clock kernel_clock(&cpu.apic, 1);
 	DriverManager driver_manager;
 	driver_manager.add_driver(&kernel_clock);
 	driver_manager.find_drivers();
@@ -79,6 +79,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	// Idle loop  (read Idle.md)
 	while (true)
 		asm("nop");
+
 }
 
 // TODO:

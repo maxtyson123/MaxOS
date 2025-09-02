@@ -132,12 +132,14 @@ namespace syscore{
 	 */
 	size_t resource_write(uint64_t handle, const void* buffer, size_t size, size_t flags){
 
-		int response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
-		while (response == as_error(ResourceErrorBase::SHOULD_BLOCK)){
-			thread_yield();
+		int response = 0;
+		while (true){
 			response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
+			if(response == as_error(ResourceErrorBase::SHOULD_BLOCK))
+				thread_yield();
+			else
+				break;
 		}
-
 		return response;
 	}
 
@@ -151,12 +153,14 @@ namespace syscore{
 	 * @return The number of bytes successfully read
 	 */
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags){
-		int response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_READ, handle, (uint64_t)buffer, size, flags, 0, 0);
-		while (response == as_error(ResourceErrorBase::SHOULD_BLOCK)){
-			thread_yield();
+		int response = 0;
+		while (true){
 			response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_READ, handle, (uint64_t)buffer, size, flags, 0, 0);
+			if(response == as_error(ResourceErrorBase::SHOULD_BLOCK))
+				thread_yield();
+			else
+				break;
 		}
-
 		return response;
 	}
 

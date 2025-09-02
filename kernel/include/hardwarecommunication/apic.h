@@ -41,17 +41,34 @@ namespace MaxOS {
           uint32_t flags;
         } __attribute__((packed));
 
-        struct MADT_Item {
+        struct MADT_Item {	// TODO: _ isn't consistent naming
           uint8_t type;
           uint8_t length;
         } __attribute__((packed));
 
-        struct MADT_IOAPIC {
+		enum MADT_TYPES{	//TODO: enum class, update refrences
+			PROCESSOR_APIC,
+			IO_APIC,
+			INTERRUPT_SOURCE_OVERRIDE,
+			NMI_SOURCE,
+			APIC_NMIS,
+			APIC_ADDRESS_OVERRIDE,
+			PROCESSOR_X2APIC,
+
+		};
+
+        struct MADT_IO_APIC {
           uint8_t io_apic_id;
           uint8_t reserved;
           uint32_t io_apic_address;
           uint32_t global_system_interrupt_base;
         } __attribute__((packed));
+
+		typedef struct MADT_PROCESSOR_APIC {
+			uint8_t processor_id;
+			uint8_t apic_id;
+			uint32_t flags;
+		} __attribute__((packed)) madt_processor_apic_t;
 
         union RedirectionEntry {
           struct {
@@ -99,8 +116,6 @@ namespace MaxOS {
             uint8_t m_override_array_size = 0;
             Override m_override_array[0x10] = {};
 
-            MADT_Item* get_madt_item(uint8_t type, uint8_t index);
-
             void read_redirect(uint8_t index, RedirectionEntry* entry);
             void write_redirect(uint8_t index, RedirectionEntry* entry);
 
@@ -114,7 +129,8 @@ namespace MaxOS {
               void set_redirect(interrupt_redirect_t* redirect);
               void set_redirect_mask(uint8_t index, bool mask);
 
-              void init();
+			  MADT_Item* get_madt_item(uint8_t type, uint8_t index);
+
         };
 
       class AdvancedProgrammableInterruptController {

@@ -40,6 +40,8 @@ namespace MaxOS{
 		ResourceRegistry<SharedMemory> m_shared_memory_registry;
 		ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
 
+		void setup_cores();
+
       public:
         Scheduler(system::Multiboot& multiboot);
         ~Scheduler();

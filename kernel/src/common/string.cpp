@@ -587,6 +587,15 @@ String String::strip(char strip_char) const {
 	return stripped.substring(0, end + 1);
 }
 
+String::String(bool value) {
+
+	if(value)
+		*this = string("true");
+	else
+		*this = string("false");
+
+}
+
 /**
  * @brief Gets the length of a string
  *
