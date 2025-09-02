@@ -8,6 +8,7 @@
 #include <processes/resource.h>
 #include <filesystem/vfs.h>
 #include <common/buffer.h>
+#include <processes/scheduler.h>
 #include <syscore/include/filesystem/file.h>
 #include <syscore/include/filesystem/directory.h>
 

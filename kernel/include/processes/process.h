@@ -100,6 +100,8 @@ namespace MaxOS
                 bool is_kernel;
 
                 string name;
+				string working_directory = "/";
+
                 memory::MemoryManager* memory_manager = nullptr;
 				ResourceManager resource_manager;
 

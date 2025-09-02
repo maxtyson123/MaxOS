@@ -82,10 +82,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - Userspace Files (proper path handling, working directories)
-
-// TODO:
 //  - SMP
+//  - Test suite of common functions & other statics (paths)
 //  - Class & Struct docstrings
 //  - Logo on fail in center
 //  - Sanitize syscall input

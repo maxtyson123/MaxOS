@@ -351,31 +351,37 @@ Resource* VFSResourceRegistry::open_as_resource(string const& name, File* file) 
 
 Resource* VFSResourceRegistry::get_resource(string const& name) {
 
+	string path = Path::absolute_path(name);
+	path = Path::join_path(Scheduler::current_process()->working_directory, path);
+
 	// Resource already opened
-	auto resource = BaseResourceRegistry::get_resource(name);
+	auto resource = BaseResourceRegistry::get_resource(path);
 	if(resource != nullptr)
 		return resource;
 
 	// Open the resource
-	bool is_file = Path::is_file(name);
+	bool is_file = Path::is_file(path);
 	if(is_file)
-		return open_as_resource(name, m_vfs->open_file(name));
+		return open_as_resource(path, m_vfs->open_file(path));
 	else
-		return open_as_resource(name, m_vfs->open_directory(name));
+		return open_as_resource(path, m_vfs->open_directory(path));
 }
 
 Resource* VFSResourceRegistry::create_resource(string const& name, size_t flags) {
 
+	string path = Path::absolute_path(name);
+	path = Path::join_path(Scheduler::current_process()->working_directory, path);
+
 	// Resource already opened
-	auto resource = BaseResourceRegistry::get_resource(name);
+	auto resource = BaseResourceRegistry::get_resource(path);
 	if(resource != nullptr)
 		return resource;
 
 	// Open the resource
-	bool is_file = Path::is_file(name);
+	bool is_file = Path::is_file(path);
 	if(is_file)
-		return open_as_resource(name, m_vfs->create_file(name));
+		return open_as_resource(path, m_vfs->create_file(path));
 	else
-		return open_as_resource(name, m_vfs->create_directory(name));
+		return open_as_resource(path, m_vfs->create_directory(path));
 
 }

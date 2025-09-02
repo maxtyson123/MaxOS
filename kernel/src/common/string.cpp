@@ -284,20 +284,27 @@ common::Vector<String> String::split(String const &delimiter) const {
 
 	// Go through the string and split it by the delimiter
 	int start = 0;
-	int end = 0;
-	for (; end < m_length; end++) {
+	for (int i = 0; i <= m_length - delimiter.length(); i++) {
 
-		// Not splitting
-		if (m_string[end] != delimiter[0])
+		// Check if matches at this position
+		bool matches = true;
+		for (int j = 0; j < delimiter.length(); j++)
+			if (m_string[i + j] != delimiter[j]) {
+				matches = false;
+				break;
+			}
+
+		if(!matches)
 			continue;
 
 		// Add the splice of the string
-		strings.push_back(substring(start, end - start));
-		start = end + 1;
+		strings.push_back(substring(start, i - start));
+		start = i + delimiter.length();
+		i += delimiter.length() - 1;
 	}
 
 	// Add the last string to the vector
-	strings.push_back(substring(start, end - start));
+	strings.push_back(substring(start, m_length - start));
 
 	return strings;
 }
