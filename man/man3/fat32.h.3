@@ -1,20 +1,14 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/fat32.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/fat32.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h
 .SH SYNOPSIS
 .br
 .PP
-\fC#include 'drivers/disk/ata\&.h'\fP
-.br
-\fC#include <common/outputStream\&.h>\fP
-.br
-\fC#include <common/vector\&.h>\fP
+\fC#include <drivers/disk/disk\&.h>\fP
 .br
 \fC#include <filesystem/filesystem\&.h>\fP
-.br
-\fC#include <memory/memorymanagement\&.h>\fP
 .br
 \fC#include <stdint\&.h>\fP
 .br
@@ -23,28 +17,66 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::filesystem::BiosParameterBlock32\fP"
+.RI "struct \fBMaxOS::filesystem::format::BiosParameterBlock32\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::filesystem::DirectoryEntry\fP"
+.RI "struct \fBMaxOS::filesystem::format::FSInfo\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::DirectoryEntry\fP"
 .br
 .RI "Stores information about a file or directory\&. "
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::LongFileNameEntry\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::Fat32Volume\fP"
+.br
+.RI "Handles the FAT table that stores the information about the files on the disk and operations on the disk\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::Fat32File\fP"
+.br
+.RI "Handles the file operations on the FAT32 filesystem\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::Fat32Directory\fP"
+.br
+.RI "Handles the directory operations on the FAT32 filesystem\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::Fat32FileSystem\fP"
+.br
+.RI "Handles the FAT32 filesystem operations\&. "
 .in -1c
 .SS "Namespaces"
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::filesystem\fP"
+.RI "namespace \fBMaxOS::filesystem\fP"
+.br
+.ti -1c
+.RI "namespace \fBMaxOS::filesystem::format\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::DirectoryEntryAttributes\fP { \fBMaxOS::filesystem::format::FREE\fP = 0x00, \fBMaxOS::filesystem::format::READ_ONLY\fP = 0x01, \fBMaxOS::filesystem::format::HIDDEN\fP = 0x02, \fBMaxOS::filesystem::format::SYSTEM\fP = 0x04, \fBMaxOS::filesystem::format::VOLUME_ID\fP = 0x08, \fBMaxOS::filesystem::format::DIRECTORY\fP = 0x10, \fBMaxOS::filesystem::format::ARCHIVE\fP = 0x20, \fBMaxOS::filesystem::format::LONG_NAME\fP = READ_ONLY | HIDDEN | SYSTEM | VOLUME_ID }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::DirectoryEntryType\fP { \fBMaxOS::filesystem::format::LAST\fP = 0x00, \fBMaxOS::filesystem::format::FREE\fP = 0xE5 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ClusterState\fP : uint32_t { \fBMaxOS::filesystem::format::FREE\fP = 0x00000000, \fBMaxOS::filesystem::format::BAD\fP = 0x0FFFFFF7, \fBMaxOS::filesystem::format::END_OF_CHAIN\fP = 0xFFFFFFFF }"
 .br
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::filesystem::BiosParameterBlock32\fP \fBMaxOS::filesystem::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::filesystem::format::BiosParameterBlock32\fP \fBMaxOS::filesystem::format::__attribute__\fP ((packed)) bpb32_t"
 .br
 .in -1c
 .SS "Variables"
@@ -132,6 +164,27 @@
 .RI "uint8_t \fBfile_system_type\fP [8]"
 .br
 .ti -1c
+.RI "uint32_t \fBlead_signature\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBreserved1\fP [480]"
+.br
+.ti -1c
+.RI "uint32_t \fBstructure_signature\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfree_cluster_count\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnext_free_cluster\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBreserved2\fP [12]"
+.br
+.ti -1c
+.RI "uint32_t \fBtrail_signature\fP"
+.br
+.ti -1c
 .RI "uint8_t \fBname\fP [8]"
 .br
 .ti -1c
@@ -170,175 +223,255 @@
 .ti -1c
 .RI "uint32_t \fBsize\fP"
 .br
+.ti -1c
+.RI "enum \fBMaxOS::filesystem::format::DirectoryEntryAttributes\fP \fBMaxOS::filesystem::format::__attribute__\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBorder\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBname1\fP [5]"
+.br
+.ti -1c
+.RI "uint8_t \fBtype\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBchecksum\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBname2\fP [6]"
+.br
+.ti -1c
+.RI "uint16_t \fBzero\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBname3\fP [2]"
+.br
 .in -1c
 .SH "Variable Documentation"
 .PP 
 .SS "uint8_t attributes"
 
 .PP
-Definition at line 5 of file fat32\&.h\&.
+Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t backup_sector"
 
 .PP
-Definition at line 23 of file fat32\&.h\&.
+Definition at line \fB21\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t boot_signature"
 
 .PP
-Definition at line 27 of file fat32\&.h\&.
+Definition at line \fB25\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t bytes_per_sector"
 
 .PP
-Definition at line 5 of file fat32\&.h\&.
+Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP\&.
+.SS "uint8_t checksum"
+
+.PP
+Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t creation_date"
 
 .PP
-Definition at line 10 of file fat32\&.h\&.
+Definition at line \fB8\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t creation_time"
 
 .PP
-Definition at line 9 of file fat32\&.h\&.
+Definition at line \fB7\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t creation_time_tenth"
 
 .PP
-Definition at line 8 of file fat32\&.h\&.
+Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t drive_number"
 
 .PP
-Definition at line 25 of file fat32\&.h\&.
+Definition at line \fB23\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t extended_flags"
 
 .PP
-Definition at line 19 of file fat32\&.h\&.
+Definition at line \fB17\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t extension[3]"
 
 .PP
-Definition at line 4 of file fat32\&.h\&.
+Definition at line \fB2\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t fat_info"
 
 .PP
-Definition at line 22 of file fat32\&.h\&.
+Definition at line \fB20\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t fat_sector_count"
 
 .PP
-Definition at line 12 of file fat32\&.h\&.
+Definition at line \fB10\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t fat_version"
 
 .PP
-Definition at line 20 of file fat32\&.h\&.
+Definition at line \fB18\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t file_system_type[8]"
 
 .PP
-Definition at line 30 of file fat32\&.h\&.
+Definition at line \fB28\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t first_cluster_high"
 
 .PP
-Definition at line 13 of file fat32\&.h\&.
+Definition at line \fB11\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t first_cluster_low"
 
 .PP
-Definition at line 18 of file fat32\&.h\&.
+Definition at line \fB16\fP of file \fBfat32\&.h\fP\&.
+.SS "uint32_t free_cluster_count"
+
+.PP
+Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t head_count"
 
 .PP
-Definition at line 14 of file fat32\&.h\&.
+Definition at line \fB12\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t hidden_sectors"
 
 .PP
-Definition at line 15 of file fat32\&.h\&.
+Definition at line \fB13\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t jump[3]"
 
 .PP
-Definition at line 3 of file fat32\&.h\&.
+Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t last_access_date"
 
 .PP
-Definition at line 11 of file fat32\&.h\&.
+Definition at line \fB9\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t last_write_date"
 
 .PP
-Definition at line 16 of file fat32\&.h\&.
+Definition at line \fB14\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t last_write_time"
 
 .PP
-Definition at line 15 of file fat32\&.h\&.
+Definition at line \fB13\fP of file \fBfat32\&.h\fP\&.
+.SS "uint32_t lead_signature"
+
+.PP
+Definition at line \fB0\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t media_type"
 
 .PP
-Definition at line 11 of file fat32\&.h\&.
+Definition at line \fB9\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t name[8]"
 
 .PP
-Definition at line 3 of file fat32\&.h\&.
+Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
 .PP
-Referenced by MaxOS::processes::IPC::alloc_shared_memory(), MaxOS::processes::IPC::create_message_endpoint(), MaxOS::processes::IPC::free_message_endpoint(), MaxOS::processes::IPC::free_shared_memory(), MaxOS::processes::IPC::get_message_endpoint(), MaxOS::processes::IPC::get_shared_memory(), MaxOS::memory::VirtualMemoryManager::load_shared_memory(), MaxOS::system::UBSanHandler::print_type_mismatch(), MaxOS::system::UBSanHandler::print_type_mismatch_v1(), MaxOS::processes::IPC::send_message(), MaxOS::system::SyscallManager::syscall_create_ipc_endpoint(), MaxOS::system::SyscallManager::syscall_create_shared_memory(), MaxOS::system::SyscallManager::syscall_klog(), MaxOS::system::SyscallManager::syscall_open_shared_memory(), and MaxOS::processes::IPC::~IPC()\&.
+Referenced by \fBMaxOS::filesystem::VirtualFileSystem::create_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::create_file()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, \fBMaxOS::processes::ResourceRegistry< Type >::create_resource()\fP, \fBMaxOS::filesystem::VirtualFileSystem::delete_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::delete_file()\fP, \fBMaxOS::processes::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::processes::ResourceManager::get_resource()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::open_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::open_file()\fP, \fBMaxOS::processes::ResourceManager::open_resource()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP, and \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP\&.
+.SS "uint16_t name1[5]"
+
+.PP
+Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
+.SS "uint16_t name2[6]"
+
+.PP
+Definition at line \fB5\fP of file \fBfat32\&.h\fP\&.
+.SS "uint16_t name3[2]"
+
+.PP
+Definition at line \fB7\fP of file \fBfat32\&.h\fP\&.
+.SS "uint32_t next_free_cluster"
+
+.PP
+Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t OEM_name[8]"
 
 .PP
-Definition at line 4 of file fat32\&.h\&.
+Definition at line \fB2\fP of file \fBfat32\&.h\fP\&.
+.SS "uint8_t order"
+
+.PP
+Definition at line \fB0\fP of file \fBfat32\&.h\fP\&.
 .SS "uint64_t reserved"
 
 .PP
-Definition at line 6 of file fat32\&.h\&.
+Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
 .PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), and MaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\&.
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
 .SS "uint8_t reserved0[12]"
 
 .PP
-Definition at line 24 of file fat32\&.h\&.
+Definition at line \fB22\fP of file \fBfat32\&.h\fP\&.
+.SS "uint8_t reserved1[480]"
+
+.PP
+Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
+.SS "uint8_t reserved2[12]"
+
+.PP
+Definition at line \fB5\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t reserved_1"
 
 .PP
-Definition at line 26 of file fat32\&.h\&.
+Definition at line \fB24\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t reserved_sectors"
 
 .PP
-Definition at line 7 of file fat32\&.h\&.
+Definition at line \fB5\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t root_cluster"
 
 .PP
-Definition at line 21 of file fat32\&.h\&.
+Definition at line \fB19\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t root_entries"
 
 .PP
-Definition at line 9 of file fat32\&.h\&.
+Definition at line \fB7\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t sectors_per_cluster"
 
 .PP
-Definition at line 6 of file fat32\&.h\&.
+Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t sectors_per_track"
 
 .PP
-Definition at line 13 of file fat32\&.h\&.
+Definition at line \fB11\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t size"
 
 .PP
-Definition at line 20 of file fat32\&.h\&.
+Definition at line \fB18\fP of file \fBfat32\&.h\fP\&.
+.SS "uint32_t structure_signature"
+
 .PP
-Referenced by MaxOS::memory::MemoryManager::align(), MaxOS::memory::PhysicalMemoryManager::align_direct_to_page(), MaxOS::memory::PhysicalMemoryManager::align_to_page(), MaxOS::memory::PhysicalMemoryManager::align_up_to_page(), MaxOS::processes::IPC::alloc_shared_memory(), MaxOS::memory::VirtualMemoryManager::allocate(), MaxOS::memory::PhysicalMemoryManager::allocate_area(), MaxOS::memory::PhysicalMemoryManager::check_aligned(), MaxOS::net::EthernetFrameHandler::DataReceived(), MaxOS::drivers::ethernet::amd_am79c973::DoSend(), MaxOS::drivers::ethernet::intel_i217::DoSend(), MaxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), MaxOS::drivers::ethernet::EthernetDriver::FireDataSent(), MaxOS::memory::PhysicalMemoryManager::free_area(), MaxOS::memory::MemoryManager::handle_free(), MaxOS::memory::MemoryManager::handle_malloc(), MaxOS::net::AddressResolutionProtocol::handleEthernetFramePayload(), MaxOS::net::InternetProtocolHandler::handleEthernetframePayload(), MaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload(), MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload(), MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), MaxOS::net::TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload(), MaxOS::net::UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(), MaxOS::memory::MemoryManager::kmalloc(), MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space(), MaxOS::memory::VirtualMemoryManager::load_shared_memory(), MaxOS::memory::MemoryManager::malloc(), MaxOS::memory::PhysicalMemoryManager::map_area(), MaxOS::memory::MemoryManager::memory_used(), MaxOS::memory::MemoryManager::MemoryManager(), MaxOS::net::UserDatagramProtocolPayloadHandler::on_event(), MaxOS::drivers::ethernet::EthernetDriverEventHandler::on_event(), MaxOS::net::TransmissionControlProtocolPayloadHandler::on_event(), operator new(), operator new[](), MaxOS::memory::PhysicalMemoryManager::reserve(), MaxOS::net::EthernetFramePayloadHandler::Send(), MaxOS::net::InternetProtocolPayloadHandler::Send(), MaxOS::net::UserDatagramProtocolSocket::Send(), MaxOS::drivers::ethernet::EthernetDriver::Send(), MaxOS::net::UserDatagramProtocolHandler::Send(), MaxOS::net::TransmissionControlProtocolSocket::Send(), MaxOS::processes::IPC::send_message(), MaxOS::net::EthernetFrameHandler::sendEthernetFrame(), MaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket(), MaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(), MaxOS::memory::PhysicalMemoryManager::size_to_frames(), MaxOS::system::SyscallManager::syscall_allocate_memory(), MaxOS::system::SyscallManager::syscall_create_shared_memory(), MaxOS::system::SyscallManager::syscall_open_shared_memory(), MaxOS::system::SyscallManager::syscall_send_ipc_message(), MaxOS::memory::PhysicalMemoryManager::unmap_area(), and MaxOS::common::Vector< MaxOS::common::EventHandler< TransmissionControlProtocolPayloadHandlerEvents > * >::Vector()\&.
+Definition at line \fB2\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t table_copies"
 
 .PP
-Definition at line 8 of file fat32\&.h\&.
+Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t table_size_32"
 
 .PP
-Definition at line 18 of file fat32\&.h\&.
+Definition at line \fB16\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t total_sectors_16"
 
 .PP
-Definition at line 10 of file fat32\&.h\&.
+Definition at line \fB8\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t total_sectors_32"
 
 .PP
-Definition at line 16 of file fat32\&.h\&.
+Definition at line \fB14\fP of file \fBfat32\&.h\fP\&.
+.SS "uint32_t trail_signature"
+
+.PP
+Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
+.SS "uint8_t type"
+
+.PP
+Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t uint_32"
 
 .PP
-Definition at line 28 of file fat32\&.h\&.
+Definition at line \fB26\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t volume_label[11]"
 
 .PP
-Definition at line 29 of file fat32\&.h\&.
+Definition at line \fB27\fP of file \fBfat32\&.h\fP\&.
+.SS "uint16_t zero"
+
+.PP
+Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

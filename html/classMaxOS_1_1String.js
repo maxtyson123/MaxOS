@@ -1,16 +1,20 @@
 var classMaxOS_1_1String =
 [
     [ "String", "classMaxOS_1_1String.html#a8a7ef356e05eb9b1ea1ab518baee3095", null ],
+    [ "String", "classMaxOS_1_1String.html#a1fdfe981d2c5e0075c1669dd94553082", null ],
     [ "String", "classMaxOS_1_1String.html#a2223e5966e982c12fa308a02ab929648", null ],
+    [ "String", "classMaxOS_1_1String.html#a0f6bec3b7ae02621413d2db080599a5a", null ],
     [ "String", "classMaxOS_1_1String.html#afbf7efb0cfe70a0f8efaa9d802ae6d89", null ],
     [ "String", "classMaxOS_1_1String.html#a773bf225a858fc1f900c0d6de3a4c427", null ],
+    [ "String", "classMaxOS_1_1String.html#aab02d1227a024250dd938403d259c5b9", null ],
+    [ "String", "classMaxOS_1_1String.html#a7ec66cc2329c07e809fb8334dbeb7e20", null ],
     [ "~String", "classMaxOS_1_1String.html#ac40b2a3fb58c2d8556f5e6ff73510036", null ],
-    [ "c_str", "classMaxOS_1_1String.html#a2af521b9de69dcbe3f1125390fbb3b5a", null ],
-    [ "c_str", "classMaxOS_1_1String.html#ab631a346035367ca54668b93728c8620", null ],
+    [ "c_str", "classMaxOS_1_1String.html#aefb74cf401b56191337867e2780c5286", null ],
+    [ "c_str", "classMaxOS_1_1String.html#a8d485340c77fd86c2bd8f1ad2b121100", null ],
     [ "center", "classMaxOS_1_1String.html#ab282882421b9a427219f6bcb36dcb5b0", null ],
     [ "copy", "classMaxOS_1_1String.html#a5d3f31f93c12aca6fd0be6923416cb70", null ],
     [ "equals", "classMaxOS_1_1String.html#aad2418bd26eb55a72127ded64a7ddfc8", null ],
-    [ "length", "classMaxOS_1_1String.html#acf733b9f4647d948a153dda31d5995a0", null ],
+    [ "length", "classMaxOS_1_1String.html#ac261f2cfcff274e916e9241123c399ef", null ],
     [ "operator!=", "classMaxOS_1_1String.html#abfb25af8317420d71b0d54603d049383", null ],
     [ "operator*", "classMaxOS_1_1String.html#aaa88f46b1ddd7754b0d5fff1ce52c5da", null ],
     [ "operator+", "classMaxOS_1_1String.html#a1e03682162710eb44b0948aa4befbe4b", null ],
@@ -22,5 +26,9 @@ var classMaxOS_1_1String =
     [ "operator>", "classMaxOS_1_1String.html#a4b9b4c9eab5759a848229a8209ac3ddf", null ],
     [ "operator>=", "classMaxOS_1_1String.html#a21e5e59295a87f0af5b082c294c12f11", null ],
     [ "operator[]", "classMaxOS_1_1String.html#a1884de1766dad8ff42b6f6e965f25ef2", null ],
-    [ "operator[]", "classMaxOS_1_1String.html#a433909e3ec663b557dcd55e361f6fec4", null ]
+    [ "operator[]", "classMaxOS_1_1String.html#a433909e3ec663b557dcd55e361f6fec4", null ],
+    [ "split", "classMaxOS_1_1String.html#a611bb8a5936a782fe7505107868c2051", null ],
+    [ "starts_with", "classMaxOS_1_1String.html#aa7bedb4fde72093a36c4e7d14434b675", null ],
+    [ "strip", "classMaxOS_1_1String.html#a27143295b0c8b130ac1caaef3d94a0b5", null ],
+    [ "substring", "classMaxOS_1_1String.html#a7efe38f209b9de7d97aae845a80edfd7", null ]
 ];

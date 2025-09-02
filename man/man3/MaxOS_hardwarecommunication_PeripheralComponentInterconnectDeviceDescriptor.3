@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,12 +15,11 @@ MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor \-
 .ti -1c
 .RI "\fBPeripheralComponentInterconnectDeviceDescriptor\fP ()"
 .br
-.RI "__DESCRIPTOR___ "
 .ti -1c
 .RI "\fB~PeripheralComponentInterconnectDeviceDescriptor\fP ()"
 .br
 .ti -1c
-.RI "\fBstring\fP \fBget_type\fP ()"
+.RI "\fBstring\fP \fBget_type\fP () \fBconst\fP"
 .br
 .RI "Get the type of the device\&. "
 .in -1c
@@ -28,80 +27,62 @@ MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor \-
 
 .in +1c
 .ti -1c
-.RI "bool \fBhas_port_base\fP"
+.RI "bool \fBhas_port_base\fP = false"
 .br
 .ti -1c
-.RI "uint32_t \fBport_base\fP"
+.RI "uint32_t \fBport_base\fP = 0"
 .br
 .ti -1c
-.RI "bool \fBhas_memory_base\fP"
+.RI "bool \fBhas_memory_base\fP = false"
 .br
 .ti -1c
-.RI "uint32_t \fBmemory_base\fP"
+.RI "uint32_t \fBmemory_base\fP = 0"
 .br
 .ti -1c
-.RI "uint32_t \fBinterrupt\fP"
+.RI "uint32_t \fBinterrupt\fP = 0"
 .br
 .ti -1c
-.RI "uint16_t \fBbus\fP"
+.RI "uint16_t \fBbus\fP = 0"
 .br
 .ti -1c
-.RI "uint16_t \fBdevice\fP"
+.RI "uint16_t \fBdevice\fP = 0"
 .br
 .ti -1c
-.RI "uint16_t \fBfunction\fP"
+.RI "uint16_t \fBfunction\fP = 0"
 .br
 .ti -1c
-.RI "uint16_t \fBvendor_id\fP"
+.RI "uint16_t \fBvendor_id\fP = 0"
 .br
 .ti -1c
-.RI "uint16_t \fBdevice_id\fP"
+.RI "uint16_t \fBdevice_id\fP = 0"
 .br
 .ti -1c
-.RI "uint8_t \fBclass_id\fP"
+.RI "uint8_t \fBclass_id\fP = 0"
 .br
 .ti -1c
-.RI "uint8_t \fBsubclass_id\fP"
+.RI "uint8_t \fBsubclass_id\fP = 0"
 .br
 .ti -1c
-.RI "uint8_t \fBinterface_id\fP"
+.RI "uint8_t \fBinterface_id\fP = 0"
 .br
 .ti -1c
-.RI "uint8_t \fBrevision\fP"
+.RI "uint8_t \fBrevision\fP = 0"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 Stores information about a PCI device\&. 
 .PP
-Definition at line 43 of file pci\&.h\&.
+Definition at line \fB43\fP of file \fBpci\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor ()"
+.SS "PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor ()\fC [default]\fP"
 
-.PP
-__DESCRIPTOR___ 
-.PP
-Definition at line 20 of file pci\&.cpp\&.
-.PP
-.nf
-20                                                                                                  {
-21 
-22 }
-.fi
-.SS "PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor ()"
+.SS "PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor ()\fC [default]\fP"
 
-.PP
-Definition at line 24 of file pci\&.cpp\&.
-.PP
-.nf
-24                                                                                                   {
-25 
-26 }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBstring\fP PeripheralComponentInterconnectDeviceDescriptor::get_type ()"
+.SS "\fBstring\fP PeripheralComponentInterconnectDeviceDescriptor::get_type () const"
 
 .PP
 Get the type of the device\&. 
@@ -113,126 +94,132 @@ Type of the device as a string (or Unknown if the type is not known)
 .PP
 
 .PP
-Definition at line 32 of file pci\&.cpp\&.
-.PP
+Definition at line \fB30\fP of file \fBpci\&.cpp\fP\&..PP
 .nf
-32                                                                  {
-33     switch (class_id)
-34     {
-35         case 0x00: return (subclass_id == 0x01) ? "VGA" : "Legacy";
-36         case 0x01:
-37             switch(subclass_id)
-38             {
-39                 case 0x01:  return "IDE interface";
-40                 case 0x06:  return "SATA controller";
-41                 default:    return "Storage";
-42             }
-43         case 0x02: return "Network";
-44         case 0x03: return "Display";
-45         case 0x04:
-46             switch(subclass_id)
-47             {
-48                 case 0x00:  return "Video";
-49                 case 0x01:
-50                 case 0x03:  return "Audio";
-51                 default:    return "Multimedia";
-52             }
-53         case 0x06:
-54             switch(subclass_id)
-55             {
-56                 case 0x00:  return "Host bridge";
-57                 case 0x01:  return "ISA bridge";
-58                 case 0x04:  return "PCI bridge";
-59                 default:    return "Bridge";
-60             }
-61         case 0x07:
-62             switch(subclass_id)
-63             {
-64                 case 0x00:  return "Serial controller";
-65                 case 0x80:  return "Communication controller";
-66             }
-67             break;
-68         case 0x0C:
-69             switch(subclass_id)
-70             {
-71                 case 0x03:  return "USB";
-72                 case 0x05:  return "System Management Bus";
-73             }
-74             break;
-75     }
-76     return "Unknown";
-77 }
+30                                                                        {
+31 
+32     switch (class_id) {
+33         case 0x00:
+34             return (subclass_id == 0x01) ? "VGA" : "Legacy";
+35         case 0x01:
+36             switch (subclass_id) {
+37                 case 0x01:
+38                     return "IDE interface";
+39                 case 0x06:
+40                     return "SATA controller";
+41                 default:
+42                     return "Storage";
+43             }
+44         case 0x02:
+45             return "Network";
+46         case 0x03:
+47             return "Display";
+48         case 0x04:
+49             switch (subclass_id) {
+50                 case 0x00:
+51                     return "Video";
+52                 case 0x01:
+53                 case 0x03:
+54                     return "Audio";
+55                 default:
+56                     return "Multimedia";
+57             }
+58         case 0x06:
+59             switch (subclass_id) {
+60                 case 0x00:
+61                     return "Host bridge";
+62                 case 0x01:
+63                     return "ISA bridge";
+64                 case 0x04:
+65                     return "PCI bridge";
+66                 default:
+67                     return "Bridge";
+68             }
+69         case 0x07:
+70             switch (subclass_id) {
+71                 case 0x00:
+72                     return "Serial controller";
+73                 case 0x80:
+74                     return "Communication controller";
+75             }
+76             break;
+77         case 0x0C:
+78             switch (subclass_id) {
+79                 case 0x03:
+80                     return "USB";
+81                 case 0x05:
+82                     return "System Management Bus";
+83             }
+84             break;
+85     }
+86     return "Unknown";
+87 }
 .fi
+
 .PP
-Referenced by MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::select_drivers()\&.
+References \fBclass_id\fP, and \fBsubclass_id\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::bus"
+.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::bus = 0"
 
 .PP
-Definition at line 53 of file pci\&.h\&.
-.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::class_id"
+Definition at line \fB53\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::class_id = 0"
 
 .PP
-Definition at line 60 of file pci\&.h\&.
+Definition at line \fB60\fP of file \fBpci\&.h\fP\&.
 .PP
-Referenced by MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::get_driver()\&.
-.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::device"
+Referenced by \fBget_type()\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::device = 0"
 
 .PP
-Definition at line 54 of file pci\&.h\&.
-.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::device_id"
+Definition at line \fB54\fP of file \fBpci\&.h\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::device_id = 0"
 
 .PP
-Definition at line 58 of file pci\&.h\&.
-.PP
-Referenced by MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::get_driver(), and MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::list_known_deivce()\&.
-.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::function"
+Definition at line \fB58\fP of file \fBpci\&.h\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::function = 0"
 
 .PP
-Definition at line 55 of file pci\&.h\&.
-.SS "bool MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::has_memory_base"
+Definition at line \fB55\fP of file \fBpci\&.h\fP\&.
+.SS "bool MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::has_memory_base = false"
 
 .PP
-Definition at line 48 of file pci\&.h\&.
-.SS "bool MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::has_port_base"
+Definition at line \fB48\fP of file \fBpci\&.h\fP\&.
+.SS "bool MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::has_port_base = false"
 
 .PP
-Definition at line 45 of file pci\&.h\&.
-.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::interface_id"
+Definition at line \fB45\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::interface_id = 0"
 
 .PP
-Definition at line 62 of file pci\&.h\&.
-.SS "uint32_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::interrupt"
+Definition at line \fB62\fP of file \fBpci\&.h\fP\&.
+.SS "uint32_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::interrupt = 0"
 
 .PP
-Definition at line 51 of file pci\&.h\&.
-.SS "uint32_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::memory_base"
+Definition at line \fB51\fP of file \fBpci\&.h\fP\&.
+.SS "uint32_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::memory_base = 0"
 
 .PP
-Definition at line 49 of file pci\&.h\&.
-.SS "uint32_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::port_base"
+Definition at line \fB49\fP of file \fBpci\&.h\fP\&.
+.SS "uint32_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::port_base = 0"
 
 .PP
-Definition at line 46 of file pci\&.h\&.
-.PP
-Referenced by MaxOS::drivers::ethernet::intel_i217::intel_i217(), and MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::select_drivers()\&.
-.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::revision"
+Definition at line \fB46\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::revision = 0"
 
 .PP
-Definition at line 64 of file pci\&.h\&.
-.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::subclass_id"
+Definition at line \fB64\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::subclass_id = 0"
 
 .PP
-Definition at line 61 of file pci\&.h\&.
+Definition at line \fB61\fP of file \fBpci\&.h\fP\&.
 .PP
-Referenced by MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::get_driver()\&.
-.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::vendor_id"
+Referenced by \fBget_type()\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::vendor_id = 0"
 
 .PP
-Definition at line 57 of file pci\&.h\&.
-.PP
-Referenced by MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::get_driver(), MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::list_known_deivce(), and MaxOS::hardwarecommunication::PeripheralComponentInterconnectController::select_drivers()\&.
+Definition at line \fB57\fP of file \fBpci\&.h\fP\&.
 
 .SH "Author"
 .PP 

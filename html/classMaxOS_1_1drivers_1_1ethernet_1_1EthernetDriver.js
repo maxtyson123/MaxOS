@@ -1,6 +1,6 @@
 var classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver =
 [
-    [ "EthernetDriver", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html#a2085e867decce4d6346ff21cb8215f31", null ],
+    [ "EthernetDriver", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html#a4f3a23191fb094f9aaf9850d92b92edf", null ],
     [ "~EthernetDriver", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html#a2f2b841c2ff58da54140154a84c0151f", null ],
     [ "DoSend", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html#acae51a237ae1975705a2f831f851cca0", null ],
     [ "FireDataReceived", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html#ac859773753c9aa3b3cc53836bf9f2410", null ],

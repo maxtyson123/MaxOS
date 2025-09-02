@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::Port8BitSlow" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::Port8BitSlow" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,38 +21,61 @@ Inherits \fBMaxOS::hardwarecommunication::Port8Bit\fP\&.
 .RI "\fB~Port8BitSlow\fP ()"
 .br
 .ti -1c
-.RI "virtual void \fBwrite\fP (uint8_t \fBdata\fP) final"
+.RI "void \fBwrite\fP (uint8_t \fBdata\fP) final"
 .br
 .RI "write a byte to the port (slow) "
 .in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::Port8Bit\fP
+.in +1c
+.ti -1c
+.RI "\fBPort8Bit\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port8Bit\fP ()"
+.br
+.ti -1c
+.RI "virtual uint8_t \fBread\fP ()"
+.br
+.RI "read a byte from the port "
+.in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Port\fP
+.in +1c
+.ti -1c
+.RI "\fBPort\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port\fP ()"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::Port\fP
+.in +1c
+.ti -1c
+.RI "uint16_t \fBm_port_number\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 Handles 8 bit ports (slow) 
 .PP
-Definition at line 41 of file port\&.h\&.
+Definition at line \fB41\fP of file \fBport\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Port8BitSlow::Port8BitSlow (uint16_t port_number)"
 
 .PP
-Definition at line 47 of file port\&.cpp\&.
-.PP
+Definition at line \fB44\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-48 : Port8Bit(port_number)
-49 {
-50 }
+45 : Port8Bit(port_number) {
+46 }
 .fi
-.SS "Port8BitSlow::~Port8BitSlow ()"
 
-.PP
-Definition at line 52 of file port\&.cpp\&.
-.PP
-.nf
-52                             {
-53 
-54 }
-.fi
+.SS "Port8BitSlow::~Port8BitSlow ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "void Port8BitSlow::write (uint8_t data)\fC [final]\fP, \fC [virtual]\fP"
@@ -69,17 +92,18 @@ write a byte to the port (slow)
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::Port8Bit\fP\&.
 .PP
-Definition at line 61 of file port\&.cpp\&.
-.PP
+Definition at line \fB55\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-61                                     {
-62     __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (data), "Nd" (m_port_number));
-63 }
+55                                      {
+56 
+57     asm volatile("outb %0, %1\\njmp 1f\\n1: jmp 1f\\n1:" : : "a" (data), "Nd" (m_port_number));
+58 }
 .fi
+
 .PP
-References data, and MaxOS::hardwarecommunication::Port::m_port_number\&.
+References \fBdata\fP, and \fBMaxOS::hardwarecommunication::Port::m_port_number\fP\&.
 .PP
-Referenced by MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::disable_pic()\&.
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::disable_pic()\fP\&.
 
 .SH "Author"
 .PP 

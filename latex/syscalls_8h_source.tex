@@ -1,0 +1,79 @@
+\doxysection{syscalls.\+h}
+\hypertarget{syscalls_8h_source}{}\label{syscalls_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/system/syscalls.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/system/syscalls.h}}
+\mbox{\hyperlink{syscalls_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 27/10/2022.}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00005}00005\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_SYSTEM\_SYSCALLS\_H}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00006}00006\ \textcolor{preprocessor}{\#define\ MAXOS\_SYSTEM\_SYSCALLS\_H}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{interrupts_8h}{hardwarecommunication/interrupts.h}}>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vector_8h}{common/vector.h}}>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{colour_8h}{common/colour.h}}>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memorymanagement_8h}{memory/memorymanagement.h}}>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{scheduler_8h}{processes/scheduler.h}}>}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{syscalls_8h}{system/syscalls.h}}>}\ \ \ \textcolor{comment}{//\ TODO:\ Rename\ /\ make\ clear\ that\ this\ references\ the\ system\ lib}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00018}00018\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}}\{}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00019}00019\ \ \ \ \ \textcolor{keyword}{namespace\ }system\{}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00021}00021\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00022}00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }SyscallManager;}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00024}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{00024}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{SyscallArguments}}\{}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00025}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a30a32ef83dd1eccf5f94c8bd2410d9f8}{00025}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a30a32ef83dd1eccf5f94c8bd2410d9f8}{arg0}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00026}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a3305efecff34f288e73771677788765f}{00026}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a3305efecff34f288e73771677788765f}{arg1}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00027}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_ab1ce29c62dd002dd89d2d583a3ceb120}{00027}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_ab1ce29c62dd002dd89d2d583a3ceb120}{arg2}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00028}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a8b02a5a437a84279c67c00135f7606f2}{00028}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a8b02a5a437a84279c67c00135f7606f2}{arg3}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00029}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a5b0fd96403eedf34b15fcd0b5a84bf04}{00029}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a5b0fd96403eedf34b15fcd0b5a84bf04}{arg4}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00030}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_afa04c38c6ef4e6c5bae63723c904a389}{00030}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_afa04c38c6ef4e6c5bae63723c904a389}{arg5}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00031}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a4b336c66e2439f0243503d09568f0fdd}{00031}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_a4b336c66e2439f0243503d09568f0fdd}{return\_value}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00032}\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_acfb86192e15234e785fe0c54e3db9a3b}{00032}}\ \ \ \ \ \ \ \ \ \ \ \ \ cpu\_status\_t*\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments_acfb86192e15234e785fe0c54e3db9a3b}{return\_state}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00033}\mbox{\hyperlink{namespaceMaxOS_1_1system_ac1ac2f4e04a73e0b12b886d72ad369ba}{00033}}\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{namespaceMaxOS_1_1system_ac1ac2f4e04a73e0b12b886d72ad369ba}{syscall\_args\_t}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Could\ use\ a\ class\ based\ response\ but\ a\ single\ class\ might\ want\ multiple\ handlers\ e.g.\ fs}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00036}\mbox{\hyperlink{namespaceMaxOS_1_1system_a2bbff8c2e565180b9baa53c02b018ed5}{00036}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ (*syscall\_func\_t)(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00042}\mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager}{00042}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager}{SyscallManager}}\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}}\{}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00045}\mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a1d639e249971331a74daede5a2a58c19}{00045}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1system_a2bbff8c2e565180b9baa53c02b018ed5}{syscall\_func\_t}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a1d639e249971331a74daede5a2a58c19}{m\_syscall\_handlers}}[256]\ =\ \{\};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00046}\mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_aff22af3325de79ab57c1e33c682dd67e}{00046}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_aff22af3325de79ab57c1e33c682dd67e}{m\_current\_args}};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_aa1e6111140cab99710a3b1857229671f}{SyscallManager}}();}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00051}\mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a8921559ddf0592cd1d432fe6a20f1197}{00051}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a8921559ddf0592cd1d432fe6a20f1197}{\string~SyscallManager}}();}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\_interrupt}}(cpu\_status\_t*\ esp)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_acadbe9be2930200ba00741385b094ace}{set\_syscall\_handler}}(::syscore::SyscallType\ syscall,\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a2bbff8c2e565180b9baa53c02b018ed5}{syscall\_func\_t}}\ handler);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_ab0fabaad5e7de4ad3fdc0548d164e2c1}{remove\_syscall\_handler}}(::syscore::SyscallType\ syscall);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Syscalls\ (TODO:\ Very\ c\ style,\ should\ be\ made\ class\ based\ that\ automatically\ registers)}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a62f04424b3326e8e21b320e07b60b0a7}{syscall\_close\_process}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a0a5f67bd76cecc2ea1a627f86cc2dad9}{syscall\_klog}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_aea27f1d22fcce354166ff0c0c62abcb8}{syscall\_allocate\_memory}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_ad13b7810e2c7c207e82e08579517cac4}{syscall\_free\_memory}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a42b5ec787b3ffaa1ead09e00622c93b3}{syscall\_resource\_create}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a7f2e6657d74a30412498184c9bcb5da0}{syscall\_resource\_open}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a4784de3797ef56db0319c82765782f01}{syscall\_resource\_close}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_ad1f88f024c3b233b3d6900088fa542ad}{syscall\_resource\_write}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_af6f1c70de487303f21ed8f0e81629244}{syscall\_resource\_read}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a9fed41dba514acdb684515708da7875d}{syscall\_thread\_yield}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a0421e056ace568a45ff1e9ca4547b551}{syscall\_thread\_sleep}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager_a9e9969336151bb32f2bb64db92c836b5}{syscall\_thread\_close}}(\mbox{\hyperlink{structMaxOS_1_1system_1_1SyscallArguments}{syscall\_args\_t}}*\ args);}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00073}00073\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00075}00075\ \}}
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{syscalls_8h_source_l00077}00077\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAXOS\_SYSTEM\_SYSCALLS\_H}}
+
+\end{DoxyCode}

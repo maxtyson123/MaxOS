@@ -1,42 +1,44 @@
-\hypertarget{process_8h}{}\doxysection{/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/processes/process.h File Reference}
-\label{process_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h}}
+\doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/processes/process.h File Reference}
+\hypertarget{process_8h}{}\label{process_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h}}
 {\ttfamily \#include $<$system/cpu.\+h$>$}\newline
 {\ttfamily \#include $<$common/vector.\+h$>$}\newline
+{\ttfamily \#include $<$common/map.\+h$>$}\newline
 {\ttfamily \#include $<$common/string.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$memory/virtual.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
-{\ttfamily \#include $<$memory/memory\+I\+O.\+h$>$}\newline
+{\ttfamily \#include $<$memory/memory\+IO.\+h$>$}\newline
 {\ttfamily \#include $<$processes/elf.\+h$>$}\newline
-\doxysubsection*{Classes}
+{\ttfamily \#include $<$processes/resource.\+h$>$}\newline
+\doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Max\+O\+S\+::processes\+::\+Thread}}
-\item 
-class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Max\+O\+S\+::processes\+::\+Process}}
-\begin{DoxyCompactList}\small\item\em A process that can be scheduled by the \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Namespaces}
+class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Max\+OS\+::processes\+::\+Thread}}
+\begin{DoxyCompactList}\small\item\em The execution context of a sub-\/process thread. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Max\+OS\+::processes\+::\+Process}}
+\begin{DoxyCompactList}\small\item\em A process that can be scheduled by the \doxylink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}, wraps \& manages threads as well as its own address space and resources. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
- \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
+namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
 \item 
- \mbox{\hyperlink{namespaceMaxOS_1_1processes}{Max\+O\+S\+::processes}}
+namespace \mbox{\hyperlink{namespaceMaxOS_1_1processes}{Max\+OS\+::processes}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Typedefs}
+\doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef enum \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{Max\+O\+S\+::processes\+::\+Thread\+State}} \mbox{\hyperlink{namespaceMaxOS_1_1processes_a00379181a9892760100d025d5d9b6a90}{Max\+O\+S\+::processes\+::thread\+\_\+state\+\_\+t}}
+typedef enum \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{Max\+OS\+::processes\+::\+Thread\+State}} \mbox{\hyperlink{namespaceMaxOS_1_1processes_a00379181a9892760100d025d5d9b6a90}{Max\+OS\+::processes\+::thread\+\_\+state\+\_\+t}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Enumerations}
+\doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{Max\+O\+S\+::processes\+::\+Thread\+State}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a3195a4effaa582ba0523a5208e945cbd}{Max\+O\+S\+::processes\+::\+N\+EW}}, 
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a8695b2e56da39ed2d5181d7ee8b56e2a}{Max\+O\+S\+::processes\+::\+R\+U\+N\+N\+I\+NG}}, 
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a043ade454d46dce2cd0ce8559301d4f6}{Max\+O\+S\+::processes\+::\+R\+E\+A\+DY}}, 
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6aa7c0931b486735232aaaf97e696ea8a5}{Max\+O\+S\+::processes\+::\+S\+L\+E\+E\+P\+I\+NG}}, 
-\newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6af8ac7aeb93d575fba401d37e30e60510}{Max\+O\+S\+::processes\+::\+W\+A\+I\+T\+I\+NG}}, 
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6ae7c1b950bc6f83844022db5d32c7cb67}{Max\+O\+S\+::processes\+::\+S\+T\+O\+P\+P\+ED}}
+enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{Max\+OS\+::processes\+::\+Thread\+State}} \{ \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a24d459a81449d7210c8f9a86c2913034}{Max\+OS\+::processes\+::\+NEW}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{Max\+OS\+::processes\+::\+RUNNING}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{Max\+OS\+::processes\+::\+READY}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a7850588c11fe6db41b8b2dd6c455f8f3}{Max\+OS\+::processes\+::\+SLEEPING}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a1869d56535e8b1449a6da54ff5e11f50}{Max\+OS\+::processes\+::\+WAITING}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{Max\+OS\+::processes\+::\+STOPPED}}
  \}
 \end{DoxyCompactItemize}

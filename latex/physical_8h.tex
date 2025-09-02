@@ -1,196 +1,209 @@
-\hypertarget{physical_8h}{}\doxysection{/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/memory/physical.h File Reference}
-\label{physical_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h}}
+\doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/memory/physical.h File Reference}
+\hypertarget{physical_8h}{}\label{physical_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h}}
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stddef.\+h$>$}\newline
 {\ttfamily \#include $<$system/multiboot.\+h$>$}\newline
 {\ttfamily \#include $<$common/spinlock.\+h$>$}\newline
-\doxysubsection*{Classes}
+\doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageTableEntry}{Max\+O\+S\+::memory\+::\+Page\+Table\+Entry}}
+struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageTableEntry}{Max\+OS\+::memory\+::\+Page\+Table\+Entry}}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageMapLevel}{Max\+O\+S\+::memory\+::\+Page\+Map\+Level}}
+struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageMapLevel}{Max\+OS\+::memory\+::\+Page\+Map\+Level}}
 \item 
-class \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager}}
+class \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager}}
+\begin{DoxyCompactList}\small\item\em Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
+\item 
+namespace \mbox{\hyperlink{namespaceMaxOS_1_1memory}{Max\+OS\+::memory}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Namespaces}
+\doxysubsubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
- \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
+\#define \mbox{\hyperlink{physical_8h_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\+\_\+\+TO\+\_\+\+ADDRESS}}(pml4,  pdpr,  pd,  pt)~((pml4 $<$$<$ 39) \texorpdfstring{$\vert$}{|} (pdpr $<$$<$ 30) \texorpdfstring{$\vert$}{|} (pd $<$$<$ 21) \texorpdfstring{$\vert$}{|}  (pt $<$$<$ 12))
 \item 
- \mbox{\hyperlink{namespaceMaxOS_1_1memory}{Max\+O\+S\+::memory}}
+\#define \mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR,  LEVEL)~(((uint64\+\_\+t)ADDR \& ((uint64\+\_\+t)0x1ff $<$$<$ (12 + LEVEL \texorpdfstring{$\ast$}{*} 9))) $>$$>$ (12 + LEVEL \texorpdfstring{$\ast$}{*} 9))
+\item 
+\#define \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 3)
+\item 
+\#define \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 2)
+\item 
+\#define \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 1)
+\item 
+\#define \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 0)
 \end{DoxyCompactItemize}
-\doxysubsection*{Macros}
+\doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR,  L\+E\+V\+EL)~(((uint64\+\_\+t)A\+D\+DR \& ((uint64\+\_\+t)0x1ff $<$$<$ (12 + L\+E\+V\+EL $\ast$ 9))) $>$$>$ (12 + L\+E\+V\+EL $\ast$ 9))
+typedef void \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{Max\+OS\+::memory\+::virtual\+\_\+address\+\_\+t}}
 \item 
-\#define \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{P\+M\+L4\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 3)
+typedef void \mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{Max\+OS\+::memory\+::physical\+\_\+address\+\_\+t}}
 \item 
-\#define \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{P\+M\+L3\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 2)
-\item 
-\#define \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{P\+M\+L2\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 1)
-\item 
-\#define \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{P\+M\+L1\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 0)
+typedef enum \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+OS\+::memory\+::\+Page\+Flags}} \mbox{\hyperlink{namespaceMaxOS_1_1memory_afff8f9259424b04221cedf42a6a6be65}{Max\+OS\+::memory\+::page\+\_\+flags\+\_\+t}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Typedefs}
+\doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-typedef void \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1a4a2cf740017bbb681bbe110a18fdcb}{Max\+O\+S\+::memory\+::virtual\+\_\+address\+\_\+t}}
-\item 
-typedef void \mbox{\hyperlink{namespaceMaxOS_1_1memory_a86d1744b2aea4590cf02ef32ff8acc63}{Max\+O\+S\+::memory\+::physical\+\_\+address\+\_\+t}}
-\item 
-typedef enum \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+O\+S\+::memory\+::\+Page\+Flags}} \mbox{\hyperlink{namespaceMaxOS_1_1memory_afff8f9259424b04221cedf42a6a6be65}{Max\+O\+S\+::memory\+::page\+\_\+flags\+\_\+t}}
-\end{DoxyCompactItemize}
-\doxysubsection*{Enumerations}
-\begin{DoxyCompactItemize}
-\item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+O\+S\+::memory\+::\+Page\+Flags}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebab78d15c26f5fc953afaf720fa4a0e2d9}{Max\+O\+S\+::memory\+::\+None}} = 0, 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Max\+O\+S\+::memory\+::\+Present}} = (1 $<$$<$ 0), 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Max\+O\+S\+::memory\+::\+Write}} = (1 $<$$<$ 1), 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebae45ca5ccdd807182c984942dde55ebaa}{Max\+O\+S\+::memory\+::\+User}} = (1 $<$$<$ 2), 
-\newline
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebade1f71893c7ef8ffc647873138cfe2d6}{Max\+O\+S\+::memory\+::\+Write\+Through}} = (1 $<$$<$ 3), 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba6ce70735ff3ee88a0984b276c8e2f1c2}{Max\+O\+S\+::memory\+::\+Cache\+Disabled}} = (1 $<$$<$ 4), 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebad0ebc4bf82b25d2ba050127787514d37}{Max\+O\+S\+::memory\+::\+Accessed}} = (1 $<$$<$ 5), 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebaeedf9362578c44709ec12c15c7a05704}{Max\+O\+S\+::memory\+::\+Dirty}} = (1 $<$$<$ 6), 
-\newline
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebab5d298d682476077cef0d1cf2449c5a8}{Max\+O\+S\+::memory\+::\+Huge\+Page}} = (1 $<$$<$ 7), 
-\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebaaee9e41af6b777257ab7e0862ebdba6c}{Max\+O\+S\+::memory\+::\+Global}} = (1 $<$$<$ 8)
+enum \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+OS\+::memory\+::\+Page\+Flags}} \{ \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebab78d15c26f5fc953afaf720fa4a0e2d9}{Max\+OS\+::memory\+::\+None}} = 0
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Max\+OS\+::memory\+::\+Present}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Max\+OS\+::memory\+::\+Write}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebae45ca5ccdd807182c984942dde55ebaa}{Max\+OS\+::memory\+::\+User}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2)
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebade1f71893c7ef8ffc647873138cfe2d6}{Max\+OS\+::memory\+::\+Write\+Through}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 3)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba6ce70735ff3ee88a0984b276c8e2f1c2}{Max\+OS\+::memory\+::\+Cache\+Disabled}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 4)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebad0ebc4bf82b25d2ba050127787514d37}{Max\+OS\+::memory\+::\+Accessed}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 5)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebaeedf9362578c44709ec12c15c7a05704}{Max\+OS\+::memory\+::\+Dirty}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 6)
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebab5d298d682476077cef0d1cf2449c5a8}{Max\+OS\+::memory\+::\+Huge\+Page}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 7)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebaaee9e41af6b777257ab7e0862ebdba6c}{Max\+OS\+::memory\+::\+Global}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 8)
+, \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba346d48faacf419ed9c75689c42ac9d1f}{Max\+OS\+::memory\+::\+No\+Execute}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 63)
  \}
 \end{DoxyCompactItemize}
-\doxysubsection*{Functions}
+\doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageTableEntry}{Max\+O\+S\+::memory\+::\+Page\+Table\+Entry}} \mbox{\hyperlink{namespaceMaxOS_1_1memory_a10570b98e38bc593fa1163b00a058ca2}{Max\+O\+S\+::memory\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed)) pte\+\_\+t
+struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageTableEntry}{Max\+OS\+::memory\+::\+Page\+Table\+Entry}} \mbox{\hyperlink{namespaceMaxOS_1_1memory_a10570b98e38bc593fa1163b00a058ca2}{Max\+OS\+::memory\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed)) pte\+\_\+t
 \end{DoxyCompactItemize}
-\doxysubsection*{Variables}
+\doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a85692f5f8e411b5cb7164a7ab671ddd4}{present}}
+bool \mbox{\hyperlink{physical_8h_aa84cc4dc60e16481b79b15b815aaea31}{present}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_af3329fc9f76244f46dedda8e02ba8066}{write}}
+bool \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_aa48fc3494320cff5dd03c1f27f00049d}{user}}
+bool \mbox{\hyperlink{physical_8h_a8d0d274d7162274a04afd0cb39eaccfd}{user}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a6c2e574dfeedee226c9acca6dc4c2e09}{write\+\_\+through}}
+bool \mbox{\hyperlink{physical_8h_ad124499797a0c2567e0689e8586318af}{write\+\_\+through}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a8b9e12f40fab594a8138aa13249de726}{cache\+\_\+disabled}}
+bool \mbox{\hyperlink{physical_8h_a7164e1adb9f37fa12d63bc66788850bf}{cache\+\_\+disabled}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a9acc33713771eb0f432069058ad82436}{accessed}}
+bool \mbox{\hyperlink{physical_8h_a242ede6c60cc0c65c71f38011ae1fa83}{accessed}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_afe5b2028c29373d0232a294fdd97453d}{dirty}}
+bool \mbox{\hyperlink{physical_8h_ad25edacba00e4d0666a9959053b7cc10}{dirty}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a8d96a37ae57b04082473571ea375e913}{huge\+\_\+page}}
+bool \mbox{\hyperlink{physical_8h_ae929bd0aeee67959abac551b220720e4}{huge\+\_\+page}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a55c4ce775529f52c49ae1dd0476cd062}{global}}
+bool \mbox{\hyperlink{physical_8h_a86004534684821212245555e66ec1d09}{global}}
 \item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a3ccf0e8f255fe1d93c77192ed3a7148f}{available}}
+uint8\+\_\+t \mbox{\hyperlink{physical_8h_ad5a95884eb3a555f48a10bb338c65480}{available}}
 \item 
 uint64\+\_\+t \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\+\_\+address}}
 \item 
 pte\+\_\+t \mbox{\hyperlink{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}{entries}} \mbox{[}512\mbox{]}
 \item 
-class \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager}} \mbox{\hyperlink{namespaceMaxOS_1_1memory_aa0524ffcedef70893006240cc686e532}{Max\+O\+S\+::memory\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+class \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager}} \mbox{\hyperlink{namespaceMaxOS_1_1memory_a1336b627521dd3a8924945fa01a30a49}{Max\+OS\+::memory\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Macro Definition Documentation}
-\mbox{\Hypertarget{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}\label{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}} 
+\Hypertarget{physical_8h_a9a863ef3a659fd011f2a7ee0bf553338}\label{physical_8h_a9a863ef3a659fd011f2a7ee0bf553338} 
+\index{physical.h@{physical.h}!ENTRIES\_TO\_ADDRESS@{ENTRIES\_TO\_ADDRESS}}
+\index{ENTRIES\_TO\_ADDRESS@{ENTRIES\_TO\_ADDRESS}!physical.h@{physical.h}}
+\doxysubsubsection{\texorpdfstring{ENTRIES\_TO\_ADDRESS}{ENTRIES\_TO\_ADDRESS}}
+{\footnotesize\ttfamily \#define ENTRIES\+\_\+\+TO\+\_\+\+ADDRESS(\begin{DoxyParamCaption}\item[{}]{pml4,  }\item[{}]{pdpr,  }\item[{}]{pd,  }\item[{}]{pt }\end{DoxyParamCaption})~((pml4 $<$$<$ 39) \texorpdfstring{$\vert$}{|} (pdpr $<$$<$ 30) \texorpdfstring{$\vert$}{|} (pd $<$$<$ 21) \texorpdfstring{$\vert$}{|}  (pt $<$$<$ 12))}
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00018}{18}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+
+\Hypertarget{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}\label{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd} 
 \index{physical.h@{physical.h}!PML1\_GET\_INDEX@{PML1\_GET\_INDEX}}
 \index{PML1\_GET\_INDEX@{PML1\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML1\_GET\_INDEX}{PML1\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define P\+M\+L1\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX(\begin{DoxyParamCaption}\item[{}]{A\+D\+DR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 0)}
+{\footnotesize\ttfamily \#define PML1\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 0)}
 
 
 
-Definition at line 23 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00024}{24}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}\label{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}} 
+\Hypertarget{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}\label{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312} 
 \index{physical.h@{physical.h}!PML2\_GET\_INDEX@{PML2\_GET\_INDEX}}
 \index{PML2\_GET\_INDEX@{PML2\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML2\_GET\_INDEX}{PML2\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define P\+M\+L2\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX(\begin{DoxyParamCaption}\item[{}]{A\+D\+DR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 1)}
+{\footnotesize\ttfamily \#define PML2\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 1)}
 
 
 
-Definition at line 22 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00023}{23}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a363318d5bd935b341ef29aa93046f5de}\label{physical_8h_a363318d5bd935b341ef29aa93046f5de}} 
+\Hypertarget{physical_8h_a363318d5bd935b341ef29aa93046f5de}\label{physical_8h_a363318d5bd935b341ef29aa93046f5de} 
 \index{physical.h@{physical.h}!PML3\_GET\_INDEX@{PML3\_GET\_INDEX}}
 \index{PML3\_GET\_INDEX@{PML3\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML3\_GET\_INDEX}{PML3\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define P\+M\+L3\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX(\begin{DoxyParamCaption}\item[{}]{A\+D\+DR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 2)}
+{\footnotesize\ttfamily \#define PML3\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 2)}
 
 
 
-Definition at line 21 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00022}{22}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a21b56ad4b688267e89e208897cfdad31}\label{physical_8h_a21b56ad4b688267e89e208897cfdad31}} 
+\Hypertarget{physical_8h_a21b56ad4b688267e89e208897cfdad31}\label{physical_8h_a21b56ad4b688267e89e208897cfdad31} 
 \index{physical.h@{physical.h}!PML4\_GET\_INDEX@{PML4\_GET\_INDEX}}
 \index{PML4\_GET\_INDEX@{PML4\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML4\_GET\_INDEX}{PML4\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define P\+M\+L4\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX(\begin{DoxyParamCaption}\item[{}]{A\+D\+DR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX}}(A\+D\+DR, 3)}
+{\footnotesize\ttfamily \#define PML4\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 3)}
 
 
 
-Definition at line 20 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00021}{21}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}\label{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}} 
+\Hypertarget{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}\label{physical_8h_a0de5225931b391ee0a69cfd4aae482c0} 
 \index{physical.h@{physical.h}!PMLX\_GET\_INDEX@{PMLX\_GET\_INDEX}}
 \index{PMLX\_GET\_INDEX@{PMLX\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PMLX\_GET\_INDEX}{PMLX\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define P\+M\+L\+X\+\_\+\+G\+E\+T\+\_\+\+I\+N\+D\+EX(\begin{DoxyParamCaption}\item[{}]{A\+D\+DR,  }\item[{}]{L\+E\+V\+EL }\end{DoxyParamCaption})~(((uint64\+\_\+t)A\+D\+DR \& ((uint64\+\_\+t)0x1ff $<$$<$ (12 + L\+E\+V\+EL $\ast$ 9))) $>$$>$ (12 + L\+E\+V\+EL $\ast$ 9))}
+{\footnotesize\ttfamily \#define PMLX\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR,  }\item[{}]{LEVEL }\end{DoxyParamCaption})~(((uint64\+\_\+t)ADDR \& ((uint64\+\_\+t)0x1ff $<$$<$ (12 + LEVEL \texorpdfstring{$\ast$}{*} 9))) $>$$>$ (12 + LEVEL \texorpdfstring{$\ast$}{*} 9))}
 
 
 
-Definition at line 18 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00019}{19}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
 \doxysubsection{Variable Documentation}
-\mbox{\Hypertarget{physical_8h_a9acc33713771eb0f432069058ad82436}\label{physical_8h_a9acc33713771eb0f432069058ad82436}} 
+\Hypertarget{physical_8h_a242ede6c60cc0c65c71f38011ae1fa83}\label{physical_8h_a242ede6c60cc0c65c71f38011ae1fa83} 
 \index{physical.h@{physical.h}!accessed@{accessed}}
 \index{accessed@{accessed}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{accessed}{accessed}}
-{\footnotesize\ttfamily uint64\+\_\+t accessed}
+{\footnotesize\ttfamily bool accessed}
 
 
 
-Definition at line 33 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00005}{5}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a3ccf0e8f255fe1d93c77192ed3a7148f}\label{physical_8h_a3ccf0e8f255fe1d93c77192ed3a7148f}} 
+\Hypertarget{physical_8h_ad5a95884eb3a555f48a10bb338c65480}\label{physical_8h_ad5a95884eb3a555f48a10bb338c65480} 
 \index{physical.h@{physical.h}!available@{available}}
 \index{available@{available}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{available}{available}}
-{\footnotesize\ttfamily uint64\+\_\+t available}
+{\footnotesize\ttfamily uint8\+\_\+t available}
 
 
 
-Definition at line 37 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00009}{9}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a8b9e12f40fab594a8138aa13249de726}\label{physical_8h_a8b9e12f40fab594a8138aa13249de726}} 
+\Hypertarget{physical_8h_a7164e1adb9f37fa12d63bc66788850bf}\label{physical_8h_a7164e1adb9f37fa12d63bc66788850bf} 
 \index{physical.h@{physical.h}!cache\_disabled@{cache\_disabled}}
 \index{cache\_disabled@{cache\_disabled}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{cache\_disabled}{cache\_disabled}}
-{\footnotesize\ttfamily uint64\+\_\+t cache\+\_\+disabled}
+{\footnotesize\ttfamily bool cache\+\_\+disabled}
 
 
 
-Definition at line 32 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00004}{4}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_afe5b2028c29373d0232a294fdd97453d}\label{physical_8h_afe5b2028c29373d0232a294fdd97453d}} 
+\Hypertarget{physical_8h_ad25edacba00e4d0666a9959053b7cc10}\label{physical_8h_ad25edacba00e4d0666a9959053b7cc10} 
 \index{physical.h@{physical.h}!dirty@{dirty}}
 \index{dirty@{dirty}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{dirty}{dirty}}
-{\footnotesize\ttfamily uint64\+\_\+t dirty}
+{\footnotesize\ttfamily bool dirty}
 
 
 
-Definition at line 34 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00006}{6}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}\label{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}} 
+\Hypertarget{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}\label{physical_8h_a571f2ec04bb9a58c7be02c94a37de231} 
 \index{physical.h@{physical.h}!entries@{entries}}
 \index{entries@{entries}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{entries}{entries}}
@@ -198,33 +211,33 @@ Definition at line 34 of file physical.\+h.
 
 
 
-Definition at line 28 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00000}{0}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by Max\+O\+S\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find(), and Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::map().
+Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00106}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}.
 
-\mbox{\Hypertarget{physical_8h_a55c4ce775529f52c49ae1dd0476cd062}\label{physical_8h_a55c4ce775529f52c49ae1dd0476cd062}} 
+\Hypertarget{physical_8h_a86004534684821212245555e66ec1d09}\label{physical_8h_a86004534684821212245555e66ec1d09} 
 \index{physical.h@{physical.h}!global@{global}}
 \index{global@{global}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{global}{global}}
-{\footnotesize\ttfamily uint64\+\_\+t global}
+{\footnotesize\ttfamily bool global}
 
 
 
-Definition at line 36 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00008}{8}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a8d96a37ae57b04082473571ea375e913}\label{physical_8h_a8d96a37ae57b04082473571ea375e913}} 
+\Hypertarget{physical_8h_ae929bd0aeee67959abac551b220720e4}\label{physical_8h_ae929bd0aeee67959abac551b220720e4} 
 \index{physical.h@{physical.h}!huge\_page@{huge\_page}}
 \index{huge\_page@{huge\_page}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{huge\_page}{huge\_page}}
-{\footnotesize\ttfamily uint64\+\_\+t huge\+\_\+page}
+{\footnotesize\ttfamily bool huge\+\_\+page}
 
 
 
-Definition at line 35 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00007}{7}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_a069784144afa0b45c14ce1788adb541a}\label{physical_8h_a069784144afa0b45c14ce1788adb541a}} 
+\Hypertarget{physical_8h_a069784144afa0b45c14ce1788adb541a}\label{physical_8h_a069784144afa0b45c14ce1788adb541a} 
 \index{physical.h@{physical.h}!physical\_address@{physical\_address}}
 \index{physical\_address@{physical\_address}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{physical\_address}{physical\_address}}
@@ -232,57 +245,53 @@ Definition at line 35 of file physical.\+h.
 
 
 
-Definition at line 38 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00010}{10}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by Max\+O\+S\+::processes\+::\+I\+P\+C\+::alloc\+\_\+shared\+\_\+memory(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::free\+\_\+shared\+\_\+memory(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::from\+\_\+dm\+\_\+region(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::identity\+\_\+map(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::is\+\_\+mapped(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::map(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+create\+\_\+shared\+\_\+memory(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+open\+\_\+shared\+\_\+memory(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::to\+\_\+dm\+\_\+region(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::to\+\_\+higher\+\_\+region(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::to\+\_\+io\+\_\+region(), and Max\+O\+S\+::drivers\+::video\+::\+Video\+Electronics\+Standards\+Association\+::\+Video\+Electronics\+Standards\+Association().
+Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00013}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::\+Advanced\+Configuration\+And\+Power\+Interface()}}, \mbox{\hyperlink{physical_8cpp_source_l00957}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::from\+\_\+dm\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00563}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::identity\+\_\+map()}}, \mbox{\hyperlink{physical_8cpp_source_l00883}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::is\+\_\+mapped()}}, \mbox{\hyperlink{virtual_8cpp_source_l00447}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space()}}, \mbox{\hyperlink{virtual_8cpp_source_l00429}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{physical_8cpp_source_l00478}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8cpp_source_l00493}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8cpp_source_l00023}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00942}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00895}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+higher\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00927}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}, and \mbox{\hyperlink{vesa_8cpp_source_l00015}{Max\+OS\+::drivers\+::video\+::\+Video\+Electronics\+Standards\+Association\+::\+Video\+Electronics\+Standards\+Association()}}.
 
-\mbox{\Hypertarget{physical_8h_a85692f5f8e411b5cb7164a7ab671ddd4}\label{physical_8h_a85692f5f8e411b5cb7164a7ab671ddd4}} 
+\Hypertarget{physical_8h_aa84cc4dc60e16481b79b15b815aaea31}\label{physical_8h_aa84cc4dc60e16481b79b15b815aaea31} 
 \index{physical.h@{physical.h}!present@{present}}
 \index{present@{present}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{present}{present}}
-{\footnotesize\ttfamily uint64\+\_\+t present}
+{\footnotesize\ttfamily bool present}
 
 
 
-Definition at line 28 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00000}{0}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-
-
-Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::map().
-
-\mbox{\Hypertarget{physical_8h_aa48fc3494320cff5dd03c1f27f00049d}\label{physical_8h_aa48fc3494320cff5dd03c1f27f00049d}} 
+\Hypertarget{physical_8h_a8d0d274d7162274a04afd0cb39eaccfd}\label{physical_8h_a8d0d274d7162274a04afd0cb39eaccfd} 
 \index{physical.h@{physical.h}!user@{user}}
 \index{user@{user}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{user}{user}}
-{\footnotesize\ttfamily uint64\+\_\+t user}
+{\footnotesize\ttfamily bool user}
 
 
 
-Definition at line 30 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00002}{2}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
-\mbox{\Hypertarget{physical_8h_af3329fc9f76244f46dedda8e02ba8066}\label{physical_8h_af3329fc9f76244f46dedda8e02ba8066}} 
+\Hypertarget{physical_8h_ab4d8d1259f524270d625ab8933700d27}\label{physical_8h_ab4d8d1259f524270d625ab8933700d27} 
 \index{physical.h@{physical.h}!write@{write}}
 \index{write@{write}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{write}{write}}
-{\footnotesize\ttfamily uint64\+\_\+t write}
+{\footnotesize\ttfamily bool write}
 
 
 
-Definition at line 29 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00001}{1}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by Max\+O\+S\+::drivers\+::ethernet\+::intel\+\_\+i217\+::activate(), Max\+O\+S\+::drivers\+::clock\+::\+Clock\+::calibrate(), Max\+O\+S\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received(), Max\+O\+S\+::drivers\+::ethernet\+::intel\+\_\+i217\+::\+Do\+Send(), Max\+O\+S\+::drivers\+::\+Driver\+::error\+\_\+message(), Max\+O\+S\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Received(), Max\+O\+S\+::drivers\+::ethernet\+::intel\+\_\+i217\+::\+Get\+Media\+Access\+Control\+Address(), Max\+O\+S\+::drivers\+::ethernet\+::intel\+\_\+i217\+::handle\+\_\+interrupt(), Max\+O\+S\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload(), Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload(), Max\+O\+S\+::drivers\+::disk\+::\+Advanced\+Technology\+Attachment\+::identify(), Max\+O\+S\+::hardwarecommunication\+::\+Local\+A\+P\+I\+C\+::init(), Max\+O\+S\+::common\+::\+Generic\+Output\+Stream$<$ string $>$\+::on\+\_\+stream\+\_\+read(), Max\+O\+S\+::common\+::\+Generic\+Output\+Stream$<$ string $>$\+::operator$<$$<$(), Max\+O\+S\+::net\+::\+Internet\+Control\+Message\+Protocol\+::\+Request\+Echo\+Reply(), Max\+O\+S\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Send(), Max\+O\+S\+::hardwarecommunication\+::\+Local\+A\+P\+I\+C\+::send\+\_\+eoi(), and Max\+O\+S\+::drivers\+::clock\+::\+P\+I\+T\+::ticks\+\_\+per\+\_\+ms().
+Referenced by \mbox{\hyperlink{ethernetframe_8cpp_source_l00078}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received()}}, \mbox{\hyperlink{icmp_8cpp_source_l00031}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{tcp_8cpp_source_l00157}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{apic_8cpp_source_l00013}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::\+Local\+APIC()}}, \mbox{\hyperlink{outputStream_8h_source_l00089}{Max\+OS\+::common\+::\+Generic\+Output\+Stream$<$ Type $>$\+::on\+\_\+stream\+\_\+read()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00171}{Max\+OS\+::common\+::\+Output\+Stream\+::operator$<$$<$()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00147}{Max\+OS\+::common\+::\+Output\+Stream\+::operator$<$$<$()}}, \mbox{\hyperlink{logger_8cpp_source_l00213}{Logger\+::printf()}}, \mbox{\hyperlink{icmp_8cpp_source_l00075}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::\+Request\+Echo\+Reply()}}, \mbox{\hyperlink{apic_8cpp_source_l00114}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+eoi()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00049}{Max\+OS\+::common\+::\+Output\+Stream\+::write()}}, \mbox{\hyperlink{disk_8cpp_source_l00040}{Max\+OS\+::drivers\+::disk\+::\+Disk\+::write()}}, \mbox{\hyperlink{console_8cpp_source_l00412}{Max\+OS\+::drivers\+::console\+::\+Console\+Stream\+::write\+\_\+char()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00111}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+hex()}}, and \mbox{\hyperlink{outputStream_8cpp_source_l00100}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+int()}}.
 
-\mbox{\Hypertarget{physical_8h_a6c2e574dfeedee226c9acca6dc4c2e09}\label{physical_8h_a6c2e574dfeedee226c9acca6dc4c2e09}} 
+\Hypertarget{physical_8h_ad124499797a0c2567e0689e8586318af}\label{physical_8h_ad124499797a0c2567e0689e8586318af} 
 \index{physical.h@{physical.h}!write\_through@{write\_through}}
 \index{write\_through@{write\_through}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{write\_through}{write\_through}}
-{\footnotesize\ttfamily uint64\+\_\+t write\+\_\+through}
+{\footnotesize\ttfamily bool write\+\_\+through}
 
 
 
-Definition at line 31 of file physical.\+h.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00003}{3}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 

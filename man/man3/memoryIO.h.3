@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memoryIO.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memoryIO.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -39,10 +39,10 @@
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::memory\fP"
+.RI "namespace \fBMaxOS::memory\fP"
 .br
 .in -1c
 .SS "Functions"
@@ -53,7 +53,7 @@
 .br
 .RI "Copies a block of memory from one location to another\&. "
 .ti -1c
-.RI "void * \fBmemset\fP (void *ptr, int value, uint64_t num)"
+.RI "void * \fBmemset\fP (void *ptr, uint32_t value, uint64_t num)"
 .br
 .RI "Fills a block of memory with a specified value\&. "
 .ti -1c
@@ -88,26 +88,27 @@ Compares two blocks of memory\&.
 .PP
 
 .PP
-Definition at line 192 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB216\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-192                                                              {
-193   const unsigned char *p1 = (const unsigned char *)ptr1;
-194   const unsigned char *p2 = (const unsigned char *)ptr2;
-195   for (size_t i = 0; i < num; i++) {
-196     if (p1[i] < p2[i])
-197       return -1;
-198     if (p1[i] > p2[i])
-199       return 1;
-200   }
-201   return 0;
-202 }
+216                                                              {
+217 
+218     // Make sure the pointers exist
+219     if (ptr1 == nullptr || ptr2 == nullptr)
+220         return 0;
+221 
+222     const auto* p1 = (const unsigned char*) ptr1;
+223     const auto* p2 = (const unsigned char*) ptr2;
+224     for (size_t i = 0; i < num; i++) {
+225         if (p1[i] < p2[i])
+226             return \-1;
+227         if (p1[i] > p2[i])
+228             return 1;
+229     }
+230     return 0;
+231 }
 .fi
-.PP
-References MaxOS::drivers::peripherals::i\&.
-.PP
-Referenced by memFunctions()\&.
-.SS "void* memcpy (void * destination, const void * source, uint64_t num)"
+
+.SS "void * memcpy (void * destination, const void * source, uint64_t num)"
 
 .PP
 Copies a block of memory from one location to another\&. 
@@ -133,23 +134,36 @@ The destination
 .PP
 
 .PP
-Definition at line 138 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB136\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-138                                                                   {
-139 
-140     unsigned char* dst = (unsigned char*) destination;
-141     const unsigned char* src = (const unsigned char*) source;
-142     for (size_t i = 0; i < num; i++)
-143         dst[i] = src[i];
-144     return destination;
-145 }
+136                                                                   {
+137 
+138     // Make sure the source and destination are not the same
+139     if (destination == source)
+140         return destination;
+141 
+142     // Make sure they exist
+143     if (destination == nullptr || source == nullptr)
+144         return destination;
+145 
+146     // Get the source and destination
+147     auto* dst = (unsigned char*) destination;
+148     const auto* src = (const unsigned char*) source;
+149 
+150     // Copy the data
+151     for (size_t i = 0; i < num; i++)
+152         dst[i] = src[i];
+153 
+154     // Usefully for easier code writing
+155     return destination;
+156 }
 .fi
+
 .PP
-References destination, MaxOS::drivers::peripherals::i, and source\&.
+References \fBdestination\fP, and \fBsource\fP\&.
 .PP
-Referenced by memFunctions(), MaxOS::processes::IPC::send_message(), and MaxOS::processes::Thread::Thread()\&.
-.SS "void* memmove (void * destination, const void * source, uint64_t num)"
+Referenced by \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::Ext2Volume()\fP, \fBMaxOS::processes::SharedMessageEndpoint::read()\fP, \fBMaxOS::common::Buffer::resize()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+.SS "void * memmove (void * destination, const void * source, uint64_t num)"
 
 .PP
 Copies a block of memory from one location to another\&. 
@@ -170,27 +184,36 @@ The destination
 .PP
 
 .PP
-Definition at line 171 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB186\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-171                                                                    {
-172     unsigned char* dst = (unsigned char*) destination;
-173     const unsigned char* src = (const unsigned char*) source;
-174     if (dst < src) {
-175         for (size_t i = 0; i < num; i++)
-176             dst[i] = src[i];
-177     } else {
-178         for (size_t i = num; i != 0; i--)
-179             dst[i-1] = src[i-1];
-180     }
-181     return destination;
-182 }
+186                                                                    {
+187 
+188     // Make sure the source and destination are not the same
+189     if (destination == source)
+190         return destination;
+191 
+192     // Make sure they exist
+193     if (destination == nullptr || source == nullptr)
+194         return destination;
+195 
+196     auto* dst = (unsigned char*) destination;
+197     const auto* src = (const unsigned char*) source;
+198     if (dst < src) {
+199         for (size_t i = 0; i < num; i++)
+200             dst[i] = src[i];
+201     } else {
+202         for (size_t i = num; i != 0; i\-\-)
+203             dst[i \- 1] = src[i \- 1];
+204     }
+205     return destination;
+206 }
 .fi
+
 .PP
-References destination, MaxOS::drivers::peripherals::i, and source\&.
+References \fBdestination\fP, and \fBsource\fP\&.
 .PP
-Referenced by memFunctions(), and MaxOS::drivers::console::VESABootConsole::scroll_up()\&.
-.SS "void* memset (void * ptr, int value, uint64_t num)"
+Referenced by \fBMaxOS::drivers::console::VESABootConsole::scroll_up()\fP\&.
+.SS "void * memset (void * ptr, uint32_t value, uint64_t num)"
 
 .PP
 Fills a block of memory with a specified value\&. 
@@ -211,20 +234,23 @@ The pointer to the block of memory
 .PP
 
 .PP
-Definition at line 156 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB166\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-156                                                  {
-157     unsigned char* dst = (unsigned char*) ptr;
-158     for (size_t i = 0; i < num; i++)
-159         dst[i] = (unsigned char) value;
-160     return ptr;
-161 }
+166                                                       {
+167 
+168     // Make sure the pointer exists
+169     if (ptr == nullptr)
+170         return ptr;
+171 
+172     auto* dst = (unsigned char*) ptr;
+173     for (size_t i = 0; i < num; i++)
+174         dst[i] = (unsigned char) value;
+175     return ptr;
+176 }
 .fi
+
 .PP
-References MaxOS::drivers::peripherals::i\&.
-.PP
-Referenced by memFunctions()\&.
+Referenced by \fBMaxOS::common::Buffer::clear()\fP, and \fBMaxOS::common::Buffer::full()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

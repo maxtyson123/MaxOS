@@ -1,6 +1,6 @@
 var colour_8h =
 [
-    [ "Colour", "classMaxOS_1_1common_1_1Colour.html", "classMaxOS_1_1common_1_1Colour" ],
+    [ "MaxOS::common::Colour", "classMaxOS_1_1common_1_1Colour.html", "classMaxOS_1_1common_1_1Colour" ],
     [ "ANSIColour", "colour_8h.html#ac660b07c00db1fe517a6f9ab5d1e5c01", [
       [ "FG_Black", "colour_8h.html#ac660b07c00db1fe517a6f9ab5d1e5c01aa75a800b3f9f0a76c609543e01012cae", null ],
       [ "FG_Red", "colour_8h.html#ac660b07c00db1fe517a6f9ab5d1e5c01acf3acb216da354fb02b49f6ec8556386", null ],
@@ -21,23 +21,23 @@ var colour_8h =
       [ "Reset", "colour_8h.html#ac660b07c00db1fe517a6f9ab5d1e5c01a6ef1cd5a9d3fa65e570b4125468d3427", null ]
     ] ],
     [ "ConsoleColour", "colour_8h.html#a163092be7d061323a91e03e6e8965da9", [
-      [ "Unititialised", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a53febde51c2b7919b88a2d0bc197869e", null ],
-      [ "Black", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a3fab4e904157b2e96be41a69c8ae0553", null ],
-      [ "Blue", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a177350a6ffd1cb26e913101efbe06add", null ],
-      [ "Green", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a53d4bd10218a4c69b9acf6246c6148e9", null ],
-      [ "Cyan", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a64cf877cc0c61e4eec7fbe6de9a312fa", null ],
-      [ "Red", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a50ca4978859264bc134dcc8e9ca11a0f", null ],
-      [ "Magenta", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ae5fdb34d4ec4a915661c6bc5e1274c10", null ],
-      [ "Brown", "colour_8h.html#a163092be7d061323a91e03e6e8965da9aa176809675a1318e6a24dd6d415233fc", null ],
-      [ "LightGrey", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a435651475912320afbee577ea1e39874", null ],
-      [ "DarkGrey", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ab62102734f62ebcaacfe43023d16fc22", null ],
-      [ "LightBlue", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a3b1a1a9e4837b4a524a5804471106c35", null ],
-      [ "LightGreen", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a1ca3102fb2da2f87bd4ef90e6647b133", null ],
-      [ "LightCyan", "colour_8h.html#a163092be7d061323a91e03e6e8965da9aa793c2f006985eb2fdd89d1e15c41e90", null ],
-      [ "LightRed", "colour_8h.html#a163092be7d061323a91e03e6e8965da9af19b2c2c04d9c323170a92576debc7f8", null ],
-      [ "LightMagenta", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ab52bbb674310fa2ec96dd0805270a952", null ],
-      [ "Yellow", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a1d4c081879e859cdbd1add274d79471b", null ],
-      [ "White", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a016a801021c0877aa43cd8f8bb656276", null ]
+      [ "Uninitialised", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a962074a9de1cf3d6d7b6f955a0a94820", null ],
+      [ "Black", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ae90dfb84e30edf611e326eeb04d680de", null ],
+      [ "Blue", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a9594eec95be70e7b1710f730fdda33d9", null ],
+      [ "Green", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ad382816a3cbeed082c9e216e7392eed1", null ],
+      [ "Cyan", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a023c239d2f2538f140a20e72c7b73f20", null ],
+      [ "Red", "colour_8h.html#a163092be7d061323a91e03e6e8965da9aee38e4d5dd68c4e440825018d549cb47", null ],
+      [ "Magenta", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ab91cc2c1416fcca942b61c7ac5b1a9ac", null ],
+      [ "Brown", "colour_8h.html#a163092be7d061323a91e03e6e8965da9aed63fc91500594c3086714f86b3001e4", null ],
+      [ "LightGrey", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a36e47cf925a1a349abe5ce1d2f1264f0", null ],
+      [ "DarkGrey", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a227f6261e7321054cc8b68d65db6306f", null ],
+      [ "LightBlue", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a4d7ff7393a484a7b9ed2e381f5cdeaf7", null ],
+      [ "LightGreen", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a7a6a38bec67cbc2a39ce22f34e4ed8e2", null ],
+      [ "LightCyan", "colour_8h.html#a163092be7d061323a91e03e6e8965da9ac37b5ce4ba80a097d82726ae74d34b13", null ],
+      [ "LightRed", "colour_8h.html#a163092be7d061323a91e03e6e8965da9af9a96fb667261a141d10021a66d6ad0f", null ],
+      [ "LightMagenta", "colour_8h.html#a163092be7d061323a91e03e6e8965da9af1ec64ef9f82e9fb86b094f8b548f9f1", null ],
+      [ "Yellow", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a51e6cd92b6c45f9affdc158ecca2b8b8", null ],
+      [ "White", "colour_8h.html#a163092be7d061323a91e03e6e8965da9a25a81701fbfa4a1efdf660a950c1d006", null ]
     ] ],
     [ "ANSI_COLOURS", "colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c", null ]
 ];

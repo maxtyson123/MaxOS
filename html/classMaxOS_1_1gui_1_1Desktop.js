@@ -4,7 +4,7 @@ var classMaxOS_1_1gui_1_1Desktop =
     [ "~Desktop", "classMaxOS_1_1gui_1_1Desktop.html#a8a52d479e397e8c99897c5df2ccaf13f", null ],
     [ "add_child", "classMaxOS_1_1gui_1_1Desktop.html#a2a92176a23c6c14aae6eb5b8309f0f2a", null ],
     [ "bring_to_front", "classMaxOS_1_1gui_1_1Desktop.html#a9b1b09773bd146a6e87b4d96043628d2", null ],
-    [ "draw_self", "classMaxOS_1_1gui_1_1Desktop.html#ac248bc90e6adfb2f675c84279da4a799", null ],
+    [ "draw_self", "classMaxOS_1_1gui_1_1Desktop.html#a58de1f22caee4765cc451c1667534f1c", null ],
     [ "internal_invalidate", "classMaxOS_1_1gui_1_1Desktop.html#a2e12df4145d37cef1f77c45a0b025ba0", null ],
     [ "invalidate", "classMaxOS_1_1gui_1_1Desktop.html#a7fbb339ab8bbdb8612f72d1547e2bd77", null ],
     [ "invert_mouse_cursor", "classMaxOS_1_1gui_1_1Desktop.html#a9c8711df4cd42767f6d28740182f3b2c", null ],
@@ -20,6 +20,6 @@ var classMaxOS_1_1gui_1_1Desktop =
     [ "m_focussed_widget", "classMaxOS_1_1gui_1_1Desktop.html#adc296de0e382f8bc7f8e160ca19738dd", null ],
     [ "m_graphics_context", "classMaxOS_1_1gui_1_1Desktop.html#afea5b2944b2c9a3484c6c6e4f7ee823b", null ],
     [ "m_invalid_areas", "classMaxOS_1_1gui_1_1Desktop.html#afff532fb8b06a71f747417c9bcc298e9", null ],
-    [ "m_mouse_x", "classMaxOS_1_1gui_1_1Desktop.html#ac91a7e78185cbaebb6f38067219c3b93", null ],
-    [ "m_mouse_y", "classMaxOS_1_1gui_1_1Desktop.html#aaa03a1cb91e7a968487ee9645402a37a", null ]
+    [ "m_mouse_x", "classMaxOS_1_1gui_1_1Desktop.html#abc5c381f4c7f5d06ff4d75dffcd4c6fa", null ],
+    [ "m_mouse_y", "classMaxOS_1_1gui_1_1Desktop.html#a6db4632321b626d42c16b8f6762bca72", null ]
 ];

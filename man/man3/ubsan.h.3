@@ -1,8 +1,8 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/ubsan.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/runtime/ubsan.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/system/ubsan.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/runtime/ubsan.h
 .SH SYNOPSIS
 .br
 .PP
@@ -13,34 +13,37 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::source_location\fP"
+.RI "struct \fBMaxOS::runtime::source_location\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::type_descriptor\fP"
+.RI "struct \fBMaxOS::runtime::type_descriptor\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::type_mismatch_info\fP"
+.RI "struct \fBMaxOS::runtime::type_mismatch_info\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::type_mismatch_info_v1\fP"
+.RI "struct \fBMaxOS::runtime::type_mismatch_info_v1\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::overflow_info\fP"
+.RI "struct \fBMaxOS::runtime::overflow_info\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::shift_out_of_bounds_info\fP"
+.RI "struct \fBMaxOS::runtime::shift_out_of_bounds_info\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::out_of_bounds_info\fP"
+.RI "struct \fBMaxOS::runtime::out_of_bounds_info\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::location_only_info\fP"
+.RI "struct \fBMaxOS::runtime::location_only_info\fP"
 .br
 .ti -1c
-.RI "struct \fBMaxOS::system::invalid_value_info\fP"
+.RI "struct \fBMaxOS::runtime::invalid_value_info\fP"
 .br
 .ti -1c
-.RI "class \fBMaxOS::system::UBSanHandler\fP"
+.RI "struct \fBMaxOS::runtime::vla_bound_not_positive_info\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::runtime::UBSanHandler\fP"
 .br
 .RI "Handles undefined behaviour sanitizer\&. "
 .in -1c
@@ -48,10 +51,10 @@
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::system\fP"
+.RI "namespace \fBMaxOS::runtime\fP"
 .br
 .in -1c
 .SS "Macros"
@@ -65,38 +68,41 @@
 
 .in +1c
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::source_location\fP \fBMaxOS::system::source_location_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::source_location\fP \fBMaxOS::runtime::source_location_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::type_descriptor\fP \fBMaxOS::system::type_descriptor_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::type_descriptor\fP \fBMaxOS::runtime::type_descriptor_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::type_mismatch_info\fP \fBMaxOS::system::type_mismatch_info_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::type_mismatch_info\fP \fBMaxOS::runtime::type_mismatch_info_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::type_mismatch_info_v1\fP \fBMaxOS::system::type_mismatch_info_v1_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::type_mismatch_info_v1\fP \fBMaxOS::runtime::type_mismatch_info_v1_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::overflow_info\fP \fBMaxOS::system::overflow_info_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::overflow_info\fP \fBMaxOS::runtime::overflow_info_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::shift_out_of_bounds_info\fP \fBMaxOS::system::shift_out_of_bounds_info_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::shift_out_of_bounds_info\fP \fBMaxOS::runtime::shift_out_of_bounds_info_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::out_of_bounds_info\fP \fBMaxOS::system::out_of_bounds_info_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::out_of_bounds_info\fP \fBMaxOS::runtime::out_of_bounds_info_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::location_only_info\fP \fBMaxOS::system::location_only_info_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::location_only_info\fP \fBMaxOS::runtime::location_only_info_t\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::invalid_value_info\fP \fBMaxOS::system::invalid_value_info_t\fP"
+.RI "typedef struct \fBMaxOS::runtime::invalid_value_info\fP \fBMaxOS::runtime::invalid_value_info_t\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBMaxOS::runtime::vla_bound_not_positive_info\fP \fBMaxOS::runtime::vla_bound_not_positive_info_t\fP"
 .br
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "const char * \fBMaxOS::system::Type_Check_Kinds\fP []"
+.RI "const char * \fBMaxOS::runtime::Type_Check_Kinds\fP []"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -104,7 +110,7 @@
 .SS "#define ubsan_aligned(value, alignment)   !(value & (alignment \- 1))"
 
 .PP
-Definition at line 13 of file ubsan\&.h\&.
+Definition at line \fB13\fP of file \fBubsan\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

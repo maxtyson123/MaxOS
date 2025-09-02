@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::clock::ClockEventHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::clock::ClockEventHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,73 +19,82 @@ Inherited by \fBMaxOS::gui::Desktop\fP\&.
 .ti -1c
 .RI "\fBClockEventHandler\fP ()"
 .br
-.RI "\fBHandler\fP "
 .ti -1c
 .RI "\fB~ClockEventHandler\fP ()"
 .br
 .ti -1c
-.RI "\fBcommon::Event\fP< \fBClockEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBClockEvents\fP > *event) override"
+.RI "\fBcommon::Event\fP< \fBClockEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBClockEvents\fP > *\fBevent\fP) \fBoverride\fP"
 .br
+.RI "Delegates the clock event to the relevant handler\&. "
 .ti -1c
-.RI "virtual void \fBon_time\fP (const \fBcommon::Time\fP &time)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_time\fP (\fBconst\fP \fBcommon::Time\fP &time)"
 .br
 .RI "Called when the clock ticks\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< ClockEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fB~EventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBEvent\fP< ClockEvents > * \fBon_event\fP (\fBEvent\fP< ClockEvents > *\fBevent\fP)"
+.br
+.RI "This function is called when an event is raised\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles the events triggered by the clock\&. 
 .PP
-Definition at line 41 of file clock\&.h\&.
+Definition at line \fB41\fP of file \fBclock\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "ClockEventHandler::ClockEventHandler ()"
+.SS "ClockEventHandler::ClockEventHandler ()\fC [default]\fP"
 
-.PP
-\fBHandler\fP 
-.PP
-Definition at line 15 of file clock\&.cpp\&.
-.PP
-.nf
-15                                      {
-16 
-17 }
-.fi
-.SS "ClockEventHandler::~ClockEventHandler ()"
+.SS "ClockEventHandler::~ClockEventHandler ()\fC [default]\fP"
 
-.PP
-Definition at line 19 of file clock\&.cpp\&.
-.PP
-.nf
-19                                       {
-20 
-21 }
-.fi
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBEvent\fP< \fBClockEvents\fP > * ClockEventHandler::on_event (\fBcommon::Event\fP< \fBClockEvents\fP > * event)\fC [override]\fP"
 
 .PP
-Definition at line 32 of file clock\&.cpp\&.
+Delegates the clock event to the relevant handler\&. 
 .PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The event being fired 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The event (may have been modified by the handler) 
+.RE
+.PP
+
+.PP
+Definition at line \fB33\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-32                                                                          {
-33 
-34     switch (event -> type) {
-35         case TIME:
-36           on_time(*((TimeEvent *)event)->time);
-37             break;
-38             
-39         default:
-40             break;
-41     }
-42 
-43     // Return the event
+33                                                                          {
+34 
+35     switch (event\->type) {
+36         case ClockEvents::TIME:
+37             on_time(*((TimeEvent *) event)\->time);
+38             break;
+39 
+40         default:
+41             break;
+42     }
+43 
 44     return event;
 45 }
 .fi
+
 .PP
-References MaxOS::drivers::clock::TIME, and type\&.
-.SS "void ClockEventHandler::on_time (const \fBcommon::Time\fP & time)\fC [virtual]\fP"
+References \fBon_time()\fP, and \fBMaxOS::drivers::clock::TIME\fP\&.
+.SS "\fBvoid\fP ClockEventHandler::on_time (\fBconst\fP \fBcommon::Time\fP & time)\fC [virtual]\fP"
 
 .PP
 Called when the clock ticks\&. 
@@ -99,14 +108,15 @@ Called when the clock ticks\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line 28 of file clock\&.cpp\&.
-.PP
+Definition at line \fB23\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-28                                                   {
-29 
-30 }
+23                                                   {
+24 
+25 }
 .fi
 
+.PP
+Referenced by \fBon_event()\fP\&.
 
 .SH "Author"
 .PP 

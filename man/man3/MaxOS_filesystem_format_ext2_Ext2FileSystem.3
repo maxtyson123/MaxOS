@@ -1,0 +1,93 @@
+.TH "MaxOS::filesystem::format::ext2::Ext2FileSystem" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::format::ext2::Ext2FileSystem \- Handles the \fBext2\fP filesystem operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ext2\&.h>\fP
+.PP
+Inherits \fBMaxOS::filesystem::FileSystem\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExt2FileSystem\fP (\fBdrivers::disk::Disk\fP *disk, \fBuint32_t\fP partition_offset)"
+.br
+.ti -1c
+.RI "\fB~Ext2FileSystem\fP () \fBfinal\fP"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "\fBFileSystem\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
+.br
+.ti -1c
+.RI "\fBDirectory\fP * \fBroot_directory\fP ()"
+.br
+.RI "Get the directory at '/'\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBget_directory\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Get the directory at a given path\&. "
+.ti -1c
+.RI "\fBbool\fP \fBexists\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Check if a path exists on the filesystem\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "\fBDirectory\fP * \fBm_root_directory\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the \fBext2\fP filesystem operations\&. 
+.PP
+Definition at line \fB368\fP of file \fBext2\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Ext2FileSystem::Ext2FileSystem (\fBdrivers::disk::Disk\fP * disk, \fBuint32_t\fP partition_offset)"
+
+.PP
+Definition at line \fB1125\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+1126         : m_volume(disk, partition_offset) {
+1127 
+1128     // Create the root directory
+1129     m_root_directory = new Ext2Directory(&m_volume, 2, "/");
+1130     m_root_directory\->read_from_disk();
+1131 
+1132 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::FileSystem::m_root_directory\fP, and \fBMaxOS::filesystem::Directory::read_from_disk()\fP\&.
+.SS "Ext2FileSystem::~Ext2FileSystem ()\fC [final]\fP"
+
+.PP
+Definition at line \fB1134\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+1134                                 {
+1135     delete m_root_directory;
+1136 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::FileSystem::m_root_directory\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

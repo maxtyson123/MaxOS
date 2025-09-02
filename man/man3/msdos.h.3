@@ -1,0 +1,181 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/partition/msdos.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/partition/msdos.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <drivers/disk/disk\&.h>\fP
+.br
+\fC#include <filesystem/format/fat32\&.h>\fP
+.br
+\fC#include <filesystem/format/ext2\&.h>\fP
+.br
+\fC#include <filesystem/vfs\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::partition::PartitionTableEntry\fP"
+.br
+.RI "Stores information about a partition\&. "
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::partition::MasterBootRecord\fP"
+.br
+.RI "Stores information about the master boot record\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::partition::MSDOSPartition\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBMaxOS\fP"
+.br
+.ti -1c
+.RI "namespace \fBMaxOS::filesystem\fP"
+.br
+.ti -1c
+.RI "namespace \fBMaxOS::filesystem::partition\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::partition::PartitionType\fP { \fBMaxOS::filesystem::partition::EMPTY\fP, \fBMaxOS::filesystem::partition::FAT12\fP, \fBMaxOS::filesystem::partition::XENIX_ROOT\fP, \fBMaxOS::filesystem::partition::XENIX_USR\fP, \fBMaxOS::filesystem::partition::FAT16\fP, \fBMaxOS::filesystem::partition::EXTENDED\fP, \fBMaxOS::filesystem::partition::FAT16_32MB\fP, \fBMaxOS::filesystem::partition::NTFS\fP, \fBMaxOS::filesystem::partition::QNX_QNY\fP, \fBMaxOS::filesystem::partition::AIX_DATA\fP, \fBMaxOS::filesystem::partition::OS2_BOOT_MANAGER\fP, \fBMaxOS::filesystem::partition::FAT32\fP, \fBMaxOS::filesystem::partition::FAT32_LBA\fP, \fBMaxOS::filesystem::partition::UNUSED_1\fP, \fBMaxOS::filesystem::partition::FAT16_LBA\fP, \fBMaxOS::filesystem::partition::EXTENDED_LBA\fP, \fBMaxOS::filesystem::partition::OPUS\fP, \fBMaxOS::filesystem::partition::FAT12_HIDDEN\fP, \fBMaxOS::filesystem::partition::COMPAQ\fP, \fBMaxOS::filesystem::partition::UNUSED_2\fP, \fBMaxOS::filesystem::partition::FAT16_HIDDEN\fP, \fBMaxOS::filesystem::partition::UNUSED_3\fP, \fBMaxOS::filesystem::partition::FAT16_32MB_HIDDEN\fP, \fBMaxOS::filesystem::partition::IFS_HIDDEN\fP, \fBMaxOS::filesystem::partition::AST_SMART_SLEEP\fP, \fBMaxOS::filesystem::partition::UNUSED_4\fP, \fBMaxOS::filesystem::partition::UNUSED_5\fP, \fBMaxOS::filesystem::partition::FAT32_HIDDEN\fP, \fBMaxOS::filesystem::partition::FAT32_LBA_HIDDEN\fP, \fBMaxOS::filesystem::partition::UNUSED_6\fP, \fBMaxOS::filesystem::partition::FAT16_LBA_HIDDEN\fP, \fBMaxOS::filesystem::partition::UNUSED_7\fP, \fBMaxOS::filesystem::partition::UNUSED_8\fP, \fBMaxOS::filesystem::partition::RESERVED_1\fP, \fBMaxOS::filesystem::partition::UNUSED_10\fP, \fBMaxOS::filesystem::partition::RESERVED_2\fP, \fBMaxOS::filesystem::partition::NEC_DOS\fP, \fBMaxOS::filesystem::partition::UNUSED_11\fP, \fBMaxOS::filesystem::partition::RESERVED_3\fP, \fBMaxOS::filesystem::partition::UNUSED_12\fP, \fBMaxOS::filesystem::partition::UNUSED_13\fP, \fBMaxOS::filesystem::partition::UNUSED_14\fP, \fBMaxOS::filesystem::partition::UNUSED_15\fP, \fBMaxOS::filesystem::partition::UNUSED_16\fP, \fBMaxOS::filesystem::partition::UNUSED_17\fP, \fBMaxOS::filesystem::partition::UNUSED_18\fP, \fBMaxOS::filesystem::partition::UNUSED_19\fP, \fBMaxOS::filesystem::partition::UNUSED_20\fP, \fBMaxOS::filesystem::partition::UNUSED_21\fP, \fBMaxOS::filesystem::partition::RESERVED_4\fP, \fBMaxOS::filesystem::partition::NOS\fP, \fBMaxOS::filesystem::partition::RESERVED_5\fP, \fBMaxOS::filesystem::partition::RESERVED_6\fP, \fBMaxOS::filesystem::partition::JFS\fP, \fBMaxOS::filesystem::partition::RESERVED_7\fP, \fBMaxOS::filesystem::partition::UNUSED_22\fP, \fBMaxOS::filesystem::partition::THEOS_3_2\fP, \fBMaxOS::filesystem::partition::PLAN9\fP, \fBMaxOS::filesystem::partition::THEOS_4_4GB\fP, \fBMaxOS::filesystem::partition::THEOS_4_EXTENDED\fP, \fBMaxOS::filesystem::partition::PARTITIONMAGIC_RECOVERY\fP, \fBMaxOS::filesystem::partition::HIDDEN_NETWARE\fP, \fBMaxOS::filesystem::partition::UNUSED_23\fP, \fBMaxOS::filesystem::partition::UNUSED_24\fP, \fBMaxOS::filesystem::partition::VENIX\fP, \fBMaxOS::filesystem::partition::LINUX_MINIX\fP, \fBMaxOS::filesystem::partition::LINUX_SWAP\fP, \fBMaxOS::filesystem::partition::LINUX_NATIVE\fP, \fBMaxOS::filesystem::partition::GOBACK\fP, \fBMaxOS::filesystem::partition::BOOT_US\fP, \fBMaxOS::filesystem::partition::EUMEL_ELAN_46\fP, \fBMaxOS::filesystem::partition::EUMEL_ELAN_47\fP, \fBMaxOS::filesystem::partition::EUMEL_ELAN_48\fP, \fBMaxOS::filesystem::partition::UNUSED_25\fP, \fBMaxOS::filesystem::partition::ADAOS\fP, \fBMaxOS::filesystem::partition::UNUSED_26\fP, \fBMaxOS::filesystem::partition::OBERON\fP, \fBMaxOS::filesystem::partition::QNX4\fP, \fBMaxOS::filesystem::partition::QNX4_SECOND\fP, \fBMaxOS::filesystem::partition::QNX4_THIRD\fP, \fBMaxOS::filesystem::partition::ONTRACK_DM\fP, \fBMaxOS::filesystem::partition::ONTRACK_DM_RW\fP, \fBMaxOS::filesystem::partition::CPM\fP, \fBMaxOS::filesystem::partition::DISK_MANAGER_AUX3\fP, \fBMaxOS::filesystem::partition::DISK_MANAGER_DDO\fP, \fBMaxOS::filesystem::partition::EZ_DRIVE\fP, \fBMaxOS::filesystem::partition::GOLDEN_BOW\fP, \fBMaxOS::filesystem::partition::DRIVE_PRO\fP, \fBMaxOS::filesystem::partition::UNUSED_27\fP, \fBMaxOS::filesystem::partition::UNUSED_28\fP, \fBMaxOS::filesystem::partition::UNUSED_29\fP, \fBMaxOS::filesystem::partition::UNUSED_30\fP, \fBMaxOS::filesystem::partition::PRIAM_EDISK\fP, \fBMaxOS::filesystem::partition::UNUSED_31\fP, \fBMaxOS::filesystem::partition::UNUSED_32\fP, \fBMaxOS::filesystem::partition::UNUSED_33\fP, \fBMaxOS::filesystem::partition::UNUSED_34\fP, \fBMaxOS::filesystem::partition::SPEEDSTOR\fP, \fBMaxOS::filesystem::partition::UNUSED_35\fP, \fBMaxOS::filesystem::partition::UNIX\fP, \fBMaxOS::filesystem::partition::PC_ARMOUR\fP, \fBMaxOS::filesystem::partition::NOVELL_NETWARE386\fP, \fBMaxOS::filesystem::partition::NOVELL_SMS\fP, \fBMaxOS::filesystem::partition::NOVELL\fP, \fBMaxOS::filesystem::partition::NOVELL_OLD\fP, \fBMaxOS::filesystem::partition::NOVELL_NETWARE_NSS\fP, \fBMaxOS::filesystem::partition::UNUSED_36\fP, \fBMaxOS::filesystem::partition::UNUSED_37\fP, \fBMaxOS::filesystem::partition::UNUSED_38\fP, \fBMaxOS::filesystem::partition::UNUSED_39\fP, \fBMaxOS::filesystem::partition::UNUSED_40\fP, \fBMaxOS::filesystem::partition::UNUSED_41\fP, \fBMaxOS::filesystem::partition::DISKSECURE\fP, \fBMaxOS::filesystem::partition::RESERVED_8\fP, \fBMaxOS::filesystem::partition::UNUSED_42\fP, \fBMaxOS::filesystem::partition::RESERVED_9\fP, \fBMaxOS::filesystem::partition::SCRAMDISK\fP, \fBMaxOS::filesystem::partition::IBM_PCIX\fP, \fBMaxOS::filesystem::partition::RESERVED_10\fP, \fBMaxOS::filesystem::partition::M2FS\fP, \fBMaxOS::filesystem::partition::XOSL_FS\fP, \fBMaxOS::filesystem::partition::UNUSED_43\fP, \fBMaxOS::filesystem::partition::UNUSED_44\fP, \fBMaxOS::filesystem::partition::UNUSED_45\fP, \fBMaxOS::filesystem::partition::UNUSED_46\fP, \fBMaxOS::filesystem::partition::UNUSED_47\fP, \fBMaxOS::filesystem::partition::UNUSED_48\fP, \fBMaxOS::filesystem::partition::UNUSED_49\fP, \fBMaxOS::filesystem::partition::MINIX\fP, \fBMaxOS::filesystem::partition::MINIX2\fP, \fBMaxOS::filesystem::partition::LINUX_SWAP_ALT\fP, \fBMaxOS::filesystem::partition::LINUX_EXT2\fP, \fBMaxOS::filesystem::partition::HIBERNATION\fP, \fBMaxOS::filesystem::partition::LINUX_EXTENDED\fP, \fBMaxOS::filesystem::partition::LINUX_RAID\fP, \fBMaxOS::filesystem::partition::NTFS_VOLUME_SET\fP, \fBMaxOS::filesystem::partition::UNUSED_50\fP, \fBMaxOS::filesystem::partition::UNUSED_51\fP, \fBMaxOS::filesystem::partition::LINUX_KERNEL\fP, \fBMaxOS::filesystem::partition::FAULT_TOLERANT_FAT32\fP, \fBMaxOS::filesystem::partition::FT_FAT32_LBA\fP, \fBMaxOS::filesystem::partition::FREEFDISK_FAT12\fP, \fBMaxOS::filesystem::partition::LINUX_LVM\fP, \fBMaxOS::filesystem::partition::UNUSED_52\fP, \fBMaxOS::filesystem::partition::FREEFDISK_FAT16\fP, \fBMaxOS::filesystem::partition::FREEFDISK_EXTENDED\fP, \fBMaxOS::filesystem::partition::FREEFDISK_FAT16_LARGE\fP, \fBMaxOS::filesystem::partition::HIDDEN_LINUX_NATIVE\fP, \fBMaxOS::filesystem::partition::AMOEBA_BAD_BLOCK\fP, \fBMaxOS::filesystem::partition::MIT_EXOPC\fP, \fBMaxOS::filesystem::partition::UNUSED_53\fP, \fBMaxOS::filesystem::partition::FREEFDISK_FAT32\fP, \fBMaxOS::filesystem::partition::FREEFDISK_FAT32_LBA\fP, \fBMaxOS::filesystem::partition::DCE376\fP, \fBMaxOS::filesystem::partition::FREEFDISK_FAT16_LBA\fP, \fBMaxOS::filesystem::partition::FREEFDISK_EXTENDED_LBA\fP, \fBMaxOS::filesystem::partition::UNUSED_54\fP, \fBMaxOS::filesystem::partition::UNUSED_55\fP, \fBMaxOS::filesystem::partition::UNUSED_56\fP, \fBMaxOS::filesystem::partition::BSD_OS\fP, \fBMaxOS::filesystem::partition::LAPTOP_HIBERNATION\fP, \fBMaxOS::filesystem::partition::HP_VOLUME_EXPANSION\fP, \fBMaxOS::filesystem::partition::UNUSED_57\fP, \fBMaxOS::filesystem::partition::RESERVED_11\fP, \fBMaxOS::filesystem::partition::RESERVED_12\fP, \fBMaxOS::filesystem::partition::BSD_386\fP, \fBMaxOS::filesystem::partition::OPENBSD\fP, \fBMaxOS::filesystem::partition::NEXTSTEP\fP, \fBMaxOS::filesystem::partition::MAC_OS_X\fP, \fBMaxOS::filesystem::partition::NETBSD\fP, \fBMaxOS::filesystem::partition::OLIVETTI_SERVICE\fP, \fBMaxOS::filesystem::partition::MAC_OS_X_BOOT\fP, \fBMaxOS::filesystem::partition::UNUSED_58\fP, \fBMaxOS::filesystem::partition::UNUSED_59\fP, \fBMaxOS::filesystem::partition::SHAGOS\fP, \fBMaxOS::filesystem::partition::SHAGOS_SWAP\fP, \fBMaxOS::filesystem::partition::BOOTSTAR\fP, \fBMaxOS::filesystem::partition::RESERVED_13\fP, \fBMaxOS::filesystem::partition::UNUSED_60\fP, \fBMaxOS::filesystem::partition::RESERVED_14\fP, \fBMaxOS::filesystem::partition::RESERVED_15\fP, \fBMaxOS::filesystem::partition::UNUSED_61\fP, \fBMaxOS::filesystem::partition::RESERVED_16\fP, \fBMaxOS::filesystem::partition::BSDI_BSD386_FS\fP, \fBMaxOS::filesystem::partition::BSDI_BSD386_SWAP\fP, \fBMaxOS::filesystem::partition::UNUSED_62\fP, \fBMaxOS::filesystem::partition::UNUSED_63\fP, \fBMaxOS::filesystem::partition::BOOT_WIZARD_HIDDEN\fP, \fBMaxOS::filesystem::partition::UNUSED_64\fP, \fBMaxOS::filesystem::partition::UNUSED_65\fP, \fBMaxOS::filesystem::partition::SOLARIS8_BOOT\fP, \fBMaxOS::filesystem::partition::UNUSED_66\fP, \fBMaxOS::filesystem::partition::CTOS\fP, \fBMaxOS::filesystem::partition::DRDOS_FAT12\fP, \fBMaxOS::filesystem::partition::RESERVED_17\fP, \fBMaxOS::filesystem::partition::HIDDEN_LINUX_SWAP\fP, \fBMaxOS::filesystem::partition::DRDOS_FAT16\fP, \fBMaxOS::filesystem::partition::DRDOS_EXTENDED\fP, \fBMaxOS::filesystem::partition::DRDOS_FAT16_LARGE\fP, \fBMaxOS::filesystem::partition::NTFS_CORRUPT\fP, \fBMaxOS::filesystem::partition::UNUSED_67\fP, \fBMaxOS::filesystem::partition::UNUSED_68\fP, \fBMaxOS::filesystem::partition::UNUSED_69\fP, \fBMaxOS::filesystem::partition::DRDOS_FAT32\fP, \fBMaxOS::filesystem::partition::DRDOS_FAT32_LBA\fP, \fBMaxOS::filesystem::partition::CTOS_MEMDUMP\fP, \fBMaxOS::filesystem::partition::DRDOS_FAT16_LBA\fP, \fBMaxOS::filesystem::partition::UNUSED_70\fP, \fBMaxOS::filesystem::partition::REAL32_SECURE_BIG\fP, \fBMaxOS::filesystem::partition::OLD_MULTIUSER_DOS_FAT12\fP, \fBMaxOS::filesystem::partition::UNUSED_71\fP, \fBMaxOS::filesystem::partition::UNUSED_72\fP, \fBMaxOS::filesystem::partition::OLD_MULTIUSER_DOS_FAT16\fP, \fBMaxOS::filesystem::partition::OLD_MULTIUSER_DOS_EXTENDED\fP, \fBMaxOS::filesystem::partition::OLD_MULTIUSER_DOS_FAT16_LARGE\fP, \fBMaxOS::filesystem::partition::UNUSED_73\fP, \fBMaxOS::filesystem::partition::CPM86\fP, \fBMaxOS::filesystem::partition::UNUSED_74\fP, \fBMaxOS::filesystem::partition::NON_FS_DATA\fP, \fBMaxOS::filesystem::partition::DIGITAL_RESEARCH_CPM\fP, \fBMaxOS::filesystem::partition::UNUSED_75\fP, \fBMaxOS::filesystem::partition::HIDDEN_CTOS_MEMDUMP\fP, \fBMaxOS::filesystem::partition::DELL_POWEREDGE\fP, \fBMaxOS::filesystem::partition::DGUX\fP, \fBMaxOS::filesystem::partition::STM_AVFS\fP, \fBMaxOS::filesystem::partition::SPEEDSTOR_FAT_EXTENDED\fP, \fBMaxOS::filesystem::partition::UNUSED_76\fP, \fBMaxOS::filesystem::partition::SPEEDSTOR_RO\fP, \fBMaxOS::filesystem::partition::SPEEDSTOR_EXTENDED\fP, \fBMaxOS::filesystem::partition::TANDY_DOS\fP, \fBMaxOS::filesystem::partition::RESERVED_18\fP, \fBMaxOS::filesystem::partition::UNUSED_77\fP, \fBMaxOS::filesystem::partition::UNUSED_78\fP, \fBMaxOS::filesystem::partition::UNUSED_79\fP, \fBMaxOS::filesystem::partition::BEFS\fP, \fBMaxOS::filesystem::partition::SPRYTIX\fP, \fBMaxOS::filesystem::partition::EFI_PROTECTIVE\fP, \fBMaxOS::filesystem::partition::EFI_SYSTEM\fP, \fBMaxOS::filesystem::partition::LINUX_PA_RISC\fP, \fBMaxOS::filesystem::partition::SPEEDSTOR_2\fP, \fBMaxOS::filesystem::partition::DOS_3_3_SECONDARY\fP, \fBMaxOS::filesystem::partition::RESERVED_19\fP, \fBMaxOS::filesystem::partition::SPEEDSTOR_LARGE\fP, \fBMaxOS::filesystem::partition::PROLOGUE_MULTI\fP, \fBMaxOS::filesystem::partition::RESERVED_20\fP, \fBMaxOS::filesystem::partition::UNUSED_80\fP, \fBMaxOS::filesystem::partition::UNUSED_81\fP, \fBMaxOS::filesystem::partition::UNUSED_82\fP, \fBMaxOS::filesystem::partition::BOCHS\fP, \fBMaxOS::filesystem::partition::VMFS\fP, \fBMaxOS::filesystem::partition::VMWARE_SWAP\fP, \fBMaxOS::filesystem::partition::LINUX_RAID_AUTO\fP, \fBMaxOS::filesystem::partition::NT_HIDDEN\fP, \fBMaxOS::filesystem::partition::XENIX_BAD_BLOCK\fP }"
+.br
+.RI "Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::partition::PartitionTableEntry\fP \fBMaxOS::filesystem::partition::__attribute__\fP ((packed))"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBbootable\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBstart_head\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBstart_sector\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBstart_cylinder\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBtype\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBend_head\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBend_sector\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBend_cylinder\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBstart_LBA\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlength\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBbootloader\fP [440]"
+.br
+.ti -1c
+.RI "uint32_t \fBdisk_signature\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBunused\fP"
+.br
+.ti -1c
+.RI "PartitionTableEntry \fBprimary_partition\fP [4]"
+.br
+.ti -1c
+.RI "uint16_t \fBmagic\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::filesystem::partition::MSDOSPartition\fP \fBMaxOS::filesystem::partition::__attribute__\fP"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "uint8_t bootable"
+
+.PP
+Definition at line \fB1\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint8_t bootloader[440]"
+
+.PP
+Definition at line \fB1\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint32_t disk_signature"
+
+.PP
+Definition at line \fB2\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint16_t end_cylinder"
+
+.PP
+Definition at line \fB11\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint8_t end_head"
+
+.PP
+Definition at line \fB9\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint8_t end_sector"
+
+.PP
+Definition at line \fB10\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint32_t length"
+
+.PP
+Definition at line \fB14\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint16_t magic"
+
+.PP
+Definition at line \fB7\fP of file \fBmsdos\&.h\fP\&.
+.PP
+Referenced by \fBkernel_main()\fP, and \fBMaxOS::system::Multiboot::Multiboot()\fP\&.
+.SS "PartitionTableEntry primary_partition[4]"
+
+.PP
+Definition at line \fB5\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint16_t start_cylinder"
+
+.PP
+Definition at line \fB5\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint8_t start_head"
+
+.PP
+Definition at line \fB3\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint32_t start_LBA"
+
+.PP
+Definition at line \fB13\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint8_t start_sector"
+
+.PP
+Definition at line \fB4\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint8_t type"
+
+.PP
+Definition at line \fB7\fP of file \fBmsdos\&.h\fP\&.
+.SS "uint16_t unused"
+
+.PP
+Definition at line \fB3\fP of file \fBmsdos\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

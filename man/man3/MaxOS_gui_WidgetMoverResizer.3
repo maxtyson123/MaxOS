@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,14 +22,50 @@ Inherits \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .RI "\fB~WidgetMoverResizer\fP ()"
 .br
 .ti -1c
-.RI "void \fBon_mouse_move_event\fP (int8_t x, int8_t y)"
+.RI "void \fBon_mouse_move_event\fP (int8_t x, int8_t y) override"
 .br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBMouseEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fB~MouseEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBcommon::Event\fP< \fBMouseEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBMouseEvents\fP > *) \fBoverride\fP"
+.br
+.RI "Handles the triggered event and calls the appropriate function\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_down_event\fP (\fBuint8_t\fP button)"
+.br
+.RI "Called when the mouse is pressed\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_up_event\fP (\fBuint8_t\fP button)"
+.br
+.RI "Called when the mouse is released\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< MouseEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fB~EventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBEvent\fP< MouseEvents > * \fBon_event\fP (\fBEvent\fP< MouseEvents > *\fBevent\fP)"
+.br
+.RI "This function is called when an event is raised\&. "
 .in -1c
 .SS "Protected Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBWidget\fP * \fBtargettedWidget\fP"
+.RI "\fBWidget\fP * \fBtargetedWidget\fP"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -37,8 +73,7 @@ Inherits \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 
 .SS "template<int Left, int Top, int Width, int Height>
 .br
-class MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >"
-A template class that allows you to move and resize a widget\&. 
+class MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >"A template class that allows you to move and resize a widget\&. 
 
 
 .PP
@@ -55,10 +90,10 @@ A template class that allows you to move and resize a widget\&.
 .PP
 
 .PP
-Definition at line 123 of file widget\&.h\&.
+Definition at line \fB123\fP of file \fBwidget\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::\fBWidgetMoverResizer\fP (\fBWidget\fP * target)"
+.SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::WidgetMoverResizer (\fBWidget\fP * target)"
 
 .PP
 ________________________________Tempaltes________________________________/// \fBWidgetMoverResizer\fP is a template class that allows you to move and resize a widget
@@ -81,26 +116,19 @@ ________________________________Tempaltes________________________________/// \fB
 .PP
 
 .PP
-Definition at line 159 of file widget\&.h\&.
-.PP
+Definition at line \fB159\fP of file \fBwidget\&.h\fP\&..PP
 .nf
 160                 : drivers::peripherals::MouseEventHandler()
 161         {
-162             this -> targettedWidget = target;
+162             this \->targetedWidget = target;
 163         }
 .fi
-.SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::~\fBWidgetMoverResizer\fP"
 
-.PP
-Definition at line 165 of file widget\&.h\&.
-.PP
-.nf
-166         {
-167         }
-.fi
+.SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::~\fBWidgetMoverResizer\fP ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "template<int Left, int Top, int Width, int Height> void \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::on_mouse_move_event (int8_t x, int8_t y)\fC [virtual]\fP"
+.SS "template<int Left, int Top, int Width, int Height> void \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::on_mouse_move_event (int8_t x, int8_t y)\fC [override]\fP, \fC [virtual]\fP"
 OnMouseMoved is called when the mouse is moved\&. Resizes and moves the widget when this happens\&.
 .PP
 \fBParameters\fP
@@ -114,30 +142,32 @@ OnMouseMoved is called when the mouse is moved\&. Resizes and moves the widget w
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .PP
-Definition at line 175 of file widget\&.h\&.
-.PP
+Definition at line \fB173\fP of file \fBwidget\&.h\fP\&..PP
 .nf
-176         {
+174         {
+175 
+176             Widget* targ = this\->targetedWidget;
 177 
-178             Widget* targ = this->targettedWidget;
-179 
-180             // If there is actually a size of the widget to change
-181             if(Left != 0 || Top != 0)
-182                 // Move the widget to the left or right, and up or down
-183                 targ -> move(targ ->m_position\&.left + Left * x, targ ->m_position\&.top + Top * y);
-184 
-185             // If there is actually a size of the widget to change
-186             if(Width != 0 || Height != 0)
-187                 // Resize the widget to the left or right, and up or down
-188                 targ -> resize( targ ->m_position\&.width + Width*x, targ ->m_position\&.height + Height*y);
-189         }
+178             // If there is actually a size of the widget to change
+179             if(Left != 0 || Top != 0)
+180                 // Move the widget to the left or right, and up or down
+181                 targ \-> move(targ \->m_position\&.left + Left * x, targ \->m_position\&.top + Top * y);
+182 
+183             // If there is actually a size of the widget to change
+184             if(Width != 0 || Height != 0)
+185                 // Resize the widget to the left or right, and up or down
+186                 targ \-> resize( targ \->m_position\&.width + Width*x, targ \->m_position\&.height + Height*y);
+187         }
 .fi
-.SH "Member Data Documentation"
-.PP 
-.SS "template<int Left, int Top, int Width, int Height> \fBWidget\fP* \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::targettedWidget\fC [protected]\fP"
 
 .PP
-Definition at line 125 of file widget\&.h\&.
+References \fBMaxOS::common::Rectangle< Type >::height\fP, and \fBMaxOS::common::Rectangle< Type >::top\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<int Left, int Top, int Width, int Height> \fBWidget\fP* \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::targetedWidget\fC [protected]\fP"
+
+.PP
+Definition at line \fB125\fP of file \fBwidget\&.h\fP\&.
 
 .SH "Author"
 .PP 

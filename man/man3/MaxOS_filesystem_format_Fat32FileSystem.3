@@ -1,0 +1,84 @@
+.TH "MaxOS::filesystem::format::Fat32FileSystem" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::format::Fat32FileSystem \- Handles the FAT32 filesystem operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fat32\&.h>\fP
+.PP
+Inherits \fBMaxOS::filesystem::FileSystem\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFat32FileSystem\fP (\fBdrivers::disk::Disk\fP *disk, \fBuint32_t\fP partition_offset)"
+.br
+.ti -1c
+.RI "\fB~Fat32FileSystem\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "\fBFileSystem\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
+.br
+.ti -1c
+.RI "\fBDirectory\fP * \fBroot_directory\fP ()"
+.br
+.RI "Get the directory at '/'\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBget_directory\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Get the directory at a given path\&. "
+.ti -1c
+.RI "\fBbool\fP \fBexists\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Check if a path exists on the filesystem\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "\fBDirectory\fP * \fBm_root_directory\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the FAT32 filesystem operations\&. 
+.PP
+Definition at line \fB278\fP of file \fBfat32\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Fat32FileSystem::Fat32FileSystem (\fBdrivers::disk::Disk\fP * disk, \fBuint32_t\fP partition_offset)"
+
+.PP
+Definition at line \fB955\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+956 : m_volume(disk, partition_offset)
+957 {
+958 
+959     // Create the root directory
+960     m_root_directory = new Fat32Directory(&m_volume, m_volume\&.bpb\&.root_cluster, "/");
+961     m_root_directory\->read_from_disk();
+962 
+963 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::format::Fat32Volume::bpb\fP, \fBMaxOS::filesystem::FileSystem::m_root_directory\fP, and \fBMaxOS::filesystem::Directory::read_from_disk()\fP\&.
+.SS "Fat32FileSystem::~Fat32FileSystem ()\fC [default]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

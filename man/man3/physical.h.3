@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,20 +27,24 @@
 .ti -1c
 .RI "class \fBMaxOS::memory::PhysicalMemoryManager\fP"
 .br
+.RI "Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses\&. "
 .in -1c
 .SS "Namespaces"
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::memory\fP"
+.RI "namespace \fBMaxOS::memory\fP"
 .br
 .in -1c
 .SS "Macros"
 
 .in +1c
+.ti -1c
+.RI "#define \fBENTRIES_TO_ADDRESS\fP(pml4,  pdpr,  pd,  pt)   ((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))"
+.br
 .ti -1c
 .RI "#define \fBPMLX_GET_INDEX\fP(ADDR,  LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
 .br
@@ -74,7 +78,7 @@
 
 .in +1c
 .ti -1c
-.RI "enum \fBMaxOS::memory::PageFlags\fP { \fBMaxOS::memory::None\fP = 0, \fBMaxOS::memory::Present\fP = (1 << 0), \fBMaxOS::memory::Write\fP = (1 << 1), \fBMaxOS::memory::User\fP = (1 << 2), \fBMaxOS::memory::WriteThrough\fP = (1 << 3), \fBMaxOS::memory::CacheDisabled\fP = (1 << 4), \fBMaxOS::memory::Accessed\fP = (1 << 5), \fBMaxOS::memory::Dirty\fP = (1 << 6), \fBMaxOS::memory::HugePage\fP = (1 << 7), \fBMaxOS::memory::Global\fP = (1 << 8) }"
+.RI "enum \fBMaxOS::memory::PageFlags\fP { \fBMaxOS::memory::None\fP = 0, \fBMaxOS::memory::Present\fP = (1 << 0), \fBMaxOS::memory::Write\fP = (1 << 1), \fBMaxOS::memory::User\fP = (1 << 2), \fBMaxOS::memory::WriteThrough\fP = (1 << 3), \fBMaxOS::memory::CacheDisabled\fP = (1 << 4), \fBMaxOS::memory::Accessed\fP = (1 << 5), \fBMaxOS::memory::Dirty\fP = (1 << 6), \fBMaxOS::memory::HugePage\fP = (1 << 7), \fBMaxOS::memory::Global\fP = (1 << 8), \fBMaxOS::memory::NoExecute\fP = (1ULL << 63) }"
 .br
 .in -1c
 .SS "Functions"
@@ -88,34 +92,34 @@
 
 .in +1c
 .ti -1c
-.RI "uint64_t \fBpresent\fP"
+.RI "bool \fBpresent\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBwrite\fP"
+.RI "bool \fBwrite\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBuser\fP"
+.RI "bool \fBuser\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBwrite_through\fP"
+.RI "bool \fBwrite_through\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBcache_disabled\fP"
+.RI "bool \fBcache_disabled\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBaccessed\fP"
+.RI "bool \fBaccessed\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBdirty\fP"
+.RI "bool \fBdirty\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBhuge_page\fP"
+.RI "bool \fBhuge_page\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBglobal\fP"
+.RI "bool \fBglobal\fP"
 .br
 .ti -1c
-.RI "uint64_t \fBavailable\fP"
+.RI "uint8_t \fBavailable\fP"
 .br
 .ti -1c
 .RI "uint64_t \fBphysical_address\fP"
@@ -129,84 +133,86 @@
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
+.SS "#define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)   ((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))"
+
+.PP
+Definition at line \fB18\fP of file \fBphysical\&.h\fP\&.
 .SS "#define PML1_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 0)"
 
 .PP
-Definition at line 23 of file physical\&.h\&.
+Definition at line \fB24\fP of file \fBphysical\&.h\fP\&.
 .SS "#define PML2_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 1)"
 
 .PP
-Definition at line 22 of file physical\&.h\&.
+Definition at line \fB23\fP of file \fBphysical\&.h\fP\&.
 .SS "#define PML3_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 2)"
 
 .PP
-Definition at line 21 of file physical\&.h\&.
+Definition at line \fB22\fP of file \fBphysical\&.h\fP\&.
 .SS "#define PML4_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 3)"
 
 .PP
-Definition at line 20 of file physical\&.h\&.
+Definition at line \fB21\fP of file \fBphysical\&.h\fP\&.
 .SS "#define PMLX_GET_INDEX(ADDR, LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
 
 .PP
-Definition at line 18 of file physical\&.h\&.
+Definition at line \fB19\fP of file \fBphysical\&.h\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "uint64_t accessed"
+.SS "bool accessed"
 
 .PP
-Definition at line 33 of file physical\&.h\&.
-.SS "uint64_t available"
+Definition at line \fB5\fP of file \fBphysical\&.h\fP\&.
+.SS "uint8_t available"
 
 .PP
-Definition at line 37 of file physical\&.h\&.
-.SS "uint64_t cache_disabled"
+Definition at line \fB9\fP of file \fBphysical\&.h\fP\&.
+.SS "bool cache_disabled"
 
 .PP
-Definition at line 32 of file physical\&.h\&.
-.SS "uint64_t dirty"
+Definition at line \fB4\fP of file \fBphysical\&.h\fP\&.
+.SS "bool dirty"
 
 .PP
-Definition at line 34 of file physical\&.h\&.
+Definition at line \fB6\fP of file \fBphysical\&.h\fP\&.
 .SS "pte_t entries[512]"
 
 .PP
-Definition at line 28 of file physical\&.h\&.
+Definition at line \fB0\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find(), and MaxOS::memory::PhysicalMemoryManager::map()\&.
-.SS "uint64_t global"
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP\&.
+.SS "bool global"
 
 .PP
-Definition at line 36 of file physical\&.h\&.
-.SS "uint64_t huge_page"
+Definition at line \fB8\fP of file \fBphysical\&.h\fP\&.
+.SS "bool huge_page"
 
 .PP
-Definition at line 35 of file physical\&.h\&.
+Definition at line \fB7\fP of file \fBphysical\&.h\fP\&.
 .SS "uint64_t physical_address"
 
 .PP
-Definition at line 38 of file physical\&.h\&.
+Definition at line \fB10\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by MaxOS::processes::IPC::alloc_shared_memory(), MaxOS::processes::IPC::free_shared_memory(), MaxOS::memory::MemoryManager::from_dm_region(), MaxOS::memory::PhysicalMemoryManager::identity_map(), MaxOS::memory::PhysicalMemoryManager::is_mapped(), MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space(), MaxOS::memory::VirtualMemoryManager::load_shared_memory(), MaxOS::memory::PhysicalMemoryManager::map(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), MaxOS::system::SyscallManager::syscall_create_shared_memory(), MaxOS::system::SyscallManager::syscall_open_shared_memory(), MaxOS::memory::MemoryManager::to_dm_region(), MaxOS::memory::MemoryManager::to_higher_region(), MaxOS::memory::MemoryManager::to_io_region(), and MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\&.
-.SS "uint64_t present"
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::memory::PhysicalMemoryManager::from_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::identity_map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::is_mapped()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_higher_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
+.SS "bool present"
 
 .PP
-Definition at line 28 of file physical\&.h\&.
-.PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::map()\&.
-.SS "uint64_t user"
+Definition at line \fB0\fP of file \fBphysical\&.h\fP\&.
+.SS "bool user"
 
 .PP
-Definition at line 30 of file physical\&.h\&.
-.SS "uint64_t write"
+Definition at line \fB2\fP of file \fBphysical\&.h\fP\&.
+.SS "bool write"
 
 .PP
-Definition at line 29 of file physical\&.h\&.
+Definition at line \fB1\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by MaxOS::drivers::ethernet::intel_i217::activate(), MaxOS::drivers::clock::Clock::calibrate(), MaxOS::net::EthernetFrameHandler::DataReceived(), MaxOS::drivers::ethernet::intel_i217::DoSend(), MaxOS::drivers::Driver::error_message(), MaxOS::drivers::ethernet::EthernetDriver::FireDataReceived(), MaxOS::drivers::ethernet::intel_i217::GetMediaAccessControlAddress(), MaxOS::drivers::ethernet::intel_i217::handle_interrupt(), MaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload(), MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::identify(), MaxOS::hardwarecommunication::LocalAPIC::init(), MaxOS::common::GenericOutputStream< string >::on_stream_read(), MaxOS::common::GenericOutputStream< string >::operator<<(), MaxOS::net::InternetControlMessageProtocol::RequestEchoReply(), MaxOS::drivers::ethernet::EthernetDriver::Send(), MaxOS::hardwarecommunication::LocalAPIC::send_eoi(), and MaxOS::drivers::clock::PIT::ticks_per_ms()\&.
-.SS "uint64_t write_through"
+Referenced by \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBMaxOS::common::GenericOutputStream< Type >::on_stream_read()\fP, \fBMaxOS::common::OutputStream::operator<<()\fP, \fBMaxOS::common::OutputStream::operator<<()\fP, \fBLogger::printf()\fP, \fBMaxOS::net::InternetControlMessageProtocol::RequestEchoReply()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_eoi()\fP, \fBMaxOS::common::OutputStream::write()\fP, \fBMaxOS::drivers::disk::Disk::write()\fP, \fBMaxOS::drivers::console::ConsoleStream::write_char()\fP, \fBMaxOS::common::OutputStream::write_hex()\fP, and \fBMaxOS::common::OutputStream::write_int()\fP\&.
+.SS "bool write_through"
 
 .PP
-Definition at line 31 of file physical\&.h\&.
+Definition at line \fB3\fP of file \fBphysical\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

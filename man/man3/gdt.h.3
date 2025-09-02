@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,9 +15,9 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::GDTR\fP"
+.RI "struct \fBMaxOS::system::GlobalDescriptorTableRegister\fP"
 .br
-.RI "A struct used to store information for the GDT Register\&. "
+.RI "How the \fBCPU\fP stores the GDT\&. "
 .ti -1c
 .RI "class \fBMaxOS::system::GlobalDescriptorTable\fP"
 .br
@@ -27,24 +27,32 @@
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::system\fP"
+.RI "namespace \fBMaxOS::system\fP"
 .br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::system::DescriptorFlags\fP : uint64_t { \fBMaxOS::system::Write\fP = (1ULL << 41), \fBMaxOS::system::Execute\fP = (1ULL << 43), \fBMaxOS::system::CodeOrDataSegment\fP = (1ULL << 44), \fBMaxOS::system::GrowDown\fP = (1ULL << 45), \fBMaxOS::system::ConformFromLower\fP = (1ULL << 46), \fBMaxOS::system::Present\fP = (1ULL << 47), \fBMaxOS::system::LongMode\fP = (1ULL << 53) }"
+.br
+.RI "Flags for the GDT entries\&. "
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::GDTR\fP \fBMaxOS::system::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::system::GlobalDescriptorTableRegister\fP \fBMaxOS::system::__attribute__\fP ((packed)) gdtr_t"
 .br
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "uint16_t \fBlimit\fP"
+.RI "uint16_t \fBsize\fP"
 .br
 .ti -1c
 .RI "uint64_t \fBaddress\fP"
@@ -55,11 +63,11 @@
 .SS "uint64_t address"
 
 .PP
-Definition at line 3 of file gdt\&.h\&.
-.SS "uint16_t limit"
+Definition at line \fB1\fP of file \fBgdt\&.h\fP\&.
+.SS "uint16_t size"
 
 .PP
-Definition at line 2 of file gdt\&.h\&.
+Definition at line \fB0\fP of file \fBgdt\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

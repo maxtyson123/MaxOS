@@ -1,4 +1,4 @@
-.TH "MaxOS::memory::MemIO16Bit" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::memory::MemIO16Bit" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,33 +30,43 @@ Inherits \fBMaxOS::memory::MemIO\fP\&.
 .RI "Reads data from the memory address\&. "
 .in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::memory::MemIO\fP
+.in +1c
+.ti -1c
+.RI "\fBMemIO\fP (uintptr_t \fBaddress\fP)"
+.br
+.ti -1c
+.RI "\fB~MemIO\fP ()"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::memory::MemIO\fP
+.in +1c
+.ti -1c
+.RI "uintptr_t \fBm_address\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 Handles 16 bit memory IO\&. 
 .PP
-Definition at line 43 of file memoryIO\&.h\&.
+Definition at line \fB43\fP of file \fBmemoryIO\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "MemIO16Bit::MemIO16Bit (uintptr_t address)"
 
 .PP
-Definition at line 46 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB44\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-47 : MemIO(address)
-48 {
-49 }
+45 : MemIO(address)
+46 {
+47 }
 .fi
-.SS "MemIO16Bit::~MemIO16Bit ()"
 
-.PP
-Definition at line 51 of file memoryIO\&.cpp\&.
-.PP
-.nf
-51                         {
-52 
-53 }
-.fi
+.SS "MemIO16Bit::~MemIO16Bit ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "uint16_t MemIO16Bit::read ()\fC [virtual]\fP"
@@ -71,15 +81,16 @@ the data read
 .PP
 
 .PP
-Definition at line 69 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB66\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-69                          {
-70     return *((volatile uint16_t*)(m_address));
-71 }
+66                           {
+67 
+68     return *((volatile uint16_t*) (m_address));
+69 }
 .fi
+
 .PP
-References MaxOS::memory::MemIO::m_address\&.
+References \fBMaxOS::memory::MemIO::m_address\fP\&.
 .SS "void MemIO16Bit::write (uint16_t data)\fC [virtual]\fP"
 
 .PP
@@ -92,15 +103,16 @@ Writes data to the memory address\&.
 .PP
 
 .PP
-Definition at line 60 of file memoryIO\&.cpp\&.
-.PP
+Definition at line \fB56\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-60                                    {
-61     (*((volatile uint16_t*)(m_address)))=(data);
-62 }
+56                                     {
+57 
+58     (*((volatile uint16_t*) (m_address))) = (data);
+59 }
 .fi
+
 .PP
-References data, and MaxOS::memory::MemIO::m_address\&.
+References \fBdata\fP, and \fBMaxOS::memory::MemIO::m_address\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,539 @@
+.TH "MaxOS::filesystem::Directory" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::Directory \- Handles a group of files (directory)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <filesystem\&.h>\fP
+.PP
+Inherited by \fBMaxOS::filesystem::format::Fat32Directory\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDirectory\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fB~Directory\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBread_from_disk\fP ()"
+.br
+.RI "Read the directory from the disk\&. "
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBFile\fP * > \fBfiles\fP ()"
+.br
+.RI "Get the files in the directory\&. "
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBDirectory\fP * > \fBsubdirectories\fP ()"
+.br
+.RI "Get the subdirectories in the directory\&. "
+.ti -1c
+.RI "\fBFile\fP * \fBopen_file\fP (\fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Open a file in the directory\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBopen_subdirectory\fP (\fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Open a directory in the directory\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBFile\fP * \fBcreate_file\fP (\fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Create a file in the directory\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBremove_file\fP (\fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Delete a file in the directory\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBrename_file\fP (\fBFile\fP *file, \fBconst\fP \fBstring\fP &\fBnew_name\fP)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrename_file\fP (\fBconst\fP \fBstring\fP &\fBold_name\fP, \fBconst\fP \fBstring\fP &\fBnew_name\fP)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBrename_subdirectory\fP (\fBDirectory\fP *directory, \fBconst\fP \fBstring\fP &\fBnew_name\fP)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrename_subdirectory\fP (\fBconst\fP \fBstring\fP &\fBold_name\fP, \fBconst\fP \fBstring\fP &\fBnew_name\fP)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBDirectory\fP * \fBcreate_subdirectory\fP (\fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Create a directory in the directory\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBremove_subdirectory\fP (\fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Try to remove a directory in the directory\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Get the name of the directory\&. "
+.ti -1c
+.RI "\fBsize_t\fP \fBsize\fP ()"
+.br
+.RI "Get the size of the directory\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBFile\fP * > \fBm_files\fP"
+.br
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBDirectory\fP * > \fBm_subdirectories\fP"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBm_name\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles a group of files (directory) 
+.PP
+Definition at line \fB56\fP of file \fBfilesystem\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Directory::Directory ()\fC [default]\fP"
+
+.SS "Directory::~Directory ()\fC [virtual]\fP"
+
+.PP
+Definition at line \fB93\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+93                       {
+94 
+95     // Free the files
+96     for (auto &file: m_files)
+97         delete file;
+98 
+99     // Free the subdirectories
+100     for (auto &subdirectory: m_subdirectories)
+101         delete subdirectory;
+102 
+103 }
+.fi
+
+.PP
+References \fBm_files\fP, and \fBm_subdirectories\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBFile\fP * Directory::create_file (\fBconst\fP \fBstring\fP & name)\fC [virtual]\fP"
+
+.PP
+Create a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to create 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A new file object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB144\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+144                                                {
+145     return nullptr;
+146 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
+.SS "\fBDirectory\fP * Directory::create_subdirectory (\fBconst\fP \fBstring\fP & name)\fC [virtual]\fP"
+
+.PP
+Create a directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to create 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new directory object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB190\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+190                                                             {
+191     return nullptr;
+192 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
+.SS "\fBcommon::Vector\fP< \fBFile\fP * > Directory::files ()"
+
+.PP
+Get the files in the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+A list of all the files in the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB117\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+117                                      {
+118     return m_files;
+119 }
+.fi
+
+.PP
+References \fBm_files\fP\&.
+.SS "\fBstring\fP Directory::name ()"
+
+.PP
+Get the name of the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB207\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+207                        {
+208     return m_name;
+209 }
+.fi
+
+.PP
+References \fBm_name\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_file()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::Ext2Directory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::Fat32Directory()\fP, \fBopen_file()\fP, \fBopen_subdirectory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::remove_file()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::remove_subdirectory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_subdirectory()\fP, and \fBrename_subdirectory()\fP\&.
+.SS "\fBFile\fP * Directory::open_file (\fBconst\fP \fBstring\fP & name)"
+
+.PP
+Open a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to open 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB127\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+127                                              {
+128 
+129     // Try to find the file
+130     for (auto &file: m_files)
+131         if (file\->name() == name)
+132             return file;
+133 
+134     // File not found
+135     return nullptr;
+136 }
+.fi
+
+.PP
+References \fBm_files\fP, and \fBname()\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::FileSystem::exists()\fP\&.
+.SS "\fBDirectory\fP * Directory::open_subdirectory (\fBconst\fP \fBstring\fP & name)"
+
+.PP
+Open a directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to open 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The directory object or null if it could not be opened 
+.RE
+.PP
+
+.PP
+Definition at line \fB171\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+171                                                           {
+172 
+173     // Try to find the directory
+174     for (auto &subdirectory: m_subdirectories)
+175         if (subdirectory\->name() == name) {
+176             subdirectory\->read_from_disk();
+177             return subdirectory;
+178         }
+179 
+180     // Directory not found
+181     return nullptr;
+182 }
+.fi
+
+.PP
+References \fBm_subdirectories\fP, and \fBname()\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::FileSystem::get_directory()\fP\&.
+.SS "\fBvoid\fP Directory::read_from_disk ()\fC [virtual]\fP"
+
+.PP
+Read the directory from the disk\&. 
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB108\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+108                                {
+109 
+110 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::filesystem::VirtualFileSystem::create_directory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBMaxOS::filesystem::format::Fat32FileSystem::Fat32FileSystem()\fP, and \fBMaxOS::filesystem::VirtualFileSystem::open_directory()\fP\&.
+.SS "\fBvoid\fP Directory::remove_file (\fBconst\fP \fBstring\fP & name)\fC [virtual]\fP"
+
+.PP
+Delete a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to remove 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB153\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+153                                               {
+154 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
+.SS "\fBvoid\fP Directory::remove_subdirectory (\fBconst\fP \fBstring\fP & name)\fC [virtual]\fP"
+
+.PP
+Try to remove a directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to remove 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB198\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+198                                                       {
+199 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
+.SS "\fBvoid\fP Directory::rename_file (\fBconst\fP \fBstring\fP & old_name, \fBconst\fP \fBstring\fP & new_name)\fC [virtual]\fP"
+
+.PP
+Rename a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_name\fP The file to rename 
+.br
+\fInew_name\fP The new name of the file 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP\&.
+.PP
+Definition at line \fB245\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+245                                                                           {
+246 
+247     ASSERT(false, "not implemented");
+248 
+249 }
+.fi
+
+.PP
+References \fBASSERT\fP\&.
+.SS "\fBvoid\fP Directory::rename_file (\fBFile\fP * file, \fBconst\fP \fBstring\fP & new_name)"
+
+.PP
+Rename a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP The file to rename 
+.br
+\fInew_name\fP The new name of the file 
+.RE
+.PP
+
+.PP
+Definition at line \fB233\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+233                                                               {
+234 
+235     rename_file(file\->name(), new_name);
+236 
+237 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::File::name()\fP, and \fBrename_file()\fP\&.
+.PP
+Referenced by \fBrename_file()\fP\&.
+.SS "\fBvoid\fP Directory::rename_subdirectory (\fBconst\fP \fBstring\fP & old_name, \fBconst\fP \fBstring\fP & new_name)\fC [virtual]\fP"
+
+.PP
+Rename a subdirectory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_name\fP The directory to rename 
+.br
+\fInew_name\fP The new name of the directory 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP\&.
+.PP
+Definition at line \fB269\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+269                                                                                   {
+270     ASSERT(false, "not implemented");
+271 }
+.fi
+
+.PP
+References \fBASSERT\fP\&.
+.SS "\fBvoid\fP Directory::rename_subdirectory (\fBDirectory\fP * directory, \fBconst\fP \fBstring\fP & new_name)"
+
+.PP
+Rename a subdirectory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirectory\fP The directory to rename 
+.br
+\fInew_name\fP The new name of the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB257\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+257                                                                                 {
+258 
+259     rename_subdirectory(directory\->name(), new_name);
+260 
+261 }
+.fi
+
+.PP
+References \fBname()\fP, and \fBrename_subdirectory()\fP\&.
+.PP
+Referenced by \fBrename_subdirectory()\fP\&.
+.SS "\fBsize_t\fP Directory::size ()"
+
+.PP
+Get the size of the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The size of the directory (sum of all the files in bytes) 
+.RE
+.PP
+
+.PP
+Definition at line \fB216\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+216                        {
+217 
+218     // Sum the size of all the files
+219     size_t size = 0;
+220     for (auto &file: m_files)
+221         size += file\->size();
+222 
+223     return size;
+224 
+225 }
+.fi
+
+.PP
+References \fBm_files\fP, and \fBsize()\fP\&.
+.PP
+Referenced by \fBsize()\fP\&.
+.SS "\fBcommon::Vector\fP< \fBDirectory\fP * > Directory::subdirectories ()"
+
+.PP
+Get the subdirectories in the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The subdirectories in the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB161\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+161                                                    {
+162     return m_subdirectories;
+163 }
+.fi
+
+.PP
+References \fBm_subdirectories\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBcommon::Vector\fP<\fBFile\fP*> MaxOS::filesystem::Directory::m_files\fC [protected]\fP"
+
+.PP
+Definition at line \fB59\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_file()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_file()\fP, \fBfiles()\fP, \fBopen_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_file()\fP, \fBsize()\fP, and \fB~Directory()\fP\&.
+.SS "\fBstring\fP MaxOS::filesystem::Directory::m_name\fC [protected]\fP"
+
+.PP
+Definition at line \fB62\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::Ext2Directory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::Fat32Directory()\fP, and \fBname()\fP\&.
+.SS "\fBcommon::Vector\fP<\fBDirectory\fP*> MaxOS::filesystem::Directory::m_subdirectories\fC [protected]\fP"
+
+.PP
+Definition at line \fB60\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_subdirectory()\fP, \fBopen_subdirectory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_subdirectory()\fP, \fBsubdirectories()\fP, and \fB~Directory()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

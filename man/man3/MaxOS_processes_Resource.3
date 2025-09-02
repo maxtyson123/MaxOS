@@ -1,0 +1,219 @@
+.TH "MaxOS::processes::Resource" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::Resource
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource\&.h>\fP
+.PP
+Inherited by \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::filesystem::FileResource\fP, \fBMaxOS::processes::SharedMemory\fP, and \fBMaxOS::processes::SharedMessageEndpoint\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, \fBresource_type_t\fP \fBtype\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~Resource\fP ()"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual void \fBopen\fP (size_t \fBflags\fP)"
+.br
+.RI "Opens the resource\&. "
+.ti -1c
+.RI "virtual void \fBclose\fP (size_t \fBflags\fP)"
+.br
+.RI "Closes the resource\&. "
+.ti -1c
+.RI "virtual int \fBread\fP (void *buffer, size_t \fBsize\fP, size_t \fBflags\fP)"
+.br
+.RI "Read a certain amount of bytes from a resource\&. "
+.ti -1c
+.RI "virtual int \fBwrite\fP (const void *buffer, size_t \fBsize\fP, size_t \fBflags\fP)"
+.br
+.RI "Write a certain amount of bytes to a resource\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB21\fP of file \fBresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Resource::Resource (const \fBstring\fP & name, size_t flags, \fBresource_type_t\fP type)"
+
+.PP
+Definition at line \fB9\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+10 : m_name(name),
+11   m_type(type)
+12 {
+13 
+14 }
+.fi
+
+.SS "Resource::~Resource ()\fC [virtual]\fP, \fC [default]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void Resource::close (size_t flags)\fC [virtual]\fP"
+
+.PP
+Closes the resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::processes::SharedMemory\fP\&.
+.PP
+Definition at line \fB33\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+33                                  {
+34 
+35 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::BaseResourceRegistry::close_resource()\fP\&.
+.SS "\fBstring\fP Resource::name ()"
+
+.PP
+Gets the name of this resource\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name 
+.RE
+.PP
+
+.PP
+Definition at line \fB67\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+67                       {
+68     return m_name;
+69 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::BaseResourceRegistry::close_resource()\fP, \fBMaxOS::processes::BaseResourceRegistry::register_resource()\fP, \fBMaxOS::filesystem::FileResource::write()\fP, and \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
+.SS "void Resource::open (size_t flags)\fC [virtual]\fP"
+
+.PP
+Opens the resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::processes::SharedMemory\fP\&.
+.PP
+Definition at line \fB23\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+23                                 {
+24 
+25 }
+.fi
+
+.SS "int Resource::read (void * buffer, size_t size, size_t flags)\fC [virtual]\fP"
+
+.PP
+Read a certain amount of bytes from a resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP How many bytes to read 
+.br
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+How many bytes were successfully read (negative can be used as errors) 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::FileResource\fP, \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::processes::SharedMemory\fP, and \fBMaxOS::processes::SharedMessageEndpoint\fP\&.
+.PP
+Definition at line \fB45\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+45                                                           {
+46     return 0;
+47 }
+.fi
+
+.SS "\fBresource_type_t\fP Resource::type ()"
+
+.PP
+Gets the type of this resource\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The type 
+.RE
+.PP
+
+.PP
+Definition at line \fB76\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+76                                {
+77 
+78     return m_type;
+79 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::ResourceManager::close_resource()\fP\&.
+.SS "int Resource::write (const void * buffer, size_t size, size_t flags)\fC [virtual]\fP"
+
+.PP
+Write a certain amount of bytes to a resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read from 
+.br
+\fIsize\fP How many bytes to write 
+.br
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+How many bytes were successfully written 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::filesystem::FileResource\fP, \fBMaxOS::filesystem::DirectoryResource\fP, and \fBMaxOS::processes::SharedMessageEndpoint\fP\&.
+.PP
+Definition at line \fB57\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+57                                                                  {
+58 
+59     return 0;
+60 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

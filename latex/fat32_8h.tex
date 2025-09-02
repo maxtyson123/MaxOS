@@ -1,36 +1,71 @@
-\hypertarget{fat32_8h}{}\doxysection{/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/filesystem/fat32.h File Reference}
-\label{fat32_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/fat32.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/fat32.h}}
-{\ttfamily \#include \char`\"{}drivers/disk/ata.\+h\char`\"{}}\newline
-{\ttfamily \#include $<$common/output\+Stream.\+h$>$}\newline
-{\ttfamily \#include $<$common/vector.\+h$>$}\newline
+\doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/filesystem/format/fat32.h File Reference}
+\hypertarget{fat32_8h}{}\label{fat32_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h}}
+{\ttfamily \#include $<$drivers/disk/disk.\+h$>$}\newline
 {\ttfamily \#include $<$filesystem/filesystem.\+h$>$}\newline
-{\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
-\doxysubsection*{Classes}
+\doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1BiosParameterBlock32}{Max\+O\+S\+::filesystem\+::\+Bios\+Parameter\+Block32}}
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32}{Max\+OS\+::filesystem\+::format\+::\+Bios\+Parameter\+Block32}}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1DirectoryEntry}{Max\+O\+S\+::filesystem\+::\+Directory\+Entry}}
-\begin{DoxyCompactList}\small\item\em Stores information about a file or directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Namespaces}
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1FSInfo}{Max\+OS\+::filesystem\+::format\+::\+FSInfo}}
+\item 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1DirectoryEntry}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry}}
+\begin{DoxyCompactList}\small\item\em Stores information about a file or directory. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry}{Max\+OS\+::filesystem\+::format\+::\+Long\+File\+Name\+Entry}}
+\item 
+class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Volume}}
+\begin{DoxyCompactList}\small\item\em Handles the FAT table that stores the information about the files on the disk and operations on the disk. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32File}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File}}
+\begin{DoxyCompactList}\small\item\em Handles the file operations on the FAT32 filesystem. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Directory}}
+\begin{DoxyCompactList}\small\item\em Handles the directory operations on the FAT32 filesystem. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32FileSystem}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+System}}
+\begin{DoxyCompactList}\small\item\em Handles the FAT32 filesystem operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
- \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
+namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
 \item 
- \mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{Max\+O\+S\+::filesystem}}
+namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{Max\+OS\+::filesystem}}
+\item 
+namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format}{Max\+OS\+::filesystem\+::format}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Functions}
+\doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1BiosParameterBlock32}{Max\+O\+S\+::filesystem\+::\+Bios\+Parameter\+Block32}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_a936d73aac14411c30530df61c3b6d8b8}{Max\+O\+S\+::filesystem\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed))
+enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}} \{ \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba88c189a42c87aa49d667fc8ab76bc323}{Max\+OS\+::filesystem\+::format\+::\+FREE}} = 0x00
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba47c7e7cb36a953a8c47e02000036bb44}{Max\+OS\+::filesystem\+::format\+::\+READ\+\_\+\+ONLY}} = 0x01
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba347e628a8f72626a0611ef842fe9d304}{Max\+OS\+::filesystem\+::format\+::\+HIDDEN}} = 0x02
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38ebafa177138f94a7ea01f549b1aa7893d03}{Max\+OS\+::filesystem\+::format\+::\+SYSTEM}} = 0x04
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38ebac7ab89361775165d882d325f6a44dcab}{Max\+OS\+::filesystem\+::format\+::\+VOLUME\+\_\+\+ID}} = 0x08
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba28766b4be065d0c806c2e9c9d914af48}{Max\+OS\+::filesystem\+::format\+::\+DIRECTORY}} = 0x10
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba71f01f32e90440fd6039511dde69e995}{Max\+OS\+::filesystem\+::format\+::\+ARCHIVE}} = 0x20
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba6be6b4d55f83c58370e48693daae3f68}{Max\+OS\+::filesystem\+::format\+::\+LONG\+\_\+\+NAME}} = READ\+\_\+\+ONLY \texorpdfstring{$\vert$}{|} HIDDEN \texorpdfstring{$\vert$}{|} SYSTEM \texorpdfstring{$\vert$}{|} VOLUME\+\_\+\+ID
+ \}
+\item 
+enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_ada91f9a29bc3902c44576cc1e84a4b53}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Type}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_ada91f9a29bc3902c44576cc1e84a4b53af447f5c03508de4d88e340390ba7c78f}{Max\+OS\+::filesystem\+::format\+::\+LAST}} = 0x00
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_ada91f9a29bc3902c44576cc1e84a4b53a88c189a42c87aa49d667fc8ab76bc323}{Max\+OS\+::filesystem\+::format\+::\+FREE}} = 0x\+E5
+ \}
+\item 
+enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64}{Max\+OS\+::filesystem\+::format\+::\+Cluster\+State}} \+: uint32\+\_\+t \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64a88c189a42c87aa49d667fc8ab76bc323}{Max\+OS\+::filesystem\+::format\+::\+FREE}} = 0x00000000
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64af1b68d66337a81cfa0d2076171cba2a8}{Max\+OS\+::filesystem\+::format\+::\+BAD}} = 0x0\+FFFFFF7
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64acf542699ffaa1a09c5b27c0f72cd3f6f}{Max\+OS\+::filesystem\+::format\+::\+END\+\_\+\+OF\+\_\+\+CHAIN}} = 0x\+FFFFFFFF
+ \}
 \end{DoxyCompactItemize}
-\doxysubsection*{Variables}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32}{Max\+OS\+::filesystem\+::format\+::\+Bios\+Parameter\+Block32}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a52f6620003d8bac345b43e0b30c9ea5f}{Max\+OS\+::filesystem\+::format\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed)) bpb32\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a61b95cffdd449d10352cfd0288b23287}{jump}} \mbox{[}3\mbox{]}
 \item 
-uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ae21b477395a1441f77a079937a0900bb}{O\+E\+M\+\_\+name}} \mbox{[}8\mbox{]}
+uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ae21b477395a1441f77a079937a0900bb}{OEM\+\_\+name}} \mbox{[}8\mbox{]}
 \item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e}{bytes\+\_\+per\+\_\+sector}}
 \item 
@@ -82,6 +117,20 @@ uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a1726642eb49790a81d20ba1024d9791d}{volume
 \item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3}{file\+\_\+system\+\_\+type}} \mbox{[}8\mbox{]}
 \item 
+uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ae8383090a2c40a0a44d77f9e4b6d731b}{lead\+\_\+signature}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{fat32_8h_aed41fe36034f1fcda738da60943924a6}{reserved1}} \mbox{[}480\mbox{]}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a86319fe2c708080de55d983c58b52626}{structure\+\_\+signature}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a82a6626ae16c997b5ed5cf2eb7164bc9}{free\+\_\+cluster\+\_\+count}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{fat32_8h_aee407e98526d594cdef398d2cfa05ee8}{next\+\_\+free\+\_\+cluster}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{fat32_8h_af6dc8e21f5c1ca5ca997fc835808802c}{reserved2}} \mbox{[}12\mbox{]}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a760eb704cccb3d6ece4b70d8cff868e6}{trail\+\_\+signature}}
+\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}} \mbox{[}8\mbox{]}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ac53000273f91ccd0a71d565d8063f914}{extension}} \mbox{[}3\mbox{]}
@@ -107,11 +156,27 @@ uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e}{last\
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4}{first\+\_\+cluster\+\_\+low}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}
+\item 
+enum \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a36092eb58028d173cef47dde82f39032}{Max\+OS\+::filesystem\+::format\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{fat32_8h_aa44597f38af03f4bb6ef069ba7efb24c}{order}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a5838c0c2c16393596822649d9b9d9d8b}{name1}} \mbox{[}5\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}{checksum}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a5842149c75fb6d31bf351993341cf514}{name2}} \mbox{[}6\mbox{]}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}{zero}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873}{name3}} \mbox{[}2\mbox{]}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Variable Documentation}
-\mbox{\Hypertarget{fat32_8h_a983149395439fbc9ca8497076b75fd6b}\label{fat32_8h_a983149395439fbc9ca8497076b75fd6b}} 
+\Hypertarget{fat32_8h_a983149395439fbc9ca8497076b75fd6b}\label{fat32_8h_a983149395439fbc9ca8497076b75fd6b} 
 \index{fat32.h@{fat32.h}!attributes@{attributes}}
 \index{attributes@{attributes}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{attributes}{attributes}}
@@ -119,9 +184,9 @@ uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}
 
 
 
-Definition at line 5 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6}\label{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6}} 
+\Hypertarget{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6}\label{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6} 
 \index{fat32.h@{fat32.h}!backup\_sector@{backup\_sector}}
 \index{backup\_sector@{backup\_sector}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{backup\_sector}{backup\_sector}}
@@ -129,9 +194,9 @@ Definition at line 5 of file fat32.\+h.
 
 
 
-Definition at line 23 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00021}{21}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ac1a97c4232f0271f6af44f69ae2d3efd}\label{fat32_8h_ac1a97c4232f0271f6af44f69ae2d3efd}} 
+\Hypertarget{fat32_8h_ac1a97c4232f0271f6af44f69ae2d3efd}\label{fat32_8h_ac1a97c4232f0271f6af44f69ae2d3efd} 
 \index{fat32.h@{fat32.h}!boot\_signature@{boot\_signature}}
 \index{boot\_signature@{boot\_signature}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{boot\_signature}{boot\_signature}}
@@ -139,9 +204,9 @@ Definition at line 23 of file fat32.\+h.
 
 
 
-Definition at line 27 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00025}{25}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e}\label{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e}} 
+\Hypertarget{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e}\label{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e} 
 \index{fat32.h@{fat32.h}!bytes\_per\_sector@{bytes\_per\_sector}}
 \index{bytes\_per\_sector@{bytes\_per\_sector}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{bytes\_per\_sector}{bytes\_per\_sector}}
@@ -149,9 +214,23 @@ Definition at line 27 of file fat32.\+h.
 
 
 
-Definition at line 5 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_af720492f0576616c43ffc1324f8d4592}\label{fat32_8h_af720492f0576616c43ffc1324f8d4592}} 
+
+
+Referenced by \mbox{\hyperlink{fat32_8cpp_source_l00578}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Directory\+::update\+\_\+entry\+\_\+on\+\_\+disk()}}.
+
+\Hypertarget{fat32_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}\label{fat32_8h_a59eac9627282a484fbaf0aa7aa3b8a9a} 
+\index{fat32.h@{fat32.h}!checksum@{checksum}}
+\index{checksum@{checksum}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{checksum}{checksum}}
+{\footnotesize\ttfamily uint8\+\_\+t checksum}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_af720492f0576616c43ffc1324f8d4592}\label{fat32_8h_af720492f0576616c43ffc1324f8d4592} 
 \index{fat32.h@{fat32.h}!creation\_date@{creation\_date}}
 \index{creation\_date@{creation\_date}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{creation\_date}{creation\_date}}
@@ -159,9 +238,9 @@ Definition at line 5 of file fat32.\+h.
 
 
 
-Definition at line 10 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00008}{8}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a95650faad49780e62ace0e0655e24632}\label{fat32_8h_a95650faad49780e62ace0e0655e24632}} 
+\Hypertarget{fat32_8h_a95650faad49780e62ace0e0655e24632}\label{fat32_8h_a95650faad49780e62ace0e0655e24632} 
 \index{fat32.h@{fat32.h}!creation\_time@{creation\_time}}
 \index{creation\_time@{creation\_time}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{creation\_time}{creation\_time}}
@@ -169,9 +248,9 @@ Definition at line 10 of file fat32.\+h.
 
 
 
-Definition at line 9 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00007}{7}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a60a55b2bce6316ee7e97ede0402491ef}\label{fat32_8h_a60a55b2bce6316ee7e97ede0402491ef}} 
+\Hypertarget{fat32_8h_a60a55b2bce6316ee7e97ede0402491ef}\label{fat32_8h_a60a55b2bce6316ee7e97ede0402491ef} 
 \index{fat32.h@{fat32.h}!creation\_time\_tenth@{creation\_time\_tenth}}
 \index{creation\_time\_tenth@{creation\_time\_tenth}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{creation\_time\_tenth}{creation\_time\_tenth}}
@@ -179,9 +258,9 @@ Definition at line 9 of file fat32.\+h.
 
 
 
-Definition at line 8 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a72aedf7609ef652851878e7a1a802c40}\label{fat32_8h_a72aedf7609ef652851878e7a1a802c40}} 
+\Hypertarget{fat32_8h_a72aedf7609ef652851878e7a1a802c40}\label{fat32_8h_a72aedf7609ef652851878e7a1a802c40} 
 \index{fat32.h@{fat32.h}!drive\_number@{drive\_number}}
 \index{drive\_number@{drive\_number}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{drive\_number}{drive\_number}}
@@ -189,9 +268,9 @@ Definition at line 8 of file fat32.\+h.
 
 
 
-Definition at line 25 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00023}{23}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a55dd8549d603eab89b2e0c423f4b3cda}\label{fat32_8h_a55dd8549d603eab89b2e0c423f4b3cda}} 
+\Hypertarget{fat32_8h_a55dd8549d603eab89b2e0c423f4b3cda}\label{fat32_8h_a55dd8549d603eab89b2e0c423f4b3cda} 
 \index{fat32.h@{fat32.h}!extended\_flags@{extended\_flags}}
 \index{extended\_flags@{extended\_flags}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{extended\_flags}{extended\_flags}}
@@ -199,9 +278,9 @@ Definition at line 25 of file fat32.\+h.
 
 
 
-Definition at line 19 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00017}{17}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ac53000273f91ccd0a71d565d8063f914}\label{fat32_8h_ac53000273f91ccd0a71d565d8063f914}} 
+\Hypertarget{fat32_8h_ac53000273f91ccd0a71d565d8063f914}\label{fat32_8h_ac53000273f91ccd0a71d565d8063f914} 
 \index{fat32.h@{fat32.h}!extension@{extension}}
 \index{extension@{extension}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{extension}{extension}}
@@ -209,9 +288,9 @@ Definition at line 19 of file fat32.\+h.
 
 
 
-Definition at line 4 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00002}{2}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a45b262a0b541597f68307aff18c6d358}\label{fat32_8h_a45b262a0b541597f68307aff18c6d358}} 
+\Hypertarget{fat32_8h_a45b262a0b541597f68307aff18c6d358}\label{fat32_8h_a45b262a0b541597f68307aff18c6d358} 
 \index{fat32.h@{fat32.h}!fat\_info@{fat\_info}}
 \index{fat\_info@{fat\_info}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{fat\_info}{fat\_info}}
@@ -219,9 +298,9 @@ Definition at line 4 of file fat32.\+h.
 
 
 
-Definition at line 22 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00020}{20}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1}\label{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1}} 
+\Hypertarget{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1}\label{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1} 
 \index{fat32.h@{fat32.h}!fat\_sector\_count@{fat\_sector\_count}}
 \index{fat\_sector\_count@{fat\_sector\_count}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{fat\_sector\_count}{fat\_sector\_count}}
@@ -229,9 +308,9 @@ Definition at line 22 of file fat32.\+h.
 
 
 
-Definition at line 12 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00010}{10}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a7695af2379f9d7dee48a680658d0a524}\label{fat32_8h_a7695af2379f9d7dee48a680658d0a524}} 
+\Hypertarget{fat32_8h_a7695af2379f9d7dee48a680658d0a524}\label{fat32_8h_a7695af2379f9d7dee48a680658d0a524} 
 \index{fat32.h@{fat32.h}!fat\_version@{fat\_version}}
 \index{fat\_version@{fat\_version}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{fat\_version}{fat\_version}}
@@ -239,9 +318,9 @@ Definition at line 12 of file fat32.\+h.
 
 
 
-Definition at line 20 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00018}{18}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3}\label{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3}} 
+\Hypertarget{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3}\label{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3} 
 \index{fat32.h@{fat32.h}!file\_system\_type@{file\_system\_type}}
 \index{file\_system\_type@{file\_system\_type}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{file\_system\_type}{file\_system\_type}}
@@ -249,9 +328,9 @@ Definition at line 20 of file fat32.\+h.
 
 
 
-Definition at line 30 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00028}{28}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a295849bfe720256aa3a5a454a28c1b84}\label{fat32_8h_a295849bfe720256aa3a5a454a28c1b84}} 
+\Hypertarget{fat32_8h_a295849bfe720256aa3a5a454a28c1b84}\label{fat32_8h_a295849bfe720256aa3a5a454a28c1b84} 
 \index{fat32.h@{fat32.h}!first\_cluster\_high@{first\_cluster\_high}}
 \index{first\_cluster\_high@{first\_cluster\_high}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{first\_cluster\_high}{first\_cluster\_high}}
@@ -259,9 +338,9 @@ Definition at line 30 of file fat32.\+h.
 
 
 
-Definition at line 13 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00011}{11}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4}\label{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4}} 
+\Hypertarget{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4}\label{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4} 
 \index{fat32.h@{fat32.h}!first\_cluster\_low@{first\_cluster\_low}}
 \index{first\_cluster\_low@{first\_cluster\_low}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{first\_cluster\_low}{first\_cluster\_low}}
@@ -269,9 +348,19 @@ Definition at line 13 of file fat32.\+h.
 
 
 
-Definition at line 18 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00016}{16}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3}\label{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3}} 
+\Hypertarget{fat32_8h_a82a6626ae16c997b5ed5cf2eb7164bc9}\label{fat32_8h_a82a6626ae16c997b5ed5cf2eb7164bc9} 
+\index{fat32.h@{fat32.h}!free\_cluster\_count@{free\_cluster\_count}}
+\index{free\_cluster\_count@{free\_cluster\_count}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{free\_cluster\_count}{free\_cluster\_count}}
+{\footnotesize\ttfamily uint32\+\_\+t free\+\_\+cluster\+\_\+count}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3}\label{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3} 
 \index{fat32.h@{fat32.h}!head\_count@{head\_count}}
 \index{head\_count@{head\_count}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{head\_count}{head\_count}}
@@ -279,9 +368,9 @@ Definition at line 18 of file fat32.\+h.
 
 
 
-Definition at line 14 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00012}{12}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ad4f0ed516a7d627aa96fd773f27a03a7}\label{fat32_8h_ad4f0ed516a7d627aa96fd773f27a03a7}} 
+\Hypertarget{fat32_8h_ad4f0ed516a7d627aa96fd773f27a03a7}\label{fat32_8h_ad4f0ed516a7d627aa96fd773f27a03a7} 
 \index{fat32.h@{fat32.h}!hidden\_sectors@{hidden\_sectors}}
 \index{hidden\_sectors@{hidden\_sectors}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{hidden\_sectors}{hidden\_sectors}}
@@ -289,9 +378,9 @@ Definition at line 14 of file fat32.\+h.
 
 
 
-Definition at line 15 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00013}{13}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a61b95cffdd449d10352cfd0288b23287}\label{fat32_8h_a61b95cffdd449d10352cfd0288b23287}} 
+\Hypertarget{fat32_8h_a61b95cffdd449d10352cfd0288b23287}\label{fat32_8h_a61b95cffdd449d10352cfd0288b23287} 
 \index{fat32.h@{fat32.h}!jump@{jump}}
 \index{jump@{jump}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{jump}{jump}}
@@ -299,9 +388,9 @@ Definition at line 15 of file fat32.\+h.
 
 
 
-Definition at line 3 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a9ba2d4d6008d657bee96ff6937079b4b}\label{fat32_8h_a9ba2d4d6008d657bee96ff6937079b4b}} 
+\Hypertarget{fat32_8h_a9ba2d4d6008d657bee96ff6937079b4b}\label{fat32_8h_a9ba2d4d6008d657bee96ff6937079b4b} 
 \index{fat32.h@{fat32.h}!last\_access\_date@{last\_access\_date}}
 \index{last\_access\_date@{last\_access\_date}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{last\_access\_date}{last\_access\_date}}
@@ -309,9 +398,9 @@ Definition at line 3 of file fat32.\+h.
 
 
 
-Definition at line 11 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00009}{9}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e}\label{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e}} 
+\Hypertarget{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e}\label{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e} 
 \index{fat32.h@{fat32.h}!last\_write\_date@{last\_write\_date}}
 \index{last\_write\_date@{last\_write\_date}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{last\_write\_date}{last\_write\_date}}
@@ -319,9 +408,9 @@ Definition at line 11 of file fat32.\+h.
 
 
 
-Definition at line 16 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00014}{14}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ad94dab8bcdb0d7989336d90a69c2a517}\label{fat32_8h_ad94dab8bcdb0d7989336d90a69c2a517}} 
+\Hypertarget{fat32_8h_ad94dab8bcdb0d7989336d90a69c2a517}\label{fat32_8h_ad94dab8bcdb0d7989336d90a69c2a517} 
 \index{fat32.h@{fat32.h}!last\_write\_time@{last\_write\_time}}
 \index{last\_write\_time@{last\_write\_time}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{last\_write\_time}{last\_write\_time}}
@@ -329,9 +418,19 @@ Definition at line 16 of file fat32.\+h.
 
 
 
-Definition at line 15 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00013}{13}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc}\label{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc}} 
+\Hypertarget{fat32_8h_ae8383090a2c40a0a44d77f9e4b6d731b}\label{fat32_8h_ae8383090a2c40a0a44d77f9e4b6d731b} 
+\index{fat32.h@{fat32.h}!lead\_signature@{lead\_signature}}
+\index{lead\_signature@{lead\_signature}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{lead\_signature}{lead\_signature}}
+{\footnotesize\ttfamily uint32\+\_\+t lead\+\_\+signature}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00000}{0}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc}\label{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc} 
 \index{fat32.h@{fat32.h}!media\_type@{media\_type}}
 \index{media\_type@{media\_type}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{media\_type}{media\_type}}
@@ -339,9 +438,9 @@ Definition at line 15 of file fat32.\+h.
 
 
 
-Definition at line 11 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00009}{9}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}\label{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}} 
+\Hypertarget{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}\label{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0} 
 \index{fat32.h@{fat32.h}!name@{name}}
 \index{name@{name}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{name}{name}}
@@ -349,23 +448,73 @@ Definition at line 11 of file fat32.\+h.
 
 
 
-Definition at line 3 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 
 
-Referenced by Max\+O\+S\+::processes\+::\+I\+P\+C\+::alloc\+\_\+shared\+\_\+memory(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::create\+\_\+message\+\_\+endpoint(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::free\+\_\+message\+\_\+endpoint(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::free\+\_\+shared\+\_\+memory(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::get\+\_\+message\+\_\+endpoint(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::get\+\_\+shared\+\_\+memory(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory(), Max\+O\+S\+::system\+::\+U\+B\+San\+Handler\+::print\+\_\+type\+\_\+mismatch(), Max\+O\+S\+::system\+::\+U\+B\+San\+Handler\+::print\+\_\+type\+\_\+mismatch\+\_\+v1(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::send\+\_\+message(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+create\+\_\+ipc\+\_\+endpoint(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+create\+\_\+shared\+\_\+memory(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+klog(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+open\+\_\+shared\+\_\+memory(), and Max\+O\+S\+::processes\+::\+I\+P\+C\+::$\sim$\+I\+P\+C().
+Referenced by \mbox{\hyperlink{vfs_8cpp_source_l00302}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::create\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00427}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::create\+\_\+file()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00370}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::create\+\_\+resource()}}, \mbox{\hyperlink{resource_8h_source_l00069}{Max\+OS\+::processes\+::\+Resource\+Registry$<$ Type $>$\+::create\+\_\+resource()}}, \mbox{\hyperlink{vfs_8cpp_source_l00341}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00500}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+file()}}, \mbox{\hyperlink{resource_8cpp_source_l00108}{Max\+OS\+::processes\+::\+Base\+Resource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{resource_8cpp_source_l00319}{Max\+OS\+::processes\+::\+Resource\+Manager\+::get\+\_\+resource()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00352}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{virtual_8cpp_source_l00410}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00256}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::open\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00460}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::open\+\_\+file()}}, \mbox{\hyperlink{resource_8cpp_source_l00264}{Max\+OS\+::processes\+::\+Resource\+Manager\+::open\+\_\+resource()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00183}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+create()}}, and \mbox{\hyperlink{syscalls_8cpp_source_l00204}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+open()}}.
 
-\mbox{\Hypertarget{fat32_8h_ae21b477395a1441f77a079937a0900bb}\label{fat32_8h_ae21b477395a1441f77a079937a0900bb}} 
+\Hypertarget{fat32_8h_a5838c0c2c16393596822649d9b9d9d8b}\label{fat32_8h_a5838c0c2c16393596822649d9b9d9d8b} 
+\index{fat32.h@{fat32.h}!name1@{name1}}
+\index{name1@{name1}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{name1}{name1}}
+{\footnotesize\ttfamily uint16\+\_\+t name1\mbox{[}5\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a5842149c75fb6d31bf351993341cf514}\label{fat32_8h_a5842149c75fb6d31bf351993341cf514} 
+\index{fat32.h@{fat32.h}!name2@{name2}}
+\index{name2@{name2}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{name2}{name2}}
+{\footnotesize\ttfamily uint16\+\_\+t name2\mbox{[}6\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873}\label{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873} 
+\index{fat32.h@{fat32.h}!name3@{name3}}
+\index{name3@{name3}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{name3}{name3}}
+{\footnotesize\ttfamily uint16\+\_\+t name3\mbox{[}2\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00007}{7}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_aee407e98526d594cdef398d2cfa05ee8}\label{fat32_8h_aee407e98526d594cdef398d2cfa05ee8} 
+\index{fat32.h@{fat32.h}!next\_free\_cluster@{next\_free\_cluster}}
+\index{next\_free\_cluster@{next\_free\_cluster}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{next\_free\_cluster}{next\_free\_cluster}}
+{\footnotesize\ttfamily uint32\+\_\+t next\+\_\+free\+\_\+cluster}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_ae21b477395a1441f77a079937a0900bb}\label{fat32_8h_ae21b477395a1441f77a079937a0900bb} 
 \index{fat32.h@{fat32.h}!OEM\_name@{OEM\_name}}
 \index{OEM\_name@{OEM\_name}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{OEM\_name}{OEM\_name}}
-{\footnotesize\ttfamily uint8\+\_\+t O\+E\+M\+\_\+name\mbox{[}8\mbox{]}}
+{\footnotesize\ttfamily uint8\+\_\+t OEM\+\_\+name\mbox{[}8\mbox{]}}
 
 
 
-Definition at line 4 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00002}{2}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}\label{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}} 
+\Hypertarget{fat32_8h_aa44597f38af03f4bb6ef069ba7efb24c}\label{fat32_8h_aa44597f38af03f4bb6ef069ba7efb24c} 
+\index{fat32.h@{fat32.h}!order@{order}}
+\index{order@{order}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{order}{order}}
+{\footnotesize\ttfamily uint8\+\_\+t order}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00000}{0}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}\label{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd} 
 \index{fat32.h@{fat32.h}!reserved@{reserved}}
 \index{reserved@{reserved}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved}{reserved}}
@@ -373,13 +522,13 @@ Definition at line 4 of file fat32.\+h.
 
 
 
-Definition at line 6 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 
 
-Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager(), and Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet().
+Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}.
 
-\mbox{\Hypertarget{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b}\label{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b}} 
+\Hypertarget{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b}\label{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b} 
 \index{fat32.h@{fat32.h}!reserved0@{reserved0}}
 \index{reserved0@{reserved0}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved0}{reserved0}}
@@ -387,9 +536,29 @@ Referenced by Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+
 
 
 
-Definition at line 24 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00022}{22}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ab43cbe584bc4765d2e54d9026a1f7c04}\label{fat32_8h_ab43cbe584bc4765d2e54d9026a1f7c04}} 
+\Hypertarget{fat32_8h_aed41fe36034f1fcda738da60943924a6}\label{fat32_8h_aed41fe36034f1fcda738da60943924a6} 
+\index{fat32.h@{fat32.h}!reserved1@{reserved1}}
+\index{reserved1@{reserved1}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{reserved1}{reserved1}}
+{\footnotesize\ttfamily uint8\+\_\+t reserved1\mbox{[}480\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_af6dc8e21f5c1ca5ca997fc835808802c}\label{fat32_8h_af6dc8e21f5c1ca5ca997fc835808802c} 
+\index{fat32.h@{fat32.h}!reserved2@{reserved2}}
+\index{reserved2@{reserved2}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{reserved2}{reserved2}}
+{\footnotesize\ttfamily uint8\+\_\+t reserved2\mbox{[}12\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_ab43cbe584bc4765d2e54d9026a1f7c04}\label{fat32_8h_ab43cbe584bc4765d2e54d9026a1f7c04} 
 \index{fat32.h@{fat32.h}!reserved\_1@{reserved\_1}}
 \index{reserved\_1@{reserved\_1}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved\_1}{reserved\_1}}
@@ -397,9 +566,9 @@ Definition at line 24 of file fat32.\+h.
 
 
 
-Definition at line 26 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00024}{24}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ab9d9cece402bcfc967b895cd556985ef}\label{fat32_8h_ab9d9cece402bcfc967b895cd556985ef}} 
+\Hypertarget{fat32_8h_ab9d9cece402bcfc967b895cd556985ef}\label{fat32_8h_ab9d9cece402bcfc967b895cd556985ef} 
 \index{fat32.h@{fat32.h}!reserved\_sectors@{reserved\_sectors}}
 \index{reserved\_sectors@{reserved\_sectors}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved\_sectors}{reserved\_sectors}}
@@ -407,9 +576,9 @@ Definition at line 26 of file fat32.\+h.
 
 
 
-Definition at line 7 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a8f7173a14bd041462761634e52a57e86}\label{fat32_8h_a8f7173a14bd041462761634e52a57e86}} 
+\Hypertarget{fat32_8h_a8f7173a14bd041462761634e52a57e86}\label{fat32_8h_a8f7173a14bd041462761634e52a57e86} 
 \index{fat32.h@{fat32.h}!root\_cluster@{root\_cluster}}
 \index{root\_cluster@{root\_cluster}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{root\_cluster}{root\_cluster}}
@@ -417,9 +586,9 @@ Definition at line 7 of file fat32.\+h.
 
 
 
-Definition at line 21 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00019}{19}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a6f1caf959e540fc21dae995d08281837}\label{fat32_8h_a6f1caf959e540fc21dae995d08281837}} 
+\Hypertarget{fat32_8h_a6f1caf959e540fc21dae995d08281837}\label{fat32_8h_a6f1caf959e540fc21dae995d08281837} 
 \index{fat32.h@{fat32.h}!root\_entries@{root\_entries}}
 \index{root\_entries@{root\_entries}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{root\_entries}{root\_entries}}
@@ -427,9 +596,9 @@ Definition at line 21 of file fat32.\+h.
 
 
 
-Definition at line 9 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00007}{7}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_aa3a3c1372b7961d20b11ab8164cc7ef3}\label{fat32_8h_aa3a3c1372b7961d20b11ab8164cc7ef3}} 
+\Hypertarget{fat32_8h_aa3a3c1372b7961d20b11ab8164cc7ef3}\label{fat32_8h_aa3a3c1372b7961d20b11ab8164cc7ef3} 
 \index{fat32.h@{fat32.h}!sectors\_per\_cluster@{sectors\_per\_cluster}}
 \index{sectors\_per\_cluster@{sectors\_per\_cluster}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{sectors\_per\_cluster}{sectors\_per\_cluster}}
@@ -437,9 +606,9 @@ Definition at line 9 of file fat32.\+h.
 
 
 
-Definition at line 6 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6}\label{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6}} 
+\Hypertarget{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6}\label{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6} 
 \index{fat32.h@{fat32.h}!sectors\_per\_track@{sectors\_per\_track}}
 \index{sectors\_per\_track@{sectors\_per\_track}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{sectors\_per\_track}{sectors\_per\_track}}
@@ -447,9 +616,9 @@ Definition at line 6 of file fat32.\+h.
 
 
 
-Definition at line 13 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00011}{11}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}\label{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}} 
+\Hypertarget{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}\label{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772} 
 \index{fat32.h@{fat32.h}!size@{size}}
 \index{size@{size}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{size}{size}}
@@ -457,13 +626,19 @@ Definition at line 13 of file fat32.\+h.
 
 
 
-Definition at line 20 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00018}{18}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a86319fe2c708080de55d983c58b52626}\label{fat32_8h_a86319fe2c708080de55d983c58b52626} 
+\index{fat32.h@{fat32.h}!structure\_signature@{structure\_signature}}
+\index{structure\_signature@{structure\_signature}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{structure\_signature}{structure\_signature}}
+{\footnotesize\ttfamily uint32\+\_\+t structure\+\_\+signature}
 
 
 
-Referenced by Max\+O\+S\+::memory\+::\+Memory\+Manager\+::align(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+direct\+\_\+to\+\_\+page(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+to\+\_\+page(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+up\+\_\+to\+\_\+page(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::alloc\+\_\+shared\+\_\+memory(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned(), Max\+O\+S\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received(), Max\+O\+S\+::drivers\+::ethernet\+::amd\+\_\+am79c973\+::\+Do\+Send(), Max\+O\+S\+::drivers\+::ethernet\+::intel\+\_\+i217\+::\+Do\+Send(), Max\+O\+S\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Received(), Max\+O\+S\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Sent(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::handle\+\_\+free(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::handle\+\_\+malloc(), Max\+O\+S\+::net\+::\+Address\+Resolution\+Protocol\+::handle\+Ethernet\+Frame\+Payload(), Max\+O\+S\+::net\+::\+Internet\+Protocol\+Handler\+::handle\+Ethernetframe\+Payload(), Max\+O\+S\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload(), Max\+O\+S\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload(), Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload(), Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::handle\+Transmission\+Control\+Protocol\+Payload(), Max\+O\+S\+::net\+::\+User\+Datagram\+Protocol\+Socket\+::handle\+User\+Datagram\+Protocol\+Payload(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::kmalloc(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space(), Max\+O\+S\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::malloc(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::map\+\_\+area(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::memory\+\_\+used(), Max\+O\+S\+::memory\+::\+Memory\+Manager\+::\+Memory\+Manager(), Max\+O\+S\+::net\+::\+User\+Datagram\+Protocol\+Payload\+Handler\+::on\+\_\+event(), Max\+O\+S\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+Event\+Handler\+::on\+\_\+event(), Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Payload\+Handler\+::on\+\_\+event(), operator new(), operator new\mbox{[}$\,$\mbox{]}(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::reserve(), Max\+O\+S\+::net\+::\+Ethernet\+Frame\+Payload\+Handler\+::\+Send(), Max\+O\+S\+::net\+::\+Internet\+Protocol\+Payload\+Handler\+::\+Send(), Max\+O\+S\+::net\+::\+User\+Datagram\+Protocol\+Socket\+::\+Send(), Max\+O\+S\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Send(), Max\+O\+S\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send(), Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::\+Send(), Max\+O\+S\+::processes\+::\+I\+P\+C\+::send\+\_\+message(), Max\+O\+S\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame(), Max\+O\+S\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet(), Max\+O\+S\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+allocate\+\_\+memory(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+create\+\_\+shared\+\_\+memory(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+open\+\_\+shared\+\_\+memory(), Max\+O\+S\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+send\+\_\+ipc\+\_\+message(), Max\+O\+S\+::memory\+::\+Physical\+Memory\+Manager\+::unmap\+\_\+area(), and Max\+O\+S\+::common\+::\+Vector$<$ Max\+O\+S\+::common\+::\+Event\+Handler$<$ Transmission\+Control\+Protocol\+Payload\+Handler\+Events $>$ $\ast$ $>$\+::\+Vector().
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00002}{2}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a5488b7348d1becdf3e14d0a278eae8d3}\label{fat32_8h_a5488b7348d1becdf3e14d0a278eae8d3}} 
+\Hypertarget{fat32_8h_a5488b7348d1becdf3e14d0a278eae8d3}\label{fat32_8h_a5488b7348d1becdf3e14d0a278eae8d3} 
 \index{fat32.h@{fat32.h}!table\_copies@{table\_copies}}
 \index{table\_copies@{table\_copies}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{table\_copies}{table\_copies}}
@@ -471,9 +646,9 @@ Referenced by Max\+O\+S\+::memory\+::\+Memory\+Manager\+::align(), Max\+O\+S\+::
 
 
 
-Definition at line 8 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_addc3b6341df1d5f0b7505254093f4428}\label{fat32_8h_addc3b6341df1d5f0b7505254093f4428}} 
+\Hypertarget{fat32_8h_addc3b6341df1d5f0b7505254093f4428}\label{fat32_8h_addc3b6341df1d5f0b7505254093f4428} 
 \index{fat32.h@{fat32.h}!table\_size\_32@{table\_size\_32}}
 \index{table\_size\_32@{table\_size\_32}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{table\_size\_32}{table\_size\_32}}
@@ -481,9 +656,9 @@ Definition at line 8 of file fat32.\+h.
 
 
 
-Definition at line 18 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00016}{16}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_aa6660fa269cbfd3fb8d6da7d5974a1a8}\label{fat32_8h_aa6660fa269cbfd3fb8d6da7d5974a1a8}} 
+\Hypertarget{fat32_8h_aa6660fa269cbfd3fb8d6da7d5974a1a8}\label{fat32_8h_aa6660fa269cbfd3fb8d6da7d5974a1a8} 
 \index{fat32.h@{fat32.h}!total\_sectors\_16@{total\_sectors\_16}}
 \index{total\_sectors\_16@{total\_sectors\_16}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{total\_sectors\_16}{total\_sectors\_16}}
@@ -491,9 +666,9 @@ Definition at line 18 of file fat32.\+h.
 
 
 
-Definition at line 10 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00008}{8}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54}\label{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54}} 
+\Hypertarget{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54}\label{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54} 
 \index{fat32.h@{fat32.h}!total\_sectors\_32@{total\_sectors\_32}}
 \index{total\_sectors\_32@{total\_sectors\_32}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{total\_sectors\_32}{total\_sectors\_32}}
@@ -501,9 +676,29 @@ Definition at line 10 of file fat32.\+h.
 
 
 
-Definition at line 16 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00014}{14}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d}\label{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d}} 
+\Hypertarget{fat32_8h_a760eb704cccb3d6ece4b70d8cff868e6}\label{fat32_8h_a760eb704cccb3d6ece4b70d8cff868e6} 
+\index{fat32.h@{fat32.h}!trail\_signature@{trail\_signature}}
+\index{trail\_signature@{trail\_signature}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{trail\_signature}{trail\_signature}}
+{\footnotesize\ttfamily uint32\+\_\+t trail\+\_\+signature}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a1d127017fb298b889f4ba24752d08b8e}\label{fat32_8h_a1d127017fb298b889f4ba24752d08b8e} 
+\index{fat32.h@{fat32.h}!type@{type}}
+\index{type@{type}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily uint8\+\_\+t type}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d}\label{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d} 
 \index{fat32.h@{fat32.h}!uint\_32@{uint\_32}}
 \index{uint\_32@{uint\_32}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{uint\_32}{uint\_32}}
@@ -511,9 +706,9 @@ Definition at line 16 of file fat32.\+h.
 
 
 
-Definition at line 28 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00026}{26}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\mbox{\Hypertarget{fat32_8h_a1726642eb49790a81d20ba1024d9791d}\label{fat32_8h_a1726642eb49790a81d20ba1024d9791d}} 
+\Hypertarget{fat32_8h_a1726642eb49790a81d20ba1024d9791d}\label{fat32_8h_a1726642eb49790a81d20ba1024d9791d} 
 \index{fat32.h@{fat32.h}!volume\_label@{volume\_label}}
 \index{volume\_label@{volume\_label}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{volume\_label}{volume\_label}}
@@ -521,5 +716,15 @@ Definition at line 28 of file fat32.\+h.
 
 
 
-Definition at line 29 of file fat32.\+h.
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00027}{27}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}\label{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa} 
+\index{fat32.h@{fat32.h}!zero@{zero}}
+\index{zero@{zero}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{zero}{zero}}
+{\footnotesize\ttfamily uint16\+\_\+t zero}
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 

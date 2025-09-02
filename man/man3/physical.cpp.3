@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/memory/physical.cpp" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/memory/physical.cpp" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,27 +6,23 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <common/kprint\&.h>\fP
+\fC#include <common/logger\&.h>\fP
 .br
 \fC#include <memory/physical\&.h>\fP
 .br
+\fC#include <system/cpu\&.h>\fP
+.br
 
-.SS "Macros"
+.SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "#define \fBENTRIES_TO_ADDRESS\fP(pml4,  pdpr,  pd,  pt)   ((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))"
+.RI "\fBvolatile\fP \fB__attribute__\fP ((\fBaligned\fP(4096))) \fBunsigned\fP \fBchar\fP \fBp4_table\fP[]"
 .br
 .in -1c
 .SS "Variables"
 
 .in +1c
-.ti -1c
-.RI "uint64_t \fBp4_table\fP []"
-.br
-.ti -1c
-.RI "uint64_t \fB_kernel_start\fP"
-.br
 .ti -1c
 .RI "uint64_t \fB_kernel_end\fP"
 .br
@@ -36,45 +32,25 @@
 .ti -1c
 .RI "uint64_t \fB_kernel_physical_end\fP"
 .br
-.ti -1c
-.RI "uint64_t \fBmultiboot_tag_end\fP"
-.br
-.ti -1c
-.RI "uint64_t \fBmultiboot_tag_start\fP"
-.br
 .in -1c
-.SH "Macro Definition Documentation"
+.SH "Function Documentation"
 .PP 
-.SS "#define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)   ((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))"
+.SS "\fBvolatile\fP \fB__attribute__\fP ((\fBaligned\fP(4096)))\fC [extern]\fP"
 
-.PP
-Definition at line 475 of file physical\&.cpp\&.
 .SH "Variable Documentation"
 .PP 
-.SS "uint64_t _kernel_end"
+.SS "uint64_t _kernel_end\fC [extern]\fP"
 
 .PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\&.
-.SS "uint64_t _kernel_physical_end"
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP\&.
+.SS "uint64_t _kernel_physical_end\fC [extern]\fP"
 
 .PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\&.
-.SS "uint64_t _kernel_size"
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP\&.
+.SS "uint64_t _kernel_size\fC [extern]\fP"
 
 .PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\&.
-.SS "uint64_t _kernel_start"
-
-.SS "uint64_t multiboot_tag_end"
-
-.PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::is_anonymous_available()\&.
-.SS "uint64_t multiboot_tag_start"
-
-.PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::is_anonymous_available()\&.
-.SS "uint64_t p4_table[]"
-
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

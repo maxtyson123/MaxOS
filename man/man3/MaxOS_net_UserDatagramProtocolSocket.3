@@ -1,4 +1,4 @@
-.TH "MaxOS::net::UserDatagramProtocolSocket" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::UserDatagramProtocolSocket" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,14 +21,36 @@ Inherits \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >\fP\&.
 .RI "\fB~UserDatagramProtocolSocket\fP ()"
 .br
 .ti -1c
-.RI "virtual void \fBhandleUserDatagramProtocolPayload\fP (uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBhandleUserDatagramProtocolPayload\fP (\fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
 .br
 .ti -1c
-.RI "virtual void \fBSend\fP (uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBSend\fP (\fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
 .br
 .ti -1c
-.RI "virtual void \fBDisconnect\fP ()"
+.RI "\fBvirtual\fP \fBvoid\fP \fBDisconnect\fP ()"
 .br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBEventManager\fP ()"
+.br
+.ti -1c
+.RI "\fB~EventManager\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< UserDatagramProtocolEvents > *\fBhandler\fP)"
+.br
+.RI "Connect an event handler to the event manager if it is not already connected\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< UserDatagramProtocolEvents > *\fBhandler\fP)"
+.br
+.RI "Disconnect an event handler from the event manager if it is connected\&. "
+.ti -1c
+.RI "\fBVector\fP< \fBEvent\fP< UserDatagramProtocolEvents > * > \fBraise_event\fP (\fBEvent\fP< UserDatagramProtocolEvents > *\fBevent\fP)"
+.br
+.RI "Calls the on_event function of all the event m_handlers connected to the event manager and returns a list of the results\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -37,19 +59,26 @@ Inherits \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >\fP\&.
 .RI "bool \fBlistening\fP"
 .br
 .ti -1c
-.RI "uint16_t \fBlocalPort\fP"
+.RI "uint16_t \fBlocalPort\fP = 0"
 .br
 .ti -1c
-.RI "uint16_t \fBremotePort\fP"
+.RI "uint16_t \fBremotePort\fP = 0"
 .br
 .ti -1c
-.RI "uint32_t \fBlocalIP\fP"
+.RI "uint32_t \fBlocalIP\fP = 0"
 .br
 .ti -1c
-.RI "uint32_t \fBremoteIP\fP"
+.RI "uint32_t \fBremoteIP\fP = 0"
 .br
 .ti -1c
 .RI "\fBUserDatagramProtocolHandler\fP * \fBuserDatagramProtocolHandler\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBVector\fP< \fBEventHandler\fP< UserDatagramProtocolEvents > * > \fBm_handlers\fP"
 .br
 .in -1c
 .SS "Friends"
@@ -61,7 +90,7 @@ Inherits \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >\fP\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 62 of file udp\&.h\&.
+Definition at line \fB62\fP of file \fBudp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "UserDatagramProtocolSocket::UserDatagramProtocolSocket ()"
@@ -69,111 +98,111 @@ Definition at line 62 of file udp\&.h\&.
 .PP
 \fBSocket\fP 
 .PP
-Definition at line 38 of file udp\&.cpp\&.
-.PP
+Definition at line \fB34\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-38                                                        {
-39 
-40     //Set the instance variables
-41     listening = false;
-42 
-43 }
+34                                                        {
+35 
+36     //Set the instance variables
+37     listening = false;
+38 
+39 }
 .fi
-.SS "UserDatagramProtocolSocket::~UserDatagramProtocolSocket ()"
 
 .PP
-Definition at line 45 of file udp\&.cpp\&.
-.PP
-.nf
-45                                                         {
-46 
-47 }
-.fi
+References \fBlistening\fP\&.
+.SS "UserDatagramProtocolSocket::~UserDatagramProtocolSocket ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void UserDatagramProtocolSocket::Disconnect ()\fC [virtual]\fP"
+.SS "\fBvoid\fP UserDatagramProtocolSocket::Disconnect ()\fC [virtual]\fP"
 
 .PP
-Definition at line 64 of file udp\&.cpp\&.
-.PP
+Definition at line \fB58\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-64                                             {
-65 
-66     userDatagramProtocolHandler ->Disconnect(this);
-67 
-68 }
-.fi
-.SS "void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload (uint8_t * data, uint16_t size)\fC [virtual]\fP"
-
-.PP
-Definition at line 49 of file udp\&.cpp\&.
-.PP
-.nf
-49                                                                                                {
-50 
-51     // Create the event
-52     UDPDataReceivedEvent* event = new UDPDataReceivedEvent(this, data, size);
-53     raise_event(event);
-54     MemoryManager::kfree(event);
-55 
-56 }
-.fi
-.PP
-References data, and size\&.
-.PP
-Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\&.
-.SS "void UserDatagramProtocolSocket::Send (uint8_t * data, uint16_t size)\fC [virtual]\fP"
-
-.PP
-Definition at line 58 of file udp\&.cpp\&.
-.PP
-.nf
-58                                                                   {
+58                                             {
 59 
-60     userDatagramProtocolHandler -> Send(this, data, size);
+60     userDatagramProtocolHandler \->Disconnect(this);
 61 
 62 }
 .fi
+
 .PP
-References data, and size\&.
-.SH "Friends And Related Function Documentation"
+References \fBMaxOS::net::UserDatagramProtocolHandler::Disconnect()\fP, and \fBuserDatagramProtocolHandler\fP\&.
+.SS "\fBvoid\fP UserDatagramProtocolSocket::handleUserDatagramProtocolPayload (\fBuint8_t\fP * data, \fBuint16_t\fP size)\fC [virtual]\fP"
+
+.PP
+Definition at line \fB43\fP of file \fBudp\&.cpp\fP\&..PP
+.nf
+43                                                                                                {
+44 
+45     // Create the event
+46     auto* event = new UDPDataReceivedEvent(this, data, size);
+47     raise_event(event);
+48     MemoryManager::kfree(event);
+49 
+50 }
+.fi
+
+.PP
+References \fBdata\fP, \fBMaxOS::memory::MemoryManager::kfree()\fP, \fBMaxOS::common::EventManager< UserDatagramProtocolEvents >::raise_event()\fP, and \fBsize\fP\&.
+.PP
+Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP\&.
+.SS "\fBvoid\fP UserDatagramProtocolSocket::Send (\fBuint8_t\fP * data, \fBuint16_t\fP size)\fC [virtual]\fP"
+
+.PP
+Definition at line \fB52\fP of file \fBudp\&.cpp\fP\&..PP
+.nf
+52                                                                   {
+53 
+54     userDatagramProtocolHandler \-> Send(this, data, size);
+55 
+56 }
+.fi
+
+.PP
+References \fBdata\fP, \fBSend()\fP, \fBsize\fP, and \fBuserDatagramProtocolHandler\fP\&.
+.PP
+Referenced by \fBSend()\fP\&.
+.SH "Friends And Related Symbol Documentation"
 .PP 
 .SS "friend class \fBUserDatagramProtocolHandler\fP\fC [friend]\fP"
 
 .PP
-Definition at line 64 of file udp\&.h\&.
+Definition at line \fB64\fP of file \fBudp\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "bool MaxOS::net::UserDatagramProtocolSocket::listening\fC [protected]\fP"
 
 .PP
-Definition at line 66 of file udp\&.h\&.
+Definition at line \fB66\fP of file \fBudp\&.h\fP\&.
 .PP
-Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\&.
-.SS "uint32_t MaxOS::net::UserDatagramProtocolSocket::localIP\fC [protected]\fP"
+Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, and \fBUserDatagramProtocolSocket()\fP\&.
+.SS "uint32_t MaxOS::net::UserDatagramProtocolSocket::localIP = 0\fC [protected]\fP"
 
 .PP
-Definition at line 71 of file udp\&.h\&.
-.SS "uint16_t MaxOS::net::UserDatagramProtocolSocket::localPort\fC [protected]\fP"
+Definition at line \fB71\fP of file \fBudp\&.h\fP\&.
+.SS "uint16_t MaxOS::net::UserDatagramProtocolSocket::localPort = 0\fC [protected]\fP"
 
 .PP
-Definition at line 68 of file udp\&.h\&.
-.SS "uint32_t MaxOS::net::UserDatagramProtocolSocket::remoteIP\fC [protected]\fP"
+Definition at line \fB68\fP of file \fBudp\&.h\fP\&.
+.SS "uint32_t MaxOS::net::UserDatagramProtocolSocket::remoteIP = 0\fC [protected]\fP"
 
 .PP
-Definition at line 72 of file udp\&.h\&.
+Definition at line \fB72\fP of file \fBudp\&.h\fP\&.
 .PP
-Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload(), and MaxOS::net::UserDatagramProtocolHandler::Send()\&.
-.SS "uint16_t MaxOS::net::UserDatagramProtocolSocket::remotePort\fC [protected]\fP"
+Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP\&.
+.SS "uint16_t MaxOS::net::UserDatagramProtocolSocket::remotePort = 0\fC [protected]\fP"
 
 .PP
-Definition at line 69 of file udp\&.h\&.
+Definition at line \fB69\fP of file \fBudp\&.h\fP\&.
 .PP
-Referenced by MaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\&.
+Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP\&.
 .SS "\fBUserDatagramProtocolHandler\fP* MaxOS::net::UserDatagramProtocolSocket::userDatagramProtocolHandler\fC [protected]\fP"
 
 .PP
-Definition at line 74 of file udp\&.h\&.
+Definition at line \fB74\fP of file \fBudp\&.h\fP\&.
+.PP
+Referenced by \fBDisconnect()\fP, and \fBSend()\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,149 @@
+\doxysection{elf.\+cpp}
+\hypertarget{elf_8cpp_source}{}\label{elf_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/processes/elf.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/processes/elf.cpp}}
+\mbox{\hyperlink{elf_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 21/03/2025.}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{elf_8h}{processes/elf.h}}>}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1processes}{MaxOS::processes}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1memory}{MaxOS::memory}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00012}00012\ \textcolor{keywordtype}{char}\ Elf64::elf\_magic[4]\ =\ \{0x7F,\ \textcolor{charliteral}{'E'},\ \textcolor{charliteral}{'L'},\ \textcolor{charliteral}{'F'}\};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00019}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_afe12878773ede304094c21c8b82284dc}{00019}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_afe12878773ede304094c21c8b82284dc}{Elf64::Elf64}}(uintptr\_t\ elf\_header\_address)}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00020}00020\ :\ m\_elf\_header\_address(elf\_header\_address)}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00021}00021\ \{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00022}00022\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00027}00027\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a8a834ce8cc8c24eaf4ad0c9d6b08b16b}{Elf64::\string~Elf64}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00032}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a911f91e8c53705ab6309c8aff83fe2d0}{00032}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a911f91e8c53705ab6309c8aff83fe2d0}{Elf64::load}}()\ \{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//TODO:\ error\ handling\ when\ the\ syscall\ for\ this\ is\ implemented}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00035}00035\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a0735167d9c18f09d4291e79277fcdfe7}{is\_valid}}())}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00038}00038\ \ \ \ \ load\_program\_headers();}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00040}00040\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00047}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{00047}}\ \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__header__t}{elf\_64\_header\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{Elf64::header}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00049}00049\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__header__t}{elf\_64\_header\_t}}*)\ m\_elf\_header\_address;}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00050}00050\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00058}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a60ee1fd12b11c8863ff916b23bed3b5a}{00058}}\ \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t}{elf\_64\_program\_header\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a60ee1fd12b11c8863ff916b23bed3b5a}{Elf64::get\_program\_header}}(\textcolor{keywordtype}{size\_t}\ index)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{comment}{//\ Check\ bounds}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>program\_header\_count)}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00064}00064\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ program\ headers\ and\ return\ the\ item}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00065}00065\ \ \ \ \ \textcolor{keyword}{auto}*\ program\_headers\ =\ (\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t}{elf\_64\_program\_header\_t}}*)\ (m\_elf\_header\_address\ +\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__header__t_ac00c56f49122661d0a2999f72d66a4a4}{program\_header\_offset}});}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00066}00066\ \ \ \ \ \textcolor{keywordflow}{return}\ \&program\_headers[index];}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00068}00068\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00076}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a83c19cfb91576cce173ccd8642a83e38}{00076}}\ \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__section__header__t}{elf\_64\_section\_header\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a83c19cfb91576cce173ccd8642a83e38}{Elf64::get\_section\_header}}(\textcolor{keywordtype}{size\_t}\ index)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00078}00078\ \ \ \ \ \textcolor{comment}{//\ Check\ bound}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>section\_header\_count)}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00082}00082\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ section\ headers\ and\ return\ the\ item}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00083}00083\ \ \ \ \ \textcolor{keyword}{auto}*\ section\_headers\ =\ (\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__section__header__t}{elf\_64\_section\_header\_t}}*)\ (m\_elf\_header\_address\ +\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__header__t_a580aa47cebee71234d8f9528c9cc7013}{section\_header\_offset}});}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{return}\ \&section\_headers[index];}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00086}00086\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00091}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a0735167d9c18f09d4291e79277fcdfe7}{00091}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a0735167d9c18f09d4291e79277fcdfe7}{Elf64::is\_valid}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00093}00093\ \ \ \ \ \textcolor{comment}{//\ Validate\ the\ magic\ number}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ 4;\ i++)}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00095}00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>identification[i]\ !=\ elf\_magic[i])}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00098}00098\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ elf\ is\ 64\ bit}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00099}00099\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>identification[(\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a9bd81329febf6efe22788e03ddeaf0af}{ElfIdentification::Class}}]\ !=\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a06110beb02e2bb6271a458e94d1e0a70a8092f0b8f17fd364c0804a39ae56f5de}{ElfClass::Bits64}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00100}00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ elf\ is\ little\ endian}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>identification[(\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73af6068daa29dbb05a7ead1e3b5a48bbee}{ElfIdentification::Data}}]\ !=\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a464343547d01dc27b11ddda3139f260da3c0ba6b22b526d7fd50c3026435a8c02}{ElfData::LittleEndian}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00106}00106\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ elf\ is\ version\ 1}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>identification[(\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a34b6cd75171affba6957e308dcbd92be}{ElfIdentification::Version}}]\ !=\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac1d3d25a34353241f191e2d7f9b308c2a222a267cc5778206b253be35ee3ddab5}{ElfVersion::Current}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00110}00110\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ elf\ is\ for\ the\ MaxOS\ platform}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00111}00111\ \ \ \ \ \textcolor{comment}{//\ \ if(header()\ -\/>\ identification[OSABI]\ !=\ MaxOSABI)}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00112}00112\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ return\ false;\ TODO:\ Would\ be\ nice\ to\ have\ an\ OS\ ABI}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00114}00114\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ elf\ is\ executable}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>\mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}\ !=\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163a38492e6b60e40c59a376e2151778e2c7}{ElfType::Executable}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00118}00118\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ elf\ is\ for\ the\ x86\_64\ platform}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>machine\ !=\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba0027f42e1e5dfcb4fd5f8f9c6db89af3}{ElfMachine::x86\_64}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00122}00122\ \ \ \ \ \textcolor{comment}{//\ LGTM}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00125}00125\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00130}00130\ \textcolor{keywordtype}{void}\ Elf64::load\_program\_headers()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00132}00132\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_abadc096d7813079afcf57c51bd55b2a9}{header}}()-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__header__t_a6416b75a4eade461514f19d1e4a13959}{program\_header\_count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ header\ information}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00135}00135\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t}{elf\_64\_program\_header\_t}}*\ program\_header\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a60ee1fd12b11c8863ff916b23bed3b5a}{get\_program\_header}}(i);}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Only\ load\ headers\ that\ actually\ need\ loading}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_a2d2610cb55916ba7a81d839d3f71ce93}{type}}\ !=\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9af19dbf2edb3a0bd74b0524d960ff21eb}{ElfProgramType::Load}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ space\ at\ the\ requested\ address}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{MemoryManager::s\_current\_memory\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_afa39a98646615a25a16aab6c62ada9fe}{vmm}}()-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_a3f68ca895273c238664aa7400f2c3003}{virtual\_address}},\ program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_ad3635812995ac3a682595df325a17b41}{memory\_size}},\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}}\ |\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}});}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ memory\ for\ program\ header\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00144}00144\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ program\ into\ memory\ at\ that\ address}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}},\ (\textcolor{keywordtype}{void}*)\ (m\_elf\_header\_address\ +\ program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_a70788d2d340e26d07e42d4cceddb96d9}{offset}}),\ program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_ad23c93923f9c162b2f3871b8bc3bb2b8}{file\_size}});}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ the\ rest\ of\ the\ memory\ if\ needed}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ zero\_size\ =\ program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_ad3635812995ac3a682595df325a17b41}{memory\_size}}\ -\/\ program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_ad23c93923f9c162b2f3871b8bc3bb2b8}{file\_size}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}((\textcolor{keywordtype}{void}*)\ ((uintptr\_t)\ \mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}\ +\ program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_ad23c93923f9c162b2f3871b8bc3bb2b8}{file\_size}}),\ 0,\ zero\_size);}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Once\ the\ memory\ has\ been\ copied\ can\ now\ mark\ the\ pages\ as\ read\ only\ etc}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00153}00153\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a9bad9143e7d3667895a6659ec7a37c95}{to\_vmm\_flags}}(program\_header-\/>\mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t_a4ca5b91964f35e9f517420453f525327}{flags}});}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a9fa7588d0fb8aadb775d642d2a47b82d}{change\_page\_flags}}(\mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}},\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{MemoryManager::s\_current\_memory\_manager}}-\/>vmm()-\/>pml4\_root\_address());}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00155}00155\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00156}00156\ \}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00164}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a9bad9143e7d3667895a6659ec7a37c95}{00164}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64_a9bad9143e7d3667895a6659ec7a37c95}{Elf64::to\_vmm\_flags}}(uint32\_t\ \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}})\ \{}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00166}00166\ \ \ \ \ \textcolor{comment}{//\ Conversion}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{comment}{//\ ELF\ \ \ |\ \ \ VMM}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{comment}{//\ 0x0\ \ \ |\ \ \ Executable}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00169}00169\ \ \ \ \ \textcolor{comment}{//\ 0x1\ \ \ |\ \ \ Write}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00170}00170\ \ \ \ \ \textcolor{comment}{//\ 0x2\ \ \ |\ \ \ Read}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00172}00172\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ =\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}}\ |\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebae45ca5ccdd807182c984942dde55ebaa}{User}}\ |\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba346d48faacf419ed9c75689c42ac9d1f}{NoExecute}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00174}00174\ \ \ \ \ \textcolor{comment}{//\ Enable\ write}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00175}00175\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}\ \&\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a26e554e107e27bd8e0d15d6a80261f2da9b0db3e6d06c9d71fcee2cffa5138a9d}{ElfWrite}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00176}00176\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ |=\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00177}00177\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{comment}{//\ Disable\ no\ execute}}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00179}00179\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}\ \&\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a26e554e107e27bd8e0d15d6a80261f2da435c91c59b56bddd448bc4c0880f0e76}{ElfExecute}})}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ \&=\ \string~NoExecute;}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00182}00182\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
+\DoxyCodeLine{\Hypertarget{elf_8cpp_source_l00183}00183\ \}}
+
+\end{DoxyCode}

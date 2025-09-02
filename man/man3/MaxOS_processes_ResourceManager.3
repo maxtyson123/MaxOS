@@ -1,0 +1,229 @@
+.TH "MaxOS::processes::ResourceManager" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::ResourceManager
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBResourceManager\fP ()"
+.br
+.ti -1c
+.RI "\fB~ResourceManager\fP ()"
+.br
+.ti -1c
+.RI "\fBcommon::Map\fP< uint64_t, \fBResource\fP * > \fBresources\fP ()"
+.br
+.RI "Get the resources currently open\&. "
+.ti -1c
+.RI "uint64_t \fBopen_resource\fP (\fBresource_type_t\fP \fBtype\fP, const \fBstring\fP &\fBname\fP, size_t \fBflags\fP)"
+.br
+.RI "Registers a resource with the resource manager and then opens it\&. "
+.ti -1c
+.RI "void \fBclose_resource\fP (uint64_t handle, size_t \fBflags\fP)"
+.br
+.RI "Un registers the resource and then closes it\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBget_resource\fP (uint64_t handle)"
+.br
+.RI "Gets a resource based on the handle id\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBget_resource\fP (const \fBstring\fP &\fBname\fP)"
+.br
+.RI "Finds a resource by name\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB101\fP of file \fBresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ResourceManager::ResourceManager ()\fC [default]\fP"
+
+.SS "ResourceManager::~ResourceManager ()"
+
+.PP
+Definition at line \fB234\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+234                                  {
+235 
+236     // Collect all resources (as closing will break iteration)
+237     common::Vector<uint64_t> handles;
+238     for (const auto& kv : m_resources)
+239         handles\&.push_back(kv\&.first);
+240 
+241     // Close the resources
+242     for (auto h : handles)
+243         close_resource(h, 0);
+244 
+245 };
+.fi
+
+.PP
+References \fBclose_resource()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void ResourceManager::close_resource (uint64_t handle, size_t flags)"
+
+.PP
+Un registers the resource and then closes it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle number of the resource 
+.br
+\fIflags\fP Flags to pass to the closing 
+.RE
+.PP
+
+.PP
+Definition at line \fB285\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+285                                                                   {
+286 
+287     auto it = m_resources\&.find(handle);
+288     if(it == m_resources\&.end())
+289         return;
+290 
+291     // Remove it
+292     Resource* resource = it\->second;
+293     m_resources\&.erase(handle);
+294 
+295     // Close it
+296     GlobalResourceRegistry::get_registry(resource\->type()) \-> close_resource(resource, flags);
+297 }
+.fi
+
+.PP
+References \fBclose_resource()\fP, \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, and \fBMaxOS::processes::Resource::type()\fP\&.
+.PP
+Referenced by \fBclose_resource()\fP, and \fB~ResourceManager()\fP\&.
+.SS "\fBResource\fP * ResourceManager::get_resource (const \fBstring\fP & name)"
+
+.PP
+Finds a resource by name\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The resource or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB319\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+319                                                           {
+320 
+321     for(const auto& resource : m_resources)
+322         if(resource\&.second\->name() == name)
+323             return resource\&.second;
+324 
+325     return nullptr;
+326 }
+.fi
+
+.PP
+References \fBname\fP\&.
+.SS "\fBResource\fP * ResourceManager::get_resource (uint64_t handle)"
+
+.PP
+Gets a resource based on the handle id\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle number of the resource 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The resource or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB305\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+305                                                        {
+306 
+307     if(m_resources\&.find(handle) == m_resources\&.end())
+308         return nullptr;
+309 
+310     return m_resources[handle];
+311 }
+.fi
+
+.PP
+Referenced by \fBopen_resource()\fP\&.
+.SS "uint64_t ResourceManager::open_resource (\fBresource_type_t\fP type, const \fBstring\fP & name, size_t flags)"
+
+.PP
+Registers a resource with the resource manager and then opens it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIresource\fP The resource to register 
+.br
+\fIname\fP The name of the resource 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handle id of the resource or 0 if failed 
+.RE
+.PP
+
+.PP
+Definition at line \fB264\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+264                                                                                               {
+265 
+266     // Get the resource
+267     auto resource = GlobalResourceRegistry::get_registry(type) \-> get_resource(name);
+268     if(!resource)
+269         return 0;
+270 
+271     // Store it
+272     m_resources\&.insert(m_next_handle, resource);
+273 
+274     // Open it
+275     resource\->open(flags);
+276     return m_next_handle++;
+277 }
+.fi
+
+.PP
+References \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBget_resource()\fP, \fBname\fP, and \fBtype\fP\&.
+.SS "\fBcommon::Map\fP< uint64_t, \fBResource\fP * > ResourceManager::resources ()"
+
+.PP
+Get the resources currently open\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The resources 
+.RE
+.PP
+
+.PP
+Definition at line \fB252\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+252                                                           {
+253 
+254     return m_resources;
+255 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

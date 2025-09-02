@@ -1,0 +1,323 @@
+.TH "MaxOS::filesystem::format::Fat32File" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::format::Fat32File \- Handles the file operations on the FAT32 filesystem\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fat32\&.h>\fP
+.PP
+Inherits \fBMaxOS::filesystem::File\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFat32File\fP (\fBFat32Volume\fP *\fBvolume\fP, \fBFat32Directory\fP *\fBparent\fP, \fBdir_entry_t\fP *info, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.ti -1c
+.RI "\fB~Fat32File\fP () final"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBwrite\fP (\fBconst\fP \fBcommon::buffer_t\fP *\fBdata\fP, \fBsize_t\fP \fBamount\fP) \fBfinal\fP"
+.br
+.RI "Write data to the file (at the current seek position, updated to be += amount) "
+.ti -1c
+.RI "\fBvoid\fP \fBread\fP (\fBcommon::buffer_t\fP *\fBdata\fP, \fBsize_t\fP \fBamount\fP) \fBfinal\fP"
+.br
+.RI "Read data from the file (at the current seek position, updated to be += amount) "
+.ti -1c
+.RI "\fBvoid\fP \fBflush\fP () \fBfinal\fP"
+.br
+.RI "Flush the file to the disk\&. "
+.ti -1c
+.RI "uint32_t \fBfirst_cluster\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::filesystem::File\fP
+.in +1c
+.ti -1c
+.RI "\fBFile\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~File\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBseek\fP (\fBSeekType\fP \fBseek_type\fP, \fBsize_t\fP offset)"
+.br
+.RI "Seek to a position in the file\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBposition\fP ()"
+.br
+.RI "Get where the file is currently at (amount read/write/seeked) "
+.ti -1c
+.RI "\fBsize_t\fP \fBsize\fP ()"
+.br
+.RI "Get the size of the file\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Get the name of the file\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::filesystem::File\fP
+.in +1c
+.ti -1c
+.RI "uint32_t \fBm_offset\fP"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBm_name\fP"
+.br
+.ti -1c
+.RI "size_t \fBm_size\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the file operations on the FAT32 filesystem\&. 
+.PP
+Definition at line \fB203\fP of file \fBfat32\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Fat32File::Fat32File (\fBFat32Volume\fP * volume, \fBFat32Directory\fP * parent, \fBdir_entry_t\fP * info, \fBconst\fP \fBstring\fP & name)"
+
+.PP
+Definition at line \fB222\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+223 : m_volume(volume),
+224   m_parent_directory(parent),
+225   m_entry(info),
+226   m_first_cluster((info\->first_cluster_high << 16) | info\->first_cluster_low)
+227 {
+228 
+229     m_name = name;
+230     m_size = info\->size;
+231     m_offset = 0;
+232 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::File::m_name\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::File::m_size\fP, and \fBMaxOS::filesystem::File::name()\fP\&.
+.SS "Fat32File::~Fat32File ()\fC [final]\fP, \fC [default]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t MaxOS::filesystem::format::Fat32File::first_cluster () const\fC [inline]\fP"
+
+.PP
+Definition at line \fB221\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+221 { return m_first_cluster; }
+.fi
+
+.SS "\fBvoid\fP Fat32File::flush ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Flush the file to the disk\&. 
+.PP
+Reimplemented from \fBMaxOS::filesystem::File\fP\&.
+.PP
+Definition at line \fB395\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+395                       {
+396     File::flush();
+397 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::File::flush()\fP\&.
+.SS "\fBvoid\fP Fat32File::read (\fBcommon::buffer_t\fP * data, \fBsize_t\fP amount)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Read data from the file (at the current seek position, updated to be += amount) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The byte buffer to read into 
+.br
+\fIamount\fP The amount of data to read 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::filesystem::File\fP\&.
+.PP
+Definition at line \fB343\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+343                                                   {
+344     size_t buffer_space = m_volume\->bpb\&.bytes_per_sector * m_volume\->bpb\&.sectors_per_cluster;
+345     buffer_t buffer(buffer_space);
+346     buffer\&.clear();
+347 
+348     uint64_t current_offset = 0;
+349     uint64_t bytes_read = 0;
+350 
+351     // Read the file
+352     for (uint32_t cluster = m_first_cluster;
+353          cluster != (uint32_t) ClusterState::END_OF_CHAIN; cluster = m_volume\->next_cluster(cluster)) {
+354 
+355         // Skip clusters before the offset
+356         if ((current_offset + buffer_space) < m_offset) {
+357             current_offset += buffer_space;
+358             continue;
+359         }
+360 
+361         // Read each sector in the cluster
+362         lba_t lba = m_volume\->data_lba + (cluster \- 2) * m_volume\->bpb\&.sectors_per_cluster;
+363         for (size_t sector = 0; sector < m_volume\->bpb\&.sectors_per_cluster; sector++)
+364             m_volume\->disk\->read(lba + sector, &buffer, m_volume\->bpb\&.bytes_per_sector);
+365         buffer\&.set_offset(0);
+366 
+367         // If the offset is in the middle of the cluster
+368         size_t buffer_offset = 0;
+369         if (m_offset > current_offset)
+370             buffer_offset = m_offset \- current_offset;
+371 
+372         // Calculate how many bytes are being copied (read from cluster at offset? or read part of cluster?)
+373         size_t cluster_remaining_bytes = buffer_space \- buffer_offset;
+374         size_t data_remaining_bytes = amount \- bytes_read;
+375         size_t bytes_to_copy = (cluster_remaining_bytes < data_remaining_bytes) ? cluster_remaining_bytes
+376                                                                                 : data_remaining_bytes;
+377         bytes_to_copy = (bytes_to_copy > buffer_space) ? buffer_space : bytes_to_copy;
+378 
+379         // Read the data
+380         buffer\&.copy_from(data, bytes_to_copy, buffer_offset, bytes_read);
+381         bytes_read += bytes_to_copy;
+382         current_offset += buffer_space;
+383 
+384         // Dont read more than needed
+385         if (bytes_read >= amount)
+386             break;
+387     }
+388 
+389     m_offset += bytes_read;
+390 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::format::Fat32Volume::bpb\fP, \fBMaxOS::common::Buffer::clear()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBdata\fP, \fBMaxOS::filesystem::format::Fat32Volume::data_lba\fP, \fBMaxOS::filesystem::format::Fat32Volume::disk\fP, \fBMaxOS::filesystem::format::END_OF_CHAIN\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::format::Fat32Volume::next_cluster()\fP, \fBMaxOS::drivers::disk::Disk::read()\fP, and \fBMaxOS::common::Buffer::set_offset()\fP\&.
+.SS "\fBvoid\fP Fat32File::write (\fBconst\fP \fBcommon::buffer_t\fP * data, \fBsize_t\fP amount)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Write data to the file (at the current seek position, updated to be += amount) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The byte buffer to write 
+.br
+\fIamount\fP The amount of data to write 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::filesystem::File\fP\&.
+.PP
+Definition at line \fB242\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+242                                                          {
+243 
+244     size_t buffer_space = m_volume\->bpb\&.bytes_per_sector * m_volume\->bpb\&.sectors_per_cluster;
+245     buffer_t buffer(buffer_space);
+246     buffer\&.clear();
+247 
+248     uint64_t current_offset = 0;
+249     uint64_t bytes_written = 0;
+250     uint32_t last = m_first_cluster;
+251 
+252     // Read the file
+253     for (uint32_t cluster = last;
+254          cluster != (uint32_t) ClusterState::END_OF_CHAIN; cluster = m_volume\->next_cluster(cluster)) {
+255         last = cluster;
+256 
+257         // No cluster to read from (blank file)
+258         if (cluster == 0)
+259             break;
+260 
+261         // Skip clusters before the offset
+262         if ((current_offset + buffer_space) < m_offset) {
+263             current_offset += buffer_space;
+264             continue;
+265         }
+266 
+267         // Read each sector in the cluster (prevent overwriting the data)
+268         lba_t lba = m_volume\->data_lba + (cluster \- 2) * m_volume\->bpb\&.sectors_per_cluster;
+269         for (size_t sector = 0; sector < m_volume\->bpb\&.sectors_per_cluster; sector++)
+270             m_volume\->disk\->read(lba + sector, &buffer, m_volume\->bpb\&.bytes_per_sector);
+271         buffer\&.set_offset(0);
+272 
+273         // If the offset is in the middle of the cluster
+274         size_t buffer_offset = 0;
+275         if (m_offset > current_offset)
+276             buffer_offset = m_offset \- current_offset;
+277 
+278         // Calculate how many bytes are being copied (read from cluster at offset?
+279         // or read part of cluster?)
+280         size_t cluster_remaining_bytes = buffer_space \- buffer_offset;
+281         size_t data_remaining_bytes = amount \- bytes_written;
+282         size_t bytes_to_copy = (cluster_remaining_bytes < data_remaining_bytes) ? cluster_remaining_bytes
+283                                                                                 : data_remaining_bytes;
+284         bytes_to_copy = (bytes_to_copy > buffer_space) ? buffer_space : bytes_to_copy;
+285 
+286         // Update the data
+287         buffer\&.copy_from(data, bytes_to_copy, buffer_offset, bytes_written);
+288         bytes_written += bytes_to_copy;
+289         current_offset += bytes_to_copy;
+290         buffer\&.set_offset(0);
+291 
+292         // Write the data back to the disk
+293         for (size_t sector = 0; sector < m_volume\->bpb\&.sectors_per_cluster; sector++)
+294             m_volume\->disk\->write(lba + sector, &buffer, m_volume\->bpb\&.bytes_per_sector);
+295     }
+296 
+297     // Extend the file
+298     while (bytes_written < amount) {
+299         // Allocate a new cluster
+300         uint32_t new_cluster = m_volume\->allocate_cluster(last);
+301         if (new_cluster == 0)
+302             break;
+303 
+304         if (last == 0)
+305             m_first_cluster = new_cluster;
+306 
+307         // Update the data
+308         size_t bytes_to_copy = (amount \- bytes_written) > buffer_space ? buffer_space : (amount \- bytes_written);
+309         buffer\&.copy_from(data, bytes_to_copy, 0, bytes_written);
+310         bytes_written += bytes_to_copy;
+311         current_offset += bytes_to_copy;
+312         buffer\&.set_offset(0);
+313 
+314         // Write the data back to the disk
+315         lba_t lba = m_volume\->data_lba + (new_cluster \- 2) * m_volume\->bpb\&.sectors_per_cluster;
+316         for (size_t sector = 0; sector < m_volume\->bpb\&.sectors_per_cluster; sector++)
+317             m_volume\->disk\->write(lba + sector, &buffer, m_volume\->bpb\&.bytes_per_sector);
+318 
+319         // Go to the next cluster
+320         last = new_cluster;
+321     }
+322 
+323     // Update file size
+324     m_offset += bytes_written;
+325     if (m_offset > m_size)
+326         m_size = m_offset;
+327 
+328     // Update entry info
+329     m_entry\->size = m_size;
+330     m_entry\->first_cluster_high = (m_first_cluster >> 16) & 0xFFFF;
+331     m_entry\->first_cluster_low = m_first_cluster & 0xFFFF;
+332     // TODO: When implemented as a usermode driver save the time
+333     m_parent_directory\->save_entry_to_disk(m_entry);
+334 
+335 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::format::Fat32Volume::allocate_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Volume::bpb\fP, \fBMaxOS::common::Buffer::clear()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBdata\fP, \fBMaxOS::filesystem::format::Fat32Volume::data_lba\fP, \fBMaxOS::filesystem::format::Fat32Volume::disk\fP, \fBMaxOS::filesystem::format::END_OF_CHAIN\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::File::m_size\fP, \fBMaxOS::filesystem::format::Fat32Volume::next_cluster()\fP, \fBMaxOS::drivers::disk::Disk::read()\fP, \fBMaxOS::filesystem::format::Fat32Directory::save_entry_to_disk()\fP, \fBMaxOS::common::Buffer::set_offset()\fP, and \fBMaxOS::drivers::disk::Disk::write()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

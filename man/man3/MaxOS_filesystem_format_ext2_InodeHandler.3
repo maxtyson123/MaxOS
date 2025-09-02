@@ -1,0 +1,242 @@
+.TH "MaxOS::filesystem::format::ext2::InodeHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::format::ext2::InodeHandler \- Simplfies the management of an inode & its blocks\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ext2\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInodeHandler\fP (\fBExt2Volume\fP *\fBvolume\fP, \fBuint32_t\fP \fBinode\fP)"
+.br
+.ti -1c
+.RI "\fB~InodeHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBsize_t\fP \fBsize\fP () \fBconst\fP"
+.br
+.RI "Read the size upper and lower into a single size_t\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBset_size\fP (\fBsize_t\fP \fBsize\fP)"
+.br
+.RI "Store the size of the inode data\&. (does not write to disk) "
+.ti -1c
+.RI "\fBsize_t\fP \fBgrow\fP (\fBsize_t\fP \fBamount\fP, \fBbool\fP flush=\fBtrue\fP)"
+.br
+.RI "Increase the size of the inode's storage capacity by allocating new blocks\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBsave\fP ()"
+.br
+.RI "Writes the inode meta data to disk\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfree\fP ()"
+.br
+.RI "Marks this inode's blocks as free and then the inode as free\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBinode_number\fP"
+.br
+.ti -1c
+.RI "inode_t \fBinode\fP"
+.br
+.ti -1c
+.RI "\fBcommon::Vector\fP< uint32_t > \fBblock_cache\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Simplfies the management of an inode & its blocks\&. 
+.PP
+Definition at line \fB283\fP of file \fBext2\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "InodeHandler::InodeHandler (\fBExt2Volume\fP * volume, \fBuint32_t\fP inode)"
+
+.PP
+Definition at line \fB491\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+492 : m_volume(volume),
+493   inode_number(inode_index),
+494   inode(m_volume\->read_inode(inode_number))
+495 {
+496 
+497     // Read the block pointers
+498     for (uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
+499         if (inode\&.block_pointers[direct_pointer])
+500             block_cache\&.push_back(inode\&.block_pointers[direct_pointer]);
+501 
+502     buffer_t buffer(m_volume\->block_size);
+503     parse_indirect(1, inode\&.l1_indirect, &buffer);
+504     parse_indirect(2, inode\&.l2_indirect, &buffer);
+505     parse_indirect(3, inode\&.l3_indirect, &buffer);
+506 }
+.fi
+
+.PP
+References \fBblock_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBinode\fP, and \fBMaxOS::common::Vector< Type >::push_back()\fP\&.
+.SS "InodeHandler::~InodeHandler ()\fC [default]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBvoid\fP InodeHandler::free ()"
+
+.PP
+Marks this inode's blocks as free and then the inode as free\&. 
+.PP
+Definition at line \fB685\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+685                         {
+686 
+687     m_volume\->ext2_lock\&.lock();
+688 
+689     // Free the inode
+690     m_volume\->free_blocks(block_cache);
+691     m_volume\->free_inode(inode_number);
+692 
+693     m_volume\->ext2_lock\&.unlock();
+694 }
+.fi
+
+.PP
+References \fBblock_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::free_blocks()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::free_inode()\fP, \fBinode_number\fP, \fBMaxOS::common::Spinlock::lock()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+.SS "\fBsize_t\fP InodeHandler::grow (\fBsize_t\fP amount, \fBbool\fP flush = \fC\fBtrue\fP\fP)"
+
+.PP
+Increase the size of the inode's storage capacity by allocating new blocks\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIamount\fP The amount to grow to in bytes 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB655\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+655                                                    {
+656 
+657     // Nothing to grow
+658     if (amount <= 0)
+659         return size();
+660 
+661     // Allocate new blocks
+662     auto blocks = m_volume\->allocate_blocks(m_volume\->bytes_to_blocks(amount));
+663     ASSERT(blocks[0] != 0, "Failed to allocate new blocks for file");
+664 
+665     // Save the changes
+666     store_blocks(blocks);
+667     set_size(size() + amount);
+668     if (flush)
+669         save();
+670 
+671     return size() + amount;
+672 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::format::ext2::Ext2Volume::allocate_blocks()\fP, \fBASSERT\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::bytes_to_blocks()\fP, \fBsave()\fP, \fBset_size()\fP, and \fBsize()\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
+.SS "\fBvoid\fP InodeHandler::save ()"
+
+.PP
+Writes the inode meta data to disk\&. 
+.PP
+Definition at line \fB677\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+677                         {
+678 
+679     m_volume\->write_inode(inode_number, &inode);
+680 }
+.fi
+
+.PP
+References \fBinode\fP, \fBinode_number\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_inode()\fP\&.
+.PP
+Referenced by \fBgrow()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
+.SS "\fBvoid\fP InodeHandler::set_size (\fBsize_t\fP size)"
+
+.PP
+Store the size of the inode data\&. (does not write to disk) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The new size 
+.RE
+.PP
+
+.PP
+Definition at line \fB520\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+520                                        {
+521 
+522     inode\&.size_lower = (uint32_t) (size & 0xFFFFFFFFULL);
+523     inode\&.size_upper = (uint32_t) (size >> 32);
+524 
+525 }
+.fi
+
+.PP
+References \fBinode\fP, and \fBsize()\fP\&.
+.PP
+Referenced by \fBgrow()\fP\&.
+.SS "\fBsize_t\fP InodeHandler::size () const"
+
+.PP
+Read the size upper and lower into a single size_t\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The size of the inode data (not the inode itself) 
+.RE
+.PP
+
+.PP
+Definition at line \fB512\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+512                                 {
+513     return ((size_t) inode\&.size_upper << 32) | (size_t) inode\&.size_lower;
+514 }
+.fi
+
+.PP
+References \fBinode\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::Ext2File()\fP, \fBgrow()\fP, and \fBset_size()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBcommon::Vector\fP<uint32_t> MaxOS::filesystem::format::ext2::InodeHandler::block_cache"
+
+.PP
+Definition at line \fB298\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBfree()\fP, \fBInodeHandler()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
+.SS "inode_t MaxOS::filesystem::format::ext2::InodeHandler::inode"
+
+.PP
+Definition at line \fB297\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBInodeHandler()\fP, \fBsave()\fP, \fBset_size()\fP, \fBsize()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
+.SS "uint32_t MaxOS::filesystem::format::ext2::InodeHandler::inode_number"
+
+.PP
+Definition at line \fB296\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBfree()\fP, and \fBsave()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

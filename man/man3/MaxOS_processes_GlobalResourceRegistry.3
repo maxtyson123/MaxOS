@@ -1,0 +1,164 @@
+.TH "MaxOS::processes::GlobalResourceRegistry" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::GlobalResourceRegistry
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGlobalResourceRegistry\fP ()"
+.br
+.ti -1c
+.RI "\fB~GlobalResourceRegistry\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBBaseResourceRegistry\fP * \fBget_registry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Gets a registry of a type\&. "
+.ti -1c
+.RI "static void \fBadd_registry\fP (\fBresource_type_t\fP \fBtype\fP, \fBBaseResourceRegistry\fP *registry)"
+.br
+.RI "Adds a registry to the global list if there is not already one for that type\&. "
+.ti -1c
+.RI "static void \fBremove_registry\fP (\fBBaseResourceRegistry\fP *registry)"
+.br
+.RI "Adds a registry to the global list if there is not already one for that type\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB85\fP of file \fBresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GlobalResourceRegistry::GlobalResourceRegistry ()"
+
+.PP
+Definition at line \fB175\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+175                                                {
+176     s_current = this;
+177 
+178 }
+.fi
+
+.SS "GlobalResourceRegistry::~GlobalResourceRegistry ()"
+
+.PP
+Definition at line \fB180\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+180                                                 {
+181     if(s_current == this)
+182         s_current = nullptr;
+183 
+184 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void GlobalResourceRegistry::add_registry (\fBresource_type_t\fP type, \fBBaseResourceRegistry\fP * registry)\fC [static]\fP"
+
+.PP
+Adds a registry to the global list if there is not already one for that type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of registry being added 
+.br
+\fIregistry\fP The registry to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB207\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+207                                                                                               {
+208 
+209     // Does it already exist?
+210     if(s_current\->m_registries\&.find(type) != s_current\->m_registries\&.end())
+211         return;
+212 
+213     s_current\->m_registries\&.insert(type, registry);
+214 }
+.fi
+
+.PP
+References \fBtype\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::BaseResourceRegistry::BaseResourceRegistry()\fP\&.
+.SS "\fBBaseResourceRegistry\fP * GlobalResourceRegistry::get_registry (\fBresource_type_t\fP type)\fC [static]\fP"
+
+.PP
+Gets a registry of a type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of registry to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The registry or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB192\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+192                                                                                {
+193 
+194     auto registry = s_current\->m_registries\&.find(type);
+195     if(registry == s_current\->m_registries\&.end())
+196         return nullptr;
+197 
+198     return registry\->second;
+199 }
+.fi
+
+.PP
+References \fBtype\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::ResourceManager::close_resource()\fP, \fBMaxOS::processes::ResourceManager::open_resource()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP, \fBMaxOS::filesystem::FileResource::write()\fP, and \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
+.SS "void GlobalResourceRegistry::remove_registry (\fBBaseResourceRegistry\fP * registry)\fC [static]\fP"
+
+.PP
+Adds a registry to the global list if there is not already one for that type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of registry being added 
+.br
+\fIregistry\fP The registry to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB222\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+222                                                                            {
+223 
+224     // Does it already exist?
+225     if(s_current\->m_registries\&.find(registry\->type()) == s_current\->m_registries\&.end())
+226         return;
+227 
+228     s_current\->m_registries\&.erase(registry\->type());
+229 
+230 }
+.fi
+
+.PP
+References \fBMaxOS::processes::BaseResourceRegistry::type()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::BaseResourceRegistry::~BaseResourceRegistry()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

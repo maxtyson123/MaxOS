@@ -1,4 +1,4 @@
-.TH "MaxOS::processes" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,8 +10,12 @@ MaxOS::processes
 
 .in +1c
 .ti -1c
+.RI "class \fBBaseResourceRegistry\fP"
+.br
+.ti -1c
 .RI "class \fBElf64\fP"
 .br
+.RI "Handles the loading and parsing of 64-bit ELF files\&. "
 .ti -1c
 .RI "struct \fBelf_64_header_t\fP"
 .br
@@ -22,125 +26,122 @@ MaxOS::processes
 .RI "struct \fBelf_64_section_header_t\fP"
 .br
 .ti -1c
-.RI "class \fBIPC\fP"
-.br
-.RI "Handles Inter \fBProcess\fP Communication\&. "
-.ti -1c
-.RI "struct \fBIPCMessage\fP"
-.br
-.ti -1c
-.RI "struct \fBIPCMessageEndpoint\fP"
-.br
-.ti -1c
-.RI "struct \fBIPCMessageQueue\fP"
-.br
-.ti -1c
-.RI "struct \fBIPCSharedMemory\fP"
+.RI "class \fBGlobalResourceRegistry\fP"
 .br
 .ti -1c
 .RI "class \fBProcess\fP"
 .br
-.RI "A process that can be scheduled by the \fBScheduler\fP\&. "
+.RI "A process that can be scheduled by the \fBScheduler\fP, wraps & manages threads as well as its own address space and resources\&. "
+.ti -1c
+.RI "class \fBResource\fP"
+.br
+.ti -1c
+.RI "class \fBResourceManager\fP"
+.br
+.ti -1c
+.RI "class \fBResourceRegistry\fP"
+.br
 .ti -1c
 .RI "class \fBScheduler\fP"
 .br
-.RI "Schedules processes to run on the CPU\&. "
+.RI "Schedules processes to run on the CPU via their threads\&. "
+.ti -1c
+.RI "class \fBSharedMemory\fP"
+.br
+.ti -1c
+.RI "class \fBSharedMessageEndpoint\fP"
+.br
 .ti -1c
 .RI "class \fBThread\fP"
 .br
+.RI "The execution context of a sub-process thread\&. "
 .in -1c
 .SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "typedef struct \fBMaxOS::processes::IPCSharedMemory\fP \fBipc_shared_memory_t\fP"
-.br
-.ti -1c
-.RI "typedef struct \fBMaxOS::processes::IPCMessage\fP \fBipc_message_t\fP"
-.br
-.ti -1c
-.RI "typedef struct \fBMaxOS::processes::IPCMessageQueue\fP \fBipc_message_queue_t\fP"
-.br
-.ti -1c
-.RI "typedef struct \fBMaxOS::processes::IPCMessageEndpoint\fP \fBipc_message_endpoint_t\fP"
-.br
-.ti -1c
 .RI "typedef enum \fBMaxOS::processes::ThreadState\fP \fBthread_state_t\fP"
+.br
+.ti -1c
+.RI "typedef ::syscore::ResourceType \fBresource_type_t\fP"
+.br
+.ti -1c
+.RI "typedef ::syscore::ResourceErrorBase \fBresource_error_base_t\fP"
 .br
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum \fBElfIdentification\fP { \fBMagic0\fP = 0, \fBMagic1\fP = 1, \fBMagic2\fP = 2, \fBMagic3\fP = 3, \fBClass\fP = 4, \fBData\fP = 5, \fBVersion\fP = 6, \fBOSABI\fP = 7, \fBABIVersion\fP = 8, \fBPadding\fP = 9 }"
+.RI "enum class \fBElfIdentification\fP { \fBMagic0\fP, \fBMagic1\fP, \fBMagic2\fP, \fBMagic3\fP, \fBClass\fP, \fBData\fP, \fBVersion\fP, \fBOSABI\fP, \fBABIVersion\fP, \fBPadding\fP }"
 .br
-.RI "ELF Header\&. "
+.RI "Style Guide Note: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format\&. "
 .ti -1c
-.RI "enum \fBElfClass\fP { \fBInvalidClass\fP, \fBClass32\fP, \fBClass64\fP }"
-.br
-.ti -1c
-.RI "enum \fBElfData\fP { \fBInvalidData\fP, \fBLittleEndian\fP, \fBBigEndian\fP }"
+.RI "enum class \fBElfClass\fP { \fBInvalid\fP = 0, \fBBits32\fP = 1, \fBBits64\fP = 2 }"
 .br
 .ti -1c
-.RI "enum \fBElfType\fP { \fBNone\fP, \fBRelocatable\fP, \fBExecutable\fP, \fBShared\fP, \fBCore\fP, \fBProcessorSpecificLow\fP = 0xFF0, \fBProcessorSpecificHigh\fP = 0xFFF }"
+.RI "enum class \fBElfData\fP { \fBInvalidData\fP, \fBLittleEndian\fP, \fBBigEndian\fP }"
 .br
 .ti -1c
-.RI "enum \fBElfMachine\fP { \fBNoMachine\fP, \fBATnTWe32100\fP, \fBSPARC\fP, \fBx86\fP, \fBMIPS\fP = 0x8, \fBPowerPC\fP = 0x14, \fBARM\fP = 0x28, \fBSuperH\fP = 0x2A, \fBIA_64\fP = 0x32, \fBx86_64\fP = 0x3E, \fBAArch64\fP = 0xB7, \fBRISC_V\fP = 0xF3 }"
+.RI "enum class \fBElfType\fP { \fBNone\fP, \fBRelocatable\fP, \fBExecutable\fP, \fBShared\fP, \fBCore\fP, \fBProcessorSpecificLow\fP = 0xFF0, \fBProcessorSpecificHigh\fP = 0xFFF }"
 .br
 .ti -1c
-.RI "enum \fBElfVersion\fP { \fBInvalid\fP, \fBCurrent\fP }"
+.RI "enum class \fBElfMachine\fP { \fBNoMachine\fP, \fBATnTWe32100\fP, \fBSPARC\fP, \fBx86\fP, \fBMIPS\fP = 0x8, \fBPowerPC\fP = 0x14, \fBARM\fP = 0x28, \fBSuperH\fP = 0x2A, \fBIA_64\fP = 0x32, \fBx86_64\fP = 0x3E, \fBAArch64\fP = 0xB7, \fBRISC_V\fP = 0xF3 }"
 .br
 .ti -1c
-.RI "enum \fBElfProgramType\fP { \fBNull\fP, \fBLoad\fP, \fBDynamic\fP, \fBInterpreter\fP, \fBProgramNote\fP, \fBProgramSharedLibrary\fP, \fBProgramHeaderTable\fP, \fBProgramTableProcessorSpecificLow\fP = 0x70000000, \fBProgramTableProcessorSpecificHigh\fP = 0x7FFFFFFF }"
+.RI "enum class \fBElfVersion\fP { \fBInvalid\fP, \fBCurrent\fP }"
+.br
+.ti -1c
+.RI "enum class \fBElfProgramType\fP { \fBNull\fP, \fBLoad\fP, \fBDynamic\fP, \fBInterpreter\fP, \fBNote\fP, \fBSharedLibrary\fP, \fBHeaderTable\fP, \fBTableProcessorSpecificLow\fP = 0x70000000, \fBTableProcessorSpecificHigh\fP = 0x7FFFFFFF }"
 .br
 .RI "Program Header\&. "
 .ti -1c
 .RI "enum \fBElfProgramFlags\fP { \fBElfExecute\fP = (1 << 0), \fBElfWrite\fP = (1 << 1), \fBElfRead\fP = (1 << 2) }"
 .br
 .ti -1c
-.RI "enum \fBElfSectionType\fP { \fBNullSection\fP, \fBProgramBits\fP, \fBSymbolTable\fP, \fBStringTable\fP, \fBRelocationAddends\fP, \fBSymbolHashTable\fP, \fBDynamicLinkingTable\fP, \fBSectionNote\fP, \fBNoBits\fP }"
+.RI "enum class \fBElfSectionType\fP { \fBNull\fP, \fBProgramBits\fP, \fBSymbolTable\fP, \fBStringTable\fP, \fBRelocationAddends\fP, \fBSymbolHashTable\fP, \fBDynamicLinkingTable\fP, \fBSectionNote\fP, \fBNoBits\fP }"
 .br
 .RI "Section Header\&. "
 .ti -1c
-.RI "enum \fBThreadState\fP { \fBNEW\fP, \fBRUNNING\fP, \fBREADY\fP, \fBSLEEPING\fP, \fBWAITING\fP, \fBSTOPPED\fP }"
+.RI "enum class \fBThreadState\fP { \fBNEW\fP, \fBRUNNING\fP, \fBREADY\fP, \fBSLEEPING\fP, \fBWAITING\fP, \fBSTOPPED\fP }"
 .br
 .in -1c
 .SH "Typedef Documentation"
 .PP 
-.SS "typedef struct \fBMaxOS::processes::IPCMessageEndpoint\fP \fBMaxOS::processes::ipc_message_endpoint_t\fP"
+.SS "typedef ::syscore::ResourceErrorBase \fBMaxOS::processes::resource_error_base_t\fP"
 
-.SS "typedef struct \fBMaxOS::processes::IPCMessageQueue\fP \fBMaxOS::processes::ipc_message_queue_t\fP"
+.PP
+Definition at line \fB19\fP of file \fBresource\&.h\fP\&.
+.SS "typedef ::syscore::ResourceType \fBMaxOS::processes::resource_type_t\fP"
 
-.SS "typedef struct \fBMaxOS::processes::IPCMessage\fP \fBMaxOS::processes::ipc_message_t\fP"
-
-.SS "typedef struct \fBMaxOS::processes::IPCSharedMemory\fP \fBMaxOS::processes::ipc_shared_memory_t\fP"
-
+.PP
+Definition at line \fB18\fP of file \fBresource\&.h\fP\&.
 .SS "typedef enum \fBMaxOS::processes::ThreadState\fP \fBMaxOS::processes::thread_state_t\fP"
 
 .SH "Enumeration Type Documentation"
 .PP 
-.SS "enum \fBMaxOS::processes::ElfClass\fP"
+.SS "enum class \fBMaxOS::processes::ElfClass\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
 .in +1c
 .TP
-\fB\fIInvalidClass \fP\fP
+\fB\fIInvalid \fP\fP
 .TP
-\fB\fIClass32 \fP\fP
+\fB\fIBits32 \fP\fP
 .TP
-\fB\fIClass64 \fP\fP
+\fB\fIBits64 \fP\fP
 .PP
-Definition at line 32 of file elf\&.h\&.
-.PP
+Definition at line \fB33\fP of file \fBelf\&.h\fP\&..PP
 .nf
-32                    {
-33           InvalidClass,
-34           Class32,
-35           Class64
-36       };
+33                          {
+34           Invalid = 0,
+35           Bits32 = 1,
+36           Bits64 = 2
+37       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfData\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfData\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -152,19 +153,19 @@ Definition at line 32 of file elf\&.h\&.
 .TP
 \fB\fIBigEndian \fP\fP
 .PP
-Definition at line 38 of file elf\&.h\&.
-.PP
+Definition at line \fB39\fP of file \fBelf\&.h\fP\&..PP
 .nf
-38                   {
-39           InvalidData,
-40           LittleEndian,
-41           BigEndian
-42       };
+39                         {
+40           InvalidData,
+41           LittleEndian,
+42           BigEndian
+43       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfIdentification\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfIdentification\fP\fC [strong]\fP"
 
 .PP
-ELF Header\&. 
+Style Guide Note: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format\&. 
 .PP
 \fBEnumerator\fP
 .in +1c
@@ -189,23 +190,23 @@ ELF Header\&.
 .TP
 \fB\fIPadding \fP\fP
 .PP
-Definition at line 19 of file elf\&.h\&.
-.PP
+Definition at line \fB20\fP of file \fBelf\&.h\fP\&..PP
 .nf
-19                             {
-20           Magic0 = 0,
-21           Magic1 = 1,
-22           Magic2 = 2,
-23           Magic3 = 3,
-24           Class  = 4,
-25           Data   = 5,
-26           Version= 6,
-27           OSABI  = 7,
-28           ABIVersion = 8,
-29           Padding = 9
-30       };
+20                                   {
+21           Magic0,
+22           Magic1,
+23           Magic2,
+24           Magic3,
+25           Class,
+26           Data,
+27           Version,
+28           OSABI,
+29           ABIVersion,
+30           Padding,
+31       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfMachine\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfMachine\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -235,24 +236,24 @@ Definition at line 19 of file elf\&.h\&.
 .TP
 \fB\fIRISC_V \fP\fP
 .PP
-Definition at line 54 of file elf\&.h\&.
-.PP
+Definition at line \fB55\fP of file \fBelf\&.h\fP\&..PP
 .nf
-54                      {
-55           NoMachine,
-56           ATnTWe32100,
-57           SPARC,
-58           x86,
-59           MIPS      = 0x8,
-60           PowerPC   = 0x14,
-61           ARM       = 0x28,
-62           SuperH    = 0x2A,
-63           IA_64     = 0x32,
-64           x86_64    = 0x3E,
-65           AArch64   = 0xB7,
-66           RISC_V    = 0xF3
-67       };
+55                            {
+56           NoMachine,
+57           ATnTWe32100,
+58           SPARC,
+59           x86,
+60           MIPS      = 0x8,
+61           PowerPC   = 0x14,
+62           ARM       = 0x28,
+63           SuperH    = 0x2A,
+64           IA_64     = 0x32,
+65           x86_64    = 0x3E,
+66           AArch64   = 0xB7,
+67           RISC_V    = 0xF3
+68       };
 .fi
+
 .SS "enum \fBMaxOS::processes::ElfProgramFlags\fP"
 
 .PP
@@ -265,16 +266,16 @@ Definition at line 54 of file elf\&.h\&.
 .TP
 \fB\fIElfRead \fP\fP
 .PP
-Definition at line 105 of file elf\&.h\&.
-.PP
+Definition at line \fB106\fP of file \fBelf\&.h\fP\&..PP
 .nf
-105                           {
-106           ElfExecute = (1 << 0),
-107           ElfWrite   = (1 << 1),
-108           ElfRead    = (1 << 2)
-109       };
+106                           {
+107           ElfExecute = (1 << 0),
+108           ElfWrite   = (1 << 1),
+109           ElfRead    = (1 << 2)
+110       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfProgramType\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfProgramType\fP\fC [strong]\fP"
 
 .PP
 Program Header\&. 
@@ -290,32 +291,32 @@ Program Header\&.
 .TP
 \fB\fIInterpreter \fP\fP
 .TP
-\fB\fIProgramNote \fP\fP
+\fB\fINote \fP\fP
 .TP
-\fB\fIProgramSharedLibrary \fP\fP
+\fB\fISharedLibrary \fP\fP
 .TP
-\fB\fIProgramHeaderTable \fP\fP
+\fB\fIHeaderTable \fP\fP
 .TP
-\fB\fIProgramTableProcessorSpecificLow \fP\fP
+\fB\fITableProcessorSpecificLow \fP\fP
 .TP
-\fB\fIProgramTableProcessorSpecificHigh \fP\fP
+\fB\fITableProcessorSpecificHigh \fP\fP
 .PP
-Definition at line 93 of file elf\&.h\&.
-.PP
+Definition at line \fB94\fP of file \fBelf\&.h\fP\&..PP
 .nf
-93                          {
-94           Null,
-95           Load,
-96           Dynamic,
-97           Interpreter,
-98           ProgramNote,
-99           ProgramSharedLibrary,
-100           ProgramHeaderTable,
-101           ProgramTableProcessorSpecificLow  = 0x70000000,
-102           ProgramTableProcessorSpecificHigh = 0x7FFFFFFF
-103       };
+94                                {
+95           Null,
+96           Load,
+97           Dynamic,
+98           Interpreter,
+99           Note,
+100           SharedLibrary,
+101           HeaderTable,
+102           TableProcessorSpecificLow  = 0x70000000,
+103           TableProcessorSpecificHigh = 0x7FFFFFFF
+104       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfSectionType\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfSectionType\fP\fC [strong]\fP"
 
 .PP
 Section Header\&. 
@@ -323,7 +324,7 @@ Section Header\&.
 \fBEnumerator\fP
 .in +1c
 .TP
-\fB\fINullSection \fP\fP
+\fB\fINull \fP\fP
 .TP
 \fB\fIProgramBits \fP\fP
 .TP
@@ -341,22 +342,22 @@ Section Header\&.
 .TP
 \fB\fINoBits \fP\fP
 .PP
-Definition at line 124 of file elf\&.h\&.
-.PP
+Definition at line \fB125\fP of file \fBelf\&.h\fP\&..PP
 .nf
-124                          {
-125           NullSection,
-126           ProgramBits,
-127           SymbolTable,
-128           StringTable,
-129           RelocationAddends,
-130           SymbolHashTable,
-131           DynamicLinkingTable,
-132           SectionNote,
-133           NoBits,
-134       };
+125                                {
+126           Null,
+127           ProgramBits,
+128           SymbolTable,
+129           StringTable,
+130           RelocationAddends,
+131           SymbolHashTable,
+132           DynamicLinkingTable,
+133           SectionNote,
+134           NoBits,
+135       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfType\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfType\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -376,20 +377,20 @@ Definition at line 124 of file elf\&.h\&.
 .TP
 \fB\fIProcessorSpecificHigh \fP\fP
 .PP
-Definition at line 44 of file elf\&.h\&.
-.PP
+Definition at line \fB45\fP of file \fBelf\&.h\fP\&..PP
 .nf
-44                   {
-45           None,
-46           Relocatable,
-47           Executable,
-48           Shared,
-49           Core,
-50           ProcessorSpecificLow  = 0xFF0,
-51           ProcessorSpecificHigh = 0xFFF
-52       };
+45                         {
+46           None,
+47           Relocatable,
+48           Executable,
+49           Shared,
+50           Core,
+51           ProcessorSpecificLow  = 0xFF0,
+52           ProcessorSpecificHigh = 0xFFF
+53       };
 .fi
-.SS "enum \fBMaxOS::processes::ElfVersion\fP"
+
+.SS "enum class \fBMaxOS::processes::ElfVersion\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -399,15 +400,15 @@ Definition at line 44 of file elf\&.h\&.
 .TP
 \fB\fICurrent \fP\fP
 .PP
-Definition at line 69 of file elf\&.h\&.
-.PP
+Definition at line \fB70\fP of file \fBelf\&.h\fP\&..PP
 .nf
-69                      {
-70           Invalid,
-71           Current
-72       };
+70                            {
+71           Invalid,
+72           Current
+73       };
 .fi
-.SS "enum \fBMaxOS::processes::ThreadState\fP"
+
+.SS "enum class \fBMaxOS::processes::ThreadState\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -425,18 +426,18 @@ Definition at line 69 of file elf\&.h\&.
 .TP
 \fB\fISTOPPED \fP\fP
 .PP
-Definition at line 23 of file process\&.h\&.
-.PP
+Definition at line \fB25\fP of file \fBprocess\&.h\fP\&..PP
 .nf
-23                                 {
-24             NEW,
-25             RUNNING,
-26             READY,
-27             SLEEPING,
-28             WAITING,
-29             STOPPED
-30         } thread_state_t;
+25                                       {
+26             NEW,
+27             RUNNING,
+28             READY,
+29             SLEEPING,
+30             WAITING,
+31             STOPPED
+32         } thread_state_t;
 .fi
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

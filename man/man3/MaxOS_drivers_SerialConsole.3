@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::SerialConsole" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::SerialConsole" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,12 +10,12 @@ MaxOS::drivers::SerialConsole \- A driver for the serial output\&.
 .PP
 \fC#include <serial\&.h>\fP
 .PP
-Inherits \fBMaxOS::drivers::Driver\fP\&.
+Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::OutputStream\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBSerialConsole\fP ()"
+.RI "\fBSerialConsole\fP (\fBLogger\fP *logger)"
 .br
 .ti -1c
 .RI "\fB~SerialConsole\fP ()"
@@ -24,88 +24,257 @@ Inherits \fBMaxOS::drivers::Driver\fP\&.
 .RI "void \fBput_character\fP (char c)"
 .br
 .RI "Waits for the serial port to be ready, then writes a character to it\&. "
+.ti -1c
+.RI "void \fBwrite_char\fP (char c) final"
+.br
+.RI "Writes a character to the output stream\&. "
 .in -1c
-.SS "Static Public Attributes"
 
+Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
 .ti -1c
-.RI "static \fBSerialConsole\fP * \fBs_active_serial_console\fP = 0"
+.RI "\fBDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~Driver\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
+.br
+.RI "activate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
+.br
+.RI "deactivate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
+.br
+.RI "Initialise the driver\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBstring\fP \fBvendor_name\fP ()"
+.br
+.RI "Get who created the device\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBstring\fP \fBdevice_name\fP ()"
+.br
+.RI "Get the device name of the driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::OutputStream\fP
+.in +1c
+.ti -1c
+.RI "\fBOutputStream\fP ()"
+.br
+.ti -1c
+.RI "\fB~OutputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBlineFeed\fP ()"
+.br
+.RI "Writes a newline to the output stream\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBcarriageReturn\fP ()"
+.br
+.RI "Writes a carriage return to the output stream\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBclear\fP ()"
+.br
+.RI "Clears the output stream\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBwrite\fP (\fBstring\fP \fBstring_to_write\fP) \fBoverride\fP"
+.br
+.RI "Writes a string to the output stream\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBwrite\fP (\fBconst\fP \fBchar\fP *\fBstring_to_write\fP)"
+.br
+.RI "Writes a string to the output stream\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBwrite_int\fP (\fBint\fP \fBint_to_write\fP)"
+.br
+.RI "Writes an integer to the output stream\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBwrite_hex\fP (\fBuint64_t\fP \fBhex_to_write\fP)"
+.br
+.RI "Writes a hex to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBstring\fP \fBstring_to_write\fP) \fBoverride\fP"
+.br
+.RI "Writes a string to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBconst\fP \fBchar\fP *\fBstring_to_write\fP)"
+.br
+.RI "Writes a string to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBint\fP \fBint_to_write\fP)"
+.br
+.RI "Writes a integer to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBuint64_t\fP \fBhex_to_write\fP)"
+.br
+.RI "Writes a hexadecimal to the output stream\&. "
+.ti -1c
+.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBchar\fP \fBchar_to_write\fP)"
+.br
+.RI "Writes a character to the output stream\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GenericOutputStream< string >\fP
+.in +1c
+.ti -1c
+.RI "\fBGenericOutputStream\fP ()"
+.br
+.RI "__________________________________________Templates__________________________________________________/// "
+.ti -1c
+.RI "\fB~GenericOutputStream\fP ()"
+.br
+.RI "Destructor of the \fBGenericOutputStream\fP class\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBon_stream_read\fP (\fBstring\fP) \fBoverride\fP"
+.br
+.RI "Writes the date that was read from the input stream to the output stream\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBstring\fP > *) \fBoverride\fP"
+.br
+.RI "Close the stream and remove it from the list of streams when the end of the stream is reached\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBwrite\fP (\fBstring\fP)"
+.br
+.RI "write an element to the stream\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBclose\fP ()"
+.br
+.RI "Close the stream\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBGenericOutputStream\fP< \fBstring\fP > & \fBoperator<<\fP (\fBstring\fP)"
+.br
+.RI "Overload the << operator to write an element to the stream\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< Type, ProcessorType >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *\fBgeneric_stream_event_handler\fP)"
+.br
+.ti -1c
+.RI "\fB~InputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamEventHandler\fP ()"
+.br
+.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
+.ti -1c
+.RI "\fB~InputStreamEventHandler\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
+.in +1c
+.ti -1c
+.RI "\fBGenericInputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
+.br
+.ti -1c
+.RI "\fB~GenericInputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
 .in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBProcessorType\fP > * > \fBm_input_stream_event_handlers\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 A driver for the serial output\&. 
 .PP
-Definition at line 21 of file serial\&.h\&.
+Definition at line \fB21\fP of file \fBserial\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "MaxOS::drivers::SerialConsole::SerialConsole ()"
+.SS "SerialConsole::SerialConsole (\fBLogger\fP * logger)"
 
 .PP
-Definition at line 9 of file serial\&.cpp\&.
-.PP
+Definition at line \fB10\fP of file \fBserial\&.cpp\fP\&..PP
 .nf
-10 : m_data_port(0x3F8),
-11   m_interrupt_enable_port(0x3F9),
-12   m_fifo_control_port(0x3FA),
-13   m_line_control_port(0x3FB),
-14   m_modem_control_port(0x3FC),
-15   m_line_status_port(0x3FD)
-16 {
-17 
-18   // Disable all interrupts
-19   m_interrupt_enable_port\&.write(0x00);
-20 
-21   // Enable DLAB (set baud rate divisor)
-22   m_line_control_port\&.write(0x80);
-23 
-24   // Set divisor to 3
-25   m_data_port\&.write(0x03);
-26   m_interrupt_enable_port\&.write(0x00);
-27 
-28   // 8 bits, no parity, one stop bit
-29   m_line_control_port\&.write(0x03);
-30 
-31   // Enable FIFO, clear them, with 14-byte threshold
-32   m_fifo_control_port\&.write(0xC7);
-33 
-34   // IRQs enabled, RTS/DSR set
-35   m_modem_control_port\&.write(0x0B);
-36 
-37   // Test serial chip
-38   m_modem_control_port\&.write(0x1E);
-39   m_data_port\&.write(0xAE);
-40   if (m_data_port\&.read() != 0xAE)
-41     return;
-42 
-43   // Enable serial chip
-44   m_modem_control_port\&.write(0x0F);
-45 
-46   // Set the active serial console
-47   s_active_serial_console = this;
-48 
+11 : m_data_port(0x3F8),
+12   m_interrupt_enable_port(0x3F9),
+13   m_fifo_control_port(0x3FA),
+14   m_line_control_port(0x3FB),
+15   m_modem_control_port(0x3FC),
+16   m_line_status_port(0x3FD)
+17 {
+18 
+19     // Disable all interrupts
+20     m_interrupt_enable_port\&.write(0x00);
+21 
+22     // Enable DLAB (set baud rate divisor)
+23     m_line_control_port\&.write(0x80);
+24 
+25     // Set divisor to 3
+26     m_data_port\&.write(0x03);
+27     m_interrupt_enable_port\&.write(0x00);
+28 
+29     // 8 bits, no parity, one stop bit
+30     m_line_control_port\&.write(0x03);
+31 
+32     // Enable FIFO, clear them, with 14\-byte threshold
+33     m_fifo_control_port\&.write(0xC7);
+34 
+35     // IRQs enabled, RTS/DSR set
+36     m_modem_control_port\&.write(0x0B);
+37 
+38     // Test serial chip
+39     m_modem_control_port\&.write(0x1E);
+40     m_data_port\&.write(0xAE);
+41     if (m_data_port\&.read() != 0xAE)
+42         return;
+43 
+44     // Enable serial chip
+45     m_modem_control_port\&.write(0x0F);
+46 
+47     // Set the active serial console
+48     logger\->add_log_writer(this);
 49 }
 .fi
-.PP
-References MaxOS::hardwarecommunication::Port8Bit::read(), s_active_serial_console, and MaxOS::hardwarecommunication::Port8Bit::write()\&.
-.SS "MaxOS::drivers::SerialConsole::~SerialConsole ()"
 
 .PP
-Definition at line 51 of file serial\&.cpp\&.
-.PP
-.nf
-51                                           {
-52 
-53     // If this is the active serial console, set it to null
-54     if (s_active_serial_console == this)
-55             s_active_serial_console = 0;
-56 
-57 }
-.fi
+References \fBLogger::add_log_writer()\fP, \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
+.SS "SerialConsole::~SerialConsole ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void MaxOS::drivers::SerialConsole::put_character (char c)"
+.SS "void SerialConsole::put_character (char c)"
 
 .PP
 Waits for the serial port to be ready, then writes a character to it\&. 
@@ -117,29 +286,46 @@ Waits for the serial port to be ready, then writes a character to it\&.
 .PP
 
 .PP
-Definition at line 63 of file serial\&.cpp\&.
-.PP
+Definition at line \fB58\fP of file \fBserial\&.cpp\fP\&..PP
 .nf
-63                                                     {
-64 
-65     // Wait for the serial port to be ready
-66     while (0 == (m_line_status_port\&.read() & 0x20));
-67 
-68     // Write the character
-69     m_data_port\&.write(c);
-70 
-71 }
+58                                         {
+59 
+60     // Wait for the serial port to be ready
+61     while (0 == (m_line_status_port\&.read() & 0x20));
+62 
+63     // Write the character
+64     m_data_port\&.write(c);
+65 
+66 }
 .fi
-.PP
-References MaxOS::drivers::peripherals::c\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBMaxOS::drivers::SerialConsole\fP * MaxOS::drivers::SerialConsole::s_active_serial_console = 0\fC [static]\fP"
 
 .PP
-Definition at line 32 of file serial\&.h\&.
+References \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
 .PP
-Referenced by SerialConsole()\&.
+Referenced by \fBwrite_char()\fP\&.
+.SS "void SerialConsole::write_char (char char_to_write)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Writes a character to the output stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIchar_to_write\fP The character to write to the output stream\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::common::OutputStream\fP\&.
+.PP
+Definition at line \fB68\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+68                                      {
+69     put_character(c);
+70 }
+.fi
+
+.PP
+References \fBput_character()\fP\&.
 
 .SH "Author"
 .PP 

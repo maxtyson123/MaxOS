@@ -1,0 +1,813 @@
+.TH "MaxOS::common::Buffer" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::Buffer \- Wrapper class for a region of bytes in memor in an attempt to add some memory safety\&. Automatically allocates the size specified and frees it once done, adds boundary to I/O\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <buffer\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBuffer\fP (\fBsize_t\fP \fBsize\fP, \fBbool\fP \fBupdate_offset\fP=\fBtrue\fP)"
+.br
+.RI "Creates a buffer of the specified size\&. "
+.ti -1c
+.RI "\fBBuffer\fP (\fBvoid\fP *\fBsource\fP, \fBsize_t\fP \fBsize\fP, \fBbool\fP \fBupdate_offset\fP=\fBtrue\fP)"
+.br
+.RI "Creates a buffer pointing to a source\&. "
+.ti -1c
+.RI "\fB~Buffer\fP ()"
+.br
+.RI "Destroy the buffer, freeing the memory\&. "
+.ti -1c
+.RI "\fBuint8_t\fP * \fBraw\fP () \fBconst\fP"
+.br
+.RI "The raw pointer to the bytes stored in memory, use is not recommended\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBclear\fP ()"
+.br
+.RI "Fulls the buffer with 0's and resets the offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfull\fP (\fBuint8_t\fP \fBbyte\fP, \fBsize_t\fP offset=0, \fBsize_t\fP \fBamount\fP=0)"
+.br
+.RI "Full the buffer with a specified byte at an offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBset_offset\fP (\fBsize_t\fP offset)"
+.br
+.RI "Set the offset for where operations should begin from\&. "
+.ti -1c
+.RI "\fBsize_t\fP \fBcapacity\fP () \fBconst\fP"
+.br
+.RI "The max bytes the buffer can currently store\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBresize\fP (\fBsize_t\fP \fBsize\fP)"
+.br
+.RI "Grow the buffer to fit a new size\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBwrite\fP (\fBuint8_t\fP \fBbyte\fP)"
+.br
+.RI "Safely writes a byte to the buffer at the current offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBwrite\fP (\fBsize_t\fP offset, \fBuint8_t\fP \fBbyte\fP)"
+.br
+.RI "Safely writes a byte to the buffer at the specified offset\&. "
+.ti -1c
+.RI "\fBuint8_t\fP \fBread\fP ()"
+.br
+.RI "Safely reads a byte from the buffer at the current offset\&. "
+.ti -1c
+.RI "\fBuint8_t\fP \fBread\fP (\fBsize_t\fP offset)"
+.br
+.RI "Safely reads a byte from the buffer at the specified offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer)"
+.br
+.RI "Copies all the bytes from another buffer into this buffer\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP)"
+.br
+.RI "Copies a range of bytes from another buffer into this buffer\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.br
+.RI "Copies a range of bytes from another buffer into this buffer at a specified offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset, \fBsize_t\fP \fBoffset_other\fP)"
+.br
+.RI "Copies a range of bytes from another buffer into this buffer at a specified offset for both\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBvoid\fP *\fBsource\fP, \fBsize_t\fP \fBlength\fP)"
+.br
+.RI "Copies a range of bytes from a source into this buffer\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBvoid\fP *\fBsource\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.br
+.RI "Copies a range of bytes from a source into this buffer at a specified offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer)"
+.br
+.RI "Copies all the bytes from this buffer into another buffer\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP)"
+.br
+.RI "Writes a range of bytes from this buffer into another buffer\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.br
+.RI "Copies a range of bytes from this buffer into another buffer at a specified offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset, \fBsize_t\fP \fBoffset_other\fP)"
+.br
+.RI "Copies a range of bytes from this buffer into another at an offset for each\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBvoid\fP *\fBdestination\fP, \fBsize_t\fP \fBlength\fP)"
+.br
+.RI "Copies a range of bytes from this buffer into a source\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBvoid\fP *\fBdestination\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.br
+.RI "Copies a range of bytes from this buffer at an offset into a source\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBbool\fP \fBupdate_offset\fP = \fBtrue\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Wrapper class for a region of bytes in memor in an attempt to add some memory safety\&. Automatically allocates the size specified and frees it once done, adds boundary to I/O\&. 
+.PP
+Definition at line \fB22\fP of file \fBbuffer\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Buffer::Buffer (\fBsize_t\fP size, \fBbool\fP update_offset = \fC\fBtrue\fP\fP)"
+
+.PP
+Creates a buffer of the specified size\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB15\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+16 : m_capacity(size),
+17   update_offset(update_offset)
+18 {
+19 
+20     // Create the buffer
+21     m_bytes = new uint8_t[size];
+22 
+23 }
+.fi
+
+.PP
+References \fBsize\fP\&.
+.SS "Buffer::Buffer (\fBvoid\fP * source, \fBsize_t\fP size, \fBbool\fP update_offset = \fC\fBtrue\fP\fP)"
+
+.PP
+Creates a buffer pointing to a source\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP The source 
+.br
+\fIsize\fP The capacity of the source 
+.RE
+.PP
+
+.PP
+Definition at line \fB31\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+32 : update_offset(update_offset)
+33 {
+34 
+35     m_bytes = (uint8_t*)source;
+36     m_capacity = size;
+37     m_dont_delete = true;
+38 
+39 }
+.fi
+
+.PP
+References \fBsize\fP, and \fBsource\fP\&.
+.SS "Buffer::~Buffer ()"
+
+.PP
+Destroy the buffer, freeing the memory\&. 
+.PP
+Definition at line \fB44\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+44                 {
+45     if(!m_dont_delete && m_bytes)
+46         delete[] m_bytes;
+47 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBsize_t\fP Buffer::capacity () const"
+
+.PP
+The max bytes the buffer can currently store\&. 
+.PP
+\fBSee also\fP
+.RS 4
+\fBBuffer\fP:grow(size_t size) to increase this\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The length of the buffer storage array 
+.RE
+.PP
+
+.PP
+Definition at line \fB88\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+88                               {
+89     return m_capacity;
+90 }
+.fi
+
+.PP
+Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBfull()\fP, \fBread()\fP, and \fBwrite()\fP\&.
+.SS "\fBvoid\fP Buffer::clear ()"
+
+.PP
+Fulls the buffer with 0's and resets the offset\&. 
+.PP
+Definition at line \fB61\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+61                    {
+62 
+63     m_offset = 0;
+64     memset(m_bytes, 0, m_capacity);
+65 }
+.fi
+
+.PP
+References \fBmemset()\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::Fat32File::read()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBBuffer\fP * buffer)"
+
+.PP
+Copies all the bytes from another buffer into this buffer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP Where to read from 
+.RE
+.PP
+
+.PP
+Definition at line \fB186\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+186                                            {
+187 
+188     // Copy the buffer
+189     ASSERT(buffer \-> capacity() <= capacity(), "Copy exceeds buffer capacity");
+190     copy_from(buffer \-> raw(), buffer \-> capacity() );
+191 
+192 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, and \fBraw()\fP\&.
+.PP
+Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP, \fBMaxOS::filesystem::format::Fat32File::write()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_inode()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBBuffer\fP * buffer, \fBsize_t\fP length)"
+
+.PP
+Copies a range of bytes from another buffer into this buffer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP Where to read from 
+.br
+\fIlength\fP How much to read 
+.RE
+.PP
+
+.PP
+Definition at line \fB200\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+200                                                           {
+201 
+202     // Copy the buffer
+203     ASSERT(length <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+204     copy_from(buffer \-> raw(), length);
+205 
+206 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, \fBlength\fP, and \fBraw()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset)"
+
+.PP
+Copies a range of bytes from another buffer into this buffer at a specified offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP Where to read from 
+.br
+\fIlength\fP How much to read 
+.br
+\fIoffset\fP Where to start writing into this at 
+.RE
+.PP
+
+.PP
+Definition at line \fB214\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+214                                                                          {
+215 
+216     // Copy the buffer
+217     ASSERT(length <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+218     copy_from(buffer \-> raw(), length, offset);
+219 
+220 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, \fBlength\fP, and \fBraw()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset, \fBsize_t\fP offset_other)"
+
+.PP
+Copies a range of bytes from another buffer into this buffer at a specified offset for both\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP Where to read from 
+.br
+\fIlength\fP How much to read 
+.br
+\fIoffset\fP Where to start writing into this at 
+.br
+\fIoffset\fP Where to start reading from the other buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB230\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+230                                                                                               {
+231 
+232     // Copy the buffer
+233     ASSERT(length + offset_other <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+234     copy_from(buffer \-> raw() + offset_other, length, offset);
+235 
+236 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, \fBlength\fP, and \fBraw()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBvoid\fP * source, \fBsize_t\fP length)"
+
+.PP
+Copies a range of bytes from a source into this buffer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP Where to read from 
+.br
+\fIlength\fP How much to read 
+.RE
+.PP
+
+.PP
+Definition at line \fB244\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+244                                                         {
+245 
+246     // Copy the bytes
+247     ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity");
+248     memcpy(m_bytes + m_offset, source, length);
+249     set_offset(m_offset + length);
+250 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBlength\fP, \fBmemcpy()\fP, \fBset_offset()\fP, and \fBsource\fP\&.
+.SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBvoid\fP * source, \fBsize_t\fP length, \fBsize_t\fP offset)"
+
+.PP
+Copies a range of bytes from a source into this buffer at a specified offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP Where to read from 
+.br
+\fIlength\fP How much to read 
+.br
+\fIoffset\fP Where to start writing at 
+.RE
+.PP
+
+.PP
+Definition at line \fB259\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+259                                                                        {
+260 
+261     // Copy the bytes
+262     ASSERT((length  + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+263     memcpy(m_bytes + offset + m_offset, source, length);
+264     set_offset(m_offset + length);
+265 
+266 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBlength\fP, \fBmemcpy()\fP, \fBset_offset()\fP, and \fBsource\fP\&.
+.SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer)"
+
+.PP
+Copies all the bytes from this buffer into another buffer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP Where to write to 
+.RE
+.PP
+
+.PP
+Definition at line \fB273\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+273                                    {
+274 
+275     // Copy the buffer
+276     ASSERT(capacity() <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+277     copy_to(buffer \-> raw(), capacity());
+278 
+279 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, and \fBraw()\fP\&.
+.PP
+Referenced by \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_inode()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer, \fBsize_t\fP length)"
+
+.PP
+Writes a range of bytes from this buffer into another buffer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP Where to write to 
+.br
+\fIlength\fP How much to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB287\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+287                                                   {
+288 
+289     // Copy the buffer
+290     ASSERT(length <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+291     copy_to(buffer \-> raw(), length);
+292 
+293 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, \fBlength\fP, and \fBraw()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset)"
+
+.PP
+Copies a range of bytes from this buffer into another buffer at a specified offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP Where to write to 
+.br
+\fIlength\fP How much to write 
+.br
+\fIoffset\fP Where to start reading at 
+.RE
+.PP
+
+.PP
+Definition at line \fB302\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+302                                                                  {
+303 
+304     // Copy the bytes
+305     ASSERT((length  + offset) <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+306     copy_to(buffer \-> raw(), length, offset);
+307 
+308 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, \fBlength\fP, and \fBraw()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset, \fBsize_t\fP offset_other)"
+
+.PP
+Copies a range of bytes from this buffer into another at an offset for each\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP Where to write to 
+.br
+\fIlength\fP How much to write 
+.br
+\fIoffset\fP Where to start reading from 
+.br
+\fIoffset_other\fP Where to start writing to 
+.RE
+.PP
+
+.PP
+Definition at line \fB318\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+318                                                                                       {
+319 
+320     // Copy the bytes
+321     ASSERT((length  + offset) <= buffer \-> capacity(), "Copy exceeds external buffer capacity");
+322     copy_to(buffer \-> raw() + offset_other, length, offset);
+323 
+324 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, \fBlength\fP, and \fBraw()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_to (\fBvoid\fP * destination, \fBsize_t\fP length)"
+
+.PP
+Copies a range of bytes from this buffer into a source\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP Where to write to 
+.br
+\fIlength\fP How much to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB333\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+333                                                      {
+334 
+335     // Copy the bytes
+336     ASSERT(length + m_offset <= (m_capacity), "Copy exceeds buffer capacity");
+337     memcpy(destination, m_bytes + m_offset, length);
+338     set_offset(m_offset + length);
+339 
+340 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBdestination\fP, \fBlength\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
+.SS "\fBvoid\fP Buffer::copy_to (\fBvoid\fP * destination, \fBsize_t\fP length, \fBsize_t\fP offset)"
+
+.PP
+Copies a range of bytes from this buffer at an offset into a source\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP Where to write to 
+.br
+\fIlength\fP How much to write 
+.br
+\fIoffset\fP Where to start reading from 
+.RE
+.PP
+
+.PP
+Definition at line \fB349\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+349                                                                     {
+350 
+351     // Copy the bytes
+352     ASSERT((length  + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+353     memcpy(destination, m_bytes + offset + m_offset, length);
+354     set_offset(m_offset + length);
+355 
+356 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBdestination\fP, \fBlength\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
+.SS "\fBvoid\fP Buffer::full (\fBuint8_t\fP byte, \fBsize_t\fP offset = \fC0\fP, \fBsize_t\fP amount = \fC0\fP)"
+
+.PP
+Full the buffer with a specified byte at an offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbyte\fP The byte to write 
+.br
+\fIoffset\fP Where to start writing (deafults to 0) 
+.br
+\fIamount\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB74\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+74                                                             {
+75 
+76     // Prevent writing past the buffer bounds
+77     if (amount == 0) amount = m_capacity \- m_offset \- offset;
+78     ASSERT(m_offset + offset + amount <= capacity(), "Buffer overflow");
+79 
+80     memset(m_bytes + m_offset + offset, byte, amount);
+81 
+82 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, and \fBmemset()\fP\&.
+.SS "\fBuint8_t\fP * Buffer::raw () const"
+
+.PP
+The raw pointer to the bytes stored in memory, use is not recommended\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The address of buffer's storage 
+.RE
+.PP
+
+.PP
+Definition at line \fB53\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+53                           {
+54 
+55     return m_bytes;
+56 }
+.fi
+
+.PP
+Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, and \fBcopy_to()\fP\&.
+.SS "\fBuint8_t\fP Buffer::read ()"
+
+.PP
+Safely reads a byte from the buffer at the current offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIoffset\fP The offset into the buffer storage array 
+.RE
+.PP
+
+.PP
+Definition at line \fB161\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+161                      {
+162     set_offset(m_offset + 1);
+163     return m_bytes[m_offset \- 1];
+164 }
+.fi
+
+.PP
+References \fBset_offset()\fP\&.
+.SS "\fBuint8_t\fP Buffer::read (\fBsize_t\fP offset)"
+
+.PP
+Safely reads a byte from the buffer at the specified offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIoffset\fP The offset into the buffer storage array 
+.RE
+.PP
+
+.PP
+Definition at line \fB171\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+171                                   {
+172 
+173     // Prevent writing past the buffer bounds
+174     ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
+175 
+176     // Set the byte
+177     set_offset(m_offset + 1);
+178     return m_bytes[(m_offset \- 1) + offset];
+179 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, and \fBset_offset()\fP\&.
+.SS "\fBvoid\fP Buffer::resize (\fBsize_t\fP size)"
+
+.PP
+Grow the buffer to fit a new size\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The new max capacity of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB97\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+97                                {
+98 
+99     // Create the new buffer
+100     auto* new_buffer = new uint8_t[size];
+101 
+102     // Copy the old buffer
+103     if(m_bytes)
+104         memcpy(new_buffer, m_bytes, m_capacity);
+105 
+106     // Store the new buffer
+107     if(!m_dont_delete && m_bytes)
+108         delete[] m_bytes;
+109 
+110     m_bytes         = new_buffer;
+111     m_capacity      = size;
+112     m_dont_delete   = true;
+113 
+114 }
+.fi
+
+.PP
+References \fBmemcpy()\fP, and \fBsize\fP\&.
+.SS "\fBvoid\fP Buffer::set_offset (\fBsize_t\fP offset)"
+
+.PP
+Set the offset for where operations should begin from\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIoffset\fP The new offset 
+.RE
+.PP
+
+.PP
+Definition at line \fB121\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+121                                      {
+122 
+123     if(update_offset)
+124         m_offset = offset;
+125 
+126 }
+.fi
+
+.PP
+References \fBupdate_offset\fP\&.
+.PP
+Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBread()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBread()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, \fBMaxOS::filesystem::format::Fat32File::write()\fP, \fBwrite()\fP, \fBwrite()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
+.SS "\fBvoid\fP Buffer::write (\fBsize_t\fP offset, \fBuint8_t\fP byte)"
+
+.PP
+Safely writes a byte to the buffer at the specified offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIoffset\fP The offset into the buffer storage array 
+.br
+\fIbyte\fP The byte to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB145\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+145                                               {
+146 
+147     // Prevent writing past the buffer bounds
+148     ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
+149 
+150     // Set the byte
+151     m_bytes[m_offset + offset] = byte;
+152     set_offset(m_offset + 1);
+153 
+154 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcapacity()\fP, and \fBset_offset()\fP\&.
+.SS "\fBvoid\fP Buffer::write (\fBuint8_t\fP byte)"
+
+.PP
+Safely writes a byte to the buffer at the current offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbyte\fP The byte to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB133\fP of file \fBbuffer\&.cpp\fP\&..PP
+.nf
+133                                {
+134     m_bytes[m_offset] = byte;
+135     set_offset(m_offset + 1);
+136 }
+.fi
+
+.PP
+References \fBset_offset()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBbool\fP MaxOS::common::Buffer::update_offset = \fBtrue\fP"
+
+.PP
+Definition at line \fB41\fP of file \fBbuffer\&.h\fP\&.
+.PP
+Referenced by \fBset_offset()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

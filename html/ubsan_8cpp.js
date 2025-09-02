@@ -12,5 +12,6 @@ var ubsan_8cpp =
     [ "__ubsan_handle_shift_out_of_bounds", "ubsan_8cpp.html#a8eaef6703e08da0c125c298190472e37", null ],
     [ "__ubsan_handle_sub_overflow", "ubsan_8cpp.html#a409f7476b41016811383494fe61596f8", null ],
     [ "__ubsan_handle_type_mismatch", "ubsan_8cpp.html#aba718eae4e2afca918ea7f1d9753c1e4", null ],
-    [ "__ubsan_handle_type_mismatch_v1", "ubsan_8cpp.html#a7c6ac7e8652cd2f37919c2263484709d", null ]
+    [ "__ubsan_handle_type_mismatch_v1", "ubsan_8cpp.html#a7c6ac7e8652cd2f37919c2263484709d", null ],
+    [ "__ubsan_handle_vla_bound_not_positive", "ubsan_8cpp.html#a7008d1bfbaa9651cd92245cf067ebefd", null ]
 ];

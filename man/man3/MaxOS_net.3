@@ -1,4 +1,4 @@
-.TH "MaxOS::net" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -105,16 +105,16 @@ MaxOS::net
 
 .in +1c
 .ti -1c
-.RI "enum \fBTransmissionControlProtocolSocketState\fP { \fBCLOSED\fP, \fBLISTEN\fP, \fBSYN_SENT\fP, \fBSYN_RECEIVED\fP, \fBESTABLISHED\fP, \fBFIN_WAIT1\fP, \fBFIN_WAIT2\fP, \fBCLOSING\fP, \fBTIME_WAIT\fP, \fBCLOSE_WAIT\fP }"
+.RI "enum class \fBTCPSocketState\fP { \fBCLOSED\fP, \fBLISTEN\fP, \fBSYN_SENT\fP, \fBSYN_RECEIVED\fP, \fBESTABLISHED\fP, \fBFIN_WAIT1\fP, \fBFIN_WAIT2\fP, \fBCLOSING\fP, \fBTIME_WAIT\fP, \fBCLOSE_WAIT\fP, \fBLAST_ACK\fP }"
 .br
 .ti -1c
-.RI "enum \fBTransmissionControlProtocolFlag\fP { \fBFIN\fP = 1, \fBSYN\fP = 2, \fBRST\fP = 4, \fBPSH\fP = 8, \fBACK\fP = 16, \fBURG\fP = 32, \fBECE\fP = 64, \fBCWR\fP = 128, \fBNS\fP = 256 }"
+.RI "enum class \fBTCPFlag\fP { \fBFIN\fP = 1, \fBSYN\fP = 2, \fBRST\fP = 4, \fBPSH\fP = 8, \fBACK\fP = 16, \fBURG\fP = 32, \fBECE\fP = 64, \fBCWR\fP = 128, \fBNS\fP = 256 }"
 .br
 .ti -1c
-.RI "enum \fBTransmissionControlProtocolPayloadHandlerEvents\fP { \fBCONNECTED\fP, \fBDISCONNECTED\fP, \fBDATA_RECEIVED\fP }"
+.RI "enum class \fBTransmissionControlProtocolPayloadHandlerEvents\fP { \fBCONNECTED\fP, \fBDISCONNECTED\fP, \fBDATA_RECEIVED\fP }"
 .br
 .ti -1c
-.RI "enum \fBUserDatagramProtocolEvents\fP { \fBUDP_DATA_RECEIVED\fP }"
+.RI "enum class \fBUserDatagramProtocolEvents\fP { \fBDATA_RECEIVED\fP }"
 .br
 .in -1c
 .SS "Functions"
@@ -136,22 +136,22 @@ MaxOS::net
 .SS "typedef uint32_t \fBMaxOS::net::InternetProtocolAddress\fP"
 
 .PP
-Definition at line 15 of file ipv4\&.h\&.
+Definition at line \fB15\fP of file \fBipv4\&.h\fP\&.
 .SS "typedef uint32_t \fBMaxOS::net::SubnetMask\fP"
 
 .PP
-Definition at line 16 of file ipv4\&.h\&.
+Definition at line \fB16\fP of file \fBipv4\&.h\fP\&.
 .SS "typedef uint16_t \fBMaxOS::net::TransmissionControlProtocolPort\fP"
 
 .PP
-Definition at line 16 of file tcp\&.h\&.
+Definition at line \fB16\fP of file \fBtcp\&.h\fP\&.
 .SS "typedef uint16_t \fBMaxOS::net::UserDatagramProtocolPort\fP"
 
 .PP
-Definition at line 35 of file udp\&.h\&.
+Definition at line \fB37\fP of file \fBudp\&.h\fP\&.
 .SH "Enumeration Type Documentation"
 .PP 
-.SS "enum \fBMaxOS::net::TransmissionControlProtocolFlag\fP"
+.SS "enum class \fBMaxOS::net::TCPFlag\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -175,8 +175,7 @@ Definition at line 35 of file udp\&.h\&.
 .TP
 \fB\fINS \fP\fP
 .PP
-Definition at line 36 of file tcp\&.h\&.
-.PP
+Definition at line \fB36\fP of file \fBtcp\&.h\fP\&..PP
 .nf
 37         {
 38             FIN = 1,
@@ -190,28 +189,8 @@ Definition at line 36 of file tcp\&.h\&.
 46             NS = 256
 47         };
 .fi
-.SS "enum \fBMaxOS::net::TransmissionControlProtocolPayloadHandlerEvents\fP"
 
-.PP
-\fBEnumerator\fP
-.in +1c
-.TP
-\fB\fICONNECTED \fP\fP
-.TP
-\fB\fIDISCONNECTED \fP\fP
-.TP
-\fB\fIDATA_RECEIVED \fP\fP
-.PP
-Definition at line 82 of file tcp\&.h\&.
-.PP
-.nf
-83         {
-84             CONNECTED,
-85             DISCONNECTED,
-86             DATA_RECEIVED
-87         };
-.fi
-.SS "enum \fBMaxOS::net::TransmissionControlProtocolSocketState\fP"
+.SS "enum class \fBMaxOS::net::TCPSocketState\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
@@ -236,9 +215,10 @@ Definition at line 82 of file tcp\&.h\&.
 \fB\fITIME_WAIT \fP\fP
 .TP
 \fB\fICLOSE_WAIT \fP\fP
+.TP
+\fB\fILAST_ACK \fP\fP
 .PP
-Definition at line 18 of file tcp\&.h\&.
-.PP
+Definition at line \fB18\fP of file \fBtcp\&.h\fP\&..PP
 .nf
 19         {
 20             CLOSED,
@@ -253,25 +233,47 @@ Definition at line 18 of file tcp\&.h\&.
 29             CLOSING,
 30             TIME_WAIT,
 31 
-32             CLOSE_WAIT
-33             //LAST_ACK
+32             CLOSE_WAIT,
+33             LAST_ACK
 34         };
 .fi
-.SS "enum \fBMaxOS::net::UserDatagramProtocolEvents\fP"
+
+.SS "enum class \fBMaxOS::net::TransmissionControlProtocolPayloadHandlerEvents\fP\fC [strong]\fP"
 
 .PP
 \fBEnumerator\fP
 .in +1c
 .TP
-\fB\fIUDP_DATA_RECEIVED \fP\fP
+\fB\fICONNECTED \fP\fP
+.TP
+\fB\fIDISCONNECTED \fP\fP
+.TP
+\fB\fIDATA_RECEIVED \fP\fP
 .PP
-Definition at line 29 of file udp\&.h\&.
-.PP
+Definition at line \fB82\fP of file \fBtcp\&.h\fP\&..PP
 .nf
-29                                        {
-30             UDP_DATA_RECEIVED,
+83         {
+84             CONNECTED,
+85             DISCONNECTED,
+86             DATA_RECEIVED
+87         };
+.fi
+
+.SS "enum class \fBMaxOS::net::UserDatagramProtocolEvents\fP\fC [strong]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIDATA_RECEIVED \fP\fP
+.PP
+Definition at line \fB29\fP of file \fBudp\&.h\fP\&..PP
+.nf
+29                                              {
+30             DATA_RECEIVED,
 31         };
 .fi
+
 .SH "Function Documentation"
 .PP 
 .SS "struct \fBMaxOS::net::AddressResolutionProtocolMessage\fP MaxOS::net::__attribute__ ((packed))"

@@ -24,5 +24,43 @@ var namespaceMaxOS_1_1net =
     [ "UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler" ],
     [ "UserDatagramProtocolHeader", "structMaxOS_1_1net_1_1UserDatagramProtocolHeader.html", "structMaxOS_1_1net_1_1UserDatagramProtocolHeader" ],
     [ "UserDatagramProtocolPayloadHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolPayloadHandler.html", "classMaxOS_1_1net_1_1UserDatagramProtocolPayloadHandler" ],
-    [ "UserDatagramProtocolSocket", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket.html", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket" ]
+    [ "UserDatagramProtocolSocket", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket.html", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket" ],
+    [ "InternetProtocolAddress", "namespaceMaxOS_1_1net.html#af037c025feb88b952b167f4dfa2709a0", null ],
+    [ "SubnetMask", "namespaceMaxOS_1_1net.html#a675fed9f30ec224711b40893d3f784d6", null ],
+    [ "TransmissionControlProtocolPort", "namespaceMaxOS_1_1net.html#a8e668c17241c6c0ed8e9f6df338b2307", null ],
+    [ "UserDatagramProtocolPort", "namespaceMaxOS_1_1net.html#a1e02f448b921ead1ac5c22bd5c83ead9", null ],
+    [ "TCPFlag", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5", [
+      [ "FIN", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5af408850c47cccdcedad816d79e100906", null ],
+      [ "SYN", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5abab6eed0f7cd8bd721e728003b63b54d", null ],
+      [ "RST", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5afbe78d395b48369284faffb0ce9d5c0f", null ],
+      [ "PSH", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a1e9eb87c0de5632c27665c0715c5a262", null ],
+      [ "ACK", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a0fc437bc317835cad5faafc12a83fad5", null ],
+      [ "URG", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5aab0b87e5caabc936ee6f8454bf5526bd", null ],
+      [ "ECE", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a411a9a1b1519ebd6c96cd25a5b2ecdd5", null ],
+      [ "CWR", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5ade3c6ff049b54ae8ae5cdd53b7cfb1b5", null ],
+      [ "NS", "namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a53c8d15a175221d2127083e66a8cc937", null ]
+    ] ],
+    [ "TCPSocketState", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44", [
+      [ "CLOSED", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a110ccf2f5d2ff4eda1fd1a494293467d", null ],
+      [ "LISTEN", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44ac1f9314a03f63f33410be3489b12b29b", null ],
+      [ "SYN_SENT", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a22ee0e543a2820dcbb2dcc90ed8fdb7c", null ],
+      [ "SYN_RECEIVED", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a027356d5e2d689dd48894303e715f2f1", null ],
+      [ "ESTABLISHED", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a7640f170af693e00a6c91df543aa2b76", null ],
+      [ "FIN_WAIT1", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a15691d3bea993fbf8cc16e3373caa548", null ],
+      [ "FIN_WAIT2", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a6371b3c24c873501dacae75d744aedec", null ],
+      [ "CLOSING", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44aa71a44c4c886bfc66b1edd511e6a677e", null ],
+      [ "TIME_WAIT", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a29766b42abee01f792492da03e732083", null ],
+      [ "CLOSE_WAIT", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a831862ab9b2e65d7f51841e0c739180f", null ],
+      [ "LAST_ACK", "namespaceMaxOS_1_1net.html#aef1bb382dd5d6cdaecb7ffe20b234a44a9cbd9a647dc3edd29dd880e97c352032", null ]
+    ] ],
+    [ "TransmissionControlProtocolPayloadHandlerEvents", "namespaceMaxOS_1_1net.html#a36c6c723a8bfd777e4d45c63c0d793a7", [
+      [ "CONNECTED", "namespaceMaxOS_1_1net.html#a36c6c723a8bfd777e4d45c63c0d793a7aa5afd6edd5336d91316964e493936858", null ],
+      [ "DISCONNECTED", "namespaceMaxOS_1_1net.html#a36c6c723a8bfd777e4d45c63c0d793a7a99c8ce56e7ab246445d3b134724428f3", null ],
+      [ "DATA_RECEIVED", "namespaceMaxOS_1_1net.html#a36c6c723a8bfd777e4d45c63c0d793a7a1644a05bebcc7abb4e6aa13abc8a75e4", null ]
+    ] ],
+    [ "UserDatagramProtocolEvents", "namespaceMaxOS_1_1net.html#a54bb405be88938f32007de4e24d992da", [
+      [ "DATA_RECEIVED", "namespaceMaxOS_1_1net.html#a54bb405be88938f32007de4e24d992daa1644a05bebcc7abb4e6aa13abc8a75e4", null ]
+    ] ],
+    [ "__attribute__", "namespaceMaxOS_1_1net.html#a4d717afc44af4a0f81e760181db3ccd7", null ],
+    [ "__attribute__", "namespaceMaxOS_1_1net.html#a4d91b32cf7866d911b58b12cf57766a8", null ]
 ];

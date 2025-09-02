@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['widgetmoverresizer_4024',['WidgetMoverResizer',['../classMaxOS_1_1gui_1_1Widget.html#a291268ec0644a8b300e3214c02411101',1,'MaxOS::gui::Widget']]]
+  ['userdatagramprotocolhandler_0',['UserDatagramProtocolHandler',['../classMaxOS_1_1net_1_1UserDatagramProtocolSocket.html#aafeb6aa0c5b10db9f5812daa43327423',1,'MaxOS::net::UserDatagramProtocolSocket']]]
 ];

@@ -1,0 +1,193 @@
+.TH "MaxOS::drivers::disk::IntegratedDriveElectronicsController" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::disk::IntegratedDriveElectronicsController \- \fBDriver\fP for the IDE controller, handles the creation and management of the IDE devices\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ide\&.h>\fP
+.PP
+Inherits \fBMaxOS::drivers::Driver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIntegratedDriveElectronicsController\fP (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP *device_descriptor)"
+.br
+.ti -1c
+.RI "\fB~IntegratedDriveElectronicsController\fP ()"
+.br
+.ti -1c
+.RI "void \fBinitialise\fP () final"
+.br
+.RI "Initialise the IDE controller by identifying the devices\&. "
+.ti -1c
+.RI "void \fBactivate\fP () final"
+.br
+.RI "Activate the IDE controller by mounting the devices to the virtual file system\&. "
+.ti -1c
+.RI "\fBstring\fP \fBvendor_name\fP () final"
+.br
+.RI "Get the vendor name\&. "
+.ti -1c
+.RI "\fBstring\fP \fBdevice_name\fP () final"
+.br
+.RI "Get the device name\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
+.in +1c
+.ti -1c
+.RI "\fBDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~Driver\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
+.br
+.RI "deactivate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBDriver\fP for the IDE controller, handles the creation and management of the IDE devices\&. 
+
+
+.IP "\(bu" 2
+
+.PP
+
+.PP
+Definition at line \fB25\fP of file \fBide\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "IntegratedDriveElectronicsController::IntegratedDriveElectronicsController (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP * device_descriptor)"
+
+.PP
+Definition at line \fB14\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+16 {
+17     // TODO: Use the device descriptor to get the port base and add the devices dynamically
+18 
+19     // Primary
+20     auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
+21     auto primary_slave = new AdvancedTechnologyAttachment(0x1F0, false);
+22     devices\&.insert(primary_maser, true);
+23     devices\&.insert(primary_slave, false);
+24 
+25     // Secondary
+26     auto secondary_maser = new AdvancedTechnologyAttachment(0x170, true);
+27     auto secondary_slave = new AdvancedTechnologyAttachment(0x170, false);
+28     devices\&.insert(secondary_maser, true);
+29     devices\&.insert(secondary_slave, false);
+30 
+31 }
+.fi
+
+.SS "IntegratedDriveElectronicsController::~IntegratedDriveElectronicsController ()\fC [default]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void IntegratedDriveElectronicsController::activate ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Activate the IDE controller by mounting the devices to the virtual file system\&. 
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line \fB66\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+66                                                     {
+67 
+68     // Loop through the devices and load the partitions
+69     for (auto &device: devices) {
+70 
+71         // Ensure there is a device and that it is the master
+72         if (device\&.first == nullptr || !device\&.second)
+73             continue;
+74 
+75         // Mount the device
+76         MSDOSPartition::mount_partitions(device\&.first);
+77 
+78     }
+79 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP\&.
+.SS "\fBstring\fP IntegratedDriveElectronicsController::device_name ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Get the device name\&. 
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line \fB92\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+92                                                          {
+93     return "PIIX4";
+94 }
+.fi
+
+.SS "void IntegratedDriveElectronicsController::initialise ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Initialise the IDE controller by identifying the devices\&. 
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line \fB38\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+38                                                       {
+39 
+40     // Loop through the devices and identify them
+41     for (auto &device: devices) {
+42 
+43         // Check if the device is present
+44         auto ata_device = device\&.first;
+45         if (ata_device == nullptr)
+46             continue;
+47 
+48         // Identify the device
+49         bool exists = ata_device\->identify();
+50 
+51         // Remove the device if it does not exist
+52         if (!exists) {
+53             devices\&.erase(ata_device);
+54             delete ata_device;
+55             continue;
+56         }
+57     }
+58 
+59     // Log the init done
+60     Logger::DEBUG() << "IDE Controller: Initialised " << devices\&.size() << " devices\\n";
+61 }
+.fi
+
+.PP
+References \fBLogger::DEBUG()\fP\&.
+.SS "\fBstring\fP IntegratedDriveElectronicsController::vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Get the vendor name\&. 
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line \fB85\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+85                                                          {
+86     return "Intel";
+87 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

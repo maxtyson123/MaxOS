@@ -1,0 +1,222 @@
+\doxysection{buffer.\+cpp}
+\hypertarget{buffer_8cpp_source}{}\label{buffer_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/common/buffer.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/common/buffer.cpp}}
+\mbox{\hyperlink{buffer_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 30/07/2025.}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{buffer_8h}{common/buffer.h}}>}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00015}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_abb9a721ab9f6f9fb3b0bae1bbd14d1ee}{00015}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_abb9a721ab9f6f9fb3b0bae1bbd14d1ee}{Buffer::Buffer}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{bool}\ update\_offset)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00016}00016\ :\ m\_capacity(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}),}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00017}00017\ \ \ update\_offset(update\_offset)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00018}00018\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00020}00020\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00021}00021\ \ \ \ \ m\_bytes\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}];}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00023}00023\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00031}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a0ebb74776f3dbff4da00f014e6d94c13}{00031}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_abb9a721ab9f6f9fb3b0bae1bbd14d1ee}{Buffer::Buffer}}(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{bool}\ update\_offset)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00032}00032\ :\ update\_offset(update\_offset)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00033}00033\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00035}00035\ \ \ \ \ m\_bytes\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)\mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00036}00036\ \ \ \ \ m\_capacity\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00037}00037\ \ \ \ \ m\_dont\_delete\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00039}00039\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00044}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a59b8743e4a5f731bdd0c4185c9ef263b}{00044}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a59b8743e4a5f731bdd0c4185c9ef263b}{Buffer::\string~Buffer}}()\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00045}00045\ \ \ \ \ \textcolor{keywordflow}{if}(!m\_dont\_delete\ \&\&\ m\_bytes)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ m\_bytes;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00053}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{00053}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{Buffer::raw}}()\textcolor{keyword}{\ const}\{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00055}00055\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00056}00056\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00061}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}{00061}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}{Buffer::clear}}()\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00063}00063\ \ \ \ \ m\_offset\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00064}00064\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(m\_bytes,\ 0,\ m\_capacity);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00065}00065\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00074}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a5bed5a921295c7d94ff47fa401446101}{00074}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a5bed5a921295c7d94ff47fa401446101}{Buffer::full}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \textcolor{keywordtype}{byte},\ \textcolor{keywordtype}{size\_t}\ offset,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ ==\ 0)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ =\ m\_capacity\ -\/\ m\_offset\ -\/\ offset;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00078}00078\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00080}00080\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(m\_bytes\ +\ m\_offset\ +\ offset,\ \textcolor{keywordtype}{byte},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00082}00082\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00088}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{00088}}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{Buffer::capacity}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00089}00089\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_capacity;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00090}00090\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00097}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af483172a774d185d08819f3b59d09fc7}{00097}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af483172a774d185d08819f3b59d09fc7}{Buffer::resize}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00099}00099\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ new\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00100}00100\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}];}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ old\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{if}(m\_bytes)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}},\ m\_bytes,\ m\_capacity);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00106}00106\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ new\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{keywordflow}{if}(!m\_dont\_delete\ \&\&\ m\_bytes)}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ m\_bytes;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00110}00110\ \ \ \ \ m\_bytes\ \ \ \ \ \ \ \ \ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00111}00111\ \ \ \ \ m\_capacity\ \ \ \ \ \ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00112}00112\ \ \ \ \ m\_dont\_delete\ \ \ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00114}00114\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00121}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{00121}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{Buffer::set\_offset}}(\textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ m\_offset\ =\ offset;}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00126}00126\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00133}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a0b249b319154019e0f60cf5c9274fb1c}{00133}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a0b249b319154019e0f60cf5c9274fb1c}{Buffer::write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \textcolor{keywordtype}{byte})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00134}00134\ \ \ \ \ m\_bytes[m\_offset]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{byte}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00135}00135\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00136}00136\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00145}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a97bd017146951f4f911aa1107e1e9988}{00145}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a0b249b319154019e0f60cf5c9274fb1c}{Buffer::write}}(\textcolor{keywordtype}{size\_t}\ offset,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \textcolor{keywordtype}{byte})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00147}00147\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00148}00148\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \&\&\ offset\ >=\ 0,\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00150}00150\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ byte}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00151}00151\ \ \ \ \ m\_bytes[m\_offset\ +\ offset]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{byte}};}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00152}00152\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00154}00154\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00161}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304}{00161}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304}{Buffer::read}}()\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00162}00162\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00163}00163\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes[m\_offset\ -\/\ 1];}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00164}00164\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00171}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7049c99742f6dd099ec95dc96e0db349}{00171}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304}{Buffer::read}}(\textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00173}00173\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00174}00174\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \&\&\ offset\ >=\ 0,\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ byte}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00177}00177\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes[(m\_offset\ -\/\ 1)\ +\ offset];}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00179}00179\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00186}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{00186}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{Buffer::copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00189}00189\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00190}00190\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ );}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00192}00192\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00200}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acfa02fb057f183777b07d6d47b8bd671}{00200}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{Buffer::copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00202}00202\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00203}00203\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00204}00204\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00206}00206\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00214}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_ace419faf128d9d7e4e7da210e8f2e7ee}{00214}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{Buffer::copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00217}00217\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00218}00218\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00220}00220\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00230}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_abb7ee7c1c6cfb7e0354417a7f2463ca3}{00230}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{Buffer::copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00232}00232\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00233}00233\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00234}00234\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00235}00235\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00236}00236\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00244}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_ae8a723030d0a9be37ed3e3e3fd85b357}{00244}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{Buffer::copy\_from}}(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}\ *\mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00245}00245\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00246}00246\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00247}00247\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ m\_offset\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00248}00248\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(m\_bytes\ +\ m\_offset,\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00249}00249\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00250}00250\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00251}00251\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00259}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a1c6c04aa04dc30d3f0f65a5257ec2eb4}{00259}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{Buffer::copy\_from}}(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}\ *\mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00261}00261\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00262}00262\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset\ +\ m\_offset)\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00263}00263\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(m\_bytes\ +\ offset\ +\ m\_offset,\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00264}00264\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00266}00266\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00267}00267\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00273}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{00273}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{Buffer::copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00275}00275\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00276}00276\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ <=\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00277}00277\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}());}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00279}00279\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00287}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_ae1a153ef69c0546137798ceee7f3ec8b}{00287}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{Buffer::copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00289}00289\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00290}00290\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00291}00291\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00292}00292\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00293}00293\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00294}00294\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00302}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a79014ce941145f1f455a9aa47a0e2413}{00302}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{Buffer::copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00304}00304\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00305}00305\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset)\ <=\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00306}00306\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00307}00307\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00308}00308\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00309}00309\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00318}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a6449b8857a61c55da9d97b7aea12cfea}{00318}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{Buffer::copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00319}00319\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00320}00320\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00321}00321\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset)\ <=\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00322}00322\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00323}00323\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00324}00324\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00325}00325\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00326}00326\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00333}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_ada89cae5bd56d51f0b8f2196ee71e45c}{00333}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{Buffer::copy\_to}}(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}})\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00334}00334\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00335}00335\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00336}00336\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ m\_offset\ <=\ (m\_capacity),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00337}00337\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ m\_bytes\ +\ m\_offset,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00338}00338\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00339}00339\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00340}00340\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00341}00341\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00349}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a8434a65eda46e5e7499843067ba9ef2b}{00349}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{Buffer::copy\_to}}(\textcolor{keywordtype}{void}\ *\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00351}00351\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00352}00352\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset\ +\ m\_offset)\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00353}00353\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ m\_bytes\ +\ offset\ +\ m\_offset,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00354}00354\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00355}00355\ }
+\DoxyCodeLine{\Hypertarget{buffer_8cpp_source_l00356}00356\ \}}
+
+\end{DoxyCode}

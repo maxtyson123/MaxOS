@@ -1,4 +1,4 @@
-.TH "MaxOS::common::GenericOutputStream< Type >" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::GenericOutputStream< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,34 +23,94 @@ Inherits \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP\&.
 .br
 .RI "Destructor of the \fBGenericOutputStream\fP class\&. "
 .ti -1c
-.RI "void \fBon_stream_read\fP (Type) override"
+.RI "\fBvoid\fP \fBon_stream_read\fP (\fBType\fP) \fBoverride\fP"
 .br
 .RI "Writes the date that was read from the input stream to the output stream\&. "
 .ti -1c
-.RI "void \fBon_end_of_stream\fP (\fBGenericInputStream\fP< Type > *) override"
+.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *) \fBoverride\fP"
 .br
 .RI "Close the stream and remove it from the list of streams when the end of the stream is reached\&. "
 .ti -1c
-.RI "virtual void \fBwrite\fP (Type)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBwrite\fP (\fBType\fP)"
 .br
 .RI "write an element to the stream\&. "
 .ti -1c
-.RI "virtual void \fBclose\fP ()"
+.RI "\fBvirtual\fP \fBvoid\fP \fBclose\fP ()"
 .br
 .RI "Close the stream\&. "
 .ti -1c
-.RI "virtual \fBGenericOutputStream\fP< Type > & \fBoperator<<\fP (Type)"
+.RI "\fBvirtual\fP \fBGenericOutputStream\fP< \fBType\fP > & \fBoperator<<\fP (\fBType\fP)"
 .br
 .RI "Overload the << operator to write an element to the stream\&. "
 .in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *\fBgeneric_stream_event_handler\fP)"
+.br
+.ti -1c
+.RI "\fB~InputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamEventHandler\fP ()"
+.br
+.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
+.ti -1c
+.RI "\fB~InputStreamEventHandler\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBGenericInputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
+.br
+.ti -1c
+.RI "\fB~GenericInputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
+.br
+.in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBType\fP > * > \fBm_input_stream_event_handlers\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class Type>
+.SS "template<\fBclass\fP \fBType\fP>
 .br
-class MaxOS::common::GenericOutputStream< Type >"
-A stream that can be written to\&. 
+class MaxOS::common::GenericOutputStream< Type >"A stream that can be written to\&. 
 
 
 .PP
@@ -61,10 +121,10 @@ A stream that can be written to\&.
 .PP
 
 .PP
-Definition at line 22 of file outputStream\&.h\&.
+Definition at line \fB22\fP of file \fBoutputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<class Type > \fBMaxOS::common::GenericOutputStream\fP< Type >::\fBGenericOutputStream\fP"
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::GenericOutputStream ()\fC [default]\fP"
 
 .PP
 __________________________________________Templates__________________________________________________/// Constructor of the \fBGenericOutputStream\fP class\&.
@@ -75,15 +135,7 @@ __________________________________________Templates_____________________________
 .RE
 .PP
 
-.PP
-Definition at line 72 of file outputStream\&.h\&.
-.PP
-.nf
-72                                                                             {
-73 
-74         }
-.fi
-.SS "template<class Type > \fBMaxOS::common::GenericOutputStream\fP< Type >::~\fBGenericOutputStream\fP"
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::~\fBGenericOutputStream\fP ()\fC [default]\fP"
 
 .PP
 Destructor of the \fBGenericOutputStream\fP class\&. 
@@ -94,17 +146,9 @@ Destructor of the \fBGenericOutputStream\fP class\&.
 .RE
 .PP
 
-.PP
-Definition at line 81 of file outputStream\&.h\&.
-.PP
-.nf
-81                                                                              {
-82 
-83         }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class Type > void \fBMaxOS::common::GenericOutputStream\fP< Type >::close\fC [virtual]\fP"
+.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::close ()\fC [virtual]\fP"
 
 .PP
 Close the stream\&. 
@@ -116,14 +160,14 @@ Close the stream\&.
 .PP
 
 .PP
-Definition at line 138 of file outputStream\&.h\&.
-.PP
+Definition at line \fB136\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-138                                                                    {
-139 
-140         }
+136                                                                    {
+137 
+138         }
 .fi
-.SS "template<class Type > void \fBMaxOS::common::GenericOutputStream\fP< Type >::on_end_of_stream (\fBGenericInputStream\fP< Type > * stream)\fC [override]\fP, \fC [virtual]\fP"
+
+.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::on_end_of_stream (\fBGenericInputStream\fP< \fBType\fP > * stream)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Close the stream and remove it from the list of streams when the end of the stream is reached\&. 
@@ -140,26 +184,28 @@ Close the stream and remove it from the list of streams when the end of the stre
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP\&.
+Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line 109 of file outputStream\&.h\&.
-.PP
+Definition at line \fB107\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-109                                                                                                               {
-110 
-111             // Close the stream\&.
-112             close();
-113 
-114             // Pass the event to any handlers
-115             for(auto& input_stream_event_handler : this ->m_input_stream_event_handlers)
-116                 input_stream_event_handler->on_end_of_stream(stream);
-117 
-118             // Remove the stream from the list of streams\&.
-119             InputStreamProcessor<Type, Type>::on_end_of_stream(stream);
-120 
-121         }
+107                                                                                                               {
+108 
+109             // Close the stream\&.
+110             close();
+111 
+112             // Pass the event to any handlers
+113             for(auto& input_stream_event_handler : this \->m_input_stream_event_handlers)
+114                 input_stream_event_handler\->on_end_of_stream(stream);
+115 
+116             // Remove the stream from the list of streams\&.
+117             InputStreamProcessor<Type, Type>::on_end_of_stream(stream);
+118 
+119         }
 .fi
-.SS "template<class Type > void \fBMaxOS::common::GenericOutputStream\fP< Type >::on_stream_read (Type read_element)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+References \fBMaxOS::common::InputStreamProcessor< Type, ProcessorType >::on_end_of_stream()\fP\&.
+.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::on_stream_read (\fBType\fP read_element)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Writes the date that was read from the input stream to the output stream\&. 
@@ -178,22 +224,24 @@ Writes the date that was read from the input stream to the output stream\&.
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line 91 of file outputStream\&.h\&.
-.PP
+Definition at line \fB89\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-91                                                                                              {
-92 
-93             // When something is read from the input stream, it is written to the output stream\&.
-94             write(read_element);
-95 
-96             // Pass the element to any handlers
-97             for(auto& input_stream_event_handler : this ->m_input_stream_event_handlers)
-98               input_stream_event_handler->on_stream_read(read_element);
-99 
-100 
-101         }
+89                                                                                              {
+90 
+91             // When something is read from the input stream, it is written to the output stream\&.
+92             write(read_element);
+93 
+94             // Pass the element to any handlers
+95             for(auto& input_stream_event_handler : this \->m_input_stream_event_handlers)
+96               input_stream_event_handler\->on_stream_read(read_element);
+97 
+98 
+99         }
 .fi
-.SS "template<class Type > \fBGenericOutputStream\fP< Type > & \fBMaxOS::common::GenericOutputStream\fP< Type >::operator<< (Type write_element)\fC [virtual]\fP"
+
+.PP
+References \fBwrite\fP\&.
+.SS "template<\fBclass\fP \fBType\fP > \fBGenericOutputStream\fP< \fBType\fP > & \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::operator<< (\fBType\fP write_element)\fC [virtual]\fP"
 
 .PP
 Overload the << operator to write an element to the stream\&. 
@@ -215,21 +263,19 @@ The stream
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::common::OutputStream\fP\&.
-.PP
-Definition at line 149 of file outputStream\&.h\&.
-.PP
+Definition at line \fB136\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-149                                                                                                                   {
-150 
-151             // write the element to the stream\&.
-152             write(write_element);
-153 
-154             // Return the stream\&.
-155             return *this;
-156         }
+147                                                                                                                   {
+148 
+149             // write the element to the stream\&.
+150             write(write_element);
+151 
+152             // Return the stream\&.
+153             return *this;
+154         }
 .fi
-.SS "template<class Type > void \fBMaxOS::common::GenericOutputStream\fP< Type >::write (Type)\fC [virtual]\fP"
+
+.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::write (\fBType\fP)\fC [virtual]\fP"
 
 .PP
 write an element to the stream\&. 
@@ -246,14 +292,11 @@ write an element to the stream\&.
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::common::OutputStream\fP\&.
-.PP
-Definition at line 129 of file outputStream\&.h\&.
-.PP
+Definition at line \fB127\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-129                                                                        {
-130 
-131         }
+127                                                                        {
+128 
+129         }
 .fi
 
 

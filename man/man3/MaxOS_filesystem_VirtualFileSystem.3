@@ -1,0 +1,974 @@
+.TH "MaxOS::filesystem::VirtualFileSystem" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::VirtualFileSystem
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vfs\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVirtualFileSystem\fP ()"
+.br
+.ti -1c
+.RI "\fB~VirtualFileSystem\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBmount_filesystem\fP (\fBFileSystem\fP *filesystem)"
+.br
+.RI "Add a filesystem to the virtual file system\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBmount_filesystem\fP (\fBFileSystem\fP *filesystem, \fBconst\fP \fBstring\fP &\fBmount_point\fP)"
+.br
+.RI "Add a filesystem to the virtual file system at a given mount point\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBunmount_filesystem\fP (\fBFileSystem\fP *filesystem)"
+.br
+.RI "Remove a filesystem from the virtual file system & delete it\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBunmount_filesystem\fP (\fBconst\fP \fBstring\fP &\fBmount_point\fP)"
+.br
+.RI "Remove a filesystem from the virtual file system\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBunmount_all\fP ()"
+.br
+.RI "Remove all mounted filesystems\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBroot_directory\fP ()"
+.br
+.RI "Get the root directory of the virtual file system\&. "
+.ti -1c
+.RI "\fBFileSystem\fP * \fBroot_filesystem\fP ()"
+.br
+.RI "Get the filesystem mounted at the root\&. "
+.ti -1c
+.RI "\fBFileSystem\fP * \fBget_filesystem\fP (\fBconst\fP \fBstring\fP &\fBmount_point\fP)"
+.br
+.RI "Get a specific filesystem mounted at a given mount point\&. "
+.ti -1c
+.RI "\fBFileSystem\fP * \fBfind_filesystem\fP (\fBstring\fP \fBpath\fP)"
+.br
+.RI "Find the filesystem that is responsible for a given path\&. "
+.ti -1c
+.RI "\fBstring\fP \fBget_relative_path\fP (\fBFileSystem\fP *filesystem, \fBstring\fP \fBpath\fP)"
+.br
+.RI "Get the relative path on a filesystem for a given VFS path (ie remove the mount point) "
+.ti -1c
+.RI "\fBDirectory\fP * \fBopen_directory\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Try to open a directory on the virtual file system and read it's contents\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBcreate_directory\fP (\fBstring\fP \fBpath\fP)"
+.br
+.RI "Attempts to open the parent directory and creates the sub directory at the end of the path\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdelete_directory\fP (\fBstring\fP \fBpath\fP)"
+.br
+.RI "Attempts to open the parent directory and deletes the sub directory at the end of the path\&. "
+.ti -1c
+.RI "\fBFile\fP * \fBcreate_file\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Attempts to open the parent directory and create the file at the end of the path\&. "
+.ti -1c
+.RI "\fBFile\fP * \fBopen_file\fP (\fBconst\fP \fBstring\fP &\fBpath\fP, \fBsize_t\fP offset=0)"
+.br
+.RI "Try to open a file on the virtual file system with a given offset\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdelete_file\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
+.br
+.RI "Opens a directory on the vfs and deletes the file at the end of the path\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBstatic\fP \fBVirtualFileSystem\fP * \fBcurrent_file_system\fP ()"
+.br
+.RI "Get the active virtual file system\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBDirectory\fP * \fBopen_directory\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.ti -1c
+.RI "\fBstatic\fP \fBDirectory\fP * \fBcreate_directory\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Creates a subdirectory in the specified directory and\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBvoid\fP \fBdelete_directory\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Delete a directory on the virtual file system and it's sub contents\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBvoid\fP \fBdelete_directory\fP (\fBDirectory\fP *\fBparent\fP, \fBDirectory\fP *directory)"
+.br
+.RI "Delete a directory on the virtual file system and it's sub contents\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBFile\fP * \fBcreate_file\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Create a file in a directory\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBFile\fP * \fBopen_file\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP offset=0)"
+.br
+.RI "Opens a file in a directory with the given offset\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBvoid\fP \fBdelete_file\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.br
+.RI "Delete a file in the given directory\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB16\fP of file \fBvfs\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "VirtualFileSystem::VirtualFileSystem ()"
+
+.PP
+Definition at line \fB11\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+11                                      {
+12 
+13     // Set the current file system to this instance
+14     s_current_file_system = this;
+15 
+16 }
+.fi
+
+.SS "VirtualFileSystem::~VirtualFileSystem ()"
+
+.PP
+Definition at line \fB18\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+18                                       {
+19 
+20     // Remove all mounted filesystems
+21     unmount_all();
+22 
+23     // Set the current file system to null
+24     s_current_file_system = nullptr;
+25 
+26 }
+.fi
+
+.PP
+References \fBunmount_all()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBDirectory\fP * VirtualFileSystem::create_directory (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
+
+.PP
+Creates a subdirectory in the specified directory and\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP Where to create the directory 
+.br
+\fIname\fP The name of the new directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The created directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB302\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+302                                                                                     {
+303 
+304     // Create the directory
+305     Directory* directory = parent\->create_subdirectory(name);
+306     directory\->read_from_disk();
+307 
+308     return directory;
+309 }
+.fi
+
+.PP
+References \fBname\fP, and \fBMaxOS::filesystem::Directory::read_from_disk()\fP\&.
+.SS "\fBDirectory\fP * VirtualFileSystem::create_directory (\fBstring\fP path)"
+
+.PP
+Attempts to open the parent directory and creates the sub directory at the end of the path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The directory object or null if it could not be opened 
+.RE
+.PP
+
+.PP
+Definition at line \fB273\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+273                                                           {
+274 
+275     // Ensure a valid path is given
+276     if (!Path::valid(path))
+277         return nullptr;
+278 
+279     path = path\&.strip('/');
+280 
+281     // Try to find the filesystem that is responsible for the path
+282     FileSystem* fs = find_filesystem(path);
+283     if (!fs)
+284         return nullptr;
+285 
+286     // Open the parent directory
+287     Directory* parent_directory = open_directory(path);
+288     if (!parent_directory)
+289         return nullptr;
+290 
+291     string directory_name = Path::file_name(path);
+292     return create_directory(parent_directory, directory_name);
+293 }
+.fi
+
+.PP
+References \fBcreate_directory()\fP, \fBMaxOS::filesystem::Path::file_name()\fP, \fBfind_filesystem()\fP, \fBopen_directory()\fP, and \fBMaxOS::filesystem::Path::valid()\fP\&.
+.PP
+Referenced by \fBcreate_directory()\fP, and \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP\&.
+.SS "\fBFile\fP * VirtualFileSystem::create_file (\fBconst\fP \fBstring\fP & path)"
+
+.PP
+Attempts to open the parent directory and create the file at the end of the path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the file (including the extension) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The file object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Definition at line \fB405\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+405                                                        {
+406 
+407     // Ensure a valid path is given
+408     if (!Path::valid(path))
+409         return nullptr;
+410 
+411     // Open the directory
+412     Directory* directory = open_directory(path);
+413     if (!directory)
+414         return nullptr;
+415 
+416     // Create the file
+417     string file_name = Path::file_name(path);
+418     return create_file(directory, file_name);
+419 }
+.fi
+
+.PP
+References \fBcreate_file()\fP, \fBMaxOS::filesystem::Path::file_name()\fP, \fBopen_directory()\fP, and \fBMaxOS::filesystem::Path::valid()\fP\&.
+.PP
+Referenced by \fBcreate_file()\fP, and \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP\&.
+.SS "\fBFile\fP * VirtualFileSystem::create_file (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
+
+.PP
+Create a file in a directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP The directory where the file should be created 
+.br
+\fIname\fP The name of the file to create 
+.RE
+.PP
+
+.PP
+Definition at line \fB427\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+427                                                                           {
+428     return parent\->create_file(name);
+429 }
+.fi
+
+.PP
+References \fBname\fP\&.
+.SS "\fBVirtualFileSystem\fP * VirtualFileSystem::current_file_system ()\fC [static]\fP"
+
+.PP
+Get the active virtual file system\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The current virtual file system or null if none is set 
+.RE
+.PP
+
+.PP
+Definition at line \fB33\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+33                                                           {
+34     return s_current_file_system;
+35 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::delete_directory (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
+
+.PP
+Delete a directory on the virtual file system and it's sub contents\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP The directory that contains the reference to the directory being deleted 
+.br
+\fIname\fP The name of the directory to delete 
+.RE
+.PP
+
+.PP
+Definition at line \fB341\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+341                                                                               {
+342 
+343     // Find the directory and delete it
+344     for (const auto& directory: parent\->subdirectories())
+345         if (directory\->name() == name)
+346             delete_directory(parent, directory);
+347 
+348 }
+.fi
+
+.PP
+References \fBdelete_directory()\fP, and \fBname\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::delete_directory (\fBDirectory\fP * parent, \fBDirectory\fP * directory)\fC [static]\fP"
+
+.PP
+Delete a directory on the virtual file system and it's sub contents\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP The directory that contains the reference to the directory being deleted 
+.br
+\fIdirectory\fP The the directory to delete 
+.RE
+.PP
+
+.PP
+Definition at line \fB356\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+356                                                                                 {
+357 
+358     // Nothing to delete
+359     if (!directory)
+360         return;
+361 
+362     // Store a reference to each subdirectory and its parent
+363     Map<Directory*, Directory*> stack;
+364     Vector<Pair<Directory*, Directory*>> to_delete;
+365     stack\&.push_back(parent, directory);
+366 
+367     while (!stack\&.empty()) {
+368 
+369         // Save the current
+370         auto current = stack\&.pop_back();
+371         auto current_directory = current\&.second;
+372         current_directory\->read_from_disk();
+373         to_delete\&.push_back({current\&.first, current_directory});
+374 
+375         // Empty the directory
+376         for (const auto &file: current_directory\->files())
+377             delete_file(current_directory, file\->name());
+378 
+379         // Process the subdirectories
+380         for (const auto &subdir: current_directory\->subdirectories())
+381             if (subdir\->name() != "\&." && subdir\->name() != "\&.\&.")
+382                 stack\&.push_back(current_directory, subdir);
+383 
+384     }
+385 
+386     // Delete the directory from the bottom of the tree
+387     for (int i = to_delete\&.size() \- 1; i >= 0; \-\-i) {
+388 
+389         // Get the parent and child
+390         const auto &current = to_delete[i];
+391         Directory* owner = current\&.first;
+392         Directory* subdirectory = current\&.second;
+393 
+394         owner\->remove_subdirectory(subdirectory\->name());
+395     }
+396 }
+.fi
+
+.PP
+References \fBdelete_file()\fP, and \fBstack\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::delete_directory (\fBstring\fP path)"
+
+.PP
+Attempts to open the parent directory and deletes the sub directory at the end of the path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB317\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+317                                                     {
+318 
+319     // Ensure a valid path is given
+320     if (!Path::valid(path))
+321         return;
+322 
+323     path = path\&.strip('/');
+324 
+325     // Open the directory
+326     Directory* parent_directory = open_directory(path);
+327     if (!parent_directory)
+328         return;
+329 
+330     // Delete the directory
+331     string directory_name = Path::file_name(path);
+332     delete_directory(parent_directory, directory_name);
+333 }
+.fi
+
+.PP
+References \fBdelete_directory()\fP, \fBMaxOS::filesystem::Path::file_name()\fP, \fBopen_directory()\fP, and \fBMaxOS::filesystem::Path::valid()\fP\&.
+.PP
+Referenced by \fBdelete_directory()\fP, and \fBdelete_directory()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::delete_file (\fBconst\fP \fBstring\fP & path)"
+
+.PP
+Opens a directory on the vfs and deletes the file at the end of the path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the file (including the extension) 
+.RE
+.PP
+
+.PP
+Definition at line \fB478\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+478                                                       {
+479 
+480     // Ensure a valid path is given
+481     if (!Path::valid(path))
+482         return;
+483 
+484     // Open the directory
+485     Directory* directory = open_directory(path);
+486     if (!directory)
+487         return;
+488 
+489     // Delete the file
+490     string file_name = Path::file_name(path);
+491     delete_file(directory, file_name);
+492 }
+.fi
+
+.PP
+References \fBdelete_file()\fP, \fBMaxOS::filesystem::Path::file_name()\fP, \fBopen_directory()\fP, and \fBMaxOS::filesystem::Path::valid()\fP\&.
+.PP
+Referenced by \fBdelete_directory()\fP, and \fBdelete_file()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::delete_file (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
+
+.PP
+Delete a file in the given directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP The directory containing the file 
+.br
+\fIname\fP The name of the file 
+.RE
+.PP
+
+.PP
+Definition at line \fB500\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+500                                                                          {
+501 
+502     // Delete the file
+503     parent\->remove_file(name);
+504 }
+.fi
+
+.PP
+References \fBname\fP\&.
+.SS "\fBFileSystem\fP * VirtualFileSystem::find_filesystem (\fBstring\fP path)"
+
+.PP
+Find the filesystem that is responsible for a given path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to search for 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The filesystem that contains the path or null if none is found 
+.RE
+.PP
+
+.PP
+Definition at line \fB178\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+178                                                           {
+179 
+180     // Longest matching path will be where the filesystem is mounted
+181     string longest_match = "";
+182     FileSystem* longest_match_fs = nullptr;
+183 
+184     // Search through the filesystems
+185     for (const auto& filesystem : filesystems) {
+186         // Get the filesystem and mount point
+187         FileSystem* fs = filesystem\&.first;
+188         string mount_point = filesystem\&.second;
+189 
+190         // Check if the path starts with the mount point
+191         if (path\&.starts_with(mount_point) && mount_point\&.length() > longest_match\&.length()) {
+192             longest_match = mount_point;
+193             longest_match_fs = fs;
+194         }
+195     }
+196 
+197     return longest_match_fs;
+198 }
+.fi
+
+.PP
+Referenced by \fBcreate_directory()\fP, and \fBopen_directory()\fP\&.
+.SS "\fBFileSystem\fP * VirtualFileSystem::get_filesystem (\fBconst\fP \fBstring\fP & mount_point)"
+
+.PP
+Get a specific filesystem mounted at a given mount point\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImount_point\fP The mount point to search for 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The filesystem mounted at the given mount point or null if none is found 
+.RE
+.PP
+
+.PP
+Definition at line \fB161\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+161                                                                        {
+162 
+163     // Check if the filesystem is mounted
+164     for(const auto& filesystem : filesystems)
+165         if (filesystem\&.second == mount_point)
+166             return filesystem\&.first;
+167 
+168     // Filesystem not found
+169     return nullptr;
+170 }
+.fi
+
+.SS "\fBstring\fP VirtualFileSystem::get_relative_path (\fBFileSystem\fP * filesystem, \fBstring\fP path)"
+
+.PP
+Get the relative path on a filesystem for a given VFS path (ie remove the mount point) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfilesystem\fP The filesystem to get the path for 
+.br
+\fIpath\fP The path to get the relative path for 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The relative path on the filesystem or an empty string if none is found 
+.RE
+.PP
+
+.PP
+Definition at line \fB207\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+207                                                                                {
+208 
+209     // Find the mount point for the filesystem
+210     auto fs = filesystems\&.find(filesystem);
+211     if (fs == filesystems\&.end())
+212         return "";
+213 
+214     // Get the mount point
+215     string mount_point = fs\->second;
+216 
+217     // Make sure that the path points to the filesystem
+218     if (!path\&.starts_with(mount_point))
+219         return "";
+220 
+221     // Get the relative path
+222     string relative_path = path\&.substring(mount_point\&.length(), path\&.length() \- mount_point\&.length());
+223     return relative_path;
+224 }
+.fi
+
+.PP
+Referenced by \fBopen_directory()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::mount_filesystem (\fBFileSystem\fP * filesystem)"
+
+.PP
+Add a filesystem to the virtual file system\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfilesystem\fP The filesystem to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB42\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+42                                                                {
+43 
+44     // Check if the filesystem is already mounted
+45     if (filesystems\&.find(filesystem) != filesystems\&.end()) {
+46         Logger::WARNING() << "Filesystem already mounted\\n";
+47         return;
+48     }
+49 
+50     // Get the mount point for the filesystem
+51     string mount_point = "/filesystem_" + filesystems\&.size();
+52 
+53     // If this is the first filesystem to be mounted, set the root filesystem
+54     if (filesystems\&.size() == 0)
+55         mount_point = "/";
+56 
+57     // Add the filesystem to the map
+58     filesystems\&.insert(filesystem, mount_point);
+59 }
+.fi
+
+.PP
+References \fBLogger::WARNING()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::mount_filesystem (\fBFileSystem\fP * filesystem, \fBconst\fP \fBstring\fP & mount_point)"
+
+.PP
+Add a filesystem to the virtual file system at a given mount point\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfilesystem\fP The filesystem to add 
+.br
+\fImount_point\fP The mount point for the filesystem 
+.RE
+.PP
+
+.PP
+Definition at line \fB67\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+67                                                                                           {
+68 
+69     // Check if the filesystem is already mounted
+70     if (filesystems\&.find(filesystem) != filesystems\&.end()) {
+71         Logger::WARNING() << "Filesystem already mounted at " << mount_point << "\\n";
+72         return;
+73     }
+74 
+75     // Add the filesystem to the map
+76     filesystems\&.insert(filesystem, mount_point);
+77 }
+.fi
+
+.PP
+References \fBLogger::WARNING()\fP\&.
+.SS "\fBDirectory\fP * VirtualFileSystem::open_directory (\fBconst\fP \fBstring\fP & path)"
+
+.PP
+Try to open a directory on the virtual file system and read it's contents\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The directory object or null if it could not be opened 
+.RE
+.PP
+
+.PP
+Definition at line \fB232\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+232                                                                {
+233 
+234     // Ensure a valid path is given
+235     if (!Path::valid(path))
+236         return nullptr;
+237 
+238     // Try to find the filesystem that is responsible for the path
+239     FileSystem* fs = find_filesystem(path);
+240     if (!fs)
+241         return nullptr;
+242 
+243     // Get where to open the directory
+244     string relative_path = get_relative_path(fs, path);
+245     string directory_path = Path::file_path(relative_path);
+246 
+247     // Open the directory
+248     Directory* directory = fs\->get_directory(directory_path);
+249     if (!directory)
+250         return nullptr;
+251     directory\->read_from_disk();
+252 
+253     return directory;
+254 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::Path::file_path()\fP, \fBfind_filesystem()\fP, \fBget_relative_path()\fP, \fBMaxOS::filesystem::Directory::read_from_disk()\fP, and \fBMaxOS::filesystem::Path::valid()\fP\&.
+.PP
+Referenced by \fBcreate_directory()\fP, \fBcreate_file()\fP, \fBdelete_directory()\fP, \fBdelete_file()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP, and \fBopen_file()\fP\&.
+.SS "\fBDirectory\fP * VirtualFileSystem::open_directory (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
+
+.PP
+Definition at line \fB256\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+256                                                                                   {
+257 
+258     // Open the file
+259     Directory* opened_directory = parent\->open_subdirectory(name);
+260     if (!opened_directory)
+261         return nullptr;
+262 
+263     opened_directory\->read_from_disk();
+264     return opened_directory;
+265 }
+.fi
+
+.PP
+References \fBname\fP\&.
+.SS "\fBFile\fP * VirtualFileSystem::open_file (\fBconst\fP \fBstring\fP & path, \fBsize_t\fP offset = \fC0\fP)"
+
+.PP
+Try to open a file on the virtual file system with a given offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the file (including the extension) 
+.br
+\fIoffset\fP The offset to seek to (default = 0) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The file or null pointer if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB438\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+438                                                                     {
+439 
+440     // Ensure a valid path is given
+441     if (!Path::valid(path))
+442         return nullptr;
+443 
+444     // Open the directory
+445     Directory* directory = open_directory(path);
+446     if (!directory)
+447         return nullptr;
+448 
+449     return open_file(directory, Path::file_name(path), offset);
+450 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::Path::file_name()\fP, \fBopen_directory()\fP, \fBopen_file()\fP, and \fBMaxOS::filesystem::Path::valid()\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP, and \fBopen_file()\fP\&.
+.SS "\fBFile\fP * VirtualFileSystem::open_file (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name, \fBsize_t\fP offset = \fC0\fP)\fC [static]\fP"
+
+.PP
+Opens a file in a directory with the given offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP The directory containing the file 
+.br
+\fIname\fP The name of the file to open 
+.br
+\fIoffset\fP How far in the file to open (default = 0) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The file or null pointer if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB460\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+460                                                                                        {
+461 
+462     // Open the file
+463     File* opened_file = parent\->open_file(name);
+464     if (!opened_file)
+465         return nullptr;
+466 
+467     // Seek to the offset
+468     opened_file\->seek(SeekType::SET, offset);
+469 
+470     return opened_file;
+471 }
+.fi
+
+.PP
+References \fBname\fP\&.
+.SS "\fBDirectory\fP * VirtualFileSystem::root_directory ()"
+
+.PP
+Get the root directory of the virtual file system\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The root directory of the virtual file system 
+.RE
+.PP
+
+.PP
+Definition at line \fB129\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+129                                              {
+130 
+131     // Get the root filesystem
+132     FileSystem* fs = root_filesystem();
+133     if (!fs)
+134         return nullptr;
+135 
+136     // Get the root directory
+137     return fs\->root_directory();
+138 }
+.fi
+
+.PP
+References \fBroot_filesystem()\fP\&.
+.SS "\fBFileSystem\fP * VirtualFileSystem::root_filesystem ()"
+
+.PP
+Get the filesystem mounted at the root\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The file system mounted '/' or null if none is mounted 
+.RE
+.PP
+
+.PP
+Definition at line \fB145\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+145                                                {
+146 
+147     // Ensure there is at least one filesystem mounted
+148     if (filesystems\&.size() == 0)
+149         return nullptr;
+150 
+151     // It is always the first filesystem mounted
+152     return filesystems\&.begin()\->first;
+153 }
+.fi
+
+.PP
+Referenced by \fBroot_directory()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::unmount_all ()"
+
+.PP
+Remove all mounted filesystems\&. 
+.PP
+Definition at line \fB116\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+116                                     {
+117 
+118     // Loop through the filesystems and unmount them
+119     for(const auto& filesystem : filesystems)
+120         unmount_filesystem(filesystem\&.first);
+121 
+122 }
+.fi
+
+.PP
+References \fBunmount_filesystem()\fP\&.
+.PP
+Referenced by \fB~VirtualFileSystem()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::unmount_filesystem (\fBconst\fP \fBstring\fP & mount_point)"
+
+.PP
+Remove a filesystem from the virtual file system\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImount_point\fP Where the filesystem is mounted 
+.RE
+.PP
+
+.PP
+Definition at line \fB102\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+102                                                                     {
+103 
+104     // Remove the filesystem from the map
+105     for(const auto& filesystem : filesystems)
+106         if (filesystem\&.second == mount_point)
+107             return unmount_filesystem(filesystem\&.first);
+108 
+109     // Filesystem not found
+110     Logger::WARNING() << "Filesystem not found at " << mount_point << "\\n";
+111 }
+.fi
+
+.PP
+References \fBunmount_filesystem()\fP, and \fBLogger::WARNING()\fP\&.
+.SS "\fBvoid\fP VirtualFileSystem::unmount_filesystem (\fBFileSystem\fP * filesystem)"
+
+.PP
+Remove a filesystem from the virtual file system & delete it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfilesystem\fP The filesystem to remove 
+.RE
+.PP
+
+.PP
+Definition at line \fB84\fP of file \fBvfs\&.cpp\fP\&..PP
+.nf
+84                                                                  {
+85 
+86     // Check if the filesystem is mounted
+87     if (filesystems\&.find(filesystem) == filesystems\&.end())
+88         return;
+89 
+90     // Remove the filesystem from the map
+91     filesystems\&.erase(filesystem);
+92 
+93     // Delete the filesystem
+94     delete filesystem;
+95 }
+.fi
+
+.PP
+Referenced by \fBunmount_all()\fP, and \fBunmount_filesystem()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

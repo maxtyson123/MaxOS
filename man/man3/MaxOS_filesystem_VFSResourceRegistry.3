@@ -1,0 +1,142 @@
+.TH "MaxOS::filesystem::VFSResourceRegistry" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::filesystem::VFSResourceRegistry
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vfsresource\&.h>\fP
+.PP
+Inherits \fBMaxOS::processes::BaseResourceRegistry\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVFSResourceRegistry\fP (\fBVirtualFileSystem\fP *\fBvfs\fP)"
+.br
+.ti -1c
+.RI "\fB~VFSResourceRegistry\fP ()"
+.br
+.ti -1c
+.RI "\fBprocesses::Resource\fP * \fBget_resource\fP (\fBconst\fP \fBstring\fP &\fBname\fP) \fBfinal\fP"
+.br
+.RI "Gets a resource from the registry by name\&. "
+.ti -1c
+.RI "\fBprocesses::Resource\fP * \fBcreate_resource\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.br
+.RI "Try to create a new resource with the specified name, will fail if the name is in use\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB51\fP of file \fBvfsresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "VFSResourceRegistry::VFSResourceRegistry (\fBVirtualFileSystem\fP * vfs)\fC [explicit]\fP"
+
+.PP
+Definition at line \fB300\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+301 : BaseResourceRegistry(resource_type_t::FILESYSTEM),
+302   m_vfs(vfs)
+303 {
+304 
+305 }
+.fi
+
+.SS "VFSResourceRegistry::~VFSResourceRegistry ()\fC [default]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBResource\fP * VFSResourceRegistry::create_resource (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Try to create a new resource with the specified name, will fail if the name is in use\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource to create 
+.br
+\fIflags\fP Optional flags to pass (unused by default but registry type specific) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The resource created or nullptr if failed to create the resource 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB370\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+370                                                                                {
+371 
+372     string path = Path::absolute_path(name);
+373     path = Path::join_path(Scheduler::current_process()\->working_directory, path);
+374 
+375     // Resource already opened
+376     auto resource = BaseResourceRegistry::get_resource(path);
+377     if(resource != nullptr)
+378         return resource;
+379 
+380     // Open the resource
+381     bool is_file = Path::is_file(path);
+382     if(is_file)
+383         return open_as_resource(path, m_vfs\->create_file(path));
+384     else
+385         return open_as_resource(path, m_vfs\->create_directory(path));
+386 
+387 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::Path::absolute_path()\fP, \fBMaxOS::filesystem::VirtualFileSystem::create_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::create_file()\fP, \fBMaxOS::processes::Scheduler::current_process()\fP, \fBMaxOS::processes::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::filesystem::Path::is_file()\fP, \fBMaxOS::filesystem::Path::join_path()\fP, and \fBname\fP\&.
+.SS "\fBResource\fP * VFSResourceRegistry::get_resource (\fBconst\fP \fBstring\fP & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets a resource from the registry by name\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource to find 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The resource or nullptr if the resource was not found 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB352\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+352                                                               {
+353 
+354     string path = Path::absolute_path(name);
+355     path = Path::join_path(Scheduler::current_process()\->working_directory, path);
+356 
+357     // Resource already opened
+358     auto resource = BaseResourceRegistry::get_resource(path);
+359     if(resource != nullptr)
+360         return resource;
+361 
+362     // Open the resource
+363     bool is_file = Path::is_file(path);
+364     if(is_file)
+365         return open_as_resource(path, m_vfs\->open_file(path));
+366     else
+367         return open_as_resource(path, m_vfs\->open_directory(path));
+368 }
+.fi
+
+.PP
+References \fBMaxOS::filesystem::Path::absolute_path()\fP, \fBMaxOS::processes::Scheduler::current_process()\fP, \fBMaxOS::processes::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::filesystem::Path::is_file()\fP, \fBMaxOS::filesystem::Path::join_path()\fP, \fBname\fP, \fBMaxOS::filesystem::VirtualFileSystem::open_directory()\fP, and \fBMaxOS::filesystem::VirtualFileSystem::open_file()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

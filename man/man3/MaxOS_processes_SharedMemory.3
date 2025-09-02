@@ -1,0 +1,259 @@
+.TH "MaxOS::processes::SharedMemory" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::SharedMemory
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ipc\&.h>\fP
+.PP
+Inherits \fBMaxOS::processes::Resource\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSharedMemory\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP \fBsize\fP, \fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Creates a new shared memory block\&. "
+.ti -1c
+.RI "\fB~SharedMemory\fP () final"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBopen\fP (\fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.br
+.RI "Map the shared memory into the address space of the owning process\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBclose\fP (\fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.br
+.RI "Frees the page containing the shared memory\&. "
+.ti -1c
+.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.br
+.RI "Get the address that the current process has this shared memory mapped to\&. "
+.ti -1c
+.RI "\fBuintptr_t\fP \fBphysical_address\fP () \fBconst\fP"
+.br
+.RI "Gets the physical address of the shared memory block\&. "
+.ti -1c
+.RI "\fBsize_t\fP \fBsize\fP () \fBconst\fP"
+.br
+.RI "Gets the size of the shared memory block\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, \fBresource_type_t\fP \fBtype\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~Resource\fP ()"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual int \fBwrite\fP (const void *buffer, size_t \fBsize\fP, size_t \fBflags\fP)"
+.br
+.RI "Write a certain amount of bytes to a resource\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBstring\fP \fBname\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBuse_count\fP = 1"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB21\fP of file \fBipc\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "SharedMemory::SharedMemory (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP size, \fBresource_type_t\fP type)"
+
+.PP
+Creates a new shared memory block\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the block 
+.RE
+.PP
+
+.PP
+Definition at line \fB19\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+20 : Resource(name, size, type),
+21   m_size(size),
+22   name(name)
+23 {
+24 
+25     m_physical_address = (uintptr_t) PhysicalMemoryManager::s_current_manager\->allocate_area(0, size);
+26 }
+.fi
+
+.PP
+References \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, and \fBsize()\fP\&.
+.SS "SharedMemory::~SharedMemory ()\fC [final]\fP, \fC [default]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBvoid\fP SharedMemory::close (\fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Frees the page containing the shared memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP Not used for this resource 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::Resource\fP\&.
+.PP
+Definition at line \fB90\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+90                                      {
+91 
+92     PhysicalMemoryManager::s_current_manager\->free_area(m_physical_address, m_size);
+93 
+94 }
+.fi
+
+.PP
+References \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP\&.
+.SS "\fBvoid\fP SharedMemory::open (\fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Map the shared memory into the address space of the owning process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP Not used for this resource 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::Resource\fP\&.
+.PP
+Definition at line \fB73\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+73                                     {
+74 
+75     // Process has already opened this memory
+76     auto it = m_mappings\&.find(Scheduler::current_process()\->pid());
+77     if(it != m_mappings\&.end())
+78         return;
+79 
+80     auto virtual_address = (uintptr_t)Scheduler::current_process()\->memory_manager\->vmm()\->load_shared_memory(m_physical_address, m_size);
+81     m_mappings\&.insert(Scheduler::current_process()\->pid(), virtual_address);
+82 
+83 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, and \fBMaxOS::common::Map< Key, Value >::insert()\fP\&.
+.SS "\fBuintptr_t\fP SharedMemory::physical_address () const"
+
+.PP
+Gets the physical address of the shared memory block\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The physical address 
+.RE
+.PP
+
+.PP
+Definition at line \fB53\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+53                                                {
+54 
+55     return m_physical_address;
+56 }
+.fi
+
+.SS "\fBint\fP SharedMemory::read (\fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Get the address that the current process has this shared memory mapped to\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP Not used 
+.br
+\fIsize\fP Not used 
+.br
+\fIflags\fP Not used 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The virtual address in the current process's address space or 0 if not found 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::Resource\fP\&.
+.PP
+Definition at line \fB38\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+38                                                               {
+39 
+40     // Process hasn't opened the resource
+41     auto it = m_mappings\&.find(Scheduler::current_process()\->pid());
+42     if(it == m_mappings\&.end())
+43         return 0;
+44 
+45     return it\->second;
+46 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, and \fBMaxOS::common::Map< Key, Value >::find()\fP\&.
+.SS "\fBsize_t\fP SharedMemory::size () const"
+
+.PP
+Gets the size of the shared memory block\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The size 
+.RE
+.PP
+
+.PP
+Definition at line \fB63\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+63                                 {
+64 
+65     return m_size;
+66 }
+.fi
+
+.PP
+Referenced by \fBSharedMemory()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBstring\fP MaxOS::processes::SharedMemory::name"
+
+.PP
+Definition at line \fB33\fP of file \fBipc\&.h\fP\&.
+.SS "uint64_t MaxOS::processes::SharedMemory::use_count = 1"
+
+.PP
+Definition at line \fB34\fP of file \fBipc\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

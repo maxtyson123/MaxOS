@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoDriver" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoDriver" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,55 +23,227 @@ Inherited by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, 
 .RI "\fB~VideoDriver\fP ()"
 .br
 .ti -1c
-.RI "virtual bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.RI "\fBvirtual\fP \fBbool\fP \fBsupports_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolor_depth\fP)"
 .br
 .RI "Check if the video driver supports a certain mode\&. "
 .ti -1c
-.RI "bool \fBset_mode\fP (uint32_t width, uint32_t height, uint32_t colorDepth)"
+.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolorDepth\fP)"
 .br
 .RI "Set the mode of the video driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
+.in +1c
+.ti -1c
+.RI "\fBDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~Driver\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
+.br
+.RI "activate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
+.br
+.RI "deactivate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
+.br
+.RI "Initialise the driver\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBstring\fP \fBvendor_name\fP ()"
+.br
+.RI "Get who created the device\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBstring\fP \fBdevice_name\fP ()"
+.br
+.RI "Get the device name of the driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fB~GraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
+.br
+.RI "Converts a colour to an integer value based on the current color depth\&. "
+.ti -1c
+.RI "\fBColour\fP \fBint_to_colour\fP (\fBuint32_t\fP)"
+.br
+.RI "Converts an integer value to a colour based on the current color depth\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBwidth\fP () \fBconst\fP"
+.br
+.RI "Gets the width of the screen\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBheight\fP () \fBconst\fP"
+.br
+.RI "Gets the height of the screen\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBcolor_depth\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBframebuffer_address\fP ()"
+.br
+.RI "Gets the address of the context's framebuffer to draw on\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
+.ti -1c
+.RI "\fBvoid\fP \fBputPixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
+.ti -1c
+.RI "\fBColour\fP \fBget_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.br
+.RI "Inverts a pixel\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdrawLine\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfillCircle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
 .in -1c
 .SS "Protected Member Functions"
 
 .in +1c
 .ti -1c
-.RI "virtual bool \fBinternal_set_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.RI "\fBvirtual\fP \fBbool\fP \fBinternal_set_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolor_depth\fP)"
 .br
 .RI "Set the mode of the video driver\&. "
 .in -1c
+
+Protected Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen based on the current color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_8_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 8 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_16_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint16_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_24_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_32_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 32 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen, automatically uses the correct color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint8_t\fP \fBget_rendered_pixel_8_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 8 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint16_t\fP \fBget_rendered_pixel_16_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel_24_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel_32_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 32 bit color depth\&. "
+.in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
+.br
+.ti -1c
+.RI "\fBint32_t\fP \fBm_width\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBint32_t\fP \fBm_height\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBm_color_depth\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBm_framebuffer_address\fP { \fBnullptr\fP }"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the video controller, handles the setting of the video mode\&. 
 .PP
-Definition at line 22 of file video\&.h\&.
+Definition at line \fB22\fP of file \fBvideo\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "VideoDriver::VideoDriver ()"
+.SS "VideoDriver::VideoDriver ()\fC [default]\fP"
 
-.PP
-Definition at line 11 of file video\&.cpp\&.
-.PP
-.nf
-12 : Driver(),
-13   GraphicsContext()
-14 {
-15 
-16 }
-.fi
-.SS "VideoDriver::~VideoDriver ()"
+.SS "VideoDriver::~VideoDriver ()\fC [default]\fP"
 
-.PP
-Definition at line 18 of file video\&.cpp\&.
-.PP
-.nf
-18                           {
-19 
-20 }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "bool VideoDriver::internal_set_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [protected]\fP, \fC [virtual]\fP"
+.SS "\fBbool\fP VideoDriver::internal_set_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)\fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
 Set the mode of the video driver\&. 
@@ -92,18 +264,18 @@ true If the mode was set successfully false otherwise
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, and \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
+Reimplemented in \fBMaxOS::drivers::video::VideoGraphicsArray\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
 .PP
-Definition at line 30 of file video\&.cpp\&.
-.PP
+Definition at line \fB22\fP of file \fBvideo\&.cpp\fP\&..PP
 .nf
-30                                                                 {
-31     return false;
-32 }
+22                                                                 {
+23     return false;
+24 }
 .fi
+
 .PP
-Referenced by set_mode()\&.
-.SS "bool VideoDriver::set_mode (uint32_t width, uint32_t height, uint32_t colorDepth)"
+Referenced by \fBset_mode()\fP\&.
+.SS "\fBbool\fP VideoDriver::set_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP colorDepth)"
 
 .PP
 Set the mode of the video driver\&. 
@@ -124,33 +296,31 @@ true If the mode was set successfully (and the screen was updated) false otherwi
 .PP
 
 .PP
-Definition at line 54 of file video\&.cpp\&.
-.PP
+Definition at line \fB46\fP of file \fBvideo\&.cpp\fP\&..PP
 .nf
-54                                                                                {
+46                                                                                {
+47 
+48     // Cant set it if not supported
+49     if(!supports_mode(width, height, colorDepth))
+50         return false;
+51 
+52     // Try set the mode
+53     if(!internal_set_mode(width, height, colorDepth))
+54         return false;
 55 
-56     // Check if the mode is supported
-57     if(!supports_mode(width, height, colorDepth))
-58         return false;
-59 
-60     // Set the mode
-61     if(internal_set_mode(width, height, colorDepth))
-62     {
-63         this -> m_width = width;
-64         this -> m_height = height;
-65         this -> m_color_depth = colorDepth;
-66         return true;
-67     }
-68 
-69     // If setting the mode failed, return false
-70     return false;
-71 }
+56     // Store the mode
+57     m_width = width;
+58     m_height = height;
+59     m_color_depth = colorDepth;
+60     return true;
+61 }
 .fi
+
 .PP
-References internal_set_mode(), MaxOS::common::GraphicsContext::m_color_depth, MaxOS::common::GraphicsContext::m_height, MaxOS::common::GraphicsContext::m_width, and supports_mode()\&.
+References \fBMaxOS::common::GraphicsContext::height()\fP, \fBinternal_set_mode()\fP, \fBMaxOS::common::GraphicsContext::m_color_depth\fP, \fBMaxOS::common::GraphicsContext::m_height\fP, \fBMaxOS::common::GraphicsContext::m_width\fP, \fBsupports_mode()\fP, and \fBMaxOS::common::GraphicsContext::width()\fP\&.
 .PP
-Referenced by kernelMain()\&.
-.SS "bool VideoDriver::supports_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [virtual]\fP"
+Referenced by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
+.SS "\fBbool\fP VideoDriver::supports_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)\fC [virtual]\fP"
 
 .PP
 Check if the video driver supports a certain mode\&. 
@@ -171,17 +341,17 @@ true If the mode is supported, false otherwise
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, and \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
+Reimplemented in \fBMaxOS::drivers::video::VideoGraphicsArray\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
 .PP
-Definition at line 42 of file video\&.cpp\&.
-.PP
+Definition at line \fB34\fP of file \fBvideo\&.cpp\fP\&..PP
 .nf
-42                                                             {
-43     return false;
-44 }
+34                                                             {
+35     return false;
+36 }
 .fi
+
 .PP
-Referenced by set_mode()\&.
+Referenced by \fBset_mode()\fP\&.
 
 .SH "Author"
 .PP 

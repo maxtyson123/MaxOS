@@ -1,0 +1,74 @@
+\doxysection{buffer.\+h}
+\hypertarget{buffer_8h_source}{}\label{buffer_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/common/buffer.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/common/buffer.h}}
+\mbox{\hyperlink{buffer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 30/07/2025.}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00005}00005\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_COMMON\_BUFFER\_H}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00006}00006\ \textcolor{preprocessor}{\#define\ MAXOS\_COMMON\_BUFFER\_H}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memoryIO_8h}{memory/memoryIO.h}}>}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00013}\mbox{\hyperlink{namespaceMaxOS}{00013}}\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}}\{}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00015}\mbox{\hyperlink{namespaceMaxOS_1_1common}{00015}}\ \ \ \ \ \textcolor{keyword}{namespace\ }common\{}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00022}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{00022}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\{}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t*\ m\_bytes\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\_capacity;}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_dont\_delete\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\_offset\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}\ =\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}\ =\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a59b8743e4a5f731bdd0c4185c9ef263b}{\string~Buffer}}();}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[nodiscard]]\ uint8\_t*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}{clear}}();}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a5bed5a921295c7d94ff47fa401446101}{full}}(uint8\_t\ \textcolor{keywordtype}{byte},\ \textcolor{keywordtype}{size\_t}\ offset\ =\ 0,\ \textcolor{keywordtype}{size\_t}\ amount\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00041}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{00041}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(\textcolor{keywordtype}{size\_t}\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af483172a774d185d08819f3b59d09fc7}{resize}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(uint8\_t\ \textcolor{keywordtype}{byte});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(\textcolor{keywordtype}{size\_t}\ offset,\ uint8\_t\ \textcolor{keywordtype}{byte});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304}{read}}();}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304}{read}}(\textcolor{keywordtype}{size\_t}\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset,\ \textcolor{keywordtype}{size\_t}\ offset\_other);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset,\ \textcolor{keywordtype}{size\_t}\ offset\_other);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ \textcolor{keywordtype}{size\_t}\ offset);}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00067}\mbox{\hyperlink{namespaceMaxOS_1_1common_ae34c2f95637029a49836360ddf075b3d}{00067}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{Buffer}}\ \mbox{\hyperlink{namespaceMaxOS_1_1common_ae34c2f95637029a49836360ddf075b3d}{buffer\_t}};}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00069}00069\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00071}00071\ \}}
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{buffer_8h_source_l00073}00073\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAXOS\_COMMON\_BUFFER\_H}}
+
+\end{DoxyCode}

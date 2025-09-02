@@ -1,0 +1,958 @@
+\doxysection{ext2.\+cpp}
+\hypertarget{ext2_8cpp_source}{}\label{ext2_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/filesystem/format/ext2.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/filesystem/format/ext2.cpp}}
+\mbox{\hyperlink{ext2_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 17/07/2025.}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{ext2_8h}{filesystem/format/ext2.h}}>}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00006}00006\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{MaxOS::filesystem}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format}{MaxOS::filesystem::format}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2}{MaxOS::filesystem::format::ext2}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00011}00011\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers}{MaxOS::drivers}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00012}00012\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1disk}{MaxOS::drivers::disk}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00013}00013\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock}{MaxOS::drivers::clock}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00015}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a4d627232293c978be4f587224170dc9b}{00015}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a4d627232293c978be4f587224170dc9b}{Ext2Volume::Ext2Volume}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk}{drivers::disk::Disk}}\ *disk,\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_af466a9d32fd2bf17acb2efa91031ded0}{lba\_t}}\ partition\_offset)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00016}00016\ :\ disk(disk),}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00017}00017\ \ \ partition\_offset(partition\_offset)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00018}00018\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00020}00020\ \ \ \ \ \textcolor{comment}{//\ Read\ superblock}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00021}00021\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{superblock\_buffer}}(\&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}},\ 1024);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00022}00022\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a9fa1c1952cece4f322ba0f2552f16c24}{read}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ 2,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{superblock\_buffer}},\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00023}00023\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a9fa1c1952cece4f322ba0f2552f16c24}{read}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ 3,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{superblock\_buffer}},\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00025}00025\ \ \ \ \ \textcolor{comment}{//\ Validate\ signature}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00026}00026\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.signature\ ==\ 0xEF53,\ \textcolor{stringliteral}{"{}Ext2\ Filesystem\ doesnt\ have\ a\ valid\ signature\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00028}00028\ \ \ \ \ \textcolor{comment}{//\ Version\ 0\ has\ constant\ inode\ info}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.version\_major\ <\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.first\_inode\ =\ 11;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inode\_size\ =\ 128;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00032}00032\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ superblock}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ =\ 1024\ <<\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.block\_size;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00036}00036\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.total\_blocks\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00037}00037\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a568c077e33ab4a474c65cfcaf934b215}{block\_group\_descriptor\_table\_block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.starting\_block\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00038}00038\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7e8c97da6e5a645d3c69ec277b9f9a2e}{block\_group\_descriptor\_table\_size}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}}\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a6a06e6d63e1762b1921e67931e6bd3c7}{pointers\_per\_block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ /\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00040}00040\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_abc67bb9fb290354dca9c09c4ca5ff43d}{inodes\_per\_block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inode\_size;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00041}00041\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ /\ 512;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7ddfbe5a0d61831f3ee40ebb6c5f2cde}{blocks\_per\_inode\_table}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inode\_size\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group\ +\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ -\/\ 1))\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00043}00043\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a27730d8b9c0f817d5b08531121e393eb}{sectors\_per\_inode\_table}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inode\_size\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group\ +\ (512\ -\/\ 1))\ /\ 512;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00045}00045\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block\ groups}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00046}00046\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}\ *[\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}}]\{\textcolor{keyword}{nullptr}\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00047}00047\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bgdt\_lba}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a568c077e33ab4a474c65cfcaf934b215}{block\_group\_descriptor\_table\_block}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sectors\_to\_read}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7e8c97da6e5a645d3c69ec277b9f9a2e}{block\_group\_descriptor\_table\_size}}\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00049}00049\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sectors\_to\_read}}\ *\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sectors\_to\_read}};\ ++i)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a9fa1c1952cece4f322ba0f2552f16c24}{read}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bgdt\_lba}}\ +\ i,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}},\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ block\ groups}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}};\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[i]\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00056}00056\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[i],\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}}.raw()\ +\ i\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}),\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00057}00057\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00058}00058\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00060}00060\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a85af61d689225472c2c26f8a330f2f6c}{Ext2Volume::\string~Ext2Volume}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00068}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{00068}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{Ext2Volume::write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_num}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{comment}{//\ Ensure\ the\ buffer\ is\ in\ the\ right\ format}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00071}00071\ \ \ \ \ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(0);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old}}\ =\ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00073}00073\ \ \ \ \ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//\ Read\ each\ sector\ of\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}};\ ++i)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00077}00077\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a307fc8dc97cc4c8f3668a18a1e0257de}{write}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_num}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}}\ +\ i,\ buffer,\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{comment}{//\ Reset\ buffer}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00080}00080\ \ \ \ \ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(0);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00081}00081\ \ \ \ \ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00082}00082\ \};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00090}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a2c24524148772b3666f9b8e1858a16f2}{00090}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a2c24524148772b3666f9b8e1858a16f2}{Ext2Volume::write\_inode}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_num}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_t}}\ *\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00092}00092\ \ \ \ \ \textcolor{comment}{//\ Locate\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00093}00093\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_num}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00094}00094\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ index\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_num}}\ -\/\ 1)\ \%\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00096}00096\ \ \ \ \ \textcolor{comment}{//\ Locate\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00097}00097\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_table}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}}]-\/>inode\_table\_address;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00098}00098\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ offset\ =\ index\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inode\_size;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00099}00099\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ offset\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00100}00100\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{in\_block\_offset}}\ =\ offset\ \%\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00103}00103\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00104}00104\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_table}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00105}00105\ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_t}}),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{in\_block\_offset}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{comment}{//\ Modify\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00108}00108\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_table}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00109}00109\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00117}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{00117}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{Ext2Volume::read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_num}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *buffer)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{comment}{//\ Ensure\ the\ buffer\ is\ in\ the\ right\ format}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00120}00120\ \ \ \ \ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(0);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00122}00122\ \ \ \ \ \textcolor{comment}{//\ Read\ each\ sector\ of\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}};\ ++i)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a9fa1c1952cece4f322ba0f2552f16c24}{read}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_num}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}}\ +\ i,\ buffer,\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00126}00126\ \ \ \ \ \textcolor{comment}{//\ Reset\ buffer}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00127}00127\ \ \ \ \ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(0);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00129}00129\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00136}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a3ea16aa4dc886e18b353c1f4a3076100}{00136}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_t}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a3ea16aa4dc886e18b353c1f4a3076100}{Ext2Volume::read\_inode}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_num}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00138}00138\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{comment}{//\ Locate\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00141}00141\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_num}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00142}00142\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ index\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_num}}\ -\/\ 1)\ \%\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00144}00144\ \ \ \ \ \textcolor{comment}{//\ Locate\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00145}00145\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_table}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}}]-\/>inode\_table\_address;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00146}00146\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ offset\ =\ index\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inode\_size;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00147}00147\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ offset\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00148}00148\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{in\_block\_offset}}\ =\ offset\ \%\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00150}00150\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00151}00151\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00152}00152\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_table}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00154}00154\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ inode\ from\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00155}00155\ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\&\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_t}}),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{in\_block\_offset}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00156}00156\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00157}00157\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00164}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae2440f7c00021606ee91f68983abf206}{00164}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae2440f7c00021606ee91f68983abf206}{Ext2Volume::allocate\_block}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00166}00166\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_acf68810ccb0f9cdb2b9491c077710205}{allocate\_blocks}}(1)[0];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00167}00167\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00175}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_acf68810ccb0f9cdb2b9491c077710205}{00175}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<uint32\_t>}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_acf68810ccb0f9cdb2b9491c077710205}{Ext2Volume::allocate\_blocks}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00177}00177\ \ \ \ \ \textcolor{comment}{//\ No\ blocks\ to\ allocate}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00179}00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{1,\ 0\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00181}00181\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ block\ group\ with\ enough\ free\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00182}00182\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[0];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00183}00183\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}])}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00184}00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>free\_blocks\ >=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ allocate\_group\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00187}00187\ \ \ \ \ \textcolor{comment}{//\ No\ block\ group\ can\ contain\ the\ block\ so\ split\ across\ multiple}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00188}00188\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<uint32\_t>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\{\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00190}00190\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ block\ group\ with\ most\ free\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00192}00192\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[0];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}]-\/>\mbox{\hyperlink{ext2_8h_a46b8adeeefed1d348a063313271a3699}{free\_blocks}}\ >\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>free\_blocks)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00197}00197\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00198}00198\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ space}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>free\_blocks\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{1,\ 0\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ remaining\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00203}00203\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ allocated\ =\ allocate\_group\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}},\ 1);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00204}00204\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ -\/=\ allocated.size();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00205}00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}:\ allocated)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00207}00207\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00209}00209\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00210}00210\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00211}00211\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00219}00219\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Vector<uint32\_t>}}\ Ext2Volume::allocate\_group\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00220}00220\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00221}00221\ \ \ \ \ \textcolor{comment}{//\ Ensure\ enough\ space}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00222}00222\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00223}00223\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ >\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>free\_blocks)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{1,\ 0\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00226}00226\ \ \ \ \ \textcolor{comment}{//\ Prepare}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00227}00227\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<uint32\_t>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\{\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00228}00228\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{zeros}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00229}00229\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{zeros}}.clear();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{comment}{//\ Read\ bitmap}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00232}00232\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00233}00233\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>block\_usage\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group;\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00238}00238\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Block\ is\ already\ used}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00239}00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[i\ /\ 8]\ \&\ (1u\ <<\ (i\ \%\ 8)))\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00241}00241\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00242}00242\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mark\ as\ used}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00243}00243\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>free\_blocks-\/-\/;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00244}00244\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.unallocated\_blocks-\/-\/;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00245}00245\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[i\ /\ 8]\ |=\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ (1u\ <<\ (i\ \%\ 8));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00247}00247\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ out\ data}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00248}00248\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.starting\_block\ +\ i;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00249}00249\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{zeros}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00250}00250\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00251}00251\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00252}00252\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ done}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00253}00253\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}-\/-\/;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00254}00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00256}00256\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00258}00258\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ changed\ metadata}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00259}00259\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>block\_usage\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00260}00260\ \ \ \ \ write\_back\_block\_groups();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00261}00261\ \ \ \ \ write\_back\_superblock();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00263}00263\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00264}00264\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00272}00272\ \textcolor{keywordtype}{void}\ Ext2Volume::free\_group\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00274}00274\ \ \ \ \ \textcolor{comment}{//\ Read\ bitmap}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00275}00275\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00276}00276\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00277}00277\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>block\_usage\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00279}00279\ \ \ \ \ \textcolor{comment}{//\ Convert\ start\ to\ be\ index\ based\ on\ the\ group\ instead\ of\ global}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00280}00280\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}}\ -\/=\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.starting\_block);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00281}00281\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00282}00282\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}};\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}};\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00284}00284\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00285}00285\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Block\ is\ already\ free\ (shouldn't\ happen)}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00286}00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[i\ /\ 8]\ \&\ (1u\ <<\ (i\ \%\ 8)))\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00287}00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mark\ as\ free}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00290}00290\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>free\_blocks++;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00291}00291\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.unallocated\_blocks++;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00292}00292\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[i\ /\ 8]\ \&=\ \string~(1u\ <<\ (i\ \%\ 8));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00293}00293\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00294}00294\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Decide\ whether\ to\ zero\ out\ or\ not,\ my\ implementation\ zeros\ on\ allocation\ but\ idk\ about\ others}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00295}00295\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00296}00296\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00297}00297\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ changed\ metadata}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00298}00298\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{descriptor}}-\/>block\_usage\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00299}00299\ \ \ \ \ write\_back\_block\_groups();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00300}00300\ \ \ \ \ write\_back\_superblock();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00301}00301\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00302}00302\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00304}00304\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00308}00308\ \textcolor{keywordtype}{void}\ Ext2Volume::write\_back\_block\_groups()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00309}00309\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00310}00310\ \ \ \ \ \textcolor{comment}{//\ Locate\ the\ block\ groups}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00311}00311\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bgdt\_blocks}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7e8c97da6e5a645d3c69ec277b9f9a2e}{block\_group\_descriptor\_table\_size}}\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00312}00312\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sectors\_to\_write}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bgdt\_blocks}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00313}00313\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bgdt\_lba}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a568c077e33ab4a474c65cfcaf934b215}{block\_group\_descriptor\_table\_block}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aa2fb31420bd869e0f42e672e6ede97b2}{sectors\_per\_block}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00315}00315\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ block\ groups\ into\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00316}00316\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sectors\_to\_write}}\ *\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00317}00317\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}};\ ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00318}00318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}}.copy\_from(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[i],\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00319}00319\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00320}00320\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ buffer\ to\ disk}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00321}00321\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}}.set\_offset(0);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00322}00322\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sectors\_to\_write}};\ ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00323}00323\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a307fc8dc97cc4c8f3668a18a1e0257de}{write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bgdt\_lba}}\ +\ i,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_buffer}},\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00324}00324\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00325}00325\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00329}00329\ \textcolor{keywordtype}{void}\ Ext2Volume::write\_back\_superblock()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00330}00330\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00331}00331\ \ \ \ \ \textcolor{comment}{//\ Store\ superblock}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00332}00332\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(1024);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00333}00333\ \ \ \ \ buffer.copy\_from(\&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{superblock\_t}}));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00334}00334\ \ \ \ \ buffer.set\_offset(0);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00335}00335\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00336}00336\ \ \ \ \ \textcolor{comment}{//\ Write\ to\ disk}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00337}00337\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a307fc8dc97cc4c8f3668a18a1e0257de}{write}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ 2,\ \&buffer,\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00338}00338\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af92c050fd33ce1edb06897b9c5fe0862}{disk}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk_a307fc8dc97cc4c8f3668a18a1e0257de}{write}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a7436ecf891301b9a4c9edb52212151db}{partition\_offset}}\ +\ 3,\ \&buffer,\ 512);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00339}00339\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00347}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af9769f68d14aa0c2c44b9313c151eafc}{00347}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af9769f68d14aa0c2c44b9313c151eafc}{Ext2Volume::bytes\_to\_blocks}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00348}00348\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes}}\ +\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00349}00349\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00357}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a657c2f9cd60960648f1e1cec6d95a144}{00357}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a657c2f9cd60960648f1e1cec6d95a144}{Ext2Volume::create\_inode}}(\textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00358}00358\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00359}00359\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00360}00360\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00361}00361\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ block\ group\ with\ enough\ free\ inodes}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00362}00362\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[0];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00363}00363\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00364}00364\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ac5a90acfd7dd067a9fa54e4a1ea0e707}{total\_block\_groups}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}])}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00365}00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>free\_inodes\ >=\ 1)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00366}00366\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00367}00367\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00368}00368\ \ \ \ \ \textcolor{comment}{//\ Read\ bitmap}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00369}00369\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00370}00370\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>block\_inode\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00372}00372\ \ \ \ \ \textcolor{comment}{//\ First\ group\ contains\ reserved\ inodes}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00373}00373\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00374}00374\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ ==\ 0\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.first\_inode\ >\ 1)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00375}00375\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.first\_inode\ -\/\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00376}00376\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00377}00377\ \ \ \ \ \textcolor{comment}{//\ Find\ a\ free\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00378}00378\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00380}00380\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Block\ is\ already\ used}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00381}00381\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ /\ 8]\ \&\ (1u\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ \%\ 8)))\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00382}00382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00383}00383\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00384}00384\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mark\ as\ used}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00385}00385\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>free\_inodes-\/-\/;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00386}00386\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.unallocated\_inodes-\/-\/;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00387}00387\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ /\ 8]\ |=\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ (1u\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ \%\ 8));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00388}00388\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00389}00389\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00390}00390\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00391}00391\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00392}00392\ \ \ \ \ \textcolor{comment}{//\ Convert\ into\ the\ 1-\/based\ inode\ index\ in\ the\ group}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00393}00393\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ *\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00394}00394\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00395}00395\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ changed\ metadata}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00396}00396\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>block\_inode\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00397}00397\ \ \ \ \ write\_back\_block\_groups();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00398}00398\ \ \ \ \ write\_back\_superblock();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00399}00399\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00400}00400\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00401}00401\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}\{\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00402}00402\ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.creation\_time\ =\ time\_to\_epoch(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>get\_time());}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00403}00403\ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.last\_modification\_time\ =\ time\_to\_epoch(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>get\_time());}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00404}00404\ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.block\_pointers[0]\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae2440f7c00021606ee91f68983abf206}{allocate\_block}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00405}00405\ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.hard\_links\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}}\ ?\ 2\ :\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00406}00406\ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.type\ =\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}}\ ?\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba28766b4be065d0c806c2e9c9d914af48}{InodeType::DIRECTORY}}\ :\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba9fc5887c030f7a3e19821ebec457e719}{InodeType::FILE}})\ >>\ 12)\ \&\ 0xF;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00407}00407\ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.permissions\ =}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00408}00408\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}}\ ?\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a3e6abe2885e285bee96b1708ba14bac1a28766b4be065d0c806c2e9c9d914af48}{InodePermissionsDefaults::DIRECTORY}}\ :\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a3e6abe2885e285bee96b1708ba14bac1a9fc5887c030f7a3e19821ebec457e719}{InodePermissionsDefaults::FILE}})\ \&\ 0x0FFF;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00409}00409\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a2c24524148772b3666f9b8e1858a16f2}{write\_inode}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}},\ \&\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00410}00410\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00411}00411\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00412}00412\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00413}00413\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00414}00414\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00421}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a4acd208a882871ef4ce89ab5e297e31c}{00421}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a4acd208a882871ef4ce89ab5e297e31c}{Ext2Volume::free\_inode}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00422}00422\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00423}00423\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ block\ group\ containing\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00424}00424\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ =\ (\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00425}00425\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group\_descriptor\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a28e53f409de30340066785e5a0d94993}{block\_groups}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00426}00426\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00427}00427\ \ \ \ \ \textcolor{comment}{//\ Read\ bitmap}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00428}00428\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00429}00429\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>block\_inode\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00430}00430\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00431}00431\ \ \ \ \ \textcolor{comment}{//\ First\ group\ contains\ reserved\ inodes}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00432}00432\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ =\ (\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}\ -\/\ 1)\ \%\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.inodes\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00433}00433\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bg\_index}}\ ==\ 0\ \&\&\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ <\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.first\_inode\ -\/\ 1)))}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00434}00434\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00435}00435\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00436}00436\ \ \ \ \ \textcolor{comment}{//\ Mark\ as\ used}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00437}00437\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>free\_inodes++;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00438}00438\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.unallocated\_inodes++;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00439}00439\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}}.raw()[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ /\ 8]\ \&=\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ \string~(1u\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}\ \%\ 8));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00440}00440\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00441}00441\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ changed\ metadata}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00442}00442\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_group}}-\/>block\_inode\_bitmap,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bitmap}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00443}00443\ \ \ \ \ write\_back\_block\_groups();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00444}00444\ \ \ \ \ write\_back\_superblock();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00445}00445\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00446}00446\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00451}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_afee2108a1f09f919a3cafff60f3bc5dd}{00451}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_afee2108a1f09f919a3cafff60f3bc5dd}{Ext2Volume::free\_blocks}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Vector<uint32\_t>}}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00452}00452\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00453}00453\ \ \ \ \ \textcolor{comment}{//\ No\ blocks\ to\ free}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00454}00454\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}}.empty())}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00455}00455\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00456}00456\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00457}00457\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}}[0];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00458}00458\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00459}00459\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00460}00460\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00461}00461\ \ \ \ \ \textcolor{comment}{//\ Free\ each\ adjacent\ set\ of\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00462}00462\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00463}00463\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00464}00464\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ is\ already\ accounted\ for}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00465}00465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00466}00466\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00467}00467\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00468}00468\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Is\ this\ block\ adjacent}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00469}00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ +\ 1)\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00470}00470\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00471}00471\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ +=\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00472}00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00473}00473\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00474}00474\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00475}00475\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adjacent\ set\ has\ ended}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00476}00476\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.starting\_block)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00477}00477\ \ \ \ \ \ \ \ \ free\_group\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00478}00478\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00479}00479\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00480}00480\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00481}00481\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00482}00482\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00483}00483\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00484}00484\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00485}00485\ \ \ \ \ \textcolor{comment}{//\ Account\ for\ the\ last\ set\ of\ blocks\ in\ the\ loop}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00486}00486\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.starting\_block)\ /\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a95e333eca8856f08ba4bc1724541a4b7}{superblock}}.blocks\_per\_group;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00487}00487\ \ \ \ \ free\_group\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{group}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00488}00488\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00489}00489\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00490}00490\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00491}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac29a45d004af57007f4bbad18fc73b05}{00491}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac29a45d004af57007f4bbad18fc73b05}{InodeHandler::InodeHandler}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume}{Ext2Volume}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00492}00492\ :\ m\_volume(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}),}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00493}00493\ \ \ inode\_number(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{inode\_index}}),}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00494}00494\ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}(m\_volume-\/>read\_inode(inode\_number))}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00495}00495\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00496}00496\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00497}00497\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block\ pointers}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00498}00498\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{direct\_pointer}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{direct\_pointer}}\ <\ 12;\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{direct\_pointer}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00499}00499\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.block\_pointers[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{direct\_pointer}}])}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00500}00500\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_ac753563317978358eb995f9eea7c1558}{push\_back}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.block\_pointers[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{direct\_pointer}}]);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00501}00501\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00502}00502\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00503}00503\ \ \ \ \ parse\_indirect(1,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l1\_indirect,\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00504}00504\ \ \ \ \ parse\_indirect(2,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l2\_indirect,\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00505}00505\ \ \ \ \ parse\_indirect(3,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l3\_indirect,\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00506}00506\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00507}00507\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00512}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{00512}}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{InodeHandler::size}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00513}00513\ \ \ \ \ \textcolor{keywordflow}{return}\ ((\textcolor{keywordtype}{size\_t})\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.size\_upper\ <<\ 32)\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\_t}})\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.size\_lower;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00514}00514\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00515}00515\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00520}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_adf9adc52bc5a36bfc974c4966a93370b}{00520}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_adf9adc52bc5a36bfc974c4966a93370b}{InodeHandler::set\_size}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00521}00521\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00522}00522\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.size\_lower\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{size}}\ \&\ 0xFFFFFFFFULL);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00523}00523\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.size\_upper\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{size}}\ >>\ 32);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00524}00524\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00525}00525\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00526}00526\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00534}00534\ \textcolor{keywordtype}{void}\ InodeHandler::parse\_indirect(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{level}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00535}00535\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00536}00536\ \ \ \ \ \textcolor{comment}{//\ Invalid}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00537}00537\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00538}00538\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00539}00539\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00540}00540\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00541}00541\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00542}00542\ \ \ \ \ \textcolor{keyword}{auto}\ *pointers\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ *)\ (buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}());}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00543}00543\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00544}00544\ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ pointers}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00545}00545\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a6a06e6d63e1762b1921e67931e6bd3c7}{pointers\_per\_block}};\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00546}00546\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ pointer\ =\ pointers[i];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00547}00547\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00548}00548\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invaild}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00549}00549\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pointer\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00550}00550\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00551}00551\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00552}00552\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Has\ indirect\ sub\ entries}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00553}00553\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{level}}\ >\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00554}00554\ \ \ \ \ \ \ \ \ \ \ \ \ parse\_indirect(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{level}}\ -\/\ 1,\ pointer,\ buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00555}00555\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00556}00556\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00557}00557\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00558}00558\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ entry}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00559}00559\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_ac753563317978358eb995f9eea7c1558}{push\_back}}(pointer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00560}00560\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00561}00561\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00562}00562\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00571}00571\ \textcolor{keywordtype}{void}\ InodeHandler::write\_indirect(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{level}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \textcolor{keywordtype}{size\_t}\ \&index)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00572}00572\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00573}00573\ \ \ \ \ \textcolor{comment}{//\ Nothing\ left\ to\ write}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00574}00574\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{remaining}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}()\ -\/\ index;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00575}00575\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{remaining}}\ ==\ 0\ ||\ index\ >=\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}())}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00576}00576\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00577}00577\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00578}00578\ \ \ \ \ \textcolor{comment}{//\ Level\ hasn't\ been\ set\ yet}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00579}00579\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00580}00580\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae2440f7c00021606ee91f68983abf206}{allocate\_block}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00581}00581\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00582}00582\ \ \ \ \ \textcolor{comment}{//\ Allocate\ a\ local\ buffer\ for\ this\ recursion\ level}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00583}00583\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00584}00584\ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}{clear}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00585}00585\ \ \ \ \ \textcolor{keyword}{auto}\ *pointers\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ *)\ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00586}00586\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00587}00587\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ pointers}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00588}00588\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a6a06e6d63e1762b1921e67931e6bd3c7}{pointers\_per\_block}};\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00589}00589\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00590}00590\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invalid}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00591}00591\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}())}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00592}00592\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00593}00593\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00594}00594\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Has\ indirect}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00595}00595\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{level}}\ >\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00596}00596\ \ \ \ \ \ \ \ \ \ \ \ \ write\_indirect(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{level}}\ -\/\ 1,\ pointers[i],\ index);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00597}00597\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00598}00598\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00599}00599\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00600}00600\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Save\ the\ pointer}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00601}00601\ \ \ \ \ \ \ \ \ pointers[i]\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[index++];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00602}00602\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00603}00603\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00604}00604\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00605}00605\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00606}00606\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00612}00612\ \textcolor{keywordtype}{void}\ InodeHandler::store\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<uint32\_t>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00613}00613\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00614}00614\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}STORING\ BLOCKS\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00615}00615\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00616}00616\ \ \ \ \ \textcolor{comment}{//\ Store\ in\ cache}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00617}00617\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00618}00618\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00619}00619\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00620}00620\ \ \ \ \ \textcolor{comment}{//\ Direct\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00621}00621\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ 12;\ ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00622}00622\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.block\_pointers[i]\ =\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}()\ ?\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ :\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00623}00623\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00624}00624\ \ \ \ \ \textcolor{comment}{//\ No\ need\ to\ do\ any\ indirects}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00625}00625\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}()\ <\ 12)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00626}00626\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00627}00627\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00628}00628\ \ \ \ \ \textcolor{comment}{//\ Setup\ Recursive\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00629}00629\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ index\ =\ 12;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00630}00630\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00631}00631\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00632}00632\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{indirect\_blocks}}[3]\ =\ \{\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l1\_indirect,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l2\_indirect,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l3\_indirect\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00633}00633\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ 3;\ ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00634}00634\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00635}00635\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Have\ to\ use\ temp\ because\ of\ packed\ field}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00636}00636\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{indirect\_blocks}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00637}00637\ \ \ \ \ \ \ \ \ write\_indirect(i\ +\ 1,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}},\ index);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00638}00638\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{indirect\_blocks}}[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00639}00639\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00640}00640\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00641}00641\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ new\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00642}00642\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l1\_indirect\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{indirect\_blocks}}[0];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00643}00643\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l2\_indirect\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{indirect\_blocks}}[1];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00644}00644\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.l3\_indirect\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{indirect\_blocks}}[2];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00645}00645\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00646}00646\ \ \ \ \ \textcolor{comment}{//\ NOTE:\ Blocks\ get\ allocated\ when\ writing\ indirects.\ This\ is\ then\ saved\ later\ in\ the\ write()\ function}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00647}00647\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00648}00648\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00655}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4bab1e2c0a08c16d2395cf4d3da64b04}{00655}}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4bab1e2c0a08c16d2395cf4d3da64b04}{InodeHandler::grow}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}},\ \textcolor{keywordtype}{bool}\ flush)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00656}00656\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00657}00657\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ grow}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00658}00658\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ <=\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00659}00659\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{size}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00660}00660\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00661}00661\ \ \ \ \ \textcolor{comment}{//\ Allocate\ new\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00662}00662\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}}\ =\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_acf68810ccb0f9cdb2b9491c077710205}{allocate\_blocks}}(m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af9769f68d14aa0c2c44b9313c151eafc}{bytes\_to\_blocks}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00663}00663\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}}[0]\ !=\ 0,\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ new\ blocks\ for\ file"{}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00664}00664\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00665}00665\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ changes}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00666}00666\ \ \ \ \ store\_blocks(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00667}00667\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_adf9adc52bc5a36bfc974c4966a93370b}{set\_size}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{size}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00668}00668\ \ \ \ \ \textcolor{keywordflow}{if}\ (flush)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00669}00669\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ae90957a35d01a04fedf9fdbe1a8fbd49}{save}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00670}00670\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00671}00671\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{size}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00672}00672\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00673}00673\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00677}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ae90957a35d01a04fedf9fdbe1a8fbd49}{00677}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ae90957a35d01a04fedf9fdbe1a8fbd49}{InodeHandler::save}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00678}00678\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00679}00679\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a2c24524148772b3666f9b8e1858a16f2}{write\_inode}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a1243bf317b75eccc9fae0c42c2a472fa}{inode\_number}},\ \&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00680}00680\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00681}00681\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00685}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a16743eec6204b9871d97b80d163449e8}{00685}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a16743eec6204b9871d97b80d163449e8}{InodeHandler::free}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00686}00686\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00687}00687\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00688}00688\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00689}00689\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00690}00690\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_afee2108a1f09f919a3cafff60f3bc5dd}{free\_blocks}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00691}00691\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a4acd208a882871ef4ce89ab5e297e31c}{free\_inode}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a1243bf317b75eccc9fae0c42c2a472fa}{inode\_number}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00692}00692\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00693}00693\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00694}00694\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00695}00695\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00696}00696\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a196cd2cd62e14d17cfd0a56f88c0106f}{InodeHandler::\string~InodeHandler}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00697}00697\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00698}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ac988fbf181910b13ed53d4756065888a}{00698}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ac988fbf181910b13ed53d4756065888a}{Ext2File::Ext2File}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume}{Ext2Volume}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00699}00699\ :\ m\_volume(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}),}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00700}00700\ \ \ m\_inode(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}},\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00701}00701\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00702}00702\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00703}00703\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ base\ information}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00704}00704\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a98335b9c813e11733b3b12a7b4fb9087}{m\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ada67576556e0415df8bf213d0ce50991}{name}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00705}00705\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}}\ =\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a8c54bf75f58ffc8c570c6d292f4f9168}{size}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00706}00706\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00707}00707\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00708}00708\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00715}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ad53e374f2bbc5858d75c333381ae7bf3}{00715}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ad53e374f2bbc5858d75c333381ae7bf3}{Ext2File::write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \textcolor{keyword}{const}\ *\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00716}00716\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00717}00717\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ write}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00718}00718\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00719}00719\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00720}00720\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00721}00721\ \ \ \ \ \textcolor{comment}{//\ Prepare\ for\ writing}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00722}00722\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00723}00723\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ =\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00724}00724\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(\mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00725}00725\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00726}00726\ \ \ \ \ \textcolor{comment}{//\ Expand\ the\ file}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00727}00727\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ >\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00728}00728\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}}\ =\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4bab1e2c0a08c16d2395cf4d3da64b04}{grow}}((\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00729}00729\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00730}00730\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ updated\ metadata}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00731}00731\ \ \ \ \ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.last\_modification\_time\ =\ time\_to\_epoch(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>get\_time());}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00732}00732\ \ \ \ \ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ae90957a35d01a04fedf9fdbe1a8fbd49}{save}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00733}00733\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00734}00734\ \ \ \ \ \textcolor{comment}{//\ Convert\ bytes\ to\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00735}00735\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_start}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ /\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00736}00736\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_offset}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ \%\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00737}00737\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00738}00738\ \ \ \ \ \textcolor{comment}{//\ Write\ each\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00739}00739\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_start}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00740}00740\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{written}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00741}00741\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{written}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00742}00742\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00743}00743\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00744}00744\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}++];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00745}00745\ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00746}00746\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00747}00747\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Where\ in\ this\ block\ to\ start\ writing}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00748}00748\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}\ -\/\ 1\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_start}})\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_offset}}\ :\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00749}00749\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{writable}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{written}}\ <\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}})\ ?\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{written}})\ :\ (\mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ -\/}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00750}00750\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00751}00751\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00752}00752\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00753}00753\ \ \ \ \ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{writable}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{written}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00754}00754\ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00755}00755\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{written}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{writable}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00756}00756\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00757}00757\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00758}00758\ \ \ \ \ \textcolor{comment}{//\ Clean\ up}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00759}00759\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00760}00760\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00761}00761\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00762}00762\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00769}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{00769}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{Ext2File::read}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00770}00770\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00771}00771\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ read}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00772}00772\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}}\ ==\ 0\ ||\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00773}00773\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00774}00774\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00775}00775\ \ \ \ \ \textcolor{comment}{//\ Prepare\ for\ reading}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00776}00776\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00777}00777\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ =\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00778}00778\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(\mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00779}00779\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00780}00780\ \ \ \ \ \textcolor{comment}{//\ Force\ bounds}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00781}00781\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ >\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00782}00782\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a2ea111d653133dd808f65809c969358f}{m\_size}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00783}00783\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00784}00784\ \ \ \ \ \textcolor{comment}{//\ Convert\ bytes\ to\ blocks}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00785}00785\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_start}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ /\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00786}00786\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_offset}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ \%\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00787}00787\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00788}00788\ \ \ \ \ \textcolor{comment}{//\ Read\ each\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00789}00789\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_start}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00790}00790\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{read}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00791}00791\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{read}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00792}00792\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00793}00793\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00794}00794\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}++];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00795}00795\ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00796}00796\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00797}00797\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Where\ in\ this\ block\ to\ start\ reading}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00798}00798\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}\ -\/\ 1\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_start}})\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_offset}}\ :\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00799}00799\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{readable}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{read}}\ <\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}})\ ?\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{read}})\ :\ (\mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00800}00800\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00801}00801\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00802}00802\ \ \ \ \ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{readable}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_start}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{read}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00803}00803\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_ab5f905fd00423326f163ef2acff681b2}{read}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{readable}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00804}00804\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00805}00805\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00806}00806\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00807}00807\ \ \ \ \ \textcolor{comment}{//\ Clean\ up}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00808}00808\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_ad49f67cc5e79f5fa95d68a381843cec5}{m\_offset}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00809}00809\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00810}00810\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00811}00811\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00815}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_af68118731b5f4780d4971db82e44fc7f}{00815}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_af68118731b5f4780d4971db82e44fc7f}{Ext2File::flush}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00816}00816\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_af87fa862de707575b8badd044a5af80e}{File::flush}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00817}00817\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00818}00818\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00819}00819\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File_a59555eda52c9bb8f3e8b17d3e4454490}{Ext2File::\string~Ext2File}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00820}00820\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00821}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_aa7aa10cb91fef1d1430b3967133608f4}{00821}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_aa7aa10cb91fef1d1430b3967133608f4}{Ext2Directory::Ext2Directory}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume}{Ext2Volume}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00822}00822\ :\ m\_volume(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}),}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00823}00823\ \ \ m\_inode(m\_volume,\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00824}00824\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00825}00825\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a127c692574d856ebdfdd8badafef2eac}{m\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00826}00826\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00827}00827\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00831}00831\ \textcolor{keywordtype}{void}\ Ext2Directory::parse\_block(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00832}00832\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00833}00833\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ offset\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00834}00834\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\ <\ m\_volume-\/>}}\mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00835}00835\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00836}00836\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ the\ entry}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00837}00837\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *entry\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}}\ *)\ (buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ offset);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00838}00838\ \ \ \ \ \ \ \ \ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_ac753563317978358eb995f9eea7c1558}{push\_back}}(*entry);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00839}00839\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00840}00840\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Not\ valid}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00841}00841\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (entry-\/>inode\ ==\ 0\ ||\ entry-\/>name\_length\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00842}00842\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00843}00843\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00844}00844\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parse}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00845}00845\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{filename}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ offset\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}}),\ entry-\/>name\_length);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00846}00846\ \ \ \ \ \ \ \ \ m\_entry\_names.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{filename}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00847}00847\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}\ =\ entry-\/>inode;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00848}00848\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00849}00849\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ the\ object}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00850}00850\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4e}{EntryType}})\ entry-\/>type)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00851}00851\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00852}00852\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea9fc5887c030f7a3e19821ebec457e719}{EntryType::FILE}}:}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00853}00853\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}}.push\_back(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File}{Ext2File}}(m\_volume,\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{filename}}));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00854}00854\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00855}00855\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00856}00856\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea28766b4be065d0c806c2e9c9d914af48}{EntryType::DIRECTORY}}:}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00857}00857\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}}.push\_back(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(m\_volume,\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{filename}}));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00858}00858\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00859}00859\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00860}00860\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00861}00861\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Unknown\ entry\ type:\ "{}}\ <<\ entry-\/>type\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00862}00862\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00863}00863\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00864}00864\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00865}00865\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Go\ to\ next}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00866}00866\ \ \ \ \ \ \ \ \ offset\ +=\ entry-\/>size;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00867}00867\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00868}00868\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00869}00869\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00877}00877\ \textcolor{keywordtype}{void}\ Ext2Directory::remove\_entry(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}},\ \textcolor{keywordtype}{bool}\ clear)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00878}00878\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00879}00879\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ entry}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00880}00880\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ index\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00881}00881\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}}\ *entry\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00882}00882\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ index\ <\ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}();\ ++index)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00883}00883\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_entry\_names[index]\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00884}00884\ \ \ \ \ \ \ \ \ \ \ \ \ entry\ =\ \&m\_entries[index];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00885}00885\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00886}00886\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00887}00887\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00888}00888\ \ \ \ \ \textcolor{comment}{//\ No\ entry\ found}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00889}00889\ \ \ \ \ \textcolor{keywordflow}{if}\ (!entry\ ||\ entry-\/>type\ !=\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}}\ ?\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea28766b4be065d0c806c2e9c9d914af48}{EntryType::DIRECTORY}}\ :\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4e}{EntryType}}::\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba9fc5887c030f7a3e19821ebec457e719}{FILE}}))}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00890}00890\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{return}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00891}00891\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00892}00892\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00893}00893\ \ \ \ \ \textcolor{keywordflow}{if}\ (clear)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00894}00894\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler}{InodeHandler}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}(m\_volume,\ entry-\/>inode);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00895}00895\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}.free();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00896}00896\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00897}00897\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00898}00898\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ reference\ from\ this\ directory}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00899}00899\ \ \ \ \ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_af4cbd0b4a51ef6309e35b51efc473156}{erase}}(entry);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00900}00900\ \ \ \ \ m\_entry\_names.erase(m\_entry\_names.begin()\ +\ index);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00901}00901\ \ \ \ \ write\_entries();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00902}00902\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00903}00903\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00911}00911\ \textcolor{keywordtype}{void}\ Ext2Directory::rename\_entry(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00912}00912\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00913}00913\ \ \ \ \ \textcolor{comment}{//\ Change\ the\ name}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00914}00914\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ m\_entry\_names.size();\ ++\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00915}00915\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_entry\_names[i]\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}}\ \&\&}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00916}00916\ \ \ \ \ \ \ \ \ \ \ \ \ m\_entries[i].\mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}\ ==\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}}\ ?\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea28766b4be065d0c806c2e9c9d914af48}{EntryType::DIRECTORY}}\ :\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4e}{EntryType}}::\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba9fc5887c030f7a3e19821ebec457e719}{FILE}}))}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00917}00917\ \ \ \ \ \ \ \ \ \ \ \ \ m\_entry\_names[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00918}00918\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00919}00919\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ change}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00920}00920\ \ \ \ \ write\_entries();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00921}00921\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00922}00922\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00923}00923\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00927}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a43d772d06ec8744ceb92cb4a31d57031}{00927}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a43d772d06ec8744ceb92cb4a31d57031}{Ext2Directory::read\_from\_disk}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00928}00928\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00929}00929\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00930}00930\ \ \ \ \ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a5bf069cc64bfc346dcca404e8cc4015b}{clear}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00931}00931\ \ \ \ \ m\_entry\_names.clear();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00932}00932\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00933}00933\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ old\ files\ \&\ Directories}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00934}00934\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&file:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00935}00935\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ file;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00936}00936\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}}.clear();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00937}00937\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00938}00938\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&directory:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00939}00939\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ directory;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00940}00940\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}}.clear();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00941}00941\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00942}00942\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ direct\ blocks\ (cant\ use\ for(\ :\ ))}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00943}00943\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00944}00944\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}();\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00945}00945\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}}\ =\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[i];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00946}00946\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00947}00947\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invalid\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00948}00948\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}}\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00949}00949\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00950}00950\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00951}00951\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00952}00952\ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}},\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00953}00953\ \ \ \ \ \ \ \ \ parse\_block(\&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00954}00954\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00955}00955\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00956}00956\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00957}00957\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00958}00958\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00959}00959\ \textcolor{keywordtype}{void}\ Ext2Directory::write\_entries()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00960}00960\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00961}00961\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ size\ needed\ to\ store\ the\ entries\ and\ the\ null\ entry}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00962}00962\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\_required}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00963}00963\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}();\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00964}00964\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a445af8c8e1f08845138399d633239778}{size}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}})\ +\ m\_entry\_names[i].\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}()\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00965}00965\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a445af8c8e1f08845138399d633239778}{size}}\ +=\ (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a445af8c8e1f08845138399d633239778}{size}}\ \%\ 4)\ ?\ 4\ -\/\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a445af8c8e1f08845138399d633239778}{size}}\ \%\ 4\ :\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00966}00966\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\_required}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a445af8c8e1f08845138399d633239778}{size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00967}00967\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00968}00968\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00969}00969\ \ \ \ \ \textcolor{comment}{//\ Expand\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00970}00970\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks\_required}}\ =\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_af9769f68d14aa0c2c44b9313c151eafc}{bytes\_to\_blocks}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\_required}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00971}00971\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks\_required}}\ >\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}())}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00972}00972\ \ \ \ \ \ \ \ \ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4bab1e2c0a08c16d2395cf4d3da64b04}{grow}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks\_required}}\ -\/\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}())\ *\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00973}00973\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00974}00974\ \ \ \ \ \textcolor{comment}{//\ Prepare\ for\ writing}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00975}00975\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00976}00976\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ =\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00977}00977\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(\mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00978}00978\ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}{clear}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00979}00979\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00980}00980\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ updated\ metadata}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00981}00981\ \ \ \ \ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_adf9adc52bc5a36bfc974c4966a93370b}{set\_size}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{blocks\_required}}\ *\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00982}00982\ \ \ \ \ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a4b3d8a3e59ad907e9117dcd68da4db23}{inode}}.last\_modification\_time\ =\ time\_to\_epoch(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>get\_time());}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00983}00983\ \ \ \ \ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ae90957a35d01a04fedf9fdbe1a8fbd49}{save}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00984}00984\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00985}00985\ \ \ \ \ \textcolor{comment}{//\ Write\ each\ entry}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00986}00986\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00987}00987\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00988}00988\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}();\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00989}00989\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00990}00990\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ entry}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00991}00991\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}}\ \&entry\ =\ m\_entries[i];}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00992}00992\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}\ =\ m\_entry\_names[i].c\_str();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00993}00993\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00994}00994\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ size}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00995}00995\ \ \ \ \ \ \ \ \ entry.name\_length\ =\ m\_entry\_names[i].length();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00996}00996\ \ \ \ \ \ \ \ \ entry.size\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}})\ +\ entry.name\_length\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00997}00997\ \ \ \ \ \ \ \ \ entry.size\ +=\ (entry.size\ \%\ 4)\ ?\ 4\ -\/\ (entry.size\ \%\ 4)\ :\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00998}00998\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l00999}00999\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Entry\ needs\ to\ be\ stored\ in\ the\ next\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01000}01000\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (entry.size\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}}\ >\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01001}01001\ \ \ \ \ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}],\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01002}01002\ \ \ \ \ \ \ \ \ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}{clear}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01003}01003\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}++;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01004}01004\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01005}01005\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01006}01006\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01007}01007\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ it\ is\ the\ last\ entry\ it\ takes\ up\ the\ rest\ of\ the\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01008}01008\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}()\ -\/\ 1)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01009}01009\ \ \ \ \ \ \ \ \ \ \ \ \ entry.size\ =\ \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\_size}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01010}01010\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01011}01011\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ entry\ and\ the\ name}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01012}01012\ \ \ \ \ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\&entry,\ \textcolor{keyword}{sizeof}(entry),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01013}01013\ \ \ \ \ \ \ \ \ buffer.\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ entry.name\_length\ +\ 1,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}}\ +\ \textcolor{keyword}{sizeof}(entry));}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01014}01014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{buffer\_offset}}\ +=\ entry.size;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01015}01015\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01016}01016\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01017}01017\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ last\ block}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01018}01018\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_aab2449336fe290292f64260781a4871b}{write\_block}}(m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_block}}],\ \&buffer);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01019}01019\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01020}01020\ \ \ \ \ \textcolor{comment}{//\ Clean\ up}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01021}01021\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01022}01022\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01023}01023\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01024}01024\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}}\ Ext2Directory::create\_entry(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01025}01025\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01026}01026\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01027}01027\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_entry\_t}}\ entry\{\};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01028}01028\ \ \ \ \ entry.inode\ =\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}\ ?\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}\ :\ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a657c2f9cd60960648f1e1cec6d95a144}{create\_inode}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01029}01029\ \ \ \ \ entry.type\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}})\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_directory}}\ ?\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea28766b4be065d0c806c2e9c9d914af48}{EntryType::DIRECTORY}}\ :\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4e}{EntryType}}::\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba9fc5887c030f7a3e19821ebec457e719}{FILE}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01030}01030\ \ \ \ \ entry.name\_length\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_ac261f2cfcff274e916e9241123c399ef}{length}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01031}01031\ \ \ \ \ entry.size\ =\ \textcolor{keyword}{sizeof}(entry)\ +\ entry.name\_length;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01032}01032\ \ \ \ \ entry.size\ +=\ entry.size\ \%\ 4\ ?\ 4\ -\/\ entry.size\ \%\ 4\ :\ 0;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01033}01033\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01034}01034\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ inode}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01035}01035\ \ \ \ \ m\_entries.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_ac753563317978358eb995f9eea7c1558}{push\_back}}(entry);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01036}01036\ \ \ \ \ m\_entry\_names.push\_back(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01037}01037\ \ \ \ \ write\_entries();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01038}01038\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01039}01039\ \ \ \ \ \textcolor{keywordflow}{return}\ entry;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01040}01040\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01041}01041\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01048}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a455b2c959db47dc1f36ddf7b6ad63221}{01048}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}\ *\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a455b2c959db47dc1f36ddf7b6ad63221}{Ext2Directory::create\_file}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01049}01049\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01050}01050\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ already\ exists}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01051}01051\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&file:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01052}01052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (file-\/>name()\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01053}01053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01054}01054\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01055}01055\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ file}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01056}01056\ \ \ \ \ \textcolor{keyword}{auto}\ file\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File}{Ext2File}}(m\_volume,\ create\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ 0,\ \textcolor{keyword}{false}).\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01057}01057\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}}.push\_back(file);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01058}01058\ \ \ \ \ \textcolor{keywordflow}{return}\ file;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01059}01059\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01060}01060\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01066}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a7dd41846b1429c109fe72564a445dc33}{01066}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a7dd41846b1429c109fe72564a445dc33}{Ext2Directory::remove\_file}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01067}01067\ \ \ \ \ remove\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01068}01068\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01069}01069\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01076}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_abdb74feb2e623f86bb6f1a8efc538dbd}{01076}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_abdb74feb2e623f86bb6f1a8efc538dbd}{Ext2Directory::rename\_file}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01077}01077\ \ \ \ \ rename\_entry(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01078}01078\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01079}01079\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01086}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a11d76223f5a89e099a1461c3e3600d7d}{01086}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}\ *\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a11d76223f5a89e099a1461c3e3600d7d}{Ext2Directory::create\_subdirectory}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01087}01087\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01088}01088\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ directory\ already\ exists}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01089}01089\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01090}01090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}-\/>name()\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01091}01091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01092}01092\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01093}01093\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01094}01094\ \ \ \ \ \textcolor{keyword}{auto}\ directory\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(m\_volume,\ create\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ 0,\ \textcolor{keyword}{true}).\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01095}01095\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}}.push\_back(directory);}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01096}01096\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01097}01097\ \ \ \ \ \textcolor{comment}{//\ Create\ self\ \&\ parent\ references}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01098}01098\ \ \ \ \ directory-\/>create\_entry(\textcolor{stringliteral}{"{}."{}},\ directory-\/>m\_inode.inode\_number,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01099}01099\ \ \ \ \ directory-\/>create\_entry(\textcolor{stringliteral}{"{}.."{}},\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a1243bf317b75eccc9fae0c42c2a472fa}{inode\_number}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01100}01100\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01101}01101\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01102}01102\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01103}01103\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01109}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a203e8f2b78ee2babb478c9b1a4cdcbfb}{01109}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a203e8f2b78ee2babb478c9b1a4cdcbfb}{Ext2Directory::remove\_subdirectory}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01110}01110\ \ \ \ \ remove\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01111}01111\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01112}01112\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01119}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_ac7578bac3d887efa8a854cbaf57733a6}{01119}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_ac7578bac3d887efa8a854cbaf57733a6}{Ext2Directory::rename\_subdirectory}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}})\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01120}01120\ \ \ \ \ rename\_entry(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01121}01121\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01122}01122\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01123}01123\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a92dd65bf42bb4f17d4d19536ed98d419}{Ext2Directory::\string~Ext2Directory}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01124}01124\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01125}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_a7aa6b4ababe8102ac0a2efdd0329b98f}{01125}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_a7aa6b4ababe8102ac0a2efdd0329b98f}{Ext2FileSystem::Ext2FileSystem}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk}{Disk}}\ *disk,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ partition\_offset)}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01126}01126\ \ \ \ \ \ \ \ \ :\ m\_volume(disk,\ partition\_offset)\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01127}01127\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01128}01128\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ root\ directory}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01129}01129\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(\&m\_volume,\ 2,\ \textcolor{stringliteral}{"{}/"{}});}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01130}01130\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ab847d2dfa3f68210d2579d77adc2a1a2}{read\_from\_disk}}();}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01131}01131\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01132}01132\ \}}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01133}01133\ }
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01134}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_ae4aa96bf15141b89f8107bebdd3ba93f}{01134}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_ae4aa96bf15141b89f8107bebdd3ba93f}{Ext2FileSystem::\string~Ext2FileSystem}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01135}01135\ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
+\DoxyCodeLine{\Hypertarget{ext2_8cpp_source_l01136}01136\ \};}
+
+\end{DoxyCode}

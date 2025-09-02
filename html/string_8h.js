@@ -1,11 +1,15 @@
 var string_8h =
 [
-    [ "String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
+    [ "MaxOS::String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
     [ "string", "string_8h.html#afa22b691550d34d82dd6a5e3f77b31cb", null ],
+    [ "ftoa", "string_8h.html#a67b7d920f0d5f6764f9d0a58f771a126", null ],
+    [ "htoa", "string_8h.html#aa45db8c9bd3e58972f39d4a5e0defa44", null ],
+    [ "itoa", "string_8h.html#a100df116078d0e34de582fc45d2e7df2", null ],
     [ "strcmp", "string_8h.html#a82efc5a6f65207e2120b326554db0ee9", null ],
     [ "strcmp", "string_8h.html#a8a56d039d532fb4707c7100fc47ec822", null ],
     [ "strcmp", "string_8h.html#a91734b3130415937b3c2fa56c5d79da4", null ],
     [ "strcmp", "string_8h.html#acc06eeb36c694e00b5906ee7f3275405", null ],
+    [ "strlen", "string_8h.html#ae6c8de953239811a34eeeab09458e55e", null ],
     [ "strncmp", "string_8h.html#a9a382141e88fb589c55148c54fa45d64", null ],
     [ "strncmp", "string_8h.html#a13f6f6daf353fc8a2edf417dbb33f8de", null ],
     [ "strncmp", "string_8h.html#a1658b202b0b408580eca37b0bccf3cd0", null ],

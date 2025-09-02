@@ -1,0 +1,336 @@
+\doxysection{vfsresource.\+cpp}
+\hypertarget{vfsresource_8cpp_source}{}\label{vfsresource_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/filesystem/vfsresource.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/filesystem/vfsresource.cpp}}
+\mbox{\hyperlink{vfsresource_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 9/1/2025.}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vfsresource_8h}{filesystem/vfsresource.h}}>}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00006}00006\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{MaxOS::filesystem}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1processes}{MaxOS::processes}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }syscore::filesystem;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00012}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_a6516d968ffd9ff30286311bf4dfe8c03}{00012}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_a6516d968ffd9ff30286311bf4dfe8c03}{FileResource::FileResource}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a9ac9ad12caad00b9d7eb53504318c263}{processes::resource\_type\_t}}\ \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00013}00013\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}),}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00014}00014\ \ \ file(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}})\ \ \textcolor{comment}{//\ Initialised\ by\ the\ registry}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00015}00015\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00017}00017\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00019}00019\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_a0b182e2d9eddaa1bca09819e85e8a461}{FileResource::\string~FileResource}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00029}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aaf4db34ad9e2f54ac0eabcceabf4e37f}{00029}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aaf4db34ad9e2f54ac0eabcceabf4e37f}{FileResource::read}}(\textcolor{keywordtype}{void}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00031}00031\ \ \ \ \ \textcolor{comment}{//\ File\ not\ found}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00032}00032\ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00035}00035\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ operation}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{FileFlags}})\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::DEFAULT:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{file\_buffer}}(buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a3385ab264cdca0faed533b17d701bab4}{read}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{file\_buffer}},\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::READ\_SIZE:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_a6797fd90178f476d319966e1fc6f501a}{size}}();}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::READ\_OFFSET:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_aae991c597c0bc4c5eb44c1f3b06a21ec}{position}}();}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00054}00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00056}00056\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00058}00058\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00068}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_a40f19ea642dd17e6245d088e89f4b280}{00068}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_a40f19ea642dd17e6245d088e89f4b280}{FileResource::write}}(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{comment}{//\ File\ not\ found}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00074}00074\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ operation}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00075}00075\ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{FileFlags}})\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::DEFAULT:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{file\_buffer}}((\textcolor{keywordtype}{void}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_acf705eb008519880b9a9d5db150eb6c8}{write}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{file\_buffer}},\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::WRITE\_SEEK\_SET:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_aa5315e6f1fdd27481ec88524041f2410}{seek}}(SeekType::SET,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00087}00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::WRITE\_SEEK\_CUR:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_aa5315e6f1fdd27481ec88524041f2410}{seek}}(SeekType::CURRENT,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::WRITE\_SEEK\_END:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File_aa5315e6f1fdd27481ec88524041f2410}{seek}}(SeekType::END,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00095}00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FileFlags::WRITE\_NAME:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Open\ the\ parent}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalResourceRegistry_a386a925d28d5ae188560586874bc9d32}{GlobalResourceRegistry::get\_registry}}(resource\_type\_t::FILESYSTEM)-\/>get\_resource(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_abf3bb6a99f336a92fcae29579b212dc7}{Path::parent\_directory}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}}()));}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ parent\_directory\ =\ ((\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource}{DirectoryResource}}*)\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}})-\/>directory;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Rename}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}}\ =\ \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ parent\_directory-\/>rename\_file(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource_aa8ce81bb1ea1928ffaf2372d3d00a42c}{file}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00110}00110\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00113}00113\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00115}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_a5c50d7ea596b9edb6744461be68eedaf}{00115}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_a5c50d7ea596b9edb6744461be68eedaf}{DirectoryResource::DirectoryResource}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a9ac9ad12caad00b9d7eb53504318c263}{processes::resource\_type\_t}}\ \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00116}00116\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}),}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00117}00117\ \ \ directory(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00118}00118\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00120}00120\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00122}00122\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_a572fac8bb4deca163759a5545d9970b4}{DirectoryResource::\string~DirectoryResource}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00130}00130\ \textcolor{keywordtype}{void}\ DirectoryResource::write\_entries(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00132}00132\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount\_written}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00134}00134\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_information\_t}}*\ entry\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00135}00135\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_capacity}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00137}00137\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{write\_single\_entry}}\ =\ [\&](\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}},\ \textcolor{keywordtype}{size\_t}\ entry\_size,\ \textcolor{keywordtype}{bool}\ is\_file)\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ enough\ space}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{required\_size}}\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_information\_t}})\ +\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_ac261f2cfcff274e916e9241123c399ef}{length}}()\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{required\_size}}\ >\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_capacity}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)entry;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ entry\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_information\_t}}*)(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{required\_size}}]);}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_capacity}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{required\_size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ the\ entry}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ entry-\/>is\_file\ =\ is\_file;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ entry-\/>size\ =\ entry\_size;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ entry-\/>entry\_length\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{required\_size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00151}00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(entry-\/>name,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_aefb74cf401b56191337867e2780c5286}{c\_str}}(),\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_ac261f2cfcff274e916e9241123c399ef}{length}}());}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ entry-\/>name[\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}}.\mbox{\hyperlink{classMaxOS_1_1String_ac261f2cfcff274e916e9241123c399ef}{length}}()]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Not\ enough\ space}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount\_written}}\ +\ entry-\/>entry\_length\ >\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ entry}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount\_written}},\ entry,\ entry-\/>entry\_length);}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00160}00160\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount\_written}}\ +=\ entry-\/>entry\_length;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00161}00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00162}00162\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00164}00164\ \ \ \ \ \textcolor{comment}{//\ Write\ files}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00165}00165\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ file\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>files())\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00166}00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{write\_single\_entry}}(file-\/>name(),\ file-\/>size(),\ \textcolor{keyword}{true}))}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00168}00168\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00170}00170\ \ \ \ \ \textcolor{comment}{//\ Write\ directories}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00171}00171\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dir}}\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>subdirectories())\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{write\_single\_entry}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dir}}-\/>name(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dir}}-\/>size(),\ \textcolor{keyword}{false}))}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00174}00174\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{keyword}{delete}[]\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)entry;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00177}00177\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00184}00184\ \textcolor{keywordtype}{size\_t}\ DirectoryResource::entries\_size()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00186}00186\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ Files}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ file\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>files())\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ entry\_size\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_information\_t}})\ +\ file-\/>name().length()\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ +=\ entry\_size;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00192}00192\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00194}00194\ \ \ \ \ \textcolor{comment}{//\ Subdirectories}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00195}00195\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dir}}\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>subdirectories())\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ entry\_size\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{entry\_information\_t}})\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dir}}-\/>name().length()\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ +=\ entry\_size;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00198}00198\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00200}00200\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00201}00201\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00211}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_a8dc521abd29f414daa2e77da0f60ee5c}{00211}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_a8dc521abd29f414daa2e77da0f60ee5c}{DirectoryResource::read}}(\textcolor{keywordtype}{void}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00213}00213\ \ \ \ \ \textcolor{comment}{//\ Directory\ not\ found}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00214}00214\ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00215}00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{DirectoryFlags}})\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00218}00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::READ\_ENTRIES:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ write\_entries(buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00223}00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::READ\_ENTRIES\_SIZE:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ entries\_size();}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00225}00225\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00228}00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00229}00229\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00232}00232\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00233}00233\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00243}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_aae2fd1f09ec25557499f6e3193056a6b}{00243}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_aae2fd1f09ec25557499f6e3193056a6b}{DirectoryResource::write}}(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00244}00244\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00245}00245\ \ \ \ \ \textcolor{comment}{//\ Directory\ not\ found}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00246}00246\ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00247}00247\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00249}00249\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{registry}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalResourceRegistry_a386a925d28d5ae188560586874bc9d32}{GlobalResourceRegistry::get\_registry}}(resource\_type\_t::FILESYSTEM);}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00251}00251\ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{DirectoryFlags}})\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00253}00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::WRITE\_NAME\ :\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Open\ the\ parent}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{registry}}-\/>get\_resource(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_abf3bb6a99f336a92fcae29579b212dc7}{Path::parent\_directory}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a78265383b9068d644a5d45b854a5c49c}{name}}()));}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ parent\_directory\ =\ ((\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource}{DirectoryResource}}*)\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}})-\/>directory;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00258}00258\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Rename}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}}\ =\ \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ parent\_directory-\/>rename\_subdirectory(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00263}00263\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00265}00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::WRITE\_NEW\_FILE:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}}\ =\ \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_af1f22518129bc93c04e7f118102addd1}{create\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00270}00270\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00273}00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::WRITE\_NEW\_DIR:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}}\ =\ \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a1eeb91d833c001f5e525b421e39927f3}{create\_subdirectory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00278}00278\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00280}00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::WRITE\_REMOVE\_FILE:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00281}00281\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}}\ =\ \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00283}00283\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a6b29d0176d8c46c8988275db4e7b9e1d}{remove\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00285}00285\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00286}00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DirectoryFlags::WRITE\_REMOVE\_DIR:\{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00287}00287\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}}\ =\ \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{string}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)buffer,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource_ae9cd103d30df03d09301c36c019eac5d}{directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a412996814d1c8351fabceea977a83f30}{remove\_subdirectory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00291}00291\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00292}00292\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00293}00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00295}00295\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00296}00296\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00297}00297\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00298}00298\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00299}00299\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00300}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_af07951efb88fe9c58385be256106d4bf}{00300}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_af07951efb88fe9c58385be256106d4bf}{VFSResourceRegistry::VFSResourceRegistry}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00301}00301\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BaseResourceRegistry}{BaseResourceRegistry}}(\mbox{\hyperlink{namespaceMaxOS_1_1processes_a9ac9ad12caad00b9d7eb53504318c263}{resource\_type\_t}}::\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{FILESYSTEM}}),}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00302}00302\ \ \ m\_vfs(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00303}00303\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00304}00304\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00305}00305\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00306}00306\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00307}00307\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_a968aa6f7832b33fd9fc888b4ec5bca9b}{VFSResourceRegistry::\string~VFSResourceRegistry}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00308}00308\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00316}00316\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ VFSResourceRegistry::open\_as\_resource(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory)\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00317}00317\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00318}00318\ \ \ \ \ \textcolor{comment}{//\ Doesnt\ exist}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00319}00319\ \ \ \ \ \textcolor{keywordflow}{if}(!directory)}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00320}00320\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00321}00321\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00322}00322\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ resource}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00323}00323\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1DirectoryResource}{DirectoryResource}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ 0,\ resource\_type\_t::FILESYSTEM);}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00324}00324\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}-\/>directory\ =\ directory;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00325}00325\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00326}00326\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BaseResourceRegistry_adf883ee5cd7054893878ce76f2c9a5fc}{register\_resource}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00327}00327\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00328}00328\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00329}00329\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00337}00337\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ VFSResourceRegistry::open\_as\_resource(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}*\ file)\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00338}00338\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00339}00339\ \ \ \ \ \textcolor{comment}{//\ Doesnt\ exist}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00340}00340\ \ \ \ \ \textcolor{keywordflow}{if}(!file)}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00341}00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00342}00342\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00343}00343\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ resource}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00344}00344\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileResource}{FileResource}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ 0,\ resource\_type\_t::FILESYSTEM);}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00345}00345\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}-\/>file\ =\ file;}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00346}00346\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00347}00347\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BaseResourceRegistry_adf883ee5cd7054893878ce76f2c9a5fc}{register\_resource}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00348}00348\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00349}00349\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00351}00351\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00352}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_a158840f689afffc36a1036d3fad11d47}{00352}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_a158840f689afffc36a1036d3fad11d47}{VFSResourceRegistry::get\_resource}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00353}00353\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00354}00354\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a9b089992646405a0969948351cb67faf}{Path::absolute\_path}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00355}00355\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a38023a8fb73c8660695358b612e13be0}{Path::join\_path}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{Scheduler::current\_process}}()-\/>working\_directory,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00356}00356\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00357}00357\ \ \ \ \ \textcolor{comment}{//\ Resource\ already\ opened}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00358}00358\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BaseResourceRegistry_a723b49dd3279da0802f7161475338b44}{BaseResourceRegistry::get\_resource}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00359}00359\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00360}00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00362}00362\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ resource}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00363}00363\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_file\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a5d85aff52a590e97a5c54c4a2d178d16}{Path::is\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00364}00364\ \ \ \ \ \textcolor{keywordflow}{if}(is\_file)}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00365}00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ open\_as\_resource(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}},\ m\_vfs-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a72b4ebe40a9371b2058a2dc1765830fb}{open\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}));}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00366}00366\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00367}00367\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ open\_as\_resource(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}},\ m\_vfs-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}));}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00368}00368\ \}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00369}00369\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00370}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_a27959c0f8a80073b5753fb0d3b75d97f}{00370}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry_a27959c0f8a80073b5753fb0d3b75d97f}{VFSResourceRegistry::create\_resource}}(\textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00372}00372\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a9b089992646405a0969948351cb67faf}{Path::absolute\_path}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00373}00373\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a38023a8fb73c8660695358b612e13be0}{Path::join\_path}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{Scheduler::current\_process}}()-\/>working\_directory,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00374}00374\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00375}00375\ \ \ \ \ \textcolor{comment}{//\ Resource\ already\ opened}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00376}00376\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BaseResourceRegistry_a723b49dd3279da0802f7161475338b44}{BaseResourceRegistry::get\_resource}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00377}00377\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00378}00378\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}};}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00380}00380\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ resource}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00381}00381\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_file\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a5d85aff52a590e97a5c54c4a2d178d16}{Path::is\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00382}00382\ \ \ \ \ \textcolor{keywordflow}{if}(is\_file)}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00383}00383\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ open\_as\_resource(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}},\ m\_vfs-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ad3f7dbfbd99ea30b5dc879bef308bbbf}{create\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}));}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00384}00384\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00385}00385\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ open\_as\_resource(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}},\ m\_vfs-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a75ac07b8f87ec1c20be8d4002699602e}{create\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}));}
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00386}00386\ }
+\DoxyCodeLine{\Hypertarget{vfsresource_8cpp_source_l00387}00387\ \}}
+
+\end{DoxyCode}

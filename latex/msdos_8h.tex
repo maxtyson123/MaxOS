@@ -1,0 +1,545 @@
+\doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/filesystem/partition/msdos.h File Reference}
+\hypertarget{msdos_8h}{}\label{msdos_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/partition/msdos.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/partition/msdos.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$drivers/disk/disk.\+h$>$}\newline
+{\ttfamily \#include $<$filesystem/format/fat32.\+h$>$}\newline
+{\ttfamily \#include $<$filesystem/format/ext2.\+h$>$}\newline
+{\ttfamily \#include $<$filesystem/vfs.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry}{Max\+OS\+::filesystem\+::partition\+::\+Partition\+Table\+Entry}}
+\begin{DoxyCompactList}\small\item\em Stores information about a partition. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord}{Max\+OS\+::filesystem\+::partition\+::\+Master\+Boot\+Record}}
+\begin{DoxyCompactList}\small\item\em Stores information about the master boot record. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition}{Max\+OS\+::filesystem\+::partition\+::\+MSDOSPartition}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
+\item 
+namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{Max\+OS\+::filesystem}}
+\item 
+namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition}{Max\+OS\+::filesystem\+::partition}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93}{Max\+OS\+::filesystem\+::partition\+::\+Partition\+Type}} \{ \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aba2b45bdc11e2a4a6e86aab2ac693cbb}{Max\+OS\+::filesystem\+::partition\+::\+EMPTY}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab87f6ac155836889d32e6caf9be6256e}{Max\+OS\+::filesystem\+::partition\+::\+FAT12}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae461dc10ebaaeae1fb7aca6644708319}{Max\+OS\+::filesystem\+::partition\+::\+XENIX\+\_\+\+ROOT}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1291fd7be08b2758ba7dc8f86168fdb2}{Max\+OS\+::filesystem\+::partition\+::\+XENIX\+\_\+\+USR}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af387b18b31dce27e077ed05b0312bcbe}{Max\+OS\+::filesystem\+::partition\+::\+FAT16}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a137134e62b2c971eba88c77734c14658}{Max\+OS\+::filesystem\+::partition\+::\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a99b31eb6f51da64e715db4a51071899f}{Max\+OS\+::filesystem\+::partition\+::\+FAT16\+\_\+32\+MB}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93abead6bebc11dade4ccad97fa037b72a6}{Max\+OS\+::filesystem\+::partition\+::\+NTFS}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93abd171688662d7549df2b9d6f28dad167}{Max\+OS\+::filesystem\+::partition\+::\+QNX\+\_\+\+QNY}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1e6d2332d6a8040f9cbfe6c416012929}{Max\+OS\+::filesystem\+::partition\+::\+AIX\+\_\+\+DATA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1395ab1a83ee260bea5a14fcdcd3f307}{Max\+OS\+::filesystem\+::partition\+::\+OS2\+\_\+\+BOOT\+\_\+\+MANAGER}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a46f21722823e3a16330a1de2b4bd105e}{Max\+OS\+::filesystem\+::partition\+::\+FAT32}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a36b7f4d68c95ebc05ac8c1ce9a9b5c1b}{Max\+OS\+::filesystem\+::partition\+::\+FAT32\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a3d60ef8953f81dae6520ebc692338d0c}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+1}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7060eadf5dec49a043dcbad8f2f5a3e8}{Max\+OS\+::filesystem\+::partition\+::\+FAT16\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa712023aa0d4c0ebf3b16295cd212c8e}{Max\+OS\+::filesystem\+::partition\+::\+EXTENDED\+\_\+\+LBA}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4c2223596711a6a941bc19e8067ceef9}{Max\+OS\+::filesystem\+::partition\+::\+OPUS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6b673b438d7d140bc3d8cdb278d75a29}{Max\+OS\+::filesystem\+::partition\+::\+FAT12\+\_\+\+HIDDEN}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6f4ccd800677249ca5170196d9ca287d}{Max\+OS\+::filesystem\+::partition\+::\+COMPAQ}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2247aebf406e9a120f4b6170d6a2ca60}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+2}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a597957b5df1db8c517e0492a2fc88a26}{Max\+OS\+::filesystem\+::partition\+::\+FAT16\+\_\+\+HIDDEN}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aaec90c0cc3bb8326117e9322a3494973}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+3}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac8be1f1e8439fe2978849121d552c0fa}{Max\+OS\+::filesystem\+::partition\+::\+FAT16\+\_\+32\+MB\+\_\+\+HIDDEN}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a54a129f24c1e0049b29c6ebd8baaaba8}{Max\+OS\+::filesystem\+::partition\+::\+IFS\+\_\+\+HIDDEN}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a025feaf4bb173debdd195ed0d261fbec}{Max\+OS\+::filesystem\+::partition\+::\+AST\+\_\+\+SMART\+\_\+\+SLEEP}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab2d477697968b3e33bb6e30dfc332ea3}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+4}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a318ed49e13c01c0462b3400cad45158d}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+5}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a99ab3e9ca4148c9970c85d355fe88c7b}{Max\+OS\+::filesystem\+::partition\+::\+FAT32\+\_\+\+HIDDEN}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a0176d2e6b99afbd302b5df810df46a4b}{Max\+OS\+::filesystem\+::partition\+::\+FAT32\+\_\+\+LBA\+\_\+\+HIDDEN}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af96dac6bce193ce32a531842a3cad27c}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+6}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a189c82717c78ca7eb7d36fcdd2c191b2}{Max\+OS\+::filesystem\+::partition\+::\+FAT16\+\_\+\+LBA\+\_\+\+HIDDEN}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a75bba91a0bd8c4fa0c525866f19a8d61}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+7}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6ac29846754ae71c0821bba6298e8461}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+8}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ad60973aa17d18994857e33ba10f505d2}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+1}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a145a2c3761988dfe872baf47b763e521}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+10}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1cdace352a82fb57a51d8b8001215241}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+2}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a113bbecf64d1b005e604c5e34b19abcf}{Max\+OS\+::filesystem\+::partition\+::\+NEC\+\_\+\+DOS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7f937c5c1b5902136c8d9d4d79e22bbd}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+11}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a001937f78396436d65a2a21540ed3a49}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+3}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac030d42078a320ffe0eddbaf9d68ddd3}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+12}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8e16eb9c414b874f7d92d380e3dffb0f}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+13}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a67e3bdde0acd180301502671b7635335}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+14}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a307ad7b2f98667c39ec4b654b1a524d3}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+15}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a83bf66fe6bea5bec1848a0f37ea46e2c}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+16}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa8e8c58770e8594c0308fe4974109c97}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+17}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae54bc2f070b00848c568007244f289fb}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+18}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae957ab94548d3d4c430251c0dbb7f6e0}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+19}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae322150d59f5345910623da911184c22}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+20}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a076a830ed8791d87c0da8b0cf32518b7}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+21}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6e4521bda9f3c206fd057078e5c0690c}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+4}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8ffe23d79ecc928cd2202d4ee5d93c91}{Max\+OS\+::filesystem\+::partition\+::\+NOS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a781f9918fb960456fd47139f811081c8}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+5}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a0040deb8182732809f19386196df91fa}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+6}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a26d80754ef7129ffae60b3fe018ba53a}{Max\+OS\+::filesystem\+::partition\+::\+JFS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac576efba78f84278a81edb40f19aa070}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+7}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac4277867a1b38153318e0e0f1e58af1b}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+22}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af642c3cf9b3298851b5d6008842dc4c9}{Max\+OS\+::filesystem\+::partition\+::\+THEOS\+\_\+3\+\_\+2}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a08520f7ea042e55952c73115d6503a0b}{Max\+OS\+::filesystem\+::partition\+::\+PLAN9}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8a2e78ed233187cb06a563f3d0602e25}{Max\+OS\+::filesystem\+::partition\+::\+THEOS\+\_\+4\+\_\+4\+GB}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93abedd39ac63392560322e911c6d618a88}{Max\+OS\+::filesystem\+::partition\+::\+THEOS\+\_\+4\+\_\+\+EXTENDED}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2bb71485fa1a0e7daf17f82e0125d209}{Max\+OS\+::filesystem\+::partition\+::\+PARTITIONMAGIC\+\_\+\+RECOVERY}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8f3573db8dfc03aa4ab5471632af8ffa}{Max\+OS\+::filesystem\+::partition\+::\+HIDDEN\+\_\+\+NETWARE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a47cfcdb177ff5d459cf1d0b3abe32504}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+23}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac61a3d895cc151af02c573bf2982f11f}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+24}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a33afbb127c94b863dd40a2d957bb21d2}{Max\+OS\+::filesystem\+::partition\+::\+VENIX}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae8eedd2e02da51848cc0ed6c06176b49}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+MINIX}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a70a59dd83b8874b8273bc8957b25ed7c}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+SWAP}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4846a587d8c5078a15d78bce12c4e3be}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+NATIVE}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af722ccb07915845eeeed7e6f95e62e79}{Max\+OS\+::filesystem\+::partition\+::\+GOBACK}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7f169b99dd6ee717a9cf1d672eac1f9c}{Max\+OS\+::filesystem\+::partition\+::\+BOOT\+\_\+\+US}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a3c052e9cca7dee179578e0f68237c798}{Max\+OS\+::filesystem\+::partition\+::\+EUMEL\+\_\+\+ELAN\+\_\+46}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1a7d5c8a40b29dcbb3249d60749eec1b}{Max\+OS\+::filesystem\+::partition\+::\+EUMEL\+\_\+\+ELAN\+\_\+47}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1942cfd5b87882100bdace705b866a62}{Max\+OS\+::filesystem\+::partition\+::\+EUMEL\+\_\+\+ELAN\+\_\+48}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac30f3c3012c61407f2680616995e73ba}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+25}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8850d5a578a367edf3be119ae0d43702}{Max\+OS\+::filesystem\+::partition\+::\+ADAOS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a950894d567fec533ee1a8cee0c55fdbb}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+26}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4eb757f0b57c1ec1f5ef3e7739646d1d}{Max\+OS\+::filesystem\+::partition\+::\+OBERON}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2c33b1ea2aa63620a0b79f8fa24f222d}{Max\+OS\+::filesystem\+::partition\+::\+QNX4}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4c0f0bd1ec96aee544436690072c742b}{Max\+OS\+::filesystem\+::partition\+::\+QNX4\+\_\+\+SECOND}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a13164cffe830d914f5bc489627d0c50c}{Max\+OS\+::filesystem\+::partition\+::\+QNX4\+\_\+\+THIRD}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac36a3288134e5b21eee5ebdb7129ff95}{Max\+OS\+::filesystem\+::partition\+::\+ONTRACK\+\_\+\+DM}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a0ded506407da7977d3049592f0d7516b}{Max\+OS\+::filesystem\+::partition\+::\+ONTRACK\+\_\+\+DM\+\_\+\+RW}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93acbdaba5605992f8e1635ad782152d65a}{Max\+OS\+::filesystem\+::partition\+::\+CPM}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a11eb8666a1280a90f1b7e46f08ccbe72}{Max\+OS\+::filesystem\+::partition\+::\+DISK\+\_\+\+MANAGER\+\_\+\+AUX3}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93acbeca4cc11a8b7eb5f0de4ca2b2b7f23}{Max\+OS\+::filesystem\+::partition\+::\+DISK\+\_\+\+MANAGER\+\_\+\+DDO}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a0b87c38efdfc84d54118e1c143d2dc7b}{Max\+OS\+::filesystem\+::partition\+::\+EZ\+\_\+\+DRIVE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6ff1236bab8f638664daec941dd55af8}{Max\+OS\+::filesystem\+::partition\+::\+GOLDEN\+\_\+\+BOW}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a89c8cd9bbb3af0b898ea3a00bb0d183d}{Max\+OS\+::filesystem\+::partition\+::\+DRIVE\+\_\+\+PRO}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93adc9a7b8d6a889ae66d65367b7f29a2d8}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+27}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae865c53a9fbe5753b526e6c6fbb790b3}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+28}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab9d621c096f05bec37220a968c5addb2}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+29}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab7b26aabb09155959f04ec3513885fbc}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+30}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1d430d397f08e77dcd896033df925fed}{Max\+OS\+::filesystem\+::partition\+::\+PRIAM\+\_\+\+EDISK}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a5c9e3124e5b0cb307f7565989bf9a5e5}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+31}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6fa0ef43bf99ea75af809e1ab8bfa795}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+32}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8e81639dea61df2230b7399fa03c5568}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+33}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af0c149291588fa4e4a5f900d66c4cbb1}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+34}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac134149ed45e7f5afdddf3021971dc16}{Max\+OS\+::filesystem\+::partition\+::\+SPEEDSTOR}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a36414a2e11506dbb792dc66c59e50117}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+35}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a15395d0642f86c5992abbca5e56e2b29}{Max\+OS\+::filesystem\+::partition\+::\+UNIX}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aabb869193e1f411eed635e21734596c4}{Max\+OS\+::filesystem\+::partition\+::\+PC\+\_\+\+ARMOUR}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93add9f1618e0fdf2030966f83ae0901c49}{Max\+OS\+::filesystem\+::partition\+::\+NOVELL\+\_\+\+NETWARE386}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ad6e1cc8aac75d64d4b1b92fc5968ce79}{Max\+OS\+::filesystem\+::partition\+::\+NOVELL\+\_\+\+SMS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93afd5e0e4fa76fc788293445d771b65ea2}{Max\+OS\+::filesystem\+::partition\+::\+NOVELL}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a155f60f3d3c11b3008cb74815c5583e0}{Max\+OS\+::filesystem\+::partition\+::\+NOVELL\+\_\+\+OLD}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ada7a0c0b44dbea8522d63a2b5e377c50}{Max\+OS\+::filesystem\+::partition\+::\+NOVELL\+\_\+\+NETWARE\+\_\+\+NSS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1d75f69fe92d65450c3b90135429da73}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+36}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a71d24d6f741701c97311b8a5d4791883}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+37}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a31a324d2a7e8d5073f2d17ff051d4bac}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+38}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2008da55163222265b2cc8a2d574b4b9}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+39}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1b80105271f1da427ae9738a45d1b621}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+40}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab745f8826e00d6d87d0cacfb82354002}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+41}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac4da611e6ed44b5e6cf7c495b1a5fa08}{Max\+OS\+::filesystem\+::partition\+::\+DISKSECURE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93adc59dcc3239ab7517d4d756705b04200}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+8}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a32864536fcb05dcd699edcdcfedaddf2}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+42}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6fd2cb2f7740c4ca92f7b50d2398c8c6}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+9}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a34480badc2a8f7b157e76fe1a804721c}{Max\+OS\+::filesystem\+::partition\+::\+SCRAMDISK}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a03fa079ac226e26750b45a3e164e2157}{Max\+OS\+::filesystem\+::partition\+::\+IBM\+\_\+\+PCIX}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac67f61c2ffedc703d13b9ce7d297dd92}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+10}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac7ca42aa0a9b954fe25f8c4881778dc7}{Max\+OS\+::filesystem\+::partition\+::\+M2\+FS}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4e44fe1ff2b26814f61c8495ad813119}{Max\+OS\+::filesystem\+::partition\+::\+XOSL\+\_\+\+FS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a237913f301c47746517b9893e3481b9c}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+43}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa3e53b1cf9d6e66005f2fbe309699d3b}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+44}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a779662e82c2c487abfa4a12db06766dc}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+45}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a21cc24107d78f73fd847ecd0ae046dd3}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+46}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a07ee436b2149a9670aec23fbc2d2b5aa}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+47}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aaa038d6c88a9200f52f022a0f297248f}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+48}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93add91b373a39cf071d25d11c4e19870b1}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+49}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6ade71d17834e99902567ad8f8dd8975}{Max\+OS\+::filesystem\+::partition\+::\+MINIX}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9457bedf00cc34087a4d074eba81991b}{Max\+OS\+::filesystem\+::partition\+::\+MINIX2}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a894ea8a65b046e6e72ee0ae1008252a6}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+SWAP\+\_\+\+ALT}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93acd897b3aaf5c5feaa6068e36ce077c79}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+EXT2}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab65029fb4a93b9c1e0d6cd9584e6573d}{Max\+OS\+::filesystem\+::partition\+::\+HIBERNATION}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2c1bb72c36635b0866ec5745050f6cee}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93add9f84f2eb520da67a9a367f8b1363c6}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+RAID}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a03a5d4876f8c0dc9b722b2405791688b}{Max\+OS\+::filesystem\+::partition\+::\+NTFS\+\_\+\+VOLUME\+\_\+\+SET}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aad676d89e71cd7454e62dd925cf19226}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+50}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab143bbd1483d273e21bbcb782e798572}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+51}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af0496cbd00922da6ac7d360b98f6e2ae}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+KERNEL}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a5bf735ddf35ef9ab08720179866c3802}{Max\+OS\+::filesystem\+::partition\+::\+FAULT\+\_\+\+TOLERANT\+\_\+\+FAT32}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93adca3e80b195d5c5064fc72e491a843df}{Max\+OS\+::filesystem\+::partition\+::\+FT\+\_\+\+FAT32\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aec7873a3660d5389aa45462fe09fd976}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+FAT12}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab49654c55d080f6bc9dd65505ac9731a}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+LVM}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ada383fd66a0f36fceb87cdaaf4f353cc}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+52}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa4f0d6a9869de0bb501ebe472a8938de}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+FAT16}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a20b58368c8ba9481e457218f332ac743}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9b726e58afbbea08cfa4c151c7188461}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+FAT16\+\_\+\+LARGE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a77049d4ff54aa6a0eb6e8df10b6490e5}{Max\+OS\+::filesystem\+::partition\+::\+HIDDEN\+\_\+\+LINUX\+\_\+\+NATIVE}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a611b5184c6b6752f607ed831bc8e225f}{Max\+OS\+::filesystem\+::partition\+::\+AMOEBA\+\_\+\+BAD\+\_\+\+BLOCK}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1f2ab8e3c61a417bd5e92adab70ca649}{Max\+OS\+::filesystem\+::partition\+::\+MIT\+\_\+\+EXOPC}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a0f0e1e2315f34b7b75f418b8a2c16ca6}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+53}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a3ebba1da44a1e7cfcc862e7bb0c07a79}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+FAT32}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7f326aa66f33c5fc25c848a97bbab4ec}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+FAT32\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a53d1af22c6f956ba64eed58d30d23f52}{Max\+OS\+::filesystem\+::partition\+::\+DCE376}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7f79484b863ea616e66299ba926c0f72}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+FAT16\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae3aa2f9f8312b65e6f66b4006ba85345}{Max\+OS\+::filesystem\+::partition\+::\+FREEFDISK\+\_\+\+EXTENDED\+\_\+\+LBA}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9ea1f831828dd4f35a495c89f2e59128}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+54}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa8250741aad7e6daab85e95987d46891}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+55}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4ed6ce5d8d028ab0036967e819ca510b}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+56}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a83466631b938c6a4e9027d4721988437}{Max\+OS\+::filesystem\+::partition\+::\+BSD\+\_\+\+OS}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a15a4afbaa6bce36ad41589b93e6abe9c}{Max\+OS\+::filesystem\+::partition\+::\+LAPTOP\+\_\+\+HIBERNATION}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a3a7f3323409862c2820fd8b84ffba2cc}{Max\+OS\+::filesystem\+::partition\+::\+HP\+\_\+\+VOLUME\+\_\+\+EXPANSION}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7fec523b390c743770b47d3dc55c73c9}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+57}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ad580f2235e854e3bc63adc0a5977f61e}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+11}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a00bdf1f952dd9c78a229c7972dbf6448}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+12}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a95a7c7ee3880afd876558ca4c0df8ef0}{Max\+OS\+::filesystem\+::partition\+::\+BSD\+\_\+386}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a009a8806a026a23ff5760ce8e5b94a4b}{Max\+OS\+::filesystem\+::partition\+::\+OPENBSD}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a687a26106cf85e474a09cf8d32b25fa9}{Max\+OS\+::filesystem\+::partition\+::\+NEXTSTEP}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8f9dccac419c040567a6aa06c0156fab}{Max\+OS\+::filesystem\+::partition\+::\+MAC\+\_\+\+OS\+\_\+X}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a32ce0ae02582a1ef1f56b5b6b04f6f50}{Max\+OS\+::filesystem\+::partition\+::\+NETBSD}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa2002fa4eee691e75be903a092f5987d}{Max\+OS\+::filesystem\+::partition\+::\+OLIVETTI\+\_\+\+SERVICE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a34ac2bc3f8931048b3da154b397ec7d1}{Max\+OS\+::filesystem\+::partition\+::\+MAC\+\_\+\+OS\+\_\+\+X\+\_\+\+BOOT}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9b504c3a7e089ce7b277dca66bcc93ca}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+58}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8685e4603c6fb8c93385787c09f3e96a}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+59}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af30e8d5b9cbe3dc11e82855da8c3c85e}{Max\+OS\+::filesystem\+::partition\+::\+SHAGOS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9c6e8cded89b1cefe1e56a5e329d94b2}{Max\+OS\+::filesystem\+::partition\+::\+SHAGOS\+\_\+\+SWAP}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac7e1a7da5f63919f491c245a5eb5ce4c}{Max\+OS\+::filesystem\+::partition\+::\+BOOTSTAR}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ad5ccedc4b90d9932b3560be526873ac3}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+13}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8bed6fb209652b2e68dd33ced8ff7b5a}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+60}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a5d22368b78ffe8da77dfbb83607e3daf}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+14}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aceb1880ed20598c551f28744b38d875a}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+15}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae805dce38a896b2a910f97c25234d988}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+61}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae8747b392c36153feb4e436c79717d5a}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+16}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6757ef846c86fdc9e3e71e36de34b35d}{Max\+OS\+::filesystem\+::partition\+::\+BSDI\+\_\+\+BSD386\+\_\+\+FS}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1bc065712d67a156bbe15c8edc7ee68b}{Max\+OS\+::filesystem\+::partition\+::\+BSDI\+\_\+\+BSD386\+\_\+\+SWAP}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93adae3fe106f8be91b7062562122d142c4}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+62}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a933ba6ca73a4d16c080797a033dec4d7}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+63}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a0f8b7af5dbca5d1d493b8c8558981dad}{Max\+OS\+::filesystem\+::partition\+::\+BOOT\+\_\+\+WIZARD\+\_\+\+HIDDEN}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a58d2d9bc5972e9a5dc314ab8484d0b57}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+64}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8a399bd1324aead64e324ca216d47146}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+65}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a7aa6305edc46c94c44b5194e5915f18e}{Max\+OS\+::filesystem\+::partition\+::\+SOLARIS8\+\_\+\+BOOT}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac9f3ee453f4455a5b5919075a13a1efd}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+66}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac7a01a425b7b8876dd7e2713d298cd7f}{Max\+OS\+::filesystem\+::partition\+::\+CTOS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ada84c541e10dfb2a3d3d6b4fb4ef0dec}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+FAT12}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af9c6201b6c9cad98a08645ad598222f2}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+17}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac3e2d9778f76572768146082080fb4c4}{Max\+OS\+::filesystem\+::partition\+::\+HIDDEN\+\_\+\+LINUX\+\_\+\+SWAP}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aacce6e84362f43bd342e889557db74dc}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+FAT16}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae6c53ab09ebd251b1d007bab64e17844}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af3566eefb031f81d70fc3492bd53b3fa}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+FAT16\+\_\+\+LARGE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1addc99e2761151d5a42e5473c6930f1}{Max\+OS\+::filesystem\+::partition\+::\+NTFS\+\_\+\+CORRUPT}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ad3b0077084c751e8342575e3cd0df4ca}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+67}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1964ae2394fb9456df5bf16835983a89}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+68}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4639ef94d4e8565c769a139cc725a44e}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+69}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a16586f27d3a4e76cff8a934a97cf8a31}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+FAT32}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93abc2c6b21ce25f45b8709ec0f747e638c}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+FAT32\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93addc30c24802a181660695c03f63c7252}{Max\+OS\+::filesystem\+::partition\+::\+CTOS\+\_\+\+MEMDUMP}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a44fa751d1eca787ecfada9eaafbc3d2e}{Max\+OS\+::filesystem\+::partition\+::\+DRDOS\+\_\+\+FAT16\+\_\+\+LBA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aeb9c749a48f65de8d94de8bae22e2622}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+70}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a929fde7bf65437da2ac1bdc81b1d5fdb}{Max\+OS\+::filesystem\+::partition\+::\+REAL32\+\_\+\+SECURE\+\_\+\+BIG}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4d9dac8dc3a3ab236026c2232620f83e}{Max\+OS\+::filesystem\+::partition\+::\+OLD\+\_\+\+MULTIUSER\+\_\+\+DOS\+\_\+\+FAT12}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a4b6ba2ab11dd5250c50156260c91b203}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+71}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ad9c21cfdbfa48246096648a1dc580f02}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+72}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a3166fab6dec349f428b67b7ec2a56f88}{Max\+OS\+::filesystem\+::partition\+::\+OLD\+\_\+\+MULTIUSER\+\_\+\+DOS\+\_\+\+FAT16}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac65a8fa59407dc066ca367fdfffa0ec2}{Max\+OS\+::filesystem\+::partition\+::\+OLD\+\_\+\+MULTIUSER\+\_\+\+DOS\+\_\+\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a3643403f25c84be857510acbaf18bd4d}{Max\+OS\+::filesystem\+::partition\+::\+OLD\+\_\+\+MULTIUSER\+\_\+\+DOS\+\_\+\+FAT16\+\_\+\+LARGE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa8de8a4cbfeb4c19babf5fd938d3ebad}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+73}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93adaafc6a3be1d864d2fb5665eb11babd0}{Max\+OS\+::filesystem\+::partition\+::\+CPM86}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a630a4f7526e5e62a788d3fd5587ef3cf}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+74}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a58621614a595f5f466a0283427361caa}{Max\+OS\+::filesystem\+::partition\+::\+NON\+\_\+\+FS\+\_\+\+DATA}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac43c9ecfb229a431d0b73e61b7ba3f6c}{Max\+OS\+::filesystem\+::partition\+::\+DIGITAL\+\_\+\+RESEARCH\+\_\+\+CPM}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae0ec39cced837c4ebcba239e56ddab4d}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+75}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a937a99519cb4bada3b4b6934727692db}{Max\+OS\+::filesystem\+::partition\+::\+HIDDEN\+\_\+\+CTOS\+\_\+\+MEMDUMP}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2e3e1c97d298b5eebe10a33f4781cbb4}{Max\+OS\+::filesystem\+::partition\+::\+DELL\+\_\+\+POWEREDGE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ac9ef26cfc4fe65cb992ed61f30da23d9}{Max\+OS\+::filesystem\+::partition\+::\+DGUX}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9861e1ceefe3651c45d69463838f9f2b}{Max\+OS\+::filesystem\+::partition\+::\+STM\+\_\+\+AVFS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a25dc3b34d10ff816f807572b0630a08a}{Max\+OS\+::filesystem\+::partition\+::\+SPEEDSTOR\+\_\+\+FAT\+\_\+\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93adfabe985a324b98cea1b71392503ea72}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+76}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6f01622de83486c373cdb34f80e5837e}{Max\+OS\+::filesystem\+::partition\+::\+SPEEDSTOR\+\_\+\+RO}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6e4bd54eca01d037d408e917cff08811}{Max\+OS\+::filesystem\+::partition\+::\+SPEEDSTOR\+\_\+\+EXTENDED}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6bf8e509f1ced4b43ac96ea536a88037}{Max\+OS\+::filesystem\+::partition\+::\+TANDY\+\_\+\+DOS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2f67a6211529dcc007ab59e0989a0da3}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+18}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9585c14195da2852945da3f8510338a5}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+77}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a493ee6eb4ea82e7e4c192f9c29f05b09}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+78}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9e43fb0469aa746cbbdbcaa6f78ebf8e}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+79}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ae2b9339cf5b8348a0761bb450cadec1f}{Max\+OS\+::filesystem\+::partition\+::\+BEFS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a51c149619c02f68cc214a6b50322a6de}{Max\+OS\+::filesystem\+::partition\+::\+SPRYTIX}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6e0d3df015e1bd410728f09ca2164ac6}{Max\+OS\+::filesystem\+::partition\+::\+EFI\+\_\+\+PROTECTIVE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a9ccc24d56a8fa554a03b7eadc0c71a8e}{Max\+OS\+::filesystem\+::partition\+::\+EFI\+\_\+\+SYSTEM}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a8319a3e31c62f7598eb79a39ff807805}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+PA\+\_\+\+RISC}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2df3521098d0e96ad9c7e83785bb0afc}{Max\+OS\+::filesystem\+::partition\+::\+SPEEDSTOR\+\_\+2}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1f59192ad9e3e971307f67daa0bb9546}{Max\+OS\+::filesystem\+::partition\+::\+DOS\+\_\+3\+\_\+3\+\_\+\+SECONDARY}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af17c6efd58f2883b2328252c3897ff6a}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+19}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1a7cbe0ef9702ea454136e7276cf5914}{Max\+OS\+::filesystem\+::partition\+::\+SPEEDSTOR\+\_\+\+LARGE}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93abe52a0fa71d80316213328306aae6559}{Max\+OS\+::filesystem\+::partition\+::\+PROLOGUE\+\_\+\+MULTI}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a2f9c6e94b7aac3d3e23b935d3d50d45d}{Max\+OS\+::filesystem\+::partition\+::\+RESERVED\+\_\+20}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aa5d9e4302e91edcd1c277288a49d9680}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+80}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a857907e7817fb3443a662266792b764f}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+81}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a238165bba71f5deb200e37aaf1f9b3bd}{Max\+OS\+::filesystem\+::partition\+::\+UNUSED\+\_\+82}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a57243e3d8ea4fa2e059cb21744cc393d}{Max\+OS\+::filesystem\+::partition\+::\+BOCHS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a18263a30df8afc60a733e59c60676ac0}{Max\+OS\+::filesystem\+::partition\+::\+VMFS}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a6e519fc924e1cd7dd56209db7a82c93e}{Max\+OS\+::filesystem\+::partition\+::\+VMWARE\+\_\+\+SWAP}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a1c062c8eba59d717db8e106fd6284c95}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+RAID\+\_\+\+AUTO}}
+, \newline
+\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93af9093a629863e160a59f374bf64c1807}{Max\+OS\+::filesystem\+::partition\+::\+NT\+\_\+\+HIDDEN}}
+, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93ab2fa4e5e5e99d97ece2166c438e8288d}{Max\+OS\+::filesystem\+::partition\+::\+XENIX\+\_\+\+BAD\+\_\+\+BLOCK}}
+ \}
+\begin{DoxyCompactList}\small\item\em Credit\+: \href{http://www.osdever.net/documents/pdf/partitiontypes.pdf}{\texttt{ http\+://www.\+osdever.\+net/documents/pdf/partitiontypes.\+pdf}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry}{Max\+OS\+::filesystem\+::partition\+::\+Partition\+Table\+Entry}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_afddaf05ee4263b59484844173c35294b}{Max\+OS\+::filesystem\+::partition\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed))
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a473a1483ecee72b5fb823dd28190cef8}{bootable}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a7b0643284eda403a636341c87b08e850}{start\+\_\+head}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a7194a9ec4359f80228f38427074b0e79}{start\+\_\+sector}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a461c61c9b56efe9ccccb9ddcafc7039e}{start\+\_\+cylinder}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_aa8928d79fa39385e4e726185713fc356}{end\+\_\+head}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_aed0439ad723570765c1e40b8efd1dd61}{end\+\_\+sector}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a4673ec2e07d66b72d0744129d4e89b87}{end\+\_\+cylinder}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{msdos_8h_a48084b77fa49c552983824a90b0110e4}{start\+\_\+\+LBA}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{msdos_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a09835f758bb5328b55a01068bbc4c972}{bootloader}} \mbox{[}440\mbox{]}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{msdos_8h_a2eda13dfaaf6d61d3bbad4f0dc86c845}{disk\+\_\+signature}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a69f7e996ff7ce0531e893a56c8515e6b}{unused}}
+\item 
+Partition\+Table\+Entry \mbox{\hyperlink{msdos_8h_ae82a748207fb88709bb65e8a13096863}{primary\+\_\+partition}} \mbox{[}4\mbox{]}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}}
+\item 
+class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition}{Max\+OS\+::filesystem\+::partition\+::\+MSDOSPartition}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a88887f48bf23d5a530521fb8b8a66ecd}{Max\+OS\+::filesystem\+::partition\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{msdos_8h_a473a1483ecee72b5fb823dd28190cef8}\label{msdos_8h_a473a1483ecee72b5fb823dd28190cef8} 
+\index{msdos.h@{msdos.h}!bootable@{bootable}}
+\index{bootable@{bootable}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{bootable}{bootable}}
+{\footnotesize\ttfamily uint8\+\_\+t bootable}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00001}{1}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a09835f758bb5328b55a01068bbc4c972}\label{msdos_8h_a09835f758bb5328b55a01068bbc4c972} 
+\index{msdos.h@{msdos.h}!bootloader@{bootloader}}
+\index{bootloader@{bootloader}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{bootloader}{bootloader}}
+{\footnotesize\ttfamily uint8\+\_\+t bootloader\mbox{[}440\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00001}{1}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a2eda13dfaaf6d61d3bbad4f0dc86c845}\label{msdos_8h_a2eda13dfaaf6d61d3bbad4f0dc86c845} 
+\index{msdos.h@{msdos.h}!disk\_signature@{disk\_signature}}
+\index{disk\_signature@{disk\_signature}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{disk\_signature}{disk\_signature}}
+{\footnotesize\ttfamily uint32\+\_\+t disk\+\_\+signature}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00002}{2}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a4673ec2e07d66b72d0744129d4e89b87}\label{msdos_8h_a4673ec2e07d66b72d0744129d4e89b87} 
+\index{msdos.h@{msdos.h}!end\_cylinder@{end\_cylinder}}
+\index{end\_cylinder@{end\_cylinder}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{end\_cylinder}{end\_cylinder}}
+{\footnotesize\ttfamily uint16\+\_\+t end\+\_\+cylinder}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00011}{11}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_aa8928d79fa39385e4e726185713fc356}\label{msdos_8h_aa8928d79fa39385e4e726185713fc356} 
+\index{msdos.h@{msdos.h}!end\_head@{end\_head}}
+\index{end\_head@{end\_head}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{end\_head}{end\_head}}
+{\footnotesize\ttfamily uint8\+\_\+t end\+\_\+head}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00009}{9}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_aed0439ad723570765c1e40b8efd1dd61}\label{msdos_8h_aed0439ad723570765c1e40b8efd1dd61} 
+\index{msdos.h@{msdos.h}!end\_sector@{end\_sector}}
+\index{end\_sector@{end\_sector}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{end\_sector}{end\_sector}}
+{\footnotesize\ttfamily uint8\+\_\+t end\+\_\+sector}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00010}{10}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_aebb70c2aab3407a9f05334c47131a43b}\label{msdos_8h_aebb70c2aab3407a9f05334c47131a43b} 
+\index{msdos.h@{msdos.h}!length@{length}}
+\index{length@{length}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{length}{length}}
+{\footnotesize\ttfamily uint32\+\_\+t length}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00014}{14}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}\label{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2} 
+\index{msdos.h@{msdos.h}!magic@{magic}}
+\index{magic@{magic}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{magic}{magic}}
+{\footnotesize\ttfamily uint16\+\_\+t magic}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00007}{7}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00033}{kernel\+\_\+main()}}, and \mbox{\hyperlink{multiboot_8cpp_source_l00014}{Max\+OS\+::system\+::\+Multiboot\+::\+Multiboot()}}.
+
+\Hypertarget{msdos_8h_ae82a748207fb88709bb65e8a13096863}\label{msdos_8h_ae82a748207fb88709bb65e8a13096863} 
+\index{msdos.h@{msdos.h}!primary\_partition@{primary\_partition}}
+\index{primary\_partition@{primary\_partition}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{primary\_partition}{primary\_partition}}
+{\footnotesize\ttfamily Partition\+Table\+Entry primary\+\_\+partition\mbox{[}4\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00005}{5}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a461c61c9b56efe9ccccb9ddcafc7039e}\label{msdos_8h_a461c61c9b56efe9ccccb9ddcafc7039e} 
+\index{msdos.h@{msdos.h}!start\_cylinder@{start\_cylinder}}
+\index{start\_cylinder@{start\_cylinder}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{start\_cylinder}{start\_cylinder}}
+{\footnotesize\ttfamily uint16\+\_\+t start\+\_\+cylinder}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00005}{5}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a7b0643284eda403a636341c87b08e850}\label{msdos_8h_a7b0643284eda403a636341c87b08e850} 
+\index{msdos.h@{msdos.h}!start\_head@{start\_head}}
+\index{start\_head@{start\_head}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{start\_head}{start\_head}}
+{\footnotesize\ttfamily uint8\+\_\+t start\+\_\+head}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00003}{3}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a48084b77fa49c552983824a90b0110e4}\label{msdos_8h_a48084b77fa49c552983824a90b0110e4} 
+\index{msdos.h@{msdos.h}!start\_LBA@{start\_LBA}}
+\index{start\_LBA@{start\_LBA}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{start\_LBA}{start\_LBA}}
+{\footnotesize\ttfamily uint32\+\_\+t start\+\_\+\+LBA}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00013}{13}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a7194a9ec4359f80228f38427074b0e79}\label{msdos_8h_a7194a9ec4359f80228f38427074b0e79} 
+\index{msdos.h@{msdos.h}!start\_sector@{start\_sector}}
+\index{start\_sector@{start\_sector}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{start\_sector}{start\_sector}}
+{\footnotesize\ttfamily uint8\+\_\+t start\+\_\+sector}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00004}{4}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a1d127017fb298b889f4ba24752d08b8e}\label{msdos_8h_a1d127017fb298b889f4ba24752d08b8e} 
+\index{msdos.h@{msdos.h}!type@{type}}
+\index{type@{type}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily uint8\+\_\+t type}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00007}{7}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+\Hypertarget{msdos_8h_a69f7e996ff7ce0531e893a56c8515e6b}\label{msdos_8h_a69f7e996ff7ce0531e893a56c8515e6b} 
+\index{msdos.h@{msdos.h}!unused@{unused}}
+\index{unused@{unused}!msdos.h@{msdos.h}}
+\doxysubsubsection{\texorpdfstring{unused}{unused}}
+{\footnotesize\ttfamily uint16\+\_\+t unused}
+
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00003}{3}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+

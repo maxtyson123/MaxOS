@@ -1,8 +1,8 @@
-.TH "MaxOS::processes::Process" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::Process" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler\fP\&.  
+MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler\fP, wraps & manages threads as well as its own address space and resources\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,11 +13,15 @@ MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler
 
 .in +1c
 .ti -1c
-.RI "\fBProcess\fP (\fBstring\fP \fBname\fP, void(*_entry_point)(void *), void *args, int arg_amount, bool \fBis_kernel\fP=false)"
+.RI "\fBProcess\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBbool\fP \fBis_kernel\fP=\fBfalse\fP)"
+.br
+.RI "Base Constructor for the \fBProcess\fP\&. "
+.ti -1c
+.RI "\fBProcess\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBvoid\fP(*\fB_entry_point\fP)(\fBvoid\fP *), \fBvoid\fP *\fBargs\fP, \fBint\fP \fBarg_amount\fP, \fBbool\fP \fBis_kernel\fP=\fBfalse\fP)"
 .br
 .RI "Constructor for the \fBProcess\fP class (from a function) "
 .ti -1c
-.RI "\fBProcess\fP (\fBstring\fP \fBname\fP, void *args, int arg_amount, \fBElf64\fP *elf, bool \fBis_kernel\fP=false)"
+.RI "\fBProcess\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBvoid\fP *\fBargs\fP, \fBint\fP \fBarg_amount\fP, \fBElf64\fP *\fBelf\fP, \fBbool\fP \fBis_kernel\fP=\fBfalse\fP)"
 .br
 .RI "Constructor for the \fBProcess\fP class (from an elf, will free the elf memory after loading) "
 .ti -1c
@@ -25,31 +29,27 @@ MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler
 .br
 .RI "Destructor for the \fBProcess\fP class\&. "
 .ti -1c
-.RI "void \fBset_up\fP ()"
-.br
-.RI "Generic setup function for the process\&. "
-.ti -1c
-.RI "\fBcommon::Vector\fP< \fBThread\fP * > \fBget_threads\fP ()"
+.RI "\fBcommon::Vector\fP< \fBThread\fP * > \fBthreads\fP ()"
 .br
 .RI "Gets the threads of the process\&. "
 .ti -1c
-.RI "void \fBadd_thread\fP (\fBThread\fP *thread)"
+.RI "\fBvoid\fP \fBadd_thread\fP (\fBThread\fP *\fBthread\fP)"
 .br
 .RI "Adds a thread to the process\&. "
 .ti -1c
-.RI "void \fBremove_thread\fP (uint64_t tid)"
+.RI "\fBvoid\fP \fBremove_thread\fP (\fBuint64_t\fP tid)"
 .br
 .RI "Finds a thread by its tid\&. "
 .ti -1c
-.RI "void \fBset_pid\fP (uint64_t pid)"
+.RI "\fBvoid\fP \fBset_pid\fP (\fBuint64_t\fP \fBpid\fP)"
 .br
 .RI "Sets the pid of the process once added to the queue\&. "
 .ti -1c
-.RI "uint64_t \fBget_pid\fP ()"
+.RI "\fBuint64_t\fP \fBpid\fP () \fBconst\fP"
 .br
 .RI "Gets the pid of the process\&. "
 .ti -1c
-.RI "uint64_t \fBget_total_ticks\fP ()"
+.RI "\fBuint64_t\fP \fBtotal_ticks\fP ()"
 .br
 .RI "Gets the total ticks of the threads in the process (not this does not include any past killed threads) "
 .in -1c
@@ -63,24 +63,65 @@ MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler
 .RI "\fBstring\fP \fBname\fP"
 .br
 .ti -1c
-.RI "\fBmemory::MemoryManager\fP * \fBmemory_manager\fP"
+.RI "\fBstring\fP \fBworking_directory\fP = '/'"
+.br
+.ti -1c
+.RI "\fBmemory::MemoryManager\fP * \fBmemory_manager\fP = nullptr"
+.br
+.ti -1c
+.RI "\fBResourceManager\fP \fBresource_manager\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-A process that can be scheduled by the \fBScheduler\fP\&. 
+A process that can be scheduled by the \fBScheduler\fP, wraps & manages threads as well as its own address space and resources\&. 
 .PP
-Definition at line 69 of file process\&.h\&.
+Definition at line \fB78\fP of file \fBprocess\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Process::Process (\fBstring\fP p_name, void(*)(void *) _entry_point, void * args, int arg_amount, bool is_kernel = \fCfalse\fP)"
+.SS "Process::Process (\fBconst\fP \fBstring\fP & p_name, \fBbool\fP is_kernel = \fC\fBfalse\fP\fP)"
+
+.PP
+Base Constructor for the \fBProcess\fP\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIp_name\fP The name of the process 
+.br
+\fIis_kernel\fP If the process is a kernel process 
+.RE
+.PP
+
+.PP
+Definition at line \fB119\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+120 : is_kernel(is_kernel),
+121   name(p_name)
+122 {
+123 
+124     // Pause interrupts while creating the process
+125     asm("cli");
+126 
+127     // Basic setup
+128     m_pid = Scheduler::system_scheduler()\->add_process(this);
+129 
+130     // If it is a kernel process then don't need a new memory manager
+131     memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager : new MemoryManager();
+132 
+133     // Resuming interrupts are done when adding a thread
+134 }
+.fi
+
+.PP
+References \fBis_kernel\fP, \fBmemory_manager\fP, \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP, and \fBMaxOS::processes::Scheduler::system_scheduler()\fP\&.
+.SS "Process::Process (\fBconst\fP \fBstring\fP & p_name, \fBvoid\fP(*)(\fBvoid\fP *) _entry_point, \fBvoid\fP * args, \fBint\fP arg_amount, \fBbool\fP is_kernel = \fC\fBfalse\fP\fP)"
 
 .PP
 Constructor for the \fBProcess\fP class (from a function) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIname\fP The name of the process 
+\fIp_name\fP The name of the process 
 .br
 \fI_entry_point\fP The entry point of the process 
 .br
@@ -93,27 +134,22 @@ Constructor for the \fBProcess\fP class (from a function)
 .PP
 
 .PP
-Definition at line 100 of file process\&.cpp\&.
-.PP
+Definition at line \fB145\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-101 : is_kernel(is_kernel),
-102   name(p_name)
-103 {
-104 
-105   // Basic setup
-106   set_up();
-107 
-108   // Create the main thread
-109   Thread* main_thread = new Thread(_entry_point, args, arg_amount, this);
-110 
-111   // Add the thread
-112   add_thread(main_thread);
-113 
-114 }
+146 : Process(p_name, is_kernel)
+147 {
+148 
+149     // Create the main thread
+150     auto* main_thread = new Thread(_entry_point, args, arg_amount, this);
+151 
+152     // Add the thread
+153     add_thread(main_thread);
+154 }
 .fi
+
 .PP
-References add_thread(), and set_up()\&.
-.SS "Process::Process (\fBstring\fP p_name, void * args, int arg_amount, \fBElf64\fP * elf, bool is_kernel = \fCfalse\fP)"
+References \fBadd_thread()\fP\&.
+.SS "Process::Process (\fBconst\fP \fBstring\fP & p_name, \fBvoid\fP * args, \fBint\fP arg_amount, \fBElf64\fP * elf, \fBbool\fP is_kernel = \fC\fBfalse\fP\fP)"
 
 .PP
 Constructor for the \fBProcess\fP class (from an elf, will free the elf memory after loading) 
@@ -133,63 +169,52 @@ Constructor for the \fBProcess\fP class (from an elf, will free the elf memory a
 .PP
 
 .PP
-Definition at line 125 of file process\&.cpp\&.
-.PP
+Definition at line \fB165\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-126 : is_kernel(is_kernel),
-127   name(p_name)
-128 {
-129 
-130   // Basic setup
-131   set_up();
-132 
-133   // Load the elf
-134   elf -> load();
-135 
-136   // Get the entry point
-137   void (*entry_point)(void *) = (void (*)(void *))elf -> get_header() -> entry;
-138 
-139   // Create the main thread
-140   Thread* main_thread = new Thread(entry_point, args, arg_amount, this);
-141 
-142   // Add the thread
-143   add_thread(main_thread);
-144 
-145   // Free the elf
-146   delete elf;
-147 }
+166 : Process(p_name, is_kernel)
+167 {
+168 
+169     // Get the entry point
+170     elf\->load();
+171     auto* entry_point = (void (*)(void*)) elf\->header()\->entry;
+172 
+173     // Create the main thread
+174     auto* main_thread = new Thread(entry_point, args, arg_amount, this);
+175     add_thread(main_thread);
+176 }
 .fi
+
 .PP
-References add_thread(), and set_up()\&.
+References \fBadd_thread()\fP\&.
 .SS "Process::~Process ()"
 
 .PP
 Destructor for the \fBProcess\fP class\&. 
 .PP
-Definition at line 153 of file process\&.cpp\&.
-.PP
+Definition at line \fB182\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-153                   {
-154 
-155   _kprintf("Cleaning up process %s\n", name\&.c_str());
-156 
-157   // Free the threads
-158   for (auto thread : m_threads)
-159       delete thread;
-160 
-161   // Free the memory manager (only if it was created)
-162   if(!is_kernel){
-163       delete memory_manager;
-164       delete m_virtual_memory_manager;
-165   }
-166 
-167 }
+182                   {
+183 
+184     uint64_t pages = PhysicalMemoryManager::s_current_manager\->memory_used();
+185 
+186     // Free the threads
+187     for (auto thread: m_threads)
+188         delete thread;
+189 
+190     // Free the memory manager (only if it was created)
+191     if (!is_kernel)
+192         delete memory_manager;
+193 
+194     // Log the cleanup
+195     Logger::DEBUG() << "Process " << name\&.c_str() << " cleaned up, memory before: " << pages << " bytes, after cleanup: " << PhysicalMemoryManager::s_current_manager\->memory_used() << " bytes\\n";
+196 }
 .fi
+
 .PP
-References _kprintf, MaxOS::String::c_str(), is_kernel, memory_manager, and name\&.
+References \fBMaxOS::String::c_str()\fP, \fBLogger::DEBUG()\fP, \fBis_kernel\fP, \fBmemory_manager\fP, \fBname\fP, and \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "void Process::add_thread (\fBThread\fP * thread)"
+.SS "\fBvoid\fP Process::add_thread (\fBThread\fP * thread)"
 
 .PP
 Adds a thread to the process\&. 
@@ -201,30 +226,25 @@ Adds a thread to the process\&.
 .PP
 
 .PP
-Definition at line 173 of file process\&.cpp\&.
-.PP
+Definition at line \fB203\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-173                                        {
-174 
-175   // Pause interrupts while adding the thread
-176   asm("cli");
-177 
-178   // Store the thread
-179   m_threads\&.push_back(thread);
-180 
-181   // Set the pid
-182   thread->parent_pid = m_pid;
-183 
-184   // Can now resume interrupts
-185   asm("sti");
-186 
-187 }
+203                                        {
+204 
+205     // Pause interrupts while adding the thread
+206     asm("cli");
+207 
+208     // Store the thread
+209     m_threads\&.push_back(thread);
+210     thread\->parent_pid = m_pid;
+211 
+212     // Can now resume interrupts
+213     asm("sti");
+214 }
 .fi
+
 .PP
-References MaxOS::processes::Thread::parent_pid\&.
-.PP
-Referenced by Process()\&.
-.SS "uint64_t Process::get_pid ()"
+Referenced by \fBProcess()\fP, and \fBProcess()\fP\&.
+.SS "\fBuint64_t\fP Process::pid () const"
 
 .PP
 Gets the pid of the process\&. 
@@ -236,57 +256,17 @@ The pid of the process
 .PP
 
 .PP
-Definition at line 252 of file process\&.cpp\&.
-.PP
+Definition at line \fB278\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-252                           {
-253   return m_pid;
-254 }
+278                             {
+279 
+280     return m_pid;
+281 }
 .fi
-.PP
-Referenced by MaxOS::processes::IPC::alloc_shared_memory(), MaxOS::processes::Scheduler::load_multiboot_elfs(), and MaxOS::processes::Thread::Thread()\&.
-.SS "\fBVector\fP< \fBThread\fP * > Process::get_threads ()"
 
 .PP
-Gets the threads of the process\&. 
-.PP
-Definition at line 241 of file process\&.cpp\&.
-.PP
-.nf
-241                                      {
-242 
-243   // Return the threads
-244   return m_threads;
-245 
-246 }
-.fi
-.PP
-Referenced by MaxOS::processes::Scheduler::force_remove_process(), MaxOS::processes::Scheduler::remove_process(), and MaxOS::processes::Scheduler::schedule_next()\&.
-.SS "uint64_t Process::get_total_ticks ()"
-
-.PP
-Gets the total ticks of the threads in the process (not this does not include any past killed threads) 
-.PP
-\fBReturns\fP
-.RS 4
-The total ticks of the threads in the process 
-.RE
-.PP
-
-.PP
-Definition at line 281 of file process\&.cpp\&.
-.PP
-.nf
-281                                   {
-282 
-283   uint64_t total_ticks = 0;
-284   for (auto thread : m_threads)
-285     total_ticks += thread->ticks;
-286 
-287   return total_ticks;
-288 }
-.fi
-.SS "void Process::remove_thread (uint64_t tid)"
+Referenced by \fBset_pid()\fP\&.
+.SS "\fBvoid\fP Process::remove_thread (\fBuint64_t\fP tid)"
 
 .PP
 Finds a thread by its tid\&. 
@@ -298,39 +278,38 @@ Finds a thread by its tid\&.
 .PP
 
 .PP
-Definition at line 193 of file process\&.cpp\&.
-.PP
+Definition at line \fB221\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-193                                         {
-194 
-195   // Find the thread
-196   for (uint16_t i = 0; i < m_threads\&.size(); i++) {
-197       if (m_threads[i]->tid == tid) {
-198 
-199         // Get the thread
-200         Thread* thread = m_threads[i];
-201 
-202         // Delete the thread
-203         delete thread;
-204 
-205         // Remove the thread from the list
-206         m_threads\&.erase(m_threads\&.begin() + i);
-207 
-208 
-209         // If there are no more threads then delete the process (done on the scheduler side)
-210         if (m_threads\&.empty())
-211           Scheduler::get_system_scheduler() -> remove_process(this);
-212 
-213         return;
-214     }
-215   }
-216 }
+221                                         {
+222 
+223     // Find the thread
+224     for (uint32_t i = 0; i < m_threads\&.size(); i++) {
+225 
+226         // Thread is not what is being removed
+227         if (m_threads[i]\->tid != tid)
+228             continue;
+229 
+230         // Delete the thread
+231         Thread* thread = m_threads[i];
+232         delete thread;
+233 
+234         // Remove the thread from the list
+235         m_threads\&.erase(m_threads\&.begin() + i);
+236 
+237         // If there are no more threads then delete the process from the scheduler
+238         if (m_threads\&.empty())
+239             Scheduler::system_scheduler()\->remove_process(this);
+240 
+241         return;
+242     }
+243 }
 .fi
+
 .PP
-References MaxOS::processes::Scheduler::get_system_scheduler(), and MaxOS::drivers::peripherals::i\&.
+References \fBMaxOS::processes::Scheduler::system_scheduler()\fP\&.
 .PP
-Referenced by MaxOS::processes::Scheduler::force_remove_process(), and MaxOS::processes::Scheduler::schedule_next()\&.
-.SS "void Process::set_pid (uint64_t pid)"
+Referenced by \fBMaxOS::processes::Scheduler::force_remove_process()\fP, and \fBMaxOS::processes::Scheduler::schedule_next()\fP\&.
+.SS "\fBvoid\fP Process::set_pid (\fBuint64_t\fP pid)"
 
 .PP
 Sets the pid of the process once added to the queue\&. 
@@ -342,77 +321,97 @@ Sets the pid of the process once added to the queue\&.
 .PP
 
 .PP
-Definition at line 222 of file process\&.cpp\&.
-.PP
+Definition at line \fB250\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-222                                   {
-223 
-224   // Check if the pid is already set
-225   if (m_pid != 0)
-226         return;
-227 
-228   // Set the pid
-229   m_pid = pid;
-230 
-231   // Assign the pid to the threads
-232   for (auto thread : m_threads)
-233         thread->parent_pid = pid;
-234 
-235 
-236 }
+250                                   {
+251 
+252     // Check if the pid is already set
+253     if (m_pid != 0)
+254         return;
+255 
+256     // Set the pid
+257     m_pid = pid;
+258 
+259     // Assign the pid to the threads
+260     for (auto thread: m_threads)
+261         thread\->parent_pid = pid;
+262 
+263 }
 .fi
-.PP
-Referenced by kernelMain()\&.
-.SS "void Process::set_up ()"
 
 .PP
-Generic setup function for the process\&. 
+References \fBpid()\fP\&.
+.SS "\fBVector\fP< \fBThread\fP * > Process::threads ()"
+
 .PP
-Definition at line 259 of file process\&.cpp\&.
+Gets the threads of the process\&. 
 .PP
+Definition at line \fB268\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-259                      {
-260 
-261   // Pause interrupts while creating the process
-262   asm("cli");
-263 
-264   // Basic setup
-265   m_pid = Scheduler::get_system_scheduler() ->add_process(this);
-266 
-267   // If it is a kernel process then don't need a new memory manager
-268   if(!is_kernel){
-269     m_virtual_memory_manager = new VirtualMemoryManager(false);
-270     memory_manager = new MemoryManager(m_virtual_memory_manager);
-271   }else{
-272     memory_manager = MemoryManager::s_kernel_memory_manager;
-273   }
-274 
-275 }
+268                                  {
+269 
+270     return m_threads;
+271 }
 .fi
+
 .PP
-References MaxOS::processes::Scheduler::add_process(), MaxOS::processes::Scheduler::get_system_scheduler(), is_kernel, and memory_manager\&.
+Referenced by \fBMaxOS::processes::Scheduler::force_remove_process()\fP, \fBMaxOS::processes::Scheduler::remove_process()\fP, and \fBMaxOS::processes::Scheduler::schedule_next()\fP\&.
+.SS "\fBuint64_t\fP Process::total_ticks ()"
+
 .PP
-Referenced by Process()\&.
+Gets the total ticks of the threads in the process (not this does not include any past killed threads) 
+.PP
+\fBReturns\fP
+.RS 4
+The total ticks of the threads in the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB288\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+288                               {
+289 
+290     uint64_t total_ticks = 0;
+291     for (auto thread: m_threads)
+292         total_ticks += thread\->ticks;
+293 
+294     return total_ticks;
+295 }
+.fi
+
+.PP
+References \fBtotal_ticks()\fP\&.
+.PP
+Referenced by \fBMaxOS::system::CPU::PANIC()\fP, and \fBtotal_ticks()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "bool MaxOS::processes::Process::is_kernel"
 
 .PP
-Definition at line 95 of file process\&.h\&.
+Definition at line \fB100\fP of file \fBprocess\&.h\fP\&.
 .PP
-Referenced by set_up(), and ~Process()\&.
-.SS "\fBmemory::MemoryManager\fP* MaxOS::processes::Process::memory_manager"
+Referenced by \fBProcess()\fP, and \fB~Process()\fP\&.
+.SS "\fBmemory::MemoryManager\fP* MaxOS::processes::Process::memory_manager = nullptr"
 
 .PP
-Definition at line 98 of file process\&.h\&.
+Definition at line \fB105\fP of file \fBprocess\&.h\fP\&.
 .PP
-Referenced by kernelMain(), MaxOS::processes::Scheduler::schedule_next(), set_up(), and ~Process()\&.
+Referenced by \fBProcess()\fP, \fBMaxOS::processes::Scheduler::schedule_next()\fP, and \fB~Process()\fP\&.
 .SS "\fBstring\fP MaxOS::processes::Process::name"
 
 .PP
-Definition at line 97 of file process\&.h\&.
+Definition at line \fB102\fP of file \fBprocess\&.h\fP\&.
 .PP
-Referenced by MaxOS::processes::Scheduler::add_process(), MaxOS::system::CPU::PANIC(), MaxOS::system::CPU::prepare_for_panic(), and ~Process()\&.
+Referenced by \fBMaxOS::processes::Scheduler::add_process()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, and \fB~Process()\fP\&.
+.SS "\fBResourceManager\fP MaxOS::processes::Process::resource_manager"
+
+.PP
+Definition at line \fB106\fP of file \fBprocess\&.h\fP\&.
+.SS "\fBstring\fP MaxOS::processes::Process::working_directory = '/'"
+
+.PP
+Definition at line \fB103\fP of file \fBprocess\&.h\fP\&.
 
 .SH "Author"
 .PP 

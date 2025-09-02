@@ -1,0 +1,87 @@
+\doxysection{port.\+cpp}
+\hypertarget{port_8cpp_source}{}\label{port_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/hardwarecommunication/port.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/hardwarecommunication/port.cpp}}
+\mbox{\hyperlink{port_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 10/4/2022.}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{port_8h}{hardwarecommunication/port.h}}>}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication}{MaxOS::hardwarecommunication}};}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00009}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_a736150b31b07cf912f138fd4506fad78}{00009}}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_a736150b31b07cf912f138fd4506fad78}{Port::Port}}(uint16\_t\ port\_number)}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00010}00010\ :\ m\_port\_number(port\_number)}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00011}00011\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00012}00012\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00014}00014\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_afe166c2a6b10ad34d47472a150366bc1}{Port::\string~Port}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00016}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a53461bfc898446e31cead8262a08b8d6}{00016}}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a53461bfc898446e31cead8262a08b8d6}{Port8Bit::Port8Bit}}(uint16\_t\ port\_number)}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00017}00017\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port}{Port}}(port\_number)\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00018}00018\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00020}00020\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a89005432c2685a92f2318d3dcf289666}{Port8Bit::\string~Port8Bit}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00027}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{00027}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{Port8Bit::write}}(uint8\_t\ \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}})\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}outb\ \%0,\ \%1"{}}\ :\ :\ \textcolor{stringliteral}{"{}a"{}}\ (\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}),\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00030}00030\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00037}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{00037}}\ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{Port8Bit::read}}()\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00039}00039\ \ \ \ \ uint8\_t\ result;}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00040}00040\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}inb\ \%1,\ \%0"{}}\ :\ \textcolor{stringliteral}{"{}=a"{}}\ (result)\ :\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00042}00042\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00044}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a2fc7c727503c249798190718427d00bd}{00044}}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a2fc7c727503c249798190718427d00bd}{Port8BitSlow::Port8BitSlow}}(uint16\_t\ port\_number)}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00045}00045\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{Port8Bit}}(port\_number)\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00046}00046\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00048}00048\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_ae8bc7252b52d57882f74d9315564bff7}{Port8BitSlow::\string~Port8BitSlow}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00055}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{00055}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8BitSlow_a21c1335b70ef3c3d6bc2048cc188f747}{Port8BitSlow::write}}(uint8\_t\ \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}})\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}outb\ \%0,\ \%1\(\backslash\)njmp\ 1f\(\backslash\)n1:\ jmp\ 1f\(\backslash\)n1:"{}}\ :\ :\ \textcolor{stringliteral}{"{}a"{}}\ (\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}),\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00058}00058\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00061}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a6ff4fc8ee32923c478cf4710ac34f028}{00061}}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a6ff4fc8ee32923c478cf4710ac34f028}{Port16Bit::Port16Bit}}(uint16\_t\ port\_number)}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00062}00062\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port}{Port}}(port\_number)\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00063}00063\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00065}00065\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a85b0844a230be693a64e5daa15e3eb48}{Port16Bit::\string~Port16Bit}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00072}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{00072}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{Port16Bit::write}}(uint16\_t\ \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}})\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00074}00074\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}outw\ \%0,\ \%1"{}}\ :\ :\ \textcolor{stringliteral}{"{}a"{}}\ (\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}),\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00075}00075\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00082}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{00082}}\ uint16\_t\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{Port16Bit::read}}()\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00084}00084\ \ \ \ \ uint16\_t\ result;}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00085}00085\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}inw\ \%1,\ \%0"{}}\ :\ \textcolor{stringliteral}{"{}=a"{}}\ (result)\ :\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00087}00087\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00090}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_a86ba53892a339c063a50f004173cf68d}{00090}}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_a86ba53892a339c063a50f004173cf68d}{Port32Bit::Port32Bit}}(uint16\_t\ port\_number)}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00091}00091\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port}{Port}}(port\_number)\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00092}00092\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00094}00094\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_a17cb30c93ea1541503d1569ad8b5b6bc}{Port32Bit::\string~Port32Bit}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00101}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_ad13c0ec90a83f05b61c023dd8a1f53e8}{00101}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_ad13c0ec90a83f05b61c023dd8a1f53e8}{Port32Bit::write}}(uint32\_t\ \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}})\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}outl\ \%0,\ \%1"{}}\ :\ :\ \textcolor{stringliteral}{"{}a"{}}\ (\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}),\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00104}00104\ \}}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00111}\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_a742b40049c70bfda79a3031b85297948}{00111}}\ uint32\_t\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port32Bit_a742b40049c70bfda79a3031b85297948}{Port32Bit::read}}()\ \{}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00113}00113\ \ \ \ \ uint32\_t\ result;}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00114}00114\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}inl\ \%1,\ \%0"{}}\ :\ \textcolor{stringliteral}{"{}=a"{}}\ (result)\ :\ \textcolor{stringliteral}{"{}Nd"{}}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port_ae5e5e845199745c708f569e3ad77d3dd}{m\_port\_number}}));}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{port_8cpp_source_l00116}00116\ \}}
+
+\end{DoxyCode}

@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/elf.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/elf.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,48 +30,49 @@
 .ti -1c
 .RI "class \fBMaxOS::processes::Elf64\fP"
 .br
+.RI "Handles the loading and parsing of 64-bit ELF files\&. "
 .in -1c
 .SS "Namespaces"
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::processes\fP"
+.RI "namespace \fBMaxOS::processes\fP"
 .br
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfIdentification\fP { \fBMaxOS::processes::Magic0\fP = 0, \fBMaxOS::processes::Magic1\fP = 1, \fBMaxOS::processes::Magic2\fP = 2, \fBMaxOS::processes::Magic3\fP = 3, \fBMaxOS::processes::Class\fP = 4, \fBMaxOS::processes::Data\fP = 5, \fBMaxOS::processes::Version\fP = 6, \fBMaxOS::processes::OSABI\fP = 7, \fBMaxOS::processes::ABIVersion\fP = 8, \fBMaxOS::processes::Padding\fP = 9 }"
+.RI "enum class \fBMaxOS::processes::ElfIdentification\fP { \fBMaxOS::processes::Magic0\fP, \fBMaxOS::processes::Magic1\fP, \fBMaxOS::processes::Magic2\fP, \fBMaxOS::processes::Magic3\fP, \fBMaxOS::processes::Class\fP, \fBMaxOS::processes::Data\fP, \fBMaxOS::processes::Version\fP, \fBMaxOS::processes::OSABI\fP, \fBMaxOS::processes::ABIVersion\fP, \fBMaxOS::processes::Padding\fP }"
 .br
-.RI "ELF Header\&. "
+.RI "Style Guide Note: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format\&. "
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfClass\fP { \fBMaxOS::processes::InvalidClass\fP, \fBMaxOS::processes::Class32\fP, \fBMaxOS::processes::Class64\fP }"
-.br
-.ti -1c
-.RI "enum \fBMaxOS::processes::ElfData\fP { \fBMaxOS::processes::InvalidData\fP, \fBMaxOS::processes::LittleEndian\fP, \fBMaxOS::processes::BigEndian\fP }"
+.RI "enum class \fBMaxOS::processes::ElfClass\fP { \fBMaxOS::processes::Invalid\fP = 0, \fBMaxOS::processes::Bits32\fP = 1, \fBMaxOS::processes::Bits64\fP = 2 }"
 .br
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfType\fP { \fBMaxOS::processes::None\fP, \fBMaxOS::processes::Relocatable\fP, \fBMaxOS::processes::Executable\fP, \fBMaxOS::processes::Shared\fP, \fBMaxOS::processes::Core\fP, \fBMaxOS::processes::ProcessorSpecificLow\fP = 0xFF0, \fBMaxOS::processes::ProcessorSpecificHigh\fP = 0xFFF }"
+.RI "enum class \fBMaxOS::processes::ElfData\fP { \fBMaxOS::processes::InvalidData\fP, \fBMaxOS::processes::LittleEndian\fP, \fBMaxOS::processes::BigEndian\fP }"
 .br
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfMachine\fP { \fBMaxOS::processes::NoMachine\fP, \fBMaxOS::processes::ATnTWe32100\fP, \fBMaxOS::processes::SPARC\fP, \fBMaxOS::processes::x86\fP, \fBMaxOS::processes::MIPS\fP = 0x8, \fBMaxOS::processes::PowerPC\fP = 0x14, \fBMaxOS::processes::ARM\fP = 0x28, \fBMaxOS::processes::SuperH\fP = 0x2A, \fBMaxOS::processes::IA_64\fP = 0x32, \fBMaxOS::processes::x86_64\fP = 0x3E, \fBMaxOS::processes::AArch64\fP = 0xB7, \fBMaxOS::processes::RISC_V\fP = 0xF3 }"
+.RI "enum class \fBMaxOS::processes::ElfType\fP { \fBMaxOS::processes::None\fP, \fBMaxOS::processes::Relocatable\fP, \fBMaxOS::processes::Executable\fP, \fBMaxOS::processes::Shared\fP, \fBMaxOS::processes::Core\fP, \fBMaxOS::processes::ProcessorSpecificLow\fP = 0xFF0, \fBMaxOS::processes::ProcessorSpecificHigh\fP = 0xFFF }"
 .br
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfVersion\fP { \fBMaxOS::processes::Invalid\fP, \fBMaxOS::processes::Current\fP }"
+.RI "enum class \fBMaxOS::processes::ElfMachine\fP { \fBMaxOS::processes::NoMachine\fP, \fBMaxOS::processes::ATnTWe32100\fP, \fBMaxOS::processes::SPARC\fP, \fBMaxOS::processes::x86\fP, \fBMaxOS::processes::MIPS\fP = 0x8, \fBMaxOS::processes::PowerPC\fP = 0x14, \fBMaxOS::processes::ARM\fP = 0x28, \fBMaxOS::processes::SuperH\fP = 0x2A, \fBMaxOS::processes::IA_64\fP = 0x32, \fBMaxOS::processes::x86_64\fP = 0x3E, \fBMaxOS::processes::AArch64\fP = 0xB7, \fBMaxOS::processes::RISC_V\fP = 0xF3 }"
 .br
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfProgramType\fP { \fBMaxOS::processes::Null\fP, \fBMaxOS::processes::Load\fP, \fBMaxOS::processes::Dynamic\fP, \fBMaxOS::processes::Interpreter\fP, \fBMaxOS::processes::ProgramNote\fP, \fBMaxOS::processes::ProgramSharedLibrary\fP, \fBMaxOS::processes::ProgramHeaderTable\fP, \fBMaxOS::processes::ProgramTableProcessorSpecificLow\fP = 0x70000000, \fBMaxOS::processes::ProgramTableProcessorSpecificHigh\fP = 0x7FFFFFFF }"
+.RI "enum class \fBMaxOS::processes::ElfVersion\fP { \fBMaxOS::processes::Invalid\fP, \fBMaxOS::processes::Current\fP }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::processes::ElfProgramType\fP { \fBMaxOS::processes::Null\fP, \fBMaxOS::processes::Load\fP, \fBMaxOS::processes::Dynamic\fP, \fBMaxOS::processes::Interpreter\fP, \fBMaxOS::processes::Note\fP, \fBMaxOS::processes::SharedLibrary\fP, \fBMaxOS::processes::HeaderTable\fP, \fBMaxOS::processes::TableProcessorSpecificLow\fP = 0x70000000, \fBMaxOS::processes::TableProcessorSpecificHigh\fP = 0x7FFFFFFF }"
 .br
 .RI "Program Header\&. "
 .ti -1c
 .RI "enum \fBMaxOS::processes::ElfProgramFlags\fP { \fBMaxOS::processes::ElfExecute\fP = (1 << 0), \fBMaxOS::processes::ElfWrite\fP = (1 << 1), \fBMaxOS::processes::ElfRead\fP = (1 << 2) }"
 .br
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfSectionType\fP { \fBMaxOS::processes::NullSection\fP, \fBMaxOS::processes::ProgramBits\fP, \fBMaxOS::processes::SymbolTable\fP, \fBMaxOS::processes::StringTable\fP, \fBMaxOS::processes::RelocationAddends\fP, \fBMaxOS::processes::SymbolHashTable\fP, \fBMaxOS::processes::DynamicLinkingTable\fP, \fBMaxOS::processes::SectionNote\fP, \fBMaxOS::processes::NoBits\fP }"
+.RI "enum class \fBMaxOS::processes::ElfSectionType\fP { \fBMaxOS::processes::Null\fP, \fBMaxOS::processes::ProgramBits\fP, \fBMaxOS::processes::SymbolTable\fP, \fBMaxOS::processes::StringTable\fP, \fBMaxOS::processes::RelocationAddends\fP, \fBMaxOS::processes::SymbolHashTable\fP, \fBMaxOS::processes::DynamicLinkingTable\fP, \fBMaxOS::processes::SectionNote\fP, \fBMaxOS::processes::NoBits\fP }"
 .br
 .RI "Section Header\&. "
 .in -1c

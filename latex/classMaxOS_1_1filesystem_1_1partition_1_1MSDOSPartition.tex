@@ -1,0 +1,105 @@
+\doxysection{Max\+OS\+::filesystem\+::partition\+::MSDOSPartition Class Reference}
+\hypertarget{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition}{}\label{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition}\index{MaxOS::filesystem::partition::MSDOSPartition@{MaxOS::filesystem::partition::MSDOSPartition}}
+
+
+{\ttfamily \#include $<$msdos.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{static}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition_ab24b24647bf8d7da1ef45b2f42c9b347}{mount\+\_\+partitions}} (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk}{drivers\+::disk\+::\+Disk}} \texorpdfstring{$\ast$}{*}disk)
+\begin{DoxyCompactList}\small\item\em read the partition table of a given hard disk \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00338}{338}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition_ab24b24647bf8d7da1ef45b2f42c9b347}\label{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition_ab24b24647bf8d7da1ef45b2f42c9b347} 
+\index{MaxOS::filesystem::partition::MSDOSPartition@{MaxOS::filesystem::partition::MSDOSPartition}!mount\_partitions@{mount\_partitions}}
+\index{mount\_partitions@{mount\_partitions}!MaxOS::filesystem::partition::MSDOSPartition@{MaxOS::filesystem::partition::MSDOSPartition}}
+\doxysubsubsection{\texorpdfstring{mount\_partitions()}{mount\_partitions()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} MSDOSPartition\+::mount\+\_\+partitions (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk}{drivers\+::disk\+::\+Disk}} \texorpdfstring{$\ast$}{*}}]{disk }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+read the partition table of a given hard disk 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hd} & The hard disk to read the partition table from \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{msdos_8cpp_source_l00019}{19}} of file \mbox{\hyperlink{msdos_8cpp_source}{msdos.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ MBR\ from\ the\ hard\ disk}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord}{MasterBootRecord}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}}\ =\ \{\};}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr\_buffer}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord}{MasterBootRecord}}));}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{hd}}-\/>read(0,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr\_buffer}});}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ magic\ number\ is\ correct}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}}.magic\ !=\ 0xAA55)\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Could\ not\ find\ valid\ MBR\ on\ disk\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{hd}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00030\ \ \ \ \ \}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ VFS}}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_aeb7fce72e33423a13006d9097c725650}{VirtualFileSystem::current\_file\_system}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ primary\ partitions}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&entry:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}}.\mbox{\hyperlink{msdos_8h_ae82a748207fb88709bb65e8a13096863}{primary\_partition}})\ \{}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Empty\ entry}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (entry.type\ ==\ 0)}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Partition\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.type\ <<\ \textcolor{stringliteral}{"{}\ at\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.start\_LBA\ <<\ \textcolor{stringliteral}{"{}:\ "{}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ a\ file\ system\ for\ the\ partition}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93}{PartitionType}})\ entry.type)\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aba2b45bdc11e2a4a6e86aab2ac693cbb}{PartitionType::EMPTY}}:}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}Empty\ partition\(\backslash\)n"{}};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a46f21722823e3a16330a1de2b4bd105e}{PartitionType::FAT32}}:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}FAT32\ partition\(\backslash\)n"{}};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}}-\/>mount\_filesystem(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32FileSystem}{Fat32FileSystem}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{hd}},\ entry.start\_LBA));}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93acd897b3aaf5c5feaa6068e36ce077c79}{PartitionType::LINUX\_EXT2}}:}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}EXT2\ partition\(\backslash\)n"{}};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}}-\/>mount\_filesystem(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem}{ext2::Ext2FileSystem}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{hd}},\ entry.start\_LBA));}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}Unknown\ or\ unimplemented\ partition\ type:\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.type\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{vfs_8cpp_source_l00033}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::current\+\_\+file\+\_\+system()}}, \mbox{\hyperlink{logger_8cpp_source_l00168}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93aba2b45bdc11e2a4a6e86aab2ac693cbb}{Max\+OS\+::filesystem\+::partition\+::\+EMPTY}}, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93a46f21722823e3a16330a1de2b4bd105e}{Max\+OS\+::filesystem\+::partition\+::\+FAT32}}, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1partition_a2e4fb19c764ea277199e32724975df93acd897b3aaf5c5feaa6068e36ce077c79}{Max\+OS\+::filesystem\+::partition\+::\+LINUX\+\_\+\+EXT2}}, \mbox{\hyperlink{logger_8cpp_source_l00136}{Logger\+::\+Out()}}, and \mbox{\hyperlink{logger_8cpp_source_l00180}{Logger\+::\+WARNING()}}.
+
+
+
+Referenced by \mbox{\hyperlink{ide_8cpp_source_l00066}{Max\+OS\+::drivers\+::disk\+::\+Integrated\+Drive\+Electronics\+Controller\+::activate()}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/filesystem/partition/\mbox{\hyperlink{msdos_8h}{msdos.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/filesystem/partition/\mbox{\hyperlink{msdos_8cpp}{msdos.\+cpp}}\end{DoxyCompactItemize}

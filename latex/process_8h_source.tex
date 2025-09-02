@@ -1,0 +1,111 @@
+\doxysection{process.\+h}
+\hypertarget{process_8h_source}{}\label{process_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h}}
+\mbox{\hyperlink{process_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 25/02/2025.}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00005}00005\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_PROCESSES\_PROCESS\_H}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00006}00006\ \textcolor{preprocessor}{\#define\ MAXOS\_PROCESSES\_PROCESS\_H}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{cpu_8h}{system/cpu.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vector_8h}{common/vector.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{map_8h}{common/map.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{string_8h}{common/string.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{virtual_8h}{memory/virtual.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memorymanagement_8h}{memory/memorymanagement.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memoryIO_8h}{memory/memoryIO.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{elf_8h}{processes/elf.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{resource_8h}{processes/resource.h}}>}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00020}00020\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00021}00021\ \{}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00022}00022\ \ \ \ \ \textcolor{keyword}{namespace\ }processes}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00023}00023\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00025}\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{00025}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{ThreadState}}\{}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a24d459a81449d7210c8f9a86c2913034}{NEW}},}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{RUNNING}},}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{READY}},}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a7850588c11fe6db41b8b2dd6c455f8f3}{SLEEPING}},}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a1869d56535e8b1449a6da54ff5e11f50}{WAITING}},}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{STOPPED}}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00032}\mbox{\hyperlink{namespaceMaxOS_1_1processes_a00379181a9892760100d025d5d9b6a90}{00032}}\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a00379181a9892760100d025d5d9b6a90}{thread\_state\_t}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }Process;}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00042}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{00042}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}\{}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uintptr\_t\ m\_stack\_pointer;}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uintptr\_t\ m\_tss\_stack\_pointer;}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ m\_sse\_save\_region[512]\ \_\_attribute\_\_((aligned(16)));}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint64\_t\ s\_stack\_size\ =\ 0x10000;}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}(\textcolor{keywordtype}{void}\ (*\_entry\_point)(\textcolor{keywordtype}{void}\ *)\ ,\ \textcolor{keywordtype}{void}*\ args,\ \textcolor{keywordtype}{int}\ arg\_amount,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ parent);}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00055}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a37d9edd3a1a776cbc27dedff949c9726}{00055}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a37d9edd3a1a776cbc27dedff949c9726}{\string~Thread}}();}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ system::cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a77cbad5ef66a0daf6f0f5bebb8ded39b}{sleep}}(\textcolor{keywordtype}{size\_t}\ milliseconds);}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00059}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{00059}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00060}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a130e3726d7c4912ab2fdf6bf587f757f}{00060}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a130e3726d7c4912ab2fdf6bf587f757f}{parent\_pid}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00062}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_afcde2d4d3ee4c3540120034dbbff1807}{00062}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ system::cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_afcde2d4d3ee4c3540120034dbbff1807}{execution\_state}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00063}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{00063}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a00379181a9892760100d025d5d9b6a90}{thread\_state\_t}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00065}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{00065}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00066}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{00066}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00068}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a9baa5fdcd84593974738c3f62f050283}{00068}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[nodiscard]]\ uintptr\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a9baa5fdcd84593974738c3f62f050283}{tss\_pointer}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_tss\_stack\_pointer;\ \}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a21abe4a5d20033649696849094c415d0}{save\_sse\_state}}();}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_acd31b38f01bba4e58e8426f5f0be25f7}{restore\_sse\_state}}();}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00078}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{00078}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Vector<Thread*>}}\ m\_threads;}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_pid\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}},\ \textcolor{keywordtype}{void}\ (*\_entry\_point)(\textcolor{keywordtype}{void}\ *),\ \textcolor{keywordtype}{void}\ *args,\ \textcolor{keywordtype}{int}\ arg\_amount,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}},\ \textcolor{keywordtype}{void}\ *args,\ \textcolor{keywordtype}{int}\ arg\_amount,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64}{Elf64}}*\ elf,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}}\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a990776d181dbbde7ff8ac12713d814b3}{\string~Process}}();}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Vector<Thread*>}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}();}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a87bca165b791fb0c3031e89201973ec7}{add\_thread}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread);}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(uint64\_t\ tid);}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}{set\_pid}}(uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}});}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a42e63bc1dde8ba77b9a14456cf225f8f}{total\_ticks}}();}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00100}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{00100}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aad5eaf3ad4ca8c3ab5eb0e08d0fdad40}{is\_kernel}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00102}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{00102}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00103}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aa1858c7751bb2937a9ad96ae5a71b781}{00103}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_aa1858c7751bb2937a9ad96ae5a71b781}{working\_directory}}\ =\ \textcolor{stringliteral}{"{}/"{}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00105}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{00105}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{memory::MemoryManager}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00106}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a5a8df0bb667ad748c6a129b1da96ed7a}{00106}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager}{ResourceManager}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a5a8df0bb667ad748c6a129b1da96ed7a}{resource\_manager}};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00110}00110\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00111}00111\ \}}
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{process_8h_source_l00113}00113\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MAXOS\_PROCESSES\_PROCESS\_H}}
+
+\end{DoxyCode}

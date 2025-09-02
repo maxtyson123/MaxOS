@@ -1,4 +1,4 @@
-.TH "MaxOS::memory::MemoryManager" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::memory::MemoryManager" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,176 +13,140 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 
 .in +1c
 .ti -1c
-.RI "\fBMemoryManager\fP (\fBVirtualMemoryManager\fP *virtual_memory_manager)"
+.RI "\fBMemoryManager\fP (\fBVirtualMemoryManager\fP *\fBvirtual_memory_manager\fP=\fBnullptr\fP)"
 .br
 .ti -1c
 .RI "\fB~MemoryManager\fP ()"
 .br
 .ti -1c
-.RI "void * \fBhandle_malloc\fP (size_t \fBsize\fP)"
+.RI "\fBvoid\fP * \fBhandle_malloc\fP (\fBsize_t\fP \fBsize\fP)"
 .br
 .RI "Allocates a block of memory\&. "
 .ti -1c
-.RI "void \fBhandle_free\fP (void *pointer)"
+.RI "\fBvoid\fP \fBhandle_free\fP (\fBvoid\fP *pointer)"
 .br
 .RI "Frees a block of memory\&. "
 .ti -1c
-.RI "\fBVirtualMemoryManager\fP * \fBget_vmm\fP ()"
+.RI "\fBVirtualMemoryManager\fP * \fBvmm\fP ()"
 .br
 .ti -1c
-.RI "int \fBmemory_used\fP ()"
+.RI "\fBint\fP \fBmemory_used\fP ()"
 .br
 .RI "Returns the amount of memory used\&. "
-.ti -1c
-.RI "size_t \fBalign\fP (size_t \fBsize\fP)"
-.br
-.RI "Aligns the size to the chunk alignment\&. "
 .in -1c
 .SS "Static Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "static void * \fBmalloc\fP (size_t \fBsize\fP)"
+.RI "\fBstatic\fP \fBvoid\fP * \fBmalloc\fP (\fBsize_t\fP \fBsize\fP)"
 .br
-.RI "Allocates a block of memory using the current memory manager\&. "
+.RI "Allocates a block of memory in the current USERSPACE heap\&. "
 .ti -1c
-.RI "static void \fBfree\fP (void *pointer)"
+.RI "\fBstatic\fP \fBvoid\fP \fBfree\fP (\fBvoid\fP *pointer)"
 .br
 .RI "Frees a block of memory using the current memory manager\&. "
 .ti -1c
-.RI "static void * \fBkmalloc\fP (size_t \fBsize\fP)"
+.RI "\fBstatic\fP \fBvoid\fP * \fBkmalloc\fP (\fBsize_t\fP \fBsize\fP)"
 .br
-.RI "Allocates a block of memory using the kernel memory manager\&. "
+.RI "Allocates a block of memory in the KERNEL space\&. "
 .ti -1c
-.RI "static void \fBkfree\fP (void *pointer)"
+.RI "\fBstatic\fP \fBvoid\fP \fBkfree\fP (\fBvoid\fP *pointer)"
 .br
 .RI "Frees a block of memory using the kernel memory manager\&. "
 .ti -1c
-.RI "static void \fBswitch_active_memory_manager\fP (\fBMemoryManager\fP *manager)"
+.RI "\fBstatic\fP \fBsize_t\fP \fBalign\fP (\fBsize_t\fP \fBsize\fP)"
+.br
+.RI "Aligns the size to the chunk alignment\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBvoid\fP \fBswitch_active_memory_manager\fP (\fBMemoryManager\fP *\fBmanager\fP)"
 .br
 .RI "Switches the active memory manager\&. "
-.ti -1c
-.RI "static void * \fBto_higher_region\fP (uintptr_t \fBphysical_address\fP)"
-.br
-.RI "Converts a physical address to a higher region address if it is in the lower region using the higher half kernel offset\&. "
-.ti -1c
-.RI "static void * \fBto_lower_region\fP (uintptr_t virtual_address)"
-.br
-.RI "Converts a virtual address to a lower region address if it is in the higher region using the higher half kernel offset\&. "
-.ti -1c
-.RI "static void * \fBto_io_region\fP (uintptr_t \fBphysical_address\fP)"
-.br
-.RI "Converts a physical address to an IO region address if it is in the lower region using the higher half memory offset\&. "
-.ti -1c
-.RI "static void * \fBto_dm_region\fP (uintptr_t \fBphysical_address\fP)"
-.br
-.RI "Converts a physical address to a direct map region address if it is in the lower region using the higher half direct map offset\&. "
-.ti -1c
-.RI "static void * \fBfrom_dm_region\fP (uintptr_t \fBphysical_address\fP)"
-.br
-.RI "Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset\&. "
-.ti -1c
-.RI "static bool \fBin_higher_region\fP (uintptr_t virtual_address)"
-.br
-.RI "Checks if a virtual address is in the higher region\&. "
 .in -1c
 .SS "Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBMemoryManager\fP * \fBprevious_memory_manager\fP"
+.RI "\fBMemoryManager\fP * \fBprevious_memory_manager\fP = nullptr"
 .br
 .in -1c
 .SS "Static Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "static \fBMemoryManager\fP * \fBs_current_memory_manager\fP = 0"
+.RI "static \fBMemoryManager\fP * \fBs_current_memory_manager\fP = nullptr"
 .br
 .ti -1c
-.RI "static \fBMemoryManager\fP * \fBs_kernel_memory_manager\fP = 0"
+.RI "static \fBMemoryManager\fP * \fBs_kernel_memory_manager\fP = nullptr"
 .br
 .ti -1c
-.RI "static const uint64_t \fBs_higher_half_kernel_offset\fP { 0xFFFFFFFF80000000 }"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_mem_offset\fP { 0xFFFF800000000000 }"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_mem_reserved\fP { 0x280000000 }"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_offset\fP { \fBs_higher_half_mem_offset\fP + \fBs_higher_half_mem_reserved\fP}"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_hh_direct_map_offset\fP { \fBs_higher_half_offset\fP + \fBPhysicalMemoryManager::s_page_size\fP }"
-.br
-.ti -1c
-.RI "static const size_t \fBs_chunk_alignment\fP { 0x10 }"
+.RI "static const size_t \fBs_chunk_alignment\fP = 0x10"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles memory allocation and deallocation\&. 
 .PP
-Definition at line 35 of file memorymanagement\&.h\&.
+Definition at line \fB35\fP of file \fBmemorymanagement\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "MemoryManager::MemoryManager (\fBVirtualMemoryManager\fP * virtual_memory_manager)"
+.SS "MemoryManager::MemoryManager (\fBVirtualMemoryManager\fP * virtual_memory_manager = \fC\fBnullptr\fP\fP)"
 
 .PP
-Definition at line 17 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB13\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-18 : m_virtual_memory_manager(vmm)
-19 {
+14 : m_virtual_memory_manager(vmm)
+15 {
+16 
+17     // Create the VMM if not provided
+18     if (m_virtual_memory_manager == nullptr)
+19         m_virtual_memory_manager = new VirtualMemoryManager();
 20 
 21     // Enable the memory manager
 22     switch_active_memory_manager(this);
 23 
-24     // Get the first chunk of memory
-25     this -> m_first_memory_chunk = (MemoryChunk*)m_virtual_memory_manager->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
-26 
-27     // Set the first chunk's properties
-28     m_first_memory_chunk-> allocated = false;
-29     m_first_memory_chunk-> prev = 0;
-30     m_first_memory_chunk-> next = 0;
-31     m_first_memory_chunk-> size = PhysicalMemoryManager::s_page_size - sizeof(MemoryChunk);
-32 
-33     // Set the last chunk to the first chunk
-34     m_last_memory_chunk = m_first_memory_chunk;
+24     // Setup the first chunk of memory
+25     this\->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager\->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
+26     m_first_memory_chunk\->allocated = false;
+27     m_first_memory_chunk\->prev = nullptr;
+28     m_first_memory_chunk\->next = nullptr;
+29     m_first_memory_chunk\->size = PhysicalMemoryManager::s_page_size \- sizeof(MemoryChunk);
+30     m_last_memory_chunk = m_first_memory_chunk;
+31 
+32     // First memory manager is the kernel memory manager
+33     if (s_kernel_memory_manager == nullptr)
+34         s_kernel_memory_manager = this;
 35 
-36     // The first chunk is the last chunk
-37     _kprintf("First memory chunk: 0x%x\n", m_first_memory_chunk);
-38 
-39 }
+36 }
 .fi
+
 .PP
-References _kprintf, MaxOS::memory::VirtualMemoryManager::allocate(), next, MaxOS::memory::PhysicalMemoryManager::s_page_size, size, and switch_active_memory_manager()\&.
+References \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::MemoryChunk::allocated\fP, \fBMaxOS::memory::MemoryChunk::next\fP, \fBMaxOS::memory::MemoryChunk::prev\fP, \fBs_kernel_memory_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_page_size\fP, \fBMaxOS::memory::MemoryChunk::size\fP, and \fBswitch_active_memory_manager()\fP\&.
 .SS "MemoryManager::~MemoryManager ()"
 
 .PP
-Definition at line 41 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB38\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-41                               {
-42 
-43     // Check if the current memory manager is this one
-44     if(s_kernel_memory_manager == this)
-45       s_kernel_memory_manager = 0;
-46 
-47     // Check if the current memory manager is this one
-48     if(s_current_memory_manager == this)
-49        s_current_memory_manager = 0;
-50 
-51 
-52 }
+38                               {
+39 
+40     // Free the VMM (if this is not the kernel memory manager)
+41     if (m_virtual_memory_manager != nullptr && s_current_memory_manager != s_kernel_memory_manager)
+42         delete m_virtual_memory_manager;
+43 
+44     // Remove the kernel reference to this
+45     if (s_kernel_memory_manager == this)
+46         s_kernel_memory_manager = nullptr;
+47 
+48     // Remove the active reference to this
+49     if (s_current_memory_manager == this)
+50         s_current_memory_manager = nullptr;
+51 }
 .fi
+
 .PP
-References s_current_memory_manager, and s_kernel_memory_manager\&.
+References \fBs_current_memory_manager\fP, and \fBs_kernel_memory_manager\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "size_t MemoryManager::align (size_t size)"
+.SS "\fBsize_t\fP MemoryManager::align (\fBsize_t\fP size)\fC [static]\fP"
 
 .PP
 Aligns the size to the chunk alignment\&. 
@@ -199,18 +163,19 @@ The aligned size
 .PP
 
 .PP
-Definition at line 276 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB277\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-276                                        {
-277   return (size / s_chunk_alignment + 1) * s_chunk_alignment;
-278 }
+277                                        {
+278 
+279     return (size / s_chunk_alignment + 1) * s_chunk_alignment;
+280 }
 .fi
+
 .PP
-References s_chunk_alignment, and size\&.
+References \fBs_chunk_alignment\fP, and \fBsize\fP\&.
 .PP
-Referenced by handle_malloc()\&.
-.SS "void MemoryManager::free (void * pointer)\fC [static]\fP"
+Referenced by \fBhandle_malloc()\fP\&.
+.SS "\fBvoid\fP MemoryManager::free (\fBvoid\fP * pointer)\fC [static]\fP"
 
 .PP
 Frees a block of memory using the current memory manager\&. 
@@ -222,76 +187,23 @@ Frees a block of memory using the current memory manager\&.
 .PP
 
 .PP
-Definition at line 148 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB147\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-148                                       {
-149 
-150     // Make sure there is a memory manager
-151     if(s_current_memory_manager == 0)
-152         return;
-153 
-154     s_current_memory_manager->handle_free(pointer);
-155 
-156 }
+147                                       {
+148 
+149     // Make sure there is a memory manager
+150     if (s_current_memory_manager == nullptr)
+151         return;
+152 
+153     s_current_memory_manager\->handle_free(pointer);
+154 }
 .fi
-.PP
-References handle_free(), and s_current_memory_manager\&.
-.SS "void * MemoryManager::from_dm_region (uintptr_t physical_address)\fC [static]\fP"
 
 .PP
-Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset\&. 
+References \fBs_current_memory_manager\fP\&.
 .PP
-\fBParameters\fP
-.RS 4
-\fIphysical_address\fP The physical address in the direct map region 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The physical address 
-.RE
-.PP
-
-.PP
-Definition at line 345 of file memorymanagement\&.cpp\&.
-.PP
-.nf
-345                                                               {
-346 
-347   if(physical_address > s_hh_direct_map_offset)
-348     return (void*)(physical_address - s_hh_direct_map_offset);
-349 
-350   // Must be in the lower half
-351   return (void*)physical_address;
-352 
-353 }
-.fi
-.PP
-References physical_address, and s_hh_direct_map_offset\&.
-.PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\&.
-.SS "\fBVirtualMemoryManager\fP * MemoryManager::get_vmm ()"
-Gets the active virtual memory manager 
-.PP
-\fBReturns\fP
-.RS 4
-The active virtual memory manager 
-.RE
-.PP
-
-.PP
-Definition at line 388 of file memorymanagement\&.cpp\&.
-.PP
-.nf
-388                                              {
-389 
-390   // Return the virtual memory manager
-391   return m_virtual_memory_manager;
-392 
-393 }
-.fi
-.SS "void MemoryManager::handle_free (void * pointer)"
+Referenced by \fBMaxOS::system::SyscallManager::syscall_free_memory()\fP\&.
+.SS "\fBvoid\fP MemoryManager::handle_free (\fBvoid\fP * pointer)"
 
 .PP
 Frees a block of memory\&. 
@@ -303,59 +215,55 @@ Frees a block of memory\&.
 .PP
 
 .PP
-Definition at line 178 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB175\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-178                                              {
-179 
+175                                              {
+176 
+177     // Cant free unallocated memory
+178     if (pointer == nullptr)
+179         return;
 180 
-181     // If nothing to free then return
-182     if(pointer == 0)
-183           return;
+181     // Check bounds
+182     if ((uint64_t) pointer < (uint64_t) m_first_memory_chunk || (uint64_t) pointer > (uint64_t) m_last_memory_chunk)
+183         return;
 184 
-185     // If block is not in the memory manager's range then return
-186     if((uint64_t ) pointer < (uint64_t ) m_first_memory_chunk || (uint64_t ) pointer > (uint64_t ) m_last_memory_chunk)
-187         return;
+185     // Get the chunk information from the pointer
+186     auto* chunk = (MemoryChunk*) ((size_t) pointer \- sizeof(MemoryChunk));
+187     chunk\->allocated = false;
 188 
-189     // Create a new free chunk
-190     MemoryChunk* chunk = (MemoryChunk*)((size_t)pointer - sizeof(MemoryChunk));
-191     chunk -> allocated = false;
-192 
-193     // If there is a free chunk before this chunk then merge them
-194     if(chunk -> prev != 0 && !chunk -> prev -> allocated){
+189     // If there is a free chunk before this chunk then merge them
+190     if (chunk\->prev != nullptr && !chunk\->prev\->allocated) {
+191 
+192         // Grow the chunk behind this one so that it now contains the freed one
+193         chunk\->prev\->size += chunk\->size + sizeof(MemoryChunk);
+194         chunk\->prev\->next = chunk\->next;
 195 
-196         // Increase the previous chunk's size and remove the current chunk from the linked list
-197         chunk->prev->size += chunk->size + sizeof(MemoryChunk);
-198         chunk -> prev -> next = chunk -> next;
+196         // The chunk in front of the freed one now needs to point to the merged chunk
+197         if (chunk\->next != nullptr)
+198             chunk\->next\->prev = chunk\->prev;
 199 
-200         // If there is a next chunk then ensure this chunk is removed from its linked list
-201         if(chunk -> next != 0)
-202             chunk -> next -> prev = chunk->prev;
-203 
-204         // Chunk is now the previous chunk
-205         chunk = chunk -> prev;
-206 
-207     }
-208 
-209     // If there is a free chunk after this chunk then merge them
-210     if(chunk -> next != 0 && !chunk -> next -> allocated){
-211 
-212         // Increase the current chunk's size and remove the next chunk from the linked list
-213         chunk -> size += chunk -> next -> size + sizeof(MemoryChunk);
-214         chunk -> next = chunk -> next -> next;
-215 
-216         // Remove the just merged chunk from the linked list
-217         if(chunk -> next != 0)
-218             chunk -> next -> prev = chunk;
-219 
-220     }
-221 }
+200         // Freed chunk doesn't exist anymore so now working with the merged chunk
+201         chunk = chunk\->prev;
+202 
+203     }
+204 
+205     // If there is a free chunk after this chunk then merge them
+206     if (chunk\->next != nullptr && !chunk\->next\->allocated) {
+207 
+208         // Grow this chunk so that it now contains the free chunk in front of the old (now freed) one
+209         chunk\->size += chunk\->next\->size + sizeof(MemoryChunk);
+210 
+211         // Now that this chunk contains the next one, it has to point to the one in front of what has just been merged
+212         // and that has to point to this
+213         chunk\->next = chunk\->next\->next;
+214         if (chunk\->next != nullptr)
+215             chunk\->next\->prev = chunk;
+216 
+217     }
+218 }
 .fi
-.PP
-References next, MaxOS::memory::MemoryChunk::prev, size, and MaxOS::memory::MemoryChunk::size\&.
-.PP
-Referenced by free(), and kfree()\&.
-.SS "void * MemoryManager::handle_malloc (size_t size)"
+
+.SS "\fBvoid\fP * MemoryManager::handle_malloc (\fBsize_t\fP size)"
 
 .PP
 Allocates a block of memory\&. 
@@ -372,93 +280,65 @@ A pointer to the block, or nullptr if no block is available
 .PP
 
 .PP
-Definition at line 92 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB89\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-92                                               {
-93   MemoryChunk* result = 0;
-94 
-95   // Don't allocate a block of size 0
-96   if(size == 0)
-97     return 0;
-98 
-99   // Size must include the size of the chunk and be aligned
-100   size = align(size + sizeof(MemoryChunk));
-101 
-102   // Find the next free chunk that is big enough
-103   for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0 && result == 0; chunk = chunk->next) {
-104     if(chunk -> size > size && !chunk -> allocated)
-105       result = chunk;
-106   }
-107 
-108   // If there is no free chunk then expand the heap
-109   if(result == 0)
-110     result = expand_heap(size);
-111 
-112   // If there is not enough space to create a new chunk then just allocate the current chunk
-113   if(result -> size < size + sizeof(MemoryChunk) + 1) {
-114     result->allocated = true;
-115     return (void *)(((size_t)result) + sizeof(MemoryChunk));
-116   }
-117 
-118   // Create a new chunk after the current one
-119   MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
-120 
-121   // Set the new chunk's properties and insert it into the linked list
-122   temp -> allocated = false;
-123   temp -> size =  result->size - size - sizeof(MemoryChunk);
-124   temp -> prev = result;
-125   temp -> next = result -> next;
-126 
-127   // If there is a chunk after the current one then set its previous to the new chunk
-128   if(temp -> next != 0)
-129     temp -> next -> prev = temp;
-130 
-131   // Current chunk is now allocated and is pointing to the new chunk
-132   result->size = size;
-133   result -> allocated = true;
-134   result->next = temp;
-135 
-136   // Update the last memory chunk if necessary
-137   if(result == m_last_memory_chunk)
-138     m_last_memory_chunk = temp;
-139 
-140   return (void*)(((size_t)result) + sizeof(MemoryChunk));
-141 }
+89                                               {
+90 
+91     MemoryChunk* result = nullptr;
+92 
+93     // Nothing to allocate
+94     if (size == 0)
+95         return nullptr;
+96 
+97     // Add room to store the chunk information
+98     size = align(size + sizeof(MemoryChunk));
+99 
+100     // Find the next free chunk that is big enough
+101     for (MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr && result == nullptr; chunk = chunk\->next) {
+102         if (chunk\->size > size && !chunk\->allocated)
+103             result = chunk;
+104     }
+105 
+106     // If there is no free chunk then make more room
+107     if (result == nullptr)
+108         result = expand_heap(size);
+109 
+110     // If there is not left over space to store extra chunks there is no need to split the chunk
+111     if (result\->size < size + sizeof(MemoryChunk) + 1) {
+112         result\->allocated = true;
+113         void* p = (void*) (((size_t) result) + sizeof(MemoryChunk));
+114         return p;
+115     }
+116 
+117     // Split the chunk into: what was requested + free overflow space for future allocates
+118     //  \- This prevents waste in the event that a big free chunk was found but the requested size would only use a portion of that
+119     auto* extra = (MemoryChunk*) ((size_t) result + sizeof(MemoryChunk) + size);
+120     extra\->allocated = false;
+121     extra\->size = result\->size \- size \- sizeof(MemoryChunk);
+122     extra\->prev = result;
+123 
+124     // Add to the linked list
+125     extra\->next = result\->next;
+126     if (extra\->next != nullptr)
+127         extra\->next\->prev = extra;
+128 
+129     // Requested chunk is now allocated exactly to the size requested and points to the free (split) block of memory that
+130     // it did not use
+131     result\->size = size;
+132     result\->allocated = true;
+133     result\->next = extra;
+134 
+135     // Update the last memory chunk if necessary
+136     if (result == m_last_memory_chunk)
+137         m_last_memory_chunk = extra;
+138 
+139     return (void*) (((size_t) result) + sizeof(MemoryChunk));
+140 }
 .fi
-.PP
-References align(), MaxOS::memory::MemoryChunk::allocated, next, MaxOS::memory::MemoryChunk::next, size, and MaxOS::memory::MemoryChunk::size\&.
-.PP
-Referenced by kmalloc(), and malloc()\&.
-.SS "bool MemoryManager::in_higher_region (uintptr_t virtual_address)\fC [static]\fP"
 
 .PP
-Checks if a virtual address is in the higher region\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIvirtual_address\fP The virtual address 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-True if the address is in the higher region, false otherwise 
-.RE
-.PP
-
-.PP
-Definition at line 361 of file memorymanagement\&.cpp\&.
-.PP
-.nf
-361                                                               {
-362   return virtual_address & (1l << 62);
-363 }
-.fi
-.PP
-References MaxOS::drivers::peripherals::l\&.
-.PP
-Referenced by MaxOS::memory::PhysicalMemoryManager::map(), and MaxOS::system::CPU::prepare_for_panic()\&.
-.SS "void MemoryManager::kfree (void * pointer)\fC [static]\fP"
+References \fBalign()\fP, and \fBsize\fP\&.
+.SS "\fBvoid\fP MemoryManager::kfree (\fBvoid\fP * pointer)\fC [static]\fP"
 
 .PP
 Frees a block of memory using the kernel memory manager\&. 
@@ -470,27 +350,26 @@ Frees a block of memory using the kernel memory manager\&.
 .PP
 
 .PP
-Definition at line 163 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB161\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-163                                        {
-164 
-165     // Make sure there is a kernel memory manager
-166     if(s_kernel_memory_manager == 0)
-167         return;
-168 
-169     s_kernel_memory_manager->handle_free(pointer);
-170 
-171 }
+161                                        {
+162 
+163     // Make sure there is a kernel memory manager
+164     if (s_kernel_memory_manager == nullptr)
+165         return;
+166 
+167     s_kernel_memory_manager\->handle_free(pointer);
+168 }
 .fi
-.PP
-References handle_free(), and s_kernel_memory_manager\&.
-.PP
-Referenced by operator delete(), and operator delete[]()\&.
-.SS "void * MemoryManager::kmalloc (size_t size)\fC [static]\fP"
 
 .PP
-Allocates a block of memory using the kernel memory manager\&. 
+References \fBs_kernel_memory_manager\fP\&.
+.PP
+Referenced by \fBMaxOS::net::TransmissionControlProtocolSocket::Connected()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolSocket::Disconnected()\fP, \fBMaxOS::net::TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolSocket::handleUserDatagramProtocolPayload()\fP, \fBoperator delete()\fP, \fBoperator delete()\fP, \fBoperator delete[]()\fP, \fBoperator delete[]()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+.SS "\fBvoid\fP * MemoryManager::kmalloc (\fBsize_t\fP size)\fC [static]\fP"
+
+.PP
+Allocates a block of memory in the KERNEL space\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -504,27 +383,26 @@ The pointer to the block, or nullptr if no block is available
 .PP
 
 .PP
-Definition at line 76 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB74\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-76                                         {
-77 
-78   // Make sure there is a kernel memory manager
-79   if(s_kernel_memory_manager == 0)
-80     return 0;
-81 
-82   return s_kernel_memory_manager->handle_malloc(size);
-83 
-84 }
+74                                         {
+75 
+76     // Make sure there is a kernel memory manager
+77     if (s_kernel_memory_manager == nullptr)
+78         return nullptr;
+79 
+80     return s_kernel_memory_manager\->handle_malloc(size);
+81 }
 .fi
-.PP
-References handle_malloc(), s_kernel_memory_manager, and size\&.
-.PP
-Referenced by operator new(), and operator new[]()\&.
-.SS "void * MemoryManager::malloc (size_t size)\fC [static]\fP"
 
 .PP
-Allocates a block of memory using the current memory manager\&. 
+References \fBs_kernel_memory_manager\fP, and \fBsize\fP\&.
+.PP
+Referenced by \fBMaxOS::drivers::ethernet::AMD_AM79C973::AMD_AM79C973()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Connect()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Listen()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Listen()\fP, \fBoperator new()\fP, \fBoperator new[]()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::processes::Thread::Thread()\fP, and \fBMaxOS::drivers::console::VESABootConsole::VESABootConsole()\fP\&.
+.SS "\fBvoid\fP * MemoryManager::malloc (\fBsize_t\fP size)\fC [static]\fP"
+
+.PP
+Allocates a block of memory in the current USERSPACE heap\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -538,22 +416,23 @@ a pointer to the block, 0 if no block is available or no memory manager is set
 .PP
 
 .PP
-Definition at line 60 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB59\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-60                                        {
-61 
-62     // Make sure there is somthing to do the allocation
-63     if(s_current_memory_manager == 0)
-64             return 0;
-65 
-66     return s_current_memory_manager->handle_malloc(size);
-67 
-68 }
+59                                        {
+60 
+61     // Make sure there is somthing to do the allocation
+62     if (s_current_memory_manager == nullptr)
+63         return nullptr;
+64 
+65     return s_current_memory_manager\->handle_malloc(size);
+66 }
 .fi
+
 .PP
-References handle_malloc(), s_current_memory_manager, and size\&.
-.SS "int MemoryManager::memory_used ()"
+References \fBs_current_memory_manager\fP, and \fBsize\fP\&.
+.PP
+Referenced by \fBMaxOS::system::SyscallManager::syscall_allocate_memory()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+.SS "\fBint\fP MemoryManager::memory_used ()"
 
 .PP
 Returns the amount of memory used\&. 
@@ -565,24 +444,22 @@ The amount of memory used
 .PP
 
 .PP
-Definition at line 259 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB259\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
 259                                {
 260 
-261         int result = 0;
+261     int result = 0;
 262 
-263         // Loop through all the chunks and add up the size of the allocated chunks
-264         for (MemoryChunk* chunk = m_first_memory_chunk; chunk != 0; chunk = chunk->next)
-265             if(chunk -> allocated)
-266                 result += chunk -> size;
+263     // Loop through all the chunks and add up the size of the allocated chunks
+264     for (MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr; chunk = chunk\->next)
+265         if (chunk\->allocated)
+266             result += chunk\->size;
 267 
-268         return result;
+268     return result;
 269 }
 .fi
-.PP
-References MaxOS::memory::MemoryChunk::next, and size\&.
-.SS "void MemoryManager::switch_active_memory_manager (\fBMemoryManager\fP * manager)\fC [static]\fP"
+
+.SS "\fBvoid\fP MemoryManager::switch_active_memory_manager (\fBMemoryManager\fP * manager)\fC [static]\fP"
 
 .PP
 Switches the active memory manager\&. 
@@ -594,211 +471,68 @@ Switches the active memory manager\&.
 .PP
 
 .PP
-Definition at line 370 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB288\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-370                                                                        {
-371 
-372   // Make sure there is a manager
-373   if(manager == nullptr)
-374     return;
-375 
-376   // Switch the address space
-377   asm volatile("mov %0, %%cr3" :: "r"((uint64_t)manager->m_virtual_memory_manager->get_pml4_root_address_physical()) : "memory");
-378 
-379   // Set the active memory manager
-380   s_current_memory_manager = manager;
-381 
-382 }
-.fi
-.PP
-References MaxOS::memory::VirtualMemoryManager::get_pml4_root_address_physical(), and s_current_memory_manager\&.
-.PP
-Referenced by MemoryManager()\&.
-.SS "void * MemoryManager::to_dm_region (uintptr_t physical_address)\fC [static]\fP"
-
-.PP
-Converts a physical address to a direct map region address if it is in the lower region using the higher half direct map offset\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIphysical_address\fP The physical address 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The direct map region address 
-.RE
-.PP
-
-.PP
-Definition at line 330 of file memorymanagement\&.cpp\&.
-.PP
-.nf
-330                                                             {
-331 
-332   if(physical_address < s_higher_half_offset)
-333     return (void*)(physical_address + s_hh_direct_map_offset);
-334 
-335   // Must be in the higher half
-336   return (void*)physical_address;
-337 
-338 }
-.fi
-.PP
-References physical_address, s_hh_direct_map_offset, and s_higher_half_offset\&.
-.PP
-Referenced by MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\&.
-.SS "void * MemoryManager::to_higher_region (uintptr_t physical_address)\fC [static]\fP"
-
-.PP
-Converts a physical address to a higher region address if it is in the lower region using the higher half kernel offset\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIphysical_address\fP The physical address 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The higher region address 
-.RE
-.PP
-
-.PP
-Definition at line 285 of file memorymanagement\&.cpp\&.
-.PP
-.nf
-285                                                                 {
-286 
-287   // If it's in the lower half then add the offset
-288   if(physical_address < s_higher_half_kernel_offset)
-289     return (void*)(physical_address + s_higher_half_kernel_offset);
-290 
-291   // Must be in the higher half
-292   return (void*)physical_address;
+288                                                                        {
+289 
+290     // Make sure there is a manager
+291     if (manager == nullptr)
+292         return;
 293 
-294 }
+294     // Switch the address space
+295     asm volatile("mov %0, %%cr3"::"r"((uint64_t) manager\->m_virtual_memory_manager\->pml4_root_address_physical()) : "memory");
+296 
+297     // Set the active memory manager
+298     s_current_memory_manager = manager;
+299 }
 .fi
-.PP
-References physical_address, and s_higher_half_kernel_offset\&.
-.SS "void * MemoryManager::to_io_region (uintptr_t physical_address)\fC [static]\fP"
 
 .PP
-Converts a physical address to an IO region address if it is in the lower region using the higher half memory offset\&. 
+References \fBs_current_memory_manager\fP\&.
 .PP
-\fBParameters\fP
-.RS 4
-\fIphysical_address\fP The physical address 
-.RE
+Referenced by \fBMemoryManager()\fP, and \fBMaxOS::processes::Scheduler::schedule_next()\fP\&.
+.SS "\fBVirtualMemoryManager\fP * MemoryManager::vmm ()"
+Gets the active virtual memory manager
 .PP
 \fBReturns\fP
 .RS 4
-The IO region address 
+The active virtual memory manager 
 .RE
 .PP
 
 .PP
-Definition at line 315 of file memorymanagement\&.cpp\&.
-.PP
+Definition at line \fB306\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-315                                                             {
-316 
-317   if(physical_address < s_higher_half_mem_offset)
-318     return (void*)(physical_address + s_higher_half_mem_offset);
-319 
-320   // Must be in the higher half
-321   return (void*)physical_address;
-322 
-323 }
+306                                          {
+307 
+308     return m_virtual_memory_manager;
+309 }
 .fi
-.PP
-References physical_address, and s_higher_half_mem_offset\&.
-.SS "void * MemoryManager::to_lower_region (uintptr_t virtual_address)\fC [static]\fP"
 
-.PP
-Converts a virtual address to a lower region address if it is in the higher region using the higher half kernel offset\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIvirtual_address\fP The virtual address 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The lower region address 
-.RE
-.PP
-
-.PP
-Definition at line 301 of file memorymanagement\&.cpp\&.
-.PP
-.nf
-301                                                               {
-302   // If it's in the lower half then add the offset
-303   if(virtual_address > s_higher_half_kernel_offset)
-304     return (void*)(virtual_address - s_higher_half_kernel_offset);
-305 
-306   // Must be in the lower half
-307   return (void*)virtual_address;
-308 }
-.fi
-.PP
-References s_higher_half_kernel_offset\&.
-.PP
-Referenced by MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "\fBMemoryManager\fP* MaxOS::memory::MemoryManager::previous_memory_manager"
+.SS "\fBMemoryManager\fP* MaxOS::memory::MemoryManager::previous_memory_manager = nullptr"
 
 .PP
-Definition at line 58 of file memorymanagement\&.h\&.
-.SS "const size_t MaxOS::memory::MemoryManager::s_chunk_alignment { 0x10 }\fC [static]\fP"
+Definition at line \fB52\fP of file \fBmemorymanagement\&.h\fP\&.
+.SS "const size_t MaxOS::memory::MemoryManager::s_chunk_alignment = 0x10\fC [static]\fP"
 
 .PP
-Definition at line 56 of file memorymanagement\&.h\&.
+Definition at line \fB50\fP of file \fBmemorymanagement\&.h\fP\&.
 .PP
-Referenced by align()\&.
-.SS "\fBMemoryManager\fP * MemoryManager::s_current_memory_manager = 0\fC [static]\fP"
+Referenced by \fBalign()\fP\&.
+.SS "\fBMemoryManager\fP* MaxOS::memory::MemoryManager::s_current_memory_manager = nullptr\fC [inline]\fP, \fC [static]\fP"
 
 .PP
-Definition at line 46 of file memorymanagement\&.h\&.
+Definition at line \fB46\fP of file \fBmemorymanagement\&.h\fP\&.
 .PP
-Referenced by free(), malloc(), switch_active_memory_manager(), and ~MemoryManager()\&.
-.SS "const uint64_t MaxOS::memory::MemoryManager::s_hh_direct_map_offset { \fBs_higher_half_offset\fP + \fBPhysicalMemoryManager::s_page_size\fP }\fC [static]\fP"
+Referenced by \fBfree()\fP, \fBmalloc()\fP, \fBswitch_active_memory_manager()\fP, and \fB~MemoryManager()\fP\&.
+.SS "\fBMemoryManager\fP* MaxOS::memory::MemoryManager::s_kernel_memory_manager = nullptr\fC [inline]\fP, \fC [static]\fP"
 
 .PP
-Definition at line 53 of file memorymanagement\&.h\&.
+Definition at line \fB47\fP of file \fBmemorymanagement\&.h\fP\&.
 .PP
-Referenced by from_dm_region(), MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager(), to_dm_region(), and MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\&.
-.SS "const uint64_t MaxOS::memory::MemoryManager::s_higher_half_kernel_offset { 0xFFFFFFFF80000000 }\fC [static]\fP"
-
-.PP
-Definition at line 49 of file memorymanagement\&.h\&.
-.PP
-Referenced by to_higher_region(), and to_lower_region()\&.
-.SS "const uint64_t MaxOS::memory::MemoryManager::s_higher_half_mem_offset { 0xFFFF800000000000 }\fC [static]\fP"
-
-.PP
-Definition at line 50 of file memorymanagement\&.h\&.
-.PP
-Referenced by to_io_region()\&.
-.SS "const uint64_t MaxOS::memory::MemoryManager::s_higher_half_mem_reserved { 0x280000000 }\fC [static]\fP"
-
-.PP
-Definition at line 51 of file memorymanagement\&.h\&.
-.SS "const uint64_t MaxOS::memory::MemoryManager::s_higher_half_offset { \fBs_higher_half_mem_offset\fP + \fBs_higher_half_mem_reserved\fP}\fC [static]\fP"
-
-.PP
-Definition at line 52 of file memorymanagement\&.h\&.
-.PP
-Referenced by to_dm_region()\&.
-.SS "\fBMemoryManager\fP * MemoryManager::s_kernel_memory_manager = 0\fC [static]\fP"
-
-.PP
-Definition at line 47 of file memorymanagement\&.h\&.
-.PP
-Referenced by kfree(), kmalloc(), and ~MemoryManager()\&.
+Referenced by \fBkfree()\fP, \fBkmalloc()\fP, \fBMemoryManager()\fP, \fBMaxOS::processes::Process::Process()\fP, \fBMaxOS::processes::Scheduler::Scheduler()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, and \fB~MemoryManager()\fP\&.
 
 .SH "Author"
 .PP 

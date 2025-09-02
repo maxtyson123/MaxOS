@@ -1,34 +1,35 @@
 var clock_8h =
 [
-    [ "TimeEvent", "classMaxOS_1_1drivers_1_1clock_1_1TimeEvent.html", "classMaxOS_1_1drivers_1_1clock_1_1TimeEvent" ],
-    [ "ClockEventHandler", "classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler.html", "classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler" ],
-    [ "PITCommand", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand" ],
-    [ "PIT", "classMaxOS_1_1drivers_1_1clock_1_1PIT.html", "classMaxOS_1_1drivers_1_1clock_1_1PIT" ],
-    [ "Clock", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html", "classMaxOS_1_1drivers_1_1clock_1_1Clock" ],
+    [ "MaxOS::drivers::clock::TimeEvent", "classMaxOS_1_1drivers_1_1clock_1_1TimeEvent.html", "classMaxOS_1_1drivers_1_1clock_1_1TimeEvent" ],
+    [ "MaxOS::drivers::clock::ClockEventHandler", "classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler.html", "classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler" ],
+    [ "MaxOS::drivers::clock::PITCommand", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand" ],
+    [ "MaxOS::drivers::clock::PIT", "classMaxOS_1_1drivers_1_1clock_1_1PIT.html", "classMaxOS_1_1drivers_1_1clock_1_1PIT" ],
+    [ "MaxOS::drivers::clock::Clock", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html", "classMaxOS_1_1drivers_1_1clock_1_1Clock" ],
+    [ "pit_command_t", "clock_8h.html#a64df5b539699c60554f98af328b16cd9", null ],
     [ "AccessMode", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844", [
-      [ "LATCH_COUNT", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844a227bf944e7056fb5ae90d6e8869cfe41", null ],
-      [ "LOW_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844accbf287ba9fab98fb1662900443e1f3e", null ],
-      [ "HIGH_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844a3b86b65b34bc582344a0631582308bf0", null ],
-      [ "LOW_HIGH_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844adb84e1a999b8ebc29d274d0bbea03069", null ]
+      [ "LATCH_COUNT", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844aa814f51f34d95e93c6d83be90275efb7", null ],
+      [ "LOW_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844a9d6b9d6fa63a6900ea19237646019473", null ],
+      [ "HIGH_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844ae7425eeb852ca574229f177807cb8ca0", null ],
+      [ "LOW_HIGH_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844adbb4778615de7631ad9e4446450576c9", null ]
     ] ],
     [ "BCDMode", "clock_8h.html#a138a8792ceb3e2bd560c677d54724b4c", [
-      [ "BINARY", "clock_8h.html#a138a8792ceb3e2bd560c677d54724b4ca1cbd4efc56960b7ba69f64310220c5c5", null ],
-      [ "BCD", "clock_8h.html#a138a8792ceb3e2bd560c677d54724b4caadb3f31d36219995143dfdfc63aff715", null ]
+      [ "BINARY", "clock_8h.html#a138a8792ceb3e2bd560c677d54724b4ca98ad0e8750ae10ad556ed7a62affb452", null ],
+      [ "BCD", "clock_8h.html#a138a8792ceb3e2bd560c677d54724b4ca8539ef1fba74a70f5a77fcc3f25c1659", null ]
     ] ],
     [ "Channel", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3", [
-      [ "CHANNEL_0", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3ac9249438b2f29afea1a3fe1a76e504d3", null ],
-      [ "CHANNEL_1", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3a337ddb730fc1f2b4588ae69d0eb0e39e", null ],
-      [ "CHANNEL_2", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3af691dc1deba5bad6bf08bf3c070a08d6", null ]
+      [ "INTERRUPT", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3a81b7fe15c43052525db74111aa314cc9", null ],
+      [ "DRAM_REFRESH", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3a04d305b384e24c98f2818da5a50342ca", null ],
+      [ "SPEAKER", "clock_8h.html#abcf21589b606dd6e2b8a617cda1b0ac3a886db3c4d7f0d4adbb44f0f3f3789d43", null ]
     ] ],
     [ "ClockEvents", "clock_8h.html#a17687f96357a81b18a16cc4afcdb29a0", [
-      [ "TIME", "clock_8h.html#a17687f96357a81b18a16cc4afcdb29a0a66c428703c3c6a056080b057a2135822", null ]
+      [ "TIME", "clock_8h.html#a17687f96357a81b18a16cc4afcdb29a0a346ff32eaa3c09983fb2ec057816d352", null ]
     ] ],
     [ "OperatingMode", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7", [
-      [ "MODE_0", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a6fc08498cb54f573042b436217707b06", null ],
-      [ "MODE_1", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a28058e28f22373baefd549b7a3005609", null ],
-      [ "MODE_2", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7affb4c2c721ab2cc61f102e054e31c612", null ],
-      [ "MODE_3", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a97ede363ac75e9f3115c37191c77b732", null ],
-      [ "MODE_4", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a9d7356b39a5b01bda28bd9360722b409", null ],
-      [ "MODE_5", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7adbe74fd6dd254bc102804e548b8c485f", null ]
+      [ "INTERRUPT_ON_TERMINAL_COUNT", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7ad9a50259f796fe2de870668630a7b727", null ],
+      [ "ONE_SHOT", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a5bc2964599423c796ecf0aaecdc5be9d", null ],
+      [ "RATE_GENERATOR", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7aca50c2eea44eff0b9ae4e9bbec438a65", null ],
+      [ "SQUARE_WAVE", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a0808de7f19eb9693fc566d3dcb715b08", null ],
+      [ "SOFTWARE_STROBE", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a1f1eb7d3c192cb3f8d5a354bfceb28de", null ],
+      [ "HARDWARE_STROBE", "clock_8h.html#a9e1786fd3419e0a129f79ffdf56154f7a1d8e2ef6a133c20c377b13a04363e907", null ]
     ] ]
 ];

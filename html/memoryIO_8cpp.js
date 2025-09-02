@@ -1,8 +1,7 @@
 var memoryIO_8cpp =
 [
     [ "memcmp", "memoryIO_8cpp.html#a72ee1a94489c3ecc654b0d9d4a70a0d1", null ],
-    [ "memcpy", "memoryIO_8cpp.html#aa9250664b209e69cb6aec30d9b7da564", null ],
-    [ "memFunctions", "memoryIO_8cpp.html#af512e6c507d5e1b3b80aa5c8ced94e9a", null ],
-    [ "memmove", "memoryIO_8cpp.html#a372aabeaff6df95a5bd10dc6c26553f1", null ],
-    [ "memset", "memoryIO_8cpp.html#a278b67fbd1dd96caa5866d95697fd633", null ]
+    [ "memcpy", "memoryIO_8cpp.html#a5d860365491e432b125606a6f8e464bc", null ],
+    [ "memmove", "memoryIO_8cpp.html#a337c480eed50c49c1db8e51a1e0acf15", null ],
+    [ "memset", "memoryIO_8cpp.html#af609697d85ef5a91e8be47ffa4c20f94", null ]
 ];

@@ -1,0 +1,378 @@
+\doxysection{vfs.\+cpp}
+\hypertarget{vfs_8cpp_source}{}\label{vfs_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/filesystem/vfs.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/filesystem/vfs.cpp}}
+\mbox{\hyperlink{vfs_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ Max\ Tyson\ on\ 20/04/2025.}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vfs_8h}{filesystem/vfs.h}}>}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{MaxOS::filesystem}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00011}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_aecd1015fa61653d78dd46f22daf72c5a}{00011}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_aecd1015fa61653d78dd46f22daf72c5a}{VirtualFileSystem::VirtualFileSystem}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ file\ system\ to\ this\ instance}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00014}00014\ \ \ \ \ s\_current\_file\_system\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00016}00016\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00018}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a0e503b0710d92b6c5032800c83fb2920}{00018}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a0e503b0710d92b6c5032800c83fb2920}{VirtualFileSystem::\string~VirtualFileSystem}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00020}00020\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ mounted\ filesystems}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00021}00021\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a15b148e52b9fafdaf494beeb5858edd1}{unmount\_all}}();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ file\ system\ to\ null}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00024}00024\ \ \ \ \ s\_current\_file\_system\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00026}00026\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00033}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_aeb7fce72e33423a13006d9097c725650}{00033}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_aeb7fce72e33423a13006d9097c725650}{VirtualFileSystem::current\_file\_system}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_current\_file\_system;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00035}00035\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00042}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a62f47e012bb80ee96e6bf706c9e801bd}{00042}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a62f47e012bb80ee96e6bf706c9e801bd}{VirtualFileSystem::mount\_filesystem}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ filesystem)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00044}00044\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ filesystem\ is\ already\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00045}00045\ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystems.find(filesystem)\ !=\ filesystems.end())\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Filesystem\ already\ mounted\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00048}00048\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ mount\ point\ for\ the\ filesystem}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}\ =\ \textcolor{stringliteral}{"{}/filesystem\_"{}}\ +\ filesystems.size();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//\ If\ this\ is\ the\ first\ filesystem\ to\ be\ mounted,\ set\ the\ root\ filesystem}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystems.size()\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}\ =\ \textcolor{stringliteral}{"{}/"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ filesystem\ to\ the\ map}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00058}00058\ \ \ \ \ filesystems.insert(filesystem,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00059}00059\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00067}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ad8b5ce4713ce7d50efd8908226fbbc21}{00067}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a62f47e012bb80ee96e6bf706c9e801bd}{VirtualFileSystem::mount\_filesystem}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ filesystem,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00069}00069\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ filesystem\ is\ already\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystems.find(filesystem)\ !=\ filesystems.end())\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Filesystem\ already\ mounted\ at\ "{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00073}00073\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ filesystem\ to\ the\ map}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00076}00076\ \ \ \ \ filesystems.insert(filesystem,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00077}00077\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00084}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a4866b31858122f50db927b4dd563d318}{00084}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a4866b31858122f50db927b4dd563d318}{VirtualFileSystem::unmount\_filesystem}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ filesystem)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ filesystem\ is\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00087}00087\ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystems.find(filesystem)\ ==\ filesystems.end())}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00090}00090\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ filesystem\ from\ the\ map}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00091}00091\ \ \ \ \ filesystems.erase(filesystem);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00093}00093\ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ filesystem}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00094}00094\ \ \ \ \ \textcolor{keyword}{delete}\ filesystem;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00095}00095\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00102}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a25dab5d0e4318f8b2f7abc4eb6e580fb}{00102}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a4866b31858122f50db927b4dd563d318}{VirtualFileSystem::unmount\_filesystem}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00104}00104\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ filesystem\ from\ the\ map}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00105}00105\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ filesystem\ :\ filesystems)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystem.second\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a4866b31858122f50db927b4dd563d318}{unmount\_filesystem}}(filesystem.first);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00109}00109\ \ \ \ \ \textcolor{comment}{//\ Filesystem\ not\ found}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00110}00110\ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Filesystem\ not\ found\ at\ "{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00111}00111\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00116}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a15b148e52b9fafdaf494beeb5858edd1}{00116}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a15b148e52b9fafdaf494beeb5858edd1}{VirtualFileSystem::unmount\_all}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00118}00118\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ filesystems\ and\ unmount\ them}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ filesystem\ :\ filesystems)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a4866b31858122f50db927b4dd563d318}{unmount\_filesystem}}(filesystem.first);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00122}00122\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00129}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ac12b82c0c5886b7e214c08635827f4cb}{00129}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ac12b82c0c5886b7e214c08635827f4cb}{VirtualFileSystem::root\_directory}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00131}00131\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ root\ filesystem}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00132}00132\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a3ed2b790b57de898cb75b90f8e2ceccf}{root\_filesystem}}();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00133}00133\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00136}00136\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ root\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00137}00137\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}-\/>root\_directory();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00138}00138\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00145}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a3ed2b790b57de898cb75b90f8e2ceccf}{00145}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a3ed2b790b57de898cb75b90f8e2ceccf}{VirtualFileSystem::root\_filesystem}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00147}00147\ \ \ \ \ \textcolor{comment}{//\ Ensure\ there\ is\ at\ least\ one\ filesystem\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00148}00148\ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystems.size()\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00151}00151\ \ \ \ \ \textcolor{comment}{//\ It\ is\ always\ the\ first\ filesystem\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00152}00152\ \ \ \ \ \textcolor{keywordflow}{return}\ filesystems.begin()-\/>first;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00153}00153\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00161}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a445c90b05dfedbabcf2e1a6c0b8a5910}{00161}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a445c90b05dfedbabcf2e1a6c0b8a5910}{VirtualFileSystem::get\_filesystem}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00163}00163\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ filesystem\ is\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00164}00164\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ filesystem\ :\ filesystems)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00165}00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filesystem.second\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ filesystem.first;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{comment}{//\ Filesystem\ not\ found}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00169}00169\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00170}00170\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00178}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a6aa513ffd11c3c2e6515735d0faabc14}{00178}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a6aa513ffd11c3c2e6515735d0faabc14}{VirtualFileSystem::find\_filesystem}}(\textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00180}00180\ \ \ \ \ \textcolor{comment}{//\ Longest\ matching\ path\ will\ be\ where\ the\ filesystem\ is\ mounted}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00181}00181\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{longest\_match}}\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00182}00182\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{longest\_match\_fs}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00184}00184\ \ \ \ \ \textcolor{comment}{//\ Search\ through\ the\ filesystems}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00185}00185\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ filesystem\ :\ filesystems)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ filesystem\ and\ mount\ point}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}\ =\ filesystem.first;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00188}00188\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}\ =\ filesystem.second;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ path\ starts\ with\ the\ mount\ point}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}.starts\_with(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}})\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}.length()\ >\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{longest\_match}}.length())\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{longest\_match}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{longest\_match\_fs}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00195}00195\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00196}00196\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00197}00197\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{longest\_match\_fs}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00198}00198\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00207}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a94d0c9ca5717b5387a7257498c6bfdd6}{00207}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a94d0c9ca5717b5387a7257498c6bfdd6}{VirtualFileSystem::get\_relative\_path}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ filesystem,\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00209}00209\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ mount\ point\ for\ the\ filesystem}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00210}00210\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}\ =\ filesystems.find(filesystem);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00211}00211\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}\ ==\ filesystems.end())}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00212}00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00214}00214\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ mount\ point}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00215}00215\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}-\/>second;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ that\ the\ path\ points\ to\ the\ filesystem}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00218}00218\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}.starts\_with(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00219}00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00220}00220\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00221}00221\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ relative\ path}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00222}00222\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{relative\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}.substring(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}.length(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}.length()\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mount\_point}}.length());}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00223}00223\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{relative\_path}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00224}00224\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00232}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{00232}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{VirtualFileSystem::open\_directory}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00234}00234\ \ \ \ \ \textcolor{comment}{//\ Ensure\ a\ valid\ path\ is\ given}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a2772efbb6cb6a8337c383434fa8b7692}{Path::valid}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00236}00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00238}00238\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ filesystem\ that\ is\ responsible\ for\ the\ path}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00239}00239\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a6aa513ffd11c3c2e6515735d0faabc14}{find\_filesystem}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00240}00240\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00241}00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00242}00242\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00243}00243\ \ \ \ \ \textcolor{comment}{//\ Get\ where\ to\ open\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00244}00244\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{relative\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a94d0c9ca5717b5387a7257498c6bfdd6}{get\_relative\_path}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00245}00245\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_ae94526e2ff54e8ae745d7fd83951beba}{Path::file\_path}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{relative\_path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00247}00247\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00248}00248\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}-\/>get\_directory(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00250}00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00251}00251\ \ \ \ \ directory-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ab847d2dfa3f68210d2579d77adc2a1a2}{read\_from\_disk}}();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00253}00253\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00254}00254\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00255}00255\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00256}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a9ad7bc117e47fcbfb8c7b9f026b59bb5}{00256}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{VirtualFileSystem::open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00258}00258\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ file}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00259}00259\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_directory}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}-\/>open\_subdirectory(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00260}00260\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_directory}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00261}00261\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00263}00263\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_directory}}-\/>read\_from\_disk();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00264}00264\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_directory}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00265}00265\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00273}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a75ac07b8f87ec1c20be8d4002699602e}{00273}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a75ac07b8f87ec1c20be8d4002699602e}{VirtualFileSystem::create\_directory}}(\textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00275}00275\ \ \ \ \ \textcolor{comment}{//\ Ensure\ a\ valid\ path\ is\ given}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00276}00276\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a2772efbb6cb6a8337c383434fa8b7692}{Path::valid}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00277}00277\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00279}00279\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}.strip(\textcolor{charliteral}{'/'});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ filesystem\ that\ is\ responsible\ for\ the\ path}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00282}00282\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{FileSystem}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a6aa513ffd11c3c2e6515735d0faabc14}{find\_filesystem}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fs}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00286}00286\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ parent\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00287}00287\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ parent\_directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00288}00288\ \ \ \ \ \textcolor{keywordflow}{if}\ (!parent\_directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00290}00290\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00291}00291\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a32927d3a40b23bfd0b4145be19f2b2fa}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00292}00292\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a75ac07b8f87ec1c20be8d4002699602e}{create\_directory}}(parent\_directory,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00293}00293\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00294}00294\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00302}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ab0656ba7ff66c2ef5a10736f9bf2ce57}{00302}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a75ac07b8f87ec1c20be8d4002699602e}{VirtualFileSystem::create\_directory}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00304}00304\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00305}00305\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}-\/>create\_subdirectory(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00306}00306\ \ \ \ \ directory-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ab847d2dfa3f68210d2579d77adc2a1a2}{read\_from\_disk}}();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00307}00307\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00308}00308\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00309}00309\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00311}00311\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00317}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ada5d02dc8232eb89317c2013e8b82a27}{00317}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ada5d02dc8232eb89317c2013e8b82a27}{VirtualFileSystem::delete\_directory}}(\textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00318}00318\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00319}00319\ \ \ \ \ \textcolor{comment}{//\ Ensure\ a\ valid\ path\ is\ given}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00320}00320\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a2772efbb6cb6a8337c383434fa8b7692}{Path::valid}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00321}00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00322}00322\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00323}00323\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}.strip(\textcolor{charliteral}{'/'});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00324}00324\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00325}00325\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00326}00326\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ parent\_directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00327}00327\ \ \ \ \ \textcolor{keywordflow}{if}\ (!parent\_directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00328}00328\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00329}00329\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00330}00330\ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00331}00331\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a32927d3a40b23bfd0b4145be19f2b2fa}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00332}00332\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ada5d02dc8232eb89317c2013e8b82a27}{delete\_directory}}(parent\_directory,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00333}00333\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00334}00334\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00341}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a500ac08ea29c20868123f356ad58af06}{00341}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ada5d02dc8232eb89317c2013e8b82a27}{VirtualFileSystem::delete\_directory}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00342}00342\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00343}00343\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ directory\ and\ delete\ it}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00344}00344\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ directory:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}-\/>subdirectories())}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00345}00345\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (directory-\/>name()\ ==\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00346}00346\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ada5d02dc8232eb89317c2013e8b82a27}{delete\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ directory);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00347}00347\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00348}00348\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00349}00349\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00356}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a59af753adc3045237f7414902b0bcd59}{00356}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ada5d02dc8232eb89317c2013e8b82a27}{VirtualFileSystem::delete\_directory}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00357}00357\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00358}00358\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ delete}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00359}00359\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00360}00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00362}00362\ \ \ \ \ \textcolor{comment}{//\ Store\ a\ reference\ to\ each\ subdirectory\ and\ its\ parent}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00363}00363\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Map<Directory*,\ Directory*>}}\ \mbox{\hyperlink{cpu_8cpp_a56f9ee420774363ee3bd9edf2e9f4a41}{stack}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00364}00364\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<Pair<Directory*,\ Directory*>}}>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_delete}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00365}00365\ \ \ \ \ \mbox{\hyperlink{cpu_8cpp_a56f9ee420774363ee3bd9edf2e9f4a41}{stack}}.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ directory);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00366}00366\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00367}00367\ \ \ \ \ \textcolor{keywordflow}{while}\ (!\mbox{\hyperlink{cpu_8cpp_a56f9ee420774363ee3bd9edf2e9f4a41}{stack}}.empty())\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00368}00368\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00369}00369\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Save\ the\ current}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00370}00370\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ =\ \mbox{\hyperlink{cpu_8cpp_a56f9ee420774363ee3bd9edf2e9f4a41}{stack}}.pop\_back();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00371}00371\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}.second;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00372}00372\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}}-\/>read\_from\_disk();}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00373}00373\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_delete}}.push\_back(\{\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}.first,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}}\});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00374}00374\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00375}00375\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Empty\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00376}00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&file:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}}-\/>files())}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_acde53c9636cd5475f63dce87849bc08c}{delete\_file}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}},\ file-\/>name());}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00378}00378\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00379}00379\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ the\ subdirectories}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00380}00380\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdir}}:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}}-\/>subdirectories())}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdir}}-\/>name()\ !=\ \textcolor{stringliteral}{"{}."{}}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdir}}-\/>name()\ !=\ \textcolor{stringliteral}{"{}.."{}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00382}00382\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{cpu_8cpp_a56f9ee420774363ee3bd9edf2e9f4a41}{stack}}.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current\_directory}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdir}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00383}00383\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00384}00384\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00385}00385\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00386}00386\ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ directory\ from\ the\ bottom\ of\ the\ tree}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00387}00387\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_delete}}.size()\ -\/\ 1;\ i\ >=\ 0;\ -\/-\/i)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00388}00388\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00389}00389\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ parent\ and\ child}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00390}00390\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_delete}}[i];}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00391}00391\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{owner}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}.first;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00392}00392\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}.second;}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00393}00393\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00394}00394\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{owner}}-\/>remove\_subdirectory(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}-\/>name());}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00395}00395\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00396}00396\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00397}00397\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00398}00398\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00405}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ad3f7dbfbd99ea30b5dc879bef308bbbf}{00405}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ad3f7dbfbd99ea30b5dc879bef308bbbf}{VirtualFileSystem::create\_file}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00406}00406\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00407}00407\ \ \ \ \ \textcolor{comment}{//\ Ensure\ a\ valid\ path\ is\ given}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00408}00408\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a2772efbb6cb6a8337c383434fa8b7692}{Path::valid}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00409}00409\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00410}00410\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00411}00411\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00412}00412\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00413}00413\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00414}00414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00415}00415\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00416}00416\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ file}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00417}00417\ \ \ \ \ \textcolor{keywordtype}{string}\ file\_name\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a32927d3a40b23bfd0b4145be19f2b2fa}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00418}00418\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ad3f7dbfbd99ea30b5dc879bef308bbbf}{create\_file}}(directory,\ file\_name);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00419}00419\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00420}00420\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00427}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a9b2f1cfd3fc4bdacde3555a48487bc92}{00427}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ad3f7dbfbd99ea30b5dc879bef308bbbf}{VirtualFileSystem::create\_file}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00428}00428\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}-\/>create\_file(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00429}00429\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00430}00430\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00438}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a72b4ebe40a9371b2058a2dc1765830fb}{00438}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a72b4ebe40a9371b2058a2dc1765830fb}{VirtualFileSystem::open\_file}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}},\ \textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00439}00439\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00440}00440\ \ \ \ \ \textcolor{comment}{//\ Ensure\ a\ valid\ path\ is\ given}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00441}00441\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a2772efbb6cb6a8337c383434fa8b7692}{Path::valid}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00442}00442\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00443}00443\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00444}00444\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00445}00445\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00446}00446\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00447}00447\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00448}00448\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00449}00449\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a72b4ebe40a9371b2058a2dc1765830fb}{open\_file}}(directory,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a32927d3a40b23bfd0b4145be19f2b2fa}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}),\ offset);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00450}00450\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00451}00451\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00460}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_ac7060e8ce6244a08397ad0d9603c2b28}{00460}}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}*\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a72b4ebe40a9371b2058a2dc1765830fb}{VirtualFileSystem::open\_file}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}},\ \textcolor{keywordtype}{size\_t}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00461}00461\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00462}00462\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ file}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00463}00463\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_file}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}-\/>open\_file(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00464}00464\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_file}})}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00465}00465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00466}00466\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00467}00467\ \ \ \ \ \textcolor{comment}{//\ Seek\ to\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00468}00468\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_file}}-\/>seek(SeekType::SET,\ offset);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00469}00469\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00470}00470\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{opened\_file}};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00471}00471\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00472}00472\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00478}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_acde53c9636cd5475f63dce87849bc08c}{00478}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_acde53c9636cd5475f63dce87849bc08c}{VirtualFileSystem::delete\_file}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00479}00479\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00480}00480\ \ \ \ \ \textcolor{comment}{//\ Ensure\ a\ valid\ path\ is\ given}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00481}00481\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a2772efbb6cb6a8337c383434fa8b7692}{Path::valid}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}))}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00482}00482\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00483}00483\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00484}00484\ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00485}00485\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a350e2317adc6a9f8557f544ce1f6e158}{open\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00486}00486\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00487}00487\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00488}00488\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00489}00489\ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ file}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00490}00490\ \ \ \ \ \textcolor{keywordtype}{string}\ file\_name\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a32927d3a40b23bfd0b4145be19f2b2fa}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00491}00491\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_acde53c9636cd5475f63dce87849bc08c}{delete\_file}}(directory,\ file\_name);}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00492}00492\ \}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00493}00493\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00500}\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_a401066a87bbc87914cf04309b094173b}{00500}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_acde53c9636cd5475f63dce87849bc08c}{VirtualFileSystem::delete\_file}}(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}},\ \textcolor{keywordtype}{string}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00501}00501\ }
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00502}00502\ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ file}}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00503}00503\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{parent}}-\/>remove\_file(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
+\DoxyCodeLine{\Hypertarget{vfs_8cpp_source_l00504}00504\ \}}
+
+\end{DoxyCode}

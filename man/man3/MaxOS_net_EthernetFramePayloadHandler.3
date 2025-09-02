@@ -1,4 +1,4 @@
-.TH "MaxOS::net::EthernetFramePayloadHandler" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::EthernetFramePayloadHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,17 +14,17 @@ Inherited by \fBMaxOS::net::AddressResolutionProtocol\fP, and \fBMaxOS::net::Int
 
 .in +1c
 .ti -1c
-.RI "\fBEthernetFramePayloadHandler\fP (\fBEthernetFrameHandler\fP *\fBframeHandler\fP, uint16_t \fBhandledType\fP)"
+.RI "\fBEthernetFramePayloadHandler\fP (\fBEthernetFrameHandler\fP *\fBframeHandler\fP, \fBuint16_t\fP \fBhandledType\fP)"
 .br
 .ti -1c
 .RI "\fB~EthernetFramePayloadHandler\fP ()"
 .br
 .RI "Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list\&. "
 .ti -1c
-.RI "virtual bool \fBhandleEthernetframePayload\fP (uint8_t *ethernetframePayload, uint32_t \fBsize\fP)"
+.RI "\fBvirtual\fP \fBbool\fP \fBhandleEthernetframePayload\fP (\fBuint8_t\fP *\fBethernetframePayload\fP, \fBuint32_t\fP \fBsize\fP)"
 .br
 .ti -1c
-.RI "void \fBSend\fP (uint64_t \fBdestinationMAC\fP, uint8_t *\fBdata\fP, uint32_t \fBsize\fP)"
+.RI "\fBvoid\fP \fBSend\fP (\fBuint64_t\fP \fBdestinationMAC\fP, \fBuint8_t\fP *\fBdata\fP, \fBuint32_t\fP \fBsize\fP)"
 .br
 .RI "Send an packet via the backend driver\&. "
 .in -1c
@@ -47,10 +47,10 @@ Inherited by \fBMaxOS::net::AddressResolutionProtocol\fP, and \fBMaxOS::net::Int
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 32 of file ethernetframe\&.h\&.
+Definition at line \fB32\fP of file \fBethernetframe\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "EthernetFramePayloadHandler::EthernetFramePayloadHandler (\fBEthernetFrameHandler\fP * frameHandler, uint16_t handledType)"
+.SS "EthernetFramePayloadHandler::EthernetFramePayloadHandler (\fBEthernetFrameHandler\fP * frameHandler, \fBuint16_t\fP handledType)"
 
 .PP
 \fBParameters\fP
@@ -62,49 +62,42 @@ Definition at line 32 of file ethernetframe\&.h\&.
 .PP
 
 .PP
-Definition at line 18 of file ethernetframe\&.cpp\&.
-.PP
+Definition at line \fB18\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
 18                                                                                                                  {
 19 
-20     this -> handledType = handledType;
-21     this -> frameHandler = frameHandler;
-22     frameHandler->connectHandler(this);
+20     this \-> handledType = handledType;
+21     this \-> frameHandler = frameHandler;
+22     frameHandler\->connectHandler(this);
 23 
 24 
 25 }
 .fi
+
 .PP
-References MaxOS::net::EthernetFrameHandler::connectHandler()\&.
-.SS "EthernetFramePayloadHandler::~EthernetFramePayloadHandler ()"
+References \fBMaxOS::net::EthernetFrameHandler::connectHandler()\fP, \fBframeHandler\fP, and \fBhandledType\fP\&.
+.SS "EthernetFramePayloadHandler::~EthernetFramePayloadHandler ()\fC [default]\fP"
 
 .PP
 Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list\&. 
-.PP
-Definition at line 31 of file ethernetframe\&.cpp\&.
-.PP
-.nf
-31                                                           {
-32 }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "bool EthernetFramePayloadHandler::handleEthernetframePayload (uint8_t * ethernetframePayload, uint32_t size)\fC [virtual]\fP"
+.SS "\fBbool\fP EthernetFramePayloadHandler::handleEthernetframePayload (\fBuint8_t\fP * ethernetframePayload, \fBuint32_t\fP size)\fC [virtual]\fP"
 
 .PP
-Reimplemented in \fBMaxOS::net::InternetProtocolHandler\fP\&.
+Reimplemented in \fBMaxOS::net::AddressResolutionProtocol\fP, and \fBMaxOS::net::InternetProtocolHandler\fP\&.
 .PP
-Definition at line 35 of file ethernetframe\&.cpp\&.
-.PP
+Definition at line \fB34\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-35                                                                                {
-36 
-37     //By default, don't handle it, will be handled in the override
-38     return false;
-39 
-40 }
+34                                                                                {
+35 
+36     //By default, don't handle it, will be handled in the override
+37     return false;
+38 
+39 }
 .fi
-.SS "void EthernetFramePayloadHandler::Send (uint64_t destination, uint8_t * data, uint32_t size)"
+
+.SS "\fBvoid\fP EthernetFramePayloadHandler::Send (\fBuint64_t\fP destination, \fBuint8_t\fP * data, \fBuint32_t\fP size)"
 
 .PP
 Send an packet via the backend driver\&. 
@@ -120,38 +113,38 @@ Send an packet via the backend driver\&.
 .PP
 
 .PP
-Definition at line 49 of file ethernetframe\&.cpp\&.
-.PP
+Definition at line \fB48\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-49                                                                                          {
-50 
-51     frameHandler -> sendEthernetFrame (destination, handledType, data, size);
-52 }
+48                                                                                          {
+49 
+50     frameHandler \-> sendEthernetFrame (destination, handledType, data, size);
+51 }
 .fi
+
 .PP
-References data, destination, and size\&.
+References \fBdata\fP, \fBdestination\fP, \fBframeHandler\fP, \fBhandledType\fP, and \fBsize\fP\&.
 .PP
-Referenced by MaxOS::net::AddressResolutionProtocol::RequestMACAddress()\&.
-.SH "Friends And Related Function Documentation"
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::RequestMACAddress()\fP\&.
+.SH "Friends And Related Symbol Documentation"
 .PP 
 .SS "friend class \fBEthernetFrameHandler\fP\fC [friend]\fP"
 
 .PP
-Definition at line 33 of file ethernetframe\&.h\&.
+Definition at line \fB33\fP of file \fBethernetframe\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBEthernetFrameHandler\fP* MaxOS::net::EthernetFramePayloadHandler::frameHandler\fC [protected]\fP"
 
 .PP
-Definition at line 35 of file ethernetframe\&.h\&.
+Definition at line \fB35\fP of file \fBethernetframe\&.h\fP\&.
 .PP
-Referenced by MaxOS::net::InternetProtocolHandler::GetMediaAccessControlAddress(), MaxOS::net::AddressResolutionProtocol::RequestMACAddress(), and MaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\&.
+Referenced by \fBEthernetFramePayloadHandler()\fP, \fBMaxOS::net::InternetProtocolHandler::GetMediaAccessControlAddress()\fP, \fBMaxOS::net::AddressResolutionProtocol::RequestMACAddress()\fP, \fBSend()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
 .SS "uint16_t MaxOS::net::EthernetFramePayloadHandler::handledType\fC [protected]\fP"
 
 .PP
-Definition at line 36 of file ethernetframe\&.h\&.
+Definition at line \fB36\fP of file \fBethernetframe\&.h\fP\&.
 .PP
-Referenced by MaxOS::net::EthernetFrameHandler::connectHandler(), and MaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\&.
+Referenced by \fBEthernetFramePayloadHandler()\fP, \fBSend()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
 
 .SH "Author"
 .PP 

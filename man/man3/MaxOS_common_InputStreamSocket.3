@@ -1,4 +1,4 @@
-.TH "MaxOS::common::InputStreamSocket< Type >" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::InputStreamSocket< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,23 +18,83 @@ Inherits \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP\&.
 .RI "\fBInputStreamSocket\fP ()"
 .br
 .ti -1c
-.RI "\fBInputStreamSocket\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.RI "\fBInputStreamSocket\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
 .br
 .ti -1c
 .RI "\fB~InputStreamSocket\fP ()"
 .br
 .ti -1c
-.RI "virtual void \fBon_stream_read\fP (Type) override"
+.RI "\fBvoid\fP \fBon_stream_read\fP (\fBType\fP) \fBoverride\fP"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *\fBgeneric_stream_event_handler\fP)"
+.br
+.ti -1c
+.RI "\fB~InputStreamProcessor\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamEventHandler\fP ()"
+.br
+.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
+.ti -1c
+.RI "\fB~InputStreamEventHandler\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBGenericInputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
+.br
+.ti -1c
+.RI "\fB~GenericInputStream\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
 .br
 .in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBType\fP > * > \fBm_input_stream_event_handlers\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class Type>
+.SS "template<\fBclass\fP \fBType\fP>
 .br
-class MaxOS::common::InputStreamSocket< Type >"
-Passes read events on to the handlers\&. 
+class MaxOS::common::InputStreamSocket< Type >"Passes read events on to the handlers\&. 
 
 
 .PP
@@ -45,10 +105,10 @@ Passes read events on to the handlers\&.
 .PP
 
 .PP
-Definition at line 64 of file inputStream\&.h\&.
+Definition at line \fB63\fP of file \fBinputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<class Type > \fBMaxOS::common::InputStreamSocket\fP< Type >::\fBInputStreamSocket\fP"
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::InputStreamSocket ()\fC [default]\fP"
 @breif Creates a new \fBInputStreamSocket\fP
 .PP
 \fBTemplate Parameters\fP
@@ -57,15 +117,7 @@ Definition at line 64 of file inputStream\&.h\&.
 .RE
 .PP
 
-.PP
-Definition at line 242 of file inputStream\&.h\&.
-.PP
-.nf
-242                                                                         {
-243 
-244         }
-.fi
-.SS "template<class Type > \fBMaxOS::common::InputStreamSocket\fP< Type >::\fBInputStreamSocket\fP (\fBInputStreamEventHandler\fP< Type > * processor_handler)"
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::InputStreamSocket (\fBInputStreamEventHandler\fP< \fBType\fP > * processor_handler)"
 @breif Creates a new \fBInputStreamSocket\fP and connects it to the handler
 .PP
 \fBTemplate Parameters\fP
@@ -80,15 +132,15 @@ Definition at line 242 of file inputStream\&.h\&.
 .PP
 
 .PP
-Definition at line 252 of file inputStream\&.h\&.
-.PP
+Definition at line \fB245\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-253         : InputStreamProcessor<Type, Type>(processor_handler)
-254         {
-255 
-256         }
+246         : InputStreamProcessor<Type, Type>(processor_handler)
+247         {
+248 
+249         }
 .fi
-.SS "template<class Type > \fBMaxOS::common::InputStreamSocket\fP< Type >::~\fBInputStreamSocket\fP"
+
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::~\fBInputStreamSocket\fP ()\fC [default]\fP"
 @breif Destroys the \fBInputStreamSocket\fP
 .PP
 \fBTemplate Parameters\fP
@@ -97,17 +149,9 @@ Definition at line 252 of file inputStream\&.h\&.
 .RE
 .PP
 
-.PP
-Definition at line 263 of file inputStream\&.h\&.
-.PP
-.nf
-263                                                                          {
-264 
-265         }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class Type > void \fBMaxOS::common::InputStreamSocket\fP< Type >::on_stream_read (Type read_element)\fC [override]\fP, \fC [virtual]\fP"
+.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::on_stream_read (\fBType\fP read_element)\fC [override]\fP, \fC [virtual]\fP"
 @breif Called when data is read from a stream\&. Passes the event on to the internetProtocolHandlers
 .PP
 \fBTemplate Parameters\fP
@@ -124,16 +168,15 @@ Definition at line 263 of file inputStream\&.h\&.
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line 273 of file inputStream\&.h\&.
-.PP
+Definition at line \fB264\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-273                                                                                            {
-274 
-275             // Pass the read event on to the handlers
-276             for(auto& event_handler : this -> m_input_stream_event_handlers)
-277               event_handler -> on_stream_read(read_element);
-278 
-279         }
+264                                                                                            {
+265 
+266             // Pass the read event on to the handlers
+267             for(auto& event_handler : this \-> m_input_stream_event_handlers)
+268               event_handler \-> on_stream_read(read_element);
+269 
+270         }
 .fi
 
 

@@ -1,11 +1,23 @@
 var searchData=
 [
-  ['validate_2914',['validate',['../classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html#a206d5910d2b05ae83b88b410f0fa85ea',1,'MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface']]],
-  ['vector_2915',['Vector',['../classMaxOS_1_1common_1_1Vector.html#ac7e3551ebb498795d2635257db45e32e',1,'MaxOS::common::Vector::Vector()'],['../classMaxOS_1_1common_1_1Vector.html#a514bd572d3efaf4f3c12d8248384e3e7',1,'MaxOS::common::Vector::Vector(int Size, Type element)']]],
-  ['vectoriterationhandler_2916',['VectorIterationHandler',['../classMaxOS_1_1common_1_1VectorIterationHandler.html#a1bdbb8c73c1ec896ed6ea3745821a2c7',1,'MaxOS::common::VectorIterationHandler']]],
-  ['vesabootconsole_2917',['VESABootConsole',['../classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#a9d8bebede82d741eb53e19b7cf2c31ec',1,'MaxOS::drivers::console::VESABootConsole']]],
-  ['videodriver_2918',['VideoDriver',['../classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html#a1aa081ed8e5de1aaf30442f10497e36b',1,'MaxOS::drivers::video::VideoDriver']]],
-  ['videoelectronicsstandardsassociation_2919',['VideoElectronicsStandardsAssociation',['../classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html#a30be5595628c7978a91fe0023ecac5ce',1,'MaxOS::drivers::video::VideoElectronicsStandardsAssociation']]],
-  ['videographicsarray_2920',['VideoGraphicsArray',['../classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray.html#af56f99edfcf3b470c90d57af39ffe5ca',1,'MaxOS::drivers::video::VideoGraphicsArray']]],
-  ['virtualmemorymanager_2921',['VirtualMemoryManager',['../classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a89f26f978695bfe043afd51b4388b323',1,'MaxOS::memory::VirtualMemoryManager']]]
+  ['text_0',['text',['../classMaxOS_1_1gui_1_1widgets_1_1Text.html#ae727336d64b5f4b90fbfe3d3613a3ea4',1,'MaxOS::gui::widgets::Text::Text()'],['../classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a5cb6a02902b3484d98248f894cec2d08',1,'MaxOS::gui::widgets::InputBox::text()']]],
+  ['textmodeconsole_1',['TextModeConsole',['../classMaxOS_1_1drivers_1_1console_1_1TextModeConsole.html#a933769627a6175e6d4b533597fd5a3f1',1,'MaxOS::drivers::console::TextModeConsole']]],
+  ['thread_2',['Thread',['../classMaxOS_1_1processes_1_1Thread.html#a1287ab4dd0133b3e7065a177717cdf77',1,'MaxOS::processes::Thread']]],
+  ['threads_3',['threads',['../classMaxOS_1_1processes_1_1Process.html#a8595e1ab73f585be41005a6bbd88eb2f',1,'MaxOS::processes::Process']]],
+  ['ticks_4',['ticks',['../classMaxOS_1_1processes_1_1Scheduler.html#a349f28166719d94bd978439f24cd2448',1,'MaxOS::processes::Scheduler']]],
+  ['ticks_5fper_5fms_5',['ticks_per_ms',['../classMaxOS_1_1drivers_1_1clock_1_1PIT.html#aedde96002f9c62875dd502f5265f0314',1,'MaxOS::drivers::clock::PIT']]],
+  ['timeevent_6',['TimeEvent',['../classMaxOS_1_1drivers_1_1clock_1_1TimeEvent.html#af28de45ceb65c439cdabe43d3e80a42c',1,'MaxOS::drivers::clock::TimeEvent']]],
+  ['to_5fconsole_5fcolour_7',['to_console_colour',['../classMaxOS_1_1common_1_1Colour.html#a433579f913162aecf6a9524f2632cdb3',1,'MaxOS::common::Colour']]],
+  ['to_5fdm_5fregion_8',['to_dm_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a061e07bff657447294f4005f550d87ac',1,'MaxOS::memory::PhysicalMemoryManager']]],
+  ['to_5fhigher_5fregion_9',['to_higher_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a9a97c836d175ac4638ed79a186fa6020',1,'MaxOS::memory::PhysicalMemoryManager']]],
+  ['to_5fio_5fregion_10',['to_io_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a1ad616354df4569df849c6f1331cd4b4',1,'MaxOS::memory::PhysicalMemoryManager']]],
+  ['to_5flower_5fregion_11',['to_lower_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a92723ea076c394a848f7f95bca9a86b6',1,'MaxOS::memory::PhysicalMemoryManager']]],
+  ['to_5fvmm_5fflags_12',['to_vmm_flags',['../classMaxOS_1_1processes_1_1Elf64.html#a9bad9143e7d3667895a6659ec7a37c95',1,'MaxOS::processes::Elf64']]],
+  ['top_5fdirectory_13',['top_directory',['../classMaxOS_1_1filesystem_1_1Path.html#a5e8fc3218495a8ae8b312c4ad2580a80',1,'MaxOS::filesystem::Path']]],
+  ['total_5fticks_14',['total_ticks',['../classMaxOS_1_1processes_1_1Process.html#a42e63bc1dde8ba77b9a14456cf225f8f',1,'MaxOS::processes::Process']]],
+  ['transmissioncontrolprotocolhandler_15',['TransmissionControlProtocolHandler',['../classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html#ab888d7bdcc105c2e47cde211edb8a2e6',1,'MaxOS::net::TransmissionControlProtocolHandler']]],
+  ['transmissioncontrolprotocolpayloadhandler_16',['TransmissionControlProtocolPayloadHandler',['../classMaxOS_1_1net_1_1TransmissionControlProtocolPayloadHandler.html#ac38b22e785b3927473134a00693c539c',1,'MaxOS::net::TransmissionControlProtocolPayloadHandler']]],
+  ['transmissioncontrolprotocolsocket_17',['TransmissionControlProtocolSocket',['../classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#aafbf9f952733dbf85d2ea5cf19f6ac04',1,'MaxOS::net::TransmissionControlProtocolSocket']]],
+  ['tss_5fpointer_18',['tss_pointer',['../classMaxOS_1_1processes_1_1Thread.html#a9baa5fdcd84593974738c3f62f050283',1,'MaxOS::processes::Thread']]],
+  ['type_19',['type',['../classMaxOS_1_1processes_1_1Resource.html#a87de16e1adbdafc3764341d85e0228b5',1,'MaxOS::processes::Resource::type()'],['../classMaxOS_1_1processes_1_1BaseResourceRegistry.html#a635fdfd3fac43ee968b530a4b076d89c',1,'MaxOS::processes::BaseResourceRegistry::type()']]]
 ];

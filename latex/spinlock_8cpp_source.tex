@@ -1,0 +1,54 @@
+\doxysection{spinlock.\+cpp}
+\hypertarget{spinlock_8cpp_source}{}\label{spinlock_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/common/spinlock.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/common/spinlock.cpp}}
+\mbox{\hyperlink{spinlock_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 24/02/2025.}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{spinlock_8h}{common/spinlock.h}}>}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{scheduler_8h}{processes/scheduler.h}}>}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1processes}{MaxOS::processes}};}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00012}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a750626d4d4d503f39af5d399adac6657}{00012}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a750626d4d4d503f39af5d399adac6657}{Spinlock::Spinlock}}(\textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{should\_yield}})}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00013}00013\ :\ m\_should\_yield(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{should\_yield}})\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00015}00015\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00017}00017\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a6ed28d5235616487585e102214c6a0c4}{Spinlock::\string~Spinlock}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00022}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{00022}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{Spinlock::lock}}()\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00024}00024\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{acquire}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00025}00025\ \ \ \ \ m\_locked\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00026}00026\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00031}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{00031}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{Spinlock::unlock}}()\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00033}00033\ \ \ \ \ m\_locked\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00034}00034\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{release}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00035}00035\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00042}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a9632d6c0ad743f60bd0d515556220d32}{00042}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a9632d6c0ad743f60bd0d515556220d32}{Spinlock::is\_locked}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00043}00043\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_locked;}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00044}00044\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00050}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{00050}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{Spinlock::acquire}}()\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{\_\_atomic\_test\_and\_set}}(\&m\_locked,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{\_\_ATOMIC\_ACQUIRE}}))\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ lock\ to\ be\ available}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00054}00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_should\_yield)}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af1bf088153c111f0a4d9411b28471739}{Scheduler::system\_scheduler}}()-\/>yield();}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00057}00057\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00058}00058\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00063}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{00063}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{Spinlock::release}}()\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00064}00064\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{\_\_atomic\_clear}}(\&m\_locked,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{\_\_ATOMIC\_RELEASE}});}
+\DoxyCodeLine{\Hypertarget{spinlock_8cpp_source_l00065}00065\ \}}
+
+\end{DoxyCode}

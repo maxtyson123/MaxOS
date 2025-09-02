@@ -1,7 +1,7 @@
 var icmp_8h =
 [
-    [ "InternetControlMessageProtocolHeader", "structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader.html", "structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader" ],
-    [ "InternetControlMessageProtocol", "classMaxOS_1_1net_1_1InternetControlMessageProtocol.html", "classMaxOS_1_1net_1_1InternetControlMessageProtocol" ],
+    [ "MaxOS::net::InternetControlMessageProtocolHeader", "structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader.html", "structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader" ],
+    [ "MaxOS::net::InternetControlMessageProtocol", "classMaxOS_1_1net_1_1InternetControlMessageProtocol.html", "classMaxOS_1_1net_1_1InternetControlMessageProtocol" ],
     [ "__attribute__", "icmp_8h.html#a4d717afc44af4a0f81e760181db3ccd7", null ],
     [ "checksum", "icmp_8h.html#a6796c847bbd16253ce2538754c250bd6", null ],
     [ "code", "icmp_8h.html#a966576744a473fafb7687f8e5649941f", null ],

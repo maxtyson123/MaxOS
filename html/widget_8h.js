@@ -1,8 +1,8 @@
 var widget_8h =
 [
-    [ "Widget", "classMaxOS_1_1gui_1_1Widget.html", "classMaxOS_1_1gui_1_1Widget" ],
-    [ "CompositeWidget", "classMaxOS_1_1gui_1_1CompositeWidget.html", "classMaxOS_1_1gui_1_1CompositeWidget" ],
-    [ "WidgetMoverResizer", "classMaxOS_1_1gui_1_1WidgetMoverResizer.html", "classMaxOS_1_1gui_1_1WidgetMoverResizer" ],
+    [ "MaxOS::gui::Widget", "classMaxOS_1_1gui_1_1Widget.html", "classMaxOS_1_1gui_1_1Widget" ],
+    [ "MaxOS::gui::CompositeWidget", "classMaxOS_1_1gui_1_1CompositeWidget.html", "classMaxOS_1_1gui_1_1CompositeWidget" ],
+    [ "MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >", "classMaxOS_1_1gui_1_1WidgetMoverResizer.html", "classMaxOS_1_1gui_1_1WidgetMoverResizer" ],
     [ "WidgetMover", "widget_8h.html#aecc292fc4b4e5ba249c2298879f57f67", null ],
     [ "WidgetMoverResizerBottom", "widget_8h.html#a7fcaff4d058fd21da777bc5f20dce520", null ],
     [ "WidgetMoverResizerBottomLeft", "widget_8h.html#a166d226fc7eadc43f2632888f98aed3f", null ],

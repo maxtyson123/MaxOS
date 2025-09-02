@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,27 +12,41 @@ MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface
 
 .in +1c
 .ti -1c
-.RI "\fBAdvancedConfigurationAndPowerInterface\fP (\fBsystem::Multiboot\fP *multiboot)"
+.RI "\fBAdvancedConfigurationAndPowerInterface\fP (\fBsystem::Multiboot\fP *\fBmultiboot\fP)"
 .br
 .ti -1c
 .RI "\fB~AdvancedConfigurationAndPowerInterface\fP ()"
 .br
 .ti -1c
-.RI "\fBACPISDTHeader\fP * \fBfind\fP (const char *\fBsignature\fP)"
+.RI "\fBACPISDTHeader\fP * \fBfind\fP (\fBconst\fP \fBchar\fP *\fBsignature\fP)"
 .br
+.RI "Finds a table with the given signature\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBvoid\fP \fBmap_tables\fP (\fBuint8_t\fP \fBsize_of_table\fP)"
+.br
+.RI "Maps the tables into the higher half\&. "
+.ti -1c
+.RI "\fBbool\fP \fBvalid_checksum\fP ()"
+.br
+.RI "Checks if the checksum is valid\&. "
 .in -1c
 .SS "Static Protected Member Functions"
 
 .in +1c
 .ti -1c
-.RI "static bool \fBvalidate\fP (const char *discriptor, size_t \fBlength\fP)"
+.RI "\fBstatic\fP \fBbool\fP \fBvalidate\fP (\fBconst\fP \fBchar\fP *\fBdescriptor\fP, \fBsize_t\fP \fBlength\fP)"
 .br
+.RI "Validates the checksum of a descriptor\&. "
 .in -1c
 .SS "Protected Attributes"
 
 .in +1c
 .ti -1c
-.RI "uint8_t \fBm_type\fP"
+.RI "bool \fBm_using_new_acpi\fP = false"
 .br
 .ti -1c
 .RI "\fBACPISDTHeader\fP * \fBm_header\fP"
@@ -43,183 +57,265 @@ MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface
 .ti -1c
 .RI "\fBRSDT\fP * \fBm_rsdt\fP"
 .br
+.ti -1c
+.RI "\fBRSDPDescriptor\fP * \fBm_rsdp\fP"
+.br
+.ti -1c
+.RI "\fBRSDPDescriptor2\fP * \fBm_rsdp2\fP"
+.br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 56 of file acpi\&.h\&.
+Definition at line \fB56\fP of file \fBacpi\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface (\fBsystem::Multiboot\fP * multiboot)"
 
 .PP
-Definition at line 11 of file acpi\&.cpp\&.
-.PP
+Definition at line \fB13\fP of file \fBacpi\&.cpp\fP\&..PP
 .nf
-11                                                                                                          {
-12 
-13   if(multiboot->get_old_acpi() != 0){
+13                                                                                                          {
 14 
-15 
-16     _kprintf("Using old ACPI\n");
-17 
-18 
-19     // Get the RSDP & RSDT
-20     RSDPDescriptor* rsdp = (RSDPDescriptor*)(multiboot->get_old_acpi() + 1);
-21     uint64_t rsdt_address = (uint64_t) rsdp->rsdt_address;
-22     m_rsdt = (RSDT*) MemoryManager::to_higher_region((uint64_t)rsdt_address);
+15     Logger::INFO() << "Setting up ACPI\\n";
+16 
+17     // If the new ACPI is not supported, panic
+18     ASSERT(multiboot\->new_acpi() != nullptr || multiboot\->old_acpi() != nullptr, "No ACPI found!");
+19 
+20     // Check if the new ACPI is supported
+21     m_using_new_acpi = multiboot\->old_acpi() == nullptr;
+22     Logger::DEBUG() << "CPU Supports " << (m_using_new_acpi ? "New" : "Old") << " ACPI\\n";
 23 
-24     // Map the RSDT
-25     rsdt_address = PhysicalMemoryManager::align_direct_to_page((size_t)rsdt_address);
-26     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)rsdt_address, m_rsdt, Present | Write);
-27     _kprintf("RSDT: physical: 0x%x, virtual: 0x%x\n", rsdp->rsdt_address, m_rsdt);
-28 
-29     // Reserve the RSDT
-30     PhysicalMemoryManager::s_current_manager->reserve((uint64_t)rsdp->rsdt_address);
-31 
-32     // Load the header
-33     m_header = &m_rsdt->header;
-34     if((m_header->length / PhysicalMemoryManager::s_page_size + 1) > 1) {
-35       ASSERT(false, "RSDT is too big, need to map more pages!")
-36     }
-37 
-38     // Map the RSDT Tables
-39     for(uint32_t i = 0; i < (m_header->length - sizeof(ACPISDTHeader)) / 4; i++) {
-40 
-41         // Get the address (aligned to page)
-42         uint64_t address = (uint64_t) m_rsdt->pointers[i];
-43         address = PhysicalMemoryManager::align_direct_to_page((size_t)address);
+24     if (m_using_new_acpi) {
+25 
+26         // Get the RSDP & XSDT
+27         m_rsdp2 = (RSDPDescriptor2*) (multiboot\->new_acpi() + 1);
+28         m_xsdt = (XSDT*) PhysicalMemoryManager::to_higher_region((uint64_t) m_rsdp2\->xsdt_address);
+29     } else {
+30 
+31         // Get the RSDP & RSDT
+32         m_rsdp = (RSDPDescriptor*) (multiboot\->old_acpi() + 1);
+33         m_rsdt = (RSDT*) PhysicalMemoryManager::to_higher_region((uint64_t) m_rsdp\->rsdt_address);
+34     }
+35 
+36     // Map the XSDT/RSDT
+37     uint64_t physical_address = m_using_new_acpi ? m_rsdp2\->xsdt_address : m_rsdp\->rsdt_address;
+38     auto virtual_address = (uint64_t) PhysicalMemoryManager::to_higher_region(physical_address);
+39     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) PhysicalMemoryManager::align_direct_to_page(physical_address), (virtual_address_t*) virtual_address, Present | Write);
+40     Logger::DEBUG() << "XSDT/RSDT: physical: 0x" << physical_address << ", virtual: 0x" << virtual_address << "\\n";
+41 
+42     // Reserve the XSDT/RSDT
+43     PhysicalMemoryManager::s_current_manager\->reserve( m_using_new_acpi ? (uint64_t) m_rsdp2\->xsdt_address : (uint64_t) m_rsdp\->rsdt_address);
 44 
-45         // Map to the higher half
-46         PhysicalMemoryManager::s_current_manager->map((physical_address_t*)address, (void*)MemoryManager::to_io_region(address), Present | Write);
+45     // Load the header
+46     m_header = m_using_new_acpi ? &m_xsdt\->header : &m_rsdt\->header;
 47 
-48         // Reserve the memory
-49         PhysicalMemoryManager::s_current_manager->reserve(address);
-50     }
+48     // Map the Tables
+49     Logger::DEBUG() << "Mapping ACPI Tables\\n";
+50     map_tables(m_using_new_acpi ? sizeof(uint64_t) : sizeof(uint32_t));
 51 
-52     // Calculate the checksum
-53     uint8_t sum = 0;
-54     for(uint32_t i = 0; i < sizeof(RSDPDescriptor); i++)
-55               sum += ((char*)rsdp)[i];
-56 
-57     // Check if the checksum is valid
-58     ASSERT(sum == 0, "Invalid checksum!")
-59 
-60   }else{
-61 
-62     // TODO: MAP THE MF
-63     ASSERT(false, "Not implemented!")
-64 
-65     // If the new ACPI is not supported, panic
-66     ASSERT(multiboot->get_new_acpi() != 0, "No ACPI found!")
-67 
-68     // It's the new ACPI
-69     m_type = 1;
-70 
-71     // Get the RSDP & XSDT
-72     RSDPDescriptor2* rsdp2 = (RSDPDescriptor2*)(multiboot->get_new_acpi() + 1);
-73     m_xsdt = (XSDT*) rsdp2->xsdt_address;
-74 
-75     // Load the header
-76     m_header = &m_xsdt->header;
-77 
-78     // Calculate the checksum
-79     uint8_t sum = 0;
-80     for(uint32_t i = 0; i < sizeof(RSDPDescriptor2); i++)
-81         sum += ((char*)rsdp2)[i];
-82 
-83     // Check if the checksum is valid
-84     ASSERT(sum == 0, "Invalid checksum!")
-85   }
-86 }
+52     // Check if the checksum is valid
+53     ASSERT(valid_checksum(), "ACPI: Invalid checksum!");
+54 }
 .fi
-.PP
-References _kprintf, address, ASSERT, MaxOS::system::Multiboot::get_new_acpi(), MaxOS::system::Multiboot::get_old_acpi(), MaxOS::drivers::peripherals::i, MaxOS::memory::Present, rsdt_address, MaxOS::hardwarecommunication::RSDPDescriptor::rsdt_address, MaxOS::memory::Write, and MaxOS::hardwarecommunication::RSDPDescriptor2::xsdt_address\&.
-.SS "AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface ()"
 
 .PP
-Definition at line 88 of file acpi\&.cpp\&.
-.PP
-.nf
-88                                                                                 {
-89 
-90 }
-.fi
+References \fBMaxOS::memory::PhysicalMemoryManager::align_direct_to_page()\fP, \fBASSERT\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::hardwarecommunication::RSDT::header\fP, \fBMaxOS::hardwarecommunication::XSDT::header\fP, \fBLogger::INFO()\fP, \fBm_header\fP, \fBm_rsdp\fP, \fBm_rsdp2\fP, \fBm_rsdt\fP, \fBm_using_new_acpi\fP, \fBm_xsdt\fP, \fBmap_tables()\fP, \fBphysical_address\fP, \fBMaxOS::memory::Present\fP, \fBMaxOS::hardwarecommunication::RSDPDescriptor::rsdt_address\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_higher_region()\fP, \fBvalid_checksum()\fP, \fBMaxOS::memory::Write\fP, and \fBMaxOS::hardwarecommunication::RSDPDescriptor2::xsdt_address\fP\&.
+.SS "AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBACPISDTHeader\fP * AdvancedConfigurationAndPowerInterface::find (const char * signature)"
+.SS "\fBACPISDTHeader\fP * AdvancedConfigurationAndPowerInterface::find (\fBconst\fP \fBchar\fP * signature)"
 
 .PP
-Definition at line 107 of file acpi\&.cpp\&.
+Finds a table with the given signature\&. 
 .PP
+\fBParameters\fP
+.RS 4
+\fIsignature\fP The signature to search for 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The table with the given signature, or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB106\fP of file \fBacpi\&.cpp\fP\&..PP
 .nf
-107                                                                                  {
-108 
-109 
-110   // Get the number of entries
-111   size_t entries = (m_header->length - sizeof(ACPISDTHeader)) / 4;
-112   if(m_type) entries = (m_header->length - sizeof(ACPISDTHeader)) / 8;
-113 
-114   // Loop through all the entries
-115   for (size_t i = 0; i < entries; ++i) {
-116 
-117       // Get the entry
-118       ACPISDTHeader* header = (ACPISDTHeader*) (m_type ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
-119 
-120       // Move the header to the higher half
-121       header = (ACPISDTHeader*) MemoryManager::to_io_region((uint64_t)header);
-122 
-123       // Check if the signature matches
-124       if(strncmp(header->signature, signature, 4) != 0)
-125          return header;
-126   }
-127 
-128   // Return null if no entry was found
-129   return nullptr;
-130 }
+106                                                                                  {
+107 
+108     // Get the number of entries
+109     size_t entries = (m_header\->length \- sizeof(ACPISDTHeader)) / sizeof(uint32_t);
+110     if (m_using_new_acpi) entries = (m_header\->length \- sizeof(ACPISDTHeader)) / sizeof(uint64_t);
+111 
+112     // Loop through all the entries
+113     for (size_t i = 0; i < entries; ++i) {
+114 
+115         // Get the entry
+116         auto* header = (ACPISDTHeader*) (m_using_new_acpi ? m_xsdt\->pointers[i] : m_rsdt\->pointers[i]);
+117 
+118         // Move the header to the higher half
+119         header = (ACPISDTHeader*) PhysicalMemoryManager::to_io_region((uint64_t) header);
+120 
+121         // Check if the signature matches
+122         if (strncmp(header\->signature, signature, 4) != 0)
+123             return header;
+124     }
+125 
+126     // Return null if no entry was found
+127     return nullptr;
+128 }
 .fi
-.PP
-References entries, header, MaxOS::drivers::peripherals::i, signature, MaxOS::hardwarecommunication::ACPISDTHeader::signature, and strncmp()\&.
-.PP
-Referenced by MaxOS::hardwarecommunication::IOAPIC::init()\&.
-.SS "bool AdvancedConfigurationAndPowerInterface::validate (const char * discriptor, size_t length)\fC [static]\fP, \fC [protected]\fP"
 
 .PP
-Definition at line 92 of file acpi\&.cpp\&.
+References \fBentries\fP, \fBheader\fP, \fBMaxOS::hardwarecommunication::ACPISDTHeader::length\fP, \fBm_header\fP, \fBm_rsdt\fP, \fBm_using_new_acpi\fP, \fBm_xsdt\fP, \fBMaxOS::hardwarecommunication::RSDT::pointers\fP, \fBMaxOS::hardwarecommunication::XSDT::pointers\fP, \fBsignature\fP, \fBMaxOS::hardwarecommunication::ACPISDTHeader::signature\fP, \fBstrncmp()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP\&.
 .PP
+Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP\&.
+.SS "\fBvoid\fP AdvancedConfigurationAndPowerInterface::map_tables (\fBuint8_t\fP size_of_tables)\fC [protected]\fP"
+
+.PP
+Maps the tables into the higher half\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize_of_header\fP The size of the tables 
+.RE
+.PP
+
+.PP
+Definition at line \fB63\fP of file \fBacpi\&.cpp\fP\&..PP
 .nf
-92                                                                                            {
-93   // Checksum
-94   uint32_t sum = 0;
+63                                                                               {
+64 
+65     for (uint32_t i = 0; i < (m_header\->length \- sizeof(ACPISDTHeader)) / size_of_tables; i++) {
+66 
+67         // Get the address (aligned to page)
+68         auto address = (uint64_t) (m_using_new_acpi ? m_xsdt\->pointers[i] : m_rsdt\->pointers[i]);
+69         address = PhysicalMemoryManager::align_direct_to_page((size_t) address);
+70 
+71         // Map to the higher half
+72         PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) address, (void*) PhysicalMemoryManager::to_io_region(address), Present | Write);
+73 
+74         // Reserve the memory
+75         PhysicalMemoryManager::s_current_manager\->reserve(address);
+76     }
+77 
+78 }
+.fi
+
+.PP
+References \fBaddress\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_direct_to_page()\fP, \fBMaxOS::hardwarecommunication::ACPISDTHeader::length\fP, \fBm_header\fP, \fBm_rsdt\fP, \fBm_using_new_acpi\fP, \fBm_xsdt\fP, \fBMaxOS::hardwarecommunication::RSDT::pointers\fP, \fBMaxOS::hardwarecommunication::XSDT::pointers\fP, \fBMaxOS::memory::Present\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, and \fBMaxOS::memory::Write\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP\&.
+.SS "\fBbool\fP AdvancedConfigurationAndPowerInterface::valid_checksum ()\fC [protected]\fP"
+
+.PP
+Checks if the checksum is valid\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the checksum is valid 
+.RE
+.PP
+
+.PP
+Definition at line \fB135\fP of file \fBacpi\&.cpp\fP\&..PP
+.nf
+135                                                             {
+136 
+137     // Get the information about the ACPI
+138     char* check = m_using_new_acpi ? (char*) m_rsdp2 : (char*) m_rsdp;
+139     uint32_t length = m_using_new_acpi ? sizeof(RSDPDescriptor2) : sizeof(RSDPDescriptor);
+140 
+141     // Calculate the checksum
+142     uint8_t sum = 0;
+143     for (uint32_t i = 0; i < length; i++)
+144         sum += check[i];
+145 
+146     return sum == 0;
+147 }
+.fi
+
+.PP
+References \fBlength\fP, \fBm_rsdp\fP, \fBm_rsdp2\fP, and \fBm_using_new_acpi\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP\&.
+.SS "\fBbool\fP AdvancedConfigurationAndPowerInterface::validate (\fBconst\fP \fBchar\fP * descriptor, \fBsize_t\fP length)\fC [static]\fP, \fC [protected]\fP"
+
+.PP
+Validates the checksum of a descriptor\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdescriptor\fP The descriptor to validate 
+.br
+\fIlength\fP The length of the descriptor 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the checksum is valid, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB87\fP of file \fBacpi\&.cpp\fP\&..PP
+.nf
+87                                                                                            {
+88 
+89     // Checksum
+90     uint32_t sum = 0;
+91 
+92     // Calculate the checksum
+93     for (uint32_t i = 0; i < length; i++)
+94         sum += ((char*) descriptor)[i];
 95 
-96   // Calculate the checksum
-97   for(uint32_t i = 0; i < length; i++)
-98         sum += ((char*) discriptor)[i];
-99 
-100   // Check if the checksum is valid
-101   return ((sum & 0xFF) == 0);
-102 
-103 }
+96     // Check if the checksum is valid
+97     return ((sum & 0xFF) == 0);
+98 }
 .fi
+
 .PP
-References MaxOS::drivers::peripherals::i, and length\&.
+References \fBlength\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBACPISDTHeader\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_header\fC [protected]\fP"
 
 .PP
-Definition at line 59 of file acpi\&.h\&.
+Definition at line \fB59\fP of file \fBacpi\&.h\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP, \fBfind()\fP, and \fBmap_tables()\fP\&.
+.SS "\fBRSDPDescriptor\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_rsdp\fC [protected]\fP"
+
+.PP
+Definition at line \fB64\fP of file \fBacpi\&.h\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP, and \fBvalid_checksum()\fP\&.
+.SS "\fBRSDPDescriptor2\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_rsdp2\fC [protected]\fP"
+
+.PP
+Definition at line \fB65\fP of file \fBacpi\&.h\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP, and \fBvalid_checksum()\fP\&.
 .SS "\fBRSDT\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_rsdt\fC [protected]\fP"
 
 .PP
-Definition at line 62 of file acpi\&.h\&.
-.SS "uint8_t MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_type\fC [protected]\fP"
+Definition at line \fB62\fP of file \fBacpi\&.h\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP, \fBfind()\fP, and \fBmap_tables()\fP\&.
+.SS "bool MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_using_new_acpi = false\fC [protected]\fP"
 
 .PP
-Definition at line 58 of file acpi\&.h\&.
+Definition at line \fB58\fP of file \fBacpi\&.h\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP, \fBfind()\fP, \fBmap_tables()\fP, and \fBvalid_checksum()\fP\&.
 .SS "\fBXSDT\fP* MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::m_xsdt\fC [protected]\fP"
 
 .PP
-Definition at line 61 of file acpi\&.h\&.
+Definition at line \fB61\fP of file \fBacpi\&.h\fP\&.
+.PP
+Referenced by \fBAdvancedConfigurationAndPowerInterface()\fP, \fBfind()\fP, and \fBmap_tables()\fP\&.
 
 .SH "Author"
 .PP 

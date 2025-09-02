@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,39 +15,204 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBVideoElectronicsStandardsAssociation\fP (\fBmultiboot_tag_framebuffer\fP *framebuffer_info)"
+.RI "\fBVideoElectronicsStandardsAssociation\fP (\fBmultiboot_tag_framebuffer\fP *\fBframebuffer_info\fP)"
 .br
 .ti -1c
 .RI "\fB~VideoElectronicsStandardsAssociation\fP ()"
 .br
 .ti -1c
-.RI "bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t) final"
+.RI "\fBbool\fP \fBsupports_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP) \fBfinal\fP"
 .br
 .RI "Checks if the VESA driver supports the given mode\&. "
 .ti -1c
-.RI "\fBstring\fP \fBget_vendor_name\fP () final"
+.RI "\fBstring\fP \fBvendor_name\fP () \fBfinal\fP"
 .br
-.RI "Renders a pixel on the screen in 16 bit mode\&. "
+.RI "The name of the vendor of the VESA standard\&. "
 .ti -1c
-.RI "\fBstring\fP \fBget_device_name\fP () final"
+.RI "\fBstring\fP \fBdevice_name\fP () \fBfinal\fP"
 .br
-.RI "Gets the colour of a pixel on the screen in 16 bit mode\&. "
+.RI "The name of the device\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::video::VideoDriver\fP
+.in +1c
+.ti -1c
+.RI "\fBVideoDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~VideoDriver\fP ()"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolorDepth\fP)"
+.br
+.RI "Set the mode of the video driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
+.in +1c
+.ti -1c
+.RI "\fBDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~Driver\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
+.br
+.RI "activate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
+.br
+.RI "deactivate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
+.br
+.RI "Initialise the driver\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fB~GraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
+.br
+.RI "Converts a colour to an integer value based on the current color depth\&. "
+.ti -1c
+.RI "\fBColour\fP \fBint_to_colour\fP (\fBuint32_t\fP)"
+.br
+.RI "Converts an integer value to a colour based on the current color depth\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBwidth\fP () \fBconst\fP"
+.br
+.RI "Gets the width of the screen\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBheight\fP () \fBconst\fP"
+.br
+.RI "Gets the height of the screen\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBcolor_depth\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBframebuffer_address\fP ()"
+.br
+.RI "Gets the address of the context's framebuffer to draw on\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
+.ti -1c
+.RI "\fBvoid\fP \fBputPixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
+.ti -1c
+.RI "\fBColour\fP \fBget_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.br
+.RI "Inverts a pixel\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdrawLine\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfillCircle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
 .in -1c
 .SS "Protected Member Functions"
 
 .in +1c
 .ti -1c
-.RI "bool \fBinternal_set_mode\fP (uint32_t width, uint32_t height, uint32_t) final"
+.RI "\fBbool\fP \fBinternal_set_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP) \fBfinal\fP"
 .br
 .RI "Sets the mode of the VESA driver\&. "
 .ti -1c
-.RI "void \fBrender_pixel_32_bit\fP (uint32_t x, uint32_t y, uint32_t colour) final"
+.RI "\fBvoid\fP \fBrender_pixel_32_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour) \fBfinal\fP"
 .br
 .RI "Renders a pixel on the screen in 32 bit mode\&. "
 .ti -1c
-.RI "uint32_t \fBget_rendered_pixel_32_bit\fP (uint32_t x, uint32_t y) final"
+.RI "\fBuint32_t\fP \fBget_rendered_pixel_32_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y) \fBfinal\fP"
 .br
 .RI "Gets the colour of a pixel on the screen in 32 bit mode\&. "
+.in -1c
+
+Protected Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen based on the current color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_8_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 8 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_16_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint16_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_24_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen, automatically uses the correct color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint8_t\fP \fBget_rendered_pixel_8_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 8 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint16_t\fP \fBget_rendered_pixel_16_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel_24_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 24 bit color depth\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -65,99 +230,97 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .RI "uint16_t \fBm_pitch\fP"
 .br
 .in -1c
-.SS "Additional Inherited Members"
+
+Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
+.br
+.ti -1c
+.RI "\fBint32_t\fP \fBm_width\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBint32_t\fP \fBm_height\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBm_color_depth\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBm_framebuffer_address\fP { \fBnullptr\fP }"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the VESA video controller, handles the rendering of pixels to the screen using VESA\&. 
 .PP
-Definition at line 26 of file vesa\&.h\&.
+Definition at line \fB26\fP of file \fBvesa\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation (\fBmultiboot_tag_framebuffer\fP * framebuffer_info)"
 
 .PP
-Definition at line 15 of file vesa\&.cpp\&.
-.PP
+Definition at line \fB15\fP of file \fBvesa\&.cpp\fP\&..PP
 .nf
-16 : VideoDriver(),
-17   m_framebuffer_info(framebuffer_info)
-18 {
-19   // Get the framebuffer info
-20   _kprintf("Framebuffer info: 0x%x\n", m_framebuffer_info);
-21 
-22   // Set the framebuffer address, bpp and pitch
-23   m_bpp = m_framebuffer_info->common\&.framebuffer_bpp;
-24   m_pitch = m_framebuffer_info->common\&.framebuffer_pitch;
-25   m_framebuffer_size = m_framebuffer_info->common\&.framebuffer_height * m_pitch;
-26 
-27   _kprintf("Framebuffer: bpp=%d, pitch=%d, size=%d\n", m_bpp, m_pitch, m_framebuffer_size);
+16 : m_framebuffer_info(framebuffer_info)
+17 {
+18 
+19     Logger::INFO() << "Setting up VESA driver\\n";
+20 
+21     // Save the framebuffer info
+22     m_bpp = m_framebuffer_info\->common\&.framebuffer_bpp;
+23     m_pitch = m_framebuffer_info\->common\&.framebuffer_pitch;
+24     m_framebuffer_size = m_framebuffer_info\->common\&.framebuffer_height * m_pitch;
+25     this\->set_mode(framebuffer_info\->common\&.framebuffer_width, framebuffer_info\->common\&.framebuffer_height,
+26                    framebuffer_info\->common\&.framebuffer_bpp);
+27     Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\\n";
 28 
-29   // Get the framebuffer address
-30   uint64_t physical_address = (uint64_t)m_framebuffer_info->common\&.framebuffer_addr;
-31   uint64_t virtual_address = (uint64_t)MemoryManager::to_dm_region(physical_address);
-32   uint64_t end = physical_address + m_framebuffer_size;
-33   m_framebuffer_address = (uint64_t*)virtual_address;
-34 
-35   _kprintf("Framebuffer address: physical=0x%x, virtual=0x%x\n", physical_address, virtual_address);
-36 
-37   // Map the framebuffer
-38   while (physical_address < end) {
-39 
-40     PhysicalMemoryManager::s_current_manager->map((physical_address_t*)physical_address, (virtual_address_t*)virtual_address, Write | Present);
-41     physical_address += PhysicalMemoryManager::s_page_size;
-42     virtual_address += PhysicalMemoryManager::s_page_size;
-43   }
-44 
-45   size_t pages = PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address);
-46   _kprintf("Framebuffer mapped: 0x%x - 0x%x (pages: %d)\n", m_framebuffer_address, virtual_address, pages);
-47 
-48   // Reserve the physical memory
-49   PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common\&.framebuffer_addr, pages);
-50 }
+29     // Map the frame buffer into the higher half
+30     auto physical_address = (uint64_t) m_framebuffer_info\->common\&.framebuffer_addr;
+31     m_framebuffer_address = (uint64_t *) PhysicalMemoryManager::to_dm_region(physical_address);
+32     PhysicalMemoryManager::s_current_manager\->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, Write | Present);
+33 
+34     // Reserve the physical memory
+35     size_t pages = PhysicalMemoryManager::size_to_frames(m_framebuffer_size);
+36     PhysicalMemoryManager::s_current_manager\->reserve(m_framebuffer_info\->common\&.framebuffer_addr, pages);
+37 
+38     // Log info
+39     Logger::DEBUG() << "Framebuffer address: physical=0x" << (uint64_t) physical_address << ", virtual=0x" << (uint64_t) m_framebuffer_address << "\\n";
+40     Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t) m_framebuffer_address << " \- 0x" << (uint64_t) (m_framebuffer_address + m_framebuffer_size) << " (pages: " << pages << ")\\n";
+41 
+42 }
 .fi
-.PP
-References _kprintf, multiboot_tag_framebuffer::common, MaxOS::drivers::peripherals::end, multiboot_tag_framebuffer_common::framebuffer_addr, multiboot_tag_framebuffer_common::framebuffer_bpp, multiboot_tag_framebuffer_common::framebuffer_height, multiboot_tag_framebuffer_common::framebuffer_pitch, m_bpp, MaxOS::common::GraphicsContext::m_framebuffer_address, m_framebuffer_info, m_framebuffer_size, m_pitch, physical_address, MaxOS::memory::Present, and MaxOS::memory::Write\&.
-.SS "VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation ()"
 
 .PP
-Definition at line 52 of file vesa\&.cpp\&.
-.PP
-.nf
-52                                                                            {
-53 
-54 }
-.fi
+References \fBmultiboot_tag_framebuffer::common\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, \fBm_bpp\fP, \fBMaxOS::common::GraphicsContext::m_framebuffer_address\fP, \fBm_framebuffer_info\fP, \fBm_framebuffer_size\fP, \fBm_pitch\fP, \fBphysical_address\fP, \fBMaxOS::memory::Present\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, and \fBMaxOS::memory::Write\fP\&.
+.SS "VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBstring\fP VideoElectronicsStandardsAssociation::get_device_name ()\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBstring\fP VideoElectronicsStandardsAssociation::device_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Gets the colour of a pixel on the screen in 16 bit mode\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIx\fP The x coordinate of the pixel 
-.br
-\fIy\fP The y coordinate of the pixel 
-.RE
+The name of the device\&. 
 .PP
 \fBReturns\fP
 .RS 4
-The 16bit colour of the pixel 
+The name of the device 
 .RE
 .PP
 
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 151 of file vesa\&.cpp\&.
-.PP
+Definition at line \fB122\fP of file \fBvesa\&.cpp\fP\&..PP
 .nf
-151                                                              {
-152     return "VESA compatible graphics card";
-153 }
+122                                                          {
+123     return "VESA compatible graphics card";
+124 }
 .fi
-.SS "uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit (uint32_t x, uint32_t y)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+
+.SS "\fBuint32_t\fP VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit (\fBuint32_t\fP x, \fBuint32_t\fP y)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
 Gets the colour of a pixel on the screen in 32 bit mode\&. 
@@ -178,46 +341,18 @@ The 32bit colour of the pixel
 .PP
 Reimplemented from \fBMaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 124 of file vesa\&.cpp\&.
-.PP
+Definition at line \fB100\fP of file \fBvesa\&.cpp\fP\&..PP
 .nf
-124                                                                                                {
-125 
-126     // Get the address of the pixel
-127     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-128 
-129     // Return the pixel
-130     return *pixel_address;
-131 }
+100                                                                                                {
+101 
+102     auto *pixel_address = (uint32_t *) ((uint8_t *) m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+103     return *pixel_address;
+104 }
 .fi
-.PP
-References m_bpp, MaxOS::common::GraphicsContext::m_framebuffer_address, m_pitch, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "\fBstring\fP VideoElectronicsStandardsAssociation::get_vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Renders a pixel on the screen in 16 bit mode\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIx\fP The x coordinate of the pixel 
-.br
-\fIy\fP The y coordinate of the pixel 
-.br
-\fIcolour\fP The 16bit colour of the pixel 
-.RE
-.PP
-
-.PP
-Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
-.PP
-Definition at line 140 of file vesa\&.cpp\&.
-.PP
-.nf
-140                                                              {
-141     return "NEC Home Electronics";  // Creator of the VESA standard
-142 }
-.fi
-.SS "bool VideoElectronicsStandardsAssociation::internal_set_mode (uint32_t width, uint32_t height, uint32_t)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+References \fBm_bpp\fP, \fBMaxOS::common::GraphicsContext::m_framebuffer_address\fP, and \fBm_pitch\fP\&.
+.SS "\fBbool\fP VideoElectronicsStandardsAssociation::internal_set_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
 Sets the mode of the VESA driver\&. 
@@ -240,18 +375,21 @@ True if the mode was set successfully, false otherwise
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 75 of file vesa\&.cpp\&.
-.PP
+Definition at line \fB54\fP of file \fBvesa\&.cpp\fP\&..PP
 .nf
-75                                                                                          {
-76 
-77     // Best mode is set by the bootloader
-78     return true;
-79 
-80 
-81 }
+54                                                                                                                   {
+55 
+56     // Can only use the mode set up already by grub
+57     return width == m_framebuffer_info\->common\&.framebuffer_width
+58            && height == m_framebuffer_info\->common\&.framebuffer_height
+59            && color_depth == m_framebuffer_info\->common\&.framebuffer_bpp;
+60 
+61 }
 .fi
-.SS "void VideoElectronicsStandardsAssociation::render_pixel_32_bit (uint32_t x, uint32_t y, uint32_t colour)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+References \fBMaxOS::common::GraphicsContext::color_depth()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::common::GraphicsContext::height()\fP, \fBm_framebuffer_info\fP, and \fBMaxOS::common::GraphicsContext::width()\fP\&.
+.SS "\fBvoid\fP VideoElectronicsStandardsAssociation::render_pixel_32_bit (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
 Renders a pixel on the screen in 32 bit mode\&. 
@@ -269,22 +407,19 @@ Renders a pixel on the screen in 32 bit mode\&.
 .PP
 Reimplemented from \fBMaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 107 of file vesa\&.cpp\&.
-.PP
+Definition at line \fB86\fP of file \fBvesa\&.cpp\fP\&..PP
 .nf
-107                                                                                                       {
-108 
-109     // Get the address of the pixel
-110     uint32_t*pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-111 
-112     // Set the pixel
-113     *pixel_address = colour;
-114 
-115 }
+86                                                                                                       {
+87 
+88     auto *pixel_address = (uint32_t *) ((uint8_t *) m_framebuffer_address + (m_pitch * y) + (m_bpp * x) / 8);
+89     *pixel_address = colour;
+90 
+91 }
 .fi
+
 .PP
-References m_bpp, MaxOS::common::GraphicsContext::m_framebuffer_address, m_pitch, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "bool VideoElectronicsStandardsAssociation::supports_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [final]\fP, \fC [virtual]\fP"
+References \fBm_bpp\fP, \fBMaxOS::common::GraphicsContext::m_framebuffer_address\fP, and \fBm_pitch\fP\&.
+.SS "\fBbool\fP VideoElectronicsStandardsAssociation::supports_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Checks if the VESA driver supports the given mode\&. 
@@ -306,46 +441,68 @@ Checks if the VESA driver supports the given mode\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 91 of file vesa\&.cpp\&.
-.PP
+Definition at line \fB71\fP of file \fBvesa\&.cpp\fP\&..PP
 .nf
-91                                                                                                               {
-92 
-93     // Check if the mode is supported
-94     if(width == (uint32_t)m_framebuffer_info->common\&.framebuffer_width && height == (uint32_t)m_framebuffer_info->common\&.framebuffer_height && color_depth == (uint32_t)m_framebuffer_info->common\&.framebuffer_bpp) {
-95         return true;
-96     }
-97     return false;
-98 }
+71                                                                                                               {
+72 
+73     // Check if the mode is supported
+74     return width == m_framebuffer_info\->common\&.framebuffer_width
+75            && height == m_framebuffer_info\->common\&.framebuffer_height
+76            && color_depth == m_framebuffer_info\->common\&.framebuffer_bpp;
+77 }
 .fi
+
 .PP
-References multiboot_tag_framebuffer::common, multiboot_tag_framebuffer_common::framebuffer_bpp, multiboot_tag_framebuffer_common::framebuffer_height, multiboot_tag_framebuffer_common::framebuffer_width, and m_framebuffer_info\&.
+References \fBMaxOS::common::GraphicsContext::color_depth()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::common::GraphicsContext::height()\fP, \fBm_framebuffer_info\fP, and \fBMaxOS::common::GraphicsContext::width()\fP\&.
+.SS "\fBstring\fP VideoElectronicsStandardsAssociation::vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+The name of the vendor of the VESA standard\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the vendor 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line \fB111\fP of file \fBvesa\&.cpp\fP\&..PP
+.nf
+111                                                          {
+112 
+113     // Creator of the VESA standard
+114     return "NEC Home Electronics";
+115 }
+.fi
+
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_bpp\fC [protected]\fP"
 
 .PP
-Definition at line 42 of file vesa\&.h\&.
+Definition at line \fB39\fP of file \fBvesa\&.h\fP\&.
 .PP
-Referenced by get_rendered_pixel_32_bit(), render_pixel_32_bit(), and VideoElectronicsStandardsAssociation()\&.
+Referenced by \fBget_rendered_pixel_32_bit()\fP, \fBrender_pixel_32_bit()\fP, and \fBVideoElectronicsStandardsAssociation()\fP\&.
 .SS "\fBmultiboot_tag_framebuffer\fP* MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_framebuffer_info\fC [protected]\fP"
 
 .PP
-Definition at line 41 of file vesa\&.h\&.
+Definition at line \fB38\fP of file \fBvesa\&.h\fP\&.
 .PP
-Referenced by supports_mode(), and VideoElectronicsStandardsAssociation()\&.
+Referenced by \fBinternal_set_mode()\fP, \fBsupports_mode()\fP, and \fBVideoElectronicsStandardsAssociation()\fP\&.
 .SS "size_t MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_framebuffer_size\fC [protected]\fP"
 
 .PP
-Definition at line 38 of file vesa\&.h\&.
+Definition at line \fB35\fP of file \fBvesa\&.h\fP\&.
 .PP
-Referenced by VideoElectronicsStandardsAssociation()\&.
+Referenced by \fBVideoElectronicsStandardsAssociation()\fP\&.
 .SS "uint16_t MaxOS::drivers::video::VideoElectronicsStandardsAssociation::m_pitch\fC [protected]\fP"
 
 .PP
-Definition at line 43 of file vesa\&.h\&.
+Definition at line \fB40\fP of file \fBvesa\&.h\fP\&.
 .PP
-Referenced by get_rendered_pixel_32_bit(), render_pixel_32_bit(), and VideoElectronicsStandardsAssociation()\&.
+Referenced by \fBget_rendered_pixel_32_bit()\fP, \fBrender_pixel_32_bit()\fP, and \fBVideoElectronicsStandardsAssociation()\fP\&.
 
 .SH "Author"
 .PP 

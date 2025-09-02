@@ -1,13 +1,5 @@
 var kernel_8cpp =
 [
-    [ "header", "kernel_8cpp.html#ae2a1cf80596e62d43dc14835ace90b6b", null ],
-    [ "log", "kernel_8cpp.html#ae2af432da844bad9087b73802d11b4ee", null ],
-    [ "constructor", "kernel_8cpp.html#a12d367671a45721e5f93f37959360759", null ],
-    [ "callConstructors", "kernel_8cpp.html#adb9a0feb0c70ccbff82716bf531a2e42", null ],
-    [ "kernelMain", "kernel_8cpp.html#a64d1f63d75fef5a193446b997b7a9090", null ],
-    [ "__dso_handle", "kernel_8cpp.html#a19df960d2907e9c08a720ae7683e632c", null ],
-    [ "active_stream", "kernel_8cpp.html#a8a91cb8e583436630a67b65651fb043e", null ],
-    [ "end_ctors", "kernel_8cpp.html#affa4f606954d8d9a7edcb66df47b7f1d", null ],
-    [ "p4_table", "kernel_8cpp.html#a19f262860236e9c10064948f12f89636", null ],
-    [ "start_ctors", "kernel_8cpp.html#a00bc71da06b4a8e02a8587bf37dd984b", null ]
+    [ "call_constructors", "kernel_8cpp.html#ac75524df0a1ac9de83987acf487c0150", null ],
+    [ "kernel_main", "kernel_8cpp.html#a5b3569dcd47463ac1cea04841fa25c53", null ]
 ];

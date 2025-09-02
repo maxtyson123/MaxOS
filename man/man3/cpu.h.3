@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,6 +12,12 @@
 .br
 \fC#include <stdint\&.h>\fP
 .br
+\fC#include <system/gdt\&.h>\fP
+.br
+\fC#include <hardwarecommunication/acpi\&.h>\fP
+.br
+\fC#include <hardwarecommunication/apic\&.h>\fP
+.br
 
 .SS "Classes"
 
@@ -19,6 +25,7 @@
 .ti -1c
 .RI "struct \fBMaxOS::system::__attribute__\fP"
 .br
+.RI "Style Guide Note: \fBCPU\fP abbreviation is preferred over Central Processing Unit\&. "
 .ti -1c
 .RI "struct \fBMaxOS::system::tss\fP"
 .br
@@ -33,10 +40,20 @@
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::system\fP"
+.RI "namespace \fBMaxOS::system\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::system::CPU_FEATURE_ECX\fP : int32_t { \fBMaxOS::system::SSE3\fP = 1 << 0, \fBMaxOS::system::PCLMUL\fP = 1 << 1, \fBMaxOS::system::DTES64\fP = 1 << 2, \fBMaxOS::system::MONITOR\fP = 1 << 3, \fBMaxOS::system::DS_CPL\fP = 1 << 4, \fBMaxOS::system::VMX\fP = 1 << 5, \fBMaxOS::system::SMX\fP = 1 << 6, \fBMaxOS::system::EST\fP = 1 << 7, \fBMaxOS::system::TM2\fP = 1 << 8, \fBMaxOS::system::SSSE3\fP = 1 << 9, \fBMaxOS::system::CID\fP = 1 << 10, \fBMaxOS::system::SDBG\fP = 1 << 11, \fBMaxOS::system::FMA\fP = 1 << 12, \fBMaxOS::system::CX16\fP = 1 << 13, \fBMaxOS::system::XTPR\fP = 1 << 14, \fBMaxOS::system::PDCM\fP = 1 << 15, \fBMaxOS::system::PCID\fP = 1 << 17, \fBMaxOS::system::DCA\fP = 1 << 18, \fBMaxOS::system::SSE4_1\fP = 1 << 19, \fBMaxOS::system::SSE4_2\fP = 1 << 20, \fBMaxOS::system::X2APIC\fP = 1 << 21, \fBMaxOS::system::MOVBE\fP = 1 << 22, \fBMaxOS::system::POPCNT\fP = 1 << 23, \fBMaxOS::system::TSC\fP = 1 << 24, \fBMaxOS::system::AES\fP = 1 << 25, \fBMaxOS::system::XSAVE\fP = 1 << 26, \fBMaxOS::system::OSXSAVE\fP = 1 << 27, \fBMaxOS::system::AVX\fP = 1 << 28, \fBMaxOS::system::F16C\fP = 1 << 29, \fBMaxOS::system::RDRAND\fP = 1 << 30, \fBMaxOS::system::HYPERVISOR\fP = 1 << 31 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::system::CPU_FEATURE_EDX\fP : int32_t { \fBMaxOS::system::FPU\fP = 1 << 0, \fBMaxOS::system::VME\fP = 1 << 1, \fBMaxOS::system::DE\fP = 1 << 2, \fBMaxOS::system::PSE\fP = 1 << 3, \fBMaxOS::system::TSC\fP = 1 << 4, \fBMaxOS::system::MSR\fP = 1 << 5, \fBMaxOS::system::PAE\fP = 1 << 6, \fBMaxOS::system::MCE\fP = 1 << 7, \fBMaxOS::system::CX8\fP = 1 << 8, \fBMaxOS::system::APIC\fP = 1 << 9, \fBMaxOS::system::SEP\fP = 1 << 11, \fBMaxOS::system::MTRR\fP = 1 << 12, \fBMaxOS::system::PGE\fP = 1 << 13, \fBMaxOS::system::MCA\fP = 1 << 14, \fBMaxOS::system::CMOV\fP = 1 << 15, \fBMaxOS::system::PAT\fP = 1 << 16, \fBMaxOS::system::PSE36\fP = 1 << 17, \fBMaxOS::system::PSN\fP = 1 << 18, \fBMaxOS::system::CLFLUSH\fP = 1 << 19, \fBMaxOS::system::DS\fP = 1 << 21, \fBMaxOS::system::ACPI\fP = 1 << 22, \fBMaxOS::system::MMX\fP = 1 << 23, \fBMaxOS::system::FXSR\fP = 1 << 24, \fBMaxOS::system::SSE\fP = 1 << 25, \fBMaxOS::system::SSE2\fP = 1 << 26, \fBMaxOS::system::SS\fP = 1 << 27, \fBMaxOS::system::HTT\fP = 1 << 28, \fBMaxOS::system::TM\fP = 1 << 29, \fBMaxOS::system::IA64\fP = 1 << 30, \fBMaxOS::system::PBE\fP = 1 << 31 }"
 .br
 .in -1c
 .SS "Functions"
@@ -98,13 +115,13 @@
 .RI "uint16_t \fBio_bitmap_offset\fP"
 .br
 .ti -1c
+.RI "enum \fBMaxOS::system::CPU_FEATURE_ECX\fP \fBMaxOS::system::__attribute__\fP"
+.br
+.ti -1c
 .RI "StackFrame * \fBnext\fP"
 .br
 .ti -1c
 .RI "uintptr_t \fBrip\fP"
-.br
-.ti -1c
-.RI "class \fBMaxOS::system::CPU\fP \fBMaxOS::system::__attribute__\fP"
 .br
 .in -1c
 .SH "Variable Documentation"
@@ -112,75 +129,75 @@
 .SS "uint16_t io_bitmap_offset"
 
 .PP
-Definition at line 17 of file cpu\&.h\&.
+Definition at line \fB15\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist1"
 
 .PP
-Definition at line 8 of file cpu\&.h\&.
+Definition at line \fB6\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist2"
 
 .PP
-Definition at line 9 of file cpu\&.h\&.
+Definition at line \fB7\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist3"
 
 .PP
-Definition at line 10 of file cpu\&.h\&.
+Definition at line \fB8\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist4"
 
 .PP
-Definition at line 11 of file cpu\&.h\&.
+Definition at line \fB9\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist5"
 
 .PP
-Definition at line 12 of file cpu\&.h\&.
+Definition at line \fB10\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist6"
 
 .PP
-Definition at line 13 of file cpu\&.h\&.
+Definition at line \fB11\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t ist7"
 
 .PP
-Definition at line 14 of file cpu\&.h\&.
+Definition at line \fB12\fP of file \fBcpu\&.h\fP\&.
 .SS "StackFrame* next"
 
 .PP
-Definition at line 2 of file cpu\&.h\&.
+Definition at line \fB0\fP of file \fBcpu\&.h\fP\&.
 .SS "uint32_t reserved0"
 
 .PP
-Definition at line 2 of file cpu\&.h\&.
+Definition at line \fB0\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t reserved1"
 
 .PP
-Definition at line 6 of file cpu\&.h\&.
+Definition at line \fB4\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t reserved2"
 
 .PP
-Definition at line 7 of file cpu\&.h\&.
+Definition at line \fB5\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t reserved3"
 
 .PP
-Definition at line 15 of file cpu\&.h\&.
+Definition at line \fB13\fP of file \fBcpu\&.h\fP\&.
 .SS "uint16_t reserved4"
 
 .PP
-Definition at line 16 of file cpu\&.h\&.
+Definition at line \fB14\fP of file \fBcpu\&.h\fP\&.
 .SS "uintptr_t rip"
 
 .PP
-Definition at line 3 of file cpu\&.h\&.
+Definition at line \fB1\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t rsp0"
 
 .PP
-Definition at line 3 of file cpu\&.h\&.
+Definition at line \fB1\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t rsp1"
 
 .PP
-Definition at line 4 of file cpu\&.h\&.
+Definition at line \fB2\fP of file \fBcpu\&.h\fP\&.
 .SS "uint64_t rsp2"
 
 .PP
-Definition at line 5 of file cpu\&.h\&.
+Definition at line \fB3\fP of file \fBcpu\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

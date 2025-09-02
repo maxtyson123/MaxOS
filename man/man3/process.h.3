@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,8 @@
 \fC#include <system/cpu\&.h>\fP
 .br
 \fC#include <common/vector\&.h>\fP
+.br
+\fC#include <common/map\&.h>\fP
 .br
 \fC#include <common/string\&.h>\fP
 .br
@@ -22,6 +24,8 @@
 .br
 \fC#include <processes/elf\&.h>\fP
 .br
+\fC#include <processes/resource\&.h>\fP
+.br
 
 .SS "Classes"
 
@@ -29,19 +33,20 @@
 .ti -1c
 .RI "class \fBMaxOS::processes::Thread\fP"
 .br
+.RI "The execution context of a sub-process thread\&. "
 .ti -1c
 .RI "class \fBMaxOS::processes::Process\fP"
 .br
-.RI "A process that can be scheduled by the \fBScheduler\fP\&. "
+.RI "A process that can be scheduled by the \fBScheduler\fP, wraps & manages threads as well as its own address space and resources\&. "
 .in -1c
 .SS "Namespaces"
 
 .in +1c
 .ti -1c
-.RI " \fBMaxOS\fP"
+.RI "namespace \fBMaxOS\fP"
 .br
 .ti -1c
-.RI " \fBMaxOS::processes\fP"
+.RI "namespace \fBMaxOS::processes\fP"
 .br
 .in -1c
 .SS "Typedefs"
@@ -55,7 +60,7 @@
 
 .in +1c
 .ti -1c
-.RI "enum \fBMaxOS::processes::ThreadState\fP { \fBMaxOS::processes::NEW\fP, \fBMaxOS::processes::RUNNING\fP, \fBMaxOS::processes::READY\fP, \fBMaxOS::processes::SLEEPING\fP, \fBMaxOS::processes::WAITING\fP, \fBMaxOS::processes::STOPPED\fP }"
+.RI "enum class \fBMaxOS::processes::ThreadState\fP { \fBMaxOS::processes::NEW\fP, \fBMaxOS::processes::RUNNING\fP, \fBMaxOS::processes::READY\fP, \fBMaxOS::processes::SLEEPING\fP, \fBMaxOS::processes::WAITING\fP, \fBMaxOS::processes::STOPPED\fP }"
 .br
 .in -1c
 .SH "Author"

@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::IOAPIC" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::IOAPIC" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,216 +18,236 @@ MaxOS::hardwarecommunication::IOAPIC
 .RI "\fB~IOAPIC\fP ()"
 .br
 .ti -1c
-.RI "uint32_t \fBread\fP (uint32_t reg)"
+.RI "uint32_t \fBread\fP (uint32_t reg) const"
 .br
+.RI "Read a value from a IO Apic register\&. "
 .ti -1c
-.RI "void \fBwrite\fP (uint32_t reg, uint32_t value)"
+.RI "void \fBwrite\fP (uint32_t reg, uint32_t value) const"
 .br
+.RI "Write a value to an IO Apic register\&. "
 .ti -1c
 .RI "void \fBset_redirect\fP (\fBinterrupt_redirect_t\fP *redirect)"
 .br
+.RI "Redirect a system interrupt to a different IRQ\&. "
 .ti -1c
 .RI "void \fBset_redirect_mask\fP (uint8_t index, bool \fBmask\fP)"
 .br
+.RI "Enables/Disables an interrupt redirect by masking it\&. "
 .ti -1c
 .RI "void \fBinit\fP ()"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 91 of file apic\&.h\&.
+Definition at line \fB90\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "IOAPIC::IOAPIC (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)"
 
 .PP
-Definition at line 116 of file apic\&.cpp\&.
-.PP
+Definition at line \fB119\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-117 : m_acpi(acpi),
-118   m_madt(nullptr)
-119 {
-120 
-121 }
+120 : m_acpi(acpi)
+121 {
+122 
+123     // Get the information about the IO APIC
+124     m_madt = (MADT*) m_acpi\->find("APIC");
+125     MADT_Item* io_apic_item = get_madt_item(1, 0);
+126 
+127     // Get the IO APIC
+128     auto* io_apic = (MADT_IOAPIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADT_Item));
+129     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic \- sizeof(MADT_Item)), Present | Write);
+130 
+131     // Map the IO APIC address to the higher half
+132     m_address = io_apic\->io_apic_address;
+133     m_address_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_address);
+134     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, Present | Write);
+135     Logger::DEBUG() << "IO APIC Address: phy=0x" << m_address << ", virt=0x" << m_address_high << "\\n";
+136 
+137     // Get the IO APIC version and max redirection entry
+138     m_version = read(0x1);
+139     m_max_redirect_entry = (uint8_t) (m_version >> 16);
+140 
+141     // Log the IO APIC information
+142     Logger::DEBUG() << "IO APIC Version: 0x" << (uint64_t) (m_version & 0xFF) << "\\n";
+143     Logger::DEBUG() << "IO APIC Max Redirection Entry: 0x" << (uint64_t) m_max_redirect_entry << "\\n";
+144 
+145     // Get the source override item
+146     MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
+147     uint32_t total_length = sizeof(MADT);
+148     while (total_length < m_madt\->header\&.length && m_override_array_size < 0x10) { // 0x10 is the max items
+149 
+150         total_length += source_override_item\->length;
+151 
+152         // If there is an override, populate the array
+153         if (source_override_item != nullptr && source_override_item\->type == 2) {
+154 
+155             // Get the override and populate the array
+156             auto* override = (Override*) (source_override_item + 1);
+157             m_override_array[m_override_array_size]\&.bus = override\->bus;
+158             m_override_array[m_override_array_size]\&.source = override\->source;
+159             m_override_array[m_override_array_size]\&.global_system_interrupt = override\->global_system_interrupt;
+160             m_override_array[m_override_array_size]\&.flags = override\->flags;
+161             m_override_array_size++;
+162         }
+163 
+164         // Get the next item
+165         source_override_item = get_madt_item(2, m_override_array_size);
+166         if (source_override_item == nullptr)
+167             break;
+168     }
+169 
+170     Logger::DEBUG() << "IO APIC Source Overrides: 0x" << m_override_array_size << "\\n";
+171 }
 .fi
-.SS "IOAPIC::~IOAPIC ()"
 
 .PP
-Definition at line 123 of file apic\&.cpp\&.
-.PP
-.nf
-123                 {
-124 
-125 }
-.fi
+References \fBMaxOS::hardwarecommunication::Override::bus\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP, \fBMaxOS::hardwarecommunication::Override::flags\fP, \fBMaxOS::hardwarecommunication::Override::global_system_interrupt\fP, \fBheader\fP, \fBMaxOS::hardwarecommunication::ACPISDTHeader::length\fP, \fBMaxOS::hardwarecommunication::MADT_Item::length\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::Present\fP, \fBread()\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::hardwarecommunication::Override::source\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, \fBMaxOS::hardwarecommunication::MADT_Item::type\fP, and \fBMaxOS::memory::Write\fP\&.
+.SS "IOAPIC::~IOAPIC ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void IOAPIC::init ()"
+.SS "void MaxOS::hardwarecommunication::IOAPIC::init ()"
+
+.SS "uint32_t IOAPIC::read (uint32_t reg) const"
 
 .PP
-Definition at line 127 of file apic\&.cpp\&.
+Read a value from a IO Apic register\&. 
 .PP
-.nf
-127                   {
-128 
-129   // Get the information about the IO APIC
-130   m_madt = (MADT*)m_acpi->find("APIC");
-131   MADT_Item* io_apic_item = get_madt_item(1, 0);
-132 
-133   // Get the IO APIC
-134   MADT_IOAPIC* io_apic = (MADT_IOAPIC*)MemoryManager::to_io_region((uint64_t)io_apic_item + sizeof(MADT_Item));
-135   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)io_apic_item, (virtual_address_t*)(io_apic - sizeof(MADT_Item)), Present | Write);
-136 
-137 
-138   // Map the IO APIC address to the higher half
-139   m_address = io_apic->io_apic_address;
-140   m_address_high = (uint64_t)MemoryManager::to_io_region(m_address);
-141   PhysicalMemoryManager::s_current_manager->map((physical_address_t*)m_address, (virtual_address_t*)m_address_high, Present | Write);
-142   _kprintf("IO APIC Address: phy=0x%x, virt=0x%x\n", m_address, m_address_high);
-143 
-144   // Get the IO APIC version and max redirection entry
-145   m_version = read(0x1);
-146   m_max_redirect_entry = (uint8_t)(m_version >> 16);
-147 
-148   // Log the IO APIC information
-149   _kprintf("IO APIC Version: 0x%x\n", m_version);
-150   _kprintf("IO APIC Max Redirection Entry: 0x%x\n", m_max_redirect_entry);
-151 
-152   // Get the source override item
-153   MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
-154 
-155   // Loop through the source override items
-156   uint32_t total_length = sizeof(MADT);
-157   while (total_length < m_madt->header\&.length && m_override_array_size < 0x10){ // 0x10 is the max items
-158 
-159       // Increment the total length
-160       total_length += source_override_item->length;
-161 
-162       // If there is an override, populate the array
-163       if(source_override_item != nullptr && source_override_item->type == 2) {
-164 
-165           // Get the override and populate the array
-166           Override *override = (Override *)(source_override_item + 1);
-167           m_override_array[m_override_array_size]\&.bus = override->bus;
-168           m_override_array[m_override_array_size]\&.source = override->source;
-169           m_override_array[m_override_array_size]\&.global_system_interrupt = override->global_system_interrupt;
-170           m_override_array[m_override_array_size]\&.flags = override->flags;
-171 
-172           // Increment the override array size
-173           m_override_array_size++;
-174       }
-175 
-176       // Get the next item
-177       source_override_item = get_madt_item(2, m_override_array_size);
-178 
-179       // If there is no next item then break
-180       if(source_override_item == nullptr)
-181           break;
-182   }
-183 
-184   // Log how many overrides were found
-185   _kprintf("IO APIC Source Overrides: 0x%x\n", m_override_array_size);
-186 }
-.fi
+\fBParameters\fP
+.RS 4
+\fIreg\fP The register to read from 
+.RE
 .PP
-References _kprintf, MaxOS::hardwarecommunication::Override::bus, MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find(), MaxOS::hardwarecommunication::Override::flags, MaxOS::hardwarecommunication::Override::global_system_interrupt, header, MaxOS::hardwarecommunication::MADT_IOAPIC::io_apic_address, MaxOS::hardwarecommunication::ACPISDTHeader::length, MaxOS::hardwarecommunication::MADT_Item::length, MaxOS::memory::Present, read(), MaxOS::hardwarecommunication::Override::source, MaxOS::hardwarecommunication::MADT_Item::type, and MaxOS::memory::Write\&.
+\fBReturns\fP
+.RS 4
+The value at the register 
+.RE
 .PP
-Referenced by MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\&.
-.SS "uint32_t IOAPIC::read (uint32_t reg)"
 
 .PP
-Definition at line 221 of file apic\&.cpp\&.
-.PP
+Definition at line \fB218\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-221                                   {
+218                                         {
+219 
+220     // Tell the APIC what register to read from
+221     *(volatile uint32_t*) (m_address_high + 0x00) = reg;
 222 
-223   // Write the register
-224   *(volatile uint32_t*)(m_address_high + 0x00) = reg;
-225 
-226   // Return the value
-227   return *(volatile uint32_t*)(m_address_high + 0x10);
-228 
-229 
-230 
-231 }
+223     // Read the value
+224     return *(volatile uint32_t*) (m_address_high + 0x10);
+225 }
 .fi
+
 .PP
-Referenced by init()\&.
+Referenced by \fBIOAPIC()\fP\&.
 .SS "void IOAPIC::set_redirect (\fBinterrupt_redirect_t\fP * redirect)"
 
 .PP
-Definition at line 272 of file apic\&.cpp\&.
+Redirect a system interrupt to a different IRQ\&. 
 .PP
+\fBParameters\fP
+.RS 4
+\fIredirect\fP The redirection entry 
+.RE
+.PP
+
+.PP
+Definition at line \fB287\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-272                                                         {
-273 
-274     // Create the redirection entry
-275     RedirectionEntry entry;
-276     entry\&.raw = redirect->flags | (redirect -> interrupt & 0xFF);
-277     entry\&.destination = redirect->destination;
-278     entry\&.mask = redirect->mask;
-279 
-280     // Check if a global system interrupt is used
-281     for (uint8_t i = 0; i < m_override_array_size; i++) {
-282 
-283         if (m_override_array[i]\&.source != redirect->type)
-284           continue;
-285 
-286         // Set the lower 4 bits of the pin
-287         entry\&.pin_polarity = ((m_override_array[i]\&.flags & 0b11) == 2) ? 0b1 : 0b0;
-288         entry\&.pin_polarity = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2) ? 0b1 : 0b0;
-289 
-290         // Set the trigger mode
-291         entry\&.trigger_mode = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2);
-292 
-293         break;
+287                                                         {
+288 
+289     // Create the redirection entry
+290     RedirectionEntry entry = {};
+291     entry\&.raw = redirect\->flags | (redirect\->interrupt & 0xFF);
+292     entry\&.destination = redirect\->destination;
+293     entry\&.mask = redirect\->mask;
 294 
-295     }
-296 
-297     // Write the redirect
-298     write_redirect(redirect->index, &entry);
-299 
-300 }
+295     // Check if a global system interrupt is used
+296     for (uint8_t i = 0; i < m_override_array_size; i++) {
+297 
+298         if (m_override_array[i]\&.source != redirect\->type)
+299             continue;
+300 
+301         // Set the lower 4 bits of the pin
+302         entry\&.pin_polarity = ((m_override_array[i]\&.flags & 0b11) == 2) ? 0b1 : 0b0;
+303         entry\&.pin_polarity = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2) ? 0b1 : 0b0;
+304 
+305         // Set the trigger mode
+306         entry\&.trigger_mode = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2);
+307         break;
+308 
+309     }
+310 
+311     // Write the redirect
+312     write_redirect(redirect\->index, &entry);
+313 }
 .fi
+
 .PP
-References MaxOS::hardwarecommunication::RedirectionEntry::destination, MaxOS::hardwarecommunication::InterruptRedirect::destination, MaxOS::hardwarecommunication::InterruptRedirect::flags, MaxOS::hardwarecommunication::Override::flags, MaxOS::drivers::peripherals::i, MaxOS::hardwarecommunication::InterruptRedirect::index, MaxOS::hardwarecommunication::RedirectionEntry::mask, MaxOS::hardwarecommunication::InterruptRedirect::mask, MaxOS::hardwarecommunication::RedirectionEntry::pin_polarity, MaxOS::hardwarecommunication::RedirectionEntry::raw, source, MaxOS::hardwarecommunication::RedirectionEntry::trigger_mode, and MaxOS::hardwarecommunication::InterruptRedirect::type\&.
+References \fBMaxOS::hardwarecommunication::RedirectionEntry::destination\fP, \fBMaxOS::hardwarecommunication::InterruptRedirect::destination\fP, \fBMaxOS::hardwarecommunication::InterruptRedirect::flags\fP, \fBMaxOS::hardwarecommunication::Override::flags\fP, \fBMaxOS::hardwarecommunication::InterruptRedirect::index\fP, \fBMaxOS::hardwarecommunication::InterruptRedirect::interrupt\fP, \fBMaxOS::hardwarecommunication::RedirectionEntry::mask\fP, \fBMaxOS::hardwarecommunication::InterruptRedirect::mask\fP, \fBMaxOS::hardwarecommunication::RedirectionEntry::pin_polarity\fP, \fBMaxOS::hardwarecommunication::RedirectionEntry::raw\fP, \fBsource\fP, \fBMaxOS::hardwarecommunication::RedirectionEntry::trigger_mode\fP, and \fBMaxOS::hardwarecommunication::InterruptRedirect::type\fP\&.
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::InterruptHandler::InterruptHandler()\fP, and \fBMaxOS::drivers::clock::PIT::ticks_per_ms()\fP\&.
 .SS "void IOAPIC::set_redirect_mask (uint8_t index, bool mask)"
 
 .PP
-Definition at line 301 of file apic\&.cpp\&.
+Enables/Disables an interrupt redirect by masking it\&. 
 .PP
-.nf
-301                                                        {
-302 
-303     // Read the current entry
-304     RedirectionEntry entry;
-305     read_redirect(index, &entry);
-306 
-307     // Set the mask
-308     entry\&.mask = mask;
-309 
-310     // Write the entry
-311     write_redirect(index, &entry);
-312 }
-.fi
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the redirect mask 
+.br
+\fImask\fP True = masked = disabled, False = unmasked = enabled 
+.RE
 .PP
-References mask, and MaxOS::hardwarecommunication::RedirectionEntry::mask\&.
-.PP
-Referenced by MaxOS::drivers::clock::PIT::ticks_per_ms()\&.
-.SS "void IOAPIC::write (uint32_t reg, uint32_t value)"
 
 .PP
-Definition at line 233 of file apic\&.cpp\&.
-.PP
+Definition at line \fB321\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-233                                                {
-234 
-235     // Write the register
-236     *(volatile uint32_t*)(m_address_high + 0x00) = reg;
-237 
-238     // Write the value
-239     *(volatile uint32_t*)(m_address_high + 0x10) = value;
-240 }
+321                                                        {
+322 
+323     // Read the current entry
+324     RedirectionEntry entry = {};
+325     read_redirect(index, &entry);
+326 
+327     // Set the mask
+328     entry\&.mask = mask;
+329     write_redirect(index, &entry);
+330 }
+.fi
+
+.PP
+References \fBmask\fP, and \fBMaxOS::hardwarecommunication::RedirectionEntry::mask\fP\&.
+.PP
+Referenced by \fBMaxOS::drivers::clock::PIT::ticks_per_ms()\fP\&.
+.SS "void IOAPIC::write (uint32_t reg, uint32_t value) const"
+
+.PP
+Write a value to an IO Apic register\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIreg\fP The register to write to 
+.br
+\fIvalue\fP The value to set the register to 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The value at the register 
+.RE
+.PP
+
+.PP
+Definition at line \fB234\fP of file \fBapic\&.cpp\fP\&..PP
+.nf
+234                                                      {
+235 
+236     // Write the register
+237     *(volatile uint32_t*) (m_address_high + 0x00) = reg;
+238 
+239     // Write the value
+240     *(volatile uint32_t*) (m_address_high + 0x10) = value;
+241 }
 .fi
 
 

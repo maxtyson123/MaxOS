@@ -1,32 +1,37 @@
-\hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable}{}\doxysection{Max\+OS\+::system\+::Global\+Descriptor\+Table Class Reference}
-\label{classMaxOS_1_1system_1_1GlobalDescriptorTable}\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysection{Max\+OS\+::system\+::Global\+Descriptor\+Table Class Reference}
+\hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable}{}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable}\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
 
 
-Sets up the G\+DT in the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}}.  
+Sets up the GDT in the \doxylink{classMaxOS_1_1system_1_1CPU}{CPU}.  
 
 
 
 
 {\ttfamily \#include $<$gdt.\+h$>$}
 
-\doxysubsection*{Public Member Functions}
+\doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}{Global\+Descriptor\+Table}} ()
 \item 
-\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}{$\sim$\+Global\+Descriptor\+Table}} ()
+\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}{\texorpdfstring{$\sim$}{\string~}\+Global\+Descriptor\+Table}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}} \mbox{[}7\mbox{]}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Sets up the G\+DT in the \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{C\+PU}}. 
+Sets up the GDT in the \doxylink{classMaxOS_1_1system_1_1CPU}{CPU}. 
 
-Definition at line 28 of file gdt.\+h.
+Definition at line \mbox{\hyperlink{gdt_8h_source_l00043}{43}} of file \mbox{\hyperlink{gdt_8h_source}{gdt.\+h}}.
 
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}} 
+\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e} 
 \index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!GlobalDescriptorTable@{GlobalDescriptorTable}}
 \index{GlobalDescriptorTable@{GlobalDescriptorTable}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
 \doxysubsubsection{\texorpdfstring{GlobalDescriptorTable()}{GlobalDescriptorTable()}}
@@ -34,75 +39,105 @@ Definition at line 28 of file gdt.\+h.
 
 
 
-Definition at line 11 of file gdt.\+cpp.
+Definition at line \mbox{\hyperlink{gdt_8cpp_source_l00011}{11}} of file \mbox{\hyperlink{gdt_8cpp_source}{gdt.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{12 \{}
-\DoxyCodeLine{13 }
-\DoxyCodeLine{14    \textcolor{comment}{// Null descriptor}}
-\DoxyCodeLine{15     m\_gdt[0] = 0;}
-\DoxyCodeLine{16 }
-\DoxyCodeLine{17     \textcolor{comment}{// Kernel code segment descriptor}}
-\DoxyCodeLine{18     uint64\_t kernel\_code\_segment\_descriptor = 0;}
-\DoxyCodeLine{19     kernel\_code\_segment\_descriptor |= 0b1011 << 8; \textcolor{comment}{// Type of selector}}
-\DoxyCodeLine{20     kernel\_code\_segment\_descriptor |= 1 << 12;     \textcolor{comment}{// Not a system descriptor}}
-\DoxyCodeLine{21     kernel\_code\_segment\_descriptor |= 0 << 13;     \textcolor{comment}{// Privilege level 0}}
-\DoxyCodeLine{22     kernel\_code\_segment\_descriptor |= 1 << 15;     \textcolor{comment}{// Present}}
-\DoxyCodeLine{23     kernel\_code\_segment\_descriptor |= 1 << 21;     \textcolor{comment}{// Long mode}}
-\DoxyCodeLine{24     m\_gdt[1] = kernel\_code\_segment\_descriptor << 32;}
-\DoxyCodeLine{25 }
-\DoxyCodeLine{26     \textcolor{comment}{// Kernel data segment descriptor}}
-\DoxyCodeLine{27     uint64\_t kernel\_data\_segment\_descriptor = 0;}
-\DoxyCodeLine{28     kernel\_data\_segment\_descriptor |= 0b0011 << 8; \textcolor{comment}{// Type of selector}}
-\DoxyCodeLine{29     kernel\_data\_segment\_descriptor |= 1 << 12;     \textcolor{comment}{// Not a system descriptor}}
-\DoxyCodeLine{30     kernel\_data\_segment\_descriptor |= 0 << 13;     \textcolor{comment}{// Privilege level 0}}
-\DoxyCodeLine{31     kernel\_data\_segment\_descriptor |= 1 << 15;     \textcolor{comment}{// Present}}
-\DoxyCodeLine{32     kernel\_data\_segment\_descriptor |= 1 << 21;     \textcolor{comment}{// Long mode}}
-\DoxyCodeLine{33     m\_gdt[2] = kernel\_data\_segment\_descriptor << 32;}
-\DoxyCodeLine{34 }
-\DoxyCodeLine{35     \textcolor{comment}{// User code segment descriptor (Change the privilege level to 3)}}
-\DoxyCodeLine{36     uint64\_t user\_code\_segment\_descriptor = kernel\_code\_segment\_descriptor | (3 << 13);}
-\DoxyCodeLine{37     m\_gdt[3] = user\_code\_segment\_descriptor;}
-\DoxyCodeLine{38 }
-\DoxyCodeLine{39     \textcolor{comment}{// User data segment descriptor (Change the privilege level to 3)}}
-\DoxyCodeLine{40     uint64\_t user\_data\_segment\_descriptor = kernel\_data\_segment\_descriptor | (3 << 13);}
-\DoxyCodeLine{41     m\_gdt[4] = user\_data\_segment\_descriptor;}
-\DoxyCodeLine{42 }
-\DoxyCodeLine{43     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Created GDT entries\(\backslash\)n"});}
-\DoxyCodeLine{44 }
-\DoxyCodeLine{45 }
-\DoxyCodeLine{46     \textcolor{comment}{// TODO: This is done in assembly but would be nice to do here}}
-\DoxyCodeLine{47 }
-\DoxyCodeLine{48 }
-\DoxyCodeLine{49     \mbox{\hyperlink{kprint_8h_ad0dbdc0814f8a967875ad592df02a663}{\_kprintf}}(\textcolor{stringliteral}{"Reloaded segment registers\(\backslash\)n"});}
-\DoxyCodeLine{50 }
-\DoxyCodeLine{51 \}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ Global\ Descriptor\ Table\(\backslash\)n"{}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//\ Null\ descriptor}}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[0]\ =\ 0;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ Kernel\ Code\ Segment\ descriptor}}
+\DoxyCodeLine{00020\ \ \ \ \ uint64\_t\ kernel\_cs\ =\ 0;}
+\DoxyCodeLine{00021\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6}{DescriptorFlags::Write}};}
+\DoxyCodeLine{00022\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a40cd014b7b6251e3a22e6a45a73a64e1}{DescriptorFlags::Execute}};}
+\DoxyCodeLine{00023\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0aa43d8a8f0415d770ad9cef1d31ef03d5}{DescriptorFlags::CodeOrDataSegment}};}
+\DoxyCodeLine{00024\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6}{DescriptorFlags::Present}};}
+\DoxyCodeLine{00025\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0ab389522a2e7fd91e3edf722ab20fe9ec}{DescriptorFlags::LongMode}};}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[1]\ =\ kernel\_cs;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ Kernel\ Data\ Segment\ descriptor}}
+\DoxyCodeLine{00029\ \ \ \ \ uint64\_t\ kernel\_ds\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6}{DescriptorFlags::Write}};}
+\DoxyCodeLine{00031\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0aa43d8a8f0415d770ad9cef1d31ef03d5}{DescriptorFlags::CodeOrDataSegment}};}
+\DoxyCodeLine{00032\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6}{DescriptorFlags::Present}};}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[2]\ =\ kernel\_ds;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ User\ code\ segment\ descriptor\ (Change\ the\ privilege\ level\ to\ 3)}}
+\DoxyCodeLine{00036\ \ \ \ \ uint64\_t\ user\_cs\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6}{DescriptorFlags::Write}};}
+\DoxyCodeLine{00038\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a40cd014b7b6251e3a22e6a45a73a64e1}{DescriptorFlags::Execute}};}
+\DoxyCodeLine{00039\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0aa43d8a8f0415d770ad9cef1d31ef03d5}{DescriptorFlags::CodeOrDataSegment}};}
+\DoxyCodeLine{00040\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6}{DescriptorFlags::Present}};}
+\DoxyCodeLine{00041\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0ab389522a2e7fd91e3edf722ab20fe9ec}{DescriptorFlags::LongMode}};}
+\DoxyCodeLine{00042\ \ \ \ \ user\_cs\ |=\ (3ULL\ <<\ 45);}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[3]\ =\ user\_cs;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ User\ data\ segment\ descriptor\ (Change\ the\ privilege\ level\ to\ 3)}}
+\DoxyCodeLine{00046\ \ \ \ \ uint64\_t\ user\_ds\ =\ 0;}
+\DoxyCodeLine{00047\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6}{DescriptorFlags::Write}};}
+\DoxyCodeLine{00048\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0aa43d8a8f0415d770ad9cef1d31ef03d5}{DescriptorFlags::CodeOrDataSegment}};}
+\DoxyCodeLine{00049\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6}{DescriptorFlags::Present}};}
+\DoxyCodeLine{00050\ \ \ \ \ user\_ds\ |=\ (3ULL\ <<\ 45);}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[4]\ =\ user\_ds;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ Reserve\ space\ for\ the\ TSS}}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[5]\ =\ 0;}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[6]\ =\ 0;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Created\ GDT\ entries\(\backslash\)n"{}};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ GDT}}
+\DoxyCodeLine{00060\ \ \ \ \ gdtr\_t\ gdtr\ =\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ .size\ \ \ \ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}})\ -\/\ 1,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ .\mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}},}
+\DoxyCodeLine{00063\ \ \ \ \ \};}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}lgdt\ \%0"{}}\ :\ :\ \textcolor{stringliteral}{"{}m"{}}(gdtr));}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Loaded\ GDT\ of\ limit\ 0x"{}}\ <<\ (uint64\_t)\ gdtr.size\ <<\ \textcolor{stringliteral}{"{}\ and\ address\ 0x"{}}\ <<\ (uint64\_t)\ gdtr.address\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//\ Reload\ the\ segment\ registers}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%ds"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%es"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%fs"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%gs"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%ss"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Reloaded\ segment\ registers\(\backslash\)n"{}};}
+\DoxyCodeLine{00074\ \}}
 
 \end{DoxyCode}
 
 
-References \+\_\+kprintf.
+References \mbox{\hyperlink{amd__am79c973_8h_source_l00001}{address}}, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0aa43d8a8f0415d770ad9cef1d31ef03d5}{Max\+OS\+::system\+::\+Code\+Or\+Data\+Segment}}, \mbox{\hyperlink{logger_8cpp_source_l00168}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a40cd014b7b6251e3a22e6a45a73a64e1}{Max\+OS\+::system\+::\+Execute}}, \mbox{\hyperlink{logger_8cpp_source_l00157}{Logger\+::\+INFO()}}, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0ab389522a2e7fd91e3edf722ab20fe9ec}{Max\+OS\+::system\+::\+Long\+Mode}}, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6}{Max\+OS\+::system\+::\+Present}}, \mbox{\hyperlink{gdt_8h_source_l00049}{table}}, and \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6}{Max\+OS\+::system\+::\+Write}}.
 
-\mbox{\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}} 
-\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!````~GlobalDescriptorTable@{$\sim$GlobalDescriptorTable}}
-\index{````~GlobalDescriptorTable@{$\sim$GlobalDescriptorTable}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
-\doxysubsubsection{\texorpdfstring{$\sim$GlobalDescriptorTable()}{~GlobalDescriptorTable()}}
-{\footnotesize\ttfamily Global\+Descriptor\+Table\+::$\sim$\+Global\+Descriptor\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line 53 of file gdt.\+cpp.
+\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_acf17048eaac95750ebc0043a1f07576a} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!````~GlobalDescriptorTable@{\texorpdfstring{$\sim$}{\string~}GlobalDescriptorTable}}
+\index{````~GlobalDescriptorTable@{\texorpdfstring{$\sim$}{\string~}GlobalDescriptorTable}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}GlobalDescriptorTable()}{\string~GlobalDescriptorTable()}}
+{\footnotesize\ttfamily Global\+Descriptor\+Table\+::\texorpdfstring{$\sim$}{\string~}\+Global\+Descriptor\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
 
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{54 \{}
-\DoxyCodeLine{55 \}}
 
-\end{DoxyCode}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}\label{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed} 
+\index{MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}!table@{table}}
+\index{table@{table}!MaxOS::system::GlobalDescriptorTable@{MaxOS::system::GlobalDescriptorTable}}
+\doxysubsubsection{\texorpdfstring{table}{table}}
+{\footnotesize\ttfamily uint64\+\_\+t Max\+OS\+::system\+::\+Global\+Descriptor\+Table\+::table\mbox{[}7\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{gdt_8h_source_l00049}{49}} of file \mbox{\hyperlink{gdt_8h_source}{gdt.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{gdt_8cpp_source_l00011}{Global\+Descriptor\+Table()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00206}{Max\+OS\+::system\+::\+CPU\+::init\+\_\+tss()}}.
+
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/include/system/\mbox{\hyperlink{gdt_8h}{gdt.\+h}}\item 
-/home/runner/work/\+Max\+O\+S/\+Max\+O\+S/kernel/src/system/\mbox{\hyperlink{gdt_8cpp}{gdt.\+cpp}}\end{DoxyCompactItemize}
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/system/\mbox{\hyperlink{gdt_8h}{gdt.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/system/\mbox{\hyperlink{gdt_8cpp}{gdt.\+cpp}}\end{DoxyCompactItemize}

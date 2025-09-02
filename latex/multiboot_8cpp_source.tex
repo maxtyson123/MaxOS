@@ -1,0 +1,149 @@
+\doxysection{multiboot.\+cpp}
+\hypertarget{multiboot_8cpp_source}{}\label{multiboot_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/system/multiboot.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/system/multiboot.cpp}}
+\mbox{\hyperlink{multiboot_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 1/6/2024.}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{multiboot_8h}{system/multiboot.h}}>}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memorymanagement_8h}{memory/memorymanagement.h}}>}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1system}{MaxOS::system}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00011}00011\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1memory}{MaxOS::memory}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00012}00012\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00014}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a742992b0c4be3c95ccb1610af82dbf19}{00014}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a742992b0c4be3c95ccb1610af82dbf19}{Multiboot::Multiboot}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}},\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}})}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00015}00015\ :\ start\_address(\mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}})}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00016}00016\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{comment}{//\ Confirm\ the\ bootloader}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00019}00019\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}}\ ==\ \mbox{\hyperlink{multiboot_8h_a18088e9abdbc843745e5e59973481475}{MULTIBOOT2\_BOOTLOADER\_MAGIC}},\ \textcolor{stringliteral}{"{}Multiboot2\ Bootloader\ Not\ Detected"{}});}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00020}00020\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Multiboot2\ Bootloader\ Detected\ at\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00022}00022\ \ \ \ \ \mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{start\_tag}}();}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00024}00024\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ tags\ and\ load\ them}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00025}00025\ \ \ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ tag}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}-\/>type)\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a0cbcbc85e6b7b88b540beff3fa79ceb6}{end\_address}}\ =\ (\textcolor{keywordtype}{unsigned}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{long}})\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a92723ea076c394a848f7f95bca9a86b6}{PhysicalMemoryManager::to\_lower\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}});}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_ad173069cc56a0b2734d796577a1bd857}{MULTIBOOT\_TAG\_TYPE\_FRAMEBUFFER}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a48388fa09d529db631bf6f80d5ab3091}{m\_framebuffer}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_ae64c134a04cf27a23a036c3330ef827a}{MULTIBOOT\_TAG\_TYPE\_BASIC\_MEMINFO}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}{m\_basic\_meminfo}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__basic__meminfo}{multiboot\_tag\_basic\_meminfo}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_afe69dc4711fc7f5dc9604977b2393218}{MULTIBOOT\_TAG\_TYPE\_BOOT\_LOADER\_NAME}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__string}{multiboot\_tag\_string}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Bootloader:\ "{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}}-\/>\mbox{\hyperlink{structmultiboot__tag__string_a50125b332242abd0051cd348fd2d9b68}{string}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_a92170b084bd536b0e30e2373263f6685}{MULTIBOOT\_TAG\_TYPE\_BOOTDEV}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmultiboot__tag__bootdev}{multiboot\_tag\_bootdev}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bootdev}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bootdev}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__bootdev}{multiboot\_tag\_bootdev}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Boot\ device:\ drive=0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bootdev}}-\/>biosdev\ <<\ \textcolor{stringliteral}{"{},\ partition=0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bootdev}}-\/>part\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_ad5e7a09f39f1f37e50be39000af2af4e}{MULTIBOOT\_TAG\_TYPE\_MMAP}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ not\ already\ a\ mmap\ tag,\ set\ it}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a439c0ec6b7446d338bdf1faeba52eef2}{m\_mmap}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a439c0ec6b7446d338bdf1faeba52eef2}{m\_mmap}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__mmap}{multiboot\_tag\_mmap}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_acc29d9aee9a932ee12628ba57fdfb3a4}{MULTIBOOT\_TAG\_TYPE\_ACPI\_OLD}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a572b5590c47b1128f43c458de10a9271}{m\_old\_acpi}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__old__acpi}{multiboot\_tag\_old\_acpi}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_afa32c43ce21ca35f6b0062bddbedf37d}{MULTIBOOT\_TAG\_TYPE\_ACPI\_NEW}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}{m\_new\_acpi}}\ =\ (\mbox{\hyperlink{structmultiboot__tag__new__acpi}{multiboot\_tag\_new\_acpi}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{multiboot_8h_a10b78479319b8790657f13414cf34736}{MULTIBOOT\_TAG\_TYPE\_MODULE}}:}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmultiboot__tag__module}{multiboot\_tag\_module}}*\ \textcolor{keyword}{module};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{module}\ =\ (multiboot\_tag\_module*)\ tag;}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Module:\ start=0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{module}}-\/>mod\_start\ <<\ \textcolor{stringliteral}{"{},\ end=0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \textcolor{keyword}{module}-\/>mod\_end\ <<\ "{},\ cmdline="{}\ <<\ module-\/>cmdline\ <<\ "{}\(\backslash\)n"{};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a3547fb0a8ee07f8b25269c0d22d98297}{m\_module}}\ =\ \textcolor{keyword}{module};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ tag}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot\_uint8\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}\ +\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}-\/>size\ +\ 7)\ \&\ \string~7));}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00080}00080\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00081}00081\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00083}00083\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a6f30ad4d6a1d3f686833d5fc9de9d269}{Multiboot::\string~Multiboot}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00086}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a6e791331c936eb83096c2386e98d4a95}{00086}}\ \mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a6e791331c936eb83096c2386e98d4a95}{Multiboot::framebuffer}}()\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00088}00088\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a48388fa09d529db631bf6f80d5ab3091}{m\_framebuffer}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00089}00089\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00091}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a3e3713de30a2ed730e52b41a1c610a96}{00091}}\ \mbox{\hyperlink{structmultiboot__tag__basic__meminfo}{multiboot\_tag\_basic\_meminfo}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a3e3713de30a2ed730e52b41a1c610a96}{Multiboot::basic\_meminfo}}()\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00093}00093\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a8018de72b296600f6090f9dfc90dce11}{m\_basic\_meminfo}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00094}00094\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00096}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a5c511bac5f032acec15f6c1d14b89fc1}{00096}}\ \mbox{\hyperlink{structmultiboot__tag__string}{multiboot\_tag\_string}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a5c511bac5f032acec15f6c1d14b89fc1}{Multiboot::bootloader\_name}}()\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00098}00098\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a7c9cdd56bd6e58a13af896226e98541b}{m\_bootloader\_name}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00099}00099\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00101}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ad74bcb71a9f5abe659389946dfdfa2f6}{00101}}\ \mbox{\hyperlink{structmultiboot__tag__mmap}{multiboot\_tag\_mmap}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ad74bcb71a9f5abe659389946dfdfa2f6}{Multiboot::mmap}}()\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a439c0ec6b7446d338bdf1faeba52eef2}{m\_mmap}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00104}00104\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00106}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ab65ea1a3a5fccf72a4baa99f2d6bbaba}{00106}}\ \mbox{\hyperlink{structmultiboot__tag__old__acpi}{multiboot\_tag\_old\_acpi}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ab65ea1a3a5fccf72a4baa99f2d6bbaba}{Multiboot::old\_acpi}}()\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00108}00108\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a572b5590c47b1128f43c458de10a9271}{m\_old\_acpi}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00109}00109\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00112}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ac4bab27793f89e2c1edfaa90ca23ec35}{00112}}\ \mbox{\hyperlink{structmultiboot__tag__new__acpi}{multiboot\_tag\_new\_acpi}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_ac4bab27793f89e2c1edfaa90ca23ec35}{Multiboot::new\_acpi}}()\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00114}00114\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_af9d4c45cd7c5bc9fb7fefe0d30e930d3}{m\_new\_acpi}};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00115}00115\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00122}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acc0c0a33a1fefd4bbed766129b9f20db}{00122}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_acc0c0a33a1fefd4bbed766129b9f20db}{Multiboot::is\_reserved}}(\mbox{\hyperlink{multiboot_8h_a8dfdd61648b48aa31845db590970e06a}{multiboot\_uint64\_t}}\ \mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}})\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ tags\ checking\ if\ the\ address\ is\ reserved}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{start\_tag}}();\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}-\/>type\ !=\ \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot\_uint8\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}\ +\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}-\/>size\ +\ 7)\ \&\ \string~7)))\ \{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ tag\ is\ a\ module\ or\ mmap}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00128}00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}-\/>type\ !=\ \mbox{\hyperlink{multiboot_8h_a10b78479319b8790657f13414cf34736}{MULTIBOOT\_TAG\_TYPE\_MODULE}}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tag}}-\/>type\ !=\ \mbox{\hyperlink{multiboot_8h_ad5e7a09f39f1f37e50be39000af2af4e}{MULTIBOOT\_TAG\_TYPE\_MMAP}})}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ module\ tag}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \textcolor{keyword}{module}\ =\ (struct\ multiboot\_tag\_module*)\ tag;}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ address\ is\ within\ the\ module}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00135}00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{amd__am79c973_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}\ >=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{module}}-\/>mod\_start\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{address\ <\ module-\/>}}mod\_end)}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00137}00137\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{comment}{//\ Not\ part\ of\ multiboot}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00143}00143\ \}}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00144}00144\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00150}\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{00150}}\ \mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{Multiboot::start\_tag}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00152}00152\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)\ (\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_aeff9ae0620a17d5309279f0dc1e20cde}{start\_address}}\ +\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a493f2d11aa7f0f7eda56675d4033fad7}{PhysicalMemoryManager::s\_higher\_half\_kernel\_offset}}\ +\ 8);}
+\DoxyCodeLine{\Hypertarget{multiboot_8cpp_source_l00153}00153\ \}}
+
+\end{DoxyCode}

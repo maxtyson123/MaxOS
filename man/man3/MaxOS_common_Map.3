@@ -1,4 +1,4 @@
-.TH "MaxOS::common::Map< Key, Value >" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::Map< Key, Value >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ MaxOS::common::Map< Key, Value > \- A list of key-value pairs\&.
 
 .in +1c
 .ti -1c
-.RI "typedef \fBVector\fP< \fBPair\fP< Key, Value > >::\fBiterator\fP \fBiterator\fP"
+.RI "\fBtypedef\fP \fBVector\fP< \fBPair\fP< \fBKey\fP, \fBValue\fP > >::iterator \fBiterator\fP"
 .br
 .in -1c
 .SS "Public Member Functions"
@@ -26,9 +26,17 @@ MaxOS::common::Map< Key, Value > \- A list of key-value pairs\&.
 .RI "\fB~Map\fP ()"
 .br
 .ti -1c
-.RI "Value & \fBoperator[]\fP (Key)"
+.RI "\fBValue\fP & \fBoperator[]\fP (\fBKey\fP)"
 .br
 .RI "Overloads the [] operator to return the value of the key\&. "
+.ti -1c
+.RI "\fBbool\fP \fBempty\fP ()"
+.br
+.RI "Returns whether the map is empty\&. "
+.ti -1c
+.RI "\fBint\fP \fBsize\fP ()"
+.br
+.RI "The number of elements in the map\&. "
 .ti -1c
 .RI "\fBiterator\fP \fBbegin\fP ()"
 .br
@@ -38,47 +46,57 @@ MaxOS::common::Map< Key, Value > \- A list of key-value pairs\&.
 .br
 .RI "Returns the end of the map\&. "
 .ti -1c
-.RI "\fBiterator\fP \fBfind\fP (Key)"
+.RI "\fBiterator\fP \fBfind\fP (\fBKey\fP)"
 .br
 .RI "Finds an element in the map based on the key\&. "
 .ti -1c
-.RI "bool \fBempty\fP ()"
+.RI "\fBiterator\fP \fBpush_back\fP (\fBKey\fP, \fBValue\fP)"
 .br
-.RI "Returns whether the map is empty\&. "
 .ti -1c
-.RI "void \fBclear\fP ()"
+.RI "\fBPair\fP< \fBKey\fP, \fBValue\fP > \fBpop_back\fP ()"
 .br
-.RI "Removes all elements from the map\&. "
 .ti -1c
-.RI "void \fBinsert\fP (Key, Value)"
+.RI "\fBiterator\fP \fBpush_front\fP (\fBKey\fP, \fBValue\fP)"
+.br
+.ti -1c
+.RI "\fBPair\fP< \fBKey\fP, \fBValue\fP > \fBpop_front\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBinsert\fP (\fBKey\fP, \fBValue\fP)"
 .br
 .RI "Updates the value of an element, or adds a new element if it does not exist\&. "
 .ti -1c
-.RI "void \fBerase\fP (Key)"
+.RI "\fBvoid\fP \fBerase\fP (\fBKey\fP)"
 .br
 .RI "Removes an element from the map\&. "
 .ti -1c
-.RI "void \fBiterate\fP (\fBMapIterationHandler\fP< Key, Value > *handler)"
+.RI "\fBvoid\fP \fBerase\fP (\fBiterator\fP position)"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBclear\fP ()"
+.br
+.RI "Removes all elements from the map\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBiterate\fP (\fBMapIterationHandler\fP< \fBKey\fP, \fBValue\fP > *\fBhandler\fP)"
 .br
 .RI "Iterates through the map and calls the handler\&. "
 .ti -1c
-.RI "void \fBiterate\fP (void callback(Key &, Value &))"
+.RI "\fBvoid\fP \fBiterate\fP (\fBvoid\fP \fBcallback\fP(\fBKey\fP &, \fBValue\fP &))"
 .br
 .in -1c
 .SS "Protected Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBVector\fP< \fBPair\fP< Key, Value > > \fBm_elements\fP"
+.RI "\fBVector\fP< \fBPair\fP< \fBKey\fP, \fBValue\fP > > \fBm_elements\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class Key, class Value>
+.SS "template<\fBclass\fP \fBKey\fP, \fBclass\fP \fBValue\fP>
 .br
-class MaxOS::common::Map< Key, Value >"
-A list of key-value pairs\&. 
+class MaxOS::common::Map< Key, Value >"A list of key-value pairs\&. 
 
 
 .PP
@@ -91,38 +109,22 @@ A list of key-value pairs\&.
 .PP
 
 .PP
-Definition at line 39 of file map\&.h\&.
+Definition at line \fB39\fP of file \fBmap\&.h\fP\&.
 .SH "Member Typedef Documentation"
 .PP 
-.SS "template<class Key , class Value > typedef \fBVector\fP<\fBPair\fP<Key, Value> >::\fBiterator\fP \fBMaxOS::common::Map\fP< Key, Value >::\fBiterator\fP"
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBtypedef\fP \fBVector\fP<\fBPair\fP<\fBKey\fP,\fBValue\fP>>::iterator \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::iterator"
 
 .PP
-Definition at line 45 of file map\&.h\&.
+Definition at line \fB45\fP of file \fBmap\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<class Key , class Value > \fBMaxOS::common::Map\fP< Key, Value >::\fBMap\fP"
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::Map ()\fC [default]\fP"
 
-.PP
-Definition at line 94 of file map\&.h\&.
-.PP
-.nf
-94                                                               {
-95 
-96         }
-.fi
-.SS "template<class Key , class Value > \fBMaxOS::common::Map\fP< Key, Value >::~\fBMap\fP"
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::~\fBMap\fP ()\fC [default]\fP"
 
-.PP
-Definition at line 98 of file map\&.h\&.
-.PP
-.nf
-98                                                                {
-99 
-100         }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class Key , class Value > \fBMap\fP< Key, Value >::\fBiterator\fP \fBMaxOS::common::Map\fP< Key, Value >::begin"
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMap\fP< \fBKey\fP, \fBValue\fP >\fB::iterator\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::begin ()"
 
 .PP
 Returns the beginning of the map\&. 
@@ -141,14 +143,16 @@ The m_first_memory_chunk element in the map
 .PP
 
 .PP
-Definition at line 123 of file map\&.h\&.
-.PP
+Definition at line \fB127\fP of file \fBmap\&.h\fP\&..PP
 .nf
-123                                                                                                  {
-124             return m_elements\&.begin();
-125         }
+127                                                                                                  {
+128             return m_elements\&.begin();
+129         }
 .fi
-.SS "template<class Key , class Value > void \fBMaxOS::common::Map\fP< Key, Value >::clear"
+
+.PP
+References \fBMaxOS::common::Vector< Type >::begin()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBvoid\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::clear ()"
 
 .PP
 Removes all elements from the map\&. 
@@ -162,14 +166,16 @@ Removes all elements from the map\&.
 .PP
 
 .PP
-Definition at line 180 of file map\&.h\&.
-.PP
+Definition at line \fB208\fP of file \fBmap\&.h\fP\&..PP
 .nf
-180                                                                      {
-181           m_elements\&.clear();
-182         }
+208                                                                      {
+209           m_elements\&.clear();
+210         }
 .fi
-.SS "template<class Key , class Value > bool \fBMaxOS::common::Map\fP< Key, Value >::empty"
+
+.PP
+References \fBMaxOS::common::Vector< Type >::clear()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBbool\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::empty ()"
 
 .PP
 Returns whether the map is empty\&. 
@@ -188,14 +194,16 @@ Whether the map is empty
 .PP
 
 .PP
-Definition at line 170 of file map\&.h\&.
-.PP
+Definition at line \fB186\fP of file \fBmap\&.h\fP\&..PP
 .nf
-170                                                                      {
-171             return m_elements\&.empty();
-172         }
+186                                                                      {
+187             return m_elements\&.empty();
+188         }
 .fi
-.SS "template<class Key , class Value > \fBMap\fP< Key, Value >::\fBiterator\fP \fBMaxOS::common::Map\fP< Key, Value >::end"
+
+.PP
+References \fBMaxOS::common::Vector< Type >::empty()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMap\fP< \fBKey\fP, \fBValue\fP >\fB::iterator\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::end ()"
 
 .PP
 Returns the end of the map\&. 
@@ -214,16 +222,31 @@ The last element in the map
 .PP
 
 .PP
-Definition at line 134 of file map\&.h\&.
-.PP
+Definition at line \fB138\fP of file \fBmap\&.h\fP\&..PP
 .nf
-134                                                                                                {
-135             return m_elements\&.end();
-136         }
+138                                                                                                {
+139             return m_elements\&.end();
+140         }
 .fi
+
 .PP
-Referenced by MaxOS::net::AddressResolutionProtocol::Resolve()\&.
-.SS "template<class Key , class Value > void \fBMaxOS::common::Map\fP< Key, Value >::erase (Key key)"
+References \fBMaxOS::common::Vector< Type >::end()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::SharedMemory::open()\fP, \fBMaxOS::processes::SharedMemory::read()\fP, and \fBMaxOS::net::AddressResolutionProtocol::Resolve()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBvoid\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::erase (\fBMap\fP< \fBKey\fP, \fBValue\fP >\fB::iterator\fP position)"
+
+.PP
+Definition at line \fB253\fP of file \fBmap\&.h\fP\&..PP
+.nf
+253                                                                                          {
+254             m_elements\&.erase(position);
+255 
+256         }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::erase()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBvoid\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::erase (\fBKey\fP key)"
 
 .PP
 Removes an element from the map\&. 
@@ -242,22 +265,24 @@ Removes an element from the map\&.
 .PP
 
 .PP
-Definition at line 213 of file map\&.h\&.
-.PP
+Definition at line \fB241\fP of file \fBmap\&.h\fP\&..PP
 .nf
-213                                                                             {
-214 
-215             // Find the element
-216             iterator it = find(key);
-217 
-218             // If the element is found then remove it
-219             if (it != end()) {
-220                 m_elements\&.erase(it);
-221             }
-222 
-223         }
+241                                                                             {
+242 
+243             // Find the element
+244             iterator it = find(key);
+245 
+246             // If the element is found then remove it
+247             if (it != end()) {
+248                 m_elements\&.erase(it);
+249             }
+250 
+251         }
 .fi
-.SS "template<class Key , class Value > \fBMap\fP< Key, Value >::\fBiterator\fP \fBMaxOS::common::Map\fP< Key, Value >::find (Key element)"
+
+.PP
+References \fBMaxOS::common::Vector< Type >::erase()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMap\fP< \fBKey\fP, \fBValue\fP >\fB::iterator\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::find (\fBKey\fP element)"
 
 .PP
 Finds an element in the map based on the key\&. 
@@ -281,29 +306,24 @@ The iterator of the element, or the end iterator if not found
 .PP
 
 .PP
-Definition at line 146 of file map\&.h\&.
-.PP
+Definition at line \fB150\fP of file \fBmap\&.h\fP\&..PP
 .nf
-146                                                                                                            {
-147 
-148             // Loop through the elements
-149             for (iterator it = begin(); it != end(); it++) {
-150 
-151                 // If the key of the current element is equal to the key we are looking for
-152                 if (it -> first == element) {
-153                     // Return the iterator
-154                     return it;
-155                 }
-156             }
-157 
-158             // If it is not found, return the end iterator
-159             return end();
-160 
-161         }
+150                                                                                                            {
+151 
+152             // Search for the element
+153             for (iterator it = begin(); it != end(); it++)
+154                 if (it \-> first == element)
+155                     return it;
+156 
+157             // Item not found
+158             return end();
+159 
+160         }
 .fi
+
 .PP
-Referenced by MaxOS::net::AddressResolutionProtocol::Resolve()\&.
-.SS "template<class Key , class Value > void \fBMaxOS::common::Map\fP< Key, Value >::insert (Key key, Value value)"
+Referenced by \fBMaxOS::processes::SharedMemory::open()\fP, \fBMaxOS::processes::SharedMemory::read()\fP, and \fBMaxOS::net::AddressResolutionProtocol::Resolve()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBvoid\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::insert (\fBKey\fP key, \fBValue\fP value)"
 
 .PP
 Updates the value of an element, or adds a new element if it does not exist\&. 
@@ -324,26 +344,28 @@ Updates the value of an element, or adds a new element if it does not exist\&.
 .PP
 
 .PP
-Definition at line 192 of file map\&.h\&.
-.PP
+Definition at line \fB220\fP of file \fBmap\&.h\fP\&..PP
 .nf
-192                                                                                           {
-193 
-194             // Find the element
-195             iterator it = find(key);
-196 
-197             // If the element is found then update the value
-198             if (it != end()) {
-199                 it -> second = value;
-200             } else {
-201                 // Otherwise, add a new element
-202                 m_elements\&.push_back(Pair<Key, Value>(key, value));
-203             }
-204         }
+220                                                                                           {
+221 
+222             // Find the element
+223             iterator it = find(key);
+224 
+225             // If the element is found then update the value
+226             if (it != end()) {
+227                 it \-> second = value;
+228             } else {
+229                 // Otherwise, add a new element
+230                 m_elements\&.push_back(Pair<Key, Value>(key, value));
+231             }
+232         }
 .fi
+
 .PP
-Referenced by MaxOS::net::AddressResolutionProtocol::handleEthernetFramePayload(), and MaxOS::net::AddressResolutionProtocol::Store()\&.
-.SS "template<class Key , class Value > void \fBMaxOS::common::Map\fP< Key, Value >::iterate (\fBMapIterationHandler\fP< Key, Value > * handler)"
+References \fBMaxOS::common::Vector< Type >::push_back()\fP\&.
+.PP
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, \fBMaxOS::processes::SharedMemory::open()\fP, and \fBMaxOS::net::AddressResolutionProtocol::Store()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBvoid\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::iterate (\fBMapIterationHandler\fP< \fBKey\fP, \fBValue\fP > * handler)"
 
 .PP
 Iterates through the map and calls the handler\&. 
@@ -362,26 +384,28 @@ Iterates through the map and calls the handler\&.
 .PP
 
 .PP
-Definition at line 232 of file map\&.h\&.
-.PP
+Definition at line \fB265\fP of file \fBmap\&.h\fP\&..PP
 .nf
-232                                                                                                                {
-233 
-234             // Loop through the elements
-235             for(auto& it : m_elements) {
-236 
-237                 // Call the handler
-238                 handler->on_read(it\&.first, it\&.second);
-239             }
-240 
-241             // Call the handler
-242             handler->on_end_of_stream();
-243 
-244         }
+265                                                                                                                {
+266 
+267             // Loop through the elements
+268             for(auto& it : m_elements) {
+269 
+270                 // Call the handler
+271                 handler\->on_read(it\&.first, it\&.second);
+272             }
+273 
+274             // Call the handler
+275             handler\->on_end_of_stream();
+276 
+277         }
 .fi
-.SS "template<class Key , class Value > void \fBMaxOS::common::Map\fP< Key, Value >::iterate (void  callbackKey &, Value &)"
 
-.SS "template<class Key , class Value > Value & \fBMaxOS::common::Map\fP< Key, Value >::operator[] (Key key)"
+.PP
+References \fBMaxOS::common::MapIterationHandler< Key, Value >::on_end_of_stream()\fP, and \fBMaxOS::common::MapIterationHandler< Key, Value >::on_read()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBvoid\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::iterate (\fBvoid\fP  callbackKey &, Value &)"
+
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBValue\fP & \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::operator[] (\fBKey\fP key)"
 
 .PP
 Overloads the [] operator to return the value of the key\&. 
@@ -405,21 +429,92 @@ The value of the key
 .PP
 
 .PP
-Definition at line 110 of file map\&.h\&.
-.PP
+Definition at line \fB114\fP of file \fBmap\&.h\fP\&..PP
 .nf
-110                                                                                    {
-111 
-112             // Return the value of the key (second item in the pair)
-113             return find(key) -> second;
-114         }
+114                                                                                    {
+115 
+116             // Return the value of the key (second item in the pair)
+117             return find(key) \-> second;
+118         }
 .fi
-.SH "Member Data Documentation"
-.PP 
-.SS "template<class Key , class Value > \fBVector\fP<\fBPair\fP<Key, Value> > \fBMaxOS::common::Map\fP< Key, Value >::m_elements\fC [protected]\fP"
+
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBPair\fP< \fBKey\fP, \fBValue\fP > \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::pop_back ()"
 
 .PP
-Definition at line 42 of file map\&.h\&.
+Definition at line \fB166\fP of file \fBmap\&.h\fP\&..PP
+.nf
+166                                                                                     {
+167             return m_elements\&.pop_back();
+168         }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::pop_back()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBPair\fP< \fBKey\fP, \fBValue\fP > \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::pop_front ()"
+
+.PP
+Definition at line \fB174\fP of file \fBmap\&.h\fP\&..PP
+.nf
+174                                                                                      {
+175             return m_elements\&.pop_front();
+176         }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::pop_front()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMap\fP< \fBKey\fP, \fBValue\fP >\fB::iterator\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::push_back (\fBKey\fP key, \fBValue\fP value)"
+
+.PP
+Definition at line \fB162\fP of file \fBmap\&.h\fP\&..PP
+.nf
+162                                                                                                                 {
+163             return m_elements\&.push_back(Pair<Key, Value>(key, value));
+164         }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::push_back()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBMap\fP< \fBKey\fP, \fBValue\fP >\fB::iterator\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::push_front (\fBKey\fP key, \fBValue\fP value)"
+
+.PP
+Definition at line \fB170\fP of file \fBmap\&.h\fP\&..PP
+.nf
+170                                                                                                                  {
+171             return m_elements\&.push_front({key, value});
+172         }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::push_front()\fP\&.
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBint\fP \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::size ()"
+
+.PP
+The number of elements in the map\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The number of elements in the \fBMap\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB195\fP of file \fBmap\&.h\fP\&..PP
+.nf
+196         {
+197             // Return the size of the vector
+198             return m_elements\&.size();
+199 
+200         }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::size()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<\fBclass\fP \fBKey\fP , \fBclass\fP \fBValue\fP > \fBVector\fP<\fBPair\fP<\fBKey\fP, \fBValue\fP> > \fBMaxOS::common::Map\fP< \fBKey\fP, \fBValue\fP >::m_elements\fC [protected]\fP"
+
+.PP
+Definition at line \fB42\fP of file \fBmap\&.h\fP\&.
 
 .SH "Author"
 .PP 

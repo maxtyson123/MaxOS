@@ -1,6 +1,6 @@
 var intel__i217_8h =
 [
-    [ "intel_i217", "classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217.html", "classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217" ],
+    [ "MaxOS::drivers::ethernet::intel_i217", "classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217.html", "classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217" ],
     [ "bufferAddress", "intel__i217_8h.html#a1eabb40700e8ed04c40ed0bf1e1568dd", null ],
     [ "checksum", "intel__i217_8h.html#a59eac9627282a484fbaf0aa7aa3b8a9a", null ],
     [ "cmd", "intel__i217_8h.html#a4d43e8212bdc9dbee866506f04effcea", null ],

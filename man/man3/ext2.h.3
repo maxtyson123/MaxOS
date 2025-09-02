@@ -1,0 +1,712 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/ext2.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/ext2.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <drivers/disk/disk\&.h>\fP
+.br
+\fC#include <filesystem/filesystem\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <memory/memoryIO\&.h>\fP
+.br
+\fC#include <common/spinlock\&.h>\fP
+.br
+\fC#include <drivers/clock/clock\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::ext2::SuperBlock\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::ext2::BlockGroupDescriptor\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::ext2::Inode\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::ext2::InodeOS2Linux\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::ext2::DirectoryEntry\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::ext2::Ext2Volume\fP"
+.br
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::ext2::InodeHandler\fP"
+.br
+.RI "Simplfies the management of an inode & its blocks\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::ext2::Ext2File\fP"
+.br
+.RI "Handles the file operations on the \fBext2\fP filesystem\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP"
+.br
+.RI "Handles the directory operations on the \fBext2\fP filesystem\&. "
+.ti -1c
+.RI "class \fBMaxOS::filesystem::format::ext2::Ext2FileSystem\fP"
+.br
+.RI "Handles the \fBext2\fP filesystem operations\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBMaxOS\fP"
+.br
+.ti -1c
+.RI "namespace \fBMaxOS::filesystem\fP"
+.br
+.ti -1c
+.RI "namespace \fBMaxOS::filesystem::format\fP"
+.br
+.ti -1c
+.RI "namespace \fBMaxOS::filesystem::format::ext2\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::FileSystemState\fP { \fBMaxOS::filesystem::format::ext2::CLEAN\fP = 1, \fBMaxOS::filesystem::format::ext2::ERROR\fP = 2 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::ErrorOperation\fP { \fBMaxOS::filesystem::format::ext2::IGNORE\fP = 1, \fBMaxOS::filesystem::format::ext2::REMOUNT\fP = 2, \fBMaxOS::filesystem::format::ext2::PANIC\fP = 3 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::CreatorOS\fP { \fBMaxOS::filesystem::format::ext2::LINUX\fP, \fBMaxOS::filesystem::format::ext2::GNU_HURD\fP, \fBMaxOS::filesystem::format::ext2::MASIX\fP, \fBMaxOS::filesystem::format::ext2::FREE_BSD\fP, \fBMaxOS::filesystem::format::ext2::OTHER_LITES\fP }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::OptionalFeatures\fP { \fBMaxOS::filesystem::format::ext2::PREALLOCATE_DIRECTORY\fP = 0x1, \fBMaxOS::filesystem::format::ext2::AFS_SERVER_INODES\fP = 0x2, \fBMaxOS::filesystem::format::ext2::JOURNAL_ENABLED\fP = 0x4, \fBMaxOS::filesystem::format::ext2::ATTRIBUTES_EXTENDED\fP = 0x8, \fBMaxOS::filesystem::format::ext2::RESIZEABLE\fP = 0x10, \fBMaxOS::filesystem::format::ext2::HASH_INDEXING\fP = 0x20 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::RequiredFeatures\fP { \fBMaxOS::filesystem::format::ext2::COMPRESSION\fP = 0x1, \fBMaxOS::filesystem::format::ext2::DIRECTORY_HAS_TYPE\fP = 0x2, \fBMaxOS::filesystem::format::ext2::MUST_REPLAY_JOURNAL\fP = 0x4, \fBMaxOS::filesystem::format::ext2::JOURNAL_DEVICE\fP = 0x8 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::ReadOnlyFeatures\fP { \fBMaxOS::filesystem::format::ext2::SPARSE_SUPER_BLOCKS\fP = 0x1, \fBMaxOS::filesystem::format::ext2::FILES_64_BIT\fP = 0x2, \fBMaxOS::filesystem::format::ext2::BINARY_TREE_DIRECTORIES\fP = 0x4 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::InodeType\fP { \fBMaxOS::filesystem::format::ext2::UNKNOWN\fP, \fBMaxOS::filesystem::format::ext2::FIFO\fP = 0x1000, \fBMaxOS::filesystem::format::ext2::CHARACTER_DEVICE\fP = 0x2000, \fBMaxOS::filesystem::format::ext2::DIRECTORY\fP = 0x4000, \fBMaxOS::filesystem::format::ext2::BLOCK_DEVICE\fP = 0x6000, \fBMaxOS::filesystem::format::ext2::FILE\fP = 0x8000, \fBMaxOS::filesystem::format::ext2::SYMBOLIC_LINK\fP = 0xA000, \fBMaxOS::filesystem::format::ext2::SOCKET\fP = 0xC000 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::InodePermissions\fP { \fBMaxOS::filesystem::format::ext2::OTHER_EXECUTE\fP = 0x1, \fBMaxOS::filesystem::format::ext2::OTHER_WRITE\fP = 0x2, \fBMaxOS::filesystem::format::ext2::OTHER_READ\fP = 0x4, \fBMaxOS::filesystem::format::ext2::GROUP_EXECUTE\fP = 0x8, \fBMaxOS::filesystem::format::ext2::GROUP_WRITE\fP = 0x10, \fBMaxOS::filesystem::format::ext2::GROUP_READ\fP = 0x20, \fBMaxOS::filesystem::format::ext2::USER_EXECUTE\fP = 0x40, \fBMaxOS::filesystem::format::ext2::USER_WRITE\fP = 0x80, \fBMaxOS::filesystem::format::ext2::USER_READ\fP = 0x100, \fBMaxOS::filesystem::format::ext2::STICKY\fP = 0x200, \fBMaxOS::filesystem::format::ext2::GROUP_ID\fP = 0x400, \fBMaxOS::filesystem::format::ext2::USER_ID\fP = 0x800 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::InodePermissionsDefaults\fP { \fBMaxOS::filesystem::format::ext2::FILE\fP = 0x1A4, \fBMaxOS::filesystem::format::ext2::DIRECTORY\fP = 0x1ED }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::InodeFlags\fP { \fBMaxOS::filesystem::format::ext2::SECURE_DELETE\fP = 0x1, \fBMaxOS::filesystem::format::ext2::KEEP_DATA\fP = 0x2, \fBMaxOS::filesystem::format::ext2::FILE_COMPRESSION\fP = 0x4, \fBMaxOS::filesystem::format::ext2::SYNC_UPDATES\fP = 0x8, \fBMaxOS::filesystem::format::ext2::FILE_IMMUTABLE\fP = 0x10, \fBMaxOS::filesystem::format::ext2::APPEND_ONLY\fP = 0x20, \fBMaxOS::filesystem::format::ext2::DONT_DUMP\fP = 0x40, \fBMaxOS::filesystem::format::ext2::NO_LAST_ACCESS\fP = 0x80, \fBMaxOS::filesystem::format::ext2::HASH_INDEXED\fP = 0x10000, \fBMaxOS::filesystem::format::ext2::AFS_DIRECTORY\fP = 0x20000, \fBMaxOS::filesystem::format::ext2::JOURNAL_FILE_DATA\fP = 0x40000 }"
+.br
+.ti -1c
+.RI "enum class \fBMaxOS::filesystem::format::ext2::EntryType\fP { \fBMaxOS::filesystem::format::ext2::UNKNOWN\fP, \fBMaxOS::filesystem::format::ext2::FILE\fP, \fBMaxOS::filesystem::format::ext2::DIRECTORY\fP, \fBMaxOS::filesystem::format::ext2::CHARACTER_DEVICE\fP, \fBMaxOS::filesystem::format::ext2::BLOCK_DEVICE\fP, \fBMaxOS::filesystem::format::ext2::FIFO\fP, \fBMaxOS::filesystem::format::ext2::SOCKET\fP, \fBMaxOS::filesystem::format::ext2::SYMBOLIC_LINK\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::filesystem::format::ext2::SuperBlock\fP \fBMaxOS::filesystem::format::ext2::__attribute__\fP ((packed)) superblock_t"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBtotal_inodes\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBtotal_blocks\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBreserved_blocks\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBunallocated_blocks\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBunallocated_inodes\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBstarting_block\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBblock_size\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfragment_size\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBblocks_per_group\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfragments_per_group\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinodes_per_group\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlast_mount_time\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlate_write_time\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBmounts_since_check\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBmounts_until_check\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBsignature\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBstate\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBerror_operation\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBversion_minor\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlast_check_time\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBtime_until_check\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBos_id\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBversion_major\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBreserved_user\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBreserved_group\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfirst_inode\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBinode_size\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBsuperblock_group\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBoptional_features\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBrequired_features\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBread_only_features\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBfilesystem_id\fP [16]"
+.br
+.ti -1c
+.RI "uint8_t \fBvolume_name\fP [16]"
+.br
+.ti -1c
+.RI "uint8_t \fBlast_mount_path\fP [64]"
+.br
+.ti -1c
+.RI "uint32_t \fBcompression\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBfile_preallocation_blocks\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBdirectory_preallocation_blocks\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBunused\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBjournal_id\fP [16]"
+.br
+.ti -1c
+.RI "uint32_t \fBjournal_inode\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBjournal_device\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBorphan_inodes_start\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBfree\fP [276]"
+.br
+.ti -1c
+.RI "enum \fBMaxOS::filesystem::format::ext2::FileSystemState\fP \fBMaxOS::filesystem::format::ext2::__attribute__\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBblock_usage_bitmap\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBblock_inode_bitmap\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinode_table_address\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfree_blocks\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBfree_inodes\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBdirectory_count\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   uint16_t \fBtype_permissions\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      uint16_t \fBpermissions\fP: 12"
+.br
+.ti -1c
+.RI "      uint16_t \fBtype\fP: 4"
+.br
+.ti -1c
+.RI "   } "
+.br
+.ti -1c
+.RI "}; "
+.br
+.ti -1c
+.RI "uint16_t \fBuser_id\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsize_lower\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlast_access_time\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBcreation_time\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBlast_modification_time\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBdeletion_time\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBgroup_id\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBhard_links\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsectors_used\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBflags\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBos_1\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBblock_pointers\fP [12]"
+.br
+.ti -1c
+.RI "uint32_t \fBl1_indirect\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBl2_indirect\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBl3_indirect\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBgeneration\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBextended_attribute\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsize_upper\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBos_2\fP [3]"
+.br
+.ti -1c
+.RI "uint8_t \fBfragment\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBhigh_type_permissions\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBhigh_user_id\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBhigh_group_id\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBauthor_id\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinode\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBsize\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBname_length\fP"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "union  { \&.\&.\&. } "
+
+.SS "uint32_t author_id"
+
+.PP
+Definition at line \fB5\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t block_inode_bitmap"
+
+.PP
+Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t block_pointers[12]"
+
+.PP
+Definition at line \fB18\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t block_size"
+
+.PP
+Definition at line \fB6\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
+.SS "uint32_t block_usage_bitmap"
+
+.PP
+Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t blocks_per_group"
+
+.PP
+Definition at line \fB8\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t compression"
+
+.PP
+Definition at line \fB36\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t creation_time"
+
+.PP
+Definition at line \fB10\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t deletion_time"
+
+.PP
+Definition at line \fB12\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t directory_count"
+
+.PP
+Definition at line \fB5\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t directory_preallocation_blocks"
+
+.PP
+Definition at line \fB38\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t error_operation"
+
+.PP
+Definition at line \fB17\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t extended_attribute"
+
+.PP
+Definition at line \fB23\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t file_preallocation_blocks"
+
+.PP
+Definition at line \fB37\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t filesystem_id[16]"
+
+.PP
+Definition at line \fB33\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t first_inode"
+
+.PP
+Definition at line \fB27\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t flags"
+
+.PP
+Definition at line \fB16\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t fragment"
+
+.PP
+Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t fragment_size"
+
+.PP
+Definition at line \fB7\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t fragments_per_group"
+
+.PP
+Definition at line \fB9\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t free"
+
+.PP
+Definition at line \fB44\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t free_blocks"
+
+.PP
+Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Volume::allocate_blocks()\fP\&.
+.SS "uint16_t free_inodes"
+
+.PP
+Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t generation"
+
+.PP
+Definition at line \fB22\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t group_id"
+
+.PP
+Definition at line \fB13\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t hard_links"
+
+.PP
+Definition at line \fB14\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t high_group_id"
+
+.PP
+Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t high_type_permissions"
+
+.PP
+Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t high_user_id"
+
+.PP
+Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t inode"
+
+.PP
+Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::create_inode()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::free_inode()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_inode()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_inode()\fP\&.
+.SS "uint16_t inode_size"
+
+.PP
+Definition at line \fB28\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t inode_table_address"
+
+.PP
+Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t inodes_per_group"
+
+.PP
+Definition at line \fB10\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t journal_device"
+
+.PP
+Definition at line \fB42\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t journal_id[16]"
+
+.PP
+Definition at line \fB40\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t journal_inode"
+
+.PP
+Definition at line \fB41\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t l1_indirect"
+
+.PP
+Definition at line \fB19\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t l2_indirect"
+
+.PP
+Definition at line \fB20\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t l3_indirect"
+
+.PP
+Definition at line \fB21\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t last_access_time"
+
+.PP
+Definition at line \fB9\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t last_check_time"
+
+.PP
+Definition at line \fB19\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t last_modification_time"
+
+.PP
+Definition at line \fB11\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t last_mount_path[64]"
+
+.PP
+Definition at line \fB35\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t last_mount_time"
+
+.PP
+Definition at line \fB11\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t late_write_time"
+
+.PP
+Definition at line \fB12\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t mounts_since_check"
+
+.PP
+Definition at line \fB13\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t mounts_until_check"
+
+.PP
+Definition at line \fB14\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t name_length"
+
+.PP
+Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t optional_features"
+
+.PP
+Definition at line \fB30\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t orphan_inodes_start"
+
+.PP
+Definition at line \fB43\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t os_1"
+
+.PP
+Definition at line \fB17\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t os_2[3]"
+
+.PP
+Definition at line \fB25\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t os_id"
+
+.PP
+Definition at line \fB21\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t permissions"
+
+.PP
+Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t read_only_features"
+
+.PP
+Definition at line \fB32\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t required_features"
+
+.PP
+Definition at line \fB31\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t reserved_blocks"
+
+.PP
+Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t reserved_group"
+
+.PP
+Definition at line \fB24\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t reserved_user"
+
+.PP
+Definition at line \fB23\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t sectors_used"
+
+.PP
+Definition at line \fB15\fP of file \fBext2\&.h\fP\&.
+.SS "char signature"
+
+.PP
+Definition at line \fB15\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP\&.
+.SS "uint16_t size"
+
+.PP
+Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::MemoryManager::align()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_direct_to_page()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_to_page()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_up_to_page()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_area()\fP, \fBMaxOS::common::Buffer::Buffer()\fP, \fBMaxOS::common::Buffer::Buffer()\fP, \fBMaxOS::memory::PhysicalMemoryManager::check_aligned()\fP, \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::DoSend()\fP, \fBMaxOS::drivers::ethernet::intel_i217::DoSend()\fP, \fBMaxOS::drivers::ethernet::EthernetDriver::FireDataReceived()\fP, \fBMaxOS::drivers::ethernet::EthernetDriver::FireDataSent()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, \fBMaxOS::memory::MemoryManager::handle_malloc()\fP, \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolSocket::handleUserDatagramProtocolPayload()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBMaxOS::drivers::ethernet::EthernetDriverEventHandler::on_event()\fP, \fBMaxOS::net::TransmissionControlProtocolPayloadHandler::on_event()\fP, \fBMaxOS::net::UserDatagramProtocolPayloadHandler::on_event()\fP, \fBoperator new()\fP, \fBoperator new[]()\fP, \fBMaxOS::filesystem::FileResource::read()\fP, \fBMaxOS::filesystem::DirectoryResource::read()\fP, \fBMaxOS::processes::SharedMessageEndpoint::read()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::common::Buffer::resize()\fP, \fBMaxOS::net::InternetProtocolPayloadHandler::Send()\fP, \fBMaxOS::net::EthernetFramePayloadHandler::Send()\fP, \fBMaxOS::drivers::ethernet::EthernetDriver::Send()\fP, \fBMaxOS::net::TransmissionControlProtocolSocket::Send()\fP, \fBMaxOS::net::UserDatagramProtocolSocket::Send()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::system::SyscallManager::syscall_allocate_memory()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_read()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_write()\fP, \fBMaxOS::common::Vector< Type >::Vector()\fP, \fBMaxOS::filesystem::FileResource::write()\fP, \fBMaxOS::filesystem::DirectoryResource::write()\fP, and \fBMaxOS::processes::SharedMessageEndpoint::write()\fP\&.
+.SS "uint32_t size_lower"
+
+.PP
+Definition at line \fB8\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t size_upper"
+
+.PP
+Definition at line \fB24\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t starting_block"
+
+.PP
+Definition at line \fB5\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t state"
+
+.PP
+Definition at line \fB16\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::Connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Listen()\fP, and \fBMaxOS::drivers::peripherals::KeyboardInterpreter::on_key_read()\fP\&.
+.SS "uint16_t superblock_group"
+
+.PP
+Definition at line \fB29\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t time_until_check"
+
+.PP
+Definition at line \fB20\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t total_blocks"
+
+.PP
+Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t total_inodes"
+
+.PP
+Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t type"
+
+.PP
+Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::GlobalResourceRegistry::add_registry()\fP, \fBMaxOS::common::Event< EventType >::Event()\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::processes::Elf64::is_valid()\fP, \fBMaxOS::drivers::ethernet::EthernetDriverEventHandler::on_event()\fP, \fBMaxOS::net::TransmissionControlProtocolPayloadHandler::on_event()\fP, \fBMaxOS::net::UserDatagramProtocolPayloadHandler::on_event()\fP, \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP, \fBMaxOS::processes::ResourceManager::open_resource()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP, and \fBMaxOS::processes::Elf64::to_vmm_flags()\fP\&.
+.SS "uint16_t type_permissions"
+
+.PP
+Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t unallocated_blocks"
+
+.PP
+Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t unallocated_inodes"
+
+.PP
+Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t unused"
+
+.PP
+Definition at line \fB39\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t user_id"
+
+.PP
+Definition at line \fB7\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t version_major"
+
+.PP
+Definition at line \fB22\fP of file \fBext2\&.h\fP\&.
+.SS "uint16_t version_minor"
+
+.PP
+Definition at line \fB18\fP of file \fBext2\&.h\fP\&.
+.SS "uint8_t volume_name[16]"
+
+.PP
+Definition at line \fB34\fP of file \fBext2\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

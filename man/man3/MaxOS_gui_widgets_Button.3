@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::widgets::Button" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::widgets::Button" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,23 +15,153 @@ Inherits \fBMaxOS::gui::Widget\fP, and \fBMaxOS::common::EventManager< ButtonEve
 
 .in +1c
 .ti -1c
-.RI "\fBButton\fP (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP \fBtext\fP)"
+.RI "\fBButton\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height, \fBconst\fP \fBstring\fP &\fBtext\fP)"
 .br
 .ti -1c
 .RI "\fB~Button\fP ()"
 .br
 .ti -1c
-.RI "void \fBdraw\fP (\fBcommon::GraphicsContext\fP *gc, \fBcommon::Rectangle\fP< int32_t > &area) override"
+.RI "\fBvoid\fP \fBdraw\fP (\fBcommon::GraphicsContext\fP *\fBgc\fP, \fBcommon::Rectangle\fP< \fBint32_t\fP > &\fBarea\fP) \fBoverride\fP"
 .br
 .RI "Draws the button\&. "
 .ti -1c
-.RI "\fBdrivers::peripherals::MouseEventHandler\fP * \fBon_mouse_button_pressed\fP (uint32_t x, uint32_t y, uint8_t button) override"
+.RI "\fBdrivers::peripherals::MouseEventHandler\fP * \fBon_mouse_button_pressed\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP button) \fBoverride\fP"
 .br
 .RI "Handles the mouse button pressed event\&. "
 .ti -1c
-.RI "void \fBon_mouse_button_released\fP (uint32_t x, uint32_t y, uint8_t button) override"
+.RI "\fBvoid\fP \fBon_mouse_button_released\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP button) \fBoverride\fP"
 .br
 .RI "Handles the mouse button released event\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
+.in +1c
+.ti -1c
+.RI "\fBWidget\fP ()"
+.br
+.ti -1c
+.RI "\fBWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
+.br
+.ti -1c
+.RI "\fB~Widget\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBinvalidate\fP ()"
+.br
+.RI "Invalidates the entire widget\&. This forces the widget to be redrawn on the next screen update\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBinvalidate\fP (\fBcommon::Rectangle\fP< \fBint32_t\fP > &\fBarea\fP)"
+.br
+.RI "Invalidates a specific area of the widget\&. This forces that part of the screen to be redrawn on the next screen update\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBadd_child\fP (\fBWidget\fP *\fBchild\fP)"
+.br
+.RI "Set the parent of a widget to this widget, making it into a child\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBcommon::Coordinates\fP \fBabsolute_coordinates\fP (\fBcommon::Coordinates\fP \fBcoordinates\fP)"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBbool\fP \fBcontains_coordinate\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Check if the widget contains a specific coordinate\&. "
+.ti -1c
+.RI "\fBcommon::Rectangle\fP< \fBint32_t\fP > \fBposition\fP ()"
+.br
+.RI "Get the position of the widget\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBmove\fP (\fBint32_t\fP left, \fBint32_t\fP top)"
+.br
+.RI "Set the position of the widget, and invalidate the old and new positions so they are redrawn\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBresize\fP (\fBint32_t\fP width, \fBint32_t\fP height)"
+.br
+.RI "Set the size of the widget, and invalidate the old and new positions so they are redrawn\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfocus\fP ()"
+.br
+.RI "Set the current focused widget to be this widget\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_focus\fP ()"
+.br
+.RI "Handles the event when the widget is focussed\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_focus_lost\fP ()"
+.br
+.RI "Handles the event when the widget is unfocused\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBbring_to_front\fP ()"
+.br
+.RI "Brings this widget to the front of the screen\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP)"
+.br
+.RI "Handles the event when the mouse is moved on to the widget\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP)"
+.br
+.RI "Handles the event when the mouse is moved out of the widget\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP, \fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP)"
+.br
+.RI "Handles the event when the mouse is moved over the widget\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBKeyboardEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fB~KeyboardEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
+.br
+.RI "Handle the trigger of an event\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_down\fP (\fBKeyCode\fP, \fBKeyboardState\fP)"
+.br
+.RI "Handle the key down event\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_up\fP (\fBKeyCode\fP, \fBKeyboardState\fP)"
+.br
+.RI "Handle the key up event\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< KeyboardEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBEventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fB~EventHandler\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBEvent\fP< KeyboardEvents > * \fBon_event\fP (\fBEvent\fP< KeyboardEvents > *\fBevent\fP)"
+.br
+.RI "This function is called when an event is raised\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventManager< ButtonEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBEventManager\fP ()"
+.br
+.ti -1c
+.RI "\fB~EventManager\fP ()"
+.br
+.ti -1c
+.RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< ButtonEvents > *\fBhandler\fP)"
+.br
+.RI "Connect an event handler to the event manager if it is not already connected\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< ButtonEvents > *\fBhandler\fP)"
+.br
+.RI "Disconnect an event handler from the event manager if it is connected\&. "
+.ti -1c
+.RI "\fBVector\fP< \fBEvent\fP< ButtonEvents > * > \fBraise_event\fP (\fBEvent\fP< ButtonEvents > *\fBevent\fP)"
+.br
+.RI "Calls the on_event function of all the event m_handlers connected to the event manager and returns a list of the results\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -53,42 +183,76 @@ Inherits \fBMaxOS::gui::Widget\fP, and \fBMaxOS::common::EventManager< ButtonEve
 .br
 .in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::gui::Widget\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBset_focus\fP (\fBWidget\fP *)"
+.br
+.RI "Sets the widget that is currently focussed\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBbring_to_front\fP (\fBWidget\fP *)"
+.br
+.RI "Brings a specific widget to the front of the screen\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::gui::Widget\fP
+.in +1c
+.ti -1c
+.RI "\fBWidget\fP * \fBm_parent\fP { nullptr }"
+.br
+.ti -1c
+.RI "bool \fBm_valid\fP { false }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_min_width\fP { 5 }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_min_height\fP { 5 }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_max_width\fP { 0x8FFFFFFF }"
+.br
+.ti -1c
+.RI "uint32_t \fBm_max_height\fP { 0x8FFFFFFF }"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::EventManager< ButtonEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBVector\fP< \fBEventHandler\fP< ButtonEvents > * > \fBm_handlers\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 A button widget, can be clicked\&. 
 .PP
-Definition at line 71 of file button\&.h\&.
+Definition at line \fB71\fP of file \fBbutton\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Button::Button (int32_t left, int32_t top, uint32_t width, uint32_t height, \fBstring\fP text)"
+.SS "Button::Button (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height, \fBconst\fP \fBstring\fP & text)"
 
 .PP
-Definition at line 70 of file button\&.cpp\&.
-.PP
+Definition at line \fB57\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-71 : Widget(left, top, width, height),
-72   background_colour(Colour(0xFF, 0xFF, 0xFF)),
-73   foreground_colour(Colour(0x00, 0x00, 0x00)),
-74   border_colour(Colour(0x57, 0x57, 0x57)),
-75   font((uint8_t*)AMIGA_FONT),
-76   text(text)
-77 {
-78 
-79 }
+58 : Widget(left, top, width, height),
+59   background_colour(Colour(0xFF, 0xFF, 0xFF)),
+60   foreground_colour(Colour(0x00, 0x00, 0x00)),
+61   border_colour(Colour(0x57, 0x57, 0x57)),
+62   font((uint8_t*) AMIGA_FONT),
+63   text(text)
+64 {
+65 
+66 }
 .fi
-.SS "Button::~Button ()"
 
-.PP
-Definition at line 81 of file button\&.cpp\&.
-.PP
-.nf
-81                 {
-82 
-83 }
-.fi
+.SS "Button::~Button ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void Button::draw (\fBcommon::GraphicsContext\fP * gc, \fBcommon::Rectangle\fP< int32_t > & area)\fC [override]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP Button::draw (\fBcommon::GraphicsContext\fP * gc, \fBcommon::Rectangle\fP< \fBint32_t\fP > & area)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Draws the button\&. 
@@ -104,72 +268,72 @@ Draws the button\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line 91 of file button\&.cpp\&.
-.PP
+Definition at line \fB76\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-91                                                                {
+76                                                                {
+77 
+78     // Default Draw Operation
+79     Widget::draw(gc, area);
+80 
+81     // Get the absolute m_position of the button
+82     Coordinates buttonCoordinates = absolute_coordinates(Coordinates(0, 0));
+83     Rectangle<int32_t> buttonPosition = position();
+84 
+85     // Get the x and y m_position of the button
+86     int32_t x = buttonCoordinates\&.first;
+87     int32_t y = buttonCoordinates\&.second;
+88 
+89     // Draw the background for the button
+90     gc\->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width,
+91                        y + area\&.top + area\&.height, background_colour);
 92 
-93     // Default Draw Operation
-94     Widget::draw(gc, area);
-95 
-96     // Get the absolute m_position of the button
-97     Coordinates buttonCoordinates = absolute_coordinates(Coordinates(0, 0));
-98     Rectangle<int32_t> buttonPosition = position();
-99 
-100     // Get the x and y m_position of the button
-101     int32_t x = buttonCoordinates\&.first;
-102     int32_t y = buttonCoordinates\&.second;
-103 
-104     // Draw the background for the button
-105     gc->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width,
-106                        y + area\&.top + area\&.height, background_colour);
-107 
-108     // Draw the border  (TODO: Make a border class?? Window uses it too)
-109 
-110     // Top Border
-111     if(area\&.intersects(Rectangle<int32_t>(0,0,buttonPosition\&.width,1))){
-112 
-113         // Start in the top left corner of the button and end in the top right corner
-114         gc->draw_line(x + area\&.left, y, x + area\&.left + area\&.width - 1, y,
-115                       border_colour);
-116     }
-117 
-118     // Left Border
-119     if(area\&.intersects(Rectangle<int32_t>(0,0,1,buttonPosition\&.height))){
-120 
-121         // Start in the top left corner and end in the bottom left corner
-122         gc->draw_line(x, y + area\&.top, x, y + area\&.top + area\&.height - 1,
-123                       border_colour);
-124     }
-125 
-126     // Right Border
-127     if(area\&.intersects(Rectangle<int32_t>(0,buttonPosition\&.height - 1,buttonPosition\&.width,1))){
+93     // Draw the border  (TODO: Make a border class?? Window uses it too)
+94 
+95     // Top Border
+96     if (area\&.intersects(Rectangle<int32_t>(0, 0, buttonPosition\&.width, 1))) {
+97 
+98         // Start in the top left corner of the button and end in the top right corner
+99         gc\->draw_line(x + area\&.left, y, x + area\&.left + area\&.width \- 1, y,
+100                       border_colour);
+101     }
+102 
+103     // Left Border
+104     if (area\&.intersects(Rectangle<int32_t>(0, 0, 1, buttonPosition\&.height))) {
+105 
+106         // Start in the top left corner and end in the bottom left corner
+107         gc\->draw_line(x, y + area\&.top, x, y + area\&.top + area\&.height \- 1,
+108                       border_colour);
+109     }
+110 
+111     // Right Border
+112     if (area\&.intersects(Rectangle<int32_t>(0, buttonPosition\&.height \- 1, buttonPosition\&.width, 1))) {
+113 
+114         // Start in the top right corner and end in the bottom right corner
+115         gc\->draw_line(x + area\&.left, y + buttonPosition\&.height \- 1,
+116                       x + area\&.left + area\&.width \- 1,
+117                       y + buttonPosition\&.height \- 1, border_colour);
+118     }
+119 
+120     // Bottom Border
+121     if (area\&.intersects(Rectangle<int32_t>(buttonPosition\&.width \- 1, 0, 1, buttonPosition\&.height))) {
+122 
+123         // Start in the bottom left corner and end in the bottom right corner
+124         gc\->draw_line(x + buttonPosition\&.width \- 1, y + area\&.top,
+125                       x + buttonPosition\&.width \- 1,
+126                       y + area\&.top + area\&.height \- 1, border_colour);
+127     }
 128 
-129         // Start in the top right corner and end in the bottom right corner
-130         gc->draw_line(x + area\&.left, y + buttonPosition\&.height - 1,
-131                       x + area\&.left + area\&.width - 1,
-132                       y + buttonPosition\&.height - 1, border_colour);
-133     }
-134 
-135     // Bottom Border
-136     if(area\&.intersects(Rectangle<int32_t>(buttonPosition\&.width - 1,0,1,buttonPosition\&.height))){
-137 
-138         // Start in the bottom left corner and end in the bottom right corner
-139         gc->draw_line(x + buttonPosition\&.width - 1, y + area\&.top,
-140                       x + buttonPosition\&.width - 1,
-141                       y + area\&.top + area\&.height - 1, border_colour);
-142     }
-143 
-144     // Draw the text
-145     common::Rectangle<int32_t> textArea(area\&.left - 1, area\&.top - 1, area\&.width, area\&.height);
-146     font\&.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, text,
-147                    textArea);
-148 
-149 }
+129     // Draw the text
+130     common::Rectangle<int32_t> textArea(area\&.left \- 1, area\&.top \- 1, area\&.width, area\&.height);
+131     font\&.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, text,
+132                    textArea);
+133 
+134 }
 .fi
+
 .PP
-References MaxOS::gui::Widget::absolute_coordinates(), background_colour, border_colour, MaxOS::gui::Widget::draw(), MaxOS::common::GraphicsContext::draw_line(), MaxOS::gui::Font::draw_text(), MaxOS::common::GraphicsContext::fill_rectangle(), MaxOS::common::Pair< First, Second >::first, font, foreground_colour, MaxOS::common::Rectangle< Type >::height, MaxOS::common::Rectangle< Type >::intersects(), MaxOS::common::Rectangle< Type >::left, MaxOS::gui::Widget::position(), MaxOS::common::Pair< First, Second >::second, text, MaxOS::common::Rectangle< Type >::top, MaxOS::common::Rectangle< Type >::width, MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "\fBMouseEventHandler\fP * Button::on_mouse_button_pressed (uint32_t x, uint32_t y, uint8_t button)\fC [override]\fP, \fC [virtual]\fP"
+References \fBMaxOS::gui::Widget::absolute_coordinates()\fP, \fBbackground_colour\fP, \fBborder_colour\fP, \fBMaxOS::gui::Widget::draw()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBfont\fP, \fBforeground_colour\fP, \fBMaxOS::common::Rectangle< Type >::height\fP, \fBMaxOS::common::Rectangle< Type >::intersects()\fP, \fBMaxOS::common::Rectangle< Type >::left\fP, \fBMaxOS::gui::Widget::position()\fP, \fBtext\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, \fBMaxOS::common::Rectangle< Type >::width\fP, \fBMaxOS::drivers::peripherals::x\fP, and \fBMaxOS::drivers::peripherals::y\fP\&.
+.SS "\fBMouseEventHandler\fP * Button::on_mouse_button_pressed (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP button)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Handles the mouse button pressed event\&. 
@@ -192,25 +356,25 @@ The mouse event handler
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line 159 of file button\&.cpp\&.
-.PP
+Definition at line \fB144\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-159                                                                                          {
-160 
-161     // Raise the event
-162     raise_event(new ButtonPressedEvent(this));
-163 
-164     // Change the button colour
-165     background_colour = Colour(0x57, 0x57, 0x57);
-166     Widget::invalidate();
-167 
-168     // Pass the event on (that it was handled)
-169     return Widget::on_mouse_button_pressed(x, y, button);
-170 }
+144                                                                                          {
+145 
+146     // Raise the event
+147     raise_event(new ButtonPressedEvent(this));
+148 
+149     // Change the button colour
+150     background_colour = Colour(0x57, 0x57, 0x57);
+151     Widget::invalidate();
+152 
+153     // Pass the event on (that it was handled)
+154     return Widget::on_mouse_button_pressed(x, y, button);
+155 }
 .fi
+
 .PP
-References background_colour, MaxOS::gui::Widget::invalidate(), MaxOS::gui::Widget::on_mouse_button_pressed(), MaxOS::common::EventManager< ButtonEvents >::raise_event(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "void Button::on_mouse_button_released (uint32_t x, uint32_t y, uint8_t button)\fC [override]\fP, \fC [virtual]\fP"
+References \fBbackground_colour\fP, \fBMaxOS::gui::Widget::invalidate()\fP, \fBMaxOS::gui::Widget::on_mouse_button_pressed()\fP, \fBMaxOS::common::EventManager< ButtonEvents >::raise_event()\fP, \fBMaxOS::drivers::peripherals::x\fP, and \fBMaxOS::drivers::peripherals::y\fP\&.
+.SS "\fBvoid\fP Button::on_mouse_button_released (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP button)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Handles the mouse button released event\&. 
@@ -228,56 +392,56 @@ Handles the mouse button released event\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line 179 of file button\&.cpp\&.
-.PP
+Definition at line \fB164\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-179                                                                             {
-180 
-181     // Raise the button released event
-182     raise_event(new ButtonReleasedEvent(this));
-183 
-184     // Change the button colour
-185     background_colour = Colour(0xFF, 0xFF, 0xFF);
-186     Widget::invalidate();
-187 
-188     // Pass the event on (that it was handled)
-189     Widget::on_mouse_button_released(x, y, button);
-190 }
+164                                                                             {
+165 
+166     // Raise the button released event
+167     raise_event(new ButtonReleasedEvent(this));
+168 
+169     // Change the button colour
+170     background_colour = Colour(0xFF, 0xFF, 0xFF);
+171     Widget::invalidate();
+172 
+173     // Pass the event on (that it was handled)
+174     Widget::on_mouse_button_released(x, y, button);
+175 }
 .fi
+
 .PP
-References background_colour, MaxOS::gui::Widget::invalidate(), MaxOS::gui::Widget::on_mouse_button_released(), MaxOS::common::EventManager< ButtonEvents >::raise_event(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References \fBbackground_colour\fP, \fBMaxOS::gui::Widget::invalidate()\fP, \fBMaxOS::gui::Widget::on_mouse_button_released()\fP, \fBMaxOS::common::EventManager< ButtonEvents >::raise_event()\fP, \fBMaxOS::drivers::peripherals::x\fP, and \fBMaxOS::drivers::peripherals::y\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBcommon::Colour\fP MaxOS::gui::widgets::Button::background_colour"
 
 .PP
-Definition at line 83 of file button\&.h\&.
+Definition at line \fB83\fP of file \fBbutton\&.h\fP\&.
 .PP
-Referenced by draw(), on_mouse_button_pressed(), and on_mouse_button_released()\&.
+Referenced by \fBdraw()\fP, \fBon_mouse_button_pressed()\fP, and \fBon_mouse_button_released()\fP\&.
 .SS "\fBcommon::Colour\fP MaxOS::gui::widgets::Button::border_colour"
 
 .PP
-Definition at line 85 of file button\&.h\&.
+Definition at line \fB85\fP of file \fBbutton\&.h\fP\&.
 .PP
-Referenced by draw()\&.
+Referenced by \fBdraw()\fP\&.
 .SS "\fBgui::Font\fP MaxOS::gui::widgets::Button::font"
 
 .PP
-Definition at line 86 of file button\&.h\&.
+Definition at line \fB86\fP of file \fBbutton\&.h\fP\&.
 .PP
-Referenced by draw()\&.
+Referenced by \fBdraw()\fP\&.
 .SS "\fBcommon::Colour\fP MaxOS::gui::widgets::Button::foreground_colour"
 
 .PP
-Definition at line 84 of file button\&.h\&.
+Definition at line \fB84\fP of file \fBbutton\&.h\fP\&.
 .PP
-Referenced by draw()\&.
+Referenced by \fBdraw()\fP\&.
 .SS "\fBstring\fP MaxOS::gui::widgets::Button::text"
 
 .PP
-Definition at line 87 of file button\&.h\&.
+Definition at line \fB87\fP of file \fBbutton\&.h\fP\&.
 .PP
-Referenced by draw()\&.
+Referenced by \fBdraw()\fP\&.
 
 .SH "Author"
 .PP 

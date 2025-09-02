@@ -15,6 +15,6 @@ var classMaxOS_1_1net_1_1TransmissionControlProtocolSocket =
     [ "remoteIP", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#a93efe470d103af1389c0bd02db9d096d", null ],
     [ "remotePort", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#acb38c8369547039ca9377038aa2601a5", null ],
     [ "sequenceNumber", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#af44a1b36503c0077f77d73a070ed56c6", null ],
-    [ "state", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#a1da79c5f89ba40d443231610968e8fe8", null ],
+    [ "state", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#aa5b492bf6a6eb8f4132b1b3ff13bdd3a", null ],
     [ "transmissionControlProtocolHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html#a13bfbbc89df0c3aacd6e67b20b00d08e", null ]
 ];

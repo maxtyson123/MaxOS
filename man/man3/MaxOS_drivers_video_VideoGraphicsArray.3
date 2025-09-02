@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoGraphicsArray" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoGraphicsArray" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,17 +21,146 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .RI "\fB~VideoGraphicsArray\fP ()"
 .br
 .ti -1c
-.RI "\fBstring\fP \fBget_vendor_name\fP () final"
+.RI "\fBstring\fP \fBvendor_name\fP () final"
 .br
 .RI "Gets the name of the vendor\&. "
 .ti -1c
-.RI "\fBstring\fP \fBget_device_name\fP () final"
+.RI "\fBstring\fP \fBdevice_name\fP () final"
 .br
 .RI "Gets the name of the device\&. "
 .ti -1c
-.RI "bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t colour_depth) final"
+.RI "bool \fBsupports_mode\fP (uint32_t \fBwidth\fP, uint32_t \fBheight\fP, uint32_t colour_depth) final"
 .br
 .RI "Checks if the specified resolution is supported\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::video::VideoDriver\fP
+.in +1c
+.ti -1c
+.RI "\fBVideoDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~VideoDriver\fP ()"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolorDepth\fP)"
+.br
+.RI "Set the mode of the video driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
+.in +1c
+.ti -1c
+.RI "\fBDriver\fP ()"
+.br
+.ti -1c
+.RI "\fB~Driver\fP ()"
+.br
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
+.br
+.RI "activate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
+.br
+.RI "deactivate the driver "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
+.br
+.RI "Initialise the driver\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fB~GraphicsContext\fP ()"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
+.br
+.RI "Converts a colour to an integer value based on the current color depth\&. "
+.ti -1c
+.RI "\fBColour\fP \fBint_to_colour\fP (\fBuint32_t\fP)"
+.br
+.RI "Converts an integer value to a colour based on the current color depth\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBwidth\fP () \fBconst\fP"
+.br
+.RI "Gets the width of the screen\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBheight\fP () \fBconst\fP"
+.br
+.RI "Gets the height of the screen\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBcolor_depth\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBframebuffer_address\fP ()"
+.br
+.RI "Gets the address of the context's framebuffer to draw on\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
+.ti -1c
+.RI "\fBvoid\fP \fBputPixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
+.ti -1c
+.RI "\fBColour\fP \fBget_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.br
+.RI "Inverts a pixel\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdrawLine\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a line on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a rectangle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a rectangle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a circle on the screen\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBfillCircle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.br
+.RI "Draws a circle on the screen, filled with a colour\&. "
 .in -1c
 .SS "Protected Member Functions"
 
@@ -45,7 +174,7 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .br
 .RI "This function is used to get the framebuffer address\&. "
 .ti -1c
-.RI "bool \fBinternal_set_mode\fP (uint32_t width, uint32_t height, uint32_t colour_depth) final"
+.RI "bool \fBinternal_set_mode\fP (uint32_t \fBwidth\fP, uint32_t \fBheight\fP, uint32_t colour_depth) final"
 .br
 .RI "Set the resolution of the screen\&. "
 .ti -1c
@@ -56,6 +185,42 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .RI "uint8_t \fBget_rendered_pixel_8_bit\fP (uint32_t x, uint32_t y) final"
 .br
 .RI "Gets a 8 bit pixel from the screen\&. "
+.in -1c
+
+Protected Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen based on the current color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_16_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint16_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_24_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBrender_pixel_32_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
+.br
+.RI "Renders a pixel to the screen using the 32 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen, automatically uses the correct color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint16_t\fP \fBget_rendered_pixel_16_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 16 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel_24_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 24 bit color depth\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBuint32_t\fP \fBget_rendered_pixel_32_bit\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
+.br
+.RI "Gets the colour of a pixel on the screen using the 32 bit color depth\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -94,19 +259,39 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .RI "\fBhardwarecommunication::Port8Bit\fP \fBm_attribute_controller_reset_port\fP"
 .br
 .in -1c
-.SS "Additional Inherited Members"
+
+Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
+.in +1c
+.ti -1c
+.RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
+.br
+.ti -1c
+.RI "\fBint32_t\fP \fBm_width\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBint32_t\fP \fBm_height\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBm_color_depth\fP { 0 }"
+.br
+.ti -1c
+.RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBm_framebuffer_address\fP { \fBnullptr\fP }"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the VGA graphics controller, handles the rendering of pixels to the screen\&. 
 .PP
-Definition at line 24 of file vga\&.h\&.
+Definition at line \fB24\fP of file \fBvga\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "VideoGraphicsArray::VideoGraphicsArray ()"
 
 .PP
-Definition at line 14 of file vga\&.cpp\&.
-.PP
+Definition at line \fB14\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
 15 : m_misc_port(0x3C2),
 16   m_crtc_index_port(0x3D4),
@@ -122,19 +307,12 @@ Definition at line 14 of file vga\&.cpp\&.
 26 {
 27 }
 .fi
-.SS "VideoGraphicsArray::~VideoGraphicsArray ()"
 
-.PP
-Definition at line 29 of file vga\&.cpp\&.
-.PP
-.nf
-29                                         {
-30 
-31 }
-.fi
+.SS "VideoGraphicsArray::~VideoGraphicsArray ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBstring\fP VideoGraphicsArray::get_device_name ()\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBstring\fP VideoGraphicsArray::device_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Gets the name of the device\&. 
@@ -148,13 +326,13 @@ The name of the device\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line 207 of file vga\&.cpp\&.
-.PP
+Definition at line \fB197\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-207                                            {
-208     return "VGA compatible graphics card";
-209 }
+197                                        {
+198     return "VGA compatible graphics card";
+199 }
 .fi
+
 .SS "uint8_t * VideoGraphicsArray::get_frame_buffer_segment ()\fC [protected]\fP"
 
 .PP
@@ -167,32 +345,36 @@ The framebuffer address\&.
 .PP
 
 .PP
-Definition at line 140 of file vga\&.cpp\&.
-.PP
+Definition at line \fB132\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-141 {
-142 
-143     // Optimise so that dont have to read and write to the port every time
-144     return (uint8_t*)0xA0000;
-145 
-146     //read data from index number 6
-147     m_graphics_controller_index_port\&.write(0x06);
-148     uint8_t segmentNumber =
-149         m_graphics_controller_data_port\&.read() & (3<<2); //Shift by 2 as only intrested in bits 3 & 4 (& 3 so all the other bits are removed)
-150     switch(segmentNumber)
-151     {
-152         default:
-153         case 0<<2: return (uint8_t*)0x00000;
-154         case 1<<2: return (uint8_t*)0xA0000;
-155         case 2<<2: return (uint8_t*)0xB0000;
-156         case 3<<2: return (uint8_t*)0xB8000;
-157     }
-158 }
+132                                                       {
+133 
+134     // Optimise so that don't have to read and write to the port every time
+135     return (uint8_t *) 0xA0000;
+136 
+137     //read data from index number 6
+138     m_graphics_controller_index_port\&.write(0x06);
+139     uint8_t segmentNumber =
+140             m_graphics_controller_data_port\&.read() &
+141             (3 << 2); //Shift by 2 as only interested in bits 3 & 4 (& 3 so all the other bits are removed)
+142     switch (segmentNumber) {
+143         default:
+144         case 0 << 2:
+145             return (uint8_t *) nullptr;
+146         case 1 << 2:
+147             return (uint8_t *) 0xA0000;
+148         case 2 << 2:
+149             return (uint8_t *) 0xB0000;
+150         case 3 << 2:
+151             return (uint8_t *) 0xB8000;
+152     }
+153 }
 .fi
+
 .PP
-References m_graphics_controller_data_port, m_graphics_controller_index_port, MaxOS::hardwarecommunication::Port8Bit::read(), and MaxOS::hardwarecommunication::Port8Bit::write()\&.
+References \fBm_graphics_controller_data_port\fP, \fBm_graphics_controller_index_port\fP, \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
 .PP
-Referenced by get_rendered_pixel_8_bit(), and render_pixel_8_bit()\&.
+Referenced by \fBget_rendered_pixel_8_bit()\fP, and \fBrender_pixel_8_bit()\fP\&.
 .SS "uint8_t VideoGraphicsArray::get_rendered_pixel_8_bit (uint32_t x, uint32_t y)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
@@ -214,41 +396,17 @@ The colour of the pixel\&.
 .PP
 Reimplemented from \fBMaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 184 of file vga\&.cpp\&.
-.PP
+Definition at line \fB175\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-184                                                                            {
-185 
-186     // Get the address of the pixel
-187     uint8_t*pixel_address = get_frame_buffer_segment() + 320*y + x;
-188 
-189     // Return the pixel
-190     return *pixel_address;
-191 }
+175                                                                            {
+176 
+177     uint8_t *pixel_address = get_frame_buffer_segment() + 320 * y + x;
+178     return *pixel_address;
+179 }
 .fi
-.PP
-References get_frame_buffer_segment(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
-.SS "\fBstring\fP VideoGraphicsArray::get_vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Gets the name of the vendor\&. 
-.PP
-\fBReturns\fP
-.RS 4
-The name of the vendor\&. 
-.RE
-.PP
-
-.PP
-Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
-.PP
-Definition at line 198 of file vga\&.cpp\&.
-.PP
-.nf
-198                                            {
-199     return "IBM"; // VGA was made by IBM
-200 }
-.fi
+References \fBget_frame_buffer_segment()\fP\&.
 .SS "bool VideoGraphicsArray::internal_set_mode (uint32_t width, uint32_t height, uint32_t colour_depth)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
@@ -272,40 +430,38 @@ True if the card was able to set the resolution, otherwise false\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 105 of file vga\&.cpp\&.
-.PP
+Definition at line \fB100\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-106 {
-107     if(!supports_mode(width, height, colour_depth))
-108         return false;
-109 
-110     //Values from osdev / modes\&.c
-111     unsigned char g_320x200x256[] =
-112             {
-113                     // MISC
-114                     0x63,
-115                     // SEQ
-116                     0x03, 0x01, 0x0F, 0x00, 0x0E,
-117                     // CRTC
-118                     0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
-119                     0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-120                     0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3,
-121                     0xFF,
-122                     // GC
-123                     0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
-124                     0xFF,
-125                     // AC
-126                     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-127                     0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-128                     0x41, 0x00, 0x0F, 0x00, 0x00
-129             };
-130 
-131     write_registers(g_320x200x256);
-132     return true;
-133 }
+100                                                                                                  {
+101 
+102     //Values from osdev / modes\&.c
+103     unsigned char g_320x200x256[] =
+104             {
+105                     // MISC
+106                     0x63,
+107                     // SEQ
+108                     0x03, 0x01, 0x0F, 0x00, 0x0E,
+109                     // CRTC
+110                     0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
+111                     0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+112                     0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3,
+113                     0xFF,
+114                     // GC
+115                     0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
+116                     0xFF,
+117                     // AC
+118                     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+119                     0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+120                     0x41, 0x00, 0x0F, 0x00, 0x00
+121             };
+122 
+123     write_registers(g_320x200x256);
+124     return true;
+125 }
 .fi
+
 .PP
-References supports_mode(), and write_registers()\&.
+References \fBwrite_registers()\fP\&.
 .SS "void VideoGraphicsArray::render_pixel_8_bit (uint32_t x, uint32_t y, uint8_t colour)\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
@@ -324,20 +480,17 @@ Puts a 8 bit pixel on the screen\&.
 .PP
 Reimplemented from \fBMaxOS::common::GraphicsContext\fP\&.
 .PP
-Definition at line 168 of file vga\&.cpp\&.
-.PP
+Definition at line \fB162\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-168                                                                                  {
-169 
-170     // Get the address of the pixel
-171     uint8_t*pixel_address = get_frame_buffer_segment() + 320*y + x;
-172 
-173     // Set the pixel
-174     *pixel_address = colour;
-175 }
+162                                                                                   {
+163 
+164     uint8_t *pixel_address = get_frame_buffer_segment() + 320 * y + x;
+165     *pixel_address = colour;
+166 }
 .fi
+
 .PP
-References get_frame_buffer_segment(), MaxOS::drivers::peripherals::x, and MaxOS::drivers::peripherals::y\&.
+References \fBget_frame_buffer_segment()\fP\&.
 .SS "bool VideoGraphicsArray::supports_mode (uint32_t width, uint32_t height, uint32_t colour_depth)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -352,15 +505,38 @@ True if the specified resolution is supported, otherwise false\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line 91 of file vga\&.cpp\&.
-.PP
+Definition at line \fB87\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-92 {
-93     return width == 320 && height == 200 && colour_depth == 8;
-94 }
+87                                                                                              {
+88     return width == 320 && height == 200 && colour_depth == 8;
+89 }
 .fi
+
 .PP
-Referenced by internal_set_mode()\&.
+References \fBMaxOS::common::GraphicsContext::height()\fP, and \fBMaxOS::common::GraphicsContext::width()\fP\&.
+.SS "\fBstring\fP VideoGraphicsArray::vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the name of the vendor\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the vendor\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
+.PP
+Definition at line \fB186\fP of file \fBvga\&.cpp\fP\&..PP
+.nf
+186                                        {
+187 
+188     // VGA was made by IBM
+189     return "IBM";
+190 }
+.fi
+
 .SS "void VideoGraphicsArray::write_registers (uint8_t * registers)\fC [protected]\fP"
 
 .PP
@@ -373,126 +549,125 @@ This function is used to write to the VGA registers\&.
 .PP
 
 .PP
-Definition at line 38 of file vga\&.cpp\&.
-.PP
+Definition at line \fB36\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-39 {
-40     // Move to the next register
-41     m_misc_port\&.write(*(registers++));
-42 
-43     // Set the sequencer registers
-44     for (uint8_t i = 0; i < 5; i++ ) {
-45       m_sequence_index_port\&.write(i);
-46       m_sequence_data_port\&.write(*(registers++));
-47     }
-48 
-49     // Clear protection bit to enable writing to CR0-7
-50     m_crtc_index_port\&.write(0x03);
-51     crtc_data_port\&.write(crtc_data_port\&.read() | 0x80);
-52     m_crtc_index_port\&.write(0x11);
-53     crtc_data_port\&.write(crtc_data_port\&.read() | ~0x80);
-54 
-55     // Ensure protection bit is set
-56     registers[0x03] = registers[0x03] | 0x80;
-57     registers[0x11] = registers[0x11] & ~0x80;
-58 
-59     // write the CRTC registers
-60     for (uint8_t i = 0; i < 25; i++ ) {
-61       m_crtc_index_port\&.write(i);
-62       crtc_data_port\&.write(*(registers++));
-63     }
-64 
-65     // write the graphics controller registers
-66     for(uint8_t i = 0; i < 9; i++)
-67     {
-68       m_graphics_controller_index_port\&.write(i);
-69       m_graphics_controller_data_port\&.write(*(registers++));
-70     }
-71 
-72     // write the attribute controller registers
-73     for(uint8_t i = 0; i < 21; i++)
-74     {
-75       m_attribute_controller_reset_port\&.read();
-76       m_attribute_controller_index_port\&.write(i);
-77       m_attribute_controller_write_port\&.write(*(registers++));
-78     }
+36                                                            {
+37 
+38     // Move to the next register
+39     m_misc_port\&.write(*(registers++));
+40 
+41     // Set the sequencer registers
+42     for (uint8_t i = 0; i < 5; i++) {
+43         m_sequence_index_port\&.write(i);
+44         m_sequence_data_port\&.write(*(registers++));
+45     }
+46 
+47     // Clear protection bit to enable writing to CR0\-7
+48     m_crtc_index_port\&.write(0x03);
+49     crtc_data_port\&.write(crtc_data_port\&.read() | 0x80);
+50     m_crtc_index_port\&.write(0x11);
+51     crtc_data_port\&.write(crtc_data_port\&.read() | ~0x80);
+52 
+53     // Ensure protection bit is set
+54     registers[0x03] = registers[0x03] | 0x80;
+55     registers[0x11] = registers[0x11] & ~0x80;
+56 
+57     // Write the CRTC registers
+58     for (uint8_t i = 0; i < 25; i++) {
+59         m_crtc_index_port\&.write(i);
+60         crtc_data_port\&.write(*(registers++));
+61     }
+62 
+63     // Write the graphics controller registers
+64     for (uint8_t i = 0; i < 9; i++) {
+65         m_graphics_controller_index_port\&.write(i);
+66         m_graphics_controller_data_port\&.write(*(registers++));
+67     }
+68 
+69     // Write the attribute controller registers
+70     for (uint8_t i = 0; i < 21; i++) {
+71         m_attribute_controller_reset_port\&.read();
+72         m_attribute_controller_index_port\&.write(i);
+73         m_attribute_controller_write_port\&.write(*(registers++));
+74     }
+75 
+76     // Re\-Lock CRTC and unblank display
+77     m_attribute_controller_reset_port\&.read();
+78     m_attribute_controller_index_port\&.write(0x20);
 79 
-80     // Re-Lock CRTC and unblank display
-81     m_attribute_controller_reset_port\&.read();
-82     m_attribute_controller_index_port\&.write(0x20);
-83 
-84 }
+80 }
 .fi
+
 .PP
-References crtc_data_port, MaxOS::drivers::peripherals::i, m_attribute_controller_index_port, m_attribute_controller_reset_port, m_attribute_controller_write_port, m_crtc_index_port, m_graphics_controller_data_port, m_graphics_controller_index_port, m_misc_port, m_sequence_data_port, m_sequence_index_port, MaxOS::hardwarecommunication::Port8Bit::read(), and MaxOS::hardwarecommunication::Port8Bit::write()\&.
+References \fBcrtc_data_port\fP, \fBm_attribute_controller_index_port\fP, \fBm_attribute_controller_reset_port\fP, \fBm_attribute_controller_write_port\fP, \fBm_crtc_index_port\fP, \fBm_graphics_controller_data_port\fP, \fBm_graphics_controller_index_port\fP, \fBm_misc_port\fP, \fBm_sequence_data_port\fP, \fBm_sequence_index_port\fP, \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
 .PP
-Referenced by internal_set_mode()\&.
+Referenced by \fBinternal_set_mode()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::crtc_data_port\fC [protected]\fP"
 
 .PP
-Definition at line 28 of file vga\&.h\&.
+Definition at line \fB28\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_attribute_controller_index_port\fC [protected]\fP"
 
 .PP
-Definition at line 33 of file vga\&.h\&.
+Definition at line \fB33\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_attribute_controller_read_port\fC [protected]\fP"
 
 .PP
-Definition at line 34 of file vga\&.h\&.
+Definition at line \fB34\fP of file \fBvga\&.h\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_attribute_controller_reset_port\fC [protected]\fP"
 
 .PP
-Definition at line 36 of file vga\&.h\&.
+Definition at line \fB36\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_attribute_controller_write_port\fC [protected]\fP"
 
 .PP
-Definition at line 35 of file vga\&.h\&.
+Definition at line \fB35\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_crtc_index_port\fC [protected]\fP"
 
 .PP
-Definition at line 27 of file vga\&.h\&.
+Definition at line \fB27\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_graphics_controller_data_port\fC [protected]\fP"
 
 .PP
-Definition at line 32 of file vga\&.h\&.
+Definition at line \fB32\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by get_frame_buffer_segment(), and write_registers()\&.
+Referenced by \fBget_frame_buffer_segment()\fP, and \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_graphics_controller_index_port\fC [protected]\fP"
 
 .PP
-Definition at line 31 of file vga\&.h\&.
+Definition at line \fB31\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by get_frame_buffer_segment(), and write_registers()\&.
+Referenced by \fBget_frame_buffer_segment()\fP, and \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_misc_port\fC [protected]\fP"
 
 .PP
-Definition at line 26 of file vga\&.h\&.
+Definition at line \fB26\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_sequence_data_port\fC [protected]\fP"
 
 .PP
-Definition at line 30 of file vga\&.h\&.
+Definition at line \fB30\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::video::VideoGraphicsArray::m_sequence_index_port\fC [protected]\fP"
 
 .PP
-Definition at line 29 of file vga\&.h\&.
+Definition at line \fB29\fP of file \fBvga\&.h\fP\&.
 .PP
-Referenced by write_registers()\&.
+Referenced by \fBwrite_registers()\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,221 @@
+\doxysection{ata.\+cpp}
+\hypertarget{ata_8cpp_source}{}\label{ata_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/drivers/disk/ata.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/drivers/disk/ata.cpp}}
+\mbox{\hyperlink{ata_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 24/10/2022.}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{ata_8h}{drivers/disk/ata.h}}>}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication}{MaxOS::hardwarecommunication}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers}{MaxOS::drivers}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00011}00011\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1disk}{MaxOS::drivers::disk}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00013}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a1b4100a00c174711a0dc843d6eb2c5e1}{00013}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a1b4100a00c174711a0dc843d6eb2c5e1}{AdvancedTechnologyAttachment::AdvancedTechnologyAttachment}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ port\_base,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{master}})}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00014}00014\ :\ m\_data\_port(port\_base),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00015}00015\ \ \ m\_error\_port(port\_base\ +\ 1),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00016}00016\ \ \ m\_sector\_count\_port(port\_base\ +\ 2),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00017}00017\ \ \ m\_LBA\_low\_port(port\_base\ +\ 3),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00018}00018\ \ \ m\_LBA\_mid\_port(port\_base\ +\ 4),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00019}00019\ \ \ m\_LBA\_high\_Port(port\_base\ +\ 5),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00020}00020\ \ \ m\_device\_port(port\_base\ +\ 6),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00021}00021\ \ \ m\_command\_port(port\_base\ +\ 7),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00022}00022\ \ \ m\_control\_port(port\_base\ +\ 0x206),}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00023}00023\ \ \ m\_is\_master(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{master}})}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00024}00024\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00026}00026\ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00028}00028\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_add10484c2f7970041539f9d1fe20855b}{AdvancedTechnologyAttachment::\string~AdvancedTechnologyAttachment}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00035}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a3afae769420a2fcf2e76e56828a539ed}{00035}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a3afae769420a2fcf2e76e56828a539ed}{AdvancedTechnologyAttachment::identify}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//\ Select\ the\ device\ (master\ or\ slave)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00038}00038\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_afc767f4ce3df365018e8d09183026377}{m\_device\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae42bcfdd9cc4f574e94f4f973c109d0a}{m\_is\_master}}\ ?\ 0xA0\ :\ 0xB0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00040}00040\ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ High\ Order\ Byte}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00041}00041\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a4ab9b81c42171090935dae1615e30b6d}{m\_control\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00043}00043\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ master\ is\ present}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00044}00044\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_afc767f4ce3df365018e8d09183026377}{m\_device\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0xA0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00046}00046\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ ==\ 0xFF)\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}ATA\ Device:\ Invalid\ status"{}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00049}00049\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ Select\ the\ device\ (master\ or\ slave)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00052}00052\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_afc767f4ce3df365018e8d09183026377}{m\_device\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae42bcfdd9cc4f574e94f4f973c109d0a}{m\_is\_master}}\ ?\ 0xA0\ :\ 0xB0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ ports}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00055}00055\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a87a151a18871dd3de1e0a80884cb8f2b}{m\_sector\_count\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a706578bce4f5cad74100aef6c92d8dec}{m\_LBA\_low\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00057}00057\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a276de6b8784ed5f5ae0932df32274fff}{m\_LBA\_mid\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00058}00058\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a585faff17a040b689133924209bf8ce2}{m\_LBA\_high\_Port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ device\ is\ present}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00061}00061\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x0EC);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00062}00062\ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00063}00063\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ ==\ 0x00)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00066}00066\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ device\ to\ be\ ready\ or\ for\ an\ error\ to\ occur}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{keywordflow}{while}\ (((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x80)\ ==\ 0x80)\ \&\&\ ((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x01)\ !=\ 0x01))}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00068}00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{comment}{//Check\ for\ any\ errors}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x01)\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}ATA\ Device:\ Error\ reading\ status\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00074}00074\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ rest\ of\ the\ data\ as\ a\ whole\ sector\ needs\ to\ be\ read}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ i\ =\ 0;\ i\ <\ 256;\ ++i)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a068d8d75646805f6bdd2e8ef40065306}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00080}00080\ \ \ \ \ \textcolor{comment}{//\ Device\ is\ present\ and\ ready}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00081}00081\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00082}00082\ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00091}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a7c6c355a66f7202759ab78f107750b3d}{00091}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a7c6c355a66f7202759ab78f107750b3d}{AdvancedTechnologyAttachment::read}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{data\_buffer}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00093}00093\ \ \ \ \ \textcolor{comment}{//\ Don't\ allow\ reading\ more\ than\ a\ sector}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0xF0000000\ ||\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ >\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a97007380690b86d78a70a699cc2eed24}{m\_bytes\_per\_sector}})}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00095}00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00097}00097\ \ \ \ \ \textcolor{comment}{//\ Select\ the\ device\ (master\ or\ slave)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00098}00098\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_afc767f4ce3df365018e8d09183026377}{m\_device\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}((\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae42bcfdd9cc4f574e94f4f973c109d0a}{m\_is\_master}}\ ?\ 0xE0\ :\ 0xF0)\ |\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x0F000000)\ >>\ 24));}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00100}00100\ \ \ \ \ \textcolor{comment}{//\ Device\ is\ busy\ (TODO:\ YIELD)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{keywordflow}{while}\ ((\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ \&\ 0x80)\ !=\ 0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ device}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00104}00104\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ad91af3aaf1e741000f0dafcb7a5c58e0}{m\_error\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00105}00105\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a87a151a18871dd3de1e0a80884cb8f2b}{m\_sector\_count\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(1);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{comment}{//\ Split\ the\ sector\ into\ the\ ports}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00108}00108\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a706578bce4f5cad74100aef6c92d8dec}{m\_LBA\_low\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x000000FF);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00109}00109\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a276de6b8784ed5f5ae0932df32274fff}{m\_LBA\_mid\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x0000FF00)\ >>\ 8);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00110}00110\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a585faff17a040b689133924209bf8ce2}{m\_LBA\_high\_Port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x00FF0000)\ >>\ 16);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00112}00112\ \ \ \ \ \textcolor{comment}{//\ Tell\ the\ device\ to\ prepare\ for\ reading}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00113}00113\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x20);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ device\ is\ there}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00116}00116\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00117}00117\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ ==\ 0x00)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00118}00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00120}00120\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ device\ to\ be\ ready\ or\ for\ an\ error\ to\ occur\ TODO:\ Userspace\ block\ here}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00121}00121\ \ \ \ \ \textcolor{keywordflow}{while}\ (((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x80)\ ==\ 0x80)\ \&\&\ ((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x01)\ !=\ 0x01))}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00122}00122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{comment}{//Check\ for\ any\ errors}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x01)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00126}00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}};\ i\ +=\ 2)\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00130}00130\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ from\ the\ disk\ (2\ bytes)\ and\ store\ the\ first\ byte}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00131}00131\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{read\_data}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a068d8d75646805f6bdd2e8ef40065306}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00132}00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{data\_buffer}}-\/>write(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{read\_data}}\ \&\ 0x00FF);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Place\ the\ second\ byte\ in\ the\ array\ if\ there\ is\ one}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00135}00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ +\ 1\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}})}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{data\_buffer}}-\/>write((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{read\_data}}\ >>\ 8)\ \&\ 0x00FF);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00137}00137\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00139}00139\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ remaining\ bytes\ as\ a\ full\ sector\ has\ to\ be\ read}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ i\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ \%\ 2);\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a97007380690b86d78a70a699cc2eed24}{m\_bytes\_per\_sector}};\ i\ +=\ 2)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a068d8d75646805f6bdd2e8ef40065306}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a5147c7c28ca813536015969ae6ba6bb6}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00142}00142\ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00151}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae5759fe67787971b2d3774c283c21fe9}{00151}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae5759fe67787971b2d3774c283c21fe9}{AdvancedTechnologyAttachment::write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ *\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{count}})\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00153}00153\ \ \ \ \ \textcolor{comment}{//\ Don't\ allow\ writing\ more\ than\ a\ sector}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00154}00154\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ >\ 0x0FFFFFFF\ ||\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{count}}\ >\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a97007380690b86d78a70a699cc2eed24}{m\_bytes\_per\_sector}})}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00157}00157\ \ \ \ \ \textcolor{comment}{//\ Select\ the\ device\ (master\ or\ slave)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00158}00158\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_afc767f4ce3df365018e8d09183026377}{m\_device\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae42bcfdd9cc4f574e94f4f973c109d0a}{m\_is\_master}}\ ?\ 0xE0\ :\ 0xF0\ |\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x0F000000)\ >>\ 24));}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00160}00160\ \ \ \ \ \textcolor{comment}{//\ Device\ is\ busy\ (TODO:\ YIELD)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00161}00161\ \ \ \ \ \textcolor{keywordflow}{while}\ ((\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ \&\ 0x80)\ !=\ 0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00163}00163\ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ device}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00164}00164\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ad91af3aaf1e741000f0dafcb7a5c58e0}{m\_error\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00165}00165\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a87a151a18871dd3de1e0a80884cb8f2b}{m\_sector\_count\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(1);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00166}00166\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{comment}{//\ Split\ the\ sector\ into\ the\ ports}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00168}00168\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a706578bce4f5cad74100aef6c92d8dec}{m\_LBA\_low\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x000000FF);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00169}00169\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a276de6b8784ed5f5ae0932df32274fff}{m\_LBA\_mid\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x0000FF00)\ >>\ 8);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00170}00170\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a585faff17a040b689133924209bf8ce2}{m\_LBA\_high\_Port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sector}}\ \&\ 0x00FF0000)\ >>\ 16);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00172}00172\ \ \ \ \ \textcolor{comment}{//\ Send\ the\ write\ command}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00173}00173\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x30);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00175}00175\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ device\ be\ ready\ writing\ (TODO:\ YIELD)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00176}00176\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00177}00177\ \ \ \ \ \textcolor{keywordflow}{while}\ ((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x80)\ !=\ 0\ ||\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x08)\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00178}00178\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00180}00180\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ data\ to\ the\ device}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00181}00181\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a97007380690b86d78a70a699cc2eed24}{m\_bytes\_per\_sector}};\ i\ +=\ 2)\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00183}00183\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{writeData}}\ =\ \mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}-\/>read();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00185}00185\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Place\ the\ next\ byte\ in\ the\ array\ if\ there\ is\ one}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ +\ 1\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{count}})}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{writeData}}\ |=\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ (\mbox{\hyperlink{icmp_8h_a1e43bf7d608e87228b625cca2c04d641}{data}}-\/>read())\ <<\ 8;}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00189}00189\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a068d8d75646805f6bdd2e8ef40065306}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{writeData}});}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00190}00190\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00192}00192\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ remaining\ bytes\ as\ a\ full\ sector\ has\ to\ be\ written}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00193}00193\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{count}}\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{count}}\ \%\ 2);\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a97007380690b86d78a70a699cc2eed24}{m\_bytes\_per\_sector}};\ i\ +=\ 2)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a068d8d75646805f6bdd2e8ef40065306}{m\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port16Bit_a24f6a288e57d4c01634926ca3580324d}{write}}(0x0000);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00196}00196\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ device\ to\ finish\ writing\ (TODO:\ YIELD)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00197}00197\ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00198}00198\ \ \ \ \ \textcolor{keywordflow}{while}\ ((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x80)\ !=\ 0\ ||\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x08)\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00200}00200\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00201}00201\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6cc4ecafeffc5083eaa0e5cbc6494605}{flush}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00202}00202\ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00203}00203\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00207}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6cc4ecafeffc5083eaa0e5cbc6494605}{00207}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6cc4ecafeffc5083eaa0e5cbc6494605}{AdvancedTechnologyAttachment::flush}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00209}00209\ \ \ \ \ \textcolor{comment}{//\ Select\ the\ device\ (master\ or\ slave)}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00210}00210\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_afc767f4ce3df365018e8d09183026377}{m\_device\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_ae42bcfdd9cc4f574e94f4f973c109d0a}{m\_is\_master}}\ ?\ 0xE0\ :\ 0xF0);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00211}00211\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00212}00212\ \ \ \ \ \textcolor{comment}{//\ Send\ the\ flush\ command}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00213}00213\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0xE7);}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00214}00214\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00215}00215\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ device\ is\ there}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00216}00216\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ ==\ 0x00)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00218}00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ device\ to\ be\ ready\ or\ for\ an\ error\ to\ occur}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00221}00221\ \ \ \ \ \textcolor{keywordflow}{while}\ (((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x80)\ ==\ 0x80)\ \&\&\ ((\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x01)\ !=\ 0x01))}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00222}00222\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a6c0d5b69c4e97c9e8442027ea363138c}{m\_command\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00224}00224\ \ \ \ \ \textcolor{comment}{//\ Check\ for\ an\ error}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00225}00225\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}\ \&\ 0x01)}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00226}00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00227}00227\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00228}00228\ \ \ \ \ \textcolor{comment}{//\ ...}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00229}00229\ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00236}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a53cabdbb6fbfc707bcf0c969ba8ff5dc}{00236}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a53cabdbb6fbfc707bcf0c969ba8ff5dc}{AdvancedTechnologyAttachment::device\_name}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00237}00237\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Advanced\ Technology\ Attachment"{}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00238}00238\ \}}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00239}00239\ }
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00245}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a8edbbadb1879bd330ec1f1855972c559}{00245}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment_a8edbbadb1879bd330ec1f1855972c559}{AdvancedTechnologyAttachment::vendor\_name}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00246}00246\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}IDE"{}};}
+\DoxyCodeLine{\Hypertarget{ata_8cpp_source_l00247}00247\ \}}
+
+\end{DoxyCode}

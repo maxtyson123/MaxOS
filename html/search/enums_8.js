@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pageflags_3697',['PageFlags',['../namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb',1,'MaxOS::memory']]]
+  ['loglevel_0',['LogLevel',['../logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9',1,'logger.h']]]
 ];

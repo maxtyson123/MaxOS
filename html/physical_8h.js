@@ -1,8 +1,9 @@
 var physical_8h =
 [
-    [ "PageTableEntry", "structMaxOS_1_1memory_1_1PageTableEntry.html", "structMaxOS_1_1memory_1_1PageTableEntry" ],
-    [ "PageMapLevel", "structMaxOS_1_1memory_1_1PageMapLevel.html", "structMaxOS_1_1memory_1_1PageMapLevel" ],
-    [ "PhysicalMemoryManager", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html", "classMaxOS_1_1memory_1_1PhysicalMemoryManager" ],
+    [ "MaxOS::memory::PageTableEntry", "structMaxOS_1_1memory_1_1PageTableEntry.html", "structMaxOS_1_1memory_1_1PageTableEntry" ],
+    [ "MaxOS::memory::PageMapLevel", "structMaxOS_1_1memory_1_1PageMapLevel.html", "structMaxOS_1_1memory_1_1PageMapLevel" ],
+    [ "MaxOS::memory::PhysicalMemoryManager", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html", "classMaxOS_1_1memory_1_1PhysicalMemoryManager" ],
+    [ "ENTRIES_TO_ADDRESS", "physical_8h.html#a9a863ef3a659fd011f2a7ee0bf553338", null ],
     [ "PML1_GET_INDEX", "physical_8h.html#a39f52e0488e29313ac48c0a06c9f8cbd", null ],
     [ "PML2_GET_INDEX", "physical_8h.html#aeccd6d6989169ce4bea31a8aebc3c312", null ],
     [ "PML3_GET_INDEX", "physical_8h.html#a363318d5bd935b341ef29aa93046f5de", null ],
@@ -21,20 +22,21 @@ var physical_8h =
       [ "Accessed", "physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebad0ebc4bf82b25d2ba050127787514d37", null ],
       [ "Dirty", "physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaeedf9362578c44709ec12c15c7a05704", null ],
       [ "HugePage", "physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebab5d298d682476077cef0d1cf2449c5a8", null ],
-      [ "Global", "physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaaee9e41af6b777257ab7e0862ebdba6c", null ]
+      [ "Global", "physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaaee9e41af6b777257ab7e0862ebdba6c", null ],
+      [ "NoExecute", "physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba346d48faacf419ed9c75689c42ac9d1f", null ]
     ] ],
     [ "__attribute__", "physical_8h.html#a10570b98e38bc593fa1163b00a058ca2", null ],
-    [ "__attribute__", "physical_8h.html#aa0524ffcedef70893006240cc686e532", null ],
-    [ "accessed", "physical_8h.html#a9acc33713771eb0f432069058ad82436", null ],
-    [ "available", "physical_8h.html#a3ccf0e8f255fe1d93c77192ed3a7148f", null ],
-    [ "cache_disabled", "physical_8h.html#a8b9e12f40fab594a8138aa13249de726", null ],
-    [ "dirty", "physical_8h.html#afe5b2028c29373d0232a294fdd97453d", null ],
+    [ "__attribute__", "physical_8h.html#a1336b627521dd3a8924945fa01a30a49", null ],
+    [ "accessed", "physical_8h.html#a242ede6c60cc0c65c71f38011ae1fa83", null ],
+    [ "available", "physical_8h.html#ad5a95884eb3a555f48a10bb338c65480", null ],
+    [ "cache_disabled", "physical_8h.html#a7164e1adb9f37fa12d63bc66788850bf", null ],
+    [ "dirty", "physical_8h.html#ad25edacba00e4d0666a9959053b7cc10", null ],
     [ "entries", "physical_8h.html#a571f2ec04bb9a58c7be02c94a37de231", null ],
-    [ "global", "physical_8h.html#a55c4ce775529f52c49ae1dd0476cd062", null ],
-    [ "huge_page", "physical_8h.html#a8d96a37ae57b04082473571ea375e913", null ],
+    [ "global", "physical_8h.html#a86004534684821212245555e66ec1d09", null ],
+    [ "huge_page", "physical_8h.html#ae929bd0aeee67959abac551b220720e4", null ],
     [ "physical_address", "physical_8h.html#a069784144afa0b45c14ce1788adb541a", null ],
-    [ "present", "physical_8h.html#a85692f5f8e411b5cb7164a7ab671ddd4", null ],
-    [ "user", "physical_8h.html#aa48fc3494320cff5dd03c1f27f00049d", null ],
-    [ "write", "physical_8h.html#af3329fc9f76244f46dedda8e02ba8066", null ],
-    [ "write_through", "physical_8h.html#a6c2e574dfeedee226c9acca6dc4c2e09", null ]
+    [ "present", "physical_8h.html#aa84cc4dc60e16481b79b15b815aaea31", null ],
+    [ "user", "physical_8h.html#a8d0d274d7162274a04afd0cb39eaccfd", null ],
+    [ "write", "physical_8h.html#ab4d8d1259f524270d625ab8933700d27", null ],
+    [ "write_through", "physical_8h.html#ad124499797a0c2567e0689e8586318af", null ]
 ];

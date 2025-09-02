@@ -1,4 +1,4 @@
-.TH "MaxOS::net::DataReceivedEvent" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::DataReceivedEvent" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,11 +14,22 @@ Inherits \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvent
 
 .in +1c
 .ti -1c
-.RI "\fBDataReceivedEvent\fP (\fBTransmissionControlProtocolSocket\fP *\fBsocket\fP, uint8_t *\fBdata\fP, uint16_t \fBsize\fP)"
+.RI "\fBDataReceivedEvent\fP (\fBTransmissionControlProtocolSocket\fP *\fBsocket\fP, \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
 .br
 .RI "___ EVENTS ___ /// "
 .ti -1c
 .RI "\fB~DataReceivedEvent\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBEvent\fP (TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP)"
+.br
+.RI "___________________________ Template Implementation ___________________________ "
+.ti -1c
+.RI "\fB~Event\fP ()"
 .br
 .in -1c
 .SS "Public Attributes"
@@ -34,57 +45,81 @@ Inherits \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvent
 .RI "uint16_t \fBsize\fP"
 .br
 .in -1c
+
+Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+.in +1c
+.ti -1c
+.RI "TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP"
+.br
+.ti -1c
+.RI "\fBuint8_t\fP * \fBbufferValue\fP"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP \fBintValue\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBboolValue\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBuint8_t\fP * \fBbufferValue\fP"
+.br
+.ti -1c
+.RI "   \fBuint32_t\fP \fBintValue\fP"
+.br
+.ti -1c
+.RI "   \fBbool\fP \fBboolValue\fP"
+.br
+.ti -1c
+.RI "} \fBreturn_value\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 89 of file tcp\&.h\&.
+Definition at line \fB89\fP of file \fBtcp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "DataReceivedEvent::DataReceivedEvent (\fBTransmissionControlProtocolSocket\fP * socket, uint8_t * data, uint16_t size)"
+.SS "DataReceivedEvent::DataReceivedEvent (\fBTransmissionControlProtocolSocket\fP * socket, \fBuint8_t\fP * data, \fBuint16_t\fP size)"
 
 .PP
 ___ EVENTS ___ /// 
 .PP
-Definition at line 555 of file tcp\&.cpp\&.
-.PP
+Definition at line \fB550\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-556 : Event(DATA_RECEIVED)
-557 {
-558     this -> socket = socket;
-559     this -> data = data;
-560     this -> size = size;
-561 }
+551 : Event(TransmissionControlProtocolPayloadHandlerEvents::DATA_RECEIVED)
+552 {
+553     this \-> socket = socket;
+554     this \-> data = data;
+555     this \-> size = size;
+556 }
 .fi
-.PP
-References data, size, and socket\&.
-.SS "DataReceivedEvent::~DataReceivedEvent ()"
 
 .PP
-Definition at line 563 of file tcp\&.cpp\&.
-.PP
-.nf
-564 {
-565 }
-.fi
+References \fBdata\fP, \fBsize\fP, and \fBsocket\fP\&.
+.SS "DataReceivedEvent::~DataReceivedEvent ()\fC [default]\fP"
+
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t* MaxOS::net::DataReceivedEvent::data"
 
 .PP
-Definition at line 93 of file tcp\&.h\&.
+Definition at line \fB93\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by DataReceivedEvent()\&.
+Referenced by \fBDataReceivedEvent()\fP\&.
 .SS "uint16_t MaxOS::net::DataReceivedEvent::size"
 
 .PP
-Definition at line 94 of file tcp\&.h\&.
+Definition at line \fB94\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by DataReceivedEvent()\&.
+Referenced by \fBDataReceivedEvent()\fP\&.
 .SS "\fBTransmissionControlProtocolSocket\fP* MaxOS::net::DataReceivedEvent::socket"
 
 .PP
-Definition at line 92 of file tcp\&.h\&.
+Definition at line \fB92\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by DataReceivedEvent()\&.
+Referenced by \fBDataReceivedEvent()\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['constructor_3627',['constructor',['../kernel_8cpp.html#a12d367671a45721e5f93f37959360759',1,'kernel.cpp']]],
-  ['coordinates_3628',['Coordinates',['../namespaceMaxOS_1_1common.html#a68414a064002a475b8a0cc83403c1ad1',1,'MaxOS::common']]]
+  ['buffer_5ft_0',['buffer_t',['../namespaceMaxOS_1_1common.html#ae34c2f95637029a49836360ddf075b3d',1,'MaxOS::common']]]
 ];

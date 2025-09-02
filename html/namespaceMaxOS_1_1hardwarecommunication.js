@@ -26,5 +26,12 @@ var namespaceMaxOS_1_1hardwarecommunication =
     [ "RSDPDescriptor", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor" ],
     [ "RSDPDescriptor2", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2" ],
     [ "RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", "structMaxOS_1_1hardwarecommunication_1_1RSDT" ],
-    [ "XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ]
+    [ "XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ],
+    [ "interrupt_redirect_t", "namespaceMaxOS_1_1hardwarecommunication.html#a8ed1467ecf3306e3f6d39deae897fbe9", null ],
+    [ "BaseAddressRegisterType", "namespaceMaxOS_1_1hardwarecommunication.html#afc5ea080a9107e056194cc643a761608", [
+      [ "MemoryMapped", "namespaceMaxOS_1_1hardwarecommunication.html#afc5ea080a9107e056194cc643a761608a89bd90e73498b68e442cc6673edddefe", null ],
+      [ "InputOutput", "namespaceMaxOS_1_1hardwarecommunication.html#afc5ea080a9107e056194cc643a761608aac7eafbd848f2f627c8da7d25a4faade", null ]
+    ] ],
+    [ "__attribute__", "namespaceMaxOS_1_1hardwarecommunication.html#abe45fccdf160be55b8dc7bd5417235ac", null ],
+    [ "__attribute__", "namespaceMaxOS_1_1hardwarecommunication.html#a246df0da2f83d4427aeff9b62cb78b01", null ]
 ];

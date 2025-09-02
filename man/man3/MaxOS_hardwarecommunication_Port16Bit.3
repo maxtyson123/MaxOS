@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::Port16Bit" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::Port16Bit" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,33 +30,42 @@ Inherits \fBMaxOS::hardwarecommunication::Port\fP\&.
 .RI "read a word from the port "
 .in -1c
 .SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Port\fP
+.in +1c
+.ti -1c
+.RI "\fBPort\fP (uint16_t port_number)"
+.br
+.ti -1c
+.RI "\fB~Port\fP ()"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::Port\fP
+.in +1c
+.ti -1c
+.RI "uint16_t \fBm_port_number\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 Handles 16 bit ports\&. 
 .PP
-Definition at line 53 of file port\&.h\&.
+Definition at line \fB53\fP of file \fBport\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Port16Bit::Port16Bit (uint16_t port_number)"
 
 .PP
-Definition at line 66 of file port\&.cpp\&.
-.PP
+Definition at line \fB61\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-67 : Port(port_number)
-68 {
-69 }
+62 : Port(port_number) {
+63 }
 .fi
-.SS "Port16Bit::~Port16Bit ()"
 
-.PP
-Definition at line 71 of file port\&.cpp\&.
-.PP
-.nf
-71                       {
-72 
-73 }
-.fi
+.SS "Port16Bit::~Port16Bit ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "uint16_t Port16Bit::read ()\fC [virtual]\fP"
@@ -71,19 +80,20 @@ the word read
 .PP
 
 .PP
-Definition at line 89 of file port\&.cpp\&.
-.PP
+Definition at line \fB82\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-89                         {
-90     uint16_t result;
-91     __asm__ volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
-92     return result;
-93 }
+82                          {
+83 
+84     uint16_t result;
+85     asm volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
+86     return result;
+87 }
 .fi
+
 .PP
-References MaxOS::hardwarecommunication::Port::m_port_number\&.
+References \fBMaxOS::hardwarecommunication::Port::m_port_number\fP\&.
 .PP
-Referenced by MaxOS::drivers::ethernet::amd_am79c973::activate(), MaxOS::drivers::ethernet::amd_am79c973::amd_am79c973(), MaxOS::drivers::ethernet::amd_am79c973::handle_interrupt(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::identify(), MaxOS::drivers::disk::AdvancedTechnologyAttachment::read_28(), and MaxOS::drivers::ethernet::amd_am79c973::reset()\&.
+Referenced by \fBMaxOS::drivers::ethernet::AMD_AM79C973::activate()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::AMD_AM79C973()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::handle_interrupt()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::identify()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::read()\fP, and \fBMaxOS::drivers::ethernet::AMD_AM79C973::reset()\fP\&.
 .SS "void Port16Bit::write (uint16_t data)\fC [virtual]\fP"
 
 .PP
@@ -96,17 +106,18 @@ write a word to the port
 .PP
 
 .PP
-Definition at line 80 of file port\&.cpp\&.
-.PP
+Definition at line \fB72\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-80                                   {
-81     __asm__ volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
-82 }
+72                                    {
+73 
+74     asm volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
+75 }
 .fi
+
 .PP
-References data, and MaxOS::hardwarecommunication::Port::m_port_number\&.
+References \fBdata\fP, and \fBMaxOS::hardwarecommunication::Port::m_port_number\fP\&.
 .PP
-Referenced by MaxOS::drivers::ethernet::amd_am79c973::activate(), MaxOS::drivers::ethernet::amd_am79c973::amd_am79c973(), MaxOS::drivers::ethernet::amd_am79c973::DoSend(), MaxOS::drivers::ethernet::amd_am79c973::handle_interrupt(), MaxOS::drivers::ethernet::amd_am79c973::reset(), and MaxOS::drivers::disk::AdvancedTechnologyAttachment::write_28()\&.
+Referenced by \fBMaxOS::drivers::ethernet::AMD_AM79C973::activate()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::AMD_AM79C973()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::DoSend()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::handle_interrupt()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::reset()\fP, and \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::write()\fP\&.
 
 .SH "Author"
 .PP 

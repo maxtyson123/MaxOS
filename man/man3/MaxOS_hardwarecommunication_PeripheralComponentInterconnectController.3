@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::PeripheralComponentInterconnectController" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::PeripheralComponentInterconnectController" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,56 +17,60 @@ Inherits \fBMaxOS::drivers::DriverSelector\fP\&.
 .ti -1c
 .RI "\fBPeripheralComponentInterconnectController\fP ()"
 .br
-.RI "__CONTROLLER___ "
 .ti -1c
 .RI "\fB~PeripheralComponentInterconnectController\fP ()"
 .br
 .ti -1c
-.RI "void \fBselect_drivers\fP (\fBdrivers::DriverSelectorEventHandler\fP *handler, \fBhardwarecommunication::InterruptManager\fP *interrupt_manager) override"
+.RI "\fBvoid\fP \fBselect_drivers\fP (\fBdrivers::DriverSelectorEventHandler\fP *\fBhandler\fP) \fBoverride\fP"
 .br
 .RI "Select the driver for the device\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::drivers::DriverSelector\fP
+.in +1c
 .ti -1c
-.RI "\fBdrivers::Driver\fP * \fBget_driver\fP (\fBPeripheralComponentInterconnectDeviceDescriptor\fP dev, \fBInterruptManager\fP *interrupt_manager)"
+.RI "\fBDriverSelector\fP ()"
+.br
+.ti -1c
+.RI "\fB~DriverSelector\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBstatic\fP \fBdrivers::Driver\fP * \fBget_driver\fP (\fBPeripheralComponentInterconnectDeviceDescriptor\fP \fBdev\fP)"
 .br
 .RI "Get the driver for the device\&. "
 .ti -1c
-.RI "void \fBlist_known_deivce\fP (\fBPeripheralComponentInterconnectDeviceDescriptor\fP dev)"
+.RI "\fBstatic\fP \fBvoid\fP \fBlist_known_device\fP (\fBconst\fP \fBPeripheralComponentInterconnectDeviceDescriptor\fP &\fBdev\fP)"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles the selecting and loading of drivers for PCI devices\&. 
 .PP
-Definition at line 77 of file pci\&.h\&.
+Definition at line \fB77\fP of file \fBpci\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "PeripheralComponentInterconnectController::PeripheralComponentInterconnectController ()"
 
 .PP
-__CONTROLLER___ 
-.PP
-Definition at line 81 of file pci\&.cpp\&.
-.PP
+Definition at line \fB89\fP of file \fBpci\&.cpp\fP\&..PP
 .nf
-82 : m_data_port(0xCFC),
-83   m_command_port(0xCF8)
-84 {
-85 
-86 }
+90 : m_data_port(0xCFC),
+91   m_command_port(0xCF8)
+92 {
+93 
+94 
+95 }
 .fi
-.SS "PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController ()"
 
-.PP
-Definition at line 88 of file pci\&.cpp\&.
-.PP
-.nf
-88                                                                                       {
-89 
-90 }
-.fi
+.SS "PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBDriver\fP * PeripheralComponentInterconnectController::get_driver (\fBPeripheralComponentInterconnectDeviceDescriptor\fP dev, \fBInterruptManager\fP * interrupt_manager)"
+.SS "\fBDriver\fP * PeripheralComponentInterconnectController::get_driver (\fBPeripheralComponentInterconnectDeviceDescriptor\fP dev)\fC [static]\fP"
 
 .PP
 Get the driver for the device\&. 
@@ -80,231 +84,200 @@ Get the driver for the device\&.
 .PP
 \fBReturns\fP
 .RS 4
-Driver for the device, 0 if there is no driver 
+Driver for the device, null pointer if there is no driver 
 .RE
 .PP
 
 .PP
-Definition at line 235 of file pci\&.cpp\&.
-.PP
+Definition at line \fB244\fP of file \fBpci\&.cpp\fP\&..PP
 .nf
-235                                                                                                                                                      {
-236 
-237     // Dont use new here, manually allocate memory instead
-238 
-239     Driver* driver = 0;
-240     switch (dev\&.vendor_id)
-241     {
-242         case 0x1022:    //AMD
-243         {
-244             switch (dev\&.device_id)
-245             {
-246                 case 0x2000:    //am79c971
-247                 {
-248                     amd_am79c973* result = (amd_am79c973*)MemoryManager::kmalloc(sizeof(amd_am79c973));
-249                     new (result) amd_am79c973(&dev, interrupt_manager);
-250                     return result;
-251 
-252                 }
-253                 default:
-254                     break;
-255             }
-256             break;
-257         }
-258         case 0x8086:  //Intel
-259         {
-260             switch (dev\&.device_id)
-261             {
-262                 case 0x100E: //i217 (Ethernet Controller)
-263                 {
-264                     intel_i217* result = (intel_i217*)MemoryManager::kmalloc(sizeof(intel_i217));
-265                     new (result) intel_i217(&dev, interrupt_manager);
-266                     return result;
-267                 }
-268                 default:
-269                     break;
-270             }
-271             break;
-272         }//End Intel
-273     }
-274 
-275     //If there is no driver for the particular device, go into generic devices
-276     switch (dev\&.class_id)
-277     {
-278         case 0x03: //Graphics
-279         {
-280 
-281             switch (dev\&.subclass_id)
-282             {
-283                 case 0x00:  //VGA
-284                 {
-285                     VideoGraphicsArray* result = (VideoGraphicsArray*)MemoryManager::kmalloc(sizeof(VideoGraphicsArray));
-286                     new (result) VideoGraphicsArray();
-287                     return result;
-288                 }
-289             }
-290             break;
-291         }
-292     }
-293 
-294     return driver;
-295 }
+244                                                                                                                  {
+245 
+246     switch (dev\&.vendor_id) {
+247         case 0x1022:    //AMD
+248         {
+249             switch (dev\&.device_id) {
+250                 case 0x2000: {
+251                     return new AMD_AM79C973(&dev);
+252 
+253                 }
+254                 default:
+255                     break;
+256             }
+257             break;
+258         }
+259         case 0x8086:  //Intel
+260         {
+261             switch (dev\&.device_id) {
+262 
+263                 case 0x100E: //i217 (Ethernet Controller)
+264                 {
+265                     return new intel_i217(&dev);
+266                 }
+267 
+268                 case 0x7010: // PIIX4 (IDE Controller)
+269                 {
+270                     return new IntegratedDriveElectronicsController(&dev);
+271                 }
+272 
+273                 default:
+274                     break;
+275             }
+276             break;
+277         }//End Intel
+278     }
+279 
+280     //If there is no driver for the particular device, go into generic devices
+281     switch (dev\&.class_id) {
+282         case 0x03: //Graphics
+283         {
+284 
+285             switch (dev\&.subclass_id) {
+286                 case 0x00:  //VGA
+287                 {
+288                     return new VideoGraphicsArray();
+289                 }
+290             }
+291             break;
+292         }
+293     }
+294 
+295     return nullptr;
+296 }
 .fi
-.PP
-References MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::class_id, MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::device_id, MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::subclass_id, and MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::vendor_id\&.
-.PP
-Referenced by select_drivers()\&.
-.SS "void PeripheralComponentInterconnectController::list_known_deivce (\fBPeripheralComponentInterconnectDeviceDescriptor\fP dev)"
 
 .PP
-Definition at line 298 of file pci\&.cpp\&.
+Referenced by \fBselect_drivers()\fP\&.
+.SS "\fBvoid\fP PeripheralComponentInterconnectController::list_known_device (\fBconst\fP \fBPeripheralComponentInterconnectDeviceDescriptor\fP & dev)\fC [static]\fP"
+
 .PP
+Definition at line \fB299\fP of file \fBpci\&.cpp\fP\&..PP
 .nf
-298                                                                                                                      {
-299     switch (dev\&.vendor_id)
-300     {
-301         case 0x1022:
-302         {
-303             // The vendor is AMD
-304             _kprintf("%hAMD ");
-305 
-306             // List the device
-307             switch (dev\&.device_id)
-308             {
+300                                                                     {
+301 
+302     switch (dev\&.vendor_id) {
+303         case 0x1022: {
+304             // The vendor is AMD
+305             Logger::Out() << "AMD ";
+306 
+307             // List the device
+308             switch (dev\&.device_id) {
 309                 default:
-310                   _kprintf("%h0x%x", dev\&.device_id);
-311                   break;
+310                     Logger::Out() << "0x%x" << dev\&.device_id;
+311                     break;
 312             }
 313             break;
 314         }
 315 
-316         case 0x106B:
-317         {
-318             // The vendor is Apple
-319             _kprintf("%hApple ");
-320 
-321             // List the device
-322             switch (dev\&.device_id)
-323             {
-324                 case 0x003F:
-325                 {
-326                   _kprintf("%hKeyLargo/Intrepid USB");
-327                   break;
-328                 }
-329 
-330                 default:
-331                   _kprintf("%h0x%x", dev\&.device_id);
-332                   break;
-333             }
-334             break;
-335         }
-336 
-337         case 1234:
-338         {
-339             // The vendor is QEMU
-340           _kprintf("%hQEMU ");
-341 
-342             // List the device
-343             switch (dev\&.device_id)
-344             {
-345 
-346                 case 0x1111:
-347                 {
-348                   _kprintf("%hVirtual Video Controller");
-349                   break;
-350                 }
-351             }
-352             break;
-353         }
-354 
-355         case 0x8086:
-356         {
-357             // The vendor is Intel
-358             _kprintf("%hIntel ");
-359 
-360             // List the device
-361             switch (dev\&.device_id)
-362             {
-363 
-364                 case 0x1237:
-365                 {
-366                   _kprintf("%h440FX");
-367                   break;
-368                 }
+316         case 0x106B: {
+317             // The vendor is Apple
+318             Logger::Out() << "Apple ";
+319 
+320             // List the device
+321             switch (dev\&.device_id) {
+322                 case 0x003F: {
+323                     Logger::Out() << "KeyLargo/Intrepid USB";
+324                     break;
+325                 }
+326 
+327                 default:
+328                     Logger::Out() << "0x%x" << dev\&.device_id;
+329                     break;
+330             }
+331             break;
+332         }
+333 
+334         case 1234: {
+335             // The vendor is QEMU
+336             Logger::Out() << "QEMU ";
+337 
+338             // List the device
+339             switch (dev\&.device_id) {
+340 
+341                 case 0x1111: {
+342                     Logger::Out() << "Virtual Video Controller";
+343                     break;
+344                 }
+345             }
+346             break;
+347         }
+348 
+349         case 0x8086: {
+350             // The vendor is Intel
+351             Logger::Out() << "Intel ";
+352 
+353             // List the device
+354             switch (dev\&.device_id) {
+355 
+356                 case 0x1237: {
+357                     Logger::Out() << "440FX";
+358                     break;
+359                 }
+360 
+361                 case 0x2415: {
+362                     Logger::Out() << "AC'97";
+363                     break;
+364                 }
+365 
+366                 case 0x7000: {
+367                     Logger::Out() << "PIIX3";
+368                     break;
 369 
-370                 case 0x2415:
-371                 {
-372                   _kprintf("%hAC'97");
-373                   break;
-374                 }
-375 
-376                 case 0x7000:
-377                 {
-378                   _kprintf("%hPIIX3");
-379                   break;
-380 
-381                 }
-382 
-383                 case 0x7010:
-384                 {
-385                   _kprintf("%hPIIX4");
-386                   break;
-387 
-388                 }
+370                 }
+371 
+372                 case 0x7111: {
+373                     Logger::Out() << "PIIX3 ACPI";
+374                     break;
+375                 }
+376 
+377                 case 0x7113: {
+378                     Logger::Out() << "PIIX4 ACPI";
+379                     break;
+380                 }
+381 
+382                 default:
+383                     Logger::Out() << "0x%x" << dev\&.device_id;
+384                     break;
+385 
+386             }
+387             break;
+388         }
 389 
-390                 case 0x7111:
-391                 {
-392                   _kprintf("%hPIIX3 ACPI");
-393                   break;
-394                 }
-395 
-396                 case 0x7113:
-397                 {
-398                   _kprintf("%hPIIX4 ACPI");
-399                   break;
-400                 }
-401 
-402                 default:
-403                     _kprintf("%h0x%x", dev\&.device_id);
-404                     break;
-405 
-406             }
-407             break;
-408         }
-409 
-410         case 0x80EE: {
-411 
-412             // The vendor is VirtualBox
-413             _kprintf("%hVirtualBox ");
-414 
-415             // List the device
-416             switch (dev\&.device_id) {
-417 
-418                 case 0xBEEF: {
-419                   _kprintf("%hGraphics Adapter");
-420                   break;
-421                 }
-422 
-423                 case 0xCAFE: {
-424                   _kprintf("%hGuest Service");
-425                   break;
-426                 }
-427             }
-428             break;
-429         }
-430 
-431         default:    // Unknown
-432           _kprintf("%hUnknown (0x%x:0x%x)", dev\&.vendor_id, dev\&.device_id);
-433           break;
-434 
-435     }
-436 }
+390         case 0x80EE: {
+391 
+392             // The vendor is VirtualBox
+393             Logger::Out() << "VirtualBox ";
+394 
+395             // List the device
+396             switch (dev\&.device_id) {
+397 
+398                 case 0xBEEF: {
+399                     Logger::Out() << "Graphics Adapter";
+400                     break;
+401                 }
+402 
+403                 case 0xCAFE: {
+404                     Logger::Out() << "Guest Service";
+405                     break;
+406                 }
+407             }
+408             break;
+409         }
+410 
+411             // Unknown
+412         default:
+413             Logger::Out() << "Unknown (0x" << dev\&.vendor_id << ":0x" << dev\&.device_id << ")";
+414             break;
+415 
+416     }
+417 }
 .fi
+
 .PP
-References _kprintf, MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::device_id, and MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::vendor_id\&.
+References \fBLogger::Out()\fP\&.
 .PP
-Referenced by select_drivers()\&.
-.SS "void PeripheralComponentInterconnectController::select_drivers (\fBdrivers::DriverSelectorEventHandler\fP * handler, \fBhardwarecommunication::InterruptManager\fP * interrupt_manager)\fC [override]\fP, \fC [virtual]\fP"
+Referenced by \fBselect_drivers()\fP\&.
+.SS "\fBvoid\fP PeripheralComponentInterconnectController::select_drivers (\fBdrivers::DriverSelectorEventHandler\fP * handler)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Select the driver for the device\&. 
@@ -325,51 +298,51 @@ Driver for the device
 .PP
 Reimplemented from \fBMaxOS::drivers::DriverSelector\fP\&.
 .PP
-Definition at line 159 of file pci\&.cpp\&.
-.PP
+Definition at line \fB168\fP of file \fBpci\&.cpp\fP\&..PP
 .nf
-160 {
-161     for (int bus = 0; bus < 8; ++bus) {
-162         for (int device = 0; device < 32; ++device) {
-163 
-164             int numFunctions = (device_has_functions(bus, device)) ? 8 : 1;
-165 
-166             for (int function = 0; function < numFunctions; ++function) {
-167 
-168                 // Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
-169                 PeripheralComponentInterconnectDeviceDescriptor deviceDescriptor = get_device_descriptor(bus, device, function);
-170                 if(deviceDescriptor\&.vendor_id == 0x0000 || deviceDescriptor\&.vendor_id == 0x0001 || deviceDescriptor\&.vendor_id == 0xFFFF)
-171                     continue;
+168                                                                                                   {
+169 
+170     for (int bus = 0; bus < 8; ++bus) {
+171         for (int device = 0; device < 32; ++device) {
 172 
-173 
-174                 // Get port number
-175                 for(int barNum = 5; barNum >= 0; barNum--){
-176                     BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
-177                     if(bar\&.address && (bar\&.type == InputOutput))
-178                         deviceDescriptor\&.port_base = (uint32_t)bar\&.address;
-179                 }
-180 
-181                 // write to the debug stream
-182                 _kprintf("DEVICE FOUND: %s - ", deviceDescriptor\&.get_type()\&.c_str());
+173             int numFunctions = (device_has_functions(bus, device)) ? 8 : 1;
+174 
+175             for (int function = 0; function < numFunctions; ++function) {
+176 
+177                 // Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
+178                 PeripheralComponentInterconnectDeviceDescriptor deviceDescriptor = get_device_descriptor(bus, device,
+179                                                                                                          function);
+180                 if (deviceDescriptor\&.vendor_id == 0x0000 || deviceDescriptor\&.vendor_id == 0x0001 ||
+181                     deviceDescriptor\&.vendor_id == 0xFFFF)
+182                     continue;
 183 
-184                 // Select the driver and print information about the device
-185                 Driver* driver = get_driver(deviceDescriptor, interrupt_manager);
-186                 if(driver != nullptr){
-187                   handler->on_driver_selected(driver);
-188                   _kprintf("%h %s %s", driver->get_vendor_name()\&.c_str(), driver->get_device_name()\&.c_str());
-189                 }else{
-190                   list_known_deivce(deviceDescriptor);
-191                 }
+184                 // Get the earliest port number
+185                 for (int barNum = 5; barNum >= 0; barNum\-\-) {
+186                     BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
+187                     if (bar\&.address && (bar\&.type == BaseAddressRegisterType::InputOutput))
+188                         deviceDescriptor\&.port_base = (uint64_t) bar\&.address;
+189                 }
+190 
+191                 Logger::DEBUG() << "DEVICE FOUND: " << deviceDescriptor\&.get_type() << " \- ";
 192 
-193                 // New line
-194                 _kprintf("%h\n");
-195             }
-196         }
-197     }
-198 }
+193                 // Select the driver and print information about the device
+194                 Driver* driver = get_driver(deviceDescriptor);
+195                 if (driver != nullptr) {
+196                     handler\->on_driver_selected(driver);
+197                     Logger::Out() << driver\->vendor_name() << " " << driver\->device_name();
+198                 } else {
+199                     list_known_device(deviceDescriptor);
+200                 }
+201 
+202                 Logger::Out() << "\\n";
+203             }
+204         }
+205     }
+206 }
 .fi
+
 .PP
-References _kprintf, MaxOS::hardwarecommunication::BaseAddressRegister::address, bus, MaxOS::String::c_str(), MaxOS::drivers::Driver::get_device_name(), get_driver(), MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::get_type(), MaxOS::drivers::Driver::get_vendor_name(), MaxOS::hardwarecommunication::InputOutput, list_known_deivce(), MaxOS::drivers::DriverSelectorEventHandler::on_driver_selected(), MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::port_base, MaxOS::hardwarecommunication::BaseAddressRegister::type, and MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::vendor_id\&.
+References \fBbus\fP, \fBLogger::DEBUG()\fP, \fBget_driver()\fP, \fBMaxOS::hardwarecommunication::InputOutput\fP, \fBlist_known_device()\fP, and \fBLogger::Out()\fP\&.
 
 .SH "Author"
 .PP 

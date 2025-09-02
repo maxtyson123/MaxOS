@@ -1,9 +1,9 @@
 var interrupts_8h =
 [
-    [ "InterruptHandler", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler" ],
-    [ "IDTR", "structMaxOS_1_1hardwarecommunication_1_1IDTR.html", "structMaxOS_1_1hardwarecommunication_1_1IDTR" ],
-    [ "InterruptDescriptor", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor" ],
-    [ "InterruptManager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager" ],
+    [ "MaxOS::hardwarecommunication::InterruptHandler", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptHandler" ],
+    [ "MaxOS::hardwarecommunication::IDTR", "structMaxOS_1_1hardwarecommunication_1_1IDTR.html", "structMaxOS_1_1hardwarecommunication_1_1IDTR" ],
+    [ "MaxOS::hardwarecommunication::InterruptDescriptor", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html", "structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor" ],
+    [ "MaxOS::hardwarecommunication::InterruptManager", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html", "classMaxOS_1_1hardwarecommunication_1_1InterruptManager" ],
     [ "__attribute__", "interrupts_8h.html#abe45fccdf160be55b8dc7bd5417235ac", null ],
     [ "address_high_bits", "interrupts_8h.html#a881797a814e5d4e40f36e556939ebb11", null ],
     [ "address_low_bits", "interrupts_8h.html#aa5e05ff0f00929c5e92891ae639afd68", null ],

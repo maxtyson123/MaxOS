@@ -1,8 +1,9 @@
-.TH "MaxOS::drivers::clock::PIT" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::clock::PIT" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-MaxOS::drivers::clock::PIT
+MaxOS::drivers::clock::PIT \- \fBDriver\fP for the Programmable Interval Timer\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,20 +15,40 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBPIT\fP (\fBhardwarecommunication::InterruptManager\fP *interrupt_manager, \fBhardwarecommunication::AdvancedProgrammableInterruptController\fP *apic)"
+.RI "\fBPIT\fP (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP *apic)"
 .br
 .ti -1c
 .RI "\fB~PIT\fP ()"
 .br
 .in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.br
+.RI "Handles an interrupt and returns the status\&. "
+.in -1c
 .SS "Protected Member Functions"
 
 .in +1c
 .ti -1c
-.RI "void \fBhandle_interrupt\fP () final"
+.RI "\fBvoid\fP \fBhandle_interrupt\fP () \fBfinal\fP"
+.br
+.RI "Tick on each interrupt\&. "
+.ti -1c
+.RI "\fBuint32_t\fP \fBticks_per_ms\fP ()"
+.br
+.RI "Uses the \fBPIT\fP to calculate how many APIC ticks are in 1 millisecond\&. "
+.in -1c
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
 .ti -1c
-.RI "uint32_t \fBticks_per_ms\fP ()"
+.RI "\fB~InterruptHandler\fP ()"
 .br
 .in -1c
 .SS "Protected Attributes"
@@ -46,142 +67,153 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .RI "\fBhardwarecommunication::IOAPIC\fP * \fBm_io_apic\fP"
 .br
 .in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 90 of file clock\&.h\&.
+\fBDriver\fP for the Programmable Interval Timer\&. 
+.PP
+Definition at line \fB96\fP of file \fBclock\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "PIT::PIT (\fBhardwarecommunication::InterruptManager\fP * interrupt_manager, \fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic)"
+.SS "PIT::PIT (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic)"
 
 .PP
-Definition at line 235 of file clock\&.cpp\&.
-.PP
+Definition at line \fB236\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-236 : InterruptHandler(0x22, interrupt_manager),
-237   m_data_port(0x40),
-238   m_command_port(0x43),
-239   m_local_apic(apic -> get_local_apic()),
-240   m_io_apic(apic -> get_io_apic())
-241 {
-242 
-243 }
+237 : InterruptHandler(0x22),
+238   m_data_port(0x40),
+239   m_command_port(0x43),
+240   m_local_apic(apic\->local_apic()),
+241   m_io_apic(apic\->io_apic())
+242 {
+243 
+244 }
 .fi
-.SS "PIT::~PIT ()"
 
-.PP
-Definition at line 245 of file clock\&.cpp\&.
-.PP
-.nf
-245           {
-246 
-247 }
-.fi
+.SS "PIT::~PIT ()\fC [default]\fP"
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void PIT::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP PIT::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
 
+.PP
+Tick on each interrupt\&. 
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .PP
-Definition at line 249 of file clock\&.cpp\&.
-.PP
+Definition at line \fB251\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-249                            {
-250   m_ticks++;
-251 }
+251                            {
+252     m_ticks++;
+253 }
 .fi
-.SS "uint32_t PIT::ticks_per_ms ()\fC [protected]\fP"
+
+.SS "\fBuint32_t\fP PIT::ticks_per_ms ()\fC [protected]\fP"
 
 .PP
-Definition at line 253 of file clock\&.cpp\&.
+Uses the \fBPIT\fP to calculate how many APIC ticks are in 1 millisecond\&. 
 .PP
+\fBReturns\fP
+.RS 4
+The amount of APIC ticks per millisecond 
+.RE
+.PP
+
+.PP
+Definition at line \fB260\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-253                            {
-254 
-255   // Set the redirect for the timer interrupt
-256   interrupt_redirect_t redirect = {
-257       \&.type = 0x2,
-258       \&.index = 0x14,
-259       \&.interrupt = 0x22,
-260       \&.destination = 0x00,
-261       \&.flags = 0x00,
-262       \&.mask = true,
-263   };
-264   m_io_apic -> set_redirect(&redirect);
-265 
-266   // Configure the PIT clock
-267   PITCommand command = {
-268       \&.bcd_mode = BINARY,
-269       \&.operating_mode = MODE_2,
-270       \&.access_mode = LOW_HIGH_BYTE,
-271       \&.channel = CHANNEL_0,
-272   };
-273   m_command_port\&.write(*(uint8_t *)&command);
-274 
-275   // Set the clock rate to 1 ms;
-276   uint16_t rate = 1193182 / 1000;
-277   m_data_port\&.write(rate & 0xFF);
-278   m_data_port\&.write(rate >> 8);
-279 
-280   // Stop the clock (write 0 as the initial count)
-281   m_local_apic -> write(0x380, 0x00);
-282 
-283   // Set the divisor to 2
-284   m_local_apic -> write(0x3E0, 0x0);
-285 
-286   // Unmask the PIT interrupt
-287   m_io_apic ->set_redirect_mask(redirect\&.index, false);
-288 
-289   // Calculate the number of ticks in 1 ms
-290   uint32_t max = (uint32_t) - 1;
-291   m_local_apic -> write(0x380, max);
+260                            {
+261 
+262     // Set the redirect for the timer interrupt
+263     interrupt_redirect_t redirect = {
+264             \&.type = 0x2,
+265             \&.index = 0x14,
+266             \&.interrupt = 0x22,
+267             \&.destination = 0x00,
+268             \&.flags = 0x00,
+269             \&.mask = true,
+270     };
+271     m_io_apic\->set_redirect(&redirect);
+272 
+273     // Configure the PIT clock
+274     pit_command_t command = {
+275             \&.bcd_mode       = (uint8_t) BCDMode::BINARY,
+276             \&.operating_mode = (uint8_t) OperatingMode::RATE_GENERATOR,
+277             \&.access_mode    = (uint8_t) AccessMode::LOW_HIGH_BYTE,
+278             \&.channel        = (uint8_t) Channel::INTERRUPT
+279     };
+280     m_command_port\&.write(*(uint8_t *) &command);
+281 
+282     // Set the clock rate to 1 ms;
+283     uint16_t rate = 1193182 / 1000;
+284     m_data_port\&.write(rate & 0xFF);
+285     m_data_port\&.write(rate >> 8);
+286 
+287     // Stop the clock
+288     m_local_apic\->write(0x380, 0x00);
+289 
+290     // Set the divisor to 2
+291     m_local_apic\->write(0x3E0, 0x0);
 292 
-293   while (m_ticks < s_calibrate_ticks)
-294     asm volatile("nop");
+293     // Unmask the PIT interrupt
+294     m_io_apic\->set_redirect_mask(redirect\&.index, false);
 295 
-296   uint32_t elapsed = max - (m_local_apic -> read(0x390));
-297   uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
-298 
-299   _kprintf("Ticks per ms: %d\n", ticks_per_ms);
-300 
-301   // Disable the PIT interrupt again
-302   m_local_apic -> write(0x380, 0x00);
-303   m_io_apic -> set_redirect_mask(redirect\&.index, true);
-304 
-305   return ticks_per_ms;
-306 
-307 }
+296     // Calculate the number of ticks in 1 ms
+297     auto max = (uint32_t) \-1;
+298     m_local_apic\->write(0x380, max);
+299 
+300     while (m_ticks < s_calibrate_ticks)
+301         asm volatile("nop");
+302 
+303     uint32_t elapsed = max \- (m_local_apic\->read(0x390));
+304     uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
+305 
+306     Logger::DEBUG() << "Ticks per ms: " << (int) ticks_per_ms << "\\n";
+307 
+308     // Disable the PIT interrupt again
+309     m_local_apic\->write(0x380, 0x00);
+310     m_io_apic\->set_redirect_mask(redirect\&.index, true);
+311 
+312     return ticks_per_ms;
+313 }
 .fi
+
 .PP
-References _kprintf, MaxOS::drivers::clock::BINARY, MaxOS::drivers::clock::CHANNEL_0, command, MaxOS::hardwarecommunication::InterruptRedirect::index, MaxOS::drivers::clock::LOW_HIGH_BYTE, m_command_port, m_data_port, m_io_apic, m_local_apic, MaxOS::drivers::clock::MODE_2, MaxOS::hardwarecommunication::IOAPIC::set_redirect_mask(), MaxOS::hardwarecommunication::InterruptRedirect::type, write, and MaxOS::hardwarecommunication::Port8Bit::write()\&.
+References \fBMaxOS::drivers::clock::BINARY\fP, \fBcommand\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::drivers::clock::INTERRUPT\fP, \fBMaxOS::drivers::clock::LOW_HIGH_BYTE\fP, \fBm_command_port\fP, \fBm_data_port\fP, \fBm_io_apic\fP, \fBm_local_apic\fP, \fBMaxOS::drivers::clock::RATE_GENERATOR\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::read()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect_mask()\fP, \fBticks_per_ms()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::write()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
 .PP
-Referenced by MaxOS::drivers::clock::Clock::calibrate()\&.
+Referenced by \fBticks_per_ms()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::PIT::m_command_port\fC [protected]\fP"
 
 .PP
-Definition at line 102 of file clock\&.h\&.
+Definition at line \fB108\fP of file \fBclock\&.h\fP\&.
 .PP
-Referenced by ticks_per_ms()\&.
+Referenced by \fBticks_per_ms()\fP\&.
 .SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::PIT::m_data_port\fC [protected]\fP"
 
 .PP
-Definition at line 101 of file clock\&.h\&.
+Definition at line \fB107\fP of file \fBclock\&.h\fP\&.
 .PP
-Referenced by ticks_per_ms()\&.
+Referenced by \fBticks_per_ms()\fP\&.
 .SS "\fBhardwarecommunication::IOAPIC\fP* MaxOS::drivers::clock::PIT::m_io_apic\fC [protected]\fP"
 
 .PP
-Definition at line 106 of file clock\&.h\&.
+Definition at line \fB112\fP of file \fBclock\&.h\fP\&.
 .PP
-Referenced by ticks_per_ms()\&.
+Referenced by \fBticks_per_ms()\fP\&.
 .SS "\fBhardwarecommunication::LocalAPIC\fP* MaxOS::drivers::clock::PIT::m_local_apic\fC [protected]\fP"
 
 .PP
-Definition at line 105 of file clock\&.h\&.
+Definition at line \fB111\fP of file \fBclock\&.h\fP\&.
 .PP
-Referenced by ticks_per_ms()\&.
+Referenced by \fBticks_per_ms()\fP\&.
 
 .SH "Author"
 .PP 

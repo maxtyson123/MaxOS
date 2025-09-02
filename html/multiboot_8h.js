@@ -34,7 +34,7 @@ var multiboot_8h =
     [ "multiboot_tag_efi32_ih", "structmultiboot__tag__efi32__ih.html", "structmultiboot__tag__efi32__ih" ],
     [ "multiboot_tag_efi64_ih", "structmultiboot__tag__efi64__ih.html", "structmultiboot__tag__efi64__ih" ],
     [ "multiboot_tag_load_base_addr", "structmultiboot__tag__load__base__addr.html", "structmultiboot__tag__load__base__addr" ],
-    [ "Multiboot", "classMaxOS_1_1system_1_1Multiboot.html", "classMaxOS_1_1system_1_1Multiboot" ],
+    [ "MaxOS::system::Multiboot", "classMaxOS_1_1system_1_1Multiboot.html", "classMaxOS_1_1system_1_1Multiboot" ],
     [ "MULTIBOOT2_BOOTLOADER_MAGIC", "multiboot_8h.html#a18088e9abdbc843745e5e59973481475", null ],
     [ "MULTIBOOT2_HEADER_MAGIC", "multiboot_8h.html#a84893ea1f13a57e8990e8d04d0f7b58d", null ],
     [ "MULTIBOOT_ARCHITECTURE_I386", "multiboot_8h.html#a6ebc069917f2924e1fd3dd794a90d048", null ],

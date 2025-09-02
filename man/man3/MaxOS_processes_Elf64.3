@@ -1,8 +1,9 @@
-.TH "MaxOS::processes::Elf64" 3 "Sat Mar 29 2025" "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::Elf64" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-MaxOS::processes::Elf64
+MaxOS::processes::Elf64 \- Handles the loading and parsing of 64-bit ELF files\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -24,29 +25,35 @@ MaxOS::processes::Elf64
 .br
 .RI "Loads the elf program into memory if a valid elf file\&. "
 .ti -1c
-.RI "bool \fBis_valid\fP ()"
+.RI "bool \fBis_valid\fP () const"
 .br
 .RI "Checks if the elf file is valid for \fBMaxOS\fP runtime\&. "
 .ti -1c
-.RI "\fBelf_64_header_t\fP * \fBget_header\fP ()"
+.RI "\fBelf_64_header_t\fP * \fBheader\fP () const"
 .br
 .RI "Gets the header of the elf file\&. "
 .ti -1c
-.RI "\fBelf_64_program_header_t\fP * \fBget_program_header\fP (size_t index)"
+.RI "\fBelf_64_program_header_t\fP * \fBget_program_header\fP (size_t index) const"
 .br
 .RI "Gets a program header from the elf file\&. "
 .ti -1c
-.RI "\fBelf_64_section_header_t\fP * \fBget_section_header\fP (size_t index)"
+.RI "\fBelf_64_section_header_t\fP * \fBget_section_header\fP (size_t index) const"
 .br
 .RI "Gets a section header from the elf file\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
 .ti -1c
-.RI "uint64_t \fBto_vmm_flags\fP (uint32_t \fBtype\fP)"
+.RI "static uint64_t \fBto_vmm_flags\fP (uint32_t \fBtype\fP)"
 .br
 .RI "Converts elf flags to vmm flags\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 149 of file elf\&.h\&.
+Handles the loading and parsing of 64-bit ELF files\&. 
+.PP
+Definition at line \fB154\fP of file \fBelf\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Elf64::Elf64 (uintptr_t elf_header_address)"
@@ -61,50 +68,20 @@ Constructor for the \fBElf64\fP class\&.
 .PP
 
 .PP
-Definition at line 19 of file elf\&.cpp\&.
-.PP
+Definition at line \fB19\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
 20 : m_elf_header_address(elf_header_address)
 21 {
 22 }
 .fi
-.SS "Elf64::~Elf64 ()"
+
+.SS "Elf64::~Elf64 ()\fC [default]\fP"
 
 .PP
 Destructor for the \fBElf64\fP class\&. 
-.PP
-Definition at line 27 of file elf\&.cpp\&.
-.PP
-.nf
-28 {
-29 }
-.fi
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBelf_64_header_t\fP * Elf64::get_header ()"
-
-.PP
-Gets the header of the elf file\&. 
-.PP
-\fBReturns\fP
-.RS 4
-The header of the elf file 
-.RE
-.PP
-
-.PP
-Definition at line 49 of file elf\&.cpp\&.
-.PP
-.nf
-49                                    {
-50 
-51   // Return the header
-52   return (elf_64_header_t*)m_elf_header_address;
-53 }
-.fi
-.PP
-Referenced by get_program_header(), get_section_header(), and is_valid()\&.
-.SS "\fBelf_64_program_header_t\fP * Elf64::get_program_header (size_t index)"
+.SS "\fBelf_64_program_header_t\fP * Elf64::get_program_header (size_t index) const"
 
 .PP
 Gets a program header from the elf file\&. 
@@ -121,25 +98,24 @@ The program header at that index or nullptr if out of bounds
 .PP
 
 .PP
-Definition at line 61 of file elf\&.cpp\&.
-.PP
+Definition at line \fB58\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-61                                                                {
-62 
-63   // Check if within bounds
-64   if(index >= get_header() -> program_header_count) return nullptr;
-65 
-66   // Get the address of the program headers
-67   elf_64_program_header_t* program_headers = (elf_64_program_header_t*)(m_elf_header_address + get_header() -> program_header_offset);
-68 
-69   // Return the requested program header
-70   return &program_headers[index];
-71 
-72 }
+58                                                                      {
+59 
+60     // Check bounds
+61     if (index >= header()\->program_header_count)
+62         return nullptr;
+63 
+64     // Find the program headers and return the item
+65     auto* program_headers = (elf_64_program_header_t*) (m_elf_header_address + header()\->program_header_offset);
+66     return &program_headers[index];
+67 
+68 }
 .fi
+
 .PP
-References get_header()\&.
-.SS "\fBelf_64_section_header_t\fP * Elf64::get_section_header (size_t index)"
+References \fBheader()\fP, and \fBMaxOS::processes::elf_64_header_t::program_header_offset\fP\&.
+.SS "\fBelf_64_section_header_t\fP * Elf64::get_section_header (size_t index) const"
 
 .PP
 Gets a section header from the elf file\&. 
@@ -156,93 +132,114 @@ The section header at that index or nullptr if out of bounds
 .PP
 
 .PP
-Definition at line 80 of file elf\&.cpp\&.
-.PP
+Definition at line \fB76\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-80                                                                {
+76                                                                      {
+77 
+78     // Check bound
+79     if (index >= header()\->section_header_count)
+80         return nullptr;
 81 
-82   // Check if within bounds
-83   if(index >= get_header() -> section_header_count) return nullptr;
-84 
-85   // Get the address of the section headers
-86   elf_64_section_header_t* section_headers = (elf_64_section_header_t*)(m_elf_header_address + get_header() -> section_header_offset);
-87 
-88   // Return the requested section header
-89   return &section_headers[index];
-90 
-91 }
+82     // Find the section headers and return the item
+83     auto* section_headers = (elf_64_section_header_t*) (m_elf_header_address + header()\->section_header_offset);
+84     return &section_headers[index];
+85 
+86 }
 .fi
+
 .PP
-References get_header()\&.
-.SS "bool Elf64::is_valid ()"
+References \fBheader()\fP, and \fBMaxOS::processes::elf_64_header_t::section_header_offset\fP\&.
+.SS "\fBelf_64_header_t\fP * Elf64::header () const"
+
+.PP
+Gets the header of the elf file\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The header of the elf file 
+.RE
+.PP
+
+.PP
+Definition at line \fB47\fP of file \fBelf\&.cpp\fP\&..PP
+.nf
+47                                      {
+48 
+49     return (elf_64_header_t*) m_elf_header_address;
+50 }
+.fi
+
+.PP
+Referenced by \fBget_program_header()\fP, \fBget_section_header()\fP, and \fBis_valid()\fP\&.
+.SS "bool Elf64::is_valid () const"
 
 .PP
 Checks if the elf file is valid for \fBMaxOS\fP runtime\&. 
 .PP
-Definition at line 96 of file elf\&.cpp\&.
-.PP
+Definition at line \fB91\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-96                      {
+91                            {
+92 
+93     // Validate the magic number
+94     for (size_t i = 0; i < 4; i++)
+95         if (header()\->identification[i] != elf_magic[i])
+96             return false;
 97 
-98   // Validate the magic number
-99   for (size_t i = 0; i < 4; i++)
-100     if (get_header() -> identification[i] != elf_magic[i])
-101       return false;
-102 
-103   // Check if the elf is 64 bit
-104   if(get_header() -> identification[Class] != Class64)
-105     return false;
-106 
-107   // Check if the elf is little endian
-108   if(get_header() -> identification[Data] != LittleEndian)
-109     return false;
-110 
-111   // Check if the elf is version 1
-112   if(get_header() -> identification[Version] != Current)
-113     return false;
-114 
-115   // Check if the elf is for the MaxOS platform
-116   //  if(get_header() -> identification[OSABI] != MaxOSABI)
-117   //      return false; TODO: Would be nice to have an OSABI
-118 
-119   // Check if the elf is executable
-120   if(get_header() -> type != Executable)
-121     return false;
-122 
-123   // Check if the elf is for the x86_64 platform
-124   if(get_header() -> machine != x86_64)
-125     return false;
-126 
-127   // LGTM
-128   return true;
-129 
-130 }
+98     // Check if the elf is 64 bit
+99     if (header()\->identification[(int) ElfIdentification::Class] != (int) ElfClass::Bits64)
+100         return false;
+101 
+102     // Check if the elf is little endian
+103     if (header()\->identification[(int) ElfIdentification::Data] != (int) ElfData::LittleEndian)
+104         return false;
+105 
+106     // Check if the elf is version 1
+107     if (header()\->identification[(int) ElfIdentification::Version] != (int) ElfVersion::Current)
+108         return false;
+109 
+110     // Check if the elf is for the MaxOS platform
+111     //  if(header() \-> identification[OSABI] != MaxOSABI)
+112     //      return false; TODO: Would be nice to have an OS ABI
+113 
+114     // Check if the elf is executable
+115     if (header()\->type != (int) ElfType::Executable)
+116         return false;
+117 
+118     // Check if the elf is for the x86_64 platform
+119     if (header()\->machine != (int) ElfMachine::x86_64)
+120         return false;
+121 
+122     // LGTM
+123     return true;
+124 
+125 }
 .fi
+
 .PP
-References MaxOS::processes::Class, MaxOS::processes::Class64, MaxOS::processes::Current, MaxOS::processes::Data, MaxOS::processes::Executable, get_header(), MaxOS::drivers::peripherals::i, MaxOS::processes::LittleEndian, type, MaxOS::processes::Version, and MaxOS::processes::x86_64\&.
+References \fBMaxOS::processes::Bits64\fP, \fBMaxOS::processes::Class\fP, \fBMaxOS::processes::Current\fP, \fBMaxOS::processes::Data\fP, \fBMaxOS::processes::Executable\fP, \fBheader()\fP, \fBMaxOS::processes::LittleEndian\fP, \fBtype\fP, \fBMaxOS::processes::Version\fP, and \fBMaxOS::processes::x86_64\fP\&.
 .PP
-Referenced by load(), and MaxOS::processes::Scheduler::load_multiboot_elfs()\&.
+Referenced by \fBload()\fP\&.
 .SS "void Elf64::load ()"
 
 .PP
 Loads the elf program into memory if a valid elf file\&. 
 .PP
-Definition at line 34 of file elf\&.cpp\&.
-.PP
+Definition at line \fB32\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-34                  {
-35 
-36   // Check if valid
-37   if(!is_valid()) return; //TODO: error handling
-38 
-39   // Load the program headers
-40   load_program_headers();
-41 
-42 }
+32                  {
+33 
+34     //TODO: error handling when the syscall for this is implemented
+35     if (!is_valid())
+36         return;
+37 
+38     load_program_headers();
+39 
+40 }
 .fi
+
 .PP
-References is_valid()\&.
-.SS "uint64_t Elf64::to_vmm_flags (uint32_t type)"
+References \fBis_valid()\fP\&.
+.SS "uint64_t Elf64::to_vmm_flags (uint32_t type)\fC [static]\fP"
 
 .PP
 Converts elf flags to vmm flags\&. 
@@ -259,32 +256,32 @@ The vmm flags
 .PP
 
 .PP
-Definition at line 175 of file elf\&.cpp\&.
-.PP
+Definition at line \fB164\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-175                                           {
-176 
-177   // Conversion
-178   // ELF   |   VMM
-179   // 0x0   |   Executable (not used)
-180   // 0x1   |   Write
-181   // 0x2   |   Read
-182 
-183   uint64_t flags = 0;
-184 
-185   if(type & ElfWrite)
-186       flags |= Write;
-187 
-188 //  if(type & ElfProgramFlags::Execute)
-189 //      flags |= PageFlags::Execute;
-190 
-191 
-192   return flags;
-193 
-194 }
+164                                           {
+165 
+166     // Conversion
+167     // ELF   |   VMM
+168     // 0x0   |   Executable
+169     // 0x1   |   Write
+170     // 0x2   |   Read
+171 
+172     uint64_t flags = Present | User | NoExecute;
+173 
+174     // Enable write
+175     if (type & ElfWrite)
+176         flags |= Write;
+177 
+178     // Disable no execute
+179     if (type & ElfExecute)
+180         flags &= ~NoExecute;
+181 
+182     return flags;
+183 }
 .fi
+
 .PP
-References MaxOS::processes::ElfWrite, flags, type, and MaxOS::memory::Write\&.
+References \fBMaxOS::processes::ElfExecute\fP, \fBMaxOS::processes::ElfWrite\fP, \fBflags\fP, \fBMaxOS::memory::NoExecute\fP, \fBMaxOS::memory::Present\fP, \fBtype\fP, \fBMaxOS::memory::User\fP, and \fBMaxOS::memory::Write\fP\&.
 
 .SH "Author"
 .PP 
