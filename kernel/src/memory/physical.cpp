@@ -724,7 +724,7 @@ void PhysicalMemoryManager::initialise_bit_map() {
 		}
 
 		// Make sure there is enough space
-		ASSERT(space >= (m_bitmap_size / 8 + 1), "Not enough space for the bitmap (to big)\n");
+		ASSERT(space >= (m_bitmap_size / 8 + 1), "Not enough space for the bitmap (too big)\n");
 
 		// Return the address (ensuring that it is in the safe region)
 		m_bit_map = (uint64_t*) to_dm_region(entry->addr + offset);

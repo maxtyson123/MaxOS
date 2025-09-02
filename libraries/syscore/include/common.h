@@ -14,6 +14,10 @@ namespace syscore{
 	* @return The length of the string
 	*/
 	inline int strlen(const char *str) {
+
+		if(str == nullptr)
+			return 0;
+
 		int len = 0;
 		for (; str[len] != '\0'; len++);
 		return len;

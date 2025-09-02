@@ -211,7 +211,7 @@ No user usage so far (userland will be added in the future)
 - [x] Paging
 - [x] Userspace
 - [x] IPC
-- [ ] VFS
+- [x] VFS
 - [x] Loading ELF
 - [ ] Multiple Cores Support (SMP & Scheduler)
 - [ ] Move drivers to userspace 

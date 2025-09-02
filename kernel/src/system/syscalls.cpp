@@ -5,7 +5,7 @@
 #include <system/syscalls.h>
 #include <common/logger.h>
 
-using namespace ::syscore;
+using namespace syscore;
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
