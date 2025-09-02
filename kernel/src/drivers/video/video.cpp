@@ -7,13 +7,7 @@
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::common;
 
-
-VideoDriver::VideoDriver()
-: Driver(),
-  GraphicsContext()
-{
-
-}
+VideoDriver::VideoDriver() = default;
 
 VideoDriver::~VideoDriver() = default;
 
@@ -51,19 +45,17 @@ bool VideoDriver::supports_mode(uint32_t, uint32_t, uint32_t) {
  */
 bool VideoDriver::set_mode(uint32_t width, uint32_t height, uint32_t colorDepth) {
 
-    // Check if the mode is supported
+    // Cant set it if not supported
     if(!supports_mode(width, height, colorDepth))
         return false;
 
-    // Set the mode
-    if(internal_set_mode(width, height, colorDepth))
-    {
-        this -> m_width = width;
-        this -> m_height = height;
-        this -> m_color_depth = colorDepth;
-        return true;
-    }
+    // Try set the mode
+    if(!internal_set_mode(width, height, colorDepth))
+        return false;
 
-    // If setting the mode failed, return false
-    return false;
+    // Store the mode
+    m_width = width;
+    m_height = height;
+    m_color_depth = colorDepth;
+    return true;
 }

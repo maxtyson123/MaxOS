@@ -3,6 +3,13 @@
 //
 #include <stdint.h>
 #include <stddef.h>
+#include <ipc/messages.h>
+#include <filesystem/directory.h>
+#include <syscalls.h>
+
+using namespace syscore;
+using namespace syscore::ipc;
+using namespace syscore::filesystem;
 
 // Write using a syscall (int 0x80 with syscall 0x01 for write)
 void write(const char* data, uint64_t length = 0)
@@ -34,54 +41,6 @@ void write_hex(uint64_t data)
   write(buffer);
 }
 
-// Create a shared memory block (int 0x80 with syscall 0x03, taking a string as the name)
-void* open_shared_memory(char* name)
-{
-  void* result = nullptr;
-
-  while (result == nullptr)
-    asm volatile("int $0x80" : "=a" (result) : "a" (0x03), "b" (name));
-  return result;
-}
-
-void setstring(char* str, const char* message)
-{
-  while(*message != '\0')
-    *str++ = *message++;
-  *str = '\0';
-}
-
-typedef struct TestSharedMemoryBlock
-{
-  char message[100];
-
-} TestSharedMemoryBlock;
-
-typedef struct SharedMessage{
-  void* message_buffer;
-  size_t message_size;
-  uintptr_t next_message;
-} ipc_message_t;
-
-void send_message(const char* endpoint, void* message, size_t size)
-{
-  asm volatile(
-      "mov %[endpoint], %%rdi\n\t"  // arg0: endpoint
-      "mov %[message], %%rsi\n\t"   // arg1: message
-      "mov %[size], %%rdx\n\t"      // arg2: size
-      "mov $0, %%r10\n\t"           // arg3: if not used, set to 0
-      "mov $0, %%r8\n\t"            // arg4: if not used, set to 0
-      "mov $0, %%r9\n\t"            // arg5: if not used, set to 0
-      "mov $0x07, %%rax\n\t"        // syscall number for send_message
-      "int $0x80\n\t"
-      :
-      : [endpoint] "r"(endpoint),
-        [message] "r"(message),
-        [size] "r"(size)
-      : "rax", "rdi", "rsi", "rdx", "r10", "r8", "r9"
-  );
-}
-
 void close()
 {
   // syscall 0, arg0 = pid (0 for current process), arg1 = exit code
@@ -95,7 +54,6 @@ void close()
       : "rax", "rdi", "rsi"
         );
 }
-
 
 void wait(uint64_t ms)
 {
@@ -112,33 +70,38 @@ void wait(uint64_t ms)
 
 extern "C" int _start(int argc, char** argv)
 {
+	// Write to the console
+	write("MaxOS Test Program v3\n");
 
-  // Print the args
-  write("Args:\n");
-  for(int i = 0; i < argc; i++)
-  {
+	uint64_t dd = open_directory("/test/abc/");
+	write("dd: \n");
+	write_hex(dd);
 
-    // Write the arg
-    write(argv[i]);
-  }
-  write("%h\n");
+	// Read Tests
+//	write("size: \n");
+//	write_hex(directory_entries_size(dd));
+//
+//	uint8_t buffer[163];
+//	directory_entries(dd, buffer, 163);
+//	size_t offset = 0;
+//	while (offset < 163)
+//	{
+//		auto* entry = (entry_information_t*)(buffer + offset);
+//		write(entry->name);
+//		write("%h\n");
+//		offset += entry->entry_length;
+//	}
 
-  // Write to the console
-  write("MaxOS Test Program v3.1\n");
+  	// Write Tests
+//	new_file(dd, "c.txt");
+//	new_directory(dd, "sub");
+//
+//	remove_file(dd, "c.txt");
+//	remove_directory(dd, "sub");
 
-  const char* message = "Message from process 2\n";
-  const char* endpoint = "TestQueue";
+//	rename_directory(dd, "def");
 
-  // Wait 4seconds
-  wait(4000);
-  write("Waited 4 seconds\n");
-
-  // Send a message via IPC
-  send_message(endpoint, (void*)message, 24);
-
-
-  // Close the process
-  write("Closing process\n");
-  close();
+	while (true)
+		thread_yield();
 
 }

@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+#include <common/vector.h>
+
 namespace MaxOS {
 
     /**
@@ -16,14 +18,21 @@ namespace MaxOS {
     class String {
         private:
           char* m_string = nullptr;
-          int m_length = 0;
+          int m_length = 0;           // Does not include the null terminator
+
+		  const static uint8_t s_small_storage = 0x99;
+		  char m_small_string[s_small_storage];
+		  bool m_using_small = true;
 
           [[nodiscard]] static int lex_value(String const &other) ;
+          void allocate_self();
 
         public:
 
           String();
+          explicit String(char c);
           String(char const* string);
+          String(uint8_t const* string, int length);
           String(String const &other);
           String(int value);
           String(uint64_t value);
@@ -34,7 +43,14 @@ namespace MaxOS {
 
           [[nodiscard]] int length(bool count_ansi = true) const;
           char* c_str();
-          [[nodiscard]] const char* c_str() const;
+          const char* c_str() const;
+
+          bool starts_with(String const &other);
+          String substring(int start, int length) const;
+
+          common::Vector<String> split(String const &delimiter) const;
+          String strip(char strip_char = ' ') const;
+
 
           [[nodiscard]] String center(int width, char fill = ' ') const;
 

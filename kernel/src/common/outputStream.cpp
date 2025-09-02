@@ -20,8 +20,7 @@ OutputStream::~OutputStream() = default;
  */
 void OutputStream::lineFeed() {
 
-    // write the text representation of a newline to the output stream.
-    write_char('\n');
+	write_char('\n');
 
 }
 
@@ -30,8 +29,8 @@ void OutputStream::lineFeed() {
  */
 void OutputStream::carriageReturn() {
 
-    // write the text representation of a carriage return to the output stream.
-    write_char('\r');
+	// write the text representation of a carriage return to the output stream.
+	write_char('\r');
 
 }
 
@@ -49,7 +48,7 @@ void OutputStream::clear() {
  */
 void OutputStream::write(string string_to_write) {
 
-  write(string_to_write.c_str());
+	write(string_to_write.c_str());
 }
 
 /**
@@ -57,44 +56,31 @@ void OutputStream::write(string string_to_write) {
  *
  * @param string_to_write The string to write to the output stream.
  */
-void OutputStream::write(const char* string_to_write){
+void OutputStream::write(const char *string_to_write) {
 
-  // Loop through the string
-  int i = 0;
-  while (string_to_write[i] != '\0') {
+	int i = 0;
+	while (string_to_write[i] != '\0') {
 
-    // Switch on the current character
-    switch (string_to_write[i]) {
+		switch (string_to_write[i]) {
 
-      // If the current character is a newline
-      case '\n':
+			case '\n':
+				lineFeed();
+				break;
 
-        // write a newline to the output stream
-        lineFeed();
-        break;
+			case '\r':
+				carriageReturn();
+				break;
 
-      // If the current character is a carriage return
-      case '\r':
+			case '\0':
+				return;
 
-        // write a carriage return to the output stream
-        carriageReturn();
-        break;
+			default:
+				write_char(string_to_write[i]);
+				break;
 
-
-      // If the current character is a null terminator
-      case '\0':
-        return;
-
-      // If the current character is any other character
-      default:
-
-        // write the current character to the output stream
-        write_char(string_to_write[i]);
-        break;
-
-      }
-      i++;
-  }
+		}
+		i++;
+	}
 }
 
 /**
@@ -113,7 +99,7 @@ void OutputStream::write_char(char) {
  */
 void OutputStream::write_int(int int_to_write) {
 
-  write(itoa(10, int_to_write));
+	write(itoa(10, int_to_write));
 
 }
 
@@ -124,23 +110,20 @@ void OutputStream::write_int(int int_to_write) {
  */
 void OutputStream::write_hex(uint64_t hex_to_write) {
 
-    write(htoa(hex_to_write));
+	write(htoa(hex_to_write));
 
 }
 
 /**
- * @brief Writes a interger to the output stream.
+ * @brief Writes a integer to the output stream.
  *
  * @param int_to_write The integer to write to the output stream.
  * @return The output stream.
  */
-OutputStream &OutputStream::operator << (int int_to_write) {
+OutputStream &OutputStream::operator<<(int int_to_write) {
 
-    // Call the writeInt function to write the integer to the output stream
-    write_int(int_to_write);
-
-    // Return the output stream
-    return *this;
+	write_int(int_to_write);
+	return *this;
 }
 
 /**
@@ -149,13 +132,10 @@ OutputStream &OutputStream::operator << (int int_to_write) {
  * @param hex_to_write The hex to write to the output stream.
  * @return The output stream.
  */
-OutputStream &OutputStream::operator << (uint64_t hex_to_write) {
+OutputStream &OutputStream::operator<<(uint64_t hex_to_write) {
 
-    // Call the write_hex function to write the hex to the output stream
-    write_hex(hex_to_write);
-
-    // Return the output stream
-    return *this;
+	write_hex(hex_to_write);
+	return *this;
 }
 
 /**
@@ -164,13 +144,10 @@ OutputStream &OutputStream::operator << (uint64_t hex_to_write) {
  * @param string_to_write The string to write to the output stream.
  * @return The output stream.
  */
-OutputStream &OutputStream::operator << (string string_to_write) {
+OutputStream &OutputStream::operator<<(string string_to_write) {
 
-    // Call the write function to write the string to the output stream
-    write(string_to_write);
-
-    // Return the output stream
-    return *this;
+	write(string_to_write);
+	return *this;
 }
 
 /**
@@ -181,11 +158,8 @@ OutputStream &OutputStream::operator << (string string_to_write) {
  */
 OutputStream &OutputStream::operator<<(char char_to_write) {
 
-    // Call the writeChar function to write the character to the output stream
-    write_char(char_to_write);
-
-    // Return the output stream
-    return *this;
+	write_char(char_to_write);
+	return *this;
 }
 
 /**
@@ -196,10 +170,6 @@ OutputStream &OutputStream::operator<<(char char_to_write) {
  */
 OutputStream &OutputStream::operator<<(char const *string_to_write) {
 
-  // Call the write function to write the string to the output stream
-  write(string_to_write);
-
-  // Return the output stream
-  return *this;
+	write(string_to_write);
+	return *this;
 }
-

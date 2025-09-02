@@ -135,6 +135,7 @@ if [  "$USE_DEBUG" -ne "0" ]; then
 fi
 
 BOOT_DEVICE=""
+: "${USE_ISO:=0}"
 if [ "$USE_ISO" -eq 1 ]; then
   msg "Using ISO boot device."
   BOOT_DEVICE="-cdrom ../MaxOS.iso"
@@ -158,6 +159,18 @@ QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                                 # Add po
 QEMU_ARGS="$QEMU_ARGS $BOOT_DEVICE"
 QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"                          # Don't reboot or shutdown on exit
 
+# Kill
+msg "Killing other instances."
+if [ "$IN_WSL" -ne "0" ]; then
+  taskkill.exe /IM "qemu-system-x86_64.exe" /F
+else
+  killall $QEMU_EXECUTABLE
+fi
+
+
 # Run qemu
 msg "Running qemu with args: $QEMU_ARGS"
 "$QEMU_EXECUTABLE" $QEMU_ARGS
+
+# Cleanup
+bash $SCRIPTDIR/copy_filesystem.sh --reverse

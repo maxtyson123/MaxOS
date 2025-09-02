@@ -9,8 +9,6 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::console;
 
-///____ Console ____
-
 Console::Console() = default;
 
 Console::~Console() = default;
@@ -131,17 +129,15 @@ void Console::put_string(uint16_t x, uint16_t y, string string, ConsoleColour fo
 
     // Print each character on the screen
     for(int i = 0; i < string.length(); i++)
-            put_character(x + i, y, string[i], foreground, background);
+        put_character(x + i, y, string[i], foreground, background);
 }
 
 /**
- * @brief Scroll the console up by 1 line
+ * @brief Scroll the entire console up by 1 line
  */
 void Console::scroll_up() {
 
-    // Scroll the console up by 1 line
     scroll_up(0, 0, width(), height());
-
 }
 
 /**
@@ -157,32 +153,22 @@ void Console::scroll_up() {
  */
 void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
-    // For each line in the area to scroll (except the last line)
-    for(uint32_t y = top; y < top+height-1; y++){
+    // Shift everything but the last line by getting what is below it
+    for(uint32_t y = top; y < top+height-1; y++)
+        for(uint32_t x = left; x < left+width; x++)
+            put_character(x, y, get_character(x, y + 1), get_foreground_color(x, y + 1), get_background_color(x, y + 1));
 
-        // For each character in the line
-        for(uint32_t x = left; x < left+width; x++) {
-
-            // Put the character from the line below
-            put_character(x, y, get_character(x, y + 1),
-                          get_foreground_color(x, y + 1),
-                          get_background_color(x, y + 1));
-
-        }
-    }
-
-    // Fill the last line with the fill character
+    // Fill the last line
     for(uint16_t x = left; x < left+width; x++)
         put_character(x, top + height - 1, fill, foreground, background);
 
 }
 
 /**
- * Clear the console
+ * Clear the entire console
  */
 void Console::clear() {
 
-    // Clear the console
     clear(0, 0, width(), height());
 
 }
@@ -200,11 +186,14 @@ void Console::clear() {
  */
 void Console::clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
-    // Put the fill character in the areas
-    for(uint16_t y = top; y < top+height; y++)
-        for(uint16_t x = left; x < left+width; x++){
+    // Check bounds
+    if ( left > this -> width() || top > this -> height() || width > this -> width() || height > this -> height() )
+        return;
+
+    // Fill the area with the character
+    for(uint16_t y = top; y < top + height; y++)
+        for(uint16_t x = left; x < left + width; x++)
             put_character(x, y, fill, foreground, background);
-        }
 
 }
 
@@ -225,10 +214,6 @@ void Console::invert_colors(uint16_t x, uint16_t y) {
     set_background_color(x, y, foreground);
 }
 
-
-///____ Console Area ____///
-
-
 ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t width, uint16_t height)
 : m_console(console),
   m_left(left),
@@ -247,7 +232,7 @@ ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t
   m_height(height)
 {
 
-    // Loop through the area setting the colors
+    // Store the colours of the console
     for(uint16_t y = top; y < top+height; y++)
         for(uint16_t x = left; x < left+width; x++){
           console->set_foreground_color(x, y, foreground);
@@ -255,7 +240,6 @@ ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t
         }
 
 }
-
 
 ConsoleArea::~ConsoleArea() = default;
 
@@ -286,13 +270,12 @@ uint16_t ConsoleArea::height() {
  */
 void ConsoleArea::put_character(uint16_t x, uint16_t y, char c) {
 
-    // Make sure the coordinates are within the console area
+    // Check bounds
     if(x >= m_width || y >= m_height)
         return;
 
-    // Put the character on the console
+    // Write to the console
     m_console->put_character(m_left + x, m_top + y, c);
-
 }
 
 
@@ -389,9 +372,7 @@ ConsoleColour ConsoleArea::get_background_color(uint16_t x, uint16_t y) {
  */
 void ConsoleArea::scroll_up() {
 
-  // Get the console
   m_console->scroll_up(m_left, m_top, m_width, m_height);
-
 }
 
 /**
@@ -413,7 +394,6 @@ void ConsoleArea::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 }
 
-///____ Console Stream ____///
 ConsoleStream::ConsoleStream(Console *console)
 : m_console(console)
 {
@@ -446,13 +426,11 @@ void ConsoleStream::write_char(char c) {
     switch (c) {
         // New line
         case '\n':
-            // Increment the y coordinate but if it is more than the height of the console scroll the console
+            // Go to the next line, if it is more then what the console can fit then scroll
             if(++m_cursor_y >= m_console->height()){
-
-                // Scroll the console
                 m_console->scroll_up();
 
-                // Decrement the y coordinate
+                // Ensure there is space at the bottom to write
                 m_cursor_y = m_console->height()-1;
             }
 
@@ -461,23 +439,22 @@ void ConsoleStream::write_char(char c) {
 
         // Carriage return
         case '\r':
-            // Go to the start of the next line
             m_cursor_x = 0;
             break;
 
-        // Null Terminator
+        // End of string
         case '\0':
             break;
 
         // Backspace
         case '\b':
-            // Decrement the x coordinate
             m_cursor_x--;
             break;
 
         // Tab
         case '\t':
-            // Figure out how many spaces to the next tab stop
+
+            // Pad with spaces until a tab is reached
             spaces = 8 - (m_cursor_x % 8);
             for(uint16_t i = 0; i < spaces; i++)
                 write_char(' ');
@@ -487,7 +464,7 @@ void ConsoleStream::write_char(char c) {
             // Put the character on the console
             m_console->put_character(m_cursor_x, m_cursor_y, c);
 
-            // Increment the x coordinate
+            // Increment the x coordinate (ANSI aren't rendered)
             if(!is_ansi)
               m_cursor_x++;
 

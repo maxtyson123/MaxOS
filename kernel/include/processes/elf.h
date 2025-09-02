@@ -158,7 +158,7 @@ namespace MaxOS
 
           static char elf_magic[4];
 
-          void load_program_headers();
+          void load_program_headers() const;
 
 
         public:
@@ -166,11 +166,11 @@ namespace MaxOS
             ~Elf64();
 
             void load();
-            bool is_valid();
+            bool is_valid() const;
 
             [[nodiscard]] elf_64_header_t* header() const;
-            elf_64_program_header_t* get_program_header(size_t index);
-            elf_64_section_header_t* get_section_header(size_t index);
+            elf_64_program_header_t* get_program_header(size_t index) const;
+            elf_64_section_header_t* get_section_header(size_t index) const;
 
             static uint64_t to_vmm_flags(uint32_t type);
 

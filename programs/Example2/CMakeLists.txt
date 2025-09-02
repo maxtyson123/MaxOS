@@ -10,7 +10,7 @@ ADD_EXECUTABLE(test1.elf ${PROJ_SRCS})
 # Set the linker info
 SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/programs/Example/src/linker.ld)
 SET_TARGET_PROPERTIES(test1.elf PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-TARGET_LINK_LIBRARIES(test1.elf gcc)
+TARGET_LINK_LIBRARIES(test1.elf gcc syscore_static)
 TARGET_LINK_OPTIONS(test1.elf PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
 
 # Install the executable

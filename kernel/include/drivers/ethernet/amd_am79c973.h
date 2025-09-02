@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include <drivers/ethernet/ethernet.h>
 #include <hardwarecommunication/pci.h>
-#include <memory/memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 
@@ -86,7 +85,7 @@ namespace MaxOS{
                 void FetchDataSent();                            //Fetches the data from the buffer
 
             public:
-                AMD_AM79C973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor, common::OutputStream* amdNetMessageStream = nullptr);
+                AMD_AM79C973(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* device_descriptor);
                 ~AMD_AM79C973();
 
                 //Override driver default methods

@@ -36,12 +36,13 @@ namespace MaxOS{
         inline static Scheduler* s_instance = nullptr;
         static const uint64_t s_ticks_per_event = { 3 };
 
-        InterProcessCommunicationManager* m_ipc;
+		GlobalResourceRegistry m_global_resource_registry = {};
+		ResourceRegistry<SharedMemory> m_shared_memory_registry;
+		ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
 
       public:
         Scheduler(system::Multiboot& multiboot);
         ~Scheduler();
-
 
         system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
         system::cpu_status_t* schedule(system::cpu_status_t* status);
@@ -59,7 +60,6 @@ namespace MaxOS{
         static Process*   get_process(uint64_t pid);
         static Thread*    current_thread();
         static Thread*    get_thread(uint64_t tid);
-        static InterProcessCommunicationManager*       scheduler_ipc();
 
         [[nodiscard]] uint64_t ticks() const;
 

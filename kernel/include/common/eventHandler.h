@@ -8,6 +8,11 @@
 #include <stdint.h>
 #include <common/vector.h>
 
+
+
+// TODO: - Event doesnt need to be a class should be a struct
+//       - With moving to micro kernel this should be moved to a external lib as not needed in the kernel
+
 namespace MaxOS{
 
     namespace common{

@@ -13,25 +13,30 @@ SET_SOURCE_FILES_PROPERTIES(${ASM_SRCS} PROPERTIES LANGUAGE ASM)
 # Find all the cpp and s files in the src directory (recursive)
 FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
 
-# Create the kernel
-ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS})
-TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
-
 # Update the version before building
+SET(VERSION_HEADER       "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h")
+SET(VERSION_HEADER_TMP   "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp")
+SET(POST_PROCESS_SCRIPT  "${CMAKE_SOURCE_DIR}/toolchain/pre_process/run.sh")
 ADD_CUSTOM_COMMAND(
-    COMMENT "post_processing kernel"
-    TARGET MaxOSk64
-    PRE_BUILD
-    COMMAND ${CMAKE_SOURCE_DIR}/toolchain/post_process/run.sh
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT      "${VERSION_HEADER}"
+        COMMAND     "${POST_PROCESS_SCRIPT}"
+        COMMAND     ${CMAKE_COMMAND} -E copy_if_different "${VERSION_HEADER_TMP}" "${VERSION_HEADER}"
+        COMMAND     ${CMAKE_COMMAND} -E remove "${VERSION_HEADER_TMP}"
+        DEPENDS     ${KERNEL_SRCS}
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        COMMENT     "Regenerating version.h because kernel sources changed"
 )
+ADD_CUSTOM_TARGET(VersionScript  DEPENDS "${VERSION_HEADER}")
+
+# Create the kernel
+ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS} ${VERSION_HEADER})
+ADD_DEPENDENCIES(MaxOSk64 VersionScript)
+TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
 
 # Linker
 SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
 SET_TARGET_PROPERTIES(MaxOSk64 PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-TARGET_LINK_LIBRARIES(MaxOSk64 gcc)
+TARGET_LINK_LIBRARIES(MaxOSk64 PRIVATE gcc syscore_static)
 TARGET_LINK_OPTIONS(MaxOSk64 PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
 
 # Set the include directories

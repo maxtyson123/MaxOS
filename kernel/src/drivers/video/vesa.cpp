@@ -12,60 +12,36 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
-VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer* framebuffer_info)
-: VideoDriver(),
-  m_framebuffer_info(framebuffer_info)
+VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer *framebuffer_info)
+: m_framebuffer_info(framebuffer_info)
 {
-  // Get the framebuffer info
-  Logger::INFO() << "Setting up VESA driver\n";
-  Logger::DEBUG() << "Framebuffer info: 0x " << (uint64_t)m_framebuffer_info << "\n";
 
-  // Set the framebuffer address, bpp and pitch
-  m_bpp = m_framebuffer_info->common.framebuffer_bpp;
-  m_pitch = m_framebuffer_info->common.framebuffer_pitch;
-  m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
+	Logger::INFO() << "Setting up VESA driver\n";
 
-  Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\n";
+	// Save the framebuffer info
+	m_bpp = m_framebuffer_info->common.framebuffer_bpp;
+	m_pitch = m_framebuffer_info->common.framebuffer_pitch;
+	m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
+	this->set_mode(framebuffer_info->common.framebuffer_width, framebuffer_info->common.framebuffer_height,
+				   framebuffer_info->common.framebuffer_bpp);
+	Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\n";
 
-  // Get the framebuffer address
-  auto physical_address = (uint64_t)m_framebuffer_info->common.framebuffer_addr;
-  auto virtual_address = (uint64_t)PhysicalMemoryManager::to_dm_region(physical_address);
-  uint64_t end = physical_address + m_framebuffer_size;
-  m_framebuffer_address = (uint64_t*)virtual_address;
+	// Map the frame buffer into the higher half
+	auto physical_address = (uint64_t) m_framebuffer_info->common.framebuffer_addr;
+	m_framebuffer_address = (uint64_t *) PhysicalMemoryManager::to_dm_region(physical_address);
+	PhysicalMemoryManager::s_current_manager->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, Write | Present);
 
-  Logger::DEBUG() << "Framebuffer address: physical=0x" << physical_address << ", virtual=0x" << virtual_address << "\n";
+	// Reserve the physical memory
+	size_t pages = PhysicalMemoryManager::size_to_frames(m_framebuffer_size);
+	PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
 
-  // Map the framebuffer
-  while (physical_address < end) {
-
-    PhysicalMemoryManager::s_current_manager->map((physical_address_t*)physical_address, (virtual_address_t*)virtual_address, Write | Present);
-    physical_address += PhysicalMemoryManager::s_page_size;
-    virtual_address += PhysicalMemoryManager::s_page_size;
-  }
-
-  size_t pages = PhysicalMemoryManager::size_to_frames(virtual_address - (uint64_t)m_framebuffer_address);
-  Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t)m_framebuffer_address << " - 0x" << virtual_address << " (pages: " << pages << ")\n";
-
-  // Reserve the physical memory
-  PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
-
-  // Set the default video mode
-  this -> set_mode(framebuffer_info->common.framebuffer_width,framebuffer_info->common.framebuffer_height, framebuffer_info->common.framebuffer_bpp);
+	// Log info
+	Logger::DEBUG() << "Framebuffer address: physical=0x" << (uint64_t) physical_address << ", virtual=0x" << (uint64_t) m_framebuffer_address << "\n";
+	Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t) m_framebuffer_address << " - 0x" << (uint64_t) (m_framebuffer_address + m_framebuffer_size) << " (pages: " << pages << ")\n";
 
 }
 
-VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation()= default;
-
-/**
- * @brief Initializes the VESA driver
- *
- * @return True if the driver was initialized successfully, false otherwise
- */
-bool VideoElectronicsStandardsAssociation::init() {
-
-    //Multiboot inits this for us
-    return true;
-}
+VideoElectronicsStandardsAssociation::~VideoElectronicsStandardsAssociation() = default;
 
 /**
  * @brief Sets the mode of the VESA driver
@@ -75,11 +51,12 @@ bool VideoElectronicsStandardsAssociation::init() {
  * @param color_depth Color depth of the screen
  * @return True if the mode was set successfully, false otherwise
  */
-bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t, uint32_t, uint32_t) {
+bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
-    // Best mode is set by the bootloader
-    return true;
-
+	// Can only use the mode set up already by grub
+	return width == m_framebuffer_info->common.framebuffer_width
+		   && height == m_framebuffer_info->common.framebuffer_height
+		   && color_depth == m_framebuffer_info->common.framebuffer_bpp;
 
 }
 
@@ -93,11 +70,10 @@ bool VideoElectronicsStandardsAssociation::internal_set_mode(uint32_t, uint32_t,
  */
 bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_t height, uint32_t color_depth) {
 
-    // Check if the mode is supported
-    if(width == (uint32_t)m_framebuffer_info->common.framebuffer_width && height == (uint32_t)m_framebuffer_info->common.framebuffer_height && color_depth == (uint32_t)m_framebuffer_info->common.framebuffer_bpp) {
-        return true;
-    }
-    return false;
+	// Check if the mode is supported
+	return width == m_framebuffer_info->common.framebuffer_width
+		   && height == m_framebuffer_info->common.framebuffer_height
+		   && color_depth == m_framebuffer_info->common.framebuffer_bpp;
 }
 
 /**
@@ -109,11 +85,8 @@ bool VideoElectronicsStandardsAssociation::supports_mode(uint32_t width, uint32_
  */
 void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint32_t y, uint32_t colour) {
 
-    // Get the address of the pixel
-    auto* pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-
-    // Set the pixel
-    *pixel_address = colour;
+	auto *pixel_address = (uint32_t *) ((uint8_t *) m_framebuffer_address + (m_pitch * y) + (m_bpp * x) / 8);
+	*pixel_address = colour;
 
 }
 
@@ -126,11 +99,8 @@ void VideoElectronicsStandardsAssociation::render_pixel_32_bit(uint32_t x, uint3
  */
 uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
 
-    // Get the address of the pixel
-    auto* pixel_address = (uint32_t*)((uint8_t *)m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
-
-    // Return the pixel
-    return *pixel_address;
+	auto *pixel_address = (uint32_t *) ((uint8_t *) m_framebuffer_address + m_pitch * (y) + m_bpp * (x) / 8);
+	return *pixel_address;
 }
 
 /**
@@ -139,7 +109,9 @@ uint32_t VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit(uint32_
  * @return The name of the vendor
  */
 string VideoElectronicsStandardsAssociation::vendor_name() {
-    return "NEC Home Electronics";  // Creator of the VESA standard
+
+	// Creator of the VESA standard
+	return "NEC Home Electronics";
 }
 
 /**
@@ -148,5 +120,5 @@ string VideoElectronicsStandardsAssociation::vendor_name() {
  * @return The name of the device
  */
 string VideoElectronicsStandardsAssociation::device_name() {
-    return "VESA compatible graphics card";
+	return "VESA compatible graphics card";
 }

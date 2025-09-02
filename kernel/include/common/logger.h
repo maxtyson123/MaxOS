@@ -7,7 +7,6 @@
 
 #include <common/outputStream.h>
 #include <common/colour.h>
-#include <common/version.h>
 
 
 
@@ -40,7 +39,7 @@
                 bool m_log_writers_enabled[m_max_log_writers] = {false, false, false, false, false};
 
                 // Progress bar
-                static const uint8_t s_progress_total = 25;
+                static inline uint8_t s_progress_total = 100;
                 uint8_t m_progress_current = 0;
 
                 static inline Logger* s_active_logger = nullptr;
@@ -58,7 +57,6 @@
                 void set_log_level(LogLevel log_level);
 
                 void write_char(char c) final;
-                void lineFeed() final;
                 void printf(const char* format, ...);
 
                 static void ASSERT(bool condition, const char* message, ...);
@@ -77,5 +75,17 @@
                 Logger& operator << (LogLevel log_level);
         };
 
+		/**
+		* @brief If the specified condition is not met then the kernel will crash with the specified message.
+		*
+		* This macro wraps Logger::ASSERT and supports printf-style formatting with variadic arguments.
+		*
+		* @param condition The condition to check.
+		* @param format The format string (like printf).
+		* @param ... Additional arguments to format.
+		*
+		* @see Logger::ASSERT
+		*/
         #define ASSERT(condition, format, ...) Logger::ASSERT(condition, format, ##__VA_ARGS__)
+
 #endif // MAXOS_COMMON_LOGGER_H

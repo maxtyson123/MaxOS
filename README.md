@@ -103,6 +103,7 @@ This is the list of required packages to build the operating system from source.
 * libisl-dev
 * cmake
 * telnet
+* rsync
 
 Linux:
   ```sh
@@ -194,7 +195,7 @@ No user usage so far (userland will be added in the future)
 
 <!-- ROADMAP -->
 ## Roadmap
-
+#### Core Kernel
 - [x] Bootloader
 - [x] GDT
 - [x] IDT
@@ -210,27 +211,30 @@ No user usage so far (userland will be added in the future)
 - [x] Paging
 - [x] Userspace
 - [x] IPC
-- [ ] VFS
+- [x] VFS
 - [x] Loading ELF
 - [ ] Multiple Cores Support (SMP & Scheduler)
-- [ ] Userland GUI
-- [ ] CLI
+- [ ] Move drivers to userspace 
+- [ ] Move VFS to userspace
 - [ ] Porting & Dynamically Linking Libc
-- [ ] Self-hosted os
-- [ ] App Framework & System Apps
-- [ ] DOOM Port
-- [ ] UserSpace Drivers
-- [ ] Userspace Networking
+- [ ] Move networking to userspace (& rewrite, fix)
+
+#### Userland
+- [ ] GUI
+- [ ] Terminal
 - [ ] Connect to Clion with SMB for files and GDB for debugging in userspace
+- [ ] DOOM Port
+- [ ] Self-hosted os
+- [ ] GUI Framework
+- [ ] App Framework & System Apps
 - [ ] Auto Updater & Image Builder (ISO Release)
 - [ ] Store
+- [ ] Security of some sort
 - [ ] User Switching
 - [ ] Real Hardware Support
-- [ ] Pretty GUI
 - [ ] Port NeoVim, Wakatime & Some hot reloader
 - [ ] Create port of my 2048
 - [ ] Own LibC
-- [ ] Compatibility Layer(s)
  
 See the [open issues](https://github.com/maxtyson123/MaxOS/issues) for a full list of proposed features (and known issues).
 

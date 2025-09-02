@@ -35,6 +35,7 @@ if [ "$1" != "--no-deps" ]; then
                             cmake \
                             nasm \
                             telnet \
+                            rsync \
             || fail "Couldn't install dependencies"
     fi
 
@@ -170,6 +171,6 @@ cd ../
 ls
 
 # Setup the first version of the kernel
-cd post_process
+cd pre_process
 ./version.sh --force
 cd ../

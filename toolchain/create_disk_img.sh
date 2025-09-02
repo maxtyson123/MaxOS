@@ -3,19 +3,22 @@
 SCRIPTDIR=$(dirname "$BASH_SOURCE")
 source $SCRIPTDIR/MaxOS.sh
 
-#TODO: Scalibitlity for partition size and amount of partitions
+# TODO: Scalability for partition size and amount of partitions
+# TODO: Better loop device handling
+
+IMAGE="../MaxOS.img"
 
 # If the disk image already exists no need to setup
-if [ -f ../MaxOS.img ]; then
+if [ -f "$IMAGE" ]; then
     msg "Image already exists"
     exit 0
 fi
 
 # Remove the disk on failure TODO: Also unmount the image
-ON_FAIL="rm -f ../MaxOS.img"
+ON_FAIL="rm -f $IMAGE"
 
 #Create a 2GB image
-qemu-img create ../MaxOS.img 2G  || fail "Could not create image"
+qemu-img create "$IMAGE" 2G  || fail "Could not create image"
 
 #Partion & Mount the image
 dev=""
@@ -25,23 +28,35 @@ if [ "$IS_MACOS" -eq 1 ]; then
    dev=${dev_arr[0]}
    sudo diskutil partitionDisk $dev MBRFormat "MS-DOS FAT32" "BOOT" 1G "MS-DOS FAT32" "DATA" R
 else
-  fdisk ../MaxOS.img -u=cylinders << EOF
+
+    if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
+      TYPE_CODE="b"  # FAT32
+    else
+      TYPE_CODE="83" # EXT2
+    fi
+
+  fdisk "$IMAGE" -u=cylinders << EOF
   o
   n
   p
   1
   1
   130
+  t
+  $TYPE_CODE
+  a
+  1
   n
   p
   2
   131
   243
-  a
-  1
+  t
+  2
+  $TYPE_CODE
   w
 EOF
-
+  dev=$(sudo losetup --find --show --partscan "$IMAGE")
 fi
 
 #Try and unmount the old mount points
@@ -55,8 +70,7 @@ fi
 # Get the partions
 part1=""
 part2=""
-if [ -f ../MaxOS.img ]; then
-  msg "MacOS: Image mounted already"
+if [  "$IS_MACOS" -eq 1 ]; then
   part1="${dev}s1"
   part2="${dev}s2"
   sudo diskutil unmount /Volumes/BOOT
@@ -64,32 +78,51 @@ if [ -f ../MaxOS.img ]; then
 
 else
   msg "Attaching image to loop device"
-  sudo losetup -D
-  sudo losetup --partscan /dev/loop0 ../MaxOS.img  || fail "Could not mount image to loop device"
+  part1="${dev}p1"
+  part2="${dev}p2"
 fi
+msg "${part1}"
+msg "${part2}"
 
 ## IMAGE 1
 msg "Creating filesystem for partition 1"
 sudo mkdir -p "$MOUNT_DIR/MaxOS_img_1" || fail "Could not create mount point"
-if [ "$IS_MACOS" -eq 1 ]; then
-  sudo diskutil unmount "$part1" || warn "Couldn't unmount $part1 before formatting"
-  sudo mount -t msdos "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount partition 1"
+if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
+  if [ "$IS_MACOS" -eq 1 ]; then
+    sudo diskutil unmount "$part1" || warn "Couldn't unmount $part1 before formatting"
+    sudo mount -t msdos "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount partition 1"
+  else
+    sudo mkfs.vfat -F 32 "$part1" || fail "Could not create FAT32 filesystem"
+    sudo mount "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount image to mount point"
+  fi
 else
-  sudo mkfs.vfat -F 32 /dev/loop0p1 || fail "Could not create filesystem"
-  sudo mount -o loop /dev/loop0p1 "$MOUNT_DIR/MaxOS_img_1"  || fail "Could not mount image to mount point"
+  if [ "$IS_MACOS" -eq 1 ]; then
+    fail "EXT2 is not supported on macOS by default"
+  else
+    sudo mkfs.ext2 "$part1" || fail "Could not create EXT2 filesystem"
+    sudo mount "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount image to mount point"
+  fi
 fi
-
 
 ## IMAGE 2
 msg "Creating filesystem for partition 2"
-sudo mkdir -p "$MOUNT_DIR/MaxOS_img_2"  || fail "Could not create mount point"
-if [ "$IS_MACOS" -eq 1 ]; then
-  sudo diskutil unmount "$part2" || warn "Couldn't unmount $part2 before formatting"
-  sudo mount -t msdos "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount partition 2"
+sudo mkdir -p "$MOUNT_DIR/MaxOS_img_2" || fail "Could not create mount point"
+
+if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
+  if [ "$IS_MACOS" -eq 1 ]; then
+    sudo diskutil unmount "$part2" || warn "Couldn't unmount $part2 before formatting"
+    sudo mount -t msdos "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount partition 2"
+  else
+    sudo mkfs.vfat -F 32 "$part2" || fail "Could not create FAT32 filesystem"
+    sudo mount "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount image to mount point"
+  fi
 else
-  sudo diskutil unmount "$part2" || warn "Couldn't unmount $part2 before formatting"
-  sudo mkfs.vfat -F 32 /dev/loop0p2 || fail "Could not create filesystem"
-  sudo mount -o loop /dev/loop0p2 "$MOUNT_DIR/MaxOS_img_2"  || fail "Could not mount image to mount point"
+  if [ "$IS_MACOS" -eq 1 ]; then
+    fail "EXT2 is not supported on macOS by default"
+  else
+    sudo mkfs.ext2 "$part2" || fail "Could not create EXT2 filesystem"
+    sudo mount "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount image to mount point"
+  fi
 fi
 
 # Sync
@@ -97,8 +130,17 @@ msg "Syncing filesystem"
 sync
 sudo sync
 
+# Define grub modules
+GRUB_MODULES="normal part_msdos biosdisk echo multiboot2"
+if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
+  GRUB_MODULES="$GRUB_MODULES fat"
+fi
+
+if [ "$FILESYSTEM_TYPE" = "EXT2" ]; then
+  GRUB_MODULES="$GRUB_MODULES ext2"
+fi
+
 #Install grub to the image
-GRUB_MODULES="normal part_msdos fat biosdisk echo multiboot2"
 if [ "$IS_MACOS" -eq 1 ]; then
   msg "Installing GRUB manually on macOS"
 
@@ -124,5 +166,8 @@ if [ "$IS_MACOS" -eq 1 ]; then
     sync
     sudo sync
 else
+  msg "Installing GRUB to disk image: $dev"
   sudo grub-install --root-directory="$MOUNT_DIR/MaxOS_img_1" --no-floppy --modules="$GRUB_MODULES" "$dev" || fail "Could not install grub"
+  sudo umount "${part1}" "${part2}"
+  sudo losetup -d "$dev"
 fi

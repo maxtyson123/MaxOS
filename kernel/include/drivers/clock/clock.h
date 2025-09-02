@@ -151,11 +151,13 @@ namespace MaxOS {
                     uint8_t read_hardware_clock(uint8_t address);
                     [[nodiscard]] uint8_t binary_representation(uint8_t number) const;
 
+					inline static Clock* s_active_clock = nullptr;
+
                 public:
                     Clock(hardwarecommunication::AdvancedProgrammableInterruptController* apic, uint16_t time_between_events = 10);
                     ~Clock();
 
-                    inline static uint64_t s_clock_accuracy = 1;
+                    uint64_t clock_accuracy = 1;
 
                     void activate() override;
                     void delay(uint32_t milliseconds) const;
@@ -165,6 +167,8 @@ namespace MaxOS {
 
                     string vendor_name() final;
                     string device_name() final;
+
+					static Clock* active_clock();
             };
 
         }

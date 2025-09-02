@@ -11,6 +11,12 @@ using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 using namespace memory;
 
+/// MAX OS NET CODE:
+///     All the old (this) networking code poorly written and not used, this will be moved to userspace in the future
+///     but is kept here as a reference for now.
+///
+///     See OSDEV wiki for the credit for this driver
+
 // Buffer Sizes
 #define buffer256                  (3 << 16)
 #define buffer512                  (2 << 16)
@@ -23,8 +29,7 @@ using namespace memory;
 ///__DRIVER___
 
 intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor)
-: EthernetDriver(nullptr),
-  InterruptHandler(0x20 + deviceDescriptor->interrupt)
+: InterruptHandler(0x20 + deviceDescriptor->interrupt)
 {
 
     //Set the registers
@@ -63,13 +68,10 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     detectEEProm ();
 
     if (readMACAddress()){
-
         ownMAC = CreateMediaAccessControlAddress(macAddress[0], macAddress[1], macAddress[2], macAddress[3], macAddress[4], macAddress[5]);
 
     }else{
-
-      error_message("ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
-        while (true);
+        ASSERT(false, "ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
     }
 
     for(int i = 0; i < 0x80; i++)               //Loop through all the registers
@@ -286,7 +288,6 @@ void intel_i217::sendInit() {
 
 void intel_i217::activate() {
 
-  m_driver_message_stream-> write("Activating Intel i217\n");
 
     //Enable interrupts
     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
@@ -300,7 +301,6 @@ void intel_i217::activate() {
     sendInit();
 
     active = true;                                               // Set active to true
-    m_driver_message_stream-> write("Intel i217 INIT DONE\n");
 
 }
 
@@ -309,18 +309,17 @@ void intel_i217::handle_interrupt() {
     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
     uint32_t temp = Read(0xc0);                //read the interrupt status register
 
-    m_driver_message_stream-> write("Interrupt from INTEL i217");
+    // if(temp & 0x04)
+    //   m_driver_message_stream-> write("INTEL i217 START LINK");//initDone = true;
+    //
+    // if(temp & 0x10)
+    //   m_driver_message_stream-> write("INTEL i217 GOOD THRESHOLD");
 
-    if(temp & 0x04)
-      m_driver_message_stream-> write("INTEL i217 START LINK");//initDone = true;
-    if(temp & 0x10)
-      m_driver_message_stream-> write("INTEL i217 GOOD THRESHOLD");
     if(temp & 0x80) FetchDataReceived();
 }
 
 void intel_i217::FetchDataReceived() {
 
-  m_driver_message_stream-> write("Fetching data... ");
 
     uint16_t old_cur;
 
@@ -348,7 +347,6 @@ void intel_i217::FetchDataReceived() {
 
 void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
-  m_driver_message_stream-> write("Sending package... ");
     while(!active);
 
     //Put params into send buffer
@@ -369,12 +367,10 @@ void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
     //Wait for the packet to be sent
     while(!(sendDsrctrs[old_cur]->status & 0xff));
-    m_driver_message_stream-> write(" Done\n");
 
 }
 
 uint64_t intel_i217::GetMediaAccessControlAddress() {
-  m_driver_message_stream-> write("Getting MAC address... ");
     while(ownMAC == 0);
     return ownMAC;
 

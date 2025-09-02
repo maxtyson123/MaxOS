@@ -11,9 +11,12 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::hardwarecommunication;
 
-AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev, OutputStream *amdNetMessageStream)
-: EthernetDriver(amdNetMessageStream),
-  InterruptHandler(0x20 + dev -> interrupt),
+/// MAX OS NET CODE:
+///     All the old (this) networking code poorly written and not used, this will be moved to userspace in the future
+///     but is kept here as a reference for now.
+
+AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
+: InterruptHandler(0x20 + dev -> interrupt),
   MACAddress0Port(dev ->port_base),
   MACAddress2Port(dev ->port_base + 0x02),
   MACAddress4Port(dev ->port_base + 0x04),
@@ -169,13 +172,13 @@ void AMD_AM79C973::handle_interrupt() {
 
     // Errors
     if((temp & 0x8000) == 0x8000)
-      error_message("AMD am79c973 ERROR: ");
+      Logger::WARNING() << "AMD am79c973 ERROR: ";
     if((temp & 0x2000) == 0x2000)
-      error_message("COLLISION ERROR\n");
+      Logger::WARNING() << "COLLISION ERROR\n";
     if((temp & 0x1000) == 0x1000)
-      error_message("MISSED FRAME\n");
+      Logger::WARNING() << "MISSED FRAME\n";
     if((temp & 0x0800) == 0x0800)
-      error_message("MEMORY ERROR\n");
+      Logger::WARNING() << "MEMORY ERROR\n";
 
 
     // Responses

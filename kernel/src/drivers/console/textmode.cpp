@@ -9,12 +9,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::console;
 
-TextModeConsole::TextModeConsole()
-: Driver(),
-  Console()
-{
-
-}
+TextModeConsole::TextModeConsole() = default;
 
 TextModeConsole::~TextModeConsole() = default;
 
@@ -23,9 +18,8 @@ TextModeConsole::~TextModeConsole() = default;
  *
  * @return The width of the console in characters
  */
-uint16_t TextModeConsole::width()
-{
-    return 80;
+uint16_t TextModeConsole::width() {
+	return 80;
 }
 
 /**
@@ -33,9 +27,8 @@ uint16_t TextModeConsole::width()
  *
  * @return The height of the console in characters
  */
-uint16_t TextModeConsole::height()
-{
-    return 25;
+uint16_t TextModeConsole::height() {
+	return 25;
 }
 
 /**
@@ -47,16 +40,15 @@ uint16_t TextModeConsole::height()
  */
 void TextModeConsole::put_character(uint16_t x, uint16_t y, char c) {
 
-    // If the coordinates are out of bounds, return
-    if(x >= width() || y >= height())
-        return;
+	// Check bounds
+	if (x >= width() || y >= height())
+		return;
 
-    // Calculate the offset 
-    int offset = (y*width() + x);
+	// Calculate the offset
+	int offset = (y * width() + x);
 
-    // Set the character at the offset, by masking the character with the current character (last 8 bits)
-    m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t)c;
-
+	// Set the character at the offset, mask away the colour information
+	m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t) c;
 }
 
 /**
@@ -68,15 +60,15 @@ void TextModeConsole::put_character(uint16_t x, uint16_t y, char c) {
  */
 void TextModeConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) {
 
-    // If the coordinates are out of bounds, return
-    if(x >= width() || y >= height())
-        return;
+	// Check bounds
+	if (x >= width() || y >= height())
+		return;
 
-    // Calculate the offset 
-    int offset = (y* width() + x);
+	// Calculate the offset
+	int offset = (y * width() + x);
 
-    // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-    m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t)foreground << 8);
+	// Set the foreground color at the offset, mask to get the foreground bits
+	m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t) foreground << 8);
 }
 
 /**
@@ -88,16 +80,15 @@ void TextModeConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour
  */
 void TextModeConsole::set_background_color(uint16_t x, uint16_t y, ConsoleColour background) {
 
-    // If the coordinates are out of bounds, return
-    if(x >= width() || y >= height())
-        return;
+	// Check bounds
+	if (x >= width() || y >= height())
+		return;
 
-    // Calculate the offset 
-    int offset = (y* width() + x);
+	// Calculate the offset
+	int offset = (y * width() + x);
 
-    // Set the background color at the offset, by masking the background color with the current background color (bits 12-15)
-    m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t)background << 12);
-
+	// Set the background color at the offset, mask to get the backgroun bits
+	m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t) background << 12);
 }
 
 /**
@@ -109,15 +100,15 @@ void TextModeConsole::set_background_color(uint16_t x, uint16_t y, ConsoleColour
  */
 char TextModeConsole::get_character(uint16_t x, uint16_t y) {
 
-    // If the coordinates are out of bounds, return
-    if(x >= width() || y >= height())
-        return ' ';
+	// Check bounds
+	if (x >= width() || y >= height())
+		return ' ';
 
-    // Calculate the offset 
-    int offset = (y* width() + x);
+	// Calculate the offset
+	int offset = (y * width() + x);
 
-    // Return the character at the offset, by masking the character with the current character (last 8 bits)
-    return (char)(m_video_memory[offset] & 0x00FF);
+	// Return the character at the offset, mask away the colour information
+	return (char) (m_video_memory[offset] & 0x00FF);
 }
 
 /**
@@ -129,15 +120,15 @@ char TextModeConsole::get_character(uint16_t x, uint16_t y) {
  */
 ConsoleColour TextModeConsole::get_foreground_color(uint16_t x, uint16_t y) {
 
-    // If the coordinates are out of bounds, return
-    if(x >= width() || y >= height())
-        return ConsoleColour::White;
+	// Check bounds
+	if (x >= width() || y >= height())
+		return ConsoleColour::White;
 
-    // Calculate the offset 
-    int offset = (y* width() + x);
+	// Calculate the offset
+	int offset = (y * width() + x);
 
-    // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
-    return (ConsoleColour)((m_video_memory[offset] & 0x0F00) >> 8);
+	// Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+	return (ConsoleColour) ((m_video_memory[offset] & 0x0F00) >> 8);
 }
 
 /**
@@ -149,13 +140,13 @@ ConsoleColour TextModeConsole::get_foreground_color(uint16_t x, uint16_t y) {
  */
 ConsoleColour TextModeConsole::get_background_color(uint16_t x, uint16_t y) {
 
-    // If the coordinates are out of bounds, return
-    if(x >= width() || y >= height())
-        return ConsoleColour::Black;
+	// Check bounds
+	if (x >= width() || y >= height())
+		return ConsoleColour::Black;
 
-    // Calculate the offset 
-    int offset = (y* width() + x);
+	// Calculate the offset
+	int offset = (y * width() + x);
 
-    // Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
-    return (ConsoleColour)((m_video_memory[offset] & 0xF000) >> 12);
+	// Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
+	return (ConsoleColour) ((m_video_memory[offset] & 0xF000) >> 12);
 }

@@ -2,12 +2,13 @@
 // Created by 98max on 24/10/2022.
 //
 
-#ifndef MAXOS_DRIVERS_ATA_H
-#define MAXOS_DRIVERS_ATA_H
+#ifndef MAXOS_DRIVERS_DISK_ATA_H
+#define MAXOS_DRIVERS_DISK_ATA_H
 
+#include <common/buffer.h>
 #include <common/outputStream.h>
 #include <hardwarecommunication/port.h>
-#include <drivers/driver.h>
+#include <drivers/disk/disk.h>
 #include <stdint.h>
 
 
@@ -21,7 +22,7 @@ namespace MaxOS{
              * @class AdvancedTechnologyAttachment
              * @brief Driver for the ATA controller, handles the reading and writing of data to the hard drive
              */
-            class AdvancedTechnologyAttachment : public Driver {
+            class AdvancedTechnologyAttachment : public Disk {
 
                 protected:
                     hardwarecommunication::Port16Bit m_data_port;
@@ -36,17 +37,14 @@ namespace MaxOS{
                     bool m_is_master;
                     uint16_t m_bytes_per_sector { 512 };
 
-                    common::OutputStream* ata_message_stream;
                 public:
-                    AdvancedTechnologyAttachment(uint16_t port_base, bool master, common::OutputStream* output_stream);
+                    AdvancedTechnologyAttachment(uint16_t port_base, bool master);
                     ~AdvancedTechnologyAttachment();
 
-                    void identify();
-                    void read_28(uint32_t sector, uint8_t* data, int count);
-                    void write_28(uint32_t sector, const uint8_t* data, int count);
-                    void flush();
-
-                    void activate() final;
+                    bool identify();
+                    void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount) final;
+                    void write(uint32_t sector, const common::buffer_t* data, size_t count) final;
+                    void flush() final;
 
                     string device_name() final;
                     string vendor_name() final;
@@ -55,4 +53,4 @@ namespace MaxOS{
     }
 }
 
-#endif //MAXOS_DRIVERS_ATA_H
+#endif //MAXOS_DRIVERS_DISK_ATA_H

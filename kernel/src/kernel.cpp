@@ -1,35 +1,19 @@
-//Common
 #include <stdint.h>
 #include <common/logger.h>
-
-//Hardware com
 #include <hardwarecommunication/interrupts.h>
-#include <hardwarecommunication/acpi.h>
-#include <hardwarecommunication/apic.h>
-
-//Drivers
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>
 #include <drivers/driver.h>
-#include <drivers/peripherals/keyboard.h>
-#include <drivers/peripherals/mouse.h>
 #include <drivers/video/vesa.h>
-
-//GUI
 #include <gui/desktop.h>
-
-//PROCESS
 #include <processes/scheduler.h>
-
-//SYSTEM
 #include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
-
-//MEMORY
 #include <memory/physical.h>
 #include <memory/virtual.h>
-
+#include <filesystem/vfs.h>
+#include <filesystem/vfsresource.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -43,53 +27,63 @@ using namespace MaxOS::gui;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
+using namespace MaxOS::filesystem;
 
 extern "C" void call_constructors();
-extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic)
-{
-    call_constructors();
+extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {
 
-    // Initialise the logger
-    Logger logger;
-    SerialConsole serial_console(&logger);
-    Logger::INFO() << "MaxOS Booted Successfully \n";
+	call_constructors();
 
-    Logger::HEADER() << "Stage {1}: System Initialisation\n";
-    Multiboot multiboot(addr, magic);
-    GlobalDescriptorTable gdt;
-    InterruptManager interrupts;
+	// Initialise the logger
+	Logger logger;
+	SerialConsole serial_console(&logger);
+	Logger::INFO() << "MaxOS Booted Successfully \n";
 
-    Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
-    PhysicalMemoryManager pmm(&multiboot);
-    VirtualMemoryManager vmm;
-    MemoryManager memoryManager(&vmm);
+	Logger::HEADER() << "Stage {1}: System Initialisation\n";
+	Multiboot multiboot(addr, magic);
+	GlobalDescriptorTable gdt;
+	InterruptManager interrupts;
 
-    Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
-    VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
-    VESABootConsole console(&vesa);
+	Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
+	PhysicalMemoryManager pmm(&multiboot);
+	VirtualMemoryManager vmm;
+	MemoryManager memoryManager(&vmm);
 
-    Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
-    DriverManager driver_manager;
-    CPU cpu(&gdt, &multiboot);
-    Clock kernel_clock(cpu.apic, 1);
-    driver_manager.add_driver(&kernel_clock);
-    driver_manager.find_drivers();
-    uint32_t reset_wait_time = driver_manager.reset_devices();
+	Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
+	VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
+	VESABootConsole console(&vesa);
 
-    Logger::HEADER() << "Stage {3}: Device Finalisation\n";
-    interrupts.activate();
-    kernel_clock.calibrate();
-    kernel_clock.delay(reset_wait_time);
-    driver_manager.initialise_drivers();
-    driver_manager.activate_drivers();
+	Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
+	VirtualFileSystem vfs;
+	CPU cpu(&gdt, &multiboot);
+	Clock kernel_clock(cpu.apic, 1);
+	DriverManager driver_manager;
+	driver_manager.add_driver(&kernel_clock);
+	driver_manager.find_drivers();
+	uint32_t reset_wait_time = driver_manager.reset_devices();
 
-    Logger::HEADER() << "Stage {4}: System Finalisation\n";
-    Scheduler scheduler(multiboot);
-    SyscallManager syscalls;
-    console.finish();
-    scheduler.activate();
+	Logger::HEADER() << "Stage {3}: Device Finalisation\n";
+	interrupts.activate();
+	kernel_clock.calibrate();
+	kernel_clock.delay(reset_wait_time);
+	driver_manager.initialise_drivers();
+	driver_manager.activate_drivers();
 
-    // Idle loop  (read Idle.md)
-    while (true)
-      asm("nop");
+	Logger::HEADER() << "Stage {4}: System Finalisation\n";
+	Scheduler scheduler(multiboot);
+	VFSResourceRegistry vfs_registry(&vfs);
+	SyscallManager syscalls;
+	console.finish();
+	scheduler.activate();
+
+	// Idle loop  (read Idle.md)
+	while (true)
+		asm("nop");
 }
+
+// TODO:
+//  - SMP
+//  - Test suite of common functions & other statics (paths)
+//  - Class & Struct docstrings
+//  - Logo on fail in center
+//  - Sanitize syscall input

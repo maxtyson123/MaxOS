@@ -15,110 +15,103 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
 : start_address(address)
 {
 
-  // Confirm the bootloader
-  ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
-  Logger::DEBUG() << "Multiboot2 Bootloader Detected at 0x" << (uint64_t)address << "\n";
+	// Confirm the bootloader
+	ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
+	Logger::DEBUG() << "Multiboot2 Bootloader Detected at 0x" << (uint64_t) address << "\n";
 
-  multiboot_tag* tag = start_tag();
+	multiboot_tag* tag = start_tag();
 
-  // Loop through the tags and load them
-  while (true) {
+	// Loop through the tags and load them
+	while (true) {
 
-    // Handle the tag
-    switch (tag -> type) {
+		// Handle the tag
+		switch (tag->type) {
 
-        case MULTIBOOT_TAG_TYPE_END:
-            end_address = (unsigned long)PhysicalMemoryManager::to_lower_region((uint64_t)tag);
-            return;
+			case MULTIBOOT_TAG_TYPE_END:
+				end_address = (unsigned long) PhysicalMemoryManager::to_lower_region((uint64_t) tag);
+				return;
 
-            //0xffffffff80394dd8
-            //0xFFFFFFFF80000000
+			case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
+				m_framebuffer = (multiboot_tag_framebuffer*) tag;
+				break;
 
-        case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
-            m_framebuffer = (multiboot_tag_framebuffer *)tag;
-            break;
+			case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+				m_basic_meminfo = (multiboot_tag_basic_meminfo*) tag;
+				break;
 
-        case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-            m_basic_meminfo = (multiboot_tag_basic_meminfo *)tag;
-            break;
+			case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
+				m_bootloader_name = (multiboot_tag_string*) tag;
+				Logger::DEBUG() << "Bootloader: " << m_bootloader_name->string << "\n";
+				break;
 
-        case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
-            m_bootloader_name = (multiboot_tag_string *)tag;
-            Logger::DEBUG() << "Bootloader: " << m_bootloader_name->string << "\n";
-            break;
+			case MULTIBOOT_TAG_TYPE_BOOTDEV:
+				multiboot_tag_bootdev* bootdev;
+				bootdev = (multiboot_tag_bootdev*) tag;
+				Logger::DEBUG() << "Boot device: drive=0x" << (uint64_t) bootdev->biosdev << ", partition=0x" << (uint64_t) bootdev->part << "\n";
+				break;
 
-        case MULTIBOOT_TAG_TYPE_BOOTDEV:
-          multiboot_tag_bootdev *bootdev;
-          bootdev = (multiboot_tag_bootdev *)tag;
-          Logger::DEBUG() << "Boot device: 0x" << (uint64_t) bootdev->biosdev << ", 0x" << (uint64_t) bootdev->slice << ", 0x" << (uint64_t) bootdev->part << " of type 0x" << (uint64_t) bootdev->type << "\n";
-          break;
+			case MULTIBOOT_TAG_TYPE_MMAP:
 
-        case MULTIBOOT_TAG_TYPE_MMAP:
+				// If there is not already a mmap tag, set it
+				if (m_mmap == nullptr)
+					m_mmap = (multiboot_tag_mmap*) tag;
 
-          // If there is not already a mmap tag, set it
-          if (m_mmap == nullptr)
-              m_mmap = (multiboot_tag_mmap *)tag;
+				break;
 
-          break;
-
-        case MULTIBOOT_TAG_TYPE_ACPI_OLD:
-              m_old_acpi = (multiboot_tag_old_acpi *)tag;
-              break;
+			case MULTIBOOT_TAG_TYPE_ACPI_OLD:
+				m_old_acpi = (multiboot_tag_old_acpi*) tag;
+				break;
 
 
-        case MULTIBOOT_TAG_TYPE_ACPI_NEW:
-              m_new_acpi = (multiboot_tag_new_acpi *)tag;
-              break;
+			case MULTIBOOT_TAG_TYPE_ACPI_NEW:
+				m_new_acpi = (multiboot_tag_new_acpi*) tag;
+				break;
 
-        case MULTIBOOT_TAG_TYPE_MODULE:
-            multiboot_tag_module *module;
-            module = (multiboot_tag_module *)tag;
-            Logger::DEBUG() << "Module: start=0x" << (uint64_t) module->mod_start << ", end=0x" << (uint64_t) module->mod_end << ", cmdline=" << module->cmdline << "\n";
-            m_module = module;
-            break;
-    }
+			case MULTIBOOT_TAG_TYPE_MODULE:
+				multiboot_tag_module* module;
+				module = (multiboot_tag_module*) tag;
+				Logger::DEBUG() << "Module: start=0x" << (uint64_t) module->mod_start << ", end=0x" << (uint64_t) module->mod_end << ", cmdline=" << module->cmdline << "\n";
+				m_module = module;
+				break;
+		}
 
-    // Move to the next tag
-    tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7));
-  }
+		// Move to the next tag
+		tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7));
+	}
 }
 
 Multiboot::~Multiboot() = default;
 
 
-multiboot_tag_framebuffer *Multiboot::framebuffer() {
+multiboot_tag_framebuffer* Multiboot::framebuffer() {
 
-    return m_framebuffer;
-
+	return m_framebuffer;
 }
 
-multiboot_tag_basic_meminfo *Multiboot::basic_meminfo() {
+multiboot_tag_basic_meminfo* Multiboot::basic_meminfo() {
 
-    return m_basic_meminfo;
-
+	return m_basic_meminfo;
 }
 
-multiboot_tag_string *Multiboot::bootloader_name() {
+multiboot_tag_string* Multiboot::bootloader_name() {
 
-    return m_bootloader_name;
-
+	return m_bootloader_name;
 }
 
-multiboot_tag_mmap *Multiboot::mmap() {
+multiboot_tag_mmap* Multiboot::mmap() {
 
-    return m_mmap;
-
+	return m_mmap;
 }
 
-multiboot_tag_old_acpi *Multiboot::old_acpi() {
+multiboot_tag_old_acpi* Multiboot::old_acpi() {
 
-  return m_old_acpi;
+	return m_old_acpi;
 }
 
 
-multiboot_tag_new_acpi *Multiboot::new_acpi() {
+multiboot_tag_new_acpi* Multiboot::new_acpi() {
 
-  return m_new_acpi;
+	return m_new_acpi;
 }
 
 /**
@@ -128,24 +121,24 @@ multiboot_tag_new_acpi *Multiboot::new_acpi() {
  */
 bool Multiboot::is_reserved(multiboot_uint64_t address) {
 
-  // Loop through the tags checking if the address is reserved
-  for(multiboot_tag* tag = start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7))) {
+	// Loop through the tags checking if the address is reserved
+	for (multiboot_tag* tag = start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {
 
-      // Check if the tag is a module or mmap
-      if(tag -> type != MULTIBOOT_TAG_TYPE_MODULE && tag -> type != MULTIBOOT_TAG_TYPE_MMAP)
-        continue;
+		// Check if the tag is a module or mmap
+		if (tag->type != MULTIBOOT_TAG_TYPE_MODULE && tag->type != MULTIBOOT_TAG_TYPE_MMAP)
+			continue;
 
-      // Get the module tag
-      auto* module = (struct multiboot_tag_module*)tag;
+		// Get the module tag
+		auto* module = (struct multiboot_tag_module*) tag;
 
-      // Check if the address is within the module
-      if(address >= module -> mod_start && address < module -> mod_end)
-        return true;
-  }
+		// Check if the address is within the module
+		if (address >= module->mod_start && address < module->mod_end)
+			return true;
+	}
 
 
-  // Not part of multiboot
-  return false;
+	// Not part of multiboot
+	return false;
 
 }
 
@@ -154,7 +147,7 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
  *
  * @return The start tag
  */
-multiboot_tag *Multiboot::start_tag() const {
+multiboot_tag* Multiboot::start_tag() const {
 
-  return (multiboot_tag*)(start_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
+	return (multiboot_tag*) (start_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
 }
