@@ -57,7 +57,7 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 	Logger::DEBUG() << "Created GDT entries\n";
 
 	// Load the GDT
-	gdtr_t gdtr = {
+	gdtr = {
 			.size    = sizeof(table) - 1,
 			.address = (uint64_t) table,
 	};

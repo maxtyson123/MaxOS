@@ -33,6 +33,9 @@ namespace MaxOS {
             [[nodiscard]] uint32_t id() const;
             void send_eoi() const;
 
+			void send_init(uint8_t apic_id, bool assert);
+			void send_startup(uint8_t apic_id, uint8_t vector);
+
         };
 
         struct MADT {

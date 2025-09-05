@@ -4,7 +4,6 @@
 %define LOOP_LIMIT 2048
 %define PD_LOOP_LIMIT 4
 
-
 global p2_table
 global p4_table
 global p3_table
@@ -107,12 +106,12 @@ start:
     lgdt [gdt64.pointer - KERNEL_VIRTUAL_ADDR]
 
     ; Jump to 64 bit mode using the kernel code selector
-    jmp 0x8:(jump_to_higher_half - KERNEL_VIRTUAL_ADDR)
+    jmp 0x8:(kernel_jump_to_higher_half - KERNEL_VIRTUAL_ADDR)
 
 section .text
 
 [bits 64]
-jump_to_higher_half:
+kernel_jump_to_higher_half:
 
     ; Now in 64 bit mode so can access the higher half of the memory
     jmp kernel_entry + KERNEL_VIRTUAL_ADDR
@@ -139,8 +138,7 @@ p2_table:
 p1_tables:
     resb 16384
 
-
-; The stack for the kernel
+; The stack for the kernel 16KiB
 align 4096
 stack:
     resb 16384

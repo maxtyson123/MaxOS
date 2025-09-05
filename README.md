@@ -218,6 +218,7 @@ No user usage so far (userland will be added in the future)
 - [ ] Move VFS to userspace
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Move networking to userspace (& rewrite, fix)
+- [ ] Clean up ALL Todos
 
 #### Userland
 - [ ] GUI

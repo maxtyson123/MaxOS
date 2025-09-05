@@ -67,7 +67,7 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	m_anonymous_memory_physical_address += s_page_size;
 	Logger::DEBUG() << "Mapped physical memory to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\n";
 
-	// Set up the bitmap
+	// Kernel Setup
 	initialise_bit_map();
 	reserve_kernel_regions(multiboot);
 

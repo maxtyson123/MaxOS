@@ -30,6 +30,32 @@ using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
 extern "C" void call_constructors();
+extern "C" uint8_t core_boot_info[];
+
+extern "C" [[noreturn]] void core_main(){
+
+	// Wait to be scheduled
+	while (true)
+		asm("nop");
+
+	auto info = (core_boot_info_t*)(core_boot_info);
+	Logger::DEBUG() << "Core " << info->id << " now in higher half \n";
+
+	// Load the higher half pml4
+
+	// Load the kernel gdt
+
+	// Load the kernel idt
+
+	// Core is all setup
+	info->activated = true;
+
+	// Wait to be scheduled
+	while (true)
+		asm("nop");
+
+}
+
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {
 
 	call_constructors();
@@ -68,6 +94,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	kernel_clock.delay(reset_wait_time);
 	driver_manager.initialise_drivers();
 	driver_manager.activate_drivers();
+	cpu.init_cores();
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
 	Scheduler scheduler(multiboot);

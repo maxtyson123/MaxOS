@@ -116,6 +116,73 @@ void LocalAPIC::send_eoi() const {
 	write(0xB0, 0);
 }
 
+/**
+ * @brief Send the init IPI to another apic
+ *
+ * @param apic_id The id of the apic to send to
+ */
+void LocalAPIC::send_init(uint8_t apic_id, bool assert) {
+
+	uint32_t icr_low = 0;
+
+	// Delivery mode = INIT (101b at bits 8-10)
+	icr_low |= (0b101 << 8);
+
+	// Level (bit 14): 1 = assert, 0 = de-assert
+	if (assert)
+		icr_low |= (1 << 14);
+
+	// Trigger mode: Level = 1
+	icr_low |= (1 << 15);
+
+	if (!m_x2apic) {
+
+		// Select target core
+		write(0x310, apic_id << 24);
+
+		// Send INIT (Delivery mode = INIT, Level = 1)
+		write(0x300, icr_low);
+
+		// Wait for delivery
+		while (read(0x300) & (1 << 12))
+			asm volatile("pause");
+
+	} else {
+
+		// x2APIC
+		CPU::write_msr(0x830, apic_id << 32 | icr_low);
+	}
+}
+
+/**
+ * @brief Send the start up IPI to another apic
+ *
+ * @param apic_id The apic to send it to
+ * @param vector Where to start executing
+ */
+void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) {
+
+	if (!m_x2apic) {
+
+		// Select target core
+		write(0x310, apic_id << 24);
+
+		// Send SIPI (Delivery mode = STARTUP)
+		write(0x300, 0x4600 | vector);
+
+		// Wait for delivery
+		while (read(0x300) & (1 << 12))
+		 	asm volatile("pause");
+
+	} else {
+
+		// x2APIC
+		CPU::write_msr(0x831, apic_id << 32 | 0x4600 | vector);
+	}
+
+
+}
+
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi)
 {

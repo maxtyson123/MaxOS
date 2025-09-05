@@ -1,10 +1,10 @@
 ENTRY(start)
 
 SECTIONS {
-    . = 1M;
 
-    _kernel_start =.;
-    _kern_virtual_offset = 0xffffffff80000000;
+
+
+    /* Multiboot must be first */
     .multiboot_header :
     {
         /* Be sure that multiboot header is at the beginning */
@@ -16,6 +16,17 @@ SECTIONS {
     {
         *(.multiboot.text)
     }
+
+    /* Physical location of spinup code */
+    .spinup 0x8000 :
+    {
+        *(.spinup)
+    }
+
+    . = 1M;
+
+    _kernel_start =.;
+    _kern_virtual_offset = 0xffffffff80000000;
 
     . += _kern_virtual_offset;
 	/* Add a symbol that indicates the start address of the kernel. */

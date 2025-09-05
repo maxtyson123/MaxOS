@@ -6,46 +6,95 @@
 #include <processes/scheduler.h>
 #include <drivers/console/vesaboot.h>
 #include <memory/memorymanagement.h>
+#include <drivers/clock/clock.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::drivers;
+using namespace MaxOS::drivers::clock;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
+using namespace MaxOS::memory;
 
 extern uint64_t stack[];
+volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
+
+extern "C" void  core_start();
+extern "C" uint8_t core_boot_info[];
 
 Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 : m_madt(madt_item)
 {
 
+	// Get the BSP ID
+	uint32_t eax, ebx, ecx, edx;
+	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
+	uint8_t bsp_id = (ebx >> 24) & 0xFF;
+
 	m_id 		= m_madt->processor_id;
 	m_apic_id 	= m_madt->apic_id;
-	m_bsp		= m_id == 0;				// TODO: Not required to be true so safer to check current lapic is == this lapic
+	m_bsp		= m_id == bsp_id;
 
 	m_enabled 		= (m_madt->flags & 0x1) != 0;
 	m_can_enable 	= (m_madt->flags & 0x2) != 0;
 
 
-	Logger::DEBUG() << "Found CPU ID: " << m_id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable << ")\n";
+	Logger::DEBUG() << "Found CPU ID: " << m_id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable  << ")\n";
 
 }
 
-Core::~Core() {
+Core::~Core() = default;
 
+void Core::wake_up(CPU* cpu) const {
+
+	// Boot core is already setup
+	if(m_bsp)
+		return;
+
+	Logger::DEBUG() << "Starting core: " << m_id << "\n";
+
+	// Core specific boot info
+	auto info = (core_boot_info_t*)(core_boot_info);
+	info->activated = false;
+	info->id = m_id;
+	info->stack = (uint64_t)MemoryManager::kmalloc(CPU::s_stack_size) + CPU::s_stack_size;
+
+	// Send init IPI
+	cpu->apic.local_apic()->send_init(m_apic_id, true);
+
+	// Send de-assert IPI
+	cpu->apic.local_apic()->send_init(m_apic_id, false);
+	Clock::active_clock()->delay(10);
+
+	// Send tow SIPIs
+	for (int i = 0; i < 2; ++i) {
+
+		// Send the start up IPI
+		cpu->apic.local_apic()->send_startup(m_apic_id, 0x8);
+		Clock::active_clock()->delay(10);
+
+		// Check if core started
+		if(info->activated){
+			Logger::DEBUG() << "Core " << m_id << " started successfully \n";
+			return;
+		}
+	}
+
+	Logger::WARNING() << "Failed to start core: " << m_id << "\n";
 }
 
 /**
  * @brief Constructor for the CPU class
  */
 CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
-: acpi(multiboot),
+: m_gdt(gdt),
+  acpi(multiboot),
   apic(&acpi)
 {
 
 	Logger::INFO() << "Setting up CPU \n";
-	init_cores();
-	init_tss(gdt);
+	find_cores();
+	init_tss();
 	init_sse();
 }
 
@@ -151,7 +200,6 @@ void CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint
 
 void CPU::stack_trace(size_t level) {
 
-	// Get the first stack frame
 	auto* frame = (stack_frame_t*) __builtin_frame_address(0);
 
 	// Loop through the frames logging
@@ -220,7 +268,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 /**
  * @brief Initialises the TSS for interrupt handling
  */
-void CPU::init_tss(GlobalDescriptorTable* gdt) {
+void CPU::init_tss() {
 
 	// The reserved have to be 0
 	tss.reserved0 = 0;
@@ -230,7 +278,7 @@ void CPU::init_tss(GlobalDescriptorTable* gdt) {
 	tss.reserved4 = 0;
 
 	// The stacks
-	tss.rsp0 = (uint64_t) stack + 16384;       // Kernel stack (scheduler will set the threads stack)
+	tss.rsp0 = (uint64_t) stack + s_stack_size;       // Kernel stack (scheduler will set the threads stack)
 	tss.rsp1 = 0;
 	tss.rsp2 = 0;
 
@@ -265,8 +313,8 @@ void CPU::init_tss(GlobalDescriptorTable* gdt) {
 	uint64_t tss_descriptor_high = base_4;
 
 	// Store in the GDT
-	gdt->table[5] = tss_descriptor_low;
-	gdt->table[6] = tss_descriptor_high;
+	m_gdt->table[5] = tss_descriptor_low;
+	m_gdt->table[6] = tss_descriptor_high;
 
 	// Load the TSS
 	Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t) &tss << "\n";
@@ -366,10 +414,9 @@ void CPU::init_sse() {
 }
 
 /**
- * @brief
- *
+ * @brief Search the madt for cores and store them
  */
-void CPU::init_cores() {
+void CPU::find_cores() {
 
 	// Search and setup each core
 	int index = 0;
@@ -387,8 +434,34 @@ void CPU::init_cores() {
 	}
 
 
-
+	// TODO: Also check x2
 }
+
+/**
+ * @brief Wake up all the cores
+ */
+void CPU::init_cores() {
+
+	Logger::INFO() << "Waking up cores: \n";
+
+	// Make sure core_start is accessible
+	ASSERT((void*)&core_start == (void*)0x8000, "Core start not at expected address");
+	PhysicalMemoryManager::s_current_manager->identity_map((physical_address_t*)0x8000, Present | Write);
+
+	// Identity map the pml4
+
+	// Find the relocated boot info
+	auto info = (core_boot_info_t*)(core_boot_info);
+
+	// Set up the boot info
+	info->p4_table = (uint64_t)PhysicalMemoryManager::to_lower_region((uintptr_t)p4_table);
+	info->gdt_64_base = (void*)&m_gdt->gdtr;
+
+	// Start each core
+	for(const auto& core : cores)
+		core->wake_up(this);
+}
+
 
 /**
  * @brief Checks if a CPU feature is supported (ECX Register)
