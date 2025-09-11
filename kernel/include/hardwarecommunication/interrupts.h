@@ -155,6 +155,7 @@ namespace MaxOS {
                 void set_apic(AdvancedProgrammableInterruptController* apic);
                 AdvancedProgrammableInterruptController* active_apic();
 
+				static void load_current();
                 void activate();
                 void deactivate();
 

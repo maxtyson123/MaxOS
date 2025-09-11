@@ -130,10 +130,7 @@ InterruptManager::InterruptManager() {
 	set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
 
 	// Tell the processor to use the IDT
-	IDTR idt = {};
-	idt.limit = 256 * sizeof(InterruptDescriptor) - 1;
-	idt.base = (uint64_t) s_interrupt_descriptor_table;
-	asm volatile("lidt %0" : : "m" (idt));
+	load_current();
 }
 
 InterruptManager::~InterruptManager() {
@@ -168,6 +165,17 @@ void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, v
 
 	// Set the flags (Trap Gate, Present and the Descriptor Privilege Level)
 	interrupt_descriptor->flags = 0b1110 | ((descriptor_privilege_level & 0b11) << 5) | (1 << 7);
+}
+
+/**
+ * @brief Tell the processor to use the current InterruptManager
+ */
+void InterruptManager::load_current() {
+
+	IDTR idt = {};
+	idt.limit = 256 * sizeof(InterruptDescriptor) - 1;
+	idt.base = (uint64_t) s_interrupt_descriptor_table;
+	asm volatile("lidt %0" : : "m" (idt));
 }
 
 /**

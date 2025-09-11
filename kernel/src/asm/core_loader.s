@@ -24,7 +24,7 @@ core_start:
     cld
 
     ; Load a minimal GDT
-    lgdt [gdt32r]
+    lgdt [gdt32.pointer]
 
     ; Enable protected mode
     mov eax, cr0
@@ -38,7 +38,7 @@ core_start:
 protected_mode_entry:
 
     ; Load the now setup p4
-    mov eax, [0x8000 + CORE_BOOT_INFO_OFFSET + CORE_BOOT_P4_TABLE]
+    mov eax, [rel core_boot_info + CORE_BOOT_P4_TABLE]
     mov cr3, eax
 
     ; Enable Physical Address Extension (PAE)
@@ -69,18 +69,11 @@ core_jump_to_higher_half:
 
 core_entry:
 
-    ; Load the temporary stack pointer
-    mov rsp, [0x8000 + CORE_BOOT_INFO_OFFSET + CORE_BOOT_STACK]
+    ; Load the proper stack pointer
+    mov rsp, [rel core_boot_info + CORE_BOOT_STACK]
 
-    ; Mark the core as setup
-    mov byte [0x8000 + CORE_BOOT_INFO_OFFSET + CORE_BOOT_ACTIVATED], 1
-
-    lgdt [0x8000 + CORE_BOOT_INFO_OFFSET + CORE_BOOT_GDT_64]
-
-    .loop: jmp .loop
-
-   ; Now call it
-   call core_main
+    ; Run the kernel (with a fixed address)
+    call core_main - KERNEL_VIRTUAL_ADDR
 
 
 ; Boot info
@@ -92,19 +85,15 @@ core_boot_info:
     db 0          ; activated
     dq 0          ; gdt_64_base
 
-; Minimal GDT
+; Create a bare minimum gdt that can be used to enter protected mode
 align 8
 gdt32:
-    dq 0                      ; Null descriptor
-    dq 0x00CF9A000000FFFF     ; 32-bit code segment
-    dq 0x00CF92000000FFFF     ; 32-bit data segment
-    dq 0x00AF9B000000FFFF     ; 64-bit code segment
-    dq 0x00AF93000000FFFF     ; 64-bit data segment
+    dq 0                                                            ; Null descriptor
+    dq 0x00CF9A000000FFFF                                           ; 32-bit code segment
+    dq 0                                                            ; 32-bit data segment
+    dq (1 <<44) | (1 << 47) | (1 << 41) | (1 << 43) | (1 << 53)     ; 64-bit code segment
+    dq 0                                                            ; 64-bit data segment
 
-gdt32_end:
-
-; GDTR structure
-align 8
-gdt32r:
-    dw gdt32_end - gdt32 - 1        ; Limit
-    dq gdt32                        ; Base
+.pointer:
+    dw .pointer - gdt32 - 1             ; size
+    dq gdt32                            ; address

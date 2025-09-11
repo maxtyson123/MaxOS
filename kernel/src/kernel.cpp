@@ -34,18 +34,12 @@ extern "C" uint8_t core_boot_info[];
 
 extern "C" [[noreturn]] void core_main(){
 
-	// Wait to be scheduled
-	while (true)
-		asm("nop");
-
 	auto info = (core_boot_info_t*)(core_boot_info);
 	Logger::DEBUG() << "Core " << info->id << " now in higher half \n";
 
-	// Load the higher half pml4
-
-	// Load the kernel gdt
-
-	// Load the kernel idt
+	// Load the kernel IDT & GDT
+	asm volatile("lgdt (%0)" : : "r"(info->gdt_64_base));
+	InterruptManager::load_current();
 
 	// Core is all setup
 	info->activated = true;
@@ -53,7 +47,6 @@ extern "C" [[noreturn]] void core_main(){
 	// Wait to be scheduled
 	while (true)
 		asm("nop");
-
 }
 
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {

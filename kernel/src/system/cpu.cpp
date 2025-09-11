@@ -450,10 +450,8 @@ void CPU::init_cores() {
 
 	// Identity map the pml4
 
-	// Find the relocated boot info
-	auto info = (core_boot_info_t*)(core_boot_info);
-
 	// Set up the boot info
+	auto info = (core_boot_info_t*)(core_boot_info);
 	info->p4_table = (uint64_t)PhysicalMemoryManager::to_lower_region((uintptr_t)p4_table);
 	info->gdt_64_base = (void*)&m_gdt->gdtr;
 
