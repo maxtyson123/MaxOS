@@ -188,7 +188,7 @@ void Clock::calibrate(uint64_t ms_per_tick) {
 
 	// Clear the interrupt mask for the clock
 	lvt &= ~(1 << 16);
-	m_apic->local_apic()->write(0x380, lvt);
+	m_apic->local_apic()->write(0x320, lvt);
 
 	Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per tick\n";
 }

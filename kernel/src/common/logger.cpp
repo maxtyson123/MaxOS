@@ -6,10 +6,12 @@
 #include <drivers/console/vesaboot.h>
 #include <common/version.h>
 #include <system/cpu.h>
+#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers::console;
+using namespace MaxOS::processes;
 
 Logger::Logger()
 : m_log_writers()
@@ -107,6 +109,8 @@ void Logger::set_log_level(LogLevel log_level) {
 			*this << ANSI_COLOURS[ANSIColour::BG_Red] << "[  ERROR   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
 			break;
 	}
+
+	Scheduler::print_running_header();
 }
 
 

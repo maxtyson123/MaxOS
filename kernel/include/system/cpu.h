@@ -167,6 +167,7 @@ namespace MaxOS {
 				~Core();
 
 				void wake_up(CPU* cpu) const;
+				static uint8_t executing_core();
 
 		};
 

@@ -26,14 +26,10 @@ Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 : m_madt(madt_item)
 {
 
-	// Get the BSP ID
-	uint32_t eax, ebx, ecx, edx;
-	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
-	uint8_t bsp_id = (ebx >> 24) & 0xFF;
 
 	m_id 		= m_madt->processor_id;
 	m_apic_id 	= m_madt->apic_id;
-	m_bsp		= m_id == bsp_id;
+	m_bsp		= m_id == executing_core();
 
 	m_enabled 		= (m_madt->flags & 0x1) != 0;
 	m_can_enable 	= (m_madt->flags & 0x2) != 0;
@@ -81,6 +77,13 @@ void Core::wake_up(CPU* cpu) const {
 	}
 
 	Logger::WARNING() << "Failed to start core: " << m_id << "\n";
+}
+
+uint8_t Core::executing_core() {
+
+	uint32_t eax, ebx, ecx, edx;
+	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
+	return (ebx >> 24) & 0xFF;
 }
 
 /**

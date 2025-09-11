@@ -35,16 +35,20 @@ extern "C" uint8_t core_boot_info[];
 extern "C" [[noreturn]] void core_main(){
 
 	auto info = (core_boot_info_t*)(core_boot_info);
+
+	// Make sure the correct core is being setup
+	ASSERT(info->id == Core::executing_core(), "Current setup core isn't the core expected");
 	Logger::DEBUG() << "Core " << info->id << " now in higher half \n";
 
 	// Load the kernel IDT & GDT
 	asm volatile("lgdt (%0)" : : "r"(info->gdt_64_base));
 	InterruptManager::load_current();
 
-	// Core is all setup
-	info->activated = true;
+	// Setup this cores' clock
+
 
 	// Wait to be scheduled
+	info->activated = true;
 	while (true)
 		asm("nop");
 }

@@ -13,7 +13,7 @@ using namespace MaxOS::system;
 
 Scheduler::Scheduler(Multiboot& multiboot)
 : InterruptHandler(0x20),
-  m_current_thread_index(0),
+  m_next_thread_index(0),
   m_active(false),
   m_ticks(0),
   m_next_pid(-1),
@@ -29,11 +29,11 @@ Scheduler::Scheduler(Multiboot& multiboot)
 	// Create the idle process
 	auto* idle = new Process("kernelMain Idle", nullptr, nullptr, 0, true);
 	idle->memory_manager = MemoryManager::s_kernel_memory_manager;
-	add_process(idle);
 	idle->set_pid(0);
 
 	// Load the elfs
 	load_multiboot_elfs(&multiboot);
+
 }
 
 Scheduler::~Scheduler() {
@@ -63,21 +63,24 @@ cpu_status_t* Scheduler::handle_interrupt(cpu_status_t* status) {
  */
 cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 
+	m_lock.lock();
+
 	// Scheduler cant schedule anything
-	if (m_threads.empty() || !m_active)
+	if (m_threads.empty() || !m_active){
+		m_lock.unlock();
 		return cpu_state;
+	}
+
 
 	// Thread that we are dealing with
-	Thread* current_thread = m_threads[m_current_thread_index];
+	Thread* current_thread = m_threads[m_core_map[Core::executing_core()]];
 
 	// Ticked
 	m_ticks++;
 	current_thread->ticks++;
 
-	// Wait for a bit so that the scheduler doesn't run too fast TODO: fix
-	if (m_ticks % s_ticks_per_event != 0) return cpu_state;
-
 	// Schedule the next thread
+	m_lock.unlock();
 	return schedule_next(cpu_state);
 }
 
@@ -89,8 +92,14 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
  */
 cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
+	// Not enough threads to need this core
+	uint64_t core_id = Core::executing_core();
+	if(m_threads.size() <= core_id)
+		return load_process(m_processes[0], m_threads[0]);
+
 	// Get the thread that is executing right now
-	Thread* current_thread = m_threads[m_current_thread_index];
+	m_lock.lock();
+	Thread* current_thread = m_threads[m_core_map[core_id]];
 
 	// Save its state
 	current_thread->execution_state = cpu_state;
@@ -98,11 +107,25 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 	if (current_thread->thread_state == ThreadState::RUNNING)
 		current_thread->thread_state = ThreadState::READY;
 
-	// Switch to the thread that will now run
-	m_current_thread_index++;
-	m_current_thread_index %= m_threads.size();
-	current_thread = m_threads[m_current_thread_index];
+	// Find a free thread to run
+	m_next_thread_index++;
+	m_next_thread_index %= m_threads.size();
+	for(const auto& core : m_core_map){
 
+		// This thread is being executed by this core
+		if(m_next_thread_index == core.second){
+			m_next_thread_index++;
+			m_next_thread_index %= m_threads.size();
+		}
+	}
+
+	// Store the tid
+	uint64_t thread_index = m_next_thread_index;
+	m_core_map.insert(core_id, thread_index);
+	m_lock.unlock();
+
+	// Get the current thread
+	current_thread = m_threads[thread_index];
 	Process* owner_process = current_process();
 
 	// Handle state changes
@@ -115,8 +138,9 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 		case ThreadState::SLEEPING:
 
 			// If the wake-up time hasn't occurred yet, run the next thread
-			if (current_thread->wakeup_time > m_ticks)
+			if (current_thread->wakeup_time > m_ticks){
 				return schedule_next(current_thread->execution_state);
+			}
 
 			break;
 
@@ -125,13 +149,13 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 			// Find the process that has the thread and remove it
 			for (auto thread: owner_process->threads()) {
 				if (thread == current_thread) {
-					owner_process->remove_thread(m_current_thread_index);
+					owner_process->remove_thread(thread_index);
 					break;
 				}
 			}
 
 			// Remove the thread
-			m_threads.erase(m_threads.begin() + m_current_thread_index);
+			m_threads.erase(m_threads.begin() + thread_index);
 
 			// Run the next thread
 			return schedule_next(cpu_state);
@@ -140,17 +164,29 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 			break;
 	}
 
-	// Prepare the next thread to run
-	current_thread->thread_state = ThreadState::RUNNING;
-	current_thread->restore_sse_state();
-
-	// Load the thread's memory manager and task state
-	MemoryManager::switch_active_memory_manager(owner_process->memory_manager);
-	CPU::tss.rsp0 = current_thread->tss_pointer();
-
-	return current_thread->execution_state;
+	// Load the thread's state
+	return load_process(owner_process, current_thread);
 }
 
+/**
+ * @brief Load the thread specific state for the thread
+ *
+ * @param process The process that owns the thread
+ * @param thread The thread to load
+ * @return The cpu state to run with the next thread
+ */
+cpu_status_t* Scheduler::load_process(Process* process, Thread* thread) {
+
+	// Prepare the next thread to run
+	thread->thread_state = ThreadState::RUNNING;
+	thread->restore_sse_state();
+
+	// Load the thread's memory manager and task state
+	MemoryManager::switch_active_memory_manager(process->memory_manager);
+	CPU::tss.rsp0 = thread->tss_pointer();
+
+	return thread->execution_state;
+}
 
 /**
  * @brief Adds a process to the scheduler
@@ -160,6 +196,8 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
  */
 uint64_t Scheduler::add_process(Process* process) {
 
+	m_lock.lock();
+
 	// Get the next process ID
 	m_next_pid++;
 
@@ -168,6 +206,7 @@ uint64_t Scheduler::add_process(Process* process) {
 	Logger::DEBUG() << "Adding process " << m_next_pid << ": " << process->name << "\n";
 
 	// Return the process ID
+	m_lock.unlock();
 	return m_next_pid;
 }
 
@@ -179,6 +218,8 @@ uint64_t Scheduler::add_process(Process* process) {
  */
 uint64_t Scheduler::add_thread(Thread* thread) {
 
+	m_lock.lock();
+
 	// Get the next thread ID
 	m_next_tid++;
 
@@ -187,6 +228,7 @@ uint64_t Scheduler::add_thread(Thread* thread) {
 	Logger::DEBUG() << "Adding thread " << m_next_tid << " to process " << thread->parent_pid << "\n";
 
 	// Return the thread ID
+	m_lock.unlock();
 	return m_next_tid;
 }
 
@@ -220,9 +262,8 @@ cpu_status_t* Scheduler::yield() {
 		return current_thread()->execution_state;
 
 	// Set the current thread to waiting if running
-	if (m_threads[m_current_thread_index]->thread_state == ThreadState::RUNNING)
-		m_threads[m_current_thread_index]->thread_state = ThreadState::READY;
-
+	if (current_thread()->thread_state == ThreadState::RUNNING)
+		current_thread()->thread_state = ThreadState::READY;
 
 	// Schedule the next thread
 	return schedule_next(current_thread()->execution_state);
@@ -245,6 +286,8 @@ void Scheduler::activate() {
  */
 uint64_t Scheduler::remove_process(Process* process) {
 
+	m_lock.lock();
+
 	// Check if the process has no threads
 	if (!process->threads().empty()) {
 
@@ -253,6 +296,7 @@ uint64_t Scheduler::remove_process(Process* process) {
 			thread->thread_state = ThreadState::STOPPED;
 
 		// Need to wait until the threads are stopped before removing the process (this will be called again when all threads are stopped)
+		m_lock.unlock();
 		return -1;
 
 	}
@@ -264,11 +308,13 @@ uint64_t Scheduler::remove_process(Process* process) {
 
 			// Delete the process mem
 			delete process;
+			m_lock.unlock();
 			return 0;
 		}
 	}
 
 	// Process not found
+	m_lock.unlock();
 	return -1;
 }
 
@@ -284,6 +330,8 @@ cpu_status_t* Scheduler::force_remove_process(Process* process) {
 	if (!process)
 		return nullptr;
 
+	m_lock.lock();
+
 	// Remove all the threads
 	for (auto thread: process->threads()) {
 
@@ -298,6 +346,7 @@ cpu_status_t* Scheduler::force_remove_process(Process* process) {
 
 	// Process will be dead now so run the next process (don't care about the execution state being outdated as it is being
 	// removed regardless)
+	m_lock.unlock();
 	return schedule_next(current_thread()->execution_state);
 }
 
@@ -349,7 +398,14 @@ Process* Scheduler::get_process(uint64_t pid) {
  */
 Thread* Scheduler::current_thread() {
 
-	return s_instance->m_threads[s_instance->m_current_thread_index];
+	if(!s_instance)
+		return nullptr;
+
+	s_instance->m_lock.lock();
+	auto thread = s_instance->m_threads[s_instance->m_core_map[Core::executing_core()]];
+	s_instance->m_lock.unlock();
+
+	return thread;
 }
 
 /**
@@ -373,7 +429,7 @@ void Scheduler::load_multiboot_elfs(Multiboot* multiboot) {
 		if (tag->type != MULTIBOOT_TAG_TYPE_MODULE)
 			continue;
 
-		// Try create the elf from the module
+		// Try to create the elf from the module
 		auto* module = (struct multiboot_tag_module*) tag;
 		auto* elf = new Elf64((uintptr_t) PhysicalMemoryManager::to_dm_region(module->mod_start));
 		if (!elf->is_valid())
@@ -406,4 +462,21 @@ Thread* Scheduler::get_thread(uint64_t tid) {
 			return thread;
 
 	return nullptr;
+}
+
+/**
+ * @brief Get the header for the running processes
+ *
+ * @return a string in the form ({name}:t{tid}c{core})
+ */
+void Scheduler::print_running_header() {
+
+	// No threads or processes to get
+	if(!s_instance || !s_instance->m_active)
+		return;
+
+	auto process = current_process();
+	auto thread   = current_thread();
+
+	Logger::Out() << "(" << process->name << ":t" << thread->tid  << "c" << Core::executing_core() << ") ";
 }
