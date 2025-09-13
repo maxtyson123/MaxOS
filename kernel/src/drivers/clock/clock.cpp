@@ -177,20 +177,26 @@ void Clock::calibrate(uint64_t ms_per_tick) {
 
 	// Get the ticks per ms
 	PIT pit(m_apic);
-	uint32_t ticks_per_ms = pit.ticks_per_ms();
+	m_pit_ticks_per_ms = pit.ticks_per_ms();
+
+	// Calibrate the BSP apic to the desired time
+	setup_apic_clock(m_apic->local_apic());
+
+	Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per kernel tick\n";
+}
+
+void Clock::setup_apic_clock(hardwarecommunication::LocalAPIC* local_apic) const {
 
 	// Configure the clock to periodic mode
 	uint32_t lvt = 0x20 | (1 << 17);
-	m_apic->local_apic()->write(0x320, lvt);
+	local_apic->write(0x320, lvt);
 
 	// Set the initial count
-	m_apic->local_apic()->write(0x380, ms_per_tick * ticks_per_ms);
+	local_apic->write(0x380, m_pit_ticks_per_ms * clock_accuracy);
 
 	// Clear the interrupt mask for the clock
 	lvt &= ~(1 << 16);
-	m_apic->local_apic()->write(0x320, lvt);
-
-	Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per tick\n";
+	local_apic->write(0x320, lvt);
 }
 
 /**
@@ -223,6 +229,7 @@ common::Time Clock::get_time() {
 Clock *Clock::active_clock() {
 	return s_active_clock;
 }
+
 
 TimeEvent::TimeEvent(Time *time)
 : Event(ClockEvents::TIME),

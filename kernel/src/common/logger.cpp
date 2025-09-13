@@ -12,6 +12,7 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers::console;
 using namespace MaxOS::processes;
+using namespace MaxOS::system;
 
 Logger::Logger()
 : m_log_writers()
@@ -20,7 +21,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total = 23;
+	s_progress_total = 22;
 
 }
 
@@ -77,6 +78,7 @@ void Logger::disable_log_writer(OutputStream *log_writer) {
 void Logger::set_log_level(LogLevel log_level) {
 
 	// Set the log level
+	m_lock.lock();
 	m_log_level = log_level;
 
 	// Update the progress bar
@@ -111,6 +113,7 @@ void Logger::set_log_level(LogLevel log_level) {
 	}
 
 	Scheduler::print_running_header();
+	m_lock.unlock();
 }
 
 
@@ -123,6 +126,10 @@ void Logger::write_char(char c) {
 
 	// Ensure logging at this level is enabled
 	if (m_log_level > s_max_log_level)
+		return;
+
+	// Only the core that is panicking can print
+	if(CPU::is_panicking && CPU::panic_core != CPU::executing_core())
 		return;
 
 	// Write the character to all output streams
@@ -138,6 +145,7 @@ void Logger::write_char(char c) {
  * @return The active logger
  */
 Logger &Logger::Out() {
+
 	return *active_logger();
 }
 

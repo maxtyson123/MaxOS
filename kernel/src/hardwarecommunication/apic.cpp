@@ -15,7 +15,11 @@ LocalAPIC::LocalAPIC() {
 	// Get the APIC base address
 	uint64_t msr_info = CPU::read_msr(0x1B);
 	m_apic_base = msr_info & 0xFFFFF000;
-	PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
+
+	// Reserve the base address once
+	static bool bsp_setup = false;
+	if(!bsp_setup)
+		PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
 
 	// Check if the APIC supports x2APIC
 	uint32_t ignored, xleaf, x2leaf;
@@ -36,28 +40,20 @@ LocalAPIC::LocalAPIC() {
 
 		// Map the APIC base address to the higher half
 		m_apic_base_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_apic_base);
-		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_apic_base,
-													  (virtual_address_t*) m_apic_base_high, Write | Present);
+		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_apic_base, (virtual_address_t*) m_apic_base_high, Write | Present);
 		Logger::DEBUG() << "APIC Base: phy=0x" << m_apic_base << ", virt=0x" << m_apic_base_high << "\n";
-
 	} else {
 		ASSERT(false, "CPU does not support xAPIC");
 	}
 
-	// Get information about the APIC
-	uint32_t spurious_vector = read(0xF0);
-	bool is_enabled = msr_info & (1 << 11);
-	bool is_bsp = msr_info & (1 << 8);
-	Logger::DEBUG() << "APIC: boot processor: " << (is_bsp ? "Yes" : "No") << ", enabled (globally): " << (is_enabled ? "Yes" : "No") << " Spurious Vector: 0x" << (uint64_t) (spurious_vector & 0xFF) << "\n";
-
-
-	if (!is_enabled) {
+	if (!(msr_info & (1 << 11))) {
 		Logger::WARNING() << "APIC is not enabled\n";
 		return;
 	}
 
 	// Enable the APIC
 	write(0xF0, (1 << 8) | 0x100);
+	bsp_setup = true;
 	Logger::DEBUG() << "APIC Enabled\n";
 }
 
@@ -87,8 +83,10 @@ uint32_t LocalAPIC::read(uint32_t reg) const {
 void LocalAPIC::write(uint32_t reg, uint32_t value) const {
 
 	// If x2APIC is enabled I/O is done through the MSR
-	if (m_x2apic)
+	if (m_x2apic){
 		CPU::write_msr((reg >> 4) + 0x800, value);
+		return;
+	}
 
 	// Default to memory I/O
 	*(volatile uint32_t*) ((uintptr_t) m_apic_base_high + reg) = value;

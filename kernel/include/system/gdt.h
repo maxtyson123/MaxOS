@@ -49,6 +49,7 @@ namespace MaxOS {
               uint64_t table[7];
 
 			  gdtr_t gdtr = {};
+			  void load();
           };
     }
 }

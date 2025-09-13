@@ -35,22 +35,23 @@ extern "C" uint8_t core_boot_info[];
 extern "C" [[noreturn]] void core_main(){
 
 	auto info = (core_boot_info_t*)(core_boot_info);
+	auto core = CPU::executing_core();
 
 	// Make sure the correct core is being setup
-	ASSERT(info->id == Core::executing_core(), "Current setup core isn't the core expected");
-	Logger::DEBUG() << "Core " << info->id << " now in higher half \n";
+	ASSERT(info->id == core->id, "Current setup core isn't the core expected");
+	Logger::DEBUG() << "Core " << core->id << " now in higher half \n";
 
-	// Load the kernel IDT & GDT
-	asm volatile("lgdt (%0)" : : "r"(info->gdt_64_base));
-	InterruptManager::load_current();
-
-	// Setup this cores' clock
-
+	// Set up the core
+	core -> init();
+	info -> activated = true;
 
 	// Wait to be scheduled
-	info->activated = true;
-	while (true)
+	asm("sti");
+	while (true){
 		asm("nop");
+	}
+
+
 }
 
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {
@@ -102,7 +103,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 	// Idle loop  (read Idle.md)
 	while (true)
-		asm("nop");
+		asm("hlt");
 
 }
 

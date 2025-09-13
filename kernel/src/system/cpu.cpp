@@ -10,6 +10,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::system;
+using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::clock;
 using namespace MaxOS::hardwarecommunication;
@@ -26,34 +27,32 @@ Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 : m_madt(madt_item)
 {
 
-
-	m_id 		= m_madt->processor_id;
+	id 		    = m_madt->processor_id;
 	m_apic_id 	= m_madt->apic_id;
-	m_bsp		= m_id == executing_core();
 
 	m_enabled 		= (m_madt->flags & 0x1) != 0;
 	m_can_enable 	= (m_madt->flags & 0x2) != 0;
 
-
-	Logger::DEBUG() << "Found CPU ID: " << m_id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable  << ")\n";
+	Logger::DEBUG() << "Found CPU ID: " << id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable  << ")\n";
 
 }
 
 Core::~Core() = default;
 
-void Core::wake_up(CPU* cpu) const {
+void Core::wake_up(CPU* cpu) {
 
 	// Boot core is already setup
 	if(m_bsp)
 		return;
 
-	Logger::DEBUG() << "Starting core: " << m_id << "\n";
+	Logger::DEBUG() << "Starting core: " << id << "\n";
+	m_stack = (uint64_t)MemoryManager::kmalloc(s_stack_size);
 
 	// Core specific boot info
 	auto info = (core_boot_info_t*)(core_boot_info);
 	info->activated = false;
-	info->id = m_id;
-	info->stack = (uint64_t)MemoryManager::kmalloc(CPU::s_stack_size) + CPU::s_stack_size;
+	info->id = id;
+	info->stack = m_stack + s_stack_size;
 
 	// Send init IPI
 	cpu->apic.local_apic()->send_init(m_apic_id, true);
@@ -67,38 +66,169 @@ void Core::wake_up(CPU* cpu) const {
 
 		// Send the start up IPI
 		cpu->apic.local_apic()->send_startup(m_apic_id, 0x8);
-		Clock::active_clock()->delay(10);
+		Clock::active_clock()->delay(100);
 
 		// Check if core started
 		if(info->activated){
-			Logger::DEBUG() << "Core " << m_id << " started successfully \n";
+			Logger::DEBUG() << "Core " << id << " started successfully \n";
 			return;
 		}
 	}
 
-	Logger::WARNING() << "Failed to start core: " << m_id << "\n";
+	Logger::WARNING() << "Failed to start core: " << id << "\n";
 }
 
-uint8_t Core::executing_core() {
+void Core::init_tss() {
 
-	uint32_t eax, ebx, ecx, edx;
-	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
-	return (ebx >> 24) & 0xFF;
+	// The reserved have to be 0
+	tss.reserved0 = 0;
+	tss.reserved1 = 0;
+	tss.reserved2 = 0;
+	tss.reserved3 = 0;
+	tss.reserved4 = 0;
+
+	// The stacks
+	tss.rsp0 = (uint64_t)m_stack + s_stack_size;       // Kernel stack (scheduler will set the threads stack)
+	tss.rsp1 = 0;
+	tss.rsp2 = 0;
+
+	// Interrupt stacks can all be 0
+	tss.ist1 = 0;
+	tss.ist2 = 0;
+	tss.ist3 = 0;
+	tss.ist4 = 0;
+	tss.ist5 = 0;
+	tss.ist6 = 0;
+	tss.ist7 = 0;
+
+	// Ports TODO when setting up userspace drivers come back to this
+	tss.io_bitmap_offset = 0;
+
+	// Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
+	auto base = (uint64_t) &tss;
+	uint16_t base_1 = base & 0xFFFF;
+	uint8_t base_2 = (base >> 16) & 0xFF;
+	uint8_t base_3 = (base >> 24) & 0xFF;
+	uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
+
+	uint16_t limit_low = (uint16_t)(sizeof(tss) - 1);
+
+	// Flags: 1 - Type = 0x9, Descriptor Privilege Level = 0, Present = 1, 2 - Available = 0, Granularity = 0
+	uint8_t flags_1 = 0x89;
+	uint8_t flags_2 = 0;
+
+	// Create the TSS descriptors
+	uint64_t tss_descriptor_low = (uint64_t) base_3 << 56 | (uint64_t) flags_2 << 48 | (uint64_t) flags_1 << 40 | (uint64_t) base_2 << 32 | (uint64_t) base_1 << 16 | (uint64_t) limit_low;
+	uint64_t tss_descriptor_high = base_4;
+
+	// Store in the GDT
+	gdt->table[5] = tss_descriptor_low;
+	gdt->table[6] = tss_descriptor_high;
+	gdt -> load();
+
+	// Load the TSS
+	Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t) &tss << "\n";
+	asm volatile("ltr %%ax" : : "a" (0x28));
+
 }
+
+
+/**
+ * @brief Initialises the SSE instructions
+ */
+void Core::init_sse() {
+
+	// Get the CR0 register
+	uint64_t cr0;
+	asm volatile("mov %%cr0, %0" : "=r" (cr0));
+
+	// Get the CR4 register
+	uint64_t cr4;
+	asm volatile("mov %%cr4, %0" : "=r" (cr4));
+
+	// Check if FPU is supported
+	ASSERT(CPU::check_cpu_feature(CPU_FEATURE_EDX::FPU), "FPU not supported - needed for SSE");
+
+	// Clear the emulation flag, task switch flags and enable the monitor coprocessor, native exception bits
+	cr0 |= (1 << 1);
+	cr0 &= ~(1 << 2);
+	cr0 &= ~(1 << 3);
+	cr0 |= (1 << 5);
+	asm volatile("mov %0, %%cr0" : : "r" (cr0));
+
+	// Enable the FPU
+	asm volatile("fninit");
+
+	// Check if SSE is supported
+	ASSERT(CPU::check_cpu_feature(CPU_FEATURE_EDX::SSE), "SSE not supported");
+
+	// Enable FSAVE, FSTORE and SSE instructions
+	cr4 |= (1 << 9);
+	cr4 |= (1 << 10);
+	asm volatile("mov %0, %%cr4" : : "r" (cr4));
+
+	// Check if XSAVE is supported
+	xsave_enabled = CPU::check_cpu_feature(CPU_FEATURE_ECX::XSAVE) && CPU::check_cpu_feature(CPU_FEATURE_ECX::OSXSAVE);
+	Logger::DEBUG() << "XSAVE: " << (xsave_enabled ? "Supported" : "Not Supported") << "\n";
+	if (!xsave_enabled) return;
+
+	// Enable the XSAVE and XRESTORE instructions
+	cr4 |= (1 << 18);
+	asm volatile("mov %0, %%cr4" : : "r" (cr4));
+
+	// Set the SSE and x87 bits
+	uint64_t xcr0;
+	asm volatile("xgetbv" : "=a" (xcr0) : "c" (0));
+	xcr0 |= 0x7;
+	asm volatile("xsetbv" : : "c" (0), "a" (xcr0));
+
+	// Check if AVX is supported
+	avx_enabled = CPU::check_cpu_feature(CPU_FEATURE_ECX::AVX);
+	Logger::DEBUG() << "AVX: " << (avx_enabled ? "Supported" : "Not Supported") << "\n";
+	if (!avx_enabled) return;
+
+	// Enable the AVX instructions
+	cr4 |= (1 << 14);
+	asm volatile("mov %0, %%cr4" : : "r" (cr4));
+
+	Logger::DEBUG() << "SSE Enabled\n";
+}
+
+void Core::init() {
+
+	// Load the kernel IDT & GDT
+	gdt = new GlobalDescriptorTable();
+	InterruptManager::load_current();
+
+	// Setup this core's clock
+	local_apic = new LocalAPIC;
+	Clock::active_clock()->setup_apic_clock(local_apic);
+
+	// Delegate large initiation
+	init_sse();
+	init_tss();
+}
+
 
 /**
  * @brief Constructor for the CPU class
  */
 CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
-: m_gdt(gdt),
-  acpi(multiboot),
+: acpi(multiboot),
   apic(&acpi)
 {
 
 	Logger::INFO() << "Setting up CPU \n";
 	find_cores();
-	init_tss();
-	init_sse();
+
+	// Manually set up the BSP
+	auto bsp = cores[0];
+	bsp -> m_bsp = true;
+	bsp -> gdt = gdt;
+	bsp -> local_apic = apic.local_apic();
+	bsp -> init_tss();
+	bsp -> init_sse();
+
 }
 
 CPU::~CPU() = default;
@@ -226,12 +356,14 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 
 	// Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most
 	// likely called by a place that cant switch to the avoidable state
-	if (!is_panicking)
-		prepare_for_panic();
+	if (is_panicking)
+		return;
+	prepare_for_panic();
 
 	// Print using the backend
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
 	Logger::ERROR() << "Kernel Panic: " << message << "\n";
+	Logger::ERROR() << "On Core: " << panic_core->id << "\n";
 
 	// Info about the running process
 	Logger::ERROR() << "Process: " << (process ? process->name.c_str() : "Kernel") << "\n";
@@ -269,64 +401,6 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 }
 
 /**
- * @brief Initialises the TSS for interrupt handling
- */
-void CPU::init_tss() {
-
-	// The reserved have to be 0
-	tss.reserved0 = 0;
-	tss.reserved1 = 0;
-	tss.reserved2 = 0;
-	tss.reserved3 = 0;
-	tss.reserved4 = 0;
-
-	// The stacks
-	tss.rsp0 = (uint64_t) stack + s_stack_size;       // Kernel stack (scheduler will set the threads stack)
-	tss.rsp1 = 0;
-	tss.rsp2 = 0;
-
-	// Interrupt stacks can all be 0
-	tss.ist1 = 0;
-	tss.ist2 = 0;
-	tss.ist3 = 0;
-	tss.ist4 = 0;
-	tss.ist5 = 0;
-	tss.ist6 = 0;
-	tss.ist7 = 0;
-
-	// Ports TODO when setting up userspace drivers come back to this
-	tss.io_bitmap_offset = 0;
-
-	// Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
-	auto base = (uint64_t) &tss;
-	uint16_t base_1 = base & 0xFFFF;
-	uint8_t base_2 = (base >> 16) & 0xFF;
-	uint8_t base_3 = (base >> 24) & 0xFF;
-	uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
-
-	uint16_t limit_low = sizeof(tss);
-
-	// Flags: 1 - Type = 0x9, Descriptor Privilege Level = 0, Present = 1
-	//        2 - Available = 0, Granularity = 0
-	uint8_t flags_1 = 0x89;
-	uint8_t flags_2 = 0;
-
-	// Create the TSS descriptors
-	uint64_t tss_descriptor_low = (uint64_t) base_3 << 56 | (uint64_t) flags_2 << 48 | (uint64_t) flags_1 << 40 | (uint64_t) base_2 << 32 | (uint64_t) base_1 << 16 | (uint64_t) limit_low;
-	uint64_t tss_descriptor_high = base_4;
-
-	// Store in the GDT
-	m_gdt->table[5] = tss_descriptor_low;
-	m_gdt->table[6] = tss_descriptor_high;
-
-	// Load the TSS
-	Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t) &tss << "\n";
-	asm volatile("ltr %%ax" : : "a" (0x28));
-
-	//TODO: For smp - load the TSS for each core or find a better way to do this
-}
-
-/**
  * @brief Ensure the CPU must panic and prepare for it if so
  *
  * @param status The status of the CPU (if available)
@@ -352,74 +426,17 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
 	// We are panicking
 	is_panicking = true;
+	panic_core = CPU::executing_core();
 	return nullptr;
-}
-
-/**
- * @brief Initialises the SSE instructions
- */
-void CPU::init_sse() {
-
-	// Get the CR0 register
-	uint64_t cr0;
-	asm volatile("mov %%cr0, %0" : "=r" (cr0));
-
-	// Get the CR4 register
-	uint64_t cr4;
-	asm volatile("mov %%cr4, %0" : "=r" (cr4));
-
-	// Check if FPU is supported
-	ASSERT(check_cpu_feature(CPU_FEATURE_EDX::FPU), "FPU not supported - needed for SSE");
-
-	// Clear the emulation flag, task switch flags and enable the monitor coprocessor, native exception bits
-	cr0 |= (1 << 1);
-	cr0 &= ~(1 << 2);
-	cr0 &= ~(1 << 3);
-	cr0 |= (1 << 5);
-	asm volatile("mov %0, %%cr0" : : "r" (cr0));
-
-	// Enable the FPU
-	asm volatile("fninit");
-
-	// Check if SSE is supported
-	ASSERT(check_cpu_feature(CPU_FEATURE_EDX::SSE), "SSE not supported");
-
-	// Enable FSAVE, FSTORE and SSE instructions
-	cr4 |= (1 << 9);
-	cr4 |= (1 << 10);
-	asm volatile("mov %0, %%cr4" : : "r" (cr4));
-
-	// Check if XSAVE is supported
-	s_xsave = check_cpu_feature(CPU_FEATURE_ECX::XSAVE) && check_cpu_feature(CPU_FEATURE_ECX::OSXSAVE);
-	Logger::DEBUG() << "XSAVE: " << (s_xsave ? "Supported" : "Not Supported") << "\n";
-	if (!s_xsave) return;
-
-	// Enable the XSAVE and XRESTORE instructions
-	cr4 |= (1 << 18);
-	asm volatile("mov %0, %%cr4" : : "r" (cr4));
-
-	// Set the SSE and x87 bits
-	uint64_t xcr0;
-	asm volatile("xgetbv" : "=a" (xcr0) : "c" (0));
-	xcr0 |= 0x7;
-	asm volatile("xsetbv" : : "c" (0), "a" (xcr0));
-
-	// Check if AVX is supported
-	s_avx = check_cpu_feature(CPU_FEATURE_ECX::AVX);
-	Logger::DEBUG() << "AVX: " << (s_avx ? "Supported" : "Not Supported") << "\n";
-	if (!s_avx) return;
-
-	// Enable the AVX instructions
-	cr4 |= (1 << 14);
-	asm volatile("mov %0, %%cr4" : : "r" (cr4));
-
-	Logger::DEBUG() << "SSE Enabled\n";
 }
 
 /**
  * @brief Search the madt for cores and store them
  */
 void CPU::find_cores() {
+
+	// Now that memory is set up the vector can be used
+	cores.reserve(1);
 
 	// Search and setup each core
 	int index = 0;
@@ -435,7 +452,6 @@ void CPU::find_cores() {
 		cores.push_back(new Core(processor_apic));
 		index++;
 	}
-
 
 	// TODO: Also check x2
 }
@@ -456,7 +472,6 @@ void CPU::init_cores() {
 	// Set up the boot info
 	auto info = (core_boot_info_t*)(core_boot_info);
 	info->p4_table = (uint64_t)PhysicalMemoryManager::to_lower_region((uintptr_t)p4_table);
-	info->gdt_64_base = (void*)&m_gdt->gdtr;
 
 	// Start each core
 	for(const auto& core : cores)
@@ -511,4 +526,14 @@ bool CPU::check_nx() {
 
 	// Return if the NX flag is supported
 	return supported;
+}
+
+Core* CPU::executing_core() {
+
+	// Get the id of this core
+	uint32_t eax, ebx, ecx, edx;
+	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
+	uint32_t core_id = (ebx >> 24) & 0xFF;
+
+	return cores[core_id];
 }

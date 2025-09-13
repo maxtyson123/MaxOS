@@ -145,6 +145,7 @@ namespace MaxOS {
                     // Time between events
                     uint16_t m_ticks_between_events { 0 };
                     uint16_t m_ticks_until_next_event { 1 };
+	                uint64_t m_pit_ticks_per_ms { 0 };
 
                     // Other functions
                     void handle_interrupt() final;
@@ -163,12 +164,13 @@ namespace MaxOS {
                     void delay(uint32_t milliseconds) const;
 
                     void calibrate(uint64_t ms_per_tick = 1);
-                    common::Time get_time();
+					void setup_apic_clock(hardwarecommunication::LocalAPIC* local_apic) const;
 
                     string vendor_name() final;
                     string device_name() final;
 
 					static Clock* active_clock();
+	                common::Time get_time();
             };
 
         }

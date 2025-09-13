@@ -71,9 +71,8 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 		return cpu_state;
 	}
 
-
 	// Thread that we are dealing with
-	Thread* current_thread = m_threads[m_core_map[Core::executing_core()]];
+	Thread* current_thread = m_threads[m_core_map[CPU::executing_core()->id]];
 
 	// Ticked
 	m_ticks++;
@@ -93,7 +92,7 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
 	// Not enough threads to need this core
-	uint64_t core_id = Core::executing_core();
+	uint64_t core_id = CPU::executing_core()->id;
 	if(m_threads.size() <= core_id)
 		return load_process(m_processes[0], m_threads[0]);
 
@@ -183,7 +182,7 @@ cpu_status_t* Scheduler::load_process(Process* process, Thread* thread) {
 
 	// Load the thread's memory manager and task state
 	MemoryManager::switch_active_memory_manager(process->memory_manager);
-	CPU::tss.rsp0 = thread->tss_pointer();
+	CPU::executing_core() -> tss.rsp0 = thread->tss_pointer();
 
 	return thread->execution_state;
 }
@@ -402,7 +401,7 @@ Thread* Scheduler::current_thread() {
 		return nullptr;
 
 	s_instance->m_lock.lock();
-	auto thread = s_instance->m_threads[s_instance->m_core_map[Core::executing_core()]];
+	auto thread = s_instance->m_threads[s_instance->m_core_map[CPU::executing_core()->id]];
 	s_instance->m_lock.unlock();
 
 	return thread;
@@ -478,5 +477,5 @@ void Scheduler::print_running_header() {
 	auto process = current_process();
 	auto thread   = current_thread();
 
-	Logger::Out() << "(" << process->name << ":t" << thread->tid  << "c" << Core::executing_core() << ") ";
+	Logger::Out() << "(" << process->name << ":t" << thread->tid  << "c" << CPU::executing_core()->id << ") ";
 }

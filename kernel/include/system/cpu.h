@@ -152,56 +152,61 @@ namespace MaxOS {
 		class CPU;
 		class Core {
 
-			private:
+			friend class CPU;
+			protected:
 				hardwarecommunication::madt_processor_apic_t* m_madt;
 
 				bool m_enabled;
 				bool m_can_enable;
 				bool m_bsp;
 
-				uint8_t m_id;
 				uint8_t m_apic_id;
 
-			public:
+				static inline size_t s_stack_size = 16384;
+				uint64_t m_stack;
+
+			    void init_tss();
+				void init_sse();
+
+		public:
 				explicit Core(hardwarecommunication::madt_processor_apic_t* madt_item);
 				~Core();
 
-				void wake_up(CPU* cpu) const;
-				static uint8_t executing_core();
+				bool xsave_enabled = false;
+				bool avx_enabled = false;
 
+				void wake_up(CPU* cpu);
+				void init();
+
+				uint8_t id;
+				tss_t tss = {};
+
+				hardwarecommunication::LocalAPIC* local_apic;
+				GlobalDescriptorTable* gdt;
 		};
 
 
 		class CPU {
-
-			private:
-				GlobalDescriptorTable* m_gdt;
 
 			public:
 
 				CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot);
 				~CPU();
 
-				static inline size_t s_stack_size = 16384;
-
 				hardwarecommunication::AdvancedConfigurationAndPowerInterface acpi;
 				hardwarecommunication::AdvancedProgrammableInterruptController apic;
 
 				static inline bool is_panicking = {false};
+				static inline Core* panic_core = nullptr;
+
 				static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
 				static void PANIC(const char* message, cpu_status_t* status = nullptr);
 				[[noreturn]] static void halt();
 
-				void init_tss();
-				inline static tss_t tss = {};
-
-				static inline bool s_xsave = false;
-				static inline bool s_avx = false;
-				void init_sse();
-
-				common::Vector<Core*> cores;
+				inline static common::Vector<Core*> cores;
 				void find_cores();
 				void init_cores();
+				static Core* executing_core();
 
 				static bool check_nx();
 

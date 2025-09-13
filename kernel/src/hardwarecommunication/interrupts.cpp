@@ -290,7 +290,7 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
 	// Send the EOI to the APIC
 	if (s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
-		m_apic->local_apic()->send_eoi();
+		CPU::executing_core()->local_apic->send_eoi();
 
 	// Return the status
 	return new_status;
@@ -305,6 +305,7 @@ void InterruptManager::set_apic(AdvancedProgrammableInterruptController* apic) {
 
 	m_apic = apic;
 }
+
 
 /**
  * @brief Handles a page fault

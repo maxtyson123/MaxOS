@@ -68,11 +68,13 @@ namespace MaxOS{
 		        void erase(iterator position);
 		        void clear();
 
+		        void reserve(size_t amount); // TODO
+		        void increase_size();
+
                 void iterate(MapIterationHandler<Key, Value>* handler);
                 void iterate(void callback(Key&, Value&));
 
         };
-
 
 	    /// ______________ TEMPLATE IMPLEMENTATION ______________
         template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() = default;
@@ -255,7 +257,12 @@ namespace MaxOS{
 
 	    }
 
-        /**
+	    template<class Key, class Value> void Map<Key, Value>::increase_size() {
+			m_elements.increase_size();
+	    }
+
+
+	    /**
          * @brief Iterates through the map and calls the handler
          *
          * @tparam Key The key type

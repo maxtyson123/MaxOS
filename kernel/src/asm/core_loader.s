@@ -32,7 +32,7 @@ core_start:
     mov cr0, eax
 
     ; Jump to 32 bit mode using the kernel code selector
-    jmp 0x08:protected_mode_entry
+    jmp 0x18:protected_mode_entry
 
 [bits 32]
 protected_mode_entry:
@@ -59,7 +59,7 @@ protected_mode_entry:
     mov cr0, eax
 
     ; Jump to 64 bit mode using the kernel code selector
-    jmp 0x18:(core_jump_to_higher_half)
+    jmp 0x8:(core_jump_to_higher_half)
 
 [bits 64]
 core_jump_to_higher_half:
@@ -89,10 +89,10 @@ core_boot_info:
 align 8
 gdt32:
     dq 0                                                            ; Null descriptor
-    dq 0x00CF9A000000FFFF                                           ; 32-bit code segment
-    dq 0                                                            ; 32-bit data segment
     dq (1 <<44) | (1 << 47) | (1 << 41) | (1 << 43) | (1 << 53)     ; 64-bit code segment
     dq 0                                                            ; 64-bit data segment
+    dq 0x00CF9A000000FFFF                                           ; 32-bit code segment
+    dq 0                                                            ; 32-bit data segment
 
 .pointer:
     dw .pointer - gdt32 - 1             ; size

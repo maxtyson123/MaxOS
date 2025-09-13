@@ -10,6 +10,7 @@
 #include <system/gdt.h>
 #include <common/inputStream.h>
 #include <common/outputStream.h>
+#include <common/map.h>
 #include <system/cpu.h>
 #include <hardwarecommunication/apic.h>
 
@@ -138,7 +139,6 @@ namespace MaxOS {
                 static void HandleException0x1F();
 
                 static system::cpu_status_t* HandleInterrupt(system::cpu_status_t* status);
-
                 system::cpu_status_t* handle_interrupt_request(system::cpu_status_t*);
 
             public:
@@ -153,7 +153,7 @@ namespace MaxOS {
                 void remove_interrupt_handler(uint8_t interrupt);
 
                 void set_apic(AdvancedProgrammableInterruptController* apic);
-                AdvancedProgrammableInterruptController* active_apic();
+				AdvancedProgrammableInterruptController* active_apic();
 
 				static void load_current();
                 void activate();

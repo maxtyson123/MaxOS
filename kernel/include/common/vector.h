@@ -6,6 +6,7 @@
 #define MAXOS_COMMON_VECTOR_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 namespace MaxOS{
 
@@ -40,8 +41,6 @@ namespace MaxOS{
             uint32_t m_size { 0 };
             uint32_t m_capacity { 1 };
 
-            void increase_size();
-
         public:
             typedef Type* iterator;
 
@@ -71,6 +70,9 @@ namespace MaxOS{
             void erase(Type);
             void erase(iterator position);
             void clear();
+
+			void reserve(size_t amount);
+	        void increase_size();
 
             void iterate(VectorIterationHandler<Type>*);
             void Iterate(void callback(Type&));
@@ -156,27 +158,32 @@ namespace MaxOS{
          * @tparam Type Type of the Vector
          */
         template <class Type> void Vector<Type>::increase_size() {
-
-
-            // Allocate more space for the array
-            Type* new_elements = new Type[m_capacity * 2];
-
-            // Copy the elements to the new array
-            for (uint32_t i = 0; i < m_size; ++i)
-              new_elements[i] = m_elements[i];
-
-            // De-allocate the old array
-            delete[] m_elements;
-
-            // Set the new array
-            m_elements = new_elements;
-
-            // Increase the capacity of the Vector
-            m_capacity *= 2;
-
+	        reserve(m_capacity * 2);
         }
 
-        /**
+	    template<class Type> void Vector<Type>::reserve(size_t amount) {
+
+
+		    // Increase the capacity of the Vector
+			if(m_capacity < amount)
+				m_capacity = amount;
+
+		    // Allocate more space for the array
+		    Type* new_elements = new Type[amount];
+
+		    // Copy the elements to the new array
+		    for (uint32_t i = 0; i < m_size; ++i)
+			    new_elements[i] = m_elements[i];
+
+		    // De-allocate the old array
+		    delete[] m_elements;
+
+		    // Set the new array
+		    m_elements = new_elements;
+	    }
+
+
+	    /**
          * @brief Overloads the [] operator to return the element at the index
          *
          * @tparam Type Type of the Vector
