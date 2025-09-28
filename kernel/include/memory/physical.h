@@ -80,10 +80,9 @@ namespace MaxOS {
           uint32_t m_bitmap_size;
           uint32_t m_used_frames = 0;
           uint64_t m_memory_size;
-          uint64_t m_kernel_end;
 
-          uint64_t m_anonymous_memory_physical_address;
-          uint64_t m_anonymous_memory_virtual_address;
+	      uint64_t m_kernel_start_page;
+          uint64_t m_kernel_end;
 
           system::Multiboot* m_multiboot;
           multiboot_mmap_entry* m_mmap;
@@ -155,7 +154,6 @@ namespace MaxOS {
           static size_t align_direct_to_page(size_t size);
           static size_t align_up_to_page(size_t size, size_t s_page_size);
           static bool check_aligned(size_t size);
-          bool is_anonymous_available(size_t size);
 
           inline static PhysicalMemoryManager* s_current_manager = nullptr;
           static void clean_page_table(uint64_t* table);

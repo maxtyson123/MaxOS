@@ -29,6 +29,7 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 
 	Logger::INFO() << "Setting up Physical Memory Manager\n";
 	Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t) &_kernel_end << ", kernel_size = 0x" << (uint64_t) &_kernel_size << ", kernel_physical_end = 0x" << (uint64_t) &_kernel_physical_end << "\n";
+	m_kernel_start_page = align_up_to_page((size_t) &_kernel_physical_end + s_page_size, s_page_size);
 
 	// Set up the current manager
 	unmap_lower_kernel();
@@ -55,17 +56,10 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	}
 	Logger::DEBUG() << "Mmap in use: 0x" << (uint64_t) m_mmap->addr << " - 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << "\n";
 
-	// Memory after the kernel to be used for direct mapping (the bitmap is not ready while mapping the higher half so have to use this)
-	m_anonymous_memory_physical_address = align_up_to_page((size_t) &_kernel_physical_end + s_page_size, s_page_size);
-	m_anonymous_memory_virtual_address = align_up_to_page((size_t) &_kernel_end + s_page_size, s_page_size);
-	Logger::DEBUG() << "Anonymous Memory: physical = " << (uint64_t) m_anonymous_memory_physical_address << ", virtual = " << (uint64_t) m_anonymous_memory_virtual_address << "\n";
-
 	// Map the physical memory into the virtual memory
+	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\n";
 	for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += s_page_size)
 		map((physical_address_t*) physical_address, (virtual_address_t*) (s_hh_direct_map_offset + physical_address), Present | Write);
-
-	m_anonymous_memory_physical_address += s_page_size;
-	Logger::DEBUG() << "Mapped physical memory to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\n";
 
 	// Kernel Setup
 	initialise_bit_map();
@@ -80,17 +74,19 @@ PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 
 void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
+	// Reserve the pages used by the higher half mapping
+	reserve((uint64_t)m_mmap->addr, m_used_frames * s_page_size);
+
 	// Reserve the area for the bitmap
 	Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t) m_bit_map << " - 0x" << (uint64_t) (m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t) m_bitmap_size / 8 << ")\n";
 	reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8);
 
 	// Calculate how much space the kernel takes up
-	uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
-	if ((((uint32_t) (m_anonymous_memory_physical_address)) % s_page_size) != 0)
+	uint32_t kernel_entries = (m_kernel_start_page / s_page_size) + 1;
+	if ((((uint32_t) (m_kernel_start_page)) % s_page_size) != 0)
 		kernel_entries += 1;
 
 	// Reserve the kernel entries
-	Logger::DEBUG() << "Kernel: location: 0x" << (uint64_t) m_anonymous_memory_physical_address << " - 0x" << (uint64_t) (m_anonymous_memory_physical_address + kernel_entries * s_page_size) << " (range of 0x" << (uint64_t) kernel_entries * s_page_size << ")\n";
 	reserve(0, kernel_entries * s_page_size);
 
 	// Reserve the area for the mmap
@@ -178,22 +174,13 @@ void* PhysicalMemoryManager::allocate_frame() {
 	// If not initialised, cant use the bitmap or higher half mapped physical memory so use leftover kernel memory already
 	// mapped in loader.s
 	if (!m_initialized) {
-		// TODO: This seems to destroy the multiboot memory map, need to fix this
 
-		// Find the first free frame
-		while ((!is_anonymous_available(m_anonymous_memory_physical_address)) && (m_anonymous_memory_physical_address < m_memory_size)) {
-			m_anonymous_memory_physical_address += s_page_size;
-			m_anonymous_memory_virtual_address += s_page_size;
-		}
+		// Use frames at the start of the mmap free
+		void* address = (void*)m_mmap->addr + (m_used_frames * s_page_size);
+		m_used_frames++;
 
-		// Mark frame as used
-		m_anonymous_memory_physical_address += s_page_size;
-		m_anonymous_memory_virtual_address += s_page_size;
-
-		// Return the address
 		m_lock.unlock();
-		return (void*) (m_anonymous_memory_physical_address - s_page_size);
-
+		return address;
 	}
 
 	// Check if there are enough frames
@@ -658,45 +645,6 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
 }
 
 /**
- * @brief Checks if a physical address is reserved by multiboot mmap
- *
- * @param address The address to check
- * @return True if the address is reserved
- */
-bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
-
-	// Make sure the address isn't (entirely) within or overlapping with the multiboot memory chunk
-	if ((address > m_multiboot->start_address && address + s_page_size < m_multiboot->end_address)
-	 || (address + s_page_size > m_multiboot->start_address && address < m_multiboot->end_address)) {
-		return false;
-	}
-
-	// Make sure the address isn't used by a multiboot module
-	if (m_multiboot->is_reserved(address))
-		return false;
-
-	// Make sure the address doesn't overlap with a reserved chunk of physical memory
-	for (multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag->entry_size)) {
-
-		// This entry doesnt contain the address
-		if ((entry->addr + entry->len) < (address + s_page_size))
-			continue;
-
-		// This entry is not free
-		if (entry->type != MULTIBOOT_MEMORY_AVAILABLE)
-			continue;
-
-		// This entry must contain the address and must be free so it can be used
-		return true;
-
-	}
-
-	// Memory is not available (it was not found in a free region)
-	return false;
-}
-
-
-/**
  * @brief Gets the address of the bitmap
  *
  * @return The address of the bitmap
@@ -704,13 +652,15 @@ bool PhysicalMemoryManager::is_anonymous_available(size_t address) {
 void PhysicalMemoryManager::initialise_bit_map() {
 
 
+	// TODO: Revisit as may mess with the new uninit page system
+
 	// Earliest address to place the bitmap (after the kernel and hh direct map)
-	uint64_t limit = m_anonymous_memory_physical_address;
+	uint64_t limit = m_kernel_start_page;
 
 	// Find a region for the bitmap to handle
 	for (multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag->entry_size)) {
 
-		// Cant use a non-free entry or an entry past limit (ie dont user higher addresses that will be overridden later)
+		// Cant use a non-free entry or an entry past limit (ie don't user higher addresses that will be overridden later)
 		if (entry->type != MULTIBOOT_MEMORY_AVAILABLE || entry->len > limit)
 			continue;
 
@@ -821,10 +771,9 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
 	size_t page_count = size / s_page_size;
 	uint64_t frame_index = address / s_page_size;
 
-	// Mark all as free
+	// Mark all as used
 	for (size_t i = 0; i < page_count; ++i)
 		m_bit_map[(frame_index + i) / s_row_bits] |= (1ULL << ((frame_index + i) % s_row_bits));
-
 
 	// Update the used frames
 	m_used_frames += page_count;
