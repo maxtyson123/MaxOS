@@ -45,6 +45,7 @@ namespace MaxOS{
             syscall_func_t m_syscall_handlers[256] = {};
             syscall_args_t* m_current_args;
 
+			inline static common::Spinlock s_lock = {};
 
           public:
               SyscallManager();

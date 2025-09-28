@@ -78,7 +78,6 @@ void Logger::disable_log_writer(OutputStream *log_writer) {
 void Logger::set_log_level(LogLevel log_level) {
 
 	// Set the log level
-	m_lock.lock();
 	m_log_level = log_level;
 
 	// Update the progress bar
@@ -113,7 +112,6 @@ void Logger::set_log_level(LogLevel log_level) {
 	}
 
 	Scheduler::print_running_header();
-	m_lock.unlock();
 }
 
 

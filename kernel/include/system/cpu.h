@@ -180,6 +180,7 @@ namespace MaxOS {
 
 				uint8_t id;
 				tss_t tss = {};
+				bool active = false;
 
 				hardwarecommunication::LocalAPIC* local_apic;
 				GlobalDescriptorTable* gdt;

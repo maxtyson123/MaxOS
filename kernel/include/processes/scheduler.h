@@ -37,7 +37,7 @@ namespace MaxOS {
 			uint64_t m_next_tid;
 
 			inline static Scheduler* s_instance = nullptr;
-			static const uint64_t s_ticks_per_event = {3};
+			static const uint64_t s_ticks_per_event = { 20 };
 
 			GlobalResourceRegistry m_global_resource_registry = {};
 			ResourceRegistry<SharedMemory> m_shared_memory_registry;

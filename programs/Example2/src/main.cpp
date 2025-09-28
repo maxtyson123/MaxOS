@@ -102,6 +102,6 @@ extern "C" int _start(int argc, char** argv)
 //	rename_directory(dd, "def");
 
 	while (true)
-		thread_yield();
+		asm("nop");
 
 }

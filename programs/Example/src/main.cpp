@@ -77,5 +77,5 @@ extern "C" [[noreturn]] void _start(void) {
 //	rename_file(fd, "b.txt");
 
 	while (true)
-		yield();
+		asm("nop");
 }

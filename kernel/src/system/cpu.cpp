@@ -66,10 +66,15 @@ void Core::wake_up(CPU* cpu) {
 
 		// Send the start up IPI
 		cpu->apic.local_apic()->send_startup(m_apic_id, 0x8);
-		Clock::active_clock()->delay(100);
+		Clock::active_clock()->delay(200);  // TODO: Handle core fails (dont schedule)  & dont delay once we are in c++
 
 		// Check if core started
 		if(info->activated){
+
+			// Wait for full init
+			while(!active)
+				asm("nop");
+
 			Logger::DEBUG() << "Core " << id << " started successfully \n";
 			return;
 		}
@@ -122,8 +127,8 @@ void Core::init_tss() {
 	uint64_t tss_descriptor_high = base_4;
 
 	// Store in the GDT
-	gdt->table[5] = tss_descriptor_low;
-	gdt->table[6] = tss_descriptor_high;
+	gdt -> table[5] = tss_descriptor_low;
+	gdt -> table[6] = tss_descriptor_high;
 	gdt -> load();
 
 	// Load the TSS
@@ -207,6 +212,8 @@ void Core::init() {
 	// Delegate large initiation
 	init_sse();
 	init_tss();
+
+	active = true;
 }
 
 
@@ -224,6 +231,7 @@ CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
 	// Manually set up the BSP
 	auto bsp = cores[0];
 	bsp -> m_bsp = true;
+	bsp -> active = true;
 	bsp -> gdt = gdt;
 	bsp -> local_apic = apic.local_apic();
 	bsp -> init_tss();
@@ -417,7 +425,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
 		// If the faulting address is in lower half just kill the process and move on
 		if (status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)) {
-			Logger::ERROR() << "CPU Panicked in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
+			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
 			return Scheduler::system_scheduler()->force_remove_process(process);
 		}
 

@@ -131,6 +131,8 @@ syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* ar
 
 syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 
+	s_lock.lock();
+
 	char* message = (char*) args->arg0;
 
 	// If the first two characters are %h then no header
@@ -138,6 +140,8 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 		Logger::Out() << message + 2;
 	else
 		Logger::INFO() << message;
+
+	s_lock.unlock();
 
 	return args;
 }

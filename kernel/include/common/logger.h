@@ -48,8 +48,6 @@
                 LogLevel m_log_level = LogLevel::INFO;
                 inline static LogLevel s_max_log_level = LogLevel::DEBUG;
 
-				MaxOS::common::Spinlock m_lock;
-
             public:
                 Logger();
                 ~Logger();

@@ -35,6 +35,7 @@ extern "C" uint8_t core_boot_info[];
 extern "C" [[noreturn]] void core_main(){
 
 	auto info = (core_boot_info_t*)(core_boot_info);
+	info -> activated = true;
 	auto core = CPU::executing_core();
 
 	// Make sure the correct core is being setup
@@ -43,15 +44,11 @@ extern "C" [[noreturn]] void core_main(){
 
 	// Set up the core
 	core -> init();
-	info -> activated = true;
+	asm("sti");
 
 	// Wait to be scheduled
-	asm("sti");
-	while (true){
+	while (true)
 		asm("nop");
-	}
-
-
 }
 
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {

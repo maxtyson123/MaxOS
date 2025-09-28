@@ -26,10 +26,19 @@ Scheduler::Scheduler(Multiboot& multiboot)
 	Logger::INFO() << "Setting up Scheduler \n";
 	s_instance = this;
 
-	// Create the idle process
-	auto* idle = new Process("kernelMain Idle", nullptr, nullptr, 0, true);
-	idle->memory_manager = MemoryManager::s_kernel_memory_manager;
-	idle->set_pid(0);
+	// Set up the core map
+	for (const auto& core : CPU::cores){
+		auto id =core->id;
+
+		// Create the core's idle
+		auto* idle = new Process("Core Idle", nullptr, nullptr, 0, true);
+		idle->memory_manager = MemoryManager::s_kernel_memory_manager;
+
+		// Make sure it's the first thing scheduled
+		m_core_map.insert(id, id);
+		idle->set_pid(id);
+	}
+
 
 	// Load the elfs
 	load_multiboot_elfs(&multiboot);
@@ -77,9 +86,13 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 	// Ticked
 	m_ticks++;
 	current_thread->ticks++;
+	m_lock.unlock();
+
+	// Thread hasn't used its time slot yet
+	if(current_thread->ticks % s_ticks_per_event)
+		return cpu_state;
 
 	// Schedule the next thread
-	m_lock.unlock();
 	return schedule_next(cpu_state);
 }
 
@@ -91,37 +104,22 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
  */
 cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
-	// Not enough threads to need this core
+	// Get the current state
 	uint64_t core_id = CPU::executing_core()->id;
-	if(m_threads.size() <= core_id)
-		return load_process(m_processes[0], m_threads[0]);
-
-	// Get the thread that is executing right now
-	m_lock.lock();
 	Thread* current_thread = m_threads[m_core_map[core_id]];
 
-	// Save its state
+	// Save the executing thread state
 	current_thread->execution_state = cpu_state;
 	current_thread->save_sse_state();
 	if (current_thread->thread_state == ThreadState::RUNNING)
 		current_thread->thread_state = ThreadState::READY;
 
-	// Find a free thread to run
-	m_next_thread_index++;
-	m_next_thread_index %= m_threads.size();
-	for(const auto& core : m_core_map){
-
-		// This thread is being executed by this core
-		if(m_next_thread_index == core.second){
-			m_next_thread_index++;
-			m_next_thread_index %= m_threads.size();
-		}
-	}
-
-	// Store the tid
-	uint64_t thread_index = m_next_thread_index;
-	m_core_map.insert(core_id, thread_index);
-	m_lock.unlock();
+	// Find a free thread to run (note: cant use modulos as don't want overlap)
+	if (m_core_map[core_id] + m_core_map.size() < m_threads.size())
+		m_core_map[core_id] += m_core_map.size();
+	else
+		m_core_map[core_id] = core_id;
+	uint64_t thread_index = m_core_map[core_id];
 
 	// Get the current thread
 	current_thread = m_threads[thread_index];
@@ -129,10 +127,6 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
 	// Handle state changes
 	switch (current_thread->thread_state) {
-
-		case ThreadState::NEW:
-			current_thread->thread_state = ThreadState::RUNNING;
-			break;
 
 		case ThreadState::SLEEPING:
 
@@ -154,7 +148,9 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 			}
 
 			// Remove the thread
+			m_lock.lock();
 			m_threads.erase(m_threads.begin() + thread_index);
+			m_lock.unlock();
 
 			// Run the next thread
 			return schedule_next(cpu_state);
@@ -224,7 +220,7 @@ uint64_t Scheduler::add_thread(Thread* thread) {
 
 	// Add the thread to the list
 	m_threads.push_back(thread);
-	Logger::DEBUG() << "Adding thread " << m_next_tid << " to process " << thread->parent_pid << "\n";
+	Logger::DEBUG() << "Adding thread  " << m_next_tid << " to process " << thread->parent_pid << "\n";
 
 	// Return the thread ID
 	m_lock.unlock();
@@ -261,11 +257,12 @@ cpu_status_t* Scheduler::yield() {
 		return current_thread()->execution_state;
 
 	// Set the current thread to waiting if running
-	if (current_thread()->thread_state == ThreadState::RUNNING)
-		current_thread()->thread_state = ThreadState::READY;
+	auto thread = current_thread();
+	if (thread->thread_state == ThreadState::RUNNING)
+		thread->thread_state = ThreadState::READY;
 
 	// Schedule the next thread
-	return schedule_next(current_thread()->execution_state);
+	return schedule_next(thread->execution_state);
 }
 
 /**
