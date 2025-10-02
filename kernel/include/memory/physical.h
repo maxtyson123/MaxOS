@@ -79,6 +79,7 @@ namespace MaxOS {
           uint32_t m_total_entries;
           uint32_t m_bitmap_size;
           uint32_t m_used_frames = 0;
+          uint32_t m_setup_frames = 0;
           uint64_t m_memory_size;
 
 	      uint64_t m_kernel_start_page;
@@ -112,9 +113,10 @@ namespace MaxOS {
           PhysicalMemoryManager(system::Multiboot* multiboot);
           ~PhysicalMemoryManager();
 
-          static const uint32_t s_page_size =  0x1000;
+          static const uint64_t s_page_size =  0x1000;
           static const uint8_t s_row_bits =  64;
 
+		  // TODO: statics should be out of class? use constexp?
           static const uint64_t s_higher_half_kernel_offset =  0xFFFFFFFF80000000;
           static const uint64_t s_higher_half_mem_offset    =  0xFFFF800000000000;
           static const uint64_t s_higher_half_mem_reserved  =  0x280000000;
@@ -159,7 +161,7 @@ namespace MaxOS {
           static void clean_page_table(uint64_t* table);
 
           void reserve(uint64_t address);
-          void reserve(uint64_t address, size_t size);
+          void reserve(uint64_t address, size_t size, const char* = "Unknown");
           void reserve_kernel_regions(system::Multiboot* multiboot);
 
           physical_address_t* get_physical_address(virtual_address_t* virtual_address,  uint64_t *pml4_root);

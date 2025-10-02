@@ -37,12 +37,6 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	s_current_manager = this;
 	m_nx_allowed = CPU::check_nx();
 
-	// Store the information about the bitmap
-	m_memory_size = (m_multiboot->basic_meminfo()->mem_upper + 1024) * 1024;
-	m_bitmap_size = m_memory_size / s_page_size + 1;
-	m_total_entries = m_bitmap_size / s_row_bits + 1;
-	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) s_page_size << "\n";
-
   	// Find a region of memory available to be used
   	m_mmap_tag = m_multiboot->mmap();
   	for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
@@ -54,7 +48,12 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 		// Store the entry. (note: don't break here as it is desired to find the last usable entry as that is normally biggest)
 		m_mmap = entry;
 	}
-	Logger::DEBUG() << "Mmap in use: 0x" << (uint64_t) m_mmap->addr << " - 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << "\n";
+
+	// Store the information about the bitmap
+	m_memory_size = (m_mmap->addr + m_mmap->len);
+	m_bitmap_size = m_memory_size / s_page_size + 1;
+	m_total_entries = m_bitmap_size / s_row_bits + 1;
+	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) s_page_size << "\n";
 
 	// Map the physical memory into the virtual memory
 	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\n";
@@ -67,6 +66,7 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 
 	// Initialisation Done
 	m_initialized = true;
+	Logger::DEBUG() << "Memory used at start: " << (int) (memory_used() / 1024 / 1024) << "mb \n";
 }
 
 PhysicalMemoryManager::~PhysicalMemoryManager() = default;
@@ -75,11 +75,10 @@ PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 	// Reserve the pages used by the higher half mapping
-	reserve((uint64_t)m_mmap->addr, m_used_frames * s_page_size);
+	reserve((uint64_t)m_mmap->addr, m_setup_frames * s_page_size, "HHDM");
 
 	// Reserve the area for the bitmap
-	Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t) m_bit_map << " - 0x" << (uint64_t) (m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t) m_bitmap_size / 8 << ")\n";
-	reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8);
+	reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8, "Bitmap");
 
 	// Calculate how much space the kernel takes up
 	uint32_t kernel_entries = (m_kernel_start_page / s_page_size) + 1;
@@ -87,7 +86,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 		kernel_entries += 1;
 
 	// Reserve the kernel entries
-	reserve(0, kernel_entries * s_page_size);
+	reserve(0, kernel_entries * s_page_size, "Kernel");
 
 	// Reserve the area for the mmap
 	uint64_t mem_end = m_mmap->addr + m_mmap->len;
@@ -101,7 +100,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 		if (entry->addr >= mem_end)
 			continue;
 
-		reserve(entry->addr, entry->len);
+		reserve(entry->addr, entry->len, "MMap");
 	}
 
 	// Reserve the area for each multiboot module
@@ -112,7 +111,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 		// Reserve the module's address
 		auto* module = (struct multiboot_tag_module*) tag;
-		reserve(module->mod_start, module->mod_end - module->mod_start);
+		reserve(module->mod_start, module->mod_end - module->mod_start, "Module");
 	}
 }
 
@@ -176,8 +175,8 @@ void* PhysicalMemoryManager::allocate_frame() {
 	if (!m_initialized) {
 
 		// Use frames at the start of the mmap free
-		void* address = (void*)m_mmap->addr + (m_used_frames * s_page_size);
-		m_used_frames++;
+		void* address = (void*)m_mmap->addr + (m_setup_frames * s_page_size);
+		m_setup_frames++;
 
 		m_lock.unlock();
 		return address;
@@ -651,9 +650,6 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
  */
 void PhysicalMemoryManager::initialise_bit_map() {
 
-
-	// TODO: Revisit as may mess with the new uninit page system
-
 	// Earliest address to place the bitmap (after the kernel and hh direct map)
 	uint64_t limit = m_kernel_start_page;
 
@@ -687,6 +683,9 @@ void PhysicalMemoryManager::initialise_bit_map() {
 	// Clear the bitmap (mark all as free)
 	for (uint32_t i = 0; i < m_total_entries; ++i)
 		m_bit_map[i] = 0;
+
+	Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t) m_bit_map << " - 0x" << (uint64_t) (m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t) m_bitmap_size / 8 << ")\n";
+
 }
 
 /**
@@ -737,15 +736,7 @@ size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
  */
 void PhysicalMemoryManager::reserve(uint64_t address) {
 
-	// Cant reserve virtual addresses (ensure the address is physical)
-	if (address >= m_memory_size)
-		return;
-
-	// Mark as used in the bitmap
-	address = align_direct_to_page(address);
-	m_bit_map[address / s_row_bits] |= (1 << (address % s_row_bits));
-
-	Logger::DEBUG() << "Reserved Address: 0x" << address << "\n";
+	reserve(address, s_page_size);
 }
 
 /**
@@ -754,11 +745,11 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
  * @param address The start of the area
  * @param size The size of the area
  */
-void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
+void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* type) {
 
 	// Cant reserve virtual addresses (ensure the address is physical)
-	if (address >= m_memory_size)
-		return;
+	ASSERT(address < m_memory_size, "Attempt to reserve address bigger then the memory can contain\n");
+	ASSERT(address + size < m_memory_size, "Attempt to reserve region bigger then the memory can contain\n");
 
 	// Wait to be able to reserve
 	m_lock.lock();
@@ -780,7 +771,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size) {
 
 	// Clear the lock
 	m_lock.unlock();
-	Logger::DEBUG() << "Reserved Address: 0x" << address << " - 0x" << address + size << " (length of 0x" << size << ")\n";
+	Logger::DEBUG() << "Reserved Address for "<< type << ": 0x" << address << " - 0x" << address + size << " (length of 0x" << size << ")\n";
 }
 
 /**
