@@ -7,6 +7,7 @@
 #include <drivers/console/vesaboot.h>
 #include <memory/memorymanagement.h>
 #include <drivers/clock/clock.h>
+#include <common/symbols.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
@@ -349,7 +350,8 @@ void CPU::stack_trace(size_t level) {
 	for (size_t current_level = 0; current_level < level; current_level++) {
 
 		// Print the frame
-		Logger::ERROR() << "(" << current_level << "):\t at 0x" << frame->rip << "\n";
+		auto function = resolve_symbol(frame->rip);
+		Logger::ERROR() << "(" << current_level << "): " << (function ? function : "Unknown()")  << " at 0x" << frame->rip << "\n";
 
 		// Next frame
 		frame = frame->next;

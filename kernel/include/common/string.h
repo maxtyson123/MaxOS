@@ -15,7 +15,7 @@ namespace MaxOS {
      * @class String
      * @brief Dynamically sized string with various operations
      */
-    class String {
+    typedef class String {
         private:
           char* m_string = nullptr;
           int m_length = 0;           // Does not include the null terminator
@@ -77,9 +77,32 @@ namespace MaxOS {
           char& operator [] (int index);
           char& operator [] (int index) const;
 
-    };
+    } string;
 
-    typedef String              string;
+	//           String(char const* string);
+	//          String(uint8_t const* string, int length);
+	//          String();
+	//          explicit String();
+	//          explicit String(uint64_t value);
+	//          explicit String(float value);
+	//		  explicit String(bool value);
+
+
+	class StringBuilder {
+		public:
+			String out;
+			operator String() const { return out; }
+
+			StringBuilder& operator <<(char const* str) { out += string(str); return *this; }
+			StringBuilder& operator <<(String const &other) { out += other; return *this; }
+			StringBuilder& operator <<(int value) { out += string(value); return *this; }
+			StringBuilder& operator <<(uint64_t value) { out += string(value); return *this; }
+			StringBuilder& operator <<(float value) { out += string(value); return *this; }
+			StringBuilder& operator <<(bool value) { out += string(value); return *this; }
+
+	};
+
+
 }
 
 // Convert functions

@@ -297,8 +297,8 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 	size_t row_bytes = region_pixel_width * bytes_per_pixel;
 
 	// Decide the colour of the pixel
-	ConsoleColour to_set_foreground = CPU::is_panicking ? ConsoleColour::White : get_foreground_color(left, top + height - 1);
-	ConsoleColour to_set_background = CPU::is_panicking ? ConsoleColour::Red : get_background_color(left, top + height - 1);
+	ConsoleColour to_set_foreground = CPU::panic_lock.is_locked() ? ConsoleColour::White : get_foreground_color(left, top + height - 1);
+	ConsoleColour to_set_background = CPU::panic_lock.is_locked() ? ConsoleColour::Red : get_background_color(left, top + height - 1);
 	Colour fill_colour = Colour(to_set_background);
 	uint32_t fill_value = s_graphics_context->colour_to_int(to_set_background);
 

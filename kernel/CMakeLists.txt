@@ -27,20 +27,56 @@ ADD_CUSTOM_COMMAND(
         COMMENT     "Regenerating version.h because kernel sources changed"
 )
 ADD_CUSTOM_TARGET(VersionScript  DEPENDS "${VERSION_HEADER}")
+LIST(APPEND KERNEL_SRCS ${VERSION_HEADER})
 
-# Create the kernel
-ADD_EXECUTABLE(MaxOSk64 ${KERNEL_SRCS} ${VERSION_HEADER})
-ADD_DEPENDENCIES(MaxOSk64 VersionScript)
-TARGET_COMPILE_DEFINITIONS(MaxOSk64 PUBLIC MAXOS_KERNEL)
+# Kernel Build function
+FUNCTION(BUILD_KERNEL target_name)
 
-# Linker
-SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
-SET_TARGET_PROPERTIES(MaxOSk64 PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-TARGET_LINK_LIBRARIES(MaxOSk64 PRIVATE gcc syscore_static)
-TARGET_LINK_OPTIONS(MaxOSk64 PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
+    # Create the kernel
+    ADD_EXECUTABLE(${target_name} ${KERNEL_SRCS})
+    ADD_DEPENDENCIES(${target_name} VersionScript)
+    TARGET_COMPILE_DEFINITIONS(${target_name} PUBLIC MAXOS_KERNEL)
 
-# Set the include directories
-TARGET_INCLUDE_DIRECTORIES(MaxOSk64 PRIVATE include)
+    # Linker
+    SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/kernel/src/linker.ld)
+    SET_TARGET_PROPERTIES(${target_name} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
+
+    # Set the include directories
+    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc syscore_static)
+    target_link_options(${target_name} PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
+    TARGET_INCLUDE_DIRECTORIES(${target_name} PRIVATE include)
+endfunction()
+
+# Build kernel with default symbols
+SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
+SET(SYMBOLS_OUT "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
+ADD_CUSTOM_COMMAND(
+        OUTPUT "discard"
+        COMMAND ${GEN_SYM_SCRIPT} pre ${SYMBOLS_OUT}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Running pre-symbols generation script"
+)
+ADD_CUSTOM_TARGET(RunPreSymbols ALL DEPENDS "discard")
+BUILD_KERNEL(MaxOSk64_nosym)
+ADD_DEPENDENCIES(MaxOSk64_nosym RunPreSymbols)
+
+# Generate symbols
+SET(OBJCOPY "${CMAKE_SOURCE_DIR}/toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy")
+SET(SYM_ELF "${CMAKE_BINARY_DIR}/MaxOS.sym")
+ADD_CUSTOM_COMMAND(
+        OUTPUT ${SYMBOLS_OUT}
+        COMMAND ${OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
+        COMMAND ${GEN_SYM_SCRIPT} ${SYM_ELF} ${SYMBOLS_OUT}
+        DEPENDS MaxOSk64_nosym ${GEN_SYM_SCRIPT}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Generating symbols.h from ${SYM_ELF}"
+)
+ADD_CUSTOM_TARGET(GenerateSymbols DEPENDS ${SYMBOLS_OUT})
+ADD_DEPENDENCIES(GenerateSymbols MaxOSk64_nosym)
+
+# Build final kernel
+BUILD_KERNEL(MaxOSk64)
+ADD_DEPENDENCIES(MaxOSk64 GenerateSymbols)
 
 # Install kernel
 INSTALL(TARGETS MaxOSk64 DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)
