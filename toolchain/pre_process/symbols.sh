@@ -8,9 +8,11 @@ LC_ALL=C
 # Get the args
 INPUT="${1:-}"
 OUT="${2:-}"
+TMP="${OUT}.tmp.$$"
 if [ -z "$INPUT" ] || [ -z "$OUT" ]; then
   fail "Usage: $0 <elf_input> <out_cpp>"
 fi
+
 
 # Empty file as there needs to be something to compile to grab the symbols from
 TMPDIR="$(mktemp -d /tmp/gen_sym.XXXXXX)"
@@ -46,7 +48,7 @@ get_demangled_names() {
 
 
 # Write the header
-cat > "$OUT" <<'EOF'
+cat > "$TMP" <<'EOF'
 //
 // This file is generated automatically by the MaxOS build system.
 //
@@ -110,12 +112,12 @@ else
         printf "  { (uintptr_t)0x%s, \"%s\" },\n", address, name;
         count++;
       }
-     ' | tee -a "$OUT" | wc -l
+     ' | tee -a "$TMP" | wc -l
   )
 fi
 
 # Write the footer
-cat >> "$OUT" <<EOF
+cat >> "$TMP" <<EOF
     };
 		const size_t kernel_symbols_count = $COUNT;
 
@@ -126,6 +128,12 @@ cat >> "$OUT" <<EOF
 #endif //MAXOS_COMMON_SYMBOLS_H
 EOF
 
-echo "Wrote $OUT (symbols: $COUNT)"
-exit 0
+if [ -f "$OUT" ] && cmp -s "$TMP" "$OUT"; then
+  rm -f "$TMP"
+  msg "No change to ${OUT}"
+  exit 0
+fi
 
+
+mv "$TMP" "$OUT"
+msg "Wrote $OUT (symbols: $COUNT)"

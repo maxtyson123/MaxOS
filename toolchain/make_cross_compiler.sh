@@ -173,4 +173,5 @@ ls
 # Setup the first version of the kernel
 cd pre_process
 ./version.sh --force
+./symbols.sh pre ../../kernel/include/common/symbols.h
 cd ../

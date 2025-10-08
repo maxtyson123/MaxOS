@@ -60,8 +60,6 @@ void Logger::add_log_writer(OutputStream *log_writer) {
  */
 void Logger::disable_log_writer(OutputStream *log_writer) {
 
-	CPU::PANIC("test");
-
 	// If the list is empty
 	if (m_log_writer_count == 0)
 		return;

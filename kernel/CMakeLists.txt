@@ -18,8 +18,8 @@ SET(VERSION_HEADER       "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h")
 SET(VERSION_HEADER_TMP   "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h.tmp")
 SET(POST_PROCESS_SCRIPT  "${CMAKE_SOURCE_DIR}/toolchain/pre_process/run.sh")
 ADD_CUSTOM_COMMAND(
-        OUTPUT      "${VERSION_HEADER}"
-        COMMAND     "${POST_PROCESS_SCRIPT}"
+        OUTPUT      ${VERSION_HEADER}
+        COMMAND     ${POST_PROCESS_SCRIPT}
         COMMAND     ${CMAKE_COMMAND} -E copy_if_different "${VERSION_HEADER_TMP}" "${VERSION_HEADER}"
         COMMAND     ${CMAKE_COMMAND} -E remove "${VERSION_HEADER_TMP}"
         DEPENDS     ${KERNEL_SRCS}
@@ -47,22 +47,14 @@ FUNCTION(BUILD_KERNEL target_name)
     TARGET_INCLUDE_DIRECTORIES(${target_name} PRIVATE include)
 endfunction()
 
-# Build kernel with default symbols
-SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
-SET(SYMBOLS_OUT "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
-ADD_CUSTOM_COMMAND(
-        OUTPUT "discard"
-        COMMAND ${GEN_SYM_SCRIPT} pre ${SYMBOLS_OUT}
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running pre-symbols generation script"
-)
-ADD_CUSTOM_TARGET(RunPreSymbols ALL DEPENDS "discard")
+# Must have a build to extract the symbols from
 BUILD_KERNEL(MaxOSk64_nosym)
-ADD_DEPENDENCIES(MaxOSk64_nosym RunPreSymbols)
 
 # Generate symbols
 SET(OBJCOPY "${CMAKE_SOURCE_DIR}/toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy")
 SET(SYM_ELF "${CMAKE_BINARY_DIR}/MaxOS.sym")
+SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
+SET(SYMBOLS_OUT "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
 ADD_CUSTOM_COMMAND(
         OUTPUT ${SYMBOLS_OUT}
         COMMAND ${OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
