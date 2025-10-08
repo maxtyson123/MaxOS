@@ -220,9 +220,7 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t* st
 	switch (status->interrupt_number) {
 
 		case 0x7:
-			Logger::ERROR() << "Device Not Available: FPU Not Enabled\n";
-			CPU::prepare_for_panic(status);
-			CPU::PANIC("See above message for more information", status);
+			CPU::PANIC("Device Not Available: FPU Not Enabled", status);
 			break;
 
 		case 0x0D:
@@ -323,6 +321,7 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 	bool instruction_fetch = (status->error_code & 0x10) != 0;
 	uint64_t faulting_address;
 	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
+	uint64_t core_id = CPU::executing_core()->id;
 
 	// Try kill the process so the system doesn't die
 	cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
@@ -330,11 +329,8 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 		return can_avoid;
 
 	// Cant avoid it so halt the kernel
-	Logger::ERROR() << "Page Fault: (0x" << faulting_address << "): present: " << (present ? "Yes" : "No")
-					<< ", write: " << (write ? "Yes" : "No") << ", user-mode: " << (user_mode ? "Yes" : "No")
-					<< ", reserved write: " << (reserved_write ? "Yes" : "No") << ", instruction fetch: "
-					<< (instruction_fetch ? "Yes" : "No") << "\n";
-	CPU::PANIC("See above message for more information", status);
+	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
+	CPU::PANIC(msg.c_str(), status);
 
 	// Probably should never get here
 	return status;
@@ -349,6 +345,7 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* status) {
 
 	uint64_t error_code = status->error_code;
+	uint64_t core_id = CPU::executing_core()->id;
 
 	// Try to avoid the panic
 	cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
@@ -356,9 +353,8 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* s
 		return can_avoid;
 
 	// Have to panic
-	Logger::ERROR() << "General Protection Fault: (0x" << status->rip << "): "
-					<< (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << "\n";
-	CPU::PANIC("See above message for more information", status);
+	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " c" << core_id << "\n";
+	CPU::PANIC(msg.c_str(), status);
 
 	// Probably should never get here
 	return status;

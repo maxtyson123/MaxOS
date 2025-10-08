@@ -68,7 +68,7 @@ fi
 ACCELERATOR=""
 if [ "$IN_WSL" -ne "0" ]; then
   msg "Using windows accelerator."
-  ACCELERATOR="-accel whpx,kernel-irqchip=off -accel tcg"
+#  ACCELERATOR="-accel whpx,kernel-irqchip=off -accel tcg"
 else
 
   # Check if KVM is supported

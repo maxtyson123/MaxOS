@@ -92,11 +92,11 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	cpu.init_cores();
 
 	Logger::HEADER() << "Stage {4}: System Finalisation\n";
-	Scheduler scheduler(multiboot);
+	GlobalScheduler scheduler(multiboot);
 	VFSResourceRegistry vfs_registry(&vfs);
 	SyscallManager syscalls;
 	console.finish();
-	scheduler.activate();
+	GlobalScheduler::activate();
 
 	// Idle loop  (read Idle.md)
 	while (true)
@@ -109,4 +109,4 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 //  - Test suite of common functions & other statics (paths)
 //  - Class & Struct docstrings
 //  - Logo on fail in center
-//  - Sanitize syscall input
+//  - Sanitize syscall input and only need reource syscalls?

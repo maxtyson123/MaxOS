@@ -332,8 +332,7 @@ void* operator new(size_t size) throw() {
 void* operator new[](size_t size) throw() {
 
 	// Handle the memory allocation
-	void* p = MaxOS::memory::MemoryManager::kmalloc(size);
-	return p;
+	return  MaxOS::memory::MemoryManager::kmalloc(size);
 }
 
 /**

@@ -42,8 +42,10 @@ Core::~Core() = default;
 void Core::wake_up(CPU* cpu) {
 
 	// Boot core is already setup
-	if(m_bsp)
+	if(m_bsp){
+		Logger::DEBUG() << "BSP Already setup\n";
 		return;
+	}
 
 	Logger::DEBUG() << "Starting core: " << id << "\n";
 	m_stack = (uint64_t)MemoryManager::kmalloc(s_stack_size);
@@ -359,14 +361,12 @@ void CPU::stack_trace(size_t level) {
 
 void CPU::PANIC(char const* message, cpu_status_t* status) {
 
-	// Get the current process
-	Process* process = Scheduler::current_process();
-
 	// Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most
 	// likely called by a place that cant switch to the avoidable state
-	if (is_panicking)
-		return;
 	prepare_for_panic();
+
+	// Get the current process
+	Process* process = GlobalScheduler::current_process();
 
 	// Print using the backend
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
@@ -376,7 +376,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Info about the running process
 	Logger::ERROR() << "Process: " << (process ? process->name.c_str() : "Kernel") << "\n";
 	if (process)
-		Logger::ERROR() << "After running for " << process->total_ticks() << " ticks (system uptime: " << Scheduler::system_scheduler()->ticks() << " ticks)\n";
+		Logger::ERROR() << "After running for " << process->total_ticks() << " ticks (system uptime: " << GlobalScheduler::core_scheduler()->ticks() << " ticks)\n";
 
 	// Stack trace
 	Logger::ERROR() << "----------------------------\n";
@@ -415,25 +415,25 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
  * @return A CPU status to avoid having to panic or a nullptr if the CPU must panic
  */
 cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
-
+	panic_lock.lock();
 
 	// If it may have occurred in a process, switch to the avoidable state
-	if (Scheduler::system_scheduler() != nullptr && Scheduler::current_process() != nullptr) {
+	if (GlobalScheduler::system_scheduler() != nullptr && GlobalScheduler::current_process() != nullptr) {
 
 		// Get the current process
-		Process* process = Scheduler::current_process();
+		Process* process = GlobalScheduler::current_process();
 
 		// If the faulting address is in lower half just kill the process and move on
 		if (status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)) {
 			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
-			return Scheduler::system_scheduler()->force_remove_process(process);
+			panic_lock.unlock();
+			return GlobalScheduler::system_scheduler()->force_remove_process(process);
 		}
 
 		// Otherwise occurred whilst the kernel was doing something for the process
 	}
 
 	// We are panicking
-	is_panicking = true;
 	panic_core = CPU::executing_core();
 	return nullptr;
 }
@@ -474,8 +474,6 @@ void CPU::init_cores() {
 	// Make sure core_start is accessible
 	ASSERT((void*)&core_start == (void*)0x8000, "Core start not at expected address");
 	PhysicalMemoryManager::s_current_manager->identity_map((physical_address_t*)0x8000, Present | Write);
-
-	// Identity map the pml4
 
 	// Set up the boot info
 	auto info = (core_boot_info_t*)(core_boot_info);

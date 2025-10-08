@@ -3,13 +3,14 @@
 //
 #include <processes/process.h>
 #include <common/logger.h>
-#include <processes/scheduler.h>    //TODO: This is a circular dependency, need to fix, make the scheduler handle that sorta stuff
 
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::processes;
 using namespace MaxOS::common;
+
+// TODO: Dont pause interrupts?
 
 
 /**
@@ -58,9 +59,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	execution_state->rsi = (uint64_t) argv;
 	//execution_state->rdx = (uint64_t)env_args;
 
-	// Begin scheduling this thread
 	parent_pid = parent->pid();
-	tid = Scheduler::system_scheduler()->add_thread(this);
 }
 
 /**
@@ -69,19 +68,15 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 Thread::~Thread() = default;
 
 /**
- * @brief Sleeps the thread for a certain amount of time (Yields the thread)
+ * @brief Sleeps the thread for a certain amount of time
  *
  * @param milliseconds The amount of time to sleep for
- * @return The status of the CPU for the next thread to run
  */
-cpu_status_t* Thread::sleep(size_t milliseconds) {
+void Thread::sleep(size_t milliseconds) {
 
 	// Update the state
 	thread_state = ThreadState::SLEEPING;
-	wakeup_time = Scheduler::system_scheduler()->ticks() + milliseconds;
-
-	// Let other processes do stuff while this thread is sleeping
-	return Scheduler::system_scheduler()->yield();
+	wakeup_time  = milliseconds;
 }
 
 /**
@@ -120,17 +115,8 @@ Process::Process(const string& p_name, bool is_kernel)
 : is_kernel(is_kernel),
   name(p_name)
 {
-
-	// Pause interrupts while creating the process
-	asm("cli");
-
-	// Basic setup
-	m_pid = Scheduler::system_scheduler()->add_process(this);
-
 	// If it is a kernel process then don't need a new memory manager
 	memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager : new MemoryManager();
-
-	// Resuming interrupts are done when adding a thread
 }
 
 /**
@@ -202,19 +188,17 @@ Process::~Process() {
  */
 void Process::add_thread(Thread* thread) {
 
-	// Pause interrupts while adding the thread
-	asm("cli");
+	m_lock.lock();
 
 	// Store the thread
 	m_threads.push_back(thread);
 	thread->parent_pid = m_pid;
 
-	// Can now resume interrupts
-	asm("sti");
+	m_lock.unlock();
 }
 
 /**
- * @brief Finds a thread by its tid
+ * @brief Remove a thread by its tid (NOTE: this will not remove it from the scheduler)
  *
  * @param tid
  */
@@ -233,11 +217,6 @@ void Process::remove_thread(uint64_t tid) {
 
 		// Remove the thread from the list
 		m_threads.erase(m_threads.begin() + i);
-
-		// If there are no more threads then delete the process from the scheduler
-		if (m_threads.empty())
-			Scheduler::system_scheduler()->remove_process(this);
-
 		return;
 	}
 }

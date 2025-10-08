@@ -54,7 +54,7 @@ namespace MaxOS
               Thread(void (*_entry_point)(void *) , void* args, int arg_amount, Process* parent);
               ~Thread();
 
-              system::cpu_status_t* sleep(size_t milliseconds);
+	          void sleep(size_t milliseconds);
 
               uint64_t tid;
               uint64_t parent_pid;
@@ -82,6 +82,7 @@ namespace MaxOS
               common::Vector<Thread*> m_threads;
 
               uint64_t m_pid = 0;
+			  common::Spinlock m_lock;
 
             public:
                 Process(const string& name, bool is_kernel = false);

@@ -113,6 +113,12 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 		auto* module = (struct multiboot_tag_module*) tag;
 		reserve(module->mod_start, module->mod_end - module->mod_start, "Module");
 	}
+
+	// Reserve all the tags
+	auto end_tag = (multiboot_tag*)to_higher_region(multiboot->end_address);
+	auto start_tag = (uint64_t)to_lower_region((uintptr_t)multiboot->start_tag());
+	size_t tags_size = multiboot->end_address - start_tag + ((end_tag->size + 7) & ~7);
+	reserve(start_tag, tags_size, "Tags");
 }
 
 /**
@@ -748,19 +754,21 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
 void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* type) {
 
 	// Cant reserve virtual addresses (ensure the address is physical)
-	ASSERT(address < m_memory_size, "Attempt to reserve address bigger then the memory can contain\n");
-	ASSERT(address + size < m_memory_size, "Attempt to reserve region bigger then the memory can contain\n");
+	ASSERT(address < m_memory_size, "Attempt to reserve address bigger then the memory can contain: 0x%x\n", address);
+	ASSERT(address + size < m_memory_size, "Attempt to reserve region bigger then the memory can contain: 0x%x-0x%x\n", address, address+size);
 
 	// Wait to be able to reserve
 	m_lock.lock();
 
-	// Ensure the area is a range of pages
-	address = align_direct_to_page(address);
-	size = align_up_to_page(size, s_page_size);
+	// Align to a page, if rounding down need to correct the range
+	size_t aligned_address = align_direct_to_page(address);
+	if(aligned_address < address)
+		size += address - aligned_address;
 
 	// Convert in to amount of pages
+	size = align_up_to_page(size, s_page_size);
 	size_t page_count = size / s_page_size;
-	uint64_t frame_index = address / s_page_size;
+	uint64_t frame_index = aligned_address / s_page_size;
 
 	// Mark all as used
 	for (size_t i = 0; i < page_count; ++i)
@@ -771,7 +779,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
 
 	// Clear the lock
 	m_lock.unlock();
-	Logger::DEBUG() << "Reserved Address for "<< type << ": 0x" << address << " - 0x" << address + size << " (length of 0x" << size << ")\n";
+	Logger::DEBUG() << "Reserved Address for "<< type << ": 0x" << aligned_address << " - 0x" << aligned_address + size << " (length of 0x" << size << ")\n";
 }
 
 /**
@@ -894,13 +902,13 @@ void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
  * @param physical_address The physical address in the direct map region
  * @return The physical address
  */
-void* PhysicalMemoryManager::from_dm_region(uintptr_t physical_address) {
+void* PhysicalMemoryManager::from_dm_region(uintptr_t virtual_address) {
 
-	if (physical_address > s_hh_direct_map_offset)
-		return (void*) (physical_address - s_hh_direct_map_offset);
+	if (virtual_address > s_hh_direct_map_offset)
+		return (void*) (virtual_address - s_hh_direct_map_offset);
 
 	// Must be in the lower half
-	return (void*) physical_address;
+	return (void*) virtual_address;
 }
 
 

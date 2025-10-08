@@ -13,67 +13,102 @@
 #include <processes/ipc.h>
 
 namespace MaxOS {
-
 	namespace processes {
+
+		class GlobalScheduler : public hardwarecommunication::InterruptHandler{
+
+			private:
+				inline static GlobalScheduler* s_instance = nullptr;
+				bool m_active { false };
+
+				GlobalResourceRegistry m_global_resource_registry = {};
+				ResourceRegistry<SharedMemory> m_shared_memory_registry;
+				ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
+
+				common::Spinlock m_lock;
+
+				uint64_t m_next_pid;
+				uint64_t m_next_tid;
+
+				common::Map<uint64_t, uint64_t> m_core_pids;
+				common::Map<uint64_t, uint64_t> m_core_tids;
+
+			public:
+				GlobalScheduler(system::Multiboot& multiboot);
+				~GlobalScheduler();
+
+				static GlobalScheduler* system_scheduler();
+				static Scheduler* core_scheduler();
+
+				system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+				static system::cpu_status_t* yield(system::cpu_status_t* current);
+
+				static void activate();
+				static void deactivate();
+				void balance();
+
+				static void load_multiboot_elfs(system::Multiboot* multiboot);
+				static void print_running_header();
+
+				uint64_t add_process(Process* process);
+				uint64_t add_thread(Thread* thread);
+
+				uint64_t remove_process(Process* process);
+				system::cpu_status_t* force_remove_process(Process* process);
+
+				static Process* current_process();
+				static Process* get_process(uint64_t pid);
+				static uint64_t next_pid();
+
+				static Thread* current_thread();
+				static Thread* get_thread(uint64_t tid);
+				static uint64_t next_tid();
+		};
 
 		/**
 		 * @class Scheduler
-		 * @brief Schedules processes to run on the CPU via their threads
+		 * @brief Schedules processes to run on the core via their threads
 		 */
-		class Scheduler : public hardwarecommunication::InterruptHandler {
+		class Scheduler {
 
-		private:
-			common::Vector<Process*> m_processes;
-			common::Vector<Thread*> m_threads;
-			common::Map<uint64_t, uint64_t> m_core_map;
+			private:
+				common::Vector<Process*> m_processes;
+				common::Vector<Thread*> m_threads;
 
-			common::Spinlock m_lock;
+				uint64_t m_next_thread_index;
+				bool m_active;
 
-			uint64_t m_next_thread_index;
-			bool m_active;
+				uint64_t m_ticks;
 
-			uint64_t m_ticks;
-			uint64_t m_next_pid;
-			uint64_t m_next_tid;
+				static const uint64_t s_ticks_per_event = { 20 };
 
-			inline static Scheduler* s_instance = nullptr;
-			static const uint64_t s_ticks_per_event = { 20 };
+				static system::cpu_status_t* load_process(Process* process, Thread* thread);
 
-			GlobalResourceRegistry m_global_resource_registry = {};
-			ResourceRegistry<SharedMemory> m_shared_memory_registry;
-			ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
+			public:
+				Scheduler();
+				~Scheduler();
 
-			static system::cpu_status_t* load_process(Process* process, Thread* thread);
+				system::cpu_status_t* schedule(system::cpu_status_t* status);
+				system::cpu_status_t* schedule_next(system::cpu_status_t* status);
+				system::cpu_status_t* yield();
 
-		public:
-			Scheduler(system::Multiboot &multiboot);
-			~Scheduler();
+				uint64_t add_process(Process* process);
+				uint64_t remove_process(Process* process);
+				system::cpu_status_t* force_remove_process(Process* process);
+				uint64_t add_thread(Thread* thread);
 
-			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
-			system::cpu_status_t* schedule(system::cpu_status_t* status);
+				Process* current_process();
+				Process* get_process(uint64_t pid);
+				uint64_t process_amount();
 
-			system::cpu_status_t* schedule_next(system::cpu_status_t* status);
-			system::cpu_status_t* yield();
+				Thread* current_thread();
+				Thread* get_thread(uint64_t tid);
+				uint64_t thread_amount();
 
-			uint64_t add_process(Process* process);
-			uint64_t remove_process(Process* process);
-			system::cpu_status_t* force_remove_process(Process* process);
-			uint64_t add_thread(Thread* thread);
+				[[nodiscard]] uint64_t ticks() const;
 
-			static Scheduler* system_scheduler();
-			static Process* current_process();
-			static Process* get_process(uint64_t pid);
-			static Thread* current_thread();
-			static Thread* get_thread(uint64_t tid);
-
-			[[nodiscard]] uint64_t ticks() const;
-
-			static void load_multiboot_elfs(system::Multiboot* multiboot);
-
-			void activate();
-			void deactivate();
-
-			static void print_running_header();
+				void activate();
+				void deactivate();
 		};
 
 	}

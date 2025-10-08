@@ -13,6 +13,13 @@
 #include <hardwarecommunication/apic.h>
 #include <memory/physical.h>
 
+// Forward declare
+namespace MaxOS {
+	namespace processes {
+		class Scheduler;
+	}
+}
+
 namespace MaxOS {
 
 	namespace system {
@@ -150,15 +157,15 @@ namespace MaxOS {
 		}__attribute__((__packed__)) core_boot_info_t;
 
 		class CPU;
-		class Core {
+		class Core{
 
 			friend class CPU;
 			protected:
 				hardwarecommunication::madt_processor_apic_t* m_madt;
 
-				bool m_enabled;
-				bool m_can_enable;
-				bool m_bsp;
+				bool m_enabled = false;
+				bool m_can_enable = false;
+				bool m_bsp = false;
 
 				uint8_t m_apic_id;
 
@@ -184,6 +191,7 @@ namespace MaxOS {
 
 				hardwarecommunication::LocalAPIC* local_apic;
 				GlobalDescriptorTable* gdt;
+				processes::Scheduler* scheduler;
 		};
 
 
@@ -197,8 +205,8 @@ namespace MaxOS {
 				hardwarecommunication::AdvancedConfigurationAndPowerInterface acpi;
 				hardwarecommunication::AdvancedProgrammableInterruptController apic;
 
-				static inline bool is_panicking = {false};
 				static inline Core* panic_core = nullptr;
+				static inline common::Spinlock panic_lock;
 
 				static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
 				static void PANIC(const char* message, cpu_status_t* status = nullptr);

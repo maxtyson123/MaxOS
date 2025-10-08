@@ -49,10 +49,11 @@ bool Spinlock::is_locked() const {
  */
 void Spinlock::acquire() {
 	while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE)) {
+		asm("nop");
 
-		// Wait for the lock to be available
-		if (m_should_yield)
-			Scheduler::system_scheduler()->yield();
+		// Wait for the lock to be available TODO: Need to save the state before the check and then return
+//		if (m_should_yield)
+//			GlobalScheduler::system_scheduler()->yield();
 
 	}
 }

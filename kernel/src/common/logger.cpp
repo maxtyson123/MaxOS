@@ -111,7 +111,7 @@ void Logger::set_log_level(LogLevel log_level) {
 			break;
 	}
 
-	Scheduler::print_running_header();
+	GlobalScheduler::print_running_header();
 }
 
 
@@ -127,7 +127,7 @@ void Logger::write_char(char c) {
 		return;
 
 	// Only the core that is panicking can print
-	if(CPU::is_panicking && CPU::panic_core != CPU::executing_core())
+	if(CPU::panic_lock.is_locked() && CPU::panic_core != CPU::executing_core())
 		return;
 
 	// Write the character to all output streams

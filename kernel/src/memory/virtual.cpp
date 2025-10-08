@@ -279,7 +279,7 @@ void VirtualMemoryManager::free(void* address) {
 	if (chunk->flags & Shared) {
 
 		// Find the resource
-		for(const auto& resource : Scheduler::current_process()->resource_manager.resources()){
+		for(const auto& resource : GlobalScheduler::current_process()->resource_manager.resources()){
 
 			// Skip non-shared memory resources
 			if(resource.second->type() != resource_type_t::SHARED_MEMORY)
@@ -291,7 +291,7 @@ void VirtualMemoryManager::free(void* address) {
 				continue;
 
 			// Close the resource
-			Scheduler::current_process()->resource_manager.close_resource(resource.first, 0);
+			GlobalScheduler::current_process()->resource_manager.close_resource(resource.first, 0);
 		}
 	}
 
@@ -410,7 +410,7 @@ uint64_t* VirtualMemoryManager::pml4_root_address_physical() {
 void* VirtualMemoryManager::load_shared_memory(const string& name) {
 
 	// Get the shared memory block
-	auto block = (SharedMemory*)Scheduler::current_process()->resource_manager.get_resource(name);
+	auto block = (SharedMemory*)GlobalScheduler::current_process()->resource_manager.get_resource(name);
 
 	// Load the shared memory
 	if (block != nullptr)

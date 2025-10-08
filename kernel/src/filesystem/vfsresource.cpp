@@ -352,7 +352,7 @@ Resource* VFSResourceRegistry::open_as_resource(string const& name, File* file) 
 Resource* VFSResourceRegistry::get_resource(string const& name) {
 
 	string path = Path::absolute_path(name);
-	path = Path::join_path(Scheduler::current_process()->working_directory, path);
+	path = Path::join_path(GlobalScheduler::current_process()->working_directory, path);
 
 	// Resource already opened
 	auto resource = BaseResourceRegistry::get_resource(path);
@@ -370,7 +370,7 @@ Resource* VFSResourceRegistry::get_resource(string const& name) {
 Resource* VFSResourceRegistry::create_resource(string const& name, size_t flags) {
 
 	string path = Path::absolute_path(name);
-	path = Path::join_path(Scheduler::current_process()->working_directory, path);
+	path = Path::join_path(GlobalScheduler::current_process()->working_directory, path);
 
 	// Resource already opened
 	auto resource = BaseResourceRegistry::get_resource(path);

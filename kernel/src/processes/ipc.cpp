@@ -38,7 +38,7 @@ SharedMemory::~SharedMemory() = default;
 int SharedMemory::read(void* buffer, size_t size, size_t flags) {
 
 	// Process hasn't opened the resource
-	auto it = m_mappings.find(Scheduler::current_process()->pid());
+	auto it = m_mappings.find(GlobalScheduler::current_process()->pid());
 	if(it == m_mappings.end())
 		return 0;
 
@@ -73,12 +73,12 @@ size_t SharedMemory::size() const {
 void SharedMemory::open(size_t flags) {
 
 	// Process has already opened this memory
-	auto it = m_mappings.find(Scheduler::current_process()->pid());
+	auto it = m_mappings.find(GlobalScheduler::current_process()->pid());
 	if(it != m_mappings.end())
 		return;
 
-	auto virtual_address = (uintptr_t)Scheduler::current_process()->memory_manager->vmm()->load_shared_memory(m_physical_address, m_size);
-	m_mappings.insert(Scheduler::current_process()->pid(), virtual_address);
+	auto virtual_address = (uintptr_t)GlobalScheduler::current_process()->memory_manager->vmm()->load_shared_memory(m_physical_address, m_size);
+	m_mappings.insert(GlobalScheduler::current_process()->pid(), virtual_address);
 
 }
 
