@@ -8,7 +8,7 @@ LC_ALL=C
 # Get the args
 INPUT="${1:-}"
 OUT="${2:-}"
-TMP="${OUT}.tmp.$$"
+TMP="${OUT}.tmp"
 if [ -z "$INPUT" ] || [ -z "$OUT" ]; then
   fail "Usage: $0 <elf_input> <out_cpp>"
 fi
@@ -128,12 +128,13 @@ cat >> "$TMP" <<EOF
 #endif //MAXOS_COMMON_SYMBOLS_H
 EOF
 
+# Only copy changes
 if [ -f "$OUT" ] && cmp -s "$TMP" "$OUT"; then
   rm -f "$TMP"
   msg "No change to ${OUT}"
   exit 0
 fi
 
-
+# Did change
 mv "$TMP" "$OUT"
 msg "Wrote $OUT (symbols: $COUNT)"

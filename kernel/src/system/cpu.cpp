@@ -404,7 +404,6 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 
 	// Print the logo
 	Logger::ERROR() << "----------------------------\n";
-	console::VESABootConsole::print_logo_kernel_panic();
 
 	// Halt
 	halt();
@@ -416,7 +415,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
  * @param status The status of the CPU (if available)
  * @return A CPU status to avoid having to panic or a nullptr if the CPU must panic
  */
-cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
+cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 	panic_lock.lock();
 
 	// If it may have occurred in a process, switch to the avoidable state
@@ -428,6 +427,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 		// If the faulting address is in lower half just kill the process and move on
 		if (status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)) {
 			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
+			Logger::ERROR() << msg;
 			panic_lock.unlock();
 			return GlobalScheduler::system_scheduler()->force_remove_process(process);
 		}
@@ -437,6 +437,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status) {
 
 	// We are panicking
 	panic_core = CPU::executing_core();
+	console::VESABootConsole::print_logo(true);
 	return nullptr;
 }
 

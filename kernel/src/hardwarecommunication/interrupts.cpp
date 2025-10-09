@@ -323,13 +323,15 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
 	uint64_t core_id = CPU::executing_core()->id;
 
+	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
+
+
 	// Try kill the process so the system doesn't die
-	cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
+	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
 	if (can_avoid != nullptr)
 		return can_avoid;
 
 	// Cant avoid it so halt the kernel
-	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
 	CPU::PANIC(msg.c_str(), status);
 
 	// Probably should never get here
@@ -346,14 +348,14 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* s
 
 	uint64_t error_code = status->error_code;
 	uint64_t core_id = CPU::executing_core()->id;
+	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " c" << core_id << "\n";
 
 	// Try to avoid the panic
-	cpu_status_t* can_avoid = CPU::prepare_for_panic(status);
+	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
 	if (can_avoid != nullptr)
 		return can_avoid;
 
 	// Have to panic
-	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " c" << core_id << "\n";
 	CPU::PANIC(msg.c_str(), status);
 
 	// Probably should never get here

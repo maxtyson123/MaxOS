@@ -208,7 +208,7 @@ namespace MaxOS {
 				static inline Core* panic_core = nullptr;
 				static inline common::Spinlock panic_lock;
 
-				static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr);
+				static cpu_status_t* prepare_for_panic(cpu_status_t* status = nullptr, const string& msg = "");
 				static void PANIC(const char* message, cpu_status_t* status = nullptr);
 				[[noreturn]] static void halt();
 

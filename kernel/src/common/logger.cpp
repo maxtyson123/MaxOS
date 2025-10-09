@@ -102,8 +102,7 @@ void Logger::set_log_level(LogLevel log_level) {
 			break;
 
 		case LogLevel::WARNING:
-			*this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]"
-				  << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
 			break;
 
 		case LogLevel::ERROR:
@@ -126,13 +125,9 @@ void Logger::write_char(char c) {
 	if (m_log_level > s_max_log_level)
 		return;
 
-	// Only the core that is panicking can print
-	if(CPU::panic_lock.is_locked() && CPU::panic_core != CPU::executing_core())
-		return;
-
 	// Write the character to all output streams
 	for (int i = 0; i < m_log_writer_count; i++)
-		if (m_log_writers_enabled[i] || m_log_level == LogLevel::ERROR)
+		if (m_log_writers_enabled[i])
 			m_log_writers[i]->write_char(c);
 
 }

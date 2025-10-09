@@ -61,8 +61,7 @@ namespace MaxOS{
                     common::ConsoleColour get_foreground_color(uint16_t x, uint16_t y) final;
                     common::ConsoleColour get_background_color(uint16_t x, uint16_t y) final;
 
-                    void print_logo();
-                    static void print_logo_kernel_panic();
+	                static void print_logo(bool is_panic = false);
                     static void update_progress_bar(uint8_t percentage);
             };
 

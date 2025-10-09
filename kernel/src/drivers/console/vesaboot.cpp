@@ -26,8 +26,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 	// Prepare the console
 	VESABootConsole::clear();
 	print_logo();
-	m_console_area = new ConsoleArea(this, 0, 0, width() / 2 - 25, height(), ConsoleColour::DarkGrey,
-									 ConsoleColour::Black);
+	m_console_area = new ConsoleArea(this, 0, 0, width() / 2 - 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
 	cout = new ConsoleStream(m_console_area);
 
 	// Only log to the screen when debugging
@@ -35,8 +34,6 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 		Logger::active_logger()->add_log_writer(cout);
 		Logger::INFO() << "Console Stream set up \n";
 	#endif
-
-	update_progress_bar(0);
 }
 
 VESABootConsole::~VESABootConsole() = default;
@@ -201,6 +198,9 @@ char VESABootConsole::get_character(uint16_t x, uint16_t y) {
  */
 ConsoleColour VESABootConsole::get_foreground_color(uint16_t x, uint16_t y) {
 
+	if(CPU::panic_lock.is_locked())
+		return ConsoleColour::White;
+
 	// If the coordinates are out of bounds, return
 	if (x >= width() || y >= height())
 		return ConsoleColour::White;
@@ -221,6 +221,9 @@ ConsoleColour VESABootConsole::get_foreground_color(uint16_t x, uint16_t y) {
  */
 ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
 
+	if(CPU::panic_lock.is_locked())
+		return ConsoleColour::Red;
+
 	// If the coordinates are out of bounds, return
 	if (x >= width() || y >= height())
 		return ConsoleColour::Black;
@@ -235,23 +238,27 @@ ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
 /**
  * @brief Prints the logo to the center of the screen
  */
-void VESABootConsole::print_logo() {
+void VESABootConsole::print_logo(bool is_panic) {
 
 	// Load the logo
-	const char *logo = header_data;
+	const char *logo = is_panic ? header_data_kp : header_data;
 
 	// Find the center of the screen
-	uint32_t center_x = s_graphics_context->width() / 2;
-	uint32_t center_y = s_graphics_context->height() / 2 - 80;
+	uint32_t screen_width = s_graphics_context->width();
+	uint32_t screen_height = s_graphics_context->height();
+	uint32_t center_x = screen_width / 2;
+	uint32_t center_y = screen_height / 2 - 80;
+
+	// Fill the screen with the logo colour
+	auto col = Colour(is_panic ? ConsoleColour::Red : ConsoleColour::Black);
+	memset(s_graphics_context->framebuffer_address(), s_graphics_context->colour_to_int(col), screen_width * screen_height * (s_graphics_context->color_depth()/8));
 
 	// Draw the logo
 	for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
 		for (uint32_t logoX = 0; logoX < logo_width; ++logoX) {
 
-			// Store the pixel in the logo
-			uint8_t pixel[3] = {0};
-
 			// Get the pixel from the logo
+			uint8_t pixel[3] = {0};
 			LOGO_HEADER_PIXEL(logo, pixel)
 
 			// Draw the pixel
@@ -260,6 +267,8 @@ void VESABootConsole::print_logo() {
 										  common::Colour(pixel[0], pixel[1], pixel[2]));
 		}
 	}
+
+	update_progress_bar(0);
 }
 
 
@@ -297,8 +306,8 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 	size_t row_bytes = region_pixel_width * bytes_per_pixel;
 
 	// Decide the colour of the pixel
-	ConsoleColour to_set_foreground = CPU::panic_lock.is_locked() ? ConsoleColour::White : get_foreground_color(left, top + height - 1);
-	ConsoleColour to_set_background = CPU::panic_lock.is_locked() ? ConsoleColour::Red : get_background_color(left, top + height - 1);
+	ConsoleColour to_set_foreground = get_foreground_color(left, top + height - 1);
+	ConsoleColour to_set_background = get_background_color(left, top + height - 1);
 	Colour fill_colour = Colour(to_set_background);
 	uint32_t fill_value = s_graphics_context->colour_to_int(to_set_background);
 
@@ -327,46 +336,13 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 }
 
 /**
- * @brief Print the panic logo in the bottom right corner of the screen
- */
-void VESABootConsole::print_logo_kernel_panic() {
-
-	// Load the logo
-	const char *logo = header_data_kp;
-
-	// Find the bottom right of the screen
-	uint32_t right_x = s_graphics_context->width() - kp_width - 10;
-	uint32_t bottom_y = s_graphics_context->height() - kp_height - 10;
-
-	// Draw the logo
-	for (uint32_t logoY = 0; logoY < kp_height; ++logoY) {
-		for (uint32_t logoX = 0; logoX < kp_width; ++logoX) {
-
-			// Store the pixel in the logo
-			uint8_t pixel[3] = {0};
-
-			// Get the pixel from the logo
-			LOGO_HEADER_PIXEL(logo, pixel)
-
-			// Draw the pixel
-			s_graphics_context->put_pixel(right_x + logoX, bottom_y + logoY, common::Colour(pixel[0], pixel[1], pixel[2]));
-		}
-	}
-
-}
-
-/**
  * @brief Cleans up the boot console
  */
 void VESABootConsole::finish() {
 
 	// Done
-	Logger::HEADER() << "MaxOS Kernel Successfully Booted\n";
-
-	// CPU::PANIC will override a disabled logger so the console should scroll itself into view as it is unknown what
-	// will be on the screen now and that may mess with the presentation of the text (ie white text on a white background)
-	cout->set_cursor(width(), height());
-
+	Logger::HEADER() << "MaxOS Kernel Successfully Booted\n" << ANSI_COLOURS[ANSIColour::Reset];
+	cout->set_cursor(0, 0);
 	Logger::active_logger()->disable_log_writer(cout);
 }
 
