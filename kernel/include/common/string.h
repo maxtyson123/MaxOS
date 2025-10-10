@@ -12,6 +12,8 @@
 
 namespace MaxOS {
 
+	constexpr int MAX_STRING_SMALL_STORAGE = 0x99;
+
     /**
      * @class String
      * @brief Dynamically sized string with various operations
@@ -21,8 +23,7 @@ namespace MaxOS {
           char* m_string = nullptr;
           int m_length = 0;           // Does not include the null terminator
 
-		  const static uint8_t s_small_storage = 0x99;
-		  char m_small_string[s_small_storage] = {0};
+		  char m_small_string[MAX_STRING_SMALL_STORAGE] = {0};
 		  bool m_using_small = true;
 
           [[nodiscard]] static int lex_value(String const &other) ;

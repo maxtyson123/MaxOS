@@ -365,7 +365,7 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 	current_thread->ticks++;
 
 	// Thread hasn't used its time slot yet
-	if(current_thread->ticks % s_ticks_per_event)
+	if(current_thread->ticks % TICKS_PER_EVENT)
 		return cpu_state;
 
 	// Schedule the next thread
@@ -405,8 +405,8 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 		case ThreadState::SLEEPING:
 
 			// If the wake-up time hasn't occurred yet, run the next thread
-			if (current_thread->wakeup_time < s_ticks_per_event){
-				current_thread->wakeup_time -= s_ticks_per_event;
+			if (current_thread->wakeup_time < TICKS_PER_EVENT){
+				current_thread->wakeup_time -= TICKS_PER_EVENT;
 				return schedule_next(&current_thread->execution_state);
 			}
 

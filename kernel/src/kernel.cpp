@@ -105,8 +105,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - SMP
-//  - Redo static constants
 //  - Test suite of common functions & other statics (paths)
 //  - Class & Struct docstrings
 //  - Sanitize syscall input and only need reource syscalls?

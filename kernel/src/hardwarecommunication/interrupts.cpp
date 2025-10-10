@@ -121,13 +121,13 @@ InterruptManager::InterruptManager() {
 	set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 0);   // Reserved
 
 	// Set up the hardware interrupts
-	set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x00, &HandleInterruptRequest0x00, 0);   // APIC Timer Interrupt
-	set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
-	set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
-	set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x00, &HandleInterruptRequest0x00, 0);   // APIC Timer Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
 
 	// Set up the system call interrupt
-	set_interrupt_descriptor_table_entry(s_hardware_interrupt_offset + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
 
 	// Tell the processor to use the IDT
 	load_current();
@@ -239,16 +239,6 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t* st
 }
 
 /**
- * @brief Returns the offset of the hardware interrupt
- *
- * @return The offset of the hardware interrupt
- */
-uint16_t InterruptManager::hardware_interrupt_offset() {
-
-	return s_hardware_interrupt_offset;
-}
-
-/**
  * @brief Sets the interrupt handler for the interrupt
  *
  * @param interrupt The interrupt number
@@ -287,7 +277,7 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 		Logger::WARNING() << "Interrupt " << (int) status->interrupt_number << " not handled\n";
 
 	// Send the EOI to the APIC
-	if (s_hardware_interrupt_offset <= status->interrupt_number && status->interrupt_number < s_hardware_interrupt_offset + 16)
+	if (HARDWARE_INTERRUPT_OFFSET <= status->interrupt_number && status->interrupt_number < HARDWARE_INTERRUPT_OFFSET + 16)
 		CPU::executing_core()->local_apic->send_eoi();
 
 	// Return the status

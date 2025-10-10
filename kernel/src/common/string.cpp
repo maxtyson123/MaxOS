@@ -177,7 +177,7 @@ void String::allocate_self() {
 		delete[] m_string;
 
 	// Try to use the small string buffer
-	m_using_small = m_length + 1 <= s_small_storage;
+	m_using_small = m_length + 1 <= MAX_STRING_SMALL_STORAGE;
 	m_string = m_using_small ? m_small_string : new char[m_length + 1];
 
 }

@@ -29,7 +29,7 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 
 	Logger::INFO() << "Setting up Physical Memory Manager\n";
 	Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t) &_kernel_end << ", kernel_size = 0x" << (uint64_t) &_kernel_size << ", kernel_physical_end = 0x" << (uint64_t) &_kernel_physical_end << "\n";
-	m_kernel_start_page = align_up_to_page((size_t) &_kernel_physical_end + s_page_size, s_page_size);
+	m_kernel_start_page = align_up_to_page((size_t) &_kernel_physical_end + PAGE_SIZE, PAGE_SIZE);
 
 	// Set up the current manager
 	unmap_lower_kernel();
@@ -51,14 +51,14 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 
 	// Store the information about the bitmap
 	m_memory_size = (m_mmap->addr + m_mmap->len);
-	m_bitmap_size = m_memory_size / s_page_size + 1;
-	m_total_entries = m_bitmap_size / s_row_bits + 1;
-	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) s_page_size << "\n";
+	m_bitmap_size = m_memory_size / PAGE_SIZE + 1;
+	m_total_entries = m_bitmap_size / ROW_BITS + 1;
+	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) PAGE_SIZE << "\n";
 
 	// Map the physical memory into the virtual memory
-	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\n";
-	for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += s_page_size)
-		map((physical_address_t*) physical_address, (virtual_address_t*) (s_hh_direct_map_offset + physical_address), Present | Write);
+	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\n";
+	for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += PAGE_SIZE)
+		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address), Present | Write);
 
 	// Kernel Setup
 	initialise_bit_map();
@@ -75,18 +75,18 @@ PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 	// Reserve the pages used by the higher half mapping
-	reserve((uint64_t)m_mmap->addr, m_setup_frames * s_page_size, "HHDM");
+	reserve((uint64_t)m_mmap->addr, m_setup_frames * PAGE_SIZE, "HHDM");
 
 	// Reserve the area for the bitmap
 	reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8, "Bitmap");
 
 	// Calculate how much space the kernel takes up
-	uint32_t kernel_entries = (m_kernel_start_page / s_page_size) + 1;
-	if ((((uint32_t) (m_kernel_start_page)) % s_page_size) != 0)
+	uint32_t kernel_entries = (m_kernel_start_page / PAGE_SIZE) + 1;
+	if ((((uint32_t) (m_kernel_start_page)) % PAGE_SIZE) != 0)
 		kernel_entries += 1;
 
 	// Reserve the kernel entries
-	reserve(0, kernel_entries * s_page_size, "Kernel");
+	reserve(0, kernel_entries * PAGE_SIZE, "Kernel");
 
 	// Reserve the area for the mmap
 	uint64_t mem_end = m_mmap->addr + m_mmap->len;
@@ -129,7 +129,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
  */
 size_t PhysicalMemoryManager::size_to_frames(size_t size) {
 
-	return align_to_page(size) / s_page_size;
+	return align_to_page(size) / PAGE_SIZE;
 }
 
 /**
@@ -140,7 +140,7 @@ size_t PhysicalMemoryManager::size_to_frames(size_t size) {
  */
 size_t PhysicalMemoryManager::align_to_page(size_t size) {
 
-	return ((size + s_page_size - 1) / s_page_size) * s_page_size;
+	return ((size + PAGE_SIZE - 1) / PAGE_SIZE) * PAGE_SIZE;
 }
 
 /**
@@ -163,7 +163,7 @@ size_t PhysicalMemoryManager::align_up_to_page(size_t size, size_t page_size) {
  */
 bool PhysicalMemoryManager::check_aligned(size_t size) {
 
-	return (size % s_page_size) == 0;
+	return (size % PAGE_SIZE) == 0;
 }
 
 /**
@@ -181,7 +181,7 @@ void* PhysicalMemoryManager::allocate_frame() {
 	if (!m_initialized) {
 
 		// Use frames at the start of the mmap free
-		void* address = (void*)m_mmap->addr + (m_setup_frames * s_page_size);
+		void* address = (void*)m_mmap->addr + (m_setup_frames * PAGE_SIZE);
 		m_setup_frames++;
 
 		m_lock.unlock();
@@ -197,7 +197,7 @@ void* PhysicalMemoryManager::allocate_frame() {
 		if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
 			continue;
 
-		for (uint32_t column = 0; column < s_row_bits; ++column) {
+		for (uint32_t column = 0; column < ROW_BITS; ++column) {
 
 			// Entry isn't free
 			if (m_bit_map[row] & (1ULL << column))
@@ -211,8 +211,8 @@ void* PhysicalMemoryManager::allocate_frame() {
 			m_lock.unlock();
 
 			// Return the address
-			uint64_t frame_address = (row * s_row_bits) + column;
-			return (void*) (frame_address * s_page_size);
+			uint64_t frame_address = (row * ROW_BITS) + column;
+			return (void*) (frame_address * PAGE_SIZE);
 		}
 	}
 
@@ -233,8 +233,8 @@ void PhysicalMemoryManager::free_frame(void* address) {
 
 	// Mark the frame as not used
 	m_used_frames--;
-	uint64_t frame_address = (uint64_t) address / s_page_size;
-	m_bit_map[frame_address / s_row_bits] &= ~(1 << (frame_address % s_row_bits));
+	uint64_t frame_address = (uint64_t) address / PAGE_SIZE;
+	m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
 
 	m_lock.unlock();
 }
@@ -262,7 +262,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 		if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
 			continue;
 
-		for (uint32_t column = 0; column < s_row_bits; ++column) {
+		for (uint32_t column = 0; column < ROW_BITS; ++column) {
 
 			// Not enough adjacent frames
 			if (m_bit_map[row] & (1ULL << column)) {
@@ -286,11 +286,11 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 			for (uint32_t i = 0; i < frame_count; ++i) {
 
 				// Get the location of the bit
-				uint32_t index = start_row + (start_column + i) / s_row_bits;
-				uint32_t bit = (start_column + i) % s_row_bits;
+				uint32_t index = start_row + (start_column + i) / ROW_BITS;
+				uint32_t bit = (start_column + i) % ROW_BITS;
 
 				// Check bounds
-				ASSERT(index >= m_total_entries || bit >= s_row_bits, "Index out of bounds\n");
+				ASSERT(index >= m_total_entries || bit >= ROW_BITS, "Index out of bounds\n");
 
 				// Mark the bit as used
 				m_bit_map[index] |= (1ULL << bit);
@@ -298,7 +298,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 
 			// Return start of the block of adjacent frames
 			m_lock.unlock();
-			return (void*) (start_address + (start_row * s_row_bits + start_column) * s_page_size);
+			return (void*) (start_address + (start_row * ROW_BITS + start_column) * PAGE_SIZE);
 
 		}
 	}
@@ -319,7 +319,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
 	// Convert address into frames
 	size_t frame_count = size_to_frames(size);
-	uint64_t frame_address = start_address / s_page_size;
+	uint64_t frame_address = start_address / PAGE_SIZE;
 
 	// Check bounds
 	if (frame_address >= m_bitmap_size)
@@ -331,7 +331,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 	// Mark the frames as not used
 	m_used_frames -= frame_count;
 	for (uint32_t i = 0; i < frame_count; ++i)
-		m_bit_map[(frame_address + i) / s_row_bits] &= ~(1 << ((frame_address + i) % s_row_bits));
+		m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
 
 	m_lock.unlock();
 }
@@ -527,7 +527,7 @@ void PhysicalMemoryManager::map_area(virtual_address_t* virtual_address_start, s
 
 	// Map the required frames
 	for (size_t i = 0; i < size_to_frames(length); ++i)
-		map(virtual_address_start + (i * s_page_size), flags);
+		map(virtual_address_start + (i * PAGE_SIZE), flags);
 
 }
 
@@ -543,7 +543,7 @@ void PhysicalMemoryManager::map_area(physical_address_t* physical_address_start,
 
 	// Map the required frames
 	for (size_t i = 0; i < size_to_frames(length); ++i)
-		map(physical_address_start + (i * s_page_size), virtual_address_start + (i * s_page_size), flags);
+		map(physical_address_start + (i * PAGE_SIZE), virtual_address_start + (i * PAGE_SIZE), flags);
 }
 
 /**
@@ -601,7 +601,7 @@ void PhysicalMemoryManager::unmap_area(virtual_address_t* virtual_address_start,
 
 	// Unmap the required frames
 	for (size_t i = 0; i < size_to_frames(length); ++i)
-		unmap(virtual_address_start + (i * s_page_size));
+		unmap(virtual_address_start + (i * PAGE_SIZE));
 }
 
 /**
@@ -721,7 +721,7 @@ uint64_t PhysicalMemoryManager::memory_size() const {
  */
 uint64_t PhysicalMemoryManager::memory_used() const {
 
-	return m_used_frames * s_page_size;
+	return m_used_frames * PAGE_SIZE;
 }
 
 /**
@@ -732,7 +732,7 @@ uint64_t PhysicalMemoryManager::memory_used() const {
  */
 size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
 
-	return (size & (~(s_page_size - 1)));
+	return (size & (~(PAGE_SIZE - 1)));
 }
 
 /**
@@ -742,7 +742,7 @@ size_t PhysicalMemoryManager::align_direct_to_page(size_t size) {
  */
 void PhysicalMemoryManager::reserve(uint64_t address) {
 
-	reserve(address, s_page_size);
+	reserve(address, PAGE_SIZE);
 }
 
 /**
@@ -766,13 +766,13 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
 		size += address - aligned_address;
 
 	// Convert in to amount of pages
-	size = align_up_to_page(size, s_page_size);
-	size_t page_count = size / s_page_size;
-	uint64_t frame_index = aligned_address / s_page_size;
+	size = align_up_to_page(size, PAGE_SIZE);
+	size_t page_count = size / PAGE_SIZE;
+	uint64_t frame_index = aligned_address / PAGE_SIZE;
 
 	// Mark all as used
 	for (size_t i = 0; i < page_count; ++i)
-		m_bit_map[(frame_index + i) / s_row_bits] |= (1ULL << ((frame_index + i) % s_row_bits));
+		m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
 
 	// Update the used frames
 	m_used_frames += page_count;
@@ -843,8 +843,8 @@ bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virt
 void* PhysicalMemoryManager::to_higher_region(uintptr_t physical_address) {
 
 	// If it's in the lower half then add the offset
-	if (physical_address < s_higher_half_kernel_offset)
-		return (void*) (physical_address + s_higher_half_kernel_offset);
+	if (physical_address < HIGHER_HALF_KERNEL_OFFSET)
+		return (void*) (physical_address + HIGHER_HALF_KERNEL_OFFSET);
 
 	// Must be in the higher half
 	return (void*) physical_address;
@@ -859,8 +859,8 @@ void* PhysicalMemoryManager::to_higher_region(uintptr_t physical_address) {
 void* PhysicalMemoryManager::to_lower_region(uintptr_t virtual_address) {
 
 	// If it's in the lower half then add the offset
-	if (virtual_address > s_higher_half_kernel_offset)
-		return (void*) (virtual_address - s_higher_half_kernel_offset);
+	if (virtual_address > HIGHER_HALF_KERNEL_OFFSET)
+		return (void*) (virtual_address - HIGHER_HALF_KERNEL_OFFSET);
 
 	// Must be in the lower half
 	return (void*) virtual_address;
@@ -874,8 +874,8 @@ void* PhysicalMemoryManager::to_lower_region(uintptr_t virtual_address) {
  */
 void* PhysicalMemoryManager::to_io_region(uintptr_t physical_address) {
 
-	if (physical_address < s_higher_half_mem_offset)
-		return (void*) (physical_address + s_higher_half_mem_offset);
+	if (physical_address < HIGHER_HALF_MEM_OFFSET)
+		return (void*) (physical_address + HIGHER_HALF_MEM_OFFSET);
 
 	// Must be in the higher half
 	return (void*) physical_address;
@@ -889,8 +889,8 @@ void* PhysicalMemoryManager::to_io_region(uintptr_t physical_address) {
  */
 void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
 
-	if (physical_address < s_higher_half_offset)
-		return (void*) (physical_address + s_hh_direct_map_offset);
+	if (physical_address < HIGHER_HALF_OFFSET)
+		return (void*) (physical_address + HIGHER_HALF_DIRECT_MAP);
 
 	// Must be in the higher half
 	return (void*) physical_address;
@@ -904,8 +904,8 @@ void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
  */
 void* PhysicalMemoryManager::from_dm_region(uintptr_t virtual_address) {
 
-	if (virtual_address > s_hh_direct_map_offset)
-		return (void*) (virtual_address - s_hh_direct_map_offset);
+	if (virtual_address > HIGHER_HALF_DIRECT_MAP)
+		return (void*) (virtual_address - HIGHER_HALF_DIRECT_MAP);
 
 	// Must be in the lower half
 	return (void*) virtual_address;

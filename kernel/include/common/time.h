@@ -56,7 +56,7 @@ namespace MaxOS{
             "Saturday"
         };
 
-        static const uint8_t DaysInMonth[] = {
+        constexpr uint8_t DAYS_IN_MONTH[] = {
             31, // January
             28, // February
             31, // March
@@ -71,9 +71,8 @@ namespace MaxOS{
             31  // December
         };
 
-        static const uint16_t DaysInYear = 365;
-
-        static const uint16_t DaysInLeapYear = 366;
+        constexpr uint16_t DAYS_PER_YEAR = 365;
+	    constexpr uint16_t DAYS_PER_LEAP_YEAR = 366;
 
         /**
          * @brief Converts a time to an epoch
@@ -85,14 +84,13 @@ namespace MaxOS{
                 uint64_t epoch = 0;
 
                 // Add the number of years
-                for(uint16_t year = 1970; year < time.year; year++){
-                        epoch += (time.is_leap_year() ? DaysInLeapYear : DaysInYear);
-                }
+                for(uint16_t year = 1970; year < time.year; year++)
+                        epoch += (time.is_leap_year() ? DAYS_PER_LEAP_YEAR : DAYS_PER_YEAR);
+
 
                 // Add the number of days in the current year
-                for(uint8_t month = 0; month < time.month - 1; month++){
-                        epoch += DaysInMonth[month];
-                }
+                for(uint8_t month = 0; month < time.month - 1; month++)
+                    epoch += DAYS_IN_MONTH[month];
 
                 // Add the number of days in the current month
                 epoch += time.day - 1;

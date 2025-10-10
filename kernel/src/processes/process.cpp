@@ -24,7 +24,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	ticks = 0;
 
 	// Create the stack
-	m_stack_pointer = (uintptr_t) MemoryManager::malloc(s_stack_size);
+	m_stack_pointer = (uintptr_t) MemoryManager::malloc(STACK_SIZE);
 
 	// Create the TSS stack
 	if (parent->is_kernel) {
@@ -33,7 +33,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 		m_tss_stack_pointer = CPU::executing_core() -> tss.rsp0;
 
 	} else {
-		m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(s_stack_size) + s_stack_size;
+		m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(STACK_SIZE) + STACK_SIZE;
 	}
 
 	// Mak sure there is a stack

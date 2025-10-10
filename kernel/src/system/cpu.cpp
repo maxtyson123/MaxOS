@@ -49,13 +49,13 @@ void Core::wake_up(CPU* cpu) {
 	}
 
 	Logger::DEBUG() << "Starting core: " << id << "\n";
-	m_stack = (uint64_t)MemoryManager::kmalloc(s_stack_size);
+	m_stack = (uint64_t)MemoryManager::kmalloc(BOOT_STACK_SIZE);
 
 	// Core specific boot info
 	auto info = (core_boot_info_t*)(core_boot_info);
 	info->activated = false;
 	info->id = id;
-	info->stack = m_stack + s_stack_size;
+	info->stack = m_stack + BOOT_STACK_SIZE;
 
 	// Send init IPI
 	cpu->apic.local_apic()->send_init(m_apic_id, true);
@@ -96,7 +96,7 @@ void Core::init_tss() {
 	tss.reserved4 = 0;
 
 	// The stacks
-	tss.rsp0 = (uint64_t)m_stack + s_stack_size;       // Kernel stack (scheduler will set the threads stack)
+	tss.rsp0 = (uint64_t)m_stack + BOOT_STACK_SIZE;       // Kernel stack (scheduler will set the threads stack)
 	tss.rsp1 = 0;
 	tss.rsp2 = 0;
 

@@ -65,6 +65,8 @@ namespace MaxOS {
 				static uint64_t next_tid();
 		};
 
+		constexpr size_t TICKS_PER_EVENT = 20;
+
 		/**
 		 * @class Scheduler
 		 * @brief Schedules processes to run on the core via their threads
@@ -79,8 +81,6 @@ namespace MaxOS {
 				bool m_active;
 
 				uint64_t m_ticks;
-
-				static const uint64_t s_ticks_per_event = { 20 };
 
 				static system::cpu_status_t* load_process(Process* process, Thread* thread);
 

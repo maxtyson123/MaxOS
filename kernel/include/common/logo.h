@@ -6,8 +6,8 @@
 
 /*  GIMP header image file format (RGB): C:\Users\98max\CLionProjects\max-os\kernel\include\common\logo.h  */
 
-static unsigned int logo_width = 335;
-static unsigned int logo_height = 212;
+constexpr int LOGO_WIDTH = 335;
+constexpr int LOGO_HEIGHT = 212;
 
 /*  Call this macro repeatedly.  After each use, the pixel data can be extracted  */
 

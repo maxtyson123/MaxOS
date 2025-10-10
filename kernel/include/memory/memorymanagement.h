@@ -28,6 +28,8 @@ namespace MaxOS{
 
         };
 
+		constexpr size_t CHUNK_ALIGNMENT = 0x10;
+
         /**
          * @class MemoryManager
          * @brief Handles memory allocation and deallocation
@@ -45,11 +47,6 @@ namespace MaxOS{
           public:
               inline static MemoryManager* s_current_memory_manager = nullptr;
               inline static MemoryManager* s_kernel_memory_manager = nullptr;
-
-              // Each chunk is aligned to 16 bytes
-              static const size_t s_chunk_alignment =  0x10;
-
-              MemoryManager* previous_memory_manager = nullptr;
 
               MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
               ~MemoryManager();

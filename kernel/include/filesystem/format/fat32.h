@@ -159,6 +159,8 @@ namespace MaxOS{
             END_OF_CHAIN    = 0xFFFFFFFF,
         };
 
+		constexpr uint16_t MAX_NAME_LENGTH = 255;
+
         /**
          * @class Fat32Volume
          * @brief Handles the FAT table that stores the information about the files on the disk and operations on the disk
@@ -257,8 +259,6 @@ namespace MaxOS{
             public:
                 Fat32Directory(Fat32Volume* volume, lba_t cluster, const string& name);
                 ~Fat32Directory();
-
-                static const size_t MAX_NAME_LENGTH = 255;
 
                 void read_from_disk() final;
 

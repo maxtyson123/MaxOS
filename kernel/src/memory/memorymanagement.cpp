@@ -22,11 +22,11 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 	switch_active_memory_manager(this);
 
 	// Setup the first chunk of memory
-	this->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
+	this->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
 	m_first_memory_chunk->allocated = false;
 	m_first_memory_chunk->prev = nullptr;
 	m_first_memory_chunk->next = nullptr;
-	m_first_memory_chunk->size = PhysicalMemoryManager::s_page_size - sizeof(MemoryChunk);
+	m_first_memory_chunk->size = PAGE_SIZE - sizeof(MemoryChunk);
 	m_last_memory_chunk = m_first_memory_chunk;
 
 	// First memory manager is the kernel memory manager
@@ -276,7 +276,7 @@ int MemoryManager::memory_used() {
  */
 size_t MemoryManager::align(size_t size) {
 
-	return (size / s_chunk_alignment + 1) * s_chunk_alignment;
+	return (size / CHUNK_ALIGNMENT + 1) * CHUNK_ALIGNMENT;
 }
 
 

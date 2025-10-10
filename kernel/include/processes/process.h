@@ -34,6 +34,7 @@ namespace MaxOS
 
         // Forward declaration
         class Process;
+		constexpr size_t STACK_SIZE = 0x10000;
 
         /**
          * @class Thread
@@ -47,8 +48,6 @@ namespace MaxOS
               uintptr_t m_tss_stack_pointer;
 
               char m_sse_save_region[512] __attribute__((aligned(16)));
-
-              static const uint64_t s_stack_size = 0x10000;
 
             public:
               Thread(void (*_entry_point)(void *) , void* args, int arg_amount, Process* parent);

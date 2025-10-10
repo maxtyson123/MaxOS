@@ -35,11 +35,16 @@ namespace MaxOS {
       size_t size;
     } free_chunk_t;
 
+	static const size_t CHUNKS_PER_PAGE = PAGE_SIZE / sizeof(virtual_memory_chunk_t) - 1;
+    static const size_t VMM_RESERVED = 0x138000000;
+
     typedef struct VirtualMemoryRegion{
-      virtual_memory_chunk_t chunks[(PhysicalMemoryManager::s_page_size / sizeof(virtual_memory_chunk_t) - 1)];
+      virtual_memory_chunk_t chunks[CHUNKS_PER_PAGE];
       struct VirtualMemoryRegion* next;
 
     } __attribute__((packed)) virtual_memory_region_t;
+
+
 
     // NOTE: Have to use a linked list as the VMM is not fully setup and thus cannot use the vector class
     /**
@@ -56,9 +61,6 @@ namespace MaxOS {
         virtual_memory_region_t* m_current_region;
         size_t m_current_chunk = 0;
         size_t m_next_available_address;
-
-        static const size_t s_chunks_per_page = (PhysicalMemoryManager::s_page_size / sizeof(virtual_memory_chunk_t) - 1);
-        static const size_t s_reserved_space = 0x138000000;
 
         free_chunk_t* m_free_chunks = nullptr;
         void add_free_chunk(uintptr_t start_address, size_t size);

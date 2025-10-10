@@ -58,6 +58,9 @@ namespace MaxOS {
           uint32_t reserved;
         } __attribute__((packed));
 
+	    constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;
+	    constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;
+
         /**
          * @class InterruptManager
          * @brief Handles all interrupts and passes them to the correct handler
@@ -74,10 +77,9 @@ namespace MaxOS {
             protected:
 
                 inline static InterruptManager* s_active_interrupt_manager = nullptr;
-                const static uint16_t s_hardware_interrupt_offset = 0x20;
 
-                InterruptHandler* m_interrupt_handlers[256] = {};
-                inline static InterruptDescriptor s_interrupt_descriptor_table[256] = {};
+                InterruptHandler* m_interrupt_handlers[MAX_INTERRUPT_HANDLERS] = {};
+                inline static InterruptDescriptor s_interrupt_descriptor_table[MAX_INTERRUPT_HANDLERS] = {};
 
                 static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (*handler)(), uint8_t descriptor_privilege_level);
 
@@ -146,8 +148,6 @@ namespace MaxOS {
                 ~InterruptManager();
 
                 static InterruptManager* active_interrupt_manager();
-
-                static uint16_t hardware_interrupt_offset();
 
                 void set_interrupt_handler(uint8_t interrupt, InterruptHandler *handler);
                 void remove_interrupt_handler(uint8_t interrupt);

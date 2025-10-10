@@ -91,7 +91,7 @@ virtual_address_t* AdvancedConfigurationAndPowerInterface::map_descriptor(uint64
 	end = PhysicalMemoryManager::align_direct_to_page(end);
 
 	// Map the remaining pages
-	for (uint64_t page_i = page + PhysicalMemoryManager::s_page_size; page_i <= end; page_i += PhysicalMemoryManager::s_page_size) {
+	for (uint64_t page_i = page + PAGE_SIZE; page_i <= end; page_i += PAGE_SIZE) {
 		virtual_address_t* virtual_i = PhysicalMemoryManager::to_io_region(page_i);
 
 		PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page_i, virtual_i, Present | Write);

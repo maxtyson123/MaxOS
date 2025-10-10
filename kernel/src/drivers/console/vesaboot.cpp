@@ -44,7 +44,7 @@ VESABootConsole::~VESABootConsole() = default;
  * @return The width of the console in characters
  */
 uint16_t VESABootConsole::width() {
-	return s_graphics_context->width() / 8;       // 8 pixels per character
+	return s_graphics_context->width() / FONT_WIDTH;       // 8 pixels per character
 }
 
 /**
@@ -53,7 +53,7 @@ uint16_t VESABootConsole::width() {
  * @return The height of the console in characters
  */
 uint16_t VESABootConsole::height() {
-	return s_graphics_context->height() / Font::font_height;
+	return s_graphics_context->height() / FONT_HEIGHT;
 }
 
 /**
@@ -126,7 +126,7 @@ void VESABootConsole::put_character(uint16_t x, uint16_t y, char c) {
 	Colour background = m_background_color == ConsoleColour::Uninitialised ? get_background_color(x, y) : Colour(m_background_color);
 
 	// Use the m_font to draw the character
-	m_font.draw_text(x * 8, y * Font::font_height, foreground, background, s_graphics_context, s);
+	m_font.draw_text(x * 8, y * FONT_HEIGHT, foreground, background, s_graphics_context, s);
 }
 
 /**
@@ -254,16 +254,16 @@ void VESABootConsole::print_logo(bool is_panic) {
 	memset(s_graphics_context->framebuffer_address(), s_graphics_context->colour_to_int(col), screen_width * screen_height * (s_graphics_context->color_depth()/8));
 
 	// Draw the logo
-	for (uint32_t logoY = 0; logoY < logo_height; ++logoY) {
-		for (uint32_t logoX = 0; logoX < logo_width; ++logoX) {
+	for (uint32_t logoY = 0; logoY < LOGO_HEIGHT; ++logoY) {
+		for (uint32_t logoX = 0; logoX < LOGO_WIDTH; ++logoX) {
 
 			// Get the pixel from the logo
 			uint8_t pixel[3] = {0};
 			LOGO_HEADER_PIXEL(logo, pixel)
 
 			// Draw the pixel
-			s_graphics_context->put_pixel(center_x - logo_width / 2 + logoX,
-										  center_y - logo_height / 2 + logoY,
+			s_graphics_context->put_pixel(center_x - LOGO_WIDTH / 2 + logoX,
+										  center_y - LOGO_HEIGHT / 2 + logoY,
 										  common::Colour(pixel[0], pixel[1], pixel[2]));
 		}
 	}
@@ -296,13 +296,13 @@ void VESABootConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 	uint64_t bytes_per_pixel = framebuffer_bpp / 8;
 	uint64_t framebuffer_pitch = framebuffer_width * bytes_per_pixel;
 
-	uint16_t line_height = Font::font_height;
+	uint16_t line_height = FONT_HEIGHT;
 
 	// Region conversions
 	uint16_t region_pixel_y = top * line_height;
 	uint16_t region_pixel_height = height * line_height;
-	uint16_t region_pixel_left = left * Font::font_width;
-	uint16_t region_pixel_width = width * Font::font_width;
+	uint16_t region_pixel_left = left * FONT_WIDTH;
+	uint16_t region_pixel_width = width * FONT_WIDTH;
 	size_t row_bytes = region_pixel_width * bytes_per_pixel;
 
 	// Decide the colour of the pixel
@@ -366,14 +366,14 @@ void VESABootConsole::update_progress_bar(uint8_t percentage) {
 	uint8_t progress_width_cull = 40;
 
 	// Find the center of the screen
-	uint32_t right_x = (s_graphics_context->width() / 2) - logo_width / 2;
-	uint32_t bottom_y = (s_graphics_context->height() / 2 - 80) - logo_height / 2;
+	uint32_t right_x = (s_graphics_context->width() / 2) - LOGO_WIDTH / 2;
+	uint32_t bottom_y = (s_graphics_context->height() / 2 - 80) - LOGO_HEIGHT / 2;
 
 	// Find the bounds
 	uint32_t start_x = progress_width_cull;
-	uint32_t start_y = logo_height + progress_spacing;
-	uint32_t end_x = logo_width - progress_width_cull;
-	uint32_t end_y = logo_height + progress_height + progress_spacing;
+	uint32_t start_y = LOGO_HEIGHT + progress_spacing;
+	uint32_t end_x = LOGO_WIDTH - progress_width_cull;
+	uint32_t end_y = LOGO_HEIGHT + progress_height + progress_spacing;
 
 	// Draw the progress bar
 	for (uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
@@ -387,7 +387,7 @@ void VESABootConsole::update_progress_bar(uint8_t percentage) {
 			is_border = is_border && percentage == 0;
 
 			// If it is not within the percentage, skip it
-			if (progress_x > logo_width * percentage / 100 && !is_border)
+			if (progress_x > LOGO_WIDTH * percentage / 100 && !is_border)
 				continue;
 
 			s_graphics_context->put_pixel(right_x + progress_x, bottom_y + progress_y, Colour(0xFF, 0xFF, 0xFF));

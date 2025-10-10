@@ -3,8 +3,8 @@
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #pragma GCC diagnostic ignored "-Wtrigraphs"
 
-static unsigned int width = 335;
-static unsigned int height = 212;
+constexpr int LOGO_WIDTH_KP = 335;
+constexpr int LOGO_HEIGHT_KP = 212;
 
 static char *header_data_kp =
 	"KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!"

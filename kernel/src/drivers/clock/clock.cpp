@@ -304,11 +304,11 @@ uint32_t PIT::ticks_per_ms() {
 	auto max = (uint32_t) -1;
 	m_local_apic->write(0x380, max);
 
-	while (m_ticks < s_calibrate_ticks)
+	while (m_ticks < TICK_CALIBRATE_LENGTH)
 		asm volatile("nop");
 
 	uint32_t elapsed = max - (m_local_apic->read(0x390));
-	uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
+	uint32_t ticks_per_ms = elapsed / TICK_CALIBRATE_LENGTH;
 
 	Logger::DEBUG() << "Ticks per ms: " << (int) ticks_per_ms << "\n";
 

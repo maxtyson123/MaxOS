@@ -149,5 +149,5 @@ bool Multiboot::is_reserved(multiboot_uint64_t address) {
  */
 multiboot_tag* Multiboot::start_tag() const {
 
-	return (multiboot_tag*) (start_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
+	return (multiboot_tag*) (start_address + HIGHER_HALF_KERNEL_OFFSET + 8);
 }

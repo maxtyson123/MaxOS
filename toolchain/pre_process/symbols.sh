@@ -120,7 +120,7 @@ cat >> "$OUT" <<EOF
     };
 		const size_t kernel_symbols_count = $COUNT;
 
-		const char* resolve_symbol(uintptr_t rip, uintptr_t link_base = memory::PhysicalMemoryManager::s_higher_half_kernel_offset, uintptr_t load_base = memory::PhysicalMemoryManager::s_higher_half_kernel_offset);
+		const char* resolve_symbol(uintptr_t rip, uintptr_t link_base = memory::HIGHER_HALF_KERNEL_OFFSET, uintptr_t load_base = memory::HIGHER_HALF_KERNEL_OFFSET);
 	}
 
 }

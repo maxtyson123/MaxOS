@@ -14,6 +14,10 @@ namespace MaxOS{
 
     namespace gui{
 
+		constexpr uint8_t FONT_PADDING = 3;
+		constexpr uint8_t FONT_HEIGHT = 8 + (2 * FONT_PADDING);
+		constexpr uint8_t FONT_WIDTH = 8;
+
         /**
          * @class Font
          * @brief A class that can be used to draw text
@@ -28,10 +32,6 @@ namespace MaxOS{
                 // Font takes the data
                 Font(const uint8_t* font_data);
                 ~Font();
-
-                static const uint8_t padding = 3;
-                static const uint16_t font_height = 8 + 2 * padding;
-                static const uint16_t font_width = 8;
 
                 bool is_bold { false };
                 bool is_italic { false };

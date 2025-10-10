@@ -39,7 +39,7 @@ Logger::~Logger() {
 void Logger::add_log_writer(OutputStream *log_writer) {
 
 	// If the list is not empty
-	if (m_log_writer_count >= m_max_log_writers)
+	if (m_log_writer_count >= MAX_LOG_WRITERS)
 		return;
 
 	// Add the output stream to the list
@@ -122,7 +122,7 @@ void Logger::set_log_level(LogLevel log_level) {
 void Logger::write_char(char c) {
 
 	// Ensure logging at this level is enabled
-	if (m_log_level > s_max_log_level)
+	if (m_log_level > MAX_LOG_LEVEL)
 		return;
 
 	// Write the character to all output streams

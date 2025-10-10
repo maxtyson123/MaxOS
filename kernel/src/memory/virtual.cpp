@@ -45,7 +45,7 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	}
 
 	// Allocate space for the vmm
-	uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager->memory_size() + PhysicalMemoryManager::s_page_size);    //TODO: Check that am not slowly overwriting the kernel (filling first space with 0s bugs out the kernel)
+	uint64_t vmm_space = PhysicalMemoryManager::align_to_page(HIGHER_HALF_DIRECT_MAP + PhysicalMemoryManager::s_current_manager->memory_size() + PAGE_SIZE);
 	void* vmm_space_physical = PhysicalMemoryManager::s_current_manager->allocate_frame();
 	PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*) vmm_space, Present | Write, m_pml4_root_address);
 	Logger::DEBUG() << "VMM space: physical - 0x" << (uint64_t) vmm_space_physical << ", virtual - 0x" << (uint64_t) vmm_space << "\n";
@@ -61,7 +61,7 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	m_first_region->next = nullptr;
 
 	// Calculate the next available address (kernel needs to reserve space for the higher half)
-	m_next_available_address = is_kernel ? vmm_space + s_reserved_space : PhysicalMemoryManager::s_page_size;
+	m_next_available_address = is_kernel ? vmm_space + VMM_RESERVED : PAGE_SIZE;
 	Logger::DEBUG() << "Next available address: 0x" << m_next_available_address << "\n";
 
 }
@@ -75,7 +75,7 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 	while (region != nullptr) {
 
 		// Loop through the chunks
-		for (size_t i = 0; i < s_chunks_per_page; i++) {
+		for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
 
 			// Have reached the end?
 			if (i == m_current_chunk && region == m_current_region)
@@ -86,7 +86,7 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 			for (size_t j = 0; j < pages; j++) {
 
 				// Get the frame
-				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) region->chunks[i].start_address + (j * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
+				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) region->chunks[i].start_address + (j * PAGE_SIZE), m_pml4_root_address);
 
 				// Free the frame
 				PhysicalMemoryManager::s_current_manager->free_frame(frame);
@@ -142,7 +142,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 	}
 
 	// Make sure the size is aligned
-	size = PhysicalMemoryManager::align_up_to_page(size, PhysicalMemoryManager::s_page_size);
+	size = PhysicalMemoryManager::align_up_to_page(size, PAGE_SIZE);
 
 	// Check the free list for a chunk (if not asking for a specific address)
 	free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(size) : nullptr;
@@ -156,7 +156,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 			for (size_t i = 0; i < pages; i++) {
 
 				// Get the frame
-				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) reusable_chunk->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
+				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) reusable_chunk->start_address + (i * PAGE_SIZE), m_pml4_root_address);
 
 				// Free the frame
 				PhysicalMemoryManager::s_current_manager->free_frame(frame);
@@ -170,7 +170,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
 
 	// Is there space in the current region
-	if (m_current_chunk >= s_chunks_per_page)
+	if (m_current_chunk >= CHUNKS_PER_PAGE)
 		new_region();
 
 	// If needed to allocate at a specific address, fill with free memory up to that address to prevent fragmentation
@@ -200,7 +200,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 		ASSERT(frame != nullptr, "Failed to allocate frame (from current region)\n");
 
 		// Map the frame
-		PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*) chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+		PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*) chunk->start_address + (i * PAGE_SIZE), Present | Write, m_pml4_root_address);
 
 	}
 
@@ -218,14 +218,14 @@ void VirtualMemoryManager::new_region() {
 	ASSERT(new_region_physical != nullptr, "Failed to allocate new VMM region\n");
 
 	// Align the new region
-	auto* new_region = (virtual_memory_region_t*) PhysicalMemoryManager::align_to_page((uint64_t) m_current_region + PhysicalMemoryManager::s_page_size);
+	auto* new_region = (virtual_memory_region_t*) PhysicalMemoryManager::align_to_page((uint64_t) m_current_region + PAGE_SIZE);
 
 	// Map the new region
 	PhysicalMemoryManager::s_current_manager->map(new_region_physical, (virtual_address_t*) new_region, Present | Write, m_pml4_root_address);
 	new_region->next = nullptr;
 
 	// Clear the new region
-	for (size_t i = 0; i < s_chunks_per_page; i++) {
+	for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
 		new_region->chunks[i].size = 0;
 		new_region->chunks[i].flags = 0;
 		new_region->chunks[i].start_address = 0;
@@ -254,7 +254,7 @@ void VirtualMemoryManager::free(void* address) {
 	while (region != nullptr) {
 
 		// Loop through the chunks
-		for (size_t i = 0; i < s_chunks_per_page; i++) {
+		for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
 
 			// Check if the address is in the chunk
 			if (region->chunks[i].start_address == (uintptr_t) address) {
@@ -319,7 +319,7 @@ size_t VirtualMemoryManager::memory_used() {
 	while (region != nullptr) {
 
 		// Loop through the chunks
-		for (size_t i = 0; i < s_chunks_per_page; i++) {
+		for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
 
 			// Check if the address is in the chunk
 			if (region->chunks[i].size != 0)
@@ -452,7 +452,7 @@ void* VirtualMemoryManager::load_physical_into_address_space(uintptr_t physical_
 	// Map the shared memory
 	size_t pages = PhysicalMemoryManager::size_to_frames(size);
 	for (size_t i = 0; i < pages; i++)
-		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) (physical_address + (i * PhysicalMemoryManager::s_page_size)), (virtual_address_t*) ((uintptr_t) address + (i * PhysicalMemoryManager::s_page_size)), Present | Write, m_pml4_root_address);
+		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) (physical_address + (i * PAGE_SIZE)), (virtual_address_t*) ((uintptr_t) address + (i * PAGE_SIZE)), Present | Write, m_pml4_root_address);
 
 
 	// All done
@@ -496,7 +496,7 @@ void VirtualMemoryManager::fill_up_to_address(uintptr_t address, size_t flags, b
 		ASSERT(frame != nullptr, "Failed to allocate frame (from fill up)\n");
 
 		// Map the frame
-		PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*) chunk->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
+		PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*) chunk->start_address + (i * PAGE_SIZE), Present | Write, m_pml4_root_address);
 
 	}
 

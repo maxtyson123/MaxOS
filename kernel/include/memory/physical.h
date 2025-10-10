@@ -67,6 +67,15 @@ namespace MaxOS {
 
       //TODO: Global paging so dont have map in every process
 
+		constexpr uint64_t PAGE_SIZE =  0x1000;
+		constexpr uint8_t  ROW_BITS =  64;
+
+		constexpr uint64_t HIGHER_HALF_KERNEL_OFFSET =  0xFFFFFFFF80000000;
+		constexpr uint64_t HIGHER_HALF_MEM_OFFSET    =  0xFFFF800000000000;
+		constexpr uint64_t HIGHER_HALF_MEM_RESERVED  =  0x280000000;
+		constexpr uint64_t HIGHER_HALF_OFFSET        = HIGHER_HALF_MEM_OFFSET + HIGHER_HALF_MEM_RESERVED;
+		constexpr uint64_t HIGHER_HALF_DIRECT_MAP    = HIGHER_HALF_OFFSET + PAGE_SIZE;
+
       /**
        * @class PhysicalMemoryManager
        * @brief Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses
@@ -112,16 +121,6 @@ namespace MaxOS {
 
           PhysicalMemoryManager(system::Multiboot* multiboot);
           ~PhysicalMemoryManager();
-
-          static const uint64_t s_page_size =  0x1000;
-          static const uint8_t s_row_bits =  64;
-
-		  // TODO: statics should be out of class? use constexp?
-          static const uint64_t s_higher_half_kernel_offset =  0xFFFFFFFF80000000;
-          static const uint64_t s_higher_half_mem_offset    =  0xFFFF800000000000;
-          static const uint64_t s_higher_half_mem_reserved  =  0x280000000;
-          static const uint64_t s_higher_half_offset        = s_higher_half_mem_offset + s_higher_half_mem_reserved;
-          static const uint64_t s_hh_direct_map_offset      = s_higher_half_offset + s_page_size;
 
           // Vars
           [[nodiscard]] uint64_t memory_size() const;

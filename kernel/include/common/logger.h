@@ -25,6 +25,9 @@
          };
 
 
+		constexpr uint8_t MAX_LOG_WRITERS = 5;
+		constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;
+
         /**
          * @class Logger
          * @brief A class that handles logging messages to the console and files.
@@ -35,9 +38,8 @@
 
                 // Cant use vector as this needs to be init before the heap
                 uint8_t m_log_writer_count = 0;
-                static const uint8_t m_max_log_writers = 5;
-                OutputStream* m_log_writers[m_max_log_writers] = {nullptr, nullptr, nullptr, nullptr, nullptr};
-                bool m_log_writers_enabled[m_max_log_writers] = {false, false, false, false, false};
+                OutputStream* m_log_writers[MAX_LOG_WRITERS] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+                bool m_log_writers_enabled[MAX_LOG_WRITERS] = {false, false, false, false, false};
 
                 // Progress bar
                 static inline uint8_t s_progress_total = 100;
@@ -46,7 +48,6 @@
                 static inline Logger* s_active_logger = nullptr;
 
                 LogLevel m_log_level = LogLevel::INFO;
-                inline static LogLevel s_max_log_level = LogLevel::DEBUG;
 
             public:
                 Logger();

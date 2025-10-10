@@ -157,6 +157,9 @@ namespace MaxOS {
 		}__attribute__((__packed__)) core_boot_info_t;
 
 		class CPU;
+
+		constexpr size_t BOOT_STACK_SIZE = 16384;
+
 		class Core{
 
 			friend class CPU;
@@ -168,8 +171,6 @@ namespace MaxOS {
 				bool m_bsp = false;
 
 				uint8_t m_apic_id;
-
-				static inline size_t s_stack_size = 16384;
 				uint64_t m_stack;
 
 			    void init_tss();

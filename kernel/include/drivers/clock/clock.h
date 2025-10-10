@@ -89,6 +89,8 @@ namespace MaxOS {
             // Forward declaration
             class Clock;
 
+			constexpr uint16_t TICK_CALIBRATE_LENGTH = 10;
+
             /**
              * @class PIT
              * @brief Driver for the Programmable Interval Timer
@@ -99,7 +101,6 @@ namespace MaxOS {
               private:
 
                 uint64_t m_ticks { 0 };
-                static const uint16_t s_calibrate_ticks = 10;
 
               protected:
 
