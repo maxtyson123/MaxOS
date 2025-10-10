@@ -417,7 +417,7 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 			// Find the process that has the thread and remove it
 			for (auto thread: owner_process->threads()) {
 				if (thread == current_thread) {
-					owner_process->remove_thread(m_next_thread_index);
+					owner_process->remove_thread(thread->tid); //TODO: Remove by reference
 					break;
 				}
 			}
@@ -486,6 +486,7 @@ uint64_t Scheduler::add_thread(Thread* thread) {
 
 	// Get the next thread ID
 	auto tid = GlobalScheduler::next_tid();
+	thread->tid = tid;
 
 	// Add the thread to the list
 	m_threads.push_back(thread);
