@@ -40,23 +40,23 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
 
 	// Set up the execution state
-	execution_state = new cpu_status_t;
-	execution_state->rip = (uint64_t) _entry_point;
-	execution_state->ss = parent->is_kernel ? 0x10 : 0x23;
-	execution_state->cs = parent->is_kernel ? 0x8 : 0x1B;
-	execution_state->rflags = 0x202;
-	execution_state->interrupt_number = 0;
-	execution_state->error_code = 0;
-	execution_state->rsp = m_stack_pointer;
-	execution_state->rbp = 0;
+	execution_state = {};
+	execution_state.rip = (uint64_t) _entry_point;
+	execution_state.ss = parent->is_kernel ? 0x10 : 0x23;
+	execution_state.cs = parent->is_kernel ? 0x8 : 0x1B;
+	execution_state.rflags = 0x202;
+	execution_state.interrupt_number = 0;
+	execution_state.error_code = 0;
+	execution_state.rsp = m_stack_pointer;
+	execution_state.rbp = 0;
 
 	// Copy the args into userspace
 	uint64_t argc = arg_amount;
 	void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
 	memcpy(argv, args, arg_amount * sizeof(void*));
 
-	execution_state->rdi = argc;
-	execution_state->rsi = (uint64_t) argv;
+	execution_state.rdi = argc;
+	execution_state.rsi = (uint64_t) argv;
 	//execution_state->rdx = (uint64_t)env_args;
 
 	parent_pid = parent->pid();

@@ -596,6 +596,57 @@ String::String(bool value) {
 
 }
 
+String String::formatted(char const* format, ...) {
+
+	// Create a pointer to the data
+	va_list parameters;
+	va_start(parameters, format);
+
+	return formatted(format, parameters);
+
+}
+
+String String::formatted(char const* format, va_list parameters) {
+
+	String out;
+
+	// Loop through the format string
+	for (; *format != '\0'; format++) {
+
+		// If it is not a %, print the character
+		if (*format != '%') {
+			out += (string)(char)(*format);
+			continue;
+		}
+
+		// Move to the next character
+		format++;
+		switch (*format) {
+			case 'd': {
+				// Print a decimal
+				int number = va_arg (parameters, int);
+				out += (string)(number);
+				break;
+			}
+			case 'x': {
+				// Print a hex
+				uint64_t number = va_arg (parameters, uint64_t);
+				out += (string)(number);
+				break;
+			}
+			case 's': {
+				// Print a string
+				char *str = va_arg (parameters, char*);
+				out += (string)(str);
+				break;
+			}
+		}
+	}
+
+	return out;
+
+}
+
 /**
  * @brief Gets the length of a string
  *

@@ -59,7 +59,7 @@ namespace MaxOS
               uint64_t tid;
               uint64_t parent_pid;
 
-              system::cpu_status_t* execution_state;
+              system::cpu_status_t execution_state;
               thread_state_t thread_state;
 
               size_t ticks;

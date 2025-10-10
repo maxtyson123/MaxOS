@@ -8,7 +8,6 @@ LC_ALL=C
 # Get the args
 INPUT="${1:-}"
 OUT="${2:-}"
-TMP="${OUT}.tmp"
 if [ -z "$INPUT" ] || [ -z "$OUT" ]; then
   fail "Usage: $0 <elf_input> <out_cpp>"
 fi
@@ -48,7 +47,7 @@ get_demangled_names() {
 
 
 # Write the header
-cat > "$TMP" <<'EOF'
+cat > "$OUT" <<'EOF'
 //
 // This file is generated automatically by the MaxOS build system.
 //
@@ -112,12 +111,12 @@ else
         printf "  { (uintptr_t)0x%s, \"%s\" },\n", address, name;
         count++;
       }
-     ' | tee -a "$TMP" | wc -l
+     ' | tee -a "$OUT" | wc -l
   )
 fi
 
 # Write the footer
-cat >> "$TMP" <<EOF
+cat >> "$OUT" <<EOF
     };
 		const size_t kernel_symbols_count = $COUNT;
 
@@ -128,13 +127,5 @@ cat >> "$TMP" <<EOF
 #endif //MAXOS_COMMON_SYMBOLS_H
 EOF
 
-# Only copy changes
-if [ -f "$OUT" ] && cmp -s "$TMP" "$OUT"; then
-  rm -f "$TMP"
-  msg "No change to ${OUT}"
-  exit 0
-fi
-
 # Did change
-mv "$TMP" "$OUT"
 msg "Wrote $OUT (symbols: $COUNT)"

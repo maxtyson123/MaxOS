@@ -311,9 +311,6 @@ syscall_args_t* SyscallManager::syscall_thread_sleep(syscall_args_t* args) {
 	// Get the milliseconds
 	size_t milliseconds = args->arg0;
 
-	// Store the updated state in the thread as the scheduler will not have the updated state when switching to the next thread
-	GlobalScheduler::current_thread()->execution_state = args->return_state;
-
 	// Sleep the thread
 	GlobalScheduler::current_thread()->sleep(milliseconds);
 	args->return_state = GlobalScheduler::yield(args->return_state);

@@ -366,6 +366,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most
 	// likely called by a place that cant switch to the avoidable state
 	prepare_for_panic();
+	panic_lock.lock();
 
 	// Get the current process
 	Process* process = GlobalScheduler::current_process();
@@ -373,7 +374,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Print using the backend
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
 	Logger::ERROR() << "Kernel Panic: " << message << "\n";
-	Logger::ERROR() << "On Core: " << panic_core->id << "\n";
+	Logger::ERROR() << "On Core: " << (panic_core ? panic_core->id : 0) << "\n";
 
 	// Info about the running process
 	Logger::ERROR() << "Process: " << (process ? process->name.c_str() : "Kernel") << "\n";
@@ -436,8 +437,9 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 	}
 
 	// We are panicking
-	panic_core = CPU::executing_core();
+	panic_core = executing_core();
 	console::VESABootConsole::print_logo(true);
+	panic_lock.unlock();
 	return nullptr;
 }
 
@@ -543,6 +545,9 @@ Core* CPU::executing_core() {
 	uint32_t eax, ebx, ecx, edx;
 	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
 	uint32_t core_id = (ebx >> 24) & 0xFF;
+
+	if(cores.empty())
+		return nullptr;
 
 	return cores[core_id];
 }

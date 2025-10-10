@@ -1,8 +1,7 @@
 # Set the flags
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra  -mno-red-zone -mno-80387 -mno-mmx -mcmodel=kernel -fno-use-cxa-atexit")
-
-# Disable certain warnings
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -mno-red-zone -mno-80387 -mno-mmx -mcmodel=kernel -fno-use-cxa-atexit -m64")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function") # Warnings
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fstack-protector-all") # Debug
 
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "-f elf64")
@@ -51,19 +50,23 @@ endfunction()
 BUILD_KERNEL(MaxOSk64_nosym)
 
 # Generate symbols
+SET(SYMBOLS_HEADER "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
+SET(SYMBOLS_HEADER_TMP "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h.tmp")
+SET(SYMBOLS_HEADER_DEP "${CMAKE_BINARY_DIR}/generated/symbols.dep")
+SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
 SET(OBJCOPY "${CMAKE_SOURCE_DIR}/toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy")
 SET(SYM_ELF "${CMAKE_BINARY_DIR}/MaxOS.sym")
-SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
-SET(SYMBOLS_OUT "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
 ADD_CUSTOM_COMMAND(
-        OUTPUT ${SYMBOLS_OUT}
-        COMMAND ${OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
-        COMMAND ${GEN_SYM_SCRIPT} ${SYM_ELF} ${SYMBOLS_OUT}
-        DEPENDS MaxOSk64_nosym ${GEN_SYM_SCRIPT}
+        OUTPUT      ${SYMBOLS_HEADER_DEP}
+        COMMAND     ${OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
+        COMMAND     ${GEN_SYM_SCRIPT} ${SYM_ELF} ${SYMBOLS_HEADER_TMP}
+        COMMAND     ${CMAKE_COMMAND} -E copy_if_different "${SYMBOLS_HEADER_TMP}" "${SYMBOLS_HEADER}"
+        COMMAND     ${CMAKE_COMMAND} -E remove "${SYMBOLS_HEADER_TMP}"
+        DEPENDS     MaxOSk64_nosym ${GEN_SYM_SCRIPT}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Generating symbols.h from ${SYM_ELF}"
+        COMMENT     "Generating symbols.h from ${SYM_ELF}"
 )
-ADD_CUSTOM_TARGET(GenerateSymbols DEPENDS ${SYMBOLS_OUT})
+ADD_CUSTOM_TARGET(GenerateSymbols DEPENDS ${SYMBOLS_HEADER_DEP})
 ADD_DEPENDENCIES(GenerateSymbols MaxOSk64_nosym)
 
 # Build final kernel

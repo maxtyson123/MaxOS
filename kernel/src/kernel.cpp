@@ -58,7 +58,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	// Initialise the logger
 	Logger logger;
 	SerialConsole serial_console(&logger);
-	Logger::INFO() << "MaxOS Booted Successfully\n";
+	Logger::INFO() << "MaxOS Booted Successfully 0x\n";
 
 	Logger::HEADER() << "Stage {1}: System Initialisation\n";
 	Multiboot multiboot(addr, magic);
@@ -106,7 +106,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 // TODO:
 //  - SMP
+//  - Redo static constants
 //  - Test suite of common functions & other statics (paths)
 //  - Class & Struct docstrings
-//  - Logo on fail in center
 //  - Sanitize syscall input and only need reource syscalls?

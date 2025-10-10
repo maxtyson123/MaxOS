@@ -21,29 +21,22 @@ AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(s
 	m_using_new_acpi = multiboot->old_acpi() == nullptr;
 	Logger::DEBUG() << "CPU Supports " << (m_using_new_acpi ? "New" : "Old") << " ACPI\n";
 
-	if (m_using_new_acpi) {
-
-		// Get the RSDP & XSDT
+	if (m_using_new_acpi)
 		m_rsdp2 = (RSDPDescriptor2*) (multiboot->new_acpi() + 1);
-		m_xsdt = (XSDT*) PhysicalMemoryManager::to_higher_region((uint64_t) m_rsdp2->xsdt_address);
-	} else {
-
-		// Get the RSDP & RSDT
+	else
 		m_rsdp = (RSDPDescriptor*) (multiboot->old_acpi() + 1);
-		m_rsdt = (RSDT*) PhysicalMemoryManager::to_higher_region((uint64_t) m_rsdp->rsdt_address);
-	}
 
 	// Map the XSDT/RSDT
 	uint64_t physical_address = m_using_new_acpi ? m_rsdp2->xsdt_address : m_rsdp->rsdt_address;
-	auto virtual_address = (uint64_t) PhysicalMemoryManager::to_higher_region(physical_address);
-	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) PhysicalMemoryManager::align_direct_to_page(physical_address), (virtual_address_t*) virtual_address, Present | Write);
-	Logger::DEBUG() << "XSDT/RSDT: physical: 0x" << physical_address << ", virtual: 0x" << virtual_address << "\n";
+	void* virtual_address = map_descriptor(physical_address);
+	ASSERT(virtual_address != nullptr, "Failed to map ACPI table");
+	Logger::DEBUG() << "XSDT/RSDT: physical: 0x" << physical_address << ", virtual: 0x" << (uint64_t)virtual_address << "\n";
 
-	// Reserve the XSDT/RSDT
-	PhysicalMemoryManager::s_current_manager->reserve( m_using_new_acpi ? (uint64_t) m_rsdp2->xsdt_address : (uint64_t) m_rsdp->rsdt_address);
-
-	// Load the header
-	m_header = m_using_new_acpi ? &m_xsdt->header : &m_rsdt->header;
+	// Load
+	if (m_using_new_acpi)
+		m_xsdt = (XSDT*)virtual_address;
+	else
+		m_rsdt = (RSDT*)virtual_address;
 
 	// Map the Tables
 	Logger::DEBUG() << "Mapping ACPI Tables\n";
@@ -60,12 +53,13 @@ AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface(
  *
  * @param size_of_header The size of the tables
  */
-void AdvancedConfigurationAndPowerInterface::map_tables(uint8_t size_of_tables) {
+void AdvancedConfigurationAndPowerInterface::map_tables(uint8_t pointer_size) {
 
-	for (uint32_t i = 0; i < (m_header->length - sizeof(ACPISDTHeader)) / size_of_tables; i++) {
+	size_t entries = (m_header->length - sizeof(ACPISDTHeader)) / pointer_size;
+	for (uint32_t i = 0; i < entries; i++) {
 
 		// Get the address (aligned to page)
-		auto address = (uint64_t) (m_using_new_acpi ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
+		auto address = (uint64_t) (m_using_new_acpi ? m_xsdt->pointers[i] : get_rsdt_pointer(i));
 		address = PhysicalMemoryManager::align_direct_to_page((size_t) address);
 
 		// Map to the higher half
@@ -75,6 +69,49 @@ void AdvancedConfigurationAndPowerInterface::map_tables(uint8_t size_of_tables) 
 		PhysicalMemoryManager::s_current_manager->reserve(address);
 	}
 
+}
+
+virtual_address_t* AdvancedConfigurationAndPowerInterface::map_descriptor(uint64_t physical_address) {
+
+	// Get the base page
+	uint64_t page = PhysicalMemoryManager::align_direct_to_page(physical_address);
+	uint64_t offset = physical_address - page;
+
+	// Map that page
+	virtual_address_t* virtual_address = PhysicalMemoryManager::to_io_region(page);
+	PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page, virtual_address, Present | Write);
+	PhysicalMemoryManager::s_current_manager -> reserve(page);
+
+	// Read the length
+	m_header = (ACPISDTHeader*)((uint8_t*)virtual_address + offset);
+	ASSERT(m_header->length >= sizeof(ACPISDTHeader), "ACPI table too short");
+
+	// Where to stop looping
+	uint64_t end = page + m_header->length - 1;
+	end = PhysicalMemoryManager::align_direct_to_page(end);
+
+	// Map the remaining pages
+	for (uint64_t page_i = page + PhysicalMemoryManager::s_page_size; page_i <= end; page_i += PhysicalMemoryManager::s_page_size) {
+		virtual_address_t* virtual_i = PhysicalMemoryManager::to_io_region(page_i);
+
+		PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page_i, virtual_i, Present | Write);
+		PhysicalMemoryManager::s_current_manager->reserve(page_i);
+	}
+
+	return (void*) ((uint8_t*) PhysicalMemoryManager::to_io_region(page) + offset);
+}
+
+uint64_t AdvancedConfigurationAndPowerInterface::get_rsdt_pointer(size_t index) {
+	uint8_t* raw = (uint8_t*) m_rsdt;
+	size_t offset = sizeof(ACPISDTHeader) + index * sizeof(uint32_t);
+
+	// Ensure offset is within mapped header length (optional but safe)
+	ASSERT(offset + sizeof(uint32_t) <= m_header->length, "RSDT index out of bounds");
+
+	// Read the pointer manually //TODO: Doesnt really solve the issue
+	uint32_t value;
+	memcpy(&value, raw + offset, sizeof(uint32_t));
+	return value;
 }
 
 /**
@@ -113,13 +150,13 @@ ACPISDTHeader* AdvancedConfigurationAndPowerInterface::find(char const* signatur
 	for (size_t i = 0; i < entries; ++i) {
 
 		// Get the entry
-		auto* header = (ACPISDTHeader*) (m_using_new_acpi ? m_xsdt->pointers[i] : m_rsdt->pointers[i]);
+		auto* header = (ACPISDTHeader*) (m_using_new_acpi ? m_xsdt->pointers[i] : get_rsdt_pointer(i));
 
 		// Move the header to the higher half
 		header = (ACPISDTHeader*) PhysicalMemoryManager::to_io_region((uint64_t) header);
 
 		// Check if the signature matches
-		if (strncmp(header->signature, signature, 4) != 0)
+		if (strncmp(header->signature, signature, 4))
 			return header;
 	}
 

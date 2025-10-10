@@ -55,7 +55,9 @@ system::cpu_status_t* GlobalScheduler::handle_interrupt(system::cpu_status_t* st
 	if(!s_instance || !s_instance->m_active)
 		return status;
 
-	return core_scheduler()->schedule(status);
+	auto s = core_scheduler()->schedule(status);
+	ASSERT(s->rip != 0, "Cant run a empty state\n");
+	return s;
 }
 
 /**
@@ -64,7 +66,7 @@ system::cpu_status_t* GlobalScheduler::handle_interrupt(system::cpu_status_t* st
  * @param current where to resume this thread to
  */
 system::cpu_status_t* GlobalScheduler::yield(cpu_status_t* current) {
-	current_thread()->execution_state = current;
+	current_thread()->execution_state = *current;
 	return core_scheduler()->yield();
 }
 
@@ -204,10 +206,12 @@ uint64_t GlobalScheduler::add_thread(Thread* thread) {
 	// Find the core with the least threads
 	uint64_t core_id = 0;
 	Scheduler* scheduler = CPU::cores[core_id]->scheduler;
-	for(; core_id < CPU::cores.size(); core_id++){
-		auto core_scheduler = CPU::cores[core_id]->scheduler;
-		if(core_scheduler->thread_amount() > scheduler->thread_amount())
+	for(const auto& core : CPU::cores){
+		auto core_scheduler = core->scheduler;
+		if(core_scheduler->thread_amount() < scheduler->thread_amount()){
+			core_id = core->id;
 			scheduler = core_scheduler;
+		}
 	}
 
 	// Save the tid
@@ -257,6 +261,9 @@ system::cpu_status_t* GlobalScheduler::force_remove_process(Process* process) {
  * @return The current process, or nullptr if not found
  */
 Process* GlobalScheduler::current_process() {
+	if(!s_instance || !s_instance ->m_active)
+		return nullptr;
+
 	return core_scheduler()->current_process();
 }
 
@@ -376,8 +383,10 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 	// Get the current state
 	Thread* current_thread = m_threads[m_next_thread_index];
 
+	ASSERT(cpu_state->rip != 0, "Cant save a empty state\n");
+
 	// Save the executing thread state
-	current_thread->execution_state = cpu_state;
+	current_thread->execution_state = *cpu_state;
 	current_thread->save_sse_state();
 	if (current_thread->thread_state == ThreadState::RUNNING)
 		current_thread->thread_state = ThreadState::READY;
@@ -398,7 +407,7 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 			// If the wake-up time hasn't occurred yet, run the next thread
 			if (current_thread->wakeup_time < s_ticks_per_event){
 				current_thread->wakeup_time -= s_ticks_per_event;
-				return schedule_next(current_thread->execution_state);
+				return schedule_next(&current_thread->execution_state);
 			}
 
 			break;
@@ -442,7 +451,7 @@ cpu_status_t* Scheduler::load_process(Process* process, Thread* thread) {
 	MemoryManager::switch_active_memory_manager(process->memory_manager);
 	CPU::executing_core() -> tss.rsp0 = thread->tss_pointer();
 
-	return thread->execution_state;
+	return &thread->execution_state;
 }
 
 /**
@@ -502,7 +511,7 @@ cpu_status_t* Scheduler::yield() {
 
 	// If this is the only thread, can't yield
 	if (m_threads.size() <= 1)
-		return current_thread()->execution_state;
+		return &current_thread()->execution_state;
 
 	// Set the current thread to waiting if running
 	auto thread = current_thread();
@@ -510,7 +519,7 @@ cpu_status_t* Scheduler::yield() {
 		thread->thread_state = ThreadState::READY;
 
 	// Schedule the next thread
-	return schedule_next(thread->execution_state);
+	return schedule_next(&thread->execution_state);
 }
 
 /**
@@ -583,7 +592,7 @@ cpu_status_t* Scheduler::force_remove_process(Process* process) {
 
 	// Process will be dead now so run the next process (don't care about the execution state being outdated as it is being
 	// removed regardless)
-	return schedule_next(current_thread()->execution_state);
+	return schedule_next(&current_thread()->execution_state);
 }
 
 /**

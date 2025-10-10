@@ -5,6 +5,8 @@
 #ifndef MAXOS_RUNTIME_CPLUSPLUS_H
 #define MAXOS_RUNTIME_CPLUSPLUS_H
 
+#include <stdint.h>
+
 namespace MaxOS {
     namespace runtime {
 
@@ -20,10 +22,6 @@ namespace MaxOS {
 
       struct atexit_func_entry_t
       {
-        /*
-	* Each member is at least 4 bytes large. Such that each entry is 12bytes.
-	* 128 * 12 = 1.5KB exact.
-	**/
         void (*destructor_func)(void *);
         void *obj_ptr;
         void *dso_handle;
@@ -31,6 +29,10 @@ namespace MaxOS {
 
       int __cxa_atexit(void (*f)(void *), void *objptr, void *dso);
       void __cxa_finalize(void *f);
+
+	  // Stack Gaurd
+	  uintptr_t __stack_chk_guard = 0x595e9fbd94fda766;
+	  void __stack_chk_fail(void);
 
       }
     }

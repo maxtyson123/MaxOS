@@ -10,6 +10,7 @@
 #include <system/multiboot.h>
 #include <common/string.h>
 #include <memory/memorymanagement.h>
+#include <memory/memoryIO.h>
 #include <memory/physical.h>
 
 namespace MaxOS {
@@ -67,6 +68,10 @@ namespace MaxOS {
           static bool validate(const char*descriptor, size_t length);
 
           void map_tables(uint8_t size_of_table);
+	      memory::virtual_address_t* map_descriptor(uint64_t physical);
+
+	      uint64_t get_rsdt_pointer(size_t index);
+
           bool valid_checksum();
 
         public:

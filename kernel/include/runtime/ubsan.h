@@ -93,7 +93,7 @@ namespace MaxOS {
               UBSanHandler();
               ~UBSanHandler();
 
-              static void handle(source_location_t location);
+              static void handle(source_location_t location, const char* msg);
 
               static void print_type_mismatch(type_mismatch_info_t* info, uintptr_t ptr);
               static void print_type_mismatch_v1(type_mismatch_info_v1_t* info, uintptr_t ptr);

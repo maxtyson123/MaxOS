@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include <common/vector.h>
+#include <stdarg.h>
 
 namespace MaxOS {
 
@@ -42,15 +43,18 @@ namespace MaxOS {
 
           void copy(String const &other);
 
+		  static String formatted(char const *format, ...);
+		  static String formatted(char const *format, va_list parameters);
+
           [[nodiscard]] int length(bool count_ansi = true) const;
           char* c_str();
           const char* c_str() const;
 
           bool starts_with(String const &other);
-          String substring(int start, int length) const;
+          [[nodiscard]] String substring(int start, int length) const;
 
-          common::Vector<String> split(String const &delimiter) const;
-          String strip(char strip_char = ' ') const;
+          [[nodiscard]] common::Vector<String> split(String const &delimiter) const;
+          [[nodiscard]] String strip(char strip_char = ' ') const;
 
 
           [[nodiscard]] String center(int width, char fill = ' ') const;
@@ -78,15 +82,6 @@ namespace MaxOS {
           char& operator [] (int index) const;
 
     } string;
-
-	//           String(char const* string);
-	//          String(uint8_t const* string, int length);
-	//          String();
-	//          explicit String();
-	//          explicit String(uint64_t value);
-	//          explicit String(float value);
-	//		  explicit String(bool value);
-
 
 	class StringBuilder {
 		public:

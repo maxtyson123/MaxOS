@@ -221,38 +221,7 @@ void Logger::printf(char const *format, ...) {
 	va_list parameters;
 	va_start(parameters, format);
 
-	// Loop through the format string
-	for (; *format != '\0'; format++) {
-
-		// If it is not a %, print the character
-		if (*format != '%') {
-			write_char(*format);
-			continue;
-		}
-
-		// Move to the next character
-		format++;
-		switch (*format) {
-			case 'd': {
-				// Print a decimal
-				int number = va_arg (parameters, int);
-				write_int(number);
-				break;
-			}
-			case 'x': {
-				// Print a hex
-				uint64_t number = va_arg (parameters, uint64_t);
-				write_hex(number);
-				break;
-			}
-			case 's': {
-				// Print a string
-				char *str = va_arg (parameters, char*);
-				write(str);
-				break;
-			}
-		}
-	}
+	write(String::formatted(format, parameters));
 }
 
 /**
@@ -267,12 +236,11 @@ void Logger::ASSERT(bool condition, char const *message, ...) {
 	if (condition)
 		return;
 
-	// Print the message
-	s_active_logger->set_log_level(LogLevel::ERROR);
-	s_active_logger->printf(message);
+	va_list parameters;
+	va_start(parameters, message);
 
 	// Hang the system
-	system::CPU::PANIC("Check previous logs for more information");
+	system::CPU::PANIC(String::formatted(message, parameters).c_str());
 }
 
 /**

@@ -321,7 +321,10 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 	bool instruction_fetch = (status->error_code & 0x10) != 0;
 	uint64_t faulting_address;
 	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
-	uint64_t core_id = CPU::executing_core()->id;
+
+	// Get the core that the fault happened on
+	auto core = CPU::executing_core();
+	uint64_t core_id = core ? core->id : 0;
 
 	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
 
@@ -346,8 +349,11 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
  */
 cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* status) {
 
+	// Get the core that the fault happened on
+	auto core = CPU::executing_core();
+	uint64_t core_id = core ? core->id : 0;
+
 	uint64_t error_code = status->error_code;
-	uint64_t core_id = CPU::executing_core()->id;
 	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " c" << core_id << "\n";
 
 	// Try to avoid the panic
