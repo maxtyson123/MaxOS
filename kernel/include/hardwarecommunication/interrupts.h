@@ -159,6 +159,8 @@ namespace MaxOS {
                 void activate();
                 void deactivate();
 
+	            static void ForceInterruptReturn(system::cpu_status_t* state);
+
         };
     }
 }

@@ -45,6 +45,8 @@ namespace MaxOS {
 
 				static void activate();
 				static void deactivate();
+				static bool is_active();
+
 				void balance();
 
 				static void load_multiboot_elfs(system::Multiboot* multiboot);

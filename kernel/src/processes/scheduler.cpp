@@ -328,6 +328,10 @@ Scheduler* GlobalScheduler::core_scheduler() {
 	return CPU::executing_core()->scheduler;
 }
 
+bool GlobalScheduler::is_active() {
+	return s_instance->m_active;
+}
+
 
 Scheduler::Scheduler()
 : m_next_thread_index(0),
@@ -382,8 +386,8 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
 	// Get the current state
 	Thread* current_thread = m_threads[m_next_thread_index];
-
-	ASSERT(cpu_state->rip != 0, "Cant save a empty state\n");
+	Process* owner_process = current_process();
+	auto old_tid = m_next_thread_index;
 
 	// Save the executing thread state
 	current_thread->execution_state = *cpu_state;
@@ -392,42 +396,49 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 		current_thread->thread_state = ThreadState::READY;
 
 	// Find a free thread to run
-	m_next_thread_index++;
-	m_next_thread_index %= m_threads.size();
+	while ((++m_next_thread_index) != old_tid){
+		m_next_thread_index %= m_threads.size();
 
-	// Get the current thread
-	current_thread = m_threads[m_next_thread_index];
-	Process* owner_process = current_process();
+		// Get the current thread
+		current_thread = m_threads[m_next_thread_index];
+		owner_process = current_process();
 
-	// Handle state changes
-	switch (current_thread->thread_state) {
+		// Handle state changes
+		switch (current_thread->thread_state) {
 
-		case ThreadState::SLEEPING:
+			case ThreadState::SLEEPING:
 
-			// If the wake-up time hasn't occurred yet, run the next thread
-			if (current_thread->wakeup_time < TICKS_PER_EVENT){
-				current_thread->wakeup_time -= TICKS_PER_EVENT;
-				return schedule_next(&current_thread->execution_state);
-			}
-
-			break;
-
-		case ThreadState::STOPPED:
-
-			// Find the process that has the thread and remove it
-			for (auto thread: owner_process->threads()) {
-				if (thread == current_thread) {
-					owner_process->remove_thread(thread->tid); //TODO: Remove by reference
-					break;
+				// If the wake-up time hasn't occurred yet, run the next thread
+				if (current_thread->wakeup_time > TICKS_PER_EVENT){
+					current_thread->wakeup_time -= TICKS_PER_EVENT;
+					continue;
 				}
-			}
 
-			// Remove the thread
-			m_threads.erase(m_threads.begin() + m_next_thread_index);
-			return schedule_next(cpu_state);
+				break;
 
-		default:
-			break;
+			case ThreadState::STOPPED:
+
+				// Find the process that has the thread and remove it
+				for (auto thread: owner_process->threads()) {
+					if (thread == current_thread) {
+						owner_process->remove_thread(thread->tid); //TODO: Remove by reference
+						break;
+					}
+				}
+
+				// Remove the thread
+				m_threads.erase(m_threads.begin() + m_next_thread_index);
+				if(owner_process->threads().empty())
+					remove_process(owner_process);
+				continue;
+
+			case ThreadState::WAITING:
+				continue;
+
+			default:
+				break;
+		}
+		break;
 	}
 
 	// Load the thread's state

@@ -68,6 +68,8 @@ namespace MaxOS
 
               void save_sse_state();
               void restore_sse_state();
+
+			  void save_cpu_state();
         };
 
         /**

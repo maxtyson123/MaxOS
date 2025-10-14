@@ -49,6 +49,15 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
     iretq
 %endmacro
 
+
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE]
+_ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE:
+
+    mov rsp, rdi         ; use the returned context
+    restore_context
+    add rsp, 16
+    iretq
+
 %macro save_context 0
     push rax
     push rbx

@@ -105,6 +105,63 @@ void Thread::restore_sse_state() {
 	asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
 }
 
+void Thread::save_cpu_state() {
+	asm volatile(
+			// Store return address before stack is modified
+			"movq (%%rsp), %%rax\n"
+
+			// Store RDI before stack is modified
+			"pushq %%rdi\n"
+			"movq %0, %%rdi\n"
+
+			// Store general purpose
+			"movq %%r15, 0x00(%%rdi)\n"
+			"movq %%r14, 0x08(%%rdi)\n"
+			"movq %%r13, 0x10(%%rdi)\n"
+			"movq %%r12, 0x18(%%rdi)\n"
+			"movq %%r11, 0x20(%%rdi)\n"
+			"movq %%r10, 0x28(%%rdi)\n"
+			"movq %%r9,  0x30(%%rdi)\n"
+			"movq %%r8,  0x38(%%rdi)\n"
+			"movq %%rdi, 0x40(%%rdi)\n"
+			"movq %%rsi, 0x48(%%rdi)\n"
+			"movq %%rbp, 0x50(%%rdi)\n"
+			"movq %%rdx, 0x58(%%rdi)\n"
+			"movq %%rcx, 0x60(%%rdi)\n"
+			"movq %%rbx, 0x68(%%rdi)\n"
+			"movq %%rax, 0x70(%%rdi)\n"
+
+			// Reserved
+			"movq $0,    0x78(%%rdi)\n"
+			"movq $0,    0x80(%%rdi)\n"
+
+			// RIP from earlier
+			"movq %%rax, 0x88(%%rdi)\n"
+
+			// Get cs
+			"xorq %%rax, %%rax\n"
+			"movw %%cs, %%ax\n"
+			"movq %%rax, 0x90(%%rdi)\n"
+
+			// Store flags
+			"pushfq\n"
+			"popq %%rax\n"
+			"movq %%rax, 0x98(%%rdi)\n"
+
+			// Get RSP and SS
+			"movq %%rsp, 0xA0(%%rdi)\n"
+			"xorq %%rax, %%rax\n"
+			"movw %%ss, %%ax\n"
+			"movq %%rax, 0xA8(%%rdi)\n"
+
+			// Restore RDI
+			"popq %%rdi\n"
+			:
+			: "r" (&execution_state)
+			: "rax", "cc", "memory"
+			);
+}
+
 /**
  * @brief Base Constructor for the Process
  *
