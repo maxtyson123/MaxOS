@@ -16,6 +16,7 @@ UBSanHandler::~UBSanHandler() = default;
 /**
  * @brief Handles the UBSan error (currently only printing the location and panicking)
  * @param location The location of the error
+ * @param msg The message that informs about the error
  */
 void UBSanHandler::handle(source_location_t location, const char* msg) {
 

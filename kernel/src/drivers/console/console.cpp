@@ -121,7 +121,7 @@ void Console::put_character(uint16_t x, uint16_t y, char c, ConsoleColour foregr
  *
  * @param x The x coordinate of the string
  * @param y The y coordinate of the string
- * @param s The string to put on the console
+ * @param string The string to put on the console
  * @param foreground The foreground color of the string
  * @param background The background color of the string
  */
@@ -415,7 +415,7 @@ void ConsoleStream::write_char(char c) {
 
     // If the character placement is more than the width of the console go on a new line
     if(m_cursor_x >= m_console->width() && c != '\n'){
-        lineFeed();
+	    line_feed();
         write("             ");
     }
 

@@ -72,7 +72,7 @@ namespace MaxOS{
 		        void increase_size();
 
                 void iterate(MapIterationHandler<Key, Value>* handler);
-                void iterate(void callback(Key&, Value&));
+	            void iterate(void (*callback)(Key &, Value &));
 
         };
 

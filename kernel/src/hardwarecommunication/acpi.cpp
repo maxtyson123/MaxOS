@@ -51,7 +51,7 @@ AdvancedConfigurationAndPowerInterface::~AdvancedConfigurationAndPowerInterface(
 /**
  * @brief Maps the tables into the higher half
  *
- * @param size_of_header The size of the tables
+ * @param pointer_size The size of the tables
  */
 void AdvancedConfigurationAndPowerInterface::map_tables(uint8_t pointer_size) {
 

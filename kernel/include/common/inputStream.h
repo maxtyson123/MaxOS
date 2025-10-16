@@ -134,14 +134,14 @@ namespace MaxOS{
         ///_______________________________________________TEMPLATES_________________________________________________________________///
 
         /**
-         * @breif Creates a new InputStreamProcessor
+         * @brief Creates a new InputStreamProcessor
          *
          * @tparam Type the type of data the stream is handling
          */
         template<class Type> InputStreamEventHandler<Type>::InputStreamEventHandler() = default;
 
         /**
-         * @breif Destroys the InputStreamProcessor and disconnects it from all streams
+         * @brief Destroys the InputStreamProcessor and disconnects it from all streams
          *
          * @tparam Type the type of data the stream is handling
          */
@@ -154,17 +154,16 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Called when data is read from a stream (overridden by subclasses)
+         * @brief Called when data is read from a stream (overridden by subclasses)
          *
          * @tparam Type the type of data the stream is handling
-         * @param read_element The element that was read from the stream
          */
         template<class Type> void InputStreamEventHandler<Type>::on_stream_read(Type) {
 
         }
 
         /**
-         * @breif Called when a stream has finished. Removes the stream from the array of streams
+         * @brief Called when a stream has finished. Removes the stream from the array of streams
          *
          * @tparam Type The type of data the stream is handling
          * @param stream The stream that has finished
@@ -177,7 +176,7 @@ namespace MaxOS{
 
 
         /**
-         * @breif Creates a new InputStreamProcessor
+         * @brief Creates a new InputStreamProcessor
          *
          * @tparam Type The type of data the stream is handling
          * @tparam ProcessorType The type of data to convert the data into via the processor
@@ -190,7 +189,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Creates a new InputStreamProcessor
+         * @brief Creates a new InputStreamProcessor
          *
          * @tparam Type The type of data the stream is handling
          * @tparam ProcessorType The type of data to convert the data into via the processor
@@ -204,7 +203,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Destroys the InputStreamProcessor
+         * @brief Destroys the InputStreamProcessor
          *
          * @tparam Type  The type of data the stream is handling
          * @tparam ProcessorType The type of data to convert the data into via the processor
@@ -212,7 +211,7 @@ namespace MaxOS{
         template<class Type, class ProcessorType> InputStreamProcessor<Type, ProcessorType>::~InputStreamProcessor() = default;
 
         /**
-         * @breif Called when a stream has finished. Passes the event on to the handlers and then removes the stream from the array of streams
+         * @brief Called when a stream has finished. Passes the event on to the handlers and then removes the stream from the array of streams
          *
          * @tparam Type The type of data the stream is handling
          * @tparam ProcessorType The type of data to convert the data into via the processor
@@ -230,14 +229,14 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Creates a new InputStreamSocket
+         * @brief Creates a new InputStreamSocket
          *
          * @tparam Type The type of data the stream is handling
          */
         template<class Type> InputStreamSocket<Type>::InputStreamSocket() = default;
 
         /**
-         * @breif Creates a new InputStreamSocket and connects it to the handler
+         * @brief Creates a new InputStreamSocket and connects it to the handler
          *
          * @tparam Type The type of data the stream is handling (and the sockets processor type)
          * @param processor_handler The handler to pass to InputStreamProcessor
@@ -249,14 +248,14 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Destroys the InputStreamSocket
+         * @brief Destroys the InputStreamSocket
          *
          * @tparam Type The type of data the stream is handling
          */
         template<class Type> InputStreamSocket<Type>::~InputStreamSocket() = default;
 
         /**
-         * @breif Called when data is read from a stream. Passes the event on to the internetProtocolHandlers
+         * @brief Called when data is read from a stream. Passes the event on to the internetProtocolHandlers
          *
          * @tparam Type The type of data the stream is handling
          * @param read_element The element that was read from the stream
@@ -270,7 +269,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Creates a new InputStreamBuffer
+         * @brief Creates a new InputStreamBuffer
          *
          * @tparam Type The type of data the stream is handling
          * @param event_fire_element The element to fire the event on
@@ -284,14 +283,14 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Destroys the InputStreamBuffer
+         * @brief Destroys the InputStreamBuffer
          *
          * @tparam Type The type of data the stream is handling
          */
         template<class Type> InputStreamBuffer<Type>::~InputStreamBuffer() = default;
 
         /**
-         * @breif Called when data is read from a stream. Adds the data to the buffer and checks if the event should be fired
+         * @brief Called when data is read from a stream. Adds the data to the buffer and checks if the event should be fired
          *
          * @tparam Type
          * @param read_element
@@ -315,7 +314,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Called when a stream has finished. Flushes the buffer if there is any data in it
+         * @brief Called when a stream has finished. Flushes the buffer if there is any data in it
          *
          * @tparam Type The type of data the stream is handling
          * @param stream The stream that has finished
@@ -331,7 +330,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Flushes the buffer by adding the termination element and firing an on read event (NOTE: The buffer is not cleared after this just overwritten)
+         * @brief Flushes the buffer by adding the termination element and firing an on read event (NOTE: The buffer is not cleared after this just overwritten)
          *
          * @tparam Type The type of data the stream is handling
          */
@@ -353,14 +352,14 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Creates a new GenericInputStream
+         * @brief Creates a new GenericInputStream
          *
          * @tparam Type The type of data the stream is handling
          */
         template<class Type> GenericInputStream<Type>::GenericInputStream() = default;
 
         /**
-         * @breif Creates a new GenericInputStream and connects it to the handler
+         * @brief Creates a new GenericInputStream and connects it to the handler
          *
          * @tparam Type The type of data the stream is handling
          * @param input_stream_event_handler The handler to handle the data
@@ -372,7 +371,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Destroys the GenericInputStream and disconnects all handlers
+         * @brief Destroys the GenericInputStream and disconnects all handlers
          *
          * @tparam Type The type of data the stream is handling
          */
@@ -384,7 +383,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Adds a inputStreamEventHandler to the list of internetProtocolHandlers
+         * @brief Adds a inputStreamEventHandler to the list of internetProtocolHandlers
          * @tparam Type The type of data the stream is handling
          * @param input_stream_event_handler The inputStreamEventHandler to add
          */
@@ -400,7 +399,7 @@ namespace MaxOS{
         }
 
         /**
-         * @breif Removes a handler from the list of handlers
+         * @brief Removes a handler from the list of handlers
          *
          * @tparam Type The type of data the stream is handling
          * @param input_stream_event_handler The handler to remove

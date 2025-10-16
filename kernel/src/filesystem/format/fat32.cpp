@@ -174,7 +174,6 @@ uint32_t Fat32Volume::allocate_cluster(uint32_t cluster, size_t amount) {
  * @brief Free a cluster in the FAT table
  *
  * @param cluster The base cluster to start from
- * @param full Weather the chain's length is 1 or not
  */
 void Fat32Volume::free_cluster(lba_t cluster) {
 

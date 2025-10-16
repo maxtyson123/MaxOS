@@ -414,6 +414,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
  * @brief Ensure the CPU must panic and prepare for it if so
  *
  * @param status The status of the CPU (if available)
+ * @param msg The message to print to diagnose the cause of the panic (prints when close program)
  * @return A CPU status to avoid having to panic or a nullptr if the CPU must panic
  */
 cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {

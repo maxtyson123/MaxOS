@@ -31,7 +31,7 @@ namespace MaxOS{
                 ~InternetControlMessageProtocol();
 
                 bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) final;
-                void RequestEchoReply(InternetProtocolAddress address);
+                void RequestEchoReply(InternetProtocolAddress ip_be);
         };
 
     }

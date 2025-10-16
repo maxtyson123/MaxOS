@@ -15,9 +15,10 @@ using namespace MaxOS::memory;
  * @brief Creates a new shared memory block
  *
  * @param name The name of the block
+ * @param size The size of the shared memory region
  */
-SharedMemory::SharedMemory(const string& name, size_t size, resource_type_t type)
-: Resource(name, size, type),
+SharedMemory::SharedMemory(const string& name, size_t size)
+: Resource(name, size, syscore::ResourceType::SHARED_MEMORY),
   m_size(size),
   name(name)
 {
@@ -113,6 +114,7 @@ SharedMessageEndpoint::~SharedMessageEndpoint() {
  *
  * @param buffer Where to write the message to
  * @param size Max size of the message to be read
+ * @param flags Unused
  * @return The amount of bytes read
  */
 int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
@@ -134,6 +136,7 @@ int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
  *
  * @param buffer The message to write to the endpoint
  * @param size The size of the message
+ * @param flags Unused
  * @return The amount of bytes written
  */
 int SharedMessageEndpoint::write(void const* buffer, size_t size, size_t flags) {

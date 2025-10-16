@@ -34,9 +34,9 @@ Logger::~Logger() {
 /**
  * @brief Adds an output stream to the logger
  *
- * @param output_stream The output stream to add
+ * @param log_writer The output stream to add
  */
-void Logger::add_log_writer(OutputStream *log_writer) {
+void Logger::add_log_writer(OutputStream* log_writer) {
 
 	// If the list is not empty
 	if (m_log_writer_count >= MAX_LOG_WRITERS)
@@ -56,9 +56,9 @@ void Logger::add_log_writer(OutputStream *log_writer) {
 /**
  * @brief Removes an output stream from the logger
  *
- * @param output_stream The output stream to remove
+ * @param log_writer The output stream to remove
  */
-void Logger::disable_log_writer(OutputStream *log_writer) {
+void Logger::disable_log_writer(OutputStream* log_writer) {
 
 	// If the list is empty
 	if (m_log_writer_count == 0)

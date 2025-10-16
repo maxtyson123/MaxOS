@@ -141,10 +141,8 @@ InterruptManager::~InterruptManager() {
  * @brief Sets an entry in the Interrupt Descriptor Table
  *
  * @param interrupt  Interrupt number
- * @param code_segment_selector_offset  Code segment
  * @param handler  Interrupt Handler
  * @param descriptor_privilege_level Descriptor Privilege Level
- * @param descriptor_type  Descriptor Type
  */
 void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), uint8_t descriptor_privilege_level) {
 

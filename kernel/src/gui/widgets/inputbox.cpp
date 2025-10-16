@@ -151,12 +151,13 @@ void InputBox::on_focus_lost() {
 /**
  * @brief Handles a keypress event by updating the rendered text in the input box
  *
- * @param keyDownCode The key being pressed
+ * @param key_down_code The key being pressed
+ * @param key_down_state The state of the key being pressed
  */
-void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
+void InputBox::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) {
 
 	// Handle the key press
-	switch (keyDownCode) {
+	switch (key_down_code) {
 		case KeyCode::backspace: {
 			if (cursor_position == 0)
 				break;
@@ -191,7 +192,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 		default: {
 
 			// If the key is a printable character, add it to the text
-			if (31 < (int) keyDownCode && (int) keyDownCode < 127) {
+			if (31 < (int) key_down_code && (int) key_down_code < 127) {
 				uint32_t length = cursor_position;
 
 				// Find the length of the text buffer
@@ -212,7 +213,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 
 				// Insert the new character
 				m_widget_text[cursor_position + 1] = m_widget_text[cursor_position];
-				m_widget_text[cursor_position] = (uint8_t) keyDownCode;
+				m_widget_text[cursor_position] = (uint8_t) key_down_code;
 				cursor_position++;
 			} else {
 
@@ -227,7 +228,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 	invalidate();
 
 	// Fire the text changed event
-	if (keyDownCode != KeyCode::leftArrow && keyDownCode != KeyCode::rightArrow)
+	if (key_down_code != KeyCode::leftArrow && key_down_code != KeyCode::rightArrow)
 		raise_event(new InputBoxTextChangedEvent(m_widget_text));
 
 }

@@ -72,7 +72,7 @@ DriverSelectorEventHandler::~DriverSelectorEventHandler() = default;
  *
  * @param driver The driver that was selected
  */
-void DriverSelectorEventHandler::on_driver_selected(Driver *) {
+void DriverSelectorEventHandler::on_driver_selected(Driver* driver) {
 }
 
 DriverSelector::DriverSelector() = default;

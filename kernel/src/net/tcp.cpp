@@ -148,9 +148,9 @@ uint32_t bigEndian16(uint16_t x)
 /**
  * @brief Handle the TCP message (provider end)
  *
- * @param srcIP_BE The source IP address
- * @param dstIP_BE The destination IP address
- * @param internetprotocolPayload The payload
+ * @param sourceIP The source IP address
+ * @param destinationIP The destination IP address
+ * @param payloadData The payload
  * @param size The size of the payload
  * @return True if data is to be sent back or false if not
  */
@@ -537,7 +537,7 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Listen(ui
  * @brief Bind a data handler to this socket
  *
  * @param socket The socket to bind the handler to
- * @param transmissionControlProtocolHandler The handler to bind
+ * @param handler The handler to bind
  */
 void TransmissionControlProtocolHandler::Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolPayloadHandler* handler)
 {

@@ -23,13 +23,13 @@ InternetControlMessageProtocol::~InternetControlMessageProtocol() = default;
  *
  * @param srcIP_BE  The source IP address of the packet
  * @param dstIP_BE  The destination IP address of the packet
- * @param internetprotocolPayload  The payload of the packet
+ * @param payloadData  The payload of the packet
  * @param size The size of the payload
 
  * @return True if the packet is to be sent back to the sender, false otherwise
  */
-bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProtocolAddress,
-                                                                   InternetProtocolAddress,
+bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProtocolAddress srcIP_BE,
+                                                                   InternetProtocolAddress dstIP_BE,
                                                                    uint8_t *payloadData,
                                                                    uint32_t size)
 {

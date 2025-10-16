@@ -161,9 +161,7 @@ bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bu
 /**
  * @brief Select the driver for the device
  *
- * @param driverManager device driver manager
- * @param interrupt_manager Interrupt manager
- * @return Driver for the device
+ * @param handler device driver event manager
  */
 void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler* handler) {
 
@@ -238,7 +236,6 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  * @brief Get the driver for the device
  *
  * @param dev Device descriptor
- * @param interrupt_manager Interrupt manager
  * @return Driver for the device, null pointer if there is no driver
  */
 Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev) {

@@ -476,7 +476,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t* physical_addre
 /**
  * @brief Maps a physical address to a virtual address
  *
- * @param physical The physical address
+ * @param physical_address The physical address
  * @param virtual_address The virtual address
  * @param flags The flags to set the mapping to
  * @param pml4_table The pml4 table to use
@@ -750,6 +750,7 @@ void PhysicalMemoryManager::reserve(uint64_t address) {
  *
  * @param address The start of the area
  * @param size The size of the area
+ * @param type The name for the region being reserved (not required, logging purposes only, defaults to unkown)
  */
 void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* type) {
 
@@ -786,6 +787,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
  * @brief Gets the physical address from a virtual address (if it exists)
  *
  * @param virtual_address The virtual address to get the physical address from
+ * @param pml4_root The address of the root pml to use
  * @return  The physical address or nullptr if it does not exist
  */
 physical_address_t* PhysicalMemoryManager::get_physical_address(virtual_address_t* virtual_address, uint64_t* pml4_root) {
@@ -804,6 +806,7 @@ physical_address_t* PhysicalMemoryManager::get_physical_address(virtual_address_
  *
  * @param virtual_address The virtual address of the page
  * @param flags The flags to set the page to
+ * @param pml4_root The address of the root pml to use
  */
 void PhysicalMemoryManager::change_page_flags(virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root) {
 
@@ -899,7 +902,7 @@ void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
 /**
  * @brief Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset
  *
- * @param physical_address The physical address in the direct map region
+ * @param virtual_address The physical address in the direct map region
  * @return The physical address
  */
 void* PhysicalMemoryManager::from_dm_region(uintptr_t virtual_address) {

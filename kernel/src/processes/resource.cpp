@@ -121,7 +121,6 @@ Resource* BaseResourceRegistry::get_resource(string const& name) {
  * @brief Registers a resource in the registry
  *
  * @param resource The resource to store
- * @param name The name of the resource (must not already be in use)
  * @return True if the register was successful, false if not
  */
 bool BaseResourceRegistry::register_resource(Resource* resource) {
@@ -216,7 +215,6 @@ void GlobalResourceRegistry::add_registry(resource_type_t type, BaseResourceRegi
 /**
  * @brief Adds a registry to the global list if there is not already one for that type
  *
- * @param type The type of registry being added
  * @param registry The registry to add
  */
 void GlobalResourceRegistry::remove_registry(BaseResourceRegistry* registry) {
@@ -257,8 +255,9 @@ common::Map<uint64_t, Resource*> ResourceManager::resources() {
 /**
  * @brief Registers a resource with the resource manager and then opens it
  *
- * @param resource The resource to register
+ * @param type The type of resource to register
  * @param name The name of the resource
+ * @param flags Per resource flags for opening
  * @return The handle id of the resource or 0 if failed
  */
 uint64_t ResourceManager::open_resource(resource_type_t type, string const& name, size_t flags) {

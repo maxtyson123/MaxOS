@@ -58,20 +58,19 @@ InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() = default;
  * @param size The size of the IP packet.
  * @return True if the packet was handled, false otherwise.
  */
-bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(net::InternetProtocolAddress,
-                                                                   net::InternetProtocolAddress,
-                                                                   uint8_t *,
-                                                                   uint32_t) {
+bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(net::InternetProtocolAddress srcIP_BE,
+                                                                   net::InternetProtocolAddress dstIP_BE,
+                                                                   uint8_t * internetprotocolPayload,
+                                                                   uint32_t size) {
     return false;
 }
 
 /**
  * @brief Sends an IP packet.
  *
- * @param dstIP_BE The destination IP address.
- * @param internetprotocolPayload The payload of the IP packet.
+ * @param destinationIP The destination IP address.
+ * @param payloadData The payload of the IP packet.
  * @param size The size of the IP packet.
- * @return True if the packet was sent, false otherwise.
  */
 void InternetProtocolPayloadHandler::Send(InternetProtocolAddress destinationIP, uint8_t *payloadData, uint32_t size) {
 
@@ -100,7 +99,7 @@ InternetProtocolHandler::~InternetProtocolHandler() = default;
 /**
  * @brief Called when an IP packet is received.
  *
- * @param etherframePayload The payload of the IP packet.
+ * @param ethernetframePayload The payload of the IP packet.
  * @param size The size of the IP packet.
  * @return True if the packet is to be sent back, false otherwise.
  */

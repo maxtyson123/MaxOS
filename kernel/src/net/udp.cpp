@@ -75,9 +75,9 @@ UserDatagramProtocolHandler::~UserDatagramProtocolHandler() = default;
 /**
  * @brief Handle the recivement of an UDP packet
  *
- * @param srcIP_BE The source IP address in big endian
- * @param dstIP_BE  The destination IP address in big endian
- * @param internetprotocolPayload The UDP payload
+ * @param sourceIP The source IP address in big endian
+ * @param destinationIP  The destination IP address in big endian
+ * @param payloadData The UDP payload
  * @param size The size of the UDP payload
  * @return True if the packet is to be sent back to the sender
  */
@@ -251,7 +251,7 @@ void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, const
  * @brief Binds a handler to the socket
  *
  * @param socket The socket to bind the handler to
- * @param userDatagramProtocolHandler The handler to bind
+ * @param userDatagramProtocolPayloadHandler The handler to bind
  */
 void UserDatagramProtocolHandler::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler) {
 

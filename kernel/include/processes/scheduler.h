@@ -90,7 +90,7 @@ namespace MaxOS {
 				Scheduler();
 				~Scheduler();
 
-				system::cpu_status_t* schedule(system::cpu_status_t* status);
+				system::cpu_status_t* schedule(system::cpu_status_t* cpu_state);
 				system::cpu_status_t* schedule_next(system::cpu_status_t* status);
 				system::cpu_status_t* yield();
 

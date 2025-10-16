@@ -157,12 +157,8 @@ uint32_t AMD_AM79C973::reset() {
 /**
  * @brief This function handles the interrupt for the device
  *
- * @param esp The stack pointer (where to return to)
 */
 void AMD_AM79C973::handle_interrupt() {
-
-
-
 
     // Similar to PIC, data needs to be read when an interrupt is sent, or it hangs
     registerAddressPort.write(0);                           // Tell device to read from register 0

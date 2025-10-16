@@ -76,22 +76,22 @@ Window::~Window() = default;
 /**
  * @brief Handles the mouse button being pressed.
  *
- * @param x The x coordinate of the mouse.
- * @param y The y coordinate of the mouse.
+ * @param mouse_x The x coordinate of the mouse.
+ * @param mouse_y The y coordinate of the mouse.
  * @param button The button that is pressed.
  */
-MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mouseY, uint8_t button) {
+MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouse_x, uint32_t mouse_y, uint8_t button) {
 
 	// Pass the mouse event to the children
-	drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouseX, mouseY, button);
+	drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouse_x, mouse_y, button);
 	Rectangle<int32_t> window_position = position();
 
 	// Bring the window to the front
 	bring_to_front();
 
 	// Convert the mouse coordinates to an int32_t
-	auto x = (int32_t) mouseX;
-	auto y = (int32_t) mouseY;
+	auto x = (int32_t) mouse_x;
+	auto y = (int32_t) mouse_y;
 
 	if (x <= frame_thickness) {
 		if (y <= frame_thickness)
@@ -129,6 +129,7 @@ MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mou
  * @brief Draws the window and its children.
  *
  * @param gc The graphics context to draw on.
+ * @param area The area to draw
  */
 void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) {
 

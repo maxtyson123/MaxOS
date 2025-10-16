@@ -339,9 +339,10 @@ void* operator new[](size_t size) throw() {
  * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
  *
  * @param pointer The pointer to the memory to allocate
+ * @param size The size of the memory to free - ignored in this implementation
  * @return The pointer to the memory
  */
-void* operator new(size_t, void* pointer) {
+void* operator new(size_t size, void* pointer) {
 
 	return pointer;
 }
@@ -349,10 +350,11 @@ void* operator new(size_t, void* pointer) {
 /**
  * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
  *
+ * @param size The size of the memory to free - ignored in this implementation
  * @param pointer The pointer to the memory to allocate
  * @return The pointer to the memory
  */
-void* operator new[](size_t, void* pointer) {
+void* operator new[](size_t size, void* pointer) {
 
 
 	return pointer;
@@ -396,8 +398,9 @@ void operator delete(void* pointer, size_t) {
  * @brief Overloaded delete operator, frees memory using the KERNEL memory manager
  *
  * @param pointer The pointer to the memory to free
+ * @param size The size of the memory to free - ignored in this implementation
  */
-void operator delete[](void* pointer, size_t) {
+void operator delete[](void* pointer, size_t size) {
 
 	// Handle the memory freeing
 	return MaxOS::memory::MemoryManager::kfree(pointer);

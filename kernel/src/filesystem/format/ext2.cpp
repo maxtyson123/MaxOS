@@ -60,7 +60,7 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 Ext2Volume::~Ext2Volume() = default;
 
 /**
- * @breif Write a single block from a buffer into onto the disk
+ * @brief Write a single block from a buffer into onto the disk
  *
  * @param block_num The block to update
  * @param buffer The buffer to read from
@@ -109,7 +109,7 @@ void Ext2Volume::write_inode(uint32_t inode_num, inode_t *inode) {
 }
 
 /**
- * @breif Reads a single block from the disk into a buffer
+ * @brief Reads a single block from the disk into a buffer
  *
  * @param block_num The block to read
  * @param buffer The buffer to read into
@@ -650,7 +650,8 @@ void InodeHandler::store_blocks(Vector<uint32_t> const &blocks) {
  * @brief Increase the size of the inode's storage capacity by allocating new blocks.
  *
  * @param amount The amount to grow to in bytes
- * @return
+ * @param flush Save the newly allocated chunks to disk, defaults to true
+ * @return The new toatal size of the file (size() + amount)
  */
 size_t InodeHandler::grow(size_t amount, bool flush) {
 
@@ -668,7 +669,7 @@ size_t InodeHandler::grow(size_t amount, bool flush) {
 	if (flush)
 		save();
 
-	return size() + amount;
+	return size() + amount; // TODO? should just be size() ?
 }
 
 /**

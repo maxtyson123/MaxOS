@@ -429,8 +429,7 @@ namespace MaxOS{
          * @tparam Type The type of the Vector
          * @param position The m_position of the element to remove
          */
-        template<class Type>
-        void Vector<Type>::erase(typename Vector<Type>::iterator position) {
+        template<class Type> void Vector<Type>::erase(typename Vector<Type>::iterator position) {
 
             // If the m_position is not in the Vector
             if (position < begin() || position >= end())

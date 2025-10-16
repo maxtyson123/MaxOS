@@ -13,7 +13,7 @@ using namespace MaxOS::memory;
 
 /**
  * @param frameHandler the handler for the ethernet frame
- * @param etherType the type of the protocol, which will be handled by this handler
+ * @param handledType the type of the protocol, which will be handled by this handler
  */
 EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* frameHandler, uint16_t handledType) {
 
@@ -41,7 +41,7 @@ bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t*, uint32_t)
 /**
  * @brief Send an packet via the backend driver
  *
- * @param dstMAC the destination MAC address
+ * @param destination the destination MAC address
  * @param data the data to send
  * @param size the size of the payload
  */
@@ -145,9 +145,9 @@ void EthernetFrameHandler::connectHandler(EthernetFramePayloadHandler *handler) 
 /**
  * @brief Send an packet via the backend driver
  *
- * @param dstMAC_BE the destination MAC address
- * @param etherType_BE the type of the protocol
- * @param buffer the data to send
+ * @param destinationMAC the destination MAC address
+ * @param frameType the type of the protocol
+ * @param data the data to send
  * @param size the size of the payload
  */
 void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t frameType, uint8_t* data, uint32_t size) {

@@ -199,7 +199,7 @@ Process::Process(const string& p_name, void (* _entry_point)(void*), void* args,
 /**
  * @brief Constructor for the Process class (from an elf, will free the elf memory after loading)
  *
- * @param name  The name of the process
+ * @param p_name  The name of the process
  * @param args  The arguments to pass to the process
  * @param arg_amount  The amount of arguments
  * @param elf  The elf file to load the process from

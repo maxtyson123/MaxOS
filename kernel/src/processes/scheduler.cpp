@@ -144,9 +144,7 @@ void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 }
 
 /**
- * @brief Get the header for the running processes
- *
- * @return a string in the form ({name}:t{tid}c{core})
+ * @brief Print the header for the running processes in the form ({name}:t{tid}c{core})
  */
 void GlobalScheduler::print_running_header() {
 
@@ -546,7 +544,6 @@ void Scheduler::activate() {
  * @brief Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped)
  *
  * @param process The process to remove
- * @param force If true, the process will be removed and so will all threads
  * @return -1 if the process has threads, 0 otherwise
  */
 uint64_t Scheduler::remove_process(Process* process) {

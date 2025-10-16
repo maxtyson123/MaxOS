@@ -27,7 +27,7 @@ namespace MaxOS {
 				common::Map<size_t, uintptr_t> m_mappings;
 
             public:
-                SharedMemory(const string& name, size_t size, resource_type_t type);
+                SharedMemory(const string& name, size_t size);
                 ~SharedMemory() final;
 
                 string name;

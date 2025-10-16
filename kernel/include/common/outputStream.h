@@ -45,7 +45,7 @@ namespace MaxOS{
                 OutputStream();
                 ~OutputStream();
 
-                virtual void lineFeed();
+                virtual void line_feed();
                 virtual void carriageReturn();
                 virtual void clear();
 
@@ -122,7 +122,6 @@ namespace MaxOS{
          * @brief write an element to the stream.
          *
          * @tparam Type The type of the elements that will be written to the stream.
-         * @param write_element The element that will be written to the stream.
          */
         template<class Type> void GenericOutputStream<Type>::write(Type) {
 

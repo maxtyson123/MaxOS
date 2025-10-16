@@ -94,7 +94,7 @@ namespace MaxOS
                   PeripheralComponentInterconnectController();
                   ~PeripheralComponentInterconnectController();
 
-                  void select_drivers(drivers::DriverSelectorEventHandler *handler) override;
+                  void select_drivers(drivers::DriverSelectorEventHandler* handler) override;
                   static drivers::Driver* get_driver(PeripheralComponentInterconnectDeviceDescriptor dev);
                   static void list_known_device(const PeripheralComponentInterconnectDeviceDescriptor& dev);
         };

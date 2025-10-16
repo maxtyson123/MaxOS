@@ -664,7 +664,6 @@ int strlen(const char *str) {
  *
  * @param base The base of the number (10 for decimal, 16 for hex)
  * @param number The number to convert
- * @param buffer The buffer to store the converted string
  *
  * @return The converted string
  */
@@ -697,7 +696,6 @@ char *itoa(int base, int64_t number) {
  * @brief Converts hex to string
  *
  * @param number The number to convert
- * @param buffer The buffer to store the converted string
  * @return The converted string
  */
 char *htoa(uint64_t number) {
@@ -720,7 +718,6 @@ char *htoa(uint64_t number) {
  * @brief Converts a float to a string
  *
  * @param number The number to convert
- * @param buffer The buffer to store the converted string
  * @return The converted string
  */
 char *ftoa(float number) {

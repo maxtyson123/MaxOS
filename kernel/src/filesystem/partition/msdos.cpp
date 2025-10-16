@@ -14,9 +14,9 @@ using namespace MaxOS::drivers::disk;
 /**
  * @brief read the partition table of a given hard disk
  *
- * @param hd The hard disk to read the partition table from
+ * @param disk The hard disk to read the partition table from
  */
-void MSDOSPartition::mount_partitions(Disk *hd) {
+void MSDOSPartition::mount_partitions(Disk* disk) {
 
 	// Read the MBR from the hard disk
 	MasterBootRecord mbr = {};

@@ -81,7 +81,7 @@ bool AddressResolutionProtocol::handleEthernetframePayload(uint8_t* etherframePa
 /**
  * @brief Request the MAC address of a given IP address.
  *
- * @param IP_BE The IP address in BigEndian.
+ * @param address The IP address in BigEndian.
  */
 void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress address) {
 
@@ -111,7 +111,7 @@ void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress addres
 /**
  * @brief Get the MAC address from an IP via ARP.
  *
- * @param IP_BE The IP address to get the MAC address from.
+ * @param address The IP address to get the MAC address from.
  * @return The MAC address of the IP address.
  */
 MediaAccessControlAddress AddressResolutionProtocol::Resolve(InternetProtocolAddress address) {

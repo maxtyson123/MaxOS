@@ -18,10 +18,9 @@ namespace MaxOS{
 
         namespace ethernet{
 
-            class AMD_AM79C973;
 
             /**
-             * @class AMD AM79C973
+             * @class AMD_AM79C973
              * @brief Driver for the AMD AM79C973 Ethernet Controller
              */
             class AMD_AM79C973 : public EthernetDriver, public hardwarecommunication::InterruptHandler{

@@ -47,10 +47,10 @@ Event<ClockEvents> *ClockEventHandler::on_event(Event<ClockEvents> *event) {
 /**
  * @brief Constructor for the Clock class
  *
- * @param interrupt_manager The interrupt manager
+ * @param apic The apic controller for this core
  * @param time_between_events The time between events in 10ths of a second
  */
-Clock::Clock(AdvancedProgrammableInterruptController *apic, uint16_t time_between_events)
+Clock::Clock(AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
 : InterruptHandler(0x20),
   m_apic(apic),
   m_ticks_between_events(time_between_events)

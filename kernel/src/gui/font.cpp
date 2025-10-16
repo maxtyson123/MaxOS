@@ -22,6 +22,8 @@ Font::~Font() = default;
  * @brief write the entire text to the screen
  * @param x The x coordinate of the text
  * @param y The y coordinate of the text
+ * @param foreground_colour The letter colour
+ * @param background_colour The background colour
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  */
@@ -48,6 +50,8 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
  *
  * @param x The x coordinate of the text
  * @param y The y coordinate of the text
+ * @param foreground_colour The letter colour
+ * @param background_colour The background colour
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  * @param limitArea The area of the text to draw
@@ -124,7 +128,7 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
  * @param text The text to get the height of
  * @return The height of the text
  */
-int32_t Font::get_text_height(string) {
+int32_t Font::get_text_height(string text) {
 
 	return 8;
 

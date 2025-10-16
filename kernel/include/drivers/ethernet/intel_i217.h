@@ -23,10 +23,10 @@ namespace MaxOS{
 
 
             /**
-             * @class Intel I217
+             * @class IntelI217
              * @brief Driver for the Intel I217 Ethernet Controller
              */
-            class intel_i217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
+            class IntelI217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
 
                 struct receiveDescriptor {
                     uint64_t bufferAddress;              // The address of the receive buffer

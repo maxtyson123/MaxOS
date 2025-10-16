@@ -48,10 +48,10 @@ void Disk::write(uint32_t sector, common::buffer_t const *data) {
  * @brief Write data to the disk
  *
  * @param sector The sector to write to
- * @param data_buffer The buffer to write the data into
- * @param amount The amount of data to write
+ * @param data The buffer to write the data into
+ * @param count The amount of data to write
  */
-void Disk::write(uint32_t sector, const buffer_t *data, size_t count) {
+void Disk::write(uint32_t sector, const buffer_t* data, size_t count) {
 }
 
 /**

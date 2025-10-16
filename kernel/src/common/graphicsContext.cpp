@@ -350,7 +350,7 @@ uint32_t GraphicsContext::height() const {
 }
 
 /**
- * @breif Gets the current color depth (bits per pixel)
+ * @brief Gets the current color depth (bits per pixel)
  * @return The color depth
  */
 uint32_t GraphicsContext::color_depth() const {

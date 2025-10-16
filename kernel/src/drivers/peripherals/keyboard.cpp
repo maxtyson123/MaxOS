@@ -20,7 +20,7 @@ KeyboardEventHandler::~KeyboardEventHandler() = default;
  * @param key_down_code The keycode of the key that was pressed
  * @param key_down_state The state of the keyboard when the key was pressed
  */
-void KeyboardEventHandler::on_key_down(KeyCode, KeyboardState) {
+void KeyboardEventHandler::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) {
 }
 
 /**
@@ -29,7 +29,7 @@ void KeyboardEventHandler::on_key_down(KeyCode, KeyboardState) {
  * @param key_up_code The keycode of the key that was released
  * @param key_up_state The state of the keyboard when the key was released
  */
-void KeyboardEventHandler::on_key_up(KeyCode, KeyboardState) {
+void KeyboardEventHandler::on_key_up(KeyCode key_up_code, KeyboardState key_up_state) {
 }
 
 /**

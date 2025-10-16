@@ -65,7 +65,7 @@ namespace MaxOS{
                     void on_focus() override;
                     void on_focus_lost() override;
 
-                    void on_key_down(drivers::peripherals::KeyCode keyDownCode, drivers::peripherals::KeyboardState keyDownState) override;
+                    void on_key_down(drivers::peripherals::KeyCode key_down_code, drivers::peripherals::KeyboardState key_down_state) override;
 
                     void update_text(const string&);
                     string text();

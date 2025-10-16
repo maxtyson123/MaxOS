@@ -118,6 +118,7 @@ void LocalAPIC::send_eoi() const {
  * @brief Send the init IPI to another apic
  *
  * @param apic_id The id of the apic to send to
+ * @param assert Is this an assert code (drive / release the signal)
  */
 void LocalAPIC::send_init(uint8_t apic_id, bool assert) {
 
@@ -294,7 +295,6 @@ uint32_t IOAPIC::read(uint32_t reg) const {
  *
  * @param reg The register to write to
  * @param value The value to set the register to
- * @return The value at the register
  */
 void IOAPIC::write(uint32_t reg, uint32_t value) const {
 

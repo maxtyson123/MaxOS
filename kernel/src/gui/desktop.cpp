@@ -148,7 +148,7 @@ void Desktop::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>&
 /**
  * @brief Adds a child widget to the desktop
  *
- * @param widget The widget to add
+ * @param child_widget The widget to add
  */
 void Desktop::add_child(Widget* child_widget) {
 

@@ -10,12 +10,12 @@ using namespace MaxOS::common;
 /**
  * @brief Creates a buffer of the specified size
  *
- * @param size
+ * @param size The capacity of the buffer
+ * @param update_offset Should operations update the offset of the buffer?
  */
 Buffer::Buffer(size_t size, bool update_offset)
-: m_capacity(size),
-  update_offset(update_offset)
-{
+		: m_capacity(size),
+		  update_offset(update_offset) {
 
 	// Create the buffer
 	m_bytes = new uint8_t[size];
@@ -27,12 +27,12 @@ Buffer::Buffer(size_t size, bool update_offset)
  *
  * @param source The source
  * @param size The capacity of the source
+ * @param update_offset Should buffer operations update the internal offset?
  */
 Buffer::Buffer(void* source, size_t size, bool update_offset)
-: update_offset(update_offset)
-{
+		: update_offset(update_offset) {
 
-	m_bytes = (uint8_t*)source;
+	m_bytes = (uint8_t*) source;
 	m_capacity = size;
 	m_dont_delete = true;
 
@@ -42,7 +42,7 @@ Buffer::Buffer(void* source, size_t size, bool update_offset)
  * @brief Destroy the buffer, freeing the memory
  */
 Buffer::~Buffer() {
-	if(!m_dont_delete && m_bytes)
+	if (!m_dont_delete && m_bytes)
 		delete[] m_bytes;
 }
 
@@ -50,7 +50,7 @@ Buffer::~Buffer() {
  * @brief The raw pointer to the bytes stored in memory, use is not recommended
  * @return The address of buffer's storage
  */
-uint8_t *Buffer::raw() const{
+uint8_t* Buffer::raw() const {
 
 	return m_bytes;
 }
@@ -100,16 +100,16 @@ void Buffer::resize(size_t size) {
 	auto* new_buffer = new uint8_t[size];
 
 	// Copy the old buffer
-	if(m_bytes)
+	if (m_bytes)
 		memcpy(new_buffer, m_bytes, m_capacity);
 
 	// Store the new buffer
-	if(!m_dont_delete && m_bytes)
+	if (!m_dont_delete && m_bytes)
 		delete[] m_bytes;
 
-	m_bytes         = new_buffer;
-	m_capacity      = size;
-	m_dont_delete   = true;
+	m_bytes = new_buffer;
+	m_capacity = size;
+	m_dont_delete = true;
 
 }
 
@@ -120,7 +120,7 @@ void Buffer::resize(size_t size) {
  */
 void Buffer::set_offset(size_t offset) {
 
-	if(update_offset)
+	if (update_offset)
 		m_offset = offset;
 
 }
@@ -156,7 +156,6 @@ void Buffer::write(size_t offset, uint8_t byte) {
 /**
  * @brief Safely reads a byte from the buffer at the current offset
  *
- * @param offset The offset into the buffer storage array
  */
 uint8_t Buffer::read() {
 	set_offset(m_offset + 1);
@@ -186,8 +185,8 @@ uint8_t Buffer::read(size_t offset) {
 void Buffer::copy_from(const Buffer* buffer) {
 
 	// Copy the buffer
-	ASSERT(buffer -> capacity() <= capacity(), "Copy exceeds buffer capacity");
-	copy_from(buffer -> raw(), buffer -> capacity() );
+	ASSERT(buffer->capacity() <= capacity(), "Copy exceeds buffer capacity");
+	copy_from(buffer->raw(), buffer->capacity());
 
 }
 
@@ -197,41 +196,41 @@ void Buffer::copy_from(const Buffer* buffer) {
  * @param buffer Where to read from
  * @param length How much to read
  */
-void Buffer::copy_from(const Buffer *buffer, size_t length) {
+void Buffer::copy_from(const Buffer* buffer, size_t length) {
 
 	// Copy the buffer
-	ASSERT(length <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_from(buffer -> raw(), length);
+	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_from(buffer->raw(), length);
 
 }
 
 /**
  * @brief Copies a range of bytes from another buffer into this buffer at a specified offset.
- * @param source Where to read from
+ * @param buffer Where to read from
  * @param length How much to read
  * @param offset Where to start writing into this at
  */
-void Buffer::copy_from(const Buffer *buffer, size_t length, size_t offset) {
+void Buffer::copy_from(const Buffer* buffer, size_t length, size_t offset) {
 
 	// Copy the buffer
-	ASSERT(length <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_from(buffer -> raw(), length, offset);
+	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_from(buffer->raw(), length, offset);
 
 }
 
 /**
  * @brief Copies a range of bytes from another buffer into this buffer at a specified offset for both.
  *
- * @param source Where to read from
+ * @param buffer Where to read from
  * @param length How much to read
  * @param offset Where to start writing into this at
- * @param offset Where to start reading from the other buffer
+ * @param offset_other Where to start reading from the other buffer
  */
-void Buffer::copy_from(const Buffer *buffer, size_t length, size_t offset, size_t offset_other) {
+void Buffer::copy_from(const Buffer* buffer, size_t length, size_t offset, size_t offset_other) {
 
 	// Copy the buffer
-	ASSERT(length + offset_other <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_from(buffer -> raw() + offset_other, length, offset);
+	ASSERT(length + offset_other <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_from(buffer->raw() + offset_other, length, offset);
 
 }
 
@@ -241,7 +240,7 @@ void Buffer::copy_from(const Buffer *buffer, size_t length, size_t offset, size_
  * @param source Where to read from
  * @param length How much to read
  */
-void Buffer::copy_from(void const *source, size_t length) {
+void Buffer::copy_from(void const* source, size_t length) {
 
 	// Copy the bytes
 	ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity");
@@ -256,10 +255,10 @@ void Buffer::copy_from(void const *source, size_t length) {
  * @param length How much to read
  * @param offset Where to start writing at
  */
-void Buffer::copy_from(void const *source, size_t length, size_t offset) {
+void Buffer::copy_from(void const* source, size_t length, size_t offset) {
 
 	// Copy the bytes
-	ASSERT((length  + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+	ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
 	memcpy(m_bytes + offset + m_offset, source, length);
 	set_offset(m_offset + length);
 
@@ -270,11 +269,11 @@ void Buffer::copy_from(void const *source, size_t length, size_t offset) {
  *
  * @param buffer Where to write to
  */
-void Buffer::copy_to(Buffer *buffer) {
+void Buffer::copy_to(Buffer* buffer) {
 
 	// Copy the buffer
-	ASSERT(capacity() <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_to(buffer -> raw(), capacity());
+	ASSERT(capacity() <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_to(buffer->raw(), capacity());
 
 }
 
@@ -284,42 +283,42 @@ void Buffer::copy_to(Buffer *buffer) {
  * @param buffer Where to write to
  * @param length How much to write
  */
-void Buffer::copy_to(Buffer *buffer, size_t length) {
+void Buffer::copy_to(Buffer* buffer, size_t length) {
 
 	// Copy the buffer
-	ASSERT(length <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_to(buffer -> raw(), length);
+	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_to(buffer->raw(), length);
 
 }
 
 /**
  * @brief Copies a range of bytes from this buffer into another buffer at a specified offset.
  *
- * @param source Where to write to
+ * @param buffer Where to write to
  * @param length How much to write
  * @param offset Where to start reading at
  */
-void Buffer::copy_to(Buffer *buffer, size_t length, size_t offset) {
+void Buffer::copy_to(Buffer* buffer, size_t length, size_t offset) {
 
 	// Copy the bytes
-	ASSERT((length  + offset) <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_to(buffer -> raw(), length, offset);
+	ASSERT((length + offset) <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_to(buffer->raw(), length, offset);
 
 }
 
 /**
  * @brief Copies a range of bytes from this buffer into another at an offset for each.
  *
- * @param destination Where to write to
+ * @param buffer Where to write to
  * @param length How much to write
  * @param offset Where to start reading from
  * @param offset_other Where to start writing to
  */
-void Buffer::copy_to(Buffer *buffer, size_t length, size_t offset, size_t offset_other) {
+void Buffer::copy_to(Buffer* buffer, size_t length, size_t offset, size_t offset_other) {
 
 	// Copy the bytes
-	ASSERT((length  + offset) <= buffer -> capacity(), "Copy exceeds external buffer capacity");
-	copy_to(buffer -> raw() + offset_other, length, offset);
+	ASSERT((length + offset) <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	copy_to(buffer->raw() + offset_other, length, offset);
 
 }
 
@@ -346,10 +345,10 @@ void Buffer::copy_to(void* destination, size_t length) {
  * @param length How much to write
  * @param offset Where to start reading from
  */
-void Buffer::copy_to(void *destination, size_t length, size_t offset) {
+void Buffer::copy_to(void* destination, size_t length, size_t offset) {
 
 	// Copy the bytes
-	ASSERT((length  + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+	ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
 	memcpy(destination, m_bytes + offset + m_offset, length);
 	set_offset(m_offset + length);
 

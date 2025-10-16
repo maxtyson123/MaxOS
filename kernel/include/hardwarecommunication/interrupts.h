@@ -141,7 +141,7 @@ namespace MaxOS {
                 static void HandleException0x1F();
 
                 static system::cpu_status_t* HandleInterrupt(system::cpu_status_t* status);
-                system::cpu_status_t* handle_interrupt_request(system::cpu_status_t*);
+                system::cpu_status_t* handle_interrupt_request(system::cpu_status_t* status);
 
             public:
                 InterruptManager();
