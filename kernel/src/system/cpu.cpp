@@ -53,6 +53,8 @@ Core::~Core() = default;
 /**
  * @brief Wakes up the core by sending the appropriate IPIs. (see core_loader.s for startup code)
  * @param cpu
+ *
+ * @todo Should handle core fails and not delay once we are in c++
  */
 void Core::wake_up(CPU* cpu) {
 
@@ -83,7 +85,7 @@ void Core::wake_up(CPU* cpu) {
 
 		// Send the start up IPI
 		cpu->apic.local_apic()->send_startup(m_apic_id, 0x8);
-		Clock::active_clock()->delay(200);  // TODO: Handle core fails (dont schedule)  & dont delay once we are in c++
+		Clock::active_clock()->delay(200);
 
 		// Check if core started
 		if(info->activated){
@@ -102,6 +104,8 @@ void Core::wake_up(CPU* cpu) {
 
 /**
  * @brief Initialises the task state segment for this core
+ *
+ * @todo Implement IO bitmap when adding userspace drivers
  */
 void Core::init_tss() {
 
@@ -126,7 +130,7 @@ void Core::init_tss() {
 	tss.ist6 = 0;
 	tss.ist7 = 0;
 
-	// Ports TODO when setting up userspace drivers come back to this
+	// Ports
 	tss.io_bitmap_offset = 0;
 
 	// Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
@@ -514,6 +518,8 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 
 /**
  * @brief Search the madt for cores and store them
+ *
+ * @todo Support for x2apic
  */
 void CPU::find_cores() {
 
@@ -534,8 +540,6 @@ void CPU::find_cores() {
 		cores.push_back(new Core(processor_apic));
 		index++;
 	}
-
-	// TODO: Also check x2
 }
 
 /**

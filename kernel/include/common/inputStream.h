@@ -4,6 +4,8 @@
  *
  * @date 12th April 2023
  * @author Max Tyson
+ *
+ * @todo Move tempalte implmentations to a cpp file
  */
 
 #ifndef MAXOS_COMMON_INPUTSTREAM_H
@@ -150,7 +152,6 @@ namespace MaxOS{
 
 
         ///_______________________________________________TEMPLATES_________________________________________________________________///
-		// TODO: should be in a cpp?
 
         /**
          * @brief Creates a new InputStreamProcessor

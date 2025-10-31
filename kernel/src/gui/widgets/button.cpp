@@ -103,7 +103,7 @@ void Button::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
 					   y + area.top + area.height, background_colour);
 
-	// Draw the border  (TODO: Make a border class?? Window uses it too)
+	// Draw the border
 
 	// Top Border
 	if (area.intersects(Rectangle<int32_t>(0, 0, buttonPosition.width, 1))) {

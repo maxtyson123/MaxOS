@@ -123,6 +123,8 @@ void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress addres
  *
  * @param address The IP address to get the MAC address from.
  * @return The MAC address of the IP address.
+ *
+ * @todo Should have a timeout in case the address cannot be resolved and avoid infinite loops
  */
 MediaAccessControlAddress AddressResolutionProtocol::Resolve(InternetProtocolAddress address) {
 
@@ -132,8 +134,6 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(InternetProtocolAdd
     if(addressCache.end() == cacheIterator){
         RequestMACAddress(address);
     }
-
-    //TODO: Add clock to wait
 
     //This isn't safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
     while (cacheIterator == addressCache.end()) {                         //Wait until the MAC address is found

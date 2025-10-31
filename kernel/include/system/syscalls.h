@@ -4,6 +4,8 @@
  *
  * @date 27th October 2022
  * @author Max Tyson
+ *
+ * @todo '<system/syscalls.h>' Rename / make clear that this references the system lib
  */
 
 #ifndef MAXOS_SYSTEM_SYSCALLS_H
@@ -16,8 +18,7 @@
 #include <common/colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
-#include <system/syscalls.h>    // TODO: Rename / make clear that this references the system lib
-
+#include <system/syscalls.h>
 
 namespace MaxOS {
 	namespace system {
@@ -40,7 +41,7 @@ namespace MaxOS {
 			cpu_status_t* return_state;     ///< The CPU state to return to after the syscall
 		} syscall_args_t;
 
-		//TODO: Could use a class based response but a single class might want multiple handlers e.g. fs
+		/// @todo Could use a class based response but a single class might want multiple handlers e.g. fs
 		typedef syscall_args_t* (* syscall_func_t)(syscall_args_t* args);
 
 		/**

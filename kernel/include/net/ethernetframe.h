@@ -4,6 +4,8 @@
  *
  * @date 11th May 2022
  * @author Max Tyson
+ *
+ * @todo Make big endian helper functions and clairty (ie be_uint16_t etc)z
  */
 
 #ifndef MAXOS_NET_ETHERNETFRAME_H
@@ -17,8 +19,6 @@
 namespace MaxOS {
 
 	namespace net {
-
-		// TODO: Make big endian helper functions and clairty (ie be_uint16_t etc)
 
 		/**
 		 * @struct EthernetFrameHeader

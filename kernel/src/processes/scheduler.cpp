@@ -129,6 +129,8 @@ void GlobalScheduler::balance() {
  * @brief Loads any valid ELF files from the multiboot structure
  *
  * @param multiboot The multiboot structure
+ *
+ * @todo Handle passing multiple args to the process
  */
 void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 
@@ -146,7 +148,7 @@ void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 
 		Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t) module->mod_start << ")\n";
 
-		// Create an array of args for the process TODO: handle multiple args ("" & spaces)
+		// Create an array of args for the process
 		char* args[1] = {module->cmdline};
 
 		// Create the process
@@ -405,6 +407,8 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
  *
  * @param status The current CPU status of the thread
  * @return The next CPU status
+ *
+ * @todo Remove by reference where possible
  */
 cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
@@ -445,7 +449,7 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 				// Find the process that has the thread and remove it
 				for (auto thread: owner_process->threads()) {
 					if (thread == current_thread) {
-						owner_process->remove_thread(thread->tid); //TODO: Remove by reference
+						owner_process->remove_thread(thread->tid);
 						break;
 					}
 				}

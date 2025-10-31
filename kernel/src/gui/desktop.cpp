@@ -4,6 +4,10 @@
  *
  * @date 15th October 2022
  * @author Max Tyson
+ *
+ * @todo Make a border class
+ * @todo Draw a proper mouse cursor
+ * @todo Draw a background image
  */
 
 #include <gui/desktop.h>
@@ -73,8 +77,6 @@ void Desktop::bring_to_front(Widget* front_widget) {
  */
 void Desktop::invert_mouse_cursor() {
 
-	//TODO: Get image drawing going and draw a proper mouse
-
 	// Draw the horizontal line
 	for (int32_t x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
 		m_graphics_context->invert_pixel(x, m_mouse_y);
@@ -135,8 +137,6 @@ void Desktop::internal_invalidate(common::Rectangle<int32_t>& area, Vector<Recta
  * @param area The area to draw
  */
 void Desktop::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) {
-
-	//TODO: Draw a background image instead
 
 	// Calculate the rectangle
 	int32_t topCornerX = area.left;

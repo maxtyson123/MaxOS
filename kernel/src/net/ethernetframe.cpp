@@ -98,6 +98,8 @@ drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
  *
  * @param buffer the buffer with the received data
  * @param size the size of the received data
+ *
+ * @todo Future debugging me: the override is not being called in derived classes
  */
 bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
 
@@ -122,9 +124,6 @@ bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
 
         // If the handler is found
         if(handlerIterator != frameHandlers.end()) {
-
-
-            //TODO: The override is not being called (IDK WHY)
 
             //Handle the data
             errorMessages -> write("EFH: Handling ethernet frame payload\n");

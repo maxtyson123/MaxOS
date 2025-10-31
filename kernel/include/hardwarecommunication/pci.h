@@ -40,7 +40,7 @@ namespace MaxOS
             public:
                 bool pre_fetchable;                 ///< Reading from this address wont change the state of the device and data can be cached by the CPU
                 uint8_t* address;                   ///< The address of the device (IO port or memory address, can be 32 or 64 bit)
-                uint32_t size;                      ///< Todo: Size of the address space
+                uint32_t size;                      ///< @todo Document Size of the address space
                 BaseAddressRegisterType type;       ///< Where to access the device
 
         };

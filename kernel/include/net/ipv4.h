@@ -26,14 +26,14 @@ namespace MaxOS {
 		struct IPV4Header {
 			uint8_t headerLength: 4;        ///< The length of the header in 32-bit words (min 5, max 15)
 			uint8_t version: 4;             ///< The version of the IP protocol (4 for IPv4)
-			uint8_t typeOfService;          ///< The type of service (low delay, high throughput, high reliability, etc. todo: enum)
+			uint8_t typeOfService;          ///< The type of service (low delay, high throughput, high reliability, etc. @todo: enum
 			uint16_t totalLength;           ///< The total length of the IP packet (header + data) in bytes
 
 			uint16_t identifier;            ///< Unique identifier for the group of fragments of a single IP packet
-			uint16_t flagsAndOffset;        ///< Flags (3 bits) and Fragment Offset (13 bits) (todo: bitfield struct?)
+			uint16_t flagsAndOffset;        ///< Flags (3 bits) and Fragment Offset (13 bits) @todo: bitfield struct?
 
 			uint8_t timeToLive;             ///< The maximum hops between devices before the packet is discarded
-			uint8_t protocol;               ///< The protocol of the payload (TCP, UDP, ICMP, etc. todo: enum)
+			uint8_t protocol;               ///< The protocol of the payload (TCP, UDP, ICMP, etc. @todo: enum
 			uint16_t checksum;              ///< The checksum of the header
 
 			uint32_t sourceIP;              ///< The IP of the sender

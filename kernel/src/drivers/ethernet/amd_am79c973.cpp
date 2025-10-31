@@ -74,9 +74,6 @@ AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
     initBlock.reserved3 = 0;                         // Reserved
     initBlock.logicalAddress = 0;                    // None for now
 
-
-    //TODO: Use malloc?
-
     // Set Buffer descriptors memory
     sendBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.sendBufferDescrAddress = (uint64_t)sendBufferDescr;
@@ -119,11 +116,12 @@ AMD_AM79C973::~AMD_AM79C973() = default;
 
 /**
  * @brief This function activates the device and starts it (Runs when the driver-manger calls activateAll())
+ *
+ * @todo Re-implement this class
  */
 void AMD_AM79C973::activate()
 {
 
-    // TODO: Have a look at re - implementing this again someday
     return;
 
     initDone = false;                                            // Set initDone to false

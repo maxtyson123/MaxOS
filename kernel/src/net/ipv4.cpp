@@ -122,6 +122,8 @@ InternetProtocolHandler::~InternetProtocolHandler() = default;
  * @param ethernetframePayload The payload of the IP packet.
  * @param size The size of the IP packet.
  * @return True if the packet is to be sent back, false otherwise.
+ *
+ * @todo Set the identifier when sending packets back
  */
 bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size){
 
@@ -165,8 +167,6 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
         ipMessage -> timeToLive = 0x40;                                                                                         //Reset TTL
         ipMessage -> checksum = Checksum((uint16_t*)ipMessage, 4 * ipMessage -> headerLength);                  //Reset checksum as the source and destination IP have changed so has the time to live and therefore there is a different header
 
-
-        // TODO: Set the identifier
     }
 
     errorMessages ->write("IP: Handled packet\n");

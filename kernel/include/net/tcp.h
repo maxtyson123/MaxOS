@@ -74,7 +74,7 @@ namespace MaxOS {
 			uint16_t checksum;                  ///< The checksum of the header
 			uint16_t urgentPtr;                 ///< Where in the data the urgent data *ends* (if the URG flag is set)
 
-			uint32_t options;                   ///< The options for the TCP packet (MSS, Window Scale, SACK Permitted, todo: make this a struct)
+			uint32_t options;                   ///< The options for the TCP packet (MSS, Window Scale, SACK Permitted) @todo: make this a struct
 		} __attribute__((packed));
 
 		/**

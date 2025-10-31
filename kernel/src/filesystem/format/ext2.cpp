@@ -278,6 +278,8 @@ common::Vector<uint32_t> Ext2Volume::allocate_group_blocks(uint32_t block_group,
  *
  * @param block_group The block group where the blocks exist
  * @param amount The amount of blocks to free
+ *
+ * @todo Decide whether to zero out or not, my implementation zeros on allocation but idk about others
  */
 void Ext2Volume::free_group_blocks(uint32_t block_group, uint32_t amount, uint32_t start) {
 
@@ -300,8 +302,6 @@ void Ext2Volume::free_group_blocks(uint32_t block_group, uint32_t amount, uint32
 		descriptor->free_blocks++;
 		superblock.unallocated_blocks++;
 		bitmap.raw()[i / 8] &= ~(1u << (i % 8));
-
-		// TODO: Decide whether to zero out or not, my implementation zeros on allocation but idk about others
 	}
 
 	// Save the changed metadata
@@ -667,6 +667,8 @@ void InodeHandler::store_blocks(Vector<uint32_t> const &blocks) {
  * @param amount The amount to grow to in bytes
  * @param flush Save the newly allocated chunks to disk, defaults to true
  * @return The new toatal size of the file (size() + amount)
+ *
+ * @todo Should this return size() instead?
  */
 size_t InodeHandler::grow(size_t amount, bool flush) {
 
@@ -684,7 +686,7 @@ size_t InodeHandler::grow(size_t amount, bool flush) {
 	if (flush)
 		save();
 
-	return size() + amount; // TODO? should just be size() ?
+	return size() + amount;
 }
 
 /**

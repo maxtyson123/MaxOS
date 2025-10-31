@@ -108,7 +108,7 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
 					   y + area.top + area.height, background_colour);
 
-	// Draw the border  (TODO: Make this a function because it is used in multiple places)
+	// Draw the border
 
 	// Top Border
 	if (area.intersects(Rectangle<int32_t>(0, 0, inputBoxPosition.width, 1))) {

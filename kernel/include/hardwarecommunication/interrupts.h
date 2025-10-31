@@ -59,7 +59,7 @@ namespace MaxOS {
           uint16_t address_low_bits;    ///< The low bits of the handler function address
           uint16_t segment_selector;    ///< The code segment selector in the GDT to use when this interrupt fires
           uint8_t ist;                  ///< The offset into the Interrupt Stack Table (0 if not used) (see TSS)
-          uint8_t flags;                ///< Flags: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (todo substruct this)
+          uint8_t flags;                ///< Flags: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (@todo substruct this)
           uint16_t address_mid_bits;    ///< The middle bits of the handler function address
           uint32_t address_high_bits;   ///< The high bits of the handler function address
           uint32_t reserved;            ///< Reserved, must be zero

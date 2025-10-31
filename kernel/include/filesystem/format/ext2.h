@@ -333,7 +333,7 @@ namespace MaxOS {
 						uint32_t inodes_per_block;                          ///< How many inodes fit in a block
 						uint32_t sectors_per_block;                         ///< How many sectors does a block take
 
-						common::Spinlock ext2_lock;                         ///< Lock for synchronised access to the volume (todo: remove public?)
+						common::Spinlock ext2_lock;                         ///< Lock for synchronised access to the volume (@todo: remove public?)
 
 						void write_block(uint32_t block_num, common::buffer_t* buffer);
 						void write_inode(uint32_t inode_num, inode_t* inode);

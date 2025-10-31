@@ -486,10 +486,10 @@ TCPSocket* TransmissionControlProtocolHandler::Connect(InternetProtocolAddress i
  * @param address The address to connect to in the form "IP:PORT"
  *
  * @return The socket that is connected to the remote host, nullptr if it failed
+ *
+ * @todo Implement string parsing for address
  */
 TCPSocket* TransmissionControlProtocolHandler::Connect(const string &address) {
-
-	//TODO NEW STRING PARSEING
 
 	return nullptr;
 }

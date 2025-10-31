@@ -350,6 +350,8 @@ struct multiboot_tag_framebuffer_common {
 /**
  * @struct multiboot_tag_framebuffer
  * @brief A tag containing information about the framebuffer
+ *
+ * @todo should use this to setup graphix context pallet?
  */
 struct multiboot_tag_framebuffer {
 	struct multiboot_tag_framebuffer_common common;                 ///< *copydoc multiboot_tag_framebuffer_common
@@ -357,7 +359,7 @@ struct multiboot_tag_framebuffer {
 	union {
 		struct {
 			multiboot_uint16_t framebuffer_palette_num_colors;      ///< The number of colors in the palette
-			struct multiboot_color framebuffer_palette[0];          ///< The color palette TODO: should use this to setup graphix context pallet?
+			struct multiboot_color framebuffer_palette[0];          ///< The color palette
 		};
 		struct {
 			multiboot_uint8_t framebuffer_red_field_position;       ///< The position of the red field

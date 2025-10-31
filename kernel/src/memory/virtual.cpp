@@ -360,6 +360,8 @@ void VirtualMemoryManager::add_free_chunk(uintptr_t start_address, size_t size) 
  *
  * @param size The size of the chunk to find
  * @return The free chunk or nullptr if not found
+ *
+ * @todo Split the chunk if it is too big
  */
 free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
 
@@ -370,8 +372,6 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
 
 		// Check if the chunk is big enough
 		if (current->size >= size) {
-
-			// TODO: Some other time this will need to be split if the chunk is too big
 
 			// Remove the chunk
 			if (previous != nullptr) {

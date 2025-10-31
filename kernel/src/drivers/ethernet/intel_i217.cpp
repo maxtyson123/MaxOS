@@ -58,7 +58,7 @@ IntelI217::IntelI217(PeripheralComponentInterconnectDeviceDescriptor *deviceDesc
     sendDescriptorTailRegister = 0x3818;
 
     // Get BAR0 type, io_base address and MMIO base address
-    bar_type = 1; // deviceDescriptor -> has_memory_base ? 0 : 1;  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
+    bar_type = 1; // deviceDescriptor -> has_memory_base ? 0 : 1;  @todo Fix memory mapping from PCI as it is unable to get MAC from memory
     portBase = deviceDescriptor ->port_base;
     //TODO: memBase = deviceDescriptor -> memory_base;
 

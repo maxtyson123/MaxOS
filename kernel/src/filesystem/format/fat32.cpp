@@ -59,6 +59,8 @@ Fat32Volume::~Fat32Volume() = default;
  *
  * @param cluster The base cluster to start from
  * @return The next cluster in the chain
+ *
+ * @todo The auto entry = uint32_t* '&' is weird, fix it
  */
 lba_t Fat32Volume::next_cluster(lba_t cluster) {
 
@@ -72,7 +74,7 @@ lba_t Fat32Volume::next_cluster(lba_t cluster) {
 	disk->read(sector, &fat);
 
 	// Get the next cluster info (mask the upper 4 bits)
-	auto entry = (uint32_t *) (&(fat.raw()[entry_index])); //  TODO & here is weird
+	auto entry = (uint32_t *) (&(fat.raw()[entry_index]));
 	return *entry & 0x0FFFFFFF;
 }
 
@@ -82,10 +84,10 @@ lba_t Fat32Volume::next_cluster(lba_t cluster) {
  * @param cluster The base cluster to start from
  * @param next_cluster The next cluster in the chain
  * @return The next cluster in the chain
+ *
+ * @todo when in userspace: For performance cache fat entirely, cache file data, cache cluster chains
  */
 uint32_t Fat32Volume::set_next_cluster(uint32_t cluster, uint32_t next_cluster) {
-
-	// TODO - when in userspace: For performance cache fat entirely, cache file data, cache cluster chains
 
 	// Get the location in the FAT table
 	lba_t offset = cluster * sizeof(uint32_t);
@@ -254,6 +256,8 @@ Fat32File::~Fat32File() = default;
  *
  * @param data The byte buffer to write
  * @param amount The amount of data to write
+ *
+ * @todo When in userspace: save timestamps
  */
 void Fat32File::write(const buffer_t *data, size_t amount) {
 
@@ -345,7 +349,7 @@ void Fat32File::write(const buffer_t *data, size_t amount) {
 	m_entry->size = m_size;
 	m_entry->first_cluster_high = (m_first_cluster >> 16) & 0xFFFF;
 	m_entry->first_cluster_low = m_first_cluster & 0xFFFF;
-	// TODO: When implemented as a usermode driver save the time
+
 	m_parent_directory->save_entry_to_disk(m_entry);
 
 }

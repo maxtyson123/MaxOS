@@ -202,10 +202,10 @@ UDPSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, uint16_t port) {
  *
  * @param address The address to connect to in the form "IP:PORT"
  * @return The socket that is connected to the remote host, nullptr if it failed
+ *
+ * @todo Implement string parsing to extract IP and port
  */
 UDPSocket *UserDatagramProtocolHandler::Connect(const string& address) {
-
-  //TODO NEW STRING PARSEING
 
   return nullptr;
 }

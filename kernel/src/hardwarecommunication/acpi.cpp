@@ -110,6 +110,14 @@ virtual_address_t* AdvancedConfigurationAndPowerInterface::map_descriptor(uint64
 	return (void*) ((uint8_t*) PhysicalMemoryManager::to_io_region(page) + offset);
 }
 
+/**
+ * @brief Gets a pointer from the RSDT
+ *
+ * @param index The index of the pointer to get
+ * @return The pointer at the given index
+ *
+ * @todo UBSan issue: type mismatch so using memcpy as a workaround
+ */
 uint64_t AdvancedConfigurationAndPowerInterface::get_rsdt_pointer(size_t index) {
 	uint8_t* raw = (uint8_t*) m_rsdt;
 	size_t offset = sizeof(ACPISDTHeader) + index * sizeof(uint32_t);
@@ -117,7 +125,7 @@ uint64_t AdvancedConfigurationAndPowerInterface::get_rsdt_pointer(size_t index) 
 	// Ensure offset is within mapped header length (optional but safe)
 	ASSERT(offset + sizeof(uint32_t) <= m_header->length, "RSDT index out of bounds");
 
-	// Read the pointer manually //TODO: Doesnt really solve the issue
+	// Read the pointer manually
 	uint32_t value;
 	memcpy(&value, raw + offset, sizeof(uint32_t));
 	return value;

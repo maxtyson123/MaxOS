@@ -36,6 +36,9 @@ InternetControlMessageProtocol::~InternetControlMessageProtocol() = default;
  * @param size The size of the payload
 
  * @return True if the packet is to be sent back to the sender, false otherwise
+ *
+ * @todo Reply to ping requests
+ * @todo Implement the rest of the ICMP messages
  */
 bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProtocolAddress srcIP_BE,
                                                                    InternetProtocolAddress dstIP_BE,
@@ -56,7 +59,6 @@ bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProto
     switch (icmp -> type) {
 
         case 0: // Echo reply
-            // TODO: reply to the ping
             break;
 
         case 8: // Echo request
@@ -71,8 +73,6 @@ bool InternetControlMessageProtocol::handleInternetProtocolPayload(InternetProto
     }
 
     return false;
-
-    //TODO: Implement the rest of the ICMP messages
 
 }
 

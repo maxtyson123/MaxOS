@@ -4,6 +4,8 @@
  *
  * @date 15th April 2023
  * @author Max Tyson
+ *
+ * @todo Replace with a proper font format
  */
 
 #include <gui/font.h>
@@ -115,8 +117,6 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
 				context->putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
 				continue;
 			}
-
-			//TODO: Bold, Italic when other fonts are working
 
 			// Get the character
 			uint8_t character = text[xBitMapOffset / 8];

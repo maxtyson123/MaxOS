@@ -15,9 +15,6 @@ using namespace MaxOS::memory;
 using namespace MaxOS::processes;
 using namespace MaxOS::common;
 
-// TODO: Dont pause interrupts?
-
-
 /**
  * @brief Constructor for the Thread class
  */

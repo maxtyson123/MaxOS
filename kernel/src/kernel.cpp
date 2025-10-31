@@ -121,8 +121,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 }
 
-// TODO:
-//  - Doxy: (where acronmys are defined - code should then use them), move todos to doxy
-//  - Clean up warnings
-//  - Test suite of common functions & other statics (paths)
-//  - Thread storage (when clib)
+/**
+ * @todo Clean up warnings
+ * @todo Test suite of common functions & other statics (paths)
+ * @todo Thread storage (when clib)
+ */

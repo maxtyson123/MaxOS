@@ -151,6 +151,8 @@ void Widget::move(int32_t left, int32_t top) {
  *
  * @param width The new m_width of the rectangle
  * @param height The new m_height of the rectangle
+ *
+ * @todo Fix the invalidation so it only redraws the areas that need to be redrawn (right and bottom are always fully redrawn currently)
  */
 void Widget::resize(int32_t width, int32_t height) {
 
@@ -169,7 +171,7 @@ void Widget::resize(int32_t width, int32_t height) {
 	Vector<Rectangle<int32_t>> invalid_areas_old = old_position.subtract(m_position);
 	Vector<Rectangle<int32_t>> invalid_areas_new = m_position.subtract(old_position);
 
-	// Right and Bottom require to be fully invalidated TODO: Fix this hack
+	// Right and Bottom require to be fully invalidated
 	if (m_position.width > old_position.width || m_position.height > old_position.height ||
 		old_position.width > m_position.width || old_position.height > m_position.height) {
 		invalidate();

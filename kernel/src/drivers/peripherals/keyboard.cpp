@@ -156,6 +156,8 @@ KeyboardInterpreterEN_US::~KeyboardInterpreterEN_US() = default;
  * @brief Handle the key down event
  *
  * @param scan_code The scan code of the key that was pressed
+ *
+ * @todo Probably a better way to do this (investigate when adding more keyboard layouts)
  */
 void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 
@@ -212,7 +214,6 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 	bool is_shifting = this->m_keyboard_state.left_shift || this->m_keyboard_state.right_shift;
 	bool should_be_upper_case = is_shifting != this->m_keyboard_state.caps_lock;
 
-	// TODO: Probably a better way to do this (investigate when adding more keyboard layouts)
 	if (type == ScanCodeType::REGULAR)
 		switch ((KeyCodeEN_US) scan_code) {
 

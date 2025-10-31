@@ -635,6 +635,8 @@ void PhysicalMemoryManager::clean_page_table(uint64_t* table) {
  * @param address The address to create the entry for
  * @param flags The flags to set the entry to
  * @return The created page table entry
+ *
+ * @todo fix the NX bit setting to be less hacky
  */
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) const {
 
@@ -652,7 +654,7 @@ pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t f
 			.physical_address   = address >> 12,
 	};
 
-	// Set the NX bit if it is allowed (TODO: make this better)
+	// Set the NX bit if it is allowed
 	if (m_nx_allowed && (flags & NO_EXECUTE)) {
 		auto page_raw = (uint64_t) &page;
 		page_raw |= NO_EXECUTE;

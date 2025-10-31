@@ -171,7 +171,8 @@ namespace MaxOS {
 				static size_t align_up_to_page(size_t size, size_t s_page_size);
 				static bool check_aligned(size_t size);
 
-				inline static PhysicalMemoryManager* s_current_manager = nullptr;   ///< The current physical memory manager in use (todo: private with getter, maybe make mapping static?)
+				///@todo Make private with getter, maybe make mapping static?
+				inline static PhysicalMemoryManager* s_current_manager = nullptr;   ///< The current physical memory manager in use
 				static void clean_page_table(uint64_t* table);
 
 				void reserve(uint64_t address);

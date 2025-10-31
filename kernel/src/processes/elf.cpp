@@ -32,10 +32,11 @@ ELF64::~ELF64() = default;
 
 /**
  * @brief Loads the elf program into memory if a valid elf file
+ *
+ * @todo Error handling
  */
 void ELF64::load() {
 
-	//TODO: error handling when the syscall for this is implemented
 	if (!is_valid())
 		return;
 
@@ -91,6 +92,8 @@ elf_64_section_header_t* ELF64::get_section_header(size_t index) const {
 
 /**
  * @brief Checks if the elf file is valid for MaxOS runtime
+ *
+ * @todo Add support for maxOS ABI
  */
 bool ELF64::is_valid() const {
 
@@ -113,7 +116,7 @@ bool ELF64::is_valid() const {
 
 	// Check if the elf is for the MaxOS platform
 	//  if(header() -> identification[OSABI] != MaxOSABI)
-	//      return false; TODO: Would be nice to have an OS ABI
+	//      return false;
 
 	// Check if the elf is executable
 	if (header()->type != (int) ELFType::Executable)

@@ -4,10 +4,11 @@
  *
  * @date 24th March 2025
  * @author Max Tyson
+ *
+ * @todo Import scheduler is a circular dependency, need to fix
+ * @todo Shouldnt have to specify type in resource constructor
  */
-//
-// Created by 98max on 24/03/2025.
-//
+
 #include <processes/ipc.h>
 
 using namespace MaxOS;
@@ -16,9 +17,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::memory;
 
 #include <common/logger.h>
-#include <processes/scheduler.h>      //TODO: Circular dependency, need to fix
-
-// TODO: Shouldnt have to specify type in resource constructor
+#include <processes/scheduler.h>
 
 /**
  * @brief Creates a new shared memory block
@@ -122,8 +121,6 @@ SharedMessageEndpoint::~SharedMessageEndpoint() {
 	for(auto& message : m_queue)
 		delete message;
 }
-
-// TODO: Add a min() max() to common somewhere
 
 /**
  * @brief Reads the first message from the endpoint or will yield until a message has been written

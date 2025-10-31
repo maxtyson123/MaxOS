@@ -45,7 +45,7 @@ namespace MaxOS{
                 void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) final;
 
             public:
-                common::Colour colour;                                                          ///< The background colour of the desktop (todo: replace with image, make priv)
+                common::Colour colour;                                                          ///< The background colour of the desktop (@todo: replace with image, make priv)
 
                 Desktop(common::GraphicsContext* gc);
                 ~Desktop();
