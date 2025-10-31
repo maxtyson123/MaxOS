@@ -1,6 +1,10 @@
-//
-// Created by 98max on 13/04/2023.
-//
+/**
+ * @file outputStream.h
+ * @brief Defines OutputStream and GenericOutputStream classes for writing data to streams
+ *
+ * @date 13th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_OUTPUTSTREAM_H
 #define MAXOS_COMMON_OUTPUTSTREAM_H

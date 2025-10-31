@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/4/2022.
-//
+/**
+ * @file port.cpp
+ * @brief Implementation of a Port class for handling IO ports
+ *
+ * @date 10th April 2022
+ * @author Max Tyson
+ */
 
 #include <hardwarecommunication/port.h>
 

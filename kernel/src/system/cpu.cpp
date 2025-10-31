@@ -1,6 +1,11 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file cpu.cpp
+ * @brief Implementation of the Central Processing Unit (CPU) and its cores
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
+
 #include <system/cpu.h>
 #include <common/logger.h>
 #include <processes/scheduler.h>

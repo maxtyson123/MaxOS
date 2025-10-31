@@ -1,6 +1,10 @@
-//
-// Created by 98max on 4/12/2023.
-//
+/**
+ * @file string.h
+ * @brief Defines a String class for dynamically sized strings with various operations
+ *
+ * @date 12th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_STRING_H
 #define MAXOS_STRING_H
@@ -12,6 +16,7 @@
 
 namespace MaxOS {
 
+	/// How many characters can be stored in the small string optimization array
 	constexpr int MAX_STRING_SMALL_STORAGE = 0x99;
 
     /**
@@ -82,7 +87,7 @@ namespace MaxOS {
           char& operator [] (int index);
           char& operator [] (int index) const;
 
-    } string;
+    } string;   ///< Typedef for String
 
 	/**
 	 * @class StringBuilder

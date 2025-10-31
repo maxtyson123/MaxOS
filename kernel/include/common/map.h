@@ -1,6 +1,10 @@
-//
-// Created by 98max on 23/10/2023.
-//
+/**
+ * @file map.h
+ * @brief Defines a Map class for storing key-value pairs
+ *
+ * @date 23rd October 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_MAP_H
 #define MAXOS_COMMON_MAP_H

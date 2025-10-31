@@ -1,3 +1,11 @@
+/**
+ * @file logo.h
+ * @brief GIMP generated header file for the kernel logo
+ *
+ * @date unknown
+ * @author Max Tyson
+ */
+
 // Ignore warnings for this file
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
@@ -6,17 +14,18 @@
 
 /*  GIMP header image file format (RGB): C:\Users\98max\CLionProjects\max-os\kernel\include\common\logo.h  */
 
-constexpr int LOGO_WIDTH = 335;
-constexpr int LOGO_HEIGHT = 212;
+constexpr int LOGO_WIDTH = 335;     ///< Width of the logo in pixels
+constexpr int LOGO_HEIGHT = 212;    ///< Height of the logo in pixels
 
-/*  Call this macro repeatedly.  After each use, the pixel data can be extracted  */
-
+/// Call this macro repeatedly.  After each use, the pixel data can be extracted
 #define LOGO_HEADER_PIXEL(data,pixel) {\
 pixel[0] = (((data[0] - 33) << 2) | ((data[1] - 33) >> 4)); \
 pixel[1] = ((((data[1] - 33) & 0xF) << 4) | ((data[2] - 33) >> 2)); \
 pixel[2] = ((((data[2] - 33) & 0x3) << 6) | ((data[3] - 33))); \
 data += 4; \
 }
+
+/// The pixel data for the logo, encoded in GIMP's header image file format
 static char *header_data =
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file scheduler.cpp
+ * @brief Implementation of a Global Scheduler for managing processes and threads
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
 
 #include <processes/scheduler.h>
 #include <common/logger.h>

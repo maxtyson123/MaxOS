@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/4/2022.
-//
+/**
+ * @file port.h
+ * @brief Defines classes for handling hardware communication ports (8, 16, and 32 bit)
+ *
+ * @date 10th April 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_HARDWARECOMMUNICATION_PORT_H
 #define MAX_OS_HARDWARECOMMUNICATION_PORT_H

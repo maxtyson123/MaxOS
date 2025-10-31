@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/28/2022.
-//
+/**
+ * @file msdos.cpp
+ * @brief Implementation of MSDOS partition table reading and mounting
+ *
+ * @date 28th December 2022
+ * @author Max Tyson
+ */
 
 #include <filesystem/partition/msdos.h>
 

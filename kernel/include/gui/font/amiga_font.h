@@ -1,6 +1,12 @@
-//
-// Created by 98max on 1/8/2024.
-//
+/**
+ * @file amiga_font.h
+ * @brief Defines the Amiga system font used in the GUI.
+ *
+ * @todo find source and add credit
+ *
+ * @date 8th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_AMIGA_FONT_H
 #define MAXOS_AMIGA_FONT_H

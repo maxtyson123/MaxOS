@@ -1,6 +1,10 @@
-//
-// Created by 98max on 1/30/2024.
-//
+/**
+ * @file physical.h
+ * @brief Defines a PhysicalMemoryManager class for managing physical memory allocation and deallocation of pages
+ *
+ * @date 30th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_MEMORY_PHYSICAL_H
 #define MAXOS_MEMORY_PHYSICAL_H
@@ -52,15 +56,15 @@ namespace MaxOS {
 		 * @brief Struct for a page table entry
 		 */
 		typedef struct PageTableEntry {
-			bool present: 1;                    ///< @copydoc PageFlags::PRESENT
-			bool write: 1;                      ///< @copydoc PageFlags::WRITE
-			bool user: 1;                       ///< @copydoc  PageFlags::USER
-			bool write_through: 1;              ///< @copydoc PageFlags::WRITE_THROUGH
-			bool cache_disabled: 1;             ///< @copydoc PageFlags::CACHE_DISABLED
-			bool accessed: 1;                   ///< @copydoc PageFlags::ACCESSED
-			bool dirty: 1;                      ///< @copydoc PageFlags::DIRTY
-			bool huge_page: 1;                  ///< @copydoc PageFlags::HUGE_PAGE
-			bool global: 1;                     ///< @copydoc PageFlags::GLOBAL
+			bool present: 1;                    ///< *copydoc PageFlags::PRESENT
+			bool write: 1;                      ///< *copydoc PageFlags::WRITE
+			bool user: 1;                       ///< *copydoc PageFlags::USER
+			bool write_through: 1;              ///< *copydoc PageFlags::WRITE_THROUGH
+			bool cache_disabled: 1;             ///< *copydoc PageFlags::CACHE_DISABLED
+			bool accessed: 1;                   ///< *copydoc PageFlags::ACCESSED
+			bool dirty: 1;                      ///< *copydoc PageFlags::DIRTY
+			bool huge_page: 1;                  ///< *copydoc PageFlags::HUGE_PAGE
+			bool global: 1;                     ///< *copydoc PageFlags::GLOBAL
 			uint8_t available: 3;               ///< Extra metadata bytes available for OS use
 			uint64_t physical_address: 52;      ///< The address the page represents in memory
 		} __attribute__((packed)) pte_t;

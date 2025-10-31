@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/10/2023.
-//
+/**
+ * @file inputbox.h
+ * @brief Defines an InputBox widget for text input in a GUI application.
+ *
+ * @date 11th October 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_GUI_WIDGETS_INPUTBOX_H
 #define MAXOS_GUI_WIDGETS_INPUTBOX_H

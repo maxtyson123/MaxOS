@@ -1,6 +1,10 @@
-//
-// Created by 98max on 5/11/2022.
-//
+/**
+ * @file ethernetframe.cpp
+ * @brief Implementation of Ethernet Frame Handler and Payload Handler
+ *
+ * @date 11th May 2022
+ * @author Max Tyson
+ */
 
 #include <net/ethernetframe.h>
 

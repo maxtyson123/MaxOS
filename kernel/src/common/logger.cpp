@@ -1,6 +1,11 @@
-//
-// Created by 98max on 4/04/2025.
-//
+/**
+ * @file logger.cpp
+ * @brief Implements a Logger class for logging messages to multiple output streams
+ *
+ * @date 4th April 2025
+ * @author Max Tyson
+ */
+
 #include <common/logger.h>
 #include <stdarg.h>
 #include <drivers/console/vesaboot.h>

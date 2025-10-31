@@ -1,6 +1,10 @@
-//
-// Created by 98max on 2/11/2024.
-//
+/**
+ * @file virtual.cpp
+ * @brief Implementation of a Virtual Memory Manager for managing virtual memory
+ *
+ * @date 11th February 2024
+ * @author Max Tyson
+ */
 
 #include <memory/virtual.h>
 #include <common/logger.h>

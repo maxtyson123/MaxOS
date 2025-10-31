@@ -1,6 +1,10 @@
-//
-// Created by 98max on 1/01/2023.
-//
+/**
+ * @file fat32.cpp
+ * @brief Implementation of a FAT32 filesystem driver
+ *
+ * @date 1st January 2023
+ * @author Max Tyson
+ */
 
 #include <filesystem/format/fat32.h>
 #include <memory/memoryIO.h>

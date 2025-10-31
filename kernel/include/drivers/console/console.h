@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/09/2023.
-//
+/**
+ * @file console.h
+ * @brief Defines a Console class for handling text-based console output with colour support
+ *
+ * @date 27th September 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_CONSOLE_H
 #define MAXOS_DRIVERS_CONSOLE_H

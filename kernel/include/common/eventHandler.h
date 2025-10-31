@@ -1,17 +1,19 @@
-//
-// Created by 98max on 9/10/2023.
-//
+/**
+ * @file eventHandler.h
+ * @brief Defines classes for handling events and event managers.
+ *
+ * @date 9th October 2023
+ * @author Max Tyson
+ *
+ * @todo Event doesnt need to be a class should be a struct
+ * @todo With moving to micro kernel this should be moved to a external lib as not needed
+ */
 
 #ifndef MAXOS_COMMON_EVENTHANDLER_H
 #define MAXOS_COMMON_EVENTHANDLER_H
 
 #include <stdint.h>
 #include <common/vector.h>
-
-
-
-// TODO: - Event doesnt need to be a class should be a struct
-//       - With moving to micro kernel this should be moved to a external lib as not needed in the kernel
 
 namespace MaxOS{
 

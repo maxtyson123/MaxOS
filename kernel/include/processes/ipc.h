@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/03/2025.
-//
+/**
+ * @file ipc.h
+ * @brief Defines inter-process communication (IPC) methods such as shared memory and message endpoints
+ *
+ * @date 24th March 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_IPC_H
 #define MAXOS_PROCESSES_IPC_H

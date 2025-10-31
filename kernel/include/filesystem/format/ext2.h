@@ -1,6 +1,10 @@
-//
-// Created by 98max on 17/07/2025.
-//
+/**
+ * @file ext2.h
+ * @brief Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem, Directory and File classes.
+ *
+ * @date 17th July 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_EXT2_H
 #define MAXOS_FILESYSTEM_EXT2_H

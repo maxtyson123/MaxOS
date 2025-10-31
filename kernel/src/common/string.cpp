@@ -1,6 +1,11 @@
-//
-// Created by 98max on 1/7/2024.
-//
+/**
+ * @file string.cpp
+ * @brief Implementation of a simple String class for handling text of varying types and lengths
+ *
+ * @date 7th January 2024
+ * @author Max Tyson
+ */
+
 #include <common/string.h>
 
 using namespace MaxOS;

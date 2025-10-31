@@ -1,3 +1,11 @@
+/**
+ * @file kernel.cpp
+ * @brief The main kernel entry point for the bsp and other cores. Handles initialisation of all core systems.
+ *
+ * @date 2022
+ * @author Max Tyson
+ */
+
 #include <stdint.h>
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>
@@ -29,9 +37,12 @@ using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
 
-extern "C" void call_constructors();
-extern "C" uint8_t core_boot_info[];
+extern "C" void call_constructors();        ///< Calls the C++ static constructors
+extern "C" uint8_t core_boot_info[];        ///< The boot info structure for the core being started
 
+/**
+ * @brief The main entry point for secondary cores. Sets up the core and waits to be scheduled.
+ */
 extern "C" [[noreturn]] void core_main(){
 
 	auto info = (core_boot_info_t*)(core_boot_info);
@@ -51,6 +62,12 @@ extern "C" [[noreturn]] void core_main(){
 		asm("nop");
 }
 
+/**
+ * @brief The main kernel entry point. Initialises all core systems and starts the scheduler.
+ *
+ * @param addr The address of the multiboot info struct
+ * @param magic The multiboot magic number
+ */
 extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {
 
 	call_constructors();
@@ -105,7 +122,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
-//  - Doxy: file header comments (where acronmys are defined - code should then use them), move todos to doxy
+//  - Doxy: (where acronmys are defined - code should then use them), move todos to doxy
 //  - Clean up warnings
 //  - Test suite of common functions & other statics (paths)
 //  - Thread storage (when clib)

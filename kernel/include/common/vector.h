@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/1/2022.
-//
+/**
+ * @file vector.h
+ * @brief Defines a Vector class for dynamically storing an array of elements.
+ *
+ * @date 1st December 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_VECTOR_H
 #define MAXOS_COMMON_VECTOR_H

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/10/2023.
-//
+/**
+ * @file button.h
+ * @brief Defines a Button widget for the GUI, including event handling for button presses and releases
+ *
+ * @date 10th October 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_GUI_WIDGETS_BUTTON_H
 #define MAXOS_GUI_WIDGETS_BUTTON_H

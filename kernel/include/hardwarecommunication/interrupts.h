@@ -1,6 +1,10 @@
-//
-// Created by 98max on 7/10/2022.
-//
+/**
+ * @file interrupts.h
+ * @brief Defines a InterruptManager and InterruptHandler for managing hardware and software interrupts
+ *
+ * @date 10th July 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H

@@ -1,6 +1,10 @@
-//
-// Created by Max Tyson on 18/04/2025.
-//
+/**
+ * @file msdos.h
+ * @brief Defines structures and enums for handling Microsoft - Desktop Operating System (MS-DOS) partitions in a filesystem
+ *
+ * @date 18th April 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_PARTITION_MSDOS_H
 #define MAXOS_FILESYSTEM_PARTITION_MSDOS_H

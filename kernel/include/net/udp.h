@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/11/2022.
-//
+/**
+ * @file udp.h
+ * @brief Defines the User Datagram Protocol (UDP) for network communication.
+ *
+ * @date 24th November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_NET_UDP_H
 #define MAXOS_NET_UDP_H
@@ -15,10 +19,10 @@ namespace MaxOS {
 	namespace net {
 
 		/**
-		 * @struct UserDatagramProtocolHeader
+		 * @struct UDPHeader
 		 * @brief The header of a UDP packet
 		 */
-		struct UserDatagramProtocolHeader {
+		struct UDPHeader {
 
 			uint16_t sourcePort;            ///< The port of the sender
 			uint16_t destinationPort;       ///< The port of the receiver
@@ -28,15 +32,15 @@ namespace MaxOS {
 		} __attribute__((packed));
 
 		/**
-		 * @enum UserDatagramProtocolEvents
+		 * @enum UDPEvents
 		 * @brief The events that can be fired by the UDP protocol
 		 */
-		enum class UserDatagramProtocolEvents {
+		enum class UDPEvents {
 			DATA_RECEIVED,
 		};
 
 		//Predefine
-		class UserDatagramProtocolSocket;
+		class UDPSocket;
 		class UserDatagramProtocolHandler;
 
 		typedef uint16_t UserDatagramProtocolPort;
@@ -45,36 +49,36 @@ namespace MaxOS {
 		 * @class UDPDataReceivedEvent
 		 * @brief Event fired when data is received on a UDP socket
 		 */
-		class UDPDataReceivedEvent : public common::Event<UserDatagramProtocolEvents> {
+		class UDPDataReceivedEvent : public common::Event<UDPEvents> {
 			public:
-				UserDatagramProtocolSocket* socket;     ///< The socket that received the data
+				UDPSocket* socket;     ///< The socket that received the data
 				uint8_t* data;                          ///< The data received
 				uint16_t size;                          ///< The size of the data received
 
-				UDPDataReceivedEvent(UserDatagramProtocolSocket* socket, uint8_t* data, uint16_t size);
+				UDPDataReceivedEvent(UDPSocket* socket, uint8_t* data, uint16_t size);
 				~UDPDataReceivedEvent();
 		};
 
 		/**
-		 * @class UserDatagramProtocolPayloadHandler
+		 * @class UDPPayloadHandler
 		 * @brief Handles the payload of a UDP packet
 		 */
-		class UserDatagramProtocolPayloadHandler : public common::EventHandler<UserDatagramProtocolEvents> {
+		class UDPPayloadHandler : public common::EventHandler<UDPEvents> {
 			public:
-				UserDatagramProtocolPayloadHandler();
-				~UserDatagramProtocolPayloadHandler();
+				UDPPayloadHandler();
+				~UDPPayloadHandler();
 
-				common::Event<UserDatagramProtocolEvents>* on_event(common::Event<UserDatagramProtocolEvents>* event) override;
+				common::Event<UDPEvents>* on_event(common::Event<UDPEvents>* event) override;
 
-				virtual void handleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, uint8_t* data, uint16_t size);
+				virtual void handleUserDatagramProtocolMessage(UDPSocket* socket, uint8_t* data, uint16_t size);
 
 		};
 
 		/**
-		 * @class UserDatagramProtocolSocket
+		 * @class UDPSocket
 		 * @brief A UDP socket
 		 */
-		class UserDatagramProtocolSocket : public common::EventManager<UserDatagramProtocolEvents> {
+		class UDPSocket : public common::EventManager<UDPEvents> {
 				friend class UserDatagramProtocolHandler;
 
 			protected:
@@ -89,8 +93,8 @@ namespace MaxOS {
 				UserDatagramProtocolHandler* userDatagramProtocolHandler;   ///< The UDP handler this socket is connected to
 
 			public:
-				UserDatagramProtocolSocket();
-				~UserDatagramProtocolSocket();
+				UDPSocket();
+				~UDPSocket();
 
 				virtual void handleUserDatagramProtocolPayload(uint8_t* data, uint16_t size);
 				virtual void Send(uint8_t* data, uint16_t size);
@@ -102,9 +106,9 @@ namespace MaxOS {
 		 * @class UserDatagramProtocolHandler
 		 * @brief Handles the UDP protocol
 		 */
-		class UserDatagramProtocolHandler : InternetProtocolPayloadHandler {
+		class UserDatagramProtocolHandler : IPV4PayloadHandler {
 			protected:
-				common::Vector<UserDatagramProtocolSocket*> sockets;    ///< The list of UDP sockets
+				common::Vector<UDPSocket*> sockets;    ///< The list of UDP sockets
 				static UserDatagramProtocolPort freePorts;              ///< The next free port number
 				common::OutputStream* errorMessages;                    ///< Where to write error messages
 
@@ -114,15 +118,15 @@ namespace MaxOS {
 
 				bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) override;
 
-				UserDatagramProtocolSocket* Connect(uint32_t ip, uint16_t port);
-				static UserDatagramProtocolSocket* Connect(const string &address);
+				UDPSocket* Connect(uint32_t ip, uint16_t port);
+				static UDPSocket* Connect(const string &address);
 
-				UserDatagramProtocolSocket* Listen(uint16_t port);
+				UDPSocket* Listen(uint16_t port);
 
-				void Disconnect(UserDatagramProtocolSocket* socket);
-				void Send(UserDatagramProtocolSocket* socket, const uint8_t* data, uint16_t size);
+				void Disconnect(UDPSocket* socket);
+				void Send(UDPSocket* socket, const uint8_t* data, uint16_t size);
 
-				static void Bind(UserDatagramProtocolSocket* socket, UserDatagramProtocolPayloadHandler* userDatagramProtocolPayloadHandler);
+				static void Bind(UDPSocket* socket, UDPPayloadHandler* UDPPayloadHandler);
 		};
 
 	}

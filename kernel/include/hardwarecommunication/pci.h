@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/10/2022.
-//
+/**
+ * @file pci.h
+ * @brief Defines a Peripheral Component Interconnect (PCI) controller for managing PCI devices and loading their drivers
+ *
+ * @date 12th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_HARDWARECOMMUNICATION_PCI_H
 #define MAX_OS_HARDWARECOMMUNICATION_PCI_H

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file widget.h
+ * @brief Defines a base Widget class and CompositeWidget class for creating graphical user interface elements
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_GUI_WIDGET_H
 #define MaxOS_GUI_WIDGET_H

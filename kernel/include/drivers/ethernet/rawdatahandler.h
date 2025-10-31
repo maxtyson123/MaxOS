@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/1/2022.
-//
+/**
+ * @file rawdatahandler.h
+ * @brief Defines a RawDataHandler class for handling raw ethernet data received from the ethernet controller.
+ *
+ * @date 1st December 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_ETHERNET_RAWDATAHANDLER_H
 #define MAXOS_DRIVERS_ETHERNET_RAWDATAHANDLER_H

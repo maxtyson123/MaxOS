@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file intel_i217.cpp
+ * @brief Implementation of the Intel I217 Ethernet Driver
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/ethernet/intel_i217.h>
 

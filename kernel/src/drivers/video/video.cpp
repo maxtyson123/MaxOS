@@ -1,3 +1,10 @@
+/**
+ * @file video.cpp
+ * @brief Implementation of a generic Video Driver interface
+ *
+ * @date 8th April 2023
+ * @author Max Tyson
+ */
 //
 // Created by 98max on 8/04/2023.
 //

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 1/30/2024.
-//
+/**
+ * @file physical.cpp
+ * @brief Implementation of the Physical Memory Manager for managing physical memory pages
+ *
+ * @date 30th January 2024
+ * @author Max Tyson
+ */
 
 #include <common/logger.h>
 #include <memory/physical.h>

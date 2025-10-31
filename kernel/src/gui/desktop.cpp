@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file desktop.cpp
+ * @brief Implementation of a Desktop class for managing the GUI desktop and mouse
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #include <gui/desktop.h>
 

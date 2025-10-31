@@ -1,6 +1,10 @@
-//
-// Created by 98max on 22/11/2022.
-//
+/**
+ * @file ipv4.h
+ * @brief Defines classes and structures for handling Internet Protocol version 4 (IPv4) packets
+ *
+ * @date 22nd November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_NET_IPV4_H
 #define MAXOS_NET_IPV4_H
@@ -16,10 +20,10 @@ namespace MaxOS {
 		typedef uint32_t SubnetMask;
 
 		/**
-		 * @struct InternetProtocolV4Header
+		 * @struct IPV4Header
 		 * @brief The header of an IPv4 packet
 		 */
-		struct InternetProtocolV4Header {
+		struct IPV4Header {
 			uint8_t headerLength: 4;        ///< The length of the header in 32-bit words (min 5, max 15)
 			uint8_t version: 4;             ///< The version of the IP protocol (4 for IPv4)
 			uint8_t typeOfService;          ///< The type of service (low delay, high throughput, high reliability, etc. todo: enum)
@@ -39,23 +43,23 @@ namespace MaxOS {
 		class InternetProtocolHandler;
 
 		/**
-		 * @class InternetProtocolAddressResolver
+		 * @class IPV4AddressResolver
 		 * @brief Resolves IP addresses to MAC addresses
 		 */
-		class InternetProtocolAddressResolver {
+		class IPV4AddressResolver {
 			public:
-				InternetProtocolAddressResolver(InternetProtocolHandler* internetProtocolHandler);
-				~InternetProtocolAddressResolver();
+				IPV4AddressResolver(InternetProtocolHandler* internetProtocolHandler);
+				~IPV4AddressResolver();
 				virtual drivers::ethernet::MediaAccessControlAddress Resolve(InternetProtocolAddress address);
 				virtual void Store(InternetProtocolAddress internetProtocolAddress, drivers::ethernet::MediaAccessControlAddress mediaAccessControlAddress);
 		};
 
 
 		/**
-		 * @class InternetProtocolPayloadHandler
+		 * @class IPV4PayloadHandler
 		 * @brief Handles the payload of a specific IP protocol
 		 */
-		class InternetProtocolPayloadHandler {
+		class IPV4PayloadHandler {
 				friend class InternetProtocolHandler;
 
 			protected:
@@ -63,8 +67,8 @@ namespace MaxOS {
 				uint8_t ipProtocol;                                 ///< The IP protocol this handler handles
 
 			public:
-				InternetProtocolPayloadHandler(InternetProtocolHandler* internetProtocolHandler, uint8_t protocol);
-				~InternetProtocolPayloadHandler();
+				IPV4PayloadHandler(InternetProtocolHandler* internetProtocolHandler, uint8_t protocol);
+				~IPV4PayloadHandler();
 
 				virtual bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
 				void Send(InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size);
@@ -76,20 +80,20 @@ namespace MaxOS {
 		 */
 		class InternetProtocolHandler : public EthernetFramePayloadHandler {
 
-			friend class InternetProtocolAddressResolver;
+			friend class IPV4AddressResolver;
 
 			protected:
 
-				common::Map<uint8_t, InternetProtocolPayloadHandler*> internetProtocolPayloadHandlers;  ///< Map of IP protocol numbers to their payload handlers
+				common::Map<uint8_t, IPV4PayloadHandler*> IPV4PayloadHandlers;  ///< Map of IP protocol numbers to their payload handlers
 
-				InternetProtocolAddressResolver* resolver = nullptr;                                    ///< The IP address resolver
+				IPV4AddressResolver* resolver = nullptr;                                    ///< The IP address resolver
 				common::OutputStream* errorMessages;                                                    ///< Stream to output error messages to
 
 				InternetProtocolAddress ownInternetProtocolAddress;                                     ///< The IP address of this device
 				InternetProtocolAddress defaultGatewayInternetProtocolAddress;                          ///< The IP address of the default gateway
 				SubnetMask subnetMask;                                                                  ///< The subnet mask
 
-				void RegisterInternetProtocolAddressResolver(InternetProtocolAddressResolver* resolver);
+				void RegisterIPV4AddressResolver(IPV4AddressResolver* resolver);
 
 			public:
 				InternetProtocolHandler(EthernetFrameHandler* backend,
@@ -110,7 +114,7 @@ namespace MaxOS {
 				InternetProtocolAddress GetInternetProtocolAddress() const;
 				drivers::ethernet::MediaAccessControlAddress GetMediaAccessControlAddress();
 
-				void connectInternetProtocolPayloadHandler(InternetProtocolPayloadHandler* internetProtocolPayloadHandler);
+				void connectIPV4PayloadHandler(IPV4PayloadHandler* IPV4PayloadHandler);
 
 
 		};

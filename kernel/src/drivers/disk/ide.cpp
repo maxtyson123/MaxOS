@@ -1,6 +1,11 @@
-//
-// Created by Max Tyson on 18/04/2025.
-//
+/**
+ * @file ide.cpp
+ * @brief Implementation of an Integrated Drive Electronics (IDE) controller driver
+ *
+ * @date 18th April 2025
+ * @author Max Tyson
+ */
+
 #include <drivers/disk/ide.h>
 
 

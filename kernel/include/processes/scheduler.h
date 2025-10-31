@@ -1,6 +1,10 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file scheduler.h
+ * @brief Defines a GlobalScheduler and Scheduler for managing processes and threads
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_SCHEDULER_H
 #define MAXOS_PROCESSES_SCHEDULER_H

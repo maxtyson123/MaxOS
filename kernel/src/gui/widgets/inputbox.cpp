@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/10/2023.
-//
+/**
+ * @file inputbox.cpp
+ * @brief Implementation of an InputBox widget for text input in the GUI
+ *
+ * @date 11th October 2023
+ * @author Max Tyson
+ */
 
 #include <gui/widgets/inputbox.h>
 #include <gui/font/amiga_font.h>

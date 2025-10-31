@@ -1,6 +1,10 @@
-//
-// Created by 98max on 17/01/2024.
-//
+/**
+ * @file cpu.h
+ * @brief Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features
+ *
+ * @date 17th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_SYSTEM_CPU_H
 #define MAXOS_SYSTEM_CPU_H

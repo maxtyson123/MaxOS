@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/02/2025.
-//
+/**
+ * @file spinlock.cpp
+ * @brief Implements a Spinlock class for mutual exclusion in concurrent programming
+ *
+ * @date 24th February 2025
+ * @author Max Tyson
+ */
 
 #include <common/spinlock.h>
 #include <processes/scheduler.h>

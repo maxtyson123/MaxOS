@@ -1,6 +1,11 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file apic.cpp
+ * @brief Implementation of the Local & IO APIC class for managing the CPU's local Advanced Programmable Interrupt Controller (APIC)
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
+
 #include <hardwarecommunication/apic.h>
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>

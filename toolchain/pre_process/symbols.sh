@@ -45,13 +45,25 @@ get_demangled_names() {
     cut -f2- "$RAW" | $CXXFILT 2>/dev/null
 }
 
+# Get the date in the format Xth Month YYYY
+DATE_STR="$(date +'%-d')"
+case "$DATE_STR" in
+  1|21|31) DATE_STR="${DATE_STR}st" ;;
+  2|22) DATE_STR="${DATE_STR}nd" ;;
+  3|23) DATE_STR="${DATE_STR}rd" ;;
+  *) DATE_STR="${DATE_STR}th" ;;
+esac
+DATE_STR="$DATE_STR $(date +' %B %Y')"
 
 # Write the header
 cat > "$OUT" <<'EOF'
-//
-// This file is generated automatically by the MaxOS build system.
-//
-
+/**
+ * @file symbols.h
+ * @brief Defines kernel symbol resolution functions
+ *
+ * @date ${DATE_STR}
+ * @author Max Tyson
+ */
 #ifndef MAXOS_COMMON_SYMBOLS_H
 #define MAXOS_COMMON_SYMBOLS_H
 

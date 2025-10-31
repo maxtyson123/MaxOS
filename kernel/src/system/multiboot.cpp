@@ -1,6 +1,10 @@
-//
-// Created by 98max on 1/6/2024.
-//
+/**
+ * @file multiboot.cpp
+ * @brief Implementation of a Multiboot2 information structure parser
+ *
+ * @date 6th January 2024
+ * @author Max Tyson
+ */
 
 #include <system/multiboot.h>
 #include <common/logger.h>

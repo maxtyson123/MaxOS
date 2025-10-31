@@ -1,6 +1,10 @@
-//
-// Created by 98max on 19/07/2023.
-//
+/**
+ * @file vesa.h
+ * @brief Defines a Video Electronics Standards Association (VESA) video driver for handling pixel rendering using VESA standards and a framebuffer
+ *
+ * @date 19th July 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_VIDEO_VESA_H
 #define MAXOS_VIDEO_VESA_H

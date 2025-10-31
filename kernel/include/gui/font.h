@@ -1,6 +1,10 @@
-//
-// Created by 98max on 4/15/2023.
-//
+/**
+ * @file font.h
+ * @brief Defines a Font class for drawing text onto a graphics context
+ *
+ * @date 15th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_FONT_H
 #define MAXOS_COMMON_FONT_H

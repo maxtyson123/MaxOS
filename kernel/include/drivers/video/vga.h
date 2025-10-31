@@ -1,6 +1,10 @@
-//
-// Created by Tyson on 14/10/2022.
-//
+/**
+ * @file vga.h
+ * @brief Defines a Video Graphics Array (VGA) driver for rendering graphics to the screen
+ *
+ * @date 14th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_DRIVERS_VGA_H
 #define MaxOS_DRIVERS_VGA_H

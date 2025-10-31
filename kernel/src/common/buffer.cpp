@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/07/2025.
-//
+/**
+ * @file buffer.cpp
+ * @brief Implementation of a simple byte buffer for reading and writing data
+ *
+ * @date 30th July 2025
+ * @author Max Tyson
+ */
 
 #include <common/buffer.h>
 

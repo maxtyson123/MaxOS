@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/16/2022.
-//
+/**
+ * @file text.cpp
+ * @brief Implementation of a Text widget for displaying text in the GUI
+ *
+ * @date 16th October 2022
+ * @author Max Tyson
+ */
 
 #include <gui/font/amiga_font.h>
 #include <gui/widgets/text.h>

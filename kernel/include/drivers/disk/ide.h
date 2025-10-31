@@ -1,6 +1,10 @@
-//
-// Created by Max Tyson on 18/04/2025.
-//
+/**
+ * @file ide.h
+ * @brief Defines a driver for the Integrated Drive Electronics (IDE) controller
+ *
+ * @date 18th April 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_IDE_H
 #define MAXOS_DRIVERS_IDE_H

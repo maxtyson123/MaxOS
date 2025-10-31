@@ -1,6 +1,12 @@
-//
-// Created by 98max on 30/03/2025.
-//
+/**
+ * @file cplusplus.h
+ * @brief Defines C++ runtime functions and structures needed for linking C++ code in the kernel
+ *
+ * @see https://wiki.osdev.org/C%2B%2B - code adapted from here
+ *
+ * @date 30th March 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_RUNTIME_CPLUSPLUS_H
 #define MAXOS_RUNTIME_CPLUSPLUS_H
@@ -9,10 +15,6 @@
 
 namespace MaxOS {
 	namespace runtime {
-
-
-		// Thanks: https://wiki.osdev.org/C%2B%2B
-
 
 		typedef void (* constructor)();
 		typedef unsigned uarch_t;

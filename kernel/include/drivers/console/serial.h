@@ -1,6 +1,10 @@
-//
-// Created by 98max on 14/01/2024.
-//
+/**
+ * @file serial.h
+ * @brief Defines a SerialConsole driver for serial output
+ *
+ * @date 14th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_SERIAL_H
 #define MAXOS_SERIAL_H

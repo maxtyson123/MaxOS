@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/12/2024.
-//
+/**
+ * @file ubsan.cpp
+ * @brief Implementation of the Undefined Behavior Sanitizer (UBSan) handler
+ *
+ * @date 30th December 2024
+ * @author Max Tyson
+ */
 
 #include <runtime/ubsan.h>
 #include <common/logger.h>

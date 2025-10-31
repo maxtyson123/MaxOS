@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/1/2022.
-//
+/**
+ * @file ethernet.h
+ * @brief Defines an EthernetDriver class for managing Ethernet communication, including sending and receiving data, handling MAC addresses, and event management.
+ *
+ * @date 1st December 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_ETHERNET_ETHERNET_H
 #define MAXOS_DRIVERS_ETHERNET_ETHERNET_H

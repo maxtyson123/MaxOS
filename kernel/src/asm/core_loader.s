@@ -1,4 +1,13 @@
-; core_loader.s  (NASM)
+;/**
+; * @file core_loader.s (NASM)
+; * @brief Loads the core in to 64 bit mode and jumps to core_main
+; *
+; * @see kernel.cpp
+; *
+; * @date 2025
+; * @author Max Tyson
+; */
+
 global core_start
 global core_boot_info
 

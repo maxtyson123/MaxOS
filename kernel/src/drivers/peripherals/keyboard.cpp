@@ -1,6 +1,10 @@
-//
-// Created by 98max on 9/10/2022.
-//
+/**
+ * @file keyboard.cpp
+ * @brief Implementation of a Keyboard driver and event handling
+ *
+ * @date 10th September 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/peripherals/keyboard.h>
 

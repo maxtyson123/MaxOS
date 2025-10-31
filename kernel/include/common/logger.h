@@ -1,6 +1,10 @@
-//
-// Created by 98max on 4/04/2025.
-//
+/**
+ * @file logger.h
+ * @brief Defines a Logger class for logging messages with different severity levels to multiple output streams.
+ *
+ * @date 4th April 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_LOGGER_H
 #define MAXOS_COMMON_LOGGER_H
@@ -25,8 +29,8 @@
          };
 
 
-		constexpr uint8_t MAX_LOG_WRITERS = 5;
-		constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;
+		constexpr uint8_t MAX_LOG_WRITERS = 5;                  ///< The maximum number of log writers that can be added to the logger
+		constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;     ///< The maximum log level for this build (messages above this level will not be logged)
 
         /**
          * @class Logger

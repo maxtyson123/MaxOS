@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/1/2022.
-//
+/**
+ * @file ethernet.cpp
+ * @brief Implementation of an Ethernet driver interface
+ *
+ * @date 1st December 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/ethernet/ethernet.h>
 

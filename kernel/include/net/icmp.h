@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/11/2022.
-//
+/**
+ * @file icmp.h
+ * @brief Defines the Internet Control Message Protocol (ICMP) handler for network communication.
+ *
+ * @date 24th November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_NET_ICMP_H
 #define MAXOS_NET_ICMP_H
@@ -15,10 +19,10 @@ namespace MaxOS {
 
 
 		/**
-		 * @struct InternetControlMessageProtocolHeader
+		 * @struct ICMPHeader
 		 * @brief The header of an ICMP packet
 		 */
-		struct InternetControlMessageProtocolHeader {
+		struct ICMPHeader {
 			uint8_t type;           ///< The type of ICMP message
 			uint8_t code;           ///< The code of the ICMP message
 
@@ -30,7 +34,7 @@ namespace MaxOS {
 		 * @class InternetControlMessageProtocol
 		 * @brief Handles ICMP packets
 		 */
-		class InternetControlMessageProtocol : InternetProtocolPayloadHandler {
+		class InternetControlMessageProtocol : IPV4PayloadHandler {
 
 				common::OutputStream* errorMessages;
 

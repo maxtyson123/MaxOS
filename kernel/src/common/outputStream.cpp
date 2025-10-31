@@ -1,6 +1,10 @@
-//
-// Created by 98max on 13/04/2023.
-//
+/**
+ * @file outputStream.cpp
+ * @brief Implements an output stream for writing strings, characters, integers, and hex values to an output device
+ *
+ * @date 13th April 2023
+ * @author Max Tyson
+ */
 
 #include <common/outputStream.h>
 

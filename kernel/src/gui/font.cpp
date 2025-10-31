@@ -1,6 +1,10 @@
-//
-// Created by 98max on 4/15/2023.
-//
+/**
+ * @file font.cpp
+ * @brief Implementation of a Font class for rendering text in a graphics context
+ *
+ * @date 15th April 2023
+ * @author Max Tyson
+ */
 
 #include <gui/font.h>
 

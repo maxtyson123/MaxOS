@@ -1,3 +1,10 @@
+/**
+ * @file ipc.cpp
+ * @brief Implementation of inter-process communication (IPC) resources
+ *
+ * @date 24th March 2025
+ * @author Max Tyson
+ */
 //
 // Created by 98max on 24/03/2025.
 //

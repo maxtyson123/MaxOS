@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/2/2023.
-//
+/**
+ * @file vesaboot.cpp
+ * @brief Implementation of a VESA Boot Console for text output in graphics mode using VESA BIOS Extensions (VBE)
+ *
+ * @date 2nd October 2023
+ * @author Max Tyson
+ */
 
 #include <drivers/console/vesaboot.h>
 #include <gui/font/amiga_font.h>

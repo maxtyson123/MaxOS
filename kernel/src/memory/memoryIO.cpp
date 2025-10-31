@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file memoryIO.cpp
+ * @brief Implementation of memory-mapped I/O operations
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #include <memory/memoryIO.h>
 

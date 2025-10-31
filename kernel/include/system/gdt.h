@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/3/2022.
-//
+/**
+ * @file gdt.h
+ * @brief Defines a Global Descriptor Table (GDT) for setting up memory segments in protected mode
+ *
+ * @date 3rd October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_SYSTEM_GDT_H
 #define MAX_OS_SYSTEM_GDT_H
@@ -28,10 +32,10 @@ namespace MaxOS {
 
 
         /**
-         * @struct GlobalDescriptorTableRegister
+         * @struct GDTRegister
          * @brief How the CPU stores the GDT
          */
-        typedef struct GlobalDescriptorTableRegister {
+        typedef struct GDTRegister {
             uint16_t size;      ///< The size of the GDT
             uint64_t address;   ///< The address of the GDT
         } __attribute__((packed)) gdtr_t;

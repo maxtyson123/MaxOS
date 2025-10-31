@@ -1,6 +1,11 @@
-//
-// Created by 98max on 30/03/2025.
-//
+/**
+ * @file cplusplus.cpp
+ * @brief Implementation of C++ runtime support functions
+ *
+ * @date 30th March 2025
+ * @author Max Tyson
+ */
+
 #include <runtime/cplusplus.h>
 #include <common/logger.h>
 

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 9/10/2022.
-//
+/**
+ * @file keyboard.h
+ * @brief Defines a Keyboard and related classes for handling keyboard input
+ *
+ * @date 9th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 #define MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H

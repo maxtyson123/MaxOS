@@ -1,6 +1,11 @@
-//
-// Created by 98max on 8/26/2025.
-//
+/**
+ * @file resource.cpp
+ * @brief Implementation of Resource and Resource Registry classes
+ *
+ * @date 26th August 2025
+ * @author Max Tyson
+ */
+
 #include <processes/resource.h>
 
 using namespace MaxOS;

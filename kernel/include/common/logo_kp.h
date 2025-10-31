@@ -1,11 +1,20 @@
+/**
+ * @file logo_kp.h
+ * @brief GIMP generated logo header for kernel panic screen
+ *
+ * @date 2025
+ * @author Max Tyson
+ */
+
 // Ignore warnings for this file
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #pragma GCC diagnostic ignored "-Wtrigraphs"
 
-constexpr int LOGO_WIDTH_KP = 335;
-constexpr int LOGO_HEIGHT_KP = 212;
+constexpr int LOGO_WIDTH_KP = 335;  ///< Width of the logo in pixels
+constexpr int LOGO_HEIGHT_KP = 212; ///< Height of the logo in pixels
 
+/// Logo pixel data in the GIMP header format
 static char *header_data_kp =
 	"KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!"
 	"KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!KA!!"

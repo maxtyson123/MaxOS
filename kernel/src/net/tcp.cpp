@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/9/2022.
-//
+/**
+ * @file tcp.cpp
+ * @brief Implementation of Transmission Control Protocol (TCP) classes and handlers
+ *
+ * @date 26th March 2024
+ * @author Max Tyson
+ */
 
 #include <net/tcp.h>
 #include "net/udp.h"
@@ -13,36 +17,36 @@ using namespace MaxOS::memory;
 
 ///__Handler__///
 
-TransmissionControlProtocolPayloadHandler::TransmissionControlProtocolPayloadHandler() = default;
+TCPPayloadHandler::TCPPayloadHandler() = default;
 
-TransmissionControlProtocolPayloadHandler::~TransmissionControlProtocolPayloadHandler()= default;
+TCPPayloadHandler::~TCPPayloadHandler()= default;
 
 /// Revisit and document
-void TransmissionControlProtocolPayloadHandler::handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket*, uint8_t*, uint16_t) {
+void TCPPayloadHandler::handleTransmissionControlProtocolPayload(TCPSocket*, uint8_t*, uint16_t) {
 
 }
 
 /// Revisit and document
-void TransmissionControlProtocolPayloadHandler::Connected(TransmissionControlProtocolSocket*) {
+void TCPPayloadHandler::Connected(TCPSocket*) {
 
 }
 
 /// Revisit and document
-void TransmissionControlProtocolPayloadHandler::Disconnected(TransmissionControlProtocolSocket*) {
+void TCPPayloadHandler::Disconnected(TCPSocket*) {
 
 }
 
 /// Revisit and document
-Event<TransmissionControlProtocolPayloadHandlerEvents>* TransmissionControlProtocolPayloadHandler::on_event(Event<TransmissionControlProtocolPayloadHandlerEvents>* event) {
+Event<TCPPayloadHandlerEvents>* TCPPayloadHandler::on_event(Event<TCPPayloadHandlerEvents>* event) {
 
 	switch (event->type) {
-		case TransmissionControlProtocolPayloadHandlerEvents::CONNECTED:
+		case TCPPayloadHandlerEvents::CONNECTED:
 			Connected(((ConnectedEvent*) event)->socket);
 			break;
-		case TransmissionControlProtocolPayloadHandlerEvents::DISCONNECTED:
+		case TCPPayloadHandlerEvents::DISCONNECTED:
 			Disconnected(((DisconnectedEvent*) event)->socket);
 			break;
-		case TransmissionControlProtocolPayloadHandlerEvents::DATA_RECEIVED:
+		case TCPPayloadHandlerEvents::DATA_RECEIVED:
 			handleTransmissionControlProtocolPayload(((DataReceivedEvent*) event)->socket,
 			                                         ((DataReceivedEvent*) event)->data,
 			                                         ((DataReceivedEvent*) event)->size);
@@ -54,7 +58,7 @@ Event<TransmissionControlProtocolPayloadHandlerEvents>* TransmissionControlProto
 
 
 ///__Socket__///
-TransmissionControlProtocolSocket::TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler) {
+TCPSocket::TCPSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler) {
 	//Set the default values
 	this->transmissionControlProtocolHandler = transmissionControlProtocolHandler;
 
@@ -62,7 +66,7 @@ TransmissionControlProtocolSocket::TransmissionControlProtocolSocket(Transmissio
 	state = TCPSocketState::CLOSED;
 }
 
-TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket() = default;
+TCPSocket::~TCPSocket() = default;
 
 /**
  * @brief Handle the TCP message (socket end)
@@ -71,7 +75,7 @@ TransmissionControlProtocolSocket::~TransmissionControlProtocolSocket() = defaul
  * @param size The size of the data
  * @return True if the connection is to be terminated after hadnling or false if not
  */
-bool TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload(uint8_t* data, uint16_t size) {
+bool TCPSocket::handleTransmissionControlProtocolPayload(uint8_t* data, uint16_t size) {
 	auto* event = new DataReceivedEvent(this, data, size);
 	raise_event(event);
 	MemoryManager::kfree(event);
@@ -84,7 +88,7 @@ bool TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload
  * @param data The data to send
  * @param size The size of the data
  */
-void TransmissionControlProtocolSocket::Send(uint8_t* data, uint16_t size) {
+void TCPSocket::Send(uint8_t* data, uint16_t size) {
 	//Wait for the socket to be connected
 	while (state != TCPSocketState::ESTABLISHED);
 
@@ -97,14 +101,14 @@ void TransmissionControlProtocolSocket::Send(uint8_t* data, uint16_t size) {
 /**
  * @brief Disconnect the socket
  */
-void TransmissionControlProtocolSocket::Disconnect() {
+void TCPSocket::Disconnect() {
 	transmissionControlProtocolHandler->Disconnect(this);
 }
 
 /**
  * @brief Raise the disconnected event
  */
-void TransmissionControlProtocolSocket::Disconnected() {
+void TCPSocket::Disconnected() {
 	auto* event = new DisconnectedEvent(this);
 	raise_event(event);
 	MemoryManager::kfree(event);
@@ -114,7 +118,7 @@ void TransmissionControlProtocolSocket::Disconnected() {
 /**
  * @brief Raise the connected event
  */
-void TransmissionControlProtocolSocket::Connected() {
+void TCPSocket::Connected() {
 	auto* event = new ConnectedEvent(this);
 	raise_event(event);
 	MemoryManager::kfree(event);
@@ -132,7 +136,7 @@ TransmissionControlProtocolPort TransmissionControlProtocolHandler::freePorts = 
  * @param errorMessages Where to write error messages
  */
 TransmissionControlProtocolHandler::TransmissionControlProtocolHandler(MaxOS::net::InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
-		: InternetProtocolPayloadHandler(internetProtocolHandler, 0x06) {
+		: IPV4PayloadHandler(internetProtocolHandler, 0x06) {
 	this->errorMessages = errorMessages;
 
 }
@@ -177,14 +181,14 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
 	}
 
 	//Get the header
-	auto* msg = (TransmissionControlProtocolHeader*) payloadData;
+	auto* msg = (TCPHeader*) payloadData;
 
 	//Get the connection values (convert to host endian)
 	uint16_t localPort = bigEndian16(msg->dstPort);
 	uint16_t remotePort = bigEndian16(msg->srcPort);
 
 	//Create the socket
-	TransmissionControlProtocolSocket* socket = nullptr;
+	TCPSocket* socket = nullptr;
 
 	for (auto &currentSocket : sockets) {
 		if (currentSocket->localPort ==
@@ -343,7 +347,7 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
 			sendTransmissionControlProtocolPacket(socket, nullptr, 0, (uint16_t) TCPFlag::RST);
 		} else                                                                        //If it doesn't exist then create a new socket and send a reset flag
 		{
-			TransmissionControlProtocolSocket new_socket(this);                     //Create a new socket
+			TCPSocket new_socket(this);                     //Create a new socket
 			new_socket.remotePort = msg->srcPort;                                         //Set the remote port
 			new_socket.remoteIP = sourceIP;                                                 //Set the remote IP
 			new_socket.localPort = msg->dstPort;                                                  //Set the local port
@@ -378,22 +382,22 @@ bool TransmissionControlProtocolHandler::handleInternetProtocolPayload(InternetP
  * @param size   The size of the data
  * @param flags  The flags to send
  */
-void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, const uint8_t* data, uint16_t size, uint16_t flags) {
+void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(TCPSocket* socket, const uint8_t* data, uint16_t size, uint16_t flags) {
 	//Get the total size of the packet and the packet with the pseudo header
-	uint16_t totalLength = size + sizeof(TransmissionControlProtocolHeader);
-	uint16_t lengthInclPHdr = totalLength + sizeof(TransmissionControlProtocolPseudoHeader);
+	uint16_t totalLength = size + sizeof(TCPHeader);
+	uint16_t lengthInclPHdr = totalLength + sizeof(TCPPseudoHeader);
 
 	//Create a buffer for the packet
 	auto* buffer = (uint8_t*) MemoryManager::kmalloc(lengthInclPHdr);
 	uint8_t* buffer2 =
-			buffer + sizeof(TransmissionControlProtocolHeader) + sizeof(TransmissionControlProtocolPseudoHeader);
+			buffer + sizeof(TCPHeader) + sizeof(TCPPseudoHeader);
 
 	//Create the headers
-	auto* phdr = (TransmissionControlProtocolPseudoHeader*) buffer;
-	auto* msg = (TransmissionControlProtocolHeader*) (buffer + sizeof(TransmissionControlProtocolPseudoHeader));
+	auto* phdr = (TCPPseudoHeader*) buffer;
+	auto* msg = (TCPHeader*) (buffer + sizeof(TCPPseudoHeader));
 
 	//Size is translated into 32bit
-	msg->headerSize32 = sizeof(TransmissionControlProtocolHeader) / 4;
+	msg->headerSize32 = sizeof(TCPHeader) / 4;
 
 	//Set the ports
 	msg->srcPort = bigEndian16(socket->localPort);
@@ -442,15 +446,15 @@ void TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket(T
  * @param port The port of the remote host
  * @return The socket that is connected to the remote host, 0 if it failed
  */
-TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port) {
+TCPSocket* TransmissionControlProtocolHandler::Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port) {
 	//Create a new socket
-	auto* socket = (TransmissionControlProtocolSocket*) MemoryManager::kmalloc(
-			sizeof(TransmissionControlProtocolSocket));
+	auto* socket = (TCPSocket*) MemoryManager::kmalloc(
+			sizeof(TCPSocket));
 
 	//If there is space for the socket
 	if (socket != nullptr) {
 		//Set the socket
-		new(socket) TransmissionControlProtocolSocket(this);
+		new(socket) TCPSocket(this);
 
 		//Set local and remote addresses
 		socket->remotePort = port;
@@ -483,7 +487,7 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(I
  *
  * @return The socket that is connected to the remote host, nullptr if it failed
  */
-TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(const string &address) {
+TCPSocket* TransmissionControlProtocolHandler::Connect(const string &address) {
 
 	//TODO NEW STRING PARSEING
 
@@ -495,7 +499,7 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Connect(c
  *
  * @param socket The socket to disconnect
  */
-void TransmissionControlProtocolHandler::Disconnect(TransmissionControlProtocolSocket* socket) {
+void TransmissionControlProtocolHandler::Disconnect(TCPSocket* socket) {
 
 	socket->state = TCPSocketState::FIN_WAIT1;                            //Begin fin wait sequence
 	sendTransmissionControlProtocolPacket(socket, nullptr, 0, (uint16_t) TCPFlag::FIN +
@@ -509,15 +513,15 @@ void TransmissionControlProtocolHandler::Disconnect(TransmissionControlProtocolS
  * @param port The port to listen on
  * @return The socket that will handle the connection
  */
-TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Listen(uint16_t port) {
+TCPSocket* TransmissionControlProtocolHandler::Listen(uint16_t port) {
 	//Create a new socket
-	auto* socket = (TransmissionControlProtocolSocket*) MemoryManager::kmalloc(
-			sizeof(TransmissionControlProtocolSocket));
+	auto* socket = (TCPSocket*) MemoryManager::kmalloc(
+			sizeof(TCPSocket));
 
 	//If there is space for the socket
 	if (socket != nullptr) {
 		//Set the socket
-		new(socket) TransmissionControlProtocolSocket(this);
+		new(socket) TCPSocket(this);
 
 		//Configure the socket
 		socket->state = TCPSocketState::LISTEN;
@@ -539,15 +543,15 @@ TransmissionControlProtocolSocket* TransmissionControlProtocolHandler::Listen(ui
  * @param socket The socket to bind the handler to
  * @param handler The handler to bind
  */
-void TransmissionControlProtocolHandler::Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolPayloadHandler* handler) {
+void TransmissionControlProtocolHandler::Bind(TCPSocket* socket, TCPPayloadHandler* handler) {
 	socket->connect_event_handler(handler);
 }
 
 
 /// ___ EVENTS ___ ///
 
-DataReceivedEvent::DataReceivedEvent(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size)
-		: Event(TransmissionControlProtocolPayloadHandlerEvents::DATA_RECEIVED) {
+DataReceivedEvent::DataReceivedEvent(TCPSocket* socket, uint8_t* data, uint16_t size)
+		: Event(TCPPayloadHandlerEvents::DATA_RECEIVED) {
 	this->socket = socket;
 	this->data = data;
 	this->size = size;
@@ -560,8 +564,8 @@ DataReceivedEvent::~DataReceivedEvent() = default;
  *
  * @param socket The socket that is connected
  */
-ConnectedEvent::ConnectedEvent(TransmissionControlProtocolSocket* socket)
-		: Event(TransmissionControlProtocolPayloadHandlerEvents::CONNECTED) {
+ConnectedEvent::ConnectedEvent(TCPSocket* socket)
+		: Event(TCPPayloadHandlerEvents::CONNECTED) {
 	this->socket = socket;
 }
 
@@ -572,8 +576,8 @@ ConnectedEvent::~ConnectedEvent() = default;
  *
  * @param socket The socket that is disconnected
  */
-DisconnectedEvent::DisconnectedEvent(TransmissionControlProtocolSocket* socket)
-		: Event(TransmissionControlProtocolPayloadHandlerEvents::DISCONNECTED) {
+DisconnectedEvent::DisconnectedEvent(TCPSocket* socket)
+		: Event(TCPPayloadHandlerEvents::DISCONNECTED) {
 	this->socket = socket;
 }
 

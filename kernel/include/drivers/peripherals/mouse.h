@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/10/2022.
-//
+/**
+ * @file mouse.h
+ * @brief Defines a MouseDriver for handling PS/2 mouse input and generating mouse events
+ *
+ * @date 10th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_MOUSE_H
 #define MAX_OS_DRIVERS_PERIPHERALS_MOUSE_H

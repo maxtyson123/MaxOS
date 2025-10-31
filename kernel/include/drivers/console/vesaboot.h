@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/2/2023.
-//
+/**
+ * @file vesaboot.h
+ * @brief Defines the VESABootConsole driver for handling console output during boot using an VESA framebuffer.
+ *
+ * @date 2nd October 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_CONSOLE_VESABOOTCONSOLE_H
 #define MAXOS_DRIVERS_CONSOLE_VESABOOTCONSOLE_H

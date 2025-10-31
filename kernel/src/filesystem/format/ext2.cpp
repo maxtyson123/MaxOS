@@ -1,6 +1,11 @@
-//
-// Created by 98max on 17/07/2025.
-//
+/**
+ * @file ext2.cpp
+ * @brief Implementation of an Ext2 filesystem driver
+ *
+ * @date 17th July 2025
+ * @author Max Tyson
+ */
+
 #include <filesystem/format/ext2.h>
 
 using namespace MaxOS;

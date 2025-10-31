@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/20/2022.
-//
+/**
+ * @file memorymanagement.h
+ * @brief Defines a MemoryManager class for handling memory allocation and deallocation
+ *
+ * @date 20th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_SYSTEM_MEMORYMANAGEMENT_H
 #define MAXOS_SYSTEM_MEMORYMANAGEMENT_H

@@ -1,6 +1,11 @@
-//
-// Created by 98max on 9/10/2025.
-//
+/**
+ * @file symbols.cpp
+ * @brief Implementation of symbol resolution for instruction pointers
+ *
+ * @date 10th September 2025
+ * @author Max Tyson
+ */
+
 #include <common/symbols.h>
 
 namespace MaxOS{

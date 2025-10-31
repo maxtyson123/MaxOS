@@ -1,6 +1,10 @@
-//
-// Created by 98max on 9/04/2023.
-//
+/**
+ * @file pair.h
+ * @brief Defines a Pair class for storing two related objects together.
+ *
+ * @date 9th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PAIR_H
 #define MAXOS_PAIR_H

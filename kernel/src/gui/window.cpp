@@ -1,6 +1,11 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file window.cpp
+ * @brief Implementation of a Window class for GUI windows
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
+
 #include <gui/window.h>
 #include <gui/widgets/text.h>
 

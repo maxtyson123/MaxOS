@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/10/2023.
-//
+/**
+ * @file button.cpp
+ * @brief Implementation of a Button widget for GUI applications
+ *
+ * @date 10th October 2023
+ * @author Max Tyson
+ */
 
 #include <gui/widgets/button.h>
 #include <gui/font/amiga_font.h>

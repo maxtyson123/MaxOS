@@ -1,6 +1,10 @@
-//
-// Created by 98max on 21/03/2025.
-//
+/**
+ * @file elf.cpp
+ * @brief Implementation of an Executable and Linkable Format (ELF) loader for 64-bit binaries
+ *
+ * @date 21st March 2025
+ * @author Max Tyson
+ */
 
 #include <processes/elf.h>
 #include <common/logger.h>

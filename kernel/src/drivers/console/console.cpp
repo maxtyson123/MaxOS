@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/09/2023.
-//
+/**
+ * @file console.cpp
+ * @brief Implementation of a basic console driver interface
+ *
+ * @date 27th September 2023
+ * @author Max Tyson
+ */
 
 #include <drivers/console/console.h>
 

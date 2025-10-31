@@ -1,6 +1,10 @@
-//
-// Created by 98max on 5/01/2023.
-//
+/**
+ * @file filesystem.h
+ * @brief Defines a generic API for a file system, including classes for File, Directory, and FileSystem
+ *
+ * @date 5th January 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_FILESYSTEM_H
 #define MAXOS_FILESYSTEM_FILESYSTEM_H

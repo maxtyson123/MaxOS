@@ -1,6 +1,11 @@
-//
-// Created by 98max on 9/1/2025.
-//
+/**
+ * @file vfsresource.h
+ * @brief Defines VFSResource classes for wrapping File and Directory objects as Resources in the Virtual File System,
+ * allowing file system operations to be performed through the Resource interface.
+ *
+ * @date 1st September 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_VFSRESOURCE_H
 #define MAXOS_FILESYSTEM_VFSRESOURCE_H

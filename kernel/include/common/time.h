@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/04/2023.
-//
+/**
+ * @file time.h
+ * @brief Defines a Time struct for storing date and time information, along with functions for time manipulation.
+ *
+ * @date 10th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_TIME_H
 #define MAXOS_COMMON_TIME_H

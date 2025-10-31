@@ -1,6 +1,11 @@
-//
-// Created by Max Tyson on 20/04/2025.
-//
+/**
+ * @file vfs.cpp
+ * @brief Implementation of a Virtual File System (VFS) for managing multiple file systems
+ *
+ * @date 20th April 2025
+ * @author Max Tyson
+ */
+
 #include <filesystem/vfs.h>
 #include <common/logger.h>
 

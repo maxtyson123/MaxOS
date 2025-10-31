@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/11/2022.
-//
+/**
+ * @file arp.h
+ * @brief Defines the Address Resolution Protocol (ARP) for resolving IP addresses to MAC addresses
+ *
+ * @date 11th November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_NET_ARP_H
 #define MAXOS_NET_ARP_H
@@ -14,10 +18,10 @@ namespace MaxOS {
 	namespace net {
 
 		/**
-		 * @struct AddressResolutionProtocolMessage
+		 * @struct ARPMessage
 		 * @brief An ARP message
 		 */
-		struct AddressResolutionProtocolMessage {
+		struct ARPMessage {
 
 			uint16_t hardwareType;          ///< The type of device that sent the ARP message (1 = Ethernet)
 			uint16_t protocol;              ///< The protocol being used (0x0800 = IPv4)
@@ -38,7 +42,7 @@ namespace MaxOS {
 		 * @class AddressResolutionProtocol
 		 * @brief Handles ARP requests and replies
 		 */
-		class AddressResolutionProtocol : public EthernetFramePayloadHandler, public InternetProtocolAddressResolver {
+		class AddressResolutionProtocol : public EthernetFramePayloadHandler, public IPV4AddressResolver {
 
 			private:
 				common::Map<InternetProtocolAddress, drivers::ethernet::MediaAccessControlAddress> addressCache;

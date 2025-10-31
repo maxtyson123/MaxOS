@@ -1,6 +1,10 @@
-//
-// Created by 98max on 21/03/2025.
-//
+/**
+ * @file elf.h
+ * @brief Defines structures and enums for handling ELF (Executable and Linkable Format) files in MaxOS.
+ *
+ * @date 21st March 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_ELF_H
 #define MAXOS_PROCESSES_ELF_H

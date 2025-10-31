@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/03/2023.
-//
+/**
+ * @file colour.cpp
+ * @brief Implementation of the Colour class defined in colour.h
+ *
+ * @date 30th March 2023
+ * @author Max Tyson
+ */
 
 #include <common/colour.h>
 

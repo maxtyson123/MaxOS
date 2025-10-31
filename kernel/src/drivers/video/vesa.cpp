@@ -1,6 +1,10 @@
-//
-// Created by 98max on 19/07/2023.
-//
+/**
+ * @file vesa.cpp
+ * @brief Implementation of a VESA video driver
+ *
+ * @date 19th July 2023
+ * @author Max Tyson
+ */
 
 #include <drivers/video/vesa.h>
 #include <common/logger.h>

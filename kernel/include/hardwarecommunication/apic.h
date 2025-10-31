@@ -1,6 +1,10 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file apic.h
+ * @brief Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_HARDWARECOMMUNICATION_APIC_H
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
@@ -41,7 +45,8 @@ namespace MaxOS {
 
 		/**
 		 * @struct MADT
-		 * @brief Multiple APIC Description Table (ACPI 2 or higher). Provides information about the APICs in the system. Following this header are multiple entries describing the APICs (see MADTEntry).
+		 * @brief Multiple APIC Description Table (MADT) (ACPI 2 or higher). Provides information about the APICs in
+		 * the system. Following this header are multiple entries describing the APICs (see MADTEntry).
 		 */
 		typedef struct MADT {
 			ACPISDTHeader header;               ///< Common ACPI SDT header

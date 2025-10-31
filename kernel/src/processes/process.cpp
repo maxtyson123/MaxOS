@@ -1,6 +1,11 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file process.cpp
+ * @brief Implementation of a Thread and Process classes for managing system processes
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
+
 #include <processes/process.h>
 #include <common/logger.h>
 

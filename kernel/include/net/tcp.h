@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/9/2022.
-//
+/**
+ * @file tcp.h
+ * @brief Defines the Transmission Control Protocol (TCP) structures and classes for handling TCP sockets and payloads.
+ *
+ * @date 12th September 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_NET_TCP_H
 #define MAXOS_NET_TCP_H
@@ -53,10 +57,10 @@ namespace MaxOS {
 		};
 
 		/**
-		 * @struct TransmissionControlProtocolHeader
+		 * @struct TCPHeader
 		 * @brief The header of a TCP packet
 		 */
-		struct TransmissionControlProtocolHeader {
+		struct TCPHeader {
 			uint16_t srcPort;                   ///< The port of the sender
 			uint16_t dstPort;                   ///< The port of the receiver
 			uint32_t sequenceNumber;            ///< Where this packet's data fits in the overall order of the data stream
@@ -74,13 +78,13 @@ namespace MaxOS {
 		} __attribute__((packed));
 
 		/**
-		 * @struct TransmissionControlProtocolPseudoHeader
+		 * @struct TCPPseudoHeader
 		 * @brief The pseudo header used for TCP checksum calculation
 		 *
 		 * @details The pseudo header is used to calculate the checksum of the TCP header. It is a copy of the IP
 		 * header, but with the protocol field set to 6 (TCP) and the length field set to the length of the TCP header.
 		 */
-		struct TransmissionControlProtocolPseudoHeader {
+		struct TCPPseudoHeader {
 			uint32_t srcIP;         ///< The IP address of the sender
 			uint32_t dstIP;         ///< The IP address of the receiver
 			uint16_t protocol;      ///< The protocol (set to 6 for TCP)
@@ -89,14 +93,14 @@ namespace MaxOS {
 
 
 		// Forward declarations
-		class TransmissionControlProtocolSocket;
+		class TCPSocket;
 		class TransmissionControlProtocolHandler;
 
 		/**
-		 * @enum TransmissionControlProtocolPayloadHandlerEvents
-		 * @brief Events for the TransmissionControlProtocolPayloadHandler
+		 * @enum TCPPayloadHandlerEvents
+		 * @brief Events for the TCPPayloadHandler
 		 */
-		enum class TransmissionControlProtocolPayloadHandlerEvents {
+		enum class TCPPayloadHandlerEvents {
 			CONNECTED,
 			DISCONNECTED,
 			DATA_RECEIVED
@@ -106,12 +110,12 @@ namespace MaxOS {
 		 * @class DataReceivedEvent
 		 * @brief Event for when data is received on a TCP socket
 		 */
-		class DataReceivedEvent : public common::Event<TransmissionControlProtocolPayloadHandlerEvents> {
+		class DataReceivedEvent : public common::Event<TCPPayloadHandlerEvents> {
 			public:
-				TransmissionControlProtocolSocket* socket;       ///< The socket that received the data
+				TCPSocket* socket;       ///< The socket that received the data
 				uint8_t* data;                                   ///< The data received
 				uint16_t size;                                    ///< The size of the data received
-				DataReceivedEvent(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size);
+				DataReceivedEvent(TCPSocket* socket, uint8_t* data, uint16_t size);
 				~DataReceivedEvent();
 		};
 
@@ -119,10 +123,10 @@ namespace MaxOS {
 		 * @class ConnectedEvent
 		 * @brief Event for when a TCP socket is connected
 		 */
-		class ConnectedEvent : public common::Event<TransmissionControlProtocolPayloadHandlerEvents> {
+		class ConnectedEvent : public common::Event<TCPPayloadHandlerEvents> {
 			public:
-				TransmissionControlProtocolSocket* socket;                      ///< The socket that is connected
-				ConnectedEvent(TransmissionControlProtocolSocket* socket);
+				TCPSocket* socket;                      ///< The socket that is connected
+				ConnectedEvent(TCPSocket* socket);
 				~ConnectedEvent();
 		};
 
@@ -130,34 +134,34 @@ namespace MaxOS {
 		 * @class DisconnectedEvent
 		 * @brief Event for when a TCP socket is disconnected
 		 */
-		class DisconnectedEvent : public common::Event<TransmissionControlProtocolPayloadHandlerEvents> {
+		class DisconnectedEvent : public common::Event<TCPPayloadHandlerEvents> {
 			public:
-				TransmissionControlProtocolSocket* socket;                      ///< The socket that is disconnected
-				DisconnectedEvent(TransmissionControlProtocolSocket* socket);
+				TCPSocket* socket;                      ///< The socket that is disconnected
+				DisconnectedEvent(TCPSocket* socket);
 				~DisconnectedEvent();
 		};
 
 		/**
-		 * @class TransmissionControlProtocolPayloadHandler
+		 * @class TCPPayloadHandler
 		 * @brief Handler for TCP payloads
 		 */
-		class TransmissionControlProtocolPayloadHandler : public common::EventHandler<TransmissionControlProtocolPayloadHandlerEvents> {
+		class TCPPayloadHandler : public common::EventHandler<TCPPayloadHandlerEvents> {
 			public:
-				TransmissionControlProtocolPayloadHandler();
-				~TransmissionControlProtocolPayloadHandler();
+				TCPPayloadHandler();
+				~TCPPayloadHandler();
 
-				common::Event<TransmissionControlProtocolPayloadHandlerEvents>* on_event(common::Event<TransmissionControlProtocolPayloadHandlerEvents>* event) override;
+				common::Event<TCPPayloadHandlerEvents>* on_event(common::Event<TCPPayloadHandlerEvents>* event) override;
 
-				virtual void handleTransmissionControlProtocolPayload(TransmissionControlProtocolSocket* socket, uint8_t* data, uint16_t size);
-				virtual void Connected(TransmissionControlProtocolSocket* socket);
-				virtual void Disconnected(TransmissionControlProtocolSocket* socket);
+				virtual void handleTransmissionControlProtocolPayload(TCPSocket* socket, uint8_t* data, uint16_t size);
+				virtual void Connected(TCPSocket* socket);
+				virtual void Disconnected(TCPSocket* socket);
 		};
 
 		/**
-		 * @class TransmissionControlProtocolSocket
+		 * @class TCPSocket
 		 * @brief A TCP socket. Allows for sending and receiving data over TCP at a port
 		 */
-		class TransmissionControlProtocolSocket: public common::EventManager<TransmissionControlProtocolPayloadHandlerEvents> {
+		class TCPSocket: public common::EventManager<TCPPayloadHandlerEvents> {
 			friend class TransmissionControlProtocolHandler;
 			friend class TransmissionControlProtocolPortListener;
 
@@ -172,8 +176,8 @@ namespace MaxOS {
 				TransmissionControlProtocolHandler* transmissionControlProtocolHandler;  ///< The TCP handler this socket is using
 				TCPSocketState state;                                                    ///< The state of the socket
 			public:
-				TransmissionControlProtocolSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
-				~TransmissionControlProtocolSocket();
+				TCPSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler);
+				~TCPSocket();
 
 				virtual void Send(uint8_t* data, uint16_t size);
 				virtual void Disconnect();
@@ -188,15 +192,15 @@ namespace MaxOS {
 		 * @class TransmissionControlProtocolHandler
 		 * @brief Handles TCP packets and manages TCP sockets
 		 */
-		class TransmissionControlProtocolHandler : InternetProtocolPayloadHandler {
-			friend class TransmissionControlProtocolSocket;
+		class TransmissionControlProtocolHandler : IPV4PayloadHandler {
+			friend class TCPSocket;
 
 			protected:
 				common::OutputStream* errorMessages;                                ///< Where to write error messages
-				common::Vector<TransmissionControlProtocolSocket*> sockets;         ///< The list of connected sockets
+				common::Vector<TCPSocket*> sockets;         ///< The list of connected sockets
 
 				static TransmissionControlProtocolPort freePorts;                   ///< The next free port to use for new sockets
-				void sendTransmissionControlProtocolPacket(TransmissionControlProtocolSocket* socket, const uint8_t* data, uint16_t size, uint16_t flags = 0);
+				void sendTransmissionControlProtocolPacket(TCPSocket* socket, const uint8_t* data, uint16_t size, uint16_t flags = 0);
 
 			public:
 				TransmissionControlProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
@@ -204,13 +208,13 @@ namespace MaxOS {
 
 				bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) override;
 
-				TransmissionControlProtocolSocket* Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port);
-				static TransmissionControlProtocolSocket* Connect(const string &address);
+				TCPSocket* Connect(InternetProtocolAddress ip, TransmissionControlProtocolPort port);
+				static TCPSocket* Connect(const string &address);
 
-				void Disconnect(TransmissionControlProtocolSocket* socket);
+				void Disconnect(TCPSocket* socket);
 
-				virtual TransmissionControlProtocolSocket* Listen(uint16_t port);
-				virtual void Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolPayloadHandler* handler);
+				virtual TCPSocket* Listen(uint16_t port);
+				virtual void Bind(TCPSocket* socket, TCPPayloadHandler* handler);
 		};
 
 

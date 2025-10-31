@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/16/2022.
-//
+/**
+ * @file text.h
+ * @brief Defines a Text widget for displaying text in the GUI
+ *
+ * @date 16th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_GUI_WDIGETS_TEXT_H
 #define MAXOS_GUI_WDIGETS_TEXT_H

@@ -1,3 +1,13 @@
+;/**
+; * @file loader.s (NASM)
+; * @brief Loads the kernel in to 64 bit mode and jumps to kernel_main
+; *
+; * @see kernel.cpp
+; *
+; * @date 2022
+; * @author Max Tyson
+; */
+
 %define KERNEL_VIRTUAL_ADDR 0xFFFFFFFF80000000
 %define PAGE_SIZE 0x1000
 %define FLAGS 0b10 | 1

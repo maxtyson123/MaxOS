@@ -1,6 +1,10 @@
-//
-// Created by 98max on 5/11/2022.
-//
+/**
+ * @file ethernetframe.h
+ * @brief Defines classes for handling Ethernet Frames and their payloads
+ *
+ * @date 11th May 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_NET_ETHERNETFRAME_H
 #define MAXOS_NET_ETHERNETFRAME_H

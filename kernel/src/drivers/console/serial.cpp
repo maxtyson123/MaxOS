@@ -1,6 +1,10 @@
-//
-// Created by 98max on 15/01/2024.
-//
+/**
+ * @file serial.cpp
+ * @brief Implements a Serial Console for logging over a serial port
+ *
+ * @date 15th January 2024
+ * @author Max Tyson
+ */
 
 #include <drivers/console/serial.h>
 

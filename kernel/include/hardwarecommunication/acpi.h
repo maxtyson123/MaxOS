@@ -1,6 +1,10 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file acpi.h
+ * @brief Defines an Advanced Configuration And Power Interface (ACPI class for handling ACPI table parsing and retrieval
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_HARDWARECOMMUNICATION_ACPI_H
 #define MAXOS_HARDWARECOMMUNICATION_ACPI_H

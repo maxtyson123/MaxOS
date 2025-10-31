@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/04/2023.
-//
+/**
+ * @file inputStream.h
+ * @brief Defines a generic input stream and related classes for handling input data streams
+ *
+ * @date 12th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_INPUTSTREAM_H
 #define MAXOS_COMMON_INPUTSTREAM_H
@@ -114,11 +118,25 @@ namespace MaxOS{
 
         };
 
-        // The ">>" operator is used to read data from a stream, it takes a stream to read from and an event handler to handle the data
-        template<class Type> void operator>>(GenericInputStream<Type>& source, InputStreamEventHandler<Type>& inputStreamEventHandler);
+        /**
+         * @brief The ">>" operator is used to read data from a stream, it takes a stream to read from and an event handler to handle the data
+         *
+         * @tparam Type The type of data the stream is handling
+         * @param source The stream to read from
+         * @param inputStreamEventHandler The event handler to handle the data
+         */
+        template<class Type> void operator >> (GenericInputStream<Type>& source, InputStreamEventHandler<Type>& inputStreamEventHandler);
 
-        // The ">>" operator is used to read data from a stream, it takes a stream to read from and a processor to convert the data into another type
-        template<class Type, class ProcessorType> GenericInputStream<ProcessorType>& operator>>(GenericInputStream<Type>& source, InputStreamProcessor<Type, ProcessorType>& processor);
+        /**
+         * @brief The ">>" operator is used to read data from a stream, it takes a stream to read from and an InputStreamProcessor to process the data
+         *
+         * @tparam Type The type of data the stream is handling
+         * @tparam ProcessorType The type of data to convert the data into via the processor
+         * @param source The stream to read from
+         * @param processor The processor to process the data
+         * @return The processed stream
+         */
+        template<class Type, class ProcessorType> GenericInputStream<ProcessorType>& operator >> (GenericInputStream<Type>& source, InputStreamProcessor<Type, ProcessorType>& processor);
 
         /**
          * @class InputStream
@@ -132,6 +150,7 @@ namespace MaxOS{
 
 
         ///_______________________________________________TEMPLATES_________________________________________________________________///
+		// TODO: should be in a cpp?
 
         /**
          * @brief Creates a new InputStreamProcessor

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/10/2022.
-//
+/**
+ * @file mouse.cpp
+ * @brief Implementation of a Mouse driver and event handler
+ *
+ * @date 10th October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/peripherals/mouse.h>
 

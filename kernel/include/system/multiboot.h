@@ -120,9 +120,9 @@ struct multiboot_header_tag {
  * @brief A tag requesting information from the bootloader
  */
 struct multiboot_header_tag_information_request {
-	multiboot_uint16_t type;              ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;             ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;              ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;              ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;             ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;              ///< *copydoc multiboot_header_tag::size
 	multiboot_uint32_t requests[0];       ///< The tags being requested
 };
 
@@ -131,9 +131,9 @@ struct multiboot_header_tag_information_request {
  * @brief A tag specifying the load addresses of the OS image
  */
 struct multiboot_header_tag_address {
-	multiboot_uint16_t type;                  ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;                 ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;                  ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;                 ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_header_tag::size
 	multiboot_uint32_t header_addr;           ///< The physical address of the multiboot header
 	multiboot_uint32_t load_addr;             ///< The physical address to load the image
 	multiboot_uint32_t load_end_addr;         ///< The physical address of the end of the loaded image
@@ -145,9 +145,9 @@ struct multiboot_header_tag_address {
  * @brief A tag specifying the entry point address of the OS image
  */
 struct multiboot_header_tag_entry_address {
-	multiboot_uint16_t type;                  ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;                 ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;                  ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;                 ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_header_tag::size
 	multiboot_uint32_t entry_addr;            ///< The physical address of the entry point
 };
 
@@ -156,9 +156,9 @@ struct multiboot_header_tag_entry_address {
  * @brief A tag specifying the console flags
  */
 struct multiboot_header_tag_console_flags {
-	multiboot_uint16_t type;                  ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;                 ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;                  ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;                 ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_header_tag::size
 	multiboot_uint32_t console_flags;         ///< The console flags
 };
 
@@ -167,9 +167,9 @@ struct multiboot_header_tag_console_flags {
  * @brief A tag specifying the VESA framebuffer settings
  */
 struct multiboot_header_tag_framebuffer {
-	multiboot_uint16_t type;                  ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;                 ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;                  ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;                 ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_header_tag::size
 	multiboot_uint32_t width;                 ///< The width of the framebuffer in pixels
 	multiboot_uint32_t height;                ///< The height of the framebuffer in pixels
 	multiboot_uint32_t depth;                 ///< The depth of the framebuffer in bits per pixel
@@ -180,9 +180,9 @@ struct multiboot_header_tag_framebuffer {
  * @brief A tag specifying the module alignment
  */
 struct multiboot_header_tag_module_align {
-	multiboot_uint16_t type;                  ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;                 ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;                  ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;                 ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_header_tag::size
 };
 
 /**
@@ -190,9 +190,9 @@ struct multiboot_header_tag_module_align {
  * @brief A tag containing information of where the OS image can be loaded
  */
 struct multiboot_header_tag_relocatable {
-	multiboot_uint16_t type;                  ///< @copydoc multiboot_header_tag::type
-	multiboot_uint16_t flags;                 ///< @copydoc multiboot_header_tag::flags
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_header_tag::size
+	multiboot_uint16_t type;                  ///< *copydoc multiboot_header_tag::type
+	multiboot_uint16_t flags;                 ///< *copydoc multiboot_header_tag::flags
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_header_tag::size
 	multiboot_uint32_t min_addr;              ///< The lowest address the image can be loaded at
 	multiboot_uint32_t max_addr;              ///< The highest address the image can be loaded at
 	multiboot_uint32_t align;                 ///< The alignment of the image
@@ -241,8 +241,8 @@ struct multiboot_tag {
  * @brief A tag containing a null-terminated string
  */
 struct multiboot_tag_string {
-	multiboot_uint32_t type;                  ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                  ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_tag::size
 	char string[0];                           ///< The string
 };
 
@@ -251,8 +251,8 @@ struct multiboot_tag_string {
  * @brief A tag containing information about a loaded module
  */
 struct multiboot_tag_module {
-	multiboot_uint32_t type;                  ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                  ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t mod_start;             ///< The starting address of the module
 	multiboot_uint32_t mod_end;               ///< The ending address of the module
 	char cmdline[0];                          ///< The args passed to the module
@@ -263,8 +263,8 @@ struct multiboot_tag_module {
  * @brief A tag containing basic (legacy) memory information
  */
 struct multiboot_tag_basic_meminfo {
-	multiboot_uint32_t type;                  ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                  ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t mem_lower;             ///< The amount of lower memory in KB
 	multiboot_uint32_t mem_upper;             ///< The amount of upper memory in KB (upper memory is the memory above 1MB, below 4GB)
 };
@@ -274,8 +274,8 @@ struct multiboot_tag_basic_meminfo {
  * @brief A tag containing information about the device the OS image was loaded from
  */
 struct multiboot_tag_bootdev {
-	multiboot_uint32_t type;                  ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                  ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t biosdev;               ///< The BIOS disk device the OS image was loaded from
 	multiboot_uint32_t slice;                 ///< The slice number of the disk device
 	multiboot_uint32_t part;                  ///< The partition number of the disk device
@@ -286,8 +286,8 @@ struct multiboot_tag_bootdev {
  * @brief A tag containing the collection of memory map entries that outline the memory layout
  */
 struct multiboot_tag_mmap {
-	multiboot_uint32_t type;                  ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                  ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                  ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                  ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t entry_size;            ///< The size of each entry
 	multiboot_uint32_t entry_version;         ///< The version of the entry structure (must be 0)
 	struct multiboot_mmap_entry entries[0];   ///< The memory map entries
@@ -314,8 +314,8 @@ struct multiboot_vbe_mode_info_block {
  * @brief A tag containing information about the VESA BIOS Extensions (VBE)
  */
 struct multiboot_tag_vbe {
-	multiboot_uint32_t type;                                  ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                                  ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                                  ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                                  ///< *copydoc multiboot_tag::size
 
 	multiboot_uint16_t vbe_mode;                              ///< The VBE mode
 	multiboot_uint16_t vbe_interface_seg;                     ///< The segment of the VBE interface
@@ -335,8 +335,8 @@ struct multiboot_tag_vbe {
  * @brief Common header for framebuffer tags
  */
 struct multiboot_tag_framebuffer_common {
-	multiboot_uint32_t type;                        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;                        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;                        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;                        ///< *copydoc multiboot_tag::size
 
 	multiboot_uint64_t framebuffer_addr;            ///< The physical address of the framebuffer
 	multiboot_uint32_t framebuffer_pitch;           ///< The number of bytes per horizontal line
@@ -352,7 +352,7 @@ struct multiboot_tag_framebuffer_common {
  * @brief A tag containing information about the framebuffer
  */
 struct multiboot_tag_framebuffer {
-	struct multiboot_tag_framebuffer_common common;                 ///< @copydoc multiboot_tag_framebuffer_common
+	struct multiboot_tag_framebuffer_common common;                 ///< *copydoc multiboot_tag_framebuffer_common
 
 	union {
 		struct {
@@ -375,8 +375,8 @@ struct multiboot_tag_framebuffer {
  * @brief A tag containing information about the ELF sections of the OS image
  */
 struct multiboot_tag_elf_sections {
-	multiboot_uint32_t type;            ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;            ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;            ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;            ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t num;             ///< The number of section headers
 	multiboot_uint32_t entsize;         ///< The size of each section header
 	multiboot_uint32_t shndx;           ///< The section header string table index
@@ -388,8 +388,8 @@ struct multiboot_tag_elf_sections {
  * @brief A tag containing information about the Advanced Power Management (APM) BIOS
  */
 struct multiboot_tag_apm {
-	multiboot_uint32_t type;        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;        ///< *copydoc multiboot_tag::size
 	multiboot_uint16_t version;     ///< The APM version
 	multiboot_uint16_t cseg;        ///< The code segment
 	multiboot_uint32_t offset;      ///< The offset
@@ -406,8 +406,8 @@ struct multiboot_tag_apm {
  * @brief A tag containing information about the EFI 32-bit system table
  */
 struct multiboot_tag_efi32 {
-	multiboot_uint32_t type;        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;        ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t pointer;     ///< Where the EFI system table is located
 };
 
@@ -416,8 +416,8 @@ struct multiboot_tag_efi32 {
  * @brief A tag containing information about the EFI 64-bit system table
  */
 struct multiboot_tag_efi64 {
-	multiboot_uint32_t type;        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;        ///< *copydoc multiboot_tag::size
 	multiboot_uint64_t pointer;     ///< Where the EFI system table is located
 };
 
@@ -426,8 +426,8 @@ struct multiboot_tag_efi64 {
  * @brief A tag containing information about the System Management BIOS (SMBIOS)
  */
 struct multiboot_tag_smbios {
-	multiboot_uint32_t type;            ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;            ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;            ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;            ///< *copydoc multiboot_tag::size
 	multiboot_uint8_t major;            ///< The major version of SMBIOS
 	multiboot_uint8_t minor;            ///< The minor version of SMBIOS
 	multiboot_uint8_t reserved[6];      ///< 6 bytes reserved
@@ -439,8 +439,8 @@ struct multiboot_tag_smbios {
  * @brief A tag containing information about the old ACPI RSDP
  */
 struct multiboot_tag_old_acpi {
-	multiboot_uint32_t type;        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;        ///< *copydoc multiboot_tag::size
 	multiboot_uint8_t rsdp[0];      ///< The RSDP structure
 };
 
@@ -449,8 +449,8 @@ struct multiboot_tag_old_acpi {
  * @brief A tag containing information about the new ACPI RSDP
  */
 struct multiboot_tag_new_acpi {
-	multiboot_uint32_t type;        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;        ///< *copydoc multiboot_tag::size
 	multiboot_uint8_t rsdp[0];      ///< The RSDP structure
 };
 
@@ -459,8 +459,8 @@ struct multiboot_tag_new_acpi {
  * @brief A tag containing information about the network booting
  */
 struct multiboot_tag_network {
-	multiboot_uint32_t type;            ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;            ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;            ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;            ///< *copydoc multiboot_tag::size
 	multiboot_uint8_t dhcpack[0];       ///< The DHCP ACK packet
 };
 
@@ -469,8 +469,8 @@ struct multiboot_tag_network {
  * @brief A tag containing the EFI memory map
  */
 struct multiboot_tag_efi_mmap {
-	multiboot_uint32_t type;            ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;            ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;            ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;            ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t descr_size;      ///< The size of each EFI memory descriptor
 	multiboot_uint32_t descr_vers;      ///< The version of the EFI memory descriptor
 	multiboot_uint8_t efi_mmap[0];      ///< The EFI memory map
@@ -481,8 +481,8 @@ struct multiboot_tag_efi_mmap {
  * @brief A tag containing the 32bit EFI image handle
  */
 struct multiboot_tag_efi32_ih {
-	multiboot_uint32_t type;            ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;            ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;            ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;            ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t pointer;         ///< Where the EFI image handle is located
 };
 
@@ -491,8 +491,8 @@ struct multiboot_tag_efi32_ih {
  * @brief A tag containing the 64bit EFI image handle
  */
 struct multiboot_tag_efi64_ih {
-	multiboot_uint32_t type;        ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;        ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;        ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;        ///< *copydoc multiboot_tag::size
 	multiboot_uint64_t pointer;     ///< Where the EFI image handle is located
 };
 
@@ -501,8 +501,8 @@ struct multiboot_tag_efi64_ih {
  * @brief A tag containing the load base address of the OS image
  */
 struct multiboot_tag_load_base_addr {
-	multiboot_uint32_t type;            ///< @copydoc multiboot_tag::type
-	multiboot_uint32_t size;            ///< @copydoc multiboot_tag::size
+	multiboot_uint32_t type;            ///< *copydoc multiboot_tag::type
+	multiboot_uint32_t size;            ///< *copydoc multiboot_tag::size
 	multiboot_uint32_t load_base_addr;  ///< Where the OS image was loaded
 };
 

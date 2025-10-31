@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file window.h
+ * @brief Defines a Window class for creating movable and resizable GUI windows
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_GUI_WINDOW_H
 #define MaxOS_GUI_WINDOW_H

@@ -1,6 +1,11 @@
-//
-// Created by 98max on 1/01/2023.
-//
+/**
+ * @file fat32.h
+ * @brief Defines structures and constants for the File Allocation Table 32 (FAT32) filesystem format and the relevant
+ * Filesystem, Directory and File classes.
+ *
+ * @date 1st January 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_FAT32_H
 #define MAXOS_FILESYSTEM_FAT32_H

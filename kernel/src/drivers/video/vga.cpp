@@ -1,6 +1,12 @@
-//
-// Created by Tyson on 14/10/2022.
-//
+/**
+ * @file vga.cpp
+ * @brief Implementation of a Video Graphics Array (VGA) driver
+ *
+ * @date 14th October 2022
+ * @author Max Tyson
+ *
+ * @see https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c - helpful for VGA mode setting
+ */
 
 #include <drivers/video/vga.h>
 
@@ -8,8 +14,6 @@ using namespace MaxOS;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::hardwarecommunication;
-
-// http://files.osdev.org/mirrors/geezer/osd/graphics/modes.c - helpful so thanks
 
 VideoGraphicsArray::VideoGraphicsArray()
 : m_misc_port(0x3C2),

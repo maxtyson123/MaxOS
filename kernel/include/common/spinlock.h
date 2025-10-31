@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/02/2025.
-//
+/**
+ * @file spinlock.h
+ * @brief Defines Spinlock and BlockingLock classes for thread synchronization
+ *
+ * @date 24th February 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_SPINLOCK_H
 #define MAXOS_COMMON_SPINLOCK_H

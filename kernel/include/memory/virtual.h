@@ -1,6 +1,10 @@
-//
-// Created by 98max on 2/11/2024.
-//
+/**
+ * @file virtual.h
+ * @brief Defines a VirtualMemoryManager class for managing virtual memory allocation and mapping to physical memory
+ *
+ * @date 11th February 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_VIRTUAL_H
 #define MAXOS_VIRTUAL_H
@@ -45,8 +49,8 @@ namespace MaxOS {
 		 * @brief A chunk of memory that has been freed and is available for allocation. A node in a linked list.
 		 */
 		typedef struct FreeChunk {
-			uintptr_t start_address;    ///< @copydoc VirtualMemoryChunk::start_address
-			size_t size;                ///< @copydoc VirtualMemoryChunk::size
+			uintptr_t start_address;    ///< *copydoc VirtualMemoryChunk::start_address
+			size_t size;                ///< *copydoc VirtualMemoryChunk::size
 			struct FreeChunk* next;     ///< Pointer to the next free chunk in the list (not sequential in memory)
 		} free_chunk_t;
 

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/11/2022.
-//
+/**
+ * @file arp.cpp
+ * @brief Implementation of the Address Resolution Protocol (ARP) for resolving IP addresses to MAC addresses
+ *
+ * @date 11th November 2022
+ * @author Max Tyson
+ */
 
 #include <net/arp.h>
 
@@ -20,7 +24,7 @@ using namespace MaxOS::drivers::ethernet;
  */
 net::AddressResolutionProtocol::AddressResolutionProtocol(EthernetFrameHandler* ethernetFrameHandler, InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
 : EthernetFramePayloadHandler(ethernetFrameHandler, 0x0806),
-  InternetProtocolAddressResolver(internetProtocolHandler)
+  IPV4AddressResolver(internetProtocolHandler)
 {
     this->internetProtocolHandler = internetProtocolHandler;
     this->errorMessages = errorMessages;
@@ -38,11 +42,11 @@ net::AddressResolutionProtocol::~AddressResolutionProtocol() = default;
 bool AddressResolutionProtocol::handleEthernetframePayload(uint8_t* etherframePayload, uint32_t size) {
 
     //Check if the size is correct
-    if(size < sizeof(AddressResolutionProtocolMessage))
+    if(size < sizeof(ARPMessage))
         return false;
 
     //Convert the payload to an ARP message
-    AddressResolutionProtocolMessage* arpMessage = (AddressResolutionProtocolMessage*)etherframePayload;
+    ARPMessage* arpMessage = (ARPMessage*)etherframePayload;
 
     //Check if the message hardware type is Ethernet (BigEndian)
     if(arpMessage -> hardwareType == 0x100){
@@ -92,7 +96,7 @@ bool AddressResolutionProtocol::handleEthernetframePayload(uint8_t* etherframePa
 void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress address) {
 
     //When a MAC address is requested, instantiate a new ARP message block on the stack
-    AddressResolutionProtocolMessage arpMessage = {};
+    ARPMessage arpMessage = {};
 
     //Set the message's values
     arpMessage.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian
@@ -108,7 +112,7 @@ void AddressResolutionProtocol::RequestMACAddress(InternetProtocolAddress addres
     arpMessage.dstIP = address;                                                           //Set the destination IP address to the requested IP address
 
     //Send the message
-    this -> Send(arpMessage.dstMAC, (uint8_t*)&arpMessage, sizeof(AddressResolutionProtocolMessage));
+    this -> Send(arpMessage.dstMAC, (uint8_t*)&arpMessage, sizeof(ARPMessage));
 
 
 }

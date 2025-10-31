@@ -1,6 +1,10 @@
-//
-// Created by 98max on 7/10/2022.
-//
+/**
+ * @file interrupts.cpp
+ * @brief Implementation of Interrupt Handling classes
+ *
+ * @date 10th July 2022
+ * @author Max Tyson
+ */
 
 #include <hardwarecommunication/interrupts.h>
 #include <common/logger.h>

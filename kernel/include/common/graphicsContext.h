@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file graphicsContext.h
+ * @brief Defines a GraphicsContext class for drawing pixels, lines, rectangles and circles to the screen
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_COMMON_GRAPHICSCONTEX_H
 #define MaxOS_COMMON_GRAPHICSCONTEX_H

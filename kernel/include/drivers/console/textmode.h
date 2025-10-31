@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/09/2023.
-//
+/**
+ * @file textmode.h
+ * @brief Defines a TextModeConsole class for handling a console in text mode using VGA
+ *
+ * @date 27th September 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_CONSOLE_TEXTMODECONSOLE_H
 #define MAXOS_DRIVERS_CONSOLE_TEXTMODECONSOLE_H

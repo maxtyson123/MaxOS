@@ -1,6 +1,10 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file acpi.cpp
+ * @brief Implementation of the Advanced Configuration and Power Interface (ACPI) class
+ *
+ * @date 26th February 2024
+ * @author Max Tyson
+ */
 #include <hardwarecommunication/acpi.h>
 #include <common/logger.h>
 

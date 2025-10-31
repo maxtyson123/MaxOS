@@ -1,6 +1,10 @@
-//
-// Created by 98max on 8/26/2025.
-//
+/**
+ * @file resource.h
+ * @brief Defines classes for managing process resources such as files and devices
+ *
+ * @date 26th August 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_RESOURCE_H
 #define MAXOS_PROCESSES_RESOURCE_H

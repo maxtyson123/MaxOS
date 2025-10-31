@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/10/2022.
-//
+/**
+ * @file driver.cpp
+ * @brief Implementation of a generic Driver class and DriverManager for managing drivers
+ *
+ * @date 11th October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/driver.h>
 #include <hardwarecommunication/pci.h>

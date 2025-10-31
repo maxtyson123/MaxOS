@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/03/2023.
-//
+/**
+ * @file video.h
+ * @brief Defines a generic VideoDriver class for handling video modes and graphics context operations.
+ *
+ * @date 30th March 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_VIDEO_VIDEO_H
 #define MAXOS_DRIVERS_VIDEO_VIDEO_H

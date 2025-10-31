@@ -1,6 +1,10 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file process.h
+ * @brief Defines Process and Thread classes for managing processes and their execution contexts
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_PROCESS_H
 #define MAXOS_PROCESSES_PROCESS_H

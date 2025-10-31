@@ -1,6 +1,11 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file widget.cpp
+ * @brief Implementation of a GUI Widget base class for creating GUI elements
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
+
 #include <gui/widget.h>
 
 using namespace MaxOS::common;

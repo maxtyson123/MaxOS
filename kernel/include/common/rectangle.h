@@ -1,6 +1,10 @@
-//
-// Created by 98max on 8/04/2023.
-//
+/**
+ * @file rectangle.h
+ * @brief Defines a Rectangle class for storing rectangle dimensions and performing rectangle operations
+ *
+ * @date 8th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_RECTANGLE_H
 #define MAXOS_COMMON_RECTANGLE_H

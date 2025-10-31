@@ -1,6 +1,11 @@
-//
-// Created by 98max on 9/2/2025.
-//
+/**
+ * @file path.cpp
+ * @brief Implementation of a Path class for handling filesystem paths
+ *
+ * @date 2nd September 2025
+ * @author Max Tyson
+ */
+
 #include <filesystem/path.h>
 
 using namespace MaxOS;

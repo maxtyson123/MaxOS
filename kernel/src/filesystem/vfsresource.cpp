@@ -1,6 +1,11 @@
-//
-// Created by 98max on 9/1/2025.
-//
+/**
+ * @file vfsresource.cpp
+ * @brief Implementation of virtual file system resources for files and directories
+ *
+ * @date 1st September 2025
+ * @author Max Tyson
+ */
+
 #include <filesystem/vfsresource.h>
 
 using namespace MaxOS;

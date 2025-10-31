@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/04/2023.
-//
+/**
+ * @file clock.h
+ * @brief Defines drivers for the Programmable Interval Timer (PIT) and APIC Clock
+ *
+ * @date 10th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_CLOCK_CLOCK_H
 #define MAXOS_DRIVERS_CLOCK_CLOCK_H

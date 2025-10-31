@@ -1,6 +1,10 @@
-// 
-//  Created by 98max on 22/10/2022.
-// 
+/**
+ * @file amd_am79c973.cpp
+ * @brief Implementation of the AMD AM79C973 Ethernet Driver
+ *
+ * @date 22nd October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/ethernet/amd_am79c973.h>
 

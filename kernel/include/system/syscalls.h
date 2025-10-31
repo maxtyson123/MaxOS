@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/10/2022.
-//
+/**
+ * @file syscalls.h
+ * @brief Defines the SyscallManager class for handling system calls from userspace applications
+ *
+ * @date 27th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_SYSTEM_SYSCALLS_H
 #define MAXOS_SYSTEM_SYSCALLS_H

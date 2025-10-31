@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/03/2023.
-//
+/**
+ * @file graphicsContext.cpp
+ * @brief Implements the GraphicsContext class defined in graphicsContext.h
+ *
+ * @date 30th March 2023
+ * @author Max Tyson
+ */
 
 #include <common/graphicsContext.h>
 

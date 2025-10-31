@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/12/2024.
-//
+/**
+ * @file ubsan.h
+ * @brief Defines structures and a handler for Undefined Behavior Sanitizer (UBSan) runtime errors
+ *
+ * @date 30th December 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_RUNTIME_UBSAN_H
 #define MAXOS_RUNTIME_UBSAN_H

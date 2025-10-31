@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/10/2022.
-//
+/**
+ * @file syscalls.cpp
+ * @brief Implementation of System Call Manager and handlers
+ *
+ * @date 27th October 2022
+ * @author Max Tyson
+ */
 
 #include <system/syscalls.h>
 #include <common/logger.h>

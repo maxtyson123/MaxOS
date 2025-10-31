@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file intel_i217.h
+ * @brief Driver for the Intel I217 Ethernet Controller
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_ETHERNET_INTEL_I127_H
 #define MAXOS_DRIVERS_ETHERNET_INTEL_I127_H

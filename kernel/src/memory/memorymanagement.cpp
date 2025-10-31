@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/20/2022.
-//
+/**
+ * @file memorymanagement.cpp
+ * @brief Implementation of a Memory Manager for dynamic memory allocation
+ *
+ * @date 20th October 2022
+ * @author Max Tyson
+ */
 
 #include <memory/memorymanagement.h>
 #include <common/logger.h>

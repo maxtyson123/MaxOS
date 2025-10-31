@@ -1,6 +1,11 @@
-//
-// Created by Max Tyson on 20/04/2025.
-//
+/**
+ * @file vfs.h
+ * @brief Defines a Virtual File System (VFS) class for managing multiple filesystems and providing a unified interface
+ * for file and directory operations.
+ *
+ * @date 20th April 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_VFS_H
 #define MAXOS_FILESYSTEM_VFS_H

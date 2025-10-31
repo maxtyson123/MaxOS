@@ -1,6 +1,10 @@
-//
-// Created by 98max on 22/10/2022.
-//
+/**
+ * @file amd_am79c973.h
+ * @brief Driver for the AMD AM79C973 Ethernet Controller
+ *
+ * @date 22nd October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_ETHERNET_AMD_AM79C973_H
 #define MAXOS_DRIVERS_ETHERNET_AMD_AM79C973_H

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 5/01/2023.
-//
+/**
+ * @file filesystem.cpp
+ * @brief Implementation of a generic filesystem interface
+ *
+ * @date 5th January 2023
+ * @author Max Tyson
+ */
 
 #include <filesystem/filesystem.h>
 #include <common/logger.h>

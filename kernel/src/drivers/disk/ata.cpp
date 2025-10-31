@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/10/2022.
-//
+/**
+ * @file ata.cpp
+ * @brief Implementation of the Advanced Technology Attachment (ATA) driver for disk communication
+ *
+ * @date 24th October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/disk/ata.h>
 

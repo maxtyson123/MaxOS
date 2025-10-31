@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file desktop.h
+ * @brief Defines a Desktop class for managing the GUI desktop, handling mouse and keyboard events, and drawing widgets.
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_GUI_DESKTOP_H
 #define MaxOS_GUI_DESKTOP_H

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/07/2025.
-//
+/**
+ * @file buffer.h
+ * @brief Defines a Buffer class for safe memory operations
+ *
+ * @date 30th July 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_BUFFER_H
 #define MAXOS_COMMON_BUFFER_H
@@ -64,7 +68,7 @@ namespace MaxOS{
 				void copy_to(void* destination, size_t length, size_t offset);
 		};
 
-		typedef Buffer buffer_t;
+		typedef Buffer buffer_t;    ///< Typedef for Buffer class
 
 	}
 

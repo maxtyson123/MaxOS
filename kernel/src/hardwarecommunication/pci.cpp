@@ -1,6 +1,11 @@
-//
-// Created by 98max on 12/10/2022.
-//
+/**
+ * @file pci.cpp
+ * @brief Implementation of a Peripheral Component Interconnect (PCI) controller and device descriptor
+ *
+ * @date 12th October 2022
+ * @author Max Tyson
+ */
+
 #include <hardwarecommunication/pci.h>
 #include <common/logger.h>
 

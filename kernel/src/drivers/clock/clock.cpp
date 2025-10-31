@@ -1,6 +1,11 @@
-//
-// Created by 98max on 10/04/2023.
-//
+/**
+ * @file clock.cpp
+ * @brief Implementation of a Clock driver for handling system time and clock interrupts
+ *
+ * @date 10th April 2023
+ * @author Max Tyson
+ */
+
 #include <drivers/clock/clock.h>
 #include <common/logger.h>
 

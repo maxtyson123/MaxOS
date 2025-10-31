@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/3/2022.
-//
+/**
+ * @file gdt.cpp
+ * @brief Implementation of the Global Descriptor Table (GDT) for memory segmentation
+ *
+ * @date 3rd October 2022
+ * @author Max Tyson
+ */
 
 #include <system/gdt.h>
 #include <common/logger.h>
