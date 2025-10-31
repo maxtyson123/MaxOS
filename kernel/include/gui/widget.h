@@ -26,18 +26,17 @@ namespace MaxOS{
             template<int Left, int Top, int Width, int Height> friend class WidgetMoverResizer;
             friend class CompositeWidget;
 
-            private:
-                common::Rectangle<int32_t> m_position;
+	        protected:
+                common::Rectangle<int32_t> m_position;          ///< The position and size of the widget (relative to its parent)
 
-            protected:
-                Widget* m_parent { nullptr };
-                bool m_valid { false };
+                Widget* m_parent { nullptr };                   ///< The widget that owns this widget
+                bool m_valid { false };                         ///< Is the widget drawn to the screen and up to date
 
-                uint32_t m_min_width { 5 };
-                uint32_t m_min_height { 5 };
+                uint32_t m_min_width { 5 };                     ///< The smallest m_width the widget can be resized to
+                uint32_t m_min_height { 5 };                    ///< The smallest m_height the widget can be resized to
 
-                uint32_t m_max_width { 0x8FFFFFFF };
-                uint32_t m_max_height { 0x8FFFFFFF };
+                uint32_t m_max_width { 0x8FFFFFFF };            ///< The largest m_width the widget can be resized to
+                uint32_t m_max_height { 0x8FFFFFFF };           ///< The largest m_height the widget can be resized to
 
                 virtual void set_focus(Widget*);
                 virtual void bring_to_front(Widget*);
@@ -83,9 +82,9 @@ namespace MaxOS{
          */
         class CompositeWidget : public Widget{
 
-            protected:
+	        protected:
 
-                common::Vector<Widget*> m_children;
+                common::Vector<Widget*> m_children;                                                                                     ///< Widgets contained within this composite widget
                 void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area, common::Vector<Widget*>::iterator start);
                 virtual void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area);
 
@@ -121,8 +120,9 @@ namespace MaxOS{
          * @tparam Height Height
          */
         template<int Left, int Top, int Width, int Height> class WidgetMoverResizer : public drivers::peripherals::MouseEventHandler{
-            protected:
+	        private:
                 Widget* targetedWidget;
+
             public:
                 WidgetMoverResizer(Widget* widget);
                 ~WidgetMoverResizer();

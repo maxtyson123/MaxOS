@@ -37,6 +37,12 @@ void Disk::read(uint32_t sector, buffer_t *data_buffer, size_t amount) {
 
 }
 
+/**
+ * @brief Write data to the disk from a buffer (max capacity 512 bytes)
+ *
+ * @param sector The sector to write to
+ * @param data The buffer to write the data from
+ */
 void Disk::write(uint32_t sector, common::buffer_t const *data) {
 
 	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();

@@ -105,6 +105,9 @@ void Thread::restore_sse_state() {
 	asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
 }
 
+/**
+ * @brief Saves the CPU state into the thread's execution_state structure
+ */
 void Thread::save_cpu_state() {
 	asm volatile(
 			// Store return address before stack is modified
@@ -205,7 +208,7 @@ Process::Process(const string& p_name, void (* _entry_point)(void*), void* args,
  * @param elf  The elf file to load the process from
  * @param is_kernel  If the process is a kernel process
  */
-Process::Process(const string& p_name, void* args, int arg_amount, Elf64* elf, bool is_kernel)
+Process::Process(const string& p_name, void* args, int arg_amount, ELF64* elf, bool is_kernel)
 : Process(p_name, is_kernel)
 {
 

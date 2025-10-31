@@ -10,6 +10,15 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::peripherals;
 
+/**
+ * @brief Construct a new Window object at a specific position and size (relative to the screen) with a title
+ *
+ * @param left How many pixels from the left of the screen the window is
+ * @param top How many pixels from the top of the screen the window is
+ * @param width How many pixels wide the window is
+ * @param height How many pixels tall the window is
+ * @param title_text The text to display in the title bar of the window
+ */
 Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& title_text)
 : CompositeWidget(left, top, width, height),
   m_title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, title_text),
@@ -40,9 +49,14 @@ Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const
 
 }
 
+/**
+ * @brief Construct a new Window object that contains a specific widget with a title. The window sizes itself to fit the widget.
+ *
+ * @param containedWidget The widget to contain within the window
+ * @param title_text The text to display in the title bar of the window
+ */
 Window::Window(Widget* containedWidget, const string& title_text)
-: CompositeWidget(0, 0, containedWidget->position().width + 2 * 5 + 2,
-				  containedWidget->position().height + 2 * 5 + 10 + 2),
+: CompositeWidget(0, 0, containedWidget->position().width + 2 * 5 + 2, containedWidget->position().height + 2 * 5 + 10 + 2),
   m_title(0, -(10 + 5) + 2, containedWidget->position().width, 10 + 5 - 3, title_text),
   m_mover(this),
   m_resizer_top(this),

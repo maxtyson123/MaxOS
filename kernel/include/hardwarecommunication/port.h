@@ -15,7 +15,7 @@ namespace MaxOS {
          */
         class Port {
             protected:
-                uint16_t m_port_number;
+                uint16_t m_port_number; ///< The port to write to / read from
 
                 Port(uint16_t port_number);
                 ~Port();

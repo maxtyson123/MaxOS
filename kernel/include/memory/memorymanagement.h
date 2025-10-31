@@ -10,69 +10,67 @@
 #include <system/multiboot.h>
 #include <memory/virtual.h>
 
-namespace MaxOS{
+namespace MaxOS {
 
-    namespace memory{
+	namespace memory {
 
-        /**
-         * @struct MemoryChunk
-         * @brief Stores information about a memory chunk in the memory manager linked list
-         */
-        struct MemoryChunk{
+		/**
+		 * @struct MemoryChunk
+		 * @brief A span of memory in the heap, can be allocated or free. Used as a node in a doubly linked list.
+		 */
+		struct MemoryChunk {
 
-            MemoryChunk* next;
-            MemoryChunk* prev;
+			MemoryChunk* next;      ///< Pointer to the chunk after this one in the list
+			MemoryChunk* prev;      ///< Pointer to the chunk before this one in the list
 
-            bool allocated;
-            size_t size;
+			bool allocated;         ///< Whether this chunk is in use or can be allocated
+			size_t size;            ///< The size of this span of memory (not including the MemoryChunk struct itself)
 
-        };
+		};
 
-		constexpr size_t CHUNK_ALIGNMENT = 0x10;
+		constexpr size_t CHUNK_ALIGNMENT = 0x10;    ///< How many bytes the chunks should be a multiple of (round up to this)
 
-        /**
-         * @class MemoryManager
-         * @brief Handles memory allocation and deallocation
-         */
-        class MemoryManager{
+		/**
+		 * @class MemoryManager
+		 * @brief Handles memory allocation and deallocation
+		 */
+		class MemoryManager {
 
-          private:
-            MemoryChunk* m_first_memory_chunk;
-            MemoryChunk* m_last_memory_chunk;
+			private:
+				MemoryChunk* m_first_memory_chunk;
+				MemoryChunk* m_last_memory_chunk;
 
-            VirtualMemoryManager* m_virtual_memory_manager;
+				VirtualMemoryManager* m_virtual_memory_manager;
 
-            MemoryChunk* expand_heap(size_t size);
+				MemoryChunk* expand_heap(size_t size);
 
-          public:
-              inline static MemoryManager* s_current_memory_manager = nullptr;
-              inline static MemoryManager* s_kernel_memory_manager = nullptr;
+			public:
+				inline static MemoryManager* s_current_memory_manager = nullptr;            ///< The memory manager for the current process
+				inline static MemoryManager* s_kernel_memory_manager = nullptr;             ///< The memory manager for any kernel processes and all kernel allocations
 
-              MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
-              ~MemoryManager();
+				MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
+				~MemoryManager();
 
-              // Public Memory Management
-              static void* malloc(size_t size);
-              static void free(void* pointer);
+				// Public Memory Management
+				static void* malloc(size_t size);
+				static void free(void* pointer);
 
-              // Kernel Memory Management
-              static void* kmalloc(size_t size);
-              static void kfree(void* pointer);
+				// Kernel Memory Management
+				static void* kmalloc(size_t size);
+				static void kfree(void* pointer);
 
-              // Internal Memory Management
-              void* handle_malloc(size_t size);
-              void handle_free(void* pointer);
-              VirtualMemoryManager* vmm();
+				// Internal Memory Management
+				void* handle_malloc(size_t size);
+				void handle_free(void* pointer);
+				VirtualMemoryManager* vmm();
 
-              // Utility Functions
-              int memory_used();
-              static size_t align(size_t size);
-              static void switch_active_memory_manager(MemoryManager* manager);
-        };
-    }
+				// Utility Functions
+				int memory_used();
+				static size_t align(size_t size);
+				static void switch_active_memory_manager(MemoryManager* manager);
+		};
+	}
 }
-
-
 
 
 void* operator new(size_t size) throw();

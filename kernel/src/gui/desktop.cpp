@@ -17,7 +17,6 @@ using namespace MaxOS::drivers::peripherals;
 Desktop::Desktop(GraphicsContext* gc)
 : CompositeWidget(0, 0, gc->width(), gc->height()),
   MouseEventHandler(),
-  ClockEventHandler(),
   m_graphics_context(gc),
   colour(Colour(0xA8, 0xA8, 0xA8))
 {

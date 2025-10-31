@@ -24,7 +24,7 @@ namespace MaxOS{
              */
             class AdvancedTechnologyAttachment : public Disk {
 
-                protected:
+	            private:
                     hardwarecommunication::Port16Bit m_data_port;
                     hardwarecommunication::Port8Bit m_error_port;
                     hardwarecommunication::Port8Bit m_sector_count_port;

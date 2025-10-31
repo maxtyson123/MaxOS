@@ -19,7 +19,6 @@ namespace MaxOS {
     namespace hardwarecommunication {
 
 
-
         class InterruptManager;
 
         /**
@@ -28,7 +27,7 @@ namespace MaxOS {
          */
         class InterruptHandler {
             protected:
-                uint8_t m_interrupt_number;
+                uint8_t m_interrupt_number;     ///<  The interrupt number this handler handles
 
                 InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
                 ~InterruptHandler();
@@ -41,29 +40,36 @@ namespace MaxOS {
 
         /**
          * @struct IDTR
-         * @brief A struct that holds the IDT register
+         * @brief A struct that holds the Interrupt Descriptor Table Register (IDTR)
          */
-        struct IDTR {
-            uint16_t limit;
-            uint64_t base;
-        } __attribute__((packed));
+        typedef struct IDTR {
+            uint16_t limit; ///< The size of the IDT
+            uint64_t base;  ///< The start address of the IDT
+        } __attribute__((packed)) idtr_t;
 
-        struct InterruptDescriptor{
-          uint16_t address_low_bits;
-          uint16_t segment_selector;
-          uint8_t ist;
-          uint8_t flags;
-          uint16_t address_mid_bits;
-          uint32_t address_high_bits;
-          uint32_t reserved;
-        } __attribute__((packed));
+		/**
+		 * @struct InterruptDescriptor
+		 * @brief An entry in the Interrupt Descriptor Table (IDT)
+		 */
+        typedef struct InterruptDescriptor{
+          uint16_t address_low_bits;    ///< The low bits of the handler function address
+          uint16_t segment_selector;    ///< The code segment selector in the GDT to use when this interrupt fires
+          uint8_t ist;                  ///< The offset into the Interrupt Stack Table (0 if not used) (see TSS)
+          uint8_t flags;                ///< Flags: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (todo substruct this)
+          uint16_t address_mid_bits;    ///< The middle bits of the handler function address
+          uint32_t address_high_bits;   ///< The high bits of the handler function address
+          uint32_t reserved;            ///< Reserved, must be zero
+        } __attribute__((packed)) interrupt_descriptor_t;
 
-	    constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;
-	    constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;
+	    constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;    ///< The offset in the IDT where interrupts from hardware start
+	    constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;        ///< The maximum number of interrupt handlers
 
         /**
          * @class InterruptManager
          * @brief Handles all interrupts and passes them to the correct handler
+         *
+         * @todo Remove the max array of handler make vector, add static handlers for page faults and gpe. Make it so that multiple handlers can be registered for the same interrupt
+         * @todo Have a single stub so that we don't need to have 256 different functions for each interrupt
          */
         class InterruptManager {
             friend class InterruptHandler;
@@ -76,69 +82,67 @@ namespace MaxOS {
 
             protected:
 
-                inline static InterruptManager* s_active_interrupt_manager = nullptr;
+                inline static InterruptManager* s_active_interrupt_manager = nullptr;                                   ///< The interrupt manger that is currently handling interrupts and is loaded into the IDTR
 
-                InterruptHandler* m_interrupt_handlers[MAX_INTERRUPT_HANDLERS] = {};
-                inline static InterruptDescriptor s_interrupt_descriptor_table[MAX_INTERRUPT_HANDLERS] = {};
+                InterruptHandler* m_interrupt_handlers[MAX_INTERRUPT_HANDLERS] = {};                                    ///< A map of index-to-interrupt of interrupt handlers to fire when an interrupt occurs
+                inline static InterruptDescriptor s_interrupt_descriptor_table[MAX_INTERRUPT_HANDLERS] = {};            ///< The Interrupt Descriptor Table (IDT)
 
                 static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (*handler)(), uint8_t descriptor_privilege_level);
 
-                static void InterruptIgnore();
-
                 //Various Interrupts
-                static void HandleInterruptRequest0x00();
-                static void HandleInterruptRequest0x01();
-                static void HandleInterruptRequest0x02();
-                static void HandleInterruptRequest0x03();
-                static void HandleInterruptRequest0x04();
-                static void HandleInterruptRequest0x05();
-                static void HandleInterruptRequest0x06();
-                static void HandleInterruptRequest0x07();
-                static void HandleInterruptRequest0x08();
-                static void HandleInterruptRequest0x09();
-                static void HandleInterruptRequest0x0A();
-                static void HandleInterruptRequest0x0B();
-                static void HandleInterruptRequest0x0C();
-                static void HandleInterruptRequest0x0D();
-                static void HandleInterruptRequest0x0E();
-                static void HandleInterruptRequest0x80();
-                static void HandleInterruptRequest0x0F();
-                static void HandleInterruptRequest0x31();
-                static void HandleInterruptRequest0x60(); // System Call
+                static void HandleInterruptRequest0x00();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x01();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x02();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x03();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x04();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x05();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x06();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x07();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x08();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x09();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x0A();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x0B();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x0C();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x0D();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x0E();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x80();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x0F();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x31();   ///< Stub (see interrupts.s)
+                static void HandleInterruptRequest0x60();   ///< Stub (see interrupts.s)
 
                 // Exceptions
-                static void HandleException0x00();
-                static void HandleException0x01();
-                static void HandleException0x02();
-                static void HandleException0x03();
-                static void HandleException0x04();
-                static void HandleException0x05();
-                static void HandleException0x06();
-                static void HandleException0x07();
-                static void HandleInterruptError0x08();
-                static void HandleException0x09();
-                static void HandleInterruptError0x0A();
-                static void HandleInterruptError0x0B();
-                static void HandleInterruptError0x0C();
-                static void HandleInterruptError0x0D();
-                static void HandleInterruptError0x0E();
-                static void HandleException0x0F();
-                static void HandleException0x10();
-                static void HandleInterruptError0x11();
-                static void HandleException0x12();
-                static void HandleException0x13();
-                static void HandleException0x14();
-                static void HandleException0x15();
-                static void HandleException0x16();
-                static void HandleException0x17();
-                static void HandleException0x18();
-                static void HandleException0x19();
-                static void HandleException0x1A();
-                static void HandleException0x1B();
-                static void HandleException0x1C();
-                static void HandleException0x1D();
-                static void HandleException0x1E();
-                static void HandleException0x1F();
+                static void HandleException0x00();          ///< Stub (see interrupts.s)
+                static void HandleException0x01();          ///< Stub (see interrupts.s)
+                static void HandleException0x02();          ///< Stub (see interrupts.s)
+                static void HandleException0x03();          ///< Stub (see interrupts.s)
+                static void HandleException0x04();          ///< Stub (see interrupts.s)
+                static void HandleException0x05();          ///< Stub (see interrupts.s)
+                static void HandleException0x06();          ///< Stub (see interrupts.s)
+                static void HandleException0x07();          ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x08();     ///< Stub (see interrupts.s)
+                static void HandleException0x09();          ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x0A();     ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x0B();     ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x0C();     ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x0D();     ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x0E();     ///< Stub (see interrupts.s)
+                static void HandleException0x0F();          ///< Stub (see interrupts.s)
+                static void HandleException0x10();          ///< Stub (see interrupts.s)
+                static void HandleInterruptError0x11();     ///< Stub (see interrupts.s)
+                static void HandleException0x12();          ///< Stub (see interrupts.s)
+                static void HandleException0x13();          ///< Stub (see interrupts.s)
+                static void HandleException0x14();          ///< Stub (see interrupts.s)
+                static void HandleException0x15();          ///< Stub (see interrupts.s)
+                static void HandleException0x16();          ///< Stub (see interrupts.s)
+                static void HandleException0x17();          ///< Stub (see interrupts.s)
+                static void HandleException0x18();          ///< Stub (see interrupts.s)
+                static void HandleException0x19();          ///< Stub (see interrupts.s)
+                static void HandleException0x1A();          ///< Stub (see interrupts.s)
+                static void HandleException0x1B();          ///< Stub (see interrupts.s)
+                static void HandleException0x1C();          ///< Stub (see interrupts.s)
+                static void HandleException0x1D();          ///< Stub (see interrupts.s)
+                static void HandleException0x1E();          ///< Stub (see interrupts.s)
+                static void HandleException0x1F();          ///< Stub (see interrupts.s)
 
                 static system::cpu_status_t* HandleInterrupt(system::cpu_status_t* status);
                 system::cpu_status_t* handle_interrupt_request(system::cpu_status_t* status);
@@ -159,7 +163,7 @@ namespace MaxOS {
                 void activate();
                 void deactivate();
 
-	            static void ForceInterruptReturn(system::cpu_status_t* state);
+	            static void ForceInterruptReturn(system::cpu_status_t* state);  ///< Force the CPU to return from an interrupt (see interrupts.s)
 
         };
     }

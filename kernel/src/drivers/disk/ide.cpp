@@ -11,11 +11,14 @@ using namespace MaxOS::drivers::disk;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::partition;
 
-IntegratedDriveElectronicsController::IntegratedDriveElectronicsController(
-PeripheralComponentInterconnectDeviceDescriptor *device_descriptor)
+/**
+ * @brief Construct a new Integrated Drive Electronics Controller object
+ *
+ * @param device_descriptor The PCI device descriptor for this controller
+ * @todo Use the device descriptor to get the port base and add the devices dynamically
+ */
+IntegratedDriveElectronicsController::IntegratedDriveElectronicsController(PeripheralComponentInterconnectDeviceDescriptor* device_descriptor)
 {
-	// TODO: Use the device descriptor to get the port base and add the devices dynamically
-
 	// Primary
 	auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
 	auto primary_slave = new AdvancedTechnologyAttachment(0x1F0, false);

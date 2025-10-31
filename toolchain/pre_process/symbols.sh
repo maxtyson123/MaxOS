@@ -63,10 +63,14 @@ namespace MaxOS{
 
 	namespace common{
 
-		typedef struct {
-			uintptr_t address;
-			const char* name;
-		} kernel_sym_t;
+	 	 	/**
+   		 * @struct KernelSymbol
+   		 * @brief Holds the address and name of a kernel symbol
+   		 */
+   		typedef struct KernelSymbol {
+   			uintptr_t address;              ///< The address of the symbol (loaded address)
+   			const char* name;               ///< The stripped name of the symbol (including namespaces)
+   		} kernel_sym_t;
 
 		const kernel_sym_t kernel_symbols[] = {
 EOF
@@ -118,7 +122,7 @@ fi
 # Write the footer
 cat >> "$OUT" <<EOF
     };
-		const size_t kernel_symbols_count = $COUNT;
+		constexpr size_t KERNEL_SYMBOLS_COUNT = $COUNT;
 
 		const char* resolve_symbol(uintptr_t rip, uintptr_t link_base = memory::HIGHER_HALF_KERNEL_OFFSET, uintptr_t load_base = memory::HIGHER_HALF_KERNEL_OFFSET);
 	}

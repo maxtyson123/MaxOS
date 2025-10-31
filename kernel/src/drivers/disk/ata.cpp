@@ -10,6 +10,12 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 
+/**
+ * @brief Constructor for the AdvancedTechnologyAttachment class
+ *
+ * @param port_base The base port for the ATA device
+ * @param master True if the device is master, false if slave
+ */
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master)
 : m_data_port(port_base),
   m_error_port(port_base + 1),

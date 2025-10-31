@@ -24,6 +24,11 @@ volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
 extern "C" void  core_start();
 extern "C" uint8_t core_boot_info[];
 
+/**
+ * @brief Constructs a new Core object from the MADT entry
+ *
+ * @param madt_item The MADT entry for this core
+ */
 Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 : m_madt(madt_item)
 {
@@ -40,6 +45,10 @@ Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 
 Core::~Core() = default;
 
+/**
+ * @brief Wakes up the core by sending the appropriate IPIs. (see core_loader.s for startup code)
+ * @param cpu
+ */
 void Core::wake_up(CPU* cpu) {
 
 	// Boot core is already setup
@@ -86,6 +95,9 @@ void Core::wake_up(CPU* cpu) {
 	Logger::WARNING() << "Failed to start core: " << id << "\n";
 }
 
+/**
+ * @brief Initialises the task state segment for this core
+ */
 void Core::init_tss() {
 
 	// The reserved have to be 0
@@ -139,7 +151,6 @@ void Core::init_tss() {
 	asm volatile("ltr %%ax" : : "a" (0x28));
 
 }
-
 
 /**
  * @brief Initialises the SSE instructions
@@ -202,6 +213,9 @@ void Core::init_sse() {
 	Logger::DEBUG() << "SSE Enabled\n";
 }
 
+/**
+ * @brief Initialises the core by setting up the GDT, IDT, TSS, SSE and APIC
+ */
 void Core::init() {
 
 	// Load the kernel IDT & GDT
@@ -244,12 +258,20 @@ CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
 
 CPU::~CPU() = default;
 
+/**
+ * @brief Halts the CPU indefinitely
+ */
 [[noreturn]] void CPU::halt() {
 
 	while (true)
 		asm volatile("hlt");
 }
 
+/**
+ * @brief Gets the current CPU status into the provided structure
+ *
+ * @param status The structure to fill with the CPU status
+ */
 void CPU::get_status(cpu_status_t* status) {
 
 	// Get the registers
@@ -270,6 +292,11 @@ void CPU::get_status(cpu_status_t* status) {
 	asm volatile("mov %%rax, %0" : "=r" (status->rax));
 }
 
+/**
+ * @brief Sets the CPU registers from the provided structure
+ *
+ * @param status The structure containing the CPU status
+ */
 void CPU::set_status(cpu_status_t* status) {
 
 	// Set the registers
@@ -291,6 +318,11 @@ void CPU::set_status(cpu_status_t* status) {
 
 }
 
+/**
+ * @brief Prints the CPU registers from the provided structure
+ *
+ * @param status The structure containing the CPU status
+ */
 void CPU::print_registers(cpu_status_t* status) {
 
 	// Print the registers
@@ -319,7 +351,12 @@ void CPU::print_registers(cpu_status_t* status) {
 
 }
 
-
+/**
+ * @brief Reads the value of the specified MSR
+ *
+ * @param msr The MSR to read
+ * @return The value of the MSR
+ */
 uint64_t CPU::read_msr(uint32_t msr) {
 
 	// Read the MSR
@@ -330,18 +367,38 @@ uint64_t CPU::read_msr(uint32_t msr) {
 	return (uint64_t) low | ((uint64_t) high << 32);
 }
 
+/**
+ * @brief Writes the specified value to the specified MSR
+ *
+ * @param msr The MSR to write to
+ * @param value The value to write
+ */
 void CPU::write_msr(uint32_t msr, uint64_t value) {
 
 	// Write the MSR
 	asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
 }
 
+/**
+ * @brief Executes the CPUID instruction with the specified leaf and returns the results in the provided pointers
+ *
+ * @param leaf The CPUID leaf to query
+ * @param eax The pointer to store the EAX result
+ * @param ebx The pointer to store the EBX result
+ * @param ecx The pointer to store the ECX result
+ * @param edx The pointer to store the EDX result
+ */
 void CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx) {
 
 	// Call the cpuid instruction
 	__get_cpuid(leaf, eax, ebx, ecx, edx);
 }
 
+/**
+ * @brief Prints a stack trace up to the specified level
+ *
+ * @param level The number of stack frames to print
+ */
 void CPU::stack_trace(size_t level) {
 
 	auto* frame = (stack_frame_t*) __builtin_frame_address(0);
@@ -361,6 +418,12 @@ void CPU::stack_trace(size_t level) {
 	}
 }
 
+/**
+ * @brief Puts the CPU into a panic state and halts it. Dumps the stack trace and registers.
+ *
+ * @param message The panic message
+ * @param status The CPU status at the time of the panic (if available, otherwise will be fetched)
+ */
 void CPU::PANIC(char const* message, cpu_status_t* status) {
 
 	// Ensure ready to panic  - At this point it is not an issue if it is possible can avoid the panic as it is most
@@ -457,12 +520,12 @@ void CPU::find_cores() {
 	while (true){
 
 		// Try to find a processor
-		MADT_Item* processor_madt = apic.io_apic()->get_madt_item(MADT_TYPES::PROCESSOR_APIC, index);
+		MADTEntry* processor_madt = apic.io_apic()->get_madt_item(MADT_TYPE::PROCESSOR_APIC, index);
 		if(!processor_madt)
 			break;
 
 		// Create a cpu
-		auto* processor_apic = (madt_processor_apic_t*) ((uint64_t) processor_madt + sizeof(MADT_Item));
+		auto* processor_apic = (madt_processor_apic_t*) ((uint64_t) processor_madt + sizeof(MADTEntry));
 		cores.push_back(new Core(processor_apic));
 		index++;
 	}
@@ -479,7 +542,7 @@ void CPU::init_cores() {
 
 	// Make sure core_start is accessible
 	ASSERT((void*)&core_start == (void*)0x8000, "Core start not at expected address");
-	PhysicalMemoryManager::s_current_manager->identity_map((physical_address_t*)0x8000, Present | Write);
+	PhysicalMemoryManager::s_current_manager->identity_map((physical_address_t*)0x8000, PRESENT | WRITE);
 
 	// Set up the boot info
 	auto info = (core_boot_info_t*)(core_boot_info);
@@ -540,15 +603,21 @@ bool CPU::check_nx() {
 	return supported;
 }
 
+/**
+ * @brief Gets the core that is currently executing
+ *
+ * @return The currently executing core
+ */
 Core* CPU::executing_core() {
+
+	// No cores?
+	if(cores.empty())
+		return nullptr;
 
 	// Get the id of this core
 	uint32_t eax, ebx, ecx, edx;
 	CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
 	uint32_t core_id = (ebx >> 24) & 0xFF;
-
-	if(cores.empty())
-		return nullptr;
 
 	return cores[core_id];
 }

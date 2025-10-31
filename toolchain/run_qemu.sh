@@ -158,6 +158,7 @@ QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"                   # Add a 
 QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                                 # Add port forwarding
 QEMU_ARGS="$QEMU_ARGS $BOOT_DEVICE"
 QEMU_ARGS="$QEMU_ARGS -no-reboot -no-shutdown"                          # Don't reboot or shutdown on exit
+#QEMU_ARGS="$QEMU_ARGS -vga virtio"                                      # Use virtio for graphics
 
 # Kill
 msg "Killing other instances."

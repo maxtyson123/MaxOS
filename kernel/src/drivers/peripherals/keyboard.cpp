@@ -123,6 +123,13 @@ KeyboardInterpreter::KeyboardInterpreter()
 
 KeyboardInterpreter::~KeyboardInterpreter() = default;
 
+/**
+ * @brief Handle the key event
+ *
+ * @param released True if the key was released, false if it was pressed
+ * @param state The state of the keyboard
+ * @param key_code The key code of the key
+ */
 void KeyboardInterpreter::on_key_read(bool released, const KeyboardState &state, KeyCode key_code) {
 
 	// Pass the key event to the handlers
@@ -150,26 +157,26 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 
 
 	// Check if the key was released
-	bool released = (scan_code & 0x80)   && (m_current_extended_code_1
-				 || (scan_code != 0xe1)) && (m_next_is_extended_code_0
-				 || (scan_code != 0xe0));
+	bool released = (scan_code & 0x80)
+					&& (m_extended_scan_code_bytes || (scan_code != 0xe1))
+					&& (m_next_is_first_extended_code || (scan_code != 0xe0));
 
 	// Clear the released bit
 	if (released)
 		scan_code &= ~0x80;
 
-	// Start of an extended scan code
+	// Start of a scan code that takes more than one byte
 	if (scan_code == 0xe0) {
-		m_next_is_extended_code_0 = true;
+		m_next_is_first_extended_code = true;
 		return;
 	}
 
 	// Handle extended scan codes
 	ScanCodeType type = ScanCodeType::REGULAR;
-	if (m_next_is_extended_code_0) {
+	if (m_next_is_first_extended_code) {
 
 		type = ScanCodeType::EXTENDED;
-		m_next_is_extended_code_0 = false;
+		m_next_is_first_extended_code = false;
 
 		// Check if the scan_code represents a shift key and return (fake shift)
 		if ((KeyboardInterpreterEN_US::KeyCodeEN_US) scan_code == KeyCodeEN_US::leftShift ||
@@ -177,24 +184,24 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 			return;
 	}
 
-	// If the scan_code is 0xe1, set the e1Code flag to 1 and return
+	// The scan code takes three bytes
 	if (scan_code == 0xe1) {
-		m_current_extended_code_1 = 1;
+		m_extended_scan_code_bytes = 1;
 		return;
 	}
 
-	// If e1Code is 1, set e1Code to 2, store the scan_code in e1CodeBuffer, and return
-	if (m_current_extended_code_1 == 1) {
-		m_current_extended_code_1 = 2;
-		m_extended_code_1_buffer = scan_code;
+	// Take the second byte of a three-byte scan code and wait for the last byte (if applicable)
+	if (m_extended_scan_code_bytes == 1) {
+		m_extended_scan_code_bytes = 2;
+		m_extended_code_buffer = scan_code;
 		return;
 	}
 
-	// If e1Code is 2, set keyType to 2, reset e1Code, and update e1CodeBuffer
-	if (m_current_extended_code_1 == 2) {
+	// Take the last byte of a three-byte scan code
+	if (m_extended_scan_code_bytes == 2) {
 		type = ScanCodeType::EXTENDED;
-		m_current_extended_code_1 = 0;
-		m_extended_code_1_buffer |= (((uint16_t) scan_code) << 8);
+		m_extended_scan_code_bytes = 0;
+		m_extended_code_buffer |= (((uint16_t) scan_code) << 8);
 	}
 
 	// Scan code value manipulations
@@ -632,6 +639,12 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 
 }
 
+/**
+ * @brief Constructor for the KeyDownEvent class
+ *
+ * @param keyCode The keycode of the key that was pressed
+ * @param keyboardState The state of the keyboard when the key was pressed
+ */
 KeyDownEvent::KeyDownEvent(KeyCode keyCode, const KeyboardState &keyboardState)
 : Event<KeyboardEvents>(KeyboardEvents::KEYDOWN),
   key_code(keyCode),
@@ -641,6 +654,12 @@ KeyDownEvent::KeyDownEvent(KeyCode keyCode, const KeyboardState &keyboardState)
 
 KeyDownEvent::~KeyDownEvent() = default;
 
+/**
+ * @brief Constructor for the KeyUpEvent class
+ *
+ * @param key_code The keycode of the key that was released
+ * @param keyboard_state The state of the keyboard when the key was released
+ */
 KeyUpEvent::KeyUpEvent(KeyCode key_code, const KeyboardState &keyboard_state)
 : Event<KeyboardEvents>(KeyboardEvents::KEYUP),
   key_code(key_code),

@@ -12,36 +12,36 @@
 
 namespace MaxOS {
 
-    namespace gui {
+	namespace gui {
 
-        namespace widgets{
+		namespace widgets {
 
-            /**
-             * @class Text
-             * @brief A box that can be used to display text
-             */
-            class Text : public Widget{
+			/**
+			 * @class Text
+			 * @brief A box that can be used to display text
+			 */
+			class Text : public Widget {
 
-            protected:
-                string m_widget_text;
+				private:
+					string m_widget_text;
 
-            public:
+				public:
 
-                gui::Font font;
+					gui::Font font;                         ///< The font to use for the text
 
-                common::Colour foreground_colour;
-                common::Colour background_colour;
+					common::Colour foreground_colour;       ///< The colour of the text characters
+					common::Colour background_colour;       ///< The colour to draw behind the text characters
 
-                Text(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text);
-                ~Text();
+					Text(int32_t left, int32_t top, uint32_t width, uint32_t height, const string &text);
+					~Text();
 
-                void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
-                void update_text(const string&);
+					void draw(common::GraphicsContext* gc, common::Rectangle<int32_t> &area) override;
+					void update_text(const string &);
 
-            };
-        }
+			};
+		}
 
-    }
+	}
 }
 
 #endif //MAXOS_GUI_WDIGETS_TEXT_H

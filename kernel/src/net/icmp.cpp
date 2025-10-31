@@ -8,7 +8,12 @@ using namespace  MaxOS;
 using namespace  MaxOS::common;
 using namespace  MaxOS::net;
 
-
+/**
+ * @brief Constructs an InternetControlMessageProtocol handler.
+ *
+ * @param internetProtocolHandler The Internet protocol handler to use.
+ * @param errorMessages The output stream to use for error messages.
+ */
 InternetControlMessageProtocol::InternetControlMessageProtocol(InternetProtocolHandler *internetProtocolHandler, OutputStream* errorMessages)
 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x01)
 {

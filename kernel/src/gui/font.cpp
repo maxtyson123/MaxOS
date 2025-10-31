@@ -8,6 +8,11 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::gui;
 
+/**
+ * @brief Construct a new Font object
+ *
+ * @param font_data The 8x8 font data to use
+ */
 Font::Font(const uint8_t* font_data) {
 
 	// Store the font data

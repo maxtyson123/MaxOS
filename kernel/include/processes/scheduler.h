@@ -15,13 +15,17 @@
 namespace MaxOS {
 	namespace processes {
 
-		class GlobalScheduler : public hardwarecommunication::InterruptHandler{
+		/**
+		 * @class GlobalScheduler
+		 * @brief The global scheduler that manages all processes and threads across all cores
+		 */
+		class GlobalScheduler : public hardwarecommunication::InterruptHandler {
 
 			private:
 				inline static GlobalScheduler* s_instance = nullptr;
-				bool m_active { false };
+				bool m_active = false;
 
-				GlobalResourceRegistry m_global_resource_registry = {};
+				GlobalResourceRegistry m_global_resource_registry = { };
 				ResourceRegistry<SharedMemory> m_shared_memory_registry;
 				ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
 
@@ -34,7 +38,7 @@ namespace MaxOS {
 				common::Map<uint64_t, uint64_t> m_core_tids;
 
 			public:
-				GlobalScheduler(system::Multiboot& multiboot);
+				GlobalScheduler(system::Multiboot &multiboot);
 				~GlobalScheduler();
 
 				static GlobalScheduler* system_scheduler();
@@ -67,6 +71,7 @@ namespace MaxOS {
 				static uint64_t next_tid();
 		};
 
+		/// Number of times the clock has to interrupt before switching to the next process/thread
 		constexpr size_t TICKS_PER_EVENT = 20;
 
 		/**

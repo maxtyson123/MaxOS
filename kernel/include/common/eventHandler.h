@@ -23,6 +23,9 @@ namespace MaxOS{
          * @brief Used to store information about an event, has a type and a return value
          *
          * @tparam EventType The type of event
+         * @todo deprecate, things that should fire events should have their own event firer class and things that connect to it, dont have a class per event
+         * @todo events should be made on stack and passed as references not pointers for better perf
+         * @deprecated Will Remove Soon
          */
         template <typename EventType> class Event
         {
@@ -30,12 +33,13 @@ namespace MaxOS{
                 Event(EventType type);
                 ~Event();
 
-                EventType type;
+                EventType type;     ///< @deprecated WRS
+
                 union {
-                    uint8_t* bufferValue;
-                    uint32_t intValue;
-                    bool boolValue;
-                } return_value;
+                    uint8_t* bufferValue;    ///< @deprecated WRS
+                    uint32_t intValue;       ///< @deprecated WRS
+                    bool boolValue;          ///< @deprecated WRS
+                } return_value; ///< @deprecated WRS
         };
 
         /**
@@ -56,12 +60,14 @@ namespace MaxOS{
          * @class EventManager
          * @brief Manages the m_handlers for a type of event, raises events and calls the m_handlers
          *
+         * @deprecated Will Remove Soon
+         *
          * @tparam EventType The type of event
          */
         template <typename EventType> class EventManager
         {
             protected:
-                Vector<EventHandler<EventType>*> m_handlers;
+                Vector<EventHandler<EventType>*> m_handlers;    ///< @deprecated WRS
 
             public:
                 EventManager();

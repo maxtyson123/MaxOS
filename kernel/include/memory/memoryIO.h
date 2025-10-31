@@ -14,10 +14,12 @@ namespace MaxOS{
         /**
          * @class MemIO
          * @brief base class for all memory IO
+         *
+         * @todo Not used, delete?
          */
         class MemIO {
             protected:
-                uintptr_t m_address;
+                uintptr_t m_address;    ///< The memory address to read from / write to
 
                 MemIO(uintptr_t address);
                 ~MemIO();

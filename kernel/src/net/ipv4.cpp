@@ -26,10 +26,21 @@ InternetProtocolAddressResolver::InternetProtocolAddressResolver(InternetProtoco
 
 InternetProtocolAddressResolver::~InternetProtocolAddressResolver() = default;
 
+/**
+ * @brief Resolves an IP address to a MAC address. (Default, returns broadcast address, override for use)
+ *
+ * @return The MAC address.
+ */
 MediaAccessControlAddress InternetProtocolAddressResolver::Resolve(InternetProtocolAddress) {
-    return 0xFFFFFFFFFFFF; // the broadcast address
+    return 0xFFFFFFFFFFFF;
 }
 
+/**
+ * @brief Stores an IP address to MAC address mapping. (Default, does nothing, override for use)
+ *
+ * @param internetProtocolAddress The IP address.
+ * @param mediaAccessControlAddress The MAC address.
+ */
 void InternetProtocolAddressResolver::Store(InternetProtocolAddress, MediaAccessControlAddress) {
 
 }
@@ -80,10 +91,15 @@ void InternetProtocolPayloadHandler::Send(InternetProtocolAddress destinationIP,
 
 }
 
-
-
-
-
+/**
+ * @brief Construct a new Internet Protocol Handler object
+ *
+ * @param backend The backend Ethernet frame handler.
+ * @param ownInternetProtocolAddress The IP address of this device.
+ * @param defaultGatewayInternetProtocolAddress The IP address of the default gateway.
+ * @param subnetMask The subnet mask.
+ * @param errorMessages Where to write error messages.
+ */
 InternetProtocolHandler::InternetProtocolHandler(EthernetFrameHandler *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask, OutputStream* errorMessages)
         : EthernetFramePayloadHandler(backend, 0x0800)
 {
@@ -227,12 +243,27 @@ uint16_t InternetProtocolHandler::Checksum(const uint16_t *data, uint32_t length
     return ((~temp & 0xFF00) >> 8) | ((~temp & 0x00FF) << 8);
 }
 
+/**
+ * @brief Registers an IP address resolver.
+ *
+ * @param resolver The resolver to register.
+ */
 void InternetProtocolHandler::RegisterInternetProtocolAddressResolver(InternetProtocolAddressResolver *resolver) {
 
     this -> resolver = resolver;
 
 }
 
+/**
+ * @brief Creates an IP address from four digits.
+ *
+ * @param digit1 The first digit.
+ * @param digit2 The second digit.
+ * @param digit3 The third digit.
+ * @param digit4 The fourth digit.
+ *
+ * @return The created IP address.
+ */
 InternetProtocolAddress InternetProtocolHandler::CreateInternetProtocolAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4) {
     InternetProtocolAddress result = digit4;
     result = (result << 8) | digit3;
@@ -241,6 +272,12 @@ InternetProtocolAddress InternetProtocolHandler::CreateInternetProtocolAddress(u
     return result;
 }
 
+/**
+ * @brief Parses a string representation of an IP address.
+ *
+ * @param address The string representation of the IP address.
+ * @return The parsed IP address.
+ */
 InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     uint8_t digits[4];
 
@@ -261,18 +298,43 @@ InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     return CreateInternetProtocolAddress(digits[0], digits[1], digits[2], digits[3]);
 }
 
+/**
+ * @brief Creates a subnet mask from four digits.
+ *
+ * @param digit1 The first digit.
+ * @param digit2 The second digit.
+ * @param digit3 The third digit.
+ * @param digit4 The fourth digit.
+ *
+ * @return The created subnet mask.
+ */
 SubnetMask InternetProtocolHandler::CreateSubnetMask(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4) {
     return (SubnetMask)CreateInternetProtocolAddress(digit1, digit2, digit3, digit4);
 }
 
+/**
+ * @brief Gets the IP address of this device.
+ *
+ * @return The IP address.
+ */
 InternetProtocolAddress InternetProtocolHandler::GetInternetProtocolAddress() const {
     return ownInternetProtocolAddress;
 }
 
+/**
+ * @brief Gets the MAC address of this device.
+ *
+ * @return The MAC address.
+ */
 MediaAccessControlAddress InternetProtocolHandler::GetMediaAccessControlAddress() {
     return frameHandler -> getMAC();
 }
 
+/**
+ * @brief Connects an IP protocol payload handler.
+ *
+ * @param internetProtocolPayloadHandler The payload handler to connect.
+ */
 void InternetProtocolHandler::connectInternetProtocolPayloadHandler( InternetProtocolPayloadHandler *internetProtocolPayloadHandler) {
     internetProtocolPayloadHandlers.insert(internetProtocolPayloadHandler -> ipProtocol, internetProtocolPayloadHandler);
 }

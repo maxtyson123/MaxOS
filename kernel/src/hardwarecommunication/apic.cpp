@@ -40,7 +40,7 @@ LocalAPIC::LocalAPIC() {
 
 		// Map the APIC base address to the higher half
 		m_apic_base_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_apic_base);
-		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_apic_base, (virtual_address_t*) m_apic_base_high, Write | Present);
+		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_apic_base, (virtual_address_t*) m_apic_base_high, PRESENT | WRITE);
 		Logger::DEBUG() << "APIC Base: phy=0x" << m_apic_base << ", virt=0x" << m_apic_base_high << "\n";
 	} else {
 		ASSERT(false, "CPU does not support xAPIC");
@@ -182,22 +182,27 @@ void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) {
 
 }
 
+/**
+ * @brief Construct a new IO APIC object. Maps the IO APIC registers and reads the MADT to get information about the IO APICs and interrupt source overrides.
+ *
+ * @param acpi The ACPI interface to get the MADT from
+ */
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi)
 {
 
 	// Get the information about the IO APIC
 	m_madt = (MADT*) m_acpi->find("APIC");
-	MADT_Item* io_apic_item = get_madt_item(MADT_TYPES::IO_APIC, 0);
+	MADTEntry* io_apic_item = get_madt_item(MADT_TYPE::IO_APIC, 0);
 
 	// Get the IO APIC
-	auto* io_apic = (MADT_IO_APIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADT_Item));
-	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic - sizeof(MADT_Item)), Present | Write);
+	auto* io_apic = (MADT_IO_APIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADTEntry));
+	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic - sizeof(MADTEntry)), PRESENT | WRITE);
 
 	// Map the IO APIC address to the higher half
 	m_address = io_apic->io_apic_address;
 	m_address_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_address);
-	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, Present | Write);
+	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, PRESENT | WRITE);
 	Logger::DEBUG() << "IO APIC Address: phy=0x" << m_address << ", virt=0x" << m_address_high << "\n";
 
 	// Get the IO APIC version and max redirection entry
@@ -209,7 +214,7 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 	Logger::DEBUG() << "IO APIC Max Redirection Entry: 0x" << (uint64_t) m_max_redirect_entry << "\n";
 
 	// Get the source override item
-	MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
+	MADTEntry* source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
 	uint32_t total_length = sizeof(MADT);
 	while (total_length < m_madt->header.length && m_override_array_size < 0x10) { // 0x10 is the max items
 
@@ -228,7 +233,7 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 		}
 
 		// Get the next item
-		source_override_item = get_madt_item(2, m_override_array_size);
+		source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
 		if (source_override_item == nullptr)
 			break;
 	}
@@ -245,10 +250,10 @@ IOAPIC::~IOAPIC() = default;
  * @param index The index of the item
  * @return The item or null if not found
  */
-MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
+MADTEntry* IOAPIC::get_madt_item(MADT_TYPE type, uint8_t index) {
 
 	// The item starts at the start of the MADT
-	auto* item = (MADT_Item*) ((uint64_t) m_madt + sizeof(MADT));
+	auto* item = (MADTEntry*) ((uint64_t) m_madt + sizeof(MADT));
 	uint64_t total_length = 0;
 	uint8_t current_index = 0;
 
@@ -256,7 +261,7 @@ MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 	while (total_length + sizeof(MADT) < m_madt->header.length && current_index <= index) {
 
 		// Correct type
-		if (item->type == type) {
+		if (item->type == (uint8_t)type) {
 
 			// Correct index means found
 			if (current_index == index)
@@ -268,7 +273,7 @@ MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 
 		// Increment the total length
 		total_length += item->length;
-		item = (MADT_Item*) ((uint64_t) item + item->length);
+		item = (MADTEntry*) ((uint64_t) item + item->length);
 	}
 
 	// No item found
@@ -394,6 +399,11 @@ void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
 	write_redirect(index, &entry);
 }
 
+/**
+ * @brief Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC.
+ *
+ * @param acpi The ACPI interface to get the MADT from
+ */
 AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi)
 : m_pic_master_command_port(0x20),
   m_pic_master_data_port(0x21),

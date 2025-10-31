@@ -7,7 +7,11 @@
 using namespace MaxOS;
 using namespace MaxOS::drivers;
 
-SerialConsole::SerialConsole(Logger *logger)
+/**
+ * @brief Constructs a new Serial Console object and initializes the serial port
+ * @param logger The logger which will use this serial console as a log writer
+ */
+SerialConsole::SerialConsole(Logger* logger)
 : m_data_port(0x3F8),
   m_interrupt_enable_port(0x3F9),
   m_fifo_control_port(0x3FA),

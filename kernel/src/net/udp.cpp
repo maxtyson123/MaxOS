@@ -11,10 +11,23 @@ UserDatagramProtocolPayloadHandler::UserDatagramProtocolPayloadHandler() = defau
 
 UserDatagramProtocolPayloadHandler::~UserDatagramProtocolPayloadHandler() = default;
 
-void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket*, uint8_t *, uint16_t) {
+/**
+ * @brief Handle the recivement of a UDP message
+ *
+ * @param socket The socket that received the message
+ * @param data The data received
+ * @param size The size of the data received
+ */
+void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket* socket, uint8_t* data, uint16_t size) {
 
 }
 
+/**
+ * @brief Event handler for UDP payload events
+ *
+ * @param event The event that was raised
+ * @return The event that was raised
+ */
 Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::on_event(Event<UserDatagramProtocolEvents> *event) {
 
     switch (event -> type) {
@@ -40,6 +53,12 @@ UserDatagramProtocolSocket::UserDatagramProtocolSocket() {
 
 UserDatagramProtocolSocket::~UserDatagramProtocolSocket() = default;
 
+/**
+ * @brief Handle the recivement of a UDP payload
+ *
+ * @param data The data received
+ * @param size The size of the data received
+ */
 void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data, uint16_t size) {
 
     // Create the event
@@ -49,12 +68,21 @@ void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data
 
 }
 
+/**
+ * @brief Send data through the UDP socket
+ *
+ * @param data The data to send
+ * @param size The size of the data
+ */
 void UserDatagramProtocolSocket::Send(uint8_t *data, uint16_t size) {
 
     userDatagramProtocolHandler -> Send(this, data, size);
 
 }
 
+/**
+ * @brief Disconnect the UDP socket
+ */
 void UserDatagramProtocolSocket::Disconnect() {
 
     userDatagramProtocolHandler ->Disconnect(this);
@@ -65,6 +93,12 @@ void UserDatagramProtocolSocket::Disconnect() {
 
 UserDatagramProtocolPort UserDatagramProtocolHandler::freePorts = 0x8000;
 
+/**
+ * @brief Construct a new User Datagram Protocol Handler object
+ *
+ * @param internetProtocolHandler The Internet protocol handler
+ * @param errorMessages Where to write error messages
+ */
 UserDatagramProtocolHandler::UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
 {
@@ -72,6 +106,7 @@ UserDatagramProtocolHandler::UserDatagramProtocolHandler(InternetProtocolHandler
 }
 
 UserDatagramProtocolHandler::~UserDatagramProtocolHandler() = default;
+
 /**
  * @brief Handle the recivement of an UDP packet
  *
@@ -154,7 +189,13 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, ui
     return socket;                                        //Return the socket
 }
 
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(const string&) {
+/**
+ * @brief Connects to a remote host through the UDP protocol
+ *
+ * @param address The address to connect to in the form "IP:PORT"
+ * @return The socket that is connected to the remote host, nullptr if it failed
+ */
+UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(const string& address) {
 
   //TODO NEW STRING PARSEING
 

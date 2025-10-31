@@ -6,6 +6,13 @@
 using namespace MaxOS;
 using namespace MaxOS::processes;
 
+/**
+ * @brief Constructs a new Resource object
+ *
+ * @param name The name of the resource
+ * @param flags The flags for the resource (unused by default but resource type specific)
+ * @param type The type of the resource
+ */
 Resource::Resource(const string& name, size_t flags, resource_type_t type)
 : m_name(name),
   m_type(type)
@@ -78,6 +85,11 @@ resource_type_t Resource::type() {
 	return m_type;
 }
 
+/**
+ * @brief Constructs a new BaseResourceRegistry object and registers it globally
+ *
+ * @param type The type of resources this registry will handle
+ */
 BaseResourceRegistry::BaseResourceRegistry(resource_type_t type)
 : m_type(type)
 {

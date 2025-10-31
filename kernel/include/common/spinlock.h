@@ -33,9 +33,17 @@ namespace MaxOS {
 		};
 
 
-		// Note: repeated API that could be made a class that isn't because lock types shouldn't be interchangeable
 
+		/// How many attempts to acquire the lock should fail before queueing
 		constexpr uint8_t BLOCKING_FAST_TRY_LIMIT = UINT8_MAX;
+
+		/**
+		 * @class BlockingLock
+		 * @brief Enables a resource to be used by only one instance at a time through a combination of spinning and queuing. When waiting enqueued, thread will sleep.
+		 *
+		 * @note Repeated API that could be made a class that isn't because lock types shouldn't be interchangeable
+		 * @see Spinlock
+		 */
 		class BlockingLock {
 
 			private:

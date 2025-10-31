@@ -10,6 +10,11 @@ using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 
+/**
+ * @brief Construct a new Advanced Configuration And Power Interface object. Maps the ACPI headers and tables into the higher half.
+ *
+ * @param multiboot The multiboot information structure to get the ACPI information from
+ */
 AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot) {
 
 	Logger::INFO() << "Setting up ACPI\n";
@@ -63,7 +68,7 @@ void AdvancedConfigurationAndPowerInterface::map_tables(uint8_t pointer_size) {
 		address = PhysicalMemoryManager::align_direct_to_page((size_t) address);
 
 		// Map to the higher half
-		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) address, (void*) PhysicalMemoryManager::to_io_region(address), Present | Write);
+		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) address, (void*) PhysicalMemoryManager::to_io_region(address), PRESENT | WRITE);
 
 		// Reserve the memory
 		PhysicalMemoryManager::s_current_manager->reserve(address);
@@ -79,7 +84,7 @@ virtual_address_t* AdvancedConfigurationAndPowerInterface::map_descriptor(uint64
 
 	// Map that page
 	virtual_address_t* virtual_address = PhysicalMemoryManager::to_io_region(page);
-	PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page, virtual_address, Present | Write);
+	PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page, virtual_address, PRESENT | WRITE);
 	PhysicalMemoryManager::s_current_manager -> reserve(page);
 
 	// Read the length
@@ -94,7 +99,7 @@ virtual_address_t* AdvancedConfigurationAndPowerInterface::map_descriptor(uint64
 	for (uint64_t page_i = page + PAGE_SIZE; page_i <= end; page_i += PAGE_SIZE) {
 		virtual_address_t* virtual_i = PhysicalMemoryManager::to_io_region(page_i);
 
-		PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page_i, virtual_i, Present | Write);
+		PhysicalMemoryManager::s_current_manager -> map((physical_address_t*)page_i, virtual_i, PRESENT | WRITE);
 		PhysicalMemoryManager::s_current_manager->reserve(page_i);
 	}
 

@@ -42,7 +42,7 @@ bool Spinlock::is_locked() const {
 
 
 /**
- * @brief Acquire the spinlock: wait until the lock is available, yielding if desired until that happens.
+ * @brief Acquire the spinlock: wait until the lock is available, spinning until that happens.
  */
 void Spinlock::acquire() {
 	while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE))
@@ -63,17 +63,37 @@ bool BlockingLock::must_spin() {
 	return GlobalScheduler::is_active();
 }
 
+/**
+ * @brief Lock the spinlock once it is available, sleeping until other processes are done with it
+ */
 void BlockingLock::lock() {
 	acquire();
 	m_locked = true;
 }
 
+/**
+ * @brief Unlock the spinlock
+ */
 void BlockingLock::unlock() {
 
 	m_locked = false;
 	release();
 }
 
+/**
+ * @brief Check if the spinlock is locked
+ *
+ * @return True if the spinlock is locked, false otherwise
+ */
+bool BlockingLock::is_locked() const {
+	return m_locked;
+}
+
+/**
+ * @brief Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available
+ *
+ * @todo Move the yielding logic into process/thread code so that it can be reused
+ */
 void BlockingLock::acquire() {
 
 	// Try to get the lock
@@ -99,13 +119,16 @@ void BlockingLock::acquire() {
 
 }
 
+/**
+ * @brief Mark as unlocked, wake the next enqueued thread
+ */
 void BlockingLock::release() {
 
 	// Next thread can be run
-	auto tid = m_queue.pop_front();
-	GlobalScheduler::get_thread(tid)->thread_state = ThreadState::READY;
+	if(!m_queue.empty()){
+		auto tid = m_queue.pop_front();
+		GlobalScheduler::get_thread(tid)->thread_state = ThreadState::READY;
+	}
 
 	__atomic_clear(&m_locked, __ATOMIC_RELEASE);
 }
-
-

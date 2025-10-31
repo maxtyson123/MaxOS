@@ -37,12 +37,12 @@ namespace MaxOS{
         template<class Type> class Vector
         {
         protected:
-            Type* m_elements;
-            uint32_t m_size { 0 };
-            uint32_t m_capacity { 1 };
+            Type* m_elements;                   ///< The array of elements
+            uint32_t m_size { 0 };              ///< How many elements are currently stored
+            uint32_t m_capacity { 1 };          ///< How many elements can be stored without resizing
 
         public:
-            typedef Type* iterator;
+            typedef Type* iterator;             ///< The iterator type for the Vector
 
             Vector();
             Vector(int Size, Type element);
@@ -68,7 +68,7 @@ namespace MaxOS{
             Type pop_front();
 
             void erase(Type);
-            void erase(iterator position);
+            void erase(typename Vector<Type>::iterator position);
             void clear();
 
 			void reserve(size_t amount);
@@ -161,6 +161,12 @@ namespace MaxOS{
 	        reserve(m_capacity * 2);
         }
 
+		/**
+		 * @brief Reserves space in the Vector for a certain amount of elements
+		 *
+		 * @tparam Type Type of the Vector
+		 * @param amount The amount of elements to reserve space for
+		 */
 	    template<class Type> void Vector<Type>::reserve(size_t amount) {
 
 
@@ -486,10 +492,21 @@ namespace MaxOS{
 
         template<class Type> VectorIterationHandler<Type>::~VectorIterationHandler() = default;
 
+
+		/**
+		 * @brief Called when the end of the stream is reached (overridden by subclasses, no default behavior)
+		 *
+		 * @tparam Type Type of the values stored in the Vector
+		 */
         template<class Type> void VectorIterationHandler<Type>::on_end_of_stream() {
 
         }
 
+		/**
+		 * @brief Called when an element is read from the Vector (overridden by subclasses, no default behavior)
+		 *
+		 * @tparam Type Type of the values stored in the Vector
+		 */
         template<class Type> void VectorIterationHandler<Type>::on_read(Type) {
 
         }

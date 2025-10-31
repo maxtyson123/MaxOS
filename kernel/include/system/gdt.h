@@ -32,8 +32,8 @@ namespace MaxOS {
          * @brief How the CPU stores the GDT
          */
         typedef struct GlobalDescriptorTableRegister {
-            uint16_t size;
-            uint64_t address;
+            uint16_t size;      ///< The size of the GDT
+            uint64_t address;   ///< The address of the GDT
         } __attribute__((packed)) gdtr_t;
 
         /**
@@ -46,9 +46,9 @@ namespace MaxOS {
               GlobalDescriptorTable();
               ~GlobalDescriptorTable();
 
-              uint64_t table[7];
+              uint64_t table[7];    ///< The GDT entries
 
-			  gdtr_t gdtr = {};
+			  gdtr_t gdtr = {};     ///< The GDTR structure
 			  void load();
           };
     }

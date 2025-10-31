@@ -84,21 +84,25 @@ namespace MaxOS {
 
     } string;
 
+	/**
+	 * @class StringBuilder
+	 * @brief Creates a string using a using a combination of parts with the '<<' operator. Simmilar to the logger.
+	 *
+	 * @see Logger
+	 */
 	class StringBuilder {
 		public:
-			String out;
-			operator String() const { return out; }
+			String out;                                 ///< The output string
+			operator String() const { return out; } 	///< Convert to string
 
-			StringBuilder& operator <<(char const* str) { out += string(str); return *this; }
-			StringBuilder& operator <<(String const &other) { out += other; return *this; }
-			StringBuilder& operator <<(int value) { out += string(value); return *this; }
-			StringBuilder& operator <<(uint64_t value) { out += string(value); return *this; }
-			StringBuilder& operator <<(float value) { out += string(value); return *this; }
-			StringBuilder& operator <<(bool value) { out += string(value); return *this; }
+			StringBuilder& operator << (char const* str) { out += string(str); return *this; }   	///< Append C-string
+			StringBuilder& operator << (String const &other) { out += other; return *this; }           	///< Append String
+			StringBuilder& operator << (int value) { out += string(value); return *this; }              ///< Append int
+			StringBuilder& operator << (uint64_t value) { out += string(value); return *this; }         ///< Append hex
+			StringBuilder& operator << (float value) { out += string(value); return *this; }            ///< Append decimal
+			StringBuilder& operator << (bool value) { out += string(value); return *this; }             ///< Append bool
 
 	};
-
-
 }
 
 // Convert functions

@@ -20,6 +20,10 @@ extern uint64_t _kernel_end;
 extern uint64_t _kernel_size;
 extern uint64_t _kernel_physical_end;
 
+/**
+ * @brief Constructs a PhysicalMemoryManager. Unmaps the lower kernel and sets up the bitmap for physical memory management. Reserves the kernel and the multiboot regions.
+ * @param multiboot The multiboot information structure to use for memory information such as the memory map.
+ */
 PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 : m_kernel_end((uint64_t) &_kernel_physical_end),
   m_multiboot(multiboot),
@@ -58,7 +62,7 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	// Map the physical memory into the virtual memory
 	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\n";
 	for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += PAGE_SIZE)
-		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address), Present | Write);
+		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address), PRESENT | WRITE);
 
 	// Kernel Setup
 	initialise_bit_map();
@@ -71,7 +75,12 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 
 PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 
-
+/**
+ * @brief Reserves the kernel, multiboot modules, mmap regions and higher half mapping regions in the physical memory
+ * 		  manager so that those pages arent overwritten later.
+ *
+ * @param multiboot The multiboot information structure to use for memory information such as the memory map.
+ */
 void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 	// Reserve the pages used by the higher half mapping
@@ -396,7 +405,7 @@ pml_t* PhysicalMemoryManager::get_and_create_table(pml_t* parent_table, uint64_t
 
 	// Create the table
 	auto* new_table = (uint64_t*) allocate_frame();
-	parent_table->entries[table_index] = create_page_table_entry((uint64_t) new_table, Present | Write);
+	parent_table->entries[table_index] = create_page_table_entry((uint64_t) new_table, PRESENT | WRITE);
 
 	// Move the table to higher half
 	// Except this doesn't need to be done because using anom memory
@@ -417,9 +426,9 @@ pml_t* PhysicalMemoryManager::get_and_create_table(pml_t* parent_table, uint64_t
 pte_t* PhysicalMemoryManager::get_entry(virtual_address_t* virtual_address, pml_t* pml4_table) {
 
 	// Kernel memory must be in the higher half
-	size_t flags = Present | Write;
+	size_t flags = PRESENT | WRITE;
 	if (!in_higher_region((uint64_t) virtual_address))
-		flags |= User;
+		flags |= USER;
 
 	uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
 	uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
@@ -486,7 +495,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t* physical_addre
 
 	// If it is in a lower region then assume it is the user space
 	if (!in_higher_region((uint64_t) virtual_address))
-		flags |= User;
+		flags |= USER;
 
 	// If the entry already exists then the mapping is already done
 	pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_table);
@@ -626,23 +635,23 @@ void PhysicalMemoryManager::clean_page_table(uint64_t* table) {
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) const {
 
 	pte_t page = (pte_t) {
-			.present            = (flags & Present) != 0,
-			.write              = (flags & Write) != 0,
-			.user               = (flags & User) != 0,
-			.write_through      = (flags & WriteThrough) != 0,
-			.cache_disabled     = (flags & CacheDisabled) != 0,
-			.accessed           = (flags & Accessed) != 0,
-			.dirty              = (flags & Dirty) != 0,
-			.huge_page          = (flags & HugePage) != 0,
-			.global             = (flags & Global) != 0,
+			.present            = (flags & PRESENT) != 0,
+			.write              = (flags & WRITE) != 0,
+			.user               = (flags & USER) != 0,
+			.write_through      = (flags & WRITE_THROUGH) != 0,
+			.cache_disabled     = (flags & CACHE_DISABLED) != 0,
+			.accessed           = (flags & ACCESSED) != 0,
+			.dirty              = (flags & DIRTY) != 0,
+			.huge_page          = (flags & HUGE_PAGE) != 0,
+			.global             = (flags & GLOBAL) != 0,
 			.available          = 0,
 			.physical_address   = address >> 12,
 	};
 
-	// Set the NX bit if it is allowed
-	if (m_nx_allowed && (flags & NoExecute)) {
+	// Set the NX bit if it is allowed (TODO: make this better)
+	if (m_nx_allowed && (flags & NO_EXECUTE)) {
 		auto page_raw = (uint64_t) &page;
-		page_raw |= NoExecute;
+		page_raw |= NO_EXECUTE;
 		page = *(pte_t*) page_raw;
 	}
 

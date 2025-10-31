@@ -111,8 +111,8 @@ namespace MaxOS{
 
             public:
 
-                intel_i217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor);
-                ~intel_i217();                                                  // Default Destructor
+	            IntelI217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor);
+                ~IntelI217();                                                  // Default Destructor
 
 
                 //Override driver default methods

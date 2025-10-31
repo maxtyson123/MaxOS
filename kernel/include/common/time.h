@@ -17,14 +17,18 @@ namespace MaxOS{
          */
         typedef struct Time{
 
-            uint16_t year;
-            uint8_t month;
-            uint8_t day;
+            uint16_t year;              ///< The year
+            uint8_t month;              ///< The month (1-12)
+            uint8_t day;                ///< The day (1-31)
 
-            uint8_t hour;
-            uint8_t minute;
-            uint8_t second;
+            uint8_t hour;               ///< The hour (0-23)
+            uint8_t minute;             ///< The minute (0-59)
+            uint8_t second;             ///< The second (0-59)
 
+			/**
+			 * @brief Checks if the year is a leap year
+			 * @return True if the year is a leap year, false otherwise
+			 */
             [[nodiscard]] bool is_leap_year() const {
                 return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
             }

@@ -88,10 +88,10 @@ namespace MaxOS{
                 void parse_console_colour(ConsoleColour colour);
 
             public:
-                uint8_t red { 0 };
-                uint8_t green { 0 };
-                uint8_t blue { 0 };
-                uint8_t alpha { 0 };
+                uint8_t red     { 0 };  ///< The amount of red 0-255
+                uint8_t green   { 0 };  ///< The amount of green 0-255
+                uint8_t blue    { 0 };  ///< The amount of blue 0-255
+                uint8_t alpha   { 0 };  ///< The amount of alpha 0-255 (0 is visible, 255 is invisible) todo: confirm
 
 
                 Colour();

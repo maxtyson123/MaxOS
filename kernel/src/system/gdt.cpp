@@ -64,6 +64,9 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 	Logger::DEBUG() << "Reloaded segment registers\n";
 }
 
+/**
+ * @brief Loads the GDT into the CPU
+ */
 void GlobalDescriptorTable::load() {
 	gdtr = {
 			.size    = sizeof(table) - 1,

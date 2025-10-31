@@ -12,35 +12,34 @@
 #include <filesystem/partition/msdos.h>
 
 
-namespace MaxOS{
+namespace MaxOS {
 
-    namespace drivers{
+	namespace drivers {
 
-        namespace disk{
+		namespace disk {
 
-            /**
-            * * @class IntegratedDriveElectronicsController
-            * @brief Driver for the IDE controller, handles the creation and management of the IDE devices
-            */
-            class IntegratedDriveElectronicsController : public Driver{
+			/**
+			* @class IntegratedDriveElectronicsController
+			* @brief Driver for the IDE controller, handles the creation and management of the IDE devices
+			*/
+			class IntegratedDriveElectronicsController : public Driver {
+				private:
+					common::Map<AdvancedTechnologyAttachment*, bool> devices;
+
+				public:
+					IntegratedDriveElectronicsController(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* device_descriptor);
+					~IntegratedDriveElectronicsController();
+
+					void initialise() final;
+					void activate() final;
+
+					string vendor_name() final;
+					string device_name() final;
 
 
-                common::Map<AdvancedTechnologyAttachment*, bool> devices;
-
-                public:
-                    IntegratedDriveElectronicsController(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* device_descriptor);
-                    ~IntegratedDriveElectronicsController();
-
-                    void initialise() final;
-                    void activate() final;
-
-                    string vendor_name() final;
-                    string device_name() final;
-
-
-            };
-        }
-    }
+			};
+		}
+	}
 }
 
 

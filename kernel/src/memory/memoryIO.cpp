@@ -6,6 +6,11 @@
 
 using namespace MaxOS::memory;
 
+/**
+ * @brief Construct a new Mem IO object
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO::MemIO(uintptr_t address)
 : m_address(address)
 {
@@ -14,6 +19,11 @@ MemIO::MemIO(uintptr_t address)
 
 MemIO::~MemIO() = default;
 
+/**
+ * @brief Construct a new Mem IO object for 8 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO8Bit::MemIO8Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -41,6 +51,11 @@ uint8_t MemIO8Bit::read() {
 	return *((volatile uint8_t*) (m_address));
 }
 
+/**
+ * @brief Construct a new Mem IO object for 16 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO16Bit::MemIO16Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -68,6 +83,11 @@ uint16_t MemIO16Bit::read() {
 	return *((volatile uint16_t*) (m_address));
 }
 
+/**
+ * @brief Construct a new Mem IO object for 32 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO32Bit::MemIO32Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -95,6 +115,11 @@ uint32_t MemIO32Bit::read() {
 	return *((volatile uint32_t*) (m_address));
 }
 
+/**
+ * @brief Construct a new Mem IO object for 64 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO64Bit::MemIO64Bit(uintptr_t address)
 : MemIO(address)
 {

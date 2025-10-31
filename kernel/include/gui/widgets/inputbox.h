@@ -16,6 +16,10 @@ namespace MaxOS{
 
         namespace widgets {
 
+			/**
+			 * @enum InputBoxEvents
+			 * @brief The events that an input box can trigger
+			 */
             enum class InputBoxEvents{
                 TEXT_CHANGED
             };
@@ -29,7 +33,7 @@ namespace MaxOS{
                   InputBoxTextChangedEvent(const string&);
                   ~InputBoxTextChangedEvent();
 
-                  string new_text;
+                  string new_text;  ///< The new text in the input box
             };
 
             /**
@@ -53,7 +57,7 @@ namespace MaxOS{
             class InputBox : public Widget, public common::EventManager<InputBoxEvents>{
 
                 protected:
-                    string m_widget_text = "                                                                          ";
+                    string m_widget_text = "                                                                          ";    ///< The text in the input box
 
                 public:
                     InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height);
@@ -71,11 +75,11 @@ namespace MaxOS{
                     string text();
 
                     // InputBox Variables
-                    common::Colour background_colour;
-                    common::Colour foreground_colour;
-                    common::Colour border_colour;
-                    gui::Font font;
-                    int32_t cursor_position { 0 };
+                    common::Colour background_colour;           ///< The background colour of the input box
+                    common::Colour foreground_colour;           ///< The colour of the text in the input box
+                    common::Colour border_colour;               ///< The colour of the bar around the input box
+                    gui::Font font;                             ///< The font to use for the input box text
+                    int32_t cursor_position { 0 };              ///< How many characters into the text the cursor is
 
             };
         }

@@ -10,40 +10,6 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::clock;
 
-
-ClockEventHandler::ClockEventHandler() = default;
-
-ClockEventHandler::~ClockEventHandler() = default;
-
-/**
- * @brief Called when the clock ticks
- *
- * @param time The current time
- */
-void ClockEventHandler::on_time(common::Time const &) {
-
-}
-
-/**
- * @brief Delegates the clock event to the relevant handler
- *
- * @param event The event being fired
- * @return The event (may have been modified by the handler)
- */
-Event<ClockEvents> *ClockEventHandler::on_event(Event<ClockEvents> *event) {
-
-	switch (event->type) {
-		case ClockEvents::TIME:
-			on_time(*((TimeEvent *) event)->time);
-			break;
-
-		default:
-			break;
-	}
-
-	return event;
-}
-
 /**
  * @brief Constructor for the Clock class
  *
@@ -185,6 +151,10 @@ void Clock::calibrate(uint64_t ms_per_tick) {
 	Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per kernel tick\n";
 }
 
+/**
+ * @brief Sets up the APIC clock to fire interrupts at the desired rate
+ * @param local_apic The local APIC to setup the clock on
+ */
 void Clock::setup_apic_clock(hardwarecommunication::LocalAPIC* local_apic) const {
 
 	// Configure the clock to periodic mode
@@ -226,20 +196,18 @@ common::Time Clock::get_time() {
 	return time;
 }
 
+/**
+ * @brief Gets the currently active clock
+ * @return The clock being used by the kernel
+ */
 Clock *Clock::active_clock() {
 	return s_active_clock;
 }
 
-
-TimeEvent::TimeEvent(Time *time)
-: Event(ClockEvents::TIME),
-  time(time)
-{
-
-}
-
-TimeEvent::~TimeEvent() = default;
-
+/**
+ * @brief Constructor for the PIT class. Registers a handler for interrupt 0x22 and initializes ports
+ * @param apic The APIC controller for the BSP core
+ */
 PIT::PIT(AdvancedProgrammableInterruptController *apic)
 : InterruptHandler(0x22),
   m_data_port(0x40),

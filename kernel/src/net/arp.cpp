@@ -11,7 +11,13 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 
 
-
+/**
+ * @brief Constructs an AddressResolutionProtocol handler.
+ *
+ * @param ethernetFrameHandler The Ethernet frame handler to use.
+ * @param internetProtocolHandler The Internet protocol handler to use.
+ * @param errorMessages The output stream to use for error messages.
+ */
 net::AddressResolutionProtocol::AddressResolutionProtocol(EthernetFrameHandler* ethernetFrameHandler, InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
 : EthernetFramePayloadHandler(ethernetFrameHandler, 0x0806),
   InternetProtocolAddressResolver(internetProtocolHandler)
@@ -136,6 +142,12 @@ MediaAccessControlAddress AddressResolutionProtocol::Resolve(InternetProtocolAdd
 
 }
 
+/**
+ * @brief Store a mapping of an IP address to a MAC address.
+ *
+ * @param internetProtocolAddress The IP address.
+ * @param mediaAccessControlAddress The MAC address.
+ */
 void AddressResolutionProtocol::Store(InternetProtocolAddress internetProtocolAddress, MediaAccessControlAddress mediaAccessControlAddress) {
     addressCache.insert(internetProtocolAddress, mediaAccessControlAddress);
 }

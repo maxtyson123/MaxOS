@@ -27,6 +27,6 @@ sed -i '/<\/head>/i <script type="text/javascript" src="$relpath^doxygen-awesome
 
 # Generate the documentation
 msg "Generating documentation..."
-doxygen Doxyfile
+doxygen Doxyfile || { fail "Doxygen generation failed"; exit 1; }
 
 msg "Documentation generated successfully!"

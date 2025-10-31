@@ -20,7 +20,7 @@ namespace MaxOS{
 		{
 
 			// No symbols
-			if (kernel_symbols_count == 0)
+			if (KERNEL_SYMBOLS_COUNT == 0)
 				return nullptr;
 
 			// Convert load to linked
@@ -35,7 +35,7 @@ namespace MaxOS{
 
 			// Binary Search for symbol
 			size_t left = 0;
-			size_t right = kernel_symbols_count;
+			size_t right = KERNEL_SYMBOLS_COUNT;
 			while (left < right) {
 				size_t middle = (left + right) >> 1;
 				if (kernel_symbols[middle].address <= adjusted_address)

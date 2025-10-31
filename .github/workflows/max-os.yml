@@ -60,8 +60,9 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Don't generate docs on dev branch
-    if: github.ref == 'refs/heads/main'
+    # Only run this job if the previous job was successful
+    needs: build-os
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -72,6 +73,9 @@ jobs:
           ./make_documentation.sh
 
       - name: Upload to branch
+
+        # Only upload if this is not a pull request (i.e., it's a push to main)
+        if: github.event_name != 'pull_request'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self

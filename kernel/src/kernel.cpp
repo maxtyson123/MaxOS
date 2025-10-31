@@ -105,6 +105,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 // TODO:
+//  - Doxy: file header comments (where acronmys are defined - code should then use them), move todos to doxy
+//  - Clean up warnings
 //  - Test suite of common functions & other statics (paths)
-//  - Class & Struct docstrings
 //  - Thread storage (when clib)

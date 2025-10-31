@@ -19,10 +19,10 @@ namespace MaxOS{
          */
         template<class Type> class Rectangle{
             public:
-                Type left { 0 };
-                Type top { 0 };
-                Type width { 0 };
-                Type height { 0 };
+                Type left { 0 };            ///< The left coordinate of the rectangle
+                Type top { 0 };             ///< The top coordinate of the rectangle
+                Type width { 0 };           ///< The width of the rectangle
+                Type height { 0 };          ///< The height of the rectangle
 
                 Rectangle();
                 Rectangle(Type left, Type top, Type width, Type height);
@@ -42,6 +42,15 @@ namespace MaxOS{
         template<class Type> Rectangle<Type>::Rectangle() = default;
 
 
+		/**
+		 * @brief Creates a new rectangle, if width or height are negative, the left/top will be adjusted and the width/height made positive
+		 *
+		 * @tparam Type The type of the rectangle
+		 * @param left The left coordinate
+		 * @param top  The top coordinate
+		 * @param width  The width of the rectangle
+		 * @param height The height of the rectangle
+		 */
         template<class Type> Rectangle<Type>::Rectangle(Type left, Type top, Type width, Type height)
         : left(left),
           top(top),

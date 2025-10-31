@@ -126,6 +126,12 @@ syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* ar
 	return args;
 }
 
+/**
+ * @brief System call to log a message to the kernel log
+ *
+ * @param args Arg0 = message
+ * @return The same args structure
+ */
 syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 
 	s_lock.lock();

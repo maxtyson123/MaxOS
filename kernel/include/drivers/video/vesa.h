@@ -25,7 +25,7 @@ namespace MaxOS {
              */
             class VideoElectronicsStandardsAssociation : public VideoDriver {
 
-                protected:
+	            private:
                     bool internal_set_mode(uint32_t width,  uint32_t height,  uint32_t) final;
 
                     void render_pixel_32_bit( uint32_t x,  uint32_t y,  uint32_t colour) final;

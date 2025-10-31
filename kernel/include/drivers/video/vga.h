@@ -22,7 +22,8 @@ namespace MaxOS{
              * @brief Driver for the VGA graphics controller, handles the rendering of pixels to the screen
              */
             class VideoGraphicsArray : public VideoDriver{
-                protected:
+
+				private:
                     hardwarecommunication::Port8Bit m_misc_port;
                     hardwarecommunication::Port8Bit m_crtc_index_port;
                     hardwarecommunication::Port8Bit crtc_data_port;

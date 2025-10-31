@@ -18,6 +18,10 @@ namespace MaxOS {
     namespace drivers {
         namespace peripherals {
 
+			/**
+			 * @enum MouseEvents
+			 * @brief The different types of mouse events that can be triggered
+			 */
             enum class MouseEvents{
                 MOVE,
                 DOWN,
@@ -30,8 +34,8 @@ namespace MaxOS {
              */
             class MouseMoveEvent : public common::Event<MouseEvents>{
                 public:
-                    int8_t x;
-                    int8_t y;
+                    int8_t x;       ///< The x coordinate of the mouse
+                    int8_t y;       ///< The y coordinate of the mouse
                     MouseMoveEvent(int8_t x, int8_t y);
                     ~MouseMoveEvent();
             };
@@ -42,7 +46,7 @@ namespace MaxOS {
              */
             class MouseDownEvent : public common::Event<MouseEvents>{
                 public:
-                    uint8_t button;
+                    uint8_t button; ///< The button that was pressed
                     MouseDownEvent(uint8_t);
                     ~MouseDownEvent();
             };
@@ -53,7 +57,7 @@ namespace MaxOS {
              */
             class MouseUpEvent : public common::Event<MouseEvents>{
                 public:
-                    uint8_t button;
+                    uint8_t button; ///< The button that was released
                     MouseUpEvent(uint8_t);
                     ~MouseUpEvent();
             };

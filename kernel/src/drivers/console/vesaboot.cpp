@@ -14,6 +14,10 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::console;
 using namespace MaxOS::system;
 
+/**
+ * @brief Constructs a new VESA Boot Console object, initializing the console area for text output.
+ * @param graphics_context The graphics context to use for rendering
+ */
 VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 : m_font((uint8_t *)AMIGA_FONT)
 {

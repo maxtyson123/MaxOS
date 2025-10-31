@@ -10,6 +10,13 @@ using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
+/**
+ * @brief Creates a new interrupt handler and registers it with the interrupt manager
+ *
+ * @param interrupt_number The interrupt number to handle
+ * @param redirect What legacy interrupt to redirect from (-1 for no redirection)
+ * @param redirect_index Which index of the legacy interrupt to redirect from
+ */
 InterruptHandler::InterruptHandler(uint8_t interrupt_number, int64_t redirect, uint64_t redirect_index)
 : m_interrupt_number(interrupt_number)
 {

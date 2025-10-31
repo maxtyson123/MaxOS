@@ -11,16 +11,18 @@ using namespace MaxOS::memory;
 #include <common/logger.h>
 #include <processes/scheduler.h>      //TODO: Circular dependency, need to fix
 
+// TODO: Shouldnt have to specify type in resource constructor
+
 /**
  * @brief Creates a new shared memory block
  *
  * @param name The name of the block
  * @param size The size of the shared memory region
+ * @param type The type of resource
  */
-SharedMemory::SharedMemory(const string& name, size_t size)
+SharedMemory::SharedMemory(const string& name, size_t size, resource_type_t type)
 : Resource(name, size, syscore::ResourceType::SHARED_MEMORY),
-  m_size(size),
-  name(name)
+  m_size(size)
 {
 
 	m_physical_address = (uintptr_t) PhysicalMemoryManager::s_current_manager->allocate_area(0, size);
@@ -94,6 +96,13 @@ void SharedMemory::close(size_t flags) {
 
 }
 
+/**
+ * @brief Creates a new shared message endpoint
+ *
+ * @param name The name of the endpoint
+ * @param size The size of messages that can be sent
+ * @param type The type of resource
+ */
 SharedMessageEndpoint::SharedMessageEndpoint(const string& name, size_t size, resource_type_t type)
 : Resource(name, size, type)
 {

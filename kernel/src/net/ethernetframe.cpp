@@ -12,6 +12,8 @@ using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::memory;
 
 /**
+ * @brief Construct a new Ether Frame Payload Handler object
+ *
  * @param frameHandler the handler for the ethernet frame
  * @param handledType the type of the protocol, which will be handled by this handler
  */
@@ -31,7 +33,15 @@ EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* f
 EthernetFramePayloadHandler::~EthernetFramePayloadHandler() = default;
 
 
-bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t*, uint32_t) {
+/**
+ * @brief Handle the received ethernet frame payload
+ *
+ * @param ethernetframePayload the payload of the ethernet frame
+ * @param size the size of the payload
+ *
+ * @return True if the data is to be sent back, false otherwise
+ */
+bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size) {
 
     //By default, don't handle it, will be handled in the override
     return false;
@@ -50,7 +60,12 @@ void EthernetFramePayloadHandler::Send(uint64_t destination, uint8_t *data, uint
     frameHandler -> sendEthernetFrame (destination, handledType, data, size);
 }
 
-
+/**
+ * @brief Construct a new Ether Frame Handler object
+ *
+ * @param driver The backend ethernet driver
+ * @param errorMessages The output stream for error messages
+ */
 EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream* errorMessages)
 : EthernetDriverEventHandler()
 {
@@ -64,6 +79,11 @@ EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream*
 
 EthernetFrameHandler::~EthernetFrameHandler() = default;
 
+/**
+ * @brief Get the MAC address of this device
+ *
+ * @return MediaAccessControlAddress The MAC address
+ */
 drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
     return ethernetDriver -> GetMediaAccessControlAddress();
 }
@@ -132,6 +152,11 @@ bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
 
 }
 
+/**
+ * @brief Connect a handler to the frame handler
+ *
+ * @param handler The handler to connect
+ */
 void EthernetFrameHandler::connectHandler(EthernetFramePayloadHandler *handler) {
 
     // Convert the protocol type to big endian

@@ -253,6 +253,13 @@ Directory* VirtualFileSystem::open_directory(const string &path) {
 	return directory;
 }
 
+/**
+ * @brief Opens a subdirectory from a parent directory
+ *
+ * @param parent The parent directory
+ * @param name The name of the subdirectory
+ * @return The opened subdirectory or null if it could not be opened
+ */
 Directory* VirtualFileSystem::open_directory(Directory* parent, string const& name) {
 
 	// Open the file

@@ -14,6 +14,14 @@ Widget::Widget()
 
 }
 
+/**
+ * @brief Construct a new Widget object at a specific position and size
+ *
+ * @param left The left position of the widget relative to its parent
+ * @param top The top position of the widget relative to its parent
+ * @param width The width of the widget
+ * @param height The height of the widget
+ */
 Widget::Widget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : KeyboardEventHandler(),
   m_position(left, top, width, height)
@@ -74,6 +82,12 @@ void Widget::add_child(Widget* child) {
 
 }
 
+/**
+ * @brief Get the absolute coordinates of the widget (relative to the screen)
+ *
+ * @param coordinates The coordinates within the widget to convert
+ * @return The absolute coordinates of the widget
+ */
 Coordinates Widget::absolute_coordinates(common::Coordinates coordinates) {
 
 	// Return the parents absolute coordinates
@@ -288,8 +302,16 @@ void Widget::on_mouse_button_released(uint32_t, uint32_t, uint8_t) {
 
 CompositeWidget::CompositeWidget() = default;
 
+/**
+ * @brief Construct a new Composite Widget object at a specific position and size
+ *
+ * @param left The left position of the widget relative to its parent
+ * @param top The top position of the widget relative to its parent
+ * @param width How many pixels wide the widget is
+ * @param height How many pixels tall the widget is
+ */
 CompositeWidget::CompositeWidget(int32_t left, int32_t top, uint32_t width, uint32_t height)
-		: Widget(left, top, width, height) {
+: Widget(left, top, width, height) {
 
 }
 

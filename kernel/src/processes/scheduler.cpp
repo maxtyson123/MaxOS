@@ -11,6 +11,12 @@ using namespace MaxOS::memory;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
+/**
+ * @brief Constructs a new Global Scheduler object. Registers as the interrupt handler for interrupt 0x20 and setups
+ * the shared resource registries. Loads any ELF files from the multiboot structure.
+ *
+ * @param multiboot The multiboot structure that may contain ELF files to load
+ */
 GlobalScheduler::GlobalScheduler(Multiboot& multiboot)
 : InterruptHandler(0x20),
   m_shared_memory_registry(resource_type_t::SHARED_MEMORY),
@@ -104,9 +110,13 @@ void GlobalScheduler::deactivate() {
 
 }
 
+/**
+ * @brief Moves processes and threads between cores to balance the load so that each core has a similar amount of threads
+ * and processes
+ *
+ * @todo Implement
+ */
 void GlobalScheduler::balance() {
-
-	// TODO
 
 }
 
@@ -126,7 +136,7 @@ void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 
 		// Try to create the elf from the module
 		auto* module = (struct multiboot_tag_module*) tag;
-		Elf64 elf((uintptr_t) PhysicalMemoryManager::to_dm_region(module->mod_start));
+		ELF64 elf((uintptr_t) PhysicalMemoryManager::to_dm_region(module->mod_start));
 		if (!elf.is_valid())
 			continue;
 
@@ -139,7 +149,7 @@ void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 		auto* process = new Process(module->cmdline, args, 1, &elf);
 		GlobalScheduler::system_scheduler() -> add_process(process);
 
-		Logger::DEBUG() << "Elf loaded to pid " << process->pid() << "\n";
+		Logger::DEBUG() << "ELF loaded to pid " << process->pid() << "\n";
 	}
 }
 
@@ -322,15 +332,27 @@ uint64_t GlobalScheduler::next_tid() {
 	return s_instance->m_next_tid++;
 }
 
+/**
+ * @brief Gets the scheduler for the currently executing core
+ *
+ * @return The scheduler for this core
+ */
 Scheduler* GlobalScheduler::core_scheduler() {
 	return CPU::executing_core()->scheduler;
 }
 
+/**
+ * @brief Checks if the global scheduler is active
+ *
+ * @return True if the scheduler is active, false otherwise
+ */
 bool GlobalScheduler::is_active() {
 	return s_instance->m_active;
 }
 
-
+/**
+ * @brief Constructs a new Scheduler object and creates the idle process
+ */
 Scheduler::Scheduler()
 : m_next_thread_index(0),
   m_active(false),

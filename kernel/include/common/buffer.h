@@ -26,7 +26,7 @@ namespace MaxOS{
 				 size_t m_capacity;
 				 bool m_dont_delete = false;
 
-				size_t m_offset = 0;
+				 size_t m_offset = 0;
 
 			public:
 				Buffer(size_t size, bool update_offset = true);
@@ -38,7 +38,7 @@ namespace MaxOS{
 				void clear();
 				void full(uint8_t byte, size_t offset = 0, size_t amount = 0);
 
-				bool update_offset = true;
+				bool update_offset = true; ///< Should operations write/read/copy update the offset in the buffer?
 				void set_offset(size_t offset);
 
 				[[nodiscard]] size_t capacity() const;

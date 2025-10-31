@@ -9,6 +9,13 @@ using namespace MaxOS::processes;
 using namespace MaxOS::common;
 using namespace syscore::filesystem;
 
+/**
+ * @brief Construct a new File Resource object
+ *
+ * @param name The name of the resource
+ * @param flags The flags for the resource when opened
+ * @param type The type of the resource
+ */
 FileResource::FileResource(string const& name, size_t flags, processes::resource_type_t type)
 : Resource(name, flags, type),
   file(nullptr)	// Initialised by the registry
@@ -112,6 +119,13 @@ int FileResource::write(void const* buffer, size_t size, size_t flags) {
 	return size;
 }
 
+/**
+ * @brief Construct a new Directory Resource object
+ *
+ * @param name The name of the resource
+ * @param flags The flags for the resource when opened
+ * @param type The type of the resource
+ */
 DirectoryResource::DirectoryResource(string const& name, size_t flags, processes::resource_type_t type)
 : Resource(name, flags, type),
   directory(nullptr)
@@ -297,6 +311,11 @@ int DirectoryResource::write(void const* buffer, size_t size, size_t flags) {
 	return size;
 }
 
+/**
+ * @brief Construct a new VFS Resource Registry object
+ *
+ * @param vfs The virtual file system to use
+ */
 VFSResourceRegistry::VFSResourceRegistry(VirtualFileSystem* vfs)
 : BaseResourceRegistry(resource_type_t::FILESYSTEM),
   m_vfs(vfs)

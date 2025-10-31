@@ -29,9 +29,9 @@ namespace MaxOS{
         {
 
             protected:
-                uint32_t m_offset;
-                string m_name;
-                size_t m_size;
+                uint32_t m_offset;  ///< The current offset in the file
+                string m_name;      ///< The name of the file
+                size_t m_size;      ///< The size of the file
 
             public:
                 File();
@@ -56,10 +56,10 @@ namespace MaxOS{
         class Directory
         {
             protected:
-                common::Vector<File*> m_files;
-                common::Vector<Directory*> m_subdirectories;
+                common::Vector<File*> m_files;                  ///< The files in this directory
+                common::Vector<Directory*> m_subdirectories;    ///< The subdirectories in this directory
 
-                string m_name;
+                string m_name;                                  ///< The name of this directory
 
             public:
                 Directory();
@@ -96,7 +96,7 @@ namespace MaxOS{
         class FileSystem
         {
             protected:
-                Directory* m_root_directory;
+                Directory* m_root_directory;    ///< The fist directory in the file system (not be confused with the system root)
 
             public:
                 FileSystem();

@@ -39,6 +39,14 @@ void InputBoxEventHandler::on_input_box_text_changed(string) {
 
 }
 
+/**
+ * @brief Construct a new Input Box object at a specific position and size
+ *
+ * @param left How many pixels from the left of the parent widget the input box is
+ * @param top How many pixels from the top of the parent widget the input box is
+ * @param width How many pixels wide the input box is
+ * @param height How many pixels tall the input box is
+ */
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
@@ -49,6 +57,15 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 
 }
 
+/**
+ * @brief Construct a new Input Box object at a specific position and size with initial text
+ *
+ * @param left The left position of the input box
+ * @param top The top position of the input box
+ * @param width The width of the input box
+ * @param height The height of the input box
+ * @param text The initial text in the input box
+ */
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
@@ -260,7 +277,11 @@ string InputBox::text() {
 	return m_widget_text;
 }
 
-
+/**
+ * @brief Construct a new Input Box Text Changed Event object
+ *
+ * @param new_text The new text in the input box
+ */
 InputBoxTextChangedEvent::InputBoxTextChangedEvent(const string& new_text)
 : Event(InputBoxEvents::TEXT_CHANGED),
   new_text(new_text)

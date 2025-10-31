@@ -10,6 +10,11 @@ using namespace MaxOS::memory;
 using namespace MaxOS::common;
 using namespace MaxOS::system;
 
+/**
+ * @brief Construct a new Memory Manager object. Will switch the pml4 to use the calling process's page tables.
+ *
+ * @param vmm The virtual memory manager to use, if nullptr a new one will be created
+ */
 MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 : m_virtual_memory_manager(vmm)
 {
@@ -226,7 +231,7 @@ void MemoryManager::handle_free(void* pointer) {
 MemoryChunk* MemoryManager::expand_heap(size_t size) {
 
 	// Create a new chunk of memory
-	auto* chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(size, Present | Write | NoExecute);
+	auto* chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(size, PRESENT | WRITE | NO_EXECUTE);
 	ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");
 
 	// Handled by assert, but just in case

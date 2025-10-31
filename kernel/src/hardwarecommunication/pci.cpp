@@ -25,6 +25,8 @@ PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnec
 /**
  * @brief Get the type of the device
  *
+ * @todo See wiki for more types to add
+ *
  * @return Type of the device as a string (or Unknown if the type is not known)
  */
 string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
@@ -259,7 +261,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 
 				case 0x100E: //i217 (Ethernet Controller)
 				{
-					return new intel_i217(&dev);
+					return new IntelI217(&dev);
 				}
 
 				case 0x7010: // PIIX4 (IDE Controller)
@@ -292,9 +294,12 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 	return nullptr;
 }
 
-
-void PeripheralComponentInterconnectController::list_known_device(
-		const PeripheralComponentInterconnectDeviceDescriptor& dev) {
+/**
+ * @brief Print the vednor and device id of known devices, or "Unknown" + their ids if not known.
+ *
+ * @param dev The device to print
+ */
+void PeripheralComponentInterconnectController::list_known_device( const PeripheralComponentInterconnectDeviceDescriptor& dev) {
 
 	switch (dev.vendor_id) {
 		case 0x1022: {

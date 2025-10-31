@@ -11,6 +11,12 @@ using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 
+/**
+ * @brief Constructor for the Multiboot class. Parses the multiboot info struct and loads the tags
+ *
+ * @param address The address of the multiboot info struct
+ * @param magic The magic number to confirm the bootloader
+ */
 Multiboot::Multiboot(unsigned long address, unsigned long magic)
 : start_address(address)
 {
@@ -82,33 +88,55 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
 
 Multiboot::~Multiboot() = default;
 
-
+/**
+ * @brief Get the framebuffer tag
+ * @return The framebuffer tag
+ */
 multiboot_tag_framebuffer* Multiboot::framebuffer() {
 
 	return m_framebuffer;
 }
 
+/**
+ * @brief Get the basic memory info tag
+ * @return The basic memory info tag
+ */
 multiboot_tag_basic_meminfo* Multiboot::basic_meminfo() {
 
 	return m_basic_meminfo;
 }
 
+/**
+ * @brief Get the bootloader name tag
+ * @return The bootloader name tag
+ */
 multiboot_tag_string* Multiboot::bootloader_name() {
 
 	return m_bootloader_name;
 }
 
+/**
+ * @brief Get the module tag
+ * @return The module tag
+ */
 multiboot_tag_mmap* Multiboot::mmap() {
 
 	return m_mmap;
 }
 
+/**
+ * @brief Get the old ACPI tag
+ * @return The old ACPI tag
+ */
 multiboot_tag_old_acpi* Multiboot::old_acpi() {
 
 	return m_old_acpi;
 }
 
-
+/**
+ * @brief Get the new ACPI tag
+ * @return The new ACPI tag
+ */
 multiboot_tag_new_acpi* Multiboot::new_acpi() {
 
 	return m_new_acpi;

@@ -17,9 +17,10 @@ namespace MaxOS {
          * @tparam Second The type of the second object
          */
         template<class First, class Second> class Pair {
+
             public:
-                First first;
-                Second second;
+                First first;                                    ///< The first object (often the key)
+                Second second;                                  ///< The second object (often the value)
 
                 Pair();
                 Pair(First, Second);
@@ -27,9 +28,16 @@ namespace MaxOS {
         };
 
         ///_____________________________Implementation___________________________________________///
-        template<class First, class Second> Pair<First,Second>::Pair()
-        = default;
+        template<class First, class Second> Pair<First,Second>::Pair() = default;
 
+		/**
+		 * @brief Creates a new pair
+		 *
+		 * @tparam First The type of the first object
+		 * @tparam Second The type of the second object
+		 * @param first The first object
+		 * @param second The second object
+		 */
         template<class First, class Second> Pair<First,Second>::Pair(First first, Second second)
         : first(first),
           second(second)

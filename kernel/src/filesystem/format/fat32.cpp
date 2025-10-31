@@ -13,8 +13,14 @@ using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::format;
 using namespace MaxOS::memory;
 
-Fat32Volume::Fat32Volume(Disk *hd, uint32_t partition_offset)
-: disk(hd)
+/**
+ * @brief Construct a new Fat32 Volume object
+ *
+ * @param disk The disk to read from
+ * @param partition_offset The offset of the partition on the disk
+ */
+Fat32Volume::Fat32Volume(Disk* disk, uint32_t partition_offset)
+: disk(disk)
 {
 
 	// Read the BIOS parameter block
@@ -217,8 +223,15 @@ void Fat32Volume::free_cluster(uint32_t cluster, size_t amount) {
 	set_next_cluster(cluster, (uint32_t) ClusterState::END_OF_CHAIN);
 }
 
-
-Fat32File::Fat32File(Fat32Volume *volume, Fat32Directory *parent, dir_entry_t *info, const string &name)
+/**
+ * @brief Construct a new Fat32 File object
+ *
+ * @param volume The helper volume object
+ * @param parent The directory that contains this file
+ * @param info The directory entry information that describes this file
+ * @param name The name of the file
+ */
+Fat32File::Fat32File(Fat32Volume* volume, Fat32Directory *parent, dir_entry_t *info, const string &name)
 : m_volume(volume),
   m_parent_directory(parent),
   m_entry(info),
@@ -395,6 +408,13 @@ void Fat32File::flush() {
 	File::flush();
 }
 
+/**
+ * @brief Construct a new Fat32 Directory object
+ *
+ * @param volume The FAT32 volume
+ * @param cluster The cluster of the directory
+ * @param name The name of the directory
+ */
 Fat32Directory::Fat32Directory(Fat32Volume *volume, uint32_t cluster, const string &name)
 : m_volume(volume),
   m_first_cluster(cluster)
@@ -574,6 +594,10 @@ void Fat32Directory::save_entry_to_disk(DirectoryEntry *entry) {
 	update_entry_on_disk(index);
 }
 
+/**
+ * @brief Save the directory entry at the given index to the disk
+ * @param index The index of the entry to update
+ */
 void Fat32Directory::update_entry_on_disk(int index) {
 
 	// Get the entry
@@ -951,6 +975,12 @@ void Fat32Directory::remove_subdirectory(const string &name) {
 	}
 }
 
+/**
+ * @brief Construct a new Fat32 File System object
+ *
+ * @param disk The disk to mount the filesystem from
+ * @param partition_offset The partition offset on the disk
+ */
 Fat32FileSystem::Fat32FileSystem(Disk *disk, uint32_t partition_offset)
 : m_volume(disk, partition_offset)
 {

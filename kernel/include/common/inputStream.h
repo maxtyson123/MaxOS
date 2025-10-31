@@ -27,7 +27,7 @@ namespace MaxOS{
             friend class GenericInputStream<Type>;
 
             protected:
-                common::Vector<GenericInputStream<Type>*> m_generic_input_streams;
+                common::Vector<GenericInputStream<Type>*> m_generic_input_streams; 		///< List of streams being observed by this handler
             public:
                 InputStreamEventHandler();
                 ~InputStreamEventHandler();
@@ -79,10 +79,10 @@ namespace MaxOS{
         template<class Type> class InputStreamBuffer : protected InputStreamProcessor<Type, Type*>
         {
             protected:
-                Type m_buffer[10240];
-                int m_offset { 0 };
-                Type m_event_fire_element;
-                Type m_termination_element;
+                Type m_buffer[10240];               ///<  The buffer to store data in
+                int m_offset { 0 };                 ///<  The current position in the buffer
+                Type m_event_fire_element;          ///<  The element that will cause the buffer to flush and fire an event
+                Type m_termination_element;         ///<  The element that will cause the buffer to flush and end the stream
 
             public:
                 InputStreamBuffer(Type event_fire_element, Type termination_element);
@@ -102,7 +102,7 @@ namespace MaxOS{
         template<class Type> class GenericInputStream{
 
             protected:
-                common::Vector<InputStreamEventHandler<Type>*> m_input_stream_event_handlers;
+                common::Vector<InputStreamEventHandler<Type>*> m_input_stream_event_handlers; ///< List of streams being observed by this handler
 
             public:
                 GenericInputStream();
